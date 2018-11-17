@@ -440,7 +440,8 @@ public:
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
 
     //by text
-    virtual OUString get_text(int pos) const = 0;
+    virtual OUString get_text(int row, int col = -1) const = 0;
+    virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
     virtual int find_text(const OUString& rText) const = 0;
     OUString get_selected_text() const
     {
@@ -498,6 +499,8 @@ public:
     virtual void make_sorted() = 0;
     virtual void clear() = 0;
     virtual int get_height_rows(int nRows) const = 0;
+
+    virtual void set_column_fixed_widths(const std::vector<int>& rWidths) = 0;
 
     virtual void set_selection_mode(bool bMultiple) = 0;
     virtual int count_selected_rows() const = 0;

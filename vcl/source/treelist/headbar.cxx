@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/headbar.hxx>
-#include <vclxaccessibleheaderbar.hxx>
+#include <vcl/headbar.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
@@ -1355,6 +1354,7 @@ css::uno::Reference< css::awt::XWindowPeer > HeaderBar::GetComponentInterface( b
 {
     css::uno::Reference< css::awt::XWindowPeer > xPeer
         (Window::GetComponentInterface(false));
+#if 0 //TODO
     if ( !xPeer.is() && bCreate )
     {
         css::awt::XWindowPeer* pPeer = new VCLXHeaderBar(this);
@@ -1362,6 +1362,7 @@ css::uno::Reference< css::awt::XWindowPeer > HeaderBar::GetComponentInterface( b
         return pPeer;
     }
     else
+#endif
         return xPeer;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

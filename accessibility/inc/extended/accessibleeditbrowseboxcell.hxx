@@ -41,7 +41,7 @@ namespace accessibility
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
             const css::uno::Reference< css::accessibility::XAccessibleContext >& _xControlChild,
-            ::svt::IAccessibleTableProvider& _rBrowseBox,
+            ::vcl::IAccessibleTableProvider& _rBrowseBox,
             const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos
@@ -107,7 +107,7 @@ namespace accessibility
                                             m_xControlAccessible;
         css::uno::Reference< css::awt::XWindow >
                                             m_xFocusWindow;
-        ::svt::IAccessibleTableProvider*    m_pBrowseBox;
+        ::vcl::IAccessibleTableProvider*    m_pBrowseBox;
         sal_Int32                           m_nRowPos;
         sal_uInt16                          m_nColPos;
 
@@ -116,7 +116,7 @@ namespace accessibility
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
             const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
-            ::svt::IAccessibleTableProvider& _rBrowseBox,
+            ::vcl::IAccessibleTableProvider& _rBrowseBox,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos
         );

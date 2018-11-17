@@ -24,7 +24,7 @@
 #include <svx/stddlg.hxx>
 
 #include <vcl/lstbox.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

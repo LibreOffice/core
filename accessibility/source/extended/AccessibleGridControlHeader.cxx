@@ -20,8 +20,7 @@
 #include <extended/AccessibleGridControlHeader.hxx>
 #include <extended/AccessibleGridControlHeaderCell.hxx>
 #include <extended/AccessibleGridControlTableCell.hxx>
-#include <svtools/accessibletable.hxx>
-
+#include <vcl/accessibletable.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -30,8 +29,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
-using namespace ::svt;
-using namespace ::svt::table;
+using namespace ::vcl;
+using namespace ::vcl::table;
 
 
 namespace accessibility {
@@ -39,8 +38,8 @@ namespace accessibility {
 
 AccessibleGridControlHeader::AccessibleGridControlHeader(
         const Reference< XAccessible >& rxParent,
-        ::svt::table::IAccessibleTable&                      rTable,
-        ::svt::table::AccessibleTableControlObjType      eObjType):
+        ::vcl::table::IAccessibleTable&                      rTable,
+        ::vcl::table::AccessibleTableControlObjType      eObjType):
         AccessibleGridControlTableBase( rxParent, rTable, eObjType )
 {
     OSL_ENSURE( isRowBar() || isColumnBar(),
@@ -58,14 +57,14 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
         throw IndexOutOfBoundsException();
     ensureIsAlive();
     Reference< XAccessible > xChild;
-    if(m_eObjType == svt::table::TCTYPE_COLUMNHEADERBAR)
+    if(m_eObjType == vcl::table::TCTYPE_COLUMNHEADERBAR)
     {
-        AccessibleGridControlHeaderCell* pColHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, svt::table::TCTYPE_COLUMNHEADERCELL);
+        AccessibleGridControlHeaderCell* pColHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, vcl::table::TCTYPE_COLUMNHEADERCELL);
         xChild = pColHeaderCell;
     }
-    else if(m_eObjType == svt::table::TCTYPE_ROWHEADERBAR)
+    else if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR)
     {
-        AccessibleGridControlHeaderCell* pRowHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, svt::table::TCTYPE_ROWHEADERCELL);
+        AccessibleGridControlHeaderCell* pRowHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, vcl::table::TCTYPE_ROWHEADERCELL);
         xChild = pRowHeaderCell;
     }
     return xChild;
@@ -74,7 +73,7 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
 sal_Int32 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
 {
      ensureIsAlive();
-     if(m_eObjType == svt::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
+     if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
          return 1;
      else
          return 0;
@@ -212,14 +211,14 @@ Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
         sal_Int32 nRow, sal_uInt32 nColumnPos )
 {
     Reference< XAccessible > xChild;
-    if(m_eObjType == svt::table::TCTYPE_COLUMNHEADERBAR)
+    if(m_eObjType == vcl::table::TCTYPE_COLUMNHEADERBAR)
     {
-        AccessibleGridControlHeaderCell* pColHeaderCell = new AccessibleGridControlHeaderCell(nColumnPos, this, m_aTable, svt::table::TCTYPE_COLUMNHEADERCELL);
+        AccessibleGridControlHeaderCell* pColHeaderCell = new AccessibleGridControlHeaderCell(nColumnPos, this, m_aTable, vcl::table::TCTYPE_COLUMNHEADERCELL);
         xChild = pColHeaderCell;
     }
-    else if(m_eObjType == svt::table::TCTYPE_ROWHEADERBAR)
+    else if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR)
     {
-        AccessibleGridControlHeaderCell* pRowHeaderCell = new AccessibleGridControlHeaderCell(nRow, this, m_aTable, svt::table::TCTYPE_ROWHEADERCELL);
+        AccessibleGridControlHeaderCell* pRowHeaderCell = new AccessibleGridControlHeaderCell(nRow, this, m_aTable, vcl::table::TCTYPE_ROWHEADERCELL);
         xChild = pRowHeaderCell;
     }
     return xChild;

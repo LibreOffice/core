@@ -17,15 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_INC_SVTACCESSIBLEFACTORY_HXX
-#define INCLUDED_SVTOOLS_SOURCE_INC_SVTACCESSIBLEFACTORY_HXX
+#ifndef INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
+#define INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
 
-#include <svtools/accessiblefactory.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/accessiblefactory.hxx>
 
-namespace svt
+namespace vcl
 {
     /** a client for the accessibility implementations which have been outsourced
-        from the main svtools library
+        from the main vcl/svtools libraries
 
         All instances of this class share a reference to a common IAccessibleFactory
         instance, which is used for creating all kind of Accessibility related
@@ -36,7 +37,7 @@ namespace svt
 
         This class is not thread-safe.
     */
-    class AccessibleFactoryAccess
+    class VCL_DLLPUBLIC AccessibleFactoryAccess
     {
     private:
         bool    m_bInitialized;
@@ -49,10 +50,8 @@ namespace svt
     private:
         void ensureInitialized();
     };
-
-
 }   // namespace svt
 
-#endif // INCLUDED_SVTOOLS_SOURCE_INC_SVTACCESSIBLEFACTORY_HXX
+#endif // INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

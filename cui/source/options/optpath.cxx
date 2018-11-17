@@ -21,7 +21,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
 #include <svl/aeitem.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/treelistentry.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>

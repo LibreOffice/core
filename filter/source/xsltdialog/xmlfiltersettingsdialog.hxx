@@ -26,7 +26,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <svl/poolitem.hxx>
 #include <unotools/moduleoptions.hxx>
 

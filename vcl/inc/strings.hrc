@@ -139,6 +139,10 @@
 #define STR_TEXTUNDO_INSERTCHARS                     NC_("STR_TEXTUNDO_INSERTCHARS", "insert '$1'")
 #define STR_TEXTUNDO_REMOVECHARS                     NC_("STR_TEXTUNDO_REMOVECHARS", "delete '$1'")
 
+// descriptions of accessible objects
+#define STR_SVT_ACC_DESC_TABLISTBOX                  NC_("STR_SVT_ACC_DESC_TABLISTBOX", "Row: %1, Column: %2")
+#define STR_SVT_ACC_EMPTY_FIELD                      NC_("STR_SVT_ACC_EMPTY_FIELD", "Empty Field")
+
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,7 @@
 
 
 #include <extended/AccessibleBrowseBoxTableCell.hxx>
-#include <svtools/accessibletableprovider.hxx>
+#include <vcl/accessibletableprovider.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 namespace accessibility
@@ -65,17 +65,17 @@ namespace accessibility
     }
 
     AccessibleBrowseBoxTableCell::AccessibleBrowseBoxTableCell(const Reference<XAccessible >& _rxParent,
-                                IAccessibleTableProvider& _rBrowseBox,
+                                vcl::IAccessibleTableProvider& _rBrowseBox,
                                 const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos,
                                 sal_Int32 _nOffset )
         :AccessibleBrowseBoxCell( _rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos )
     {
-        m_nOffset = ( _nOffset == OFFSET_DEFAULT ) ? sal_Int32(BBINDEX_FIRSTCONTROL) : _nOffset;
+        m_nOffset = ( _nOffset == OFFSET_DEFAULT ) ? sal_Int32(vcl::BBINDEX_FIRSTCONTROL) : _nOffset;
         sal_Int32 nIndex = getIndex_Impl( _nRowPos, _nColPos, _rBrowseBox.GetColumnCount() );
-       setAccessibleName( _rBrowseBox.GetAccessibleObjectName( BBTYPE_TABLECELL, nIndex ) );
-       setAccessibleDescription( _rBrowseBox.GetAccessibleObjectDescription( BBTYPE_TABLECELL, nIndex ) );
+       setAccessibleName( _rBrowseBox.GetAccessibleObjectName( vcl::BBTYPE_TABLECELL, nIndex ) );
+       setAccessibleDescription( _rBrowseBox.GetAccessibleObjectDescription( vcl::BBTYPE_TABLECELL, nIndex ) );
         // Need to register as event listener
         Reference< XComponent > xComponent(_rxParent, UNO_QUERY);
         if( xComponent.is() )
@@ -206,7 +206,7 @@ namespace accessibility
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
 
-        return /*BBINDEX_FIRSTCONTROL*/ m_nOffset + ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();
+        return /*vcl::BBINDEX_FIRSTCONTROL*/ m_nOffset + ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();
     }
 
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCaretPosition(  )

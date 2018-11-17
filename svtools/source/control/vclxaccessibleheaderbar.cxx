@@ -20,7 +20,7 @@
 #include <vclxaccessibleheaderbaritem.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

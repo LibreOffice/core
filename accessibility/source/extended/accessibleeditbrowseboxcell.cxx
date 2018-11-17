@@ -39,7 +39,7 @@ namespace accessibility
                 const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
                 const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
                 const css::uno::Reference< css::accessibility::XAccessibleContext >& _xControlChild,
-                ::svt::IAccessibleTableProvider& _rBrowseBox,
+                ::vcl::IAccessibleTableProvider& _rBrowseBox,
                 const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos)
@@ -185,7 +185,7 @@ namespace accessibility
     EditBrowseBoxTableCellAccess::EditBrowseBoxTableCellAccess(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
             const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
-            ::svt::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos )
+            ::vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos )
         :WeakComponentImplHelper( m_aMutex )
         ,m_xParent( _rxParent )
         ,m_xControlAccessible( _rxControlAccessible )

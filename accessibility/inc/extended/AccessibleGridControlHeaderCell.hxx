@@ -29,8 +29,8 @@ namespace accessibility
     public:
         AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
                         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                        ::svt::table::IAccessibleTable& _rTable,
-                        ::svt::table::AccessibleTableControlObjType  _eObjType);
+                        ::vcl::table::IAccessibleTable& _rTable,
+                        ::vcl::table::AccessibleTableControlObjType  _eObjType);
         /** @return  The count of visible children. */
         virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
 

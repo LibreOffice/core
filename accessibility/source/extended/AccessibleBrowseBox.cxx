@@ -20,7 +20,7 @@
 #include <extended/AccessibleBrowseBox.hxx>
 #include <extended/AccessibleBrowseBoxTable.hxx>
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
-#include <svtools/accessibletableprovider.hxx>
+#include <vcl/accessibletableprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/types.h>
 
@@ -38,8 +38,8 @@ using namespace ::svt;
 
 AccessibleBrowseBox::AccessibleBrowseBox(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
-            ::svt::IAccessibleTableProvider& _rBrowseBox )
-    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, BBTYPE_BROWSEBOX ),
+            ::vcl::IAccessibleTableProvider& _rBrowseBox )
+    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, vcl::BBTYPE_BROWSEBOX ),
       m_aCreator(_rxCreator)
 {
     m_xFocusWindow = VCLUnoHelper::GetInterface(mpBrowseBox->GetWindowInstance());
@@ -93,7 +93,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    return BBINDEX_FIRSTCONTROL + mpBrowseBox->GetAccessibleControlCount();
+    return vcl::BBINDEX_FIRSTCONTROL + mpBrowseBox->GetAccessibleControlCount();
 }
 
 
@@ -106,12 +106,12 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     if( nChildIndex >= 0 )
     {
-        if( nChildIndex < BBINDEX_FIRSTCONTROL )
+        if( nChildIndex < vcl::BBINDEX_FIRSTCONTROL )
             xRet = implGetFixedChild( nChildIndex );
         else
         {
             // additional controls
-            nChildIndex -= BBINDEX_FIRSTCONTROL;
+            nChildIndex -= vcl::BBINDEX_FIRSTCONTROL;
             if( nChildIndex < mpBrowseBox->GetAccessibleControlCount() )
                 xRet = mpBrowseBox->CreateAccessibleControl( nChildIndex );
         }
@@ -139,7 +139,7 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
         // try whether point is in one of the fixed children
         // (table, header bars, corner control)
         Point aPoint( VCLPoint( rPoint ) );
-        for( nIndex = 0; (nIndex < BBINDEX_FIRSTCONTROL) && !xChild.is(); ++nIndex )
+        for( nIndex = 0; (nIndex < vcl::BBINDEX_FIRSTCONTROL) && !xChild.is(); ++nIndex )
         {
             css::uno::Reference< css::accessibility::XAccessible > xCurrChild( implGetFixedChild( nIndex ) );
             css::uno::Reference< css::accessibility::XAccessibleComponent >
@@ -185,9 +185,7 @@ tools::Rectangle AccessibleBrowseBox::implGetBoundingBoxOnScreen()
     return mpBrowseBox->GetWindowExtentsRelative( nullptr );
 }
 
-
 // internal helper methods
-
 css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::implGetTable()
 {
     if( !mxTable.is() )
@@ -198,16 +196,15 @@ css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::impl
     return mxTable.get();
 }
 
-
 css::uno::Reference< css::accessibility::XAccessible >
-AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
+AccessibleBrowseBox::implGetHeaderBar(vcl::AccessibleBrowseBoxObjType eObjType)
 {
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     rtl::Reference< AccessibleBrowseBoxHeaderBar >* pxMember = nullptr;
 
-    if( eObjType == BBTYPE_ROWHEADERBAR )
+    if( eObjType == vcl::BBTYPE_ROWHEADERBAR )
         pxMember = &mxRowHeaderBar;
-    else if( eObjType ==  BBTYPE_COLUMNHEADERBAR )
+    else if( eObjType == vcl::BBTYPE_COLUMNHEADERBAR )
         pxMember = &mxColumnHeaderBar;
 
     if( pxMember )
@@ -223,20 +220,19 @@ AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
     return xRet;
 }
 
-
 css::uno::Reference< css::accessibility::XAccessible >
 AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
 {
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     switch( nChildIndex )
     {
-        case BBINDEX_COLUMNHEADERBAR:
-            xRet = implGetHeaderBar( BBTYPE_COLUMNHEADERBAR );
+        case vcl::BBINDEX_COLUMNHEADERBAR:
+            xRet = implGetHeaderBar( vcl::BBTYPE_COLUMNHEADERBAR );
         break;
-        case BBINDEX_ROWHEADERBAR:
-            xRet = implGetHeaderBar( BBTYPE_ROWHEADERBAR );
+        case vcl::BBINDEX_ROWHEADERBAR:
+            xRet = implGetHeaderBar( vcl::BBTYPE_ROWHEADERBAR );
         break;
-        case BBINDEX_TABLE:
+        case vcl::BBINDEX_TABLE:
             xRet = implGetTable();
         break;
     }
@@ -270,7 +266,7 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
 
 // = AccessibleBrowseBoxAccess
 
-AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::svt::IAccessibleTableProvider& _rBrowseBox )
+AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::IAccessibleTableProvider& _rBrowseBox )
         :m_xParent( _rxParent )
         ,m_rBrowseBox( _rBrowseBox )
 {

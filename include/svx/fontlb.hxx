@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_FONTLB_HXX
 #define INCLUDED_SVX_FONTLB_HXX
 
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>

@@ -21,7 +21,7 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_MODULDLG_HXX
 
 #include <bastype2.hxx>
-#include <svtools/svtabbx.hxx>
+#include <vcl/svtabbx.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/tabctrl.hxx>

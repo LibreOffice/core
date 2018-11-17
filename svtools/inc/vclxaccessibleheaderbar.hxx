@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_INC_VCLXACCESSIBLEHEADERBAR_HXX
 #define INCLUDED_SVTOOLS_INC_VCLXACCESSIBLEHEADERBAR_HXX
 
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 

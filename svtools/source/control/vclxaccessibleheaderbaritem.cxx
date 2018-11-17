@@ -18,7 +18,7 @@
  */
 #include <vclxaccessibleheaderbaritem.hxx>
 
-#include <svtools/headbar.hxx>
+#include <vcl/headbar.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

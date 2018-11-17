@@ -3587,12 +3587,23 @@ void SvTreeListBox::EnableContextMenuHandling()
     pImpl->bContextMenuHandling = true;
 }
 
-void SvTreeListBox::EnableList( bool _bEnable )
+css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
 {
-    // call base class method
-    Window::Enable(_bEnable);
-    // then invalidate
-    Invalidate(tools::Rectangle(Point(), GetSizePixel()));
+    vcl::Window* pParent = GetAccessibleParentWindow();
+    DBG_ASSERT( pParent, "SvTreeListBox::CreateAccessible - accessible parent not found" );
+
+    css::uno::Reference< XAccessible > xAccessible;
+    if ( pParent )
+    {
+        css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
+        if ( xAccParent.is() )
+        {
+            // need to be done here to get the vclxwindow later on in the accessible
+            css::uno::Reference< css::awt::XWindowPeer > xTemp(GetComponentInterface());
+            xAccessible = pImpl->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
+        }
+    }
+    return xAccessible;
 }
 
 void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const
