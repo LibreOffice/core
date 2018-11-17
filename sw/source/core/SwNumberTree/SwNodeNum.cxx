@@ -184,26 +184,12 @@ bool SwNodeNum::IsCounted() const
 // #i64010#
 bool SwNodeNum::HasCountedChildren() const
 {
-    bool bResult = false;
-
-    tSwNumberTreeChildren::const_iterator aIt;
-
-    for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
-    {
-        SwNodeNum* pChild( dynamic_cast<SwNodeNum*>(*aIt) );
-        OSL_ENSURE( pChild,
-                "<SwNodeNum::HasCountedChildren()> - unexpected type of child" );
-        if ( pChild &&
-             ( pChild->IsCountedForNumbering() ||
-               pChild->HasCountedChildren() ) )
-        {
-            bResult = true;
-
-            break;
-        }
-    }
-
-    return bResult;
+    return std::any_of(mChildren.begin(), mChildren.end(),
+        [](SwNumberTreeNode* pNode) {
+            SwNodeNum* pChild( dynamic_cast<SwNodeNum*>(pNode) );
+            OSL_ENSURE( pChild, "<SwNodeNum::HasCountedChildren()> - unexpected type of child" );
+            return pChild && (pChild->IsCountedForNumbering() || pChild->HasCountedChildren());
+        });
 }
 // #i64010#
 bool SwNodeNum::IsCountedForNumbering() const

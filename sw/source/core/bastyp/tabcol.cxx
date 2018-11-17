@@ -76,10 +76,9 @@ void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
     aData.insert( aData.begin() + nPos, aEntry );
 
 #if OSL_DEBUG_LEVEL > 1
-    SwTabColsEntries::iterator aPos = aData.begin();
-    for ( ; aPos != aData.end(); ++aPos )
+    for ( const auto& rPos : aData )
     {
-        aEntry =(*aPos);
+        aEntry = rPos;
     }
 #endif
 }

@@ -1589,14 +1589,13 @@ void SwAccessibleTable::FireSelectionEvent( )
 
     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
 
-    for (Cells_t::iterator vi = m_vecCellRemove.begin();
-            vi != m_vecCellRemove.end(); ++vi)
+    for (const auto& rCell : m_vecCellRemove)
     {
         // fdo#57197: check if the object is still alive
-        uno::Reference<XAccessible> const xAcc(vi->second);
+        uno::Reference<XAccessible> const xAcc(rCell.second);
         if (xAcc.is())
         {
-            SwAccessibleContext *const pAccCell(vi->first);
+            SwAccessibleContext *const pAccCell(rCell.first);
             assert(pAccCell);
             pAccCell->FireAccessibleEvent(aEvent);
         }
@@ -1605,14 +1604,13 @@ void SwAccessibleTable::FireSelectionEvent( )
     if (m_vecCellAdd.size() <= SELECTION_WITH_NUM)
     {
         aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
-        for (Cells_t::iterator vi = m_vecCellAdd.begin();
-                vi != m_vecCellAdd.end(); ++vi)
+        for (const auto& rCell : m_vecCellAdd)
         {
             // fdo#57197: check if the object is still alive
-            uno::Reference<XAccessible> const xAcc(vi->second);
+            uno::Reference<XAccessible> const xAcc(rCell.second);
             if (xAcc.is())
             {
-                SwAccessibleContext *const pAccCell(vi->first);
+                SwAccessibleContext *const pAccCell(rCell.first);
                 assert(pAccCell);
                 pAccCell->FireAccessibleEvent(aEvent);
             }

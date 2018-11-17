@@ -855,10 +855,10 @@ css::uno::Sequence< css::uno::Any >
             if ( !vFrameList.empty() )
             {
                 uno::Sequence< uno::Any > aRet(vFrameList.size());
-                auto aIter = vFrameList.begin();
-                for ( sal_Int32 nIndex = 0; aIter != vFrameList.end(); ++aIter, nIndex++ )
+                sal_Int32 nIndex = 0;
+                for ( const auto& rpFrame : vFrameList )
                 {
-                    uno::Reference< XAccessible > xAcc = pAccMap->GetContext(*aIter, false);
+                    uno::Reference< XAccessible > xAcc = pAccMap->GetContext(rpFrame, false);
                     if ( xAcc.is() )
                     {
                         SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
@@ -867,6 +867,7 @@ css::uno::Sequence< css::uno::Any >
                             aRet[nIndex] <<= xAcc;
                         }
                     }
+                    nIndex++;
                 }
 
                 return aRet;

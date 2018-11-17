@@ -1402,19 +1402,17 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     // merge default and run attributes
     std::vector< PropertyValue > aValues( aDefAttrSeq.size() );
     sal_Int32 i = 0;
-    for ( tAccParaPropValMap::const_iterator aDefIter = aDefAttrSeq.begin();
-          aDefIter != aDefAttrSeq.end();
-          ++aDefIter )
+    for ( const auto& rDefEntry : aDefAttrSeq )
     {
         tAccParaPropValMap::const_iterator aRunIter =
-                                        aRunAttrSeq.find( aDefIter->first );
+                                        aRunAttrSeq.find( rDefEntry.first );
         if ( aRunIter != aRunAttrSeq.end() )
         {
             aValues[i] = aRunIter->second;
         }
         else
         {
-            aValues[i] = aDefIter->second;
+            aValues[i] = rDefEntry.second;
         }
         ++i;
     }
@@ -1429,11 +1427,9 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
         aValues.resize( aValues.size() + aSupplementalAttrSeq.size() );
 
-        for ( tAccParaPropValMap::const_iterator aSupplementalIter = aSupplementalAttrSeq.begin();
-            aSupplementalIter != aSupplementalAttrSeq.end();
-            ++aSupplementalIter )
+        for ( const auto& rSupplementalEntry : aSupplementalAttrSeq )
         {
-            aValues[i] = aSupplementalIter->second;
+            aValues[i] = rSupplementalEntry.second;
             ++i;
         }
 
@@ -1534,24 +1530,22 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
         PropertyEntryVector_t aPropertyEntries = rPropMap.getPropertyEntries();
-        PropertyEntryVector_t::const_iterator aPropIt = aPropertyEntries.begin();
-        while ( aPropIt != aPropertyEntries.end() )
+        for ( const auto& rProp : aPropertyEntries )
         {
-            const SfxPoolItem* pItem = pSet->GetItem( aPropIt->nWID );
+            const SfxPoolItem* pItem = pSet->GetItem( rProp.nWID );
             if ( pItem )
             {
                 uno::Any aVal;
-                pItem->QueryValue( aVal, aPropIt->nMemberId );
+                pItem->QueryValue( aVal, rProp.nMemberId );
 
                 PropertyValue rPropVal;
-                rPropVal.Name = aPropIt->sName;
+                rPropVal.Name = rProp.sName;
                 rPropVal.Value = aVal;
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 
                 aDefAttrSeq[rPropVal.Name] = rPropVal;
             }
-            ++aPropIt;
         }
 
         // #i72800#
@@ -1669,11 +1663,9 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
                                             ( bProvideMMToPixelRatio ? 1 : 0 ) );
     PropertyValue* pValues = aValues.getArray();
     sal_Int32 i = 0;
-    for ( tAccParaPropValMap::const_iterator aIter  = aDefAttrSeq.begin();
-          aIter != aDefAttrSeq.end();
-          ++aIter )
+    for ( const auto& rEntry : aDefAttrSeq )
     {
-        pValues[i] = aIter->second;
+        pValues[i] = rEntry.second;
         ++i;
     }
 
@@ -1750,19 +1742,18 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
             PropertyEntryVector_t aPropertyEntries = rPropMap.getPropertyEntries();
-            PropertyEntryVector_t::const_iterator aPropIt = aPropertyEntries.begin();
-            while ( aPropIt != aPropertyEntries.end() )
+            for ( const auto& rProp : aPropertyEntries )
             {
                 const SfxPoolItem* pItem( nullptr );
                 // #i82637# - Found character attributes, whose value equals the value of
                 // the corresponding default character attributes, are excluded.
-                if ( aSet.GetItemState( aPropIt->nWID, true, &pItem ) == SfxItemState::SET )
+                if ( aSet.GetItemState( rProp.nWID, true, &pItem ) == SfxItemState::SET )
                 {
                     uno::Any aVal;
-                    pItem->QueryValue( aVal, aPropIt->nMemberId );
+                    pItem->QueryValue( aVal, rProp.nMemberId );
 
                     PropertyValue rPropVal;
-                    rPropVal.Name = aPropIt->sName;
+                    rPropVal.Name = rProp.sName;
                     rPropVal.Value = aVal;
                     rPropVal.Handle = -1;
                     rPropVal.State = PropertyState_DIRECT_VALUE;
@@ -1775,8 +1766,6 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
                         aRunAttrSeq[rPropVal.Name] = rPropVal;
                     }
                 }
-
-                ++aPropIt;
             }
         }
 

@@ -107,11 +107,9 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
                     pAccImpl->GetAdditionalAccessibleChildren( &aAdditionalChildren );
 
                     sal_Int32 nCounter( 0 );
-                    for ( std::vector< vcl::Window* >::iterator aIter = aAdditionalChildren.begin();
-                          aIter != aAdditionalChildren.end();
-                          ++aIter )
+                    for ( const auto& rpChild : aAdditionalChildren )
                     {
-                        aLower = (*aIter);
+                        aLower = rpChild;
                         insert( ++nCounter, SwAccessibleChildMapKey::XWINDOW, aLower );
                     }
                 }

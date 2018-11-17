@@ -396,9 +396,8 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
             aItBegin = mChildren.begin();
         }
 
-        tSwNumberTreeChildren::iterator aIt;
-        for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
-            (*aIt)->mpParent = pDest;
+        for (auto& rpChild : mChildren)
+            rpChild->mpParent = pDest;
 
         pDest->mChildren.insert(mChildren.begin(), mChildren.end());
         mChildren.clear();
@@ -846,8 +845,6 @@ void SwNumberTreeNode::IsSane(bool bRecursive,
                               vector<const SwNumberTreeNode *> rParents)
     const
 {
-    tSwNumberTreeChildren::const_iterator aIt;
-
     assert(find(rParents.begin(), rParents.end(), this) == rParents.end());
 
     assert(rParents.empty() || rParents.back() == mpParent);
@@ -855,23 +852,23 @@ void SwNumberTreeNode::IsSane(bool bRecursive,
     rParents.push_back(this);
 
     bool bFirst = true;
-    for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
+    for (const auto& rpChild : mChildren)
     {
-        if (*aIt)
+        if (rpChild)
         {
-            if ((*aIt)->IsPhantom())
+            if (rpChild->IsPhantom())
             {
-                SAL_WARN_IF((*aIt)->HasOnlyPhantoms(), "sw.core",
+                SAL_WARN_IF(rpChild->HasOnlyPhantoms(), "sw.core",
                         "HasOnlyPhantoms: is this an error?");
 
                 assert(bFirst && "found phantom not at first position.");
             }
 
-            assert((*aIt)->mpParent == this);
+            assert(rpChild->mpParent == this);
 
             if (mpParent)
             {
-                assert((*aIt)->IsPhantom() || !(*aIt)->LessThan(*this));
+                assert(rpChild->IsPhantom() || !rpChild->LessThan(*this));
             }
         }
         else
@@ -881,7 +878,7 @@ void SwNumberTreeNode::IsSane(bool bRecursive,
 
         if (bRecursive)
         {
-            (*aIt)->IsSane(bRecursive, rParents);
+            rpChild->IsSane(bRecursive, rParents);
         }
 
         bFirst = false;
@@ -1031,10 +1028,8 @@ void SwNumberTreeNode::InvalidateTree() const
     // do not call SetInvalid, would cause loop !!!
     mItLastValid = mChildren.end();
 
-    tSwNumberTreeChildren::const_iterator aIt;
-
-    for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
-        (*aIt)->InvalidateTree();
+    for (const auto& rpChild : mChildren)
+        rpChild->InvalidateTree();
 }
 
 void SwNumberTreeNode::Invalidate(SwNumberTreeNode const * pChild)
@@ -1072,10 +1067,8 @@ void SwNumberTreeNode::Notify()
         if (! IsPhantom())
             NotifyNode();
 
-        tSwNumberTreeChildren::iterator aIt;
-
-        for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
-            (*aIt)->Notify();
+        for (auto& rpChild : mChildren)
+            rpChild->Notify();
     }
 }
 
@@ -1174,20 +1167,16 @@ void SwNumberTreeNode::NotifyChildrenOnDepth( const int nDepth )
     OSL_ENSURE( nDepth >= 0,
             "<SwNumberTreeNode::NotifyChildrenOnDepth(..)> - misusage" );
 
-    SwNumberTreeNode::tSwNumberTreeChildren::iterator aChildIter =
-                                                            mChildren.begin();
-    while ( aChildIter != mChildren.end() )
+    for ( const auto& rpChild : mChildren )
     {
         if ( nDepth == 0 )
         {
-            (*aChildIter)->NotifyNode();
+            rpChild->NotifyNode();
         }
         else
         {
-            (*aChildIter)->NotifyChildrenOnDepth( nDepth - 1 );
+            rpChild->NotifyChildrenOnDepth( nDepth - 1 );
         }
-
-        ++aChildIter;
     }
 }
 
