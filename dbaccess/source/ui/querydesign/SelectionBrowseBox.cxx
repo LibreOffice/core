@@ -2559,12 +2559,12 @@ OUString OSelectionBrowseBox::GetRowDescription( sal_Int32 _nRow ) const
     return aLabel.getToken(nToken, ';');
 }
 
-OUString OSelectionBrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition) const
+OUString OSelectionBrowseBox::GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition) const
 {
     OUString sRetText;
     switch( _eObjType )
     {
-        case ::svt::BBTYPE_ROWHEADERCELL:
+        case ::vcl::BBTYPE_ROWHEADERCELL:
             sRetText = GetRowDescription(_nPosition);
             break;
         default:

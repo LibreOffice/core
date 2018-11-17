@@ -1242,6 +1242,16 @@ public:
                         virtual ~VCLXToolBox() override;
 };
 
+class VCLXHeaderBar :  public VCLXWindow
+{
+public:
+    VCLXHeaderBar();
+    virtual ~VCLXHeaderBar() override;
+
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
+
+};
+
 #endif // INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

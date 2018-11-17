@@ -30,7 +30,7 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
-#include <svtaccessiblefactory.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
 #include <limits>
@@ -495,7 +495,7 @@ struct TabBar_Impl
     ScopedVclPtr<TabBarEdit>    mpEdit;
     std::vector<std::unique_ptr<ImplTabBarItem>> mpItemList;
 
-    svt::AccessibleFactoryAccess  maAccessibleFactory;
+    vcl::AccessibleFactoryAccess  maAccessibleFactory;
 
     sal_uInt16 getItemSize()
     {

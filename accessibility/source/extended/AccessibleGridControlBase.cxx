@@ -18,7 +18,7 @@
  */
 
 #include <extended/AccessibleGridControlBase.hxx>
-#include <svtools/accessibletable.hxx>
+#include <vcl/accessibletable.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/types.h>
 
@@ -34,8 +34,8 @@ using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
-using namespace ::svt;
-using namespace ::svt::table;
+using namespace ::vcl;
+using namespace ::vcl::table;
 
 
 namespace accessibility {
@@ -45,8 +45,8 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 
 AccessibleGridControlBase::AccessibleGridControlBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::table::IAccessibleTable& rTable,
-        ::svt::table::AccessibleTableControlObjType      eObjType ) :
+        ::vcl::table::IAccessibleTable& rTable,
+        ::vcl::table::AccessibleTableControlObjType      eObjType ) :
     AccessibleGridControlImplHelper( m_aMutex ),
     m_xParent( rxParent ),
     m_aTable( rTable),
@@ -430,8 +430,8 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
 
 
 GridControlAccessibleElement::GridControlAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                        ::svt::table::IAccessibleTable& rTable,
-                        ::svt::table::AccessibleTableControlObjType  eObjType )
+                        ::vcl::table::IAccessibleTable& rTable,
+                        ::vcl::table::AccessibleTableControlObjType  eObjType )
     :AccessibleGridControlBase( rxParent, rTable, eObjType )
 {
 }

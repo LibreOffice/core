@@ -18,10 +18,9 @@
  */
 
 #include <extended/AccessibleGridControlTableBase.hxx>
-#include <svtools/accessibletable.hxx>
+#include <vcl/accessibletable.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>
-
 
 using css::uno::Reference;
 using css::uno::Sequence;
@@ -29,8 +28,8 @@ using css::uno::Any;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::svt;
-using namespace ::svt::table;
+using namespace ::vcl;
+using namespace ::vcl::table;
 
 
 namespace accessibility {

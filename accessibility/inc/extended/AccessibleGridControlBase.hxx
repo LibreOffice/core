@@ -21,7 +21,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLBASE_HXX
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLBASE_HXX
 
-#include <svtools/accessibletable.hxx>
+#include <vcl/accessibletable.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
@@ -73,8 +73,8 @@ public:
         @param eObjType  Type of accessible table control. */
     AccessibleGridControlBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::table::IAccessibleTable& rTable,
-        ::svt::table::AccessibleTableControlObjType  eObjType );
+        ::vcl::table::IAccessibleTable& rTable,
+        ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 protected:
     virtual ~AccessibleGridControlBase() override;
@@ -191,7 +191,7 @@ public:
     // helper methods
 
     /** @return  The GridControl object type. */
-    inline ::svt::table::AccessibleTableControlObjType getType() const;
+    inline ::vcl::table::AccessibleTableControlObjType getType() const;
 
     /** Commits an event to all listeners. */
     void commitEvent(
@@ -258,9 +258,9 @@ protected:
     /** The parent accessible object. */
     css::uno::Reference< css::accessibility::XAccessible > m_xParent;
     /** The SVT Table control. */
-    ::svt::table::IAccessibleTable& m_aTable;
+    ::vcl::table::IAccessibleTable& m_aTable;
     /** The type of this object (for names, descriptions, state sets, ...). */
-    ::svt::table::AccessibleTableControlObjType m_eObjType;
+    ::vcl::table::AccessibleTableControlObjType m_eObjType;
 
 private:
     /** Localized name. */
@@ -290,8 +290,8 @@ protected:
     */
     GridControlAccessibleElement(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::table::IAccessibleTable& rTable,
-        ::svt::table::AccessibleTableControlObjType  eObjType );
+        ::vcl::table::IAccessibleTable& rTable,
+        ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 public:
     // XInterface
@@ -316,7 +316,7 @@ private:
 
 // inlines
 
-inline ::svt::table::AccessibleTableControlObjType AccessibleGridControlBase::getType() const
+inline ::vcl::table::AccessibleTableControlObjType AccessibleGridControlBase::getType() const
 {
     return m_eObjType;
 }

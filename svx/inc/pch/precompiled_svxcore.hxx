@@ -425,10 +425,8 @@
 #include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <svl/whiter.hxx>
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/headbar.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -589,6 +587,8 @@
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/headbar.hxx>
 #include <vcl/transfer.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

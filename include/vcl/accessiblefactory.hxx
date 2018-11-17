@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ACCESSIBLEFACTORY_HXX
-#define INCLUDED_SVTOOLS_ACCESSIBLEFACTORY_HXX
+#ifndef INCLUDED_VCL_ACCESSIBLEFACTORY_HXX
+#define INCLUDED_VCL_ACCESSIBLEFACTORY_HXX
 
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
-#include <svtools/accessibletableprovider.hxx>
+#include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/accessibletableprovider.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -45,12 +45,8 @@ class VCLXWindow;
 class TextEngine;
 class TextView;
 
-
-namespace svt
+namespace vcl
 {
-
-
-    class PanelTabBar;
     namespace table
     {
         class IAccessibleTable;
@@ -72,16 +68,20 @@ namespace svt
     class IAccessibleFactory : public virtual ::salhelper::SimpleReferenceObject
     {
     public:
-        virtual IAccessibleTabListBox*
+        virtual vcl::IAccessibleTabListBox*
             createAccessibleTabListBox(
                 const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                 SvHeaderTabListBox& rBox
             ) const = 0;
-
-        virtual IAccessibleBrowseBox*
+        virtual css::uno::Reference< css::accessibility::XAccessible >
+            createAccessibleTreeListBox(
+                SvTreeListBox& _rListBox,
+                const css::uno::Reference< css::accessibility::XAccessible >& _xParent
+            ) const = 0;
+        virtual vcl::IAccessibleBrowseBox*
             createAccessibleBrowseBox(
                 const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                IAccessibleTableProvider& _rBrowseBox
+                vcl::IAccessibleTableProvider& _rBrowseBox
             ) const = 0;
         virtual table::IAccessibleTableControl*
             createAccessibleTableControl(
@@ -108,14 +108,14 @@ namespace svt
         virtual css::uno::Reference< css::accessibility::XAccessible >
             createAccessibleBrowseBoxHeaderBar(
                 const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                IAccessibleTableProvider& _rOwningTable,
-                AccessibleBrowseBoxObjType _eObjType
+                vcl::IAccessibleTableProvider& _rOwningTable,
+                vcl::AccessibleBrowseBoxObjType _eObjType
             ) const = 0;
 
         virtual css::uno::Reference< css::accessibility::XAccessible >
             createAccessibleBrowseBoxTableCell(
                 const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                IAccessibleTableProvider& _rBrowseBox,
+                vcl::IAccessibleTableProvider& _rBrowseBox,
                 const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                 sal_Int32 _nRowId,
                 sal_uInt16 _nColId,
@@ -126,15 +126,15 @@ namespace svt
             createAccessibleBrowseBoxHeaderCell(
                 sal_Int32 _nColumnRowId,
                 const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                IAccessibleTableProvider& _rBrowseBox,
+                vcl::IAccessibleTableProvider& _rBrowseBox,
                 const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-                AccessibleBrowseBoxObjType  _eObjType
+                vcl::AccessibleBrowseBoxObjType  _eObjType
             ) const = 0;
 
         virtual css::uno::Reference< css::accessibility::XAccessible >
             createAccessibleCheckBoxCell(
                 const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                IAccessibleTableProvider& _rBrowseBox,
+                vcl::IAccessibleTableProvider& _rBrowseBox,
                 const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos,
@@ -147,7 +147,7 @@ namespace svt
                 const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
                 const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
                 const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
-                IAccessibleTableProvider& _rBrowseBox,
+                vcl::IAccessibleTableProvider& _rBrowseBox,
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos
             ) const = 0;
@@ -156,10 +156,9 @@ namespace svt
         virtual ~IAccessibleFactory() override {}
     };
 
+}   // namespace vcl
 
-}   // namespace svt
 
-
-#endif // INCLUDED_SVTOOLS_ACCESSIBLEFACTORY_HXX
+#endif // INCLUDED_VCL_ACCESSIBLEFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

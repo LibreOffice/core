@@ -18,7 +18,7 @@
  */
 
 #include <extended/AccessibleBrowseBoxTable.hxx>
-#include <svtools/accessibletableprovider.hxx>
+#include <vcl/accessibletableprovider.hxx>
 
 
 using ::com::sun::star::uno::Reference;
@@ -36,8 +36,8 @@ namespace accessibility {
 
 AccessibleBrowseBoxTable::AccessibleBrowseBoxTable(
         const Reference< XAccessible >& rxParent,
-        IAccessibleTableProvider&                      rBrowseBox ) :
-    AccessibleBrowseBoxTableBase( rxParent, rBrowseBox, BBTYPE_TABLE )
+        vcl::IAccessibleTableProvider& rBrowseBox ) :
+    AccessibleBrowseBoxTableBase( rxParent, rBrowseBox, vcl::BBTYPE_TABLE )
 {
 }
 
@@ -62,7 +62,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
 {
     osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
-    return BBINDEX_TABLE;
+    return vcl::BBINDEX_TABLE;
 }
 
 // XAccessibleComponent -------------------------------------------------------
@@ -112,14 +112,14 @@ Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxTable::getAccessibleRo
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
-    return implGetHeaderBar( BBINDEX_ROWHEADERBAR );
+    return implGetHeaderBar( vcl::BBINDEX_ROWHEADERBAR );
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleBrowseBoxTable::getAccessibleColumnHeaders()
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();
-    return implGetHeaderBar( BBINDEX_COLUMNHEADERBAR );
+    return implGetHeaderBar( vcl::BBINDEX_COLUMNHEADERBAR );
 }
 
 Sequence< sal_Int32 > SAL_CALL AccessibleBrowseBoxTable::getSelectedAccessibleRows()

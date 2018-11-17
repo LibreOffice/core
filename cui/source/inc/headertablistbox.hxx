@@ -20,9 +20,8 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_HEADERTABLISTBOX_HXX
 #define INCLUDED_CUI_SOURCE_INC_HEADERTABLISTBOX_HXX
 
-#include <svtools/headbar.hxx>
-#include <svtools/svtabbx.hxx>
-
+#include <vcl/headbar.hxx>
+#include <vcl/svtabbx.hxx>
 
 class MacroEventListBox final : public Control
 {

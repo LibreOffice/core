@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/seleng.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/vclevent.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <o3tl/enumarray.hxx>
@@ -99,6 +100,9 @@ private:
 
     VclPtr<ScrollBar>    aHorSBar;
     VclPtr<ScrollBarBox> aScrBarBox;
+
+    ::vcl::AccessibleFactoryAccess
+                        m_aFactoryAccess;
 
     static Image*       s_pDefCollapsed;
     static Image*       s_pDefExpanded;
