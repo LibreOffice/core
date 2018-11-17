@@ -567,7 +567,7 @@ void SAL_CALL OPreparedStatement::setClob(sal_Int32 nParameterIndex, const Refer
             break;
     }
 
-    // We need to make sure we close the Blob even if their are errors, hence evaluate
+    // We need to make sure we close the Blob even if there are errors, hence evaluate
     // errors after closing.
     closeBlobAfterWriting(aBlobHandle);
 
@@ -605,7 +605,7 @@ void OPreparedStatement::setClob( sal_Int32 nParameterIndex, const OUString& rSt
                             sData.getLength(),
                             sData.getStr() );
 
-    // We need to make sure we close the Blob even if their are errors, hence evaluate
+    // We need to make sure we close the Blob even if there are errors, hence evaluate
     // errors after closing.
     closeBlobAfterWriting(aBlobHandle);
 
@@ -657,7 +657,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
         }
     }
 
-    // We need to make sure we close the Blob even if their are errors, hence evaluate
+    // We need to make sure we close the Blob even if there are errors, hence evaluate
     // errors after closing.
     closeBlobAfterWriting(aBlobHandle);
 
@@ -824,7 +824,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
             }
         }
 
-        // We need to make sure we close the Blob even if their are errors, hence evaluate
+        // We need to make sure we close the Blob even if there are errors, hence evaluate
         // errors after closing.
         closeBlobAfterWriting(aBlobHandle);
 
