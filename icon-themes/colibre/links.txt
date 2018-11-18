@@ -1783,3 +1783,7 @@ cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
 cmd/sc_chartmenu.png cmd/sc_drawchart.png
 cmd/sc_objectmenu.png cmd/sc_insertframe.png
 
+# writer
+# ===============================================
+cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
+cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
