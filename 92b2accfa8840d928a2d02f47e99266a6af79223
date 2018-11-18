@@ -22,6 +22,30 @@
       "revId": "92b2accfa8840d928a2d02f47e99266a6af79223",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_c747b1bc",
+        "filename": "sw/source/core/view/vprint.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-11-18T23:06:53Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "ff5d4b2f_b12abf8d",
+      "range": {
+        "startLine": 592,
+        "startChar": 71,
+        "endLine": 592,
+        "endChar": 75
+      },
+      "revId": "92b2accfa8840d928a2d02f47e99266a6af79223",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
