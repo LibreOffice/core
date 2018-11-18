@@ -1502,7 +1502,7 @@ struct TemporaryCellGroupMaker
             mCell->GetDocument()->GetRecursionHelper().AddTemporaryGroupCell( mCell );
         }
     }
-    ~TemporaryCellGroupMaker()
+    ~TemporaryCellGroupMaker() COVERITY_NOEXCEPT_FALSE
     {
         if( mEnabled )
             mCell->GetDocument()->GetRecursionHelper().CleanTemporaryGroupCells();
