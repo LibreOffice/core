@@ -612,28 +612,25 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
     {
         const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
         PropertyEntryVector_t aSrcPropVector = rSrc.getPropertyEntries();
-        PropertyEntryVector_t::const_iterator aSrcIt = aSrcPropVector.begin();
 
-        while(aSrcIt != aSrcPropVector.end())
+        for(const auto& rSrcProp : aSrcPropVector)
         {
-            const sal_uInt16 nWID = aSrcIt->nWID;
+            const sal_uInt16 nWID = rSrcProp.nWID;
             if(SfxItemPool::IsWhich(nWID)
                     && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
                     && rPropSet.GetUsrAnyForID(nWID))
                 rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
-            ++aSrcIt;
         }
 
-        aSrcIt = aSrcPropVector.begin();
-        while(aSrcIt != aSrcPropVector.end())
+        for(const auto& rSrcProp : aSrcPropVector)
         {
-            if(aSrcIt->nWID)
+            if(rSrcProp.nWID)
             {
-                uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(aSrcIt->nWID);
+                uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(rSrcProp.nWID);
                 if(pUsrAny)
                 {
                     // search for equivalent entry in pDst
-                    const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( aSrcIt->sName );
+                    const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( rSrcProp.sName );
                     if(pEntry)
                     {
                         // entry found
@@ -641,7 +638,7 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
                         {
                             // special ID in PropertySet, can only be set
                             // directly at the object
-                            xSet->setPropertyValue( aSrcIt->sName, *pUsrAny);
+                            xSet->setPropertyValue( rSrcProp.sName, *pUsrAny);
                         }
                         else
                         {
@@ -650,9 +647,6 @@ static void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemProper
                     }
                 }
             }
-
-            // next entry
-            ++aSrcIt;
         }
         const_cast< SvxItemPropertySet& >(rPropSet).ClearAllUsrAny();
     }

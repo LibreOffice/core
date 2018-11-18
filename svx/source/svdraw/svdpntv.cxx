@@ -67,13 +67,10 @@ using namespace ::com::sun::star;
 
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
 {
-    for(SdrPaintWindowVector::const_iterator a = maPaintWindows.begin(); a != maPaintWindows.end(); ++a)
-    {
-        if(&((*a)->GetOutputDevice()) == &rOut)
-        {
-            return *a;
-        }
-    }
+    auto a = std::find_if(maPaintWindows.begin(), maPaintWindows.end(),
+        [&rOut](const SdrPaintWindow* pWindow) { return &(pWindow->GetOutputDevice()) == &rOut; });
+    if (a != maPaintWindows.end())
+        return *a;
 
     return nullptr;
 }
@@ -578,9 +575,9 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
                     pWindow->SetLineColor(COL_LIGHTGREEN);
                     pWindow->SetFillColor();
 
-                    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+                    for(const auto& rRect : aRectangles)
                     {
-                        pWindow->DrawRect(*aRectIter);
+                        pWindow->DrawRect(rRect);
                     }
 
                     //RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());

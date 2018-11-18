@@ -88,12 +88,10 @@ namespace sdr
             }
 
             // execute events from the vector
-            ::std::vector< Event* >::const_iterator aEnd = aToBeExecutedList.end();
-            for(::std::vector< Event* >::iterator aCandidate = aToBeExecutedList.begin();
-                aCandidate != aEnd; ++aCandidate)
+            for(auto& rpCandidate : aToBeExecutedList)
             {
                 // trigger event. This may re-insert the event to the scheduler again
-                (*aCandidate)->Trigger(mnTime);
+                rpCandidate->Trigger(mnTime);
             }
         }
 
@@ -146,9 +144,8 @@ namespace sdr
         void Scheduler::InsertEvent(Event& rNew)
         {
             // insert maintaining time ordering
-            auto it = mvEvents.begin();
-            while (it != mvEvents.end() && rNew.GetTime() >= (*it)->GetTime())
-                it++;
+            auto it = std::find_if(mvEvents.begin(), mvEvents.end(),
+                [&rNew](const Event* pEvent) { return rNew.GetTime() < pEvent->GetTime(); });
             mvEvents.insert(it, &rNew);
             checkTimeout();
         }

@@ -476,10 +476,9 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
 
                     if(aPathXPP.count())
                     {
-                        for(SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
+                        for(const sal_uInt16 nObjPt : rPts)
                         {
                             sal_uInt32 nPolyNum, nPointNum;
-                            const sal_uInt16 nObjPt = *it;
 
                             if(sdr::PolyPolygonEditor::GetRelativePolyPoint(aPathXPP, nObjPt, nPolyNum, nPointNum))
                             {
@@ -518,9 +517,8 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
                 if (pGPL)
                 {
-                    for(SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
+                    for(const sal_uInt16 nObjPt : rPts)
                     {
-                        const sal_uInt16 nObjPt = *it;
                         const sal_uInt16 nGlueNum(pGPL->FindGluePoint(nObjPt));
 
                         if(SDRGLUEPOINT_NOTFOUND != nGlueNum)
@@ -1620,9 +1618,8 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     tools::Rectangle aBound(pObj->GetCurrentBoundRect());
 
-                    for (SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
+                    for (sal_uInt16 nId : rPts)
                     {
-                        sal_uInt16 nId = *it;
                         sal_uInt16 nGlueNum=pGPL->FindGluePoint(nId);
 
                         if (nGlueNum!=SDRGLUEPOINT_NOTFOUND)

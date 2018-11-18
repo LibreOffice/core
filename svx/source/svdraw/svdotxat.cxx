@@ -376,8 +376,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             }
         }
         // and finally, merge all stylesheets that are contained in aStyles with previous broadcasters
-        for(std::set<SfxStyleSheet*>::const_iterator it = aStyleSheets.begin(); it != aStyleSheets.end(); ++it) {
-            SfxStyleSheet* pStyle=*it;
+        for(SfxStyleSheet* pStyle : aStyleSheets) {
             // let StartListening see for itself if there's already a listener registered
             StartListening(*pStyle, DuplicateHandling::Prevent);
         }
@@ -411,10 +410,9 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
             }
 
             ESelection aSelAll( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL );
-            std::vector<sal_uInt16>::const_iterator aIter( rCharWhichIds.begin() );
-            while( aIter != rCharWhichIds.end() )
+            for( const auto& rWhichId : rCharWhichIds )
             {
-                pOutliner->RemoveAttribs( aSelAll, false, (*aIter++) );
+                pOutliner->RemoveAttribs( aSelAll, false, rWhichId );
             }
 
             if(!pEdtOutl || (pText != getActiveText()) )

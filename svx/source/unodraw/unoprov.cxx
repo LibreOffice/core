@@ -833,11 +833,10 @@ OUString UHashMap::getNameFromId(sal_uInt32 nId)
 {
     const UHashMapImpl &rMap = GetUHashImpl();
 
-    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); ++it)
-    {
-        if (it->second == nId)
-            return it->first;
-    }
+    auto it = std::find_if(rMap.begin(), rMap.end(),
+        [nId](const UHashMapImpl::value_type& rEntry) { return rEntry.second == nId; });
+    if (it != rMap.end())
+        return it->first;
     OSL_FAIL("[CL] unknown SdrObject identifier");
     return OUString();
 }

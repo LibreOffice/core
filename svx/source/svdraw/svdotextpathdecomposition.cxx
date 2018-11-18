@@ -567,10 +567,10 @@ namespace
         const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute,
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rTarget)
     {
-        for(basegfx::B2DPolyPolygonVector::const_iterator aPolygon(rB2DPolyPolyVector.begin()); aPolygon != rB2DPolyPolyVector.end(); ++aPolygon)
+        for(const auto& rB2DPolyPolygon : rB2DPolyPolyVector)
         {
             // prepare PolyPolygons
-            basegfx::B2DPolyPolygon aB2DPolyPolygon = *aPolygon;
+            basegfx::B2DPolyPolygon aB2DPolyPolygon = rB2DPolyPolygon;
             aB2DPolyPolygon.transform(rTransform);
 
             for(auto const& rPolygon : aB2DPolyPolygon)

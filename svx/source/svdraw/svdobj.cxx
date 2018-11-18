@@ -390,9 +390,8 @@ SdrObject::~SdrObject()
 {
     // tell all the registered ObjectUsers that the page is in destruction
     sdr::ObjectUserVector aListCopy(mpImpl->maObjectUsers.begin(), mpImpl->maObjectUsers.end());
-    for(sdr::ObjectUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
+    for(sdr::ObjectUser* pObjectUser : aListCopy)
     {
-        sdr::ObjectUser* pObjectUser = *aIterator;
         DBG_ASSERT(pObjectUser, "SdrObject::~SdrObject: corrupt ObjectUser list (!)");
         pObjectUser->ObjectInDestruction(*this);
     }

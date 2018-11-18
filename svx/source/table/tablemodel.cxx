@@ -88,10 +88,8 @@ template< class Vec, class Iter, class Entry > static sal_Int32 insert_range( Ve
         else
         {
             // insert
-            sal_Int32 nFind = nIndex;
             Iter aIter( rVector.begin() );
-            while( nFind-- )
-                ++aIter;
+            std::advance( aIter, nIndex );
 
             Entry aEmpty;
             rVector.insert( aIter, nCount, aEmpty );
@@ -499,17 +497,15 @@ void TableModel::disposing()
 {
     if( !maRows.empty() )
     {
-        RowVector::iterator aIter( maRows.begin() );
-        while( aIter != maRows.end() )
-            (*aIter++)->dispose();
+        for( auto& rpRow : maRows )
+            rpRow->dispose();
         RowVector().swap(maRows);
     }
 
     if( !maColumns.empty() )
     {
-        ColumnVector::iterator aIter( maColumns.begin() );
-        while( aIter != maColumns.end() )
-            (*aIter++)->dispose();
+        for( auto& rpCol : maColumns )
+            rpCol->dispose();
         ColumnVector().swap(maColumns);
     }
 
@@ -1091,20 +1087,18 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
 void TableModel::updateRows()
 {
     sal_Int32 nRow = 0;
-    RowVector::iterator iter = maRows.begin();
-    while( iter != maRows.end() )
+    for( auto& rpRow : maRows )
     {
-        (*iter++)->mnRow = nRow++;
+        rpRow->mnRow = nRow++;
     }
 }
 
 void TableModel::updateColumns()
 {
     sal_Int32 nColumn = 0;
-    ColumnVector::iterator iter = maColumns.begin();
-    while( iter != maColumns.end() )
+    for( auto& rpCol : maColumns )
     {
-        (*iter++)->mnColumn = nColumn++;
+        rpCol->mnColumn = nColumn++;
     }
 }
 

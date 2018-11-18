@@ -384,22 +384,15 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     }
 
     // now aPreviouslyVisible contains all views where we became invisible
-    ::std::set< SdrView* >::const_iterator aLoopViews;
-    for (   aLoopViews = aPreviouslyVisible.begin();
-            aLoopViews != aPreviouslyVisible.end();
-            ++aLoopViews
-        )
+    for (const auto& rpView : aPreviouslyVisible)
     {
-        lcl_ensureControlVisibility( *aLoopViews, this, false );
+        lcl_ensureControlVisibility( rpView, this, false );
     }
 
     // and aNewlyVisible all views where we became visible
-    for (   aLoopViews = aNewlyVisible.begin();
-            aLoopViews != aNewlyVisible.end();
-            ++aLoopViews
-        )
+    for (const auto& rpView : aNewlyVisible)
     {
-        lcl_ensureControlVisibility( *aLoopViews, this, true );
+        lcl_ensureControlVisibility( rpView, this, true );
     }
 }
 

@@ -119,19 +119,15 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
 
     OUString sName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
-    ItemPoolVector::iterator aIter = maItemSetVector.begin();
-    const ItemPoolVector::iterator aEnd = maItemSetVector.end();
-
-
-    while( aIter != aEnd )
+    auto aIter = std::find_if(maItemSetVector.begin(), maItemSetVector.end(),
+        [&](const std::unique_ptr<SfxItemSet>& rpItem) {
+            const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&(rpItem->Get( mnWhich ) ));
+            return sName == pItem->GetName();
+        });
+    if (aIter != maItemSetVector.end())
     {
-        const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
-        if (sName == pItem->GetName())
-        {
-            maItemSetVector.erase( aIter );
-            return;
-        }
-        ++aIter;
+        maItemSetVector.erase( aIter );
+        return;
     }
 
     if (!hasByName(sName))
@@ -145,22 +141,19 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
 
     OUString aName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 
-    ItemPoolVector::iterator aIter = maItemSetVector.begin();
-    const ItemPoolVector::iterator aEnd = maItemSetVector.end();
-
-    while( aIter != aEnd )
+    auto aIter = std::find_if(maItemSetVector.begin(), maItemSetVector.end(),
+        [&](const std::unique_ptr<SfxItemSet>& rpItem) {
+            const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&(rpItem->Get( mnWhich ) ));
+            return aName == pItem->GetName();
+        });
+    if (aIter != maItemSetVector.end())
     {
-        const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
-        if (aName == pItem->GetName())
-        {
-            std::unique_ptr<NameOrIndex> xNewItem(createItem());
-            xNewItem->SetName(aName);
-            if (!xNewItem->PutValue(aElement, mnMemberId) || !isValid(xNewItem.get()))
-                throw lang::IllegalArgumentException();
-            (*aIter)->Put(*xNewItem);
-            return;
-        }
-        ++aIter;
+        std::unique_ptr<NameOrIndex> xNewItem(createItem());
+        xNewItem->SetName(aName);
+        if (!xNewItem->PutValue(aElement, mnMemberId) || !isValid(xNewItem.get()))
+            throw lang::IllegalArgumentException();
+        (*aIter)->Put(*xNewItem);
+        return;
     }
 
     // if it is not in our own sets, modify the pool!

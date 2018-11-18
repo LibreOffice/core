@@ -146,14 +146,12 @@ void SdrPageView::AddPaintWindowToPageView(SdrPaintWindow& rPaintWindow)
 
 void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
 {
-    for(auto it = maPageWindows.begin(); it != maPageWindows.end(); ++it)
-    {
-        if(&((*it)->GetPaintWindow()) == &rPaintWindow)
-        {
-            maPageWindows.erase(it);
-            break;
-        }
-    }
+    auto it = std::find_if(maPageWindows.begin(), maPageWindows.end(),
+        [&rPaintWindow](const std::unique_ptr<SdrPageWindow>& rpWindow) {
+            return &(rpWindow->GetPaintWindow()) == &rPaintWindow;
+        });
+    if (it != maPageWindows.end())
+        maPageWindows.erase(it);
 }
 
 css::uno::Reference< css::awt::XControlContainer > SdrPageView::GetControlContainer( const OutputDevice& _rDevice ) const

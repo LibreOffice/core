@@ -260,9 +260,9 @@ namespace sdr
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
                         aSet.Put(rSet);
 
-                        for (std::vector<sal_uInt16>::const_iterator aI = aCharWhichIds.begin(); aI != aCharWhichIds.end(); ++aI)
+                        for (const auto& rWhichId : aCharWhichIds)
                         {
-                            pOutliner->RemoveCharAttribs(nPara, *aI);
+                            pOutliner->RemoveCharAttribs(nPara, rWhichId);
                         }
 
                         pOutliner->SetParaAttribs(nPara, aSet);

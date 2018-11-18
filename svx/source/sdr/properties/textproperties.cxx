@@ -451,23 +451,20 @@ namespace sdr
                                     std::vector<EECharAttrib> aAttribs;
                                     pEditEngine->GetCharAttribs(nPara, aAttribs);
 
-                                    for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(), aEnd = aAttribs.end(); i != aEnd; ++i)
+                                    for(const auto& rAttrib : aAttribs)
                                     {
-                                        if(EE_FEATURE_FIELD == i->pAttr->Which())
+                                        if(rAttrib.pAttr && EE_FEATURE_FIELD == rAttrib.pAttr->Which())
                                         {
-                                            if(i->pAttr)
+                                            const SvxFieldItem* pFieldItem = static_cast<const SvxFieldItem*>(rAttrib.pAttr);
+
+                                            if(pFieldItem)
                                             {
-                                                const SvxFieldItem* pFieldItem = static_cast<const SvxFieldItem*>(i->pAttr);
+                                                const SvxFieldData* pData = pFieldItem->GetField();
 
-                                                if(pFieldItem)
+                                                if(dynamic_cast<const SvxURLField*>( pData))
                                                 {
-                                                    const SvxFieldData* pData = pFieldItem->GetField();
-
-                                                    if(dynamic_cast<const SvxURLField*>( pData))
-                                                    {
-                                                        bHasURL = true;
-                                                        break;
-                                                    }
+                                                    bHasURL = true;
+                                                    break;
                                                 }
                                             }
                                         }
@@ -480,16 +477,16 @@ namespace sdr
 
                                         ESelection aSel(nPara, 0);
 
-                                        for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(), aEnd = aAttribs.end(); i != aEnd; ++i)
+                                        for(const auto& rAttrib : aAttribs)
                                         {
-                                            if(EE_FEATURE_FIELD == i->pAttr->Which())
+                                            if(EE_FEATURE_FIELD == rAttrib.pAttr->Which())
                                             {
-                                                aSel.nEndPos = i->nStart;
+                                                aSel.nEndPos = rAttrib.nStart;
 
                                                 if(aSel.nStartPos != aSel.nEndPos)
                                                     pEditEngine->QuickSetAttribs(aColorSet, aSel);
 
-                                                aSel.nStartPos = i->nEnd;
+                                                aSel.nStartPos = rAttrib.nEnd;
                                             }
                                         }
 

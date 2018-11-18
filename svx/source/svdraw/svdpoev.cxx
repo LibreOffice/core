@@ -98,9 +98,9 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
         bSetMarkedSegmentsKindPossible = true;
     }
 
-    for (SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
+    for (const auto& rPt : rPts)
     {
-        sal_uInt32 nNum(*it);
+        sal_uInt32 nNum(rPt);
         sal_uInt32 nPolyNum, nPntNum;
 
         if(PolyPolygonEditor::GetRelativePolyPoint(pPath->GetPathPoly(), nNum, nPolyNum, nPntNum))
@@ -384,9 +384,9 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                         bCorrectionFlag = true;
 
                         SdrUShortCont aReplaceSet;
-                        for(SdrUShortCont::const_iterator it2 = rPts.begin(); it2 != rPts.end(); ++it2)
+                        for(const auto& rPt : rPts)
                         {
-                            sal_uInt32 nPntNum(*it2);
+                            sal_uInt32 nPntNum(rPt);
                             nPntNum += nNewPt0Idx;
 
                             if(nPntNum >= nMax)
@@ -439,15 +439,11 @@ bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
 
             if(nPointCount >= 3)
             {
-                bRetval = pMarkedPathObject->IsClosedObj(); // #i76617#
-
-                for(SdrUShortCont::const_iterator it = rSelectedPoints.begin();
-                    !bRetval && it != rSelectedPoints.end(); ++it)
-                {
-                    const sal_uInt16 nMarkedPointNum(*it);
-
-                    bRetval = (nMarkedPointNum > 0 && nMarkedPointNum < nPointCount - 1);
-                }
+                bRetval = pMarkedPathObject->IsClosedObj() // #i76617#
+                    || std::any_of(rSelectedPoints.begin(), rSelectedPoints.end(),
+                        [nPointCount](const sal_uInt16 nMarkedPointNum) {
+                            return nMarkedPointNum > 0 && nMarkedPointNum < nPointCount - 1;
+                        });
             }
         }
     }
@@ -545,9 +541,9 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 
         basegfx::B2DPolyPolygon aXPP(pPath->GetPathPoly());
 
-        for (SdrUShortCont::const_iterator it = rPts.begin(); it != rPts.end(); ++it)
+        for (const auto& rPt : rPts)
         {
-            sal_uInt32 nPt = *it;
+            sal_uInt32 nPt = rPt;
             sal_uInt32 nPolyNum, nPointNum;
 
             if(PolyPolygonEditor::GetRelativePolyPoint(aXPP, nPt, nPolyNum, nPointNum))

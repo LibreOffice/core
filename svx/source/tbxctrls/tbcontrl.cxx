@@ -1327,9 +1327,9 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     mpPaletteListBox->SetSelectHdl( LINK( this, SvxColorWindow, SelectPaletteHdl ) );
     mpPaletteListBox->AdaptDropDownLineCountToMaximum();
     std::vector<OUString> aPaletteList = mxPaletteManager->GetPaletteList();
-    for( std::vector<OUString>::iterator it = aPaletteList.begin(); it != aPaletteList.end(); ++it )
+    for (const auto& rPalette : aPaletteList )
     {
-        mpPaletteListBox->InsertEntry( *it );
+        mpPaletteListBox->InsertEntry( rPalette );
     }
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     mpPaletteListBox->SelectEntry( aPaletteName );
@@ -1439,8 +1439,8 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
     mxPaletteListBox->connect_changed(LINK(this, ColorWindow, SelectPaletteHdl));
     std::vector<OUString> aPaletteList = mxPaletteManager->GetPaletteList();
     mxPaletteListBox->freeze();
-    for (std::vector<OUString>::iterator it = aPaletteList.begin(); it != aPaletteList.end(); ++it)
-        mxPaletteListBox->append_text(*it);
+    for (const auto& rPalette : aPaletteList)
+        mxPaletteListBox->append_text(rPalette);
     mxPaletteListBox->thaw();
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     mxPaletteListBox->set_active_text(aPaletteName);
@@ -2261,12 +2261,12 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     bool bIsSymbol;
     NfWSStringsDtor aStringsDtor;
 
-    for( std::vector< OUString >::iterator i = aList.begin(); i != aList.end(); ++i, ++nCount )
+    for( const auto& rItem : aList )
     {
         sal_uInt16& rCurrencyIndex = aCurrencyList[ nCount ];
         if ( rCurrencyIndex < nLen )
         {
-            m_pCurrencyLb->InsertEntry( *i );
+            m_pCurrencyLb->InsertEntry( rItem );
             const NfCurrencyEntry& aCurrencyEntry = rCurrencyTable[ rCurrencyIndex ];
 
             bIsSymbol = nPos >= nLen;
@@ -2278,6 +2278,7 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
                 nSelectedPos = nPos;
             ++nPos;
         }
+        ++nCount;
     }
     m_pCurrencyLb->SetSelectHdl( LINK( this, SvxCurrencyList_Impl, SelectHdl ) );
     SetText( SvxResId( RID_SVXSTR_TBLAFMT_CURRENCY ) );

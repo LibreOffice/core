@@ -52,10 +52,10 @@ namespace sdr
 
                 if(pProcessor)
                 {
-                    for(OverlayObjectVector::const_iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); ++aIter)
+                    for(const auto& rpOverlayObject : maOverlayObjects)
                     {
-                        OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
-                        const OverlayObject& rCandidate = **aIter;
+                        OSL_ENSURE(rpOverlayObject, "Corrupted OverlayObject List (!)");
+                        const OverlayObject& rCandidate = *rpOverlayObject;
 
                         if(rCandidate.isVisible())
                         {
@@ -94,11 +94,10 @@ namespace sdr
 
             if(nSize)
             {
-                OverlayObjectVector::const_iterator aEnd(maOverlayObjects.end());
-                for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != aEnd; ++aIter)
+                for(const auto& rpOverlayObject : maOverlayObjects)
                 {
-                    OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
-                    OverlayObject& rCandidate = **aIter;
+                    OSL_ENSURE(rpOverlayObject, "Corrupted OverlayObject List (!)");
+                    OverlayObject& rCandidate = *rpOverlayObject;
                     rCandidate.stripeDefinitionHasChanged();
                 }
             }
@@ -224,11 +223,10 @@ namespace sdr
 
             if(nSize)
             {
-                OverlayObjectVector::const_iterator aEnd = maOverlayObjects.end();
-                for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != aEnd; ++aIter)
+                for(const auto& rpOverlayObject : maOverlayObjects)
                 {
-                    OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
-                    OverlayObject& rCandidate = **aIter;
+                    OSL_ENSURE(rpOverlayObject, "Corrupted OverlayObject List (!)");
+                    OverlayObject& rCandidate = *rpOverlayObject;
                     impApplyRemoveActions(rCandidate);
                 }
 

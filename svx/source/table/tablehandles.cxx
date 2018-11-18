@@ -119,12 +119,9 @@ void TableEdgeHdl::getPolyPolygon(basegfx::B2DPolyPolygon& rVisible, basegfx::B2
 
     basegfx::B2DPoint aStart(aOffset), aEnd(aOffset);
     int nPos = mbHorizontal ? 0 : 1;
-    TableEdgeVector::const_iterator aIter( maEdges.begin() );
 
-    while( aIter != maEdges.end() )
+    for( const TableEdge& aEdge : maEdges )
     {
-        TableEdge aEdge(*aIter++);
-
         aStart[nPos] = aOffset[nPos] + aEdge.mnStart;
         aEnd[nPos] = aOffset[nPos] + aEdge.mnEnd;
 

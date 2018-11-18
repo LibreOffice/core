@@ -643,13 +643,11 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
     for( nCol = 1; nCol < nColCount; ++nCol )
     {
         bool bChanges = false;
-        MergeableCellVector::iterator iter( aMergedCells[nCol].begin() );
 
         const sal_Int32 nOldSize = maColumns[nCol].mnSize;
 
-        while( iter != aMergedCells[nCol].end() )
+        for( const CellRef& xCell : aMergedCells[nCol] )
         {
-            CellRef xCell( (*iter++) );
             sal_Int32 nMinWidth = xCell->getMinimumWidth();
 
             for( sal_Int32 nMCol = nCol - xCell->getColumnSpan() + 1; (nMCol > 0) && (nMCol < nCol); ++nMCol )
@@ -806,10 +804,8 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
         bool bChanges = false;
         sal_Int32 nOldSize = maRows[nRow].mnSize;
 
-        MergeableCellVector::iterator iter( aMergedCells[nRow].begin() );
-        while( iter != aMergedCells[nRow].end() )
+        for( const CellRef& xCell : aMergedCells[nRow] )
         {
-            CellRef xCell( (*iter++) );
             sal_Int32 nMinHeight = xCell->getMinimumHeight();
 
             for( sal_Int32 nMRow = nRow - xCell->getRowSpan() + 1; (nMRow > 0) && (nMRow < nRow); ++nMRow )

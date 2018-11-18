@@ -905,12 +905,8 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             tools::Rectangle aBound;
 
             {
-                std::vector< SdrObject* >::iterator aIter = aShapes.begin();
-                const std::vector< SdrObject* >::iterator aEnd = aShapes.end();
-
-                while( aIter != aEnd )
+                for( SdrObject* pObj : aShapes )
                 {
-                    SdrObject* pObj = (*aIter++);
                     tools::Rectangle aR1(pObj->GetCurrentBoundRect());
                     if (aBound.IsEmpty())
                         aBound=aR1;

@@ -42,6 +42,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/text/XTextRange.hpp>
@@ -227,13 +228,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 
         if ( pDisabledTypes )
         {
-            const sal_Int32 nNumberOfDisabledSmartTagTypes = pDisabledTypes->size();
-            Sequence< OUString > aTypes( nNumberOfDisabledSmartTagTypes );
-
-            std::vector< OUString >::const_iterator aIter;
-            sal_Int32 nCount = 0;
-            for ( aIter = pDisabledTypes->begin(); aIter != pDisabledTypes->end(); ++aIter )
-                aTypes[ nCount++ ] = *aIter;
+            Sequence< OUString > aTypes = comphelper::containerToSequence(*pDisabledTypes);
 
             const Any aNewTypes = makeAny( aTypes );
 
