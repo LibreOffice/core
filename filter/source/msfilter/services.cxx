@@ -21,19 +21,16 @@
 #include <filter/msfilter/msvbahelper.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace ::ooo::vba;
 
 namespace {
 
-#define IMPLEMENTATION_ENTRY( className ) \
-    { &className##_createInstance, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, nullptr, 0 }
-
 static ::cppu::ImplementationEntry const spServices[] =
 {
-    IMPLEMENTATION_ENTRY( ::ooo::vba::VBAMacroResolver ),
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
+    { VBAMacroResolver_createInstance, VBAMacroResolver_getImplementationName,
+      VBAMacroResolver_getSupportedServiceNames,
+      ::cppu::createSingleComponentFactory, nullptr, 0 }
 };
-
-#undef IMPLEMENTATION_ENTRY
 
 } // namespace
 
