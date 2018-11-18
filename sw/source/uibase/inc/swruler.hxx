@@ -18,7 +18,7 @@ namespace vcl { class Window; }
 class SwEditWin;
 
 /**
- * An horizontal ruler with a control for comment panel visibility fo Writer.
+ * An horizontal ruler with a control for comment panel visibility for Writer.
  *
  * The comment control only appears when the document has comments already.
  */

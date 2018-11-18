@@ -98,9 +98,9 @@
 #define STR_STATE_BACKUP_DBDOC                      NC_("STR_STATE_BACKUP_DBDOC", "Backup Document")
 #define STR_STATE_MIGRATE                           NC_("STR_STATE_MIGRATE", "Migrate")
 #define STR_STATE_SUMMARY                           NC_("STR_STATE_SUMMARY", "Summary")
-// To translators: This refers to a form documen    t inside a database document.
+// To translators: This refers to a form document inside a database document.
 #define STR_FORM                                    NC_("STR_FORM", "Form '$name$'")
-// To translators: This refers to a report docum    ent inside a database document.
+// To translators: This refers to a report document inside a database document.
 #define STR_REPORT                                  NC_("STR_REPORT", "Report '$name$'")
 #define STR_OVERALL_PROGRESS                        NC_("STR_OVERALL_PROGRESS", "document $current$ of $overall$")
 #define STR_DATABASE_DOCUMENT                       NC_("STR_DATABASE_DOCUMENT", "Database Document")

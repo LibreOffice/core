@@ -321,7 +321,7 @@ namespace sfx2
         lcl_ReadGlobalFilters( aFilterClassification, _rGlobalClasses, _rGlobalClassNames );
 
 
-        // fo for the local classes
+        // go for the local classes
         lcl_ReadLocalFilters( aFilterClassification, _rLocalClasses );
 
     }
