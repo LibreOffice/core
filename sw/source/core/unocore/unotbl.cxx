@@ -1300,10 +1300,12 @@ uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames()
 
 
 SwXTextTableRow::SwXTextTableRow(SwFrameFormat* pFormat, SwTableLine* pLn) :
-    SwClient(pFormat),
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_ROW)),
-    pLine(pLn)
-{ }
+    m_pFormat(pFormat),
+    pLine(pLn),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_ROW))
+{
+    StartListening(m_pFormat->GetNotifier());
+}
 
 SwXTextTableRow::~SwXTextTableRow()
 {
@@ -1452,18 +1454,16 @@ void SwXTextTableRow::addVetoableChangeListener(const OUString& /*rPropertyName*
 void SwXTextTableRow::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
     { throw uno::RuntimeException("not implemented", static_cast<cppu::OWeakObject*>(this)); };
 
-void SwXTextTableRow::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
-    { ClientModify(this, pOld, pNew); }
-
-void SwXTextTableRow::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+void SwXTextTableRow::Notify(const SfxHint& rHint)
 {
-    if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableLine, SwXTextTableRow>*>(&rHint))
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
+        m_pFormat = nullptr;
+    } else if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableLine, SwXTextTableRow>*>(&rHint))
     {
         if(!pFindHint->m_pCore && pFindHint->m_pCore == pLine)
             pFindHint->m_pResult = this;
     }
-    else
-        SwClient::SwClientNotify(rModify, rHint);
 }
 
 SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine const * pLine)
@@ -3961,7 +3961,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
     SwTableLine* pLine = pTable->GetTabLines()[nIndex];
     FindUnoInstanceHint<SwTableLine,SwXTextTableRow> aHint{pLine};
-    pFrameFormat->CallSwClientNotify(aHint);
+    pFrameFormat->GetNotifier().Broadcast(aHint);
     if(!aHint.m_pResult)
         aHint.m_pResult = new SwXTextTableRow(pFrameFormat, pLine);
     uno::Reference<beans::XPropertySet> xRet = static_cast<beans::XPropertySet*>(aHint.m_pResult);
