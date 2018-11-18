@@ -1491,7 +1491,7 @@ namespace drawinglayer
 
             if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
             {
-                // #121194# Changed implementation and checked usages fo convert to metafile,
+                // #121194# Changed implementation and checked usages of convert to metafile,
                 // presentation start (uses SvtGraphicFill) and printing.
 
                 // calculate transformation. Get real object size, all values in FillGraphicAttribute

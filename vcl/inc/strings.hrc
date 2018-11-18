@@ -42,7 +42,7 @@
 #define SV_HELPTEXT_FADEOUT                          NC_("SV_HELPTEXT_FADEOUT", "Hide")
 #define SV_HELPTEXT_CLOSEDOCUMENT                    NC_("SV_HELPTEXT_CLOSEDOCUMENT", "Close Document")
 
-// To translators: This is used on buttons for platforms other than windows, there should be a ~ mnemonic in this string
+// To translators: This is used on buttons for platforms other than Windows, there should be a ~ mnemonic in this string
 #define SV_BUTTONTEXT_OK                             NC_("SV_BUTTONTEXT_OK", "~OK")
 // To translators: This is used on buttons for platforms other than windows, there should be a ~ mnemonic in this string
 #define SV_BUTTONTEXT_CANCEL                         NC_("SV_BUTTONTEXT_CANCEL", "~Cancel")
