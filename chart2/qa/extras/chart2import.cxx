@@ -115,6 +115,7 @@ public:
     void testTdf121205();
 
     void testTdf114179();
+    void testDeletedDataLabel();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testTdf121205);
 
     CPPUNIT_TEST(testTdf114179);
+    CPPUNIT_TEST(testDeletedDataLabel);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1636,6 +1638,35 @@ void Chart2ImportTest::testTdf114179()
     awt::Size aSize = getSize( xDiagram,aPage );
     CPPUNIT_ASSERT( aSize.Width > 0);
     CPPUNIT_ASSERT( aSize.Height > 0);
+}
+
+namespace {
+
+void checkDataLabelProperties(const Reference<chart2::XDataSeries>& xDataSeries, sal_Int32 nDataPointIndex, bool bValueVisible)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(nDataPointIndex), uno::UNO_QUERY_THROW);
+    chart2::DataPointLabel aLabel;
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(bValueVisible, static_cast<bool>(aLabel.ShowNumber));
+    CPPUNIT_ASSERT_EQUAL(false, static_cast<bool>(aLabel.ShowNumberInPercent));
+}
+
+}
+
+void Chart2ImportTest::testDeletedDataLabel()
+{
+    load("/chart2/qa/extras/data/xlsx/", "deleted_data_labels.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+    Reference<chart2::XDataSeries> xDataSeries0 = getDataSeriesFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT(xDataSeries0.is());
+    checkDataLabelProperties(xDataSeries0, 0, true);
+    checkDataLabelProperties(xDataSeries0, 1, false);
+    checkDataLabelProperties(xDataSeries0, 2, true);
+    Reference<chart2::XDataSeries> xDataSeries1 = getDataSeriesFromDoc(xChartDoc, 1);
+    CPPUNIT_ASSERT(xDataSeries1.is());
+    checkDataLabelProperties(xDataSeries1, 0, false);
+    checkDataLabelProperties(xDataSeries1, 1, false);
+    checkDataLabelProperties(xDataSeries1, 2, false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
