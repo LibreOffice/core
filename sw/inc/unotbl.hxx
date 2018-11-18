@@ -148,22 +148,17 @@ public:
     css::uno::Any GetAny() const;
 };
 
-class SwXTextTableRow final : public cppu::WeakImplHelper
-<
-    css::beans::XPropertySet,
-    css::lang::XServiceInfo
->,
-    public SwClient
+class SwXTextTableRow final
+    : public cppu::WeakImplHelper<css::beans::XPropertySet, css::lang::XServiceInfo>
+    , public SvtListener
 {
-    const SfxItemPropertySet*   m_pPropSet;
-    SwTableLine*            pLine;
+    SwFrameFormat* m_pFormat;
+    SwTableLine* pLine;
+    const SfxItemPropertySet* m_pPropSet;
 
-    SwFrameFormat* GetFrameFormat() { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
-    const SwFrameFormat* GetFrameFormat() const { return const_cast<SwXTextTableRow*>(this)->GetFrameFormat(); }
+    SwFrameFormat* GetFrameFormat() { return m_pFormat; }
+    const SwFrameFormat* GetFrameFormat() const { return m_pFormat; }
     virtual ~SwXTextTableRow() override;
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     SwXTextTableRow(SwFrameFormat* pFormat, SwTableLine* pLine);
@@ -184,6 +179,8 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     static SwTableLine* FindLine(SwTable* pTable, SwTableLine const * pLine);
+
+    void Notify(const SfxHint&) override;
 };
 
 typedef cppu::WeakImplHelper<
