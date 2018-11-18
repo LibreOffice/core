@@ -3307,7 +3307,7 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
     const SwTextNode* pTextNode( GetTextNodeForParaProps() );
     // sw_redlinehide: check that pParaPropsNode is the correct one
     assert(pTextNode->IsNumbered(getRootFrame()) == pTextNode->IsNumbered(nullptr));
-    if (pTextNode && pTextNode->IsNumbered(getRootFrame()) &&
+    if (pTextNode->IsNumbered(getRootFrame()) &&
         pTextNode->IsCountedInList() && pTextNode->GetNumRule())
     {
         int nListLevel = pTextNode->GetActualListLevel();
