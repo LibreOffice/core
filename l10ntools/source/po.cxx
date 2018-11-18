@@ -442,7 +442,7 @@ namespace
         struct tm* pNow = localtime(&aNow);
         char pBuff[50];
         strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
-        return pBuff;
+        return OString(pBuff);
     }
 }
 
