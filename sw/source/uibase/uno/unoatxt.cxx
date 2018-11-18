@@ -754,7 +754,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
         {
             if ( SfxHintId::Deinitializing == _rHint.GetId() )
             {
-                // our document is dying (possibly because we're shuting down, and the document was notified
+                // our document is dying (possibly because we're shutting down, and the document was notified
                 // earlier than we are?)
                 // stop listening at the docu
                 EndListening( *xDocSh );

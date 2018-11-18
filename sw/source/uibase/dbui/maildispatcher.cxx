@@ -120,7 +120,7 @@ void MailDispatcher::enqueueMailMessage(uno::Reference<mail::XMailMessage> const
     ::osl::MutexGuard thread_status_guard( m_aThreadStatusMutex );
     ::osl::MutexGuard message_container_guard( m_aMessageContainerMutex );
 
-    OSL_PRECOND( !m_bShutdownRequested, "MailDispatcher thread is shuting down already" );
+    OSL_PRECOND( !m_bShutdownRequested, "MailDispatcher thread is shutting down already" );
 
     m_aXMessageList.push_back( message );
     if ( m_bActive )
@@ -145,7 +145,7 @@ void MailDispatcher::start()
 
     ::osl::ClearableMutexGuard thread_status_guard( m_aThreadStatusMutex );
 
-    OSL_PRECOND(!m_bShutdownRequested, "MailDispatcher thread is shuting down already");
+    OSL_PRECOND(!m_bShutdownRequested, "MailDispatcher thread is shutting down already");
 
     if ( !m_bShutdownRequested )
     {
@@ -165,7 +165,7 @@ void MailDispatcher::stop()
 
     ::osl::ClearableMutexGuard thread_status_guard( m_aThreadStatusMutex );
 
-    OSL_PRECOND(!m_bShutdownRequested, "MailDispatcher thread is shuting down already");
+    OSL_PRECOND(!m_bShutdownRequested, "MailDispatcher thread is shutting down already");
 
     if (!m_bShutdownRequested)
     {
@@ -183,7 +183,7 @@ void MailDispatcher::shutdown()
 {
     ::osl::MutexGuard thread_status_guard( m_aThreadStatusMutex );
 
-    OSL_PRECOND(!m_bShutdownRequested, "MailDispatcher thread is shuting down already");
+    OSL_PRECOND(!m_bShutdownRequested, "MailDispatcher thread is shutting down already");
 
     m_bShutdownRequested = true;
     m_aWakeupCondition.set();
@@ -192,7 +192,7 @@ void MailDispatcher::shutdown()
 
 void MailDispatcher::addListener(::rtl::Reference<IMailDispatcherListener> const & listener)
 {
-    OSL_PRECOND(!m_bShutdownRequested, "MailDispatcher thread is shuting down already");
+    OSL_PRECOND(!m_bShutdownRequested, "MailDispatcher thread is shutting down already");
 
     ::osl::MutexGuard guard( m_aListenerContainerMutex );
     m_aListenerVector.push_back( listener );

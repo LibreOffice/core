@@ -453,7 +453,7 @@ sal_uInt16 BigPtrArray::Compress()
             // Is the current block now empty as a result?
             if( !p->nElem )
             {
-                // than remove
+                // then remove
                 delete   p;
                 p = nullptr;
                 ++nBlkdel;

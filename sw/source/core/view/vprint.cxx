@@ -589,8 +589,8 @@ bool SwViewShell::PrintOrPDFExport(
 void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                            vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
-    // For printing a shell is needed. Either the Doc already has one, than we
-    // create a new view, or it has none, than we create the first view.
+    // For printing a shell is needed. Either the Doc already has one, then we
+    // create a new view, or it has none, then we create the first view.
     std::unique_ptr<SwViewShell> pSh;
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
         pSh.reset(new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), nullptr, &rRenderContext,VSHELLFLAG_SHARELAYOUT ));
