@@ -16,6 +16,24 @@
       "revId": "777ad38f7a4850aaf7018d4ed3f4a757171b6558",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_07c5c98e",
+        "filename": "embedserv/source/inprocserv/dllentry.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-18T11:37:38Z",
+      "side": 1,
+      "message": "No, it might also b negative... char is not always unsigned",
+      "parentUuid": "ff5d4b2f_87d1b95a",
+      "revId": "777ad38f7a4850aaf7018d4ed3f4a757171b6558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
