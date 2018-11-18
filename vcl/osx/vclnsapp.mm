@@ -64,7 +64,7 @@
     (void)pNotification;
     if( [NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)] )
     {
-        NSWindow.allowsAutomaticWindowTabbing = NO;
+        [NSWindow setAllowsAutomaticWindowTabbing:NO];
     }
 }
 
