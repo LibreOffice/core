@@ -318,13 +318,9 @@ namespace
 
 void ColumnInfoCache::deinitializeControls()
 {
-    ColumnInfos::const_iterator aEnd = m_aColumns.end();
-    for (   ColumnInfos::iterator col = m_aColumns.begin();
-            col != aEnd;
-            ++col
-        )
+    for (auto& rCol : m_aColumns)
     {
-        lcl_resetColumnControlInfo( *col );
+        lcl_resetColumnControlInfo( rCol );
     }
     m_bControlsInitialized = false;
 }
@@ -334,19 +330,15 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
 {
     try
     {
-        ColumnInfos::const_iterator aEnd = m_aColumns.end();
         // for every of our known columns, find the controls which are bound to this column
-        for (   ColumnInfos::iterator col = m_aColumns.begin();
-                col != aEnd;
-                ++col
-            )
+        for (auto& rCol : m_aColumns)
         {
-            OSL_ENSURE( !col->xFirstControlWithInputRequired.is() && !col->xFirstGridWithInputRequiredColumn.is()
-                && ( col->nRequiredGridColumn == -1 ), "ColumnInfoCache::initializeControls: called me twice?" );
+            OSL_ENSURE( !rCol.xFirstControlWithInputRequired.is() && !rCol.xFirstGridWithInputRequiredColumn.is()
+                && ( rCol.nRequiredGridColumn == -1 ), "ColumnInfoCache::initializeControls: called me twice?" );
 
-            lcl_resetColumnControlInfo( *col );
+            lcl_resetColumnControlInfo( rCol );
 
-            Reference< XInterface > xNormColumn( col->xColumn, UNO_QUERY_THROW );
+            Reference< XInterface > xNormColumn( rCol.xColumn, UNO_QUERY_THROW );
 
             const Reference< XControl >* pControl( _rControls.getConstArray() );
             const Reference< XControl >* pControlEnd( pControl + _rControls.getLength() );
@@ -380,8 +372,8 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
                     if ( gridCol < gridColCount )
                     {
                         // found a grid column which is bound to the given
-                        col->xFirstGridWithInputRequiredColumn = xGrid;
-                        col->nRequiredGridColumn = gridCol;
+                        rCol.xFirstGridWithInputRequiredColumn = xGrid;
+                        rCol.nRequiredGridColumn = gridCol;
                         break;
                     }
 
@@ -401,7 +393,7 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
                 // did not find a control which is bound to this particular column, and for which the input is required
                 continue;   // with next DB column
 
-            col->xFirstControlWithInputRequired = *pControl;
+            rCol.xFirstControlWithInputRequired = *pControl;
         }
     }
     catch( const Exception& )
@@ -513,12 +505,9 @@ struct UpdateAllListeners
 IMPL_LINK_NOARG( FormController, OnInvalidateFeatures, Timer*, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    for ( ::std::set< sal_Int16 >::const_iterator aLoop = m_aInvalidFeatures.begin();
-          aLoop != m_aInvalidFeatures.end();
-          ++aLoop
-        )
+    for (const auto& rFeature : m_aInvalidFeatures)
     {
-        DispatcherContainer::const_iterator aDispatcherPos = m_aFeatureDispatchers.find( *aLoop );
+        DispatcherContainer::const_iterator aDispatcherPos = m_aFeatureDispatchers.find( rFeature );
         if ( aDispatcherPos != m_aFeatureDispatchers.end() )
         {
             // TODO: for the real and actual listener notifications, we should release
@@ -748,12 +737,9 @@ void FormController::impl_setTextOnAllFilter_throw()
     if ( static_cast<size_t>(m_nCurrentFilterPosition) < m_aFilterRows.size() )
     {
         FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
-        for (   FmFilterRow::const_iterator iter2 = rRow.begin();
-                iter2 != rRow.end();
-                ++iter2
-            )
+        for (const auto& rEntry : rRow)
         {
-            iter2->first->setText( iter2->second );
+            rEntry.first->setText( rEntry.second );
         }
     }
 }
@@ -788,10 +774,8 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                 // now add the filter rows
                 try
                 {
-                    for ( FmFilterRows::const_iterator row = m_aFilterRows.begin(); row != m_aFilterRows.end(); ++row )
+                    for (const FmFilterRow& rRow : m_aFilterRows)
                     {
-                        const FmFilterRow& rRow = *row;
-
                         if ( rRow.empty() )
                             continue;
 
@@ -946,26 +930,20 @@ Sequence< Sequence< OUString > > FormController::getPredicateExpressions()
 
     Sequence< Sequence< OUString > > aExpressions( m_aFilterRows.size() );
     sal_Int32 termIndex = 0;
-    for (   FmFilterRows::const_iterator row = m_aFilterRows.begin();
-            row != m_aFilterRows.end();
-            ++row, ++termIndex
-        )
+    for (const FmFilterRow& rRow : m_aFilterRows)
     {
-        const FmFilterRow& rRow( *row );
-
         Sequence< OUString > aConjunction( m_aFilterComponents.size() );
         sal_Int32 componentIndex = 0;
-        for (   FilterComponents::const_iterator comp = m_aFilterComponents.begin();
-                comp != m_aFilterComponents.end();
-                ++comp, ++componentIndex
-            )
+        for (const auto& rComp : m_aFilterComponents)
         {
-            FmFilterRow::const_iterator predicate = rRow.find( *comp );
+            FmFilterRow::const_iterator predicate = rRow.find( rComp );
             if ( predicate != rRow.end() )
                 aConjunction[ componentIndex ] = predicate->second;
+            ++componentIndex;
         }
 
         aExpressions[ termIndex ] = aConjunction;
+        ++termIndex;
     }
 
     return aExpressions;
@@ -1117,15 +1095,11 @@ void SAL_CALL FormController::disposing(const EventObject& e)
 
 void FormController::disposeAllFeaturesAndDispatchers()
 {
-    DispatcherContainer::const_iterator aEnd = m_aFeatureDispatchers.end();
-    for ( DispatcherContainer::iterator aDispatcher = m_aFeatureDispatchers.begin();
-          aDispatcher != aEnd;
-          ++aDispatcher
-        )
+    for (auto& rDispatcher : m_aFeatureDispatchers)
     {
         try
         {
-            ::comphelper::disposeComponent( aDispatcher->second );
+            ::comphelper::disposeComponent( rDispatcher.second );
         }
         catch( const Exception& )
         {
@@ -1165,11 +1139,10 @@ void FormController::disposing()
     implSetCurrentControl( nullptr );
 
     // clean up our children
-    for (FmFormControllers::const_iterator i = m_aChildren.begin();
-        i != m_aChildren.end(); ++i)
+    for (const auto& rpChild : m_aChildren)
     {
         // search the position of the model within the form
-        Reference< XFormComponent >  xForm((*i)->getModel(), UNO_QUERY);
+        Reference< XFormComponent >  xForm(rpChild->getModel(), UNO_QUERY);
         sal_uInt32 nPos = m_xModelAsIndex->getCount();
         Reference< XFormComponent > xTemp;
         for( ; nPos; )
@@ -1178,13 +1151,13 @@ void FormController::disposing()
             m_xModelAsIndex->getByIndex( --nPos ) >>= xTemp;
             if ( xForm.get() == xTemp.get() )
             {
-                Reference< XInterface > xIfc( *i, UNO_QUERY );
+                Reference< XInterface > xIfc( rpChild, UNO_QUERY );
                 m_xModelAsManager->detach( nPos, xIfc );
                 break;
             }
         }
 
-        Reference< XComponent > (*i, UNO_QUERY)->dispose();
+        Reference< XComponent > (rpChild, UNO_QUERY)->dispose();
     }
     m_aChildren.clear();
 
@@ -3063,14 +3036,12 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         Reference< XNameAccess > xQueryColumns =
             Reference< XColumnsSupplier >( m_xComposer, UNO_QUERY_THROW )->getColumns();
 
-        ::std::vector<FmFieldInfo>::const_iterator aEnd = rFieldInfos.end();
-        for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
-            iter != aEnd; ++iter)
+        for (auto& rFieldInfo : rFieldInfos)
         {
-            if ( xQueryColumns->hasByName((*iter).aFieldName) )
+            if ( xQueryColumns->hasByName(rFieldInfo.aFieldName) )
             {
-                if ( (xQueryColumns->getByName((*iter).aFieldName) >>= (*iter).xField) && (*iter).xField.is() )
-                    (*iter).xField->getPropertyValue(FM_PROP_REALNAME) >>= (*iter).aFieldName;
+                if ( (xQueryColumns->getByName(rFieldInfo.aFieldName) >>= rFieldInfo.xField) && rFieldInfo.xField.is() )
+                    rFieldInfo.xField->getPropertyValue(FM_PROP_REALNAME) >>= rFieldInfo.aFieldName;
             }
         }
 
@@ -3146,22 +3117,21 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                 }
 
                 // find the text component
-                for (::std::vector<FmFieldInfo>::const_iterator iter = rFieldInfos.begin();
-                    iter != aEnd; ++iter)
+                for (const auto& rFieldInfo : rFieldInfos)
                 {
                     // we found the field so insert a new entry to the filter row
-                    if ((*iter).xField == xField)
+                    if (rFieldInfo.xField == xField)
                     {
                         // do we already have the control ?
-                        if (aRow.find((*iter).xText) != aRow.end())
+                        if (aRow.find(rFieldInfo.xText) != aRow.end())
                         {
-                            OUString aCompText = aRow[(*iter).xText];
+                            OUString aCompText = aRow[rFieldInfo.xText];
                             aCompText += " ";
                             OString aVal = m_pParser->getContext().getIntlKeywordAscii(IParseContext::InternationalKeyCode::And);
                             aCompText += OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
                             aCompText += " ";
                             aCompText += ::comphelper::getString(pRefValues[j].Value);
-                            aRow[(*iter).xText] = aCompText;
+                            aRow[rFieldInfo.xText] = aCompText;
                         }
                         else
                         {
@@ -3212,7 +3182,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                                                                     ,aAppLocale
                                                                     ,cDecimalSeparator
                                                                     ,getParseContext());
-                                aRow[(*iter).xText] = sCriteria;
+                                aRow[rFieldInfo.xText] = sCriteria;
                             }
                         }
                     }
@@ -3227,12 +3197,9 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
     }
 
     // now set the filter controls
-    for (   ::std::vector<FmFieldInfo>::const_iterator field = rFieldInfos.begin(), aEnd = rFieldInfos.end();
-            field != aEnd;
-            ++field
-        )
+    for (const auto& rFieldInfo : rFieldInfos)
     {
-        m_aFilterComponents.push_back( field->xText );
+        m_aFilterComponents.push_back( rFieldInfo.xText );
     }
 }
 
@@ -3477,10 +3444,9 @@ void FormController::setMode(const OUString& Mode)
     else
         stopFiltering();
 
-    for (FmFormControllers::const_iterator i = m_aChildren.begin();
-        i != m_aChildren.end(); ++i)
+    for (const auto& rChild : m_aChildren)
     {
-        Reference< XModeSelector > xMode(*i, UNO_QUERY);
+        Reference< XModeSelector > xMode(rChild, UNO_QUERY);
         if ( xMode.is() )
             xMode->setMode(Mode);
     }
@@ -4224,19 +4190,16 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // search the interceptor responsible for the given object
-    const auto aEnd = m_aControlDispatchInterceptors.end();
-    for ( auto aIter = m_aControlDispatchInterceptors.begin();
-            aIter != aEnd;
-            ++aIter
-        )
+    auto aIter = std::find_if(m_aControlDispatchInterceptors.begin(), m_aControlDispatchInterceptors.end(),
+        [&_xInterception](const rtl::Reference<DispatchInterceptionMultiplexer>& rpInterceptor) {
+            return rpInterceptor->getIntercepted() == _xInterception;
+        });
+    if (aIter != m_aControlDispatchInterceptors.end())
     {
-        if ((*aIter)->getIntercepted() == _xInterception) {
-            // log off the interception from its interception object
-            (*aIter)->dispose();
-            // remove the interceptor from our array
-            m_aControlDispatchInterceptors.erase(aIter);
-            return;
-        }
+        // log off the interception from its interception object
+        (*aIter)->dispose();
+        // remove the interceptor from our array
+        m_aControlDispatchInterceptors.erase(aIter);
     }
 }
 

@@ -311,17 +311,14 @@ namespace svxform
         ControlBag aInvalidControls;
         m_aInvalidControls.swap( aInvalidControls );
 
-        for ( ControlBag::const_iterator loop = aInvalidControls.begin();
-              loop != aInvalidControls.end();
-              ++loop
-            )
+        for (const auto& rControl : aInvalidControls)
         {
-            Reference< XVclWindowPeer > xPeer( loop->xControl->getPeer(), UNO_QUERY );
+            Reference< XVclWindowPeer > xPeer( rControl.xControl->getPeer(), UNO_QUERY );
             if ( xPeer.is() )
             {
-                updateBorderStyle( loop->xControl, xPeer, *loop );
-                xPeer->setProperty( FM_PROP_HELPTEXT, makeAny( loop->sOriginalHelpText ) );
-                setUnderline( xPeer, *loop );
+                updateBorderStyle( rControl.xControl, xPeer, rControl );
+                xPeer->setProperty( FM_PROP_HELPTEXT, makeAny( rControl.sOriginalHelpText ) );
+                setUnderline( xPeer, rControl );
             }
         }
     }

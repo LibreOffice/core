@@ -92,9 +92,7 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
              OUStringToOString( aDestDir, RTL_TEXTENCODING_UTF8 ).getStr() );
     pGalTheme->SetDestDir( aDestDir, bRelativeURLs );
 
-    std::vector<INetURLObject>::const_iterator aIter;
-
-    for( aIter = rFiles.begin(); aIter != rFiles.end(); ++aIter )
+    for( const auto& rFile : rFiles )
     {
 //  Should/could use:
 //    if ( ! pGalTheme->InsertFileOrDirURL( aURL ) ) {
@@ -102,12 +100,12 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
 
         Graphic aGraphic;
 
-        if ( ! pGalTheme->InsertURL( *aIter ) )
+        if ( ! pGalTheme->InsertURL( rFile ) )
             fprintf( stderr, "Failed to import '%s'\n",
-                     OUStringToOString( aIter->GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr() );
+                     OUStringToOString( rFile.GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr() );
         else
             fprintf( stderr, "Imported file '%s' (%" SAL_PRIuUINT32 ")\n",
-                     OUStringToOString( aIter->GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr(),
+                     OUStringToOString( rFile.GetMainURL(INetURLObject::DecodeMechanism::NONE), RTL_TEXTENCODING_UTF8 ).getStr(),
                      pGalTheme->GetObjectCount() );
     }
 

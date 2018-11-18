@@ -77,14 +77,14 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
                 /* FIXME-BCP47: what is this supposed to do? */
                 n = 0;
                 OUString aLang = aLocale.replace('_','-');
-                for( std::vector< OUString >::const_iterator i = aFallbacks.begin();
-                     i != aFallbacks.end(); ++i, ++n )
+                for( const auto& rFallback : aFallbacks )
                 {
-                    SAL_INFO( "svx", "compare '" << aLang << "' with '" << *i << "' rank " << nRank << " vs. " << n );
-                    if( *i == aLang && n < nRank ) {
+                    SAL_INFO( "svx", "compare '" << aLang << "' with '" << rFallback << "' rank " << nRank << " vs. " << n );
+                    if( rFallback == aLang && n < nRank ) {
                         nRank = n; // try to get the most accurate match
                         aResult = aValue;
                     }
+                    ++n;
                 }
             }
         }

@@ -555,12 +555,9 @@ namespace svx
     {
         SfxItemPool& rPool = *_rSet.GetPool();
 
-        for (   ControlFeatures::const_iterator aFeature = _rDispatchers.begin();
-                aFeature != _rDispatchers.end();
-                ++aFeature
-            )
+        for (const auto& rFeature : _rDispatchers)
         {
-            SfxSlotId nSlotId( aFeature->first );
+            SfxSlotId nSlotId( rFeature.first );
             #if OSL_DEBUG_LEVEL > 0
                 OUString sUnoSlotName;
                 if ( SfxGetpApp() )
@@ -600,14 +597,14 @@ namespace svx
             if ( bIsInPool )
             {
                 #if OSL_DEBUG_LEVEL > 0
-                    bool bFeatureIsEnabled = aFeature->second->isFeatureEnabled();
+                    bool bFeatureIsEnabled = rFeature.second->isFeatureEnabled();
                     OString sMessage =  "found a feature state for "  + sUnoSlotNameAscii;
                     if ( !bFeatureIsEnabled )
                         sMessage += " (disabled)";
                     SAL_INFO("svx.form", sMessage );
                 #endif
 
-                lcl_translateUnoStateToItem( nSlotId, aFeature->second->getFeatureState(), _rSet );
+                lcl_translateUnoStateToItem( nSlotId, rFeature.second->getFeatureState(), _rSet );
             }
             #if OSL_DEBUG_LEVEL > 0
             else
@@ -1096,13 +1093,9 @@ namespace svx
         OSL_PRECOND( isControllerListening(), "FmTextControlShell::stopControllerListening: inconsistence!" );
 
         // dispose all listeners associated with the controls of the active controller
-        FocusListenerAdapters::const_iterator aEnd = m_aControlObservers.end();
-        for (   FocusListenerAdapters::iterator aLoop = m_aControlObservers.begin();
-                aLoop != aEnd;
-                ++aLoop
-            )
+        for (auto& rpObserver : m_aControlObservers)
         {
-            (*aLoop)->dispose();
+            rpObserver->dispose();
         }
 
         FocusListenerAdapters aEmpty;
@@ -1115,13 +1108,9 @@ namespace svx
     void FmTextControlShell::implClearActiveControlRef()
     {
         // no more features for this control
-        ControlFeatures::const_iterator aEnd = m_aControlFeatures.end();
-        for (   ControlFeatures::iterator aLoop = m_aControlFeatures.begin();
-                aLoop != aEnd;
-                ++aLoop
-            )
+        for (auto& rFeature : m_aControlFeatures)
         {
-            aLoop->second->dispose();
+            rFeature.second->dispose();
         }
 
         ControlFeatures aEmpty;

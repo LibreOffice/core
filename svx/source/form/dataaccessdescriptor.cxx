@@ -208,14 +208,10 @@ namespace svx
 
         DataAccessDescriptorProperty nNeededHandle = _rPos->first;
 
-        for ( MapString2PropertyEntry::const_iterator loop = rProperties.begin();
-              loop != rProperties.end();
-              ++loop
-            )
-        {
-            if ( nNeededHandle == loop->second->mnHandle )
-                return loop->second;
-        }
+        auto loop = std::find_if(rProperties.begin(), rProperties.end(),
+            [&nNeededHandle](const MapString2PropertyEntry::value_type& rProp) { return nNeededHandle == rProp.second->mnHandle; });
+        if (loop != rProperties.end())
+            return loop->second;
         throw RuntimeException();
     }
 

@@ -263,13 +263,11 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         GalleryBrowser2::GetFrame(), css::uno::UNO_QUERY );
     css::uno::Reference< css::util::XURLTransformer > xTransformer(
         mpBrowser->GetURLTransformer() );
-    CommandInfoMap::const_iterator aEnd = m_aCommandInfo.end();
-    for ( CommandInfoMap::iterator it = m_aCommandInfo.begin();
-         it != aEnd; ++it )
+    for ( auto& rInfo : m_aCommandInfo )
     {
         try
         {
-            CommandInfo &rCmdInfo = it->second;
+            CommandInfo &rCmdInfo = rInfo.second;
             if ( xTransformer.is() )
                 xTransformer->parseStrict( rCmdInfo.URL );
 

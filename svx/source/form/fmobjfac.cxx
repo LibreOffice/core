@@ -217,15 +217,12 @@ IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, Sdr
             pNewObj = new FmFormObj(aParams.rSdrModel);
 
         // initialize some properties which we want to differ from the defaults
-        for (   PropertyValueArray::const_iterator aInitProp = aInitialProperties.begin();
-                aInitProp != aInitialProperties.end();
-                ++aInitProp
-            )
+        for (const auto& rInitProp : aInitialProperties)
         {
             lcl_initProperty(
                 static_cast< FmFormObj* >( pNewObj ),
-                aInitProp->first,
-                aInitProp->second
+                rInitProp.first,
+                rInitProp.second
             );
         }
     }

@@ -94,17 +94,9 @@ namespace svx
 
     bool OComponentTransferable::canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors, bool _bForm )
     {
-        DataFlavorExVector::const_iterator aEnd = _rFlavors.end();
-        for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
-                aCheck != aEnd;
-                ++aCheck
-            )
-        {
-            if ( getDescriptorFormatId(_bForm) == aCheck->mnSotId )
-                return true;
-        }
-
-        return false;
+        SotClipboardFormatId nFormatId = getDescriptorFormatId(_bForm);
+        return std::any_of(_rFlavors.begin(), _rFlavors.end(),
+            [&nFormatId](const DataFlavorEx& rCheck) { return nFormatId == rCheck.mnSotId; });
     }
 
 

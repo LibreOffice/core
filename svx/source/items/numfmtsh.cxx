@@ -162,8 +162,8 @@ SvxNumberFormatShell::~SvxNumberFormatShell()
     {
         // Added formats are invalid => remove them
 
-        for (std::vector<sal_uInt32>::const_iterator it(aAddList.begin()); it != aAddList.end(); ++it)
-            pFormatter->DeleteEntry(*it);
+        for (const auto& rItem : aAddList)
+            pFormatter->DeleteEntry(rItem);
     }
 }
 
@@ -802,11 +802,10 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys(std::vector<OUString>& rLi
 
     if (nCurCategory != SvNumFormatType::ALL)
     {
-        for (SvNumberFormatTable::const_iterator it = pCurFmtTable->begin(), aEnd = pCurFmtTable->end();
-                it != aEnd; ++it)
+        for (const auto& rEntry : *pCurFmtTable)
         {
-            sal_uInt32 nKey = it->first;
-            const SvNumberformat* pNumEntry = it->second;
+            sal_uInt32 nKey = rEntry.first;
+            const SvNumberformat* pNumEntry = rEntry.second;
 
             if (!IsRemoved_Impl(nKey))
             {
@@ -893,10 +892,10 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
         rShortSymbol = pTmpCurrencyEntry->BuildSymbolString(bTmpBanking, true);
     }
 
-    for (SvNumberFormatTable::const_iterator it = pCurFmtTable->begin(), aEnd = pCurFmtTable->end(); it != aEnd; ++it)
+    for (const auto& rEntry : *pCurFmtTable)
     {
-        sal_uInt32 nKey = it->first;
-        const SvNumberformat* pNumEntry = it->second;
+        sal_uInt32 nKey = rEntry.first;
+        const SvNumberformat* pNumEntry = rEntry.second;
 
         if (!IsRemoved_Impl(nKey))
         {
@@ -1032,10 +1031,9 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl(std::vector<OUString>& rList,
     const bool bCatDefined = (eCategory == SvNumFormatType::DEFINED);
     const bool bCategoryMatch = (eCategory != SvNumFormatType::ALL && !bCatDefined);
 
-    for (SvNumberFormatTable::const_iterator it = pCurFmtTable->begin(), aEnd = pCurFmtTable->end();
-            it != aEnd; ++it)
+    for (const auto& rEntry : *pCurFmtTable)
     {
-        const SvNumberformat* pNumEntry = it->second;
+        const SvNumberformat* pNumEntry = rEntry.second;
 
         if (bCategoryMatch && pNumEntry->GetMaskedType() != eCategory)
             continue; // for; type does not match category if not ALL
@@ -1047,7 +1045,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl(std::vector<OUString>& rList,
         if (!(bUserDefined || (!bCatDefined && pNumEntry->IsAdditionalBuiltin())))
             continue; // for; does not match criteria at all
 
-        const sal_uInt32 nKey = it->first;
+        const sal_uInt32 nKey = rEntry.first;
         if (!IsRemoved_Impl(nKey))
         {
             aNewFormNInfo = pNumEntry->GetFormatstring();
