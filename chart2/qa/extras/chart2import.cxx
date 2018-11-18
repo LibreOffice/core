@@ -116,6 +116,7 @@ public:
 
     void testTdf114179();
     void testDeletedDataLabel();
+    void testDataPointInheritedColorDOCX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -186,6 +187,7 @@ public:
 
     CPPUNIT_TEST(testTdf114179);
     CPPUNIT_TEST(testDeletedDataLabel);
+    CPPUNIT_TEST(testDataPointInheritedColorDOCX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1667,6 +1669,20 @@ void Chart2ImportTest::testDeletedDataLabel()
     checkDataLabelProperties(xDataSeries1, 0, false);
     checkDataLabelProperties(xDataSeries1, 1, false);
     checkDataLabelProperties(xDataSeries1, 2, false);
+}
+
+void Chart2ImportTest::testDataPointInheritedColorDOCX()
+{
+    load( "/chart2/qa/extras/data/docx/", "data_point_inherited_color.docx" );
+    uno::Reference< chart2::XChartDocument > xChartDoc ( getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT( xChartDoc.is() );
+    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY_THROW);
+
+    Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xPropertySet.is());
+    sal_Int32 nColor = xPropertySet->getPropertyValue("FillColor").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), nColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
