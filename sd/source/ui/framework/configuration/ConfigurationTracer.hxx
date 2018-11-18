@@ -23,6 +23,7 @@
 #include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
 namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 namespace sd { namespace framework {
@@ -36,7 +37,7 @@ public:
     static void TraceConfiguration (
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const char* pMessage);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >=1
     static void TraceBoundResources (
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
