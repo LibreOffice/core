@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_87d1b95a",
+        "filename": "embedserv/source/inprocserv/dllentry.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-18T11:35:15Z",
+      "side": 1,
+      "message": "the if condition is redundant here, can just be\n     else\n         pBuf.....",
+      "revId": "777ad38f7a4850aaf7018d4ed3f4a757171b6558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
