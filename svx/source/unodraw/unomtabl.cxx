@@ -185,18 +185,15 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 
     OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
-    ItemPoolVector::iterator aIter = maItemSetVector.begin();
-    const ItemPoolVector::iterator aEnd = maItemSetVector.end();
-
-    while( aIter != aEnd )
+    auto aIter = std::find_if(maItemSetVector.begin(), maItemSetVector.end(),
+        [&aName](const std::unique_ptr<SfxItemSet>& rpItem) {
+            const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&(rpItem->Get( XATTR_LINEEND ) ));
+            return pItem->GetName() == aName;
+        });
+    if (aIter != maItemSetVector.end())
     {
-        const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( XATTR_LINEEND ) ));
-        if( pItem->GetName() == aName )
-        {
-            maItemSetVector.erase( aIter );
-            return;
-        }
-        ++aIter;
+        maItemSetVector.erase( aIter );
+        return;
     }
 
     if( !hasByName( aName ) )
@@ -210,29 +207,26 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
 
     const OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 
-    ItemPoolVector::iterator aIter = maItemSetVector.begin();
-    const ItemPoolVector::iterator aEnd = maItemSetVector.end();
-
-    while( aIter != aEnd )
+    auto aIter = std::find_if(maItemSetVector.begin(), maItemSetVector.end(),
+        [&aName](const std::unique_ptr<SfxItemSet>& rpItem) {
+            const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&(rpItem->Get( XATTR_LINEEND ) ));
+            return pItem->GetName() == aName;
+        });
+    if (aIter != maItemSetVector.end())
     {
-        const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( XATTR_LINEEND ) ));
-        if( pItem->GetName() == aName )
-        {
-            XLineEndItem aEndMarker(XATTR_LINEEND);
-            aEndMarker.SetName( aName );
-            if( !aEndMarker.PutValue( aElement, 0 ) )
-                throw lang::IllegalArgumentException();
+        XLineEndItem aEndMarker(XATTR_LINEEND);
+        aEndMarker.SetName( aName );
+        if( !aEndMarker.PutValue( aElement, 0 ) )
+            throw lang::IllegalArgumentException();
 
-            (*aIter)->Put( aEndMarker );
+        (*aIter)->Put( aEndMarker );
 
-            XLineStartItem aStartMarker(XATTR_LINESTART);
-            aStartMarker.SetName( aName );
-            aStartMarker.PutValue( aElement, 0 );
+        XLineStartItem aStartMarker(XATTR_LINESTART);
+        aStartMarker.SetName( aName );
+        aStartMarker.PutValue( aElement, 0 );
 
-            (*aIter)->Put( aStartMarker );
-            return;
-        }
-        ++aIter;
+        (*aIter)->Put( aStartMarker );
+        return;
     }
 
     // if it is not in our own sets, modify the pool!

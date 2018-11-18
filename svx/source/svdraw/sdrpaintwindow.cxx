@@ -53,9 +53,8 @@ IMPL_LINK(CandidateMgr, WindowEventListener, VclWindowEvent&, rEvent, void)
 
 CandidateMgr::~CandidateMgr()
 {
-    for (auto aI = m_aCandidates.begin(); aI != m_aCandidates.end(); ++aI)
+    for (VclPtr<vcl::Window>& pCandidate : m_aCandidates)
     {
-        VclPtr<vcl::Window> pCandidate = *aI;
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
             continue;
         pCandidate->RemoveEventListener(LINK(this, CandidateMgr, WindowEventListener));
@@ -91,9 +90,9 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window const & rWindow, tools::
         pCandidate = pCandidate->GetWindow( GetWindowType::Next );
     }
 
-    for (auto aI = m_aCandidates.begin(); aI != m_aCandidates.end(); ++aI)
+    for (const auto& rpCandidate : m_aCandidates)
     {
-        pCandidate = aI->get();
+        pCandidate = rpCandidate.get();
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
             continue;
         //rhbz#1007697 this can cause the window itself to be
@@ -153,11 +152,11 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
     RectangleVector aRectangles;
     aRegionPixel.GetRegionRectangles(aRectangles);
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+    for(const auto& rRect : aRectangles)
     {
         // for each rectangle, copy the area
-        const Point aTopLeft(aRectIter->TopLeft());
-        const Size aSize(aRectIter->GetSize());
+        const Point aTopLeft(rRect.TopLeft());
+        const Size aSize(rRect.GetSize());
 
         mpOutputDevice->DrawOutDev(
             aTopLeft, aSize,
@@ -177,7 +176,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
 
             mpOutputDevice->SetLineColor(aColor);
             mpOutputDevice->SetFillColor();
-            mpOutputDevice->DrawRect(*aRectIter);
+            mpOutputDevice->DrawRect(rRect);
         }
 #endif
     }

@@ -188,9 +188,9 @@ namespace sdr
 
             if(bDidChange)
             {
-                for (std::vector< sal_uInt16 >::const_iterator aIter(aPostItemChangeList.begin()), aEnd(aPostItemChangeList.end()); aIter != aEnd; ++aIter)
+                for (const auto& rItem : aPostItemChangeList)
                 {
-                    PostItemChange(*aIter);
+                    PostItemChange(rItem);
                 }
 
                 ItemSetChanged(aSet);

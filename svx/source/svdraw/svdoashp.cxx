@@ -1498,27 +1498,26 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
         }
     }
 
-    for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() );
-         aIter != aEnd; ++aIter )
+    for (const auto& rInteraction : aInteractionHandles)
     {
         try
         {
-            if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
-                aIter->xInteraction->setControllerPosition( aIter->aPosition );
-            if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X )
+            if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
+                rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
+            if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X )
             {
-                sal_Int32 nX = ( aIter->aPosition.X - aOld.Left() ) + maRect.Left();
-                aIter->xInteraction->setControllerPosition( css::awt::Point( nX, aIter->xInteraction->getPosition().Y ) );
+                sal_Int32 nX = ( rInteraction.aPosition.X - aOld.Left() ) + maRect.Left();
+                rInteraction.xInteraction->setControllerPosition( css::awt::Point( nX, rInteraction.xInteraction->getPosition().Y ) );
             }
-            else if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
+            else if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
             {
-                sal_Int32 nX = maRect.Right() - (aOld.Right() - aIter->aPosition.X);
-                aIter->xInteraction->setControllerPosition( css::awt::Point( nX, aIter->xInteraction->getPosition().Y ) );
+                sal_Int32 nX = maRect.Right() - (aOld.Right() - rInteraction.aPosition.X);
+                rInteraction.xInteraction->setControllerPosition( css::awt::Point( nX, rInteraction.xInteraction->getPosition().Y ) );
             }
-            if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
+            if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
             {
-                sal_Int32 nY = ( aIter->aPosition.Y - aOld.Top() ) + maRect.Top();
-                aIter->xInteraction->setControllerPosition( css::awt::Point( aIter->xInteraction->getPosition().X, nY ) );
+                sal_Int32 nY = ( rInteraction.aPosition.Y - aOld.Top() ) + maRect.Top();
+                rInteraction.xInteraction->setControllerPosition( css::awt::Point( rInteraction.xInteraction->getPosition().X, nY ) );
             }
         }
         catch ( const uno::RuntimeException& )
@@ -1911,23 +1910,22 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
             NbcMirror( aLeft, aRight );
         }
 
-        for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() );
-             aIter != aEnd ; ++aIter )
+        for (const auto& rInteraction : aInteractionHandles)
         {
             try
             {
-                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
-                    aIter->xInteraction->setControllerPosition( aIter->aPosition );
-                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X ||
-                     aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
+                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
+                    rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
+                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X ||
+                     rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
                 {
-                    if (aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX)
+                    if (rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX)
                         bOldMirroredX = !bOldMirroredX;
 
                     sal_Int32 nX;
                     if ( bOldMirroredX )
                     {
-                        nX = ( aIter->aPosition.X - aOld.Right() );
+                        nX = ( rInteraction.aPosition.X - aOld.Right() );
                         if ( rNewRect.Left() > rNewRect.Right() )
                             nX = maRect.Left() - nX;
                         else
@@ -1935,20 +1933,20 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
                     }
                     else
                     {
-                        nX = ( aIter->aPosition.X - aOld.Left() );
+                        nX = ( rInteraction.aPosition.X - aOld.Left() );
                         if ( rNewRect.Left() > rNewRect.Right() )
                             nX = maRect.Right() - nX;
                         else
                             nX += maRect.Left();
                     }
-                    aIter->xInteraction->setControllerPosition( css::awt::Point( nX, aIter->xInteraction->getPosition().Y ) );
+                    rInteraction.xInteraction->setControllerPosition( css::awt::Point( nX, rInteraction.xInteraction->getPosition().Y ) );
                 }
-                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
+                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
                 {
                     sal_Int32 nY;
                     if ( bOldMirroredY )
                     {
-                        nY = ( aIter->aPosition.Y - aOld.Bottom() );
+                        nY = ( rInteraction.aPosition.Y - aOld.Bottom() );
                         if ( rNewRect.Top() > rNewRect.Bottom() )
                             nY = maRect.Top() - nY;
                         else
@@ -1956,13 +1954,13 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
                     }
                     else
                     {
-                        nY = ( aIter->aPosition.Y - aOld.Top() );
+                        nY = ( rInteraction.aPosition.Y - aOld.Top() );
                         if ( rNewRect.Top() > rNewRect.Bottom() )
                             nY = maRect.Bottom() - nY;
                         else
                             nY += maRect.Top();
                     }
-                    aIter->xInteraction->setControllerPosition( css::awt::Point( aIter->xInteraction->getPosition().X, nY ) );
+                    rInteraction.xInteraction->setControllerPosition( css::awt::Point( rInteraction.xInteraction->getPosition().X, nY ) );
                 }
             }
             catch ( const uno::RuntimeException& )
@@ -1995,13 +1993,12 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
                     SetRectsDirty(true);
                     InvalidateRenderGeometry();
 
-                    for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() ) ;
-                      aIter != aEnd; ++aIter)
+                    for (const auto& rInteraction : aInteractionHandles)
                     {
-                        if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
+                        if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
                         {
-                            if ( aIter->xInteraction.is() )
-                                aIter->xInteraction->setControllerPosition( aIter->aPosition );
+                            if ( rInteraction.xInteraction.is() )
+                                rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
                         }
                     }
                 }
@@ -2082,13 +2079,12 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     maRect = aRect1;
     SetRectsDirty();
 
-    for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() );
-        aIter != aEnd ; ++aIter)
+    for (const auto& rInteraction : aInteractionHandles)
     {
         try
         {
-            if ( aIter->nMode & CustomShapeHandleModes::CREATE_FIXED )
-                aIter->xInteraction->setControllerPosition( awt::Point( rStat.GetStart().X(), rStat.GetStart().Y() ) );
+            if ( rInteraction.nMode & CustomShapeHandleModes::CREATE_FIXED )
+                rInteraction.xInteraction->setControllerPosition( awt::Point( rStat.GetStart().X(), rStat.GetStart().Y() ) );
         }
         catch ( const uno::RuntimeException& )
         {
@@ -2412,13 +2408,12 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         SetRectsDirty();
         SetChanged();
 
-        for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd ( aInteractionHandles.end() );
-            aIter != aEnd ; ++aIter)
+        for (const auto& rInteraction : aInteractionHandles)
         {
             try
             {
-                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
-                    aIter->xInteraction->setControllerPosition( aIter->aPosition );
+                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
+                    rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
             }
             catch ( const uno::RuntimeException& )
             {
@@ -2447,13 +2442,12 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
         maRect = aNewTextRect;
         SetRectsDirty();
 
-        for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() ) ;
-            aIter != aEnd ; ++aIter)
+        for (const auto& rInteraction : aInteractionHandles)
         {
             try
             {
-                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
-                    aIter->xInteraction->setControllerPosition( aIter->aPosition );
+                if ( rInteraction.nMode & CustomShapeHandleModes::RESIZE_FIXED )
+                    rInteraction.xInteraction->setControllerPosition( rInteraction.aPosition );
             }
             catch ( const uno::RuntimeException& )
             {

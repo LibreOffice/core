@@ -377,14 +377,10 @@ void SearchToolbarControllersManager::freeController( const css::uno::Reference<
     SearchToolbarControllersMap::iterator pIt = aSearchToolbarControllersMap.find(xFrame);
     if (pIt != aSearchToolbarControllersMap.end())
     {
-        for (SearchToolbarControllersVec::iterator pItCtrl=pIt->second.begin(); pItCtrl!=pIt->second.end(); ++pItCtrl)
-        {
-            if (pItCtrl->Name == sCommandURL)
-            {
-                pIt->second.erase(pItCtrl);
-                break;
-            }
-        }
+        auto pItCtrl = std::find_if(pIt->second.begin(), pIt->second.end(),
+            [&sCommandURL](const css::beans::PropertyValue& rCtrl) { return rCtrl.Name == sCommandURL; });
+        if (pItCtrl != pIt->second.end())
+            pIt->second.erase(pItCtrl);
 
         if (pIt->second.empty())
             aSearchToolbarControllersMap.erase(pIt);
@@ -398,14 +394,10 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
     SearchToolbarControllersMap::iterator pIt = aSearchToolbarControllersMap.find(xFrame);
     if (pIt != aSearchToolbarControllersMap.end())
     {
-        for (SearchToolbarControllersVec::iterator pItCtrl =pIt->second.begin(); pItCtrl != pIt->second.end(); ++pItCtrl)
-        {
-            if (pItCtrl->Name == sCommandURL)
-            {
-                pItCtrl->Value >>= xStatusListener;
-                break;
-            }
-        }
+        auto pItCtrl = std::find_if(pIt->second.begin(), pIt->second.end(),
+            [&sCommandURL](const css::beans::PropertyValue& rCtrl) { return rCtrl.Name == sCommandURL; });
+        if (pItCtrl != pIt->second.end())
+            pItCtrl->Value >>= xStatusListener;
     }
 
     return xStatusListener;

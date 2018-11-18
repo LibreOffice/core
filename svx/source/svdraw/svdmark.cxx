@@ -161,15 +161,9 @@ void SdrMarkList::ImpForceSort()
         // remove invalid
         if(nCount > 0 )
         {
-            for(auto it = maList.begin(); it != maList.end(); )
-            {
-                if(it->get()->GetMarkedSdrObj() == nullptr)
-                {
-                    it = maList.erase( it );
-                }
-                else
-                    ++it;
-            }
+            maList.erase(std::remove_if(maList.begin(), maList.end(),
+                [](std::unique_ptr<SdrMark>& rItem) { return rItem.get()->GetMarkedSdrObj() == nullptr; }),
+                maList.end());
             nCount = maList.size();
         }
 

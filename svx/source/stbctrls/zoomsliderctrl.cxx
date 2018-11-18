@@ -80,12 +80,8 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
 
     // check for snapping points:
     sal_uInt16 nCount = 0;
-    for ( std::vector< long >::const_iterator aSnappingPointIter = mxImpl->maSnappingPointOffsets.begin(),
-           aEnd = mxImpl->maSnappingPointOffsets.end();
-          aSnappingPointIter != aEnd;
-          ++aSnappingPointIter )
+    for ( const long nCurrent : mxImpl->maSnappingPointOffsets )
     {
-        const long nCurrent = *aSnappingPointIter;
         if ( std::abs(nCurrent - nOffset) < nSnappingEpsilon )
         {
             nOffset = nCurrent;
@@ -207,10 +203,8 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         // remove snapping points that are to close to each other:
         long nLastOffset = 0;
 
-        for ( std::set< sal_uInt16 >::const_iterator aSnappingPointIter = aTmpSnappingPoints.begin(),
-              aEnd = aTmpSnappingPoints.end(); aSnappingPointIter != aEnd; ++aSnappingPointIter )
+        for ( const sal_uInt16 nCurrent : aTmpSnappingPoints )
         {
-            const sal_uInt16 nCurrent = *aSnappingPointIter;
             const long nCurrentOffset = Zoom2Offset( nCurrent );
 
             if ( nCurrentOffset - nLastOffset >= nSnappingPointsMinDist )
@@ -258,12 +252,9 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
 
     // draw snapping points:
-    for ( std::vector< long >::const_iterator aSnappingPointIter = mxImpl->maSnappingPointOffsets.begin(),
-            aEnd = mxImpl->maSnappingPointOffsets.end();
-          aSnappingPointIter != aEnd;
-          ++aSnappingPointIter )
+    for ( const auto& rSnappingPoint : mxImpl->maSnappingPointOffsets )
     {
-        long nSnapPosX = aRect.Left() + *aSnappingPointIter;
+        long nSnapPosX = aRect.Left() + rSnappingPoint;
 
         pDev->DrawRect( tools::Rectangle( nSnapPosX - 1, aSlider.Top() - nSnappingHeight,
                     nSnapPosX, aSlider.Bottom() + nSnappingHeight ) );

@@ -155,9 +155,8 @@ void CellUndo::getDataFromCell( Data& rData )
 
 static void Dispose( RowVector& rRows )
 {
-    RowVector::iterator aIter( rRows.begin() );
-    while( aIter != rRows.end() )
-        (*aIter++)->dispose();
+    for( auto& rpRow : rRows )
+        rpRow->dispose();
 }
 
 
@@ -243,17 +242,15 @@ void RemoveRowUndo::Redo()
 
 static void Dispose( ColumnVector& rCols )
 {
-    ColumnVector::iterator aIter( rCols.begin() );
-    while( aIter != rCols.end() )
-        (*aIter++)->dispose();
+    for( auto& rpCol : rCols )
+        rpCol->dispose();
 }
 
 
 static void Dispose( CellVector& rCells )
 {
-    CellVector::iterator aIter( rCells.begin() );
-    while( aIter != rCells.end() )
-        (*aIter++)->dispose();
+    for( auto& rpCell : rCells )
+        rpCell->dispose();
 }
 
 

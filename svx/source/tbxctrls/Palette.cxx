@@ -42,9 +42,9 @@ void PaletteASE::LoadColorSet( SvxColorValueSet& rColorSet )
 {
     rColorSet.Clear();
     int nIx = 1;
-    for (ColorList::const_iterator it = maColors.begin(); it != maColors.end(); ++it)
+    for (const auto& rColor : maColors)
     {
-        rColorSet.InsertItem(nIx, it->first, it->second);
+        rColorSet.InsertItem(nIx, rColor.first, rColor.second);
         ++nIx;
     }
 }
@@ -53,9 +53,9 @@ void PaletteASE::LoadColorSet( ColorValueSet& rColorSet )
 {
     rColorSet.Clear();
     int nIx = 1;
-    for (ColorList::const_iterator it = maColors.begin(); it != maColors.end(); ++it)
+    for (const auto& rColor : maColors)
     {
-        rColorSet.InsertItem(nIx, it->first, it->second);
+        rColorSet.InsertItem(nIx, rColor.first, rColor.second);
         ++nIx;
     }
 }
@@ -214,9 +214,9 @@ void PaletteGPL::LoadColorSet( SvxColorValueSet& rColorSet )
 
     rColorSet.Clear();
     int nIx = 1;
-    for (ColorList::const_iterator it = maColors.begin(); it != maColors.end(); ++it)
+    for (const auto& rColor : maColors)
     {
-        rColorSet.InsertItem(nIx, it->first, it->second);
+        rColorSet.InsertItem(nIx, rColor.first, rColor.second);
         ++nIx;
     }
 }
@@ -227,9 +227,9 @@ void PaletteGPL::LoadColorSet( ColorValueSet& rColorSet )
 
     rColorSet.Clear();
     int nIx = 1;
-    for (ColorList::const_iterator it = maColors.begin(); it != maColors.end(); ++it)
+    for (const auto& rColor : maColors)
     {
-        rColorSet.InsertItem(nIx, it->first, it->second);
+        rColorSet.InsertItem(nIx, rColor.first, rColor.second);
         ++nIx;
     }
 }

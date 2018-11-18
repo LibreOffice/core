@@ -73,9 +73,8 @@ void TableRow::dispose()
     mxTableModel.clear();
     if( !maCells.empty() )
     {
-        CellVector::iterator aIter( maCells.begin() );
-        while( aIter != maCells.end() )
-            (*aIter++)->dispose();
+        for( auto& rpCell : maCells )
+            rpCell->dispose();
         CellVector().swap(maCells);
     }
 }
@@ -128,8 +127,7 @@ void TableRow::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
         if( (nIndex + nCount) < static_cast< sal_Int32 >( maCells.size() ) )
         {
             CellVector::iterator aBegin( maCells.begin() );
-            while( nIndex-- && (aBegin != maCells.end()) )
-                ++aBegin;
+            std::advance(aBegin, nIndex);
 
             if( nCount > 1 )
             {

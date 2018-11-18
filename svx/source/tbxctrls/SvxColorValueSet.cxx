@@ -99,18 +99,18 @@ void ColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, cons
     sal_uInt32 nStartIndex = 1;
     if(rNamePrefix.getLength() != 0)
     {
-        for(std::set<Color>::const_iterator it = rColorSet.begin();
-            it != rColorSet.end(); ++it, nStartIndex++)
+        for(const auto& rColor : rColorSet)
         {
-            InsertItem(nStartIndex, *it, rNamePrefix + OUString::number(nStartIndex));
+            InsertItem(nStartIndex, rColor, rNamePrefix + OUString::number(nStartIndex));
+            nStartIndex++;
         }
     }
     else
     {
-        for(std::set<Color>::const_iterator it = rColorSet.begin();
-            it != rColorSet.end(); ++it, nStartIndex++)
+        for(const auto& rColor : rColorSet)
         {
-            InsertItem(nStartIndex, *it, "");
+            InsertItem(nStartIndex, rColor, "");
+            nStartIndex++;
         }
     }
 }
@@ -120,18 +120,18 @@ void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, c
     sal_uInt32 nStartIndex = 1;
     if(rNamePrefix.getLength() != 0)
     {
-        for(std::set<Color>::const_iterator it = rColorSet.begin();
-            it != rColorSet.end(); ++it, nStartIndex++)
+        for(const auto& rColor : rColorSet)
         {
-            InsertItem(nStartIndex, *it, rNamePrefix + OUString::number(nStartIndex));
+            InsertItem(nStartIndex, rColor, rNamePrefix + OUString::number(nStartIndex));
+            nStartIndex++;
         }
     }
     else
     {
-        for(std::set<Color>::const_iterator it = rColorSet.begin();
-            it != rColorSet.end(); ++it, nStartIndex++)
+        for(const auto& rColor : rColorSet)
         {
-            InsertItem(nStartIndex, *it, "");
+            InsertItem(nStartIndex, rColor, "");
+            nStartIndex++;
         }
     }
 }

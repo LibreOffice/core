@@ -126,9 +126,9 @@ void AccessibleTableShapeImpl::dispose()
     if( mxTable.is() )
     {
         //remove all the cell's acc object in table's dispose.
-        for( AccessibleCellMap::iterator iter( maChildMap.begin() ); iter != maChildMap.end(); ++iter )
+        for( auto& rEntry : maChildMap )
         {
-            (*iter).second->dispose();
+            rEntry.second->dispose();
         }
         maChildMap.clear();
         Reference< XModifyListener > xListener( this );
@@ -302,9 +302,9 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
         // all accessible cell instances still left in aTempChildMap must be disposed
         // as they are no longer part of the table
 
-        for( AccessibleCellMap::iterator iter( aTempChildMap.begin() ); iter != aTempChildMap.end(); ++iter )
+        for( auto& rEntry : aTempChildMap )
         {
-            (*iter).second->dispose();
+            rEntry.second->dispose();
         }
         //notify bridge to update the acc cache.
         AccessibleTableShape *pAccTable = dynamic_cast <AccessibleTableShape *> (mxAccessible.get());

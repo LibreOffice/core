@@ -826,10 +826,8 @@ void SdrEditView::DistributeMarkedObjects(weld::Window* pParent)
                         default: break;
                     }
 
-                    for ( itEntryList = aEntryList.begin();
-                          itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
-                          ++itEntryList )
-                    {};
+                    itEntryList = std::find_if(aEntryList.begin(), aEntryList.end(),
+                        [&pNew](const ImpDistributeEntry* pEntry) { return pEntry->mnPos >= pNew->mnPos; });
                     if ( itEntryList < aEntryList.end() )
                         aEntryList.insert( itEntryList, pNew );
                     else
@@ -921,10 +919,8 @@ void SdrEditView::DistributeMarkedObjects(weld::Window* pParent)
                         default: break;
                     }
 
-                    for ( itEntryList = aEntryList.begin();
-                          itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
-                          ++itEntryList )
-                    {};
+                    itEntryList = std::find_if(aEntryList.begin(), aEntryList.end(),
+                        [&pNew](const ImpDistributeEntry* pEntry) { return pEntry->mnPos >= pNew->mnPos; });
                     if ( itEntryList < aEntryList.end() )
                         aEntryList.insert( itEntryList, pNew );
                     else

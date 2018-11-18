@@ -786,11 +786,12 @@ bool SdrObjList::RecalcNavigationPositions()
         {
             mbIsNavigationOrderDirty = false;
 
-            WeakSdrObjectContainerType::iterator iObject;
-            WeakSdrObjectContainerType::const_iterator iEnd (mxNavigationOrder->end());
             sal_uInt32 nIndex (0);
-            for (iObject=mxNavigationOrder->begin(); iObject!=iEnd; ++iObject,++nIndex)
-                (*iObject)->SetNavigationPosition(nIndex);
+            for (auto& rpObject : *mxNavigationOrder)
+            {
+                rpObject->SetNavigationPosition(nIndex);
+                ++nIndex;
+            }
         }
     }
 
@@ -1132,9 +1133,8 @@ SdrPage::~SdrPage()
     // of page users.  Therefore we have to use a copy of the list for the
     // iteration.
     sdr::PageUserVector aListCopy (maPageUsers.begin(), maPageUsers.end());
-    for(sdr::PageUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
+    for(sdr::PageUser* pPageUser : aListCopy)
     {
-        sdr::PageUser* pPageUser = *aIterator;
         DBG_ASSERT(pPageUser, "SdrPage::~SdrPage: corrupt PageUser list (!)");
         pPageUser->PageInDestruction(*this);
     }

@@ -121,7 +121,7 @@ namespace sdr
             RectangleVector aRectangles;
             rRegionPixel.GetRegionRectangles(aRectangles);
 
-            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+            for(const auto& rRect : aRectangles)
             {
 #ifdef DBG_UTIL
                 // #i72754# possible graphical region test only with non-pro
@@ -131,13 +131,13 @@ namespace sdr
                 {
                     getOutputDevice().SetLineColor(COL_LIGHTGREEN);
                     getOutputDevice().SetFillColor();
-                    getOutputDevice().DrawRect(*aRectIter);
+                    getOutputDevice().DrawRect(rRect);
                 }
 #endif
 
                 // restore the area
-                const Point aTopLeft(aRectIter->TopLeft());
-                const Size aSize(aRectIter->GetSize());
+                const Point aTopLeft(rRect.TopLeft());
+                const Size aSize(rRect.GetSize());
 
                 getOutputDevice().DrawOutDev(
                     aTopLeft, aSize, // destination
@@ -188,11 +188,11 @@ namespace sdr
             RectangleVector aRectangles;
             aRegion.GetRegionRectangles(aRectangles);
 
-            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+            for(const auto& rRect : aRectangles)
             {
                 // for each rectangle, save the area
-                const Point aTopLeft(aRectIter->TopLeft());
-                const Size aSize(aRectIter->GetSize());
+                const Point aTopLeft(rRect.TopLeft());
+                const Size aSize(rRect.GetSize());
 
                 mpBufferDevice->DrawOutDev(
                     aTopLeft, aSize, // destination

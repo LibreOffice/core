@@ -42,10 +42,8 @@ void FastPropertySetInfo::addProperties( const PropertyVector& rProps )
     sal_uInt32 nIndex = maProperties.size();
     sal_uInt32 nCount = rProps.size();
     maProperties.resize( nIndex + nCount );
-    PropertyVector::const_iterator aIter( rProps.begin() );
-    while( nCount-- )
+    for( const Property& rProperty : rProps )
     {
-        const Property& rProperty = (*aIter++);
         maProperties[nIndex] = rProperty;
         maMap[ rProperty.Name ] = nIndex++;
     }

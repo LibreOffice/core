@@ -947,9 +947,8 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
         SdrPageView* pPV=pM->GetPageView();
         const SdrUShortCont& rMrkGlue=pM->GetMarkedGluePoints();
-        for (SdrUShortCont::const_iterator it = rMrkGlue.begin(); it != rMrkGlue.end(); ++it)
+        for (sal_uInt16 nId : rMrkGlue)
         {
-            sal_uInt16 nId=*it;
             //nNum changed to nNumGP because already used in for loop
             sal_uInt16 nNumGP=pGPL->FindGluePoint(nId);
             if (nNumGP!=SDRGLUEPOINT_NOTFOUND)

@@ -487,13 +487,10 @@ Any SAL_CALL TableDesignFamily::getByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
 
-    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
-    for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
-        iter != aEnd; ++iter)
-    {
-        if( (*iter)->getName() == rName )
-            return Any( (*iter) );
-    }
+    auto iter = std::find_if(maDesigns.begin(), maDesigns.end(),
+        [&rName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == rName; });
+    if (iter != maDesigns.end())
+        return Any( (*iter) );
 
     throw NoSuchElementException();
 }
@@ -506,10 +503,8 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames()
     Sequence< OUString > aRet( maDesigns.size() );
     OUString* pNames = aRet.getArray();
 
-    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
-    for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
-         iter != aEnd; ++iter)
-        *pNames++ = (*iter)->getName();
+    for( const auto& rpStyle : maDesigns )
+        *pNames++ = rpStyle->getName();
 
     return aRet;
 }
@@ -519,13 +514,8 @@ sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
-    for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
-        iter != aEnd; ++iter)
-        if( (*iter)->getName() == aName )
-            return true;
-
-    return false;
+    return std::any_of(maDesigns.begin(), maDesigns.end(),
+        [&aName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == aName; });
 }
 
 
@@ -580,11 +570,9 @@ void SAL_CALL TableDesignFamily::insertByName( const OUString& rName, const Any&
         throw IllegalArgumentException();
 
     xStyle->setName( rName );
-    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
-    for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
-        iter != aEnd; ++iter)
-        if( (*iter)->getName() == rName )
-            throw ElementExistException();
+    if (std::any_of(maDesigns.begin(), maDesigns.end(),
+            [&rName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == rName; }))
+        throw ElementExistException();
 
     maDesigns.push_back( xStyle );
 }
@@ -594,17 +582,13 @@ void SAL_CALL TableDesignFamily::removeByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
 
-    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
-    for( TableDesignStyleVector::iterator iter( maDesigns.begin() );
-        iter != aEnd; ++iter)
+    auto iter = std::find_if(maDesigns.begin(), maDesigns.end(),
+        [&rName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == rName; });
+    if (iter != maDesigns.end())
     {
-        if( (*iter)->getName() == rName )
-        {
-            maDesigns.erase( iter );
-            return;
-        }
+        maDesigns.erase( iter );
+        return;
     }
-
 
     throw NoSuchElementException();
 }
@@ -621,16 +605,13 @@ void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any
     if( !xStyle.is() )
         throw IllegalArgumentException();
 
-    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
-    for( TableDesignStyleVector::iterator iter( maDesigns.begin() );
-        iter != aEnd; ++iter)
+    auto iter = std::find_if(maDesigns.begin(), maDesigns.end(),
+        [&rName](const Reference<XStyle>& rpStyle) { return rpStyle->getName() == rName; });
+    if (iter != maDesigns.end())
     {
-        if( (*iter)->getName() == rName )
-        {
-            (*iter) = xStyle;
-            xStyle->setName( rName );
-            return;
-        }
+        (*iter) = xStyle;
+        xStyle->setName( rName );
+        return;
     }
 
     throw NoSuchElementException();
@@ -662,9 +643,9 @@ void SAL_CALL TableDesignFamily::dispose(  )
     TableDesignStyleVector aDesigns;
     aDesigns.swap( maDesigns );
 
-    for( TableDesignStyleVector::iterator iter( aDesigns.begin() ); iter != aDesigns.end(); ++iter )
+    for( const auto& rStyle : aDesigns )
     {
-        Reference< XComponent > xComp( (*iter), UNO_QUERY );
+        Reference< XComponent > xComp( rStyle, UNO_QUERY );
         if( xComp.is() )
             xComp->dispose();
     }
