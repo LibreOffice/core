@@ -82,11 +82,7 @@ void OOXMLParserState::setForwardEvents(bool bForwardEvents)
 
 const std::string OOXMLParserState::getHandle() const
 {
-    char sBuffer[256];
-
-    snprintf(sBuffer, sizeof(sBuffer), "%u", mnHandle);
-
-    return sBuffer;
+    return std::to_string(mnHandle);
 }
 
 void OOXMLParserState::setHandle()
