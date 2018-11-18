@@ -238,20 +238,13 @@ namespace svx
         bool bFieldFormat       = bool(_nFormats & ColumnTransferFormatFlags::FIELD_DESCRIPTOR);
         bool bControlFormat     = bool(_nFormats & ColumnTransferFormatFlags::CONTROL_EXCHANGE);
         bool bDescriptorFormat  = bool(_nFormats & ColumnTransferFormatFlags::COLUMN_DESCRIPTOR);
-        for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
-                aCheck != _rFlavors.end();
-                ++aCheck
-            )
-        {
-            if (bFieldFormat && (SotClipboardFormatId::SBA_FIELDDATAEXCHANGE == aCheck->mnSotId))
-                return true;
-            if (bControlFormat && (SotClipboardFormatId::SBA_CTRLDATAEXCHANGE == aCheck->mnSotId))
-                return true;
-            if (bDescriptorFormat && (getDescriptorFormatId() == aCheck->mnSotId))
-                return true;
-        }
-
-        return false;
+        SotClipboardFormatId nFormatId = getDescriptorFormatId();
+        return std::any_of(_rFlavors.begin(), _rFlavors.end(),
+            [&](const DataFlavorEx& rCheck) {
+                return (bFieldFormat && (SotClipboardFormatId::SBA_FIELDDATAEXCHANGE == rCheck.mnSotId))
+                    || (bControlFormat && (SotClipboardFormatId::SBA_CTRLDATAEXCHANGE == rCheck.mnSotId))
+                    || (bDescriptorFormat && (nFormatId == rCheck.mnSotId));
+            });
     }
 
 
@@ -470,19 +463,12 @@ namespace svx
 
     bool ODataAccessObjectTransferable::canExtractObjectDescriptor(const DataFlavorExVector& _rFlavors)
     {
-        for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
-                aCheck != _rFlavors.end();
-                ++aCheck
-            )
-        {
-            if (SotClipboardFormatId::DBACCESS_TABLE == aCheck->mnSotId)
-                return true;
-            if (SotClipboardFormatId::DBACCESS_QUERY == aCheck->mnSotId)
-                return true;
-            if (SotClipboardFormatId::DBACCESS_COMMAND == aCheck->mnSotId)
-                return true;
-        }
-        return false;
+        return std::any_of(_rFlavors.begin(), _rFlavors.end(),
+            [](const DataFlavorEx& rCheck) {
+                return SotClipboardFormatId::DBACCESS_TABLE == rCheck.mnSotId
+                    || SotClipboardFormatId::DBACCESS_QUERY == rCheck.mnSotId
+                    || SotClipboardFormatId::DBACCESS_COMMAND == rCheck.mnSotId;
+            });
     }
 
 
@@ -634,14 +620,9 @@ namespace svx
 
     bool OMultiColumnTransferable::canExtractDescriptor(const DataFlavorExVector& _rFlavors)
     {
-        DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
-        for (   ;
-                aCheck != _rFlavors.end() && getDescriptorFormatId() == aCheck->mnSotId;
-                ++aCheck
-            )
-            ;
-
-        return aCheck == _rFlavors.end();
+        const SotClipboardFormatId nFormatId = getDescriptorFormatId();
+        return std::all_of(_rFlavors.begin(), _rFlavors.end(),
+            [&nFormatId](const DataFlavorEx& rCheck) { return nFormatId == rCheck.mnSotId; });
     }
 
 

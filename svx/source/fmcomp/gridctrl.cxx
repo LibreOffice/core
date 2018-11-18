@@ -3467,13 +3467,11 @@ void DbGridControl::BeginCursorAction()
     if (m_pFieldListeners)
     {
         ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
-        ColumnFieldValueListeners::const_iterator aIter = pListeners->begin();
-        while (aIter != pListeners->end())
+        for (const auto& rListener : *pListeners)
         {
-            GridFieldValueListener* pCurrent = (*aIter).second;
+            GridFieldValueListener* pCurrent = rListener.second;
             if (pCurrent)
                 pCurrent->suspend();
-            ++aIter;
         }
     }
 
@@ -3486,13 +3484,11 @@ void DbGridControl::EndCursorAction()
     if (m_pFieldListeners)
     {
         ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
-        ColumnFieldValueListeners::const_iterator aIter = pListeners->begin();
-        while (aIter != pListeners->end())
+        for (const auto& rListener : *pListeners)
         {
-            GridFieldValueListener* pCurrent = (*aIter).second;
+            GridFieldValueListener* pCurrent = rListener.second;
             if (pCurrent)
                 pCurrent->resume();
-            ++aIter;
         }
     }
 

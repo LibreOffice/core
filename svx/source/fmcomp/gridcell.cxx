@@ -3079,9 +3079,8 @@ void DbFilterField::Update()
     }
 
     // filling the entries for the combobox
-    for (::std::vector< OUString >::const_iterator iter = aStringList.begin();
-         iter != aStringList.end(); ++iter)
-        static_cast<ComboBox*>(m_pWindow.get())->InsertEntry(*iter);
+    for (const auto& rString : aStringList)
+        static_cast<ComboBox*>(m_pWindow.get())->InsertEntry(rString);
 }
 
 

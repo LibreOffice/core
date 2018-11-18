@@ -231,16 +231,11 @@ namespace svxform
 
         // check whether there are only hidden controls
         // I may add a format to pCtrlExch
-        bool bHasNonHidden = false;
-        for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
-              it != m_arrCurrentSelection.end(); ++it )
-        {
-            FmEntryData* pCurrent = static_cast< FmEntryData* >( (*it)->GetUserData() );
-            if ( IsHiddenControl( pCurrent ) )
-                continue;
-            bHasNonHidden = true;
-            break;
-        }
+        bool bHasNonHidden = std::any_of(m_arrCurrentSelection.begin(), m_arrCurrentSelection.end(),
+            [](const SvTreeListEntry* pEntry) {
+                FmEntryData* pCurrent = static_cast< FmEntryData* >( pEntry->GetUserData() );
+                return !IsHiddenControl( pCurrent );
+            });
 
         if ( bHasNonHidden && ( 0 == ( _nAction & DND_ACTION_MOVE ) ) )
             // non-hidden controls need to be moved
@@ -264,9 +259,8 @@ namespace svxform
         m_aControlExchange.prepareDrag();
         m_aControlExchange->setFocusEntry( GetCurEntry() );
 
-        for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
-              it != m_arrCurrentSelection.end(); ++it )
-            m_aControlExchange->addSelectedEntry(*it);
+        for (const auto& rpEntry : m_arrCurrentSelection)
+            m_aControlExchange->addSelectedEntry(rpEntry);
 
         m_aControlExchange->setFormsRoot( GetNavModel()->GetFormPage()->GetForms() );
         m_aControlExchange->buildPathFormat( this, m_pRootEntry );
@@ -276,10 +270,11 @@ namespace svxform
             // create a sequence
             Sequence< Reference< XInterface > > seqIFaces(m_arrCurrentSelection.size());
             Reference< XInterface >* pArray = seqIFaces.getArray();
-            for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
-                  it != m_arrCurrentSelection.end(); ++it, ++pArray )
-                *pArray = static_cast< FmEntryData* >( (*it)->GetUserData() )->GetElement();
-
+            for (const auto& rpEntry : m_arrCurrentSelection)
+            {
+                *pArray = static_cast< FmEntryData* >( rpEntry->GetUserData() )->GetElement();
+                ++pArray;
+            }
             // and the new format
             m_aControlExchange->addHiddenControlsFormat(seqIFaces);
         }
@@ -795,12 +790,8 @@ namespace svxform
             pLoop = GetParent(pLoop);
         }
 
-        for (   ListBoxEntrySet::const_iterator dropped = aDropped.begin();
-                dropped != aDropped.end();
-                ++dropped
-            )
+        for (SvTreeListEntry* pCurrent : aDropped)
         {
-            SvTreeListEntry* pCurrent = *dropped;
             SvTreeListEntry* pCurrentParent = GetParent(pCurrent);
 
             // test for 0)
@@ -1241,10 +1232,8 @@ namespace svxform
             m_bKeyboardCut = true;
 
             // mark all the entries we just "cut" into the clipboard as "nearly moved"
-            for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
-                  it != m_arrCurrentSelection.end(); ++it )
+            for ( SvTreeListEntry* pEntry : m_arrCurrentSelection )
             {
-                SvTreeListEntry* pEntry = *it;
                 if ( pEntry )
                 {
                     m_aCutEntries.insert( pEntry );
@@ -1530,12 +1519,8 @@ namespace svxform
         {
             if ( doingKeyboardCut() )
             {
-                for (   ListBoxEntrySet::const_iterator i = m_aCutEntries.begin();
-                        i != m_aCutEntries.end();
-                        ++i
-                    )
+                for (SvTreeListEntry* pEntry : m_aCutEntries)
                 {
-                    SvTreeListEntry* pEntry = *i;
                     if ( !pEntry )
                         continue;
 
@@ -1754,10 +1739,9 @@ namespace svxform
         }
 
         // remove remaining structure
-        for (SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
-             it != m_arrCurrentSelection.end(); ++it)
+        for (const auto& rpSelection : m_arrCurrentSelection)
         {
-            FmEntryData* pCurrent = static_cast<FmEntryData*>((*it)->GetUserData());
+            FmEntryData* pCurrent = static_cast<FmEntryData*>(rpSelection->GetUserData());
 
             // if the entry still has children, we skipped deletion of one of those children.
             // This may for instance be because the shape is in a hidden layer, where we're unable
@@ -1943,10 +1927,8 @@ namespace svxform
 
         UnmarkAllViewObj();
 
-        for (SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
-             it != m_arrCurrentSelection.end(); ++it)
+        for (SvTreeListEntry* pSelectionLoop : m_arrCurrentSelection)
         {
-            SvTreeListEntry* pSelectionLoop = *it;
             // When form selection, mark all controls of form
             if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
                 MarkViewObj(static_cast<FmFormData*>(pSelectionLoop->GetUserData()), false/*deep*/);

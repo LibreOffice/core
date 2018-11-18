@@ -98,13 +98,8 @@ namespace svxform
 
     bool OLocalExchange::hasFormat( const DataFlavorExVector& _rFormats, SotClipboardFormatId _nFormatId )
     {
-        DataFlavorExVector::const_iterator aSearch;
-
-        for ( aSearch = _rFormats.begin(); aSearch != _rFormats.end(); ++aSearch )
-            if ( aSearch->mnSotId == _nFormatId )
-                break;
-
-        return aSearch != _rFormats.end();
+        return std::any_of(_rFormats.begin(), _rFormats.end(),
+            [&_nFormatId](const DataFlavorEx& rFormat) { return rFormat.mnSotId == _nFormatId; });
     }
 
 
@@ -220,14 +215,10 @@ namespace svxform
 
         m_aControlPaths.realloc(nEntryCount);
         css::uno::Sequence<sal_uInt32>* pAllPaths = m_aControlPaths.getArray();
-        for (   ListBoxEntrySet::const_iterator loop = m_aSelectedEntries.begin();
-                loop != m_aSelectedEntries.end();
-                ++loop, ++pAllPaths
-            )
+        for (SvTreeListEntry* pCurrentEntry : m_aSelectedEntries)
         {
             // first we collect the path in an array
             ::std::vector< sal_uInt32 > aCurrentPath;
-            SvTreeListEntry* pCurrentEntry = *loop;
 
             SvTreeListEntry* pLoop = pCurrentEntry;
             while (pLoop != pRoot)
@@ -248,6 +239,7 @@ namespace svxform
             sal_Int32 j,k;
             for (j = nDepth - 1, k = 0; k<nDepth; --j, ++k)
                 pSeq[j] = aCurrentPath[k];
+            ++pAllPaths;
         }
     }
 

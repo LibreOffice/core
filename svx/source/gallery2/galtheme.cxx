@@ -1122,10 +1122,8 @@ bool GalleryTheme::InsertFileOrDirURL(const INetURLObject& rFileOrDirURL, sal_uI
     {
     }
 
-    ::std::vector< INetURLObject >::const_iterator aIter( aURLVector.begin() ), aEnd( aURLVector.end() );
-
-    while( aIter != aEnd )
-        bRet = bRet || InsertURL( *aIter++, nInsertPos );
+    for( const auto& rURL : aURLVector )
+        bRet = bRet || InsertURL( rURL, nInsertPos );
 
     return bRet;
 }

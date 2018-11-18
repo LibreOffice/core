@@ -134,14 +134,12 @@ FmEntryDataList::~FmEntryDataList()
 
 void FmEntryDataList::remove( FmEntryData* pItem )
 {
-    auto aEnd = maEntryDataList.end();
-    for ( auto it = maEntryDataList.begin(); it != aEnd; ++it )
+    auto it = std::find_if(maEntryDataList.begin(), maEntryDataList.end(),
+        [&pItem](const std::unique_ptr<FmEntryData>& rEntryData) { return rEntryData.get() == pItem; });
+    if (it != maEntryDataList.end())
     {
-        if ( it->get() == pItem )
-        {
-            maEntryDataList.erase( it );
-            return;
-        }
+        maEntryDataList.erase( it );
+        return;
     }
     assert(false);
 }

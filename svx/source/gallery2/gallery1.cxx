@@ -666,14 +666,10 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
             KillFile( aStrURL );
         }
 
-        auto aEnd = aThemeList.end();
-        for ( auto it = aThemeList.begin(); it != aEnd; ++it )
-        {
-            if ( pThemeEntry == it->get() ) {
-                aThemeList.erase( it );
-                break;
-            }
-        }
+        auto it = std::find_if(aThemeList.begin(), aThemeList.end(),
+            [&pThemeEntry](const std::unique_ptr<GalleryThemeEntry>& rpEntry) { return pThemeEntry == rpEntry.get(); });
+        if (it != aThemeList.end())
+            aThemeList.erase( it );
 
         Broadcast( GalleryHint( GalleryHintType::THEME_REMOVED, rThemeName ) );
 
@@ -689,14 +685,10 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 
     if( pThemeEntry )
     {
-        for (GalleryCacheThemeList::const_iterator it = aThemeCache.begin(); it != aThemeCache.end(); ++it)
-        {
-            if (pThemeEntry == (*it)->GetThemeEntry())
-            {
-                pTheme = (*it)->GetTheme();
-                break;
-            }
-        }
+        auto it = std::find_if(aThemeCache.begin(), aThemeCache.end(),
+            [&pThemeEntry](const GalleryThemeCacheEntry* pEntry) { return pThemeEntry == pEntry->GetThemeEntry(); });
+        if (it != aThemeCache.end())
+            pTheme = (*it)->GetTheme();
 
         if( !pTheme )
         {
@@ -736,15 +728,12 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 
 void Gallery::ImplDeleteCachedTheme( GalleryTheme const * pTheme )
 {
-    GalleryCacheThemeList::const_iterator aEnd = aThemeCache.end();
-    for (GalleryCacheThemeList::iterator it = aThemeCache.begin(); it != aEnd; ++it)
+    auto it = std::find_if(aThemeCache.begin(), aThemeCache.end(),
+        [&pTheme](const GalleryThemeCacheEntry* pEntry) { return pTheme == pEntry->GetTheme(); });
+    if (it != aThemeCache.end())
     {
-        if (pTheme == (*it)->GetTheme())
-        {
-            delete *it;
-            aThemeCache.erase(it);
-            break;
-        }
+        delete *it;
+        aThemeCache.erase(it);
     }
 }
 

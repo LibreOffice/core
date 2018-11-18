@@ -599,9 +599,9 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
 
 FmFormItem* FmFilterModel::Find(const ::std::vector<std::unique_ptr<FmFilterData>>& rItems, const Reference< XFormController > & xController) const
 {
-    for (auto i = rItems.begin(); i != rItems.end(); ++i)
+    for (const auto& rItem : rItems)
     {
-        FmFormItem* pForm = dynamic_cast<FmFormItem*>( i->get() );
+        FmFormItem* pForm = dynamic_cast<FmFormItem*>( rItem.get() );
         if (pForm)
         {
             if ( xController == pForm->GetController() )
@@ -620,9 +620,9 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<std::unique_ptr<FmFilterData
 
 FmFormItem* FmFilterModel::Find(const ::std::vector<std::unique_ptr<FmFilterData>>& rItems, const Reference< XForm >& xForm) const
 {
-    for (auto i = rItems.begin(); i != rItems.end(); ++i)
+    for (const auto& rItem : rItems)
     {
-        FmFormItem* pForm = dynamic_cast<FmFormItem*>( i->get() );
+        FmFormItem* pForm = dynamic_cast<FmFormItem*>( rItem.get() );
         if (pForm)
         {
             if (xForm == pForm->GetController()->getModel())
@@ -669,13 +669,8 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
 void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 {
     // insert the condition behind the last filter items
-    auto aEnd = _rFormItem.GetChildren().rend();
-    auto iter = _rFormItem.GetChildren().rbegin();
-    while ( iter != aEnd )
-    {
-        if (dynamic_cast<const FmFilterItems*>(iter->get()) !=  nullptr)
-            break;
-    }
+    auto iter = std::find_if(_rFormItem.GetChildren().rbegin(), _rFormItem.GetChildren().rend(),
+        [](const std::unique_ptr<FmFilterData>& rChild) { return dynamic_cast<const FmFilterItems*>(rChild.get()) != nullptr; });
 
     sal_Int32 nInsertPos = iter.base() - _rFormItem.GetChildren().begin();
     // delegate this to the FilterController, it will notify us, which will let us update our model
@@ -913,18 +908,17 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
     // checks whether for each form there's one free level for input
     ::std::vector< std::unique_ptr<FmFilterData> >& rChildren = _rItem.GetChildren();
     bool bAppendLevel = dynamic_cast<const FmFormItem*>(&_rItem) !=  nullptr;
-    auto aEnd = rChildren.end();
 
-    for ( auto i = rChildren.begin(); i != aEnd; ++i )
+    for ( auto& rpChild : rChildren )
     {
-        FmFilterItems* pItems = dynamic_cast<FmFilterItems*>( i->get() );
+        FmFilterItems* pItems = dynamic_cast<FmFilterItems*>( rpChild.get() );
         if ( pItems && pItems->GetChildren().empty() )
         {
             bAppendLevel = false;
             break;
         }
 
-        FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( i->get() );
+        FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( rpChild.get() );
         if (pFormItem)
         {
             EnsureEmptyFilterRows( *pFormItem );
@@ -1494,13 +1488,8 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
 
 void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,bool _bCopy)
 {
-    ::std::vector<FmFilterItem*>::const_iterator aEnd = _rFilterList.end();
-    for (   ::std::vector< FmFilterItem* >::const_iterator i = _rFilterList.begin();
-            i != aEnd;
-            ++i
-        )
+    for (FmFilterItem* pLookupItem : _rFilterList)
     {
-        FmFilterItem* pLookupItem( *i );
         if ( pLookupItem->GetParent() == _pTargetItems )
             continue;
 

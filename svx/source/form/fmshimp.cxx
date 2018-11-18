@@ -1002,10 +1002,10 @@ IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots_Lock, void*,void)
 
     m_nInvalidationEvent = nullptr;
 
-    for (std::vector<InvalidSlotInfo>::const_iterator i = m_arrInvalidSlots.begin(); i < m_arrInvalidSlots.end(); ++i)
+    for (const auto& rInvalidSlot : m_arrInvalidSlots)
     {
-        if (i->id)
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(i->id, true, (i->flags & 0x01));
+        if (rInvalidSlot.id)
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(rInvalidSlot.id, true, (rInvalidSlot.flags & 0x01));
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
@@ -2001,12 +2001,9 @@ bool FmXFormShell::setCurrentSelection_Lock( const InterfaceBag& _rSelection )
 
     // determine the form which all the selected objects belong to, if any
     Reference< XForm > xNewCurrentForm;
-    for ( InterfaceBag::const_iterator loop = m_aCurrentSelection.begin();
-          loop != m_aCurrentSelection.end();
-          ++loop
-        )
+    for (const auto& rpSelection : m_aCurrentSelection)
     {
-        Reference< XForm > xThisRoundsForm( GetForm( *loop ) );
+        Reference< XForm > xThisRoundsForm( GetForm( rpSelection ) );
         OSL_ENSURE( xThisRoundsForm.is(), "FmXFormShell::setCurrentSelection: *everything* should belong to a form!" );
 
         if ( !xNewCurrentForm.is() )
@@ -2955,12 +2952,9 @@ void FmXFormShell::startFiltering_Lock()
     if ( pAdapter.is() )
     {
         const ::std::vector< Reference< runtime::XFormController> >& rControllerList = pAdapter->GetList();
-        for (   ::std::vector< Reference< runtime::XFormController> >::const_iterator j = rControllerList.begin();
-                j != rControllerList.end();
-                ++j
-            )
+        for (const auto& rpController : rControllerList)
         {
-            Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
+            Reference< XModeSelector> xModeSelector(rpController, UNO_QUERY);
             if (xModeSelector.is())
                 xModeSelector->setMode( "FilterMode" );
         }
@@ -3037,13 +3031,12 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
 
         if (bSave)
         {
-            for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
-                 j != rControllerList.end(); ++j)
+            for (const auto& rpController : rControllerList)
             {
                 // remember the current filter settings in case we're going to reload the forms below (which may fail)
                 try
                 {
-                    Reference< XPropertySet > xFormAsSet((*j)->getModel(), UNO_QUERY);
+                    Reference< XPropertySet > xFormAsSet(rpController->getModel(), UNO_QUERY);
                     aOriginalFilters.push_back(::comphelper::getString(xFormAsSet->getPropertyValue(FM_PROP_FILTER)));
                     aOriginalApplyFlags.push_back(::comphelper::getBOOL(xFormAsSet->getPropertyValue(FM_PROP_APPLYFILTER)));
                 }
@@ -3057,14 +3050,13 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
                         aOriginalFilters.emplace_back( );
                     aOriginalApplyFlags.push_back( false );
                 }
-                saveFilter(*j);
+                saveFilter(rpController);
             }
         }
-        for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
-             j != rControllerList.end(); ++j)
+        for (const auto& rController : rControllerList)
         {
 
-            Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
+            Reference< XModeSelector> xModeSelector(rController, UNO_QUERY);
             if (xModeSelector.is())
                 xModeSelector->setMode( "DataMode" );
         }
@@ -3406,21 +3398,17 @@ void FmXFormShell::CreateExternalView_Lock()
             // properties describing the "direct" column properties
             const sal_Int16 nListBoxDescription = 6;
             Sequence< PropertyValue> aListBoxDescription(nListBoxDescription);
-            for (   FmMapUString2UString::const_iterator aCtrlSource = aRadioControlSources.begin();
-                    aCtrlSource != aRadioControlSources.end();
-                    ++aCtrlSource, ++nOffset
-                )
+            for (const auto& rCtrlSource : aRadioControlSources)
             {
-
                 PropertyValue* pListBoxDescription = aListBoxDescription.getArray();
                 // label
                 pListBoxDescription->Name = FM_PROP_LABEL;
-                pListBoxDescription->Value <<= (*aCtrlSource).first;
+                pListBoxDescription->Value <<= rCtrlSource.first;
                 ++pListBoxDescription;
 
                 // control source
                 pListBoxDescription->Name = FM_PROP_CONTROLSOURCE;
-                pListBoxDescription->Value <<= (*aCtrlSource).second;
+                pListBoxDescription->Value <<= rCtrlSource.second;
                 ++pListBoxDescription;
 
                 // bound column
@@ -3434,7 +3422,7 @@ void FmXFormShell::CreateExternalView_Lock()
                 ++pListBoxDescription;
 
                 // list source
-                MapUString2UstringSeq::const_iterator aCurrentListSource = aRadioListSources.find((*aCtrlSource).first);
+                MapUString2UstringSeq::const_iterator aCurrentListSource = aRadioListSources.find(rCtrlSource.first);
                 DBG_ASSERT(aCurrentListSource != aRadioListSources.end(),
                     "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 pListBoxDescription->Name = FM_PROP_LISTSOURCE;
@@ -3442,7 +3430,7 @@ void FmXFormShell::CreateExternalView_Lock()
                 ++pListBoxDescription;
 
                 // value list
-                MapUString2UstringSeq::const_iterator aCurrentValueList = aRadioValueLists.find((*aCtrlSource).first);
+                MapUString2UstringSeq::const_iterator aCurrentValueList = aRadioValueLists.find(rCtrlSource.first);
                 DBG_ASSERT(aCurrentValueList != aRadioValueLists.end(),
                     "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 pListBoxDescription->Name = FM_PROP_STRINGITEMLIST;
@@ -3466,7 +3454,7 @@ void FmXFormShell::CreateExternalView_Lock()
 
                 // column position
                 pDispatchArgs->Name = FMARG_ADDCOL_COLUMNPOS;
-                FmMapUString2Int16::const_iterator aOffset = aRadioPositions.find((*aCtrlSource).first);
+                FmMapUString2Int16::const_iterator aOffset = aRadioPositions.find(rCtrlSource.first);
                 DBG_ASSERT(aOffset != aRadioPositions.end(),
                     "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 sal_Int16 nPosition = (*aOffset).second;
@@ -3485,6 +3473,7 @@ void FmXFormShell::CreateExternalView_Lock()
                 // dispatch the "add column"
                 xAddColumnDispatch->dispatch(aAddColumnURL, aDispatchArgs);
                 ++nAddedColumns;
+                ++nOffset;
             }
 
 
