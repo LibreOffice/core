@@ -93,6 +93,7 @@ void lclDataLabelSharedCharacters( ContextHandler2 const & rContext, const OUStr
 DataLabelContext::DataLabelContext( ContextHandler2Helper& rParent, DataLabelModel& rModel ) :
     ContextBase< DataLabelModel >( rParent, rModel )
 {
+    mrModel.mbDeleted = false;
 }
 
 DataLabelContext::~DataLabelContext()
@@ -101,7 +102,6 @@ DataLabelContext::~DataLabelContext()
 
 ContextHandlerRef DataLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    mrModel.mbDeleted = false;
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( idx ):
@@ -124,6 +124,7 @@ void DataLabelContext::onCharacters( const OUString& rChars )
 DataLabelsContext::DataLabelsContext( ContextHandler2Helper& rParent, DataLabelsModel& rModel ) :
     ContextBase< DataLabelsModel >( rParent, rModel )
 {
+    mrModel.mbDeleted = false;
 }
 
 DataLabelsContext::~DataLabelsContext()
@@ -132,7 +133,6 @@ DataLabelsContext::~DataLabelsContext()
 
 ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    mrModel.mbDeleted = false;
     bool bMSO2007Doc = getFilter().isMSO2007Document();
     if( isRootElement() ) switch( nElement )
     {
