@@ -31,7 +31,7 @@ void ConfigurationTracer::TraceConfiguration (
     const Reference<XConfiguration>& rxConfiguration,
     const char* pMessage)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >=1
     SAL_INFO("sd.ui","" << pMessage << " at " << rxConfiguration.get() << " {");
     if (rxConfiguration.is())
     {
@@ -48,7 +48,7 @@ void ConfigurationTracer::TraceConfiguration (
 #endif
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >=1
 void ConfigurationTracer::TraceBoundResources (
     const Reference<XConfiguration>& rxConfiguration,
     const Reference<XResourceId>& rxResourceId,
