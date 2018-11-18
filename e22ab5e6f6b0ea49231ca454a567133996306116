@@ -16,6 +16,24 @@
       "revId": "e22ab5e6f6b0ea49231ca454a567133996306116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_670925dc",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2018-11-18T12:54:19Z",
+      "side": 1,
+      "message": "\u003e Bah, I just found out that this needs some more work..\n \u003e The dimensions of the Rank array matters,\n(snip)\n \u003e Would you like to take care of that for 6.2?\n\nYes, I would.\nOne thing I would like to ask for the task is a good test case with a proper matrix of ranks.\nSo far I test formulae like \"AVERAGE(LARGE(X, {1,2,3}))\".\nIs there any available function F such that \"F(LARGE(X, {1,2;3,4}))\" for example?",
+      "parentUuid": "ff5d4b2f_1f04f77a",
+      "revId": "e22ab5e6f6b0ea49231ca454a567133996306116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
