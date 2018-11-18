@@ -639,6 +639,10 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             else
                 getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
         }
+        else if (rSeries.mxShapeProp.is())
+        {
+            getFormatter().convertFrameFormatting( aPropSet, rSeries.mxShapeProp, rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
+        }
     }
     catch( Exception& )
     {
