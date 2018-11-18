@@ -4355,7 +4355,7 @@ static int ImplGetSelectedIndex( HMENU hMenu )
         for(int i=0; i<n; i++ )
         {
             if( !GetMenuItemInfoW( hMenu, i, TRUE, &mi) )
-                SAL_WARN( "vcl", "GetMenuItemInfoW faled: " << WindowsErrorString( GetLastError() ) );
+                SAL_WARN( "vcl", "GetMenuItemInfoW failed: " << WindowsErrorString( GetLastError() ) );
             else
             {
                 if( mi.fState & MFS_HILITE )

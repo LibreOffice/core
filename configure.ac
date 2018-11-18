@@ -122,7 +122,7 @@ add_warning()
     echo "$COLORWARN $@" >> warn
 }
 
-dnl Some Mac User have the bad habbit of letting a lot fo crap
+dnl Some Mac User have the bad habit of letting a lot of crap
 dnl accumulate in their PATH and even adding stuff in /usr/local/bin
 dnl that confuse the build.
 dnl For the ones that use LODE, let's be nice and protect them
@@ -548,7 +548,7 @@ test_fontconfig=yes
 test_cairo=no
 
 # Default values, as such probably valid just for Linux, set
-# differently below just for Mac OSX,but at least better than
+# differently below just for Mac OSX, but at least better than
 # hardcoding these as we used to do. Much of this is duplicated also
 # in solenv for old build system and for gbuild, ideally we should
 # perhaps define stuff like this only here in configure.ac?
@@ -2522,7 +2522,7 @@ if test $_os = iOS -o $_os = Android; then
     # Disable dynamic_loading always for iOS and Android
     enable_dynamic_loading=no
 elif test -z "$enable_dynamic_loading"; then
-    # Otherwise enable it unless speficically disabled
+    # Otherwise enable it unless specifically disabled
     enable_dynamic_loading=yes
 fi
 
@@ -2843,7 +2843,7 @@ if test $_os = Darwin -o $_os = iOS; then
 
     AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
     if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED; then
-        AC_MSG_ERROR([the version minimumn required, $MAC_OS_X_VERSION_MIN_REQUIRED, must be <= the version maximum allowed, $MAC_OS_X_VERSION_MAX_ALLOWED])
+        AC_MSG_ERROR([the version minimum required, $MAC_OS_X_VERSION_MIN_REQUIRED, must be <= the version maximum allowed, $MAC_OS_X_VERSION_MAX_ALLOWED])
     else
         AC_MSG_RESULT([ok])
     fi
@@ -11384,7 +11384,7 @@ if test "x$with_theme" != "xno"; then
 fi
 AC_MSG_RESULT([$WITH_THEMES])
 AC_SUBST([WITH_THEMES])
-# FIXME: remove this, and the convenience default->colibre remapping after a crace period
+# FIXME: remove this, and the convenience default->colibre remapping after a grace period
 for theme in $with_theme; do
     case $theme in
     default) AC_MSG_WARN([--with-theme=default is deprecated and will be removed, use --with-theme=colibre]) ;;

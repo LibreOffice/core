@@ -1546,7 +1546,7 @@ void FmXFormShell::ExecuteSearch_Lock()
                 if (xCurrentCol.is())
                     strActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(FM_PROP_LABEL));
 
-                // the text fo the current column
+                // the text of the current column
                 Reference< XIndexAccess> xColControls(xGridPeer, UNO_QUERY);
                 Reference< XInterface> xCurControl;
                 xColControls->getByIndex(nViewCol) >>= xCurControl;

@@ -2678,7 +2678,7 @@ void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
         const SwPosition *pTmpStt = pTmp->Start(),
                         *pTmpEnd = pTmp->GetPoint() == pTmpStt ?
                                         pTmp->GetMark() : pTmp->GetPoint();
-        // If a SPoint or GetMark are in a cursor area than cancel the old area.
+        // If a SPoint or GetMark are in a cursor area then cancel the old area.
         // During comparison keep in mind that End() is outside the area.
         if( *pStt <= *pTmpStt )
         {

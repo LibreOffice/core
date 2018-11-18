@@ -343,7 +343,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont, Color &_rTextColor)
                 sal_Int32 nPos = 0;
                 while( nPos != -1 )
                 {
-                    // list fo fonts, VCL: semicolon as separator, HTML: comma
+                    // list of fonts, VCL: semicolon as separator, HTML: comma
                     OUString aFName = rFace.getToken( 0, ',', nPos );
                     aFName = comphelper::string::strip(aFName, ' ');
                     if( !aFontName.isEmpty() )

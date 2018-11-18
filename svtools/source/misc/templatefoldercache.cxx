@@ -259,7 +259,7 @@ namespace svt
         {
             // use the base class operator with the local name of the content
             OUString sURL = _rxContent->getURL();
-            // #116281# Keep office installtion relocatable. Never store
+            // #116281# Keep office installation relocatable. Never store
             // any direct references to office installation directory.
             sURL = m_xOfficeInstDirs->makeRelocatableURL( sURL );
             m_rStorage.WriteUniOrByteString( sURL, m_rStorage.GetStreamCharSet() );
@@ -660,7 +660,7 @@ namespace svt
         while ( nRootDirectories-- )
         {
             OUString sURL = m_pCacheStream->ReadUniOrByteString(m_pCacheStream->GetStreamCharSet());
-            // #116281# Keep office installtion relocatable. Never store
+            // #116281# Keep office installation relocatable. Never store
             // any direct references to office installation directory.
             sURL = getOfficeInstDirs()->makeAbsoluteURL( sURL );
             m_aPreviousState.push_back(
