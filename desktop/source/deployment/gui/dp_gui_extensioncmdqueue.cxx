@@ -906,13 +906,10 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         // If there is at least one directly downloadable extension then we
         // open the install dialog.
         std::vector< UpdateData > dataDownload;
-        int countWebsiteDownload = 0;
 
         for (auto const& data : vData)
         {
-            if ( !data.sWebsiteURL.isEmpty() )
-                countWebsiteDownload ++;
-            else
+            if ( data.sWebsiteURL.isEmpty() )
                 dataDownload.push_back(data);
         }
 
