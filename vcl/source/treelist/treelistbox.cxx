@@ -2716,8 +2716,8 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             Color aNewWallColor = rSettings.GetHighlightColor();
             if (!bInUse || nItemType != SvLBoxItemType::ContextBmp)
             {
-                // if the face color is bright then the deactive color is also bright
-                // -> so you can't see any deactive selection
+                // if the face color is bright then the deactivate color is also bright
+                // -> so you can't see any deactivate selection
                 if (bHideSelection && !rSettings.GetFaceColor().IsBright()
                    && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
                 {

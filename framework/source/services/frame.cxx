@@ -2111,7 +2111,7 @@ void SAL_CALL Frame::disposing()
     // If somewhere called dispose() whitout close() before - normally no dialogs
     // should exist. Otherwise it's the problem of the outside caller.
     // Note:
-    //      (a) Do it after stopWindowListening(). May that force some active/deactive
+    //      (a) Do it after stopWindowListening(). May that force some active/deactivate
     //          notifications which we don't need here really.
     //      (b) Don't forget to save the old value of IsDialogCancelEnabled() to
     //          restore it afterwards (to not kill headless mode).
