@@ -433,29 +433,22 @@ OString PoEntry::genKeyId(const OString& rGenerator)
     return OString(sKeyId);
 }
 
-namespace
-{
-    // Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
-    OString lcl_GetTime()
-    {
-        time_t aNow = time(nullptr);
-        struct tm* pNow = localtime(&aNow);
-        char pBuff[50];
-        strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
-        return pBuff;
-    }
-}
-
 PoHeader::PoHeader( const OString& rExtSrc )
     : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
 {
+    // Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
+    char pBuff[50];
+    time_t aNow = time(nullptr);
+    struct tm* pNow = localtime(&aNow);
+    strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
+
     m_pGenPo->setExtractCom("extracted from " + rExtSrc);
     m_pGenPo->setMsgStr(
         OString("Project-Id-Version: PACKAGE VERSION\n"
         "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?"
         "product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-        "POT-Creation-Date: ") + lcl_GetTime() +
+        "POT-Creation-Date: ") + pBuff +
         OString("\nPO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
         "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
         "Language-Team: LANGUAGE <LL@li.org>\n"
