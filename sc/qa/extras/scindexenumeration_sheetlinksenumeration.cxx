@@ -10,7 +10,6 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumeration.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
