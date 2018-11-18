@@ -4835,8 +4835,7 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
     if (!SotExchange::IsChart(aClassID))
         return false;
 
-    m_postponedChart = pSdrObj;
-    m_postponedChartSize = rSize;
+    m_aPostponedCharts.push_back(std::pair<const SdrObject*, Size>(pSdrObj, rSize));
     return true;
 }
 
@@ -4845,81 +4844,86 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
  */
 void DocxAttributeOutput::WritePostponedChart()
 {
-    if(m_postponedChart == nullptr)
+    if (m_aPostponedCharts.empty())
         return;
-    uno::Reference< chart2::XChartDocument > xChartDoc;
-    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(m_postponedChart)->getUnoShape(), uno::UNO_QUERY );
-    if( xShape.is() )
+
+    for (const auto& itr : m_aPostponedCharts)
     {
-        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-        if( xPropSet.is() )
-            xChartDoc.set( xPropSet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+        uno::Reference< chart2::XChartDocument > xChartDoc;
+        uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(itr.first)->getUnoShape(), uno::UNO_QUERY );
+        if( xShape.is() )
+        {
+            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+            if( xPropSet.is() )
+                xChartDoc.set( xPropSet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+        }
+
+        if( xChartDoc.is() )
+        {
+            SAL_INFO("sw.ww8", "DocxAttributeOutput::WriteOLE2Obj: export chart ");
+            m_pSerializer->startElementNS( XML_w, XML_drawing,
+                    FSEND );
+            m_pSerializer->startElementNS( XML_wp, XML_inline,
+                    XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
+                    FSEND );
+
+            OString aWidth( OString::number( TwipsToEMU( itr.second.Width() ) ) );
+            OString aHeight( OString::number( TwipsToEMU( itr.second.Height() ) ) );
+            m_pSerializer->singleElementNS( XML_wp, XML_extent,
+                    XML_cx, aWidth.getStr(),
+                    XML_cy, aHeight.getStr(),
+                    FSEND );
+            // TODO - the right effectExtent, extent including the effect
+            m_pSerializer->singleElementNS( XML_wp, XML_effectExtent,
+                    XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0",
+                    FSEND );
+
+            OUString sName("Object 1");
+            uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
+            if( xNamed.is() )
+                sName = xNamed->getName();
+
+            /* If there is a scenario where a chart is followed by a shape
+               which is being exported as an alternate content then, the
+               docPr Id is being repeated, ECMA 20.4.2.5 says that the
+               docPr Id should be unique, ensuring the same here.
+               */
+            m_pSerializer->singleElementNS( XML_wp, XML_docPr,
+                    XML_id, I32S( m_anchorId++ ),
+                    XML_name, USS( sName ),
+                    FSEND );
+
+            m_pSerializer->singleElementNS( XML_wp, XML_cNvGraphicFramePr,
+                    FSEND );
+
+            m_pSerializer->startElementNS( XML_a, XML_graphic,
+                    FSNS( XML_xmlns, XML_a ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
+                    FSEND );
+
+            m_pSerializer->startElementNS( XML_a, XML_graphicData,
+                    XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart",
+                    FSEND );
+
+            OString aRelId;
+            m_nChartCount++;
+            uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
+            aRelId = m_rExport.OutputChart( xModel, m_nChartCount, m_pSerializer );
+
+            m_pSerializer->singleElementNS( XML_c, XML_chart,
+                    FSNS( XML_xmlns, XML_c ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dmlChart)), RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS( XML_xmlns, XML_r ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS( XML_r, XML_id ), aRelId.getStr(),
+                    FSEND );
+
+            m_pSerializer->endElementNS( XML_a, XML_graphicData );
+            m_pSerializer->endElementNS( XML_a, XML_graphic );
+            m_pSerializer->endElementNS( XML_wp, XML_inline );
+            m_pSerializer->endElementNS( XML_w, XML_drawing );
+
+        }
     }
 
-    if( xChartDoc.is() )
-    {
-        SAL_INFO("sw.ww8", "DocxAttributeOutput::WriteOLE2Obj: export chart ");
-        m_pSerializer->startElementNS( XML_w, XML_drawing,
-            FSEND );
-        m_pSerializer->startElementNS( XML_wp, XML_inline,
-            XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
-            FSEND );
-
-        OString aWidth( OString::number( TwipsToEMU( m_postponedChartSize.Width() ) ) );
-        OString aHeight( OString::number( TwipsToEMU( m_postponedChartSize.Height() ) ) );
-        m_pSerializer->singleElementNS( XML_wp, XML_extent,
-            XML_cx, aWidth.getStr(),
-            XML_cy, aHeight.getStr(),
-            FSEND );
-        // TODO - the right effectExtent, extent including the effect
-        m_pSerializer->singleElementNS( XML_wp, XML_effectExtent,
-            XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0",
-            FSEND );
-
-        OUString sName("Object 1");
-        uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
-        if( xNamed.is() )
-            sName = xNamed->getName();
-
-        /* If there is a scenario where a chart is followed by a shape
-           which is being exported as an alternate content then, the
-           docPr Id is being repeated, ECMA 20.4.2.5 says that the
-           docPr Id should be unique, ensuring the same here.
-        */
-        m_pSerializer->singleElementNS( XML_wp, XML_docPr,
-            XML_id, I32S( m_anchorId++ ),
-            XML_name, USS( sName ),
-            FSEND );
-
-        m_pSerializer->singleElementNS( XML_wp, XML_cNvGraphicFramePr,
-            FSEND );
-
-        m_pSerializer->startElementNS( XML_a, XML_graphic,
-            FSNS( XML_xmlns, XML_a ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
-
-        m_pSerializer->startElementNS( XML_a, XML_graphicData,
-            XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/chart",
-            FSEND );
-
-        OString aRelId;
-        m_nChartCount++;
-        uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
-        aRelId = m_rExport.OutputChart( xModel, m_nChartCount, m_pSerializer );
-
-        m_pSerializer->singleElementNS( XML_c, XML_chart,
-            FSNS( XML_xmlns, XML_c ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(dmlChart)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_r ), OUStringToOString(GetExport().GetFilter().getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_r, XML_id ), aRelId.getStr(),
-            FSEND );
-
-        m_pSerializer->endElementNS( XML_a, XML_graphicData );
-        m_pSerializer->endElementNS( XML_a, XML_graphic );
-        m_pSerializer->endElementNS( XML_wp, XML_inline );
-        m_pSerializer->endElementNS( XML_w, XML_drawing );
-
-    }
-    m_postponedChart = nullptr;
+    m_aPostponedCharts.clear();
 }
 
 bool DocxAttributeOutput::WriteOLEMath( const SwOLENode& rOLENode )
@@ -9150,7 +9154,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nFieldsInHyperlink( 0 ),
       m_bExportingOutline(false),
       m_nChartCount(0),
-      m_postponedChart( nullptr ),
       pendingPlaceholder( nullptr ),
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 1 ),
