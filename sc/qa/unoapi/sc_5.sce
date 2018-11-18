@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 -o sc.ScIndexEnumeration_DataPilotItemsEnumeration
--o sc.ScIndexEnumeration_DataPilotTablesEnumeration
 -o sc.ScIndexEnumeration_DatabaseRangesEnumeration
 -o sc.ScIndexEnumeration_FunctionDescriptionEnumeration
 -o sc.ScIndexEnumeration_LabelRangesEnumeration
