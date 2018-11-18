@@ -33,7 +33,7 @@ public:
     static void TraceConfiguration (
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const char* pMessage);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL >=1
     static void TraceBoundResources (
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
