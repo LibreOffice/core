@@ -252,7 +252,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
         rDescription.aAction + " Id:" + rDescription.aID +
         " Parent:" + rDescription.aParent + aParameterString;
 
-    log(aLogLine);
+    (void) log(aLogLine);
 }
 
 UITestLogger& UITestLogger::getInstance()
