@@ -877,8 +877,7 @@ private:
     std::vector<const SwOLENode*> m_aPostponedMaths;
     /// count charts consistently for unit tests
     unsigned int m_nChartCount;
-    const SdrObject* m_postponedChart;
-    Size m_postponedChartSize;
+    std::vector<std::pair<const SdrObject*, Size>> m_aPostponedCharts;
     std::vector<const SdrObject*> m_aPostponedFormControls;
     std::vector<PostponedDrawing> m_aPostponedActiveXControls;
     const SwField* pendingPlaceholder;
