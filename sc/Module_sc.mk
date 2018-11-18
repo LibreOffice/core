@@ -138,6 +138,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_indexenumeration_datapilottablesenumeration \
 	CppunitTest_sc_indexenumeration_ddelinksenumeration \
 	CppunitTest_sc_indexenumeration_labelrangesenumeration \
+	CppunitTest_sc_indexenumeration_namedrangesenumeration \
 	CppunitTest_sc_indexenumeration_scenariosenumeration \
 	CppunitTest_sc_indexenumeration_sheetlinksenumeration \
 	CppunitTest_sc_indexenumeration_tableconditionalentryenumeration \
