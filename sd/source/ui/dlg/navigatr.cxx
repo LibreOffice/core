@@ -96,7 +96,7 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
     // set focus to listbox, otherwise it is in the toolbox which is only useful
     // for keyboard navigation
     maTlbObjects->GrabFocus();
-    maTlbObjects->SetSdNavigatorWinFlag(true);
+    maTlbObjects->SetSdNavigator(this);
 
     // DragTypeListBox
     maLbDocs->SetSelectHdl( LINK( this, SdNavigatorWin, SelectDocumentHdl ) );
