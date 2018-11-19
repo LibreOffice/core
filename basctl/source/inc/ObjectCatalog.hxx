@@ -28,29 +28,42 @@
 namespace basctl
 {
 
-
-// ObjectCatalog -- a docking window that contains the currently loaded macros
-// in a tree structure.
-
+/*!
+ *  @brief A docking window that contains a tree of the currently loaded macros
+ *
+ *  The class creates Object Catalog window with the currently loaded macros
+ *  in a tree structure which allows user to quickly select the necessary
+ *  one or macros in BasicIDE.
+ */
 class ObjectCatalog : public DockingWindow
 {
 public:
     explicit ObjectCatalog(vcl::Window* pParent);
     virtual ~ObjectCatalog() override;
     virtual void dispose() override;
-public:
-    void UpdateEntries () { aTree->UpdateEntries(); }
+
+    ///  Update the entries of Object Catalog Treelist
+    void UpdateEntries () { maTree->UpdateEntries(); }
     void SetCurrentEntry (BaseWindow* pCurWin);
 
 private:
-    // title: "Object Catalog"
-    VclPtr<FixedText> aTitle;
-    // the tree-list of the objects
-    VclPtr<TreeListBox> aTree;
+    VclPtr<FixedText>   maTitle;    ///< Title of the Object Catalog window
+    VclPtr<TreeListBox> maTree;     ///< The Treelist of the objects in window
 
-private:
+    /*!
+     *  Function for resize of Window.
+     *  Use only for calls ArrangeWindows().
+     */
     virtual void Resize () override; // Window
+    /*!
+     *  Function for resize of docking window.
+     *  Use only for calls ArrangeWindows().
+     */
     virtual void ToggleFloatingMode () override; // DockingWindow
+    /*!
+     *  Uses Resize() and ToggleFloatingMode() functions for resizing
+     *  window and dicking window
+     */
     void ArrangeWindows ();
 };
 
