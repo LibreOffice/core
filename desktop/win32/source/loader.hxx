@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DESKTOP_WIN32_SOURCE_LOADER_HXX
 #define INCLUDED_DESKTOP_WIN32_SOURCE_LOADER_HXX
 
+#include <cstddef>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <string.h>
@@ -77,6 +78,9 @@ inline WCHAR * commandLineAppendEncoded(WCHAR * buffer, WCHAR const * text) {
 // terminated full directory path (ending in "\") to the "ini" file
 // corresponding to the current executable.
 void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory);
+
+// Implementation of the process guarding soffice.bin
+int officeloader_impl(bool bAllowConsole);
 
 }
 
