@@ -119,7 +119,14 @@ void SAL_CALL VistaFilePicker::appendFilter(const OUString& sTitle ,
 {
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_APPEND_FILTER);
-    rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
+    const sal_Int32 idx = sTitle.indexOf("(.");
+    if (idx > 0)
+    {
+        const OUString sTitle_ = sTitle.replaceAt(idx, 2, "(*.");
+        rRequest->setArgument(PROP_FILTER_TITLE, sTitle_);
+    }
+    else
+        rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
     rRequest->setArgument(PROP_FILTER_VALUE, sFilter);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
@@ -129,7 +136,14 @@ void SAL_CALL VistaFilePicker::setCurrentFilter(const OUString& sTitle)
 {
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_SET_CURRENT_FILTER);
-    rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
+    const sal_Int32 idx = sTitle.indexOf("(.");
+    if (idx > 0)
+    {
+        const OUString sTitle_ = sTitle.replaceAt(idx, 2, "(*.");
+        rRequest->setArgument(PROP_FILTER_TITLE, sTitle_);
+    }
+    else
+        rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
 }
@@ -142,6 +156,7 @@ OUString SAL_CALL VistaFilePicker::getCurrentFilter()
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
 
     const  OUString sTitle = rRequest->getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
+
     return sTitle;
 }
 
