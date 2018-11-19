@@ -183,43 +183,26 @@ namespace desktop
         "                       Used only in unit tests and should have two arguments.  \n\n";
 #ifdef _WIN32
     namespace{
+        // This class is only used to create a console when soffice.bin is run without own console
+        // (like using soffice.exe launcher as opposed to soffice.com), and either --version or
+        // --help command line options were specified, or an error in a command line option was
+        // detected, which requires to output strings to user.
         class lcl_Console {
-            enum eConsoleMode { unknown, attached, allocated };
         public:
             explicit lcl_Console(short nBufHeight)
-                : mConsoleMode(unknown)
+                : m_bOwnConsole(AllocConsole() != FALSE)
             {
-                if (GetStdHandle(STD_OUTPUT_HANDLE) == nullptr) // application does not have associated standard handles
+                if (m_bOwnConsole)
                 {
-                    STARTUPINFOW aStartupInfo;
-                    aStartupInfo.cb = sizeof(aStartupInfo);
-                    GetStartupInfoW(&aStartupInfo);
-                    if ((aStartupInfo.dwFlags & STARTF_USESTDHANDLES) == STARTF_USESTDHANDLES)
-                    {
-                        // If standard handles had been passed to this process, use them
-                        SetStdHandle(STD_INPUT_HANDLE, aStartupInfo.hStdInput);
-                        SetStdHandle(STD_OUTPUT_HANDLE, aStartupInfo.hStdOutput);
-                        SetStdHandle(STD_ERROR_HANDLE, aStartupInfo.hStdError);
-                    }
-                    else
-                    {
-                        // Try to attach parent console; on error try to create new.
-                        // If this process already has its console, these will simply fail.
-                        if (AttachConsole(ATTACH_PARENT_PROCESS) != FALSE)
-                            mConsoleMode = attached;
-                        else if (AllocConsole() != FALSE)
-                            mConsoleMode = allocated;
+                    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
-                        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
-                        // Ensure that console buffer is enough to hold required data
-                        CONSOLE_SCREEN_BUFFER_INFO cinfo;
-                        GetConsoleScreenBufferInfo(hOut, &cinfo);
-                        if (cinfo.dwSize.Y < nBufHeight)
-                        {
-                            cinfo.dwSize.Y = nBufHeight;
-                            SetConsoleScreenBufferSize(hOut, cinfo.dwSize);
-                        }
+                    // Ensure that console buffer is enough to hold required data
+                    CONSOLE_SCREEN_BUFFER_INFO cinfo;
+                    GetConsoleScreenBufferInfo(hOut, &cinfo);
+                    if (cinfo.dwSize.Y < nBufHeight)
+                    {
+                        cinfo.dwSize.Y = nBufHeight;
+                        SetConsoleScreenBufferSize(hOut, cinfo.dwSize);
                     }
 
                     (void)freopen("CON", "r", stdin);
@@ -227,47 +210,21 @@ namespace desktop
                     (void)freopen("CON", "w", stderr);
 
                     std::ios::sync_with_stdio(true);
-
-                    // In case we use parent's console, emit an empty string
-                    // to avoid output on a line with command prompt
-                    if (mConsoleMode == attached)
-                        fprintf(stdout, "\n");
                 }
             }
 
             ~lcl_Console()
             {
-                fflush(stdout);
-                switch (mConsoleMode) {
-                case unknown:
-                    // Don't free the console
-                    return;
-                case attached:
+                if (m_bOwnConsole)
                 {
-                    // Put Enter keypress to console input buffer to emit next command prompt after the command
-                    INPUT_RECORD ir;
-                    ir.EventType = KEY_EVENT;
-                    KEY_EVENT_RECORD& ke = ir.Event.KeyEvent;
-                    ke.bKeyDown = TRUE;
-                    ke.wRepeatCount = 1;
-                    ke.wVirtualKeyCode = VK_RETURN;
-                    ke.wVirtualScanCode = MapVirtualKeyW(VK_RETURN, MAPVK_VK_TO_VSC);
-                    ke.uChar.UnicodeChar = L'\r';
-                    ke.dwControlKeyState = 0;
-                    DWORD nEvents;
-                    WriteConsoleInputW(GetStdHandle(STD_INPUT_HANDLE), &ir, 1, &nEvents);
-                    break;
-                }
-                case allocated:
+                    fflush(stdout);
                     fprintf(stdout, "Press Enter to continue...");
                     fgetc(stdin);
-                    break;
+                    FreeConsole();
                 }
-
-                FreeConsole();
             }
         private:
-            eConsoleMode mConsoleMode;
+            bool m_bOwnConsole;
         };
     }
 #endif
