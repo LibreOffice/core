@@ -23,7 +23,6 @@
 #include <editeng/justifyitem.hxx>
 #include <osl/diagnose.h>
 #include <svl/itemset.hxx>
-#include <osl/diagnose.h>
 
 #include <dpoutput.hxx>
 #include <document.hxx>

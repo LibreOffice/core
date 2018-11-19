@@ -30,7 +30,6 @@
 #include <numrule.hxx>
 
 #include <editeng/eerdll.hxx>
-#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
