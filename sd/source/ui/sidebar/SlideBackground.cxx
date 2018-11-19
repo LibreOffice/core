@@ -281,6 +281,7 @@ void SlideBackground::HandleContextChange(
 
         if (maContext == maDrawOtherContext)
         {
+            mpEditMaster->Hide();
             mpFillStyle->Show();
             mpBackgroundLabel->Show();
         }
