@@ -52,6 +52,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
+#include <txtfrm.hxx>
 #include <hints.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -103,6 +104,11 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     const sw::DocumentContentOperationsManager::ParaRstFormat* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFormat*>(pArgs);
     SwContentNode* pNode = rpNd->GetContentNode();
+    if (pPara->pLayout && pPara->pLayout->IsHideRedlines()
+        && pNode && pNode->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+    {
+        return true;
+    }
     if( pNode && pNode->HasSwAttrSet() )
     {
         const bool bLocked = pNode->IsModifyLocked();
@@ -224,7 +230,8 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
     return true;
 }
 
-void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark, bool bExactRange )
+void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark,
+        bool bExactRange, SwRootFrame const*const pLayout)
 {
     SwHistory* pHst = nullptr;
     SwDataChanged aTmp( rRg );
@@ -235,7 +242,8 @@ void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark, bool bExactRang
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
-    sw::DocumentContentOperationsManager::ParaRstFormat aPara( pStt, pEnd, pHst );
+    sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+            pStt, pEnd, pHst, nullptr, pLayout );
     aPara.bInclRefToxMark = bInclRefToxMark;
     aPara.bExactRange = bExactRange;
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
@@ -246,7 +254,8 @@ void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark, bool bExactRang
 void SwDoc::ResetAttrs( const SwPaM &rRg,
                         bool bTextAttr,
                         const std::set<sal_uInt16> &rAttrs,
-                        const bool bSendDataChangedEvents )
+                        const bool bSendDataChangedEvents,
+                        SwRootFrame const*const pLayout)
 {
     SwPaM* pPam = const_cast<SwPaM*>(&rRg);
     if( !bTextAttr && !rAttrs.empty() && RES_TXTATR_END > *(rAttrs.begin()) )
@@ -318,7 +327,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     const SwPosition *pStt = pPam->Start(), *pEnd = pPam->End();
-    sw::DocumentContentOperationsManager::ParaRstFormat aPara( pStt, pEnd, pHst );
+    sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+            pStt, pEnd, pHst, nullptr, pLayout);
 
     // mst: not including META here; it seems attrs with CH_TXTATR are omitted
     sal_uInt16 const aResetableSetRange[] {
@@ -1008,6 +1018,18 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
 
     sw::DocumentContentOperationsManager::ParaRstFormat* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFormat*>(pArgs);
 
+    if (pPara->pLayout && pPara->pLayout->IsHideRedlines())
+    {
+        if (pCNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+        {
+            return true;
+        }
+        if (pCNd->IsTextNode())
+        {
+            pCNd = sw::GetParaPropsNode(*pPara->pLayout, SwNodeIndex(*pCNd));
+        }
+    }
+
     SwTextFormatColl* pFormat = static_cast<SwTextFormatColl*>(pPara->pFormatColl);
     if ( pPara->bReset )
     {
@@ -1070,7 +1092,8 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
 bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
                           SwTextFormatColl *pFormat,
                           const bool bReset,
-                          const bool bResetListAttrs)
+                          const bool bResetListAttrs,
+                          SwRootFrame const*const pLayout)
 {
     SwDataChanged aTmp( rRg );
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
@@ -1086,7 +1109,8 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
 
-    sw::DocumentContentOperationsManager::ParaRstFormat aPara( pStt, pEnd, pHst );
+    sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+            pStt, pEnd, pHst, nullptr, pLayout);
     aPara.pFormatColl = pFormat;
     aPara.bReset = bReset;
     // #i62675#
@@ -1614,7 +1638,8 @@ SwFormat* SwDoc::FindFormatByName( const SwFormatsBase& rFormatArr,
     return pFnd;
 }
 
-void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
+void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
+        SwRootFrame const*const pLayout)
 {
     SwHistory* pHistory = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1634,6 +1659,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
         SwTextNode* pTNd = aIdx.GetNode().GetTextNode();
         if( pTNd )
         {
+            pTNd = sw::GetParaPropsNode(*pLayout, aIdx);
             SvxLRSpaceItem aLS( static_cast<const SvxLRSpaceItem&>(pTNd->SwContentNode::GetAttr( RES_LR_SPACE )) );
 
             // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
@@ -1669,6 +1695,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
 
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
             pTNd->SetAttr( aLS );
+            aIdx = *sw::GetFirstAndLastNode(*pLayout, aIdx).second;
         }
         ++aIdx;
     }
@@ -1776,6 +1803,9 @@ void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nP
     {
         aPam.SetMark();
         aPam.GetMark()->nContent.Assign(pTNd, pTNd->GetText().getLength());
+        // sw_redlinehide: don't need layout currently because the only caller
+        // passes in the properties node
+        assert(static_cast<SwTextFrame const*>(pTNd->getLayoutFrame(nullptr))->GetTextNodeForParaProps() == pTNd);
         getIDocumentContentOperations().InsertItemSet( aPam, *pSet );
     }
 }
@@ -1817,7 +1847,7 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     }
     whichIds.push_back(0);
     SfxItemSet currentSet(GetAttrPool(), &whichIds[0]);
-    pTNd->GetAttr(currentSet, nEnd, nEnd);
+    pTNd->GetParaAttr(currentSet, nEnd, nEnd);
     for (size_t i = 0; whichIds[i]; i += 2)
     {   // yuk - want to explicitly set the pool defaults too :-/
         currentSet.Put(currentSet.Get(whichIds[i]));

@@ -302,10 +302,11 @@ public:
        the requested item set as a LR-SPACE item, if <bOnlyTextAttr> == false,
        corresponding node has not its own indent attributes and the
        position-and-space mode of the list level is SvxNumberFormat::LABEL_ALIGNMENT. */
-    bool GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
+    bool GetParaAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                   const bool bOnlyTextAttr  = false,
                   const bool bGetFromChrFormat = true,
-                  const bool bMergeIndentValuesOfNumRule = false ) const;
+                  const bool bMergeIndentValuesOfNumRule = false,
+                  SwRootFrame const* pLayout = nullptr) const;
 
     /// Convey attributes of an AttrSet (AutoFormat) to SwpHintsArray.
     void FormatToTextAttr( SwTextNode* pNd );
@@ -773,8 +774,6 @@ public:
     bool IsInList() const;
 
     bool IsFirstOfNumRule(SwRootFrame const& rLayout) const;
-
-    sal_uInt16 GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd ) const;
 
     SAL_DLLPRIVATE css::uno::WeakReference<css::text::XTextContent> const& GetXParagraph() const
             { return m_wXParagraph; }

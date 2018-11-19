@@ -77,6 +77,7 @@
 #include <unoprnms.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
+#include <txtfrm.hxx>
 #include <rdfhelper.hxx>
 #include <sfx2/watermarkitem.hxx>
 
@@ -2168,7 +2169,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
         if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
         {
             // Change the paragraph style to pLocal and remove all direct paragraph formatting.
-            GetDoc()->SetTextFormatColl( rPaM, pLocal, true, bResetListAttrs );
+            GetDoc()->SetTextFormatColl(rPaM, pLocal, true, bResetListAttrs, GetLayout());
 
             // If there are hints on the nodes which cover the whole node, then remove those, too.
             SwPaM aPaM(*rPaM.Start(), *rPaM.End());
@@ -2177,7 +2178,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                 aPaM.Start()->nContent = 0;
                 aPaM.End()->nContent = pEndTextNode->GetText().getLength();
             }
-            GetDoc()->RstTextAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true);
+            GetDoc()->RstTextAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true, GetLayout());
         }
 
     }
@@ -2203,6 +2204,10 @@ void SwEditShell::FillByEx(SwTextFormatColl* pColl)
 {
     SwPaM * pCursor = GetCursor();
     SwContentNode * pCnt = pCursor->GetContentNode();
+    if (pCnt->IsTextNode()) // uhm... what nonsense would happen if not?
+    {   // only need properties-node because BREAK/PAGEDESC filtered anyway!
+        pCnt = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
+    }
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
     if( pSet )
     {

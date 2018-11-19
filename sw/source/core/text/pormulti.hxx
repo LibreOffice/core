@@ -52,6 +52,7 @@ enum class RubyPosition : sal_uInt16
 
 struct SwMultiCreator
 {
+    TextFrameIndex nStartOfAttr;
     const SwTextAttr* pAttr;
     const SfxPoolItem* pItem;
     SwMultiCreatorId nId;
