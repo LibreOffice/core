@@ -83,8 +83,6 @@ class SW_DLLPUBLIC SwNode
 
     SwNodeType const m_nNodeType;
 
-    /// For text nodes: level of auto format. Was put here because we had still free bits.
-    sal_uInt8 m_nAFormatNumLvl : 3;
     bool m_bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
 
 public:
@@ -134,9 +132,6 @@ public:
     inline sal_uLong EndOfSectionIndex() const;
     inline const SwEndNode* EndOfSectionNode() const;
     inline         SwEndNode* EndOfSectionNode();
-
-    sal_uInt8 GetAutoFormatLvl() const     { return m_nAFormatNumLvl; }
-    void SetAutoFormatLvl( sal_uInt8 nVal )      { m_nAFormatNumLvl = nVal; }
 
     bool IsIgnoreDontExpand() const  { return m_bIgnoreDontExpand; }
     void SetIgnoreDontExpand( bool bNew )  { m_bIgnoreDontExpand = bNew; }

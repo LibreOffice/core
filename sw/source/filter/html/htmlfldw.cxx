@@ -332,7 +332,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                                    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
                                    RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
                                    RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
-        rTextNd.GetAttr( aScriptItemSet, nFieldPos, nFieldPos+1 );
+        rTextNd.GetParaAttr(aScriptItemSet, nFieldPos, nFieldPos+1);
 
         sal_uInt16 aWesternWhichIds[4] =
             { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
