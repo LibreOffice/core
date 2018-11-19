@@ -159,7 +159,13 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             if( pNd )
             {
                 if( pSet != &rSet )
-                    rSet.MergeValues( aSet );
+                {
+                    if (!GetLayout()->IsHideRedlines()
+                        || pNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
+                    {
+                        rSet.MergeValues( aSet );
+                    }
+                }
 
                 if( aSet.Count() )
                     aSet.ClearItem();
