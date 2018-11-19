@@ -262,6 +262,12 @@ DECLARE_WW8EXPORT_TEST(testTdf98620_rtlJustify, "tdf98620_rtlJustify.doc")
     CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")) );
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf121110_absJustify, "tdf121110_absJustify.doc")
+{
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")) );
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(3), "ParaAdjust")) );
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx")
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), "ParaAdjust"));
