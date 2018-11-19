@@ -142,7 +142,7 @@ Size CuiCustomMultilineEdit::GetOptimalSize() const
 }
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
-    ModelessDialog( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui"),
+    ModalDialog( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui"),
     m_pPrefCtrl( get<SvSimpleTableContainer>("preferences") ),
     m_pResetBtn( get<PushButton>("reset") ),
     m_pEditBtn( get<PushButton>("edit") ),
@@ -195,7 +195,7 @@ void CuiAboutConfigTabPage::dispose()
     m_pEditBtn.clear();
     m_pSearchBtn.clear();
     m_pSearchEdit.clear();
-    ModelessDialog::dispose();
+    ModalDialog::dispose();
 }
 
 void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUString& rProp, const OUString& rStatus,
