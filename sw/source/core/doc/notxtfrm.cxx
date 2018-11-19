@@ -1075,7 +1075,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                 if( !pGrfObj ||
                     !pGrfObj->IsDataComplete() ||
                     !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
-                    !aTmpSz.Height() || !pGrfNd->GetAutoFormatLvl() )
+                    !aTmpSz.Height())
                 {
                     pGrfNd->TriggerAsyncRetrieveInputStream(); // #i73788#
                 }

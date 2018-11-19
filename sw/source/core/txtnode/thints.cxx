@@ -65,6 +65,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
+#include <rootfrm.hxx>
 #include <rolbck.hxx>
 #include <ddefld.hxx>
 #include <docufld.hxx>
@@ -2048,10 +2049,33 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
 }
 
 // request the attributes of the TextNode at the range
-bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
+bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                          const bool bOnlyTextAttr, const bool bGetFromChrFormat,
-                         const bool bMergeIndentValuesOfNumRule ) const
+                         const bool bMergeIndentValuesOfNumRule,
+                         SwRootFrame const*const pLayout) const
 {
+    assert(!rSet.Count()); // handled inconsistently, typically an error?
+
+    if (pLayout && pLayout->IsHideRedlines())
+    {
+        if (GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+        {
+            return false; // ignore deleted node
+        }
+    }
+
+    // get the node's automatic attributes
+    SfxItemSet aFormatSet( *rSet.GetPool(), rSet.GetRanges() );
+    if (!bOnlyTextAttr)
+    {
+        SwTextNode const& rParaPropsNode(
+                sw::GetAttrMerged(aFormatSet, *this, pLayout));
+        if (bMergeIndentValuesOfNumRule)
+        {
+            lcl_MergeListLevelIndentAsLRSpaceItem(rParaPropsNode, aFormatSet);
+        }
+    }
+
     if( HasHints() )
     {
         // First, check which text attributes are valid in the range.
@@ -2068,17 +2092,6 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         void (*fnMergeAttr)( SfxItemSet&, const SfxPoolItem& )
             = bGetFromChrFormat ? &lcl_MergeAttr_ExpandChrFormat
                              : &lcl_MergeAttr;
-
-        // get the node's automatic attributes
-        SfxItemSet aFormatSet( *rSet.GetPool(), rSet.GetRanges() );
-        if( !bOnlyTextAttr )
-        {
-            SwContentNode::GetAttr( aFormatSet );
-            if ( bMergeIndentValuesOfNumRule )
-            {
-                lcl_MergeListLevelIndentAsLRSpaceItem( *this, aFormatSet );
-            }
-        }
 
         const size_t nSize = m_pSwpHints->Count();
 
@@ -2247,18 +2260,13 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         {
             // remove all from the format-set that are also set in the text-set
             aFormatSet.Differentiate( rSet );
-            // now "merge" everything
-            rSet.Put( aFormatSet );
         }
     }
-    else if( !bOnlyTextAttr )
+
+    if (aFormatSet.Count())
     {
-        // get the node's automatic attributes
-        SwContentNode::GetAttr( rSet );
-        if ( bMergeIndentValuesOfNumRule )
-        {
-            lcl_MergeListLevelIndentAsLRSpaceItem( *this, rSet );
-        }
+        // now "merge" everything
+        rSet.Put( aFormatSet );
     }
 
     return rSet.Count() != 0;
@@ -3245,10 +3253,7 @@ bool SwpHints::TryInsertHint(
     // ... and notify listeners
     if ( rNode.HasWriterListeners() )
     {
-        SwUpdateAttr aHint(
-            nHtStart,
-            nHtStart == nHintEnd ? nHintEnd + 1 : nHintEnd,
-            nWhich);
+        SwUpdateAttr aHint(nHtStart, nHintEnd, nWhich);
 
         rNode.ModifyNotification( nullptr, &aHint );
     }

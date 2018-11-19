@@ -141,9 +141,10 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                         ? nEndCnt
                         : pNd->GetTextNode()->GetText().getLength();
 
-                    static_cast<SwTextNode*>(pNd)->GetAttr( *pSet, nStt, nEnd,
+                    static_cast<SwTextNode*>(pNd)->GetParaAttr(*pSet, nStt, nEnd,
                                                 false, true,
-                                                bMergeIndentValuesOfNumRule );
+                                                bMergeIndentValuesOfNumRule,
+                                                GetLayout());
                 }
                 break;
             case SwNodeType::Grf:
@@ -158,7 +159,13 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             if( pNd )
             {
                 if( pSet != &rSet )
-                    rSet.MergeValues( aSet );
+                {
+                    if (!GetLayout()->IsHideRedlines()
+                        || pNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
+                    {
+                        rSet.MergeValues( aSet );
+                    }
+                }
 
                 if( aSet.Count() )
                     aSet.ClearItem();
@@ -209,10 +216,16 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
             // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
 
+            if (GetLayout()->IsHideRedlines()
+                && pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+            {
+                continue;
+            }
+
             if( pNd->IsTextNode() )
             {
                 // get the node (paragraph) attributes
-                static_cast<SwContentNode*>(pNd)->GetAttr(*pSet);
+                sw::GetAttrMerged(*pSet, *pNd->GetTextNode(), GetLayout());
 
                 if( pSet != &rSet && aSet.Count() )
                 {
@@ -286,6 +299,7 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
 
 std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell::GetItemWithPaM( sal_uInt16 nWhich )
 {
+    assert(isCHRATR(nWhich)); // sw_redlinehide: only thing that works
     std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> vItem;
     for(SwPaM& rCurrentPaM : GetCursor()->GetRingContainer())
     { // for all the point and mark (selections)
@@ -510,6 +524,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
         for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )
             if( nullptr != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTextNode() ))
             {
+                pCNd = sw::GetParaPropsNode(*GetLayout(), *pCNd);
                 const SvxLRSpaceItem& rLS = static_cast<const SvxLRSpaceItem&>(
                                             pCNd->GetAttr( RES_LR_SPACE ));
                 if( bRight )
@@ -549,10 +564,10 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->MoveLeftMargin( aRangeArr.SetPam( n, aPam ),
-                                        bRight, bModulus );
+                                        bRight, bModulus, GetLayout() );
     }
     else
-        GetDoc()->MoveLeftMargin( *pCursor, bRight, bModulus );
+        GetDoc()->MoveLeftMargin( *pCursor, bRight, bModulus, GetLayout() );
 
     EndUndo( SwUndoId::END );
     EndAllAction();
@@ -584,15 +599,15 @@ static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
     if ( bNum )
     {
         bRet = false;
-
-        if (sw::IsParaPropsNode(rLayout, rTNd) && rTNd.IsInList())
+        SwTextNode const*const pPropsNode(sw::GetParaPropsNode(rLayout, rTNd));
+        if (pPropsNode->IsInList())
         {
-            OSL_ENSURE( rTNd.GetNumRule(),
+            OSL_ENSURE( pPropsNode->GetNumRule(),
                     "<lcl_IsNoEndTextAttrAtPos(..)> - no list style found at text node. Serious defect." );
-            const SwNumRule* pNumRule = rTNd.GetNumRule();
+            const SwNumRule* pNumRule = pPropsNode->GetNumRule();
             if(pNumRule)
             {
-                int nListLevel = rTNd.GetActualListLevel();
+                int nListLevel = pPropsNode->GetActualListLevel();
 
                 if (nListLevel < 0)
                     nListLevel = 0;
@@ -606,7 +621,7 @@ static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
                     if ( SVX_NUM_CHAR_SPECIAL == rNumFormat.GetNumberingType() )
                         sExp = OUString(rNumFormat.GetBulletChar());
                     else
-                        sExp = rTNd.GetNumString();
+                        sExp = pPropsNode->GetNumString(true, MAXLEVEL, &rLayout);
                 }
             }
         }
@@ -726,6 +741,9 @@ SvtScriptType SwEditShell::GetScriptType() const
                         if (nEndPos > rText.getLength())
                             nEndPos = rText.getLength();
 
+                        bool const isUntilEnd(pScriptInfo
+                            ? pFrame->MapViewToModelPos(TextFrameIndex(pFrame->GetText().getLength())) <= *pEnd
+                            : rText.getLength() == nEndPos);
                         sal_uInt16 nScript;
                         while( nChg < nEndPos )
                         {
@@ -738,8 +756,10 @@ SvtScriptType SwEditShell::GetScriptType() const
                                                                 rText, nChg );
 
                             if (!lcl_IsNoEndTextAttrAtPos(*GetLayout(), *pTNd, nChg, nRet, true,
-                                      0 == nChg && rText.getLength() == nEndPos))
+                                      TextFrameIndex(0) == iChg && isUntilEnd))
+                            {
                                 nRet |= lcl_SetScriptFlags( nScript );
+                            }
 
                             if( (SvtScriptType::LATIN | SvtScriptType::ASIAN |
                                 SvtScriptType::COMPLEX) == nRet )
@@ -820,14 +840,15 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
     sal_uInt16 nScaleWidth;
     if( pTNd )
     {
-        const SwPosition* pEnd = pStt == pCursor->GetPoint()
-                                        ? pCursor->GetMark()
-                                        : pCursor->GetPoint();
-        const sal_Int32 nStt = pStt->nContent.GetIndex();
-        const sal_Int32 nEnd = pStt->nNode == pEnd->nNode
-            ? pEnd->nContent.GetIndex()
-            : pTNd->GetText().getLength();
-        nScaleWidth = pTNd->GetScalingOfSelectedText( nStt, nEnd );
+        SwTextFrame *const pFrame(static_cast<SwTextFrame *>(
+                    pTNd->getLayoutFrame(GetLayout(), pStt)));
+        assert(pFrame); // shell cursor must be positioned in node with frame
+        TextFrameIndex const nStart(pFrame->MapModelToViewPos(*pStt));
+        TextFrameIndex const nEnd(
+            sw::FrameContainsNode(*pFrame, pCursor->End()->nNode.GetIndex())
+                ? pFrame->MapModelToViewPos(*pCursor->End())
+                : TextFrameIndex(pFrame->GetText().getLength()));
+        nScaleWidth = pFrame->GetScalingOfSelectedText(nStart, nEnd);
     }
     else
         nScaleWidth = 100;              // default are no scaling -> 100%
