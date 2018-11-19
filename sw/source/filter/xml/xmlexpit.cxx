@@ -54,7 +54,6 @@
 #include "xmlithlp.hxx"
 
 #include <fmtrowsplt.hxx>
-#include <osl/diagnose.h>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

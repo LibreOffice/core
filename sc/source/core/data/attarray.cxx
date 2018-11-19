@@ -27,7 +27,6 @@
 #include <editeng/justifyitem.hxx>
 #include <osl/diagnose.h>
 #include <svl/poolcach.hxx>
-#include <osl/diagnose.h>
 
 #include <global.hxx>
 #include <document.hxx>
