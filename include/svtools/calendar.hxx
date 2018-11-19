@@ -142,7 +142,6 @@ class SVT_DLLPUBLIC Calendar final : public Control
     Date            maCurDate;
     Date            maOldCurDate;
     Date            maAnchorDate;
-    Date const      maDropDate;
     Color           maSelColor;
     Color           maOtherColor;
     sal_Int32       mnDayCount;

@@ -143,8 +143,7 @@ Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
     maOldFirstDate( 0, 0, 1900 ),
     maCurDate( Date::SYSTEM ),
     maOldCurDate( 0, 0, 1900 ),
-    maAnchorDate( maCurDate ),
-    maDropDate( 0, 0, 1900 )
+    maAnchorDate( maCurDate )
 {
     ImplInit( nWinStyle );
 }
