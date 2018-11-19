@@ -14,7 +14,6 @@
   <menu:menuitem menu:id=".uno:PasteUnformatted"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TextAttributes"/>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuseparator/>
@@ -23,4 +22,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:SetDefault"/>
   <menu:menuitem menu:id=".uno:EditStyle"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertAnnotation"/>
 </menu:menupopup>
