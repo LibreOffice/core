@@ -531,7 +531,7 @@ void ControlConverter::convertToAxState( PropertySet const & rPropSet,
 
     sal_Int16 nState = API_STATE_DONTKNOW;
 
-    bool bTmp = false;
+    bool bTriStateEnabled = false;
     // need to use State for current state ( I think this is regardless of whether
     // control is awt or not )
     rPropSet.getProperty( nState, PROP_State );
@@ -543,8 +543,12 @@ void ControlConverter::convertToAxState( PropertySet const & rPropSet,
         rValue = "1";
 
     // tristate
-    if( bSupportsTriState && rPropSet.getProperty( bTmp, PROP_TriState ) )
-        nMultiSelect = AX_SELECTION_MULTI;
+    if( bSupportsTriState )
+    {
+        bool bPropertyExists = rPropSet.getProperty( bTriStateEnabled, PROP_TriState );
+        if( bPropertyExists && bTriStateEnabled )
+            nMultiSelect = AX_SELECTION_MULTI;
+    }
 }
 
 void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
@@ -1510,7 +1514,7 @@ void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty(); // mnShowDropButton );
     aWriter.skipProperty();
     aWriter.skipProperty(); // drop down style
-    if ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX && mnMultiSelect != AX_SELECTION_SINGLE )
+    if ( (mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX || mnDisplayStyle == AX_DISPLAYSTYLE_CHECKBOX) && mnMultiSelect != AX_SELECTION_SINGLE )
         aWriter.writeIntProperty< sal_uInt8 >( mnMultiSelect );
     // although CheckBox, ListBox, OptionButton, ToggleButton are also supported
     // they can only have the fileformat default
@@ -1663,7 +1667,7 @@ void AxCheckBoxModel::convertFromProperties( PropertySet& rPropSet, const Contro
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
     ControlConverter::convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     // need to process the image if one exists
-    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN );
+    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_TRISTATE );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
