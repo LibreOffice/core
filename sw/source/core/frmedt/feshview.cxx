@@ -2241,6 +2241,11 @@ RndStdIds SwFEShell::GetAnchorId() const
                 break;
             }
             SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+            if (!pContact)
+            {
+                nRet = RndStdIds::UNKNOWN;
+                break;
+            }
             RndStdIds nId = pContact->GetFormat()->GetAnchor().GetAnchorId();
             if ( nRet == RndStdIds(SHRT_MAX) )
                 nRet = nId;
@@ -2345,11 +2350,13 @@ bool SwFEShell::IsGroupSelected()
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             // consider 'virtual' drawing objects.
             // Thus, use corresponding method instead of checking type.
-            if ( pObj->IsGroupObject() &&
-                 // --> #i38505# No ungroup allowed for 3d objects
-                 !pObj->Is3DObj() &&
-                 RndStdIds::FLY_AS_CHAR != static_cast<SwDrawContact*>(GetUserCall(pObj))->
-                                      GetFormat()->GetAnchor().GetAnchorId() )
+            if (!pObj->IsGroupObject())
+                continue;
+            // --> #i38505# No ungroup allowed for 3d objects
+            if (pObj->Is3DObj())
+                continue;
+            SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+            if (!pContact || RndStdIds::FLY_AS_CHAR != pContact->GetFormat()->GetAnchor().GetAnchorId())
             {
                 return true;
             }
