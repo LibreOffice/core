@@ -1484,7 +1484,7 @@ void SbRtl_ConvertToUrl(StarBASIC *, SbxArray & rPar, bool)
         OUString aFileURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         if( aFileURL.isEmpty() )
         {
-            ::osl::File::getFileURLFromSystemPath( aFileURL, aFileURL );
+            osl::File::getFileURLFromSystemPath(aStr, aFileURL);
         }
         if( aFileURL.isEmpty() )
         {
