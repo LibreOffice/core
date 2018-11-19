@@ -110,7 +110,7 @@ IMPL_STATIC_LINK_NOARG(NoHelpErrorBox, HelpRequestHdl, weld::Widget&, bool)
     return false;
 }
 
-static OUString HelpLocaleString();
+static OUString const & HelpLocaleString();
 
 namespace {
 
@@ -205,69 +205,67 @@ bool impl_hasHTMLHelpInstalled()
 
 /// Return the locale we prefer for displaying help
 // static OUString const & HelpLocaleString()
-static OUString  HelpLocaleString()
+static OUString const & HelpLocaleString()
 {
     if (comphelper::LibreOfficeKit::isActive())
         return comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
 
     static OUString aLocaleStr;
-    if (aLocaleStr.isEmpty())
+    if (!aLocaleStr.isEmpty())
+        return aLocaleStr;
+
+    const OUString aEnglish("en-US");
+    // detect installed locale
+    aLocaleStr = utl::ConfigManager::getUILocale();
+
+    if ( aLocaleStr.isEmpty() )
     {
-        const OUString aEnglish("en-US");
-        // detect installed locale
-        aLocaleStr = utl::ConfigManager::getUILocale();
-
-        if ( aLocaleStr.isEmpty() )
-            aLocaleStr = aEnglish;
-        else
-        {
-            // get fall-back language (country)
-            OUString sLang = aLocaleStr ;
-            sal_Int32 nSepPos = sLang.indexOf( '-' );
-            if (nSepPos != -1)
-            {
-                sLang = sLang.copy( 0, nSepPos );
-            }
-            OUString sHelpPath("");
-            sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aLocaleStr;
-            if (impl_checkHelpLocalePath(sHelpPath))
-            {
-                return aLocaleStr;
-            }
-            sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + sLang;
-            if (impl_checkHelpLocalePath(sHelpPath))
-            {
-                aLocaleStr = sLang;
-                return aLocaleStr;
-            }
-            sHelpPath = getHelpRootURL() + "/" + aLocaleStr;
-            if (impl_checkHelpLocalePath(sHelpPath))
-            {
-                return aLocaleStr;
-            }
-            sHelpPath = getHelpRootURL() + "/" + sLang;
-            if (impl_checkHelpLocalePath(sHelpPath))
-            {
-                aLocaleStr = sLang;
-                return aLocaleStr;
-            }
-
-            sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aEnglish;
-            if (impl_checkHelpLocalePath(sHelpPath))
-            {
-                return aEnglish;
-            }
-            sHelpPath = getHelpRootURL() + "/" + aEnglish;
-            if (impl_checkHelpLocalePath(sHelpPath))
-            {
-                aLocaleStr = sLang;
-                return aEnglish;
-            }
-            aLocaleStr = utl::ConfigManager::getUILocale();
-            return aLocaleStr;
-        }
+        aLocaleStr = aEnglish;
+        return aLocaleStr;
     }
 
+    // get fall-back language (country)
+    OUString sLang = aLocaleStr;
+    sal_Int32 nSepPos = sLang.indexOf( '-' );
+    if (nSepPos != -1)
+    {
+        sLang = sLang.copy( 0, nSepPos );
+    }
+    OUString sHelpPath("");
+    sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aLocaleStr;
+    if (impl_checkHelpLocalePath(sHelpPath))
+    {
+        return aLocaleStr;
+    }
+    sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + sLang;
+    if (impl_checkHelpLocalePath(sHelpPath))
+    {
+        aLocaleStr = sLang;
+        return aLocaleStr;
+    }
+    sHelpPath = getHelpRootURL() + "/" + aLocaleStr;
+    if (impl_checkHelpLocalePath(sHelpPath))
+    {
+        return aLocaleStr;
+    }
+    sHelpPath = getHelpRootURL() + "/" + sLang;
+    if (impl_checkHelpLocalePath(sHelpPath))
+    {
+        aLocaleStr = sLang;
+        return aLocaleStr;
+    }
+    sHelpPath = getHelpRootURL() + "/" + utl::ConfigManager::getProductVersion() + "/" + aEnglish;
+    if (impl_checkHelpLocalePath(sHelpPath))
+    {
+        aLocaleStr = aEnglish;
+        return aLocaleStr;
+    }
+    sHelpPath = getHelpRootURL() + "/" + aEnglish;
+    if (impl_checkHelpLocalePath(sHelpPath))
+    {
+        aLocaleStr = aEnglish;
+        return aLocaleStr;
+    }
     return aLocaleStr;
 }
 
