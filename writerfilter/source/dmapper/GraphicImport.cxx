@@ -66,11 +66,27 @@
 #include "WrapPolygonHandler.hxx"
 #include "util.hxx"
 
+using namespace css;
+
+namespace
+{
+bool isTopGroupObj(const uno::Reference<drawing::XShape>& xShape)
+{
+    SdrObject* pObject = GetSdrObjectFromXShape(xShape);
+    if (!pObject)
+        return false;
+
+    if (pObject->getParentSdrObjectFromSdrObject())
+        return false;
+
+    return pObject->IsGroupObject();
+}
+}
+
 namespace writerfilter {
 
 namespace dmapper
 {
-using namespace css;
 
 class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
 {
@@ -800,8 +816,15 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(0)));
 
                             // Position of the groupshape should be set after children have been added.
+                            // Long-term we should get rid of positioning group
+                            // shapes, though. Do it for top-level ones with
+                            // absolute page position as a start.
                             // fdo#80555: also set position for graphic shapes here
-                            m_xShape->setPosition(awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
+                            if (!isTopGroupObj(m_xShape)
+                                || m_pImpl->nHoriRelation != text::RelOrientation::PAGE_FRAME
+                                || m_pImpl->nVertRelation != text::RelOrientation::PAGE_FRAME)
+                                m_xShape->setPosition(
+                                    awt::Point(m_pImpl->nLeftPosition, m_pImpl->nTopPosition));
 
                             if (nRotation)
                                 xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
