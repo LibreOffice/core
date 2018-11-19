@@ -51,27 +51,27 @@ enum class ShapeProperty
     LineWidth,
     LineColor,
     LineTransparency,
-    LineDash,                     /// Explicit line dash or name of a line dash stored in a global container.
+    LineDash,                     ///< Explicit line dash or name of a line dash stored in a global container.
     LineJoint,
-    LineStart,                    /// Explicit line start marker or name of a line marker stored in a global container.
+    LineStart,                    ///< Explicit line start marker or name of a line marker stored in a global container.
     LineStartWidth,
     LineStartCenter,
-    LineEnd,                      /// Explicit line end marker or name of a line marker stored in a global container.
+    LineEnd,                      ///< Explicit line end marker or name of a line marker stored in a global container.
     LineEndWidth,
     LineEndCenter,
     FillStyle,
     FillColor,
     FillTransparency,
     GradientTransparency,
-    FillGradient,                 /// Explicit fill gradient or name of a fill gradient stored in a global container.
-    FillBitmap,                   /// Explicit fill bitmap or name of a fill bitmap stored in a global container.
+    FillGradient,                 ///< Explicit fill gradient or name of a fill gradient stored in a global container.
+    FillBitmap,                   ///< Explicit fill bitmap or name of a fill bitmap stored in a global container.
     FillBitmapMode,
     FillBitmapSizeX,
     FillBitmapSizeY,
     FillBitmapOffsetX,
     FillBitmapOffsetY,
     FillBitmapRectanglePoint,
-    FillHatch,                    /// Explicit fill hatch or name of a fill hatch stored in a global container.
+    FillHatch,                    ///< Explicit fill hatch or name of a fill hatch stored in a global container.
     FillBackground,
     FillBitmapName,
     ShadowXDistance,
