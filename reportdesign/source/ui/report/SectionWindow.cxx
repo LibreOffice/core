@@ -207,13 +207,9 @@ bool OSectionWindow::setGroupSectionTitle(
 
 void OSectionWindow::ImplInitSettings()
 {
-    static bool t = false;
-    if ( t )
-    {
     EnableChildTransparentMode();
     SetParentClipMode( ParentClipMode::NoClip );
     SetPaintTransparent( true );
-    }
     SetBackground( );
 }
 
