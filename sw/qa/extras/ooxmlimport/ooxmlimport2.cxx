@@ -92,6 +92,14 @@ DECLARE_OOXMLIMPORT_TEST(testGroupShapeFontName, "groupshape-fontname.docx")
         getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontNameAsian"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(test120551, "tdf120551.docx")
+{
+    auto nHoriOrientPosition = getProperty<sal_Int32>(getShape(1), "HoriOrientPosition");
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 436, Actual  : -2542'.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(436), nHoriOrientPosition);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
 {
     // The test document has following ill-formed structure:
