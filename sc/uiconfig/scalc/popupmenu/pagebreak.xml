@@ -28,6 +28,7 @@
   <menu:menuitem menu:id=".uno:EditPrintArea"/>
   <menu:menuitem menu:id=".uno:DeletePrintArea"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:NormalViewMode"/>
   <menu:menuitem menu:id=".uno:InsertRowBreak"/>
   <menu:menuitem menu:id=".uno:InsertColumnBreak"/>
   <menu:menuitem menu:id=".uno:DeleteAllBreaks"/>
