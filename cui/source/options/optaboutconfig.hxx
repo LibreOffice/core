@@ -39,7 +39,7 @@ public:
     virtual Size GetOptimalSize() const override;
 };
 
-class CuiAboutConfigTabPage : public ModelessDialog
+class CuiAboutConfigTabPage : public ModalDialog
 {
 private:
     VclPtr<SvSimpleTableContainer> m_pPrefCtrl;
