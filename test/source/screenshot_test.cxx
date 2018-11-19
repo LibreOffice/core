@@ -20,6 +20,7 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/configmgr.hxx>
+#include <tools/stream.hxx>
 
 
 namespace {

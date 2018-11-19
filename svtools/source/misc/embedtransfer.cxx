@@ -29,6 +29,7 @@
 #include <svtools/embedtransfer.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/gdimtf.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/storagehelper.hxx>

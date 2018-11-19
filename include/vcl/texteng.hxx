@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <vector>
 
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>

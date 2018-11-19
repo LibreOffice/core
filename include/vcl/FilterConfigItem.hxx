@@ -24,13 +24,14 @@
 #include <vcl/dllapi.h>
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace task { class XStatusIndicator; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
 class VCL_DLLPUBLIC FilterConfigItem
 {

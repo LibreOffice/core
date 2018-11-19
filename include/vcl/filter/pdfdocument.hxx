@@ -15,8 +15,6 @@
 #include <map>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.h>
-
 #include <tools/stream.hxx>
 
 #include <vcl/dllapi.h>
@@ -35,12 +33,25 @@ class XCertificate;
 }
 }
 
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace uno
+{
+template <class interface_type> class Reference;
+}
+}
+}
+}
+
 namespace vcl
 {
 namespace filter
 {
 class PDFTrailerElement;
-class PDFHexStringElement;
 class PDFReferenceElement;
 class PDFDocument;
 class PDFDictionaryElement;

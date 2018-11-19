@@ -12,6 +12,7 @@
 #include <datamapper.hxx>
 #include <stringutil.hxx>
 
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 #include <orcus/csv_parser.hpp>

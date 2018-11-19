@@ -19,6 +19,7 @@
 
 #include <vcl/metaact.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <tools/stream.hxx>
 
 #include <salinst.hxx>
 #include <svdata.hxx>

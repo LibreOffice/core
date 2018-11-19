@@ -27,7 +27,9 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <memory>
 
 #define BUFFER_SIZE  4096

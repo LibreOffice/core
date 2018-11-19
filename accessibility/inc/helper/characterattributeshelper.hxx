@@ -25,6 +25,7 @@
 #include <vcl/font.hxx>
 
 #include <map>
+#include <vector>
 
 
 // class CharacterAttributesHelper

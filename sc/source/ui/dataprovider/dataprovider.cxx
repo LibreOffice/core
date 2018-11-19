@@ -15,6 +15,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
+#include <tools/stream.hxx>
 
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"

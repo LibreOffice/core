@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/stream.hxx>
 
 #include <set>
 #include <memory>
