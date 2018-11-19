@@ -1111,14 +1111,14 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
 SwTableConfig::SwTableConfig(bool bWeb)
     : ConfigItem(bWeb ? OUString("Office.WriterWeb/Table") : OUString("Office.Writer/Table"),
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
-    , nTableHMove(0)
-    , nTableVMove(0)
-    , nTableHInsert(0)
-    , nTableVInsert(0)
-    , eTableChgMode(TableChgMode::FixedWidthChangeAbs)
-    , bInsTableFormatNum(false)
-    , bInsTableChangeNumFormat(false)
-    , bInsTableAlignNum(false)
+    , m_nTableHMove(0)
+    , m_nTableVMove(0)
+    , m_nTableHInsert(0)
+    , m_nTableVInsert(0)
+    , m_eTableChgMode(TableChgMode::FixedWidthChangeAbs)
+    , m_bInsTableFormatNum(false)
+    , m_bInsTableChangeNumFormat(false)
+    , m_bInsTableAlignNum(false)
 {
     Load();
 }
@@ -1139,14 +1139,14 @@ void SwTableConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case 0 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableHMove)); break;   //"Shift/Row",
-            case 1 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableVMove)); break;     //"Shift/Column",
-            case 2 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableHInsert)); break;   //"Insert/Row",
-            case 3 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(nTableVInsert)); break;   //"Insert/Column",
-            case 4 : pValues[nProp] <<= static_cast<sal_Int32>(eTableChgMode); break;   //"Change/Effect",
-            case 5 : pValues[nProp] <<= bInsTableFormatNum; break;  //"Input/NumberRecognition",
-            case 6 : pValues[nProp] <<= bInsTableChangeNumFormat; break;  //"Input/NumberFormatRecognition",
-            case 7 : pValues[nProp] <<= bInsTableAlignNum; break;  //"Input/Alignment"
+            case 0 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(m_nTableHMove)); break;   //"Shift/Row",
+            case 1 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(m_nTableVMove)); break;     //"Shift/Column",
+            case 2 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(m_nTableHInsert)); break;   //"Insert/Row",
+            case 3 : pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(m_nTableVInsert)); break;   //"Insert/Column",
+            case 4 : pValues[nProp] <<= static_cast<sal_Int32>(m_eTableChgMode); break;   //"Change/Effect",
+            case 5 : pValues[nProp] <<= m_bInsTableFormatNum; break;  //"Input/NumberRecognition",
+            case 6 : pValues[nProp] <<= m_bInsTableChangeNumFormat; break;  //"Input/NumberFormatRecognition",
+            case 7 : pValues[nProp] <<= m_bInsTableAlignNum; break;  //"Input/Alignment"
         }
     }
     PutProperties(aNames, aValues);
@@ -1165,14 +1165,14 @@ void SwTableConfig::Load()
             sal_Int32 nTemp = 0;
             switch (nProp)
             {
-                case 0 : pValues[nProp] >>= nTemp; nTableHMove = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;  //"Shift/Row",
-                case 1 : pValues[nProp] >>= nTemp; nTableVMove = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;     //"Shift/Column",
-                case 2 : pValues[nProp] >>= nTemp; nTableHInsert = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Row",
-                case 3 : pValues[nProp] >>= nTemp; nTableVInsert = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Column",
-                case 4 : pValues[nProp] >>= nTemp; eTableChgMode = static_cast<TableChgMode>(nTemp); break;   //"Change/Effect",
-                case 5 : bInsTableFormatNum = *o3tl::doAccess<bool>(pValues[nProp]);  break;  //"Input/NumberRecognition",
-                case 6 : bInsTableChangeNumFormat = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/NumberFormatRecognition",
-                case 7 : bInsTableAlignNum = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/Alignment"
+                case 0 : pValues[nProp] >>= nTemp; m_nTableHMove = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;  //"Shift/Row",
+                case 1 : pValues[nProp] >>= nTemp; m_nTableVMove = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;     //"Shift/Column",
+                case 2 : pValues[nProp] >>= nTemp; m_nTableHInsert = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Row",
+                case 3 : pValues[nProp] >>= nTemp; m_nTableVInsert = static_cast<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Column",
+                case 4 : pValues[nProp] >>= nTemp; m_eTableChgMode = static_cast<TableChgMode>(nTemp); break;   //"Change/Effect",
+                case 5 : m_bInsTableFormatNum = *o3tl::doAccess<bool>(pValues[nProp]);  break;  //"Input/NumberRecognition",
+                case 6 : m_bInsTableChangeNumFormat = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/NumberFormatRecognition",
+                case 7 : m_bInsTableAlignNum = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/Alignment"
             }
         }
     }
