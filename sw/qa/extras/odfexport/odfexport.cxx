@@ -1950,7 +1950,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     // (used from LibreOffice 6.1, and proposed for next ODF)
     const char* aFieldTexts[] = { "A 2", "Az Isten", "Az 50-esek",
         "A 2018-asok", "Az egyebek", "A fejezetek",
-        u8"Az „Őseinket...”", "a 2",
+        reinterpret_cast<char const *>(u8"Az „Őseinket...”"), "a 2",
         "Az v", "az 1", "Az e", "az 1",
         "Az (5)", "az 1", "A 2", "az 1" };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
