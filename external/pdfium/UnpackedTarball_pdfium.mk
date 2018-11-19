@@ -36,7 +36,12 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/base/allocator/partition_allocator/page_allocator.cc third_party/base/allocator/partition_allocator/page_allocator.cpp && \
     mv third_party/base/allocator/partition_allocator/partition_alloc.cc third_party/base/allocator/partition_allocator/partition_alloc.cpp && \
     mv third_party/base/allocator/partition_allocator/spin_lock.cc third_party/base/allocator/partition_allocator/spin_lock.cpp && \
-	mv third_party/base/debug/alias.cc third_party/base/debug/alias.cpp \
+    mv third_party/base/debug/alias.cc third_party/base/debug/alias.cpp && \
+    mv third_party/base/allocator/partition_allocator/oom_callback.cc third_party/base/allocator/partition_allocator/oom_callback.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_bucket.cc third_party/base/allocator/partition_allocator/partition_bucket.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_oom.cc third_party/base/allocator/partition_allocator/partition_oom.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_page.cc third_party/base/allocator/partition_allocator/partition_page.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_root_base.cc third_party/base/allocator/partition_allocator/partition_root_base.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:

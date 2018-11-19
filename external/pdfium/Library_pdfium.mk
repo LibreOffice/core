@@ -47,9 +47,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annotiteration \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_baannot \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_baannothandler \
-    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_datetime \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_formfillenvironment \
-    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_interform \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_pageview \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_widget \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_widgethandler \
@@ -81,13 +79,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/fpdf_view \
     UnpackedTarball/pdfium/fpdfsdk/ipdfsdk_pauseadapter \
     UnpackedTarball/pdfium/fpdfsdk/cpdf_annotcontext \
+    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_interactiveform \
 ))
 
 # fdrm
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/core/fdrm/crypto/fx_crypt \
-    UnpackedTarball/pdfium/core/fdrm/crypto/fx_crypt_aes \
-    UnpackedTarball/pdfium/core/fdrm/crypto/fx_crypt_sha \
+    UnpackedTarball/pdfium/core/fdrm/fx_crypt \
+    UnpackedTarball/pdfium/core/fdrm/fx_crypt_aes \
+    UnpackedTarball/pdfium/core/fdrm/fx_crypt_sha \
 ))
 
 # formfiller
@@ -185,7 +184,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_color \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_colorspace \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_colorstate \
-    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_contentmark \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_contentmarks \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_contentmarkitem \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_contentparser \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_docpagedata \
@@ -303,7 +302,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_formcontrol \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_formfield \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_iconfit \
-    UnpackedTarball/pdfium/core/fpdfdoc/cpdf_interform \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpdf_interactiveform \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_link \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_linklist \
     UnpackedTarball/pdfium/core/fpdfdoc/cpdf_metadata \
@@ -413,6 +412,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/cfx_seekablemultistream \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssdata \
     UnpackedTarball/pdfium/core/fxcrt/fx_codepage \
+    UnpackedTarball/pdfium/core/fxcrt/fx_number \
     UnpackedTarball/pdfium/core/fxcrt/cfx_utf8encoder \
     UnpackedTarball/pdfium/core/fxcrt/cfx_readonlymemorystream \
 ))
@@ -468,6 +468,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/fx_ge_fontmap \
     UnpackedTarball/pdfium/core/fxge/fx_ge_linux \
     UnpackedTarball/pdfium/core/fxge/fx_ge_text \
+    UnpackedTarball/pdfium/core/fxge/fx_font \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_dibbase \
 ))
 
@@ -546,6 +547,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/spin_lock \
     UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_alloc \
     UnpackedTarball/pdfium/third_party/base/debug/alias \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/oom_callback \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_bucket \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_oom \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_page \
+    UnpackedTarball/pdfium/third_party/base/allocator/partition_allocator/partition_root_base \
 ))
 
 # skia_shared
