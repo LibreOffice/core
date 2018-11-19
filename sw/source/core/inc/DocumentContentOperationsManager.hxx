@@ -87,10 +87,13 @@ public:
 
     // Add a para for the char attribute exp...
     bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const SetAttrMode nFlags = SetAttrMode::DEFAULT, bool bExpandCharToPara=false) override;
+                        const SetAttrMode nFlags = SetAttrMode::DEFAULT,
+                        SwRootFrame const* pLayout = nullptr,
+                        bool bExpandCharToPara=false) override;
 
     void InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
-        const SetAttrMode nFlags = SetAttrMode::DEFAULT) override;
+        const SetAttrMode nFlags = SetAttrMode::DEFAULT,
+        SwRootFrame const* pLayout = nullptr) override;
 
     void RemoveLeadingWhiteSpace(const SwPosition & rPos ) override;
 
@@ -117,6 +120,7 @@ public:
         SwHistory* pHistory;
         const SwPosition *pSttNd, *pEndNd;
         const SfxItemSet* pDelSet;
+        SwRootFrame const*const pLayout;
         sal_uInt16 nWhich;
         bool bReset;
         bool bResetListAttrs; // #i62575#
@@ -126,12 +130,14 @@ public:
         bool bExactRange;
 
         ParaRstFormat(const SwPosition* pStt, const SwPosition* pEnd,
-                   SwHistory* pHst, const SfxItemSet* pSet = nullptr)
+                   SwHistory* pHst, const SfxItemSet* pSet = nullptr,
+                   SwRootFrame const*const pLay = nullptr)
             : pFormatColl(nullptr)
             , pHistory(pHst)
             , pSttNd(pStt)
             , pEndNd(pEnd)
             , pDelSet(pSet)
+            , pLayout(pLay)
             , nWhich(0)
             , bReset(false) // #i62675#
             , bResetListAttrs(false)

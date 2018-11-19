@@ -45,6 +45,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <redline.hxx>
 #include <txtfrm.hxx>
+#include <rootfrm.hxx>
 #include <unocrsr.hxx>
 #include <mvsave.hxx>
 #include <ndtxt.hxx>
@@ -1013,6 +1014,81 @@ namespace
 
 namespace //local functions originally from docfmt.cxx
 {
+
+    bool lcl_ApplyOtherSet(
+            SwContentNode & rNode,
+            SwHistory *const pHistory,
+            SfxItemSet const& rOtherSet,
+            SfxItemSet const& rFirstSet,
+            SfxItemSet const& rPropsSet,
+            SwRootFrame const*const pLayout,
+            SwNodeIndex *const o_pIndex = nullptr)
+    {
+        assert(rOtherSet.Count());
+
+        bool ret(false);
+        SwTextNode *const pTNd = rNode.GetTextNode();
+        sw::MergedPara const* pMerged(nullptr);
+        if (pLayout && pLayout->IsHideRedlines() && pTNd)
+        {
+            SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(
+                pTNd->getLayoutFrame(pLayout)));
+            if (pTextFrame)
+            {
+                pMerged = pTextFrame->GetMergedPara();
+            }
+            if (pMerged)
+            {
+                if (rFirstSet.Count())
+                {
+                    if (pHistory)
+                    {
+                        SwRegHistory aRegH(pMerged->pFirstNode, *pMerged->pFirstNode, pHistory);
+                        ret = pMerged->pFirstNode->SetAttr(rFirstSet);
+                    }
+                    else
+                    {
+                        ret = pMerged->pFirstNode->SetAttr(rFirstSet);
+                    }
+                }
+                if (rPropsSet.Count())
+                {
+                    if (pHistory)
+                    {
+                        SwRegHistory aRegH(pMerged->pParaPropsNode, *pMerged->pParaPropsNode, pHistory);
+                        ret = pMerged->pParaPropsNode->SetAttr(rPropsSet) || ret;
+                    }
+                    else
+                    {
+                        ret = pMerged->pParaPropsNode->SetAttr(rPropsSet) || ret;
+                    }
+                }
+                if (o_pIndex)
+                {
+                    *o_pIndex = *pMerged->pLastNode; // skip hidden
+                }
+            }
+        }
+
+        // input cursor can't be on hidden node, and iteration skips them
+        assert(!pLayout || !pLayout->IsHideRedlines()
+            || rNode.GetRedlineMergeFlag() != SwNode::Merge::Hidden);
+
+        if (!pMerged)
+        {
+            if (pHistory)
+            {
+                SwRegHistory aRegH(&rNode, rNode, pHistory);
+                ret = rNode.SetAttr( rOtherSet );
+            }
+            else
+            {
+                ret = rNode.SetAttr( rOtherSet );
+            }
+        }
+        return ret;
+    }
+
     #define DELETECHARSETS if ( bDelete ) { delete pCharSet; delete pOtherSet; }
 
     /// Insert Hints according to content types;
@@ -1024,6 +1100,7 @@ namespace //local functions originally from docfmt.cxx
         const SfxItemSet& rChgSet,
         const SetAttrMode nFlags,
         SwUndoAttr *const pUndo,
+        SwRootFrame const*const pLayout,
         const bool bExpandCharToPara=false)
     {
         // Divide the Sets (for selections in Nodes)
@@ -1106,6 +1183,10 @@ namespace //local functions originally from docfmt.cxx
             if (rRg.IsInFrontOfLabel())
             {
                 SwTextNode * pTextNd = pNode->GetTextNode();
+                if (pLayout)
+                {
+                    pTextNd = sw::GetParaPropsNode(*pLayout, *pTextNd);
+                }
                 SwNumRule * pNumRule = pTextNd->GetNumRule();
 
                 if ( !pNumRule )
@@ -1246,8 +1327,13 @@ namespace //local functions originally from docfmt.cxx
                     }
                     else
                     {
-                        SwRegHistory aRegH( pNode, *pNode, pHistory );
-                        bRet = pNode->SetAttr( aNew ) || bRet;
+                        SwContentNode * pFirstNode(pNode);
+                        if (pLayout && pLayout->IsHideRedlines())
+                        {
+                            pFirstNode = sw::GetFirstAndLastNode(*pLayout, pStt->nNode).first;
+                        }
+                        SwRegHistory aRegH( pFirstNode, *pFirstNode, pHistory );
+                        bRet = pFirstNode->SetAttr( aNew ) || bRet;
                     }
                 }
 
@@ -1307,6 +1393,21 @@ namespace //local functions originally from docfmt.cxx
                                     SwGetPoolIdFromName::NumRule )) )
                     pDoc->getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId );
             }
+        }
+
+        SfxItemSet firstSet(pDoc->GetAttrPool(),
+                svl::Items<RES_PAGEDESC, RES_BREAK>{});
+        if (pOtherSet && pOtherSet->Count())
+        {   // actually only RES_BREAK is possible here...
+            firstSet.Put(*pOtherSet);
+        }
+        SfxItemSet propsSet(pDoc->GetAttrPool(),
+            svl::Items<RES_PARATR_BEGIN, RES_PAGEDESC,
+                       RES_BREAK+1, RES_FRMATR_END,
+                       XATTR_FILL_FIRST, XATTR_FILL_LAST+1>{});
+        if (pOtherSet && pOtherSet->Count())
+        {
+            propsSet.Put(*pOtherSet);
         }
 
         if( !rRg.HasMark() )        // no range
@@ -1387,15 +1488,13 @@ namespace //local functions originally from docfmt.cxx
             }
             if( pOtherSet && pOtherSet->Count() )
             {
-                SwRegHistory aRegH( pNode, *pNode, pHistory );
-
                 // Need to check for unique item for DrawingLayer items of type NameOrIndex
                 // and evtl. correct that item to ensure unique names for that type. This call may
                 // modify/correct entries inside of the given SfxItemSet
                 SfxItemSet aTempLocalCopy(*pOtherSet);
 
                 pDoc->CheckForUniqueItemForLineFillNameOrIndex(aTempLocalCopy);
-                bRet = pNode->SetAttr(aTempLocalCopy) || bRet;
+                bRet = lcl_ApplyOtherSet(*pNode, pHistory, aTempLocalCopy, firstSet, propsSet, pLayout) || bRet;
             }
 
             DELETECHARSETS
@@ -1435,8 +1534,7 @@ namespace //local functions originally from docfmt.cxx
 
                 if( pOtherSet && pOtherSet->Count() )
                 {
-                    SwRegHistory aRegH( pNode, *pNode, pHistory );
-                    bRet = pNode->SetAttr( *pOtherSet ) || bRet;
+                    bRet = lcl_ApplyOtherSet(*pNode, pHistory, *pOtherSet, firstSet, propsSet, pLayout) || bRet;
                 }
 
                 // Only selection in a Node.
@@ -1495,8 +1593,7 @@ namespace //local functions originally from docfmt.cxx
 
                     if( pOtherSet && pOtherSet->Count() )
                     {
-                        SwRegHistory aRegH( pNode, *pNode, pHistory );
-                        pNode->SetAttr( *pOtherSet );
+                        lcl_ApplyOtherSet(*pNode, pHistory, *pOtherSet, firstSet, propsSet, pLayout);
                     }
 
                     ++nNodes;
@@ -1517,7 +1614,8 @@ namespace //local functions originally from docfmt.cxx
         // Reset all attributes from the set!
         if( pCharSet && pCharSet->Count() && !( SetAttrMode::DONTREPLACE & nFlags ) )
         {
-            ::sw::DocumentContentOperationsManager::ParaRstFormat aPara( pStt, pEnd, pHistory, pCharSet );
+            ::sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+                    pStt, pEnd, pHistory, pCharSet, pLayout);
             pDoc->GetNodes().ForEach( aSt, aEnd, ::sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
         }
 
@@ -1525,18 +1623,23 @@ namespace //local functions originally from docfmt.cxx
             SfxItemState::SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, false ) ||
             SfxItemState::SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, false ) );
 
-        for(; aSt < aEnd; ++aSt )
+        for (SwNodeIndex current = aSt; current < aEnd; ++current)
         {
-            pNode = aSt.GetNode().GetContentNode();
-            if( !pNode )
+            SwTextNode *const pTNd = current.GetNode().GetTextNode();
+            if (!pTNd)
                 continue;
 
-            SwTextNode* pTNd = pNode->GetTextNode();
+            if (pLayout && pLayout->IsHideRedlines()
+                && pTNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+            {   // not really sure what to do here, but applying to hidden
+                continue; // nodes doesn't make sense...
+            }
+
             if( pHistory )
             {
-                SwRegHistory aRegH( pNode, *pNode, pHistory );
+                SwRegHistory aRegH( pTNd, *pTNd, pHistory );
 
-                if( pTNd && pCharSet && pCharSet->Count() )
+                if (pCharSet && pCharSet->Count())
                 {
                     SwpHints *pSwpHints = bCreateSwpHints ? &pTNd->GetOrCreateSwpHints()
                                                 : pTNd->GetpSwpHints();
@@ -1547,17 +1650,26 @@ namespace //local functions originally from docfmt.cxx
                     if( pSwpHints )
                         pSwpHints->DeRegister();
                 }
-                if( pOtherSet && pOtherSet->Count() )
-                    pNode->SetAttr( *pOtherSet );
             }
             else
             {
-                if( pTNd && pCharSet && pCharSet->Count() )
+                if (pCharSet && pCharSet->Count())
                     pTNd->SetAttr(*pCharSet, 0, pTNd->GetText().getLength(), nFlags);
-                if( pOtherSet && pOtherSet->Count() )
-                    pNode->SetAttr( *pOtherSet );
             }
             ++nNodes;
+        }
+
+        if (pOtherSet && pOtherSet->Count())
+        {
+            for (; aSt < aEnd; ++aSt)
+            {
+                pNode = aSt.GetNode().GetContentNode();
+                if (!pNode)
+                    continue;
+
+                lcl_ApplyOtherSet(*pNode, pHistory, *pOtherSet, firstSet, propsSet, pLayout, &aSt);
+                ++nNodes;
+            }
         }
 
         //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
@@ -3101,6 +3213,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
     const SwPaM &rRg,
     const SfxPoolItem &rHt,
     const SetAttrMode nFlags,
+    SwRootFrame const*const pLayout,
     const bool bExpandCharToPara)
 {
     if (utl::ConfigManager::IsFuzzing())
@@ -3116,7 +3229,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
 
     SfxItemSet aSet( m_rDoc.GetAttrPool(), {{rHt.Which(), rHt.Which()}} );
     aSet.Put( rHt );
-    const bool bRet = lcl_InsAttr( &m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), bExpandCharToPara );
+    const bool bRet = lcl_InsAttr(&m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, bExpandCharToPara);
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
@@ -3131,7 +3244,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
 }
 
 void DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
-                            const SetAttrMode nFlags )
+        const SetAttrMode nFlags, SwRootFrame const*const pLayout)
 {
     SwDataChanged aTmp( rRg );
     std::unique_ptr<SwUndoAttr> pUndoAttr;
@@ -3141,7 +3254,7 @@ void DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const S
         pUndoAttr.reset(new SwUndoAttr( rRg, rSet, nFlags ));
     }
 
-    bool bRet = lcl_InsAttr( &m_rDoc, rRg, rSet, nFlags, pUndoAttr.get() );
+    bool bRet = lcl_InsAttr(&m_rDoc, rRg, rSet, nFlags, pUndoAttr.get(), pLayout);
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
@@ -3531,6 +3644,11 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 bool DocumentContentOperationsManager::lcl_RstTextAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFormat* pPara = static_cast<ParaRstFormat*>(pArgs);
+    if (pPara->pLayout && pPara->pLayout->IsHideRedlines()
+        && rpNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+    {
+        return true; // skip hidden, since new items aren't applied
+    }
     SwTextNode * pTextNode = rpNd->GetTextNode();
     if( pTextNode && pTextNode->GetpSwpHints() )
     {
