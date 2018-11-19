@@ -23,6 +23,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/stream.hxx>
 
 #include "jpeg/Exif.hxx"
 #include "jpeg/JpegTransform.hxx"

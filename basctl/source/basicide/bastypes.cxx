@@ -34,6 +34,7 @@
 #include <svl/stritem.hxx>
 #include <svl/srchdefs.hxx>
 #include <vcl/weld.hxx>
+#include <tools/stream.hxx>
 
 namespace basctl
 {

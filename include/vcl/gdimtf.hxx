@@ -29,7 +29,6 @@
 
 class OutputDevice;
 class MetaAction;
-class MetaCommentAction;
 class SvStream;
 class Color;
 class BitmapEx;

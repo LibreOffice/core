@@ -313,3 +313,9 @@ blacklist:
     include/vcl/event.hxx:
     # Needed for enum type 
     - vcl/window.hxx
+    include/vcl/fntstyle.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/vcl/help.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx

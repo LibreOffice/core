@@ -32,9 +32,11 @@
 #include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <osl/endian.h>
 #include <vcl/dibtools.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>

@@ -10,8 +10,8 @@
 #ifndef INCLUDED_VCL_GRAPHIC_EXTERNAL_LINK_HXX
 #define INCLUDED_VCL_GRAPHIC_EXTERNAL_LINK_HXX
 
-#include <memory>
 #include <vcl/dllapi.h>
+#include <rtl/ustring.hxx>
 
 class VCL_DLLPUBLIC GraphicExternalLink
 {

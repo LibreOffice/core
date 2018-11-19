@@ -24,6 +24,8 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
+#include <vcl/gdimtf.hxx>
+#include <tools/stream.hxx>
 
 #include "exp/xmlimp.hxx"
 #include "EPUBPackage.hxx"

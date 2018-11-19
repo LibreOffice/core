@@ -21,11 +21,13 @@
 #include <o3tl/safeint.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <sal/log.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/gdimtf.hxx>
 
 #include <math.h>
 #include <algorithm>

@@ -9,6 +9,7 @@
  */
 
 #include <vcl/font/FeatureParser.hxx>
+#include <vcl/font/Feature.hxx>
 
 namespace vcl
 {

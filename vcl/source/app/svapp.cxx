@@ -30,6 +30,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
+#include <tools/stream.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
 

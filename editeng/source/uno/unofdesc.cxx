@@ -31,6 +31,7 @@
 #include <editeng/memberids.h>
 #include <svl/itempool.hxx>
 #include <vcl/unohelp.hxx>
+#include <tools/gen.hxx>
 
 #include <editeng/unofdesc.hxx>
 #include <editeng/svxfont.hxx>

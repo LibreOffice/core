@@ -171,7 +171,6 @@ HeaderBarItemBits::CLICKABLE, but HeaderBarItemBits::FIXEDPOS.
 
 *************************************************************************/
 
-class Accelerator;
 class ImplHeadItem;
 
 #define WB_BOTTOMBORDER         (WinBits(0x0400))
@@ -208,8 +207,6 @@ namespace o3tl
 #define HEADERBAR_FULLSIZE          (long(1000000000))
 
 #define HEADERBAR_TEXTOFF           2
-
-class VCLXHeaderBar;
 
 
 class VCL_DLLPUBLIC HeaderBar : public vcl::Window

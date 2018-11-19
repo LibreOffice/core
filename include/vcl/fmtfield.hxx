@@ -20,10 +20,10 @@
 #ifndef INCLUDED_VCL_FMTFIELD_HXX
 #define INCLUDED_VCL_FMTFIELD_HXX
 
-#include <svtools/svtdllapi.h>
 #include <vcl/spinfld.hxx>
-#include <svl/zforlist.hxx>
 #include <memory>
+
+class SvNumberFormatter;
 
 namespace validation { class NumberValidator; }
 

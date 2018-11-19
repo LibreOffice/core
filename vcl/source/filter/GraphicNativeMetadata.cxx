@@ -20,6 +20,7 @@
 #include <vcl/GraphicNativeMetadata.hxx>
 
 #include <vcl/gfxlink.hxx>
+#include <tools/stream.hxx>
 
 #include "jpeg/Exif.hxx"
 #include <memory>

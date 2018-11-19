@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_HELP_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 

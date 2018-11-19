@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svx/svxdllapi.h>
+#include <rtl/ref.hxx>
 #include <map>
 #include <memory>
 

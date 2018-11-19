@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 #include "decode.hxx"
 #include "gifread.hxx"
 #include <memory>

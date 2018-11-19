@@ -36,6 +36,7 @@
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <vcl/treelistentry.hxx>
+#include <tools/stream.hxx>
 
 #include <rtl/uri.hxx>
 

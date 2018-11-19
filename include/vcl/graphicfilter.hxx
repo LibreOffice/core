@@ -21,16 +21,17 @@
 #define INCLUDED_VCL_GRAPHICFILTER_HXX
 
 #include <tools/gen.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/field.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/errcode.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace o3tl { template <typename T> struct typed_flags; }
+
+class INetURLObject;
 
 class FilterConfigCache;
 class SvStream;

@@ -23,11 +23,9 @@
 #include <memory>
 #include <vcl/graph.hxx>
 #include <vcl/dllapi.h>
-#include <o3tl/typed_flags_set.hxx>
 
-#include <com/sun/star/graphic/XGraphic.hpp>
-
-#include <unordered_set>
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace o3tl { template <typename T> struct typed_flags; }
 
 enum class GraphicManagerDrawFlags
 {
@@ -64,9 +62,6 @@ enum class GraphicDrawMode
     Watermark = 3
 };
 
-class GraphicManager;
-class SvStream;
-class GraphicCache;
 class VirtualDevice;
 struct GrfSimpleCacheObj;
 struct ImplTileInfo;

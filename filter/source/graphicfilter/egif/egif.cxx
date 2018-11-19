@@ -18,12 +18,14 @@
  */
 
 
+#include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svl/solar.hrc>
 #include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include "giflzwc.hxx"
 #include <memory>
 

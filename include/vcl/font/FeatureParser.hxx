@@ -12,11 +12,8 @@
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <rtl/string.hxx>
-#include <memory>
 #include <vector>
 #include <unordered_map>
-#include <vcl/font/Feature.hxx>
 
 namespace vcl
 {

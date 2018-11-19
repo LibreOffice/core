@@ -11,6 +11,7 @@
 #include <FontFeaturesDialog.hxx>
 #include <vcl/font/FeatureParser.hxx>
 #include <svx/dialmgr.hxx>
+#include <unordered_set>
 
 using namespace css;
 

@@ -30,6 +30,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

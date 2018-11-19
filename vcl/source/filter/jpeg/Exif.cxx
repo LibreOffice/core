@@ -19,6 +19,7 @@
 
 #include "Exif.hxx"
 #include <memory>
+#include <tools/stream.hxx>
 
 Exif::Exif() :
     maOrientation(TOP_LEFT),

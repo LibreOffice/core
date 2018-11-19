@@ -65,6 +65,7 @@
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <editeng/svxenum.hxx>
 #include <editeng/flditem.hxx>
 #include <sot/storinfo.hxx>

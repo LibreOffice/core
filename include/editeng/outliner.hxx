@@ -32,6 +32,7 @@
 #include <tools/contnr.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/errcode.hxx>
 #include <tools/link.hxx>
 #include <svl/style.hxx>
 #include <editeng/editengdllapi.h>

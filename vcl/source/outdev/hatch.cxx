@@ -20,6 +20,7 @@
 #include <cassert>
 
 #include <tools/line.hxx>
+#include <tools/stream.hxx>
 
 #include <vcl/hatch.hxx>
 #include <vcl/metaact.hxx>

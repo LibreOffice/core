@@ -19,16 +19,10 @@
 
 #ifndef INCLUDED_VCL_FLTCALL_HXX
 #define INCLUDED_VCL_FLTCALL_HXX
-#include <sal/types.h>
-#include <vcl/field.hxx>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <vcl/FilterConfigItem.hxx>
 
 class FilterConfigItem;
 class SvStream;
 class Graphic;
-namespace vcl { class Window; }
 
 typedef bool (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,
                             FilterConfigItem* pConfigItem);

@@ -41,6 +41,7 @@
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>

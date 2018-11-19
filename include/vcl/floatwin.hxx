@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_FLOATWIN_HXX
 #define INCLUDED_VCL_FLOATWIN_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
-#include <o3tl/typed_flags_set.hxx>
 #include <memory>
+
+namespace o3tl { template <typename T> struct typed_flags; }
 
 class ToolBox;
 

@@ -16,6 +16,8 @@
 #include <test/unoapi_test.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/gdimtf.hxx>
+#include <tools/stream.hxx>
 
 using namespace com::sun::star;
 

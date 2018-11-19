@@ -16,6 +16,7 @@
 #include <comphelper/fileformat.h>
 
 #include <vcl/graphicfilter.hxx>
+#include <tools/stream.hxx>
 
 using namespace ::com::sun::star;
 

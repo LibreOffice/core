@@ -21,6 +21,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
+#include <tools/solar.h>
 #include <vcl/imapobj.hxx>
 
 class Fraction;

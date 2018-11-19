@@ -23,6 +23,7 @@
 #include "commoncontrol.hxx"
 #include <vcl/fmtfield.hxx>
 #include <svtools/fileurlbox.hxx>
+#include <svl/zforlist.hxx>
 #include "standardcontrol.hxx"
 
 class SvNumberFormatsSupplierObj;

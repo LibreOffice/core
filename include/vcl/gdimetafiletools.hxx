@@ -19,7 +19,8 @@
 #ifndef INCLUDED_VCL_GDIMETAFILETOOLS_HXX
 #define INCLUDED_VCL_GDIMETAFILETOOLS_HXX
 
-#include <vcl/gdimtf.hxx>
+#include <vcl/dllapi.h>
+class GDIMetaFile;
 
 
 // #i121267# Added tooling to be able to support old exporters which are based on

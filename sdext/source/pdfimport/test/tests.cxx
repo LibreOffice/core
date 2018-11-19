@@ -54,6 +54,7 @@
 
 #include <cassert>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::pdfparse;
 using namespace ::pdfi;

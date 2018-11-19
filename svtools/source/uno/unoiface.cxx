@@ -22,6 +22,7 @@
 #include <vcl/fixedhyper.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
 #include <svtools/filectrl.hxx>

@@ -47,6 +47,7 @@
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <tools/zcodec.hxx>
 #include <editeng/svxenum.hxx>
 #include <sot/storinfo.hxx>

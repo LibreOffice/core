@@ -19,6 +19,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>

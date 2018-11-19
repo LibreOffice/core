@@ -32,6 +32,7 @@
 class ImplLayoutArgs;
 class PhysicalFontFace;
 class SalGraphics;
+struct GlyphItem;
 namespace vcl
 {
     class TextLayoutCache;

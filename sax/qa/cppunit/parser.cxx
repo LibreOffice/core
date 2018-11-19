@@ -17,6 +17,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <sax/fastparser.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <rtl/ref.hxx>
 
 using namespace css;
 using namespace css::xml::sax;

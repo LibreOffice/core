@@ -23,6 +23,7 @@
 #include <canvas/canvastools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
+#include <tools/stream.hxx>
 
 #include "canvasbitmap.hxx"
 #include "spritecanvas.hxx"
