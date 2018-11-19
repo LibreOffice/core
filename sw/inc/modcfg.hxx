@@ -146,15 +146,15 @@ class SwTableConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    sal_uInt16      nTableHMove;          //int Table/Shift/Row
-    sal_uInt16      nTableVMove;          //int Table/Shift/Column
-    sal_uInt16      nTableHInsert;        //int Table/Insert/Row
-    sal_uInt16      nTableVInsert;        //int Table/Insert/Column
-    TableChgMode  eTableChgMode;        //int Table/Change/Effect
+    sal_uInt16      m_nTableHMove;          //int Table/Shift/Row
+    sal_uInt16      m_nTableVMove;          //int Table/Shift/Column
+    sal_uInt16      m_nTableHInsert;        //int Table/Insert/Row
+    sal_uInt16      m_nTableVInsert;        //int Table/Insert/Column
+    TableChgMode  m_eTableChgMode;        //int Table/Change/Effect
 
-    bool    bInsTableFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
-    bool    bInsTableChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
-    bool    bInsTableAlignNum;        // Table/Input/Alignment                // Align numbers.
+    bool    m_bInsTableFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
+    bool    m_bInsTableChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
+    bool    m_bInsTableAlignNum;        // Table/Input/Alignment                // Align numbers.
 
     static const css::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -218,24 +218,24 @@ class SW_DLLPUBLIC SwModuleOptions
 public:
     SwModuleOptions();
 
-    TableChgMode  GetTableMode() const { return m_aTableConfig.eTableChgMode;}
-    void        SetTableMode( TableChgMode  eSet ) { m_aTableConfig.eTableChgMode = eSet;
+    TableChgMode  GetTableMode() const { return m_aTableConfig.m_eTableChgMode;}
+    void        SetTableMode( TableChgMode  eSet ) { m_aTableConfig.m_eTableChgMode = eSet;
                                                 m_aTableConfig.SetModified();}
 
-    sal_uInt16      GetTableHMove() const { return m_aTableConfig.nTableHMove;}
-    void        SetTableHMove( sal_uInt16 nSet ) {    m_aTableConfig.nTableHMove = nSet;
+    sal_uInt16      GetTableHMove() const { return m_aTableConfig.m_nTableHMove;}
+    void        SetTableHMove( sal_uInt16 nSet ) {    m_aTableConfig.m_nTableHMove = nSet;
                                                 m_aTableConfig.SetModified();}
 
-    sal_uInt16      GetTableVMove() const { return m_aTableConfig.nTableVMove;}
-    void        SetTableVMove( sal_uInt16 nSet ) {    m_aTableConfig.nTableVMove = nSet;
+    sal_uInt16      GetTableVMove() const { return m_aTableConfig.m_nTableVMove;}
+    void        SetTableVMove( sal_uInt16 nSet ) {    m_aTableConfig.m_nTableVMove = nSet;
                                                 m_aTableConfig.SetModified();}
 
-    sal_uInt16      GetTableHInsert() const {return m_aTableConfig.nTableHInsert;}
-    void        SetTableHInsert( sal_uInt16 nSet ) {  m_aTableConfig.nTableHInsert = nSet;
+    sal_uInt16      GetTableHInsert() const {return m_aTableConfig.m_nTableHInsert;}
+    void        SetTableHInsert( sal_uInt16 nSet ) {  m_aTableConfig.m_nTableHInsert = nSet;
                                                 m_aTableConfig.SetModified();}
 
-    sal_uInt16      GetTableVInsert() const {return m_aTableConfig.nTableVInsert;}
-    void        SetTableVInsert( sal_uInt16 nSet ) {  m_aTableConfig.nTableVInsert = nSet;
+    sal_uInt16      GetTableVInsert() const {return m_aTableConfig.m_nTableVInsert;}
+    void        SetTableVInsert( sal_uInt16 nSet ) {  m_aTableConfig.m_nTableVInsert = nSet;
                                                 m_aTableConfig.SetModified();}
 
     const AuthorCharAttr    &GetInsertAuthorAttr() const { return m_aRevisionConfig.m_aInsertAttr; }
@@ -276,24 +276,24 @@ public:
                 }
 
     bool        IsInsTableFormatNum(bool bHTML) const
-                    { return bHTML ? m_aWebTableConfig.bInsTableFormatNum : m_aTableConfig.bInsTableFormatNum; }
+                    { return bHTML ? m_aWebTableConfig.m_bInsTableFormatNum : m_aTableConfig.m_bInsTableFormatNum; }
     void        SetInsTableFormatNum( bool bHTML, bool b )
                     { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
-                      config.bInsTableFormatNum = b;
+                      config.m_bInsTableFormatNum = b;
                       config.SetModified();}
 
     bool        IsInsTableChangeNumFormat(bool bHTML) const
-                    { return bHTML ? m_aWebTableConfig.bInsTableChangeNumFormat : m_aTableConfig.bInsTableChangeNumFormat; }
+                    { return bHTML ? m_aWebTableConfig.m_bInsTableChangeNumFormat : m_aTableConfig.m_bInsTableChangeNumFormat; }
     void        SetInsTableChangeNumFormat( bool bHTML, bool b )
                     { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
-                      config.bInsTableChangeNumFormat = b;
+                      config.m_bInsTableChangeNumFormat = b;
                       config.SetModified();}
 
     bool        IsInsTableAlignNum(bool bHTML) const
-                    { return bHTML ? m_aWebTableConfig.bInsTableAlignNum : m_aTableConfig.bInsTableAlignNum; }
+                    { return bHTML ? m_aWebTableConfig.m_bInsTableAlignNum : m_aTableConfig.m_bInsTableAlignNum; }
     void        SetInsTableAlignNum( bool bHTML, bool b )
                     { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
-                      config.bInsTableAlignNum = b;
+                      config.m_bInsTableAlignNum = b;
                       config.SetModified();}
 
     const SwInsertTableOptions& GetInsTableFlags(bool bHTML) const

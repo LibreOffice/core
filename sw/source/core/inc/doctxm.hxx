@@ -33,7 +33,7 @@ struct SwTOXSortTabBase;
 
 class SwTOXBaseSection : public SwTOXBase, public SwSection
 {
-    std::vector<std::unique_ptr<SwTOXSortTabBase>> aSortArr;
+    std::vector<std::unique_ptr<SwTOXSortTabBase>> m_aSortArr;
 
     void UpdateMarks( const SwTOXInternational& rIntl,
                       const SwTextNode* pOwnChapterNode );
@@ -76,7 +76,7 @@ public:
                  const bool        _bNewTOX = false );
     void UpdatePageNum();               // insert page numbering
 
-    const std::vector<std::unique_ptr<SwTOXSortTabBase>>& GetTOXSortTabBases() const { return aSortArr; }
+    const std::vector<std::unique_ptr<SwTOXSortTabBase>>& GetTOXSortTabBases() const { return m_aSortArr; }
 
     bool SetPosAtStartEnd( SwPosition& rPos ) const;
 };
