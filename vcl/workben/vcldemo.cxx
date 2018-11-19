@@ -523,8 +523,8 @@ public:
                 const char *mpString;
             } const aRuns[] = {
 #define SET(font,string) { font, reinterpret_cast<const char *>(string) }
-                SET("sans", "a"),           // logical font - no 'sans' font.
-                SET("opensymbol", "#$%"),   // font fallback - $ is missing.
+                {"sans", "a"},           // logical font - no 'sans' font.
+                {"opensymbol", "#$%"},   // font fallback - $ is missing.
                 SET("sans", pInvalid),      // unicode invalid character
                 // tdf#96266 - stacking diacritics
                 SET("carlito", pDiacritic1),

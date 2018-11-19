@@ -386,6 +386,12 @@ void testIntermediaryStaticCast() {
     d = int(d) + 1.0; // expected-error {{suspicious functional cast from 'double' to 'int', result is implicitly cast to 'double' [loplugin:redundantcast]}}
 };
 
+void testArrayDecay() {
+    (void) static_cast<char const *>(""); // expected-error {{redundant static_cast from 'const char [1]' to 'const char *' [loplugin:redundantcast]}}
+    (void) reinterpret_cast<char const *>(""); // expected-error {{redundant reinterpret_cast from 'const char [1]' to 'const char *' [loplugin:redundantcast]}}
+    (void) reinterpret_cast<char const *>(u8"");
+}
+
 int main() {
     testConstCast();
     testStaticCast();
@@ -395,6 +401,7 @@ int main() {
     testReinterpretConstCast();
     testDynamicCast();
     testIntermediaryStaticCast();
+    testArrayDecay();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -358,6 +358,28 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
             << expr->getSourceRange();
         return true;
     }
+    if (auto const impl = dyn_cast<ImplicitCastExpr>(expr->getSubExpr())) {
+        if (impl->getCastKind() == CK_ArrayToPointerDecay && impl->getType() == t2)
+            //TODO: instead of exact QualType match, allow some variation?
+        {
+            auto const fn = handler.getMainFileName();
+            if (!(loplugin::isSamePathname(
+                      fn, SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx")
+                  || loplugin::isSamePathname(
+                      fn, SRCDIR "/sal/qa/rtl/strings/test_ostring_stringliterals.cxx")
+                  || loplugin::isSamePathname(
+                      fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx")
+                  || loplugin::isSamePathname(
+                      fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_stringliterals.cxx")))
+            {
+                report(
+                    DiagnosticsEngine::Warning, "redundant static_cast from %0 to %1",
+                    expr->getExprLoc())
+                    << expr->getSubExprAsWritten()->getType() << t2 << expr->getSourceRange();
+            }
+            return true;
+        }
+    }
     auto const t3 = expr->getType();
     auto const c1 = t1.getCanonicalType();
     auto const c3 = t3.getCanonicalType();
@@ -470,6 +492,30 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
 {
     if (ignoreLocation(expr)) {
         return true;
+    }
+    if (auto const sub = dyn_cast<ImplicitCastExpr>(expr->getSubExpr())) {
+        if (sub->getCastKind() == CK_ArrayToPointerDecay && sub->getType() == expr->getType())
+            //TODO: instead of exact QualType match, allow some variation?
+        {
+            if (loplugin::TypeCheck(sub->getType()).Pointer().Const().Char()) {
+                if (auto const lit = dyn_cast<clang::StringLiteral>(expr->getSubExprAsWritten())) {
+                    if (lit->getKind() == clang::StringLiteral::UTF8) {
+                        // Don't warn about
+                        //
+                        //   redundant_cast<char const *>(u8"...")
+                        //
+                        // in pre-C++2a code:
+                        return true;
+                    }
+                }
+            }
+            report(
+                DiagnosticsEngine::Warning, "redundant reinterpret_cast from %0 to %1",
+                expr->getExprLoc())
+                << expr->getSubExprAsWritten()->getType() << expr->getTypeAsWritten()
+                << expr->getSourceRange();
+            return true;
+        }
     }
     if (expr->getSubExpr()->getType()->isVoidPointerType()) {
         auto t = expr->getType()->getAs<clang::PointerType>();
