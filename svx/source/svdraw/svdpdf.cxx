@@ -218,7 +218,7 @@ void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pAction
         // Load the page text to extract it when we get text elements.
         FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage);
 
-        const int nPageObjectCount = FPDFPage_CountObject(pPdfPage);
+        const int nPageObjectCount = FPDFPage_CountObjects(pPdfPage);
         if (pProgrInfo)
             pProgrInfo->SetActionCount(nPageObjectCount);
 
