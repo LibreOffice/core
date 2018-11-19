@@ -2350,6 +2350,11 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                                 aNewSet.ClearItem(i);
                             }
                         }
+                        for (sal_uInt16 i = XATTR_FILL_FIRST; i <= XATTR_FILL_LAST; ++i)
+                        {
+                            aOldSet.ClearItem(i);
+                            aNewSet.ClearItem(i);
+                        }
                     }
                     if (m_pMergedPara && m_pMergedPara->pFirstNode != &rModify)
                     {
