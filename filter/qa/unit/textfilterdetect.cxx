@@ -14,6 +14,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
+#include <tools/stream.hxx>
 
 namespace com
 {

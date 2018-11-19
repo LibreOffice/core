@@ -24,6 +24,7 @@
 #include <canvas/canvastools.hxx>
 #include <rtl/instance.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 

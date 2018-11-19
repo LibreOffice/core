@@ -25,6 +25,7 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>

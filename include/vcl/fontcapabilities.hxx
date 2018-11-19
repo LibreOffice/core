@@ -11,10 +11,7 @@
 #define INCLUDED_VCL_FONTCAPABILITIES_HXX
 
 #include <boost/optional.hpp>
-#include <vector>
 #include <bitset>
-
-#include <sal/types.h>
 
 //See OS/2 table, i.e. http://www.microsoft.com/typography/otspec/os2.htm#ur
 namespace vcl

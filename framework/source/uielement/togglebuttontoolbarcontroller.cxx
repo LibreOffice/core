@@ -35,6 +35,8 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/combobox.hxx>
 #include <svtools/miscopt.hxx>
 
 using namespace ::com::sun::star;

@@ -47,6 +47,7 @@
 #include <stack>
 #include <deque>
 #include <sax/fastparser.hxx>
+#include <rtl/ref.hxx>
 
 
 namespace {

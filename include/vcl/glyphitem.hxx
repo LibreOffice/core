@@ -20,9 +20,11 @@
 #ifndef INCLUDED_VCL_GLYPHITEM_HXX
 #define INCLUDED_VCL_GLYPHITEM_HXX
 
+#include <sal/types.h>
+#include <vcl/dllapi.h>
+
 typedef sal_uInt16 sal_GlyphId;
 
-struct GlyphItem;
 class SalLayoutGlyphsImpl;
 
 class VCL_DLLPUBLIC SalLayoutGlyphs final

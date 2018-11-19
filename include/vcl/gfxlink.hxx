@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #include <memory>

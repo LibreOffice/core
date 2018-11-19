@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 

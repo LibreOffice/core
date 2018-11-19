@@ -21,14 +21,11 @@
 #define INCLUDED_VCL_GRAPH_HXX
 
 #include <memory>
-#include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
-#include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vectorgraphicdata.hxx>
@@ -47,7 +44,9 @@ enum class GraphicType
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 namespace vcl { class Font; }
 
-class GfxLink;
+class Bitmap;
+class GDIMetaFile;
+class SvStream;
 class ImpGraphic;
 class OutputDevice;
 class ReaderData;

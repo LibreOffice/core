@@ -27,7 +27,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
 using namespace ::com::sun::star::beans     ;   // PropertyValue

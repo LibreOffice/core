@@ -46,6 +46,7 @@
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
 #include <emfplushelper.hxx>

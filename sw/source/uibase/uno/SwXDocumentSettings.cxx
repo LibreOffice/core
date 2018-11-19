@@ -50,6 +50,7 @@
 #include <unomod.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/asiancfg.hxx>
+#include <tools/stream.hxx>
 
 #include <swmodule.hxx>
 #include <cfgitems.hxx>

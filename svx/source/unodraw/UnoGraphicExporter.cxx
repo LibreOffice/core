@@ -32,6 +32,7 @@
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <tools/urlobj.hxx>
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>

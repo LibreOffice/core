@@ -26,6 +26,7 @@
 #include <rtl/strbuf.hxx>
 #include <tools/helpers.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>

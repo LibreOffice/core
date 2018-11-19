@@ -23,13 +23,14 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
-#include <tools/gen.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
+#include <i18nlangtag/lang.h>
 #include <vcl/fntstyle.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
+class Size;
+class LanguageTag;
 class SvStream;
 #define FontAlign TextAlign
 

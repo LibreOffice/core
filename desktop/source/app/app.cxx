@@ -115,6 +115,7 @@
 #include <svl/eitem.hxx>
 #include <basic/sbstar.hxx>
 #include <desktop/crashreport.hxx>
+#include <tools/urlobj.hxx>
 
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
