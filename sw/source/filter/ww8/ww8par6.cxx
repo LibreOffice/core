@@ -319,11 +319,27 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
         SvxFrameDirection eDir =
             *pData ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB;
 
-        // Previous adjust or bidi values require changing paraAdjust.
-        // Only change if ParaBiDi doesn't match previous setting.
-        const bool bParentRTL = IsRightToLeft();
-        if ( (eDir == SvxFrameDirection::Horizontal_RL_TB && !bParentRTL) ||
-             (eDir == SvxFrameDirection::Horizontal_LR_TB && bParentRTL) )
+        // In eWW8+, justify can be relative to BiDi(Jc) or absolute(Jc80).
+        // If the paragraph justification was relative, then a change in BiDi needs to adjust it.
+        bool bBidiSwap = m_xWwFib->GetFIBVersion() >= ww::eWW8;
+        const SfxGrabBagItem* pGrabBag = static_cast<const SfxGrabBagItem*>(GetFormatAttr(RES_PARATR_GRABBAG));
+        if ( pGrabBag )
+        {
+            const std::map<OUString, css::uno::Any>& rMap = pGrabBag->GetGrabBag();
+            auto aIterator = rMap.find("ParaRelativeJustify");
+            if( aIterator != rMap.end() )
+                aIterator->second >>= bBidiSwap;
+        }
+
+        if ( bBidiSwap )
+        {
+            // Only change if ParaBiDi doesn't match previous setting.
+            const bool bParentIsRTL = IsRightToLeft();
+            bBidiSwap = (eDir == SvxFrameDirection::Horizontal_RL_TB && !bParentIsRTL)
+                     || (eDir == SvxFrameDirection::Horizontal_LR_TB && bParentIsRTL);
+        }
+
+        if ( bBidiSwap )
         {
             const SvxAdjustItem* pItem = static_cast<const SvxAdjustItem*>(GetFormatAttr(RES_PARATR_ADJUST));
             if ( !pItem )
@@ -4414,12 +4430,21 @@ void SwWW8ImplReader::Read_IdctHint( sal_uInt16, const sal_uInt8* pData, short n
     }
 }
 
-void SwWW8ImplReader::Read_Justify( sal_uInt16, const sal_uInt8* pData, short nLen )
+void SwWW8ImplReader::Read_Justify( sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 1)
     {
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_ADJUST );
         return;
+    }
+
+    if ( nId == NS_sprm::sprmPJc80 && m_xWwFib->GetFIBVersion() >= ww::eWW8 )
+    {
+        // Add a marker to the grabbag indicating that this setting is absolute; not impacted by RTL
+        SfxGrabBagItem aGrabBag = *static_cast<const SfxGrabBagItem*>(GetFormatAttr(RES_PARATR_GRABBAG));
+        std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+        rMap["ParaRelativeJustify"] <<= false;
+        NewAttr(aGrabBag);
     }
 
     SvxAdjust eAdjust(SvxAdjust::Left);
@@ -4468,7 +4493,7 @@ bool SwWW8ImplReader::IsRightToLeft()
     return bRTL;
 }
 
-void SwWW8ImplReader::Read_RTLJustify( sal_uInt16, const sal_uInt8* pData, short nLen )
+void SwWW8ImplReader::Read_RTLJustify( sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 1)
     {
@@ -4476,10 +4501,16 @@ void SwWW8ImplReader::Read_RTLJustify( sal_uInt16, const sal_uInt8* pData, short
         return;
     }
 
+    // Set grabbag marker indicating that this setting is relative; impacted by RTL
+    SfxGrabBagItem aGrabBag = *static_cast<const SfxGrabBagItem*>(GetFormatAttr(RES_PARATR_GRABBAG));
+    std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+    rMap["ParaRelativeJustify"] <<= true;
+    NewAttr(aGrabBag);
+
     //If we are in a ltr paragraph this is the same as normal Justify,
     //If we are in a rtl paragraph the meaning is reversed.
     if (!IsRightToLeft())
-        Read_Justify(NS_sprm::sprmPJc80 /*dummy*/, pData, nLen);
+        Read_Justify(nId, pData, nLen);
     else
     {
         SvxAdjust eAdjust(SvxAdjust::Right);
