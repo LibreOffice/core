@@ -947,19 +947,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
     bool bDocRequestSent = false;
 
     OUString aUnknown( aCmdLineArgs->GetUnknown() );
-    if ( !aUnknown.isEmpty() || aCmdLineArgs->IsHelp() )
-    {
-        ApplicationEvent* pAppEvent =
-            new ApplicationEvent(ApplicationEvent::Type::Help, aUnknown);
-        ImplPostForeignAppEvent( pAppEvent );
-    }
-    else if ( aCmdLineArgs->IsVersion() )
-    {
-        ApplicationEvent* pAppEvent =
-            new ApplicationEvent(ApplicationEvent::Type::Version);
-        ImplPostForeignAppEvent( pAppEvent );
-    }
-    else
+    if (aUnknown.isEmpty() && !aCmdLineArgs->IsHelp() && !aCmdLineArgs->IsVersion())
     {
         const CommandLineArgs &rCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 

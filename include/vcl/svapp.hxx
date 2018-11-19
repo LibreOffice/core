@@ -128,8 +128,6 @@ public:
     enum class Type {
         Accept,                ///< Listen for connections
         Appear,                ///< Make application appear
-        Help,                  ///< Bring up help options (command-line help)
-        Version,               ///< Display product version
         Open,                  ///< Open a document
         OpenHelpUrl,           ///< Open a help URL
         Print,                 ///< Print document
@@ -148,9 +146,7 @@ public:
     */
     explicit ApplicationEvent(Type type): aEvent(type)
     {
-        assert(
-            type == Type::Appear || type == Type::Version
-            || type == Type::PrivateDoShutdown || type == Type::QuickStart);
+        assert(type == Type::Appear || type == Type::PrivateDoShutdown || type == Type::QuickStart);
     }
 
     /** Constructor for ApplicationEvent, accepts a string for the data
@@ -163,7 +159,7 @@ public:
     ApplicationEvent(Type type, OUString const & data): aEvent(type)
     {
         assert(
-            type == Type::Accept || type == Type::Help || type == Type::OpenHelpUrl
+            type == Type::Accept || type == Type::OpenHelpUrl
             || type == Type::ShowDialog || type == Type::Unaccept);
         aData.push_back(data);
     }
@@ -200,7 +196,7 @@ public:
     OUString const & GetStringData() const
     {
         assert(
-            aEvent == Type::Accept || aEvent == Type::Help
+            aEvent == Type::Accept
             || aEvent == Type::OpenHelpUrl || aEvent == Type::ShowDialog
             || aEvent == Type::Unaccept);
         assert(aData.size() == 1);

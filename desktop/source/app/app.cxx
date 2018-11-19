@@ -1256,25 +1256,6 @@ int Desktop::Main()
 
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
-#if HAVE_FEATURE_DESKTOP
-    const OUString& aUnknown( rCmdLineArgs.GetUnknown() );
-    if ( !aUnknown.isEmpty() )
-    {
-        displayCmdlineHelp( aUnknown );
-        return EXIT_FAILURE;
-    }
-    if ( rCmdLineArgs.IsHelp() )
-    {
-        displayCmdlineHelp( OUString() );
-        return EXIT_SUCCESS;
-    }
-    if ( rCmdLineArgs.IsVersion() )
-    {
-        displayVersion();
-        return EXIT_SUCCESS;
-    }
-#endif
-
     Translate::SetReadStringHook(ReplaceStringHookProc);
 
     // Startup screen
@@ -2340,12 +2321,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 }
             }
         }
-        break;
-    case ApplicationEvent::Type::Help:
-        displayCmdlineHelp(rAppEvent.GetStringData());
-        break;
-    case ApplicationEvent::Type::Version:
-        displayVersion();
         break;
     case ApplicationEvent::Type::Open:
         {
