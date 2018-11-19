@@ -37,6 +37,7 @@ class SwFrameFormat;
 class SwDrawFrameFormat;
 class SwFlyFrameFormat;
 class SwNodeIndex;
+class SwRootFrame;
 
 namespace utl { class TransliterationWrapper; }
 namespace svt { class EmbeddedObjectRef; }
@@ -212,10 +213,13 @@ public:
         false.
     */
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const SetAttrMode nFlags = SetAttrMode::DEFAULT, bool bExpandCharToPara=false) = 0;
+                                const SetAttrMode nFlags = SetAttrMode::DEFAULT,
+                                SwRootFrame const* pLayout = nullptr,
+                                bool bExpandCharToPara=false) = 0;
 
     virtual void InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
-        const SetAttrMode nFlags = SetAttrMode::DEFAULT) = 0;
+        const SetAttrMode nFlags = SetAttrMode::DEFAULT,
+        SwRootFrame const* pLayout = nullptr) = 0;
 
     /** Removes any leading white space from the paragraph
     */
