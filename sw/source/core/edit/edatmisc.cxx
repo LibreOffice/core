@@ -110,7 +110,7 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
             if( rPaM.HasMark() && ( bIsTableMode ||
                 *rPaM.GetPoint() != *rPaM.GetMark() ))
             {
-                GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, rHint, nFlags );
+                GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, rHint, nFlags, GetLayout());
             }
         }
 
@@ -120,7 +120,7 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
     {
         if( !HasSelection() )
             UpdateAttr();
-        GetDoc()->getIDocumentContentOperations().InsertPoolItem( *pCursor, rHint, nFlags );
+        GetDoc()->getIDocumentContentOperations().InsertPoolItem(*pCursor, rHint, nFlags, GetLayout());
     }
     EndAllAction();
 }
@@ -141,7 +141,7 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
             if( rTmpCursor.HasMark() && ( bIsTableMode ||
                 *rTmpCursor.GetPoint() != *rTmpCursor.GetMark() ))
             {
-                GetDoc()->getIDocumentContentOperations().InsertItemSet(rTmpCursor, rSet, nFlags );
+                GetDoc()->getIDocumentContentOperations().InsertItemSet(rTmpCursor, rSet, nFlags, GetLayout());
             }
         }
 
@@ -151,7 +151,7 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
     {
         if( !HasSelection() )
             UpdateAttr();
-        GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCursor, rSet, nFlags );
+        GetDoc()->getIDocumentContentOperations().InsertItemSet(*pCursor, rSet, nFlags, GetLayout());
     }
     EndAllAction();
 }
