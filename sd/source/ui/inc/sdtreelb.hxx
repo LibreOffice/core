@@ -58,9 +58,6 @@ class SD_DLLPUBLIC SdPageObjsTLB final : public SvTreeListBox
 {
     static bool  SAL_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
 
-    // set contenttree in SdNavigatorWin
-    bool                           bisInSdNavigatorWin;
-
     ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
 public:
@@ -119,7 +116,7 @@ public:
 
 private:
 
-    VclPtr<vcl::Window>     mpParent;
+    VclPtr<SdNavigatorWin>  mpNavigator;
     const SdDrawDocument*   mpDoc;
     SdDrawDocument*         mpBookmarkDoc;
     SfxMedium*              mpMedium;
@@ -210,7 +207,7 @@ public:
     OUString                GetSelectedEntry();
 
     //Mark Current Entry
-    void                    SetSdNavigatorWinFlag(bool isInSdNavigatorWin){bisInSdNavigatorWin =isInSdNavigatorWin;};
+    void                    SetSdNavigator(SdNavigatorWin* pNavigator);
 
     void                    Clear();
     void                    SetSaveTreeItemStateFlag(bool bState){mbSaveTreeItemState = bState;}
