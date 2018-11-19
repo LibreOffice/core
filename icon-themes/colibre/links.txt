@@ -1748,10 +1748,10 @@ cmd/lc_tableevents.png cmd/lc_animationeffects.png
 # calc context menu rowheader
 # ==============================================
 cmd/sc_rowheight.png cmd/sc_setminimalrowheight.png
-cmd/sc_columnheight.png cmd/sc_setminimalcolumnheight.png
+cmd/sc_columnwidth.png cmd/sc_setminimalcolumnwidth.png
 
 cmd/lc_rowheight.png cmd/lc_setminimalrowheight.png
-cmd/lc_columnheight.png cmd/lc_setminimalcolumnheight.png
+cmd/lc_columnwidth.png cmd/lc_setminimalcolumnwidth.png
 
 # calc toolbar previewbar
 # ==============================================
