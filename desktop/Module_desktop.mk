@@ -78,7 +78,8 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_sdraw \
     Executable_simpress \
     Executable_smath \
-    Executable_soffice \
+    Executable_soffice_exe \
+    Executable_soffice_com \
     Executable_sweb \
     Executable_swriter \
     Executable_unoinfo \
