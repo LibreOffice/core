@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_1f0d1737",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-19T23:20:24Z",
+      "side": 1,
+      "message": "There is at least an indentation issue here.",
+      "revId": "b51544779cf21fe1950172f4882910d32a010089",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
