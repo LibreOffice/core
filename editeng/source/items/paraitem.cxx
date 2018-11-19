@@ -277,7 +277,7 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId ),
-    bOneBlock( false ), bLastCenter( false ), bLastBlock( false )
+    bOneBlock( false ), bLastCenter( false ), bLastBlock( false ), bRelative( true )
 {
     SetAdjust( eAdjst );
 }
@@ -291,7 +291,8 @@ bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
     return GetAdjust() == rItem.GetAdjust() &&
            bOneBlock == rItem.bOneBlock &&
            bLastCenter == rItem.bLastCenter &&
-           bLastBlock == rItem.bLastBlock;
+           bLastBlock == rItem.bLastBlock &&
+           bRelative == rItem.bRelative;
 }
 
 bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const

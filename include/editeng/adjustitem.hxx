@@ -46,6 +46,9 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
     bool    bLastCenter : 1;
     bool    bLastBlock : 1;
 
+    /// Only used for import: value is absolute or relative to BiDirectional text
+    bool    bRelative   : 1;
+
 public:
     static SfxPoolItem* CreateDefault();
 
@@ -122,6 +125,9 @@ public:
             eRet = SvxAdjust::Block;
         return eRet;
     }
+
+    void SetRelative( const bool bRel ) { bRelative = bRel; }
+    bool IsRelative() const { return bRelative; }
 };
 
 #endif

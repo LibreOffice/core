@@ -1320,6 +1320,17 @@ bool SwWW8FltControlStack::CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd)
 void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
                                                SwFltStackEntry& rEntry )
 {
+    if ( rEntry.pAttr->Which() == RES_PARATR_ADJUST )
+    {
+        if ( SvxAdjustItem* pAdjust = static_cast<SvxAdjustItem*>(rEntry.pAttr.get())
+         )
+        {
+            if ( pAdjust->GetAdjust() == SvxAdjust::Left || pAdjust->GetAdjust() == SvxAdjust::Right )
+                pAdjust->SetLastBlock( SvxAdjust::Left );
+        }
+//This was unused...  SAL_WARN("JCL","::FltEndStack::SetAttrInDoc");
+    }
+
     switch( rEntry.pAttr->Which() )
     {
     case RES_FLTR_BOOKMARK:
