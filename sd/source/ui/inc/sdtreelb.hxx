@@ -126,8 +126,6 @@ private:
     bool                    mbLinkableSelected;
     OUString                maDocName;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks
-    VclPtr<SdNavigatorWin>  mpDropNavWin;
-    SfxViewFrame*           mpFrame;
     std::vector<OUString>   maTreeItem;
     bool                    mbSaveTreeItemState;
     OUString                maSelectionEntryText;

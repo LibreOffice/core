@@ -201,8 +201,6 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 ,   maImgOle            ( BitmapEx(BMP_OLE) )
 ,   maImgGraphic        ( BitmapEx(BMP_GRAPHIC) )
 ,   mbLinkableSelected  ( false )
-,   mpDropNavWin        ( nullptr )
-,   mpFrame             ( nullptr )
 ,   mbSaveTreeItemState ( false )
 ,   mbShowAllShapes     ( false )
 ,   mbShowAllPages      ( false )
@@ -231,7 +229,6 @@ void SdPageObjsTLB::SetSdNavigator(SdNavigatorWin* pNavigator)
 
 void SdPageObjsTLB::SetViewFrame( SfxViewFrame* pViewFrame )
 {
-    mpFrame = pViewFrame;
     sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
     const css::uno::Reference< css::frame::XFrame > xFrame = pBase->GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
     m_pAccel->init(::comphelper::getProcessComponentContext(), xFrame);
@@ -251,7 +248,6 @@ void SdPageObjsTLB::dispose()
         // no document was created from mpMedium, so this object is still the owner of it
         delete mpMedium;
     mpNavigator.clear();
-    mpDropNavWin.clear();
     m_pAccel.reset();
     SvTreeListBox::dispose();
 }
@@ -980,19 +976,9 @@ void SdPageObjsTLB::MouseButtonDown(const MouseEvent& rMEvt)
  */
 void SdPageObjsTLB::StartDrag( sal_Int8, const Point& rPosPixel)
 {
-    SdNavigatorWin* pNavWin = nullptr;
     SvTreeListEntry* pEntry = GetEntry(rPosPixel);
 
-    if (mpFrame->HasChildWindow(SID_NAVIGATOR))
-    {
-        SfxChildWindow* pWnd = mpFrame->GetChildWindow(SID_NAVIGATOR);
-        pNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : nullptr;
-    }
-
-    if (pEntry != nullptr
-        && pNavWin !=nullptr
-        && pNavWin == mpNavigator
-        && pNavWin->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE )
+    if (pEntry && mpNavigator && mpNavigator->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE)
     {
         // Mark only the children of the page under the mouse as drop
         // targets.  This prevents moving shapes from one page to another.
@@ -1033,14 +1019,11 @@ void SdPageObjsTLB::StartDrag( sal_Int8, const Point& rPosPixel)
  */
 void SdPageObjsTLB::DoDrag()
 {
-    SfxChildWindow* pWnd = mpFrame->HasChildWindow(SID_NAVIGATOR) ? mpFrame->GetChildWindow(SID_NAVIGATOR) : nullptr;
-    mpDropNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : nullptr;
-
-    if( mpDropNavWin )
+    if (mpNavigator)
     {
         ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
         OUString aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INetProtocol::File ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        NavigatorDragType   eDragType = mpDropNavWin->GetNavigatorDragType();
+        NavigatorDragType   eDragType = mpNavigator->GetNavigatorDragType();
 
         aURL += "#" + GetSelectedEntry();
 
@@ -1114,18 +1097,12 @@ void SdPageObjsTLB::DoDrag()
 
 void SdPageObjsTLB::OnDragFinished()
 {
-    if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
+    if (mpNavigator)
     {
-        SfxChildWindow* pWnd = mpFrame->GetChildWindow(SID_NAVIGATOR);
-        SdNavigatorWin* pNewNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : nullptr;
-        if (mpDropNavWin == pNewNavWin)
-        {
-            MouseEvent aMEvt( mpDropNavWin->GetPointerPosPixel() );
-            SvTreeListBox::MouseButtonUp( aMEvt );
-        }
+        MouseEvent aMEvt(mpNavigator->GetPointerPosPixel());
+        SvTreeListBox::MouseButtonUp(aMEvt);
     }
 
-    mpDropNavWin = nullptr;
     bIsInDrag = false;
 }
 
@@ -1183,16 +1160,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         if( !bIsInDrag )
         {
-            SdNavigatorWin* pNavWin = nullptr;
-            sal_uInt16          nId = SID_NAVIGATOR;
-
-            if (mpFrame->HasChildWindow(nId))
-            {
-                SfxChildWindow* pWnd = mpFrame->GetChildWindow(nId);
-                pNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : nullptr;
-            }
-
-            if( pNavWin && ( pNavWin == mpNavigator ) )
+            if (mpNavigator)
             {
                 TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
                 OUString                aFile;
