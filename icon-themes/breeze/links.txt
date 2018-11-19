@@ -1730,3 +1730,11 @@ cmd/lc_cellprotection.png cmd/lc_protect.png
 # writer
 # ===============================================
 cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
+
+# draw
+# ===============================================
+cmd/sc_masterpage.png cmd/sc_slidemasterpage.png
+cmd/lc_masterpage.png cmd/lc_slidemasterpage.png
+
+cmd/sc_pagemode.png cmd/sc_normalmultipanegui.png
+cmd/lc_pagemode.png cmd/lc_normalmultipanegui.png
