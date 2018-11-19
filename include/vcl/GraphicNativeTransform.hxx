@@ -20,7 +20,10 @@
 #ifndef INCLUDED_VCL_GRAPHICNATIVETRANSFORM_HXX
 #define INCLUDED_VCL_GRAPHICNATIVETRANSFORM_HXX
 
-#include <vcl/graph.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vcl/dllapi.h>
+class Graphic;
 
 class VCL_DLLPUBLIC GraphicNativeTransform final
 {

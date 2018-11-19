@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <sal/config.h>
+#include <tools/stream.hxx>
 
 #include <rtl/character.hxx>
 #include <bitmapwriteaccess.hxx>

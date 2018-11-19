@@ -25,6 +25,8 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/fltcall.hxx>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <tools/stream.hxx>
 
 #define MAXOBJECTHANDLES 16
 

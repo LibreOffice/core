@@ -44,6 +44,8 @@
 #include <vcl/fltcall.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
+#include <tools/stream.hxx>
+#include <vcl/gdimtf.hxx>
 
 #include "../source/filter/igif/gifread.hxx"
 #include "../source/filter/ixbm/xbmread.hxx"

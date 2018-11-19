@@ -23,6 +23,7 @@
 
 #include <FltCallDialogParameter.hxx>
 #include <vcl/weld.hxx>
+#include <tools/stream.hxx>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>

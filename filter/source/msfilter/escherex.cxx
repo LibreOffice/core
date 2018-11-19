@@ -39,6 +39,7 @@
 #include <vcl/wrkwin.hxx>
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
+#include <tools/urlobj.hxx>
 #include <svx/svdopath.hxx>
 #include <stdlib.h>
 #include <vcl/graphicfilter.hxx>

@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/dllapi.h>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

@@ -19,6 +19,7 @@
 
 #include <graphic/UnoGraphic.hxx>
 
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>

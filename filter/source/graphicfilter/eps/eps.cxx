@@ -41,6 +41,7 @@
 #include <vcl/weld.hxx>
 #include <strings.hrc>
 #include <osl/diagnose.h>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <math.h>
 #include <memory>

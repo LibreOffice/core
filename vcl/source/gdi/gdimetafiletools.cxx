@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/graphictools.hxx>
 #include <osl/diagnose.h>
+#include <tools/stream.hxx>
 
 // helpers
 

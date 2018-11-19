@@ -41,6 +41,7 @@
 #include <vcl/wall.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <comphelper/hash.hxx>
+#include <tools/stream.hxx>
 
 #include <sallayout.hxx>
 #include <outdata.hxx>
