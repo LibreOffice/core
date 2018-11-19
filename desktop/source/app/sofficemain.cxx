@@ -142,7 +142,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
     Application::SetAppName( "soffice" );
-#ifdef UNX
+
     // handle --version and --help already here, otherwise they would be handled
     // after VCL initialization that might fail if $DISPLAY is not set
     const desktop::CommandLineArgs& rCmdLineArgs = desktop::Desktop::GetCommandLineArgs();
@@ -165,7 +165,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
         desktop::displayVersion();
         return EXIT_SUCCESS;
     }
-#endif
+
     return SVMain();
 #if defined ANDROID
     } catch (const css::uno::Exception &e) {
