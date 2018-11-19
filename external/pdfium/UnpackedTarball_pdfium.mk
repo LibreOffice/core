@@ -8,10 +8,12 @@
 #
 
 pdfium_patches :=
-pdfium_patches += visibility.patch.1
 pdfium_patches += ubsan.patch
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
+# Avoids Windows 8 build dependency.
+pdfium_patches += windows7.patch.1
+pdfium_patches += c++20-comparison.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
@@ -36,7 +38,14 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/base/allocator/partition_allocator/page_allocator.cc third_party/base/allocator/partition_allocator/page_allocator.cpp && \
     mv third_party/base/allocator/partition_allocator/partition_alloc.cc third_party/base/allocator/partition_allocator/partition_alloc.cpp && \
     mv third_party/base/allocator/partition_allocator/spin_lock.cc third_party/base/allocator/partition_allocator/spin_lock.cpp && \
-	mv third_party/base/debug/alias.cc third_party/base/debug/alias.cpp \
+    mv third_party/base/debug/alias.cc third_party/base/debug/alias.cpp && \
+    mv third_party/base/allocator/partition_allocator/oom_callback.cc third_party/base/allocator/partition_allocator/oom_callback.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_bucket.cc third_party/base/allocator/partition_allocator/partition_bucket.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_oom.cc third_party/base/allocator/partition_allocator/partition_oom.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_page.cc third_party/base/allocator/partition_allocator/partition_page.cpp && \
+    mv third_party/base/allocator/partition_allocator/partition_root_base.cc third_party/base/allocator/partition_allocator/partition_root_base.cpp && \
+    mv third_party/base/allocator/partition_allocator/random.cc third_party/base/allocator/partition_allocator/random.cpp && \
+    mv third_party/base/win/win_util.cc third_party/base/win/win_util.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:
