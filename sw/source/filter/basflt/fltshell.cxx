@@ -29,6 +29,7 @@
 
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/cmapitem.hxx>
@@ -553,6 +554,16 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry& rEntry)
 {
     SwPaM aRegion( rTmpPos );
+
+    if ( rEntry.pAttr->Which() == RES_PARATR_ADJUST )
+    {
+        if ( SvxAdjustItem* pAdjust = static_cast<SvxAdjustItem*>(rEntry.pAttr.get())
+         )
+        {
+            if ( pAdjust->GetAdjust() == SvxAdjust::Left || pAdjust->GetAdjust() == SvxAdjust::Right )
+                pAdjust->SetLastBlock( SvxAdjust::Left );
+        }
+    }
 
     switch(rEntry.pAttr->Which())
     {
