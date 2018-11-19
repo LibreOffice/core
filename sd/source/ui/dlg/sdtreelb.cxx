@@ -194,8 +194,6 @@ SotClipboardFormatId SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormat
 
 SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 :   SvTreeListBox       ( pParentWin, nStyle )
-,   bisInSdNavigatorWin ( false )
-,   mpParent            ( pParentWin )
 ,   mpDoc               ( nullptr )
 ,   mpBookmarkDoc       ( nullptr )
 ,   mpMedium            ( nullptr )
@@ -226,6 +224,11 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
     m_pAccel = ::svt::AcceleratorExecute::createAcceleratorHelper();
 }
 
+void SdPageObjsTLB::SetSdNavigator(SdNavigatorWin* pNavigator)
+{
+    mpNavigator = pNavigator;
+}
+
 void SdPageObjsTLB::SetViewFrame( SfxViewFrame* pViewFrame )
 {
     mpFrame = pViewFrame;
@@ -247,7 +250,7 @@ void SdPageObjsTLB::dispose()
     else
         // no document was created from mpMedium, so this object is still the owner of it
         delete mpMedium;
-    mpParent.clear();
+    mpNavigator.clear();
     mpDropNavWin.clear();
     m_pAccel.reset();
     SvTreeListBox::dispose();
@@ -947,7 +950,7 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
     }
     else if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE)
     {
-        if(bisInSdNavigatorWin)
+        if (mpNavigator)
         {
             SvTreeListEntry* pNewEntry = GetCurEntry();
             if (!pNewEntry)
@@ -988,7 +991,7 @@ void SdPageObjsTLB::StartDrag( sal_Int8, const Point& rPosPixel)
 
     if (pEntry != nullptr
         && pNavWin !=nullptr
-        && pNavWin == mpParent
+        && pNavWin == mpNavigator
         && pNavWin->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE )
     {
         // Mark only the children of the page under the mouse as drop
@@ -1189,13 +1192,13 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 pNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : nullptr;
             }
 
-            if( pNavWin && ( pNavWin == mpParent ) )
+            if( pNavWin && ( pNavWin == mpNavigator ) )
             {
                 TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
                 OUString                aFile;
 
                 if( aDataHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aFile ) &&
-                    static_cast<SdNavigatorWin*>(mpParent.get())->InsertFile( aFile ) )
+                    mpNavigator->InsertFile( aFile ) )
                 {
                     nRet = rEvt.mnAction;
                 }
