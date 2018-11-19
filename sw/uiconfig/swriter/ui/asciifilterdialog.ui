@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="AsciiFilterDialog">
@@ -10,6 +10,9 @@
     <property name="default_width">0</property>
     <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -97,10 +100,10 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="asciifilterdialog|label2">_Character set</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes" context="asciifilterdialog|label2">_Character set:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">charset</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -111,10 +114,10 @@
                       <object class="GtkLabel" id="fontft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="asciifilterdialog|fontft">Default fonts</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes" context="asciifilterdialog|fontft">Default fonts:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">font</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -125,10 +128,10 @@
                       <object class="GtkLabel" id="languageft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="asciifilterdialog|languageft">Lan_guage</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes" context="asciifilterdialog|languageft">Lan_guage:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">language</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -139,9 +142,9 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="asciifilterdialog|label5">_Paragraph break</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes" context="asciifilterdialog|label5">_Paragraph break:</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -175,7 +178,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="homogeneous">True</property>
+                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="crlf">
                             <property name="label" translatable="yes" context="asciifilterdialog|crlf">_CR &amp; LF</property>
@@ -255,19 +258,20 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="includebom">
-                        <property name="label" translatable="yes" context="asciifilterdialog|includebom">Include byte-order-mark</property>
+                        <property name="label" translatable="yes" context="asciifilterdialog|includebom">Include byte-order mark</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
+                        <property name="left_attach">1</property>
                         <property name="top_attach">4</property>
-                        <property name="width">2</property>
-                        <property name="height">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -297,8 +301,5 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child>
-      <placeholder/>
-    </child>
   </object>
 </interface>
