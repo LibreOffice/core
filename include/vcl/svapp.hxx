@@ -128,8 +128,6 @@ public:
     enum class Type {
         Accept,                ///< Listen for connections
         Appear,                ///< Make application appear
-        Help,                  ///< Bring up help options (command-line help)
-        Version,               ///< Display product version
         Open,                  ///< Open a document
         OpenHelpUrl,           ///< Open a help URL
         Print,                 ///< Print document
@@ -141,29 +139,27 @@ public:
 
     /** Explicit constructor for ApplicationEvent.
 
-     @attention Type::Appear, Type::Version, Type::PrivateDoShutdown and
+     @attention Type::Appear, Type::PrivateDoShutdown and
         Type::QuickStart are the \em only events that don't need to include
         a data string with the event. No other events should use this
         constructor!
     */
     explicit ApplicationEvent(Type type): aEvent(type)
     {
-        assert(
-            type == Type::Appear || type == Type::Version
-            || type == Type::PrivateDoShutdown || type == Type::QuickStart);
+        assert(type == Type::Appear || type == Type::PrivateDoShutdown || type == Type::QuickStart);
     }
 
     /** Constructor for ApplicationEvent, accepts a string for the data
      associated with the event.
 
-     @attention Type::Accept, Type::Help, Type::OpenHelpUrl, Type::ShowDialog
+     @attention Type::Accept, Type::OpenHelpUrl, Type::ShowDialog
         and Type::Unaccept are the \em only events that accept a single
         string as event data. No other events should use this constructor!
     */
     ApplicationEvent(Type type, OUString const & data): aEvent(type)
     {
         assert(
-            type == Type::Accept || type == Type::Help || type == Type::OpenHelpUrl
+            type == Type::Accept || type == Type::OpenHelpUrl
             || type == Type::ShowDialog || type == Type::Unaccept);
         aData.push_back(data);
     }
@@ -193,14 +189,14 @@ public:
     /** Gets the application event's data string.
 
      @attention The \em only events that need a single string Type::Accept,
-        Type::Help, Type::OpenHelpUrl, Type::ShowDialog and Type::Unaccept
+        Type::OpenHelpUrl, Type::ShowDialog and Type::Unaccept
 
      @returns The event's data string.
     */
     OUString const & GetStringData() const
     {
         assert(
-            aEvent == Type::Accept || aEvent == Type::Help
+            aEvent == Type::Accept
             || aEvent == Type::OpenHelpUrl || aEvent == Type::ShowDialog
             || aEvent == Type::Unaccept);
         assert(aData.size() == 1);
