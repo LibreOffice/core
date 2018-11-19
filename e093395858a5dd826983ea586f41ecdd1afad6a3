@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_2a13f40f",
+        "filename": "sw/source/filter/xml/xmlexpit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-19T10:51:19Z",
+      "side": 1,
+      "message": "??",
+      "revId": "e093395858a5dd826983ea586f41ecdd1afad6a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_4a0e28e6",
+        "filename": "sw/source/filter/xml/xmlimpit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-19T10:51:19Z",
+      "side": 1,
+      "message": "??",
+      "revId": "e093395858a5dd826983ea586f41ecdd1afad6a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_6a09ecdb",
+        "filename": "sw/source/uibase/utlui/uiitems.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-19T10:51:19Z",
+      "side": 1,
+      "message": "??\nI don\u0027t see other same line",
+      "revId": "e093395858a5dd826983ea586f41ecdd1afad6a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
