@@ -532,9 +532,8 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
         int x = pix.X();
         int y = pix.Y();
 
-        OUStringBuffer buf;
-        buf.appendUtf32(mxFontCharMap->GetCharFromIndex(i));
-        OUString aCharStr(buf.makeStringAndClear());
+        sal_UCS4 nChar = mxFontCharMap->GetCharFromIndex(i);
+        OUString aCharStr(&nChar, 1);
         int nTextWidth = rRenderContext.GetTextWidth(aCharStr);
         int tx = x + (nX - nTextWidth + 1) / 2;
         int ty = y + (nY - nTextHeight + 1) / 2;
