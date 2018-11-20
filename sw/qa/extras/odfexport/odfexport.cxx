@@ -1948,7 +1948,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 {
     // Test loext:reference-language attribute of reference fields
     // (used from LibreOffice 6.1, and proposed for next ODF)
-    const char* aFieldTexts[] = { "A 2", "Az 50-esek",
+    const char* aFieldTexts[] = { "A 2", "Az Isten", "Az 50-esek",
         "A 2018-asok", "Az egyebek", "A fejezetek",
         u8"Az „Őseinket...”", "a 2",
         "Az v", "az 1", "Az e", "az 1",
