@@ -62,8 +62,12 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            // Undock for Lok.
-            pDockingParent->SetFloatingSize(Size(400, 600));
+            // Undock sidebar in LOK to allow for resizing freely
+            // (i.e. when the client window is resized) and collapse
+            // it so the client can open it on demand.
+            pDockingParent->SetFloatingSize(
+                Size(TabBar::GetDefaultWidth() * GetWindow()->GetDPIScaleFactor(),
+                     pDockingParent->GetSizePixel().Height()));
             pDockingParent->SetFloatingMode(true);
         }
     }
