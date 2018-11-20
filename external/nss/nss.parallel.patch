@@ -543,7 +543,7 @@ diff -ur a/nss/nss/lib/zlib/Makefile b/nss/nss/lib/zlib/Makefile
 diff -ur a/nss/nss/Makefile b/nss/nss/Makefile
 --- a/nss/nss/Makefile	2018-10-18 11:31:47.783647793 +0000
 +++ b/nss/nss/Makefile	2018-10-16 18:39:22.603411256 +0000
-@@ -49,7 +49,14 @@
+@@ -49,7 +49,15 @@
  # (7) Execute "local" rules. (OPTIONAL).                              #
  #######################################################################
  
@@ -552,6 +552,7 @@ diff -ur a/nss/nss/Makefile b/nss/nss/Makefile
 +	$(MAKE) build_nspr
 +	$(MAKE) -C coreconf/nsinstall program
 +	$(MAKE) export private_export
++	$(MAKE) -C lib/zlib libs
 +	$(MAKE) -C lib libs
 +	$(MAKE) -C cmd/lib libs
 +	$(MAKE) libs
