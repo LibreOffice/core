@@ -16,6 +16,5 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 -o sc.ScIndexEnumeration_DataPilotItemsEnumeration
--o sc.ScIndexEnumeration_SpreadsheetViewPanesEnumeration
 -o sc.ScIndexEnumeration_SubTotalFieldsEnumeration
 -o sc.ScIndexEnumeration_TableChartsEnumeration
