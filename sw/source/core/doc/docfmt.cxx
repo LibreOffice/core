@@ -52,6 +52,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
+#include <txtfrm.hxx>
 #include <hints.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -103,6 +104,11 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     const sw::DocumentContentOperationsManager::ParaRstFormat* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFormat*>(pArgs);
     SwContentNode* pNode = rpNd->GetContentNode();
+    if (pPara->pLayout && pPara->pLayout->IsHideRedlines()
+        && pNode && pNode->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+    {
+        return true;
+    }
     if( pNode && pNode->HasSwAttrSet() )
     {
         const bool bLocked = pNode->IsModifyLocked();
@@ -224,7 +230,8 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
     return true;
 }
 
-void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark, bool bExactRange )
+void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark,
+        bool bExactRange, SwRootFrame const*const pLayout)
 {
     SwHistory* pHst = nullptr;
     SwDataChanged aTmp( rRg );
@@ -235,7 +242,8 @@ void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark, bool bExactRang
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
-    sw::DocumentContentOperationsManager::ParaRstFormat aPara( pStt, pEnd, pHst );
+    sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+            pStt, pEnd, pHst, nullptr, pLayout );
     aPara.bInclRefToxMark = bInclRefToxMark;
     aPara.bExactRange = bExactRange;
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
@@ -246,7 +254,8 @@ void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark, bool bExactRang
 void SwDoc::ResetAttrs( const SwPaM &rRg,
                         bool bTextAttr,
                         const std::set<sal_uInt16> &rAttrs,
-                        const bool bSendDataChangedEvents )
+                        const bool bSendDataChangedEvents,
+                        SwRootFrame const*const pLayout)
 {
     SwPaM* pPam = const_cast<SwPaM*>(&rRg);
     if( !bTextAttr && !rAttrs.empty() && RES_TXTATR_END > *(rAttrs.begin()) )
@@ -318,7 +327,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     const SwPosition *pStt = pPam->Start(), *pEnd = pPam->End();
-    sw::DocumentContentOperationsManager::ParaRstFormat aPara( pStt, pEnd, pHst );
+    sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+            pStt, pEnd, pHst, nullptr, pLayout);
 
     // mst: not including META here; it seems attrs with CH_TXTATR are omitted
     sal_uInt16 const aResetableSetRange[] {
