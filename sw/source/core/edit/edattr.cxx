@@ -216,10 +216,16 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
             // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
 
+            if (GetLayout()->IsHideRedlines()
+                && pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+            {
+                continue;
+            }
+
             if( pNd->IsTextNode() )
             {
                 // get the node (paragraph) attributes
-                static_cast<SwContentNode*>(pNd)->GetAttr(*pSet);
+                sw::GetAttrMerged(*pSet, *pNd->GetTextNode(), GetLayout());
 
                 if( pSet != &rSet && aSet.Count() )
                 {
