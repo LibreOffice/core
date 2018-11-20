@@ -92,8 +92,59 @@ OString ExtractOLEClassName(const tools::SvRef<SotStorage>& xStorage)
     return read_uInt8s_ToOString(*pCompObj, nData);
 }
 
+/// Parses the presentation stream of an OLE2 storage.
+bool ParseOLE2Presentation(SvStream& rOle2, sal_uInt32& nWidth, sal_uInt32& nHeight,
+                           SvStream& rPresentationData)
+{
+    // See [MS-OLEDS] 2.3.4, OLEPresentationStream
+    rOle2.Seek(0);
+    tools::SvRef<SotStorage> pStorage = new SotStorage(rOle2);
+    tools::SvRef<SotStorageStream> xOle2Presentation
+        = pStorage->OpenSotStream("\002OlePres000", StreamMode::STD_READ);
+
+    // Read AnsiClipboardFormat.
+    sal_uInt32 nMarkerOrLength = 0;
+    xOle2Presentation->ReadUInt32(nMarkerOrLength);
+    if (nMarkerOrLength != 0xffffffff)
+        // FormatOrAnsiString is not present
+        return false;
+    sal_uInt32 nFormatOrAnsiLength = 0;
+    xOle2Presentation->ReadUInt32(nFormatOrAnsiLength);
+    if (nFormatOrAnsiLength != 0x00000003) // CF_METAFILEPICT
+        return false;
+
+    // Read TargetDeviceSize.
+    sal_uInt32 nTargetDeviceSize = 0;
+    xOle2Presentation->ReadUInt32(nTargetDeviceSize);
+    if (nTargetDeviceSize != 0x00000004)
+        // TargetDevice is present
+        return false;
+
+    sal_uInt32 nAspect = 0;
+    xOle2Presentation->ReadUInt32(nAspect);
+    sal_uInt32 nLindex = 0;
+    xOle2Presentation->ReadUInt32(nLindex);
+    sal_uInt32 nAdvf = 0;
+    xOle2Presentation->ReadUInt32(nAdvf);
+    sal_uInt32 nReserved1 = 0;
+    xOle2Presentation->ReadUInt32(nReserved1);
+    xOle2Presentation->ReadUInt32(nWidth);
+    xOle2Presentation->ReadUInt32(nHeight);
+    sal_uInt32 nSize = 0;
+    xOle2Presentation->ReadUInt32(nSize);
+
+    // Read Data.
+    if (nSize > xOle2Presentation->remainingSize())
+        return false;
+    std::vector<char> aBuffer(nSize);
+    xOle2Presentation->ReadBytes(aBuffer.data(), aBuffer.size());
+    rPresentationData.WriteBytes(aBuffer.data(), aBuffer.size());
+
+    return true;
+}
+
 /// Inserts an OLE1 header before an OLE2 storage.
-OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
+OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, sal_uInt32& nHeight)
 {
     rOle2.Seek(0);
     tools::SvRef<SotStorage> xStorage(new SotStorage(rOle2));
@@ -105,7 +156,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
     // Write ObjectHeader, see [MS-OLEDS] 2.2.4.
     rOle1.Seek(0);
     // OLEVersion.
-    rOle1.WriteUInt32(0);
+    rOle1.WriteUInt32(0x00000501);
 
     // FormatID is EmbeddedObject.
     rOle1.WriteUInt32(0x00000002);
@@ -131,6 +182,35 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
     // Write the actual native data.
     rOle2.Seek(0);
     rOle1.WriteStream(rOle2);
+
+    // Write Presentation.
+    SvMemoryStream aPresentationData;
+    if (ParseOLE2Presentation(rOle2, nWidth, nHeight, aPresentationData))
+    {
+        // OLEVersion.
+        rOle1.WriteUInt32(0x00000501);
+        // FormatID: constant means the ClassName field is present.
+        rOle1.WriteUInt32(0x00000005);
+        // ClassName: null terminated pascal string.
+        OString aPresentationClassName("METAFILEPICT");
+        rOle1.WriteUInt32(aPresentationClassName.getLength() + 1);
+        rOle1.WriteOString(aPresentationClassName);
+        rOle1.WriteChar(0);
+        // Width.
+        rOle1.WriteUInt32(nWidth);
+        // Height.
+        rOle1.WriteUInt32(nHeight * -1);
+        // PresentationDataSize
+        sal_uInt32 nPresentationData = aPresentationData.Tell();
+        rOle1.WriteUInt32(8 + nPresentationData);
+        // Reserved1-4.
+        rOle1.WriteUInt16(0x0008);
+        rOle1.WriteUInt16(0x31b1);
+        rOle1.WriteUInt16(0x1dd9);
+        rOle1.WriteUInt16(0x0000);
+        aPresentationData.Seek(0);
+        rOle1.WriteStream(aPresentationData, nPresentationData);
+    }
 
     return aClassName;
 }
@@ -222,7 +302,9 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
 
     // Write OLE1 header, then the RTF wrapper.
     SvMemoryStream aOLE1;
-    OString aClassName = InsertOLE1Header(rOle2, aOLE1);
+    sal_uInt32 nWidth = 0;
+    sal_uInt32 nHeight = 0;
+    OString aClassName = InsertOLE1Header(rOle2, aOLE1, nWidth, nHeight);
 
     // Start object.
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_OBJECT);
@@ -235,11 +317,10 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
     rRtf.WriteCharPtr("}");
 
     // Object size.
-    Size aSize(rOLENode.GetTwipSize());
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJW);
-    rRtf.WriteCharPtr(OString::number(aSize.getWidth()).getStr());
+    rRtf.WriteCharPtr(OString::number(nWidth).getStr());
     rRtf.WriteCharPtr(OOO_STRING_SVTOOLS_RTF_OBJH);
-    rRtf.WriteCharPtr(OString::number(aSize.getHeight()).getStr());
+    rRtf.WriteCharPtr(OString::number(nHeight).getStr());
 
     // Start objdata.
     rRtf.WriteCharPtr(
