@@ -175,12 +175,10 @@ ScVbaOLEObjects::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaOLEObjects::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.OLEObjects";
-    }
+        "ooo.vba.excel.OLEObjects"
+    };
     return aServiceNames;
 }
 

@@ -98,12 +98,10 @@ ScVbaComments::getServiceImplName()
 css::uno::Sequence<OUString>
 ScVbaComments::getServiceNames()
 {
-    static uno::Sequence< OUString > sNames;
-    if ( sNames.getLength() == 0 )
+    static uno::Sequence< OUString > const sNames
     {
-        sNames.realloc( 1 );
-        sNames[0] = "ooo.vba.excel.Comments";
-    }
+        "ooo.vba.excel.Comments"
+    };
     return sNames;
 }
 

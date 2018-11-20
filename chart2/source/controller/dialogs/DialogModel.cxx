@@ -75,28 +75,26 @@ OUString lcl_ConvertRole( const OUString & rRoleString )
     OUString aResult( rRoleString );
 
     typedef std::map< OUString, OUString > tTranslationMap;
-    static tTranslationMap aTranslationMap;
-
-    if( aTranslationMap.empty() )
+    static tTranslationMap aTranslationMap =
     {
-        aTranslationMap[ "categories" ] =   ::chart::SchResId( STR_DATA_ROLE_CATEGORIES );
-        aTranslationMap[ "error-bars-x" ] = ::chart::SchResId( STR_DATA_ROLE_X_ERROR );
-        aTranslationMap[ "error-bars-x-positive" ] = ::chart::SchResId( STR_DATA_ROLE_X_ERROR_POSITIVE );
-        aTranslationMap[ "error-bars-x-negative" ] = ::chart::SchResId( STR_DATA_ROLE_X_ERROR_NEGATIVE );
-        aTranslationMap[ "error-bars-y" ] = ::chart::SchResId( STR_DATA_ROLE_Y_ERROR );
-        aTranslationMap[ "error-bars-y-positive" ] = ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_POSITIVE );
-        aTranslationMap[ "error-bars-y-negative" ] = ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_NEGATIVE );
-        aTranslationMap[ "label" ] =        ::chart::SchResId( STR_DATA_ROLE_LABEL );
-        aTranslationMap[ "values-first" ] = ::chart::SchResId( STR_DATA_ROLE_FIRST );
-        aTranslationMap[ "values-last" ] =  ::chart::SchResId( STR_DATA_ROLE_LAST );
-        aTranslationMap[ "values-max" ] =   ::chart::SchResId( STR_DATA_ROLE_MAX );
-        aTranslationMap[ "values-min" ] =   ::chart::SchResId( STR_DATA_ROLE_MIN );
-        aTranslationMap[ "values-x" ] =     ::chart::SchResId( STR_DATA_ROLE_X );
-        aTranslationMap[ "values-y" ] =     ::chart::SchResId( STR_DATA_ROLE_Y );
-        aTranslationMap[ "values-size" ] =  ::chart::SchResId( STR_DATA_ROLE_SIZE );
-        aTranslationMap[ "FillColor" ] =    ::chart::SchResId( STR_PROPERTY_ROLE_FILLCOLOR );
-        aTranslationMap[ "BorderColor" ] =  ::chart::SchResId( STR_PROPERTY_ROLE_BORDERCOLOR );
-    }
+        { "categories", ::chart::SchResId( STR_DATA_ROLE_CATEGORIES ) },
+        { "error-bars-x", ::chart::SchResId( STR_DATA_ROLE_X_ERROR ) },
+        { "error-bars-x-positive", ::chart::SchResId( STR_DATA_ROLE_X_ERROR_POSITIVE ) },
+        { "error-bars-x-negative", ::chart::SchResId( STR_DATA_ROLE_X_ERROR_NEGATIVE ) },
+        { "error-bars-y", ::chart::SchResId( STR_DATA_ROLE_Y_ERROR ) },
+        { "error-bars-y-positive", ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_POSITIVE ) },
+        { "error-bars-y-negative", ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_NEGATIVE ) },
+        { "label",        ::chart::SchResId( STR_DATA_ROLE_LABEL ) },
+        { "values-first", ::chart::SchResId( STR_DATA_ROLE_FIRST ) },
+        { "values-last",  ::chart::SchResId( STR_DATA_ROLE_LAST ) },
+        { "values-max",   ::chart::SchResId( STR_DATA_ROLE_MAX ) },
+        { "values-min",   ::chart::SchResId( STR_DATA_ROLE_MIN ) },
+        { "values-x",     ::chart::SchResId( STR_DATA_ROLE_X ) },
+        { "values-y",     ::chart::SchResId( STR_DATA_ROLE_Y ) },
+        { "values-size",  ::chart::SchResId( STR_DATA_ROLE_SIZE ) },
+        { "FillColor",    ::chart::SchResId( STR_PROPERTY_ROLE_FILLCOLOR ) },
+        { "BorderColor",  ::chart::SchResId( STR_PROPERTY_ROLE_BORDERCOLOR ) },
+    };
 
     tTranslationMap::const_iterator aIt( aTranslationMap.find( rRoleString ));
     if( aIt != aTranslationMap.end())
@@ -108,26 +106,28 @@ OUString lcl_ConvertRole( const OUString & rRoleString )
 
 typedef std::map< OUString, sal_Int32 > lcl_tRoleIndexMap;
 
-void lcl_createRoleIndexMap( lcl_tRoleIndexMap & rOutMap )
+lcl_tRoleIndexMap lcl_createRoleIndexMap()
 {
-    rOutMap.clear();
+    lcl_tRoleIndexMap aMap;
     sal_Int32 nIndex = 0;
 
-    rOutMap[ "label" ] =                 ++nIndex;
-    rOutMap[ "categories" ] =            ++nIndex;
-    rOutMap[ "values-x" ] =              ++nIndex;
-    rOutMap[ "values-y" ] =              ++nIndex;
-    rOutMap[ "error-bars-x" ] =          ++nIndex;
-    rOutMap[ "error-bars-x-positive" ] = ++nIndex;
-    rOutMap[ "error-bars-x-negative" ] = ++nIndex;
-    rOutMap[ "error-bars-y" ] =          ++nIndex;
-    rOutMap[ "error-bars-y-positive" ] = ++nIndex;
-    rOutMap[ "error-bars-y-negative" ] = ++nIndex;
-    rOutMap[ "values-first" ] =          ++nIndex;
-    rOutMap[ "values-min" ] =            ++nIndex;
-    rOutMap[ "values-max" ] =            ++nIndex;
-    rOutMap[ "values-last" ] =           ++nIndex;
-    rOutMap[ "values-size" ] =           ++nIndex;
+    aMap[ "label" ] =                 ++nIndex;
+    aMap[ "categories" ] =            ++nIndex;
+    aMap[ "values-x" ] =              ++nIndex;
+    aMap[ "values-y" ] =              ++nIndex;
+    aMap[ "error-bars-x" ] =          ++nIndex;
+    aMap[ "error-bars-x-positive" ] = ++nIndex;
+    aMap[ "error-bars-x-negative" ] = ++nIndex;
+    aMap[ "error-bars-y" ] =          ++nIndex;
+    aMap[ "error-bars-y-positive" ] = ++nIndex;
+    aMap[ "error-bars-y-negative" ] = ++nIndex;
+    aMap[ "values-first" ] =          ++nIndex;
+    aMap[ "values-min" ] =            ++nIndex;
+    aMap[ "values-max" ] =            ++nIndex;
+    aMap[ "values-last" ] =           ++nIndex;
+    aMap[ "values-size" ] =           ++nIndex;
+
+    return aMap;
 }
 
 struct lcl_DataSeriesContainerAppend
@@ -766,10 +766,7 @@ OUString DialogModel::GetRoleDataLabel()
 
 sal_Int32 DialogModel::GetRoleIndexForSorting( const OUString & rInternalRoleString )
 {
-    static lcl_tRoleIndexMap aRoleIndexMap;
-
-    if( aRoleIndexMap.empty())
-        lcl_createRoleIndexMap( aRoleIndexMap );
+    static lcl_tRoleIndexMap aRoleIndexMap = lcl_createRoleIndexMap();
 
     lcl_tRoleIndexMap::const_iterator aIt( aRoleIndexMap.find( rInternalRoleString ));
     if( aIt != aRoleIndexMap.end())

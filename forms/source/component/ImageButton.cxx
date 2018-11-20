@@ -143,9 +143,8 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
 // OImageButtonControl
 Sequence<Type> OImageButtonControl::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-        aTypes = concatSequences(OClickableImageBaseControl::_getTypes(), OImageButtonControl_BASE::getTypes());
+    static Sequence<Type> const aTypes =
+        concatSequences(OClickableImageBaseControl::_getTypes(), OImageButtonControl_BASE::getTypes());
     return aTypes;
 }
 

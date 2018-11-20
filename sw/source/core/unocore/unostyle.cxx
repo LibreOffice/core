@@ -4331,30 +4331,26 @@ void SwXTextTableStyle::UpdateCellStylesMapping()
 
 const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
 {
-    static CellStyleNameMap aMap;
-    if(aMap.empty())
+    static CellStyleNameMap const aMap
     {
-        CellStyleNameMap aNewMap;
-        aNewMap[ "first-row"    ] = FIRST_ROW_STYLE;
-        aNewMap[ "last-row"     ] = LAST_ROW_STYLE;
-        aNewMap[ "first-column" ] = FIRST_COLUMN_STYLE;
-        aNewMap[ "last-column"  ] = LAST_COLUMN_STYLE;
-        aNewMap[ "body"         ] = BODY_STYLE;
-        aNewMap[ "even-rows"    ] = EVEN_ROWS_STYLE;
-        aNewMap[ "odd-rows"     ] = ODD_ROWS_STYLE;
-        aNewMap[ "even-columns" ] = EVEN_COLUMNS_STYLE;
-        aNewMap[ "odd-columns"  ] = ODD_COLUMNS_STYLE;
-        aNewMap[ "background"   ] = BACKGROUND_STYLE;
+        { "first-row"     , FIRST_ROW_STYLE },
+        { "last-row"      , LAST_ROW_STYLE },
+        { "first-column"  , FIRST_COLUMN_STYLE },
+        { "last-column"   , LAST_COLUMN_STYLE },
+        { "body"          , BODY_STYLE },
+        { "even-rows"     , EVEN_ROWS_STYLE },
+        { "odd-rows"      , ODD_ROWS_STYLE },
+        { "even-columns"  , EVEN_COLUMNS_STYLE },
+        { "odd-columns"   , ODD_COLUMNS_STYLE },
+        { "background"    , BACKGROUND_STYLE },
         // loext namespace
-        aNewMap[ "first-row-start-column" ] = FIRST_ROW_START_COLUMN_STYLE;
-        aNewMap[ "first-row-end-column"   ] = FIRST_ROW_END_COLUMN_STYLE;
-        aNewMap[ "last-row-start-column"  ] = LAST_ROW_START_COLUMN_STYLE;
-        aNewMap[ "last-row-end-column"    ] = LAST_ROW_END_COLUMN_STYLE;
-        aNewMap[ "first-row-even-column"  ] = FIRST_ROW_EVEN_COLUMN_STYLE;
-        aNewMap[ "last-row-even-column"   ] = LAST_ROW_EVEN_COLUMN_STYLE;
-
-        aMap.swap(aNewMap);
-    }
+        { "first-row-start-column"  , FIRST_ROW_START_COLUMN_STYLE },
+        { "first-row-end-column"    , FIRST_ROW_END_COLUMN_STYLE },
+        { "last-row-start-column"   , LAST_ROW_START_COLUMN_STYLE },
+        { "last-row-end-column"     , LAST_ROW_END_COLUMN_STYLE },
+        { "first-row-even-column"   , FIRST_ROW_EVEN_COLUMN_STYLE },
+        { "last-row-even-column"    , LAST_ROW_EVEN_COLUMN_STYLE },
+    };
     return aMap;
 }
 
@@ -4731,10 +4727,8 @@ css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(S
         if (!pBoxFormat)
         {
             // return a default-dummy style to prevent crash
-            static SwBoxAutoFormat* pDefaultBoxFormat;
-            if (!pDefaultBoxFormat)
-                pDefaultBoxFormat = new SwBoxAutoFormat();
-            pBoxFormat = pDefaultBoxFormat;
+            static SwBoxAutoFormat aDefaultBoxFormat;
+            pBoxFormat = &aDefaultBoxFormat;
         }
 
         xTextCellStyle.set(pBoxFormat->GetXObject(), uno::UNO_QUERY);

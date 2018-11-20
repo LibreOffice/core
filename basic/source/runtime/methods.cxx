@@ -129,14 +129,7 @@ static long GetDayDiff( const Date& rDate );
 
 static const CharClass& GetCharClass()
 {
-    static bool bNeedsInit = true;
-    static LanguageTag aLanguageTag( LANGUAGE_SYSTEM);
-    if( bNeedsInit )
-    {
-        bNeedsInit = false;
-        aLanguageTag = Application::GetSettings().GetLanguageTag();
-    }
-    static CharClass aCharClass( aLanguageTag );
+    static CharClass aCharClass( Application::GetSettings().GetLanguageTag() );
     return aCharClass;
 }
 
@@ -169,11 +162,7 @@ OUString getFullPath( const OUString& aRelPath )
 // TODO: -> SbiGlobals
 static uno::Reference< ucb::XSimpleFileAccess3 > const & getFileAccess()
 {
-    static uno::Reference< ucb::XSimpleFileAccess3 > xSFI;
-    if( !xSFI.is() )
-    {
-        xSFI = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );
-    }
+    static uno::Reference< ucb::XSimpleFileAccess3 > xSFI = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );
     return xSFI;
 }
 

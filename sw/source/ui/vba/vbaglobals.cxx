@@ -144,34 +144,25 @@ SwVbaGlobals::getServiceImplName()
 uno::Sequence< OUString >
 SwVbaGlobals::getServiceNames()
 {
-        static uno::Sequence< OUString > aServiceNames;
-        if ( aServiceNames.getLength() == 0 )
+        static uno::Sequence< OUString > const aServiceNames
         {
-                aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = "ooo.vba.word.Globals";
-        }
+            "ooo.vba.word.Globals"
+        };
         return aServiceNames;
 }
 
 uno::Sequence< OUString >
 SwVbaGlobals::getAvailableServiceNames(  )
 {
-    static bool bInit = false;
-    static uno::Sequence< OUString > serviceNames( SwVbaGlobals_BASE::getAvailableServiceNames() );
-    if ( !bInit )
+    static uno::Sequence< OUString > const serviceNames = [&]()
     {
-         OUString names[] = {
-            OUString( "ooo.vba.word.Document" ),
+        uno::Sequence< OUString > tmp = SwVbaGlobals_BASE::getAvailableServiceNames();
+        tmp.realloc( tmp.getLength() + 1 );
+        tmp[ tmp.getLength() - 1 ] = "ooo.vba.word.Document";
 //            #FIXME #TODO make Application a proper service
 //            OUString( "ooo.vba.word.Application" ),
-        };
-        sal_Int32 nWordServices = SAL_N_ELEMENTS( names );
-        sal_Int32 startIndex = serviceNames.getLength();
-        serviceNames.realloc( serviceNames.getLength() + nWordServices );
-        for ( sal_Int32 index = 0; index < nWordServices; ++index )
-             serviceNames[ startIndex + index ] = names[ index ];
-        bInit = true;
-    }
+        return tmp;
+    }();
     return serviceNames;
 }
 

@@ -689,14 +689,15 @@ KeyCodeEntry const aMSKeyCodesData[] = {
 
 awt::KeyEvent parseKeyEvent( const OUString& Key )
 {
-    static std::map< OUString, sal_uInt16 > s_KeyCodes;
-    if ( s_KeyCodes.empty() )
+    static std::map< OUString, sal_uInt16 > s_KeyCodes = [&]()
     {
+        std::map< OUString, sal_uInt16 > tmp;
         for (KeyCodeEntry const & i : aMSKeyCodesData)
         {
-            s_KeyCodes[ OUString::createFromAscii( i.sName ) ] = i.nCode;
+            tmp[ OUString::createFromAscii( i.sName ) ] = i.nCode;
         }
-    }
+        return tmp;
+    }();
     OUString sKeyCode;
     sal_uInt16 nVclKey = 0;
 

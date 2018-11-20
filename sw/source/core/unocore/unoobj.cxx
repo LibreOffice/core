@@ -2068,8 +2068,7 @@ SwXTextCursor::getPropertySetInfo()
 {
     SolarMutexGuard g;
 
-    static uno::Reference< beans::XPropertySetInfo >  xRef;
-    if(!xRef.is())
+    static uno::Reference< beans::XPropertySetInfo >  xRef = [&]()
     {
         static SfxItemPropertyMapEntry const aCursorExtMap_Impl[] =
         {
@@ -2081,10 +2080,10 @@ SwXTextCursor::getPropertySetInfo()
             m_pImpl->m_rPropSet.getPropertySetInfo();
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-        xRef = new SfxExtItemPropertySetInfo(
+        return new SfxExtItemPropertySetInfo(
             aCursorExtMap_Impl,
             aPropSeq );
-    }
+    }();
     return xRef;
 }
 
