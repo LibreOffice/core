@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <iostream>
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumeration.hxx>
 
