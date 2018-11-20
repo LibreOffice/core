@@ -782,7 +782,8 @@ public:
      that <bReset = true> and the paragraph style has a list style attribute set. */
     bool SetTextFormatColl(const SwPaM &rRg, SwTextFormatColl *pFormat,
                        const bool bReset = true,
-                       const bool bResetListAttrs = false);
+                       const bool bResetListAttrs = false,
+                       SwRootFrame const* pLayout = nullptr);
     SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const
         {   return static_cast<SwTextFormatColl*>(FindFormatByName( *mpTextFormatCollTable, rName )); }
 

@@ -293,6 +293,7 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
 
 std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell::GetItemWithPaM( sal_uInt16 nWhich )
 {
+    assert(isCHRATR(nWhich)); // sw_redlinehide: only thing that works
     std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> vItem;
     for(SwPaM& rCurrentPaM : GetCursor()->GetRingContainer())
     { // for all the point and mark (selections)
