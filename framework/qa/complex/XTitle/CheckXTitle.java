@@ -155,6 +155,7 @@ public class CheckXTitle
 
         disabled until the waitUntilDispatcherAvailable can be replaced
     */
+    @Test
     public void checkTitleNumbers() throws Exception
     {
         PropertyValue[] lArgs = new PropertyValue[1];
@@ -208,6 +209,7 @@ public class CheckXTitle
 
         disabled until the waitUntilDispatcherAvailable can be replaced
     */
+    @Test
     public void setTitleAndCheck() throws Exception
     {
         PropertyValue[] lArgs = new PropertyValue[1];
