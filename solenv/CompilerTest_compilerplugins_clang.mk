@@ -65,6 +65,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/unoany \
     compilerplugins/clang/test/unreffun \
     compilerplugins/clang/test/unusedindex \
+    compilerplugins/clang/test/unusedenumconstants \
     compilerplugins/clang/test/unusedvariablecheck \
     compilerplugins/clang/test/unusedvariablemore \
     compilerplugins/clang/test/useuniqueptr \
