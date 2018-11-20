@@ -16,6 +16,24 @@
       "revId": "c6a320da3b02211a2a344ad78e9e632b7beedc10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_e06cdb9d",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T09:05:50Z",
+      "side": 1,
+      "message": "Will try; my first attempt was poppler_bool(1) which failed because of a plugin...",
+      "parentUuid": "ff5d4b2f_a0d1435a",
+      "revId": "c6a320da3b02211a2a344ad78e9e632b7beedc10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
