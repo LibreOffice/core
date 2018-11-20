@@ -14,6 +14,7 @@
 #include <rtl/character.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
+#include <vector>
 
 namespace msfilter
 {
@@ -276,7 +277,10 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
 
         if (nData)
         {
-            rOle2.WriteStream(aStream);
+            // NativeData
+            std::vector<char> aBuffer(nData);
+            aStream.ReadBytes(aBuffer.data(), aBuffer.size());
+            rOle2.WriteBytes(aBuffer.data(), aBuffer.size());
             rOle2.Seek(0);
         }
     }
