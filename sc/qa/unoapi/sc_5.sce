@@ -19,5 +19,4 @@
 -o sc.ScIndexEnumeration_SpreadsheetViewPanesEnumeration
 -o sc.ScIndexEnumeration_SpreadsheetsEnumeration
 -o sc.ScIndexEnumeration_SubTotalFieldsEnumeration
--o sc.ScIndexEnumeration_TableAutoFormatEnumeration
 -o sc.ScIndexEnumeration_TableChartsEnumeration
