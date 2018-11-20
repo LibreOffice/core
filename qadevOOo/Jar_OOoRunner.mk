@@ -993,7 +993,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextCursor \
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextObj \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_DataPilotItemsEnumeration \
-    qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SpreadsheetsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SpreadsheetViewPanesEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SubTotalFieldsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TableChartsEnumeration \
