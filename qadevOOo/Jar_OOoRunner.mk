@@ -996,7 +996,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SpreadsheetsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SpreadsheetViewPanesEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_SubTotalFieldsEnumeration \
-    qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TableAutoFormatEnumeration \
     qadevOOo/tests/java/mod/_sc/ScIndexEnumeration_TableChartsEnumeration \
     qadevOOo/tests/java/mod/_sc/ScLabelRangesObj \
     qadevOOo/tests/java/mod/_sc/ScModelObj \
