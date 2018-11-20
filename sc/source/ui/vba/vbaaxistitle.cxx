@@ -34,15 +34,13 @@ ScVbaAxisTitle::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaAxisTitle::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames = [&]()
     {
-        uno::Sequence< OUString > BaseServiceNames = AxisTitleBase::getServiceNames();
-        aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.AxisTitle";
-        for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
-            aServiceNames[ index ] = BaseServiceNames[ index ];
-    }
+        uno::Sequence< OUString > tmp = AxisTitleBase::getServiceNames();
+        tmp.realloc( tmp.getLength() + 1 );
+        tmp[ tmp.getLength() - 1 ] = "ooo.vba.excel.AxisTitle";
+        return tmp;
+    }();
     return aServiceNames;
 }
 

@@ -54,12 +54,10 @@ ScVbaPages::createEnumeration()
 uno::Sequence< OUString >
 ScVbaPages::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.msform.Pages";
-    }
+        "ooo.vba.msform.Pages"
+    };
     return aServiceNames;
 }
 

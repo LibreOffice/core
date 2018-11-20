@@ -250,11 +250,10 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         SfxAllItemSet aTmpSet(*pCollSet);
         ::ConvertAttrCharToGen(aTmpSet);
 
-        SwAbstractDialogFactory* pFact = swui::GetFactory();
-        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
+        SwAbstractDialogFactory& rFact = swui::GetFactory();
 
         const OUString sFormatStr = pColl->GetName();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetDialogFrameWeld(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwCharDlg(GetDialogFrameWeld(), pSh->GetView(), aTmpSet, SwCharDlgMode::Env, &sFormatStr));
         if (pDlg->Execute() == RET_OK)
         {
             SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );

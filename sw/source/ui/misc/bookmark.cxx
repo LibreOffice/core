@@ -190,9 +190,8 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, Button*, void)
     uno::Reference<uno::XInterface> xTmp;
     aObj >>= xTmp;
     uno::Reference<container::XNamed> xNamed(xTmp, uno::UNO_QUERY);
-    SwAbstractDialogFactory* pFact = swui::GetFactory();
-    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-    ScopedVclPtr<AbstractSwRenameXNamedDlg> pDlg(pFact->CreateSwRenameXNamedDlg(GetFrameWeld(), xNamed, xNameAccess));
+    SwAbstractDialogFactory& rFact = swui::GetFactory();
+    ScopedVclPtr<AbstractSwRenameXNamedDlg> pDlg(rFact.CreateSwRenameXNamedDlg(GetFrameWeld(), xNamed, xNameAccess));
     pDlg->SetForbiddenChars(BookmarkTable::aForbiddenChars + OUStringLiteral1(BookmarkTable::cSeparator));
 
     if (pDlg->Execute())

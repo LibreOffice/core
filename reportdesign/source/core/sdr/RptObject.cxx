@@ -249,68 +249,72 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
     {
         case OBJ_DLG_IMAGECONTROL:
             {
-                static TPropertyNamePair s_aNameMap;
-                if ( s_aNameMap.empty() )
+                static TPropertyNamePair s_aNameMap = [&]()
                 {
                     std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
-                    s_aNameMap.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
-                }
+                    TPropertyNamePair tmp;
+                    tmp.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
+                    return tmp;
+                }();
                 return s_aNameMap;
             }
 
         case OBJ_DLG_FIXEDTEXT:
             {
-                static TPropertyNamePair s_aNameMap;
-                if ( s_aNameMap.empty() )
+                static TPropertyNamePair s_aNameMap = [&]()
                 {
                     std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
-                    s_aNameMap.emplace(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
+                    TPropertyNamePair tmp;
+                    tmp.emplace(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
+                    tmp.emplace(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter));
+                    tmp.emplace(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter));
+                    tmp.emplace(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter));
+                    tmp.emplace(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
 
                     std::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust);
-                    s_aNameMap.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust));
-                }
+                    tmp.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust));
+                    return tmp;
+                }();
                 return s_aNameMap;
             }
         case OBJ_DLG_FORMATTEDFIELD:
             {
-                static TPropertyNamePair s_aNameMap;
-                if ( s_aNameMap.empty() )
+                static TPropertyNamePair s_aNameMap = [&]()
                 {
                     std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
-                    s_aNameMap.emplace(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
+                    TPropertyNamePair tmp;
+                    tmp.emplace(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter));
+                    tmp.emplace(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter));
+                    tmp.emplace(PROPERTY_CHARRELIEF,TPropertyConverter(PROPERTY_FONTRELIEF,aNoConverter));
+                    tmp.emplace(PROPERTY_CHARFONTHEIGHT,TPropertyConverter(PROPERTY_FONTHEIGHT,aNoConverter));
+                    tmp.emplace(PROPERTY_CHARSTRIKEOUT,TPropertyConverter(PROPERTY_FONTSTRIKEOUT,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter));
+                    tmp.emplace(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter));
                     std::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust);
-                    s_aNameMap.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust));
-                }
+                    tmp.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust));
+                    return tmp;
+                }();
                 return s_aNameMap;
             }
 
         case OBJ_CUSTOMSHAPE:
             {
-                static TPropertyNamePair s_aNameMap;
-                if ( s_aNameMap.empty() )
+                static TPropertyNamePair s_aNameMap = [&]()
                 {
                     std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
-                    s_aNameMap.emplace(OUString("FillColor"),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter));
-                    s_aNameMap.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter));
-                }
+                    TPropertyNamePair tmp;
+                    tmp.emplace(OUString("FillColor"),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter));
+                    tmp.emplace(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter));
+                    return tmp;
+                }();
                 return s_aNameMap;
             }
 

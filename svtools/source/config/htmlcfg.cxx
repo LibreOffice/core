@@ -76,8 +76,7 @@ struct HtmlOptions_Impl
 
 const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
 {
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
+    static Sequence<OUString> aNames = [&]()
     {
         static const char* aPropNames[] =
         {
@@ -99,11 +98,12 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
             "Import/NumbersEnglishUS"               // 15
         };
         const int nCount = SAL_N_ELEMENTS(aPropNames);
-        aNames.realloc(nCount);
-        OUString* pNames = aNames.getArray();
+        Sequence<OUString> tmp(nCount);
+        OUString* pNames = tmp.getArray();
         for(int i = 0; i < nCount; i++)
             pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
+        return tmp;
+    }();
     return aNames;
 }
 

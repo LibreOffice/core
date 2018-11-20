@@ -1188,10 +1188,9 @@ namespace frm
             // nobody's interested in ...
             return;
 
-        static Sequence< sal_Int16 > s_aModifyDependentFeatures;
-        if ( s_aModifyDependentFeatures.getLength() == 0 )
+        static Sequence< sal_Int16 > const s_aModifyDependentFeatures = [&]()
         {
-            sal_Int16 pModifyDependentFeatures[] =
+            static sal_Int16 const pModifyDependentFeatures[] =
             {
                 FormFeature::MoveToNext,
                 FormFeature::MoveToInsertRow,
@@ -1199,8 +1198,8 @@ namespace frm
                 FormFeature::UndoRecordChanges
             };
             size_t const nFeatureCount = SAL_N_ELEMENTS( pModifyDependentFeatures );
-            s_aModifyDependentFeatures = Sequence< sal_Int16 >( pModifyDependentFeatures, nFeatureCount );
-        }
+            return Sequence< sal_Int16 >( pModifyDependentFeatures, nFeatureCount );
+        }();
 
         Reference< XFeatureInvalidation > xInvalidation = m_xFeatureInvalidation;
         _rClearForCallback.clear();

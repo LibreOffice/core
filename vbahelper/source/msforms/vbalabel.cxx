@@ -102,12 +102,10 @@ void SAL_CALL ScVbaLabel::setAutoSize( sal_Bool bAutoSize )
 uno::Sequence< OUString >
 ScVbaLabel::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.msforms.Label";
-    }
+        "ooo.vba.msforms.Label"
+    };
     return aServiceNames;
 }
 

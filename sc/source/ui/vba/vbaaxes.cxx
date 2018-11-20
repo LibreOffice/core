@@ -201,12 +201,10 @@ ScVbaAxes::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaAxes::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.Axes";
-    }
+        "ooo.vba.excel.Axes"
+    };
     return aServiceNames;
 }
 

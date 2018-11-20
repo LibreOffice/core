@@ -916,11 +916,7 @@ ScVbaApplication::Calculate()
 /// @throws uno::RuntimeException
 static uno::Reference< util::XPathSettings > const & lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext )
 {
-    static uno::Reference< util::XPathSettings >  xPathSettings;
-    if ( !xPathSettings.is() )
-    {
-        xPathSettings.set( util::PathSettings::create( xContext ) );
-    }
+    static uno::Reference< util::XPathSettings > xPathSettings( util::PathSettings::create( xContext ) );
     return xPathSettings;
 }
 
@@ -1476,12 +1472,10 @@ ScVbaApplication::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaApplication::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.Application";
-    }
+        "ooo.vba.excel.Application"
+    };
     return aServiceNames;
 }
 
