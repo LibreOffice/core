@@ -95,10 +95,11 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
 
     bool found = false;
     std::string value;
+    auto const initexpr = compat::IgnoreImplicit(init->getInit());
     if (tc.Const().Class("OUString").Namespace("rtl").GlobalNamespace()
         || tc.Const().Class("OString").Namespace("rtl").GlobalNamespace())
     {
-        if (auto constructExpr = dyn_cast<CXXConstructExpr>(init->getInit()))
+        if (auto constructExpr = dyn_cast<CXXConstructExpr>(initexpr))
         {
             if (constructExpr->getNumArgs() >= 1
                 && isa<clang::StringLiteral>(constructExpr->getArg(0)))
@@ -112,7 +113,7 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
     else if (type->isFloatingType())
     {
         APFloat x1(0.0f);
-        if (init->getInit()->EvaluateAsFloat(x1, compiler.getASTContext()))
+        if (initexpr->EvaluateAsFloat(x1, compiler.getASTContext()))
         {
             std::string s;
             llvm::raw_string_ostream os(s);
@@ -123,15 +124,15 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
     }
 #endif
     // ignore this, it seems to trigger an infinite recursion
-    else if (isa<UnaryExprOrTypeTraitExpr>(init->getInit()))
+    else if (isa<UnaryExprOrTypeTraitExpr>(initexpr))
         ;
     // ignore this, calling EvaluateAsInt on it will crash clang
-    else if (init->getInit()->isValueDependent())
+    else if (initexpr->isValueDependent())
         ;
     else
     {
         APSInt x1;
-        if (init->getInit()->EvaluateAsInt(x1, compiler.getASTContext()))
+        if (initexpr->EvaluateAsInt(x1, compiler.getASTContext()))
         {
             value = x1.toString(10);
             found = true;
