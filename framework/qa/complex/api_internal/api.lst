@@ -94,7 +94,6 @@ job96=sc.ScFilterDescriptorBase
 job97=sc.ScFunctionListObj
 job98=sc.ScHeaderFieldObj
 job99=sc.ScHeaderFieldsObj
-job115=sc.ScIndexEnumeration_SubTotalFieldsEnumeration
 job117=sc.ScIndexEnumeration_TableChartsEnumeration
 job122=sc.ScLabelRangesObj
 job125=sc.ScScenariosObj
