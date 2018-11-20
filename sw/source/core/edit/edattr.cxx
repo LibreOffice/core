@@ -525,6 +525,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
         for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )
             if( nullptr != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTextNode() ))
             {
+                pCNd = sw::GetParaPropsNode(*GetLayout(), *pCNd);
                 const SvxLRSpaceItem& rLS = static_cast<const SvxLRSpaceItem&>(
                                             pCNd->GetAttr( RES_LR_SPACE ));
                 if( bRight )
@@ -564,10 +565,10 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
         SwPaM aPam( *pCursor->GetPoint() );
         for( size_t n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->MoveLeftMargin( aRangeArr.SetPam( n, aPam ),
-                                        bRight, bModulus );
+                                        bRight, bModulus, GetLayout() );
     }
     else
-        GetDoc()->MoveLeftMargin( *pCursor, bRight, bModulus );
+        GetDoc()->MoveLeftMargin( *pCursor, bRight, bModulus, GetLayout() );
 
     EndUndo( SwUndoId::END );
     EndAllAction();
