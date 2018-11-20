@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_40ee0789",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:30:56Z",
+      "side": 1,
+      "message": "Is this static required at all? isn\u0027t it enough to simply make the following line\n\n    static CharClass aCharClass(Application::GetSettings().GetLanguageTag());",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 82
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_00212fb5",
+        "filename": "connectivity/source/drivers/jdbc/CallableStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:30:56Z",
+      "side": 1,
+      "message": "why not simply\n\n    char cSignature[] \u003d ...?\n\nor even simply put it inline into a multiline function call.\nHas the static pointer some advantage here?",
+      "range": {
+        "startLine": 332,
+        "startChar": 12,
+        "endLine": 332,
+        "endChar": 48
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_c003170f",
+        "filename": "forms/source/component/Columns.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:30:56Z",
+      "side": 1,
+      "message": "Initialization of size 10 is lost...",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 68,
+        "endChar": 41
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_5b083c27",
+        "filename": "forms/source/component/Edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:30:56Z",
+      "side": 1,
+      "message": "won\u0027t work this?\n\n    static Sequence\u003cType\u003e const aTypes \u003d concatSequences(OBoundControl::_getTypes(), OEditControl_BASE::getTypes());",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 8
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
