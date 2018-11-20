@@ -32,11 +32,17 @@
 
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
+
+
+using namespace css;
+using namespace css::uno;
+using namespace css::frame;
 
 namespace framework{
 
@@ -346,12 +352,21 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
     if (xURLProvider.is())
         sURL = xURLProvider->getLocation ();
 
+    utl::MediaDescriptor aDescriptor(xModel->getArgs());
+    const OUString sSuggestedSaveAsName = aDescriptor.getUnpackedValueOrDefault(
+        utl::MediaDescriptor::PROP_SUGGESTEDSAVEASNAME(), OUString());
+
     if (!sURL.isEmpty())
     {
         sTitle = impl_convertURL2Title(sURL);
         if (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
             xNumbers->releaseNumber (nLeasedNumber);
         nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
+    }
+    else if (!sSuggestedSaveAsName.isEmpty())
+    {
+        // tdf#121537 Use suggested save as name for title if file has not yet been saved
+        sTitle = sSuggestedSaveAsName;
     }
     else
     {

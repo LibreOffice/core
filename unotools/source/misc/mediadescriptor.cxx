@@ -322,6 +322,12 @@ const OUString& MediaDescriptor::PROP_DOCUMENTBASEURL()
     return sProp;
 }
 
+const OUString& MediaDescriptor::PROP_SUGGESTEDSAVEASNAME()
+{
+    static const OUString sProp("SuggestedSaveAsName");
+    return sProp;
+}
+
 MediaDescriptor::MediaDescriptor()
     : SequenceAsHashMap()
 {
