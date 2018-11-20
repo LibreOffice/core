@@ -150,8 +150,9 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_indexenumeration_spreadsheetviewpanesenumeration \
 	CppunitTest_sc_indexenumeration_subtotalfieldsenumeration \
 	CppunitTest_sc_indexenumeration_tableautoformatenumeration \
-	CppunitTest_sc_indexenumeration_tableconditionalentryenumeration \
+	CppunitTest_sc_indexenumeration_tablechartsenumeration \
 	CppunitTest_sc_indexenumeration_tablecolumnsenumeration \
+	CppunitTest_sc_indexenumeration_tableconditionalentryenumeration \
 	CppunitTest_sc_indexenumeration_tablerowsenumeration \
 	CppunitTest_sc_indexenumeration_textfieldenumeration \
 	CppunitTest_sc_importdescriptorbaseobj \
