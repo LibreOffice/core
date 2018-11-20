@@ -115,6 +115,19 @@ struct PairIndices
 
 };
 
+// There are three Unicode script codes for Japaneese text, but only one
+// OpenType script tag, so we want to keep them in one run as splitting is
+// pointless for the purpose of OpenType shaping.
+UScriptCode getScript(UChar32 ch, UErrorCode* status)
+{
+    UScriptCode script = uscript_getScript(ch, status);
+    if (U_FAILURE(*status))
+        return script;
+    if (script == USCRIPT_KATAKANA || script == USCRIPT_KATAKANA_OR_HIRAGANA)
+        return USCRIPT_HIRAGANA;
+    return script;
+}
+
 }
 
 static const PairIndices gPairIndices;
@@ -159,7 +172,7 @@ UBool ScriptRun::next()
             }
         }
 
-        UScriptCode sc = uscript_getScript(ch, &error);
+        UScriptCode sc = getScript(ch, &error);
         int32_t pairIndex = gPairIndices.getPairIndex(ch);
 
         // Paired character handling:
