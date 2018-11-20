@@ -91,6 +91,23 @@
       "revId": "692900b0e878a31137899457fd277ac0164d69ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_bb185875",
+        "filename": "sal/rtl/hash.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-11-20T12:37:55Z",
+      "side": 1,
+      "message": "It looks like a memory leak here to me.",
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
