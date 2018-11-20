@@ -42,7 +42,7 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
     }
 
     for(SwPaM& rCurrentCursor : pCursor->GetRingContainer())
-        GetDoc()->ResetAttrs(rCurrentCursor, true, attrs);
+        GetDoc()->ResetAttrs(rCurrentCursor, true, attrs, true, GetLayout());
 
     if( bUndoGroup )
     {

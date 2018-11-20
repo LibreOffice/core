@@ -692,8 +692,10 @@ public:
     void ResetAttrs( const SwPaM &rRg,
                      bool bTextAttr = true,
                      const std::set<sal_uInt16> &rAttrs = std::set<sal_uInt16>(),
-                     const bool bSendDataChangedEvents = true );
-    void RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark = false, bool bExactRange = false );
+                     const bool bSendDataChangedEvents = true,
+                     SwRootFrame const* pLayout = nullptr);
+    void RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark = false,
+            bool bExactRange = false, SwRootFrame const* pLayout = nullptr);
 
     /** Set attribute in given format.1y
      *  If Undo is enabled, the old values is added to the Undo history. */

@@ -2181,7 +2181,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                 aPaM.Start()->nContent = 0;
                 aPaM.End()->nContent = pEndTextNode->GetText().getLength();
             }
-            GetDoc()->RstTextAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true);
+            GetDoc()->RstTextAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true, GetLayout());
         }
 
     }
