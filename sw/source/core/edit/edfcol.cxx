@@ -75,6 +75,7 @@
 #include <unoprnms.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
+#include <txtfrm.hxx>
 #include <rdfhelper.hxx>
 #include <sfx2/watermarkitem.hxx>
 
@@ -2207,6 +2208,10 @@ void SwEditShell::FillByEx(SwTextFormatColl* pColl)
 {
     SwPaM * pCursor = GetCursor();
     SwContentNode * pCnt = pCursor->GetContentNode();
+    if (pCnt->IsTextNode()) // uhm... what nonsense would happen if not?
+    {   // only need properties-node because BREAK/PAGEDESC filtered anyway!
+        pCnt = sw::GetParaPropsNode(*GetLayout(), pCursor->GetPoint()->nNode);
+    }
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
     if( pSet )
     {
