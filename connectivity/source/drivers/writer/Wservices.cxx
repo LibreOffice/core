@@ -30,10 +30,12 @@ using createFactoryFunc = uno::Reference<lang::XSingleServiceFactory> (*)(
 
 struct ProviderRequest
 {
+private:
     uno::Reference<lang::XSingleServiceFactory> xRet;
     uno::Reference<lang::XMultiServiceFactory> const xServiceManager;
     OUString const sImplementationName;
 
+public:
     ProviderRequest(void* pServiceManager, sal_Char const* pImplementationName)
         : xServiceManager(static_cast<lang::XMultiServiceFactory*>(pServiceManager))
         , sImplementationName(OUString::createFromAscii(pImplementationName))
@@ -56,7 +58,7 @@ struct ProviderRequest
         return xRet.is();
     }
 
-    void* getProvider() const { return xRet.get(); }
+    uno::XInterface* getProvider() const { return xRet.get(); }
 };
 
 extern "C" SAL_DLLPUBLIC_EXPORT void*
@@ -73,8 +75,8 @@ connectivity_writer_component_getFactory(const sal_Char* pImplementationName, vo
                              connectivity::writer::ODriver_CreateInstance,
                              ::cppu::createSingleFactory);
 
-        if (aReq.xRet.is())
-            aReq.xRet->acquire();
+        if (aReq.getProvider())
+            aReq.getProvider()->acquire();
 
         pRet = aReq.getProvider();
     }

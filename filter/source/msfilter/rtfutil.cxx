@@ -239,7 +239,8 @@ OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream, sa
 bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
 {
     SvMemoryStream aStream;
-    int b = 0, count = 2;
+    int b = 0;
+    int count = 2;
 
     // Feed the destination text to a stream.
     for (int i = 0; i < rObjdata.getLength(); ++i)

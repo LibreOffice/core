@@ -150,8 +150,7 @@ void SdtHelper::createDateControl(OUString const& rContentText, const beans::Pro
         SAL_WARN("writerfilter", "unhandled w:dateFormat value");
         if (m_sDate.isEmpty())
             return;
-        else
-            nDateFormat = 0;
+        nDateFormat = 0;
     }
     xPropertySet->setPropertyValue("DateFormat", uno::makeAny(nDateFormat));
 
