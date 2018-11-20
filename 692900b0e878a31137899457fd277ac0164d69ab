@@ -94,6 +94,121 @@
     },
     {
       "key": {
+        "uuid": "ff5d4b2f_fb0ed030",
+        "filename": "forms/source/component/ImageButton.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:47:47Z",
+      "side": 1,
+      "message": "possibly just\n\n    static Sequence\u003cType\u003e const aTypes \u003d concatSequences(OClickableImageBaseControl::_getTypes(), OImageButtonControl_BASE::getTypes());",
+      "range": {
+        "startLine": 146,
+        "startChar": 41,
+        "endLine": 148,
+        "endChar": 14
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_db1b0c71",
+        "filename": "forms/source/component/clickableimage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:47:47Z",
+      "side": 1,
+      "message": "...and here",
+      "range": {
+        "startLine": 80,
+        "startChar": 42,
+        "endLine": 82,
+        "endChar": 18
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_7b2c2099",
+        "filename": "forms/source/runtime/formoperations.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:47:47Z",
+      "side": 1,
+      "message": "Can\u0027t we use an initializer list here?",
+      "range": {
+        "startLine": 1191,
+        "startChar": 72,
+        "endLine": 1202,
+        "endChar": 12
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_5b215c9f",
+        "filename": "helpcompiler/source/HelpCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:47:47Z",
+      "side": 1,
+      "message": "static rtl_TextEncoding nThreadTextEncoding \u003d osl_getThreadTextEncoding();",
+      "range": {
+        "startLine": 512,
+        "startChar": 54,
+        "endLine": 514,
+        "endChar": 18
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_3b26a8b9",
+        "filename": "sal/osl/unx/profile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:47:47Z",
+      "side": 1,
+      "message": "static bool const bLockingDisabled \u003d getenv(\"STAR_PROFILE_LOCKING_DISABLED\") !\u003d nullptr;",
+      "range": {
+        "startLine": 882,
+        "startChar": 4,
+        "endLine": 888,
+        "endChar": 8
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff5d4b2f_bb185875",
         "filename": "sal/rtl/hash.cxx",
         "patchSetId": 1
@@ -105,6 +220,23 @@
       "writtenOn": "2018-11-20T12:37:55Z",
       "side": 1,
       "message": "It looks like a memory leak here to me.",
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_db342ce1",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2353,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T12:47:47Z",
+      "side": 1,
+      "message": "I\u0027m afraid it will still need some return here to please some compilers...",
       "revId": "692900b0e878a31137899457fd277ac0164d69ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
