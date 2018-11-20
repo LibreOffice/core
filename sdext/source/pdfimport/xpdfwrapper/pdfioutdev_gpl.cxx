@@ -514,7 +514,7 @@ void PDFOutDev::printPath( GfxPath* pPath )
 PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
     m_pDoc( pDoc ),
     m_aFontMap(),
-    m_pUtf8Map( new UnicodeMap("UTF-8", gTrue, &mapUTF8) ),
+    m_pUtf8Map( new UnicodeMap("UTF-8", true, &mapUTF8) ),
     m_bSkipImages(false)
 {
 }
@@ -939,9 +939,9 @@ void PDFOutDev::endTextObject(GfxState*)
 }
 
 void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
-                              int width, int height, GBool invert,
-                              GBool /*interpolate*/,
-                              GBool /*inlineImg*/ )
+                              int width, int height, poppler_bool invert,
+                              poppler_bool /*interpolate*/,
+                              poppler_bool /*inlineImg*/ )
 {
     if (m_bSkipImages)
         return;
@@ -969,8 +969,8 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
 
 void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
                           int width, int height, GfxImageColorMap* colorMap,
-                          GBool /*interpolate*/,
-                          int* maskColors, GBool /*inlineImg*/ )
+                          poppler_bool /*interpolate*/,
+                          int* maskColors, poppler_bool /*inlineImg*/ )
 {
     if (m_bSkipImages)
         return;
@@ -1018,11 +1018,10 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
 void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
                                 int width, int height,
                                 GfxImageColorMap* colorMap,
-                                GBool /*interpolate*/,
+                                poppler_bool /*interpolate*/,
                                 Stream* maskStr,
                                 int maskWidth, int maskHeight,
-                                GBool maskInvert
-                                , GBool /*maskInterpolate*/
+                                poppler_bool maskInvert, poppler_bool /*maskInterpolate*/
                                )
 {
     if (m_bSkipImages)
@@ -1036,11 +1035,11 @@ void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
 void PDFOutDev::drawSoftMaskedImage(GfxState*, Object*, Stream* str,
                                     int width, int height,
                                     GfxImageColorMap* colorMap,
-                                    GBool /*interpolate*/,
+                                    poppler_bool /*interpolate*/,
                                     Stream* maskStr,
                                     int maskWidth, int maskHeight,
                                     GfxImageColorMap* maskColorMap
-                                    , GBool /*maskInterpolate*/
+                                    , poppler_bool /*maskInterpolate*/
                                    )
 {
     if (m_bSkipImages)
