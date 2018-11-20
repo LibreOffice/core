@@ -1015,6 +1015,18 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
 
     sw::DocumentContentOperationsManager::ParaRstFormat* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFormat*>(pArgs);
 
+    if (pPara->pLayout && pPara->pLayout->IsHideRedlines())
+    {
+        if (pCNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+        {
+            return true;
+        }
+        if (pCNd->IsTextNode())
+        {
+            pCNd = sw::GetParaPropsNode(*pPara->pLayout, SwNodeIndex(*pCNd));
+        }
+    }
+
     SwTextFormatColl* pFormat = static_cast<SwTextFormatColl*>(pPara->pFormatColl);
     if ( pPara->bReset )
     {
@@ -1077,7 +1089,8 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
 bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
                           SwTextFormatColl *pFormat,
                           const bool bReset,
-                          const bool bResetListAttrs)
+                          const bool bResetListAttrs,
+                          SwRootFrame const*const pLayout)
 {
     SwDataChanged aTmp( rRg );
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
@@ -1093,7 +1106,8 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    sw::DocumentContentOperationsManager::ParaRstFormat aPara( pStt, pEnd, pHst );
+    sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+            pStt, pEnd, pHst, nullptr, pLayout);
     aPara.pFormatColl = pFormat;
     aPara.bReset = bReset;
     // #i62675#

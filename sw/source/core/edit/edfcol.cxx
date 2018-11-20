@@ -2172,7 +2172,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
         if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
         {
             // Change the paragraph style to pLocal and remove all direct paragraph formatting.
-            GetDoc()->SetTextFormatColl( rPaM, pLocal, true, bResetListAttrs );
+            GetDoc()->SetTextFormatColl(rPaM, pLocal, true, bResetListAttrs, GetLayout());
 
             // If there are hints on the nodes which cover the whole node, then remove those, too.
             SwPaM aPaM(*rPaM.Start(), *rPaM.End());
