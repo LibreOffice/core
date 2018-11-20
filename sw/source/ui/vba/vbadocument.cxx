@@ -609,12 +609,10 @@ SwVbaDocumentOutgoingConnectionPoint::Unadvise( sal_uInt32 Cookie )
 uno::Sequence< OUString >
 SwVbaDocument::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.word.Document";
-    }
+        "ooo.vba.word.Document"
+    };
     return aServiceNames;
 }
 

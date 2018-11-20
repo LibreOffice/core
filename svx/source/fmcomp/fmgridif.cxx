@@ -2374,14 +2374,11 @@ OUString FmXGridPeer::getMode()
 
 css::uno::Sequence<OUString> FmXGridPeer::getSupportedModes()
 {
-    static css::uno::Sequence<OUString> aModes;
-    if (!aModes.getLength())
+    static css::uno::Sequence<OUString> const aModes
     {
-        aModes.realloc(2);
-        OUString* pModes = aModes.getArray();
-        pModes[0] = "DataMode";
-        pModes[1] = "FilterMode";
-    }
+        "DataMode",
+        "FilterMode"
+    };
     return aModes;
 }
 
@@ -2660,8 +2657,7 @@ const std::vector<DbGridControlNavigationBarState>& FmXGridPeer::getSupportedGri
 
 Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
 {
-    static Sequence< css::util::URL> aSupported;
-    if (aSupported.getLength() == 0)
+    static Sequence< css::util::URL> aSupported = [&]()
     {
         static const char* sSupported[] = {
             FMURL_RECORD_MOVEFIRST,
@@ -2671,18 +2667,19 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
             FMURL_RECORD_MOVETONEW,
             FMURL_RECORD_UNDO
         };
-        aSupported.realloc(SAL_N_ELEMENTS(sSupported));
-        css::util::URL* pSupported = aSupported.getArray();
+        Sequence< css::util::URL> tmp(SAL_N_ELEMENTS(sSupported));
+        css::util::URL* pSupported = tmp.getArray();
 
-        for ( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pSupported)
+        for ( sal_Int32 i = 0; i < tmp.getLength(); ++i, ++pSupported)
             pSupported->Complete = OUString::createFromAscii(sSupported[i]);
 
         // let an css::util::URL-transformer normalize the URLs
         Reference< css::util::XURLTransformer >  xTransformer(
             util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
-        for (css::util::URL & rURL : aSupported)
+        for (css::util::URL & rURL : tmp)
             xTransformer->parseStrict(rURL);
-    }
+        return tmp;
+    }();
 
     return aSupported;
 }

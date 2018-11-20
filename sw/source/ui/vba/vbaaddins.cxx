@@ -88,12 +88,10 @@ SwVbaAddins::getServiceImplName()
 css::uno::Sequence<OUString>
 SwVbaAddins::getServiceNames()
 {
-    static uno::Sequence< OUString > sNames;
-    if ( sNames.getLength() == 0 )
+    static uno::Sequence< OUString > const sNames
     {
-        sNames.realloc( 1 );
-        sNames[0] = "ooo.vba.word.Addins";
-    }
+        "ooo.vba.word.Addins"
+    };
     return sNames;
 }
 

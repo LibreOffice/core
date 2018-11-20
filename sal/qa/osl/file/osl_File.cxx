@@ -4922,8 +4922,7 @@ namespace osl_Directory
 
     static OUString const & get_test_path()
     {
-        static OUString test_path;
-        if (test_path.isEmpty())
+        static OUString test_path = [&]()
         {
             OUString tmp;
             osl::FileBase::RC rc = osl::FileBase::getTempDirURL(tmp);
@@ -4962,14 +4961,16 @@ namespace osl_Directory
 #endif
             tmp_x += OString(TEST_PATH_POSTFIX);
 
-            rc = osl::FileBase::getFileURLFromSystemPath(OStringToOUString(tmp_x, RTL_TEXTENCODING_UTF8), test_path);
+            OUString tmpTestPath;
+            rc = osl::FileBase::getFileURLFromSystemPath(OStringToOUString(tmp_x, RTL_TEXTENCODING_UTF8), tmpTestPath);
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
              "Cannot convert the system path back to an URL",
              osl::FileBase::E_None, rc
-          );
-        }
+            );
+            return tmpTestPath;
+        }();
         return test_path;
     }
 

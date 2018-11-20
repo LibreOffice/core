@@ -676,13 +676,11 @@ void SAL_CALL FormController::resetted(const EventObject& rEvent)
 
 Sequence< OUString> const & FormController::getSupportedServiceNames_Static()
 {
-    static Sequence< OUString> aServices;
-    if (!aServices.getLength())
+    static Sequence< OUString> const aServices
     {
-        aServices.realloc(2);
-        aServices.getArray()[0] = "com.sun.star.form.runtime.FormController";
-        aServices.getArray()[1] = "com.sun.star.awt.control.TabController";
-    }
+        "com.sun.star.form.runtime.FormController",
+        "com.sun.star.awt.control.TabController"
+    };
     return aServices;
 }
 
@@ -3467,13 +3465,11 @@ Sequence< OUString > SAL_CALL FormController::getSupportedModes()
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    static Sequence< OUString > aModes;
-    if (!aModes.getLength())
+    static Sequence< OUString > const aModes
     {
-        aModes.realloc(2);
-        aModes[0] = "DataMode";
-        aModes[1] = "FilterMode";
-    }
+        "DataMode",
+        "FilterMode"
+    };
     return aModes;
 }
 

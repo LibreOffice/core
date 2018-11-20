@@ -1110,30 +1110,28 @@ OUString SwTableAutoFormat::GetTableTemplateCellSubName(const SwBoxAutoFormat& r
  * ODD  = 1, 3, 5, ...
  * EVEN = 2, 4, 6, ...
  */
-const std::vector<sal_Int32>& SwTableAutoFormat::GetTableTemplateMap()
+const std::vector<sal_Int32> & SwTableAutoFormat::GetTableTemplateMap()
 {
-    static std::vector<sal_Int32>* pTableTemplateMap;
-    if (!pTableTemplateMap)
+    static std::vector<sal_Int32> const aTableTemplateMap
     {
-        pTableTemplateMap = new std::vector<sal_Int32>;
-        pTableTemplateMap->push_back(1 ); // FIRST_ROW              // FR
-        pTableTemplateMap->push_back(13); // LAST_ROW               // LR
-        pTableTemplateMap->push_back(4 ); // FIRST_COLUMN           // FC
-        pTableTemplateMap->push_back(7 ); // LAST_COLUMN            // LC
-        pTableTemplateMap->push_back(5 ); // EVEN_ROWS              // ER
-        pTableTemplateMap->push_back(8 ); // ODD_ROWS               // OR
-        pTableTemplateMap->push_back(6 ); // EVEN_COLUMNS           // EC
-        pTableTemplateMap->push_back(9 ); // ODD_COLUMNS            // OC
-        pTableTemplateMap->push_back(10); // BODY
-        pTableTemplateMap->push_back(11); // BACKGROUND             // BCKG
-        pTableTemplateMap->push_back(0 ); // FIRST_ROW_START_COLUMN // FRSC
-        pTableTemplateMap->push_back(3 ); // FIRST_ROW_END_COLUMN   // FRENC
-        pTableTemplateMap->push_back(12); // LAST_ROW_START_COLUMN  // LRSC
-        pTableTemplateMap->push_back(15); // LAST_ROW_END_COLUMN    // LRENC
-        pTableTemplateMap->push_back(2 ); // FIRST_ROW_EVEN_COLUMN  // FREC
-        pTableTemplateMap->push_back(14); // LAST_ROW_EVEN_COLUMN   // LREC
-    }
-    return *pTableTemplateMap;
+        1 , // FIRST_ROW              // FR
+        13, // LAST_ROW               // LR
+        4 , // FIRST_COLUMN           // FC
+        7 , // LAST_COLUMN            // LC
+        5 , // EVEN_ROWS              // ER
+        8 , // ODD_ROWS               // OR
+        6 , // EVEN_COLUMNS           // EC
+        9 , // ODD_COLUMNS            // OC
+        10, // BODY
+        11, // BACKGROUND             // BCKG
+        0 , // FIRST_ROW_START_COLUMN // FRSC
+        3 , // FIRST_ROW_END_COLUMN   // FRENC
+        12, // LAST_ROW_START_COLUMN  // LRSC
+        15, // LAST_ROW_END_COLUMN    // LRENC
+        2 , // FIRST_ROW_EVEN_COLUMN  // FREC
+        14, // LAST_ROW_EVEN_COLUMN   // LREC
+    };
+    return aTableTemplateMap;
 }
 
 sal_uInt8 SwTableAutoFormat::CountPos(sal_uInt32 nCol, sal_uInt32 nCols, sal_uInt32 nRow,

@@ -215,12 +215,10 @@ SwVbaBookmarks::getServiceImplName()
 css::uno::Sequence<OUString>
 SwVbaBookmarks::getServiceNames()
 {
-    static uno::Sequence< OUString > sNames;
-    if ( sNames.getLength() == 0 )
+    static uno::Sequence< OUString > const sNames
     {
-        sNames.realloc( 1 );
-        sNames[0] = "ooo.vba.word.Bookmarks";
-    }
+        "ooo.vba.word.Bookmarks"
+    };
     return sNames;
 }
 

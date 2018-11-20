@@ -280,12 +280,10 @@ ScVbaWorkbooks::getServiceImplName()
 css::uno::Sequence<OUString>
 ScVbaWorkbooks::getServiceNames()
 {
-    static uno::Sequence< OUString > sNames;
-    if ( sNames.getLength() == 0 )
+    static uno::Sequence< OUString > const sNames
     {
-        sNames.realloc( 1 );
-        sNames[0] = "ooo.vba.excel.Workbooks";
-    }
+        "ooo.vba.excel.Workbooks"
+    };
     return sNames;
 }
 

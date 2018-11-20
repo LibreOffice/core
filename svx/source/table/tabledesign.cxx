@@ -184,22 +184,19 @@ TableDesignStyle::TableDesignStyle()
 
 const CellStyleNameMap& TableDesignStyle::getCellStyleNameMap()
 {
-    static CellStyleNameMap aMap;
-    if( aMap.empty() )
+    static CellStyleNameMap const aMap
     {
-        CellStyleNameMap aNewMap;
-        aNewMap[ OUString( "first-row" ) ] = first_row_style;
-        aNewMap[ OUString( "last-row" ) ] = last_row_style;
-        aNewMap[ OUString( "first-column" ) ] = first_column_style;
-        aNewMap[ OUString( "last-column" ) ] = last_column_style;
-        aNewMap[ OUString( "body" ) ] = body_style;
-        aNewMap[ OUString( "even-rows" ) ] = even_rows_style;
-        aNewMap[ OUString( "odd-rows" ) ] = odd_rows_style;
-        aNewMap[ OUString( "even-columns" ) ] = even_columns_style;
-        aNewMap[ OUString( "odd-columns" ) ] = odd_columns_style;
-        aNewMap[ OUString( "background" ) ] = background_style;
-        aMap.swap( aNewMap );
-    }
+         { OUString( "first-row" )    , first_row_style },
+         { OUString( "last-row" )     , last_row_style },
+         { OUString( "first-column" ) , first_column_style },
+         { OUString( "last-column" )  , last_column_style },
+         { OUString( "body" )         , body_style },
+         { OUString( "even-rows" )    , even_rows_style },
+         { OUString( "odd-rows" )     , odd_rows_style },
+         { OUString( "even-columns" ) , even_columns_style },
+         { OUString( "odd-columns" )  , odd_columns_style },
+         { OUString( "background" )   , background_style },
+    };
 
     return aMap;
 }

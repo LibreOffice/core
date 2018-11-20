@@ -6965,20 +6965,20 @@ const Color SwPageFrame::GetDrawBackgrdColor() const
 /// create/return font used to paint the "empty page" string
 const vcl::Font& SwPageFrame::GetEmptyPageFont()
 {
-    static vcl::Font* pEmptyPgFont = nullptr;
-    if ( nullptr == pEmptyPgFont )
+    static vcl::Font aEmptyPgFont = [&]()
     {
-        pEmptyPgFont = new vcl::Font;
-        pEmptyPgFont->SetFontSize( Size( 0, 80 * 20 )); // == 80 pt
-        pEmptyPgFont->SetWeight( WEIGHT_BOLD );
-        pEmptyPgFont->SetStyleName( aEmptyOUStr );
-        pEmptyPgFont->SetFamilyName("Helvetica");
-        pEmptyPgFont->SetFamily( FAMILY_SWISS );
-        pEmptyPgFont->SetTransparent( true );
-        pEmptyPgFont->SetColor( COL_GRAY );
-    }
+        vcl::Font tmp;
+        tmp.SetFontSize( Size( 0, 80 * 20 )); // == 80 pt
+        tmp.SetWeight( WEIGHT_BOLD );
+        tmp.SetStyleName( aEmptyOUStr );
+        tmp.SetFamilyName("Helvetica");
+        tmp.SetFamily( FAMILY_SWISS );
+        tmp.SetTransparent( true );
+        tmp.SetColor( COL_GRAY );
+        return tmp;
+    }();
 
-    return *pEmptyPgFont;
+    return aEmptyPgFont;
 }
 
 /**

@@ -1265,14 +1265,10 @@ void SAL_CALL ScModelObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes(SfxBaseModel::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
+        uno::Sequence<uno::Type> tmp(SfxBaseModel::getTypes());
 
-        uno::Sequence<uno::Type> aAggTypes;
         if ( GetFormatter().is() )
         {
             const uno::Type& rProvType = cppu::UnoType<lang::XTypeProvider>::get();
@@ -1280,15 +1276,15 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
             if(auto xNumProv
                = o3tl::tryAccess<uno::Reference<lang::XTypeProvider>>(aNumProv))
             {
-                aAggTypes = (*xNumProv)->getTypes();
+                uno::Sequence<uno::Type> aAggTypes = (*xNumProv)->getTypes();
+                long nParentLen = tmp.getLength();
+                tmp.realloc( nParentLen + aAggTypes.getLength() );
+                std::copy_n(aAggTypes.begin(), aAggTypes.getLength(), tmp.begin() + nParentLen);
             }
         }
-        long nAggLen = aAggTypes.getLength();
-        const uno::Type* pAggPtr = aAggTypes.getConstArray();
-
-        const long nThisLen = 16;
-        aTypes.realloc( nParentLen + nAggLen + nThisLen );
-        uno::Type* pPtr = aTypes.getArray();
+        long nParentLen = tmp.getLength();
+        tmp.realloc( nParentLen + 16 );
+        uno::Type* pPtr = tmp.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSpreadsheetDocument>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<document::XActionLockable>::get();
         pPtr[nParentLen + 2] = cppu::UnoType<sheet::XCalculatable>::get();
@@ -1305,14 +1301,8 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
         pPtr[nParentLen +13] = cppu::UnoType<lang::XServiceInfo>::get();
         pPtr[nParentLen +14] = cppu::UnoType<util::XChangesNotifier>::get();
         pPtr[nParentLen +15] = cppu::UnoType<sheet::opencl::XOpenCLSelection>::get();
-
-        long i;
-        for (i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                    // parent types first
-
-        for (i=0; i<nAggLen; i++)
-            pPtr[nParentLen+nThisLen+i] = pAggPtr[i];   // aggregated types last
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 

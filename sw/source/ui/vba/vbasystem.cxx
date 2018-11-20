@@ -268,12 +268,10 @@ SwVbaSystem::getServiceImplName()
 uno::Sequence< OUString >
 SwVbaSystem::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.word.System";
-    }
+        "ooo.vba.word.System"
+    };
     return aServiceNames;
 }
 

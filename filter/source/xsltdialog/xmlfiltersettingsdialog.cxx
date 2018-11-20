@@ -1186,74 +1186,64 @@ application_info_impl::application_info_impl( const sal_Char * pDocumentService,
 {
 }
 
-std::vector< application_info_impl* >& getApplicationInfos()
+std::vector< application_info_impl > const & getApplicationInfos()
 {
-    static std::vector< application_info_impl* > aInfos;
-
-    if( aInfos.empty() )
+    static std::vector< application_info_impl > const aInfos
     {
-        aInfos.push_back( new application_info_impl(
-            "com.sun.star.text.TextDocument",
+        {   "com.sun.star.text.TextDocument",
             STR_APPL_NAME_WRITER,
             "com.sun.star.comp.Writer.XMLImporter",
-            "com.sun.star.comp.Writer.XMLExporter" ) );
+            "com.sun.star.comp.Writer.XMLExporter" },
 
-        aInfos.push_back( new application_info_impl(
-            "com.sun.star.sheet.SpreadsheetDocument",
+        {   "com.sun.star.sheet.SpreadsheetDocument",
             STR_APPL_NAME_CALC,
             "com.sun.star.comp.Calc.XMLImporter",
-            "com.sun.star.comp.Calc.XMLExporter" ) );
+            "com.sun.star.comp.Calc.XMLExporter" },
 
-        aInfos.push_back( new application_info_impl(
-            "com.sun.star.presentation.PresentationDocument",
+        {  "com.sun.star.presentation.PresentationDocument",
             STR_APPL_NAME_IMPRESS,
             "com.sun.star.comp.Impress.XMLImporter",
-            "com.sun.star.comp.Impress.XMLExporter" ) );
+            "com.sun.star.comp.Impress.XMLExporter" },
 
-        aInfos.push_back( new application_info_impl(
-            "com.sun.star.drawing.DrawingDocument",
+        {   "com.sun.star.drawing.DrawingDocument",
             STR_APPL_NAME_DRAW,
             "com.sun.star.comp.Draw.XMLImporter",
-            "com.sun.star.comp.Draw.XMLExporter" ) );
+            "com.sun.star.comp.Draw.XMLExporter" },
 
         // --- oasis file formats...
-        aInfos.push_back( new application_info_impl(
-            "com.sun.star.text.TextDocument",
+        {   "com.sun.star.text.TextDocument",
             STR_APPL_NAME_OASIS_WRITER,
             "com.sun.star.comp.Writer.XMLOasisImporter",
-            "com.sun.star.comp.Writer.XMLOasisExporter" ) );
+            "com.sun.star.comp.Writer.XMLOasisExporter" },
 
-        aInfos.push_back( new application_info_impl(
-            "com.sun.star.sheet.SpreadsheetDocument",
+        {   "com.sun.star.sheet.SpreadsheetDocument",
             STR_APPL_NAME_OASIS_CALC,
             "com.sun.star.comp.Calc.XMLOasisImporter",
-            "com.sun.star.comp.Calc.XMLOasisExporter" ) );
+            "com.sun.star.comp.Calc.XMLOasisExporter" },
 
-        aInfos.push_back( new application_info_impl(
-            "com.sun.star.presentation.PresentationDocument",
+        {   "com.sun.star.presentation.PresentationDocument",
             STR_APPL_NAME_OASIS_IMPRESS,
             "com.sun.star.comp.Impress.XMLOasisImporter",
-            "com.sun.star.comp.Impress.XMLOasisExporter" ) );
+            "com.sun.star.comp.Impress.XMLOasisExporter" },
 
-        aInfos.push_back( new application_info_impl(
-            "com.sun.star.drawing.DrawingDocument",
+        {  "com.sun.star.drawing.DrawingDocument",
             STR_APPL_NAME_OASIS_DRAW,
             "com.sun.star.comp.Draw.XMLOasisImporter",
-            "com.sun.star.comp.Draw.XMLOasisExporter" ) );
-    }
+            "com.sun.star.comp.Draw.XMLOasisExporter" },
+    };
 
     return aInfos;
 }
 
 const application_info_impl* getApplicationInfo( const OUString& rServiceName )
 {
-    std::vector< application_info_impl* >& rInfos = getApplicationInfos();
+    std::vector< application_info_impl > const & rInfos = getApplicationInfos();
     for (auto const& info : rInfos)
     {
-        if( rServiceName == info->maXMLExporter ||
-            rServiceName == info->maXMLImporter)
+        if( rServiceName == info.maXMLExporter ||
+            rServiceName == info.maXMLImporter)
         {
-            return info;
+            return &info;
         }
     }
     return nullptr;

@@ -26,10 +26,10 @@ using namespace ::com::sun::star::uno;
 
 static const css::uno::Sequence<OUString>& getColumnTypes()
 {
-    static css::uno::Sequence<OUString> aColumnTypes(10);
-    if (aColumnTypes.getConstArray()[0].isEmpty())
+    static css::uno::Sequence<OUString> aColumnTypes = [&]()
     {
-        OUString* pNames = aColumnTypes.getArray();
+        css::uno::Sequence<OUString> tmp(10);
+        OUString* pNames = tmp.getArray();
         pNames[TYPE_CHECKBOX] = FM_COL_CHECKBOX;
         pNames[TYPE_COMBOBOX] = FM_COL_COMBOBOX;
         pNames[TYPE_CURRENCYFIELD] = FM_COL_CURRENCYFIELD;
@@ -40,7 +40,8 @@ static const css::uno::Sequence<OUString>& getColumnTypes()
         pNames[TYPE_PATTERNFIELD] = FM_COL_PATTERNFIELD;
         pNames[TYPE_TEXTFIELD] = FM_COL_TEXTFIELD;
         pNames[TYPE_TIMEFIELD] = FM_COL_TIMEFIELD;
-    }
+        return tmp;
+    }();
     return aColumnTypes;
 }
 
