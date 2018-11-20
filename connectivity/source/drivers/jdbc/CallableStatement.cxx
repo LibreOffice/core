@@ -327,12 +327,11 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
         // convert Parameter
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,m_sSqlStatement));
 
-        static jmethodID mID(nullptr);
-        if ( !mID  )
+        static jmethodID mID = [&]()
         {
             static const char * const cSignature = "(Ljava/lang/String;II)Ljava/sql/CallableStatement;";
-            mID  = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
-        }
+            return t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+        }();
         if( mID ){
             out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, str.get() ,m_nResultSetType,m_nResultSetConcurrency);
         } //mID

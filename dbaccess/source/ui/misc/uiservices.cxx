@@ -20,6 +20,7 @@
 #include <cppuhelper/factory.hxx>
 #include <dbu_reghelper.hxx>
 #include <uiservices.hxx>
+#include <mutex>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -30,8 +31,8 @@ extern "C" {
 
 static void createRegistryInfo_DBU()
 {
-    static bool bInit = false;
-    if (!bInit)
+    static std::once_flag aInit;
+    std::call_once(aInit, [&]()
     {
         createRegistryInfo_OTableFilterDialog();
         createRegistryInfo_ODataSourcePropertyDialog();
@@ -57,8 +58,8 @@ static void createRegistryInfo_DBU()
         createRegistryInfo_CopyTableWizard();
         createRegistryInfo_OTextConnectionSettingsDialog();
         createRegistryInfo_LimitBoxController();
-        bInit = true;
-    }
+        return true;
+    });
 }
 
 }

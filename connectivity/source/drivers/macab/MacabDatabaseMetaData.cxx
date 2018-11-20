@@ -736,16 +736,16 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  )
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
 
-    static ODatabaseMetaDataResultSet::ORows aRows;
-    static const char aTable[] = "TABLE";
-
-    if (aRows.empty())
+    static ODatabaseMetaDataResultSet::ORows aRows = [&]
     {
+        static const char aTable[] = "TABLE";
+        ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow(2);
         aRow[0] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[1] = new ORowSetValueDecorator(OUString(aTable));
-        aRows.push_back(aRow);
-    }
+        tmp.push_back(aRow);
+        return tmp;
+    }();
     pResult->setRows(aRows);
     return xRef;
 }
@@ -755,9 +755,9 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  )
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xRef = pResult;
 
-    static ODatabaseMetaDataResultSet::ORows aRows;
-    if (aRows.empty())
+    static ODatabaseMetaDataResultSet::ORows aRows = [&]()
     {
+        ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow(19);
 
         // We support four types: char, timestamp, integer, float
@@ -781,27 +781,29 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  )
         aRow[17] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[18] = new ORowSetValueDecorator(sal_Int32(10));
 
-        aRows.push_back(aRow);
+        tmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(19));
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue();
         aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue();
-        aRows.push_back(aRow);
+        tmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
         aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
         aRow[15] = new ORowSetValueDecorator(sal_Int32(20));
-        aRows.push_back(aRow);
+        tmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("FLOAT"));
         aRow[2] = new ORowSetValueDecorator(DataType::FLOAT);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
         aRow[15] = new ORowSetValueDecorator(sal_Int32(15));
-        aRows.push_back(aRow);
-    }
+        tmp.push_back(aRow);
+
+        return tmp;
+    }();
     pResult->setRows(aRows);
     return xRef;
 }
@@ -943,10 +945,9 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
     if (!bTableFound)
         return xRef;
 
-    static ODatabaseMetaDataResultSet::ORows aRows;
-
-    if (aRows.empty())
+    static ODatabaseMetaDataResultSet::ORows aRows = [&]()
     {
+        ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow(6);
 
         MacabRecords *xRecords = m_xConnection->getAddressBook()->getMacabRecords();
@@ -960,14 +961,15 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
         aRow[3] = new ORowSetValueDecorator(xRecords->getName());
         aRow[4] = new ORowSetValueDecorator(OUString(aTable));
         aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRows.push_back(aRow);
+        tmp.push_back(aRow);
 
         for(i = 0; i < nGroups; i++)
         {
             aRow[3] = new ORowSetValueDecorator(xGroups[i]->getName());
-            aRows.push_back(aRow);
+            tmp.push_back(aRow);
         }
-    }
+        return tmp;
+    }();
     pResult->setRows(aRows);
     return xRef;
 }

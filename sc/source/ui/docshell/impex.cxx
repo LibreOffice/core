@@ -2334,29 +2334,28 @@ ScFormatFilterPlugin* ScFilterCreate();
 typedef ScFormatFilterPlugin * (*FilterFn)();
 ScFormatFilterPlugin &ScFormatFilter::Get()
 {
-    static ScFormatFilterPlugin *plugin;
-
-    if (plugin != nullptr)
-        return *plugin;
-
-#ifndef DISABLE_DYNLOADING
-    OUString sFilterLib(SVLIBRARY("scfilt"));
-    static ::osl::Module aModule;
-    bool bLoaded = aModule.is();
-    if (!bLoaded)
-        bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
-    if (!bLoaded)
-        bLoaded = aModule.load(sFilterLib);
-    if (bLoaded)
+    static ScFormatFilterPlugin *plugin = [&]()
     {
-        oslGenericFunction fn = aModule.getFunctionSymbol( "ScFilterCreate" );
-        if (fn != nullptr)
-            plugin = reinterpret_cast<FilterFn>(fn)();
-    }
-    assert(plugin != nullptr);
+#ifndef DISABLE_DYNLOADING
+        OUString sFilterLib(SVLIBRARY("scfilt"));
+        static ::osl::Module aModule;
+        bool bLoaded = aModule.is();
+        if (!bLoaded)
+            bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
+        if (!bLoaded)
+            bLoaded = aModule.load(sFilterLib);
+        if (bLoaded)
+        {
+            oslGenericFunction fn = aModule.getFunctionSymbol( "ScFilterCreate" );
+            if (fn != nullptr)
+                return reinterpret_cast<FilterFn>(fn)();
+        }
+        assert(false);
+        return static_cast<ScFormatFilterPlugin*>(nullptr);
 #else
-    plugin = ScFilterCreate();
+        return ScFilterCreate();
 #endif
+    }();
 
     return *plugin;
 }

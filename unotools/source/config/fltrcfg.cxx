@@ -303,13 +303,8 @@ namespace {
 
 const Sequence<OUString>& GetPropertyNames()
 {
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
+    static Sequence<OUString> const aNames
     {
-        int nCount = 14;
-        aNames.realloc(nCount);
-        static const char* aPropNames[] =
-        {
             "Import/MathTypeToMath",            //  0
             "Import/WinWordToWriter",           //  1
             "Import/PowerPointToImpress",       //  2
@@ -324,11 +319,7 @@ const Sequence<OUString>& GetPropertyNames()
             "Import/ImportWWFieldsAsEnhancedFields", // 11
             "Import/SmartArtToShapes",          // 12
             "Export/CharBackgroundToHighlighting"    // 13
-        };
-        OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
+    };
     return aNames;
 }
 

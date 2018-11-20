@@ -1167,40 +1167,37 @@ static struct {
     {"textBox", mso_sptTextBox},
 };
 
-typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> CustomShapeTypeTranslationHashMap;
-static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = nullptr;
-
 const char* GetOOXMLPresetGeometry( const char* sShapeType )
 {
-    if( pCustomShapeTypeTranslationHashMap == nullptr )
+    typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> CustomShapeTypeTranslationHashMap;
+    static CustomShapeTypeTranslationHashMap aCustomShapeTypeTranslationHashMap = [&]()
     {
-        pCustomShapeTypeTranslationHashMap = new CustomShapeTypeTranslationHashMap;
+        CustomShapeTypeTranslationHashMap tmp;
         for(const msfilter::util::CustomShapeTypeTranslationTable& i : pCustomShapeTypeTranslationTable)
         {
-            (*pCustomShapeTypeTranslationHashMap)[ i.sOOo ] = i.sMSO;
+            tmp[ i.sOOo ] = i.sMSO;
         }
-    }
+        return tmp;
+    }();
     CustomShapeTypeTranslationHashMap::iterator i(
-        pCustomShapeTypeTranslationHashMap->find(sShapeType));
-    return i == pCustomShapeTypeTranslationHashMap->end() ? "rect" : i->second;
+        aCustomShapeTypeTranslationHashMap.find(sShapeType));
+    return i == aCustomShapeTypeTranslationHashMap.end() ? "rect" : i->second;
 }
-
-typedef std::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> DMLToVMLTranslationHashMap;
-static DMLToVMLTranslationHashMap* pDMLToVMLMap;
 
 MSO_SPT GETVMLShapeType(const OString& aType)
 {
-    const char* pDML = GetOOXMLPresetGeometry(aType.getStr());
-
-    if (!pDMLToVMLMap)
+    typedef std::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> DMLToVMLTranslationHashMap;
+    static DMLToVMLTranslationHashMap aDMLToVMLMap = [&]()
     {
-        pDMLToVMLMap = new DMLToVMLTranslationHashMap;
+        DMLToVMLTranslationHashMap tmp;
         for (auto& i : pDMLToVMLTable)
-            (*pDMLToVMLMap)[i.sDML] = i.nVML;
-    }
+            tmp[i.sDML] = i.nVML;
+        return tmp;
+    }();
 
-    DMLToVMLTranslationHashMap::iterator i(pDMLToVMLMap->find(pDML));
-    return i == pDMLToVMLMap->end() ? mso_sptNil : i->second;
+    const char* pDML = GetOOXMLPresetGeometry(aType.getStr());
+    DMLToVMLTranslationHashMap::iterator i(aDMLToVMLMap.find(pDML));
+    return i == aDMLToVMLMap.end() ? mso_sptNil : i->second;
 }
 
 bool HasTextBoxContent(sal_uInt32 nShapeType)

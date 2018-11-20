@@ -185,12 +185,10 @@ ScVbaCommandBarControl::getServiceImplName()
 uno::Sequence<OUString>
 ScVbaCommandBarControl::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.CommandBarControl";
-    }
+        "ooo.vba.CommandBarControl"
+    };
     return aServiceNames;
 }
 
@@ -217,12 +215,10 @@ ScVbaCommandBarPopup::getServiceImplName()
 uno::Sequence<OUString>
 ScVbaCommandBarPopup::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.CommandBarPopup";
-    }
+        "ooo.vba.CommandBarPopup"
+    };
     return aServiceNames;
 }
 
@@ -249,12 +245,10 @@ ScVbaCommandBarButton::getServiceImplName()
 uno::Sequence<OUString>
 ScVbaCommandBarButton::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.CommandBarButton";
-    }
+        "ooo.vba.CommandBarButton"
+    };
     return aServiceNames;
 }
 

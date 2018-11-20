@@ -54,65 +54,33 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
 {
     if ( nType == SfxStyleFamily::Para )
     {
-        static bool bCellMapFilled = false;
-        static ScDisplayNameMap aCellMap[12];
-        if ( !bCellMapFilled )
+        static ScDisplayNameMap const aCellMap[]
         {
-            aCellMap[0].aDispName = ScResId( STR_STYLENAME_STANDARD );
-            aCellMap[0].aProgName = SC_STYLE_PROG_STANDARD;
-
-            aCellMap[1].aDispName = ScResId( STR_STYLENAME_RESULT );
-            aCellMap[1].aProgName = SC_STYLE_PROG_RESULT;
-
-            aCellMap[2].aDispName = ScResId( STR_STYLENAME_RESULT1 );
-            aCellMap[2].aProgName = SC_STYLE_PROG_RESULT1;
-
-            aCellMap[3].aDispName = ScResId( STR_STYLENAME_HEADLINE );
-            aCellMap[3].aProgName = SC_STYLE_PROG_HEADLINE;
-
-            aCellMap[4].aDispName = ScResId( STR_STYLENAME_HEADLINE1 );
-            aCellMap[4].aProgName = SC_STYLE_PROG_HEADLINE1;
-
-            aCellMap[5].aDispName = ScResId( STR_PIVOT_STYLENAME_INNER );
-            aCellMap[5].aProgName = SC_PIVOT_STYLE_PROG_INNER;
-
-            aCellMap[6].aDispName = ScResId( STR_PIVOT_STYLENAME_RESULT );
-            aCellMap[6].aProgName = SC_PIVOT_STYLE_PROG_RESULT;
-
-            aCellMap[7].aDispName = ScResId( STR_PIVOT_STYLENAME_CATEGORY );
-            aCellMap[7].aProgName = SC_PIVOT_STYLE_PROG_CATEGORY;
-
-            aCellMap[8].aDispName = ScResId( STR_PIVOT_STYLENAME_TITLE );
-            aCellMap[8].aProgName = SC_PIVOT_STYLE_PROG_TITLE;
-
-            aCellMap[9].aDispName = ScResId( STR_PIVOT_STYLENAME_FIELDNAME );
-            aCellMap[9].aProgName = SC_PIVOT_STYLE_PROG_FIELDNAME;
-
-            aCellMap[10].aDispName = ScResId( STR_PIVOT_STYLENAME_TOP );
-            aCellMap[10].aProgName = SC_PIVOT_STYLE_PROG_TOP;
-
+            { ScResId( STR_STYLENAME_STANDARD ), OUString(SC_STYLE_PROG_STANDARD) },
+            { ScResId( STR_STYLENAME_RESULT ), OUString(SC_STYLE_PROG_RESULT) },
+            { ScResId( STR_STYLENAME_RESULT1 ), OUString(SC_STYLE_PROG_RESULT1) },
+            { ScResId( STR_STYLENAME_HEADLINE ), OUString(SC_STYLE_PROG_HEADLINE) },
+            { ScResId( STR_STYLENAME_HEADLINE1 ), OUString(SC_STYLE_PROG_HEADLINE1) },
+            { ScResId( STR_PIVOT_STYLENAME_INNER ), OUString(SC_PIVOT_STYLE_PROG_INNER) },
+            { ScResId( STR_PIVOT_STYLENAME_RESULT ), OUString(SC_PIVOT_STYLE_PROG_RESULT) },
+            { ScResId( STR_PIVOT_STYLENAME_CATEGORY ), OUString(SC_PIVOT_STYLE_PROG_CATEGORY) },
+            { ScResId( STR_PIVOT_STYLENAME_TITLE ), OUString(SC_PIVOT_STYLE_PROG_TITLE) },
+            { ScResId( STR_PIVOT_STYLENAME_FIELDNAME ), OUString(SC_PIVOT_STYLE_PROG_FIELDNAME) },
+            { ScResId( STR_PIVOT_STYLENAME_TOP ), OUString(SC_PIVOT_STYLE_PROG_TOP) },
             //  last entry remains empty
-
-            bCellMapFilled = true;
-        }
+            { OUString(), OUString() },
+        };
         return aCellMap;
     }
     else if ( nType == SfxStyleFamily::Page )
     {
-        static bool bPageMapFilled = false;
-        static ScDisplayNameMap aPageMap[3];
-        if ( !bPageMapFilled )
+        static ScDisplayNameMap const aPageMap[]
         {
-            aPageMap[0].aDispName = ScResId( STR_STYLENAME_STANDARD );
-            aPageMap[0].aProgName = SC_STYLE_PROG_STANDARD;
-
-            aPageMap[1].aDispName = ScResId( STR_STYLENAME_REPORT );
-            aPageMap[1].aProgName = SC_STYLE_PROG_REPORT;
-
+            { ScResId( STR_STYLENAME_STANDARD ), OUString(SC_STYLE_PROG_STANDARD) },
+            { ScResId( STR_STYLENAME_REPORT ),   OUString(SC_STYLE_PROG_REPORT) },
             //  last entry remains empty
-
-            bPageMapFilled = true;
-        }
+            { OUString(), OUString() },
+        };
         return aPageMap;
     }
     OSL_FAIL("invalid family");

@@ -155,10 +155,9 @@ static bool getFromCommandLineArgs(
 {
     OSL_ASSERT(value);
 
-    static NameValueVector *pNameValueVector = nullptr;
-    if (!pNameValueVector)
+    static NameValueVector nameValueVector = [&]()
     {
-        static NameValueVector nameValueVector;
+        NameValueVector tmp;
 
         sal_Int32 nArgCount = osl_getCommandArgCount();
         for(sal_Int32 i = 0; i < nArgCount; ++ i)
@@ -189,18 +188,18 @@ static bool getFromCommandLineArgs(
                         nameValue.sValue = nameValue.sValue.copy(0,nameValue.sValue.getLength()-1);
                     }
 
-                    nameValueVector.push_back( nameValue );
+                    tmp.push_back( nameValue );
                 }
             }
             rtl_uString_release( pArg );
-        }
-        pNameValueVector = &nameValueVector;
-    }
+        };
+        return tmp;
+    }();
 
     bool found = false;
 
-    for(NameValueVector::iterator ii = pNameValueVector->begin();
-        ii != pNameValueVector->end();
+    for(NameValueVector::iterator ii = nameValueVector.begin();
+        ii != nameValueVector.end();
         ++ii)
     {
         if ((*ii).sName == key)

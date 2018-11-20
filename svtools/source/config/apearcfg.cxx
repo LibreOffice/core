@@ -94,11 +94,8 @@ SvtTabAppearanceCfg::~SvtTabAppearanceCfg( )
 
 const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
 {
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
+    static Sequence<OUString> const aNames
     {
-        static const sal_Char* aPropNames[] =
-        {
              "Window/Drag"                       //  0
             ,"Menu/FollowMouse"                  //  1
             ,"Dialog/MousePositioning"           //  2
@@ -107,15 +104,7 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
             ,"FontAntiAliasing/Enabled"          //  4
             ,"FontAntiAliasing/MinPixelHeight"   //  5
 #endif
-        };
-        const int nCount = SAL_N_ELEMENTS( aPropNames );
-        aNames.realloc(nCount);
-
-        const sal_Char** pAsciiNames = aPropNames;
-        OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; ++i, ++pNames, ++pAsciiNames)
-            *pNames = OUString::createFromAscii( *pAsciiNames );
-    }
+    };
     return aNames;
 }
 
