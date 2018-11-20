@@ -491,12 +491,17 @@ OUString SwEditShell::GetDropText( const sal_Int32 nChars ) const
         }
     }
 
-    SwTextNode* pTextNd = pCursor->GetNode( !pCursor->HasMark() ).GetTextNode();
+    SwTextNode const*const pTextNd = pCursor->GetNode(false).GetTextNode();
     if( pTextNd )
     {
-        sal_Int32 nDropLen = pTextNd->GetDropLen( nChars );
-        if( nDropLen )
-            aText = pTextNd->GetText().copy(0, nDropLen);
+        SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(
+            pTextNd->getLayoutFrame(GetLayout())));
+        SAL_WARN_IF(!pTextFrame, "sw.core", "GetDropText cursor has no frame?");
+        if (pTextFrame)
+        {
+            TextFrameIndex const nDropLen(pTextFrame->GetDropLen(TextFrameIndex(nChars)));
+            aText = pTextFrame->GetText().copy(0, sal_Int32(nDropLen));
+        }
     }
 
     return aText;
@@ -512,6 +517,14 @@ void SwEditShell::ReplaceDropText( const OUString &rStr, SwPaM* pPaM )
 
         const SwNodeIndex& rNd = pCursor->GetPoint()->nNode;
         SwPaM aPam( rNd, rStr.getLength(), rNd, 0 );
+        SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(
+            rNd.GetNode().GetTextNode()->getLayoutFrame(GetLayout())));
+        if (pTextFrame)
+        {
+            *aPam.GetPoint() = pTextFrame->MapViewToModelPos(TextFrameIndex(0));
+            *aPam.GetMark() = pTextFrame->MapViewToModelPos(TextFrameIndex(
+                std::min(rStr.getLength(), pTextFrame->GetText().getLength())));
+        }
         if( !GetDoc()->getIDocumentContentOperations().Overwrite( aPam, rStr ) )
         {
             OSL_FAIL( "Doc->getIDocumentContentOperations().Overwrite(Str) failed." );
