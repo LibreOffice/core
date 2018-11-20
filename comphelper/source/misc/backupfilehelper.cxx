@@ -2044,29 +2044,25 @@ namespace comphelper
 
     const std::vector< OUString >& BackupFileHelper::getCustomizationDirNames()
     {
-        static std::vector< OUString > aDirNames;
-
-        if (aDirNames.empty())
+        static std::vector< OUString > aDirNames =
         {
-            aDirNames.emplace_back("config");     // UI config stuff
-            aDirNames.emplace_back("registry");   // most of the registry stuff
-            aDirNames.emplace_back("psprint");    // not really needed, can be abandoned
-            aDirNames.emplace_back("store");      // not really needed, can be abandoned
-            aDirNames.emplace_back("temp");       // not really needed, can be abandoned
-            aDirNames.emplace_back("pack");       // own backup dir
-        }
+            "config",     // UI config stuff
+            "registry",   // most of the registry stuff
+            "psprint",    // not really needed, can be abandoned
+            "store",      // not really needed, can be abandoned
+            "temp",       // not really needed, can be abandoned
+            "pack"       // own backup dir
+        };
 
         return aDirNames;
     }
 
     const std::vector< OUString >& BackupFileHelper::getCustomizationFileNames()
     {
-        static std::vector< OUString > aFileNames;
-
-        if (aFileNames.empty())
+        static std::vector< OUString > aFileNames =
         {
-            aFileNames.emplace_back("registrymodifications.xcu"); // personal registry stuff
-        }
+            "registrymodifications.xcu" // personal registry stuff
+        };
 
         return aFileNames;
     }

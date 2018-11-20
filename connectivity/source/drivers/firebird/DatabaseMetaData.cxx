@@ -805,10 +805,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
     ODatabaseMetaDataResultSet* pResultSet =
             new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
     uno::Reference< XResultSet > xResultSet = pResultSet;
-    static ODatabaseMetaDataResultSet::ORows aResults;
-
-    if(aResults.empty())
+    static ODatabaseMetaDataResultSet::ORows aResults = [&]()
     {
+        ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow(19);
 
         // Common data
@@ -838,7 +837,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // Varchar
         aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
@@ -850,7 +849,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // Binary (CHAR)
         // It is distinguished from Text type by its character set
@@ -862,7 +861,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
                 sal_Int16(ColumnSearch::NONE)); // Searchable
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // Varbinary (VARCHAR)
         aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
@@ -882,12 +881,12 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // Longvarbinary (SQL_BLOB)
         // Distinguished from simple blob with a user-defined subtype.
         aRow[2] = new ORowSetValueDecorator(DataType::LONGVARBINARY);
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // Integer Types common
         {
@@ -902,17 +901,17 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[1] = new ORowSetValueDecorator(OUString("SMALLINT"));
         aRow[2] = new ORowSetValueDecorator(DataType::SMALLINT);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(5)); // Prevision
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
         // Integer (SQL_LONG)
         aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
         aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(10)); // Precision
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
         // Bigint (SQL_INT64)
         aRow[1] = new ORowSetValueDecorator(OUString("BIGINT"));
         aRow[2] = new ORowSetValueDecorator(DataType::BIGINT);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(20)); // Precision
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // Decimal Types common
         {
@@ -928,14 +927,14 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
         aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
         // Decimal
         aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
         aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         // Float (SQL_FLOAT)
@@ -944,14 +943,14 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[3] = new ORowSetValueDecorator(sal_Int16(7)); // Precision
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
         aRow[15] = new ORowSetValueDecorator(sal_Int16(7)); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
         // Double (SQL_DOUBLE)
         aRow[1] = new ORowSetValueDecorator(OUString("DOUBLE PRECISION"));
         aRow[2] = new ORowSetValueDecorator(DataType::DOUBLE);
         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
         aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // TODO: no idea whether D_FLOAT corresponds to an sql type
 
@@ -965,7 +964,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // SQL_TYPE_TIME
         aRow[1] = new ORowSetValueDecorator(OUString("TIME"));
@@ -989,7 +988,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // SQL_BLOB
         aRow[1] = new ORowSetValueDecorator(OUString("BLOB"));
@@ -1001,7 +1000,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
+        tmp.push_back(aRow);
 
         // SQL_BOOLEAN
         aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
@@ -1013,9 +1012,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(false); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        aResults.push_back(aRow);
-
-    }
+        tmp.push_back(aRow);
+        return tmp;
+    }();
     pResultSet->setRows(aResults);
     return xResultSet;
 }

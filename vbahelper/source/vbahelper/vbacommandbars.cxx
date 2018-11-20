@@ -233,12 +233,10 @@ ScVbaCommandBars::getServiceImplName()
 uno::Sequence<OUString>
 ScVbaCommandBars::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.CommandBars";
-    }
+        "ooo.vba.CommandBars"
+    };
     return aServiceNames;
 }
 

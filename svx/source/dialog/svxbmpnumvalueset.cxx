@@ -78,17 +78,16 @@ static const sal_Unicode aBulletTypes[] =
 
 static vcl::Font& lcl_GetDefaultBulletFont()
 {
-    static bool bInit = false;
-    static vcl::Font aDefBulletFont("OpenSymbol", "", Size(0, 14));
-    if(!bInit)
+    static vcl::Font aDefBulletFont = [&]()
     {
-        aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
-        aDefBulletFont.SetFamily( FAMILY_DONTKNOW );
-        aDefBulletFont.SetPitch( PITCH_DONTKNOW );
-        aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
-        aDefBulletFont.SetTransparent( true );
-        bInit = true;
-    }
+        static vcl::Font tmp("OpenSymbol", "", Size(0, 14));
+        tmp.SetCharSet( RTL_TEXTENCODING_SYMBOL );
+        tmp.SetFamily( FAMILY_DONTKNOW );
+        tmp.SetPitch( PITCH_DONTKNOW );
+        tmp.SetWeight( WEIGHT_DONTKNOW );
+        tmp.SetTransparent( true );
+        return tmp;
+    }();
     return aDefBulletFont;
 }
 

@@ -433,12 +433,10 @@ ScVbaLineFormat::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaLineFormat::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.msform.LineFormat";
-    }
+        "ooo.vba.msform.LineFormat"
+    };
     return aServiceNames;
 }
 

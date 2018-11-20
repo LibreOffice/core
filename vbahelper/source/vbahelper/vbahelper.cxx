@@ -100,12 +100,7 @@ nViewNo && !pView->GetObjectShell()->IsInPlaceActive() )
 uno::Reference< beans::XIntrospectionAccess >
 getIntrospectionAccess( const uno::Any& aObject )
 {
-    static uno::Reference< beans::XIntrospection > xIntrospection;
-    if( !xIntrospection.is() )
-    {
-        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        xIntrospection.set( beans::theIntrospection::get( xContext ) );
-    }
+    static uno::Reference< beans::XIntrospection > xIntrospection( beans::theIntrospection::get( comphelper::getProcessComponentContext() ) );
     return xIntrospection->inspect( aObject );
 }
 

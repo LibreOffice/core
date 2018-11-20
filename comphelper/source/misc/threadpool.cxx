@@ -109,8 +109,7 @@ ThreadPool& ThreadPool::getSharedOptimalPool()
 
 sal_Int32 ThreadPool::getPreferredConcurrency()
 {
-    static sal_Int32 ThreadCount = 0;
-    if (ThreadCount == 0)
+    static sal_Int32 ThreadCount = [&]()
     {
         const sal_Int32 nHardThreads = std::max(std::thread::hardware_concurrency(), 1U);
         sal_Int32 nThreads = nHardThreads;
@@ -122,8 +121,8 @@ sal_Int32 ThreadPool::getPreferredConcurrency()
         }
 
         nThreads = std::min(nHardThreads, nThreads);
-        ThreadCount = std::max<sal_Int32>(nThreads, 1);
-    }
+        return std::max<sal_Int32>(nThreads, 1);
+    }();
 
     return ThreadCount;
 }

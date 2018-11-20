@@ -897,63 +897,43 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNam
 
 static uno::Sequence< OUString > const & getAttributeNames()
 {
-    static uno::Sequence< OUString >* pNames = nullptr;
-
-    if( pNames == nullptr )
+    static uno::Sequence< OUString > const aNames
     {
         // Add the font name to attribute list
-        uno::Sequence< OUString >* pSeq = new uno::Sequence< OUString >( 13 );
-
-        OUString* pStrings = pSeq->getArray();
-
         // sorted list of strings
-        sal_Int32 i = 0;
-
-        pStrings[i++] = UNO_NAME_CHAR_BACK_COLOR;
-        pStrings[i++] = UNO_NAME_CHAR_COLOR;
-        pStrings[i++] = UNO_NAME_CHAR_CONTOURED;
-        pStrings[i++] = UNO_NAME_CHAR_EMPHASIS;
-        pStrings[i++] = UNO_NAME_CHAR_ESCAPEMENT;
-        pStrings[i++] = UNO_NAME_CHAR_FONT_NAME;
-        pStrings[i++] = UNO_NAME_CHAR_HEIGHT;
-        pStrings[i++] = UNO_NAME_CHAR_POSTURE;
-        pStrings[i++] = UNO_NAME_CHAR_SHADOWED;
-        pStrings[i++] = UNO_NAME_CHAR_STRIKEOUT;
-        pStrings[i++] = UNO_NAME_CHAR_UNDERLINE;
-        pStrings[i++] = UNO_NAME_CHAR_UNDERLINE_COLOR;
-        pStrings[i++] = UNO_NAME_CHAR_WEIGHT;
-        assert(i == pSeq->getLength());
-        pNames = pSeq;
-    }
-    return *pNames;
+        UNO_NAME_CHAR_BACK_COLOR,
+        UNO_NAME_CHAR_COLOR,
+        UNO_NAME_CHAR_CONTOURED,
+        UNO_NAME_CHAR_EMPHASIS,
+        UNO_NAME_CHAR_ESCAPEMENT,
+        UNO_NAME_CHAR_FONT_NAME,
+        UNO_NAME_CHAR_HEIGHT,
+        UNO_NAME_CHAR_POSTURE,
+        UNO_NAME_CHAR_SHADOWED,
+        UNO_NAME_CHAR_STRIKEOUT,
+        UNO_NAME_CHAR_UNDERLINE,
+        UNO_NAME_CHAR_UNDERLINE_COLOR,
+        UNO_NAME_CHAR_WEIGHT,
+    };
+    return aNames;
 }
 
 static uno::Sequence< OUString > const & getSupplementalAttributeNames()
 {
-    static uno::Sequence< OUString >* pNames = nullptr;
-
-    if( pNames == nullptr )
+    static uno::Sequence< OUString > const aNames
     {
-        uno::Sequence< OUString >* pSeq = new uno::Sequence< OUString >( 9 );
-
-        OUString* pStrings = pSeq->getArray();
-
         // sorted list of strings
-        sal_Int32 i = 0;
-
-        pStrings[i++] = UNO_NAME_NUMBERING_LEVEL;
-        pStrings[i++] = UNO_NAME_NUMBERING_RULES;
-        pStrings[i++] = UNO_NAME_PARA_ADJUST;
-        pStrings[i++] = UNO_NAME_PARA_BOTTOM_MARGIN;
-        pStrings[i++] = UNO_NAME_PARA_FIRST_LINE_INDENT;
-        pStrings[i++] = UNO_NAME_PARA_LEFT_MARGIN;
-        pStrings[i++] = UNO_NAME_PARA_LINE_SPACING;
-        pStrings[i++] = UNO_NAME_PARA_RIGHT_MARGIN;
-        pStrings[i++] = UNO_NAME_TABSTOPS;
-        assert(i == pSeq->getLength());
-        pNames = pSeq;
-    }
-    return *pNames;
+        UNO_NAME_NUMBERING_LEVEL,
+        UNO_NAME_NUMBERING_RULES,
+        UNO_NAME_PARA_ADJUST,
+        UNO_NAME_PARA_BOTTOM_MARGIN,
+        UNO_NAME_PARA_FIRST_LINE_INDENT,
+        UNO_NAME_PARA_LEFT_MARGIN,
+        UNO_NAME_PARA_LINE_SPACING,
+        UNO_NAME_PARA_RIGHT_MARGIN,
+        UNO_NAME_TABSTOPS,
+    };
+    return aNames;
 }
 
 // XInterface

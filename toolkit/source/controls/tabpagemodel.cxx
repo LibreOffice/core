@@ -92,13 +92,8 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
 ::cppu::IPropertyArrayHelper& UnoControlTabPageModel::getInfoHelper()
 {
-    static UnoPropertyArrayHelper* pHelper = nullptr;
-    if ( !pHelper )
-    {
-        Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
-        pHelper = new UnoPropertyArrayHelper( aIDs );
-    }
-    return *pHelper;
+    static UnoPropertyArrayHelper aHelper( ImplGetPropertyIds() );
+    return aHelper;
 }
 // beans::XMultiPropertySet
 uno::Reference< beans::XPropertySetInfo > UnoControlTabPageModel::getPropertySetInfo(  )

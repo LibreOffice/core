@@ -19,6 +19,7 @@
 
 #include <componentmodule.hxx>
 #include "dbpservices.hxx"
+#include <mutex>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -28,14 +29,14 @@ extern "C" {
 
 static void dbp_initializeModule()
 {
-    static bool s_bInit = false;
-    if (!s_bInit)
+    std::once_flag aInit;
+    std::call_once(aInit, [&]()
     {
         createRegistryInfo_OGroupBoxWizard();
         createRegistryInfo_OListComboWizard();
         createRegistryInfo_OGridWizard();
-        s_bInit = true;
-    }
+        return true;
+    });
 }
 
 }
