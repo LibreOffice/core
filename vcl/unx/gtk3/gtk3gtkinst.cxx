@@ -4129,9 +4129,10 @@ struct GtkInstanceTreeIter : public weld::TreeIter
 {
     GtkInstanceTreeIter(const GtkInstanceTreeIter* pOrig)
     {
-        if (!pOrig)
-            return;
-        iter = pOrig->iter;
+        if (pOrig)
+            iter = pOrig->iter;
+        else
+            memset(&iter, 0, sizeof(iter));
     }
     GtkTreeIter iter;
 };
