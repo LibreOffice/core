@@ -256,10 +256,9 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
 static EventInfoHash& getEventTransInfo()
 {
-    static bool initialised = false;
-    static EventInfoHash eventTransInfo;
-    if ( !initialised )
+    static EventInfoHash eventTransInfo = [&]()
     {
+        EventInfoHash tmp;
         OUString sEventInfo;
         TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
         int nCount = SAL_N_ELEMENTS(aTranslatePropMap_Impl);
@@ -275,10 +274,10 @@ static EventInfoHash& getEventTransInfo()
                 pTransProp++;
                 i++;
             }while(i < nCount && sEventInfo == pTransProp->sEventInfo);
-            eventTransInfo[sEventInfo] = infoList;
+            tmp[sEventInfo] = infoList;
         }
-        initialised = true;
-    }
+        return tmp;
+    }();
     return eventTransInfo;
 }
 

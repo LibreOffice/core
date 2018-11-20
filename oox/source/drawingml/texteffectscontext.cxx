@@ -20,82 +20,80 @@ namespace oox { namespace drawingml {
 namespace
 {
 
-OUString lclGetNameForElementId(sal_uInt32 aId)
+OUString const & lclGetNameForElementId(sal_uInt32 aId)
 {
-    static std::map<sal_uInt32, OUString> aIdMap;
-    if(aIdMap.empty())
+    static std::map<sal_uInt32, OUString> const aIdMap
     {
-        aIdMap[OOX_TOKEN(w14, srgbClr)]      = "srgbClr";
-        aIdMap[OOX_TOKEN(w14, schemeClr)]    = "schemeClr";
-        aIdMap[OOX_TOKEN(w14, tint)]         = "tint";
-        aIdMap[OOX_TOKEN(w14, shade)]        = "shade";
-        aIdMap[OOX_TOKEN(w14, alpha)]        = "alpha";
-        aIdMap[OOX_TOKEN(w14, hueMod)]       = "hueMod";
-        aIdMap[OOX_TOKEN(w14, sat)]          = "sat";
-        aIdMap[OOX_TOKEN(w14, satOff)]       = "satOff";
-        aIdMap[OOX_TOKEN(w14, satMod)]       = "satMod";
-        aIdMap[OOX_TOKEN(w14, lum)]          = "lum";
-        aIdMap[OOX_TOKEN(w14, lumOff)]       = "lumOff";
-        aIdMap[OOX_TOKEN(w14, lumMod)]       = "lumMod";
-        aIdMap[OOX_TOKEN(w14, noFill)]       = "noFill";
-        aIdMap[OOX_TOKEN(w14, solidFill)]    = "solidFill";
-        aIdMap[OOX_TOKEN(w14, gradFill)]     = "gradFill";
-        aIdMap[OOX_TOKEN(w14, gsLst)]        = "gsLst";
-        aIdMap[OOX_TOKEN(w14, gs)]           = "gs";
-        aIdMap[OOX_TOKEN(w14, pos)]          = "pos";
-        aIdMap[OOX_TOKEN(w14, lin)]          = "lin";
-        aIdMap[OOX_TOKEN(w14, path)]         = "path";
-        aIdMap[OOX_TOKEN(w14, fillToRect)]   = "fillToRect";
-        aIdMap[OOX_TOKEN(w14, prstDash)]     = "prstDash";
-        aIdMap[OOX_TOKEN(w14, round)]        = "round";
-        aIdMap[OOX_TOKEN(w14, bevel)]        = "bevel";
-        aIdMap[OOX_TOKEN(w14, miter)]        = "miter";
-        aIdMap[OOX_TOKEN(w14, camera)]       = "camera";
-        aIdMap[OOX_TOKEN(w14, lightRig)]     = "lightRig";
-        aIdMap[OOX_TOKEN(w14, rot)]          = "rot";
-        aIdMap[OOX_TOKEN(w14, bevelT)]       = "bevelT";
-        aIdMap[OOX_TOKEN(w14, bevelB)]       = "bevelB";
-        aIdMap[OOX_TOKEN(w14, extrusionClr)] = "extrusionClr";
-        aIdMap[OOX_TOKEN(w14, contourClr)]   = "contourClr";
-        aIdMap[OOX_TOKEN(w14, styleSet)]     = "styleSet";
+        { OOX_TOKEN(w14, srgbClr)      , "srgbClr" },
+        { OOX_TOKEN(w14, schemeClr)    , "schemeClr" },
+        { OOX_TOKEN(w14, tint)         , "tint" },
+        { OOX_TOKEN(w14, shade)        , "shade" },
+        { OOX_TOKEN(w14, alpha)        , "alpha" },
+        { OOX_TOKEN(w14, hueMod)       , "hueMod" },
+        { OOX_TOKEN(w14, sat)          , "sat" },
+        { OOX_TOKEN(w14, satOff)       , "satOff" },
+        { OOX_TOKEN(w14, satMod)       , "satMod" },
+        { OOX_TOKEN(w14, lum)          , "lum" },
+        { OOX_TOKEN(w14, lumOff)       , "lumOff" },
+        { OOX_TOKEN(w14, lumMod)       , "lumMod" },
+        { OOX_TOKEN(w14, noFill)       , "noFill" },
+        { OOX_TOKEN(w14, solidFill)    , "solidFill" },
+        { OOX_TOKEN(w14, gradFill)     , "gradFill" },
+        { OOX_TOKEN(w14, gsLst)        , "gsLst" },
+        { OOX_TOKEN(w14, gs)           , "gs" },
+        { OOX_TOKEN(w14, pos)          , "pos" },
+        { OOX_TOKEN(w14, lin)          , "lin" },
+        { OOX_TOKEN(w14, path)         , "path" },
+        { OOX_TOKEN(w14, fillToRect)   , "fillToRect" },
+        { OOX_TOKEN(w14, prstDash)     , "prstDash" },
+        { OOX_TOKEN(w14, round)        , "round" },
+        { OOX_TOKEN(w14, bevel)        , "bevel" },
+        { OOX_TOKEN(w14, miter)        , "miter" },
+        { OOX_TOKEN(w14, camera)       , "camera" },
+        { OOX_TOKEN(w14, lightRig)     , "lightRig" },
+        { OOX_TOKEN(w14, rot)          , "rot" },
+        { OOX_TOKEN(w14, bevelT)       , "bevelT" },
+        { OOX_TOKEN(w14, bevelB)       , "bevelB" },
+        { OOX_TOKEN(w14, extrusionClr) , "extrusionClr" },
+        { OOX_TOKEN(w14, contourClr)   , "contourClr"} ,
+        { OOX_TOKEN(w14, styleSet)     , "styleSet" },
 
-        aIdMap[OOX_TOKEN(w14, glow)]         = "glow";
-        aIdMap[OOX_TOKEN(w14, shadow)]       = "shadow";
-        aIdMap[OOX_TOKEN(w14, reflection)]   = "reflection";
-        aIdMap[OOX_TOKEN(w14, textOutline)]  = "textOutline";
-        aIdMap[OOX_TOKEN(w14, textFill)]     = "textFill";
-        aIdMap[OOX_TOKEN(w14, scene3d)]      = "scene3d";
-        aIdMap[OOX_TOKEN(w14, props3d)]      = "props3d";
-        aIdMap[OOX_TOKEN(w14, ligatures)]    = "ligatures";
-        aIdMap[OOX_TOKEN(w14, numForm)]      = "numForm";
-        aIdMap[OOX_TOKEN(w14, numSpacing)]   = "numSpacing";
-        aIdMap[OOX_TOKEN(w14, stylisticSets)]= "stylisticSets";
-        aIdMap[OOX_TOKEN(w14, cntxtAlts)]    = "cntxtAlts";
-    }
+        { OOX_TOKEN(w14, glow)         , "glow" },
+        { OOX_TOKEN(w14, shadow)       , "shadow" },
+        { OOX_TOKEN(w14, reflection)   , "reflection" },
+        { OOX_TOKEN(w14, textOutline)  , "textOutline" },
+        { OOX_TOKEN(w14, textFill)     , "textFill" },
+        { OOX_TOKEN(w14, scene3d)      , "scene3d" },
+        { OOX_TOKEN(w14, props3d)      , "props3d" },
+        { OOX_TOKEN(w14, ligatures)    , "ligatures" },
+        { OOX_TOKEN(w14, numForm)      , "numForm" },
+        { OOX_TOKEN(w14, numSpacing)   , "numSpacing" },
+        { OOX_TOKEN(w14, stylisticSets), "stylisticSets" },
+        { OOX_TOKEN(w14, cntxtAlts)    , "cntxtAlts" },
+    };
 
-    return aIdMap[aId];
+    return aIdMap.find(aId)->second;
 }
 
 OUString lclGetGrabBagName(sal_uInt32 aId)
 {
-    static std::map<sal_uInt32, OUString> aGrabBagNameMap;
-    if(aGrabBagNameMap.empty())
+    static std::map<sal_uInt32, OUString> const aGrabBagNameMap
     {
-        aGrabBagNameMap[OOX_TOKEN(w14, glow)]         = "CharGlowTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, shadow)]       = "CharShadowTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, reflection)]   = "CharReflectionTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, textOutline)]  = "CharTextOutlineTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, textFill)]     = "CharTextFillTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, scene3d)]      = "CharScene3DTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, props3d)]      = "CharProps3DTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, ligatures)]    = "CharLigaturesTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, numForm)]      = "CharNumFormTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, numSpacing)]   = "CharNumSpacingTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, stylisticSets)]= "CharStylisticSetsTextEffect";
-        aGrabBagNameMap[OOX_TOKEN(w14, cntxtAlts)]    = "CharCntxtAltsTextEffect";
-    }
+        { OOX_TOKEN(w14, glow)         , "CharGlowTextEffect" },
+        { OOX_TOKEN(w14, shadow)       , "CharShadowTextEffect" },
+        { OOX_TOKEN(w14, reflection)   , "CharReflectionTextEffect" },
+        { OOX_TOKEN(w14, textOutline)  , "CharTextOutlineTextEffect" },
+        { OOX_TOKEN(w14, textFill)     , "CharTextFillTextEffect" },
+        { OOX_TOKEN(w14, scene3d)      , "CharScene3DTextEffect" },
+        { OOX_TOKEN(w14, props3d)      , "CharProps3DTextEffect" },
+        { OOX_TOKEN(w14, ligatures)    , "CharLigaturesTextEffect" },
+        { OOX_TOKEN(w14, numForm)      , "CharNumFormTextEffect" },
+        { OOX_TOKEN(w14, numSpacing)   , "CharNumSpacingTextEffect" },
+        { OOX_TOKEN(w14, stylisticSets), "CharStylisticSetsTextEffect" },
+        { OOX_TOKEN(w14, cntxtAlts)    , "CharCntxtAltsTextEffect" },
+    };
 
-    return aGrabBagNameMap[aId];
+    return aGrabBagNameMap.find(aId)->second;
 }
 
 }

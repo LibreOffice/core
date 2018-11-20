@@ -156,17 +156,14 @@ uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
 
 uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes
     {
-        aTypes.realloc(5);
-        uno::Type* pPtr = aTypes.getArray();
-        pPtr[0] = cppu::UnoType<sheet::XViewPane>::get();
-        pPtr[1] = cppu::UnoType<sheet::XCellRangeReferrer>::get();
-        pPtr[2] = cppu::UnoType<view::XFormLayerAccess>::get();
-        pPtr[3] = cppu::UnoType<lang::XServiceInfo>::get();
-        pPtr[4] = cppu::UnoType<lang::XTypeProvider>::get();
-    }
+        cppu::UnoType<sheet::XViewPane>::get(),
+        cppu::UnoType<sheet::XCellRangeReferrer>::get(),
+        cppu::UnoType<view::XFormLayerAccess>::get(),
+        cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+    };
     return aTypes;
 }
 
@@ -578,21 +575,16 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
 
 uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aViewPaneTypes(ScViewPaneBase::getTypes());
-        long nViewPaneLen = aViewPaneTypes.getLength();
-        const uno::Type* pViewPanePtr = aViewPaneTypes.getConstArray();
+        uno::Sequence<uno::Type> tmp(ScViewPaneBase::getTypes());
 
         uno::Sequence<uno::Type> aControllerTypes(SfxBaseController::getTypes());
-        long nControllerLen = aControllerTypes.getLength();
-        const uno::Type* pControllerPtr = aControllerTypes.getConstArray();
+        std::copy(aControllerTypes.begin(), aControllerTypes.end(), tmp.end());
 
-        long nParentLen = nViewPaneLen + nControllerLen;
-
-        aTypes.realloc( nParentLen + 12 );
-        uno::Type* pPtr = aTypes.getArray();
+        long nParentLen = tmp.getLength();
+        tmp.realloc( nParentLen + 12 );
+        uno::Type* pPtr = tmp.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSpreadsheetView>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<container::XEnumerationAccess>::get();
         pPtr[nParentLen + 2] = cppu::UnoType<container::XIndexAccess>::get();
@@ -605,13 +597,8 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
         pPtr[nParentLen + 9] = cppu::UnoType<sheet::XEnhancedMouseClickBroadcaster>::get();
         pPtr[nParentLen + 10] = cppu::UnoType<sheet::XActivationBroadcaster>::get();
         pPtr[nParentLen + 11] = cppu::UnoType<datatransfer::XTransferableSupplier>::get();
-
-        long i;
-        for (i=0; i<nViewPaneLen; i++)
-            pPtr[i] = pViewPanePtr[i];              // parent types first
-        for (i=0; i<nControllerLen; i++)
-            pPtr[nViewPaneLen+i] = pControllerPtr[i];
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 

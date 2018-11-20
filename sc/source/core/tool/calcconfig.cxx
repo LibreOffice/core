@@ -29,17 +29,13 @@ using comphelper::ConfigurationListener;
 
 static rtl::Reference<ConfigurationListener> const & getMiscListener()
 {
-    static rtl::Reference<ConfigurationListener> xListener;
-    if (!xListener.is())
-        xListener.set(new ConfigurationListener("/org.openoffice.Office.Common/Misc"));
+    static rtl::Reference<ConfigurationListener> xListener(new ConfigurationListener("/org.openoffice.Office.Common/Misc"));
     return xListener;
 }
 
 static rtl::Reference<ConfigurationListener> const & getFormulaCalculationListener()
 {
-    static rtl::Reference<ConfigurationListener> xListener;
-    if (!xListener.is())
-        xListener.set(new ConfigurationListener("/org.openoffice.Office.Calc/Formula/Calculation"));
+    static rtl::Reference<ConfigurationListener> xListener(new ConfigurationListener("/org.openoffice.Office.Calc/Formula/Calculation"));
     return xListener;
 }
 

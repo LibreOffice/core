@@ -239,13 +239,12 @@ static TransliterationWrapper& GetIgnoreTranslWrapper()
 }
 static CollatorWrapper& GetCollatorWrapper()
 {
-    static int bIsInit = 0;
-    static CollatorWrapper aCollWrp( ::comphelper::getProcessComponentContext() );
-    if( !bIsInit )
+    static CollatorWrapper aCollWrp = [&]()
     {
-        aCollWrp.loadDefaultCollator( GetAppLang().getLocale(), 0 );
-        bIsInit = 1;
-    }
+        CollatorWrapper tmp( ::comphelper::getProcessComponentContext() );
+        tmp.loadDefaultCollator( GetAppLang().getLocale(), 0 );
+        return tmp;
+    }();
     return aCollWrp;
 }
 

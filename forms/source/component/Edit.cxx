@@ -61,12 +61,8 @@ using namespace ::com::sun::star::form::binding;
 
 Sequence<Type> OEditControl::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-    {
         // my two base classes
-        aTypes = concatSequences(OBoundControl::_getTypes(), OEditControl_BASE::getTypes());
-    }
+    static Sequence<Type> const aTypes = concatSequences(OBoundControl::_getTypes(), OEditControl_BASE::getTypes());
     return aTypes;
 }
 

@@ -121,12 +121,10 @@ SwVbaTemplate::getServiceImplName()
 uno::Sequence< OUString >
 SwVbaTemplate::getServiceNames()
 {
-        static uno::Sequence< OUString > aServiceNames;
-        if ( aServiceNames.getLength() == 0 )
+        static uno::Sequence< OUString > const aServiceNames
         {
-                aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = "ooo.vba.word.Template";
-        }
+            "ooo.vba.word.Template"
+        };
         return aServiceNames;
 }
 

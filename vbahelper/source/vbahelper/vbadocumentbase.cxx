@@ -286,12 +286,10 @@ VbaDocumentBase::getServiceImplName()
 uno::Sequence< OUString >
 VbaDocumentBase::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.VbaDocumentBase";
-    }
+        "ooo.vba.VbaDocumentBase"
+    };
     return aServiceNames;
 }
 

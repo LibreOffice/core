@@ -573,9 +573,7 @@ bool SwViewOption::IsAppearanceFlag(ViewOptFlags nFlag)
 namespace{
 rtl::Reference<comphelper::ConfigurationListener> const & getWCOptionListener()
 {
-    static rtl::Reference<comphelper::ConfigurationListener> xListener;
-    if (!xListener.is())
-        xListener.set(new comphelper::ConfigurationListener("/org.openoffice.Office.Writer/Cursor/Option"));
+    static rtl::Reference<comphelper::ConfigurationListener> xListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Writer/Cursor/Option"));
     return xListener;
 }
 }
