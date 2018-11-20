@@ -44,6 +44,7 @@ struct MyFieldInfo
     std::string parentClass;
     std::string fieldName;
     std::string sourceLocation;
+    SourceLocation loc;
 };
 bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
 {
@@ -68,19 +69,31 @@ public:
     {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
-        // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
-        // writing to the same logfile
-        std::string output;
-        for (const MyFieldInfo & s : definitionSet)
-            output += "definition:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.sourceLocation + "\n";
-        for (const MyFieldInfo & s : writeSet)
-            output += "write:\t" + s.parentClass + "\t" + s.fieldName + "\n";
-        for (const MyFieldInfo & s : readSet)
-            output += "read:\t" + s.parentClass + "\t" + s.fieldName + "\n";
-        std::ofstream myfile;
-        myfile.open( WORKDIR "/loplugin.unusedenumconstants.log", std::ios::app | std::ios::out);
-        myfile << output;
-        myfile.close();
+        if (!isUnitTestMode())
+        {
+            // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
+            // writing to the same logfile
+            std::string output;
+            for (const MyFieldInfo & s : definitionSet)
+                output += "definition:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.sourceLocation + "\n";
+            for (const MyFieldInfo & s : writeSet)
+                output += "write:\t" + s.parentClass + "\t" + s.fieldName + "\n";
+            for (const MyFieldInfo & s : readSet)
+                output += "read:\t" + s.parentClass + "\t" + s.fieldName + "\n";
+            std::ofstream myfile;
+            myfile.open( WORKDIR "/loplugin.unusedenumconstants.log", std::ios::app | std::ios::out);
+            myfile << output;
+            myfile.close();
+        }
+        else
+        {
+            for (const MyFieldInfo& s : writeSet)
+                report(DiagnosticsEngine::Warning, "write %0", s.loc)
+                    << s.fieldName;
+            for (const MyFieldInfo& s : readSet)
+                report(DiagnosticsEngine::Warning, "read %0", s.loc)
+                    << s.fieldName;
+        }
     }
 
     bool shouldVisitTemplateInstantiations () const { return true; }
@@ -106,6 +119,7 @@ MyFieldInfo UnusedEnumConstants::niceName(const EnumConstantDecl* enumConstantDe
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( enumConstantDecl->getLocation() );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
+    aInfo.loc = expansionLoc;
     aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
     loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 
@@ -143,7 +157,10 @@ bool UnusedEnumConstants::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     }
 
     const Stmt * parent = declRefExpr;
-try_again:
+    const Stmt * child = nullptr;
+
+walk_up:
+    child = parent;
     parent = getParentStmt(parent);
     bool bWrite = false;
     bool bRead = false;
@@ -153,54 +170,90 @@ try_again:
         // Could probably do better here.
         // Sometimes this is a constructor-initialiser-expression, so just make a pessimistic assumption.
         bWrite = true;
-    } else if (isa<CallExpr>(parent) || isa<InitListExpr>(parent) || isa<ArraySubscriptExpr>(parent)
-                || isa<ReturnStmt>(parent) || isa<DeclStmt>(parent)
-                || isa<CXXConstructExpr>(parent)
-                || isa<CXXThrowExpr>(parent))
+    }
+    else if (const CXXOperatorCallExpr * operatorCall = dyn_cast<CXXOperatorCallExpr>(parent))
+    {
+        auto oo = operatorCall->getOperator();
+        // if assignment op
+        if (oo == OO_Equal || oo == OO_StarEqual || oo == OO_SlashEqual || oo == OO_PercentEqual
+           || oo == OO_PlusEqual || oo == OO_MinusEqual || oo == OO_LessLessEqual
+           || oo == OO_AmpEqual || oo == OO_CaretEqual || oo == OO_PipeEqual)
+            bWrite = true;
+        // else if comparison op
+        else if (oo == OO_AmpAmp || oo == OO_PipePipe || oo == OO_Subscript
+            || oo == OO_Less || oo == OO_Greater || oo == OO_LessEqual || oo == OO_GreaterEqual || oo == OO_EqualEqual || oo == OO_ExclaimEqual)
+            bRead = true;
+        else
+            goto walk_up;
+    }
+    else if (const CXXMemberCallExpr * memberCall = dyn_cast<CXXMemberCallExpr>(parent))
+    {
+        //memberCall->getImplicitObjectArgument()->dump();
+        //child->dump();
+        // happens a lot with o3tl::typed_flags
+        if (*memberCall->child_begin() == child)
+            goto walk_up;
+        bWrite = true;
+    }
+    else if (isa<CallExpr>(parent) || isa<InitListExpr>(parent) || isa<ArraySubscriptExpr>(parent)
+             || isa<ReturnStmt>(parent) || isa<DeclStmt>(parent)
+             || isa<CXXConstructExpr>(parent)
+             || isa<CXXThrowExpr>(parent))
     {
         bWrite = true;
-    } else if (isa<CaseStmt>(parent) || isa<SwitchStmt>(parent))
+    }
+    else if (isa<CaseStmt>(parent) || isa<SwitchStmt>(parent) || isa<IfStmt>(parent)
+            || isa<WhileStmt>(parent) || isa<DoStmt>(parent) || isa<ForStmt>(parent) || isa<DefaultStmt>(parent))
     {
         bRead = true;
-    } else if (const BinaryOperator * binaryOp = dyn_cast<BinaryOperator>(parent))
+    }
+    else if (const BinaryOperator * binaryOp = dyn_cast<BinaryOperator>(parent))
     {
         if (BinaryOperator::isAssignmentOp(binaryOp->getOpcode())) {
             bWrite = true;
-        } else {
+        } else if (BinaryOperator::isComparisonOp(binaryOp->getOpcode())) {
             bRead = true;
+        } else {
+            goto walk_up;
         }
-    } else if (const CXXOperatorCallExpr * operatorCall = dyn_cast<CXXOperatorCallExpr>(parent))
+    }
+    else if (isa<ConditionalOperator>(parent))
     {
-        auto oo = operatorCall->getOperator();
-        if (oo == OO_Equal
-            || (oo >= OO_PlusEqual && oo <= OO_GreaterGreaterEqual)) {
-            bWrite = true;
-        } else {
-            bRead = true;
-        }
-    } else if (isa<CastExpr>(parent) || isa<UnaryOperator>(parent)
-                || isa<ConditionalOperator>(parent) || isa<ParenExpr>(parent)
+        goto walk_up;
+    }
+    else if (isa<CastExpr>(parent) || isa<UnaryOperator>(parent)
+                || isa<ParenExpr>(parent)
                 || isa<MaterializeTemporaryExpr>(parent)
-                || isa<ExprWithCleanups>(parent))
+                || isa<ExprWithCleanups>(parent)
+#if CLANG_VERSION >= 80000
+                || isa<ConstantExpr>(parent)
+#endif
+                || isa<CXXBindTemporaryExpr>(parent))
     {
-        goto try_again;
-    } else if (isa<CXXDefaultArgExpr>(parent))
+        goto walk_up;
+    }
+    else if (isa<CXXDefaultArgExpr>(parent))
     {
         // TODO this could be improved
         bWrite = true;
-    } else if (isa<DeclRefExpr>(parent))
+    }
+    else if (isa<DeclRefExpr>(parent))
     {
         // slightly weird case I saw in basegfx where the enum is being used as a template param
         bWrite = true;
-    } else if (isa<MemberExpr>(parent))
+    }
+    else if (isa<MemberExpr>(parent))
     {
-        // slightly weird case I saw in sc where the enum is being used as a template param
-        bWrite = true;
-    } else if (isa<UnresolvedLookupExpr>(parent))
+        goto walk_up;
+    }
+    else if (isa<UnresolvedLookupExpr>(parent)
+            || isa<CompoundStmt>(parent))
     {
         bRead = true;
         bWrite = true;
-    } else {
+    }
+    else
+    {
         bDump = true;
     }
 
