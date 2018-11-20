@@ -32,7 +32,9 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/controllayout.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
+#ifdef MACOSX
+# include <vcl/opengl/OpenGLHelper.hxx>
+#endif
 
 #include <outdata.hxx>
 #include <outdev.h>
