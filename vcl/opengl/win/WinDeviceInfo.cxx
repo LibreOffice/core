@@ -190,9 +190,7 @@ wgl::OperatingSystem WindowsVersionToOperatingSystem(int32_t aWindowsVersion)
 
 int32_t WindowsOSVersion()
 {
-    static int32_t winVersion = kWindowsUnknown;
-
-    if (winVersion == kWindowsUnknown)
+    static int32_t winVersion = [&]()
     {
         // GetVersion(Ex) and VersionHelpers (based on VerifyVersionInfo) API are
         // subject to manifest-based behavior since Windows 8.1, so give wrong results.
@@ -219,13 +217,14 @@ int32_t WindowsOSVersion()
                         if (VerQueryValueW(ver.get(), L"\\", &pBlock, &dwBlockSz) != FALSE && dwBlockSz >= sizeof(VS_FIXEDFILEINFO))
                         {
                             VS_FIXEDFILEINFO *vinfo = static_cast<VS_FIXEDFILEINFO *>(pBlock);
-                            winVersion = int32_t(vinfo->dwProductVersionMS);
+                            return int32_t(vinfo->dwProductVersionMS);
                         }
                     }
                 }
             }
         }
-    }
+        return int32_t(kWindowsUnknown);
+    }();
 
     return winVersion;
 }
