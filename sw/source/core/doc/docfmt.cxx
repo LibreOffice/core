@@ -1638,7 +1638,8 @@ SwFormat* SwDoc::FindFormatByName( const SwFormatsBase& rFormatArr,
     return pFnd;
 }
 
-void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
+void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
+        SwRootFrame const*const pLayout)
 {
     SwHistory* pHistory = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1658,6 +1659,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
         SwTextNode* pTNd = aIdx.GetNode().GetTextNode();
         if( pTNd )
         {
+            pTNd = sw::GetParaPropsNode(*pLayout, aIdx);
             SvxLRSpaceItem aLS( static_cast<const SvxLRSpaceItem&>(pTNd->SwContentNode::GetAttr( RES_LR_SPACE )) );
 
             // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
@@ -1693,6 +1695,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
 
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
             pTNd->SetAttr( aLS );
+            aIdx = *sw::GetFirstAndLastNode(*pLayout, aIdx).second;
         }
         ++aIdx;
     }
