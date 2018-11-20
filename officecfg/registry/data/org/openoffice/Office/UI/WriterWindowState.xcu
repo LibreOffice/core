@@ -654,7 +654,7 @@
           <value xml:lang="en-US">Standard (Viewing Mode)</value>
         </prop>
         <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="NoClose" oor:type="xs:boolean">
           <value>true</value>
