@@ -206,9 +206,7 @@ static void CalculateHorizontalScalingFactor(
     do
     {
         i = 0;
-        std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
-        std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();
-        while( aTextAreaIter != aTextAreaIEnd )
+        for( const auto& rTextArea : rFWData.vTextAreas )
         {
             // calculating the width of the corresponding 2d text area
             double fWidth = GetLength( rOutline2d.GetObject( i++ ) );
@@ -218,11 +216,9 @@ static void CalculateHorizontalScalingFactor(
                 fWidth /= 2.0;
             }
 
-            std::vector< FWParagraphData >::const_iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
-            std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
-            while( aParagraphIter != aParagraphIEnd )
+            for( const auto& rParagraph : rTextArea.vParagraphs )
             {
-                double fTextWidth = pVirDev->GetTextWidth( aParagraphIter->aString );
+                double fTextWidth = pVirDev->GetTextWidth( rParagraph.aString );
                 if ( fTextWidth > 0.0 )
                 {
                     double fScale = fWidth / fTextWidth;
@@ -236,9 +232,7 @@ static void CalculateHorizontalScalingFactor(
                         fScalingFactor = fScale;
                     }
                 }
-                ++aParagraphIter;
             }
-            ++aTextAreaIter;
         }
 
         if (fScalingFactor < 1.0)
@@ -269,11 +263,9 @@ static void GetTextAreaOutline(
     sal_Int32 nVerticalOffset = rFWData.nMaxParagraphsPerTextArea > rTextArea.vParagraphs.size()
                                     ? rFWData.nSingleLineHeight / 2 : 0;
 
-    std::vector< FWParagraphData >::iterator aParagraphIter( rTextArea.vParagraphs.begin() );
-    std::vector< FWParagraphData >::const_iterator aParagraphIEnd( rTextArea.vParagraphs.end() );
-    while( aParagraphIter != aParagraphIEnd )
+    for( auto& rParagraph : rTextArea.vParagraphs )
     {
-        const OUString& rText = aParagraphIter->aString;
+        const OUString& rText = rParagraph.aString;
         if ( !rText.isEmpty() )
         {
             // generating vcl/font
@@ -319,7 +311,7 @@ static void GetTextAreaOutline(
             pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
             pVirDev->SetFont( aFont );
             pVirDev->EnableRTL();
-            if ( aParagraphIter->nFrameDirection == SvxFrameDirection::Horizontal_RL_TB )
+            if ( rParagraph.nFrameDirection == SvxFrameDirection::Horizontal_RL_TB )
                 pVirDev->SetLayoutMode( ComplexTextLayoutFlags::BiDiRtl );
 
             const SvxCharScaleWidthItem& rCharScaleWidthItem = rSdrObjCustomShape.GetMergedItem( EE_CHAR_FONTWIDTH );
@@ -341,48 +333,36 @@ static void GetTextAreaOutline(
                     if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, nWidth, pDXArry.get() ) )
                     {
                         sal_Int32 nTextWidth = pVirDev->GetTextWidth( aCharText);
-                        std::vector< tools::PolyPolygon >::iterator aOutlineIter = aCharacterData.vOutlines.begin();
-                        std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd = aCharacterData.vOutlines.end();
-                        if ( aOutlineIter == aOutlineIEnd )
+                        if ( aCharacterData.vOutlines.empty() )
                         {
                             nHeight += rFWData.nSingleLineHeight;
                         }
                         else
                         {
-                            while ( aOutlineIter != aOutlineIEnd )
+                            for ( auto& rOutline : aCharacterData.vOutlines )
                             {
                                 // rotating
-                                aOutlineIter->Rotate( Point( nTextWidth / 2, rFWData.nSingleLineHeight / 2 ), 900 );
-                                aCharacterData.aBoundRect.Union( aOutlineIter->GetBoundRect() );
-                                ++aOutlineIter;
+                                rOutline.Rotate( Point( nTextWidth / 2, rFWData.nSingleLineHeight / 2 ), 900 );
+                                aCharacterData.aBoundRect.Union( rOutline.GetBoundRect() );
                             }
-                            aOutlineIter = aCharacterData.vOutlines.begin();
-                            aOutlineIEnd = aCharacterData.vOutlines.end();
-                            while ( aOutlineIter != aOutlineIEnd )
+                            for ( auto& rOutline : aCharacterData.vOutlines )
                             {
                                 sal_Int32 nM = - aCharacterData.aBoundRect.Left() + nHeight;
-                                aOutlineIter->Move( nM, 0 );
+                                rOutline.Move( nM, 0 );
                                 aCharacterData.aBoundRect.Move( nM, 0 );
-                                ++aOutlineIter;
                             }
                             nHeight += aCharacterData.aBoundRect.GetWidth() + ( rFWData.nSingleLineHeight / 5 );
                             aSingleCharacterUnion.Union( aCharacterData.aBoundRect );
                         }
                     }
-                    aParagraphIter->vCharacters.push_back( aCharacterData );
+                    rParagraph.vCharacters.push_back( aCharacterData );
                 }
-                std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-                std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
-                while ( aCharacterIter != aCharacterIEnd )
+                for ( auto& rCharacter : rParagraph.vCharacters )
                 {
-                    std::vector< tools::PolyPolygon >::iterator aOutlineIter( aCharacterIter->vOutlines.begin() );
-                    std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd( aCharacterIter->vOutlines.end() );
-                    while ( aOutlineIter != aOutlineIEnd )
+                    for ( auto& rOutline : rCharacter.vOutlines )
                     {
-                        aOutlineIter->Move( ( aSingleCharacterUnion.GetWidth() - aCharacterIter->aBoundRect.GetWidth() ) / 2, 0 );
-                        ++aOutlineIter;
+                        rOutline.Move( ( aSingleCharacterUnion.GetWidth() - rCharacter.aBoundRect.GetWidth() ) / 2, 0 );
                     }
-                    ++aCharacterIter;
                 }
             }
             else
@@ -398,34 +378,26 @@ static void GetTextAreaOutline(
                 FWCharacterData aCharacterData;
                 if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, pDXArry.get() ) )
                 {
-                    aParagraphIter->vCharacters.push_back( aCharacterData );
+                    rParagraph.vCharacters.push_back( aCharacterData );
                 }
             }
 
             // vertical alignment
-            std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-            std::vector< FWCharacterData >::const_iterator aCharacterIEnd ( aParagraphIter->vCharacters.end() );
-            while ( aCharacterIter != aCharacterIEnd )
+            for ( auto& rCharacter : rParagraph.vCharacters )
             {
-                std::vector< tools::PolyPolygon >::iterator aOutlineIter( aCharacterIter->vOutlines.begin() );
-                std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd( aCharacterIter->vOutlines.end() );
-                while( aOutlineIter != aOutlineIEnd )
+                for( tools::PolyPolygon& rPolyPoly : rCharacter.vOutlines )
                 {
-
-                    tools::PolyPolygon& rPolyPoly = *aOutlineIter++;
-
                     if ( nVerticalOffset )
                         rPolyPoly.Move( 0, nVerticalOffset );
 
                     // retrieving the boundrect for the paragraph
                     tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
-                    aParagraphIter->aBoundRect.Union( aBoundRect );
+                    rParagraph.aBoundRect.Union( aBoundRect );
                 }
-                ++aCharacterIter;
             }
         }
         // updating the boundrect for the text area by merging the current paragraph boundrect
-        if ( aParagraphIter->aBoundRect.IsEmpty() )
+        if ( rParagraph.aBoundRect.IsEmpty() )
         {
             if ( rTextArea.aBoundRect.IsEmpty() )
                 rTextArea.aBoundRect = tools::Rectangle( Point( 0, 0 ), Size( 1, rFWData.nSingleLineHeight ) );
@@ -434,29 +406,23 @@ static void GetTextAreaOutline(
         }
         else
         {
-            tools::Rectangle& rParagraphBoundRect = aParagraphIter->aBoundRect;
+            tools::Rectangle& rParagraphBoundRect = rParagraph.aBoundRect;
             rTextArea.aBoundRect.Union( rParagraphBoundRect );
 
             if ( bSameLetterHeights )
             {
-                std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-                std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
-                while ( aCharacterIter != aCharacterIEnd )
+                for ( auto& rCharacter : rParagraph.vCharacters )
                 {
-                    std::vector< tools::PolyPolygon >::iterator aOutlineIter( aCharacterIter->vOutlines.begin() );
-                    std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd( aCharacterIter->vOutlines.end() );
-                    while( aOutlineIter != aOutlineIEnd )
+                    for( auto& rOutline : rCharacter.vOutlines )
                     {
-                        tools::Rectangle aPolyPolyBoundRect( aOutlineIter->GetBoundRect() );
+                        tools::Rectangle aPolyPolyBoundRect( rOutline.GetBoundRect() );
                         if (aPolyPolyBoundRect.GetHeight() != rParagraphBoundRect.GetHeight() && aPolyPolyBoundRect.GetHeight())
-                            aOutlineIter->Scale( 1.0, static_cast<double>(rParagraphBoundRect.GetHeight()) / aPolyPolyBoundRect.GetHeight() );
-                        aPolyPolyBoundRect = aOutlineIter->GetBoundRect();
+                            rOutline.Scale( 1.0, static_cast<double>(rParagraphBoundRect.GetHeight()) / aPolyPolyBoundRect.GetHeight() );
+                        aPolyPolyBoundRect = rOutline.GetBoundRect();
                         sal_Int32 nMove = aPolyPolyBoundRect.Top() - rParagraphBoundRect.Top();
                         if ( nMove )
-                            aOutlineIter->Move( 0, -nMove );
-                        ++aOutlineIter;
+                            rOutline.Move( 0, -nMove );
                     }
-                    ++aCharacterIter;
                 }
             }
         }
@@ -464,7 +430,6 @@ static void GetTextAreaOutline(
             nVerticalOffset -= rFWData.nSingleLineHeight;
         else
             nVerticalOffset += rFWData.nSingleLineHeight;
-        ++aParagraphIter;
     }
 }
 
@@ -474,9 +439,6 @@ static bool GetFontWorkOutline(
 {
     SdrTextHorzAdjust eHorzAdjust(rSdrObjCustomShape.GetMergedItem( SDRATTR_TEXT_HORZADJUST ).GetValue());
     drawing::TextFitToSizeType const eFTS(rSdrObjCustomShape.GetMergedItem( SDRATTR_TEXT_FITTOSIZE ).GetValue());
-
-    std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
-    std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();
 
     bool bSameLetterHeights = false;
     const SdrCustomShapeGeometryItem& rGeometryItem(rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
@@ -494,12 +456,12 @@ static bool GetFontWorkOutline(
     if (rFWData.nSingleLineHeight == SAL_MIN_INT32)
         return false;
 
-    while ( aTextAreaIter != aTextAreaIEnd )
+    for ( auto& rTextArea : rFWData.vTextAreas )
     {
         GetTextAreaOutline(
             rFWData,
             rSdrObjCustomShape,
-            *aTextAreaIter,
+            rTextArea,
             bSameLetterHeights);
 
         if (eFTS == drawing::TextFitToSizeType_ALLLINES ||
@@ -507,30 +469,21 @@ static bool GetFontWorkOutline(
             // need another ODF attribute!
             eFTS == drawing::TextFitToSizeType_PROPORTIONAL)
         {
-            std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
-            std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
-            while ( aParagraphIter != aParagraphIEnd )
+            for ( auto& rParagraph : rTextArea.vParagraphs )
             {
-                sal_Int32 nParaWidth = aParagraphIter->aBoundRect.GetWidth();
+                sal_Int32 nParaWidth = rParagraph.aBoundRect.GetWidth();
                 if ( nParaWidth )
                 {
-                    double fScale = static_cast<double>(aTextAreaIter->aBoundRect.GetWidth()) / nParaWidth;
+                    double fScale = static_cast<double>(rTextArea.aBoundRect.GetWidth()) / nParaWidth;
 
-                    std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-                    std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
-                    while ( aCharacterIter != aCharacterIEnd )
+                    for ( auto& rCharacter : rParagraph.vCharacters )
                     {
-                        std::vector< tools::PolyPolygon >::iterator aOutlineIter = aCharacterIter->vOutlines.begin();
-                        std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
-                        while( aOutlineIter != aOutlineIEnd )
+                        for( auto& rOutline : rCharacter.vOutlines )
                         {
-                            aOutlineIter->Scale( fScale, 1.0 );
-                            ++aOutlineIter;
+                            rOutline.Scale( fScale, 1.0 );
                         }
-                        ++aCharacterIter;
                     }
                 }
-                ++aParagraphIter;
             }
         }
         else if (rFWData.bScaleX)
@@ -538,36 +491,26 @@ static bool GetFontWorkOutline(
             const SdrTextVertAdjust nVertJustify = rSdrObjCustomShape.GetMergedItem( SDRATTR_TEXT_VERTADJUST ).GetValue();
             double fFactor = nVertJustify == SdrTextVertAdjust::SDRTEXTVERTADJUST_BOTTOM ? -0.5 : ( nVertJustify == SdrTextVertAdjust::SDRTEXTVERTADJUST_TOP ? 0.5 : 0 );
 
-            std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
-            std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
-            while ( aParagraphIter != aParagraphIEnd )
+            for ( auto& rParagraph : rTextArea.vParagraphs )
             {
                 sal_Int32 nHorzDiff = 0;
-                sal_Int32 nVertDiff = static_cast<double>( rFWData.nSingleLineHeight ) * fFactor * ( aTextAreaIter->vParagraphs.size() - 1 );
+                sal_Int32 nVertDiff = static_cast<double>( rFWData.nSingleLineHeight ) * fFactor * ( rTextArea.vParagraphs.size() - 1 );
 
                 if ( eHorzAdjust == SDRTEXTHORZADJUST_CENTER )
-                    nHorzDiff = ( rFWData.fHorizontalTextScaling * aTextAreaIter->aBoundRect.GetWidth() - aParagraphIter->aBoundRect.GetWidth() ) / 2;
+                    nHorzDiff = ( rFWData.fHorizontalTextScaling * rTextArea.aBoundRect.GetWidth() - rParagraph.aBoundRect.GetWidth() ) / 2;
                 else if ( eHorzAdjust == SDRTEXTHORZADJUST_RIGHT )
-                    nHorzDiff = ( rFWData.fHorizontalTextScaling * aTextAreaIter->aBoundRect.GetWidth() - aParagraphIter->aBoundRect.GetWidth() );
+                    nHorzDiff = ( rFWData.fHorizontalTextScaling * rTextArea.aBoundRect.GetWidth() - rParagraph.aBoundRect.GetWidth() );
 
                 if (nHorzDiff)
                 {
-                    std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-                    std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
-                    while ( aCharacterIter != aCharacterIEnd )
+                    for ( auto& rCharacter : rParagraph.vCharacters )
                     {
-                        std::vector< tools::PolyPolygon >::iterator aOutlineIter = aCharacterIter->vOutlines.begin();
-                        std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
-                        while( aOutlineIter != aOutlineIEnd )
+                        for( auto& rOutline : rCharacter.vOutlines )
                         {
-                            aOutlineIter->Move( nHorzDiff, nVertDiff );
-                            ++aOutlineIter;
+                            rOutline.Move( nHorzDiff, nVertDiff );
                         }
-                        ++aCharacterIter;
                     }
                 }
-
-                ++aParagraphIter;
             }
         }
         else
@@ -577,32 +520,23 @@ static bool GetFontWorkOutline(
                 case SDRTEXTHORZADJUST_RIGHT :
                 case SDRTEXTHORZADJUST_CENTER:
                 {
-                    std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
-                    std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
-                    while ( aParagraphIter != aParagraphIEnd )
+                    for ( auto& rParagraph : rTextArea.vParagraphs )
                     {
                         sal_Int32 nHorzDiff = 0;
                         if ( eHorzAdjust == SDRTEXTHORZADJUST_CENTER )
-                            nHorzDiff = ( aTextAreaIter->aBoundRect.GetWidth() - aParagraphIter->aBoundRect.GetWidth() ) / 2;
+                            nHorzDiff = ( rTextArea.aBoundRect.GetWidth() - rParagraph.aBoundRect.GetWidth() ) / 2;
                         else if ( eHorzAdjust == SDRTEXTHORZADJUST_RIGHT )
-                            nHorzDiff = ( aTextAreaIter->aBoundRect.GetWidth() - aParagraphIter->aBoundRect.GetWidth() );
+                            nHorzDiff = ( rTextArea.aBoundRect.GetWidth() - rParagraph.aBoundRect.GetWidth() );
                         if ( nHorzDiff )
                         {
-                            std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-                            std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
-                            while ( aCharacterIter != aCharacterIEnd )
+                            for ( auto& rCharacter : rParagraph.vCharacters )
                             {
-                                std::vector< tools::PolyPolygon >::iterator aOutlineIter = aCharacterIter->vOutlines.begin();
-                                std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
-                                while( aOutlineIter != aOutlineIEnd )
+                                for( auto& rOutline : rCharacter.vOutlines )
                                 {
-                                    aOutlineIter->Move( nHorzDiff, 0 );
-                                    ++aOutlineIter;
+                                    rOutline.Move( nHorzDiff, 0 );
                                 }
-                                ++aCharacterIter;
                             }
                         }
-                        ++aParagraphIter;
                     }
                 }
                 break;
@@ -611,7 +545,6 @@ static bool GetFontWorkOutline(
                 case SDRTEXTHORZADJUST_LEFT : break;    // already left aligned -> nothing to do
             }
         }
-        ++aTextAreaIter;
     }
 
     return true;
@@ -653,10 +586,8 @@ static void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& r
         double fLength = rDistances[ rDistances.size() - 1 ];
         if ( fLength > 0.0 )
         {
-            std::vector< double >::iterator aIter = rDistances.begin();
-            std::vector< double >::const_iterator aEnd = rDistances.end();
-            while ( aIter != aEnd )
-                *aIter++ /= fLength;
+            for ( auto& rDistance : rDistances )
+                rDistance /= fLength;
         }
     }
 }
@@ -745,13 +676,10 @@ static void GetPoint( const tools::Polygon& rPoly, const std::vector< double >& 
 
 static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWData& rFWData )
 {
-    std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
-    std::vector< FWTextArea >::iterator aTextAreaIEnd = rFWData.vTextAreas.end();
-
     sal_uInt16 nOutline2dIdx = 0;
-    while( aTextAreaIter != aTextAreaIEnd )
+    for( auto& rTextArea : rFWData.vTextAreas )
     {
-        tools::Rectangle rTextAreaBoundRect = aTextAreaIter->aBoundRect;
+        tools::Rectangle rTextAreaBoundRect = rTextArea.aBoundRect;
         sal_Int32 nLeft = rTextAreaBoundRect.Left();
         sal_Int32 nTop = rTextAreaBoundRect.Top();
         sal_Int32 nWidth = rTextAreaBoundRect.GetWidth();
@@ -775,19 +703,12 @@ static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2
                 CalcDistances( rOutlinePoly, vDistances );
                 if ( !vDistances.empty() )
                 {
-                    std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
-                    std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
-                    while( aParagraphIter != aParagraphIEnd )
+                    for( auto& rParagraph : rTextArea.vParagraphs )
                     {
-                        std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-                        std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
-                        while ( aCharacterIter != aCharacterIEnd )
+                        for ( auto& rCharacter : rParagraph.vCharacters )
                         {
-                            std::vector< tools::PolyPolygon >::iterator aOutlineIter = aCharacterIter->vOutlines.begin();
-                            std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
-                            while( aOutlineIter != aOutlineIEnd )
+                            for( tools::PolyPolygon& rPolyPoly : rCharacter.vOutlines )
                             {
-                                tools::PolyPolygon& rPolyPoly = *aOutlineIter;
                                 tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
                                 double fx1 = aBoundRect.Left() - nLeft;
                                 double fx2 = aBoundRect.Right() - nLeft;
@@ -812,17 +733,13 @@ static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2
                                 }
                                 fvx = fvx / fL;
                                 fvy = fvy / fL;
-                                fL = aTextAreaIter->aBoundRect.GetHeight() / 2.0 + aTextAreaIter->aBoundRect.Top() - aParagraphIter->aBoundRect.Center().Y();
+                                fL = rTextArea.aBoundRect.GetHeight() / 2.0 + rTextArea.aBoundRect.Top() - rParagraph.aBoundRect.Center().Y();
                                 fvx *= fL;
                                 fvy *= fL;
-                                rPolyPoly.Rotate( Point( aBoundRect.Center().X(), aParagraphIter->aBoundRect.Center().Y() ), sin( fAngle ), cos( fAngle ) );
-                                rPolyPoly.Move( static_cast<sal_Int32>( ( fx1 + fvx )- aBoundRect.Center().X() ), static_cast<sal_Int32>( ( fy1 + fvy ) - aParagraphIter->aBoundRect.Center().Y() ) );
-
-                                ++aOutlineIter;
+                                rPolyPoly.Rotate( Point( aBoundRect.Center().X(), rParagraph.aBoundRect.Center().Y() ), sin( fAngle ), cos( fAngle ) );
+                                rPolyPoly.Move( static_cast<sal_Int32>( ( fx1 + fvx )- aBoundRect.Center().X() ), static_cast<sal_Int32>( ( fy1 + fvy ) - rParagraph.aBoundRect.Center().Y() ) );
                             }
-                            ++aCharacterIter;
                         }
-                        ++aParagraphIter;
                     }
                 }
             }
@@ -843,19 +760,12 @@ static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2
                 vDistances2.reserve( nPointCount2 );
                 CalcDistances( rOutlinePoly, vDistances );
                 CalcDistances( rOutlinePoly2, vDistances2 );
-                std::vector< FWParagraphData >::iterator aParagraphIter = aTextAreaIter->vParagraphs.begin();
-                std::vector< FWParagraphData >::const_iterator aParagraphIEnd = aTextAreaIter->vParagraphs.end();
-                while( aParagraphIter != aParagraphIEnd )
+                for( auto& rParagraph : rTextArea.vParagraphs )
                 {
-                    std::vector< FWCharacterData >::iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-                    std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
-                    while ( aCharacterIter != aCharacterIEnd )
+                    for ( auto& rCharacter : rParagraph.vCharacters )
                     {
-                        std::vector< tools::PolyPolygon >::iterator aOutlineIter = aCharacterIter->vOutlines.begin();
-                        std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
-                        while( aOutlineIter != aOutlineIEnd )
+                        for( tools::PolyPolygon& rPolyPoly : rCharacter.vOutlines )
                         {
-                            tools::PolyPolygon& rPolyPoly = *aOutlineIter;
                             sal_uInt16 i, nPolyCount = rPolyPoly.Count();
                             for ( i = 0; i < nPolyCount; i++ )
                             {
@@ -899,15 +809,11 @@ static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2
                                 // write back polygon
                                 rPolyPoly[ i ] = aLocalPoly;
                             }
-                            ++aOutlineIter;
                         }
-                        ++aCharacterIter;
                     }
-                    ++aParagraphIter;
                 }
             }
         }
-        ++aTextAreaIter;
     }
 }
 
@@ -919,30 +825,18 @@ static SdrObject* CreateSdrObjectFromParagraphOutlines(
     basegfx::B2DPolyPolygon aPolyPoly;
     if ( !rFWData.vTextAreas.empty() )
     {
-        std::vector< FWTextArea >::const_iterator aTextAreaIter = rFWData.vTextAreas.begin();
-        std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();
-        while ( aTextAreaIter != aTextAreaIEnd )
+        for ( const auto& rTextArea : rFWData.vTextAreas )
         {
-            std::vector< FWParagraphData >::const_iterator aParagraphIter = aTextAreaIter->vParagraphs.begin();
-            std::vector< FWParagraphData >::const_iterator aParagraphIEnd = aTextAreaIter->vParagraphs.end();
-            while ( aParagraphIter != aParagraphIEnd )
+            for ( const auto& rParagraph : rTextArea.vParagraphs )
             {
-                std::vector< FWCharacterData >::const_iterator aCharacterIter( aParagraphIter->vCharacters.begin() );
-                std::vector< FWCharacterData >::const_iterator aCharacterIEnd( aParagraphIter->vCharacters.end() );
-                while ( aCharacterIter != aCharacterIEnd )
+                for ( const auto& rCharacter : rParagraph.vCharacters )
                 {
-                    std::vector< tools::PolyPolygon >::const_iterator aOutlineIter = aCharacterIter->vOutlines.begin();
-                    std::vector< tools::PolyPolygon >::const_iterator aOutlineIEnd = aCharacterIter->vOutlines.end();
-                    while( aOutlineIter != aOutlineIEnd )
+                    for( const auto& rOutline : rCharacter.vOutlines )
                     {
-                        aPolyPoly.append( aOutlineIter->getB2DPolyPolygon() );
-                        ++aOutlineIter;
+                        aPolyPoly.append( rOutline.getB2DPolyPolygon() );
                     }
-                    ++aCharacterIter;
                 }
-                ++aParagraphIter;
             }
-            ++aTextAreaIter;
         }
 
         pRet = new SdrPathObj(

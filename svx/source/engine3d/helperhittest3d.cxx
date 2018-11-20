@@ -218,12 +218,9 @@ void getAllHit3DObjectsSortedFrontToBack(
                 ::std::sort(aDepthAndObjectResults.begin(), aDepthAndObjectResults.end());
 
                 // copy SdrObject pointers to return result set
-                ::std::vector< ImplPairDephAndObject >::iterator aIterator2(aDepthAndObjectResults.begin());
-                ::std::vector< ImplPairDephAndObject >::const_iterator aEnd(aDepthAndObjectResults.end());
-
-                for(;aIterator2 != aEnd; ++aIterator2)
+                for(const auto& rResult : aDepthAndObjectResults)
                 {
-                    o_rResult.push_back(aIterator2->getObject());
+                    o_rResult.push_back(rResult.getObject());
                 }
             }
         }

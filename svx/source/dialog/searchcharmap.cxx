@@ -132,12 +132,10 @@ void SvxSearchCharSet::SelectCharacter( const Subset* sub )
 
     while(cChar <= sub->GetRangeMax() && nMapIndex == 0)
     {
-        for(auto it = m_aItemList.begin(); it!= m_aItemList.end(); it++)
-            if(it->second == cChar)
-            {
-                nMapIndex = it->first;
-                break;
-            }
+        auto it = std::find_if(m_aItemList.begin(), m_aItemList.end(),
+            [&cChar](const std::pair<const sal_Int32, sal_UCS4>& rItem) { return rItem.second == cChar; });
+        if (it != m_aItemList.end())
+            nMapIndex = it->first;
         cChar++;
     }
 
