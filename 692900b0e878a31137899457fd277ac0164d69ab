@@ -286,6 +286,24 @@
     },
     {
       "key": {
+        "uuid": "ff5d4b2f_fb65b0e2",
+        "filename": "sal/rtl/hash.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-11-20T13:05:30Z",
+      "side": 1,
+      "message": "Remove !pInternPool check might cause the old pInternPool overwritten and unreferenced, since rtl_str_hash_new invoked malloc again. Or do we have a garbage collection here?",
+      "parentUuid": "ff5d4b2f_7b7ae088",
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff5d4b2f_db342ce1",
         "filename": "sc/source/ui/docshell/impex.cxx",
         "patchSetId": 1
