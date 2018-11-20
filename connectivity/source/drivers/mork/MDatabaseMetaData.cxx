@@ -50,7 +50,7 @@ ODatabaseMetaData::~ODatabaseMetaData()
 }
 
 
-ODatabaseMetaDataResultSet::ORows& ODatabaseMetaData::getColumnRows(
+ODatabaseMetaDataResultSet::ORows ODatabaseMetaData::getColumnRows(
         const OUString& tableNamePattern,
         const OUString& columnNamePattern )
 {
@@ -58,9 +58,8 @@ ODatabaseMetaDataResultSet::ORows& ODatabaseMetaData::getColumnRows(
     SAL_INFO("connectivity.mork", "tableNamePattern: " << tableNamePattern);
     SAL_INFO("connectivity.mork", "columnNamePattern: " << columnNamePattern);
 
-    static ODatabaseMetaDataResultSet::ORows aRows;
+    ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow aRow(19);
-    aRows.clear();
 
     ::osl::MutexGuard aGuard( m_aMutex );
     std::vector< OUString > tables;

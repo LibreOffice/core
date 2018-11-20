@@ -257,11 +257,10 @@ OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
 }
 
 
-ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const OUString& columnNamePattern )
+ODatabaseMetaDataResultSet::ORows OEvoabDatabaseMetaData::getColumnRows( const OUString& columnNamePattern )
 {
-    static ODatabaseMetaDataResultSet::ORows aRows;
+    ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow  aRow(19);
-    aRows.clear();
 
     // ****************************************************
     // Some entries in a row never change, so set them now

@@ -390,7 +390,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         {
             if(match(tableNamePattern,*pBegin,'\0'))
             {
-                static ODatabaseMetaDataResultSet::ORow aRow(8);
+                ODatabaseMetaDataResultSet::ORow aRow(8);
 
                 aRow[2] = new ORowSetValueDecorator(*pBegin);
                 aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
