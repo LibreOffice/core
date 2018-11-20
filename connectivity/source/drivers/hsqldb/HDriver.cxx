@@ -353,14 +353,14 @@ namespace connectivity
                         xComp->addEventListener(this);
 
                     // we want to close all connections when the office shuts down
-                    static Reference< XTerminateListener> s_xTerminateListener;
-                    if( !s_xTerminateListener.is() )
+                    static Reference< XTerminateListener> s_xTerminateListener = [&]()
                     {
                         Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
 
-                        s_xTerminateListener = new OConnectionController(this);
-                        xDesktop->addTerminateListener(s_xTerminateListener);
-                    }
+                        auto tmp = new OConnectionController(this);
+                        xDesktop->addTerminateListener(tmp);
+                        return tmp;
+                    }();
                     Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, m_xContext );
                     xConnection.set(xIfc,UNO_QUERY);
                     m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,TWeakRefPair(WeakReferenceHelper(xConnection),WeakReferenceHelper()))));

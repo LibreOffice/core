@@ -25,9 +25,7 @@
 
 GtkSalSystem *GtkSalSystem::GetSingleton()
 {
-    static GtkSalSystem *pSingleton = nullptr;
-    if (!pSingleton)
-        pSingleton = new GtkSalSystem();
+    static GtkSalSystem *pSingleton = new GtkSalSystem();
     return pSingleton;
 }
 

@@ -807,15 +807,15 @@ sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
 
 uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  )
 {
-    static uno::Sequence< uno::Type > aRetTypes;
-
-    if(aRetTypes.getLength())
-        return aRetTypes;
-    const auto& rCellTypes = SwXCellBaseClass::getTypes();
-    const auto& rTextTypes = SwXText::getTypes();
-    aRetTypes = uno::Sequence<uno::Type>(rCellTypes.getLength() + rTextTypes.getLength());
-    std::copy_n(rCellTypes.begin(), rCellTypes.getLength(), aRetTypes.begin());
-    std::copy_n(rTextTypes.begin(), rTextTypes.getLength(), aRetTypes.begin()+rCellTypes.getLength());
+    static uno::Sequence< uno::Type > aRetTypes = [&]()
+    {
+        const auto& rCellTypes = SwXCellBaseClass::getTypes();
+        const auto& rTextTypes = SwXText::getTypes();
+        auto tmp = uno::Sequence<uno::Type>(rCellTypes.getLength() + rTextTypes.getLength());
+        std::copy_n(rCellTypes.begin(), rCellTypes.getLength(), tmp.begin());
+        std::copy_n(rTextTypes.begin(), rTextTypes.getLength(), tmp.begin()+rCellTypes.getLength());
+        return tmp;
+    }();
     return aRetTypes;
 }
 

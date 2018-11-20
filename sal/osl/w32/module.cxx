@@ -327,10 +327,7 @@ typedef BOOL (WINAPI *GetModuleInformation_PROC)(
 static bool osl_addressGetModuleURL_NT_( void *pv, rtl_uString **pustrURL )
 {
     bool    bSuccess    = false;    /* Assume failure */
-    static HMODULE      hModPsapi = nullptr;
-
-    if ( !hModPsapi )
-        hModPsapi = LoadLibraryW( L"PSAPI.DLL" );
+    static HMODULE hModPsapi = LoadLibraryW( L"PSAPI.DLL" );
 
     if ( hModPsapi )
     {

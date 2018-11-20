@@ -556,12 +556,10 @@ SwVbaParagraphFormat::getServiceImplName()
 uno::Sequence< OUString >
 SwVbaParagraphFormat::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.word.ParagraphFormat";
-    }
+        "ooo.vba.word.ParagraphFormat"
+    };
     return aServiceNames;
 }
 

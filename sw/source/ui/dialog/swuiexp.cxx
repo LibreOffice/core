@@ -52,12 +52,10 @@
 
 namespace swui
 {
-    static SwAbstractDialogFactory_Impl* pFactory=nullptr;
-    SwAbstractDialogFactory * GetFactory()
+    SwAbstractDialogFactory& GetFactory()
     {
-        if ( !pFactory )
-            pFactory = new SwAbstractDialogFactory_Impl;
-        return pFactory;
+        static SwAbstractDialogFactory_Impl aFactory;
+        return aFactory;
     }
 }
 
@@ -65,7 +63,7 @@ extern "C"
 {
     SAL_DLLPUBLIC_EXPORT SwAbstractDialogFactory* SwCreateDialogFactory()
     {
-        return ::swui::GetFactory();
+        return &::swui::GetFactory();
     }
 }
 

@@ -877,12 +877,9 @@ inline Subset::Subset(sal_UCS4 nMin, sal_UCS4 nMax, const OUString& rName)
 
 void SubsetMap::InitList()
 {
-    static SubsetVec aAllSubsets;
-    static bool bInit = true;
-    if( bInit )
+    static SubsetVec s_aAllSubsets = [&]()
     {
-        bInit = false;
-
+        SubsetVec aAllSubsets;
         //I wish icu had a way to give me the block ranges
         for (int i = UBLOCK_BASIC_LATIN; i < UBLOCK_COUNT; ++i)
         {
@@ -1797,9 +1794,10 @@ void SubsetMap::InitList()
         }
 
         std::stable_sort(aAllSubsets.begin(), aAllSubsets.end());
-    }
+        return aAllSubsets;
+    }();
 
-    maSubsets = aAllSubsets;
+    maSubsets = s_aAllSubsets;
 }
 
 void SubsetMap::ApplyCharMap( const FontCharMapRef& rxFontCharMap )

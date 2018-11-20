@@ -76,11 +76,8 @@ struct HtmlOptions_Impl
 
 const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
 {
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
+    static Sequence<OUString> const aNames
     {
-        static const char* aPropNames[] =
-        {
             "Import/UnknownTag",                    //  0
             "Import/FontSetting",                   //  1
             "Import/FontSize/Size_1",               //  2
@@ -97,13 +94,7 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
             "Export/Warning",                       // 13
             "Export/Encoding",                      // 14
             "Import/NumbersEnglishUS"               // 15
-        };
-        const int nCount = SAL_N_ELEMENTS(aPropNames);
-        aNames.realloc(nCount);
-        OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
+    };
     return aNames;
 }
 

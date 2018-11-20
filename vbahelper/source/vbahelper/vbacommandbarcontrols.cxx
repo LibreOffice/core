@@ -236,12 +236,10 @@ ScVbaCommandBarControls::getServiceImplName()
 uno::Sequence<OUString>
 ScVbaCommandBarControls::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.CommandBarControls";
-    }
+        "ooo.vba.CommandBarControls"
+    };
     return aServiceNames;
 }
 
@@ -306,12 +304,10 @@ OUString VbaDummyCommandBarControls::getServiceImplName()
 
 uno::Sequence<OUString> VbaDummyCommandBarControls::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.CommandBarControls";
-    }
+        "ooo.vba.CommandBarControls"
+    };
     return aServiceNames;
 }
 

@@ -49,12 +49,7 @@ OUString SwVbaMailMerge::getServiceImplName() { return OUString("SwVbaMailMerge"
 
 css::uno::Sequence<OUString> SwVbaMailMerge::getServiceNames()
 {
-    static css::uno::Sequence<OUString> aServiceNames;
-    if (aServiceNames.getLength() == 0)
-    {
-        aServiceNames.realloc(1);
-        aServiceNames[0] = "ooo.vba.word.MailMerge";
-    }
+    static css::uno::Sequence<OUString> const aServiceNames{ "ooo.vba.word.MailMerge" };
     return aServiceNames;
 }
 
