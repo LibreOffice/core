@@ -2436,23 +2436,33 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 }
                 else
                 {
-                    vcl::Font aColorFont(aStdFont);
+                    vcl::Font aFont(aStdFont);
+                    Size aTmpSize(aStdFont.GetFontSize());
+                    aTmpSize.setWidth( aTmpSize.Width() * ( rFmt.GetBulletRelSize()) );
+                    aTmpSize.setWidth( aTmpSize.Width() / 100 ) ;
+                    aTmpSize.setHeight( aTmpSize.Height() * ( rFmt.GetBulletRelSize()) );
+                    aTmpSize.setHeight( aTmpSize.Height() / 100 ) ;
+                    if(!aTmpSize.Height())
+                        aTmpSize.setHeight( 1 );
+                    aFont.SetFontSize(aTmpSize);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
                     if (aTmpBulletColor == COL_AUTO)
                         aTmpBulletColor = aBackColor.IsDark() ? COL_WHITE : COL_BLACK;
                     else if (aTmpBulletColor == aBackColor)
                         aTmpBulletColor.Invert();
-                    aColorFont.SetColor(aTmpBulletColor);
-                    pVDev->SetFont(aColorFont);
+                    aFont.SetColor(aTmpBulletColor);
+                    pVDev->SetFont(aFont);
                     aNum.SetLevel( nLevel );
                     if (pActNum->IsContinuousNumbering())
                         aNum.GetLevelVal()[nLevel] = nPreNum;
                     OUString aText(pActNum->MakeNumString(aNum));
-                    pVDev->DrawText(Point(nXStart, nYStart), aText);
-                    pVDev->SetFont(aStdFont);
+                    long nY = nYStart;
+                    nY -= (pVDev->GetTextHeight() - nTextHeight - pVDev->GetFontMetric().GetDescent());
+                    pVDev->DrawText(Point(nXStart, nY), aText);
                     nTextOffset = pVDev->GetTextWidth(aText);
                     nTextOffset = nTextOffset + nXStep;
                     nPreNum++;
+                    pVDev->SetFont(aStdFont);
                 }
                 //#i5153# the selected rectangle(s) should be black
                 if (0 != (nActLevel & (1<<nLevel)))
