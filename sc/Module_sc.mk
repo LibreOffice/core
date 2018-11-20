@@ -98,7 +98,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	JunitTest_sc_unoapi_2 \
 	JunitTest_sc_unoapi_3 \
 	JunitTest_sc_unoapi_4 \
-	JunitTest_sc_unoapi_5 \
 	JunitTest_sc_unoapi_6 \
 	JunitTest_sc_unoapi_7 \
 	CppunitTest_sc_anchor_test \
@@ -138,6 +137,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_indexenumeration_cellarealinksenumeration \
 	CppunitTest_sc_indexenumeration_databaserangesenumeration \
 	CppunitTest_sc_indexenumeration_datapilotfieldsenumeration \
+	CppunitTest_sc_indexenumeration_datapilotitemsenumeration \
 	CppunitTest_sc_indexenumeration_datapilottablesenumeration \
 	CppunitTest_sc_indexenumeration_ddelinksenumeration \
 	CppunitTest_sc_indexenumeration_functiondescriptionenumeration \
