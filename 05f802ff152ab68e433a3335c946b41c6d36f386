@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_9b1354b9",
+        "filename": "basegfx/source/polygon/b2dpolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T16:04:58Z",
+      "side": 1,
+      "message": "OSL_ENSURE is deprecated iirc; please just use assert() (preferably imo) or SAL_WARN_IF().",
+      "range": {
+        "startLine": 1499,
+        "startChar": 12,
+        "endLine": 1499,
+        "endChar": 22
+      },
+      "revId": "05f802ff152ab68e433a3335c946b41c6d36f386",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
