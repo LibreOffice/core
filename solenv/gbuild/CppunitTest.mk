@@ -20,16 +20,11 @@
 # CppunitTest class
 
 # Cap the number of threads unittests use.
-export MAX_CONCURRENCY=4
+gb_CppunitTest_ENV_VARS := MAX_CONCURRENCY=4
 # Disable searching for certificates by default
-export MOZILLA_CERTIFICATE_FOLDER=0
+gb_CppunitTest_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=0
 # Avoid hanging if the cups daemon requests a password.
-export SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
-# Default unit tests to run with the headless plugin, if not set by the user
-ifeq ($(SAL_USE_VCLPLUGIN),)
-	SAL_USE_VCLPLUGIN := svp
-	export SAL_USE_VCLPLUGIN
-endif
+gb_CppunitTest_ENV_VARS += SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
 
 gb_CppunitTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(SYSTEM_PYTHON),,$(call gb_Package_get_target,python3))
@@ -124,8 +119,6 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 else
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(if $(and $(gb_CppunitTest__vcl_no_svp), \
-			$(filter svp,$(SAL_USE_VCLPLUGIN))),unset SAL_USE_VCLPLUGIN &&) \
 		mkdir -p $(dir $@) && \
 		rm -fr $@.user && cp -r $(WORKDIR)/unittest $@.user && \
 		$(if $(gb_CppunitTest__use_confpreinit), \
@@ -136,6 +129,8 @@ else
 		( \
 		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
 		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
+		$(gb_CppunitTest_ENV_VARS) \
+		$(if $(gb_CppunitTest__vcl_no_svp),,SAL_USE_VCLPLUGIN=$(or $(SAL_USE_VCLPLUGIN),svp)) \
 		$(EXTRA_ENV_VARS) \
 		$(if $(filter gdb,$(gb_CppunitTest_GDBTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
