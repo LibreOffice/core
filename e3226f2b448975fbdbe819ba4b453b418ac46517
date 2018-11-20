@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_964c4977",
+        "filename": "sal/osl/w32/time.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T20:20:35Z",
+      "side": 1,
+      "message": "We possibly can just skip this, since GetProcAddress returns nullptr when an error encountered (which must be the case for null handle; and kernel32.dll must always be available)",
+      "range": {
+        "startLine": 43,
+        "startChar": 8,
+        "endLine": 44,
+        "endChar": 27
+      },
+      "revId": "e3226f2b448975fbdbe819ba4b453b418ac46517",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
