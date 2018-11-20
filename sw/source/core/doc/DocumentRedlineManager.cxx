@@ -1835,7 +1835,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     if (pDelNode != nullptr && pTextNode != nullptr && pDelNode != pTextNode)
                         pTextNode->CopyCollFormat( *pDelNode );
                 }
-                else
+                else if ( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
                 {
                     // tdf#119571 update the style of the joined paragraph
                     // after a partially deleted paragraph to show its correct style
