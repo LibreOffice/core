@@ -2086,6 +2086,55 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     SdXImpressDocument* pXImpressDocument = createDoc("paste_text_onslide.odp");
     CPPUNIT_ASSERT(pXImpressDocument);
 
+    // Drain events.
+    Scheduler::ProcessEventsToIdle();
+
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(0), convertMm100ToTwip(0),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(0), convertMm100ToTwip(0),
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // select second text object
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    // step into text editing
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '1', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, '1', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // select full text
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT | KEY_SHIFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT | KEY_SHIFT);
+    Scheduler::ProcessEventsToIdle();
+
+    // Click on the title text to select it.
+    const long xPos = 0;
+    const long yPos = 50;
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(xPos), convertMm100ToTwip(yPos),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(xPos), convertMm100ToTwip(yPos),
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
     // select second text object
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
@@ -2138,8 +2187,8 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     CPPUNIT_ASSERT(pTextObj);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TEXT), pTextObj->GetObjIdentifier());
     Point aPos = pTextObj->GetLastBoundRect().TopLeft();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(12990), aPos.getX(), 100);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7393), aPos.getY(), 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(6591), aPos.getX(), 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7430), aPos.getY(), 100);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
@@ -2207,6 +2256,15 @@ void SdTiledRenderingTest::testCutSelectionChange()
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
+    Scheduler::ProcessEventsToIdle();
+
+    // Click somewhere so the focus is in the slides main area and not the slide-sorter.
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(1000), convertMm100ToTwip(1000),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(1000), convertMm100ToTwip(1000),
+                                      1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
     // Select first text object
