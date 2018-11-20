@@ -2160,6 +2160,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
     if (pEntry->HasChildren())
     {
         auto pChild = m_xTreeView->FirstChild(pEntry);
+        assert(pChild);
         if (m_xTreeView->GetEntryText(pChild) == "<dummy>")
         {
             m_xTreeView->RemoveEntry(pChild);
