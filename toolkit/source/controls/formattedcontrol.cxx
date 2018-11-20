@@ -59,22 +59,16 @@ namespace toolkit
         }
 
 
-        bool& lcl_getTriedCreation()
-        {
-            static bool s_bTriedCreation = false;
-            return s_bTriedCreation;
-        }
-
+        static bool s_bTriedCreation = false;
 
         const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
         {
             ::osl::MutexGuard aGuard( getDefaultFormatsMutex() );
 
-            bool& rbTriedCreation = lcl_getTriedCreation();
             Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
-            if ( !rDefaultFormats.is() && !rbTriedCreation )
+            if ( !rDefaultFormats.is() && !s_bTriedCreation )
             {
-                rbTriedCreation = true;
+                s_bTriedCreation = true;
                 rDefaultFormats = NumberFormatsSupplier::createWithDefaultLocale( ::comphelper::getProcessComponentContext() );
             }
             if ( !rDefaultFormats.is() )
@@ -101,7 +95,7 @@ namespace toolkit
                 Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
                 Reference< XNumberFormatsSupplier > xReleasePotentialLastReference( rDefaultFormats );
                 rDefaultFormats.clear();
-                lcl_getTriedCreation() = false;
+                s_bTriedCreation = false;
 
                 aGuard.clear();
                 xReleasePotentialLastReference.clear();
