@@ -32,11 +32,7 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::ucb;
 
-    struct PropertyMapEntry
-    {
-        OUString       maName;
-        DataAccessDescriptorProperty const      mnHandle;
-    };
+    typedef std::pair<OUString const, DataAccessDescriptorProperty> PropertyMapEntry;
 
     class ODADescriptorImpl
     {
@@ -50,7 +46,7 @@ namespace svx
         Sequence< PropertyValue >   m_aAsSequence;
         Reference< XPropertySet >   m_xAsSet;
 
-        typedef ::std::map< OUString, PropertyMapEntry const * >    MapString2PropertyEntry;
+        typedef ::std::map< OUString, DataAccessDescriptorProperty >    MapString2PropertyEntry;
 
     public:
         ODADescriptorImpl();
@@ -109,7 +105,7 @@ namespace svx
             MapString2PropertyEntry::const_iterator aPropPos = rProperties.find( pValues->Name );
             if ( aPropPos != rProperties.end() )
             {
-                DataAccessDescriptorProperty eProperty = aPropPos->second->mnHandle;
+                DataAccessDescriptorProperty eProperty = aPropPos->second;
                 m_aValues[eProperty] = pValues->Value;
             }
             else
@@ -174,10 +170,7 @@ namespace svx
     const ODADescriptorImpl::MapString2PropertyEntry& ODADescriptorImpl::getPropertyMap( )
     {
         // the properties we know
-        static MapString2PropertyEntry s_aProperties;
-        if ( s_aProperties.empty() )
-        {
-            static PropertyMapEntry const s_aDescriptorProperties[] =
+        static MapString2PropertyEntry s_aProperties
             {
                 { OUString("ActiveConnection"),   DataAccessDescriptorProperty::Connection,            },
                 { OUString("BookmarkSelection"),  DataAccessDescriptorProperty::BookmarkSelection,     },
@@ -195,10 +188,6 @@ namespace svx
                 { OUString("Selection"),          DataAccessDescriptorProperty::Selection,             }
             };
 
-            for (size_t i=0; i<SAL_N_ELEMENTS(s_aDescriptorProperties); ++i)
-                s_aProperties[ s_aDescriptorProperties[i].maName ] = &s_aDescriptorProperties[i];
-        }
-
         return s_aProperties;
     }
 
@@ -209,9 +198,9 @@ namespace svx
         DataAccessDescriptorProperty nNeededHandle = _rPos->first;
 
         auto loop = std::find_if(rProperties.begin(), rProperties.end(),
-            [&nNeededHandle](const MapString2PropertyEntry::value_type& rProp) { return nNeededHandle == rProp.second->mnHandle; });
+            [&nNeededHandle](const MapString2PropertyEntry::value_type& rProp) { return nNeededHandle == rProp.second; });
         if (loop != rProperties.end())
-            return loop->second;
+            return &*loop;
         throw RuntimeException();
     }
 
@@ -222,8 +211,8 @@ namespace svx
 
         // build the property value
         PropertyValue aReturn;
-        aReturn.Name    = pProperty->maName;
-        aReturn.Handle  = static_cast<sal_Int32>(pProperty->mnHandle);
+        aReturn.Name    = pProperty->first;
+        aReturn.Handle  = static_cast<sal_Int32>(pProperty->second);
         aReturn.Value   = _rPos->second;
         aReturn.State   = PropertyState_DIRECT_VALUE;
 

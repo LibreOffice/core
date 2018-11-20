@@ -420,12 +420,10 @@ ScVbaInterior::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaInterior::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.Interior";
-    }
+        "ooo.vba.excel.Interior"
+    };
     return aServiceNames;
 }
 

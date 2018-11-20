@@ -46,18 +46,8 @@ using namespace ::com::sun::star::util;
 
 Sequence<Type> OFileControlModel::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-    {
-        // my base class
-        Sequence<Type> aBaseClassTypes = OControlModel::_getTypes();
-
-        Sequence<Type> aOwnTypes(1);
-        Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = cppu::UnoType<XReset>::get();
-
-        aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
-    }
+    static Sequence<Type> const aTypes =
+        concatSequences(OControlModel::_getTypes(), Sequence<Type>{ cppu::UnoType<XReset>::get() });
     return aTypes;
 }
 

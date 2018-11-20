@@ -82,20 +82,19 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
             case XML_TOK_VALUE_TYPE:
                 {
                     // needs to be translated into a css::uno::Type
-                    static std::map< OUString, css::uno::Type > s_aTypeNameMap;
-                    if (s_aTypeNameMap.empty())
+                    static std::map< OUString, css::uno::Type > const s_aTypeNameMap
                     {
-                        s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = cppu::UnoType<bool>::get();
+                        { GetXMLToken( XML_BOOLEAN)   , cppu::UnoType<bool>::get() },
                         // Not a copy paste error, see comment xmloff/source/forms/propertyimport.cxx lines 244-248
-                        s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = cppu::UnoType<double>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = cppu::UnoType<double>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = cppu::UnoType<OUString>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_INT)]       = cppu::UnoType<sal_Int32>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = cppu::UnoType<sal_Int16>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_DATE)]      = cppu::UnoType<css::util::Date>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_TIME)]      = cppu::UnoType<css::util::Time>::get();
-                        s_aTypeNameMap[GetXMLToken( XML_VOID)]      = cppu::UnoType<void>::get();
-                    }
+                        { GetXMLToken( XML_FLOAT)     , cppu::UnoType<double>::get() },
+                        { GetXMLToken( XML_DOUBLE)    , cppu::UnoType<double>::get() },
+                        { GetXMLToken( XML_STRING)    , cppu::UnoType<OUString>::get() },
+                        { GetXMLToken( XML_INT)       , cppu::UnoType<sal_Int32>::get() },
+                        { GetXMLToken( XML_SHORT)     , cppu::UnoType<sal_Int16>::get() },
+                        { GetXMLToken( XML_DATE)      , cppu::UnoType<css::util::Date>::get() },
+                        { GetXMLToken( XML_TIME)      , cppu::UnoType<css::util::Time>::get() },
+                        { GetXMLToken( XML_VOID)      , cppu::UnoType<void>::get() },
+                    };
 
                     const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(sValue);
                     OSL_ENSURE(s_aTypeNameMap.end() != aTypePos, "OXMLControlProperty::OXMLControlProperty: invalid type!");

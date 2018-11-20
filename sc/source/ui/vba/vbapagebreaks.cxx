@@ -250,12 +250,10 @@ ScVbaHPageBreaks::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaHPageBreaks::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.HPageBreaks";
-    }
+        "ooo.vba.excel.HPageBreaks"
+    };
     return aServiceNames;
 }
 
@@ -309,12 +307,10 @@ ScVbaVPageBreaks::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaVPageBreaks::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.VPageBreaks";
-    }
+        "ooo.vba.excel.VPageBreaks"
+    };
     return aServiceNames;
 }
 

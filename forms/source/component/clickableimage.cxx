@@ -77,9 +77,8 @@ namespace frm
 
     Sequence<Type> OClickableImageBaseControl::_getTypes()
     {
-        static Sequence<Type> aTypes;
-        if (!aTypes.getLength())
-            aTypes = concatSequences(OControl::_getTypes(), OClickableImageBaseControl_BASE::getTypes());
+        static Sequence<Type> const aTypes =
+            concatSequences(OControl::_getTypes(), OClickableImageBaseControl_BASE::getTypes());
         return aTypes;
     }
 

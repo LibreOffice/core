@@ -173,9 +173,7 @@ bool EApiInit()
 
 ESourceRegistry *get_e_source_registry()
 {
-    static ESourceRegistry *theInstance;
-    if (!theInstance)
-        theInstance = e_source_registry_new_sync(nullptr, nullptr);
+    static ESourceRegistry *theInstance = e_source_registry_new_sync(nullptr, nullptr);
     return theInstance;
 }
 

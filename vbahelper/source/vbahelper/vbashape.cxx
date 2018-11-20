@@ -749,12 +749,10 @@ ScVbaShape::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaShape::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.msform.Shape";
-    }
+        "ooo.vba.msform.Shape"
+    };
     return aServiceNames;
 }
 
