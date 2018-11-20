@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_a0d1435a",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-20T08:46:30Z",
+      "side": 1,
+      "message": "are poppler_true/false really needed, can\u0027t we just use true/fales instead?",
+      "revId": "c6a320da3b02211a2a344ad78e9e632b7beedc10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
