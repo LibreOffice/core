@@ -262,9 +262,9 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
 FrameSelectorImpl::~FrameSelectorImpl()
 
 {
-    for( auto aIt = maChildVec.begin(), aEnd = maChildVec.end(); aIt != aEnd; ++aIt )
-        if( aIt->is() )
-            (*aIt)->Invalidate();
+    for( auto& rpChild : maChildVec )
+        if( rpChild.is() )
+            rpChild->Invalidate();
 }
 
 // initialization

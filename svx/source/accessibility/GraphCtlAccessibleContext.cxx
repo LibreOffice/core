@@ -633,12 +633,9 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
     mpPage = nullptr;
 
     {
-        ShapesMapType::iterator I;
-        ShapesMapType::const_iterator endIt = mxShapes.end();
-
-        for (I=mxShapes.begin(); I!=endIt; ++I)
+        for (const auto& rEntry : mxShapes)
         {
-            rtl::Reference<XAccessible> pAcc((*I).second.get());
+            rtl::Reference<XAccessible> pAcc(rEntry.second.get());
             Reference< XComponent > xComp( pAcc.get(), UNO_QUERY );
             if( xComp.is() )
                 xComp->dispose();

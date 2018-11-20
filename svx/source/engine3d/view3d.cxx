@@ -1066,23 +1066,20 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
                 {
                     // do we have overlap with an object of this layer?
                     bool bOverlap(false);
-                    auto itAct = pLayer->mvNeighbours.begin();
 
-                    while(!bOverlap && itAct != pLayer->mvNeighbours.end())
+                    for(const auto& rAct : pLayer->mvNeighbours)
                     {
-                        // do itAct->mpObj and pExtrudeObj overlap? Check by
+                        // do rAct.mpObj and pExtrudeObj overlap? Check by
                         // using logical AND clipping
                         const basegfx::B2DPolyPolygon aAndPolyPolygon(
                             basegfx::utils::solvePolygonOperationAnd(
                                 aExtrudePoly,
-                                itAct->maPreparedPolyPolygon));
+                                rAct.maPreparedPolyPolygon));
 
-                        bOverlap = (0 != aAndPolyPolygon.count());
-
-                        if(bOverlap)
+                        if(aAndPolyPolygon.count() != 0)
                         {
                             // second criteria: is another fillstyle or color used?
-                            const SfxItemSet& rCompareSet = itAct->mpObj->GetMergedItemSet();
+                            const SfxItemSet& rCompareSet = rAct.mpObj->GetMergedItemSet();
 
                             drawing::FillStyle eCompareFillStyle = rCompareSet.Get(XATTR_FILLSTYLE).GetValue();
 
@@ -1094,17 +1091,18 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
 
                                     if(aCompareColor == aLocalColor)
                                     {
-                                        bOverlap = false;
+                                        continue;
                                     }
                                 }
                                 else if(eLocalFillStyle == drawing::FillStyle_NONE)
                                 {
-                                    bOverlap = false;
+                                    continue;
                                 }
                             }
-                        }
 
-                        ++itAct;
+                            bOverlap = true;
+                            break;
+                        }
                     }
 
                     if(bOverlap)
@@ -1143,15 +1141,10 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
             while(pLayer)
             {
                 // move along layer
-                auto itAct = pLayer->mvNeighbours.begin();
-
-                while(itAct != pLayer->mvNeighbours.end())
+                for(auto& rAct : pLayer->mvNeighbours)
                 {
                     // adapt extrude value
-                    itAct->mpObj->SetMergedItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
-
-                    // next
-                    ++itAct;
+                    rAct.mpObj->SetMergedItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
                 }
 
                 // next layer

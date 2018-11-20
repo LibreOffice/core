@@ -738,9 +738,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
                     pMap));
 
             // removing placeholder objects
-            for (std::vector< E3dCompoundObject* >::iterator aObjectListIter( aPlaceholderObjectList.begin() ); aObjectListIter != aPlaceholderObjectList.end(); )
+            for (E3dCompoundObject* pTemp : aPlaceholderObjectList)
             {
-                E3dCompoundObject* pTemp(*aObjectListIter++);
                 pScene->RemoveObject( pTemp->GetOrdNum() );
                 // always use SdrObject::Free(...) for SdrObjects (!)
                 SdrObject* pTemp2(pTemp);

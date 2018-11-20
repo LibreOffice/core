@@ -1369,9 +1369,9 @@ AccessibleShape::getGroupPosition( const uno::Any& )
     //get the index of the selected object in the group
     //we start counting position from 1
     sal_Int32 nPos = 1;
-    for ( std::vector< uno::Reference<drawing::XShape> >::const_iterator aIter = vXShapes.begin(); aIter != vXShapes.end(); ++aIter, nPos++ )
+    for ( const auto& rpShape : vXShapes )
     {
-        if ( (*aIter).get() == mxShape.get() )
+        if ( rpShape.get() == mxShape.get() )
         {
             sal_Int32* pArray = aRet.getArray();
             pArray[0] = nGroupLevel;
@@ -1379,6 +1379,7 @@ AccessibleShape::getGroupPosition( const uno::Any& )
             pArray[2] = nPos;
             break;
         }
+        nPos++;
     }
 
     return aRet;
