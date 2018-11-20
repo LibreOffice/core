@@ -1334,23 +1334,18 @@ uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
 
 uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes(OComponentHelper::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
-        aTypes.realloc( nParentLen + 4 );
+        uno::Sequence<uno::Type> tmp(OComponentHelper::getTypes());
+        long nParentLen = tmp.getLength();
+        tmp.realloc( nParentLen + 4 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<text::XTextField>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<beans::XPropertySet>::get();
         pPtr[nParentLen + 2] = cppu::UnoType<lang::XUnoTunnel>::get();
         pPtr[nParentLen + 3] = cppu::UnoType<lang::XServiceInfo>::get();
-
-        for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 

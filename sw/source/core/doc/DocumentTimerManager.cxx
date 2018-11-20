@@ -132,9 +132,7 @@ DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
 IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
 {
 #ifdef TIMELOG
-    static ::rtl::Logfile* pModLogFile = 0;
-    if( !pModLogFile )
-        pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
+    static ::rtl::Logfile* pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
     BlockIdling();
     StopIdling();

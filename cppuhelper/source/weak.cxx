@@ -40,9 +40,7 @@ namespace cppu
 // this is used to lock all instances of OWeakConnectionPoint and OWeakRefListener as well as OWeakObject::m_pWeakConnectionPoint
 static Mutex & getWeakMutex()
 {
-    static Mutex * s_pMutex = nullptr;
-    if (! s_pMutex)
-        s_pMutex = new Mutex();
+    static Mutex * s_pMutex = new Mutex();
     return *s_pMutex;
 }
 

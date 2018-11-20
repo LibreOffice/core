@@ -60,12 +60,10 @@ SwVbaField::getServiceImplName()
 uno::Sequence<OUString>
 SwVbaField::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.word.Field";
-    }
+        "ooo.vba.word.Field"
+    };
     return aServiceNames;
 }
 
@@ -518,12 +516,10 @@ SwVbaFields::getElementType()
 uno::Sequence<OUString>
 SwVbaFields::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.word.Fields";
-    }
+        "ooo.vba.word.Fields"
+    };
     return aServiceNames;
 }
 

@@ -105,12 +105,10 @@ ScVbaFileDialogSelectedItems::getServiceImplName()
 uno::Sequence<OUString>
 ScVbaFileDialogSelectedItems::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.FileDialogSelectedItems";
-    }
+        "ooo.vba.FileDialogSelectedItems"
+    };
     return aServiceNames;
 }
 

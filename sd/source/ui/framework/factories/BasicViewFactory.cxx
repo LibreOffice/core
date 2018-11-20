@@ -439,17 +439,18 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
     Reference<XRelocatableResource> xResource (rpDescriptor->mxView, UNO_QUERY);
     if (xResource.is())
     {
-        static ::std::vector<Reference<XResourceId> > s_aCacheableResources;
-        if (s_aCacheableResources.empty() )
+        static ::std::vector<Reference<XResourceId> > s_aCacheableResources = [&]()
         {
+            ::std::vector<Reference<XResourceId> > tmp;
             std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*mpBase));
 
             // The slide sorter and the task panel are cacheable and relocatable.
-            s_aCacheableResources.push_back(FrameworkHelper::CreateResourceId(
+            tmp.push_back(FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftDrawPaneURL));
-            s_aCacheableResources.push_back(FrameworkHelper::CreateResourceId(
+            tmp.push_back(FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftImpressPaneURL));
-        }
+            return tmp;
+        }();
 
         ::std::vector<Reference<XResourceId> >::const_iterator iId;
         for (iId=s_aCacheableResources.begin(); iId!=s_aCacheableResources.end(); ++iId)

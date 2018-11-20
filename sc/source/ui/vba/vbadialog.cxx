@@ -71,12 +71,10 @@ ScVbaDialog::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaDialog::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.Dialog";
-    }
+        "ooo.vba.excel.Dialog"
+    };
     return aServiceNames;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -428,12 +428,10 @@ VbaApplicationBase::getServiceImplName()
 uno::Sequence<OUString>
 VbaApplicationBase::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.VbaApplicationBase";
-    }
+        "ooo.vba.VbaApplicationBase"
+    };
     return aServiceNames;
 }
 

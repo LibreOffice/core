@@ -112,12 +112,10 @@ SwVbaRow::getServiceImplName()
 uno::Sequence< OUString >
 SwVbaRow::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.word.Row";
-    }
+        "ooo.vba.word.Row"
+    };
     return aServiceNames;
 }
 

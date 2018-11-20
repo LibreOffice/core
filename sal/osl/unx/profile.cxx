@@ -879,19 +879,13 @@ static osl_TStamp OslProfile_getFileStamp(osl_TFile* pFile)
 static bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 {
     struct flock lock;
-    /* boring hack, but initializers for static vars must be constant */
-    static bool bIsInitialized = false;
-    static bool bLockingDisabled;
-
-    if ( !bIsInitialized )
+    static bool const bLockingDisabled = [&]()
     {
         sal_Char* pEnvValue;
         pEnvValue = getenv( "STAR_PROFILE_LOCKING_DISABLED" );
 
-        bLockingDisabled = pEnvValue != nullptr;
-
-        bIsInitialized = true;
-    }
+        return pEnvValue != nullptr;
+    }();
 
     if (pFile->m_Handle < 0)
     {

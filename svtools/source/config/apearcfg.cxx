@@ -94,8 +94,7 @@ SvtTabAppearanceCfg::~SvtTabAppearanceCfg( )
 
 const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
 {
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
+    static Sequence<OUString> const aNames = [&]()
     {
         static const sal_Char* aPropNames[] =
         {
@@ -109,13 +108,14 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
 #endif
         };
         const int nCount = SAL_N_ELEMENTS( aPropNames );
-        aNames.realloc(nCount);
+        Sequence<OUString> tmp(nCount);
 
         const sal_Char** pAsciiNames = aPropNames;
-        OUString* pNames = aNames.getArray();
+        OUString* pNames = tmp.getArray();
         for(int i = 0; i < nCount; ++i, ++pNames, ++pAsciiNames)
             *pNames = OUString::createFromAscii( *pAsciiNames );
-    }
+        return tmp;
+    }();
     return aNames;
 }
 
