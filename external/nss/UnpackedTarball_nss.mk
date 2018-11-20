@@ -34,7 +34,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     	external/nss/nss.utf8bom.patch.1) \
 	$(if $(filter ANDROID,$(OS)), \
 		external/nss/nss-android.patch.1) \
-	external/nss/nss.parallel.patch \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
