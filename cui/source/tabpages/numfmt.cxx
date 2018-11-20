@@ -1612,7 +1612,9 @@ IMPL_LINK_NOARG(SvxNumberFormatTabPage, LostFocusHdl_Impl, weld::Widget&, void)
     {
         sal_uInt16 nSelPos = m_xLbFormat->get_selected_index();
         pNumFmtShell->SetComment4Entry(nSelPos, m_xEdComment->get_text());
-        m_xEdComment->set_text(m_xLbCategory->get_text(1));    // String for user defined
+        // String for user defined, if present
+        OUString sEntry = m_xLbCategory->n_children() > 1 ? m_xLbCategory->get_text(1) : OUString();
+        m_xEdComment->set_text(sEntry);
     }
 }
 
