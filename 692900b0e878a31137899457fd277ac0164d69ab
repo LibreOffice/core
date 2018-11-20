@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "ff5d4b2f_bb46184f",
+        "filename": "connectivity/source/drivers/jdbc/CallableStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-20T12:54:08Z",
+      "side": 1,
+      "message": "probably just historical, I don\u0027t know of any good reason, either way the compiler will put it into the readonly linker segment",
+      "parentUuid": "ff5d4b2f_00212fb5",
+      "range": {
+        "startLine": 332,
+        "startChar": 12,
+        "endLine": 332,
+        "endChar": 48
+      },
+      "revId": "692900b0e878a31137899457fd277ac0164d69ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff5d4b2f_c003170f",
         "filename": "forms/source/component/Columns.cxx",
         "patchSetId": 1
