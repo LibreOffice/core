@@ -1753,10 +1753,8 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
 struct SalInstanceTreeIter : public weld::TreeIter
 {
     SalInstanceTreeIter(const SalInstanceTreeIter* pOrig)
+        : iter(pOrig ? pOrig->iter : nullptr)
     {
-        if (!pOrig)
-            return;
-        iter = pOrig->iter;
     }
     SvTreeListEntry* iter;
 };
@@ -2160,6 +2158,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
     if (pEntry->HasChildren())
     {
         auto pChild = m_xTreeView->FirstChild(pEntry);
+        assert(pChild);
         if (m_xTreeView->GetEntryText(pChild) == "<dummy>")
         {
             m_xTreeView->RemoveEntry(pChild);

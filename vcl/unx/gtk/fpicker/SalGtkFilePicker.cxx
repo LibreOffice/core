@@ -1233,7 +1233,7 @@ uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nC
                             &iter, 0, &item, -1);
                         aItemList[i] = OUString(item, strlen(item), RTL_TEXTENCODING_UTF8);
                         g_free(item);
-                        gtk_tree_model_iter_next(pTree, &iter);
+                        (void)gtk_tree_model_iter_next(pTree, &iter);
                     }
                 }
                 aAny <<= aItemList;
