@@ -18,10 +18,7 @@
 
 package complex.XTitle;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import util.utils;
 
 import org.junit.After;
@@ -199,6 +196,33 @@ public class CheckXTitle
 
         xDoc     = null;
         xDisProv = null;
+    }
+
+    /** checks the if SuggestedSaveAsName is displayed in the title */
+    @Test
+    public void checkTitleSuggestedFileName() throws Exception
+    {
+        PropertyValue[] lArgs = new PropertyValue[2];
+
+        lArgs[0]         = new PropertyValue();
+        lArgs[0].Name    = "Hidden";
+        lArgs[0].Value   = Boolean.FALSE;
+        lArgs[1]         = new PropertyValue();
+        lArgs[1].Name    = "SuggestedSaveAsName";
+        lArgs[1].Value   = "suggestme.odt";
+
+        // load doc
+        XComponent xDoc = m_xLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, lArgs);
+        assertNotNull("Could not load temporary document", xDoc);
+
+        XModel xModel = UnoRuntime.queryInterface( XModel.class, xDoc );
+        XTitle xTitle = UnoRuntime.queryInterface( XTitle.class, xModel.getCurrentController().getFrame() );
+
+        String title = xTitle.getTitle();
+        assertTrue(title.startsWith("suggestme.odt"));
+
+        XDispatchProvider xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
+        prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_DOC );
     }
 
     /** @short sets frame title and checks for infinite recursion
