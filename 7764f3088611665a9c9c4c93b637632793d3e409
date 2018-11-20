@@ -22,6 +22,30 @@
       "revId": "7764f3088611665a9c9c4c93b637632793d3e409",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_9b19148a",
+        "filename": "sc/source/core/tool/stylehelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-20T19:30:37Z",
+      "side": 1,
+      "message": "thanks, that was from an in-between state of the code",
+      "parentUuid": "ff5d4b2f_fbadb031",
+      "range": {
+        "startLine": 73,
+        "startChar": 15,
+        "endLine": 73,
+        "endChar": 27
+      },
+      "revId": "7764f3088611665a9c9c4c93b637632793d3e409",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
