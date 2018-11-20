@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_9bbd946a",
+        "filename": "sc/source/core/tool/stylehelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T18:08:33Z",
+      "side": 1,
+      "message": "Change this to const char*, and use equalsAscii() below where it is used?",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 12
+      },
+      "revId": "98ccec6a121c75f77b2c03f06c9310922616cdd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
