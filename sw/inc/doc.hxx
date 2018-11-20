@@ -1378,7 +1378,8 @@ public:
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or subtracting a given
      offset or set it "to" this position (bModulus = true). */
-    void MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus );
+    void MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
+            SwRootFrame const* pLayout = nullptr);
 
     // Query NumberFormatter.
     inline       SvNumberFormatter* GetNumberFormatter( bool bCreate = true );
