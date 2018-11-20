@@ -55,7 +55,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         }
 
         ODatabaseMetaDataResultSet::ORows aRows;
-        static ODatabaseMetaDataResultSet::ORow aRow(8);
+        ODatabaseMetaDataResultSet::ORow aRow(8);
         aRow[5] = new ORowSetValueDecorator(sUserWorkingFor);
         aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
         aRow[7] = new ORowSetValueDecorator(OUString("YES"));
