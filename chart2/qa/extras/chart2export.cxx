@@ -122,6 +122,7 @@ public:
     void testChartTitlePropertiesBitmapFillPPTX();
     void testTdf116163();
     void testTdf119029();
+    void testTdf108022();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -206,6 +207,7 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
     CPPUNIT_TEST(testTdf116163);
     CPPUNIT_TEST(testTdf119029);
+    CPPUNIT_TEST(testTdf108022);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1935,6 +1937,18 @@ void Chart2ExportTest::testTdf119029()
     assertXPath(pXmlDoc,
                 "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:bodyPr", "rot",
                 "-5400000");
+}
+
+void Chart2ExportTest::testTdf108022()
+{
+    load("/chart2/qa/extras/data/odt/", "tdf108022.odt");
+    reload("Office Open XML Text");
+
+    // assert we really have two charts
+    Reference<chart2::XChartDocument> xChartDoc1(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc1.is());
+    Reference<chart2::XChartDocument> xChartDoc2(getChartDocFromWriter(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc2.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
