@@ -158,6 +158,13 @@ DECLARE_WW8EXPORT_TEST(testTdf94009_zeroPgMargin, "tdf94009_zeroPgMargin.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(defaultStyle, "TopMargin"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf120711_joinedParagraphWithChangeTracking, "tdf120711.doc")
+{
+    sal_Int16   numFormat = getNumberingTypeOfParagraph(5);
+    // last paragraph is not a list item
+    CPPUNIT_ASSERT(style::NumberingType::CHAR_SPECIAL != numFormat);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
