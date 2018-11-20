@@ -1490,6 +1490,21 @@ namespace basegfx
             return false;
         }
 
+        // Calculates distance of curve point to its control point for a Bézier curve, that
+        // approximates a unit circle arc. fAngle is the center angle of the circle arc. The
+        // constrain 0<=fAngle<=pi/2 must not be violated to give a useful accuracy. For details
+        // and alternatives read document "ApproxCircleInfo.odt", attachment of bug tdf#121425.
+        static double impDistanceBezierPointToControl(double fAngle)
+        {
+            SAL_WARN_IF(fAngle < 0 || fAngle > F_PI2,"basegfx","angle not suitable for approximate circle");
+            if (0 <= fAngle && fAngle <= F_PI2)
+            {
+                return 4.0/3.0 * ( tan(fAngle/4.0));
+            }
+            else
+                return 0;
+        }
+
         B2DPolygon createPolygonFromRect( const B2DRectangle& rRect, double fRadiusX, double fRadiusY )
         {
             const double fZero(0.0);
@@ -1549,7 +1564,7 @@ namespace basegfx
                 B2DPolygon aRetval;
                 const double fBowX((rRect.getWidth() / 2.0) * fRadiusX);
                 const double fBowY((rRect.getHeight() / 2.0) * fRadiusY);
-                const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
+                const double fKappa(impDistanceBezierPointToControl(F_PI2));
 
                 // create start point at bottom center
                 if(!rtl::math::approxEqual(fOne, fRadiusX))
@@ -1657,13 +1672,12 @@ namespace basegfx
         static B2DPolygon impCreateUnitCircle(sal_uInt32 nStartQuadrant)
         {
             B2DPolygon aUnitCircle;
-            const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
-            const double fScaledKappa(fKappa * (1.0 / STEPSPERQUARTER));
+            const double fSegmentKappa = impDistanceBezierPointToControl(F_PI2 / STEPSPERQUARTER);
             const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
 
             B2DPoint aPoint(1.0, 0.0);
-            B2DPoint aForward(1.0, fScaledKappa);
-            B2DPoint aBackward(1.0, -fScaledKappa);
+            B2DPoint aForward(1.0, fSegmentKappa);
+            B2DPoint aBackward(1.0, -fSegmentKappa);
 
             if(nStartQuadrant != 0)
             {
@@ -1697,12 +1711,11 @@ namespace basegfx
                 B2DPolygon operator()()
                 {
                     B2DPolygon aUnitHalfCircle;
-                    const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
-                    const double fScaledKappa(fKappa * (1.0 / STEPSPERQUARTER));
+                    const double fSegmentKappa(impDistanceBezierPointToControl(F_PI2 / STEPSPERQUARTER));
                     const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
                     B2DPoint aPoint(1.0, 0.0);
-                    B2DPoint aForward(1.0, fScaledKappa);
-                    B2DPoint aBackward(1.0, -fScaledKappa);
+                    B2DPoint aForward(1.0, fSegmentKappa);
+                    B2DPoint aBackward(1.0, -fSegmentKappa);
 
                     aUnitHalfCircle.append(aPoint);
 
@@ -1815,8 +1828,7 @@ namespace basegfx
                 const double fAnglePerSegment(F_PI2 / STEPSPERQUARTER);
                 const sal_uInt32 nStartSegment(sal_uInt32(fStart / fAnglePerSegment) % nSegments);
                 const sal_uInt32 nEndSegment(sal_uInt32(fEnd / fAnglePerSegment) % nSegments);
-                const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
-                const double fScaledKappa(fKappa * (1.0 / STEPSPERQUARTER));
+                const double fSegmentKappa(impDistanceBezierPointToControl(fAnglePerSegment));
 
                 B2DPoint aSegStart(cos(fStart), sin(fStart));
                 aRetval.append(aSegStart);
@@ -1825,7 +1837,7 @@ namespace basegfx
                 {
                     // start and end in one sector and in the right order, create in one segment
                     const B2DPoint aSegEnd(cos(fEnd), sin(fEnd));
-                    const double fFactor(fScaledKappa * ((fEnd - fStart) / fAnglePerSegment));
+                    const double fFactor(impDistanceBezierPointToControl(fEnd - fStart));
 
                     aRetval.appendBezierSegment(
                         aSegStart + (B2DPoint(-aSegStart.getY(), aSegStart.getX()) * fFactor),
@@ -1835,7 +1847,7 @@ namespace basegfx
                 else
                 {
                     double fSegEndRad((nStartSegment + 1) * fAnglePerSegment);
-                    double fFactor(fScaledKappa * ((fSegEndRad - fStart) / fAnglePerSegment));
+                    double fFactor(impDistanceBezierPointToControl(fSegEndRad - fStart));
                     B2DPoint aSegEnd(cos(fSegEndRad), sin(fSegEndRad));
 
                     aRetval.appendBezierSegment(
@@ -1853,8 +1865,8 @@ namespace basegfx
                         aSegEnd = B2DPoint(cos(fSegEndRad), sin(fSegEndRad));
 
                         aRetval.appendBezierSegment(
-                            aSegStart + (B2DPoint(-aSegStart.getY(), aSegStart.getX()) * fScaledKappa),
-                            aSegEnd - (B2DPoint(-aSegEnd.getY(), aSegEnd.getX()) * fScaledKappa),
+                            aSegStart + (B2DPoint(-aSegStart.getY(), aSegStart.getX()) * fSegmentKappa),
+                            aSegEnd - (B2DPoint(-aSegEnd.getY(), aSegEnd.getX()) * fSegmentKappa),
                             aSegEnd);
 
                         nSegment = (nSegment + 1) % nSegments;
@@ -1863,7 +1875,7 @@ namespace basegfx
 
                     // End in this sector
                     const double fSegStartRad(nSegment * fAnglePerSegment);
-                    fFactor = fScaledKappa * ((fEnd - fSegStartRad) / fAnglePerSegment);
+                    fFactor= impDistanceBezierPointToControl(fEnd - fSegStartRad);
                     aSegEnd = B2DPoint(cos(fEnd), sin(fEnd));
 
                     aRetval.appendBezierSegment(
