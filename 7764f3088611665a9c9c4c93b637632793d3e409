@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_fbadb031",
+        "filename": "sc/source/core/tool/stylehelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T18:11:38Z",
+      "side": 1,
+      "message": "I noticed that you explicitly return address of first element, instead of array itself (implicitly converted to the same). Is there some reason to do this way?",
+      "range": {
+        "startLine": 73,
+        "startChar": 15,
+        "endLine": 73,
+        "endChar": 27
+      },
+      "revId": "7764f3088611665a9c9c4c93b637632793d3e409",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
