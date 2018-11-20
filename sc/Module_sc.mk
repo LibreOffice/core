@@ -148,6 +148,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_indexenumeration_sheetlinksenumeration \
 	CppunitTest_sc_indexenumeration_spreadsheetsenumeration \
 	CppunitTest_sc_indexenumeration_spreadsheetviewpanesenumeration \
+	CppunitTest_sc_indexenumeration_subtotalfieldsenumeration \
 	CppunitTest_sc_indexenumeration_tableautoformatenumeration \
 	CppunitTest_sc_indexenumeration_tableconditionalentryenumeration \
 	CppunitTest_sc_indexenumeration_tablecolumnsenumeration \
