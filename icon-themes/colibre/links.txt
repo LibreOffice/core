@@ -376,24 +376,22 @@ cmd/lc_importfromfile.png cmd/lc_dataimport.png
 cmd/sc_importfromfile.png cmd/sc_dataimport.png
 
 # Wizard
-cmd/lc_dbnewqueryautopilot.png cmd/lc_autoformat.png
-cmd/lc_usewizards.png cmd/lc_autoformat.png
-cmd/lc_graphicfiltertoolbox.png cmd/lc_autoformat.png
-cmd/lc_dbnewtableautopilot.png cmd/lc_autoformat.png
-cmd/lc_dbnewreportautopilot.png cmd/lc_autoformat.png
-cmd/lc_dbnewformautopilot.png cmd/lc_autoformat.png
-cmd/lc_commontaskbarvisible.png cmd/lc_autoformat.png
-cmd/lc_autopilotmenu.png cmd/lc_autoformat.png
-cmd/lc_newarrangement.png cmd/lc_autoformat.png
-cmd/sc_dbnewqueryautopilot.png cmd/sc_autoformat.png
-cmd/sc_usewizards.png cmd/sc_autoformat.png
-cmd/sc_graphicfiltertoolbox.png cmd/sc_autoformat.png
-cmd/sc_dbnewtableautopilot.png cmd/sc_autoformat.png
-cmd/sc_dbnewreportautopilot.png cmd/sc_autoformat.png
-cmd/sc_dbnewformautopilot.png cmd/sc_autoformat.png
-cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
-cmd/sc_autopilotmenu.png cmd/sc_autoformat.png
-cmd/sc_newarrangement.png cmd/sc_autoformat.png
+cmd/lc_dbnewqueryautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_usewizards.png cmd/lc_autopilotmenu.png
+cmd/lc_graphicfiltertoolbox.png cmd/lc_autopilotmenu.png
+cmd/lc_dbnewtableautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_dbnewreportautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_dbnewformautopilot.png cmd/lc_autopilotmenu.png
+cmd/lc_commontaskbarvisible.png cmd/lc_autopilotmenu.png
+cmd/lc_newarrangement.png cmd/lc_autopilotmenu.png
+cmd/sc_dbnewqueryautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_usewizards.png cmd/sc_autopilotmenu.png
+cmd/sc_graphicfiltertoolbox.png cmd/sc_autopilotmenu.png
+cmd/sc_dbnewtableautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_dbnewreportautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_dbnewformautopilot.png cmd/sc_autopilotmenu.png
+cmd/sc_commontaskbarvisible.png cmd/sc_autopilotmenu.png
+cmd/sc_newarrangement.png cmd/sc_autopilotmenu.png
 
 # Filter
 cmd/lc_formfilterexecute.png cmd/lc_datafilterstandardfilter.png
@@ -1510,7 +1508,7 @@ svx/res/cd017.png cmd/sc_bezierinsert.png
 svx/res/cd018.png cmd/sc_bezierdelete.png
 svx/res/cd020.png cmd/sc_undo.png
 svx/res/cd021.png cmd/sc_redo.png
-svx/res/cd025.png cmd/sc_autoformat.png
+svx/res/cd025.png cmd/sc_autopilotmenu.png
 svx/res/cd026.png cmd/sc_bmpmask.png
 
 svx/res/color.png cmd/sc_bmpmask.png
