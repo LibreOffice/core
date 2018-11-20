@@ -804,7 +804,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                 bCreateNewList = false;
             }
 
-            GetDoc()->SetCounted( aPam, true );
+            GetDoc()->SetCounted(aPam, true, GetLayout());
         }
     }
     else
@@ -812,7 +812,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         GetDoc()->SetNumRule( *pCursor, rRule,
                               bCreateNewList, GetLayout(), rContinuedListId,
                               true, bResetIndentAttrs );
-        GetDoc()->SetCounted( *pCursor, true );
+        GetDoc()->SetCounted( *pCursor, true, GetLayout() );
     }
     GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
 
