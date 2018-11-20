@@ -65,7 +65,8 @@
 
 
 namespace {
-    void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker )
+    void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam, sal_uInt16 marker,
+            SwRootFrame const*const pLayout)
     {
         std::set<sal_uInt16> aResetAttrsArray;
         aResetAttrsArray.insert( marker );
@@ -79,11 +80,11 @@ namespace {
                         rPam.End()->nNode );
             aPam.Start()->nContent = 0;
             aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTextNode()->Len();
-            pDoc->ResetAttrs( aPam, false, aResetAttrsArray );
+            pDoc->ResetAttrs( aPam, false, aResetAttrsArray, true, pLayout );
         }
         else
         {
-            pDoc->ResetAttrs( rPam, false, aResetAttrsArray );
+            pDoc->ResetAttrs( rPam, false, aResetAttrsArray, true, pLayout );
         }
     }
 
@@ -914,7 +915,9 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
         }
         if (!sListId.isEmpty())
         {
-            getIDocumentContentOperations().InsertPoolItem(aPam, SfxStringItem(RES_PARATR_LIST_ID, sListId));
+            getIDocumentContentOperations().InsertPoolItem(aPam,
+                SfxStringItem(RES_PARATR_LIST_ID, sListId),
+                SetAttrMode::DEFAULT, pLayout);
         }
     }
 
@@ -955,13 +958,15 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
 
     if ( bSetItem )
     {
-        getIDocumentContentOperations().InsertPoolItem(aPam, SwNumRuleItem(pNewOrChangedNumRule->GetName()));
+        getIDocumentContentOperations().InsertPoolItem(aPam,
+                SwNumRuleItem(pNewOrChangedNumRule->GetName()),
+                SetAttrMode::DEFAULT, pLayout);
     }
 
     if ( bResetIndentAttrs
          && pNewOrChangedNumRule->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        ::lcl_ResetIndentAttrs(this, aPam, RES_LR_SPACE);
+        ::lcl_ResetIndentAttrs(this, aPam, RES_LR_SPACE, pLayout);
     }
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -974,15 +979,18 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
     return sListId;
 }
 
-void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
+void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted,
+        SwRootFrame const*const pLayout)
 {
     if ( bCounted )
     {
-        ::lcl_ResetIndentAttrs(this, rPam, RES_PARATR_LIST_ISCOUNTED);
+        ::lcl_ResetIndentAttrs(this, rPam, RES_PARATR_LIST_ISCOUNTED, pLayout);
     }
     else
     {
-        getIDocumentContentOperations().InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, false ) );
+        getIDocumentContentOperations().InsertPoolItem(rPam,
+                SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, false),
+                SetAttrMode::DEFAULT, pLayout);
     }
 }
 
