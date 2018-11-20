@@ -130,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "ff5d4b2f_7b2f80f6",
+        "filename": "stoc/source/javaloader/javaloader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T15:51:12Z",
+      "side": 1,
+      "message": "Well - I understand that this is outside of the scope of this; just for the record:\n\nthe mutex is local to the file, and is only used in two places: in the initializer here (which is used only once, for the one and the only loader instance creation), and in its method JavaComponentLoader::getJavaLoader(), which can never be run synchronously with this static initialization. So I believe that it\u0027s not necessary here any longer.",
+      "parentUuid": "ff5d4b2f_dbbe6cfe",
+      "range": {
+        "startLine": 346,
+        "startChar": 8,
+        "endLine": 346,
+        "endChar": 43
+      },
+      "revId": "8e48c9d8300aeb5611847989c2fe347923e5b192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff5d4b2f_7b88a070",
         "filename": "svtools/source/config/apearcfg.cxx",
         "patchSetId": 2
