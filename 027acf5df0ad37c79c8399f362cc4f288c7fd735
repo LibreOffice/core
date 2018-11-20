@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_7bd66052",
+        "filename": "sw/source/uibase/config/modcfg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-20T13:29:34Z",
+      "side": 1,
+      "message": "INS_PROP_TABLE_BORDER here?",
+      "range": {
+        "startLine": 557,
+        "startChar": 65,
+        "endLine": 557,
+        "endChar": 108
+      },
+      "revId": "027acf5df0ad37c79c8399f362cc4f288c7fd735",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
