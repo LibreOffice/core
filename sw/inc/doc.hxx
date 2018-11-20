@@ -1030,7 +1030,7 @@ public:
                      const OUString& sContinuedListId = OUString(),
                      bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
-    void SetCounted( const SwPaM&, bool bCounted);
+    void SetCounted(const SwPaM&, bool bCounted, SwRootFrame const* pLayout);
 
     void MakeUniqueNumRules(const SwPaM & rPaM);
 
