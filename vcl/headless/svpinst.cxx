@@ -27,7 +27,9 @@
 #include <sal/types.h>
 
 #include <vcl/inputtypes.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
+#ifndef LIBO_HEADLESS
+# include <vcl/opengl/OpenGLContext.hxx>
+#endif
 
 #include <headless/svpinst.hxx>
 #include <headless/svpframe.hxx>
