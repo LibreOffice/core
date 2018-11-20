@@ -279,7 +279,8 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
 
         if (nData)
         {
-            rOle2.WriteStream(aStream);
+            // NativeData
+            rOle2.WriteStream(aStream, nData);
             rOle2.Seek(0);
         }
     }
