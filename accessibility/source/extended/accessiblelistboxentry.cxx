@@ -437,7 +437,7 @@ namespace accessibility
         {
             return getListBox()->GetEntryLongDescription( pEntry );
         }
-        //want to cout the real column number in the list box.
+        //want to count the real column number in the list box.
         sal_uInt16 iRealItemCount = 0;
         sal_uInt16 iCount = 0;
         sal_uInt16 iTotleItemCount = pEntry->ItemCount();
