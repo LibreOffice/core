@@ -44,7 +44,9 @@ public:
     virtual bool            Export() = 0;
 
 #ifndef DISABLE_DYNLOADING
-    static ::osl::Module*       OpenLibrary( const OUString& rLibraryName );
+    static void Preload();
+    /// Open library @rLibraryName and lookup symbol @rFnSymbol
+    static oslGenericFunction GetLibrarySymbol( const OUString& rLibraryName, const OUString &rFnSymbol );
 #endif
 
 protected:
