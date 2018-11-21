@@ -362,20 +362,6 @@ sd/source/ui/slidesorter/inc/view/SlsInsertAnimator.hxx:45
     enum sd::slidesorter::view::InsertAnimator::ResetMode RM_AbortAnimations
 sd/source/ui/slidesorter/inc/view/SlsInsertAnimator.hxx:45
     enum sd::slidesorter::view::InsertAnimator::ResetMode RM_Normal
-sdext/source/pdfimport/inc/pdfiprocessor.hxx:74
-    enum pdfi::PDFIProcessor::DocumentTextDirecion TbLr
-sdext/source/pdfimport/inc/pdfiprocessor.hxx:74
-    enum pdfi::PDFIProcessor::DocumentTextDirecion LrTb
-sdext/source/pdfimport/inc/pdfiprocessor.hxx:74
-    enum pdfi::PDFIProcessor::DocumentTextDirecion RlTb
-sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
-    enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Left
-sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
-    enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Top
-sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
-    enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Right
-sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
-    enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Bottom
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_RADIUS
 sw/inc/docary.hxx:74
