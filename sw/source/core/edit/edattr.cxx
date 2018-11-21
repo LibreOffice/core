@@ -600,15 +600,15 @@ static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
     if ( bNum )
     {
         bRet = false;
-
-        if (sw::IsParaPropsNode(rLayout, rTNd) && rTNd.IsInList())
+        SwTextNode const*const pPropsNode(sw::GetParaPropsNode(rLayout, rTNd));
+        if (pPropsNode->IsInList())
         {
-            OSL_ENSURE( rTNd.GetNumRule(),
+            OSL_ENSURE( pPropsNode->GetNumRule(),
                     "<lcl_IsNoEndTextAttrAtPos(..)> - no list style found at text node. Serious defect." );
-            const SwNumRule* pNumRule = rTNd.GetNumRule();
+            const SwNumRule* pNumRule = pPropsNode->GetNumRule();
             if(pNumRule)
             {
-                int nListLevel = rTNd.GetActualListLevel();
+                int nListLevel = pPropsNode->GetActualListLevel();
 
                 if (nListLevel < 0)
                     nListLevel = 0;
@@ -622,7 +622,7 @@ static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
                     if ( SVX_NUM_CHAR_SPECIAL == rNumFormat.GetNumberingType() )
                         sExp = OUString(rNumFormat.GetBulletChar());
                     else
-                        sExp = rTNd.GetNumString();
+                        sExp = pPropsNode->GetNumString(true, MAXLEVEL, &rLayout);
                 }
             }
         }
@@ -742,6 +742,9 @@ SvtScriptType SwEditShell::GetScriptType() const
                         if (nEndPos > rText.getLength())
                             nEndPos = rText.getLength();
 
+                        bool const isUntilEnd(pScriptInfo
+                            ? pFrame->MapViewToModelPos(TextFrameIndex(pFrame->GetText().getLength())) <= *pEnd
+                            : rText.getLength() == nEndPos);
                         sal_uInt16 nScript;
                         while( nChg < nEndPos )
                         {
@@ -754,8 +757,10 @@ SvtScriptType SwEditShell::GetScriptType() const
                                                                 rText, nChg );
 
                             if (!lcl_IsNoEndTextAttrAtPos(*GetLayout(), *pTNd, nChg, nRet, true,
-                                      0 == nChg && rText.getLength() == nEndPos))
+                                      TextFrameIndex(0) == iChg && isUntilEnd))
+                            {
                                 nRet |= lcl_SetScriptFlags( nScript );
+                            }
 
                             if( (SvtScriptType::LATIN | SvtScriptType::ASIAN |
                                 SvtScriptType::COMPLEX) == nRet )
