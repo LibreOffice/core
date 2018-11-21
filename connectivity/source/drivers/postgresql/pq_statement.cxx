@@ -138,9 +138,7 @@ static ::cppu::IPropertyArrayHelper & getStatementPropertyArrayHelper()
                 ::cppu::UnoType<sal_Int32>::get() , 0 )},
         true );
 
-    static ::cppu::IPropertyArrayHelper *pArrayHelper = &arrayHelper;
-
-    return *pArrayHelper;
+    return arrayHelper;
 }
 
 Statement::Statement( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,

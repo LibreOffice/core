@@ -1017,10 +1017,9 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
 
     Reference< XResultSet > xResultSet = pResultSet;
-    static ODatabaseMetaDataResultSet::ORows aRows;
-
-    if(aRows.empty())
+    static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
+        ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.reserve(19);
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
@@ -1044,13 +1043,14 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
         aRow.push_back(new ORowSetValueDecorator(sal_Int32(10)));
 
-        aRows.push_back(aRow);
+        tmp.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::VARCHAR);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(65535));
-        aRows.push_back(aRow);
-    }
+        tmp.push_back(aRow);
+        return tmp;
+    }();
     pResultSet->setRows(aRows);
     return xResultSet;
 }
