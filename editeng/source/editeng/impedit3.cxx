@@ -462,8 +462,6 @@ void ImpEditEngine::FormatDoc()
         }
     }
 
-    if ( aStatus.DoRestoreFont() )
-        GetRefDevice()->SetFont( aOldFont );
     bIsFormatting = false;
     bFormatted = true;
 
@@ -3337,8 +3335,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     vcl::Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray.get() );
-                                    if ( aStatus.DoRestoreFont() )
-                                        GetRefDevice()->SetFont( _aOldFont );
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
@@ -3367,8 +3363,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     vcl::Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray.get() );
-                                    if ( aStatus.DoRestoreFont() )
-                                        GetRefDevice()->SetFont( _aOldFont );
                                 }
 
                                 long nTxtWidth = rTextPortion.GetSize().Width();
@@ -3823,8 +3817,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
         if (IsVertical() && !IsTopToBottom() && ( aStartPos.X() > aClipRect.Right() ) )
             break;
     }
-    if ( aStatus.DoRestoreFont() )
-        pOutDev->SetFont( aOldFont );
 }
 
 void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice )
@@ -3964,8 +3956,6 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
                 {
                     vcl::Font aOldFont( GetRefDevice()->GetFont() );
                     CreateLines( nParagraph, 0 );   // 0: No TextRanger
-                    if ( aStatus.DoRestoreFont() )
-                        GetRefDevice()->SetFont( aOldFont );
                 }
                 else
                 {

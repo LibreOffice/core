@@ -29,7 +29,6 @@ enum class EEControlBits
 {
     NONE               = 0x00000000,
     USECHARATTRIBS     = 0x00000001,  // Use of hard character attributes
-    USEPARAATTRIBS     = 0x00000002,  // Using paragraph attributes.
     CRSRLEFTPARA       = 0x00000004,  // Cursor is moved to another paragraph
     DOIDLEFORMAT       = 0x00000008,  // Formatting idle
     PASTESPECIAL       = 0x00000010,  // Allow PasteSpecial
@@ -45,21 +44,18 @@ enum class EEControlBits
     MARKNONURLFIELDS   = 0x00004000,  // Mark fields other than URL with color
     MARKURLFIELDS      = 0x00008000,  // Mark URL fields with color
     MARKFIELDS         = (MARKNONURLFIELDS | MARKURLFIELDS),
-    RESTOREFONT        = 0x00010000,  // Restore Font in OutDev
     RTFSTYLESHEETS     = 0x00020000,  // Use Stylesheets when imported
     AUTOCORRECT        = 0x00080000,  // AutoCorrect
     AUTOCOMPLETE       = 0x00100000,  // AutoComplete
     AUTOPAGESIZEX      = 0x00200000,  // Adjust paper width to Text
     AUTOPAGESIZEY      = 0x00400000,  // Adjust paper height to Text
     AUTOPAGESIZE       = (AUTOPAGESIZEX | AUTOPAGESIZEY),
-    TABINDENTING       = 0x00800000,  // Indent with tab
     FORMAT100          = 0x01000000,  // Always format to 100%
     ULSPACESUMMATION   = 0x02000000,  // MS Compat: sum SA and SB, not maximum value
-    ULSPACEFIRSTPARA   = 0x04000000,  // MS Compat: evaluate also at the first paragraph
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x07ffffff> {};
+    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x037efffd> {};
 }
 
 enum class EVControlBits

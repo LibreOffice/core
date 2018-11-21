@@ -1208,12 +1208,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                 if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     bool bShift = rKeyEvent.GetKeyCode().IsShift();
-                    if ( pImpEditEngine->GetStatus().DoTabIndenting() &&
-                        ( aCurSel.Min().GetNode() != aCurSel.Max().GetNode() ) )
-                    {
-                        pImpEditEngine->IndentBlock( pEditView, !bShift );
-                    }
-                    else if ( !bShift )
+                    if ( !bShift )
                     {
                         bool bSel = pEditView->HasSelection();
                         if ( bSel )
@@ -1854,18 +1849,15 @@ void EditEngine::SetControlWord( EEControlBits nWord )
         {
             // possibly reformat:
             if ( ( nChanges & EEControlBits::USECHARATTRIBS ) ||
-                 ( nChanges & EEControlBits::USEPARAATTRIBS ) ||
                  ( nChanges & EEControlBits::ONECHARPERLINE ) ||
                  ( nChanges & EEControlBits::STRETCHING ) ||
                  ( nChanges & EEControlBits::OUTLINER ) ||
                  ( nChanges & EEControlBits::NOCOLORS ) ||
                  ( nChanges & EEControlBits::OUTLINER2 ) )
             {
-                if ( ( nChanges & EEControlBits::USECHARATTRIBS ) ||
-                     ( nChanges & EEControlBits::USEPARAATTRIBS ) )
+                if ( nChanges & EEControlBits::USECHARATTRIBS )
                 {
-                    bool bUseCharAttribs = bool( nWord & EEControlBits::USECHARATTRIBS );
-                    pImpEditEngine->GetEditDoc().CreateDefFont( bUseCharAttribs );
+                    pImpEditEngine->GetEditDoc().CreateDefFont( true );
                 }
 
                 pImpEditEngine->FormatFullDoc();

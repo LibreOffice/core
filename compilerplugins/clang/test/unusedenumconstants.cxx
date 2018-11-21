@@ -27,10 +27,12 @@ enum class BrowseMode
 {
     Modules = 0x01, // expected-error {{read Modules [loplugin:unusedenumconstants]}}
     Top = 0x02, // expected-error {{write Top [loplugin:unusedenumconstants]}}
+    Bottom = 0x04, // expected-error {{read Bottom [loplugin:unusedenumconstants]}}
+    Left = 0x04, // expected-error {{write Left [loplugin:unusedenumconstants]}}
 };
 namespace o3tl
 {
-template <> struct typed_flags<BrowseMode> : is_typed_flags<BrowseMode, 0x3>
+template <> struct typed_flags<BrowseMode> : is_typed_flags<BrowseMode, 0xf>
 {
 };
 }
@@ -42,6 +44,8 @@ int test2(BrowseMode nMode)
     g_flags |= BrowseMode::Top;
     return 0;
 }
+bool test2b(BrowseMode nMode) { return bool(nMode & BrowseMode::Bottom); }
+BrowseMode test2c() { return BrowseMode::Left; }
 
 enum class Enum3
 {

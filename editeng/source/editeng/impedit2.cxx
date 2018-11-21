@@ -4111,7 +4111,7 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
             }
 
             sal_Int32 nPortion = GetParaPortions().GetPos( pPortion );
-            if ( nPortion || aStatus.ULSpaceFirstParagraph() )
+            if ( nPortion )
             {
                 sal_uInt16 nUpper = GetYValue( rULItem.GetUpper() );
                 pPortion->nHeight += nUpper;
