@@ -472,7 +472,7 @@ void SdImportTestSmartArt::testAccentProcess()
     CPPUNIT_ASSERT(xFirstParentText.is());
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xFirstParentText->getString());
     uno::Reference<drawing::XShape> xFirstParent(xFirstParentText, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFirstParentText.is());
+    CPPUNIT_ASSERT(xFirstParent.is());
     int nFirstParentTop = xFirstParent->getPosition().Y;
 
     uno::Reference<text::XText> xFirstChildText(xFirstPair->getByIndex(2), uno::UNO_QUERY);
@@ -481,12 +481,27 @@ void SdImportTestSmartArt::testAccentProcess()
     uno::Reference<drawing::XShape> xFirstChild(xFirstChildText, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstChildText.is());
     int nFirstChildTop = xFirstChild->getPosition().Y;
+    int nFirstChildRight = xFirstChild->getPosition().X + xFirstChild->getSize().Width;
 
     // First child is below the first parent.
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected less than: 3881, Actual  : 3881', i.e. xFirstChild was not
     // below xFirstParent (a good position is 9081).
     CPPUNIT_ASSERT_LESS(nFirstChildTop, nFirstParentTop);
+
+    uno::Reference<drawing::XShapes> xSecondPair(xGroup->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSecondPair.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xSecondPair->getCount());
+    uno::Reference<text::XText> xSecondParentText(xSecondPair->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstParentText.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), xSecondParentText->getString());
+    uno::Reference<drawing::XShape> xSecondParent(xSecondParentText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSecondParent.is());
+    int nSecondParentLeft = xSecondParent->getPosition().X;
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected less than: 12700; Actual  : 18540', i.e. the "b" and "c"
+    // shapes overlapped.
+    CPPUNIT_ASSERT_LESS(nSecondParentLeft, nFirstChildRight);
 
     xDocShRef->DoClose();
 }
