@@ -839,10 +839,9 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
     // in special the metadata of the resultset already returns the right columns
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xResultSet = pResultSet;
-    static ODatabaseMetaDataResultSet::ORows aRows;
-
-    if(aRows.empty())
+    static ODatabaseMetaDataResultSet::ORows aRows = [&]()
     {
+        ODatabaseMetaDataResultSet::ORows tmp;
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.reserve(19);
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
@@ -866,9 +865,9 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
         aRow.push_back(new ORowSetValueDecorator(sal_Int32(10)));
 
-        aRows.push_back(aRow);
-
-    }
+        tmp.push_back(aRow);
+        return tmp;
+    }();
     pResultSet->setRows(aRows);
     return xResultSet;
 }
