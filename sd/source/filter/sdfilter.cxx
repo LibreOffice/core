@@ -58,14 +58,41 @@ OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName )
 }
 
 #ifndef DISABLE_DYNLOADING
+
+typedef std::map<OUString, std::unique_ptr<osl::Module>> SdModuleMap;
+static SdModuleMap g_SdModuleMap;
+
 extern "C" { static void thisModule() {} }
 
-::osl::Module* SdFilter::OpenLibrary( const OUString& rLibraryName )
+oslGenericFunction SdFilter::GetLibrarySymbol( const OUString& rLibraryName, const OUString &rFnSymbol )
 {
-    std::unique_ptr< osl::Module > mod(new osl::Module);
-    return mod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName),
-                             SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY)
-        ? mod.release() : nullptr;
+    osl::Module *pMod = nullptr;
+    auto it = g_SdModuleMap.find(rLibraryName);
+    if (it != g_SdModuleMap.end())
+        pMod = it->second.get();
+
+    if (!pMod)
+    {
+        pMod = new osl::Module;
+        if (pMod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName),
+                               SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
+            g_SdModuleMap[rLibraryName] = std::unique_ptr<osl::Module>(pMod);
+        else
+        {
+            delete pMod;
+            pMod = nullptr;
+        }
+    }
+    if (!pMod)
+        return nullptr;
+    else
+        return pMod->getFunctionSymbol(rFnSymbol);
+}
+
+void SdFilter::Preload()
+{
+    (void)GetLibrarySymbol("sdfilt", "ImportPPT");
+    (void)GetLibrarySymbol("icg", "ImportCGM");
 }
 
 #endif
