@@ -29,7 +29,8 @@ static ::cppu::ImplementationEntry const spServices[] =
 {
     { VBAMacroResolver_createInstance, VBAMacroResolver_getImplementationName,
       VBAMacroResolver_getSupportedServiceNames,
-      ::cppu::createSingleComponentFactory, nullptr, 0 }
+      ::cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 } // namespace
