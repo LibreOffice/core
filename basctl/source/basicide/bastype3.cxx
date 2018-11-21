@@ -560,9 +560,7 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(weld::TreeIter* pEntry)
 
     std::vector<std::pair<Entry*, OUString>> aEntries;
 
-    m_xControl->get_text(*pEntry);
     std::unique_ptr<weld::TreeIter> xIter(m_xControl->make_iterator(pEntry));
-    m_xControl->get_text(*xIter);
     bool bValidIter = true;
     do
     {
@@ -594,6 +592,7 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(weld::TreeIter* pEntry)
 
     if ( !aEntries.empty() )
     {
+        std::reverse(aEntries.begin(), aEntries.end());
         for (auto& pair : aEntries)
         {
             Entry* pBE = pair.first;
