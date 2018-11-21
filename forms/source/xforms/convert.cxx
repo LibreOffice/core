@@ -288,12 +288,8 @@ void Convert::init()
 Convert& Convert::get()
 {
     // create our Singleton instance on demand
-    static Convert* pConvert = nullptr;
-    if( pConvert == nullptr )
-        pConvert = new Convert();
-
-    OSL_ENSURE( pConvert != nullptr, "no converter?" );
-    return *pConvert;
+    static Convert aConvert;
+    return aConvert;
 }
 
 bool Convert::hasType( const css::uno::Type& rType )

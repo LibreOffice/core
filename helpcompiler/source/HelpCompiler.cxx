@@ -509,13 +509,7 @@ namespace fs
 {
     rtl_TextEncoding getThreadTextEncoding()
     {
-        static bool bNeedsInit = true;
-        static rtl_TextEncoding nThreadTextEncoding;
-        if( bNeedsInit )
-        {
-            bNeedsInit = false;
-            nThreadTextEncoding = osl_getThreadTextEncoding();
-        }
+        static rtl_TextEncoding nThreadTextEncoding = osl_getThreadTextEncoding();
         return nThreadTextEncoding;
     }
 
