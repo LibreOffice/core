@@ -756,6 +756,7 @@ public:
 
     bool IsSymbolAt(TextFrameIndex) const;
     OUString GetCurWord(SwPosition const&) const;
+    sal_uInt16 GetScalingOfSelectedText(TextFrameIndex nStt, TextFrameIndex nEnd);
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
