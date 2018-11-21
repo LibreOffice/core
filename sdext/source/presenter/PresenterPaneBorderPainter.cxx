@@ -90,7 +90,6 @@ namespace {
         BorderSize maInnerBorderSize;
         BorderSize maOuterBorderSize;
         BorderSize maTotalBorderSize;
-        enum Side { Left, Top, Right, Bottom };
     private:
         void UpdateBorderSizes();
         SharedBitmapDescriptor GetBitmap(
