@@ -1524,7 +1524,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 case svExternalDoubleRef:
                 {
                     formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
-                    if (eType == formula::ParamClass::Array)
+                    if (eType == formula::ParamClass::Value || eType == formula::ParamClass::Array)
                     {
                         sal_uInt16 nFileId = p->GetIndex();
                         OUString aTabName = p->GetString().getString();
@@ -1540,6 +1540,15 @@ bool ScInterpreter::ConvertMatrixParameters()
                         ScMatrixRef pMat = pTemp->GetMatrix();
                         if (pMat)
                         {
+                            if (eType == formula::ParamClass::Value)
+                            {   // only if single value expected
+                                SCSIZE nC, nR;
+                                pMat->GetDimensions( nC, nR);
+                                if (nJumpCols < nC)
+                                    nJumpCols = nC;
+                                if (nJumpRows < nR)
+                                    nJumpRows = nR;
+                            }
                             formula::FormulaToken* pNew = new ScMatrixToken( pMat);
                             pNew->IncRef();
                             pStack[ sp - i ] = pNew;
