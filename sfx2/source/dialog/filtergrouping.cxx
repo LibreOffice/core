@@ -896,6 +896,7 @@ namespace sfx2
         // Only use one extension (#i32434#)
         // (and always the first if there are more than one)
         sExtension = pDefaultFilter->GetWildcard().getGlob().getToken(0, ';');
+        //sExtension = _rxFilterManager->getFilterExtension(sExtension, false);
         sUIName = addExtension( pDefaultFilter->GetUIName(), sExtension, false, _rFileDlgImpl );
         try
         {
@@ -1144,16 +1145,23 @@ namespace sfx2
 
         if ( sRet.indexOf( "(*.*)" ) == -1 )
         {
-            OUString sExt = _rExtension;
-            if ( !_bForOpen )
+            // If file picker is derived from XFilePicker4, it has it's own filter methods
+            OUString sExt = _rFileDlgImpl.getAdjustedFilterExtension(_rExtension, _bForOpen);
+            // If not derived from XFilePicker4, sExt becomes empty string, so use standard replacing
+            if (sExt.isEmpty())
             {
-                // show '*' in extensions only when opening a document
-                sExt = sExt.replaceAll("*", "");
+                sExt = _rExtension;
+                if (!_bForOpen)
+                {
+                    // show '*' in extensions only when opening a document
+                    sExt = sExt.replaceAll("*", "");
+                }
             }
             sRet += " (";
             sRet += sExt;
             sRet += ")";
         }
+
         _rFileDlgImpl.addFilterPair( _rDisplayText, sRet );
         return sRet;
     }

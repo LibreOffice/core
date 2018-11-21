@@ -33,7 +33,7 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker4.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -2258,6 +2258,15 @@ OUString FileDialogHelper_Impl::getFilterWithExtension( const OUString& rFilter 
         }
     }
     return sRet;
+}
+
+OUString FileDialogHelper_Impl::getAdjustedFilterExtension(const OUString& sExtension, bool bForOpen)
+{
+    Reference< XFilePicker4 >    xFilePicker4(mxFileDlg, UNO_QUERY);
+    if (xFilePicker4.is())
+        return xFilePicker4->getFilterExtension(sExtension, (bForOpen ? sal_True: sal_False));
+    else
+        return OUString();
 }
 
 void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
