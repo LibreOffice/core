@@ -814,7 +814,7 @@ bool SwTextNode::IsSymbolAt(const sal_Int32 nBegin) const
 {
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *const_cast<SwTextNode*>(this), aScriptInfo );
-    aIter.Seek( nBegin );
+    aIter.Seek( TextFrameIndex(nBegin) );
     return aIter.GetFnt()->IsSymbol( getIDocumentLayoutAccess().GetCurrentViewShell() );
 }
 
@@ -955,6 +955,7 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
 
 /**
  * Changing this method very likely requires changing of GetScalingOfSelectedText
+ * This one is called exclusively from import filters, so there is no layout.
  */
 void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
                                sal_uLong& rAbsMin ) const
@@ -1011,23 +1012,23 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
 
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *const_cast<SwTextNode*>(this), aScriptInfo );
-    sal_Int32 nIdx = 0;
+    TextFrameIndex nIdx(0);
     aIter.SeekAndChgAttrIter( nIdx, pOut );
-    sal_Int32 nLen = m_Text.getLength();
+    TextFrameIndex nLen(m_Text.getLength());
     long nCurrentWidth = 0;
     long nAdd = 0;
     SwMinMaxArgs aArg( pOut, pSh, rMin, rAbsMin );
     while( nIdx < nLen )
     {
-        sal_Int32 nNextChg = aIter.GetNextAttr();
-        sal_Int32 nStop = aScriptInfo.NextScriptChg( nIdx );
+        TextFrameIndex nNextChg = aIter.GetNextAttr();
+        TextFrameIndex nStop = aScriptInfo.NextScriptChg( nIdx );
         if( nNextChg > nStop )
             nNextChg = nStop;
         SwTextAttr *pHint = nullptr;
         sal_Unicode cChar = CH_BLANK;
         nStop = nIdx;
         while( nStop < nLen && nStop < nNextChg &&
-               CH_TAB != ( cChar = m_Text[nStop] ) &&
+               CH_TAB != (cChar = m_Text[sal_Int32(nStop)]) &&
                CH_BREAK != cChar && CHAR_HARDBLANK != cChar &&
                CHAR_HARDHYPHEN != cChar && CHAR_SOFTHYPHEN != cChar &&
                !pHint )
@@ -1036,7 +1037,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                 || ( nullptr == ( pHint = aIter.GetAttr( nStop ) ) ) )
                 ++nStop;
         }
-        if ( lcl_MinMaxString( aArg, aIter.GetFnt(), m_Text, nIdx, nStop ) )
+        if (lcl_MinMaxString(aArg, aIter.GetFnt(), m_Text, sal_Int32(nIdx), sal_Int32(nStop)))
         {
             nAdd = 20;
         }
@@ -1066,7 +1067,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
             case CHAR_HARDHYPHEN:
             {
                 OUString sTmp( cChar );
-                SwDrawTextInfo aDrawInf( getIDocumentLayoutAccess().GetCurrentViewShell(),
+                SwDrawTextInfo aDrawInf( pSh,
                     *pOut, sTmp, 0, 1, 0, false );
                 nCurrentWidth = aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
                 aArg.nWordWidth += nCurrentWidth;
@@ -1074,7 +1075,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                 if( static_cast<long>(rAbsMin) < aArg.nWordWidth )
                     rAbsMin = aArg.nWordWidth;
                 aArg.Minimum( aArg.nWordWidth + aArg.nWordAdd );
-                aArg.nNoLineBreak = nIdx++;
+                aArg.nNoLineBreak = sal_Int32(nIdx++);
             }
             break;
             case CH_TXTATR_BREAKWORD:
@@ -1140,8 +1141,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                     case RES_TXTATR_ANNOTATION :
                         {
                             SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
-                            const OUString aText = pField->ExpandField(true,
-                                    pSh ? pSh->GetLayout() : nullptr);
+                            const OUString aText = pField->ExpandField(true, nullptr);
                             if( lcl_MinMaxString( aArg, aIter.GetFnt(), aText, 0,
                                 aText.getLength() ) )
                                 nAdd = 20;
