@@ -5523,7 +5523,7 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
                  // check start:
                  // 1. start in the same node
                  (( uStartNodeIndex == uNodeIndex &&
-                    uStartCharIndex == static_cast<sal_uLong>(rNode.Len()) ) ||
+                    uStartCharIndex == 0 ) ||
                  // 2. or in a previous node
                     uStartNodeIndex < uNodeIndex
                  ) &&
