@@ -114,6 +114,11 @@ void SAL_CALL VistaFilePicker::setTitle(const OUString& sTitle)
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
 }
 
+OUString  SAL_CALL VistaFilePicker::getFilterExtension(const OUString& sExtension, sal_Bool)
+{
+    return sExtension;
+}
+
 void SAL_CALL VistaFilePicker::appendFilter(const OUString& sTitle ,
                                             const OUString& sFilter)
 {
