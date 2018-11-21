@@ -466,12 +466,6 @@ sw/inc/poolfmt.hxx:234
     enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
 sw/inc/tblafmt.hxx:286
     enum SwTableAutoFormat::UpdateFlags UPDATE_ALL
-sw/source/core/inc/txtfly.hxx:42
-    enum PAGESIDE RIGHT_SIDE
-sw/source/core/inc/txtfly.hxx:42
-    enum PAGESIDE LEFT_SIDE
-sw/source/core/inc/txtfly.hxx:42
-    enum PAGESIDE DONTKNOW_SIDE
 sw/source/filter/ww8/ww8scan.hxx:388
     enum ePLCFT SEP
 sw/source/filter/ww8/ww8struc.hxx:944
