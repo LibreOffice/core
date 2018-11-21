@@ -494,14 +494,6 @@ sw/source/uibase/docvw/edtwin.cxx:1570
     enum SwKeyState ColTopBig
 sw/source/uibase/docvw/edtwin.cxx:1571
     enum SwKeyState ColTopSmall
-sw/source/uibase/inc/tautofmt.hxx:36
-    enum AutoFormatLine BOTTOM_LINE
-sw/source/uibase/inc/tautofmt.hxx:36
-    enum AutoFormatLine LEFT_LINE
-sw/source/uibase/inc/tautofmt.hxx:36
-    enum AutoFormatLine RIGHT_LINE
-sw/source/uibase/inc/tautofmt.hxx:36
-    enum AutoFormatLine TOP_LINE
 sw/source/uibase/utlui/content.cxx:824
     enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
 sw/source/uibase/utlui/content.cxx:825
