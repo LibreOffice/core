@@ -538,8 +538,6 @@ ucb/source/ucp/webdav-neon/DAVTypes.hxx:195
     enum webdav_ucp::Depth DAVINFINITY
 ucbhelper/source/client/proxydecider.cxx:119
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Manual
-vcl/inc/regband.hxx:45
-    enum LineType LINE_HORIZONTAL
 vcl/inc/salptype.hxx:44
     enum SalPrinterError General
 vcl/inc/unx/saldisp.hxx:65

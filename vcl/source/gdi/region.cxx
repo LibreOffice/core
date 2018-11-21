@@ -128,7 +128,7 @@ namespace
                 // in other places (but seems to be the wrong way.)
                 const long nTop (::std::min(aStart.Y(), aEnd.Y()));
                 const long nBottom (::std::max(aStart.Y(), aEnd.Y()));
-                const LineType eLineType (aStart.Y() > aEnd.Y() ? LINE_DESCENDING : LINE_ASCENDING);
+                const LineType eLineType (aStart.Y() > aEnd.Y() ? LineType::Descending : LineType::Ascending);
 
                 // Make sure that the current line is covered by bands.
                 pRegionBand->ImplAddMissingBands(nTop,nBottom);

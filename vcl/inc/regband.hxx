@@ -42,7 +42,7 @@ struct ImplRegionBandSep
     bool                        mbRemoved;
 };
 
-enum LineType { LINE_ASCENDING, LINE_DESCENDING, LINE_HORIZONTAL };
+enum class LineType { Ascending, Descending };
 
 // element for the list with x-separations
 struct ImplRegionBandPoint
