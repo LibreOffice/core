@@ -376,10 +376,6 @@ sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
     enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Right
 sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
     enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Bottom
-sfx2/source/dialog/securitypage.cxx:48
-    enum (anonymous namespace)::RedlineFunc RF_ON
-sfx2/source/dialog/securitypage.cxx:48
-    enum (anonymous namespace)::RedlineFunc RF_PROTECT
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_RADIUS
 sw/inc/docary.hxx:74
