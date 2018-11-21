@@ -1149,11 +1149,15 @@ namespace sfx2
         if ( sRet.indexOf( "(*.*)" ) == -1 )
         {
             OUString sExt = _rExtension;
+#if defined(_WIN32) // don't remove "*" under Windows
+            _bForOpen = _bForOpen;
+#else
             if ( !_bForOpen )
             {
                 // show '*' in extensions only when opening a document
                 sExt = sExt.replaceAll("*", "");
             }
+#endif
             sRet += " (";
             sRet += sExt;
             sRet += ")";
