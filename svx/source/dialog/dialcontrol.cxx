@@ -601,7 +601,7 @@ void SvxDialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimal
     if( mpImpl->mpLinkField )
     {
         weld::SpinButton& rField = *mpImpl->mpLinkField;
-        rField.connect_changed(Link<weld::Entry&,void>());
+        rField.connect_value_changed(Link<weld::SpinButton&,void>());
     }
     // remember the new linked field
     mpImpl->mpLinkField = pField;
@@ -609,11 +609,11 @@ void SvxDialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimal
     if( mpImpl->mpLinkField )
     {
         weld::SpinButton& rField = *mpImpl->mpLinkField;
-        rField.connect_changed(LINK(this, SvxDialControl, LinkedFieldModifyHdl));
+        rField.connect_value_changed(LINK(this, SvxDialControl, LinkedFieldModifyHdl));
     }
 }
 
-IMPL_LINK_NOARG(SvxDialControl, LinkedFieldModifyHdl, weld::Entry&, void)
+IMPL_LINK_NOARG(SvxDialControl, LinkedFieldModifyHdl, weld::SpinButton&, void)
 {
     LinkedFieldModifyHdl();
 }
@@ -623,7 +623,6 @@ void SvxDialControl::LinkedFieldModifyHdl()
     if( mpImpl->mpLinkField )
         SetRotation(mpImpl->mpLinkField->get_value() * mpImpl->mnLinkedFieldValueMultiplyer);
 }
-
 
 void SvxDialControl::SaveValue()
 {
