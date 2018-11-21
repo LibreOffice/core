@@ -445,7 +445,7 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
         return;
     }
 
-    LineType eLineType = (rStartPt.Y() > rEndPt.Y()) ? LINE_DESCENDING : LINE_ASCENDING;
+    LineType eLineType = (rStartPt.Y() > rEndPt.Y()) ? LineType::Descending : LineType::Ascending;
     if ( rStartPt.X() == rEndPt.X() )
     {
         // vertical line
