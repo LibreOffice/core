@@ -42,8 +42,6 @@ using namespace ::com::sun::star::lang;
 
 namespace {
 
-enum broadcast_type { row_added, row_removed, data_changed};
-
 typedef ::cppu::WeakComponentImplHelper    <   XMutableGridDataModel
                                             ,   XServiceInfo
                                             >   DefaultGridDataModel_Base;
