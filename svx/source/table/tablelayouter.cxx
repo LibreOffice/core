@@ -664,7 +664,9 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
         }
 
         if( bChanges )
-            nCurrentWidth += maColumns[nCol].mnSize - nOldSize;
+        {
+            nCurrentWidth = o3tl::saturating_add(nCurrentWidth, maColumns[nCol].mnSize - nOldSize);
+        }
     }
 
     // now scale if wanted and needed
