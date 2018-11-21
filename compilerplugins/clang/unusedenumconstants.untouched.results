@@ -512,8 +512,6 @@ sw/source/uibase/inc/tautofmt.hxx:36
     enum AutoFormatLine RIGHT_LINE
 sw/source/uibase/inc/tautofmt.hxx:36
     enum AutoFormatLine TOP_LINE
-sw/source/uibase/inc/wrtsh.hxx:365
-    enum SwWrtShell::FieldDialogPressedButton BTN_EDIT
 sw/source/uibase/utlui/content.cxx:824
     enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
 sw/source/uibase/utlui/content.cxx:825
