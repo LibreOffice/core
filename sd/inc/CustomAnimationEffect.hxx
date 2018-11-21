@@ -209,8 +209,6 @@ struct stl_CustomAnimationEffect_search_node_predict
     const css::uno::Reference< css::animations::XAnimationNode >& mxSearchNode;
 };
 
-enum ESequenceHint { EFFECT_EDITED, EFFECT_REMOVED, EFFECT_ADDED };
-
 /** this listener is implemented by UI components to track changes in the animation core */
 class ISequenceListener
 {
