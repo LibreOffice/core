@@ -141,7 +141,8 @@ public:
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& ) override;
 
-    void            InitHeaderBar( HeaderBar* pHeaderBar );
+    void            InitHeaderBar(HeaderBar* pHeaderBar);
+    HeaderBar*      GetHeaderBar();
     static bool     IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol );
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,

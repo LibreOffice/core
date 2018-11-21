@@ -277,6 +277,8 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
+    virtual Size        GetOptimalSize() const override;
+
     virtual void        EndDrag();
     virtual void        Select();
     virtual void        DoubleClick();

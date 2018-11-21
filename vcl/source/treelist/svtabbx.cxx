@@ -517,6 +517,11 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
     m_pImpl->m_pHeaderBar->SetCreateAccessibleHdl( LINK( this, SvHeaderTabListBox, CreateAccessibleHdl_Impl ) );
 }
 
+HeaderBar* SvHeaderTabListBox::GetHeaderBar()
+{
+    return m_pImpl ? m_pImpl->m_pHeaderBar : nullptr;
+}
+
 bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     SvButtonState eState = SvButtonState::Unchecked;
