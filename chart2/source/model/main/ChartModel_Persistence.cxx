@@ -54,6 +54,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
@@ -617,7 +618,7 @@ void ChartModel::impl_loadGraphics(
                         if (apIStm)
                         {
                             Graphic aGraphic;
-
+                            SolarMutexGuard aGuard;
                             if (!GraphicConverter::Import(*apIStm, aGraphic))
                             {
                                 m_aGraphicObjectVector.emplace_back(aGraphic );
