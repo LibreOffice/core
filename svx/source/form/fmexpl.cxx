@@ -132,12 +132,13 @@ FmEntryDataList::~FmEntryDataList()
 }
 
 
-void FmEntryDataList::remove( FmEntryData* pItem )
+void FmEntryDataList::removeNoDelete( FmEntryData* pItem )
 {
     auto it = std::find_if(maEntryDataList.begin(), maEntryDataList.end(),
         [&pItem](const std::unique_ptr<FmEntryData>& rEntryData) { return rEntryData.get() == pItem; });
     if (it != maEntryDataList.end())
     {
+        it->release();
         maEntryDataList.erase( it );
         return;
     }

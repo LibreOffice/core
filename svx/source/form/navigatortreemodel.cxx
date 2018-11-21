@@ -415,10 +415,10 @@ namespace svxform
 
         // remove from parent
         if (pFolder)
-            pFolder->GetChildList()->remove( pEntry );
+            pFolder->GetChildList()->removeNoDelete( pEntry );
         else
         {
-            GetRootList()->remove( pEntry );
+            GetRootList()->removeNoDelete( pEntry );
 
             // If root has no more form, reset CurForm at shell
             if ( !GetRootList()->size() )

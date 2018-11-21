@@ -197,7 +197,7 @@ public:
         { return maEntryDataList.at(Index).get(); }
 
     size_t          size() const { return maEntryDataList.size(); }
-    void            remove( FmEntryData* pItem );
+    void            removeNoDelete( FmEntryData* pItem );
     void            insert( std::unique_ptr<FmEntryData> pItem, size_t Index );
     void            clear();
 };
