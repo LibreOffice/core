@@ -464,8 +464,6 @@ sw/inc/poolfmt.hxx:233
     enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_ROWS
 sw/inc/poolfmt.hxx:234
     enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
-sw/inc/tblafmt.hxx:286
-    enum SwTableAutoFormat::UpdateFlags UPDATE_ALL
 sw/source/filter/ww8/ww8scan.hxx:388
     enum ePLCFT SEP
 sw/source/filter/ww8/ww8struc.hxx:944
