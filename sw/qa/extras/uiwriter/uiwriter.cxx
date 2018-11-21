@@ -4173,7 +4173,7 @@ void SwUiWriterTest::testTdf87922()
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     const OUString& rText = aNodeIndex.GetNode().GetTextNode()->GetText();
     sal_Int32 nLength = rText.getLength();
-    SwDrawTextInfo aDrawTextInfo(pWrtShell, *pWrtShell->GetOut(), pScriptInfo, rText, 0, nLength);
+    SwDrawTextInfo aDrawTextInfo(pWrtShell, *pWrtShell->GetOut(), pScriptInfo, rText, TextFrameIndex(0), TextFrameIndex(nLength));
     // Root -> page -> body -> text.
     SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());
     aDrawTextInfo.SetFrame(pTextFrame);
@@ -4217,17 +4217,17 @@ class PortionHandler : public SwPortionHandler
         mPortionItems.clear();
     }
 
-    virtual void Text(sal_Int32 nLength, sal_uInt16 nType,
+    virtual void Text(TextFrameIndex nLength, sal_uInt16 nType,
                       sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/) override
     {
-        mPortionItems.emplace_back("text", nLength, nType);
+        mPortionItems.emplace_back("text", sal_Int32(nLength), nType);
     }
 
-    virtual void Special(sal_Int32 nLength, const OUString & /*rText*/,
+    virtual void Special(TextFrameIndex nLength, const OUString & /*rText*/,
                          sal_uInt16 nType, sal_Int32 /*nHeight*/,
                          sal_Int32 /*nWidth*/, const SwFont* /*pFont*/) override
     {
-        mPortionItems.emplace_back("special", nLength, nType);
+        mPortionItems.emplace_back("special", sal_Int32(nLength), nType);
     }
 
     virtual void LineBreak(sal_Int32 /*nWidth*/) override
@@ -4235,9 +4235,9 @@ class PortionHandler : public SwPortionHandler
         mPortionItems.emplace_back("line_break", 0, 0);
     }
 
-    virtual void Skip(sal_Int32 nLength) override
+    virtual void Skip(TextFrameIndex nLength) override
     {
-        mPortionItems.emplace_back("skip", nLength, 0);
+        mPortionItems.emplace_back("skip", sal_Int32(nLength), 0);
     }
 
     virtual void Finish() override

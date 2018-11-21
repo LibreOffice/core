@@ -1674,7 +1674,7 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                 // get position inside field portion?
                 if ( pPor->InFieldGrp() && pCMS && pCMS->m_pSpecialPos )
                 {
-                    pCMS->m_pSpecialPos->nCharOfst = nLength;
+                    pCMS->m_pSpecialPos->nCharOfst = sal_Int32(nLength);
                     nLength = TextFrameIndex(0);
                 }
 

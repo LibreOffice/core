@@ -1452,7 +1452,7 @@ sal_uInt8 SwScriptInfo::DirType(const TextFrameIndex nPos) const
 
 TextFrameIndex SwScriptInfo::NextHiddenChg(TextFrameIndex const nPos) const
 {
-    for (auto const it : m_HiddenChg)
+    for (auto const& it : m_HiddenChg)
     {
         if (nPos < it)
         {
