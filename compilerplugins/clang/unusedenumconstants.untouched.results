@@ -544,18 +544,6 @@ vcl/inc/salptype.hxx:44
     enum SalPrinterError General
 vcl/inc/unx/saldisp.hxx:65
     srv_vendor_t vendor_none
-vcl/inc/unx/saldisp.hxx:77
-    enum SalRGB RGBA
-vcl/inc/unx/saldisp.hxx:77
-    enum SalRGB RBGA
-vcl/inc/unx/saldisp.hxx:78
-    enum SalRGB GBRA
-vcl/inc/unx/saldisp.hxx:78
-    enum SalRGB GRBA
-vcl/inc/unx/saldisp.hxx:79
-    enum SalRGB BRGA
-vcl/inc/unx/saldisp.hxx:79
-    enum SalRGB BGRA
 vcl/source/gdi/CommonSalLayout.cxx:129
     enum (anonymous namespace)::VerticalOrientation Rotated
 vcl/unx/gtk3/gtk3gtkinst.cxx:2524

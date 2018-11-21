@@ -2393,7 +2393,7 @@ bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateDat
 }
 
 SalVisual::SalVisual():
-    eRGBMode_(RGB), nRedShift_(0), nGreenShift_(0), nBlueShift_(0), nRedBits_(0), nGreenBits_(0),
+    eRGBMode_(SalRGB::RGB), nRedShift_(0), nGreenShift_(0), nBlueShift_(0), nRedBits_(0), nGreenBits_(0),
     nBlueBits_(0)
 {}
 
@@ -2414,46 +2414,46 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
             if( red_mask == 0xFF0000 )
                 if( green_mask == 0xFF00 )
                     if( blue_mask  == 0xFF )
-                        eRGBMode_ = RGB;
+                        eRGBMode_ = SalRGB::RGB;
                     else
-                        eRGBMode_ = otherSalRGB;
+                        eRGBMode_ = SalRGB::otherSalRGB;
                 else if( blue_mask  == 0xFF00 )
                     if( green_mask == 0xFF )
-                        eRGBMode_ = RBG;
+                        eRGBMode_ = SalRGB::RBG;
                     else
-                        eRGBMode_ = otherSalRGB;
+                        eRGBMode_ = SalRGB::otherSalRGB;
                 else
-                    eRGBMode_ = otherSalRGB;
+                    eRGBMode_ = SalRGB::otherSalRGB;
             else if( green_mask == 0xFF0000 )
                 if( red_mask == 0xFF00 )
                     if( blue_mask  == 0xFF )
-                        eRGBMode_ = GRB;
+                        eRGBMode_ = SalRGB::GRB;
                     else
-                        eRGBMode_ = otherSalRGB;
+                        eRGBMode_ = SalRGB::otherSalRGB;
                 else if( blue_mask == 0xFF00 )
                     if( red_mask  == 0xFF )
-                        eRGBMode_ = GBR;
+                        eRGBMode_ = SalRGB::GBR;
                     else
-                        eRGBMode_ = otherSalRGB;
+                        eRGBMode_ = SalRGB::otherSalRGB;
                 else
-                    eRGBMode_ = otherSalRGB;
+                    eRGBMode_ = SalRGB::otherSalRGB;
             else if( blue_mask == 0xFF0000 )
                 if( red_mask == 0xFF00 )
                     if( green_mask  == 0xFF )
-                        eRGBMode_ = BRG;
+                        eRGBMode_ = SalRGB::BRG;
                     else
-                        eRGBMode_ = otherSalRGB;
+                        eRGBMode_ = SalRGB::otherSalRGB;
                 else if( green_mask == 0xFF00 )
                     if( red_mask == 0xFF )
-                        eRGBMode_ = BGR;
+                        eRGBMode_ = SalRGB::BGR;
                     else
-                        eRGBMode_ = otherSalRGB;
+                        eRGBMode_ = SalRGB::otherSalRGB;
                 else
-                    eRGBMode_ = otherSalRGB;
+                    eRGBMode_ = SalRGB::otherSalRGB;
             else
-                eRGBMode_ = otherSalRGB;
+                eRGBMode_ = SalRGB::otherSalRGB;
         else
-            eRGBMode_ = otherSalRGB;
+            eRGBMode_ = SalRGB::otherSalRGB;
     }
 }
 
@@ -2462,8 +2462,8 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
 
 // Color is RGB (ABGR) a=0xFF000000, r=0xFF0000, g=0xFF00, b=0xFF
 
-#define SALCOLOR        RGB
-#define SALCOLORREVERSE BGR
+#define SALCOLOR        SalRGB::RGB
+#define SALCOLORREVERSE SalRGB::BGR
 
 Color SalVisual::GetTCColor( Pixel nPixel ) const
 {
@@ -2479,7 +2479,7 @@ Color SalVisual::GetTCColor( Pixel nPixel ) const
     Pixel g = nPixel & green_mask;
     Pixel b = nPixel & blue_mask;
 
-    if( otherSalRGB != eRGBMode_ ) // 8+8+8=24
+    if( SalRGB::otherSalRGB != eRGBMode_ ) // 8+8+8=24
         return Color( r >> nRedShift_,
                               g >> nGreenShift_,
                               b >> nBlueShift_ );
@@ -2510,7 +2510,7 @@ Pixel SalVisual::GetTCPixel( Color nColor ) const
     if( SALCOLORREVERSE == eRGBMode_ )
         return (b << 16) | (g << 8) | r;
 
-    if( otherSalRGB != eRGBMode_ ) // 8+8+8=24
+    if( SalRGB::otherSalRGB != eRGBMode_ ) // 8+8+8=24
         return (r << nRedShift_) | (g << nGreenShift_) | (b << nBlueShift_);
 
     if( nRedShift_ > 0 )   r <<= nRedShift_;   else r >>= -nRedShift_;
