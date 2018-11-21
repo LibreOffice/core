@@ -2481,6 +2481,7 @@ void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
 
 void MessageDialog::StateChanged(StateChangedType nType)
 {
+    Dialog::StateChanged(nType);
     if (nType == StateChangedType::InitShow)
     {
         // MessageBox should be at least as wide as to see the title
@@ -2488,9 +2489,11 @@ void MessageDialog::StateChanged(StateChangedType nType)
         // Extra-Width for Close button
         nTitleWidth += mpWindowImpl->mnTopBorder;
         if (get_preferred_size().Width() < nTitleWidth)
+        {
             set_width_request(nTitleWidth);
+            DoInitialLayout();
+        }
     }
-    Dialog::StateChanged(nType);
 }
 
 VclVPaned::VclVPaned(vcl::Window *pParent)
