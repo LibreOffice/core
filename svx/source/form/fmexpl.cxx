@@ -132,13 +132,14 @@ FmEntryDataList::~FmEntryDataList()
 }
 
 
-void FmEntryDataList::remove( FmEntryData* pItem )
+void FmEntryDataList::removeNoDelete( FmEntryData* pItem )
 {
     auto aEnd = maEntryDataList.end();
     for ( auto it = maEntryDataList.begin(); it != aEnd; ++it )
     {
         if ( it->get() == pItem )
         {
+            it->release();
             maEntryDataList.erase( it );
             return;
         }
