@@ -826,6 +826,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
                          parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf121597TrackedDeletionOfMultipleParagraphs, "tdf121597.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:del");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
