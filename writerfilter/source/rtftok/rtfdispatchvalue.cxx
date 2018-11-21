@@ -934,10 +934,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             int& rCurrentTRLeft((Destination::NESTEDTABLEPROPERTIES == aDestination)
                                     ? m_nNestedTRLeft
                                     : m_nTopLevelTRLeft);
-            int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == aDestination)
-                                   ? m_nNestedCurrentCellX
-                                   : m_nTopLevelCurrentCellX);
-            rCurrentTRLeft = rCurrentCellX = nParam;
+            rCurrentTRLeft = nParam;
         }
         break;
         case RTF_COLS:
