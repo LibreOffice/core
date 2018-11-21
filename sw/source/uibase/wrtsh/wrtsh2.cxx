@@ -146,7 +146,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
         bool bCancel = false;
 
         size_t nIndex = 0;
-        FieldDialogPressedButton ePressedButton = BTN_NONE;
+        FieldDialogPressedButton ePressedButton = FieldDialogPressedButton::NONE;
 
         SwField* pField = GetCurField();
         if (pField)
@@ -179,9 +179,9 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
                 // Otherwise update error at multi-selection:
                 pTmp->GetField(nIndex)->GetTyp()->UpdateFields();
 
-                if (ePressedButton == BTN_PREV && nIndex > 0)
+                if (ePressedButton == FieldDialogPressedButton::Previous && nIndex > 0)
                     nIndex--;
-                else if (ePressedButton == BTN_NEXT && nIndex < nCnt - 1)
+                else if (ePressedButton == FieldDialogPressedButton::Next && nIndex < nCnt - 1)
                     nIndex++;
                 else
                     bCancel = true;
@@ -268,9 +268,9 @@ bool SwWrtShell::StartInputFieldDlg(SwField* pField, bool bPrevButton, bool bNex
     if (pPressedButton)
     {
         if (pDlg->PrevButtonPressed())
-            *pPressedButton = BTN_PREV;
+            *pPressedButton = FieldDialogPressedButton::Previous;
         else if (pDlg->NextButtonPressed())
-            *pPressedButton = BTN_NEXT;
+            *pPressedButton = FieldDialogPressedButton::Next;
     }
 
     pDlg.disposeAndClear();
@@ -288,9 +288,9 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bPrevButton, bool b
     if (pPressedButton)
     {
         if (pDlg->PrevButtonPressed())
-            *pPressedButton = BTN_PREV;
+            *pPressedButton = FieldDialogPressedButton::Previous;
         else if (pDlg->NextButtonPressed())
-            *pPressedButton = BTN_NEXT;
+            *pPressedButton = FieldDialogPressedButton::Next;
     }
 
     pDlg.disposeAndClear();

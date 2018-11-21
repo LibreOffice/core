@@ -362,7 +362,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     enum DoType { UNDO, REDO, REPEAT };
 
-    enum FieldDialogPressedButton { BTN_NONE, BTN_EDIT, BTN_PREV, BTN_NEXT };
+    enum class FieldDialogPressedButton { NONE, Previous, Next };
 
     void    Do( DoType eDoType, sal_uInt16 nCnt = 1 );
     OUString  GetDoString( DoType eDoType ) const;
