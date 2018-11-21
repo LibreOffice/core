@@ -494,7 +494,9 @@ void SdImportTestSmartArt::testAccentProcess()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xSecondPair->getCount());
     uno::Reference<text::XText> xSecondParentText(xSecondPair->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstParentText.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("c"), xSecondParentText->getString());
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: cc; Actual  : c', i.e. non-first runs on data points were ignored.
+    CPPUNIT_ASSERT_EQUAL(OUString("cc"), xSecondParentText->getString());
     uno::Reference<drawing::XShape> xSecondParent(xSecondParentText, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSecondParent.is());
     int nSecondParentLeft = xSecondParent->getPosition().X;
