@@ -38,13 +38,6 @@ with io.open("workdir/loplugin.countusersofdefaultparams.log", "rb", buffering=1
         else:
             print( "unknown line: " + line)
 
-# Invert the definitionToSourceLocationMap.
-sourceLocationToDefinitionMap = {}
-for k, v in definitionToSourceLocationMap.iteritems():
-    sourceLocationToDefinitionMap[v] = sourceLocationToDefinitionMap.get(v, [])
-    sourceLocationToDefinitionMap[v].append(k)
-
-    
 tmp1list = list()
 for k,v in callDict.iteritems():
     if len(v) >= 1:
