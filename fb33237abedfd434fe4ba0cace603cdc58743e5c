@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_569ed107",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-11-21T09:29:38Z",
+      "side": 1,
+      "message": "Here it seems better to test mnMultiSelect !\u003d AX_SELECTION_SINGLE also in case of a checkbox.",
+      "revId": "fb33237abedfd434fe4ba0cace603cdc58743e5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
