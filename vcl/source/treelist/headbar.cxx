@@ -103,6 +103,11 @@ HeaderBar::HeaderBar(vcl::Window* pParent, WinBits nWinStyle)
     SetSizePixel( CalcWindowSizePixel() );
 }
 
+Size HeaderBar::GetOptimalSize() const
+{
+    return CalcWindowSizePixel();
+}
+
 HeaderBar::~HeaderBar() = default;
 
 void HeaderBar::ApplySettings(vcl::RenderContext& rRenderContext)
