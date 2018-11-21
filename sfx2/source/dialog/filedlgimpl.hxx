@@ -205,6 +205,8 @@ namespace sfx2
         OUString                getFilterName( const OUString& rFilterWithExtension ) const;
         OUString                getFilterWithExtension( const OUString& rFilter ) const;
 
+        OUString                getAdjustedFilterExtension(const OUString& sExtension, bool bForOpen);
+
         void                    SetContext( FileDialogHelper::Context _eNewContext );
 
         bool             isSystemFilePicker() const { return mbSystemPicker; }
