@@ -841,14 +841,15 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
     sal_uInt16 nScaleWidth;
     if( pTNd )
     {
-        const SwPosition* pEnd = pStt == pCursor->GetPoint()
-                                        ? pCursor->GetMark()
-                                        : pCursor->GetPoint();
-        const sal_Int32 nStt = pStt->nContent.GetIndex();
-        const sal_Int32 nEnd = pStt->nNode == pEnd->nNode
-            ? pEnd->nContent.GetIndex()
-            : pTNd->GetText().getLength();
-        nScaleWidth = pTNd->GetScalingOfSelectedText( nStt, nEnd );
+        SwTextFrame *const pFrame(static_cast<SwTextFrame *>(
+                    pTNd->getLayoutFrame(GetLayout(), pStt)));
+        assert(pFrame); // shell cursor must be positioned in node with frame
+        TextFrameIndex const nStart(pFrame->MapModelToViewPos(*pStt));
+        TextFrameIndex const nEnd(
+            sw::FrameContainsNode(*pFrame, pCursor->End()->nNode.GetIndex())
+                ? pFrame->MapModelToViewPos(*pCursor->End())
+                : TextFrameIndex(pFrame->GetText().getLength()));
+        nScaleWidth = pFrame->GetScalingOfSelectedText(nStart, nEnd);
     }
     else
         nScaleWidth = 100;              // default are no scaling -> 100%

@@ -776,8 +776,6 @@ public:
 
     bool IsFirstOfNumRule(SwRootFrame const& rLayout) const;
 
-    sal_uInt16 GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd ) const;
-
     SAL_DLLPRIVATE css::uno::WeakReference<css::text::XTextContent> const& GetXParagraph() const
             { return m_wXParagraph; }
     SAL_DLLPRIVATE void SetXParagraph(css::uno::Reference<css::text::XTextContent> const& xParagraph)
