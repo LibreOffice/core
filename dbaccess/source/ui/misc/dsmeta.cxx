@@ -87,9 +87,9 @@ namespace dbaui
     static const FeatureSet& lcl_getFeatureSet( const OUString& _rURL )
     {
         typedef std::map< OUString, FeatureSet > FeatureSets;
-        static FeatureSets s_aFeatureSets;
-        if ( s_aFeatureSets.empty() )
+        static FeatureSets s_aFeatureSets = [&]()
         {
+            FeatureSets tmp;
             ::connectivity::DriversConfig aDriverConfig( ::comphelper::getProcessComponentContext() );
             const uno::Sequence< OUString > aPatterns = aDriverConfig.getURLs();
             for ( auto const & pattern : aPatterns )
@@ -105,9 +105,10 @@ namespace dbaui
                     ++pFeatureMapping;
                 }
 
-                s_aFeatureSets[ pattern ] = aCurrentSet;
+                tmp[ pattern ] = aCurrentSet;
             }
-        }
+            return tmp;
+        }();
 
         OSL_ENSURE( s_aFeatureSets.find( _rURL ) != s_aFeatureSets.end(), "invalid URL/pattern!" );
         return s_aFeatureSets[ _rURL ];
@@ -115,9 +116,9 @@ namespace dbaui
 
     static AuthenticationMode getAuthenticationMode( const OUString& _sURL )
     {
-        static std::map< OUString, FeatureSupport > s_aSupport;
-        if ( s_aSupport.empty() )
+        static std::map< OUString, FeatureSupport > s_aSupport = [&]()
         {
+            std::map< OUString, FeatureSupport > tmp;
             ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessComponentContext());
             const uno::Sequence< OUString > aURLs = aDriverConfig.getURLs();
             const OUString* pIter = aURLs.getConstArray();
@@ -135,9 +136,10 @@ namespace dbaui
                     else if ( sAuth == "Password" )
                         aInit = FeatureSupport(AuthPwd);
                 }
-                s_aSupport.insert(std::make_pair(*pIter,aInit));
+                tmp.insert(std::make_pair(*pIter,aInit));
             }
-        }
+            return tmp;
+        }();
         OSL_ENSURE(s_aSupport.find(_sURL) != s_aSupport.end(),"Illegal URL!");
         return s_aSupport[ _sURL ].eAuthentication;
     }
