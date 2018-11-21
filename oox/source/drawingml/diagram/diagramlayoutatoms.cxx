@@ -523,7 +523,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aSize.Width *= fWidthScale;
                 aCurrShape->setSize(aSize);
 
-                aCurrShape->setChildSize(aChildSize);
+                aCurrShape->setChildSize(aSize);
                 aCurrPos.X += nIncX * (aSize.Width + fSpace*aSize.Width);
                 aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
             }
