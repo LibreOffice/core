@@ -362,9 +362,9 @@
 #define ST_TYPE_TITLE                           NC_("ST_TYPE_TITLE", "General")
 
 #define RID_STR_ABSOURCEDIALOGTITLE             NC_("RID_STR_ABSOURCEDIALOGTITLE", "Address Book Data Source Wizard")
-#define RID_STR_SELECT_ABTYPE                   NC_("RID_STR_SELECT_ABTYPE", "Address book type")
+#define RID_STR_SELECT_ABTYPE                   NC_("RID_STR_SELECT_ABTYPE", "Address Book Type")
 #define RID_STR_INVOKE_ADMIN_DIALOG             NC_("RID_STR_INVOKE_ADMIN_DIALOG", "Connection Settings")
-#define RID_STR_TABLE_SELECTION                 NC_("RID_STR_TABLE_SELECTION", "Table selection")
+#define RID_STR_TABLE_SELECTION                 NC_("RID_STR_TABLE_SELECTION", "Table Selection")
 #define RID_STR_MANUAL_FIELD_MAPPING            NC_("RID_STR_MANUAL_FIELD_MAPPING", "Field Assignment")
 #define RID_STR_FINAL_CONFIRM                   NC_("RID_STR_FINAL_CONFIRM", "Data Source Title")
 #define RID_STR_NEEDTYPESELECTION               NC_("RID_STR_NEEDTYPESELECTION", "Please select a type of address book.")
