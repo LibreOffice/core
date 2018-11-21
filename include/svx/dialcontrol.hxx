@@ -214,7 +214,7 @@ protected:
 private:
     void                InvalidateControl();
 
-    DECL_LINK(LinkedFieldModifyHdl, weld::Entry&, void);
+    DECL_LINK(LinkedFieldModifyHdl, weld::SpinButton&, void);
     void LinkedFieldModifyHdl();
 };
 
