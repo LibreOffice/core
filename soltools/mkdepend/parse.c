@@ -31,10 +31,9 @@ in this Software without prior written authorization from the X Consortium.
 
 #include "def.h"
 static char *hash_lookup( char *symbol, struct symhash *symbols );
-static void hash_undefine( char *symbol, struct symhash *symbols );
 static int gobble( struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, struct symhash *symbols );
-static int deftype ( char *line, struct filepointer *filep, struct inclist *file,
+static int deftype ( char *line, struct filepointer *filep,
     int parse_it, struct symhash *symbols);
 static int zero_value(char const *exp, struct symhash *symbols);
 
@@ -44,10 +43,9 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
 {
     char   *line;
     int    type;
-    boolean recfailOK;
 
     while ((line = get_line(filep))) {
-        type = deftype(line, filep, file, TRUE, symbols);
+        type = deftype(line, filep, TRUE, symbols);
         switch(type) {
         case IF:
         doif:
@@ -56,93 +54,29 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
             while ((type == ELIF) || (type == ELIFFALSE) ||
                    (type == ELIFGUESSFALSE))
                 type = gobble(filep, file, file_red, symbols);
-            if (type == ELSE)
-                gobble(filep, file, file_red, symbols);
             break;
         case IFFALSE:
-        case IFGUESSFALSE:
             doiffalse:
-            if (type == IFGUESSFALSE || type == ELIFGUESSFALSE)
-                recfailOK = TRUE;
-            else
-                recfailOK = failOK;
             type = gobble(filep, file, file_red, symbols);
-            if (type == ELSE)
-                find_includes(filep, file,
-                      file_red, recursion+1, recfailOK, incCollection, symbols);
-            else if (type == ELIF)
+            if (type == ELIF)
                 goto doif;
             else if ((type == ELIFFALSE) || (type == ELIFGUESSFALSE))
                 goto doiffalse;
             break;
-        case IFDEF:
-        case IFNDEF:
-            if ((type == IFDEF && hash_lookup(line, symbols))
-             || (type == IFNDEF && !hash_lookup(line, symbols))) {
-                debug(1,(type == IFNDEF ?
-                    "line %d: %s !def'd in %s via %s%s\n" : "",
-                    filep->f_line, line,
-                    file->i_file, file_red->i_file, ": doit"));
-                type = find_includes(filep, file,
-                    file_red, recursion+1, failOK, incCollection, symbols);
-                while (type == ELIF || type == ELIFFALSE || type == ELIFGUESSFALSE)
-                    type = gobble(filep, file, file_red, symbols);
-                if (type == ELSE)
-                    gobble(filep, file, file_red, symbols);
-            }
-            else {
-                debug(1,(type == IFDEF ?
-                    "line %d: %s !def'd in %s via %s%s\n" : "",
-                    filep->f_line, line,
-                    file->i_file, file_red->i_file, ": gobble"));
-                type = gobble(filep, file, file_red, symbols);
-                if (type == ELSE)
-                    find_includes(filep, file,
-                        file_red, recursion + 1, failOK, incCollection, symbols);
-                else if (type == ELIF)
-                        goto doif;
-                else if (type == ELIFFALSE || type == ELIFGUESSFALSE)
-                        goto doiffalse;
-            }
-            break;
-        case ELSE:
         case ELIFFALSE:
         case ELIFGUESSFALSE:
         case ELIF:
             if (!recursion)
                 gobble(filep, file, file_red, symbols);
-            /*fall-through*/
-        case ENDIF:
             if (recursion)
                 return type;
-            /*fall-through*/
-        case DEFINE:
             define(line, &symbols);
-            break;
-        case UNDEF:
-            if (!*line) {
-                warning("%s, line %d: incomplete undef == \"%s\"\n",
-                file_red->i_file, filep->f_line, line);
-                break;
-            }
-            hash_undefine(line, symbols);
-            break;
-        case INCLUDE:
-            add_include(filep, file, file_red, line, FALSE, failOK, incCollection, symbols);
-            break;
-        case INCLUDEDOT:
-            add_include(filep, file, file_red, line, TRUE, failOK, incCollection, symbols);
             break;
         case ERROR:
                 warning("%s: %d: %s\n", file_red->i_file,
                  filep->f_line, line);
                 break;
 
-        case PRAGMA:
-        case IDENT:
-        case SCCS:
-        case EJECT:
-            break;
         case -1:
             warning("%s", file_red->i_file);
             if (file_red != file)
@@ -172,35 +106,16 @@ int gobble(struct filepointer *filep,
     int    type;
 
     while ((line = get_line(filep))) {
-        type = deftype(line, filep, file, FALSE, symbols);
+        type = deftype(line, filep, FALSE, symbols);
         switch(type) {
         case IF:
         case IFFALSE:
-        case IFGUESSFALSE:
-        case IFDEF:
-        case IFNDEF:
             type = gobble(filep, file, file_red, symbols);
             while ((type == ELIF) || (type == ELIFFALSE) ||
                    (type == ELIFGUESSFALSE))
                 type = gobble(filep, file, file_red, symbols);
-            if (type == ELSE)
-                    (void)gobble(filep, file, file_red, symbols);
             break;
-        case ELSE:
-        case ENDIF:
-            debug(0,("%s, line %d: #%s\n",
-                file->i_file, filep->f_line,
-                directives[type]));
-            return type;
-        case DEFINE:
-        case UNDEF:
-        case INCLUDE:
-        case INCLUDEDOT:
-        case PRAGMA:
         case ERROR:
-        case IDENT:
-        case SCCS:
-        case EJECT:
             break;
         case ELIF:
         case ELIFFALSE:
@@ -218,7 +133,7 @@ int gobble(struct filepointer *filep,
 /*
  * Decide what type of # directive this line is.
  */
-int deftype (char *line, struct filepointer *filep, struct inclist *file, int parse_it, struct symhash *symbols)
+int deftype (char *line, struct filepointer *filep, int parse_it, struct symhash *symbols)
 {
     char   *p;
     char    *directive, savechar;
@@ -287,68 +202,8 @@ int deftype (char *line, struct filepointer *filep, struct inclist *file, int pa
         debug(0,("%s, line %d: %s #if %s\n",
              file->i_file, filep->f_line, ret?"false":"true", p));
         break;
-    case IFDEF:
-    case IFNDEF:
-        debug(0,("%s, line %d: #%s %s\n",
-            file->i_file, filep->f_line, directives[ret], p));
-        //fall-through
-    case UNDEF:
-        /*
-         * separate the name of a single symbol.
-         */
-        while (isalnum((unsigned char)*p) || *p == '_')
-            *line++ = *p++;
-        *line = '\0';
-        break;
-    case INCLUDE:
-        debug(2,("%s, line %d: #include %s\n",
-            file->i_file, filep->f_line, p));
-
-        /* Support ANSI macro substitution */
-        {
-            char *sym = hash_lookup(p, symbols);
-            while (sym)
-            {
-                p = sym;
-                debug(3,("%s : #includes SYMBOL %s\n",
-                            file->i_incstring,
-                            sym));
-                /* mark file as having included a 'soft include' */
-                file->i_included_sym = TRUE;
-                sym = hash_lookup(p, symbols);
-            }
-        }
-
-        /*
-         * Separate the name of the include file.
-         */
-        while (*p && *p != '"' && *p != '<')
-            p++;
-        if (! *p)
-            return -2;
-        if (*p++ == '"') {
-            ret = INCLUDEDOT;
-            while (*p && *p != '"')
-                *line++ = *p++;
-        } else
-            while (*p && *p != '>')
-                *line++ = *p++;
-        *line = '\0';
-        break;
-    case DEFINE:
-        /*
-         * copy the definition back to the beginning of the line.
-         */
-        memmove (line, p, strlen(p));
-        break;
-    case ELSE:
-    case ENDIF:
     case ELIF:
-    case PRAGMA:
     case ERROR:
-    case IDENT:
-    case SCCS:
-    case EJECT:
         debug(0,("%s, line %d: #%s\n",
             file->i_file, filep->f_line, directives[ret]));
         /*
@@ -540,52 +395,6 @@ char *hash_lookup( char *symbol, struct symhash *symbols )
         return it->p_value;
 
     return NULL;
-}
-
-void hash_undefine( char *symbol, struct symhash *symbols )
-{
-    int hashval;
-    struct pair *it;
-
-    if ( !symbols )
-        return;
-
-    hashval = hash( symbol );
-    it = symbols->s_pairs[ hashval ];
-
-    /* Replace/insert the symbol */
-    if ( it == NULL )
-        return;
-    else if ( strcmp( it->p_name, symbol ) == 0 )
-    {
-        if ( it->p_next )
-        {
-            struct pair *tmp;
-            it->p_name = it->p_next->p_name;
-            it->p_value = it->p_next->p_value;
-            tmp = it->p_next->p_next;
-            free( it->p_next );
-            it->p_next = tmp;
-        }
-        else
-        {
-            free( it );
-            symbols->s_pairs[ hashval ] = NULL;
-        }
-    }
-    else
-    {
-        while ( it->p_next && ( strcmp( it->p_next->p_name, symbol ) != 0 ) )
-        {
-            it = it->p_next;
-        }
-        if ( it->p_next )
-        {
-            struct pair *tmp = it->p_next;
-            it->p_next = it->p_next->p_next;
-            free( tmp );
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

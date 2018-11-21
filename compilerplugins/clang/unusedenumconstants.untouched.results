@@ -380,10 +380,6 @@ sfx2/source/dialog/securitypage.cxx:48
     enum (anonymous namespace)::RedlineFunc RF_ON
 sfx2/source/dialog/securitypage.cxx:48
     enum (anonymous namespace)::RedlineFunc RF_PROTECT
-soltools/cpp/_lex.c:61
-    int SLASH1
-soltools/cpp/cpp.h:49
-    int IDENT
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_RADIUS
 sw/inc/docary.hxx:74
