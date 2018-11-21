@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -10,6 +10,18 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
+    <property name="lower">-99.989999999999995</property>
+    <property name="upper">99.989999999999995</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="lower">0.050000000000000003</property>
+    <property name="upper">99.989999999999995</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
     <property name="lower">-99.989999999999995</property>
     <property name="upper">99.989999999999995</property>
     <property name="step_increment">1</property>
@@ -56,9 +68,10 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="width:0.00cm">
+                          <object class="GtkSpinButton" id="width">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
                           </object>
@@ -95,7 +108,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="frmtypepage|autowidthft">_Width (at least)</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">width:0.00cm</property>
+                                <property name="mnemonic_widget">width</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
@@ -109,7 +122,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="frmtypepage|widthft">_Width</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">width:0.00cm</property>
+                                <property name="mnemonic_widget">width</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
@@ -180,10 +193,11 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="height:0.00cm">
+                          <object class="GtkSpinButton" id="height">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="adjustment">adjustment1</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -219,7 +233,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="frmtypepage|autoheightft">H_eight (at least)</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">height:0.00cm</property>
+                                <property name="mnemonic_widget">height</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
@@ -233,7 +247,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="frmtypepage|heightft">H_eight</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">height:0.00cm</property>
+                                <property name="mnemonic_widget">height</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
@@ -351,7 +365,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="svxlo-SvxSwFrameExample" id="preview">
+              <object class="GtkDrawingArea" id="preview">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
@@ -398,7 +412,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">topara</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -414,7 +427,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">tochar</property>
+                        <property name="group">topage</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -430,7 +443,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">aschar</property>
+                        <property name="group">topage</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -446,7 +459,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">toframe</property>
+                        <property name="group">topage</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -533,7 +546,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="frmtypepage|horibyft">b_y</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">byhori:0.00cm</property>
+                    <property name="mnemonic_widget">byhori</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -547,7 +560,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="frmtypepage|vertbyft">by</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">byvert:0.00cm</property>
+                    <property name="mnemonic_widget">byvert</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -570,9 +583,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="byhori:0.00cm">
+                  <object class="GtkSpinButton" id="byhori">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
                   </object>
@@ -626,10 +640,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="byvert:0.00cm">
+                  <object class="GtkSpinButton" id="byvert">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment2</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
