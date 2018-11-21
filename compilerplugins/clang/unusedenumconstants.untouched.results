@@ -326,42 +326,6 @@ sc/source/ui/inc/autofmt.hxx:33
     enum AutoFmtLine TOP_LINE
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:105
     enum (anonymous namespace)::ScRegType LINEAR
-sd/inc/CustomAnimationEffect.hxx:212
-    enum sd::ESequenceHint EFFECT_ADDED
-sd/inc/CustomAnimationEffect.hxx:212
-    enum sd::ESequenceHint EFFECT_REMOVED
-sd/inc/CustomAnimationEffect.hxx:212
-    enum sd::ESequenceHint EFFECT_EDITED
-sd/inc/Outliner.hxx:185
-    enum SdOutliner::ChangeHint CH_VIEW_SHELL_VALID
-sd/inc/Outliner.hxx:185
-    enum SdOutliner::ChangeHint CH_VIEW_SHELL_INVALID
-sd/inc/sdenumdef.hxx:23
-    enum OutputType OUTPUT_PAGE
-sd/inc/sdenumdef.hxx:23
-    enum OutputType OUTPUT_ORIGINAL
-sd/inc/sdenumdef.hxx:23
-    enum OutputType OUTPUT_SLIDE
-sd/inc/sdenumdef.hxx:23
-    enum OutputType OUTPUT_OVERHEAD
-sd/inc/sdenumdef.hxx:23
-    enum OutputType OUTPUT_WIDESCREEN
-sd/inc/sdenumdef.hxx:23
-    enum OutputType OUTPUT_PRESENTATION
-sd/inc/sdenumdef.hxx:24
-    enum StartType ST_EMPTY
-sd/inc/sdenumdef.hxx:24
-    enum StartType ST_TEMPLATE
-sd/inc/sdenumdef.hxx:24
-    enum StartType ST_OPEN
-sd/source/ui/inc/RemoteServer.hxx:42
-    enum sd::ClientInfo::PROTOCOL NETWORK
-sd/source/ui/inc/RemoteServer.hxx:42
-    enum sd::ClientInfo::PROTOCOL BLUETOOTH
-sd/source/ui/slidesorter/inc/view/SlsInsertAnimator.hxx:45
-    enum sd::slidesorter::view::InsertAnimator::ResetMode RM_AbortAnimations
-sd/source/ui/slidesorter/inc/view/SlsInsertAnimator.hxx:45
-    enum sd::slidesorter::view::InsertAnimator::ResetMode RM_Normal
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_RADIUS
 sw/inc/docary.hxx:74

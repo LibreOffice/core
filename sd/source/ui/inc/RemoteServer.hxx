@@ -39,7 +39,6 @@ namespace sd
 
         bool const mbIsAlreadyAuthorised;
 
-        enum PROTOCOL { NETWORK = 1, BLUETOOTH };
         ClientInfo( const OUString& rName,
                     const bool bIsAlreadyAuthorised ) :
             mName( rName ),

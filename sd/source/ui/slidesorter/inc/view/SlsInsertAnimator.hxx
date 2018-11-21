@@ -42,7 +42,6 @@ public:
     */
     void SetInsertPosition (const InsertPosition& rInsertPosition);
 
-    enum ResetMode { RM_Normal, RM_AbortAnimations };
     /** Restore the normal position of all page objects.
         @param eMode
             This flag controls whether to start an animation that ends in the
