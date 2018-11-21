@@ -1449,43 +1449,37 @@ typedef std::unordered_map< const char*, ShapeConverter, rtl::CStringHash, rtl::
 
 static const NameToConvertMapType& lcl_GetConverters()
 {
-    static bool shape_map_inited = false;
-    static NameToConvertMapType shape_converters;
-    if( shape_map_inited )
+    static NameToConvertMapType const shape_converters
     {
-        return shape_converters;
-    }
+        { "com.sun.star.drawing.ClosedBezierShape"         , &ShapeExport::WriteClosedPolyPolygonShape },
+        { "com.sun.star.drawing.ConnectorShape"            , &ShapeExport::WriteConnectorShape },
+        { "com.sun.star.drawing.CustomShape"               , &ShapeExport::WriteCustomShape },
+        { "com.sun.star.drawing.EllipseShape"              , &ShapeExport::WriteEllipseShape },
+        { "com.sun.star.drawing.GraphicObjectShape"        , &ShapeExport::WriteGraphicObjectShape },
+        { "com.sun.star.drawing.LineShape"                 , &ShapeExport::WriteLineShape },
+        { "com.sun.star.drawing.OpenBezierShape"           , &ShapeExport::WriteOpenPolyPolygonShape },
+        { "com.sun.star.drawing.PolyPolygonShape"          , &ShapeExport::WriteClosedPolyPolygonShape },
+        { "com.sun.star.drawing.PolyLineShape"             , &ShapeExport::WriteClosedPolyPolygonShape },
+        { "com.sun.star.drawing.RectangleShape"            , &ShapeExport::WriteRectangleShape },
+        { "com.sun.star.drawing.OLE2Shape"                 , &ShapeExport::WriteOLE2Shape },
+        { "com.sun.star.drawing.TableShape"                , &ShapeExport::WriteTableShape },
+        { "com.sun.star.drawing.TextShape"                 , &ShapeExport::WriteTextShape },
+        { "com.sun.star.drawing.GroupShape"                , &ShapeExport::WriteGroupShape },
 
-    shape_converters[ "com.sun.star.drawing.ClosedBezierShape" ]        = &ShapeExport::WriteClosedPolyPolygonShape;
-    shape_converters[ "com.sun.star.drawing.ConnectorShape" ]           = &ShapeExport::WriteConnectorShape;
-    shape_converters[ "com.sun.star.drawing.CustomShape" ]              = &ShapeExport::WriteCustomShape;
-    shape_converters[ "com.sun.star.drawing.EllipseShape" ]             = &ShapeExport::WriteEllipseShape;
-    shape_converters[ "com.sun.star.drawing.GraphicObjectShape" ]       = &ShapeExport::WriteGraphicObjectShape;
-    shape_converters[ "com.sun.star.drawing.LineShape" ]                = &ShapeExport::WriteLineShape;
-    shape_converters[ "com.sun.star.drawing.OpenBezierShape" ]          = &ShapeExport::WriteOpenPolyPolygonShape;
-    shape_converters[ "com.sun.star.drawing.PolyPolygonShape" ]         = &ShapeExport::WriteClosedPolyPolygonShape;
-    shape_converters[ "com.sun.star.drawing.PolyLineShape" ]            = &ShapeExport::WriteClosedPolyPolygonShape;
-    shape_converters[ "com.sun.star.drawing.RectangleShape" ]           = &ShapeExport::WriteRectangleShape;
-    shape_converters[ "com.sun.star.drawing.OLE2Shape" ]                = &ShapeExport::WriteOLE2Shape;
-    shape_converters[ "com.sun.star.drawing.TableShape" ]               = &ShapeExport::WriteTableShape;
-    shape_converters[ "com.sun.star.drawing.TextShape" ]                = &ShapeExport::WriteTextShape;
-    shape_converters[ "com.sun.star.drawing.GroupShape" ]               = &ShapeExport::WriteGroupShape;
+        { "com.sun.star.presentation.GraphicObjectShape"   , &ShapeExport::WriteGraphicObjectShape },
+        { "com.sun.star.presentation.MediaShape"           , &ShapeExport::WriteGraphicObjectShape },
+        { "com.sun.star.presentation.OLE2Shape"            , &ShapeExport::WriteOLE2Shape },
+        { "com.sun.star.presentation.TableShape"           , &ShapeExport::WriteTableShape },
+        { "com.sun.star.presentation.TextShape"            , &ShapeExport::WriteTextShape },
 
-    shape_converters[ "com.sun.star.presentation.GraphicObjectShape" ]  = &ShapeExport::WriteGraphicObjectShape;
-    shape_converters[ "com.sun.star.presentation.MediaShape" ]          = &ShapeExport::WriteGraphicObjectShape;
-    shape_converters[ "com.sun.star.presentation.OLE2Shape" ]           = &ShapeExport::WriteOLE2Shape;
-    shape_converters[ "com.sun.star.presentation.TableShape" ]          = &ShapeExport::WriteTableShape;
-    shape_converters[ "com.sun.star.presentation.TextShape" ]           = &ShapeExport::WriteTextShape;
-
-    shape_converters[ "com.sun.star.presentation.DateTimeShape" ]       = &ShapeExport::WriteTextShape;
-    shape_converters[ "com.sun.star.presentation.FooterShape" ]         = &ShapeExport::WriteTextShape;
-    shape_converters[ "com.sun.star.presentation.HeaderShape" ]         = &ShapeExport::WriteTextShape;
-    shape_converters[ "com.sun.star.presentation.NotesShape" ]          = &ShapeExport::WriteTextShape;
-    shape_converters[ "com.sun.star.presentation.OutlinerShape" ]       = &ShapeExport::WriteTextShape;
-    shape_converters[ "com.sun.star.presentation.SlideNumberShape" ]    = &ShapeExport::WriteTextShape;
-    shape_converters[ "com.sun.star.presentation.TitleTextShape" ]      = &ShapeExport::WriteTextShape;
-    shape_map_inited = true;
-
+        { "com.sun.star.presentation.DateTimeShape"        , &ShapeExport::WriteTextShape },
+        { "com.sun.star.presentation.FooterShape"          , &ShapeExport::WriteTextShape },
+        { "com.sun.star.presentation.HeaderShape"          , &ShapeExport::WriteTextShape },
+        { "com.sun.star.presentation.NotesShape"           , &ShapeExport::WriteTextShape },
+        { "com.sun.star.presentation.OutlinerShape"        , &ShapeExport::WriteTextShape },
+        { "com.sun.star.presentation.SlideNumberShape"     , &ShapeExport::WriteTextShape },
+        { "com.sun.star.presentation.TitleTextShape"       , &ShapeExport::WriteTextShape },
+    };
     return shape_converters;
 }
 

@@ -63,10 +63,10 @@ const sal_uInt16 COMPATIBLE_HIDDEN  = 0x0008;
 
 const css::uno::Sequence<OUString>& getColumnTypes()
 {
-    static css::uno::Sequence<OUString> aColumnTypes(10);
-    if (aColumnTypes.getConstArray()[0].isEmpty())
+    static css::uno::Sequence<OUString> aColumnTypes = [&]()
     {
-        OUString* pNames = aColumnTypes.getArray();
+        css::uno::Sequence<OUString> tmp(10);
+        OUString* pNames = tmp.getArray();
         pNames[TYPE_CHECKBOX]       = "CheckBox";
         pNames[TYPE_COMBOBOX]       = "ComboBox";
         pNames[TYPE_CURRENCYFIELD]  = "CurrencyField";
@@ -77,7 +77,8 @@ const css::uno::Sequence<OUString>& getColumnTypes()
         pNames[TYPE_PATTERNFIELD]   = "PatternField";
         pNames[TYPE_TEXTFIELD]      = "TextField";
         pNames[TYPE_TIMEFIELD]      = "TimeField";
-    }
+        return tmp;
+    }();
     return aColumnTypes;
 }
 
