@@ -127,8 +127,6 @@ public:
     ScMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals );
     ~ScMatrix();
 
-    enum Op { Add, Sub, Mul, Div };
-
     typedef std::function<void(size_t, size_t, double)> DoubleOpFunction;
     typedef std::function<void(size_t, size_t, bool)> BoolOpFunction;
     typedef std::function<void(size_t, size_t, svl::SharedString)> StringOpFunction;
@@ -391,7 +389,7 @@ public:
      *                     otherwise they become NaN values.
      */
     void GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero = true ) const ;
-    void MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const ;
+    void MergeDoubleArrayMultiply( std::vector<double>& rArray ) const ;
 
     void NotOp(ScMatrix& rMat) ;
     void NegOp(ScMatrix& rMat) ;

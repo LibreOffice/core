@@ -1672,7 +1672,7 @@ void ScInterpreter::ScSumProduct()
             return;
         }
 
-        pMat->MergeDoubleArray(aResArray, ScMatrix::Mul);
+        pMat->MergeDoubleArrayMultiply(aResArray);
     }
 
     double fSum = std::for_each(aResArray.begin(), aResArray.end(), SumValues()).getValue();
