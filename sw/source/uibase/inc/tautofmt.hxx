@@ -33,8 +33,6 @@ class SwTableAutoFormat;
 class SwTableAutoFormatTable;
 class SwWrtShell;
 
-enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
-
 class SwAutoFormatDlg : public SfxDialogController
 {
     OUString const  m_aStrTitle;
