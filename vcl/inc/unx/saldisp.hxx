@@ -71,12 +71,9 @@ extern "C" srv_vendor_t sal_GetServerVendor( Display *p_display );
 
 // MSB/Bigendian view (Color == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
 
-enum SalRGB { RGB,  RBG,
+enum class SalRGB { RGB,  RBG,
               GBR,  GRB,
               BGR,  BRG,
-              RGBA, RBGA,
-              GBRA, GRBA,
-              BGRA, BRGA,
               otherSalRGB };
 
 class SalVisual : public XVisualInfo
