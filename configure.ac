@@ -9850,8 +9850,8 @@ if test -z "$FLEX"; then
 else
     AC_MSG_CHECKING([the flex version])
     _flex_version=$($FLEX --version | $SED -e 's/^.*\([[[:digit:]]]\{1,\}\.[[[:digit:]]]\{1,\}\.[[[:digit:]]]\{1,\}\).*$/\1/')
-    if test $(echo $_flex_version | $AWK -F. '{printf("%d%03d%03d", $1, $2, $3)}') -lt 2005035; then
-        AC_MSG_ERROR([failed ($FLEX $_flex_version found, but need at least 2.5.35)])
+    if test $(echo $_flex_version | $AWK -F. '{printf("%d%03d%03d", $1, $2, $3)}') -lt 2006000; then
+        AC_MSG_ERROR([failed ($FLEX $_flex_version found, but need at least 2.6.0)])
     fi
 fi
 AC_SUBST([FLEX])
