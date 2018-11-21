@@ -302,7 +302,7 @@ struct INetURLObject::SchemeInfo
 
 struct INetURLObject::PrefixInfo
 {
-    enum Kind { OFFICIAL, INTERNAL, EXTERNAL, ALIAS }; // order is important!
+    enum class Kind { Official, Internal, External }; // order is important!
 
     sal_Char const * m_pPrefix;
     sal_Char const * m_pTranslatedPrefix;
@@ -711,7 +711,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         m_eScheme = pPrefix->m_eScheme;
 
         OUString sTemp(OUString::createFromAscii(pPrefix->m_eKind
-                                                 >= PrefixInfo::EXTERNAL ?
+                                                 >= PrefixInfo::Kind::External ?
                                              pPrefix->m_pTranslatedPrefix :
                                              pPrefix->m_pPrefix));
         aSynAbsURIRef.append(sTemp);
@@ -2048,7 +2048,7 @@ bool INetURLObject::convertIntToExt(OUString const & rTheIntURIRef,
     sal_Unicode const * pEnd = pBegin + aSynExtURIRef.getLength();
     sal_Unicode const * p = pBegin;
     PrefixInfo const * pPrefix = getPrefix(p, pEnd);
-    bool bConvert = pPrefix && pPrefix->m_eKind == PrefixInfo::INTERNAL;
+    bool bConvert = pPrefix && pPrefix->m_eKind == PrefixInfo::Kind::Internal;
     if (bConvert)
     {
         aSynExtURIRef =
@@ -2071,7 +2071,7 @@ bool INetURLObject::convertExtToInt(OUString const & rTheExtURIRef,
     sal_Unicode const * pEnd = pBegin + aSynIntURIRef.getLength();
     sal_Unicode const * p = pBegin;
     PrefixInfo const * pPrefix = getPrefix(p, pEnd);
-    bool bConvert = pPrefix && pPrefix->m_eKind == PrefixInfo::EXTERNAL;
+    bool bConvert = pPrefix && pPrefix->m_eKind == PrefixInfo::Kind::External;
     if (bConvert)
     {
         aSynIntURIRef =
@@ -2088,82 +2088,82 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
 {
     static PrefixInfo const aMap[]
         = { // dummy entry at front needed, because pLast may point here:
-            { nullptr, nullptr, INetProtocol::NotValid, PrefixInfo::INTERNAL },
+            { nullptr, nullptr, INetProtocol::NotValid, PrefixInfo::Kind::Internal },
             { ".component:", "staroffice.component:", INetProtocol::Component,
-              PrefixInfo::INTERNAL },
+              PrefixInfo::Kind::Internal },
             { ".uno:", "staroffice.uno:", INetProtocol::Uno,
-              PrefixInfo::INTERNAL },
-            { "cid:", nullptr, INetProtocol::Cid, PrefixInfo::OFFICIAL },
-            { "data:", nullptr, INetProtocol::Data, PrefixInfo::OFFICIAL },
-            { "db:", "staroffice.db:", INetProtocol::Db, PrefixInfo::INTERNAL },
-            { "file:", nullptr, INetProtocol::File, PrefixInfo::OFFICIAL },
-            { "ftp:", nullptr, INetProtocol::Ftp, PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Internal },
+            { "cid:", nullptr, INetProtocol::Cid, PrefixInfo::Kind::Official },
+            { "data:", nullptr, INetProtocol::Data, PrefixInfo::Kind::Official },
+            { "db:", "staroffice.db:", INetProtocol::Db, PrefixInfo::Kind::Internal },
+            { "file:", nullptr, INetProtocol::File, PrefixInfo::Kind::Official },
+            { "ftp:", nullptr, INetProtocol::Ftp, PrefixInfo::Kind::Official },
             { "hid:", "staroffice.hid:", INetProtocol::Hid,
-              PrefixInfo::INTERNAL },
-            { "http:", nullptr, INetProtocol::Http, PrefixInfo::OFFICIAL },
-            { "https:", nullptr, INetProtocol::Https, PrefixInfo::OFFICIAL },
-            { "javascript:", nullptr, INetProtocol::Javascript, PrefixInfo::OFFICIAL },
-            { "ldap:", nullptr, INetProtocol::Ldap, PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Internal },
+            { "http:", nullptr, INetProtocol::Http, PrefixInfo::Kind::Official },
+            { "https:", nullptr, INetProtocol::Https, PrefixInfo::Kind::Official },
+            { "javascript:", nullptr, INetProtocol::Javascript, PrefixInfo::Kind::Official },
+            { "ldap:", nullptr, INetProtocol::Ldap, PrefixInfo::Kind::Official },
             { "macro:", "staroffice.macro:", INetProtocol::Macro,
-              PrefixInfo::INTERNAL },
-            { "mailto:", nullptr, INetProtocol::Mailto, PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Internal },
+            { "mailto:", nullptr, INetProtocol::Mailto, PrefixInfo::Kind::Official },
             { "private:", "staroffice.private:", INetProtocol::PrivSoffice,
-              PrefixInfo::INTERNAL },
+              PrefixInfo::Kind::Internal },
             { "private:factory/", "staroffice.factory:",
-              INetProtocol::PrivSoffice, PrefixInfo::INTERNAL },
+              INetProtocol::PrivSoffice, PrefixInfo::Kind::Internal },
             { "private:helpid/", "staroffice.helpid:", INetProtocol::PrivSoffice,
-              PrefixInfo::INTERNAL },
+              PrefixInfo::Kind::Internal },
             { "private:java/", "staroffice.java:", INetProtocol::PrivSoffice,
-              PrefixInfo::INTERNAL },
+              PrefixInfo::Kind::Internal },
             { "private:searchfolder:", "staroffice.searchfolder:",
-              INetProtocol::PrivSoffice, PrefixInfo::INTERNAL },
+              INetProtocol::PrivSoffice, PrefixInfo::Kind::Internal },
             { "private:trashcan:", "staroffice.trashcan:",
-              INetProtocol::PrivSoffice, PrefixInfo::INTERNAL },
-            { "sftp:", nullptr, INetProtocol::Sftp, PrefixInfo::OFFICIAL },
+              INetProtocol::PrivSoffice, PrefixInfo::Kind::Internal },
+            { "sftp:", nullptr, INetProtocol::Sftp, PrefixInfo::Kind::Official },
             { "slot:", "staroffice.slot:", INetProtocol::Slot,
-              PrefixInfo::INTERNAL },
-            { "smb:", nullptr, INetProtocol::Smb, PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Internal },
+            { "smb:", nullptr, INetProtocol::Smb, PrefixInfo::Kind::Official },
             { "staroffice.component:", ".component:", INetProtocol::Component,
-              PrefixInfo::EXTERNAL },
-            { "staroffice.db:", "db:", INetProtocol::Db, PrefixInfo::EXTERNAL },
+              PrefixInfo::Kind::External },
+            { "staroffice.db:", "db:", INetProtocol::Db, PrefixInfo::Kind::External },
             { "staroffice.factory:", "private:factory/",
-              INetProtocol::PrivSoffice, PrefixInfo::EXTERNAL },
+              INetProtocol::PrivSoffice, PrefixInfo::Kind::External },
             { "staroffice.helpid:", "private:helpid/", INetProtocol::PrivSoffice,
-              PrefixInfo::EXTERNAL },
+              PrefixInfo::Kind::External },
             { "staroffice.hid:", "hid:", INetProtocol::Hid,
-              PrefixInfo::EXTERNAL },
+              PrefixInfo::Kind::External },
             { "staroffice.java:", "private:java/", INetProtocol::PrivSoffice,
-              PrefixInfo::EXTERNAL },
+              PrefixInfo::Kind::External },
             { "staroffice.macro:", "macro:", INetProtocol::Macro,
-              PrefixInfo::EXTERNAL },
+              PrefixInfo::Kind::External },
             { "staroffice.private:", "private:", INetProtocol::PrivSoffice,
-              PrefixInfo::EXTERNAL },
+              PrefixInfo::Kind::External },
             { "staroffice.searchfolder:", "private:searchfolder:",
-              INetProtocol::PrivSoffice, PrefixInfo::EXTERNAL },
+              INetProtocol::PrivSoffice, PrefixInfo::Kind::External },
             { "staroffice.slot:", "slot:", INetProtocol::Slot,
-              PrefixInfo::EXTERNAL },
+              PrefixInfo::Kind::External },
             { "staroffice.trashcan:", "private:trashcan:",
-              INetProtocol::PrivSoffice, PrefixInfo::EXTERNAL },
+              INetProtocol::PrivSoffice, PrefixInfo::Kind::External },
             { "staroffice.uno:", ".uno:", INetProtocol::Uno,
-              PrefixInfo::EXTERNAL },
+              PrefixInfo::Kind::External },
             { "staroffice:", "private:", INetProtocol::PrivSoffice,
-              PrefixInfo::EXTERNAL },
-            { "telnet:", nullptr, INetProtocol::Telnet, PrefixInfo::OFFICIAL },
-            { "vnd.libreoffice.cmis:", nullptr, INetProtocol::Cmis, PrefixInfo::INTERNAL },
+              PrefixInfo::Kind::External },
+            { "telnet:", nullptr, INetProtocol::Telnet, PrefixInfo::Kind::Official },
+            { "vnd.libreoffice.cmis:", nullptr, INetProtocol::Cmis, PrefixInfo::Kind::Internal },
             { "vnd.sun.star.cmd:", nullptr, INetProtocol::VndSunStarCmd,
-              PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Official },
             { "vnd.sun.star.expand:", nullptr, INetProtocol::VndSunStarExpand,
-              PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Official },
             { "vnd.sun.star.help:", nullptr, INetProtocol::VndSunStarHelp,
-              PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Official },
             { "vnd.sun.star.hier:", nullptr, INetProtocol::VndSunStarHier,
-              PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Official },
             { "vnd.sun.star.pkg:", nullptr, INetProtocol::VndSunStarPkg,
-              PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Official },
             { "vnd.sun.star.tdoc:", nullptr, INetProtocol::VndSunStarTdoc,
-              PrefixInfo::OFFICIAL },
+              PrefixInfo::Kind::Official },
             { "vnd.sun.star.webdav:", nullptr, INetProtocol::VndSunStarWebdav,
-              PrefixInfo::OFFICIAL }
+              PrefixInfo::Kind::Official }
         };
 /* This list needs to be sorted, or you'll introduce serious bugs */
 

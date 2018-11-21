@@ -532,8 +532,6 @@ toolkit/source/controls/grid/defaultgriddatamodel.cxx:45
     enum (anonymous namespace)::broadcast_type data_changed
 toolkit/source/controls/grid/defaultgriddatamodel.cxx:45
     enum (anonymous namespace)::broadcast_type row_removed
-tools/source/fsys/urlobj.cxx:305
-    enum INetURLObject::PrefixInfo::Kind ALIAS
 ucb/source/ucp/webdav-neon/DAVTypes.hxx:195
     enum webdav_ucp::Depth DAVINFINITY
 ucbhelper/source/client/proxydecider.cxx:119
