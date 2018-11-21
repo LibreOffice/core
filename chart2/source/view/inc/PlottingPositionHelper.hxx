@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star { namespace chart2 { class XTransformation; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }

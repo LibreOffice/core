@@ -19,19 +19,17 @@
 
 #include "VAxisProperties.hxx"
 #include <ViewDefines.hxx>
-#include <CommonConverters.hxx>
 #include <AxisHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
 
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

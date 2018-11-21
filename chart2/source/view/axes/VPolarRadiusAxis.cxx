@@ -22,7 +22,6 @@
 #include <PlottingPositionHelper.hxx>
 #include <CommonConverters.hxx>
 #include "Tickmarks_Equidistant.hxx"
-#include <rtl/math.hxx>
 
 namespace chart
 {

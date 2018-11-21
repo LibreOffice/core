@@ -18,7 +18,6 @@
  */
 
 #include "Tickmarks_Equidistant.hxx"
-#include <ViewDefines.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <float.h>

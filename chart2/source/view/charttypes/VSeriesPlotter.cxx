@@ -21,12 +21,9 @@
 #include <VSeriesPlotter.hxx>
 #include <VLineProperties.hxx>
 #include <ShapeFactory.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
-#include <svl/zformat.hxx>
 
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
-#include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
 #include <StatisticsHelper.hxx>
 #include <PlottingPositionHelper.hxx>
@@ -70,18 +67,9 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XSimpleText.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 
-#include <svx/unoshape.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

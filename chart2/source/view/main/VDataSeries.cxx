@@ -23,7 +23,6 @@
 #include <CommonConverters.hxx>
 #include <LabelPositionHelper.hxx>
 #include <ChartTypeHelper.hxx>
-#include <DataSeriesHelper.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
 
@@ -39,10 +38,6 @@
 #include <tools/color.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 
 namespace chart {

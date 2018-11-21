@@ -18,7 +18,6 @@
  */
 
 #include <DateHelper.hxx>
-#include "DateScaling.hxx"
 #include <rtl/math.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>
 

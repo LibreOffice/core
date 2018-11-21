@@ -22,7 +22,6 @@
 #include <ChartView.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <NumberFormatterWrapper.hxx>
-#include <ViewDefines.hxx>
 #include <VDiagram.hxx>
 #include "VTitle.hxx"
 #include "VButton.hxx"
@@ -35,17 +34,14 @@
 #include "VLegend.hxx"
 #include <PropertyMapper.hxx>
 #include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ScaleAutomatism.hxx>
-#include <MinimumAndMaximumSupplier.hxx>
 #include <ObjectIdentifier.hxx>
 #include <DiagramHelper.hxx>
 #include <RelativePositionHelper.hxx>
 #include <servicenames.hxx>
 #include <AxisHelper.hxx>
 #include <AxisIndexDefines.hxx>
-#include <ControllerLockGuard.hxx>
 #include <BaseGFXHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DateHelper.hxx>
@@ -53,15 +49,12 @@
 #include <defines.hxx>
 #include <unonames.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <rtl/uuid.h>
 #include <tools/globname.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <svx/charthelper.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
@@ -75,33 +68,22 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XShapeGroup.hpp>
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -114,15 +96,13 @@
 #include <servicenames_charttypes.hxx>
 
 
-#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-#include <osl/conditn.hxx>
-#include <o3tl/make_unique.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <memory>
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 
 namespace chart {
 

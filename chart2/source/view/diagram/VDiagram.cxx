@@ -25,15 +25,10 @@
 #include <ObjectIdentifier.hxx>
 #include <DiagramHelper.hxx>
 #include <BaseGFXHelper.hxx>
-#include <CommonConverters.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>
 #include <editeng/unoprnms.hxx>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/ProjectionMode.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <svx/unoshape.hxx>

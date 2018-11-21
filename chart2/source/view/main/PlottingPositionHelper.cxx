@@ -19,12 +19,10 @@
 
 #include <PlottingPositionHelper.hxx>
 #include <CommonConverters.hxx>
-#include <ViewDefines.hxx>
 #include <Linear3DTransformation.hxx>
 #include <VPolarTransformation.hxx>
 #include <ShapeFactory.hxx>
 #include <PropertyMapper.hxx>
-#include <DateHelper.hxx>
 #include <defines.hxx>
 
 #include <com/sun/star/chart/TimeUnit.hpp>

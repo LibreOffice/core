@@ -22,7 +22,6 @@
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <basegfx/polygon/b3dpolygon.hxx>
-#include <basegfx/polygon/b3dpolygontools.hxx>
 
 using namespace ::com::sun::star;
 

@@ -20,8 +20,6 @@
 #include <VLegendSymbolFactory.hxx>
 #include <PropertyMapper.hxx>
 #include <ShapeFactory.hxx>
-#include <ObjectIdentifier.hxx>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>

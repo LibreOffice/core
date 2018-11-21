@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star { namespace drawing { class XShap
 namespace chart
 {
 
-class PlottingPositionHelper;
 class ShapeFactory;
 
 class LabelPositionHelper

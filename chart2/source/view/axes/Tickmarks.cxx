@@ -22,7 +22,6 @@
 #include "Tickmarks_Dates.hxx"
 #include <ViewDefines.hxx>
 #include "VAxisProperties.hxx"
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/chart2/AxisType.hpp>
 

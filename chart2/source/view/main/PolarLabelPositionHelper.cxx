@@ -19,7 +19,6 @@
 
 #include <PolarLabelPositionHelper.hxx>
 #include <PlottingPositionHelper.hxx>
-#include <CommonConverters.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 

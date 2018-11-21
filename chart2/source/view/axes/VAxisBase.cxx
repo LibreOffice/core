@@ -19,7 +19,6 @@
 
 #include "VAxisBase.hxx"
 #include <ShapeFactory.hxx>
-#include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include "Tickmarks.hxx"
 #include <com/sun/star/drawing/XShapes.hpp>

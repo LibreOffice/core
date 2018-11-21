@@ -19,16 +19,10 @@
 
 #include "VTitle.hxx"
 #include <CommonConverters.hxx>
-#include <PropertyMapper.hxx>
 #include <ShapeFactory.hxx>
-#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <rtl/math.hxx>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/text/ControlCharacter.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <sal/log.hxx>
 
 namespace chart

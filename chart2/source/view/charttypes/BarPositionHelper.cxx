@@ -18,12 +18,8 @@
  */
 
 #include "BarPositionHelper.hxx"
-#include <Linear3DTransformation.hxx>
-#include <ViewDefines.hxx>
-#include <CommonConverters.hxx>
 #include <DateHelper.hxx>
 #include <o3tl/make_unique.hxx>
-#include <com/sun/star/chart/TimeUnit.hpp>
 
 namespace chart
 {
