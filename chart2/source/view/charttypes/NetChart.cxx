@@ -22,12 +22,9 @@
 #include <ShapeFactory.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <CommonConverters.hxx>
-#include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
-#include <ChartTypeHelper.hxx>
 #include <LabelPositionHelper.hxx>
 #include <Clipping.hxx>
-#include <Stripe.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <DateHelper.hxx>
 
@@ -35,14 +32,10 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
-#include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/drawing/DoubleSequence.hpp>
-#include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 
 namespace chart
 {

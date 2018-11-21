@@ -18,7 +18,6 @@
  */
 
 #include <VPolarTransformation.hxx>
-#include <ViewDefines.hxx>
 #include <CommonConverters.hxx>
 #include <algorithm>
 

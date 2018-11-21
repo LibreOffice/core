@@ -19,9 +19,7 @@
 
 #include <LabelPositionHelper.hxx>
 #include <PlottingPositionHelper.hxx>
-#include <CommonConverters.hxx>
 #include <PropertyMapper.hxx>
-#include <ShapeFactory.hxx>
 #include <RelativeSizeHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>

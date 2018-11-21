@@ -22,15 +22,9 @@
 #include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <ObjectIdentifier.hxx>
-#include <LabelPositionHelper.hxx>
 #include "BarPositionHelper.hxx"
-#include <VLegendSymbolFactory.hxx>
-#include <FormattedStringHelper.hxx>
-#include <DataSeriesHelper.hxx>
 #include <DateHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <rtl/math.hxx>
-#include <editeng/unoprnms.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

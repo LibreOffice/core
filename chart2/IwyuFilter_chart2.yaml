@@ -468,6 +468,9 @@ blacklist:
     chart2/source/controller/main/ElementSelector.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/view/main/ShapeFactory.cxx:
+    # Needed for template
+    - com/sun/star/graphic/XGraphic.hpp
     chart2/source/controller/main/StatusBarCommandDispatch.hxx:
     # base class has to be a complete type
     - CommandDispatch.hxx

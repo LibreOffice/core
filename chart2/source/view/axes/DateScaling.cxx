@@ -20,7 +20,6 @@
 #include "DateScaling.hxx"
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <rtl/math.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace

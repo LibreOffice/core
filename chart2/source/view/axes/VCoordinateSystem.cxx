@@ -22,23 +22,17 @@
 #include "VCartesianCoordinateSystem.hxx"
 #include "VPolarCoordinateSystem.hxx"
 #include <ScaleAutomatism.hxx>
-#include <VSeriesPlotter.hxx>
 #include <ShapeFactory.hxx>
 #include <servicenames_coosystems.hxx>
-#include <AxisIndexDefines.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ExplicitCategoriesProvider.hxx>
-#include <AxisHelper.hxx>
 #include <ContainerHelper.hxx>
 #include "VAxisBase.hxx"
-#include <ViewDefines.hxx>
-#include <DataSeriesHelper.hxx>
 #include <defines.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 

@@ -20,8 +20,6 @@
 #include "VCartesianAxis.hxx"
 #include <PlottingPositionHelper.hxx>
 #include <ShapeFactory.hxx>
-#include <CommonConverters.hxx>
-#include <ViewDefines.hxx>
 #include <PropertyMapper.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <LabelPositionHelper.hxx>
@@ -33,9 +31,6 @@
 
 #include <rtl/math.hxx>
 #include <tools/color.hxx>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
-#include <editeng/unoprnms.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
 #include <sal/log.hxx>

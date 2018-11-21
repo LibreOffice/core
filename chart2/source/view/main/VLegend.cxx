@@ -21,17 +21,14 @@
 #include "VButton.hxx"
 #include <PropertyMapper.hxx>
 #include <ChartModel.hxx>
-#include <CommonConverters.hxx>
 #include <ObjectIdentifier.hxx>
 #include <RelativePositionHelper.hxx>
 #include <ShapeFactory.hxx>
 #include <RelativeSizeHelper.hxx>
 #include <LegendEntryProvider.hxx>
 #include <chartview/DrawModelWrapper.hxx>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -42,7 +39,6 @@
 #include <com/sun/star/chart2/XFormattedString2.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/diagnose_ex.h>
 

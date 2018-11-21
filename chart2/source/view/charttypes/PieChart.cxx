@@ -24,7 +24,6 @@
 #include <ShapeFactory.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <CommonConverters.hxx>
-#include <ViewDefines.hxx>
 #include <ObjectIdentifier.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>

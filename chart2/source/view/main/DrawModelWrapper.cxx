@@ -26,10 +26,8 @@
 #include <svl/eitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svx3ditems.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/XPropertyTable.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/unolingu.hxx>
@@ -37,11 +35,9 @@
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <sfx2/objsh.hxx>
-#include <com/sun/star/linguistic2/XHyphenator.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenator; } } } }
+namespace com { namespace sun { namespace star { namespace linguistic2 { class XSpellChecker1; } } } }
 
 using namespace ::com::sun::star;
 

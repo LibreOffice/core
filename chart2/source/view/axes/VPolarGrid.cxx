@@ -26,8 +26,6 @@
 #include <CommonConverters.hxx>
 #include <VLineProperties.hxx>
 #include "Tickmarks_Equidistant.hxx"
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <osl/diagnose.h>
 

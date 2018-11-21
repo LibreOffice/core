@@ -22,7 +22,6 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 
 #include <rtl/math.hxx>
-#include <com/sun/star/awt/Size.hpp>
 
 namespace chart
 {

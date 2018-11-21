@@ -24,7 +24,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/rectitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
