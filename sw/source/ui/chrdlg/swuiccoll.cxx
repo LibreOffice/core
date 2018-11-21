@@ -51,10 +51,7 @@ SwCondCollPage::SwCondCollPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_pFormat(nullptr)
     , m_bNewTemplate(false)
     , m_xConditionCB(m_xBuilder->weld_check_button("condstyle"))
-    , m_xContextFT(m_xBuilder->weld_label("contextft"))
-    , m_xUsedFT(m_xBuilder->weld_label("usedft"))
     , m_xTbLinks(m_xBuilder->weld_tree_view("links"))
-    , m_xStyleFT(m_xBuilder->weld_label("styleft"))
     , m_xStyleLB(m_xBuilder->weld_tree_view("styles"))
     , m_xFilterLB(m_xBuilder->weld_combo_box("filter"))
     , m_xRemovePB(m_xBuilder->weld_button("remove"))
@@ -179,10 +176,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
 IMPL_LINK(SwCondCollPage, OnOffHdl, weld::ToggleButton&, rBox, void)
 {
     const bool bEnable = rBox.get_active();
-    m_xContextFT->set_sensitive(bEnable);
-    m_xUsedFT->set_sensitive(bEnable);
     m_xTbLinks->set_sensitive(bEnable);
-    m_xStyleFT->set_sensitive(bEnable);
     m_xStyleLB->set_sensitive(bEnable);
     m_xFilterLB->set_sensitive(bEnable);
     m_xRemovePB->set_sensitive(bEnable);

@@ -28,6 +28,7 @@
 #include <vcl/fmtfield.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>
+#include <vcl/headbar.hxx>
 #include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
@@ -518,7 +519,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         vcl::Window* pTarget = get<vcl::Window>(elem.m_sID);
         ListBox *pListBoxTarget = dynamic_cast<ListBox*>(pTarget);
         ComboBox *pComboBoxTarget = dynamic_cast<ComboBox*>(pTarget);
-        SvTabListBox *pTreeBoxTarget = dynamic_cast<SvTabListBox*>(pTarget);
+        SvHeaderTabListBox *pTreeBoxTarget = dynamic_cast<SvHeaderTabListBox*>(pTarget);
         // pStore may be empty
         const ListStore *pStore = get_model_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pListBoxTarget && !pComboBoxTarget && !pTreeBoxTarget, "vcl", "missing elements of combobox");
@@ -1108,6 +1109,30 @@ namespace
             rMap.erase(aFind);
         }
         return sTooltipText;
+    }
+
+    OUString extractTitle(VclBuilder::stringmap &rMap)
+    {
+        OUString sTitle;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("title"));
+        if (aFind != rMap.end())
+        {
+            sTitle = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sTitle;
+    }
+
+    bool extractHeadersVisible(VclBuilder::stringmap &rMap)
+    {
+        bool bHeadersVisible = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("headers-visible"));
+        if (aFind != rMap.end())
+        {
+            bHeadersVisible = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bHeadersVisible;
     }
 
     void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame)
@@ -1871,10 +1896,12 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkTreeView")
     {
+        //window we want to apply the packing props for this GtkTreeView to
+        VclPtr<vcl::Window> xWindowForPackingProps;
         //To-Do
-        //a) make SvTabListBox the default target for GtkTreeView
+        //a) make SvHeaderTabListBox the default target for GtkTreeView
         //b) remove the non-drop down mode of ListBox and convert
-        //   everything over to SvTabListBox
+        //   everything over to SvHeaderTabListBox
         //c) remove the users of makeSvTabListBox and makeSvTreeListBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
@@ -1884,21 +1911,62 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             if (!sBorder.isEmpty())
                 nWinStyle |= WB_BORDER;
         }
-        //ListBox/SvTabListBox manages its own scrolling,
+        //ListBox/SvHeaderTabListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         if (pRealParent != pParent)
             nWinStyle |= WB_BORDER;
         if (m_bLegacy)
+        {
             xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
+            xWindowForPackingProps = xWindow;
+        }
         else
         {
-            VclPtrInstance<SvTabListBox> xBox(pRealParent, nWinStyle);
+            VclPtr<SvHeaderTabListBox> xBox;
+            bool bHeadersVisible = extractHeadersVisible(rMap);
+            if (bHeadersVisible)
+            {
+                VclPtr<VclVBox> xContainer = VclPtr<VclVBox>::Create(pRealParent);
+                OString containerid(id + "-container");
+                xContainer->SetHelpId(m_sHelpRoot + containerid);
+                m_aChildren.emplace_back(containerid, xContainer, true);
+
+                VclPtrInstance<HeaderBar> xHeader(xContainer, WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP | WB_3DLOOK);
+                OString headerid(id + "-header");
+                xHeader->SetHelpId(m_sHelpRoot + headerid);
+                m_aChildren.emplace_back(headerid, xHeader, true);
+
+                xBox = VclPtr<SvHeaderTabListBox>::Create(xContainer, nWinStyle);
+                xBox->InitHeaderBar(xHeader);
+                xContainer->set_expand(true);
+                xHeader->Show();
+                xContainer->Show();
+                xWindowForPackingProps = xContainer;
+            }
+            else
+            {
+                xBox = VclPtr<SvHeaderTabListBox>::Create(pRealParent, nWinStyle);
+                xWindowForPackingProps = xBox;
+            }
+            xWindow = xBox;
             xBox->SetNoAutoCurEntry(true);
             xBox->SetHighlightRange(); // select over the whole width
-            xWindow = xBox;
         }
         if (pRealParent != pParent)
-            cleanupWidgetOwnScrolling(pParent, xWindow, rMap);
+            cleanupWidgetOwnScrolling(pParent, xWindowForPackingProps, rMap);
+    }
+    else if (name == "GtkTreeViewColumn")
+    {
+        if (!m_bLegacy)
+        {
+            SvHeaderTabListBox* pTreeView = static_cast<SvHeaderTabListBox*>(pParent);
+            if (HeaderBar* pHeaderBar = pTreeView->GetHeaderBar())
+            {
+                OUString sTitle(extractTitle(rMap));
+                auto nItemId = pHeaderBar->GetItemCount() + 1;
+                pHeaderBar->InsertItem(nItemId, sTitle, 100);
+            }
+        }
     }
     else if (name == "GtkLabel")
     {
@@ -4081,7 +4149,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         rTarget.SelectEntryPos(nActiveId);
 }
 
-void VclBuilder::mungeModel(SvTabListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
+void VclBuilder::mungeModel(SvHeaderTabListBox& rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
 {
     for (auto const& entry : rStore.m_aEntries)
     {

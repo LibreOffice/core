@@ -39,6 +39,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fmtfield.hxx>
+#include <vcl/headbar.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/prgsbar.hxx>
@@ -1764,14 +1765,15 @@ class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::Tr
 private:
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
-    VclPtr<SvTabListBox> m_xTreeView;
+    VclPtr<SvHeaderTabListBox> m_xTreeView;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(ExpandingHdl, SvTreeListBox*, bool);
+    DECL_LINK(EndDragHdl, HeaderBar*, void);
 
 public:
-    SalInstanceTreeView(SvTabListBox* pTreeView, bool bTakeOwnership)
+    SalInstanceTreeView(SvHeaderTabListBox* pTreeView, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, bTakeOwnership)
         , m_xTreeView(pTreeView)
     {
@@ -1781,6 +1783,12 @@ public:
         m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
         const long aTabPositions[] = { 0 };
         m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
+        if (HeaderBar* pHeaderBar = m_xTreeView->GetHeaderBar())
+        {
+            //make the last entry fill available space
+            pHeaderBar->SetItemSize(pHeaderBar->GetItemId(pHeaderBar->GetItemCount() - 1 ), HEADERBAR_FULLSIZE);
+            pHeaderBar->SetEndDragHdl(LINK(this, SalInstanceTreeView, EndDragHdl));
+        }
     }
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
@@ -1789,6 +1797,11 @@ public:
         aTabPositions.push_back(0);
         aTabPositions.insert(aTabPositions.end(), rWidths.begin(), rWidths.end());
         m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
+        if (HeaderBar* pHeaderBar = m_xTreeView->GetHeaderBar())
+        {
+            for (size_t i = 0; i < rWidths.size(); ++i)
+                pHeaderBar->SetItemSize(pHeaderBar->GetItemId(i), rWidths[i]);
+        }
     }
 
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rStr, const OUString* pId,
@@ -2159,13 +2172,17 @@ public:
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
     }
 
-    SvTabListBox& getTreeView()
+    SvHeaderTabListBox& getTreeView()
     {
         return *m_xTreeView;
     }
 
     virtual ~SalInstanceTreeView() override
     {
+        if (HeaderBar* pHeaderBar = m_xTreeView->GetHeaderBar())
+        {
+            pHeaderBar->SetEndDragHdl(Link<HeaderBar*, void>());
+        }
         m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());
         m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
@@ -2185,6 +2202,15 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)
         return false;
     signal_row_activated();
     return false;
+}
+
+IMPL_LINK(SalInstanceTreeView, EndDragHdl, HeaderBar*, pHeaderBar, void)
+{
+    std::vector<long> aTabPositions;
+    aTabPositions.push_back(0);
+    for (int i = 0; i < pHeaderBar->GetItemCount() - 1; ++i)
+        aTabPositions.push_back(pHeaderBar->GetItemSize(pHeaderBar->GetItemId(i)));
+    m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
 }
 
 IMPL_LINK_NOARG(SalInstanceTreeView, ExpandingHdl, SvTreeListBox*, bool)
@@ -3292,7 +3318,7 @@ public:
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
     {
-        SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
+        SvHeaderTabListBox* pTreeView = m_xBuilder->get<SvHeaderTabListBox>(id);
         return pTreeView ? o3tl::make_unique<SalInstanceTreeView>(pTreeView, bTakeOwnership) : nullptr;
     }
 
