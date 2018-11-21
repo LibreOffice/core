@@ -504,7 +504,18 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         nTab = aLocalParam.nDestTab;
     }
 
-    ScEditableTester aTester( &rDoc, nTab, aLocalParam.nCol1,aLocalParam.nRow1,
+    // tdf#119804: If there is a header row/column, it won't be affected by
+    // sorting; so we can exlude it from the test.
+    SCROW nStartingRowToEdit = aLocalParam.nRow1;
+    SCROW nStartingColToEdit = aLocalParam.nCol1;
+    if ( aLocalParam.bHasHeader )
+    {
+        if ( aLocalParam.bByRow )
+            nStartingRowToEdit++;
+        else
+            nStartingColToEdit++;
+    }
+    ScEditableTester aTester( &rDoc, nTab, nStartingColToEdit,nStartingRowToEdit,
                                         aLocalParam.nCol2,aLocalParam.nRow2 );
     if (!aTester.IsEditable())
     {
