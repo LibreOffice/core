@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_8093df4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-11-21T09:41:49Z",
+      "side": 1,
+      "message": "That is an assumption, but it seems likely because Jc definitely overrides Jc80.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 29
+      },
+      "revId": "c4f901b32588428373d2458021b98f0af13668ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_6098eb69",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-11-21T09:41:49Z",
+      "side": 1,
+      "message": "that logically follows the first assumption.",
+      "range": {
+        "startLine": 15,
+        "startChar": 33,
+        "endLine": 16,
+        "endChar": 40
+      },
+      "revId": "c4f901b32588428373d2458021b98f0af13668ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_20a2f39b",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4444,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-11-21T09:41:49Z",
+      "side": 1,
+      "message": "I hope this is an appropriate use of the grabbag? [No, I see that it isn\u0027t because on export, I get unhandled property warnings.]",
+      "range": {
+        "startLine": 4444,
+        "startChar": 84,
+        "endLine": 4444,
+        "endChar": 102
+      },
+      "revId": "c4f901b32588428373d2458021b98f0af13668ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
