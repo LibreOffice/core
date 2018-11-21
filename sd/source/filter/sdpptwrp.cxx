@@ -74,7 +74,7 @@ SdPPTFilter::~SdPPTFilter()
 
 bool SdPPTFilter::Import()
 {
-    bool    bRet = false;
+    bool bRet = false;
     tools::SvRef<SotStorage> pStorage = new SotStorage( mrMedium.GetInStream(), false );
     if( !pStorage->GetError() )
     {
@@ -97,24 +97,18 @@ bool SdPPTFilter::Import()
                 mrMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
             else
             {
-#ifndef DISABLE_DYNLOADING
-                ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-                if ( pLibrary )
-                {
-                    ImportPPTPointer PPTImport = reinterpret_cast< ImportPPTPointer >( pLibrary->getFunctionSymbol( "ImportPPT" ) );
-                    if ( PPTImport )
-                        bRet = PPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
-
-                    if ( !bRet )
-                        mrMedium.SetError(SVSTREAM_WRONGVERSION);
-                    pLibrary->release(); //TODO: let it get unloaded?
-                    delete pLibrary;
-                }
+#ifdef DISABLE_DYNLOADING
+                ImportPPTPointer pPPTImport = ImportPPT;
 #else
-                bRet = ImportPPT( &mrDocument, *pDocStream, *pStorage, mrMedium );
+                ImportPPTPointer pPPTImport = reinterpret_cast< ImportPPTPointer >(
+                    SdFilter::GetLibrarySymbol(mrMedium.GetFilter()->GetUserData(), "ImportPPT"));
+#endif
+
+                if ( pPPTImport )
+                    bRet = pPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
+
                 if ( !bRet )
                     mrMedium.SetError(SVSTREAM_WRONGVERSION);
-#endif
             }
 
             delete pDocStream;
@@ -126,58 +120,50 @@ bool SdPPTFilter::Import()
 
 bool SdPPTFilter::Export()
 {
-#ifndef DISABLE_DYNLOADING
-    ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-#endif
-    bool        bRet = false;
+    bool bRet = false;
 
-#ifndef DISABLE_DYNLOADING
-    if( pLibrary )
-#endif
+    if( mxModel.is() )
     {
-        if( mxModel.is() )
-        {
-            tools::SvRef<SotStorage>    xStorRef = new SotStorage( mrMedium.GetOutStream(), false );
-#ifndef DISABLE_DYNLOADING
-            ExportPPTPointer PPTExport = reinterpret_cast<ExportPPTPointer>(pLibrary->getFunctionSymbol( "ExportPPT" ));
+        tools::SvRef<SotStorage> xStorRef = new SotStorage( mrMedium.GetOutStream(), false );
+
+#ifdef DISABLE_DYNLOADING
+        ExportPPTPointer PPTExport = ExportPPT;
 #else
-            ExportPPTPointer PPTExport = ExportPPT;
+        ExportPPTPointer PPTExport = reinterpret_cast< ExportPPTPointer >(
+            SdFilter::GetLibrarySymbol(mrMedium.GetFilter()->GetUserData(), "ExportPPT"));
 #endif
 
-            if( PPTExport && xStorRef.is() )
-            {
-                sal_uInt32          nCnvrtFlags = 0;
-                const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
-                if ( rFilterOptions.IsMath2MathType() )
-                    nCnvrtFlags |= OLE_STARMATH_2_MATHTYPE;
-                if ( rFilterOptions.IsWriter2WinWord() )
-                    nCnvrtFlags |= OLE_STARWRITER_2_WINWORD;
-                if ( rFilterOptions.IsCalc2Excel() )
-                    nCnvrtFlags |= OLE_STARCALC_2_EXCEL;
-                if ( rFilterOptions.IsImpress2PowerPoint() )
-                    nCnvrtFlags |= OLE_STARIMPRESS_2_POWERPOINT;
-                if ( rFilterOptions.IsEnablePPTPreview() )
-                    nCnvrtFlags |= 0x8000;
+        if( PPTExport && xStorRef.is() )
+        {
+            sal_uInt32          nCnvrtFlags = 0;
+            const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
+            if ( rFilterOptions.IsMath2MathType() )
+                nCnvrtFlags |= OLE_STARMATH_2_MATHTYPE;
+            if ( rFilterOptions.IsWriter2WinWord() )
+                nCnvrtFlags |= OLE_STARWRITER_2_WINWORD;
+            if ( rFilterOptions.IsCalc2Excel() )
+                nCnvrtFlags |= OLE_STARCALC_2_EXCEL;
+            if ( rFilterOptions.IsImpress2PowerPoint() )
+                nCnvrtFlags |= OLE_STARIMPRESS_2_POWERPOINT;
+            if ( rFilterOptions.IsEnablePPTPreview() )
+                nCnvrtFlags |= 0x8000;
 
-                mrDocument.SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
+            mrDocument.SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
 
-                CreateStatusIndicator();
+            CreateStatusIndicator();
 
-                //OUString sBaseURI( "BaseURI");
-                std::vector< PropertyValue > aProperties;
-                PropertyValue aProperty;
-                aProperty.Name = "BaseURI";
-                aProperty.Value <<= mrMedium.GetBaseURL( true );
-                aProperties.push_back( aProperty );
+            //OUString sBaseURI( "BaseURI");
+            std::vector< PropertyValue > aProperties;
+            PropertyValue aProperty;
+            aProperty.Name = "BaseURI";
+            aProperty.Value <<= mrMedium.GetBaseURL( true );
+            aProperties.push_back( aProperty );
 
-                bRet = PPTExport( aProperties, xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );
-                xStorRef->Commit();
-            }
+            bRet = PPTExport( aProperties, xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );
+            xStorRef->Commit();
         }
-#ifndef DISABLE_DYNLOADING
-        delete pLibrary;
-#endif
     }
+
     return bRet;
 }
 
@@ -186,20 +172,14 @@ void SdPPTFilter::PreSaveBasic()
     const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
     if( rFilterOptions.IsLoadPPointBasicStorage() )
     {
-#ifndef DISABLE_DYNLOADING
-        ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-        if( pLibrary )
-        {
-            SaveVBAPointer pSaveVBA= reinterpret_cast<SaveVBAPointer>(pLibrary->getFunctionSymbol( "SaveVBA" ));
-            if( pSaveVBA )
-            {
-                pSaveVBA( static_cast<SfxObjectShell&>(mrDocShell), pBas );
-            }
-            delete pLibrary;
-        }
+#ifdef DISABLE_DYNLOADING
+        SaveVBAPointer pSaveVBA= SaveVBA;
 #else
-        SaveVBA( (SfxObjectShell&) mrDocShell, pBas );
+        SaveVBAPointer pSaveVBA = reinterpret_cast< SaveVBAPointer >(
+            SdFilter::GetLibrarySymbol(mrMedium.GetFilter()->GetUserData(), "SaveVBA"));
 #endif
+        if( pSaveVBA )
+            pSaveVBA( static_cast<SfxObjectShell&>(mrDocShell), pBas );
     }
 }
 
