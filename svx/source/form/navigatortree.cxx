@@ -1044,9 +1044,9 @@ namespace svxform
 
             // remove from parent
             if (pCurrentParentUserData)
-                pCurrentParentUserData->GetChildList()->remove( pCurrentUserData );
+                pCurrentParentUserData->GetChildList()->removeNoDelete( pCurrentUserData );
             else
-                GetNavModel()->GetRootList()->remove( pCurrentUserData );
+                GetNavModel()->GetRootList()->removeNoDelete( pCurrentUserData );
 
             // remove from container
             sal_Int32 nIndex = getElementPos(xContainer, xCurrentChild);
