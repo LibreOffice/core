@@ -39,8 +39,6 @@ class SwContourCache;
 
 typedef std::vector< SwAnchoredObject* > SwAnchoredObjList;
 
-enum PAGESIDE { LEFT_SIDE, RIGHT_SIDE, DONTKNOW_SIDE };
-
 /** Contour-cache global variable, initialized/destroyed in txtinit.cxx
     and needed in txtfly.cxx by text wrapping.
   */
