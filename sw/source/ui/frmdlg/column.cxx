@@ -558,8 +558,8 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     m_xDistEd1->SetMetric(aMetric);
     m_xDistEd2->SetMetric(aMetric);
     //default spacing between cols = 0.5cm
-    m_xDistEd1->SetPrcntValue(50, FieldUnit::CM);
-    m_xDistEd2->SetPrcntValue(50, FieldUnit::CM);
+    m_xDistEd1->set_value(50, FieldUnit::CM);
+    m_xDistEd2->set_value(50, FieldUnit::CM);
 
     m_xColMgr.reset(new SwColMgr(*rSet));
     m_nCols = m_xColMgr->GetCount() ;
@@ -963,7 +963,7 @@ IMPL_LINK(SwColumnPage, GapModify, weld::MetricSpinButton&, rMetricField, void)
         if(nActValue > nMaxGap)
         {
             nActValue = nMaxGap;
-            m_xDistEd1->SetPrcntValue(m_xDistEd1->NormalizePercent(nMaxGap), FieldUnit::TWIP);
+            m_xDistEd1->set_value(m_xDistEd1->NormalizePercent(nMaxGap), FieldUnit::TWIP);
         }
         m_xColMgr->SetGutterWidth(static_cast<sal_uInt16>(nActValue));
         for(sal_uInt16 i = 0; i < m_nCols; i++)
@@ -1122,29 +1122,29 @@ void SwColumnPage::Update(const weld::MetricSpinButton* pInteractiveField)
         //fdo#87612 if we're interacting with this widget and the value will be the same
         //then leave it alone (i.e. don't change equivalent values of e.g. .8 -> 0.8)
         if (nNewValue != nCurrentValue || pInteractiveField != m_xEd1->get())
-            m_xEd1->SetPrcntValue(nNewValue, FieldUnit::TWIP);
+            m_xEd1->set_value(nNewValue, FieldUnit::TWIP);
 
         nCurrentValue = m_xDistEd1->NormalizePercent(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
         nNewValue = m_xDistEd1->NormalizePercent(m_nColDist[m_nFirstVis]);
         if (nNewValue != nCurrentValue || pInteractiveField != m_xDistEd1->get())
-            m_xDistEd1->SetPrcntValue(nNewValue, FieldUnit::TWIP);
+            m_xDistEd1->set_value(nNewValue, FieldUnit::TWIP);
 
         nCurrentValue = m_xEd2->NormalizePercent(m_xEd2->DenormalizePercent(m_xEd2->get_value(FieldUnit::TWIP)));
         nNewValue = m_xEd2->NormalizePercent(m_nColWidth[m_nFirstVis+1]);
         if (nNewValue != nCurrentValue || pInteractiveField != m_xEd2->get())
-            m_xEd2->SetPrcntValue(nNewValue, FieldUnit::TWIP);
+            m_xEd2->set_value(nNewValue, FieldUnit::TWIP);
 
         if(m_nCols >= 3)
         {
             nCurrentValue = m_xDistEd2->NormalizePercent(m_xDistEd2->DenormalizePercent(m_xDistEd2->get_value(FieldUnit::TWIP)));
             nNewValue = m_xDistEd2->NormalizePercent(m_nColDist[m_nFirstVis+1]);
             if (nNewValue != nCurrentValue || pInteractiveField != m_xDistEd2->get())
-                m_xDistEd2->SetPrcntValue(nNewValue, FieldUnit::TWIP);
+                m_xDistEd2->set_value(nNewValue, FieldUnit::TWIP);
 
             nCurrentValue = m_xEd3->NormalizePercent(m_xEd3->DenormalizePercent(m_xEd3->get_value(FieldUnit::TWIP)));
             nNewValue = m_xEd3->NormalizePercent(m_nColWidth[m_nFirstVis+2]);
             if (nNewValue != nCurrentValue || pInteractiveField != m_xEd3->get())
-                m_xEd3->SetPrcntValue(nNewValue, FieldUnit::TWIP);
+                m_xEd3->set_value(nNewValue, FieldUnit::TWIP);
         }
         else
         {
@@ -1280,7 +1280,7 @@ IMPL_LINK(SwColumnPage, SetDefaultsHdl, SvtValueSet *, pVS, void)
     {
         m_xCLNrEdt->set_value(nItem);
         m_xAutoWidthBox->set_active(true);
-        m_xDistEd1->SetPrcntValue(50, FieldUnit::CM);
+        m_xDistEd1->set_value(50, FieldUnit::CM);
         ColModify(nullptr);
     }
     else
@@ -1288,18 +1288,18 @@ IMPL_LINK(SwColumnPage, SetDefaultsHdl, SvtValueSet *, pVS, void)
         m_bLockUpdate = true;
         m_xCLNrEdt->set_value(2);
         m_xAutoWidthBox->set_active(false);
-        m_xDistEd1->SetPrcntValue(50, FieldUnit::CM);
+        m_xDistEd1->set_value(50, FieldUnit::CM);
         ColModify(nullptr);
         // now set the width ratio to 2 : 1 or 1 : 2 respectively
         const long nSmall = static_cast< long >(m_xColMgr->GetActualSize() / 3);
         if(nItem == 4)
         {
-            m_xEd2->SetPrcntValue(m_xEd2->NormalizePercent(nSmall), FieldUnit::TWIP);
+            m_xEd2->set_value(m_xEd2->NormalizePercent(nSmall), FieldUnit::TWIP);
             m_pModifiedField = m_xEd2.get();
         }
         else
         {
-            m_xEd1->SetPrcntValue(m_xEd1->NormalizePercent(nSmall), FieldUnit::TWIP);
+            m_xEd1->set_value(m_xEd1->NormalizePercent(nSmall), FieldUnit::TWIP);
             m_pModifiedField = m_xEd1.get();
         }
         m_bLockUpdate = false;
