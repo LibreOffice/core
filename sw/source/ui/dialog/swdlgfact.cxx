@@ -1008,11 +1008,11 @@ VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDi
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )
 {
-    if (nRegion == SfxStyleFamily::Page || nRegion == SfxStyleFamily::Pseudo || nRegion == SfxStyleFamily::Para)
+    if (nRegion != SfxStyleFamily::Frame)
     {
         return VclPtr<AbstractApplyTabController_Impl>::Create(o3tl::make_unique<SwTemplateDlgController>(pParent ? pParent->GetFrameWeld() : nullptr, rBase, nRegion, sPage, pActShell, bNew));
     }
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTemplateDlg>::Create(pParent, rBase, nRegion, sPage, pActShell, bNew);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTemplateDlg>::Create(pParent, rBase, nRegion, sPage, pActShell);
     return VclPtr<AbstractApplyTabDialog_Impl>::Create(pDlg);
 }
 
