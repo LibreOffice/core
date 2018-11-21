@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_36711de2",
+        "filename": "sc/source/ui/view/drawview.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-21T09:33:08Z",
+      "side": 1,
+      "message": "you need to also remove the declaration of the dtor here, not just the definition further down below",
+      "revId": "05557abae5b91b02b95dcc5a39274d2c2426d327",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
