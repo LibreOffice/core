@@ -5219,11 +5219,11 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
             m_nParaCnt = m_nParaCnt - std::min(m_nParaCnt, nTableBoxSize);
 
             // Jump to a table if needed
-            if( JUMPTO_TABLE == m_eJumpTo && m_xTable->GetSwTable() &&
+            if( JumpToMarks::Table == m_eJumpTo && m_xTable->GetSwTable() &&
                 m_xTable->GetSwTable()->GetFrameFormat()->GetName() == m_sJmpMark )
             {
                 m_bChkJumpMark = true;
-                m_eJumpTo = JUMPTO_NONE;
+                m_eJumpTo = JumpToMarks::NONE;
             }
 
             // If the import was canceled, don't call Show again here since
