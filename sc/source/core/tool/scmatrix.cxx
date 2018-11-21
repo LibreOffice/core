@@ -319,7 +319,7 @@ public:
     ScMatrixRef CompareMatrix( sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const;
 
     void GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) const;
-    void MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const;
+    void MergeDoubleArrayMultiply( std::vector<double>& rArray ) const;
 
     template<typename T>
     void ApplyOperation(T aOp, ScMatrixImpl& rMat);
@@ -2181,24 +2181,15 @@ void ScMatrixImpl::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZer
     aFunc.swap(rArray);
 }
 
-void ScMatrixImpl::MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const
+void ScMatrixImpl::MergeDoubleArrayMultiply( std::vector<double>& rArray ) const
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     size_t nSize = aSize.row*aSize.column;
     if (nSize != rArray.size())
         return;
 
-    switch (eOp)
-    {
-        case ScMatrix::Mul:
-        {
-            MergeDoubleArrayFunc<ArrayMul> aFunc(rArray);
-            maMat.walk(std::move(aFunc));
-        }
-        break;
-        default:
-            ;
-    }
+    MergeDoubleArrayFunc<ArrayMul> aFunc(rArray);
+    maMat.walk(std::move(aFunc));
 }
 
 namespace Op {
@@ -3289,9 +3280,9 @@ void ScMatrix::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) 
     pImpl->GetDoubleArray(rArray, bEmptyAsZero);
 }
 
-void ScMatrix::MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const
+void ScMatrix::MergeDoubleArrayMultiply( std::vector<double>& rArray ) const
 {
-    pImpl->MergeDoubleArray(rArray, eOp);
+    pImpl->MergeDoubleArrayMultiply(rArray);
 }
 
 namespace matop {

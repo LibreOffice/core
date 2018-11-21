@@ -282,12 +282,6 @@ reportdesign/source/ui/inc/ReportDefines.hxx:24
     enum rptui::DlgEdMode Test
 sax/source/fastparser/fastparser.cxx:80
     enum (anonymous namespace)::CallbackType INVALID
-sc/inc/scmatrix.hxx:130
-    enum ScMatrix::Op Div
-sc/inc/scmatrix.hxx:130
-    enum ScMatrix::Op Add
-sc/inc/scmatrix.hxx:130
-    enum ScMatrix::Op Sub
 sc/source/filter/excel/xiescher.cxx:460
     enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
