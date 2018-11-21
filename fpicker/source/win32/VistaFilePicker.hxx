@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker4.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
@@ -45,7 +45,7 @@ namespace vista{
 
 
 typedef ::cppu::WeakComponentImplHelper<
-                css::ui::dialogs::XFilePicker3,
+                css::ui::dialogs::XFilePicker4,
                 css::ui::dialogs::XFilePickerControlAccess,
                 css::ui::dialogs::XFilePreview,
                 css::ui::dialogs::XFolderPicker2,
@@ -103,7 +103,10 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  ) override;
 
     // XFilePicker2 functions
-    virtual css::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSelectedFiles() override;
+
+    // XFilePicker4 functions
+    virtual OUString  SAL_CALL getFilterExtension(const OUString& sExtension, sal_Bool bForOpen) override;
 
 
     // XFilterManager functions
