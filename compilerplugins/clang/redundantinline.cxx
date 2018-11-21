@@ -138,7 +138,7 @@ private:
 
     bool handleNonExternalLinkage(FunctionDecl const * decl) {
         if (decl->getLinkageInternal() >=
-#if CLANG_VERSION >= 40000
+#if CLANG_VERSION >= 50000
             ModuleLinkage
 #else
             ExternalLinkage
