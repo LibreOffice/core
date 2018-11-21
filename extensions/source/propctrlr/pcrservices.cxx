@@ -20,6 +20,7 @@
 
 #include "modulepcr.hxx"
 #include "pcrservices.hxx"
+#include <mutex>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -29,8 +30,8 @@ extern "C" {
 
 static void pcr_initializeModule()
 {
-    static bool s_bInit = false;
-    if (!s_bInit)
+    std::once_flag aInit;
+    std::call_once(aInit, [&]()
     {
         createRegistryInfo_OPropertyBrowserController();
         createRegistryInfo_FormController();
@@ -51,8 +52,8 @@ static void pcr_initializeModule()
         createRegistryInfo_StringRepresentation();
         createRegistryInfo_MasterDetailLinkDialog();
         createRegistryInfo_FormGeometryHandler();
-        s_bInit = true;
-    }
+        return true;
+    });
 }
 
 }

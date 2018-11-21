@@ -20,6 +20,7 @@
 #include <cppuhelper/factory.hxx>
 #include <flt_reghelper.hxx>
 #include "xmlservices.hxx"
+#include <mutex>
 
 using namespace ::dbaxml;
 using namespace ::com::sun::star::uno;
@@ -30,8 +31,8 @@ extern "C" {
 
 static void createRegistryInfo_dbaxml()
 {
-    static bool bInit = false;
-    if (!bInit)
+    static std::once_flag aInit;
+    std::call_once(aInit, [&]()
     {
         createRegistryInfo_DBTypeDetection();
         createRegistryInfo_ODBFilter();
@@ -39,8 +40,8 @@ static void createRegistryInfo_dbaxml()
         createRegistryInfo_OSettingsExport();
         createRegistryInfo_OFullExport();
         createRegistryInfo_DBContentLoader2();
-        bInit = true;
-    }
+        return true;
+    });
 }
 
 }

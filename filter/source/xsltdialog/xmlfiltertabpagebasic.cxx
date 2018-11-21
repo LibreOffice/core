@@ -34,10 +34,10 @@ XMLFilterTabPageBasic::XMLFilterTabPageBasic(weld::Widget* pPage)
 {
     m_xEDDescription->set_size_request(-1, m_xEDDescription->get_height_rows(4));
 
-    std::vector< application_info_impl* >& rInfos = getApplicationInfos();
+    std::vector< application_info_impl > const & rInfos = getApplicationInfos();
     for (auto const& info : rInfos)
     {
-        OUString aEntry( info->maDocumentUIName );
+        OUString aEntry( info.maDocumentUIName );
         m_xCBApplication->append_text( aEntry );
     }
 }
@@ -92,14 +92,14 @@ void XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
 
         if( !pInfo->maDocumentService.isEmpty() )
         {
-            std::vector< application_info_impl* >& rInfos = getApplicationInfos();
+            std::vector< application_info_impl > const & rInfos = getApplicationInfos();
             for (auto const& info : rInfos)
             {
-                if( pInfo->maDocumentService == info->maDocumentUIName )
+                if( pInfo->maDocumentService == info.maDocumentUIName )
                 {
-                    pInfo->maDocumentService = info->maDocumentService;
-                    pInfo->maExportService = info->maXMLExporter;
-                    pInfo->maImportService = info->maXMLImporter;
+                    pInfo->maDocumentService = info.maDocumentService;
+                    pInfo->maExportService = info.maXMLExporter;
+                    pInfo->maImportService = info.maXMLImporter;
                     break;
                 }
             }
