@@ -189,6 +189,11 @@ public:
     void SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
+enum class SwTableAutoFormatUpdateFlags { Char = 1, Box = 2 };
+namespace o3tl {
+    template<> struct typed_flags<SwTableAutoFormatUpdateFlags> : is_typed_flags<SwTableAutoFormatUpdateFlags, 0x03> {};
+};
+
 /*
 @remarks
 A table has a number of lines. These lines seem to correspond with rows, except in the case of
@@ -283,10 +288,9 @@ public:
     void SetName( const OUString& rNew ) { m_aName = rNew; nStrResId = USHRT_MAX; }
     const OUString& GetName() const { return m_aName; }
 
-    enum UpdateFlags { UPDATE_CHAR = 1, UPDATE_BOX = 2, UPDATE_ALL = 3 };
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
-                                UpdateFlags eFlags, SvNumberFormatter const * );
-    void UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet, UpdateFlags eFlags,
+                                SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter const * );
+    void UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet, SwTableAutoFormatUpdateFlags eFlags,
                         SvNumberFormatter* ) const ;
 
     void RestoreTableProperties(SwTable &table) const;

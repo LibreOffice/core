@@ -728,7 +728,7 @@ const SwBoxAutoFormat& SwTableAutoFormat::GetDefaultBoxFormat()
 
 void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
                                     const SfxItemSet& rSet,
-                                    UpdateFlags eFlags,
+                                    SwTableAutoFormatUpdateFlags eFlags,
                                     SvNumberFormatter const * pNFormatr)
 {
     OSL_ENSURE( nPos < 16, "wrong area" );
@@ -740,7 +740,7 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
         aBoxAutoFormat[ nPos ] = pFormat;
     }
 
-    if( UPDATE_CHAR & eFlags )
+    if( SwTableAutoFormatUpdateFlags::Char & eFlags )
     {
         pFormat->SetFont( rSet.Get( RES_CHRATR_FONT ) );
         pFormat->SetHeight( rSet.Get( RES_CHRATR_FONTSIZE ) );
@@ -762,7 +762,7 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
         pFormat->SetColor( rSet.Get( RES_CHRATR_COLOR ) );
         pFormat->SetAdjust( rSet.Get( RES_PARATR_ADJUST ) );
     }
-    if( UPDATE_BOX & eFlags )
+    if( SwTableAutoFormatUpdateFlags::Box & eFlags )
     {
         pFormat->SetBox( rSet.Get( RES_BOX ) );
 // FIXME - add attribute IDs for the diagonal line items
@@ -792,11 +792,11 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
 }
 
 void SwTableAutoFormat::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
-                                 UpdateFlags eFlags, SvNumberFormatter* pNFormatr) const
+                                 SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter* pNFormatr) const
 {
     const SwBoxAutoFormat& rChg = GetBoxFormat( nPos );
 
-    if( UPDATE_CHAR & eFlags )
+    if( SwTableAutoFormatUpdateFlags::Char & eFlags )
     {
         if( IsFont() )
         {
@@ -851,7 +851,7 @@ void SwTableAutoFormat::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
             rSet.Put( rChg.GetAdjust() );
     }
 
-    if( UPDATE_BOX & eFlags )
+    if( SwTableAutoFormatUpdateFlags::Box & eFlags )
     {
         if( IsFrame() )
         {

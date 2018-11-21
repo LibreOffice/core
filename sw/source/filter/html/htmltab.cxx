@@ -1482,7 +1482,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 pTableFormat->UpdateToSet(nPos,
                                           const_cast<SfxItemSet&>(static_cast<SfxItemSet const&>(
                                               pFrameFormat->GetAttrSet())),
-                                          SwTableAutoFormat::UPDATE_BOX,
+                                          SwTableAutoFormatUpdateFlags::Box,
                                           pFrameFormat->GetDoc()->GetNumberFormatter());
             }
         }
