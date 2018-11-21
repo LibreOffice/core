@@ -5,7 +5,7 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:78
 bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:79
     enum x86_64_reg_class X86_64_X87UP_CLASS
 chart2/source/inc/CharacterProperties.hxx:121
-    enum chart::CharacterProperties::(anonymous at /media/noel/disk2/libo6/chart2/source/inc/CharacterProperties.hxx:42:5) FAST_PROPERTY_ID_END_CHAR_PROP
+    enum chart::CharacterProperties::(anonymous at /home/noel/libo2/chart2/source/inc/CharacterProperties.hxx:42:5) FAST_PROPERTY_ID_END_CHAR_PROP
 chart2/source/inc/TitleHelper.hxx:48
     enum chart::TitleHelper::eTitleType NORMAL_TITLE_END
 chart2/source/view/inc/ShapeFactory.hxx:50
@@ -39,15 +39,15 @@ chart2/source/view/inc/ShapeFactory.hxx:63
 chart2/source/view/inc/ShapeFactory.hxx:64
     enum chart::SymbolEnum Symbol_VerticalBar
 configmgr/source/access.hxx:455
-    enum configmgr::Access::(anonymous at /media/noel/disk2/libo6/configmgr/source/access.hxx:453:5) IS_GROUP_MEMBER
+    enum configmgr::Access::(anonymous at /home/noel/libo2/configmgr/source/access.hxx:453:5) IS_GROUP_MEMBER
 configmgr/source/access.hxx:455
-    enum configmgr::Access::(anonymous at /media/noel/disk2/libo6/configmgr/source/access.hxx:453:5) IS_SET_MEMBER
+    enum configmgr::Access::(anonymous at /home/noel/libo2/configmgr/source/access.hxx:453:5) IS_SET_MEMBER
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /media/noel/disk2/libo6/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XS
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XS
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /media/noel/disk2/libo6/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XSI
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_OOR
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /media/noel/disk2/libo6/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_OOR
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XSI
 connectivity/source/drivers/evoab2/NConnection.hxx:41
     connectivity::evoab::SDBCAddress::sdbc_address_type Unknown
 cppcanvas/source/mtfrenderer/emfppen.cxx:53
@@ -82,6 +82,8 @@ dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:72
     enum dbaccess::OSingleSelectQueryComposer::EColumnType SelectColumns
 dbaccess/source/filter/xml/xmlEnums.hxx:140
     enum dbaxml::XMLQueryTable XML_TOK_UPDATE_TABLE
+dbaccess/source/ui/inc/sqlmessage.hxx:57
+    enum dbaui::MessBoxStyle DefaultCancel
 drawinglayer/source/tools/emfpbrush.hxx:37
     enum emfplushelper::EmfPlusHatchStyle HatchStyle05Percent
 drawinglayer/source/tools/emfpbrush.hxx:38
@@ -305,7 +307,11 @@ include/editeng/editeng.hxx:126
 include/editeng/editeng.hxx:127
     enum GetAttribsFlags PARAATTRIBS
 include/editeng/editstat.hxx:32
-    enum EEControlBits USEPARAATTRIBS
+    enum EEControlBits CRSRLEFTPARA
+include/editeng/editstat.hxx:49
+    enum EEControlBits AUTOCOMPLETE
+include/editeng/editstat.hxx:64
+    enum EVControlBits BIGSCROLL
 include/editeng/flditem.hxx:94
     enum SvxDateFormat System
 include/editeng/flditem.hxx:96
@@ -326,6 +332,8 @@ include/framework/framelistanalyzer.hxx:36
     enum FrameAnalyzerFlags Model
 include/framework/framelistanalyzer.hxx:41
     enum FrameAnalyzerFlags Zombie
+include/i18nutil/casefolding.hxx:39
+    enum MappingType CasedLetterMask
 include/i18nutil/casefolding.hxx:40
     enum MappingType NotValue
 include/LibreOfficeKit/LibreOfficeKitEnums.h:31
@@ -343,65 +351,67 @@ include/LibreOfficeKit/LibreOfficeKitEnums.h:630
 include/oox/core/filterbase.hxx:82
     enum oox::core::OoxmlVersion ISOIEC_29500_2008
 include/oox/ppt/animationspersist.hxx:37
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_TO
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_TO
 include/oox/ppt/animationspersist.hxx:38
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_FROM
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_USERDATA
 include/oox/ppt/animationspersist.hxx:38
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_USERDATA
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_ATTRIBUTENAME
 include/oox/ppt/animationspersist.hxx:38
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_BY
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_BY
 include/oox/ppt/animationspersist.hxx:38
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_ATTRIBUTENAME
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_FROM
 include/oox/ppt/animationspersist.hxx:39
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_DECELERATE
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_FILL
 include/oox/ppt/animationspersist.hxx:39
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_DURATION
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_ACCELERATION
 include/oox/ppt/animationspersist.hxx:39
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_AUTOREVERSE
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_AUTOREVERSE
 include/oox/ppt/animationspersist.hxx:39
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_ACCELERATION
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_DURATION
 include/oox/ppt/animationspersist.hxx:39
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_FILL
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_DECELERATE
 include/oox/ppt/animationspersist.hxx:40
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_REPEATDURATION
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_REPEATCOUNT
 include/oox/ppt/animationspersist.hxx:40
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_RESTART
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_RESTART
 include/oox/ppt/animationspersist.hxx:40
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_REPEATCOUNT
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_REPEATDURATION
 include/oox/ppt/animationspersist.hxx:41
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_COLORINTERPOLATION
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_DIRECTION
 include/oox/ppt/animationspersist.hxx:41
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_DIRECTION
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_CALCMODE
 include/oox/ppt/animationspersist.hxx:41
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_CALCMODE
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_COLORINTERPOLATION
 include/oox/ppt/animationspersist.hxx:41
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_TRANSFORMTYPE
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_TRANSFORMTYPE
 include/oox/ppt/animationspersist.hxx:42
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_PATH
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_PATH
 include/oox/ppt/animationspersist.hxx:43
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_ITERATEINTERVAL
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_ITERATETYPE
 include/oox/ppt/animationspersist.hxx:43
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_ITERATETYPE
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_ITERATEINTERVAL
 include/oox/ppt/animationspersist.hxx:44
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_COMMAND
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_PARAMETER
 include/oox/ppt/animationspersist.hxx:44
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_SUBITEM
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_SUBITEM
 include/oox/ppt/animationspersist.hxx:44
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_PARAMETER
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_COMMAND
 include/oox/ppt/animationspersist.hxx:44
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_TARGET
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_TARGET
 include/oox/ppt/animationspersist.hxx:45
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_VALUES
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_VALUES
 include/oox/ppt/animationspersist.hxx:45
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_KEYTIMES
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_DISPLAY
 include/oox/ppt/animationspersist.hxx:45
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_FORMULA
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_KEYTIMES
 include/oox/ppt/animationspersist.hxx:45
-    enum oox::ppt::(anonymous at /media/noel/disk2/libo6/include/oox/ppt/animationspersist.hxx:36:5) NP_DISPLAY
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_FORMULA
 include/sfx2/objsh.hxx:120
     enum SfxObjectShellFlags DONTCLOSE
 include/sfx2/objsh.hxx:121
     enum SfxObjectShellFlags NODOCINFO
+include/sfx2/viewsh.hxx:101
+    enum SfxViewShellFlags NO_SHOW
 include/store/types.h:65
     enum storeAccessMode ReadCreate
 include/svl/ctloptions.hxx:64
@@ -441,9 +451,9 @@ include/svl/languageoptions.hxx:74
 include/svl/lockfilecommon.hxx:34
     enum LockFileComponent OOOUSERNAME
 include/svl/lockfilecommon.hxx:34
-    enum LockFileComponent SYSUSERNAME
-include/svl/lockfilecommon.hxx:34
     enum LockFileComponent EDITTIME
+include/svl/lockfilecommon.hxx:34
+    enum LockFileComponent SYSUSERNAME
 include/svl/lockfilecommon.hxx:34
     enum LockFileComponent LOCALHOST
 include/svl/poolitem.hxx:89
@@ -470,6 +480,12 @@ include/svtools/headbar.hxx:189
     enum HeaderBarItemBits BOTTOM
 include/svtools/headbar.hxx:191
     enum HeaderBarItemBits RIGHTIMAGE
+include/svtools/ivctrl.hxx:43
+    enum SvxIconViewFlags CURSORED
+include/svtools/ivctrl.hxx:45
+    enum SvxIconViewFlags DROP_TARGET
+include/svtools/ivctrl.hxx:46
+    enum SvxIconViewFlags BLOCK_EMPHASIS
 include/svtools/ruler.hxx:506
     enum RulerBorderStyle Snap
 include/svtools/ruler.hxx:507
@@ -482,6 +498,10 @@ include/svx/EnhancedCustomShapeGeometry.hxx:47
     enum SvxMSDffHandleFlags MIRRORED_Y
 include/svx/EnhancedCustomShapeGeometry.hxx:50
     enum SvxMSDffHandleFlags MAP
+include/svx/EnhancedCustomShapeGeometry.hxx:56
+    enum SvxMSDffHandleFlags CENTER_X_IS_SPECIAL
+include/svx/EnhancedCustomShapeGeometry.hxx:57
+    enum SvxMSDffHandleFlags CENTER_Y_IS_SPECIAL
 include/svx/flagsdef.hxx:111
     enum TabulatorDisableFlags TypeRight
 include/svx/flagsdef.hxx:112
@@ -508,6 +528,8 @@ include/svx/langbox.hxx:45
     enum SvxLanguageListFlags HYPH_USED
 include/svx/langbox.hxx:46
     enum SvxLanguageListFlags THES_USED
+include/svx/langbox.hxx:47
+    enum SvxLanguageListFlags ALSO_PRIMARY_ONLY
 include/svx/ruler.hxx:60
     enum SvxRulerDragFlags OBJECT_LEFT_INDENT_ONLY
 include/svx/sdtakitm.hxx:31
@@ -520,6 +542,12 @@ include/svx/svdmrkv.hxx:42
     enum SdrSearchOptions WITHTEXT
 include/svx/svdmrkv.hxx:43
     enum SdrSearchOptions TESTTEXTAREA
+include/svx/svdmrkv.hxx:44
+    enum SdrSearchOptions BACKWARD
+include/svx/svdmrkv.hxx:47
+    enum SdrSearchOptions PASS3NEAREST
+include/svx/svdograf.hxx:52
+    enum SdrGrafObjTransformsAttrs ROTATE
 include/svx/swframeposstrings.hxx:78
     enum SvxSwFramePosString::StringId STR_MAX
 include/svx/swframetypes.hxx:41
@@ -530,6 +558,8 @@ include/tools/inetmsg.hxx:70
     enum InetMessageMime NUMHDR
 include/tools/poly.hxx:34
     enum PolyOptimizeFlags OPEN
+include/tools/poly.hxx:37
+    enum PolyOptimizeFlags REDUCE
 include/unotools/fontcfg.hxx:51
     enum ImplFontAttrs Default
 include/unotools/fontcfg.hxx:52
@@ -560,9 +590,9 @@ include/unotools/fontdefs.hxx:71
     enum DefaultFontType LATIN_FIXED
 include/unotools/fontdefs.hxx:81
     enum DefaultFontType CTL_DISPLAY
-include/vcl/bitmap.hxx:64
+include/vcl/bitmap.hxx:65
     enum BmpDitherFlags Matrix
-include/vcl/bitmap.hxx:66
+include/vcl/bitmap.hxx:67
     enum BmpDitherFlags Floyd16
 include/vcl/decoview.hxx:87
     enum DrawButtonFlags NoFill
@@ -876,11 +906,15 @@ include/vcl/keycod.hxx:32
     enum KeyFuncType REDO
 include/vcl/keycod.hxx:32
     enum KeyFuncType REPEAT
-include/vcl/menu.hxx:74
-    enum PopupMenuFlags ExecuteUp
+include/vcl/keycodes.hxx:173
+    enum ModKeyFlags Mod1Msk
+include/vcl/keycodes.hxx:174
+    enum ModKeyFlags Mod2Msk
 include/vcl/menu.hxx:75
+    enum PopupMenuFlags ExecuteUp
+include/vcl/menu.hxx:76
     enum PopupMenuFlags ExecuteLeft
-include/vcl/menu.hxx:83
+include/vcl/menu.hxx:84
     enum PopupMenuFlags NoHorzPlacement
 include/vcl/outdev.hxx:142
     enum SalLayoutFlags EnableLigatures
@@ -900,6 +934,10 @@ include/vcl/outdev.hxx:230
     enum DrawModeFlags GhostedLine
 include/vcl/outdev.hxx:232
     enum DrawModeFlags GhostedText
+include/vcl/outdev.hxx:233
+    enum DrawModeFlags GhostedBitmap
+include/vcl/outdev.hxx:234
+    enum DrawModeFlags GhostedGradient
 include/vcl/pdfwriter.hxx:110
     enum vcl::PDFWriter::PDFVersion PDF_1_3
 include/vcl/pdfwriter.hxx:110
@@ -943,19 +981,19 @@ include/vcl/pdfwriter.hxx:171
 include/vcl/pdfwriter.hxx:173
     enum vcl::PDFWriter::StructAttributeValue Normal
 include/vcl/pdfwriter.hxx:177
-    enum vcl::PDFWriter::StructAttributeValue LowerAlpha
+    enum vcl::PDFWriter::StructAttributeValue UpperRoman
+include/vcl/pdfwriter.hxx:177
+    enum vcl::PDFWriter::StructAttributeValue Square
 include/vcl/pdfwriter.hxx:177
     enum vcl::PDFWriter::StructAttributeValue Circle
 include/vcl/pdfwriter.hxx:177
     enum vcl::PDFWriter::StructAttributeValue Disc
 include/vcl/pdfwriter.hxx:177
-    enum vcl::PDFWriter::StructAttributeValue Square
+    enum vcl::PDFWriter::StructAttributeValue LowerAlpha
 include/vcl/pdfwriter.hxx:177
     enum vcl::PDFWriter::StructAttributeValue UpperAlpha
 include/vcl/pdfwriter.hxx:177
     enum vcl::PDFWriter::StructAttributeValue LowerRoman
-include/vcl/pdfwriter.hxx:177
-    enum vcl::PDFWriter::StructAttributeValue UpperRoman
 include/vcl/pdfwriter.hxx:177
     enum vcl::PDFWriter::StructAttributeValue Decimal
 include/vcl/prntypes.hxx:38
@@ -1034,6 +1072,8 @@ include/vcl/salctype.hxx:41
     enum ConvertDataFormat PDF
 include/vcl/splitwin.hxx:37
     enum SplitWindowItemFlags Invisible
+include/vcl/treelistentry.hxx:38
+    enum SvTLEntryFlags IN_USE
 include/vcl/vclenum.hxx:37
     enum MenuItemBits POPUPSELECT
 include/vcl/vclenum.hxx:143
@@ -1066,8 +1106,16 @@ include/vcl/window.hxx:303
     enum StartTrackingFlags MouseButtonDown
 include/vcl/window.hxx:304
     enum StartTrackingFlags FocusCancel
+include/vcl/window.hxx:373
+    enum DrawFlags NoBorder
+include/vcl/window.hxx:375
+    enum DrawFlags NoDisable
 include/vcl/window.hxx:376
     enum DrawFlags NoMnemonic
+include/vcl/window.hxx:377
+    enum DrawFlags NoSelection
+include/vcl/window.hxx:378
+    enum DrawFlags NoBackground
 include/vcl/wrkwin.hxx:37
     enum PresentationFlags NoFullScreen
 include/vcl/wrkwin.hxx:38
@@ -1078,14 +1126,18 @@ include/xmloff/shapeexport.hxx:54
     enum XMLShapeExportFlags HEIGHT
 include/xmloff/xmlexppr.hxx:35
     enum SvXmlExportFlags DEFAULTS
+include/xmloff/xmlexppr.hxx:36
+    enum SvXmlExportFlags DEEP
 include/xmloff/xmlexppr.hxx:38
     enum SvXmlExportFlags EMPTY
 include/xmloff/xmlimp.hxx:108
     enum SvXMLImportFlags EMBEDDED
 o3tl/qa/test-enumarray.cxx:30
-    enum MyEnum TWO
-o3tl/qa/test-enumarray.cxx:30
     enum MyEnum ONE
+o3tl/qa/test-enumarray.cxx:30
+    enum MyEnum TWO
+o3tl/qa/test-typed_flags.cxx:19
+    enum ConfigurationChangedHint TWO
 oox/source/dump/dffdumper.cxx:157
     enum oox::dump::(anonymous namespace)::PropType PROPTYPE_COLORARRAY
 oox/source/dump/dffdumper.cxx:157
@@ -1114,6 +1166,8 @@ sc/inc/token.hxx:213
     enum ScTableRefToken::Item HEADERS_DATA
 sc/inc/token.hxx:214
     enum ScTableRefToken::Item DATA_TOTALS
+sc/inc/types.hxx:38
+    enum ScMatValType NonvalueMask
 sc/inc/types.hxx:56
     enum ScFormulaVectorState FormulaVectorDisabledNotInSoftwareSubset
 sc/inc/types.hxx:123
@@ -1124,6 +1178,8 @@ sc/source/filter/inc/unitconverter.hxx:44
     enum oox::xls::Unit UNIT_REFDEVY
 sc/source/filter/lotus/lotread.cxx:41
     enum STATE S_WK1
+sc/source/filter/oox/formulabase.cxx:63
+    enum FuncFlags BIFFIMPORTONLY
 sc/source/ui/inc/undobase.hxx:135
     enum ScMoveUndoMode SC_UNDO_REFFIRST
 sc/source/ui/inc/viewdata.hxx:43
@@ -1171,11 +1227,11 @@ scaddins/source/pricing/pricing.hxx:55
 sd/source/ui/slidesorter/cache/SlsRequestPriorityClass.hxx:40
     enum sd::slidesorter::cache::RequestPriorityClass MAX_CLASS
 slideshow/source/engine/shapes/viewshape.hxx:279
-    enum slideshow::internal::ViewShape::(anonymous at /media/noel/disk2/libo6/slideshow/source/engine/shapes/viewshape.hxx:279:13) MAX_RENDER_CACHE_ENTRIES
+    enum slideshow::internal::ViewShape::(anonymous at /home/noel/libo2/slideshow/source/engine/shapes/viewshape.hxx:279:13) MAX_RENDER_CACHE_ENTRIES
 slideshow/source/engine/slideview.cxx:249
-    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(anonymous at /media/noel/disk2/libo6/slideshow/source/engine/slideview.cxx:249:5) SPRITE_ULLAGE
+    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(anonymous at /home/noel/libo2/slideshow/source/engine/slideview.cxx:249:5) SPRITE_ULLAGE
 slideshow/source/engine/slideview.cxx:729
-    enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at /media/noel/disk2/libo6/slideshow/source/engine/slideview.cxx:729:5) LAYER_ULLAGE
+    enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at /home/noel/libo2/slideshow/source/engine/slideview.cxx:729:5) LAYER_ULLAGE
 slideshow/source/inc/doctreenode.hxx:52
     enum slideshow::internal::DocTreeNode::NodeType Invalid
 soltools/cpp/cpp.h:42
@@ -1238,7 +1294,7 @@ svl/source/numbers/zformat.cxx:385
     enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM18
 svl/source/numbers/zformat.cxx:386
     enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM19
-svtools/source/contnr/fileview.cxx:109
+svtools/source/contnr/fileview.cxx:110
     enum FileViewFlags SHOW_ONLYTITLE
 svx/inc/galbrws2.hxx:53
     enum GalleryItemFlags ThemeName
@@ -1252,6 +1308,8 @@ svx/source/inc/docrecovery.hxx:93
     enum EDocStates Incomplete
 svx/source/inc/docrecovery.hxx:95
     enum EDocStates Succeeded
+sw/inc/accmap.hxx:75
+    enum AccessibleStates OPAQUE
 sw/inc/dbmgr.hxx:485
     enum sw::DBConnURIType MSJET
 sw/inc/dbmgr.hxx:486
@@ -1268,6 +1326,8 @@ sw/inc/docufld.hxx:114
     enum SwExtUserSubType EU_APARTMENT
 sw/inc/IDocumentRedlineAccess.hxx:57
     enum RedlineFlags IgnoreDeleteRedlines
+sw/inc/ndtyp.hxx:42
+    enum SwNodeType ContentMask
 sw/inc/poolfmt.hxx:116
     enum RES_POOL_CHRFMT_TYPE RES_POOLCHR_LABEL
 sw/inc/poolfmt.hxx:117
@@ -1382,6 +1442,8 @@ sw/inc/poolfmt.hxx:422
     enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_DOC_TITEL
 sw/inc/reffld.hxx:38
     enum REFERENCESUBTYPE REF_OUTLINE
+sw/inc/tblenum.hxx:37
+    enum TableChgWidthHeightType InsertDeleteMode
 sw/inc/undobj.hxx:134
     enum DelContentType Fly
 sw/inc/undobj.hxx:135
@@ -1407,13 +1469,15 @@ sw/source/core/inc/SwXMLBlockImport.hxx:108
 sw/source/core/text/pormulti.hxx:50
     enum RubyPosition RIGHT
 sw/source/core/unocore/unosett.cxx:1578
-    enum (anonymous at /media/noel/disk2/libo6/sw/source/core/unocore/unosett.cxx:1577:5) NotInChapterFirst
+    enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) NotInChapterFirst
 sw/source/core/unocore/unosett.cxx:1579
-    enum (anonymous at /media/noel/disk2/libo6/sw/source/core/unocore/unosett.cxx:1577:5) NotInChapterLast
+    enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) NotInChapterLast
 sw/source/core/unocore/unosett.cxx:1580
-    enum (anonymous at /media/noel/disk2/libo6/sw/source/core/unocore/unosett.cxx:1577:5) InChapterFirst
+    enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) InChapterFirst
 sw/source/core/unocore/unosett.cxx:1581
-    enum (anonymous at /media/noel/disk2/libo6/sw/source/core/unocore/unosett.cxx:1577:5) InChapterLast
+    enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) InChapterLast
+sw/source/filter/html/css1atr.cxx:114
+    enum Css1FrameSize VarHeight
 sw/source/filter/html/css1atr.cxx:117
     enum Css1FrameSize AnyHeight
 sw/source/filter/ww8/ww8scan.hxx:604
@@ -1426,14 +1490,22 @@ sw/source/uibase/inc/envimg.hxx:33
     enum SwEnvAlign ENV_VER_LEFT
 sw/source/uibase/inc/envimg.hxx:34
     enum SwEnvAlign ENV_VER_CNTR
+sw/source/uibase/inc/numberingtypelistbox.hxx:32
+    enum SwInsertNumTypes PageStyleNumbering
+sw/source/uibase/inc/numberingtypelistbox.hxx:33
+    enum SwInsertNumTypes Bitmap
+sw/source/uibase/inc/numberingtypelistbox.hxx:34
+    enum SwInsertNumTypes Bullet
 tools/source/generic/poly.cxx:1122
-    enum (anonymous at /media/noel/disk2/libo6/tools/source/generic/poly.cxx:1122:5) maxRecursionDepth
+    enum (anonymous at /home/noel/libo2/tools/source/generic/poly.cxx:1122:5) maxRecursionDepth
 ucbhelper/source/client/proxydecider.cxx:119
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Automatic
 uui/source/logindlg.hxx:29
     enum LoginFlags NoUsername
 uui/source/logindlg.hxx:30
     enum LoginFlags NoPassword
+vcl/inc/fontsubset.hxx:41
+    enum FontType ANY_TYPE1
 vcl/inc/salptype.hxx:45
     enum SalPrinterError Abort
 vcl/source/gdi/CommonSalLayout.cxx:128

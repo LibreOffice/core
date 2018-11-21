@@ -188,12 +188,21 @@ walk_up:
     }
     else if (const CXXMemberCallExpr * memberCall = dyn_cast<CXXMemberCallExpr>(parent))
     {
-        //memberCall->getImplicitObjectArgument()->dump();
-        //child->dump();
         // happens a lot with o3tl::typed_flags
         if (*memberCall->child_begin() == child)
-            goto walk_up;
-        bWrite = true;
+        {
+            if (auto conversionDecl = dyn_cast<CXXConversionDecl>(memberCall->getMethodDecl()))
+            {
+                if (conversionDecl->getConversionType()->isSpecificBuiltinType(clang::BuiltinType::Bool))
+                    bRead = true;
+                else
+                    goto walk_up;
+            }
+            else
+                goto walk_up;
+        }
+        else
+            bWrite = true;
     }
     else if (isa<CallExpr>(parent) || isa<InitListExpr>(parent) || isa<ArraySubscriptExpr>(parent)
              || isa<ReturnStmt>(parent) || isa<DeclStmt>(parent)

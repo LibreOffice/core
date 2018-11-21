@@ -205,6 +205,9 @@ writeonlySet = set()
 for d in writeSet:
     if d in readSet:
         continue
+    # can happen with stuff in workdir or external
+    if d not in definitionSet:
+        continue
     srcLoc = definitionToSourceLocationMap[d];
     if (is_ignore(srcLoc)):
         continue
@@ -213,6 +216,9 @@ for d in writeSet:
 readonlySet = set()
 for d in readSet:
     if d in writeSet:
+        continue
+    # can happen with stuff in workdir or external
+    if d not in definitionSet:
         continue
     srcLoc = definitionToSourceLocationMap[d];
     if (is_ignore(srcLoc)):

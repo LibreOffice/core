@@ -1,3 +1,23 @@
+canvas/source/cairo/cairo_canvashelper.hxx:216
+    enum cairocanvas::CanvasHelper::ColorType IGNORE_COLOR
+canvas/source/cairo/cairo_canvashelper.hxx:216
+    enum cairocanvas::CanvasHelper::ColorType TEXT_COLOR
+canvas/source/cairo/cairo_canvashelper.hxx:216
+    enum cairocanvas::CanvasHelper::ColorType LINE_COLOR
+canvas/source/cairo/cairo_canvashelper.hxx:216
+    enum cairocanvas::CanvasHelper::ColorType FILL_COLOR
+cui/source/inc/hldoctp.hxx:54
+    enum SvxHyperlinkDocTp::EPathType Type_Unknown
+cui/source/inc/hldoctp.hxx:55
+    enum SvxHyperlinkDocTp::EPathType Type_File
+cui/source/inc/hldoctp.hxx:56
+    enum SvxHyperlinkDocTp::EPathType Type_ExistsDir
+cui/source/inc/hldoctp.hxx:56
+    enum SvxHyperlinkDocTp::EPathType Type_Dir
+dbaccess/source/core/api/query.hxx:66
+    enum dbaccess::OQuery::AGGREGATE_ACTION FLUSHING
+dbaccess/source/core/inc/querycontainer.hxx:72
+    enum dbaccess::OQueryContainer::AGGREGATE_ACTION FLUSHING
 drawinglayer/source/tools/emfpbrush.hxx:32
     enum emfplushelper::EmfPlusHatchStyle HatchStyleVertical
 drawinglayer/source/tools/emfpbrush.hxx:33
@@ -80,10 +100,58 @@ drawinglayer/source/tools/emfpbrush.hxx:83
     enum emfplushelper::EmfPlusHatchStyle HatchStyleSolidDiamond
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeUnknown
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:28
+    enum BrushStyle BRUSH_NULL
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:28
+    enum BrushStyle BRUSH_HORZ
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:28
+    enum BrushStyle BRUSH_VERT
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:28
+    enum BrushStyle BRUSH_SOLID
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:29
+    enum BrushStyle BRUSH_CROSS
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:29
+    enum BrushStyle BRUSH_DIAGCROSS
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:29
+    enum BrushStyle BRUSH_DOWNDIAG
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:29
+    enum BrushStyle BRUSH_UPDIAG
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:30
+    enum BrushStyle BRUSH_75
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:30
+    enum BrushStyle BRUSH_25
+filter/source/graphicfilter/idxf/dxf2mtf.hxx:30
+    enum BrushStyle BRUSH_50
+filter/source/graphicfilter/ipict/ipict.cxx:71
+    enum PictReaderInternal::Pattern::BrushStyle BRUSH_NULL
+filter/source/msfilter/eschesdo.hxx:29
+    enum ImplEESdrPageType NORMAL
+filter/source/msfilter/eschesdo.hxx:29
+    enum ImplEESdrPageType UNDEFINED
+filter/source/msfilter/eschesdo.hxx:29
+    enum ImplEESdrPageType NOTICE
+filter/source/msfilter/eschesdo.hxx:29
+    enum ImplEESdrPageType MASTER
+include/canvas/spriteredrawmanager.hxx:145
+    enum canvas::SpriteRedrawManager::SpriteChangeRecord::ChangeType none
 include/connectivity/dbtools.hxx:822
     enum connectivity::dbase::DBFType dBaseIVMemo
+include/desktop/exithelper.h:25
+    enum EExitCodes EXITHELPER_NO_ERROR
+include/desktop/exithelper.h:25
+    int EXITHELPER_NO_ERROR
+include/desktop/exithelper.h:27
+    int EXITHELPER_SECOND_OFFICE
+include/desktop/exithelper.h:27
+    enum EExitCodes EXITHELPER_SECOND_OFFICE
+include/desktop/exithelper.h:29
+    int EXITHELPER_FATAL_ERROR
 include/editeng/borderline.hxx:128
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
+include/editeng/editdata.hxx:41
+    enum EESpellState LanguageNotInstalled
+include/formula/formula.hxx:52
+    enum formula::FormulaDlgMode FORMULA_FORMDLG_ARGS
 include/i18nutil/transliteration.hxx:45
     enum TransliterationFlags NumToTextLower_zh_CN
 include/i18nutil/transliteration.hxx:47
@@ -108,18 +176,238 @@ include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
 include/oox/ole/axfontdata.hxx:40
     enum AxFontFlags AutoColor
+include/oox/ppt/animationspersist.hxx:43
+    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_ENDSYNC
+include/svx/nbdtmg.hxx:40
+    enum svx::sidebar::NBType Bullets
+include/svx/nbdtmg.hxx:40
+    enum svx::sidebar::NBType GraphicBullets
+include/svx/xenum.hxx:27
+    enum XBitmapType Import
+include/svx/xenum.hxx:27
+    enum XBitmapType N8x8
 include/unotools/eventcfg.hxx:29
     enum GlobalEventId STARTAPP
 include/unotools/eventcfg.hxx:30
     enum GlobalEventId CLOSEAPP
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::beans::XPropertySet, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::sdb::XSingleSelectQueryComposer, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::sdbc::XStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::sdbc::XPreparedStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::uno::XInterface, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::embed::XStorage, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+include/vcl/keycod.hxx:29
+    enum KeyFuncType OPEN
+include/vcl/keycod.hxx:29
+    enum KeyFuncType SAVE
+include/vcl/keycod.hxx:30
+    enum KeyFuncType SAVEAS
+include/vcl/keycod.hxx:30
+    enum KeyFuncType CLOSE
+include/vcl/keycod.hxx:30
+    enum KeyFuncType PRINT
+include/vcl/keycod.hxx:30
+    enum KeyFuncType QUIT
+include/vcl/keycod.hxx:32
+    enum KeyFuncType FIND
+include/vcl/keycod.hxx:33
+    enum KeyFuncType PROPERTIES
+include/vcl/keycod.hxx:33
+    enum KeyFuncType FINDBACKWARD
+include/vcl/pdfwriter.hxx:201
+    enum vcl::PDFWriter::WidgetState Up
+include/vcl/pdfwriter.hxx:201
+    enum vcl::PDFWriter::WidgetState Down
 include/vcl/syswin.hxx:54
     enum WindowStateState FullScreen
+include/vcl/vclenum.hxx:191
+    enum FontAutoHint DontKnow
+include/vcl/vclenum.hxx:191
+    enum FontAutoHint Yes
+include/vcl/vclenum.hxx:191
+    enum FontAutoHint No
+include/vcl/vclenum.hxx:193
+    enum FontHinting DontKnow
+include/vcl/vclenum.hxx:193
+    enum FontHinting No
+include/vcl/vclenum.hxx:193
+    enum FontHinting Yes
+include/vcl/vclenum.hxx:195
+    enum FontHintStyle Slight
+include/vcl/vclenum.hxx:195
+    enum FontHintStyle Medium
+include/vcl/vclenum.hxx:195
+    enum FontHintStyle Full
+l10ntools/inc/export.hxx:63
+    enum IdLevel Identifier
+l10ntools/inc/export.hxx:63
+    enum IdLevel Null
+l10ntools/inc/export.hxx:63
+    enum IdLevel Text
+l10ntools/inc/export.hxx:85
+    enum ExportListType Filter
+l10ntools/inc/export.hxx:85
+    enum ExportListType String
+l10ntools/inc/export.hxx:85
+    enum ExportListType Item
+l10ntools/inc/export.hxx:85
+    enum ExportListType Paired
+l10ntools/inc/export.hxx:89
+    enum StringType QuickHelpText
+l10ntools/inc/export.hxx:89
+    enum StringType Text
+l10ntools/inc/export.hxx:89
+    enum StringType Title
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
-    enum (anonymous at /media/noel/disk2/libo6/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
+    enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
 libreofficekit/source/gtk/lokdocview.cxx:287
-    enum (anonymous at /media/noel/disk2/libo6/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
+    enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
+linguistic/source/defs.hxx:85
+    enum LinguDispatcher::DspType DSP_GRAMMAR
+linguistic/source/defs.hxx:85
+    enum LinguDispatcher::DspType DSP_THES
+linguistic/source/defs.hxx:85
+    enum LinguDispatcher::DspType DSP_HYPH
+linguistic/source/defs.hxx:85
+    enum LinguDispatcher::DspType DSP_SPELL
+reportdesign/source/ui/inc/ReportDefines.hxx:24
+    enum rptui::DlgEdMode Test
+sax/source/fastparser/fastparser.cxx:80
+    enum (anonymous namespace)::CallbackType INVALID
+sc/inc/filter.hxx:43
+    enum ExportFormatLotus ExpWK4
+sc/inc/filter.hxx:43
+    enum ExportFormatLotus ExpWK1
+sc/inc/filter.hxx:43
+    enum ExportFormatLotus ExpWK3
+sc/inc/filter.hxx:44
+    enum ExportFormatExcel ExpBiff4W
+sc/inc/filter.hxx:44
+    enum ExportFormatExcel ExpBiff4
+sc/inc/filter.hxx:44
+    enum ExportFormatExcel ExpBiff3
+sc/inc/filter.hxx:44
+    enum ExportFormatExcel ExpBiff2
+sc/inc/filter.hxx:44
+    enum ExportFormatExcel Exp2007Xml
+sc/inc/scmatrix.hxx:130
+    enum ScMatrix::Op Div
+sc/inc/scmatrix.hxx:130
+    enum ScMatrix::Op Add
+sc/inc/scmatrix.hxx:130
+    enum ScMatrix::Op Sub
+sc/source/core/inc/doubleref.hxx:41
+    enum ScDBRangeBase::RefType EXTERNAL
+sc/source/core/inc/doubleref.hxx:41
+    enum ScDBRangeBase::RefType INTERNAL
+sc/source/filter/excel/xiescher.cxx:460
+    enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
+sc/source/filter/inc/decl.h:24
+    enum WKTYP eWK4
+sc/source/ui/inc/anyrefdg.hxx:192
+    enum ScRefHdlrImpl<class ScValidationDlg, class SfxTabDialog, false>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
+sc/source/ui/inc/anyrefdg.hxx:192
+    enum ScRefHdlrImpl::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
+sc/source/ui/inc/autofmt.hxx:33
+    enum AutoFmtLine BOTTOM_LINE
+sc/source/ui/inc/autofmt.hxx:33
+    enum AutoFmtLine LEFT_LINE
+sc/source/ui/inc/autofmt.hxx:33
+    enum AutoFmtLine RIGHT_LINE
+sc/source/ui/inc/autofmt.hxx:33
+    enum AutoFmtLine TOP_LINE
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:105
     enum (anonymous namespace)::ScRegType LINEAR
+sd/inc/CustomAnimationEffect.hxx:212
+    enum sd::ESequenceHint EFFECT_ADDED
+sd/inc/CustomAnimationEffect.hxx:212
+    enum sd::ESequenceHint EFFECT_REMOVED
+sd/inc/CustomAnimationEffect.hxx:212
+    enum sd::ESequenceHint EFFECT_EDITED
+sd/inc/Outliner.hxx:185
+    enum SdOutliner::ChangeHint CH_VIEW_SHELL_VALID
+sd/inc/Outliner.hxx:185
+    enum SdOutliner::ChangeHint CH_VIEW_SHELL_INVALID
+sd/inc/sdenumdef.hxx:23
+    enum OutputType OUTPUT_PAGE
+sd/inc/sdenumdef.hxx:23
+    enum OutputType OUTPUT_ORIGINAL
+sd/inc/sdenumdef.hxx:23
+    enum OutputType OUTPUT_SLIDE
+sd/inc/sdenumdef.hxx:23
+    enum OutputType OUTPUT_OVERHEAD
+sd/inc/sdenumdef.hxx:23
+    enum OutputType OUTPUT_WIDESCREEN
+sd/inc/sdenumdef.hxx:23
+    enum OutputType OUTPUT_PRESENTATION
+sd/inc/sdenumdef.hxx:24
+    enum StartType ST_EMPTY
+sd/inc/sdenumdef.hxx:24
+    enum StartType ST_TEMPLATE
+sd/inc/sdenumdef.hxx:24
+    enum StartType ST_OPEN
+sd/source/ui/inc/RemoteServer.hxx:42
+    enum sd::ClientInfo::PROTOCOL NETWORK
+sd/source/ui/inc/RemoteServer.hxx:42
+    enum sd::ClientInfo::PROTOCOL BLUETOOTH
+sd/source/ui/slidesorter/inc/view/SlsInsertAnimator.hxx:45
+    enum sd::slidesorter::view::InsertAnimator::ResetMode RM_AbortAnimations
+sd/source/ui/slidesorter/inc/view/SlsInsertAnimator.hxx:45
+    enum sd::slidesorter::view::InsertAnimator::ResetMode RM_Normal
+sdext/source/pdfimport/inc/pdfiprocessor.hxx:74
+    enum pdfi::PDFIProcessor::DocumentTextDirecion TbLr
+sdext/source/pdfimport/inc/pdfiprocessor.hxx:74
+    enum pdfi::PDFIProcessor::DocumentTextDirecion LrTb
+sdext/source/pdfimport/inc/pdfiprocessor.hxx:74
+    enum pdfi::PDFIProcessor::DocumentTextDirecion RlTb
+sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
+    enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Left
+sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
+    enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Top
+sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
+    enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Right
+sdext/source/presenter/PresenterPaneBorderPainter.cxx:93
+    enum sdext::presenter::(anonymous namespace)::RendererPaneStyle::Side Bottom
+sfx2/source/dialog/securitypage.cxx:48
+    enum (anonymous namespace)::RedlineFunc RF_ON
+sfx2/source/dialog/securitypage.cxx:48
+    enum (anonymous namespace)::RedlineFunc RF_PROTECT
+soltools/cpp/_lex.c:61
+    int SLASH1
+soltools/cpp/cpp.h:49
+    int IDENT
+starmath/inc/token.hxx:74
+    enum SmTokenType TMATFORM
+starmath/inc/token.hxx:87
+    enum SmTokenType TPOINT
+starmath/inc/token.hxx:94
+    enum SmTokenType TTOP
+starmath/inc/token.hxx:96
+    enum SmTokenType TNDIBVIDES
+svx/inc/sxmkitm.hxx:25
+    enum SdrMeasureKind SDRMEASURE_RADIUS
+sw/inc/docary.hxx:74
+    enum SwVectorModifyBase<class SwNumRule *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:74
+    enum SwVectorModifyBase<class SwSectionFormat *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:74
+    enum SwVectorModifyBase<class SwTOXType *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:74
+    enum SwVectorModifyBase<class SwFieldType *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:74
+    enum SwVectorModifyBase<class SwCharFormat *>::DestructorPolicy KeepElements
+sw/inc/docary.hxx:74
+    enum SwVectorModifyBase::DestructorPolicy KeepElements
+sw/inc/docary.hxx:75
+    enum SwVectorModifyBase::DestructorPolicy FreeElements
 sw/inc/poolfmt.hxx:96
     enum RES_POOLFMT RES_POOL_CHRFMT
 sw/inc/poolfmt.hxx:97
@@ -184,18 +472,48 @@ sw/inc/poolfmt.hxx:233
     enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_ROWS
 sw/inc/poolfmt.hxx:234
     enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
-sw/source/ui/fldui/fldref.cxx:756
-    enum FMT_REF_IDX FMT_REF_PAGE_IDX
-sw/source/ui/fldui/fldref.cxx:757
-    enum FMT_REF_IDX FMT_REF_CHAPTER_IDX
-sw/source/ui/fldui/fldref.cxx:758
-    enum FMT_REF_IDX FMT_REF_TEXT_IDX
-sw/source/ui/fldui/fldref.cxx:759
-    enum FMT_REF_IDX FMT_REF_UPDOWN_IDX
-sw/source/ui/fldui/fldref.cxx:761
-    enum FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
+sw/inc/tblafmt.hxx:286
+    enum SwTableAutoFormat::UpdateFlags UPDATE_ALL
+sw/source/core/inc/txtfly.hxx:42
+    enum PAGESIDE RIGHT_SIDE
+sw/source/core/inc/txtfly.hxx:42
+    enum PAGESIDE LEFT_SIDE
+sw/source/core/inc/txtfly.hxx:42
+    enum PAGESIDE DONTKNOW_SIDE
+sw/source/filter/html/swhtml.hxx:408
+    enum SwHTMLParser::JumpToMarks JUMPTO_FRAME
+sw/source/filter/ww8/ww8scan.hxx:388
+    enum ePLCFT SEP
+sw/source/filter/ww8/ww8struc.hxx:944
+    enum WW8_FSPA::FSPAOrient RelText
+sw/source/filter/ww8/ww8struc.hxx:944
+    enum WW8_FSPA::FSPAOrient RelPgMargin
 sw/source/ui/fldui/fldref.cxx:762
+    enum FMT_REF_IDX FMT_REF_PAGE_IDX
+sw/source/ui/fldui/fldref.cxx:763
+    enum FMT_REF_IDX FMT_REF_CHAPTER_IDX
+sw/source/ui/fldui/fldref.cxx:764
+    enum FMT_REF_IDX FMT_REF_TEXT_IDX
+sw/source/ui/fldui/fldref.cxx:765
+    enum FMT_REF_IDX FMT_REF_UPDOWN_IDX
+sw/source/ui/fldui/fldref.cxx:767
+    enum FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
+sw/source/ui/fldui/fldref.cxx:768
     enum FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
+sw/source/uibase/docvw/edtwin.cxx:1570
+    enum SwKeyState ColTopBig
+sw/source/uibase/docvw/edtwin.cxx:1571
+    enum SwKeyState ColTopSmall
+sw/source/uibase/inc/tautofmt.hxx:36
+    enum AutoFormatLine BOTTOM_LINE
+sw/source/uibase/inc/tautofmt.hxx:36
+    enum AutoFormatLine LEFT_LINE
+sw/source/uibase/inc/tautofmt.hxx:36
+    enum AutoFormatLine RIGHT_LINE
+sw/source/uibase/inc/tautofmt.hxx:36
+    enum AutoFormatLine TOP_LINE
+sw/source/uibase/inc/wrtsh.hxx:365
+    enum SwWrtShell::FieldDialogPressedButton BTN_EDIT
 sw/source/uibase/utlui/content.cxx:824
     enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
 sw/source/uibase/utlui/content.cxx:825
@@ -208,16 +526,42 @@ sw/source/uibase/utlui/glbltree.cxx:147
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_LINK
 sw/source/uibase/utlui/glbltree.cxx:148
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
+toolkit/source/controls/grid/defaultgriddatamodel.cxx:45
+    enum (anonymous namespace)::broadcast_type row_added
+toolkit/source/controls/grid/defaultgriddatamodel.cxx:45
+    enum (anonymous namespace)::broadcast_type data_changed
+toolkit/source/controls/grid/defaultgriddatamodel.cxx:45
+    enum (anonymous namespace)::broadcast_type row_removed
+tools/source/fsys/urlobj.cxx:305
+    enum INetURLObject::PrefixInfo::Kind ALIAS
+ucb/source/ucp/webdav-neon/DAVTypes.hxx:195
+    enum webdav_ucp::Depth DAVINFINITY
+ucbhelper/source/client/proxydecider.cxx:119
+    enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Manual
+vcl/inc/regband.hxx:45
+    enum LineType LINE_HORIZONTAL
 vcl/inc/salptype.hxx:44
     enum SalPrinterError General
 vcl/inc/unx/saldisp.hxx:65
     srv_vendor_t vendor_none
+vcl/inc/unx/saldisp.hxx:77
+    enum SalRGB RGBA
+vcl/inc/unx/saldisp.hxx:77
+    enum SalRGB RBGA
+vcl/inc/unx/saldisp.hxx:78
+    enum SalRGB GBRA
+vcl/inc/unx/saldisp.hxx:78
+    enum SalRGB GRBA
+vcl/inc/unx/saldisp.hxx:79
+    enum SalRGB BRGA
+vcl/inc/unx/saldisp.hxx:79
+    enum SalRGB BGRA
 vcl/source/gdi/CommonSalLayout.cxx:129
     enum (anonymous namespace)::VerticalOrientation Rotated
 vcl/unx/gtk3/gtk3gtkinst.cxx:2524
-    enum (anonymous at /media/noel/disk2/libo6/vcl/unx/gtk3/gtk3gtkinst.cxx:2522:1) PROP_0
+    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:2522:1) PROP_0
 vcl/unx/gtk3/gtk3gtkinst.cxx:2529
-    enum (anonymous at /media/noel/disk2/libo6/vcl/unx/gtk3/gtk3gtkinst.cxx:2522:1) PROP_SHADOW_TYPE
+    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:2522:1) PROP_SHADOW_TYPE
 writerfilter/source/ooxml/OOXMLFactory.hxx:36
     enum writerfilter::ooxml::ResourceType NoResource
 writerfilter/source/ooxml/OOXMLFactory.hxx:37

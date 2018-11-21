@@ -247,7 +247,6 @@ bool ImplSdPPTImport::Import()
     SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
     EEControlBits nControlWord = rOutl.GetEditEngine().GetControlWord();
     nControlWord |=  EEControlBits::ULSPACESUMMATION;
-    nControlWord &= ~EEControlBits::ULSPACEFIRSTPARA;
     const_cast<EditEngine&>(rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
