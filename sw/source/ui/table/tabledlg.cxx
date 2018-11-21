@@ -160,8 +160,8 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, weld::ToggleButton&, rBtn, void 
         m_xRightMF->SetMetricFieldMin(0); //dito
         m_xLeftMF->SetMetricFieldMax(99);
         m_xRightMF->SetMetricFieldMax(99);
-        m_xLeftMF->SetPrcntValue(m_xLeftMF->NormalizePercent(nLeft ), FieldUnit::TWIP );
-        m_xRightMF->SetPrcntValue(m_xRightMF->NormalizePercent(nRight ), FieldUnit::TWIP );
+        m_xLeftMF->set_value(m_xLeftMF->NormalizePercent(nLeft ), FieldUnit::TWIP );
+        m_xRightMF->set_value(m_xRightMF->NormalizePercent(nRight ), FieldUnit::TWIP );
     }
     else
         ModifyHdl(*m_xLeftMF->get());    //correct values again
@@ -184,27 +184,27 @@ IMPL_LINK_NOARG(SwFormatTablePage, AutoClickHdl, weld::ToggleButton&, void)
          bOthers = true;
     if (m_xFullBtn->get_active())
     {
-        m_xLeftMF->SetPrcntValue(0);
-        m_xRightMF->SetPrcntValue(0);
+        m_xLeftMF->set_value(0);
+        m_xRightMF->set_value(0);
         nSaveWidth = static_cast<SwTwips>(m_xWidthMF->DenormalizePercent(m_xWidthMF->get_value(FieldUnit::TWIP)));
-        m_xWidthMF->SetPrcntValue(m_xWidthMF->NormalizePercent(pTableData->GetSpace()), FieldUnit::TWIP);
+        m_xWidthMF->set_value(m_xWidthMF->NormalizePercent(pTableData->GetSpace()), FieldUnit::TWIP);
         bFull = true;
         bRestore = false;
     }
     else if (m_xLeftBtn->get_active())
     {
         bRightEnable = bWidthEnable = true;
-        m_xLeftMF->SetPrcntValue(0);
+        m_xLeftMF->set_value(0);
     }
     else if (m_xFromLeftBtn->get_active())
     {
         bLeftEnable = bWidthEnable = true;
-        m_xRightMF->SetPrcntValue(0);
+        m_xRightMF->set_value(0);
     }
     else if (m_xRightBtn->get_active())
     {
         bLeftEnable = bWidthEnable = true;
-        m_xRightMF->SetPrcntValue(0);
+        m_xRightMF->set_value(0);
     }
     else if (m_xCenterBtn->get_active())
     {
@@ -233,7 +233,7 @@ IMPL_LINK_NOARG(SwFormatTablePage, AutoClickHdl, weld::ToggleButton&, void)
         //After being switched on automatic, the width was pinned
         //in order to restore the width while switching back to.
         bFull = false;
-        m_xWidthMF->SetPrcntValue(m_xWidthMF->NormalizePercent(nSaveWidth ), FieldUnit::TWIP );
+        m_xWidthMF->set_value(m_xWidthMF->NormalizePercent(nSaveWidth ), FieldUnit::TWIP );
     }
     ModifyHdl(*m_xWidthMF->get());
     bModified = true;
@@ -358,9 +358,9 @@ void  SwFormatTablePage::ModifyHdl(const weld::MetricSpinButton& rEdit)
         }
     }
     if (nCurWidth != nPrevWidth )
-        m_xWidthMF->SetPrcntValue( m_xWidthMF->NormalizePercent( nCurWidth ), FieldUnit::TWIP );
-    m_xRightMF->SetPrcntValue( m_xRightMF->NormalizePercent( nRight ), FieldUnit::TWIP );
-    m_xLeftMF->SetPrcntValue( m_xLeftMF->NormalizePercent( nLeft ), FieldUnit::TWIP );
+        m_xWidthMF->set_value( m_xWidthMF->NormalizePercent( nCurWidth ), FieldUnit::TWIP );
+    m_xRightMF->set_value( m_xRightMF->NormalizePercent( nRight ), FieldUnit::TWIP );
+    m_xLeftMF->set_value( m_xLeftMF->NormalizePercent( nLeft ), FieldUnit::TWIP );
     bModified = true;
 }
 
@@ -451,14 +451,14 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
         {
             m_xRelWidthCB->set_active(true);
             RelWidthClickHdl(*m_xRelWidthCB);
-            m_xWidthMF->SetPrcntValue(pTableData->GetWidthPercent(), FieldUnit::PERCENT);
+            m_xWidthMF->set_value(pTableData->GetWidthPercent(), FieldUnit::PERCENT);
 
             m_xWidthMF->save_value();
             nSaveWidth = static_cast< SwTwips >(m_xWidthMF->get_value(FieldUnit::PERCENT));
         }
         else
         {
-            m_xWidthMF->SetPrcntValue(m_xWidthMF->NormalizePercent(
+            m_xWidthMF->set_value(m_xWidthMF->NormalizePercent(
                     pTableData->GetWidth()), FieldUnit::TWIP);
             m_xWidthMF->save_value();
             nSaveWidth = pTableData->GetWidth();
@@ -467,9 +467,9 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
 
         m_xWidthMF->SetRefValue(pTableData->GetSpace());
 
-        m_xLeftMF->SetPrcntValue(m_xLeftMF->NormalizePercent(
+        m_xLeftMF->set_value(m_xLeftMF->NormalizePercent(
                     pTableData->GetLeftSpace()), FieldUnit::TWIP);
-        m_xRightMF->SetPrcntValue(m_xRightMF->NormalizePercent(
+        m_xRightMF->set_value(m_xRightMF->NormalizePercent(
                     pTableData->GetRightSpace()), FieldUnit::TWIP);
         m_xLeftMF->save_value();
         m_xRightMF->save_value();
@@ -565,14 +565,14 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
         if(pTableData->GetWidthPercent() == 0 &&
                 nCurWidth != m_xWidthMF->DenormalizePercent(m_xWidthMF->get_value(FieldUnit::TWIP)))
         {
-            m_xWidthMF->SetPrcntValue(m_xWidthMF->NormalizePercent(
+            m_xWidthMF->set_value(m_xWidthMF->NormalizePercent(
                             nCurWidth), FieldUnit::TWIP);
             m_xWidthMF->save_value();
             nSaveWidth = nCurWidth;
-            m_xLeftMF->SetPrcntValue(m_xLeftMF->NormalizePercent(
+            m_xLeftMF->set_value(m_xLeftMF->NormalizePercent(
                             pTableData->GetLeftSpace()), FieldUnit::TWIP);
             m_xLeftMF->save_value();
-            m_xRightMF->SetPrcntValue(m_xRightMF->NormalizePercent(
+            m_xRightMF->set_value(m_xRightMF->NormalizePercent(
                             pTableData->GetRightSpace()), FieldUnit::TWIP);
             m_xRightMF->save_value();
         }
@@ -784,7 +784,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
         sal_Int64 nMaxTwips = m_aFieldArr[0].NormalizePercent( nTableWidth );
         for( sal_uInt16 i = 0; (i < nMetFields) && (i < nNoOfVisibleCols); i++ )
         {
-            m_aFieldArr[i].SetPrcntValue( m_aFieldArr[i].NormalizePercent(
+            m_aFieldArr[i].set_value( m_aFieldArr[i].NormalizePercent(
                                                 GetVisibleWidth(i) ), FieldUnit::TWIP );
             m_aFieldArr[i].set_min(nMinTwips, FieldUnit::TWIP);
             m_aFieldArr[i].set_max(nMaxTwips, FieldUnit::TWIP);
@@ -1027,7 +1027,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
 
     for( sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < nMetFields ); i++)
     {
-        m_aFieldArr[i].SetPrcntValue(m_aFieldArr[i].NormalizePercent(
+        m_aFieldArr[i].set_value(m_aFieldArr[i].NormalizePercent(
                         GetVisibleWidth(aValueTable[i]) ), FieldUnit::TWIP);
     }
 }

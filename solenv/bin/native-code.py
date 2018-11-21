@@ -510,7 +510,6 @@ custom_widgets = [
     'SvxNoSpaceEdit',
     'SvxPathControl',
     'SvxRelativeField',
-    'SvxSwFrameExample',
     'SvxTextEncodingBox',
     'SvxTextEncodingBox',
     'SwAddressPreview',
