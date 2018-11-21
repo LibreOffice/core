@@ -338,10 +338,10 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         m_xDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrameItemSet, false );
 
         // maybe jump to section
-        if( JUMPTO_REGION == m_eJumpTo && aName == m_sJmpMark )
+        if( JumpToMarks::Region == m_eJumpTo && aName == m_sJmpMark )
         {
             m_bChkJumpMark = true;
-            m_eJumpTo = JUMPTO_NONE;
+            m_eJumpTo = JumpToMarks::NONE;
         }
 
         SwTextNode* pOldTextNd =
@@ -724,10 +724,10 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         m_xDoc->InsertSwSection( *m_pPam, aSection, nullptr, &aFrameItemSet, false );
 
         // Jump to section, if this is requested.
-        if( JUMPTO_REGION == m_eJumpTo && aName == m_sJmpMark )
+        if( JumpToMarks::Region == m_eJumpTo && aName == m_sJmpMark )
         {
             m_bChkJumpMark = true;
-            m_eJumpTo = JUMPTO_NONE;
+            m_eJumpTo = JumpToMarks::NONE;
         }
 
         SwTextNode* pOldTextNd =

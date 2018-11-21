@@ -798,10 +798,10 @@ IMAGE_SETEVENT:
         pFlyFormat->SetName( sHTMLGrfName );
 
         // maybe jump to graphic
-        if( JUMPTO_GRAPHIC == m_eJumpTo && sHTMLGrfName == m_sJmpMark )
+        if( JumpToMarks::Graphic == m_eJumpTo && sHTMLGrfName == m_sJmpMark )
         {
             m_bChkJumpMark = true;
-            m_eJumpTo = JUMPTO_NONE;
+            m_eJumpTo = JumpToMarks::NONE;
         }
     }
 

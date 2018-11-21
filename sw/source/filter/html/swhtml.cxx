@@ -281,7 +281,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_nContextStAttrMin( 0 ),
     m_nSelectEntryCnt( 0 ),
     m_nOpenParaToken( HtmlTokenId::NONE ),
-    m_eJumpTo( JUMPTO_NONE ),
+    m_eJumpTo( JumpToMarks::NONE ),
 #ifdef DBG_UTIL
     m_nContinue( 0 ),
 #endif
@@ -382,7 +382,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
             m_sJmpMark = pMed->GetURLObject().GetMark();
             if( !m_sJmpMark.isEmpty() )
             {
-                m_eJumpTo = JUMPTO_MARK;
+                m_eJumpTo = JumpToMarks::Mark;
                 sal_Int32 nLastPos = m_sJmpMark.lastIndexOf( cMarkSeparator );
                 sal_Int32 nPos =  nLastPos != -1 ? nLastPos : 0;
 
@@ -396,15 +396,15 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
                 {
                     sCmp = sCmp.toAsciiLowerCase();
                     if( sCmp == "region" )
-                        m_eJumpTo = JUMPTO_REGION;
+                        m_eJumpTo = JumpToMarks::Region;
                     else if( sCmp == "table" )
-                        m_eJumpTo = JUMPTO_TABLE;
+                        m_eJumpTo = JumpToMarks::Table;
                     else if( sCmp == "graphic" )
-                        m_eJumpTo = JUMPTO_GRAPHIC;
+                        m_eJumpTo = JumpToMarks::Graphic;
                     else if( sCmp == "outline" ||
                             sCmp == "text" ||
                             sCmp == "frame" )
-                        m_eJumpTo = JUMPTO_NONE;  // this is nothing valid!
+                        m_eJumpTo = JumpToMarks::NONE;  // this is nothing valid!
                     else
                         // otherwise this is a normal (book)mark
                         nPos = -1;
@@ -415,7 +415,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
                 if( nPos != -1 )
                     m_sJmpMark = m_sJmpMark.copy( 0, nPos );
                 if( m_sJmpMark.isEmpty() )
-                    m_eJumpTo = JUMPTO_NONE;
+                    m_eJumpTo = JumpToMarks::NONE;
             }
         }
     }
@@ -2862,10 +2862,10 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                             ::sw::mark::InsertMode::New);
 
                         // jump to bookmark
-                        if( JUMPTO_MARK == m_eJumpTo && pNewMark->GetName() == m_sJmpMark )
+                        if( JumpToMarks::Mark == m_eJumpTo && pNewMark->GetName() == m_sJmpMark )
                         {
                             m_bChkJumpMark = true;
-                            m_eJumpTo = JUMPTO_NONE;
+                            m_eJumpTo = JumpToMarks::NONE;
                         }
                     }
                     break;
@@ -2921,11 +2921,11 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 
                     // maybe jump to a bookmark
                     if( RES_TXTATR_INETFMT == nWhich &&
-                        JUMPTO_MARK == m_eJumpTo &&
+                        JumpToMarks::Mark == m_eJumpTo &&
                         m_sJmpMark == static_cast<SwFormatINetFormat*>(pAttr->m_pItem.get())->GetName() )
                     {
                         m_bChkJumpMark = true;
-                        m_eJumpTo = JUMPTO_NONE;
+                        m_eJumpTo = JumpToMarks::NONE;
                     }
 
                     m_xDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->m_pItem, SetAttrMode::DONTREPLACE );

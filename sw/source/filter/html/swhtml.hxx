@@ -405,8 +405,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_uInt16  m_nSelectEntryCnt;    // Number of entries in the actual listbox
     HtmlTokenId m_nOpenParaToken;     // opened paragraph element
 
-    enum JumpToMarks { JUMPTO_NONE, JUMPTO_MARK, JUMPTO_TABLE, JUMPTO_FRAME,
-                        JUMPTO_REGION, JUMPTO_GRAPHIC } m_eJumpTo;
+    enum class JumpToMarks { NONE, Mark, Table, Region, Graphic };
+    JumpToMarks m_eJumpTo;
 
 #ifdef DBG_UTIL
     sal_uInt16  m_nContinue;        // depth of Continue calls
