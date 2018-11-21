@@ -40,8 +40,7 @@ class ScOrcusFilters;
 enum EXCIMPFORMAT { EIF_AUTO, EIF_BIFF5, EIF_BIFF8, EIF_BIFF_LE4 };
 
 // for export
-enum ExportFormatLotus { ExpWK1, ExpWK3, ExpWK4 };
-enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5, ExpBiff8, Exp2007Xml };
+enum ExportFormatExcel { ExpBiff5, ExpBiff8 };
 
 // These are implemented inside the scfilt library and lazy loaded
 

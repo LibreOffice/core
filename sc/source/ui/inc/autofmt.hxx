@@ -30,8 +30,6 @@ class SvNumberFormatter;
 class VirtualDevice;
 class ScViewData;
 
-enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
-
 class SC_DLLPUBLIC ScAutoFmtPreview : public vcl::Window
 {
 public:
