@@ -526,12 +526,6 @@ sw/source/uibase/utlui/glbltree.cxx:147
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_LINK
 sw/source/uibase/utlui/glbltree.cxx:148
     enum GLOBAL_CONTEXT_IDX IDX_STR_UPDATE_ALL
-toolkit/source/controls/grid/defaultgriddatamodel.cxx:45
-    enum (anonymous namespace)::broadcast_type row_added
-toolkit/source/controls/grid/defaultgriddatamodel.cxx:45
-    enum (anonymous namespace)::broadcast_type data_changed
-toolkit/source/controls/grid/defaultgriddatamodel.cxx:45
-    enum (anonymous namespace)::broadcast_type row_removed
 ucb/source/ucp/webdav-neon/DAVTypes.hxx:195
     enum webdav_ucp::Depth DAVINFINITY
 ucbhelper/source/client/proxydecider.cxx:119
