@@ -1855,7 +1855,7 @@ void Test::testMatrix()
 
     pMat2 = new ScMatrix(3, 3, 10.0);
     pMat2->PutString(rPool.intern("B"), 1, 0);
-    pMat2->MergeDoubleArray(aDoubles, ScMatrix::Mul);
+    pMat2->MergeDoubleArrayMultiply(aDoubles);
 
     {
         const double pChecks[] = { 25, 12, 0, fNaN, fNaN, 0, 0, 23, -200 };
