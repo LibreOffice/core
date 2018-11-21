@@ -384,14 +384,6 @@ soltools/cpp/_lex.c:61
     int SLASH1
 soltools/cpp/cpp.h:49
     int IDENT
-starmath/inc/token.hxx:74
-    enum SmTokenType TMATFORM
-starmath/inc/token.hxx:87
-    enum SmTokenType TPOINT
-starmath/inc/token.hxx:94
-    enum SmTokenType TTOP
-starmath/inc/token.hxx:96
-    enum SmTokenType TNDIBVIDES
 svx/inc/sxmkitm.hxx:25
     enum SdrMeasureKind SDRMEASURE_RADIUS
 sw/inc/docary.hxx:74
