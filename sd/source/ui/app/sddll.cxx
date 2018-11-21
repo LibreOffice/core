@@ -95,6 +95,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sdabstdlg.hxx>
+#include <sdfilter.hxx>
 #include <sdmod.hxx>
 
 using namespace ::com::sun::star;
@@ -294,6 +295,7 @@ void SdDLL::Init()
 extern "C" SAL_DLLPUBLIC_EXPORT
 void lok_preload_hook()
 {
+    SdFilter::Preload();
     SdAbstractDialogFactory::Create();
 }
 
