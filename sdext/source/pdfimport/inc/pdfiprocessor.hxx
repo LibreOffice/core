@@ -71,7 +71,6 @@ namespace pdfi
             css::uno::XComponentContext >  m_xContext;
         basegfx::B2DHomMatrix prevTextMatrix;
         double prevCharWidth;
-        enum DocumentTextDirecion { LrTb, RlTb, TbLr };
 
         explicit PDFIProcessor( const css::uno::Reference< css::task::XStatusIndicator >& xStat,
             css::uno::Reference< css::uno::XComponentContext > const & xContext) ;
