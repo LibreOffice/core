@@ -1234,8 +1234,6 @@ slideshow/source/engine/slideview.cxx:729
     enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at /home/noel/libo2/slideshow/source/engine/slideview.cxx:729:5) LAYER_ULLAGE
 slideshow/source/inc/doctreenode.hxx:52
     enum slideshow::internal::DocTreeNode::NodeType Invalid
-soltools/cpp/cpp.h:42
-    int WS
 svgio/inc/svgstyleattributes.hxx:62
     enum svgio::svgreader::FontSize FontSize_notset
 svl/source/numbers/zformat.cxx:358

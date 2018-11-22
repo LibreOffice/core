@@ -277,7 +277,6 @@ long
     {
         switch (tp->type)
         {
-            case WS:
             case NL:
                 continue;
 
