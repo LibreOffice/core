@@ -197,27 +197,8 @@ void AboutDialog::StyleControls()
 
 void AboutDialog::SetLogo()
 {
-    long nWidth = get_content_area()->get_preferred_size().Width();
-
-    // fdo#67401 set AntiAliasing for SVG logo
-    SvtOptionsDrawinglayer aDrawOpt;
-    bool bOldAntiAliasSetting = aDrawOpt.IsAntiAliasing();
-    aDrawOpt.SetAntiAliasing(true);
-
-    // load svg logo, specify desired width, scale height isotropically
-    if (SfxApplication::loadBrandSvg("flat_logo", aLogoBitmap, nWidth) &&
-        !aLogoBitmap.IsEmpty())
-    {
-        m_pLogoImage->SetImage(Image(aLogoBitmap));
-        m_pLogoReplacement->Hide();
-        m_pLogoImage->Show();
-    }
-    else
-    {
-        m_pLogoImage->Hide();
-        m_pLogoReplacement->Show();
-    }
-    aDrawOpt.SetAntiAliasing(bOldAntiAliasSetting);
+    m_pLogoImage->Hide();
+    m_pLogoReplacement->Show();
 }
 
 void AboutDialog::Resize()
