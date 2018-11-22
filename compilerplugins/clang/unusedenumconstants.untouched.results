@@ -14,10 +14,6 @@ cui/source/inc/hldoctp.hxx:56
     enum SvxHyperlinkDocTp::EPathType Type_ExistsDir
 cui/source/inc/hldoctp.hxx:56
     enum SvxHyperlinkDocTp::EPathType Type_Dir
-dbaccess/source/core/api/query.hxx:66
-    enum dbaccess::OQuery::AGGREGATE_ACTION FLUSHING
-dbaccess/source/core/inc/querycontainer.hxx:72
-    enum dbaccess::OQueryContainer::AGGREGATE_ACTION FLUSHING
 drawinglayer/source/tools/emfpbrush.hxx:32
     enum emfplushelper::EmfPlusHatchStyle HatchStyleVertical
 drawinglayer/source/tools/emfpbrush.hxx:33

@@ -63,8 +63,8 @@ protected:
     ::dbtools::WarningsContainer*                             m_pWarnings;
 
     // possible actions on our "aggregate"
-    enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };
-    AGGREGATE_ACTION    m_eDoingCurrently;
+    enum class AggregateAction { NONE, SettingProperties };
+    AggregateAction    m_eDoingCurrently;
 
     /** a class which automatically resets m_eDoingCurrently in its destructor
     */
@@ -75,7 +75,7 @@ protected:
         OQuery&             m_rActor;
     public:
         explicit OAutoActionReset(OQuery& _rActor) : m_rActor(_rActor) { }
-        ~OAutoActionReset() { m_rActor.m_eDoingCurrently = NONE; }
+        ~OAutoActionReset() { m_rActor.m_eDoingCurrently = AggregateAction::NONE; }
     };
 
 protected:

@@ -67,7 +67,7 @@ OQueryContainer::OQueryContainer(
     ,m_pWarnings( _pWarnings )
     ,m_xCommandDefinitions(_rxCommandDefinitions)
     ,m_xConnection(_rxConn)
-    ,m_eDoingCurrently(NONE)
+    ,m_eDoingCurrently(AggregateAction::NONE)
 {
 }
 
@@ -180,7 +180,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 
     // insert the basic object into the definition container
     {
-        m_eDoingCurrently = INSERTING;
+        m_eDoingCurrently = AggregateAction::Inserting;
         OAutoActionReset aAutoReset(*this);
         m_xCommandDefinitions->insertByName(sNewObjectName, makeAny(xCommandDefinitionPart));
     }
@@ -235,7 +235,7 @@ void SAL_CALL OQueryContainer::elementInserted( const css::container::ContainerE
     _rEvent.Accessor >>= sElementName;
     {
         MutexGuard aGuard(m_aMutex);
-        if (INSERTING == m_eDoingCurrently)
+        if (AggregateAction::Inserting == m_eDoingCurrently)
             // nothing to do, we're inserting via an "appendByDescriptor"
             return;
 
