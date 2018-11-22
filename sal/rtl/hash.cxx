@@ -40,12 +40,7 @@ static void rtl_str_hash_free(StringHashTable *pHash);
 
 static StringHashTable * getHashTable()
 {
-    static StringHashTable *pInternPool = nullptr;
-    if (!pInternPool)
-    {
-        static StringHashTable* pHash = rtl_str_hash_new(1024);
-        pInternPool = pHash;
-    }
+    static StringHashTable* pInternPool = rtl_str_hash_new(1024);
     return pInternPool;
 }
 
