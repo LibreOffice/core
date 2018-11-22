@@ -490,10 +490,6 @@ include/svl/visitem.hxx:39
     void SfxVisibilityItem::SfxVisibilityItem(unsigned short,class SvStream &)
     unsigned short which
     Which()
-include/svtools/accessibletable.hxx:84
-    class tools::Rectangle svt::table::IAccessibleTable::calcHeaderRect(_Bool)
-    _Bool _bIsColumnBar
-    isColumnBar()
 include/svtools/ehdl.hxx:37
     void SfxErrorContext::SfxErrorContext(unsigned short,class weld::Window *,const struct std::pair<const char *, class ErrCode> *,const class std::locale &)
     const class std::locale & rResLocaleP
