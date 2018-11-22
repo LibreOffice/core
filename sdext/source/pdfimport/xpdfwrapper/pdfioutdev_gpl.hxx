@@ -171,7 +171,11 @@ namespace pdfi
         //----- initialization and control
 
         // Set default transform matrix.
+#if POPPLER_CHECK_VERSION(0, 71, 0)
+        virtual void setDefaultCTM(const double *ctm) override;
+#else
         virtual void setDefaultCTM(double *ctm) override;
+#endif
 
         // Start a page.
         virtual void startPage(int pageNum, GfxState *state
