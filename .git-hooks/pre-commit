@@ -257,6 +257,12 @@ To remove the change, you can do:
 
   git submodule update $_
 
+If it fails with 'error: Server does not allow request for unadvertised object',
+run the following:
+
+  git submodule sync
+  git submodule update $_
+
 EOM
             exit(1);
         }
