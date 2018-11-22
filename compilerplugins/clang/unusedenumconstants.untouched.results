@@ -100,38 +100,6 @@ drawinglayer/source/tools/emfpbrush.hxx:83
     enum emfplushelper::EmfPlusHatchStyle HatchStyleSolidDiamond
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeUnknown
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:28
-    enum BrushStyle BRUSH_NULL
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:28
-    enum BrushStyle BRUSH_HORZ
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:28
-    enum BrushStyle BRUSH_VERT
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:28
-    enum BrushStyle BRUSH_SOLID
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:29
-    enum BrushStyle BRUSH_CROSS
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:29
-    enum BrushStyle BRUSH_DIAGCROSS
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:29
-    enum BrushStyle BRUSH_DOWNDIAG
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:29
-    enum BrushStyle BRUSH_UPDIAG
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:30
-    enum BrushStyle BRUSH_75
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:30
-    enum BrushStyle BRUSH_25
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:30
-    enum BrushStyle BRUSH_50
-filter/source/graphicfilter/ipict/ipict.cxx:71
-    enum PictReaderInternal::Pattern::BrushStyle BRUSH_NULL
-filter/source/msfilter/eschesdo.hxx:29
-    enum ImplEESdrPageType NORMAL
-filter/source/msfilter/eschesdo.hxx:29
-    enum ImplEESdrPageType UNDEFINED
-filter/source/msfilter/eschesdo.hxx:29
-    enum ImplEESdrPageType NOTICE
-filter/source/msfilter/eschesdo.hxx:29
-    enum ImplEESdrPageType MASTER
 include/connectivity/dbtools.hxx:822
     enum connectivity::dbase::DBFType dBaseIVMemo
 include/desktop/exithelper.h:25
