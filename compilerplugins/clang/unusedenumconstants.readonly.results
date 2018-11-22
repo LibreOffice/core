@@ -1178,8 +1178,6 @@ sc/source/filter/inc/unitconverter.hxx:44
     enum oox::xls::Unit UNIT_REFDEVY
 sc/source/filter/lotus/lotread.cxx:41
     enum STATE S_WK1
-sc/source/filter/oox/formulabase.cxx:63
-    enum FuncFlags BIFFIMPORTONLY
 sc/source/ui/inc/viewdata.hxx:43
     enum ScSplitMode SC_SPLIT_MODE_MAX_ENUM
 sc/source/ui/inc/viewdata.hxx:45

@@ -38,7 +38,6 @@ ErrCode ImportLotus::parse()
     enum STATE
     {
         S_START,        // analyse first BOF
-        S_WK1,          // in WK1-Stream
         S_WK3,          // in WK3-Section
         S_WK4,
         S_FM3,
@@ -105,9 +104,6 @@ ErrCode ImportLotus::parse()
                     eRet = ErrCode(0xFFFFFFFF);
                 }
             }
-            break;
-
-            case S_WK1:                                 // S_WK1
             break;
 
             case S_WK3:                                 // S_WK3
