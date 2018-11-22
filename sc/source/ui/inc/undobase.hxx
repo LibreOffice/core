@@ -132,21 +132,17 @@ public:
     void            EndRedo();
 };
 
-enum ScMoveUndoMode { SC_UNDO_REFFIRST, SC_UNDO_REFLAST };
-
 class ScMoveUndo: public ScSimpleUndo               // with references
 {
 public:
                     ScMoveUndo( ScDocShell* pDocSh,
-                                ScDocumentUniquePtr pRefDoc, std::unique_ptr<ScRefUndoData> pRefData,
-                                ScMoveUndoMode eRefMode );
+                                ScDocumentUniquePtr pRefDoc, std::unique_ptr<ScRefUndoData> pRefData );
     virtual         ~ScMoveUndo() override;
 
 protected:
     std::unique_ptr<SdrUndoAction>  pDrawUndo;
     ScDocumentUniquePtr             pRefUndoDoc;
     std::unique_ptr<ScRefUndoData>  pRefUndoData;
-    ScMoveUndoMode const  eMode;
 
     void            BeginUndo();
     void            EndUndo();

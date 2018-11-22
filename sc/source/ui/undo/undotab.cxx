@@ -247,7 +247,7 @@ bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell, const vector<SCTAB> &aTab,
                                     ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData ) :
-    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), std::move(pRefData), SC_UNDO_REFLAST )
+    ScMoveUndo( pNewDocShell, std::move(pUndoDocument), std::move(pRefData) )
 {
     theTabs.insert(theTabs.end(), aTab.begin(), aTab.end() );
     SetChangeTrack();
