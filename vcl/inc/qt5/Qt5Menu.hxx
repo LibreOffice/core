@@ -12,6 +12,7 @@
 #include <salmenu.hxx>
 
 class MenuItemList;
+class QActionGroup;
 class QMenu;
 class QMenuBar;
 class Qt5MenuItem;
@@ -27,9 +28,13 @@ private:
     Qt5Frame* mpFrame;
     bool mbMenuBar;
     QMenuBar* mpQMenuBar;
+    QMenu* mpQMenu;
+    QActionGroup* mpQActionGroup;
 
     void DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu = nullptr);
     static void NativeItemText(OUString& rItemText);
+
+    QMenu* InsertMenuItem(Qt5MenuItem* pSalMenuItem);
 
 public:
     Qt5Menu(bool bMenuBar);
