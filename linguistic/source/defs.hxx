@@ -82,8 +82,6 @@ struct LangSvcEntries_Thes : public LangSvcEntries
 class LinguDispatcher
 {
 public:
-    enum DspType    { DSP_SPELL, DSP_HYPH, DSP_THES, DSP_GRAMMAR };
-
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) = 0;
     virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const = 0;
 

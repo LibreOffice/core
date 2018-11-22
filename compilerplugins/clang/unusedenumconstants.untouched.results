@@ -178,14 +178,6 @@ include/oox/ole/axfontdata.hxx:40
     enum AxFontFlags AutoColor
 include/oox/ppt/animationspersist.hxx:43
     enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_ENDSYNC
-include/svx/nbdtmg.hxx:40
-    enum svx::sidebar::NBType Bullets
-include/svx/nbdtmg.hxx:40
-    enum svx::sidebar::NBType GraphicBullets
-include/svx/xenum.hxx:27
-    enum XBitmapType Import
-include/svx/xenum.hxx:27
-    enum XBitmapType N8x8
 include/unotools/eventcfg.hxx:29
     enum GlobalEventId STARTAPP
 include/unotools/eventcfg.hxx:30
@@ -222,64 +214,12 @@ include/vcl/keycod.hxx:33
     enum KeyFuncType PROPERTIES
 include/vcl/keycod.hxx:33
     enum KeyFuncType FINDBACKWARD
-include/vcl/pdfwriter.hxx:201
-    enum vcl::PDFWriter::WidgetState Up
-include/vcl/pdfwriter.hxx:201
-    enum vcl::PDFWriter::WidgetState Down
 include/vcl/syswin.hxx:54
     enum WindowStateState FullScreen
-include/vcl/vclenum.hxx:191
-    enum FontAutoHint DontKnow
-include/vcl/vclenum.hxx:191
-    enum FontAutoHint Yes
-include/vcl/vclenum.hxx:191
-    enum FontAutoHint No
-include/vcl/vclenum.hxx:193
-    enum FontHinting DontKnow
-include/vcl/vclenum.hxx:193
-    enum FontHinting No
-include/vcl/vclenum.hxx:193
-    enum FontHinting Yes
-include/vcl/vclenum.hxx:195
-    enum FontHintStyle Slight
-include/vcl/vclenum.hxx:195
-    enum FontHintStyle Medium
-include/vcl/vclenum.hxx:195
-    enum FontHintStyle Full
-l10ntools/inc/export.hxx:63
-    enum IdLevel Identifier
-l10ntools/inc/export.hxx:63
-    enum IdLevel Null
-l10ntools/inc/export.hxx:63
-    enum IdLevel Text
-l10ntools/inc/export.hxx:85
-    enum ExportListType Filter
-l10ntools/inc/export.hxx:85
-    enum ExportListType String
-l10ntools/inc/export.hxx:85
-    enum ExportListType Item
-l10ntools/inc/export.hxx:85
-    enum ExportListType Paired
-l10ntools/inc/export.hxx:89
-    enum StringType QuickHelpText
-l10ntools/inc/export.hxx:89
-    enum StringType Text
-l10ntools/inc/export.hxx:89
-    enum StringType Title
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
     enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
 libreofficekit/source/gtk/lokdocview.cxx:287
     enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
-linguistic/source/defs.hxx:85
-    enum LinguDispatcher::DspType DSP_GRAMMAR
-linguistic/source/defs.hxx:85
-    enum LinguDispatcher::DspType DSP_THES
-linguistic/source/defs.hxx:85
-    enum LinguDispatcher::DspType DSP_HYPH
-linguistic/source/defs.hxx:85
-    enum LinguDispatcher::DspType DSP_SPELL
-reportdesign/source/ui/inc/ReportDefines.hxx:24
-    enum rptui::DlgEdMode Test
 sc/source/filter/excel/xiescher.cxx:460
     enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24

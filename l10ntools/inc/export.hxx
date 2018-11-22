@@ -60,8 +60,6 @@ typedef std::unordered_map<OString, bool>
 // class ResData
 
 
-enum class IdLevel { Null=0, Text=2, Identifier=5 };
-
 /// Purpose: holds mandatory data to export a single res
 class ResData
 {
@@ -79,15 +77,6 @@ public:
 
 
 // class Export
-
-
-enum class ExportListType {
-    NONE, String, Filter, Item, Paired
-};
-
-enum class StringType {
-    Text, QuickHelpText, Title
-};
 
 
 class ParserQueue;

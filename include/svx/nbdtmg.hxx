@@ -35,11 +35,6 @@ enum class NBOType
     Bullets = 1, Numbering, Outline
 };
 
-enum class NBType
-{
-    Bullets = 1, GraphicBullets
-};
-
 class  SVX_DLLPUBLIC NumSettings_Impl
 {
     public:
