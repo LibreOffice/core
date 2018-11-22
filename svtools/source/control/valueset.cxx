@@ -59,7 +59,6 @@ enum
 
 ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
-    maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
     maColor( COL_TRANSPARENT )
 {
     mpNoneItem.reset(nullptr);
@@ -92,9 +91,6 @@ ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle ) :
     mbFullMode          = true;
     mbEdgeBlending      = false;
     mbHasVisibleItems   = false;
-
-    // #106446#, #106601# force mirroring of virtual device
-    maVirDev->EnableRTL( GetParent()->IsRTLEnabled() );
 
     ImplInitSettings( true, true, true );
 }
@@ -203,7 +199,7 @@ void ValueSet::ImplInitScrollBar()
     }
 }
 
-void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
+void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect)
 {
     WinBits nStyle = GetStyle();
     if (nStyle & WB_ITEMBORDER)
@@ -224,7 +220,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         }
         else
         {
-            DecorationView aView(maVirDev.get());
+            DecorationView aView(&rRenderContext);
             aRect = aView.DrawFrame(aRect, mnFrameStyle);
         }
     }
@@ -239,42 +235,45 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
 
     if (pItem == mpNoneItem.get())
     {
-        maVirDev->SetFont(rRenderContext.GetFont());
-        maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
-        maVirDev->SetTextFillColor();
-        maVirDev->SetFillColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor());
-        maVirDev->DrawRect(aRect);
+        rRenderContext.SetTextColor((nStyle & WB_MENUSTYLEVALUESET)
+                                        ? rStyleSettings.GetMenuTextColor()
+                                        : rStyleSettings.GetWindowTextColor());
+        rRenderContext.SetTextFillColor();
+        rRenderContext.SetFillColor((nStyle & WB_MENUSTYLEVALUESET)
+                                        ? rStyleSettings.GetMenuColor()
+                                        : rStyleSettings.GetWindowColor());
+        rRenderContext.DrawRect(aRect);
         Point aTxtPos(aRect.Left() + 2, aRect.Top());
         long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
         if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
         {
-            maVirDev->SetClipRegion(vcl::Region(aRect));
-            maVirDev->DrawText(aTxtPos, pItem->maText);
-            maVirDev->SetClipRegion();
+            rRenderContext.SetClipRegion(vcl::Region(aRect));
+            rRenderContext.DrawText(aTxtPos, pItem->maText);
+            rRenderContext.SetClipRegion();
         }
         else
-            maVirDev->DrawText(aTxtPos, pItem->maText);
+            rRenderContext.DrawText(aTxtPos, pItem->maText);
     }
     else if (pItem->meType == VALUESETITEM_COLOR)
     {
-        maVirDev->SetFillColor(pItem->maColor);
-        maVirDev->DrawRect(aRect);
+        rRenderContext.SetFillColor(pItem->maColor);
+        rRenderContext.DrawRect(aRect);
     }
     else
     {
         if (IsColor())
-            maVirDev->SetFillColor(maColor);
+            rRenderContext.SetFillColor(maColor);
         else if (nStyle & WB_MENUSTYLEVALUESET)
-            maVirDev->SetFillColor(rStyleSettings.GetMenuColor());
+            rRenderContext.SetFillColor(rStyleSettings.GetMenuColor());
         else if (IsEnabled())
-            maVirDev->SetFillColor(rStyleSettings.GetWindowColor());
+            rRenderContext.SetFillColor(rStyleSettings.GetWindowColor());
         else
-            maVirDev->SetFillColor(rStyleSettings.GetFaceColor());
-        maVirDev->DrawRect(aRect);
+            rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
+        rRenderContext.DrawRect(aRect);
 
         if (pItem->meType == VALUESETITEM_USERDRAW)
         {
-            UserDrawEvent aUDEvt(this, maVirDev.get(), aRect, pItem->mnId);
+            UserDrawEvent aUDEvt(this, &rRenderContext, aRect, pItem->mnId);
             UserDraw(aUDEvt);
         }
         else
@@ -294,31 +293,30 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
             if (aImageSize.Width()  > aRectSize.Width() ||
                 aImageSize.Height() > aRectSize.Height())
             {
-                maVirDev->SetClipRegion(vcl::Region(aRect));
-                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
-                maVirDev->SetClipRegion();
+                rRenderContext.SetClipRegion(vcl::Region(aRect));
+                rRenderContext.DrawImage(aPos, pItem->maImage, nImageStyle);
+                rRenderContext.SetClipRegion();
             }
             else
-                maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
+                rRenderContext.DrawImage(aPos, pItem->maImage, nImageStyle);
 
             if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
             {
-                maVirDev->SetFont(rRenderContext.GetFont());
-                maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
-                maVirDev->SetTextFillColor();
+                rRenderContext.SetFont(rRenderContext.GetFont());
+                rRenderContext.SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
+                rRenderContext.SetTextFillColor();
 
-                long nTxtWidth = maVirDev->GetTextWidth(pItem->maText);
-
-                if (nTxtWidth > aRect.GetWidth())
-                    maVirDev->SetClipRegion(vcl::Region(aRect));
-
-                maVirDev->DrawText(Point(aRect.Left() +
-                                         (aRect.GetWidth() - nTxtWidth) / 2,
-                                         aRect.Bottom() - maVirDev->GetTextHeight()),
-                                   pItem->maText);
+                long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
 
                 if (nTxtWidth > aRect.GetWidth())
-                    maVirDev->SetClipRegion();
+                    rRenderContext.SetClipRegion(vcl::Region(aRect));
+
+                rRenderContext.DrawText(Point(aRect.Left() + (aRect.GetWidth() - nTxtWidth) / 2,
+                                              aRect.Bottom() - rRenderContext.GetTextHeight()),
+                                        pItem->maText);
+
+                if (nTxtWidth > aRect.GetWidth())
+                    rRenderContext.SetClipRegion();
             }
         }
     }
@@ -334,7 +332,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
 
         if (!aBlendFrame.IsEmpty())
         {
-            maVirDev->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
+            rRenderContext.DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
         }
     }
 }
@@ -344,7 +342,7 @@ Reference<XAccessible> ValueSet::CreateAccessible()
     return new ValueSetAcc( this );
 }
 
-void ValueSet::Format(vcl::RenderContext const & rRenderContext)
+void ValueSet::Format(vcl::RenderContext& rRenderContext)
 {
     Size aWinSize(GetOutputSizePixel());
     size_t nItemCount = mItemList.size();
@@ -489,11 +487,6 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         mnItemHeight = nCalcHeight / mnVisLines;
     }
 
-    // Init VirDev
-    maVirDev->SetSettings(rRenderContext.GetSettings());
-    maVirDev->SetBackground(rRenderContext.GetBackground());
-    maVirDev->SetOutputSizePixel(aWinSize);
-
     // nothing is changed in case of too small items
     if ((mnItemWidth <= 0) ||
         (mnItemHeight <= ((nStyle & WB_ITEMBORDER) ? 4 : 2)) ||
@@ -569,7 +562,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         }
 
         // calculate and draw items
-        maVirDev->SetLineColor();
+        rRenderContext.SetLineColor();
         long x = nStartX;
         long y = nStartY;
 
@@ -849,41 +842,11 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     ImplDrawItemText(rRenderContext, pItem->maText);
 }
 
-void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
-{
-    tools::Rectangle aRect;
-
-    const size_t nItemPos = GetItemPos( nItemId );
-    if ( nItemPos != VALUESET_ITEM_NOTFOUND )
-    {
-        if ( !mItemList[nItemPos]->mbVisible )
-        {
-            return;
-        }
-        aRect = ImplGetItemRect(nItemPos);
-    }
-    else
-    {
-        if (mpNoneItem == nullptr)
-        {
-            return;
-        }
-        aRect = maNoneItemRect;
-    }
-
-    HideFocus();
-    const Point aPos  = aRect.TopLeft();
-    const Size  aSize = aRect.GetSize();
-    DrawOutDev( aPos, aSize, aPos, aSize, *maVirDev.get() );
-}
-
 void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
 {
     if ( mnHighItemId == nItemId )
         return;
 
-    // remember the old item to delete the previous selection
-    sal_uInt16 nOldItem = mnHighItemId;
     mnHighItemId = nItemId;
 
     // don't draw the selection if nothing is selected
@@ -891,39 +854,14 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
         mbDrawSelection = false;
 
     // remove the old selection and draw the new one
-    ImplHideSelect( nOldItem );
     Invalidate();
     mbDrawSelection = true;
 }
 
 void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
 {
-    if (mbFormat)
-        Format(rRenderContext);
-
+    Format(rRenderContext);
     HideFocus();
-
-    Point aDefPos;
-    Size aSize = maVirDev->GetOutputSizePixel();
-
-    if (mxScrollBar.get() && mxScrollBar->IsVisible())
-    {
-        Point aScrPos = mxScrollBar->GetPosPixel();
-        Size aScrSize = mxScrollBar->GetSizePixel();
-        Point aTempPos(0, aScrPos.Y());
-        Size aTempSize(aSize.Width(), aScrPos.Y());
-
-        rRenderContext.DrawOutDev(aDefPos, aTempSize, aDefPos, aTempSize, *maVirDev.get());
-        aTempSize.setWidth( aScrPos.X() - 1 );
-        aTempSize.setHeight( aScrSize.Height() );
-        rRenderContext.DrawOutDev(aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get());
-        aTempPos.setY( aScrPos.Y() + aScrSize.Height() );
-        aTempSize.setWidth( aSize.Width() );
-        aTempSize.setHeight( aSize.Height() - aTempPos.Y() );
-        rRenderContext.DrawOutDev(aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get());
-    }
-    else
-        rRenderContext.DrawOutDev(aDefPos, aSize, aDefPos, aSize, *maVirDev.get());
 
     // draw parting line to the Namefield
     if (GetStyle() & WB_NAMEFIELD)
@@ -1377,9 +1315,6 @@ void ValueSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
-        long nOffY = maVirDev->GetOutputSizePixel().Height();
-        Size aWinSize(GetOutputSizePixel());
-        rRenderContext.DrawRect(tools::Rectangle(Point(0, nOffY ), Point( aWinSize.Width(), aWinSize.Height())));
     }
 
     ImplDraw(rRenderContext);
@@ -1400,9 +1335,7 @@ void ValueSet::GetFocus()
 void ValueSet::LoseFocus()
 {
     SAL_INFO("svtools", "value set losing focus");
-    if ( mbNoSelection && mnSelItemId )
-        ImplHideSelect( mnSelItemId );
-    else
+    if (!mbNoSelection || !mnSelItemId)
         HideFocus();
     Control::LoseFocus();
 
@@ -1796,7 +1729,6 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         else
         {
             // remove old selection and draw the new one
-            ImplHideSelect( nOldItem );
             Invalidate();
         }
     }
@@ -1963,14 +1895,13 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 
 
     ValueSetItem* pItem = mItemList[nPos].get();
-
+    if (pItem->maText == rText)
+        return;
     // Remember old and new name for accessibility event.
     Any aOldName;
     Any aNewName;
-    OUString sString (pItem->maText);
-    aOldName <<= sString;
-    sString = rText;
-    aNewName <<= sString;
+    aOldName <<= pItem->maText;
+    aNewName <<= rText;
 
     pItem->maText = rText;
 
@@ -2220,10 +2151,9 @@ Size ValueSet::GetLargestItemSize()
         Size aSize = pItem->maImage.GetSizePixel();
         if (pItem->meType == VALUESETITEM_IMAGE_AND_TEXT)
         {
-            aSize.AdjustHeight(3 * NAME_LINE_HEIGHT +
-                maVirDev->GetTextHeight() );
+            aSize.AdjustHeight(3 * NAME_LINE_HEIGHT + GetTextHeight());
             aSize.setWidth( std::max(aSize.Width(),
-                                     maVirDev->GetTextWidth(pItem->maText) + NAME_OFFSET) );
+                                     GetTextWidth(pItem->maText) + NAME_OFFSET) );
         }
 
         aLargestItem.setWidth( std::max(aLargestItem.Width(), aSize.Width()) );
