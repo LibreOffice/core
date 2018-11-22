@@ -313,7 +313,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     }
     // TODO also avoid multiline paragraphs in those SDT types for shape text
     bool bOneliner = m_bStartedParaSdt && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() && lcl_isOnelinerSdt(m_aStartedParagraphSdtPrAlias);
-    if (bEndParaSdt || (m_bStartedParaSdt && m_bHadSectPr) || bOneliner)
+    if (bEndParaSdt || (m_bStartedParaSdt && m_bHadSectPr) || bOneliner || (m_bStartedParaSdt && m_bCloseStartedParaSdt))
     {
         // This is the common case: "close sdt before the current paragraph" was requested by the next paragraph.
         EndSdtBlock();
@@ -708,6 +708,7 @@ void DocxAttributeOutput::EndSdtBlock()
 {
     m_pSerializer->endElementNS( XML_w, XML_sdtContent );
     m_pSerializer->endElementNS( XML_w, XML_sdt );
+    m_bCloseStartedParaSdt = false;
 }
 
 #define MAX_CELL_IN_WORD 62
@@ -2684,6 +2685,14 @@ bool DocxAttributeOutput::EndURL(bool const)
 void DocxAttributeOutput::FieldVanish( const OUString& rText, ww::eField eType )
 {
     WriteField_Impl( nullptr, eType, rText, FieldFlags::All );
+}
+
+void DocxAttributeOutput::OnTOXEnding()
+{
+    // tdf#121561: when TOC is finished we need to close para-std
+    // we will do it later when the whole structure of the current node will be outputed
+    // because std is written between to w:p nodes.
+    m_bCloseStartedParaSdt = true;
 }
 
 // The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
@@ -9043,6 +9052,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bEndCharSdt(false),
       m_bStartedCharSdt(false),
       m_bStartedParaSdt(false),
+      m_bCloseStartedParaSdt(false),
       m_endPageRef( false ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
