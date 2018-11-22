@@ -863,7 +863,7 @@ Reference< XResultSet> const & SwMailMergeConfigItem::GetResultSet() const
     if(!m_pImpl->m_xConnection.is() && !m_pImpl->m_aDBData.sDataSource.isEmpty())
     {
         m_pImpl->m_xConnection.reset(
-            SwDBManager::GetConnection( m_pImpl->m_aDBData.sDataSource, m_pImpl->m_xSource ),
+            SwDBManager::GetConnection(m_pImpl->m_aDBData.sDataSource, m_pImpl->m_xSource, m_pSourceView),
             SharedConnection::TakeOwnership
         );
     }
