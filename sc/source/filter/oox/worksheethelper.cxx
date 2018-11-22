@@ -744,7 +744,7 @@ void WorksheetGlobals::setBaseColumnWidth( sal_Int32 nWidth )
         // #i3006# add 5 pixels padding to the width
         const UnitConverter& rUnitConv = getUnitConverter();
         maDefColModel.mfWidth = rUnitConv.scaleFromMm100(
-            rUnitConv.scaleToMm100( nWidth, UNIT_DIGIT ) + rUnitConv.scaleToMm100( 5, UNIT_SCREENX ), UNIT_DIGIT );
+            rUnitConv.scaleToMm100( nWidth, Unit::Digit ) + rUnitConv.scaleToMm100( 5, Unit::ScreenX ), Unit::Digit );
     }
 }
 
@@ -1176,7 +1176,7 @@ void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
         const ValueRange& rColRange, const ColumnModel& rModel )
 {
     // column width: convert 'number of characters' to column width in 1/100 mm
-    sal_Int32 nWidth = getUnitConverter().scaleToMm100( rModel.mfWidth, UNIT_DIGIT );
+    sal_Int32 nWidth = getUnitConverter().scaleToMm100( rModel.mfWidth, Unit::Digit );
 
     // macro sheets have double width
     if( meSheetType == WorksheetType::Macro )
@@ -1236,7 +1236,7 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
 {
     // row height: convert points to row height in 1/100 mm
     double fHeight = (rModel.mfHeight >= 0.0) ? rModel.mfHeight : fDefHeight;
-    sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
+    sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, Unit::Point );
     SCROW nStartRow = rRowRange.mnFirst;
     SCROW nEndRow = rRowRange.mnLast;
     SCTAB nTab = getSheetIndex();

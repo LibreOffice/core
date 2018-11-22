@@ -1172,10 +1172,6 @@ sc/inc/types.hxx:56
     enum ScFormulaVectorState FormulaVectorDisabledNotInSoftwareSubset
 sc/inc/types.hxx:123
     enum sc::ListenerGroupType Single
-sc/source/filter/inc/unitconverter.hxx:43
-    enum oox::xls::Unit UNIT_REFDEVX
-sc/source/filter/inc/unitconverter.hxx:44
-    enum oox::xls::Unit UNIT_REFDEVY
 sc/source/filter/lotus/lotread.cxx:41
     enum STATE S_WK1
 sc/source/ui/inc/viewdata.hxx:43

@@ -1183,7 +1183,7 @@ void Alignment::finalizeImport()
 
     /*  indentation: expressed as number of blocks of 3 space characters in
         OOXML. */
-    sal_Int32 nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, UNIT_SPACE );
+    sal_Int32 nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, Unit::Space );
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
         maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
 

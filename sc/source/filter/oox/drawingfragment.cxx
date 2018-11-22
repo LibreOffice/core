@@ -512,7 +512,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                     instead the top border of the caption text. */
                 if( const ::oox::vml::TextFontModel* pFontModel = pTextBox ? pTextBox->getFirstFont() : nullptr )
                 {
-                    sal_Int32 nFontHeightHmm = getUnitConverter().scaleToMm100( pFontModel->monSize.get( 160 ), UNIT_TWIP );
+                    sal_Int32 nFontHeightHmm = getUnitConverter().scaleToMm100( pFontModel->monSize.get( 160 ), Unit::Twip );
                     sal_Int32 nYDiff = ::std::min< sal_Int32 >( nFontHeightHmm / 2, aShapeRect.Y );
                     aShapeRect.Y -= nYDiff;
                     aShapeRect.Height += nYDiff;
