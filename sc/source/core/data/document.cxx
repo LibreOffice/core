@@ -1741,7 +1741,7 @@ ScFormulaVectorState ScDocument::GetFormulaVectorState( const ScAddress& rPos ) 
 {
     SCTAB nTab = rPos.Tab();
     if (!ValidTab(nTab) || static_cast<size_t>(nTab) >= maTabs.size() || !maTabs[nTab])
-        return FormulaVectorUnknown;
+        return ScFormulaVectorState::Unknown;
 
     return maTabs[nTab]->GetFormulaVectorState(rPos.Col(), rPos.Row());
 }

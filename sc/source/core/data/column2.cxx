@@ -2075,7 +2075,7 @@ size_t ScColumn::GetFormulaHash( SCROW nRow ) const
 ScFormulaVectorState ScColumn::GetFormulaVectorState( SCROW nRow ) const
 {
     const ScFormulaCell* pCell = FetchFormulaCell(nRow);
-    return pCell ? pCell->GetVectorState() : FormulaVectorUnknown;
+    return pCell ? pCell->GetVectorState() : ScFormulaVectorState::Unknown;
 }
 
 formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )

@@ -869,12 +869,12 @@ void Test::testFormulaHashAndTag()
         const char* pFormula;
         ScFormulaVectorState const eState;
     } aVectorTests[] = {
-        { "=SUM(1;2;3;4;5)", FormulaVectorEnabled },
-        { "=NOW()", FormulaVectorDisabled },
-        { "=AVERAGE(X1:Y200)", FormulaVectorCheckReference },
-        { "=MAX(X1:Y200;10;20)", FormulaVectorCheckReference },
-        { "=MIN(10;11;22)", FormulaVectorEnabled },
-        { "=H4", FormulaVectorCheckReference },
+        { "=SUM(1;2;3;4;5)", ScFormulaVectorState::Enabled },
+        { "=NOW()", ScFormulaVectorState::Disabled },
+        { "=AVERAGE(X1:Y200)", ScFormulaVectorState::CheckReference },
+        { "=MAX(X1:Y200;10;20)", ScFormulaVectorState::CheckReference },
+        { "=MIN(10;11;22)", ScFormulaVectorState::Enabled },
+        { "=H4", ScFormulaVectorState::CheckReference },
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aVectorTests); ++i)

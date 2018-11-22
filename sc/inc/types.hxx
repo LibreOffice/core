@@ -49,17 +49,16 @@ typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
  * series of formula token arrays in adjacent formula cells in one step,
  * provided that they all contain identical set of tokens.
  */
-enum ScFormulaVectorState
+enum class ScFormulaVectorState
 {
-    FormulaVectorDisabled,
-    FormulaVectorDisabledNotInSubSet,
-    FormulaVectorDisabledNotInSoftwareSubset,
-    FormulaVectorDisabledByOpCode,
-    FormulaVectorDisabledByStackVariable,
+    Disabled,
+    DisabledNotInSubSet,
+    DisabledByOpCode,
+    DisabledByStackVariable,
 
-    FormulaVectorEnabled,
-    FormulaVectorCheckReference,
-    FormulaVectorUnknown
+    Enabled,
+    CheckReference,
+    Unknown
 };
 
 namespace sc {

@@ -2285,7 +2285,7 @@ size_t ScTable::GetFormulaHash( SCCOL nCol, SCROW nRow ) const
 ScFormulaVectorState ScTable::GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const
 {
     if ( !IsColValid( nCol ) )
-        return FormulaVectorUnknown;
+        return ScFormulaVectorState::Unknown;
 
     return aCol[nCol].GetFormulaVectorState(nRow);
 }

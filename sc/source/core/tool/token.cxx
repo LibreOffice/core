@@ -1364,7 +1364,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         {
             SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
                 << "(" << int(eOp) << ") disables vectorisation for formula group");
-            meVectorState = FormulaVectorDisabledNotInSubSet;
+            meVectorState = ScFormulaVectorState::DisabledNotInSubSet;
             mbOpenCLEnabled = false;
             return;
         }
@@ -1549,7 +1549,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             default:
                 SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
                     << "(" << int(eOp) << ") disables vectorisation for formula group");
-                meVectorState = FormulaVectorDisabledByOpCode;
+                meVectorState = ScFormulaVectorState::DisabledByOpCode;
                 mbOpenCLEnabled = false;
                 return;
         }
@@ -1568,7 +1568,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svSingleRef:
             case svDoubleRef:
                 // Depends on the reference state.
-                meVectorState = FormulaVectorCheckReference;
+                meVectorState = ScFormulaVectorState::CheckReference;
             break;
             case svError:
             case svEmptyCell:
@@ -1589,7 +1589,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svUnknown:
                 // We don't support vectorization on these.
                 SAL_INFO("sc.opencl", "opcode ocPush: variable type " << StackVarEnumToString(r.GetType()) << " disables vectorisation for formula group");
-                meVectorState = FormulaVectorDisabledByStackVariable;
+                meVectorState = ScFormulaVectorState::DisabledByStackVariable;
                 mbOpenCLEnabled = false;
                 return;
             default:
@@ -1603,7 +1603,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         {
             SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
                 << "(" << int(eOp) << ") disables vectorisation for formula group");
-            meVectorState = FormulaVectorDisabledNotInSubSet;
+            meVectorState = ScFormulaVectorState::DisabledNotInSubSet;
             mbOpenCLEnabled = false;
             return;
         }
@@ -1639,7 +1639,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
 
                 SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp)
                     << "(" << int(eOp) << ") disables vectorisation for formula group");
-                meVectorState = FormulaVectorDisabledByOpCode;
+                meVectorState = ScFormulaVectorState::DisabledByOpCode;
                 mbOpenCLEnabled = false;
                 return;
 
@@ -1794,7 +1794,7 @@ void ScTokenArray::GenHash()
 void ScTokenArray::ResetVectorState()
 {
     mbOpenCLEnabled = ScCalcConfig::isOpenCLEnabled();
-    meVectorState = mbOpenCLEnabled ? FormulaVectorEnabled : FormulaVectorDisabled;
+    meVectorState = mbOpenCLEnabled ? ScFormulaVectorState::Enabled : ScFormulaVectorState::Disabled;
     mbThreadingEnabled = ScCalcConfig::isThreadingEnabled();
 }
 
@@ -1802,11 +1802,10 @@ bool ScTokenArray::IsFormulaVectorDisabled() const
 {
     switch (meVectorState)
     {
-        case FormulaVectorDisabled:
-        case FormulaVectorDisabledByOpCode:
-        case FormulaVectorDisabledNotInSoftwareSubset:
-        case FormulaVectorDisabledByStackVariable:
-        case FormulaVectorDisabledNotInSubSet:
+        case ScFormulaVectorState::Disabled:
+        case ScFormulaVectorState::DisabledByOpCode:
+        case ScFormulaVectorState::DisabledByStackVariable:
+        case ScFormulaVectorState::DisabledNotInSubSet:
             return true;
         default:
             ;

@@ -4724,25 +4724,22 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
     bool bCanVectorize = pCode->IsEnabledForOpenCL();
     switch (pCode->GetVectorState())
     {
-        case FormulaVectorEnabled:
-        case FormulaVectorCheckReference:
+        case ScFormulaVectorState::Enabled:
+        case ScFormulaVectorState::CheckReference:
         break;
 
         // Not good.
-        case FormulaVectorDisabledByOpCode:
+        case ScFormulaVectorState::DisabledByOpCode:
             aScope.addMessage("group calc disabled due to vector state (non-vector-supporting opcode)");
             break;
-        case FormulaVectorDisabledNotInSoftwareSubset:
-            aScope.addMessage("group calc disabled due to vector state (opcode not in software subset)");
-            break;
-        case FormulaVectorDisabledByStackVariable:
+        case ScFormulaVectorState::DisabledByStackVariable:
             aScope.addMessage("group calc disabled due to vector state (non-vector-supporting stack variable)");
             break;
-        case FormulaVectorDisabledNotInSubSet:
+        case ScFormulaVectorState::DisabledNotInSubSet:
             aScope.addMessage("group calc disabled due to vector state (opcode not in subset)");
             break;
-        case FormulaVectorDisabled:
-        case FormulaVectorUnknown:
+        case ScFormulaVectorState::Disabled:
+        case ScFormulaVectorState::Unknown:
         default:
             aScope.addMessage("group calc disabled due to vector state (unknown)");
             return false;
@@ -4890,7 +4887,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
 
 bool ScFormulaCell::InterpretInvariantFormulaGroup()
 {
-    if (pCode->GetVectorState() == FormulaVectorCheckReference)
+    if (pCode->GetVectorState() == ScFormulaVectorState::CheckReference)
     {
         // An invariant group should only have absolute row references, and no
         // external references are allowed.
