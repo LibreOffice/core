@@ -107,12 +107,11 @@ enum class FileViewFlags
     ONLYFOLDER         = 0x01,
     MULTISELECTION     = 0x02,
     SHOW_TYPE          = 0x04,
-    SHOW_ONLYTITLE     = 0x10,
     SHOW_NONE          = 0x20,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<FileViewFlags> : is_typed_flags<FileViewFlags, 0x1f> {};
+    template<> struct typed_flags<FileViewFlags> : is_typed_flags<FileViewFlags, 0x27> {};
 }
 
 namespace
@@ -391,27 +390,18 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
     HeaderBarItemBits nBits = ( HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE );
-    if (nFlags & FileViewFlags::SHOW_ONLYTITLE)
-    {
-        long aTabPositions[] = { 20, 600 };
-        SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
 
-        mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 600, nBits | HeaderBarItemBits::UPARROW);
-    }
-    else
-    {
-        long aTabPositions[] = { 20, 180, 320, 400, 600 };
-        SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
-        SetTabJustify(2, AdjustRight); // column "Size"
+    long aTabPositions[] = { 20, 180, 320, 400, 600 };
+    SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
+    SetTabJustify(2, AdjustRight); // column "Size"
 
-        mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
-        if (nFlags & FileViewFlags::SHOW_TYPE)
-        {
-            mpHeaderBar->InsertItem(COLUMN_TYPE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
-        }
-        mpHeaderBar->InsertItem(COLUMN_SIZE, SvtResId(STR_SVT_FILEVIEW_COLUMN_SIZE), 80, nBits);
-        mpHeaderBar->InsertItem(COLUMN_DATE, SvtResId(STR_SVT_FILEVIEW_COLUMN_DATE), 500, nBits);
+    mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
+    if (nFlags & FileViewFlags::SHOW_TYPE)
+    {
+        mpHeaderBar->InsertItem(COLUMN_TYPE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
     }
+    mpHeaderBar->InsertItem(COLUMN_SIZE, SvtResId(STR_SVT_FILEVIEW_COLUMN_SIZE), 80, nBits);
+    mpHeaderBar->InsertItem(COLUMN_DATE, SvtResId(STR_SVT_FILEVIEW_COLUMN_DATE), 500, nBits);
 
     Size aHeadSize = mpHeaderBar->GetSizePixel();
     SetPosSizePixel( Point( 0, aHeadSize.Height() ),
