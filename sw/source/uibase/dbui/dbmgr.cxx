@@ -1931,7 +1931,7 @@ sal_Int32 SwDBManager::GetColumnType( const OUString& rDBName,
 }
 
 uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rDataSource,
-                                                    uno::Reference<sdbc::XDataSource>& rxSource)
+                                                              uno::Reference<sdbc::XDataSource>& rxSource, SwView *pView)
 {
     uno::Reference< sdbc::XConnection> xConnection;
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -1941,7 +1941,8 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
         if ( xComplConnection.is() )
         {
             rxSource.set(xComplConnection, uno::UNO_QUERY);
-            uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
+            weld::Window* pWindow = pView ? pView->GetFrameWeld() : nullptr;
+            uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(xContext, pWindow ? pWindow->GetXWindow() : nullptr), uno::UNO_QUERY_THROW );
             xConnection = xComplConnection->connectWithCompletion( xHandler );
         }
     }
@@ -2420,7 +2421,8 @@ uno::Reference< sdbc::XConnection> const & SwDBManager::RegisterConnection(OUStr
     uno::Reference< sdbc::XDataSource> xSource;
     if(!pFound->xConnection.is())
     {
-        pFound->xConnection = SwDBManager::GetConnection(rDataSource, xSource );
+        SwView* pView = (m_pDoc && m_pDoc->GetDocShell()) ? m_pDoc->GetDocShell()->GetView() : nullptr;
+        pFound->xConnection = SwDBManager::GetConnection(rDataSource, xSource, pView);
         try
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
@@ -3183,8 +3185,8 @@ uno::Reference<sdbc::XDataSource> SwDBManager::getDataSourceAsParent(const uno::
 uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDataSourceName,
                                        const OUString& _sCommand,
                                        sal_Int32 _nCommandType,
-                                       const uno::Reference<sdbc::XConnection>& _xConnection
-                                      )
+                                       const uno::Reference<sdbc::XConnection>& _xConnection,
+                                       SwView* pView)
 {
     uno::Reference<sdbc::XResultSet> xResultSet;
     try
@@ -3205,7 +3207,8 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
 
                 if ( xRowSet.is() )
                 {
-                    uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), nullptr), uno::UNO_QUERY_THROW );
+                    weld::Window* pWindow = pView ? pView->GetFrameWeld() : nullptr;
+                    uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), pView ? pWindow->GetXWindow() : nullptr), uno::UNO_QUERY_THROW );
                     xRowSet->executeWithCompletion(xHandler);
                 }
                 xResultSet.set(xRowSet, uno::UNO_QUERY);
