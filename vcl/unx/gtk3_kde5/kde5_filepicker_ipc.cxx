@@ -203,7 +203,8 @@ FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
     qRegisterMetaType<uint64_t>("uint64_t");
     qRegisterMetaType<Commands>("Commands");
 
-    connect(this, &FilePickerIpc::commandReceived, this, &FilePickerIpc::handleCommand);
+    connect(this, &FilePickerIpc::commandReceived, this, &FilePickerIpc::handleCommand,
+            Qt::QueuedConnection);
 
     // read IPC commands and their args in a separate thread, so this does not block everything else;
     // 'commandReceived' signal is emitted every time a command and its args have been read;
