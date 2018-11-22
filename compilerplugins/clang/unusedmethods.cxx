@@ -18,7 +18,6 @@
 #include "clang/AST/Attr.h"
 
 #include "plugin.hxx"
-#include "compat.hxx"
 
 /**
 This plugin performs 3 different analyses:
@@ -118,9 +117,8 @@ public:
     bool TraverseFunctionDecl( FunctionDecl* );
     bool TraverseCXXMethodDecl( CXXMethodDecl* );
     bool TraverseCXXConversionDecl( CXXConversionDecl* );
-#if CLANG_VERSION >= 50000
     bool TraverseCXXDeductionGuideDecl( CXXDeductionGuideDecl* );
-#endif
+
 private:
     void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
@@ -167,7 +165,7 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
         aInfo.nameAndParams = functionDecl->getQualifiedNameAsString() + "(";
     }
     bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
+    for (const ParmVarDecl *pParmVarDecl : functionDecl->parameters()) {
         if (bFirst)
             bFirst = false;
         else
@@ -400,7 +398,6 @@ bool UnusedMethods::TraverseCXXConversionDecl(CXXConversionDecl* f)
     currentFunctionDecl = copy;
     return ret;
 }
-#if CLANG_VERSION >= 50000
 bool UnusedMethods::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
 {
     auto copy = currentFunctionDecl;
@@ -409,7 +406,6 @@ bool UnusedMethods::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
     currentFunctionDecl = copy;
     return ret;
 }
-#endif
 
 loplugin::Plugin::Registration< UnusedMethods > X("unusedmethods", false);
 

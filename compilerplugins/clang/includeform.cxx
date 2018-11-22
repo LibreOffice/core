@@ -11,7 +11,6 @@
 
 #include "config_clang.h"
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Enforces the "Rules for #include directives (C/C++)" described in README.md.
@@ -74,7 +73,7 @@ private:
                 pos = pos2;
             }
 #endif
-            auto dir2 = std::string(compat::take_front(file, pos));
+            auto dir2 = std::string(file.take_front(pos));
             loplugin::normalizeDotDotInFilePath(dir2);
             shouldUseAngles = !loplugin::isSamePathname(dir1, dir2);
         }

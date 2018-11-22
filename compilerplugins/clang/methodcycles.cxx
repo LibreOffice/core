@@ -18,7 +18,6 @@
 #include "clang/AST/Attr.h"
 
 #include "plugin.hxx"
-#include "compat.hxx"
 
 /**
 What we are looking for here are methods that are not reachable from any of the program
@@ -110,9 +109,8 @@ public:
     bool TraverseCXXConstructorDecl(CXXConstructorDecl*);
     bool TraverseCXXConversionDecl(CXXConversionDecl*);
     bool TraverseCXXDestructorDecl(CXXDestructorDecl*);
-#if CLANG_VERSION >= 50000
     bool TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl*);
-#endif
+
 private:
     void logCallToRootMethods(const FunctionDecl* functionDeclFrom,
                               const FunctionDecl* functionDeclTo);
@@ -154,7 +152,7 @@ MyFuncInfo MethodCycles::niceName(const FunctionDecl* functionDecl)
         aInfo.nameAndParams = functionDecl->getQualifiedNameAsString() + "(";
     }
     bool bFirst = true;
-    for (const ParmVarDecl* pParmVarDecl : compat::parameters(*functionDecl))
+    for (const ParmVarDecl* pParmVarDecl : functionDecl->parameters())
     {
         if (bFirst)
             bFirst = false;
@@ -349,7 +347,6 @@ bool MethodCycles::TraverseCXXConversionDecl(CXXConversionDecl* f)
     currentFunctionDecl = copy;
     return ret;
 }
-#if CLANG_VERSION >= 50000
 bool MethodCycles::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
 {
     auto copy = currentFunctionDecl;
@@ -358,7 +355,6 @@ bool MethodCycles::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
     currentFunctionDecl = copy;
     return ret;
 }
-#endif
 bool MethodCycles::TraverseCXXConstructorDecl(CXXConstructorDecl* f)
 {
     auto copy = currentFunctionDecl;

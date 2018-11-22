@@ -33,7 +33,6 @@ struct S2
     OUString x;
 };
 
-#if CLANG_VERSION >= 50000 // probably something to do with how OUString initialisers work
 S2 const& f2()
 {
     static S2 const s1[]{
@@ -42,7 +41,6 @@ S2 const& f2()
     };
     return s1[0];
 }
-#endif
 
 // no warning expected
 S2 const& f3()

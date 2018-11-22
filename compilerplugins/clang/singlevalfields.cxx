@@ -321,13 +321,11 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         {
             break;
         }
-#if CLANG_VERSION >= 40000
         else if ( isa<ArrayInitLoopExpr>(parent) )
         {
             bPotentiallyAssignedTo = true;
             break;
         }
-#endif
         else {
             bPotentiallyAssignedTo = true;
             bDump = true;
@@ -451,7 +449,6 @@ std::string SingleValFields::getExprValue(const Expr* arg)
             return dyn_cast<clang::StringLiteral>(constructExpr->getArg(0))->getString();
         }
     }
-#if CLANG_VERSION >= 50000
     if (arg->getType()->isFloatingType())
     {
         APFloat x1(0.0f);
@@ -463,7 +460,6 @@ std::string SingleValFields::getExprValue(const Expr* arg)
             return os.str();
         }
     }
-#endif
     APSInt x1;
     if (arg->EvaluateAsInt(x1, compiler.getASTContext()))
         return x1.toString(10);
