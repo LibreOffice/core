@@ -473,14 +473,6 @@ public:
 };
 
 
-enum ComplListAppendHandl
-{
-    AH_EmptyAsErr,
-    AH_EmpyAs0,
-    AH_IgnoreEmpty
-};
-
-
 class ComplexList final
 {
 private:
@@ -498,10 +490,10 @@ public:
     inline void             Append( Complex&& pNew );
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList, ComplListAppendHandl eAH );
+    void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList );
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                    Append( const css::uno::Sequence< css::uno::Any >& aMultPars,ComplListAppendHandl eAH );
+    void                    Append( const css::uno::Sequence< css::uno::Any >& aMultPars );
 };
 
 

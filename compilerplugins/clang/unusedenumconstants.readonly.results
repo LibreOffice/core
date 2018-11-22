@@ -1202,10 +1202,6 @@ sc/source/ui/vba/vbasheetobject.hxx:142
     enum ScVbaControlObjectBase::ListenerType LISTENER_VALUE
 sc/source/ui/vba/vbasheetobject.hxx:143
     enum ScVbaControlObjectBase::ListenerType LISTENER_CHANGE
-scaddins/source/analysis/analysishelper.hxx:478
-    enum sca::analysis::ComplListAppendHandl AH_EmptyAsErr
-scaddins/source/analysis/analysishelper.hxx:479
-    enum sca::analysis::ComplListAppendHandl AH_EmpyAs0
 scaddins/source/datefunc/datefunc.hxx:41
     enum ScaCategory Finance
 scaddins/source/datefunc/datefunc.hxx:42
