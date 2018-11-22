@@ -19,13 +19,6 @@
 
 # CppunitTest class
 
-# Cap the number of threads unittests use.
-gb_CppunitTest_ENV_VARS := MAX_CONCURRENCY=4
-# Disable searching for certificates by default
-gb_CppunitTest_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=0
-# Avoid hanging if the cups daemon requests a password.
-gb_CppunitTest_ENV_VARS += SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
-
 gb_CppunitTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(SYSTEM_PYTHON),,$(call gb_Package_get_target,python3))
 
@@ -129,7 +122,7 @@ else
 		( \
 		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
 		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
-		$(gb_CppunitTest_ENV_VARS) \
+		$(gb_TEST_ENV_VARS) \
 		$(if $(gb_CppunitTest__vcl_no_svp),,SAL_USE_VCLPLUGIN=$(or $(SAL_USE_VCLPLUGIN),svp)) \
 		$(EXTRA_ENV_VARS) \
 		$(if $(filter gdb,$(gb_CppunitTest_GDBTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
