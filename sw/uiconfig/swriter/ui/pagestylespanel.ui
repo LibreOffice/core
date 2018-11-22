@@ -76,7 +76,7 @@
         <child>
           <object class="svxcorelo-PageNumberListBox" id="numberbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -132,7 +132,7 @@
         <child>
           <object class="GtkComboBoxText" id="columnbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <items>
               <item translatable="yes" context="pagestylespanel|columnbox">1 Column</item>
               <item translatable="yes" context="pagestylespanel|columnbox">2 Columns</item>
@@ -152,7 +152,7 @@
           <object class="svxlo-SvxFillAttrBox" id="lbhatching">
             <property name="width_request">150</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -165,7 +165,7 @@
           <object class="svxlo-SvxFillAttrBox" id="lbbitmap">
             <property name="width_request">150</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -178,7 +178,7 @@
           <object class="svxcorelo-SvxColorListBox" id="lbcolor">
             <property name="width_request">150</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -191,7 +191,7 @@
           <object class="svxcorelo-SvxColorListBox" id="lbgradient">
             <property name="width_request">150</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -203,7 +203,7 @@
         <child>
           <object class="svxlo-SvxFillTypeBox" id="bgselect">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
