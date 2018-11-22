@@ -88,6 +88,24 @@
       "revId": "15355274aad37b34050949655e5954e27fb6a7fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df6247ed_49e1a1d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-22T09:35:38Z",
+      "side": 1,
+      "message": "...and that SAL_USE_VCLPLUGIN\u003dsvp check was added to OpenGLHelper::isVCLOpenGLEnabled with the same 6cdfe5ebb4f6c06bfa8b0e67e778dd68131c14e3 \"Drop some headless mode variants\" that globally set SAL_USE_VCLPLUGIN\u003dsvp for all builds",
+      "parentUuid": "df6247ed_89a8b977",
+      "revId": "15355274aad37b34050949655e5954e27fb6a7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
