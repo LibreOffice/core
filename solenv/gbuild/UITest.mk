@@ -69,6 +69,7 @@ else
 		PYTHONPATH="$(PYPATH)" \
 		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*)))" \
 		PYTHONDONTWRITEBYTECODE=0 \
+		$(gb_TEST_ENV_VARS) \
 		$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(DISABLE_GUI),, \
 			SAL_USE_VCLPLUGIN=svp \
 		)) \
