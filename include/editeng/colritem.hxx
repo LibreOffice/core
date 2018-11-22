@@ -68,6 +68,8 @@ public:
         return mColor;
     }
     void SetValue(const Color& rNewColor);
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 // XXX: to be moved in a separate header.
