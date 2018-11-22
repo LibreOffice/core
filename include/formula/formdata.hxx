@@ -29,6 +29,8 @@
 
 namespace formula
 {
+enum class FormulaDlgMode;
+
 class FORMULA_DLLPUBLIC FormEditData
 {
 public:
@@ -37,7 +39,7 @@ public:
 
     virtual void            SaveValues();
 
-    sal_uInt16       GetMode() const     { return nMode; }
+    FormulaDlgMode   GetMode() const     { return nMode; }
     sal_Int32        GetFStart() const   { return nFStart; }
     sal_uInt16       GetOffset() const   { return nOffset; }
     const OUString&  GetUndoStr() const  { return aUndoStr; }
@@ -45,7 +47,7 @@ public:
     const VclPtr<vcl::Window>& GetFocusWindow()const  { return xFocusWin; }
     const Selection& GetSelection()const { return aSelection;}
 
-    void             SetMode( sal_uInt16 nNew )                  { nMode = nNew; }
+    void             SetMode( FormulaDlgMode nNew )              { nMode = nNew; }
     void             SetFStart( sal_Int32 nNew )                 { nFStart = nNew; }
     void             SetOffset( sal_uInt16 nNew )                { nOffset = nNew; }
     void             SetUndoStr( const OUString& rNew )          { aUndoStr = rNew; }
@@ -58,7 +60,7 @@ protected:
     FormEditData& operator=( const FormEditData& r );
 
 private:
-    sal_uInt16          nMode;              // enum ScFormulaDlgMode
+    FormulaDlgMode      nMode;
     sal_Int32           nFStart;
     sal_uInt16          nOffset;
     OUString            aUndoStr;
