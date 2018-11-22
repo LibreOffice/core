@@ -111,14 +111,13 @@ enum class Css1Background {
 enum class Css1FrameSize {
     NONE       = 0x00,
     Width      = 0x01,
-    VarHeight  = 0x02,
-    MinHeight  = 0x04,
-    FixHeight  = 0x08,
-    AnyHeight  = 0x0e,
+    MinHeight  = 0x02,
+    FixHeight  = 0x04,
+    AnyHeight  = 0x06,
     Pixel      = 0x10,
 };
 namespace o3tl {
-    template<> struct typed_flags<Css1FrameSize> : is_typed_flags<Css1FrameSize, 0x1f> {};
+    template<> struct typed_flags<Css1FrameSize> : is_typed_flags<Css1FrameSize, 0x17> {};
 }
 
 #define DOT_LEADERS_MAX_WIDTH   18
@@ -2883,9 +2882,6 @@ static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
             break;
         case ATT_MIN_SIZE:
             bOutHeight = bool(nMode & Css1FrameSize::MinHeight);
-            break;
-        case ATT_VAR_SIZE:
-            bOutHeight = bool(nMode & Css1FrameSize::VarHeight);
             break;
         default:
             OSL_ENSURE( bOutHeight, "Height will not be exported" );

@@ -1476,8 +1476,6 @@ sw/source/core/unocore/unosett.cxx:1580
     enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) InChapterFirst
 sw/source/core/unocore/unosett.cxx:1581
     enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) InChapterLast
-sw/source/filter/html/css1atr.cxx:114
-    enum Css1FrameSize VarHeight
 sw/source/filter/html/css1atr.cxx:117
     enum Css1FrameSize AnyHeight
 sw/source/filter/ww8/ww8scan.hxx:604
