@@ -131,6 +131,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121456_tabsOffset, "tdf121456_tabsOffset.odt")
     }
 }
 
+// tdf#121561: make sure w:sdt/w:sdtContent around TOC is written during ODT->DOCX conversion
+DECLARE_OOXMLEXPORT_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffset.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:t", "Inhaltsverzeichnis");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", " TOC \\f \\o \"1-9\" \\h");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Table of Contents");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx")
 {
     CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER), getProperty<sal_Int16>(getParagraph(1), "ParaAdjust"));
