@@ -3510,7 +3510,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     if ( rSrcSh.IsSelFrameMode() )
     {
         //Hack: fool the special treatment
-        aSttPt -= aSttPt - rSrcSh.GetObjRect().Pos();
+        aSttPt = rSrcSh.GetObjRect().Pos();
     }
 
     bool bRet = rSrcSh.SwFEShell::Copy( &rSh, aSttPt, rDragPt, bMove,
