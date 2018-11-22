@@ -598,7 +598,11 @@ void PDFOutDev::restoreState(GfxState*)
     printf( "restoreState\n" );
 }
 
+#if POPPLER_CHECK_VERSION(0, 71, 0)
+void PDFOutDev::setDefaultCTM(const double *pMat)
+#else
 void PDFOutDev::setDefaultCTM(double *pMat)
+#endif
 {
     assert(pMat);
 
