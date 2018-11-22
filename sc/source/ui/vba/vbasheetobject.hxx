@@ -133,24 +133,13 @@ typedef ::cppu::ImplInheritanceHelper< ScVbaSheetObjectBase, ov::excel::XControl
 class ScVbaControlObjectBase : public ScVbaControlObject_BASE
 {
 public:
-    /** Specifies the listener used for OnAction events. */
-    enum ListenerType
-    {
-        LISTENER_ACTION,        /// XActionListener.actionPerformed
-        LISTENER_MOUSE,         /// XMouseListener.mouseReleased
-        LISTENER_TEXT,          /// XTextListener.textChanged
-        LISTENER_VALUE,         /// XAdjustmentListener.adjustmentValueChanged
-        LISTENER_CHANGE         /// XChangeListener.changed
-    };
-
     /// @throws css::uno::RuntimeException
     explicit ScVbaControlObjectBase(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         const css::uno::Reference< css::frame::XModel >& rxModel,
         const css::uno::Reference< css::container::XIndexContainer >& rxFormIC,
-        const css::uno::Reference< css::drawing::XControlShape >& rxControlShape,
-        ListenerType eListenerType );
+        const css::uno::Reference< css::drawing::XControlShape >& rxControlShape );
 
     // XSheetObject attributes
     virtual OUString SAL_CALL getName() override;
@@ -171,8 +160,6 @@ protected:
 protected:
     css::uno::Reference< css::container::XIndexContainer > mxFormIC;
     css::uno::Reference< css::beans::XPropertySet > mxControlProps;
-    OUString maListenerType;
-    OUString maEventMethod;
 };
 
 typedef ::cppu::ImplInheritanceHelper< ScVbaControlObjectBase, ov::excel::XButton > ScVbaButton_BASE;
