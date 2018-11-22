@@ -23,6 +23,9 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
     , mpParentSalMenu(nullptr)
     , mpFrame(nullptr)
     , mbMenuBar(bMenuBar)
+    , mpQMenuBar(nullptr)
+    , mpQMenu(nullptr)
+    , mpQActionGroup(nullptr)
 {
     connect(this, &Qt5Menu::setFrameSignal, this, &Qt5Menu::SetFrame, Qt::BlockingQueuedConnection);
 }
@@ -30,6 +33,67 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
 Qt5Menu::~Qt5Menu() { maItems.clear(); }
 
 bool Qt5Menu::VisibleMenuBar() { return true; }
+
+QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem)
+{
+    QMenu* pQMenu = mpQMenu;
+    sal_uInt16 nId = pSalMenuItem->mnId;
+    OUString aText = mpVCLMenu->GetItemText(nId);
+    NativeItemText(aText);
+    vcl::KeyCode nAccelKey = mpVCLMenu->GetAccelKey(nId);
+    bool bChecked = mpVCLMenu->IsItemChecked(nId);
+    MenuItemBits itemBits = mpVCLMenu->GetItemBits(nId);
+
+    if (mbMenuBar && mpQMenuBar)
+        // top-level menu
+        pQMenu = mpQMenuBar->addMenu(toQString(aText));
+    else
+    {
+        if (pSalMenuItem->mpSubMenu)
+        {
+            // submenu
+            pQMenu = pQMenu->addMenu(toQString(aText));
+            mpQActionGroup = new QActionGroup(pQMenu);
+        }
+        else
+        {
+            if (pSalMenuItem->mnType == MenuItemType::SEPARATOR)
+                pQMenu->addSeparator();
+            else
+            {
+                // leaf menu
+                QAction* pAction = pQMenu->addAction(toQString(aText));
+                pSalMenuItem->mpAction = pAction;
+                pAction->setShortcut(toQString(nAccelKey.GetName(GetFrame()->GetWindow())));
+
+                if (itemBits & MenuItemBits::CHECKABLE)
+                {
+                    pAction->setCheckable(true);
+                    pAction->setChecked(bChecked);
+                }
+                else if (itemBits & MenuItemBits::RADIOCHECK)
+                {
+                    pAction->setCheckable(true);
+                    if (!mpQActionGroup)
+                    {
+                        mpQActionGroup = new QActionGroup(pQMenu);
+                        mpQActionGroup->setExclusive(true);
+                    }
+                    mpQActionGroup->addAction(pAction);
+                    pAction->setChecked(bChecked);
+                }
+
+                pAction->setEnabled(pSalMenuItem->mbEnabled);
+                pAction->setVisible(pSalMenuItem->mbVisible);
+
+                connect(pAction, &QAction::triggered, this,
+                        [pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
+            }
+        }
+    }
+
+    return pQMenu;
+}
 
 void Qt5Menu::InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos)
 {
@@ -88,70 +152,16 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
 
 void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
 {
-    Menu* pVCLMenu = mpVCLMenu;
+    mpQMenu = pParentMenu;
 
     if (mbMenuBar && mpQMenuBar)
         mpQMenuBar->clear();
-    QActionGroup* pQAG = nullptr;
+    mpQActionGroup = nullptr;
 
     for (sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++)
     {
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nItem);
-        sal_uInt16 nId = pSalMenuItem->mnId;
-        OUString aText = pVCLMenu->GetItemText(nId);
-        QMenu* pQMenu = pParentMenu;
-        NativeItemText(aText);
-        vcl::KeyCode nAccelKey = pVCLMenu->GetAccelKey(nId);
-        bool bChecked = pVCLMenu->IsItemChecked(nId);
-        MenuItemBits itemBits = pVCLMenu->GetItemBits(nId);
-
-        if (mbMenuBar && mpQMenuBar)
-            // top-level menu
-            pQMenu = mpQMenuBar->addMenu(toQString(aText));
-        else
-        {
-            if (pSalMenuItem->mpSubMenu)
-            {
-                // submenu
-                pQMenu = pQMenu->addMenu(toQString(aText));
-                pQAG = new QActionGroup(pQMenu);
-            }
-            else
-            {
-                if (pSalMenuItem->mnType == MenuItemType::SEPARATOR)
-                    pQMenu->addSeparator();
-                else
-                {
-                    // leaf menu
-                    QAction* pAction = pQMenu->addAction(toQString(aText));
-                    pSalMenuItem->mpAction = pAction;
-                    pAction->setShortcut(toQString(nAccelKey.GetName(GetFrame()->GetWindow())));
-
-                    if (itemBits & MenuItemBits::CHECKABLE)
-                    {
-                        pAction->setCheckable(true);
-                        pAction->setChecked(bChecked);
-                    }
-                    else if (itemBits & MenuItemBits::RADIOCHECK)
-                    {
-                        pAction->setCheckable(true);
-                        if (!pQAG)
-                        {
-                            pQAG = new QActionGroup(pQMenu);
-                            pQAG->setExclusive(true);
-                        }
-                        pQAG->addAction(pAction);
-                        pAction->setChecked(bChecked);
-                    }
-
-                    pAction->setEnabled(pSalMenuItem->mbEnabled);
-                    pAction->setVisible(pSalMenuItem->mbVisible);
-
-                    connect(pAction, &QAction::triggered, this,
-                            [pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
-                }
-            }
-        }
+        QMenu* pQMenu = InsertMenuItem(pSalMenuItem);
 
         if (pSalMenuItem->mpSubMenu != nullptr)
         {
