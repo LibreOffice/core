@@ -1294,8 +1294,6 @@ svl/source/numbers/zformat.cxx:385
     enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM18
 svl/source/numbers/zformat.cxx:386
     enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM19
-svtools/source/contnr/fileview.cxx:110
-    enum FileViewFlags SHOW_ONLYTITLE
 svx/source/inc/docrecovery.hxx:85
     enum EDocStates TryLoadBackup
 svx/source/inc/docrecovery.hxx:86
