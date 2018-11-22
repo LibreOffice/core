@@ -347,6 +347,7 @@ cmd/lc_dbreportdelete.png cmd/lc_delete.png
 cmd/lc_dbquerydelete.png cmd/lc_delete.png
 cmd/lc_dbformdelete.png cmd/lc_delete.png
 cmd/lc_dbclearquery.png cmd/lc_delete.png
+cmd/lc_deletecell.png cmd/lc_delete.png
 cmd/sc_deleteprintarea.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
 cmd/sc_dbtabledelete.png cmd/sc_delete.png
@@ -416,8 +417,7 @@ cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 # Group
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
-cmd/sc_formatungroup.png cmd/sc_ungroup.png
-cmd/sc_groupmenu.png cmd/sc_group.png
+cmd/sc_groupmenu.png cmd/sc_formatgroup.png
 
 # Undo
 cmd/lc_recundo.png cmd/lc_undo.png
@@ -432,8 +432,9 @@ cmd/lc_setborderstyle.png cmd/lc_diagramarea.png
 cmd/sc_setborderstyle.png cmd/sc_diagramarea.png
 
 # Label
-cmd/lc_definename.png cmd/lc_label.png
-cmd/sc_definename.png cmd/sc_label.png
+cmd/32/addname.png cmd/32/label.png
+cmd/lc_addname.png cmd/lc_label.png
+cmd/sc_addname.png cmd/sc_label.png
 
 # Rotate
 cmd/lc_clickchangerotation.png cmd/lc_toggleobjectrotatemode.png
@@ -727,12 +728,10 @@ cmd/lc_hyphenation.png cmd/lc_hyphenate.png
 cmd/sc_hyphenation.png cmd/sc_hyphenate.png
 
 # Currency
-cmd/lc_currencyfield.png cmd/lc_formattedfield.png
-cmd/sc_currencyfield.png cmd/sc_formattedfield.png
-cmd/lc_numberformatcurrency.png cmd/lc_formattedfield.png
-cmd/sc_numberformatcurrency.png cmd/sc_formattedfield.png
-cmd/lc_numberformatcurrencysimple.png cmd/lc_formattedfield.png
-cmd/sc_numberformatcurrencysimple.png cmd/sc_formattedfield.png
+cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
+cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
+cmd/lc_numberformatcurrencysimple.png cmd/lc_currencyfield.png
+cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
 
 # Fontwork
 cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
@@ -764,9 +763,6 @@ cmd/sc_gridmenu.png cmd/sc_grid.png
 # Crop
 cmd/lc_grafattrcrop.png cmd/lc_crop.png
 cmd/sc_grafattrcrop.png cmd/sc_crop.png
-
-# Group
-cmd/sc_formatgroup.png cmd/sc_group.png
 
 # Extrusion Rotate
 cmd/lc_rulerrowsvertical.png cmd/lc_extrusiontiltright.png
@@ -908,8 +904,6 @@ cmd/lc_dbnewquerysql.png cmd/lc_sbanativesql.png
 cmd/sc_dbnewquerysql.png cmd/sc_sbanativesql.png
 cmd/lc_dbtableedit.png cmd/lc_tabledialog.png
 cmd/sc_dbtableedit.png cmd/sc_tabledialog.png
-cmd/lc_dataincolumns.png cmd/lc_dbviewtablenames.png
-cmd/sc_dataincolumns.png cmd/sc_dbviewtablenames.png
 cmd/lc_dbdtableedit.png cmd/lc_tabledialog.png
 cmd/sc_dbdtableedit.png cmd/sc_tabledialog.png
 cmd/lc_dbquerypropertiesdialog.png cmd/lc_dbqueryedit.png
@@ -1244,7 +1238,7 @@ res/plugin.png cmd/lc_insertplugin.png
 res/sx10144.png cmd/sc_checkbox.png
 res/sx10593.png cmd/sc_switchxformsdesignmode.png
 res/sx10597.png cmd/sc_color.png
-res/sx10598.png cmd/sc_group.png
+res/sx10598.png cmd/sc_formatgroup.png
 
 res/sc05500.png cmd/sc_adddirect.png
 res/sc05678.png cmd/sc_inserthyperlink.png
@@ -1397,7 +1391,7 @@ sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
 sd/res/comments_indicator.png cmd/sc_showannotations.png
 sd/res/get1obj.png cmd/sc_selectobject.png
 sd/res/getallob.png cmd/sc_selectall.png
-sd/res/group.png cmd/sc_group.png
+sd/res/group.png cmd/sc_formatgroup.png
 sd/res/ole.png cmd/lc_insertobject.png
 sd/res/page.png cmd/lc_adddirect.png
 sd/res/pipette.png cmd/lc_bmpmask.png
@@ -1728,6 +1722,8 @@ cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
+cmd/sc_toolprotectiondocument.png cmd/sc_protect.png
+cmd/lc_toolprotectiondocument.png cmd/lc_protect.png
 
 # calc context menu sheettab
 # ==============================================
@@ -1793,3 +1789,14 @@ cmd/lc_masterpage.png cmd/lc_slidemasterpage.png
 
 cmd/sc_pagemode.png cmd/sc_normalmultipanegui.png
 cmd/lc_pagemode.png cmd/lc_normalmultipanegui.png
+
+# Sheet
+cmd/32/sheetlefttoright.png cmd/32/paralefttoright.png
+cmd/32/sheetrighttoleft.png cmd/32/pararighttoleft.png
+cmd/32/tableevents.png cmd/32/animationeffects.png
+cmd/lc_sheetlefttoright.png cmd/lc_paralefttoright.png
+cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
+cmd/lc_tableevents.png cmd/lc_animationeffects.png
+cmd/sc_sheetlefttoright.png cmd/sc_paralefttoright.png
+cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
+cmd/sc_tableevents.png cmd/sc_animationeffects.png
