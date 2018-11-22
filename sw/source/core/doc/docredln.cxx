@@ -136,9 +136,6 @@ static bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 
 bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTable, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
 {
-    if( RedlineFlags::IgnoreDeleteRedlines & pDoc->getIDocumentRedlineAccess().GetRedlineFlags() )
-        return false;
-
     bool bChg = false;
 
     if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
@@ -215,9 +212,6 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
 
 bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& rTableLine, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
 {
-    if( RedlineFlags::IgnoreDeleteRedlines & pDoc->getIDocumentRedlineAccess().GetRedlineFlags() )
-        return false;
-
     bool bChg = false;
 
     if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
@@ -262,9 +256,6 @@ bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine&
 
 bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
 {
-    if( RedlineFlags::IgnoreDeleteRedlines & pDoc->getIDocumentRedlineAccess().GetRedlineFlags() )
-        return false;
-
     bool bChg = false;
 
     if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())

@@ -2083,8 +2083,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
 bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
                             sal_uInt16 nDelType )
 {
-    if( RedlineFlags::IgnoreDeleteRedlines & meRedlineFlags ||
-        !rRange.HasMark() || *rRange.GetMark() == *rRange.GetPoint() )
+    if( !rRange.HasMark() || *rRange.GetMark() == *rRange.GetPoint() )
         return false;
 
     bool bChg = false;

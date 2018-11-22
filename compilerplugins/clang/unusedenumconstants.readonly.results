@@ -1324,8 +1324,6 @@ sw/inc/docufld.hxx:113
     enum SwExtUserSubType EU_FATHERSNAME
 sw/inc/docufld.hxx:114
     enum SwExtUserSubType EU_APARTMENT
-sw/inc/IDocumentRedlineAccess.hxx:57
-    enum RedlineFlags IgnoreDeleteRedlines
 sw/inc/ndtyp.hxx:42
     enum SwNodeType ContentMask
 sw/inc/poolfmt.hxx:116
