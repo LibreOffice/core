@@ -211,11 +211,6 @@ namespace cairocanvas
 
         css::rendering::IntegerBitmapLayout getMemoryLayout();
 
-        enum ColorType
-        {
-            LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
-        };
-
         void doPolyPolygonPath( const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                 Operation aOperation,
                                 bool bNoLineJoin = false,

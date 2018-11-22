@@ -1,11 +1,3 @@
-canvas/source/cairo/cairo_canvashelper.hxx:216
-    enum cairocanvas::CanvasHelper::ColorType IGNORE_COLOR
-canvas/source/cairo/cairo_canvashelper.hxx:216
-    enum cairocanvas::CanvasHelper::ColorType TEXT_COLOR
-canvas/source/cairo/cairo_canvashelper.hxx:216
-    enum cairocanvas::CanvasHelper::ColorType LINE_COLOR
-canvas/source/cairo/cairo_canvashelper.hxx:216
-    enum cairocanvas::CanvasHelper::ColorType FILL_COLOR
 drawinglayer/source/tools/emfpbrush.hxx:32
     enum emfplushelper::EmfPlusHatchStyle HatchStyleVertical
 drawinglayer/source/tools/emfpbrush.hxx:33
