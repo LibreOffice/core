@@ -289,11 +289,11 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle,
                 for (size_t i = 0; i < rSortArr.size(); ++i)
                 {
                     SwTOXSortTabBase* pOld = rSortArr[i].get();
-                    if(*pOld == *pNew)
+                    if (pOld->equivalent(*pNew))
                     {
                         //only the first occurrence in the document
                         //has to be in the array
-                        if(*pOld < *pNew)
+                        if (pOld->sort_lt(*pNew))
                             pNew.reset();
                         else // remove the old content
                             rSortArr.erase(rSortArr.begin() + i);
@@ -301,14 +301,14 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle,
                     }
                 }
                 //if it still exists - insert at the correct position
-                if(pNew)
+                if (pNew)
                 {
                     size_t j {0};
 
                     while (j < rSortArr.size())
                     {
                         SwTOXSortTabBase* pOld = rSortArr[j].get();
-                        if(*pNew < *pOld)
+                        if (pNew->sort_lt(*pOld))
                             break;
                         ++j;
                     }
