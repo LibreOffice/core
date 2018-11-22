@@ -94,7 +94,7 @@
                   <object class="GtkButton" id="BTN_ADD">
                     <property name="label" translatable="yes" context="tp_DataSource|BTN_ADD">_Add</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -106,7 +106,7 @@
                 <child>
                   <object class="GtkButton" id="BTN_UP">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="always_show_image">True</property>
                     <child internal-child="accessible">
@@ -124,7 +124,7 @@
                   <object class="GtkButton" id="BTN_REMOVE">
                     <property name="label" translatable="yes" context="tp_DataSource|BTN_REMOVE">_Remove</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
                     <property name="use_underline">True</property>
@@ -137,7 +137,7 @@
                 <child>
                   <object class="GtkButton" id="BTN_DOWN">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_DOWN-atkobject">
