@@ -579,10 +579,13 @@ void SdrMarkView::showMarkHandles()
 
 bool SdrMarkView::ImpIsFrameHandles() const
 {
+    // There can be multiple mark views, but we're only interested in the one that has a window associated.
+    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
+
     const size_t nMarkCount=GetMarkedObjectCount();
     bool bFrmHdl=nMarkCount>static_cast<size_t>(mnFrameHandlesLimit) || mbForceFrameHandles;
     bool bStdDrag=meDragMode==SdrDragMode::Move;
-    if (nMarkCount==1 && bStdDrag && bFrmHdl)
+    if (!bTiledRendering && nMarkCount==1 && bStdDrag && bFrmHdl)
     {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj->GetObjInventor()==SdrInventor::Default)
@@ -656,12 +659,15 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     if(areMarkHandlesHidden())
         return;
 
+    // There can be multiple mark views, but we're only interested in the one that has a window associated.
+    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
+
     const size_t nMarkCount=GetMarkedObjectCount();
     bool bStdDrag=meDragMode==SdrDragMode::Move;
     bool bSingleTextObjMark=false;
     bool bLimitedRotation(false);
 
-    if (nMarkCount==1)
+    if (!bTiledRendering && nMarkCount==1)
     {
         mpMarkedObj=GetMarkedObjectByIndex(0);
 
@@ -698,9 +704,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     // ( necessary for handles to be displayed in
     // correct position )
     Point aGridOff = GetGridOffset();
-
-    // There can be multiple mark views, but we're only interested in the one that has a window associated.
-    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
 
     // check if text edit or ole is active and handles need to be suppressed. This may be the case
     // when a single object is selected
