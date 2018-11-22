@@ -92,6 +92,7 @@
 #include <oox/export/vmlexport.hxx>
 #include <sfx2/docfile.hxx>
 #include <sal/log.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include "sprmids.hxx"
 
@@ -3056,6 +3057,61 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
     }
     if ( TOX_CONTENT_SECTION == rSection.GetType() )
         m_bStartTOX = true;
+
+    // tdf#121561: During export of the ODT file with TOC inside into DOCX format,
+    // the TOC title is being exported as regular paragraph. We should surround it
+    // with <w:sdt><w:sdtPr><w:sdtContent> to make it (TOC title) recognizable
+    // by MS Word as part of the TOC.
+    if (TOX_CONTENT_SECTION == rSection.GetType())
+    {
+        const SwSectionNode* pSectNd = &rSectionNode;
+
+        // get section node, skip toc-header node
+        {
+            SwNodeIndex aIdxNext( *pSectNd, 1 );
+            const SwNode& rNdNext = aIdxNext.GetNode();
+
+            if (rNd.IsSectionNode())
+            {
+                const SwSectionNode* pSectNdNext = static_cast<const SwSectionNode*>(&rNdNext);
+                if (TOX_HEADER_SECTION == pSectNdNext->GetSection().GetType() &&
+                    pSectNdNext->StartOfSectionNode()->IsSectionNode())
+                {
+                    pSectNd = pSectNdNext;
+                }
+            }
+        }
+
+        // get node of the first paragraph inside TOC
+        SwNodeIndex aIdxPara( *pSectNd, 1 );
+        const SwNode& rNdTocPara = aIdxPara.GetNode();
+
+        if (rNdTocPara.GetContentNode())
+        {
+            // put required flags into a new grab bag
+            uno::Sequence<beans::PropertyValue> aDocPropertyValues(comphelper::InitPropertySequence(
+            {
+                {"ooxml:CT_SdtDocPart_docPartGallery", uno::makeAny(OUString("Table of Contents"))},
+                {"ooxml:CT_SdtDocPart_docPartUnique",  uno::makeAny(OUString("true"))},
+            }));
+
+            uno::Sequence<beans::PropertyValue> aSdtPrPropertyValues(comphelper::InitPropertySequence(
+            {
+                {"ooxml:CT_SdtPr_docPartObj", uno::makeAny(aDocPropertyValues)},
+            }));
+
+            SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
+            aGrabBag.GetGrabBag()["SdtPr"] <<= aSdtPrPropertyValues;
+
+            // create temp attr set
+            SwAttrSet aSet(rNdTocPara.GetContentNode()->GetSwAttrSet());
+            aSet.Put(aGrabBag);
+
+            // set new attr to node
+            const SwContentNode* pNode = rNdTocPara.GetContentNode();
+            const_cast<SwContentNode*>(pNode)->SetAttr(aSet);
+        }
+    }
 }
 
 void WW8Export::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum )

@@ -176,6 +176,8 @@ public:
 
     virtual void FieldVanish( const OUString& rText, ww::eField eType ) override;
 
+    virtual void OnTOXEnding() override;
+
     /// Output redlining.
     ///
     /// The common attribute that can be among the run properties.
@@ -727,6 +729,7 @@ private:
     bool m_bStartedCharSdt;
     /// If an SDT around paragraphs is currently open.
     bool m_bStartedParaSdt;
+    bool m_bCloseStartedParaSdt;
     /// Attributes of the run color
     rtl::Reference<sax_fastparser::FastAttributeList> m_pColorAttrList;
     /// Attributes of the paragraph background
