@@ -1542,5 +1542,3 @@ writerfilter/source/ooxml/OOXMLFactory.hxx:57
     enum writerfilter::ooxml::ResourceType HpsMeasure
 writerfilter/source/ooxml/OOXMLFactory.hxx:58
     enum writerfilter::ooxml::ResourceType MeasurementOrPercent
-xmloff/source/forms/propertyexport.hxx:38
-    enum BoolAttrFlags DefaultMask
