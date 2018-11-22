@@ -58,13 +58,12 @@ enum class FontChangeMask {
     Bold     = 0x0004,
     Italic   = 0x0008,
     Color    = 0x0010,
-    Phantom  = 0x0020,
-    HorAlign = 0x0040
+    Phantom  = 0x0020
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<FontChangeMask> : is_typed_flags<FontChangeMask, 0x007f> {};
+    template<> struct typed_flags<FontChangeMask> : is_typed_flags<FontChangeMask, 0x003f> {};
 }
 
 
