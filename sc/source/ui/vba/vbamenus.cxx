@@ -109,12 +109,10 @@ ScVbaMenus::getServiceImplName()
 uno::Sequence<OUString>
 ScVbaMenus::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.Menus";
-    }
+        "ooo.vba.excel.Menus"
+    };
     return aServiceNames;
 }
 

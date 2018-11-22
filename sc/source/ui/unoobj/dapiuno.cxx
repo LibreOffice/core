@@ -623,18 +623,15 @@ void SAL_CALL ScDataPilotDescriptorBase::release() throw()
 
 Sequence< uno::Type > SAL_CALL ScDataPilotDescriptorBase::getTypes()
 {
-    static Sequence< uno::Type > aTypes;
-    if ( aTypes.getLength() == 0 )
+    static Sequence< uno::Type > const aTypes
     {
-        aTypes.realloc( 6 );
-        uno::Type* pPtr = aTypes.getArray();
-        pPtr[ 0 ] = cppu::UnoType<XDataPilotDescriptor>::get();
-        pPtr[ 1 ] = cppu::UnoType<XPropertySet>::get();
-        pPtr[ 2 ] = cppu::UnoType<XDataPilotDataLayoutFieldSupplier>::get();
-        pPtr[ 3 ] = cppu::UnoType<lang::XUnoTunnel>::get();
-        pPtr[ 4 ] = cppu::UnoType<lang::XTypeProvider>::get();
-        pPtr[ 5 ] = cppu::UnoType<lang::XServiceInfo>::get();
-    }
+        cppu::UnoType<XDataPilotDescriptor>::get(),
+        cppu::UnoType<XPropertySet>::get(),
+        cppu::UnoType<XDataPilotDataLayoutFieldSupplier>::get(),
+        cppu::UnoType<lang::XUnoTunnel>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<lang::XServiceInfo>::get(),
+    };
     return aTypes;
 }
 
@@ -1094,21 +1091,13 @@ void SAL_CALL ScDataPilotTableObj::release() throw()
 
 Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes()
 {
-    static Sequence< uno::Type > aTypes;
-    if ( aTypes.getLength() == 0 )
-    {
-        Sequence< uno::Type > aParentTypes = ScDataPilotDescriptorBase::getTypes();
-        sal_Int32 nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
-        aTypes.realloc( nParentLen + 2 );
-        uno::Type* pPtr = aTypes.getArray();
-        for (sal_Int32 i = 0; i < nParentLen; ++i)
-            pPtr[ i ] = pParentPtr[ i ];               // parent types first
-
-        pPtr[ nParentLen ] = cppu::UnoType<XDataPilotTable2>::get();
-        pPtr[ nParentLen+1 ] = cppu::UnoType<XModifyBroadcaster>::get();
-    }
+    static const Sequence< uno::Type > aTypes = comphelper::concatSequences(
+        ScDataPilotDescriptorBase::getTypes(),
+        Sequence< uno::Type >
+        {
+            cppu::UnoType<XDataPilotTable2>::get(),
+            cppu::UnoType<XModifyBroadcaster>::get()
+        } );
     return aTypes;
 }
 
