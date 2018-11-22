@@ -120,7 +120,6 @@ enum AreaOverlapType
 
 enum class ListenerGroupType
 {
-    Single,
     Group,
     Both
 };
