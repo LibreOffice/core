@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df6247ed_0c0df736",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-22T15:56:24Z",
+      "side": 1,
+      "message": "(filters were missing)",
+      "revId": "68b498ffa644662be03905bd8c0014a364f87128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df6247ed_4c03ef0e",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4180,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-22T15:56:24Z",
+      "side": 1,
+      "message": "// there should be one pivot table ;-)",
+      "revId": "68b498ffa644662be03905bd8c0014a364f87128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df6247ed_2c08bb26",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-22T15:56:24Z",
+      "side": 1,
+      "message": "what about \u0027make sure DPCollection/pivot cache didn\u0027t get lost after export\u0027 instead?",
+      "revId": "68b498ffa644662be03905bd8c0014a364f87128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
