@@ -130,7 +130,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
         OSL_ENSURE(pData,"FormEditData not available");
 
-        formula::FormulaDlgMode eMode = FORMULA_FORMDLG_FORMULA;            // default...
+        formula::FormulaDlgMode eMode = FormulaDlgMode::Formula;            // default...
 
         // edit if formula exists
 
@@ -173,7 +173,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
             pData->SetFStart( 1 );      // after "="
         }
 
-        pData->SetMode( static_cast<sal_uInt16>(eMode) );
+        pData->SetMode( eMode );
         OUString rStrExp = GetMeText();
 
         Update(rStrExp);

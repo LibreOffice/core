@@ -1535,7 +1535,7 @@ include/editeng/svxrtf.hxx:223
 include/filter/msfilter/msdffimp.hxx:377
     enum DffSeekToContentMode SEEK_FROM_CURRENT
 include/formula/formula.hxx:52
-    enum formula::FormulaDlgMode FORMULA_FORMDLG_EDIT
+    enum formula::FormulaDlgMode FormulaDlgMode::Edit
 include/formula/tokenarray.hxx:60
     enum ScRecalcMode ONLOAD_MUST
 include/formula/tokenarray.hxx:62

@@ -49,7 +49,7 @@ namespace formula
 #define STRUCT_FOLDER 2
 #define STRUCT_ERROR  3
 
-enum FormulaDlgMode { FORMULA_FORMDLG_FORMULA, FORMULA_FORMDLG_ARGS, FORMULA_FORMDLG_EDIT };
+enum class FormulaDlgMode { Formula, Edit };
 
 
 class FormulaDlg_Impl;

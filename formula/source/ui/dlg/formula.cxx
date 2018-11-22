@@ -368,9 +368,9 @@ void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
         pData->SetSelection(m_pMEdit->GetSelection());
 
         if (m_pTabCtrl->GetCurPageId() == TP_FUNCTION)
-            pData->SetMode( sal_uInt16(FORMULA_FORMDLG_FORMULA) );
+            pData->SetMode( FormulaDlgMode::Formula );
         else
-            pData->SetMode( sal_uInt16(FORMULA_FORMDLG_EDIT) );
+            pData->SetMode( FormulaDlgMode::Edit );
         pData->SetUndoStr(m_pMEdit->GetText());
         pData->SetMatrixFlag(m_pBtnMatrix->IsChecked());
     }
@@ -1309,7 +1309,7 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
         sal_Int32 n1 = m_aFormulaHelper.GetArgStart( aFormula, nFormulaStrPos, nEdFocus + pData->GetOffset() );
 
         pData->SaveValues();
-        pData->SetMode( sal_uInt16(FORMULA_FORMDLG_FORMULA) );
+        pData->SetMode( FormulaDlgMode::Formula );
         pData->SetFStart( n1 );
         pData->SetUndoStr( aUndoStr );
         ClearAllParas();
@@ -1582,7 +1582,7 @@ void FormulaDlg_Impl::Update()
     UpdateTokenArray(sExpression);
     FormulaCursorHdl(*m_pMEFormula);
     CalcStruct(sExpression);
-    if (pData->GetMode() == FORMULA_FORMDLG_FORMULA)
+    if (pData->GetMode() == FormulaDlgMode::Formula)
         m_pTabCtrl->SetCurPageId(TP_FUNCTION);
     else
         m_pTabCtrl->SetCurPageId(TP_STRUCT);
@@ -1606,7 +1606,7 @@ void FormulaDlg_Impl::SetMeText(const OUString& _sText)
 
 FormulaDlgMode FormulaDlg_Impl::SetMeText( const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate)
 {
-    FormulaDlgMode eMode = FORMULA_FORMDLG_FORMULA;
+    FormulaDlgMode eMode = FormulaDlgMode::Formula;
     if (!m_bEditFlag)
         m_pMEdit->SetText(_sText);
 
@@ -1617,7 +1617,7 @@ FormulaDlgMode FormulaDlg_Impl::SetMeText( const OUString& _sText, sal_Int32 Pri
         m_pMEFormula->UpdateOldSel();
         m_pMEdit->Invalidate();
         m_pHelper->showReference(m_pMEdit->GetSelected());
-        eMode = FORMULA_FORMDLG_EDIT;
+        eMode = FormulaDlgMode::Edit;
 
         m_pBtnMatrix->Check( bMatrix );
     } // if ( _bUpdate )
@@ -1951,7 +1951,7 @@ void FormEditData::SaveValues()
 
 void FormEditData::Reset()
 {
-    nMode = 0;
+    nMode = FormulaDlgMode::Formula;
     nFStart = 0;
     nOffset = 0;
     bMatrix = false;

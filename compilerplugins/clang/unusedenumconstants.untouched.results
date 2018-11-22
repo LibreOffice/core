@@ -150,8 +150,6 @@ include/editeng/borderline.hxx:128
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
 include/editeng/editdata.hxx:41
     enum EESpellState LanguageNotInstalled
-include/formula/formula.hxx:52
-    enum formula::FormulaDlgMode FORMULA_FORMDLG_ARGS
 include/i18nutil/transliteration.hxx:45
     enum TransliterationFlags NumToTextLower_zh_CN
 include/i18nutil/transliteration.hxx:47
