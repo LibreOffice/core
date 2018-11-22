@@ -137,14 +137,7 @@ private:
     }
 
     bool handleNonExternalLinkage(FunctionDecl const * decl) {
-        if (decl->getLinkageInternal() >=
-#if CLANG_VERSION >= 50000
-            ModuleLinkage
-#else
-            ExternalLinkage
-#endif
-        )
-        {
+        if (decl->getLinkageInternal() >= ModuleLinkage) {
             return false;
         }
         if (!compiler.getSourceManager().isInMainFile(decl->getLocation())) {

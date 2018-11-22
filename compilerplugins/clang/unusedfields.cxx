@@ -524,10 +524,7 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
             break;
         }
         else if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
-#if CLANG_VERSION >= 40000
-             || isa<ArrayInitLoopExpr>(parent)
-#endif
-             || isa<ExprWithCleanups>(parent))
+             || isa<ArrayInitLoopExpr>(parent) || isa<ExprWithCleanups>(parent))
         {
             walkupUp();
         }
@@ -731,10 +728,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
             break;
         }
         else if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
-#if CLANG_VERSION >= 40000
-             || isa<ArrayInitLoopExpr>(parent)
-#endif
-             || isa<ExprWithCleanups>(parent))
+             || isa<ArrayInitLoopExpr>(parent) || isa<ExprWithCleanups>(parent))
         {
             walkupUp();
         }

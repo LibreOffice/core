@@ -393,10 +393,7 @@ void ConstFields::check(const FieldDecl* fieldDecl, const Expr* memberExpr)
             break;
         }
         else if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent)
-                 || isa<ParenListExpr>(parent)
-#if CLANG_VERSION >= 40000
-                 || isa<ArrayInitLoopExpr>(parent)
-#endif
+                 || isa<ParenListExpr>(parent) || isa<ArrayInitLoopExpr>(parent)
                  || isa<ExprWithCleanups>(parent))
         {
             walkUp();

@@ -27,30 +27,6 @@
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
 
-inline llvm::StringRef take_front(llvm::StringRef ref, std::size_t N = 1) {
-#if CLANG_VERSION >= 40000
-    return ref.take_front(N);
-#else
-    auto const size = ref.size();
-    return N >= size ? ref : ref.drop_back(size - N);
-#endif
-}
-
-
-#if CLANG_VERSION >= 30900
-inline clang::ArrayRef<clang::ParmVarDecl *> parameters(
-    clang::FunctionDecl const & decl)
-{
-    return decl.parameters();
-}
-#else
-inline clang::FunctionDecl::param_const_range parameters(
-    clang::FunctionDecl const & decl)
-{
-    return decl.params();
-}
-#endif
-
 inline clang::SourceLocation getBeginLoc(clang::Decl const * decl) {
 #if CLANG_VERSION >= 80000
     return decl->getBeginLoc();
@@ -138,58 +114,6 @@ inline bool isPointWithin(
         Location == Start || Location == End
         || (SM.isBeforeInTranslationUnit(Start, Location)
             && SM.isBeforeInTranslationUnit(Location, End));
-#endif
-}
-
-inline bool isMacroArgExpansion(
-    clang::CompilerInstance& compiler, clang::SourceLocation location,
-    clang::SourceLocation * startLocation)
-{
-#if CLANG_VERSION >= 30900
-    return compiler.getSourceManager().isMacroArgExpansion(
-        location, startLocation);
-#else
-    bool b = compiler.getSourceManager().isMacroArgExpansion(location);
-    if (b) {
-        *startLocation = compiler.getSourceManager()
-            .getSLocEntry(compiler.getSourceManager().getFileID(location))
-            .getExpansion().getExpansionLocStart();
-    }
-    return b;
-#endif
-}
-
-inline llvm::StringRef getImmediateMacroNameForDiagnostics(
-    clang::SourceLocation Loc, clang::SourceManager const & SM,
-    clang::LangOptions const &LangOpts)
-{
-#if CLANG_VERSION >= 30900
-    return clang::Lexer::getImmediateMacroNameForDiagnostics(Loc, SM, LangOpts);
-#else
-    using namespace clang;
-    // Verbatim copy from Clang's lib/Lex/Lexer.cpp:
-
-    assert(Loc.isMacroID() && "Only reasonable to call this on macros");
-    // Walk past macro argument expansion.
-    while (SM.isMacroArgExpansion(Loc))
-        Loc = SM.getImmediateExpansionRange(Loc).first;
-
-    // If the macro's spelling has no FileID, then it's actually a token paste
-    // or stringization (or similar) and not a macro at all.
-    if (!SM.getFileEntryForID(SM.getFileID(SM.getSpellingLoc(Loc))))
-        return StringRef();
-
-    // Find the spelling location of the start of the non-argument expansion
-    // range. This is where the macro name was spelled in order to begin
-    // expanding this macro.
-    Loc = SM.getSpellingLoc(SM.getImmediateExpansionRange(Loc).first);
-
-    // Dig out the buffer where the macro name was spelled and the extents of
-    // the name so that we can render it into the expansion note.
-    std::pair<FileID, unsigned> ExpansionInfo = SM.getDecomposedLoc(Loc);
-    unsigned MacroTokenLength = Lexer::MeasureTokenLength(Loc, SM, LangOpts);
-    StringRef ExpansionBuffer = SM.getBufferData(ExpansionInfo.first);
-    return ExpansionBuffer.substr(ExpansionInfo.second, MacroTokenLength);
 #endif
 }
 

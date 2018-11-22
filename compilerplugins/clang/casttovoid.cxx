@@ -105,7 +105,6 @@ public:
         return ret;
     }
 
-#if CLANG_VERSION >= 50000
     bool TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl * decl) {
         returnTypes_.push(decl->getReturnType());
         auto const ret = RecursiveASTVisitor::TraverseCXXDeductionGuideDecl(
@@ -115,7 +114,6 @@ public:
         returnTypes_.pop();
         return ret;
     }
-#endif
 
     bool TraverseCXXMethodDecl(CXXMethodDecl * decl) {
         returnTypes_.push(decl->getReturnType());
@@ -489,7 +487,7 @@ private:
         }
         auto const loc = compat::getBeginLoc(dre);
         if (compiler.getSourceManager().isMacroArgExpansion(loc)
-            && (compat::getImmediateMacroNameForDiagnostics(
+            && (Lexer::getImmediateMacroNameForDiagnostics(
                     loc, compiler.getSourceManager(), compiler.getLangOpts())
                 == "assert"))
         {

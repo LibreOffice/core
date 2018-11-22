@@ -47,7 +47,6 @@ class Class4
     }
 };
 
-#if CLANG_VERSION >= 50000 // Expr::EvaluateAsFloat
 class Class5
 {
     enum class Enum
@@ -77,7 +76,6 @@ class Class5
         (void)m_fielda4;
     }
 };
-#endif
 
 // no warning expected
 class Class6

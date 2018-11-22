@@ -69,7 +69,6 @@ struct DerivedDifferent : Base
 
 struct DerivedSame : Base
 {
-#if CLANG_VERSION >= 30900 // cf. corresponding condition in Plugin::checkIdenticalDefaultArguments
     void
     defaults( // expected-error {{public function just calls public parent [loplugin:unnecessaryoverride]}}
         void* x1 = 0, int x2 = (1 - 1), double x3 = 1.0, Base const& x4 = (Base()),
@@ -78,7 +77,6 @@ struct DerivedSame : Base
     {
         Base::defaults(x1, x2, x3, x4, x5);
     }
-#endif
 };
 
 struct DerivedSlightlyDifferent : Base

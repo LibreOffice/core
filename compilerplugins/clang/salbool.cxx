@@ -333,8 +333,8 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
                     .getImmediateMacroCallerLoc(loc);
                 if (!isSharedCAndCppCode(callLoc)) {
                     SourceLocation argLoc;
-                    if (compat::isMacroArgExpansion(
-                            compiler, compat::getBeginLoc(expr), &argLoc)
+                    if (compiler.getSourceManager().isMacroArgExpansion(
+                            compat::getBeginLoc(expr), &argLoc)
                         //TODO: check it's the complete (first) arg to the macro
                         && (Lexer::getImmediateMacroName(
                                 argLoc, compiler.getSourceManager(),

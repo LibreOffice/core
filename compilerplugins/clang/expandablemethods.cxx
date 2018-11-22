@@ -140,7 +140,7 @@ MyFuncInfo ExpandableMethods::niceName(const FunctionDecl* functionDecl)
     }
     aInfo.nameAndParams += functionDecl->getNameAsString() + "(";
     bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
+    for (const ParmVarDecl *pParmVarDecl : functionDecl->parameters()) {
         if (bFirst)
             bFirst = false;
         else
@@ -187,7 +187,7 @@ bool ExpandableMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
                  // any function that uses a parameter more than once
                  if (!bLargeFunction) {
                      StringRef bodyText(s1, s2-s1);
-                     for (const ParmVarDecl* param : compat::parameters(*functionDecl)) {
+                     for (const ParmVarDecl* param : functionDecl->parameters()) {
                          StringRef name = param->getName();
                          if (name.empty())
                              continue;

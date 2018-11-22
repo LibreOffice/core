@@ -90,10 +90,7 @@ public:
             }
         }
         bool dtorOrDealloc = isDtorOrDealloc(decl);
-        SourceRange source;
-#if CLANG_VERSION >= 40000
-        source = decl->getExceptionSpecSourceRange();
-#endif
+        auto const source = decl->getExceptionSpecSourceRange();
         if (rewriter != nullptr && source.isValid()) {
             if (dtorOrDealloc) {
                 if (replaceText(source, "noexcept(false)")) {
