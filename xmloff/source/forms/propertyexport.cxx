@@ -267,8 +267,8 @@ namespace xmloff
         // no check of the property value type: this method is allowed to be called with any integer properties
         // (e.g. sal_Int32, sal_uInt16 etc)
 
-        bool bDefault = (BoolAttrFlags::DefaultTrue == (BoolAttrFlags::DefaultMask & _nBooleanAttributeFlags));
-        bool bDefaultVoid = (BoolAttrFlags::DefaultVoid == (BoolAttrFlags::DefaultMask & _nBooleanAttributeFlags));
+        bool bDefault(BoolAttrFlags::DefaultTrue & _nBooleanAttributeFlags);
+        bool bDefaultVoid(BoolAttrFlags::DefaultVoid & _nBooleanAttributeFlags);
 
         // get the value
         bool bCurrentValue = bDefault;
