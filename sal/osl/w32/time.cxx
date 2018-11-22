@@ -35,18 +35,14 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 
     typedef VOID (WINAPI *GetSystemTimePreciseAsFileTime_PROC)(LPFILETIME);
 
-    static HMODULE hModule = nullptr;
-    static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = nullptr;
-
     OSL_ASSERT(pTimeVal != nullptr);
 
-    if ( !hModule )
+    static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = [&]()
     {
-        hModule = GetModuleHandleW( L"Kernel32.dll" );
-        if ( hModule )
-            pGetSystemTimePreciseAsFileTime = reinterpret_cast<GetSystemTimePreciseAsFileTime_PROC>(
+        HMODULE hModule = GetModuleHandleW( L"Kernel32.dll" );
+        return reinterpret_cast<GetSystemTimePreciseAsFileTime_PROC>(
                 GetProcAddress(hModule, "GetSystemTimePreciseAsFileTime"));
-    }
+    }();
 
     // use ~1 microsecond resolution if available
     if (pGetSystemTimePreciseAsFileTime)
