@@ -139,7 +139,7 @@ public:
     void setExternalData( bool _bData );
 
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     void dbg_assertInvariant() const;
 #endif
 

@@ -1457,13 +1457,13 @@ class RecursionCounter
 {
     ScRecursionHelper&  rRec;
     bool                bStackedInIteration;
-#ifdef DBG_UTIL
+#if defined DBG_UTIL && !defined NDEBUG
     const ScFormulaCell* cell;
 #endif
 public:
     RecursionCounter( ScRecursionHelper& r, ScFormulaCell* p )
         : rRec(r)
-#ifdef DBG_UTIL
+#if defined DBG_UTIL && !defined NDEBUG
         , cell(p)
 #endif
     {
@@ -1477,7 +1477,7 @@ public:
         rRec.DecRecursionCount();
         if (bStackedInIteration)
         {
-#ifdef DBG_UTIL
+#if defined DBG_UTIL && !defined NDEBUG
             assert(rRec.GetRecursionInIterationStack().top() == cell);
 #endif
             rRec.GetRecursionInIterationStack().pop();

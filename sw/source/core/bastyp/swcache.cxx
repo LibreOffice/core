@@ -58,7 +58,7 @@ void SwCache::Check()
             assert(pObj == m_pLast);
         }
         pObj = pObj->GetNext();
-        assert(pObj != pOldRealFirst);
+        assert(pObj != pOldRealFirst); (void) pOldRealFirst;
     }
     assert(bFirstFound);
     SAL_WARN_IF( nCnt + m_aFreePositions.size() != size(), "sw.core", "Lost Chain." );

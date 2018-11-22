@@ -65,7 +65,7 @@ using namespace com::sun::star::xml::dom;
 using namespace xforms;
 
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
 #define DBG_INVARIANT_TYPE(TYPE) class DBG_##TYPE { const TYPE* mpT; void check() { mpT->dbg_assertInvariant(); } public: DBG_##TYPE(const TYPE* pT) : mpT(pT) { check(); } ~DBG_##TYPE() { check(); } } _DBG_##TYPE(this);
 
 #define DBG_INVARIANT() DBG_INVARIANT_TYPE(Model)
@@ -177,7 +177,7 @@ void Model::setExternalData( bool _bData )
     mbExternalData = _bData;
 }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
 void Model::dbg_assertInvariant() const
 {
     assert(mxInstances && "no instances found");

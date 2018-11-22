@@ -1573,7 +1573,7 @@ SwRect SwTextFrame::SmartTagScan(SwTextNode & rNode)
 
 void SwTextFrame::CollectAutoCmplWrds(SwTextNode & rNode, sal_Int32 nActPos)
 {
-    assert(sw::FrameContainsNode(*this, rNode.GetIndex()));
+    assert(sw::FrameContainsNode(*this, rNode.GetIndex())); (void) this;
     SwTextNode *const pNode(&rNode);
     if (!nActPos)
         nActPos = COMPLETE_STRING;
