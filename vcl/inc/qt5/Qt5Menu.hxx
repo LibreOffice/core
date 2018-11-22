@@ -34,7 +34,7 @@ private:
     void DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu = nullptr);
     static void NativeItemText(OUString& rItemText);
 
-    QMenu* InsertMenuItem(Qt5MenuItem* pSalMenuItem);
+    QMenu* InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos);
 
 public:
     Qt5Menu(bool bMenuBar);
@@ -69,12 +69,15 @@ Q_SIGNALS:
 
 private slots:
     static void slotMenuTriggered(Qt5MenuItem* pQItem);
+    static void slotMenuAboutToShow(Qt5MenuItem* pQItem);
+    static void slotMenuAboutToHide(Qt5MenuItem* pQItem);
 };
 
 class Qt5MenuItem : public SalMenuItem
 {
 public:
     Qt5MenuItem(const SalItemParams*);
+    virtual ~Qt5MenuItem();
 
     Qt5Menu* mpParentMenu; // The menu into which this menu item is inserted
     Qt5Menu* mpSubMenu; // Submenu of this item (if defined)
