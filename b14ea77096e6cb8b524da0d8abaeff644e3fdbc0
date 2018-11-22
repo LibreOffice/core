@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df6247ed_2f40ad07",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-22T22:08:55Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the keyvalue be exchanged only if enabled, i.e. if Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep() like in vcl/source/window/winproc.cxx:887 ImplHandleKey() ?",
+      "revId": "b14ea77096e6cb8b524da0d8abaeff644e3fdbc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
