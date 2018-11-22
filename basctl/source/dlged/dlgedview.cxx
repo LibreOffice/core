@@ -177,7 +177,7 @@ SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol
 
     if(pRetval)
     {
-        // check hitted object locally
+        // check hit object locally
         pRetval = impLocalHitCorrection(pRetval, rPnt, nTol);
     }
 
