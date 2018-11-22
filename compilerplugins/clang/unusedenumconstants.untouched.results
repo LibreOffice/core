@@ -140,10 +140,6 @@ include/desktop/exithelper.h:25
     enum EExitCodes EXITHELPER_NO_ERROR
 include/desktop/exithelper.h:25
     int EXITHELPER_NO_ERROR
-include/desktop/exithelper.h:27
-    int EXITHELPER_SECOND_OFFICE
-include/desktop/exithelper.h:27
-    enum EExitCodes EXITHELPER_SECOND_OFFICE
 include/desktop/exithelper.h:29
     int EXITHELPER_FATAL_ERROR
 include/editeng/borderline.hxx:128
