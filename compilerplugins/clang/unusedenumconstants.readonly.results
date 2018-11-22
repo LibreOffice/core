@@ -1236,8 +1236,6 @@ slideshow/source/inc/doctreenode.hxx:52
     enum slideshow::internal::DocTreeNode::NodeType Invalid
 soltools/cpp/cpp.h:42
     int WS
-starmath/inc/node.hxx:62
-    enum FontChangeMask HorAlign
 svgio/inc/svgstyleattributes.hxx:62
     enum svgio::svgreader::FontSize FontSize_notset
 svl/source/numbers/zformat.cxx:358

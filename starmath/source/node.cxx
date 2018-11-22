@@ -204,8 +204,7 @@ void SmNode::SetSize(const Fraction &rSize)
 
 void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree )
 {
-    if (!(Flags() & FontChangeMask::HorAlign))
-        meRectHorAlign = eHorAlign;
+    meRectHorAlign = eHorAlign;
 
     if (bApplyToSubTree)
         ForEachNonNull(this, [eHorAlign](SmNode *pNode){pNode->SetRectHorAlign(eHorAlign);});
