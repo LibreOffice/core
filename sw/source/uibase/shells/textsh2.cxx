@@ -116,7 +116,8 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
     if ( !xConnection.is() )
     {
         Reference<XDataSource> xSource;
-        xConnection = SwDBManager::GetConnection(sSourceArg, xSource);
+        SwView &rSwView = GetView();
+        xConnection = SwDBManager::GetConnection(sSourceArg, xSource, &rSwView);
     }
     if(!xConnection.is())
         return ;
@@ -155,7 +156,8 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
                 bool bDisposeResultSet = false;
                 if ( !xCursor.is() )
                 {
-                    xCursor = SwDBManager::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection);
+                    SwView &rSwView = GetView();
+                    xCursor = SwDBManager::createCursor(sSourceArg,sCommandArg,nCommandTypeArg,xConnection,&rSwView);
                     bDisposeResultSet = xCursor.is();
                 }
 
@@ -233,7 +235,8 @@ IMPL_LINK( SwBaseShell, InsertDBTextHdl, void*, p, void )
 
         if ( !xConnection.is()  )
         {
-            xConnection = SwDBManager::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
+            SwView &rSwView = GetView();
+            xConnection = SwDBManager::GetConnection(pDBStruct->aDBData.sDataSource, xSource, &rSwView);
             bDispose = true;
         }
 
