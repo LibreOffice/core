@@ -188,12 +188,6 @@ enum class LineStyle
 
 enum class RasterOp { OverPaint, Xor, N0, N1, Invert };
 
-enum class FontAutoHint { DontKnow, No, Yes };
-
-enum class FontHinting { DontKnow, No, Yes };
-
-enum class FontHintStyle { NONE, Slight, Medium, Full };
-
 typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
 
 enum class OutDevSupportType { TransparentRect, B2DDraw };

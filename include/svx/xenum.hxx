@@ -24,7 +24,6 @@
 enum class XFormTextStyle   { Rotate, Upright, SlantX, SlantY, NONE };
 enum class XFormTextAdjust  { Left, Right, AutoSize, Center };
 enum class XFormTextShadow  { NONE, Normal, Slant };
-enum class XBitmapType      { Import, N8x8 };
 
 
 #endif // INCLUDED_SVX_XENUM_HXX

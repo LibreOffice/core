@@ -194,13 +194,6 @@ public:
         Signature
     };
 
-    enum WidgetState
-    {
-        // PushButton, RadioButton, CheckBox; Down means selected for
-        // RadioButton and CheckBox
-        Up, Down
-    };
-
     enum ErrorCode
     {
         // transparent object occurred and was draw opaque because
