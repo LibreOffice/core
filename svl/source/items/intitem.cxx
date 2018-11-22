@@ -138,6 +138,14 @@ SfxPoolItem* SfxInt32Item::CreateDefault()
     return new SfxInt32Item();
 };
 
+void SfxInt32Item::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxInt32Item"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 
 //  class SfxUInt32Item
 
@@ -146,6 +154,14 @@ SfxPoolItem* SfxUInt32Item::CreateDefault()
 {
     return new SfxUInt32Item();
 };
+
+void SfxUInt32Item::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUInt32Item"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
 
 
 SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
