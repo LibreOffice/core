@@ -26,8 +26,6 @@
 
 // fractions of Draw PPTWriter etc.
 
-enum ImplEESdrPageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
-
 class ImplEESdrWriter;
 class SdrObject;
 class SdrPage;
