@@ -9769,9 +9769,10 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc, const 
 //  [RangeArray] is the reference, which is to comprise at least two columns.
 //  [Index] is the number of the column in the array that contains the value to be returned. The first column has the number 1.
 //
+// Prerequisite of lcl_getPrevRowWithEmptyValueLookup():
+//      Value referenced by [SearchCriterion] is empty.
 // lcl_getPrevRowWithEmptyValueLookup() performs following checks:
-// - if value referenced by [SearchCriterion] is empty
-// - and if we run query with "exact match" mode (i.e. VLOOKUP)
+// - if we run query with "exact match" mode (i.e. VLOOKUP)
 // - and if we already have the same lookup done before but for another row
 //   which is also had empty [SearchCriterion]
 //
@@ -9786,12 +9787,9 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc, const 
 // This method was added only for speed up to avoid several useless complete
 // lookups inside [RangeArray] for searching empty strings.
 //
-static SCROW lcl_getPrevRowWithEmptyValueLookup(const ScLookupCache& rCache, const ScLookupCache::QueryCriteria& aCriteria, const ScQueryParam & rParam)
+static SCROW lcl_getPrevRowWithEmptyValueLookup( const ScLookupCache& rCache,
+        const ScLookupCache::QueryCriteria& rCriteria, const ScQueryParam & rParam)
 {
-    // is search with equal match?
-    if (! aCriteria.isEmptyStringQuery())
-        return -1; // not found
-
     // is lookup value empty?
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
@@ -9800,7 +9798,7 @@ static SCROW lcl_getPrevRowWithEmptyValueLookup(const ScLookupCache& rCache, con
 
     // try to find the row index for which we have already performed lookup
     // and have some result of it inside cache
-    return rCache.lookup( aCriteria );
+    return rCache.lookup( rCriteria );
 }
 
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
@@ -9830,7 +9828,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         // tdf#121052: Slow load of cells with VLOOKUP with references to empty cells
         // This check was added only for speed up to avoid several useless complete
         // lookups inside [RangeArray] for searching empty strings.
-        if (eCacheResult == ScLookupCache::NOT_CACHED)
+        if (eCacheResult == ScLookupCache::NOT_CACHED && aCriteria.isEmptyStringQuery())
         {
             const SCROW nPrevRowWithEmptyValueLookup = lcl_getPrevRowWithEmptyValueLookup(rCache, aCriteria, rParam);
             if (nPrevRowWithEmptyValueLookup >= 0)
