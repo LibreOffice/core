@@ -1500,10 +1500,6 @@ tools/source/generic/poly.cxx:1122
     enum (anonymous at /home/noel/libo2/tools/source/generic/poly.cxx:1122:5) maxRecursionDepth
 ucbhelper/source/client/proxydecider.cxx:119
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Automatic
-uui/source/logindlg.hxx:29
-    enum LoginFlags NoUsername
-uui/source/logindlg.hxx:30
-    enum LoginFlags NoPassword
 vcl/inc/fontsubset.hxx:41
     enum FontType ANY_TYPE1
 vcl/inc/salptype.hxx:45
