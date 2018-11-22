@@ -3029,9 +3029,6 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
                         const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode()) );
     bBigger = aParam.bBigger;
 
-    FN_lcl_SetLineHeight fnSelLine = lcl_SetSelLineHeight;
-    FN_lcl_SetLineHeight fnOtherLine = lcl_SetOtherLineHeight;
-
     SwTableLines* pLines = &m_aLines;
 
     // How do we get to the height?
@@ -3056,7 +3053,7 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
                 if( bBigger )
                     bRet = true;
                 else
-                    bRet = (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
+                    bRet = lcl_SetSelLineHeight( (*pLines)[ nBaseLinePos ], aParam,
                                         nAbsDiff, true );
 
                 if( bRet )
@@ -3064,7 +3061,7 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
                     if( ppUndo )
                         ppUndo->reset(new SwUndoAttrTable( *aParam.pTableNd, true ));
 
-                    (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
+                    lcl_SetSelLineHeight( (*pLines)[ nBaseLinePos ], aParam,
                                     nAbsDiff, false );
                 }
             }
@@ -3116,7 +3113,7 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
                     {
                         for( auto n = nStt; n < nEnd; ++n )
                         {
-                            if( !(*fnOtherLine)( (*pLines)[ n ], aParam,
+                            if( !lcl_SetOtherLineHeight( (*pLines)[ n ], aParam,
                                                     nAbsDiff, true ))
                             {
                                 bRet = false;
@@ -3125,7 +3122,7 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
                         }
                     }
                     else
-                        bRet = (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
+                        bRet = lcl_SetSelLineHeight( (*pLines)[ nBaseLinePos ], aParam,
                                                 nAbsDiff, true );
                 }
 
@@ -3139,18 +3136,18 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
 
                     if( bTop )
                     {
-                        (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
+                        lcl_SetSelLineHeight( (*pLines)[ nBaseLinePos ], aParam,
                                         nAbsDiff, false );
                         for( auto n = nStt; n < nEnd; ++n )
-                            (*fnOtherLine)( (*pLines)[ n ], aParam1,
+                            lcl_SetOtherLineHeight( (*pLines)[ n ], aParam1,
                                             nAbsDiff, false );
                     }
                     else
                     {
                         for( auto n = nStt; n < nEnd; ++n )
-                            (*fnOtherLine)( (*pLines)[ n ], aParam1,
+                            lcl_SetOtherLineHeight( (*pLines)[ n ], aParam1,
                                             nAbsDiff, false );
-                        (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
+                        lcl_SetSelLineHeight( (*pLines)[ nBaseLinePos ], aParam,
                                         nAbsDiff, false );
                     }
                 }
