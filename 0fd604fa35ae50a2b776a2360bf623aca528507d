@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_1b008134",
+        "filename": "sw/qa/python/check_xautotextgroup.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:34:24Z",
+      "side": 1,
+      "message": "Why does this test pass if autotext is not operational?",
+      "revId": "0fd604fa35ae50a2b776a2360bf623aca528507d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_dbf9c94d",
+        "filename": "sw/qa/python/check_xautotextgroup.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:34:24Z",
+      "side": 1,
+      "message": "Why does this test pass if autotext is not operational?",
+      "revId": "0fd604fa35ae50a2b776a2360bf623aca528507d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_fbfc8d3f",
+        "filename": "sw/qa/python/check_xautotextgroup.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:34:24Z",
+      "side": 1,
+      "message": "this now fails (but never ran before)",
+      "revId": "0fd604fa35ae50a2b776a2360bf623aca528507d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_bb94d5e9",
+        "filename": "sw/qa/python/check_xautotextgroup.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:34:24Z",
+      "side": 1,
+      "message": "this now fails (and never ran before)",
+      "revId": "0fd604fa35ae50a2b776a2360bf623aca528507d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_9b991121",
+        "filename": "sw/qa/python/check_xautotextgroup.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:34:24Z",
+      "side": 1,
+      "message": "this now fails (but never ran before)",
+      "revId": "0fd604fa35ae50a2b776a2360bf623aca528507d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_7b9e5d08",
+        "filename": "sw/qa/python/check_xautotextgroup.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:34:24Z",
+      "side": 1,
+      "message": "this now fails (but never ran before)",
+      "revId": "0fd604fa35ae50a2b776a2360bf623aca528507d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
