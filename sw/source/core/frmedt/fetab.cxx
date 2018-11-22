@@ -2141,47 +2141,12 @@ void SwFEShell::SetTableAttr( const SfxItemSet &rNew )
     }
 }
 
-/** move cursor within a table into previous/next row (same column)
- * @param pShell cursor shell whose cursor is to be moved
- * @param bUp true: move up, false: move down
- * @returns true if successful
- */
-static bool lcl_GoTableRow( SwCursorShell* pShell, bool bUp )
-{
-    OSL_ENSURE( pShell != nullptr, "need shell" );
-
-    SwPaM* pPam = pShell->GetCursor();
-    const SwStartNode* pTableBox = pPam->GetNode().FindTableBoxStartNode();
-    OSL_ENSURE( pTableBox != nullptr, "I'm living in a box... NOT!" );
-
-    // move cursor to start node of table box
-    pPam->GetPoint()->nNode = pTableBox->GetIndex();
-    pPam->GetPoint()->nContent.Assign( nullptr, 0 );
-    GoInContent( *pPam, fnMoveForward );
-
-    // go to beginning end of table box
-    SwMoveFnCollection const & fnPosSect = bUp ? fnSectionStart : fnSectionEnd;
-    pShell->MoveSection( GoCurrSection, fnPosSect );
-
-    // and go up/down into next content
-    return bUp ? pShell->Up() : pShell->Down();
-}
-
 // change a cell width/cell height/column width/row height
 void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 nDiff )
 {
     SwFrame *pFrame = GetCurrFrame();
     if( !pFrame || !pFrame->IsInTab() )
         return;
-
-    if( (TableChgWidthHeightType::InsertDeleteMode & eType) &&
-        dynamic_cast< const SwDDETable* >(pFrame->ImplFindTabFrame()->GetTable()) != nullptr )
-    {
-        vcl::Window* pWin = GetWin();
-        ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR, pWin ? pWin->GetFrameWeld() : nullptr,
-                        DialogMask::MessageInfo | DialogMask::ButtonsOk );
-        return;
-    }
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -2208,66 +2173,17 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
         pTab->GetFormat()->SetFormatAttr( aSz );
     }
 
-    if( (eType & TableChgWidthHeightType::BiggerMode) &&
-        (eType & TableChgWidthHeightType::InsertDeleteMode) )
-    {
-        nDiff = sal_uInt16(aRectFnSet.GetWidth(pFrame->getFrameArea()));
-
-        // we must move the cursor outside the current cell before
-        // deleting the cells.
-        switch( eTypePos )
-        {
-        case TableChgWidthHeightType::RowBottom:
-            lcl_GoTableRow( this, false );
-            break;
-        case TableChgWidthHeightType::ColLeft:
-            GoPrevCell();
-            break;
-        case TableChgWidthHeightType::ColRight:
-            GoNextCell();
-            break;
-        default:
-            break;
-        }
-    }
-
     SwTwips nLogDiff = nDiff;
     nLogDiff *= pTab->GetFormat()->GetFrameSize().GetWidth();
     nLogDiff /= nPrtWidth;
 
     /** The cells are destroyed in here */
-    bool bRet = GetDoc()->SetColRowWidthHeight(
+    GetDoc()->SetColRowWidthHeight(
                     *const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()),
                     eType, nDiff, nLogDiff );
 
     ClearFEShellTabCols(*GetDoc(), nullptr);
     EndAllActionAndCall();
-
-    if( bRet && (eType & (TableChgWidthHeightType::BiggerMode | TableChgWidthHeightType::InsertDeleteMode)) == TableChgWidthHeightType::InsertDeleteMode )
-    {
-        switch(extractPosition(eType))
-        {
-        case TableChgWidthHeightType::CellLeft:
-        case TableChgWidthHeightType::ColLeft:
-                GoPrevCell();
-                break;
-
-        case TableChgWidthHeightType::CellRight:
-        case TableChgWidthHeightType::ColRight:
-                GoNextCell();
-                break;
-
-        case TableChgWidthHeightType::CellTop:
-                lcl_GoTableRow( this, true );
-                break;
-
-        case TableChgWidthHeightType::CellBottom:
-        case TableChgWidthHeightType::RowBottom:
-                lcl_GoTableRow( this, false );
-                break;
-        default: break;
-        }
-    }
 }
 
 static bool lcl_IsFormulaSelBoxes( const SwTable& rTable, const SwTableBoxFormula& rFormula,

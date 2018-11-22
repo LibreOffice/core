@@ -1442,8 +1442,6 @@ sw/inc/poolfmt.hxx:422
     enum RES_POOL_COLLFMT_TYPE RES_POOLCOLL_DOC_TITEL
 sw/inc/reffld.hxx:38
     enum REFERENCESUBTYPE REF_OUTLINE
-sw/inc/tblenum.hxx:37
-    enum TableChgWidthHeightType InsertDeleteMode
 sw/inc/undobj.hxx:134
     enum DelContentType Fly
 sw/inc/undobj.hxx:135
