@@ -517,10 +517,6 @@ void ScBroadcastAreaSlot::GetAllListeners(
         const ScRange& rAreaRange = pArea->GetRange();
         switch (eGroup)
         {
-            case sc::ListenerGroupType::Single:
-                if (pArea->IsGroupListening())
-                    continue;
-            break;
             case sc::ListenerGroupType::Group:
                 if (!pArea->IsGroupListening())
                     continue;
