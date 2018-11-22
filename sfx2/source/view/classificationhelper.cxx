@@ -762,13 +762,12 @@ sal_Int32 SfxClassificationHelper::GetImpactLevel()
     }
     else if (aScale == "FIPS-199")
     {
-        static std::map<OUString, sal_Int32> aValues;
-        if (aValues.empty())
+        static std::map<OUString, sal_Int32> const aValues
         {
-            aValues["Low"] = 0;
-            aValues["Moderate"] = 1;
-            aValues["High"] = 2;
-        }
+            { "Low", 0 },
+            { "Moderate", 1 },
+            { "High", 2 }
+        };
         auto itValues = aValues.find(aLevel);
         if (itValues == aValues.end())
             return nRet;

@@ -44,16 +44,14 @@ enum FactoryId
 typedef std::unordered_map<OUString, FactoryId> FactoryMap;
 
 namespace {
-static std::shared_ptr<FactoryMap> spFactoryMap;
-std::shared_ptr<FactoryMap> const & GetFactoryMap()
+FactoryMap const & GetFactoryMap()
 {
-    if (spFactoryMap == nullptr)
+    static FactoryMap aFactoryMap
     {
-        spFactoryMap.reset(new FactoryMap);
-        (*spFactoryMap)[SdDrawingDocument_getImplementationName()] = SdDrawingDocumentFactoryId;
-        (*spFactoryMap)[SdPresentationDocument_getImplementationName()] = SdPresentationDocumentFactoryId;
-    }
-    return spFactoryMap;
+        { SdDrawingDocument_getImplementationName(), SdDrawingDocumentFactoryId },
+        { SdPresentationDocument_getImplementationName(), SdPresentationDocumentFactoryId }
+    };
+    return aFactoryMap;
 };
 } // end of anonymous namespace
 
@@ -74,10 +72,10 @@ SAL_DLLPUBLIC_EXPORT void * sd_component_getFactory(
         uno::Reference<lang::XSingleServiceFactory> xFactory;
         uno::Reference<lang::XSingleComponentFactory> xComponentFactory;
 
-        const std::shared_ptr<FactoryMap>& pFactoryMap (GetFactoryMap());
+        const FactoryMap& rFactoryMap (GetFactoryMap());
         OUString sImplementationName (OUString::createFromAscii(pImplName));
-        FactoryMap::const_iterator iFactory (pFactoryMap->find(sImplementationName));
-        if (iFactory != pFactoryMap->end())
+        FactoryMap::const_iterator iFactory (rFactoryMap.find(sImplementationName));
+        if (iFactory != rFactoryMap.end())
         {
             switch (iFactory->second)
             {

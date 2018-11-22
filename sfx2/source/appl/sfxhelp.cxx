@@ -117,25 +117,24 @@ namespace {
 /// Root path of the help.
 OUString const & getHelpRootURL()
 {
-    static OUString s_instURL;
-    if (!s_instURL.isEmpty())
-        return s_instURL;
-
-    s_instURL = officecfg::Office::Common::Path::Current::Help::get(comphelper::getProcessComponentContext());
-    if (s_instURL.isEmpty())
+    static OUString const s_instURL = [&]()
     {
-        // try to determine path from default
-        s_instURL = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
-    }
+        OUString tmp = officecfg::Office::Common::Path::Current::Help::get(comphelper::getProcessComponentContext());
+        if (tmp.isEmpty())
+        {
+            // try to determine path from default
+            tmp = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
+        }
 
-    // replace anything like $(instpath);
-    SvtPathOptions aOptions;
-    s_instURL = aOptions.SubstituteVariable(s_instURL);
+        // replace anything like $(instpath);
+        SvtPathOptions aOptions;
+        tmp = aOptions.SubstituteVariable(tmp);
 
-    OUString url;
-    if (osl::FileBase::getFileURLFromSystemPath(s_instURL, url) == osl::FileBase::E_None)
-        s_instURL = url;
-
+        OUString url;
+        if (osl::FileBase::getFileURLFromSystemPath(tmp, url) == osl::FileBase::E_None)
+            tmp = url;
+        return tmp;
+    }();
     return s_instURL;
 }
 
@@ -161,13 +160,8 @@ bool impl_hasHelpInstalled()
     if (comphelper::LibreOfficeKit::isActive())
         return false;
 
-    static OUString aLocaleStr;
-
-    if (aLocaleStr.isEmpty())
-    {
         // detect installed locale
-        aLocaleStr = HelpLocaleString();
-    }
+    static OUString const aLocaleStr = HelpLocaleString();
 
     OUString helpRootURL = getHelpRootURL() + "/" + aLocaleStr + "/err.html";
     bool bOK = false;
@@ -187,13 +181,8 @@ bool impl_hasHTMLHelpInstalled()
     if (comphelper::LibreOfficeKit::isActive())
         return false;
 
-    static OUString aLocaleStr;
-
-    if (aLocaleStr.isEmpty())
-    {
-        // detect installed locale
-        aLocaleStr = HelpLocaleString();
-    }
+    // detect installed locale
+    static OUString const aLocaleStr = HelpLocaleString();
 
     OUString helpRootURL = getHelpRootURL() + "/" + aLocaleStr + "/text";
     bool bOK = impl_checkHelpLocalePath( helpRootURL );
@@ -204,7 +193,6 @@ bool impl_hasHTMLHelpInstalled()
 } // namespace
 
 /// Return the locale we prefer for displaying help
-// static OUString const & HelpLocaleString()
 static OUString const & HelpLocaleString()
 {
     if (comphelper::LibreOfficeKit::isActive())
