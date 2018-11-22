@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <array>
 #include <utility>
 #include <map>
 
@@ -281,17 +282,16 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
 //static
 OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 {
-    static sal_Char const * aMap[CONTENT_TYPE_LAST + 1];
-    static bool bInitialized = false;
-    if (!bInitialized)
+    static std::array<sal_Char const *, CONTENT_TYPE_LAST + 1> aMap = [&]()
     {
+        std::array<sal_Char const *, CONTENT_TYPE_LAST + 1> tmp;
         for (std::size_t i = 0; i <= CONTENT_TYPE_LAST; ++i)
-            aMap[aStaticTypeNameMap[i].m_eTypeID] = aStaticTypeNameMap[i].m_pTypeName;
-        aMap[CONTENT_TYPE_UNKNOWN] = CONTENT_TYPE_STR_APP_OCTSTREAM;
-        aMap[CONTENT_TYPE_TEXT_PLAIN] = CONTENT_TYPE_STR_TEXT_PLAIN
-                                            "; charset=iso-8859-1";
-        bInitialized = true;
-    }
+            tmp[aStaticTypeNameMap[i].m_eTypeID] = aStaticTypeNameMap[i].m_pTypeName;
+        tmp[CONTENT_TYPE_UNKNOWN] = CONTENT_TYPE_STR_APP_OCTSTREAM;
+        tmp[CONTENT_TYPE_TEXT_PLAIN] = CONTENT_TYPE_STR_TEXT_PLAIN
+                                        "; charset=iso-8859-1";
+        return tmp;
+    }();
 
     OUString aTypeName = eTypeID <= CONTENT_TYPE_LAST ? OUString::createFromAscii(aMap[eTypeID])
                                                       : OUString();
