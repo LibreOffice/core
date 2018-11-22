@@ -236,6 +236,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
     SwDrawBase* pFuncPtr = nullptr;
 
+    // for LibreOfficeKit - choosing a shape should construct it directly
+    bool bCreateDirectly = false;
+
     switch (nSlotId)
     {
         case SID_OBJECT_SELECT:
@@ -307,6 +310,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CS_ID :
         {
             pFuncPtr = new ConstCustomShape(m_pWrtShell, m_pEditWin, this, rReq );
+
+            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+
             m_nDrawSfxId = nSlotId;
             if ( nSlotId != SID_DRAW_CS_ID )
             {
@@ -341,7 +347,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
         pFuncPtr->Activate(nSlotId);
         NoRotate();
-        if(rReq.GetModifier() == KEY_MOD1)
+        if(rReq.GetModifier() == KEY_MOD1 || bCreateDirectly)
         {
             if(SID_OBJECT_SELECT == m_nDrawSfxId )
             {
