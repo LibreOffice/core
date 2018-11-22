@@ -108,10 +108,14 @@ DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
                 return IdleJob::Grammar;
         }
 
-        for ( auto pLayout : m_rDoc.GetAllLayouts() )
+        // If we're dragging re-layout doesn't occur so avoid a busy loop.
+        if (!pShell->HasDrawViewDrag())
         {
-            if( pLayout->IsIdleFormat() )
-                return IdleJob::Layout;
+            for ( auto pLayout : m_rDoc.GetAllLayouts() )
+            {
+                if( pLayout->IsIdleFormat() )
+                    return IdleJob::Layout;
+            }
         }
 
         SwFieldUpdateFlags nFieldUpdFlag = m_rDoc.GetDocumentSettingManager().getFieldUpdateFlags(true);

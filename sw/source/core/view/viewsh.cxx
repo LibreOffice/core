@@ -698,8 +698,7 @@ bool SwViewShell::HasCharts() const
 
 void SwViewShell::LayoutIdle()
 {
-    if( !mpOpt->IsIdle() || !GetWin() ||
-        ( Imp()->HasDrawView() && Imp()->GetDrawView()->IsDragObj() ) )
+    if( !mpOpt->IsIdle() || !GetWin() || HasDrawViewDrag() )
         return;
 
     //No idle when printing is going on.
