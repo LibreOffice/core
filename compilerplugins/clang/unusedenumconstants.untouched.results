@@ -148,8 +148,6 @@ include/desktop/exithelper.h:29
     int EXITHELPER_FATAL_ERROR
 include/editeng/borderline.hxx:128
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
-include/editeng/editdata.hxx:41
-    enum EESpellState LanguageNotInstalled
 include/i18nutil/transliteration.hxx:45
     enum TransliterationFlags NumToTextLower_zh_CN
 include/i18nutil/transliteration.hxx:47
