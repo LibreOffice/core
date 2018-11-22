@@ -233,7 +233,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
 {
-    if ( GetPathType ( maStrURL ) == Type_ExistsFile  ||
+    if ( GetPathType ( maStrURL ) == EPathType::ExistsFile  ||
          maStrURL.isEmpty() ||
          maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ||
          maStrURL.startsWith( sHash ) )
@@ -279,7 +279,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl, Edit&, void)
 
 IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
 {
-    if ( IsMarkWndVisible() && ( GetPathType( maStrURL )==Type_ExistsFile ||
+    if ( IsMarkWndVisible() && ( GetPathType( maStrURL )== EPathType::ExistsFile ||
                                   maStrURL.isEmpty() ||
                                   maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ) )
     {
@@ -347,9 +347,9 @@ SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( const OUString& rS
     INetURLObject aURL( rStrPath, INetProtocol::File );
 
     if( aURL.HasError() )
-        return Type_Invalid;
+        return EPathType::Invalid;
     else
-        return Type_ExistsFile;
+        return EPathType::ExistsFile;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
