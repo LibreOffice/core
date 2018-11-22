@@ -142,7 +142,7 @@ namespace canvas
          */
         struct SpriteChangeRecord
         {
-            enum class ChangeType { none=0, move, update };
+            enum class ChangeType { move, update };
 
             SpriteChangeRecord( const Sprite::Reference&    rSprite,
                                 const ::basegfx::B2DPoint&  rOldPos,
