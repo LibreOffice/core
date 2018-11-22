@@ -22,6 +22,7 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/component_context.hxx>
 
 #include "vbaapplication.hxx"
@@ -225,26 +226,18 @@ ScVbaGlobals::MenuBars( const uno::Any& aIndex )
 uno::Sequence< OUString > SAL_CALL
 ScVbaGlobals::getAvailableServiceNames(  )
 {
-    static bool bInit = false;
-    static uno::Sequence< OUString > serviceNames( ScVbaGlobals_BASE::getAvailableServiceNames() );
-    if ( !bInit )
-    {
-         const OUString names[] = {
-            OUString(  "ooo.vba.excel.Range"  ),
-            OUString(  "ooo.vba.excel.Workbook"  ),
-            OUString(  "ooo.vba.excel.Window"  ),
-            OUString(  "ooo.vba.excel.Worksheet"  ),
-            OUString(  "ooo.vba.excel.Application"  ),
-            OUString(  "ooo.vba.excel.Hyperlink"  ),
-            OUString(  "com.sun.star.script.vba.VBASpreadsheetEventProcessor"  )
-          };
-        sal_Int32 nExcelServices = SAL_N_ELEMENTS( names );
-        sal_Int32 startIndex = serviceNames.getLength();
-        serviceNames.realloc( serviceNames.getLength() + nExcelServices );
-        for ( sal_Int32 index = 0; index < nExcelServices; ++index )
-             serviceNames[ startIndex + index ] = names[ index ];
-        bInit = true;
-    }
+    static const uno::Sequence< OUString > serviceNames = comphelper::concatSequences(
+        ScVbaGlobals_BASE::getAvailableServiceNames(),
+        uno::Sequence< OUString >
+        {
+            "ooo.vba.excel.Range",
+            "ooo.vba.excel.Workbook",
+            "ooo.vba.excel.Window",
+            "ooo.vba.excel.Worksheet",
+            "ooo.vba.excel.Application",
+            "ooo.vba.excel.Hyperlink",
+            "com.sun.star.script.vba.VBASpreadsheetEventProcessor"
+        } );
     return serviceNames;
 }
 
@@ -257,12 +250,10 @@ ScVbaGlobals::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaGlobals::getServiceNames()
 {
-        static uno::Sequence< OUString > aServiceNames;
-        if ( aServiceNames.getLength() == 0 )
+        static uno::Sequence< OUString > aServiceNames
         {
-                aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = "ooo.vba.excel.Globals" ;
-        }
+            "ooo.vba.excel.Globals"
+        };
         return aServiceNames;
 }
 

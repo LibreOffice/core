@@ -1265,13 +1265,8 @@ void SAL_CALL ScModelObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static const uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes(SfxBaseModel::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
         uno::Sequence<uno::Type> aAggTypes;
         if ( GetFormatter().is() )
         {
@@ -1283,36 +1278,29 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
                 aAggTypes = (*xNumProv)->getTypes();
             }
         }
-        long nAggLen = aAggTypes.getLength();
-        const uno::Type* pAggPtr = aAggTypes.getConstArray();
-
-        const long nThisLen = 16;
-        aTypes.realloc( nParentLen + nAggLen + nThisLen );
-        uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSpreadsheetDocument>::get();
-        pPtr[nParentLen + 1] = cppu::UnoType<document::XActionLockable>::get();
-        pPtr[nParentLen + 2] = cppu::UnoType<sheet::XCalculatable>::get();
-        pPtr[nParentLen + 3] = cppu::UnoType<util::XProtectable>::get();
-        pPtr[nParentLen + 4] = cppu::UnoType<drawing::XDrawPagesSupplier>::get();
-        pPtr[nParentLen + 5] = cppu::UnoType<sheet::XGoalSeek>::get();
-        pPtr[nParentLen + 6] = cppu::UnoType<sheet::XConsolidatable>::get();
-        pPtr[nParentLen + 7] = cppu::UnoType<sheet::XDocumentAuditing>::get();
-        pPtr[nParentLen + 8] = cppu::UnoType<style::XStyleFamiliesSupplier>::get();
-        pPtr[nParentLen + 9] = cppu::UnoType<view::XRenderable>::get();
-        pPtr[nParentLen +10] = cppu::UnoType<document::XLinkTargetSupplier>::get();
-        pPtr[nParentLen +11] = cppu::UnoType<beans::XPropertySet>::get();
-        pPtr[nParentLen +12] = cppu::UnoType<lang::XMultiServiceFactory>::get();
-        pPtr[nParentLen +13] = cppu::UnoType<lang::XServiceInfo>::get();
-        pPtr[nParentLen +14] = cppu::UnoType<util::XChangesNotifier>::get();
-        pPtr[nParentLen +15] = cppu::UnoType<sheet::opencl::XOpenCLSelection>::get();
-
-        long i;
-        for (i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                    // parent types first
-
-        for (i=0; i<nAggLen; i++)
-            pPtr[nParentLen+nThisLen+i] = pAggPtr[i];   // aggregated types last
-    }
+        return comphelper::concatSequences(
+            SfxBaseModel::getTypes(),
+            aAggTypes,
+            uno::Sequence<uno::Type>
+            {
+                cppu::UnoType<sheet::XSpreadsheetDocument>::get(),
+                cppu::UnoType<document::XActionLockable>::get(),
+                cppu::UnoType<sheet::XCalculatable>::get(),
+                cppu::UnoType<util::XProtectable>::get(),
+                cppu::UnoType<drawing::XDrawPagesSupplier>::get(),
+                cppu::UnoType<sheet::XGoalSeek>::get(),
+                cppu::UnoType<sheet::XConsolidatable>::get(),
+                cppu::UnoType<sheet::XDocumentAuditing>::get(),
+                cppu::UnoType<style::XStyleFamiliesSupplier>::get(),
+                cppu::UnoType<view::XRenderable>::get(),
+                cppu::UnoType<document::XLinkTargetSupplier>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<lang::XMultiServiceFactory>::get(),
+                cppu::UnoType<lang::XServiceInfo>::get(),
+                cppu::UnoType<util::XChangesNotifier>::get(),
+                cppu::UnoType<sheet::opencl::XOpenCLSelection>::get(),
+            } );
+    }();
     return aTypes;
 }
 

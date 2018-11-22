@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaaxistitle.hxx"
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -34,15 +35,9 @@ ScVbaAxisTitle::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaAxisTitle::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
-    {
-        uno::Sequence< OUString > BaseServiceNames = AxisTitleBase::getServiceNames();
-        aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.AxisTitle";
-        for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
-            aServiceNames[ index ] = BaseServiceNames[ index ];
-    }
+    static uno::Sequence< OUString > const aServiceNames = comphelper::concatSequences(
+        AxisTitleBase::getServiceNames(),
+        uno::Sequence<OUString> { "ooo.vba.excel.AxisTitle" } );
     return aServiceNames;
 }
 

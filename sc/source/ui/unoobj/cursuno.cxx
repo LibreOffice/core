@@ -21,6 +21,7 @@
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <cursuno.hxx>
@@ -66,22 +67,14 @@ void SAL_CALL ScCellCursorObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
-    {
-        uno::Sequence<uno::Type> aParentTypes(ScCellRangeObj::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
-        aTypes.realloc( nParentLen + 3 );
-        uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSheetCellCursor>::get();
-        pPtr[nParentLen + 1] = cppu::UnoType<sheet::XUsedAreaCursor>::get();
-        pPtr[nParentLen + 2] = cppu::UnoType<table::XCellCursor>::get();
-
-        for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
-    }
+    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
+        ScCellRangeObj::getTypes(),
+        uno::Sequence<uno::Type>
+        {
+            cppu::UnoType<sheet::XSheetCellCursor>::get(),
+            cppu::UnoType<sheet::XUsedAreaCursor>::get(),
+            cppu::UnoType<table::XCellCursor>::get()
+        } );
     return aTypes;
 }
 
