@@ -280,8 +280,6 @@ linguistic/source/defs.hxx:85
     enum LinguDispatcher::DspType DSP_SPELL
 reportdesign/source/ui/inc/ReportDefines.hxx:24
     enum rptui::DlgEdMode Test
-sax/source/fastparser/fastparser.cxx:80
-    enum (anonymous namespace)::CallbackType INVALID
 sc/source/filter/excel/xiescher.cxx:460
     enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
@@ -390,10 +388,6 @@ sw/source/ui/fldui/fldref.cxx:767
     enum FMT_REF_IDX FMT_REF_ONLYNUMBER_IDX
 sw/source/ui/fldui/fldref.cxx:768
     enum FMT_REF_IDX FMT_REF_ONLYCAPTION_IDX
-sw/source/uibase/docvw/edtwin.cxx:1570
-    enum SwKeyState ColTopBig
-sw/source/uibase/docvw/edtwin.cxx:1571
-    enum SwKeyState ColTopSmall
 sw/source/uibase/utlui/content.cxx:824
     enum STR_CONTEXT_IDX IDX_STR_LINK_REGION
 sw/source/uibase/utlui/content.cxx:825

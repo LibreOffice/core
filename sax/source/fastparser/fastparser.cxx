@@ -77,7 +77,7 @@ struct EventList
     bool mbIsAttributesEmpty;
 };
 
-enum CallbackType { INVALID, START_ELEMENT, END_ELEMENT, CHARACTERS, PROCESSING_INSTRUCTION, DONE, EXCEPTION };
+enum class CallbackType { START_ELEMENT, END_ELEMENT, CHARACTERS, PROCESSING_INSTRUCTION, DONE, EXCEPTION };
 
 struct Event
 {
@@ -295,7 +295,7 @@ private:
         catch (...)
         {
             Entity &rEntity = mpParser->getEntity();
-            rEntity.getEvent( EXCEPTION );
+            rEntity.getEvent( CallbackType::EXCEPTION );
             mpParser->produce( true );
         }
     }
@@ -985,22 +985,22 @@ bool FastSaxParserImpl::consume(EventList& rEventList)
     {
         switch ((*aEventIt).maType)
         {
-            case START_ELEMENT:
+            case CallbackType::START_ELEMENT:
                 rEntity.startElement( &(*aEventIt) );
                 break;
-            case END_ELEMENT:
+            case CallbackType::END_ELEMENT:
                 rEntity.endElement();
                 break;
-            case CHARACTERS:
+            case CallbackType::CHARACTERS:
                 rEntity.characters( (*aEventIt).msChars );
                 break;
-            case PROCESSING_INSTRUCTION:
+            case CallbackType::PROCESSING_INSTRUCTION:
                 rEntity.processingInstruction(
                     (*aEventIt).msNamespace, (*aEventIt).msElementName ); // ( target, data )
                 break;
-            case DONE:
+            case CallbackType::DONE:
                 return false;
-            case EXCEPTION:
+            case CallbackType::EXCEPTION:
                 rEntity.throwException( mxDocumentLocator, false );
                 SAL_FALLTHROUGH; // avoid unreachable code warning with some compilers
             default:
@@ -1094,7 +1094,7 @@ void FastSaxParserImpl::parse()
             rEntity.throwException( mxDocumentLocator, true );
         }
     } while( nRead > 0 );
-    rEntity.getEvent( DONE );
+    rEntity.getEvent( CallbackType::DONE );
     if( rEntity.mbEnableThreads )
         produce( true );
 }
@@ -1117,7 +1117,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     }
 
     // create attribute map and process namespace instructions
-    Event& rEvent = rEntity.getEvent( START_ELEMENT );
+    Event& rEvent = rEntity.getEvent( CallbackType::START_ELEMENT );
     bool bIsAttributesEmpty = false;
     if ( rEntity.mbEnableThreads )
         bIsAttributesEmpty = rEntity.getEventList().mbIsAttributesEmpty;
@@ -1285,7 +1285,7 @@ void FastSaxParserImpl::callbackEndElement()
     if( !rEntity.maNamespaceStack.empty() )
         rEntity.maNamespaceStack.pop();
 
-    rEntity.getEvent( END_ELEMENT );
+    rEntity.getEvent( CallbackType::END_ELEMENT );
     if (rEntity.mbEnableThreads)
         produce();
     else
@@ -1314,7 +1314,7 @@ void FastSaxParserImpl::sendPendingCharacters()
     OUString sChars( pendingCharacters.data(), pendingCharacters.size(), RTL_TEXTENCODING_UTF8 );
     if (rEntity.mbEnableThreads)
     {
-        Event& rEvent = rEntity.getEvent( CHARACTERS );
+        Event& rEvent = rEntity.getEvent( CallbackType::CHARACTERS );
         rEvent.msChars = sChars;
         produce();
     }
@@ -1328,7 +1328,7 @@ void FastSaxParserImpl::callbackProcessingInstruction( const xmlChar *target, co
     if (!pendingCharacters.empty())
         sendPendingCharacters();
     Entity& rEntity = getEntity();
-    Event& rEvent = rEntity.getEvent( PROCESSING_INSTRUCTION );
+    Event& rEvent = rEntity.getEvent( CallbackType::PROCESSING_INSTRUCTION );
 
     // This event is very rare, so no need to waste extra space for this
     // Using namespace and element strings to be target and data in that order.
