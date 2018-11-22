@@ -44,6 +44,7 @@
 #include <attrib.hxx>
 #include <globstr.hrc>
 #include <global.hxx>
+#include <dpobject.hxx>
 
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -211,6 +212,7 @@ public:
     void testTdf118990();
     void testKeepSettingsOfBlankRows();
 
+    void testTdf121612();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -321,6 +323,7 @@ public:
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testKeepSettingsOfBlankRows);
+    CPPUNIT_TEST(testTdf121612);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4100,6 +4103,23 @@ void ScExportTest::testKeepSettingsOfBlankRows()
 
     // saved blank row with not default setting in A2
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
+}
+
+void ScExportTest::testTdf121612()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf121612.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // There should be a pivot table
+    CPPUNIT_ASSERT(rDoc.HasPivotTable());
+
+    // DP collection is not lost after export and has one entry
+    ScDPCollection* pDPColl = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT(pDPColl);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
