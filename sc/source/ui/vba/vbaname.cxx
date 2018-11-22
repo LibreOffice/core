@@ -214,12 +214,10 @@ ScVbaName::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaName::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.Name";
-    }
+        "ooo.vba.excel.Name"
+    };
     return aServiceNames;
 }
 

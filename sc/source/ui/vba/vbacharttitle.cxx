@@ -34,15 +34,13 @@ ScVbaChartTitle::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaChartTitle::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames = [&]()
     {
-        uno::Sequence< OUString > BaseServiceNames = ChartTitleBase::getServiceNames();
-        aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.Chart";
-        for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
-            aServiceNames[ index ] = BaseServiceNames[ index ];
-    }
+        uno::Sequence< OUString > tmp = ChartTitleBase::getServiceNames();
+        tmp.realloc( tmp.getLength() + 1 );
+        tmp[ tmp.getLength() - 1 ] = "ooo.vba.excel.Chart";
+        return tmp;
+    }();
     return aServiceNames;
 }
 

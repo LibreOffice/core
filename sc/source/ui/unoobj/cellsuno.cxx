@@ -1772,25 +1772,22 @@ void SAL_CALL ScCellRangesBase::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> const aTypes
     {
-        aTypes.realloc(13);
-        uno::Type* pPtr = aTypes.getArray();
-        pPtr[0] = cppu::UnoType<beans::XPropertySet>::get();
-        pPtr[1] = cppu::UnoType<beans::XMultiPropertySet>::get();
-        pPtr[2] = cppu::UnoType<beans::XPropertyState>::get();
-        pPtr[3] = cppu::UnoType<sheet::XSheetOperation>::get();
-        pPtr[4] = cppu::UnoType<chart::XChartDataArray>::get();
-        pPtr[5] = cppu::UnoType<util::XIndent>::get();
-        pPtr[6] = cppu::UnoType<sheet::XCellRangesQuery>::get();
-        pPtr[7] = cppu::UnoType<sheet::XFormulaQuery>::get();
-        pPtr[8] = cppu::UnoType<util::XReplaceable>::get();
-        pPtr[9] = cppu::UnoType<util::XModifyBroadcaster>::get();
-        pPtr[10]= cppu::UnoType<lang::XServiceInfo>::get();
-        pPtr[11]= cppu::UnoType<lang::XUnoTunnel>::get();
-        pPtr[12]= cppu::UnoType<lang::XTypeProvider>::get();
-    }
+        cppu::UnoType<beans::XPropertySet>::get(),
+        cppu::UnoType<beans::XMultiPropertySet>::get(),
+        cppu::UnoType<beans::XPropertyState>::get(),
+        cppu::UnoType<sheet::XSheetOperation>::get(),
+        cppu::UnoType<chart::XChartDataArray>::get(),
+        cppu::UnoType<util::XIndent>::get(),
+        cppu::UnoType<sheet::XCellRangesQuery>::get(),
+        cppu::UnoType<sheet::XFormulaQuery>::get(),
+        cppu::UnoType<util::XReplaceable>::get(),
+        cppu::UnoType<util::XModifyBroadcaster>::get(),
+        cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XUnoTunnel>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get()
+    };
     return aTypes;
 }
 
@@ -4142,22 +4139,17 @@ void SAL_CALL ScCellRangesObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScCellRangesObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes(ScCellRangesBase::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
-        aTypes.realloc( nParentLen + 3 );
-        uno::Type* pPtr = aTypes.getArray();
+        uno::Sequence<uno::Type> tmp(ScCellRangesBase::getTypes());
+        long nParentLen = tmp.getLength();
+        tmp.realloc( nParentLen + 3 );
+        uno::Type* pPtr = tmp.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSheetCellRangeContainer>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<container::XNameContainer>::get();
         pPtr[nParentLen + 2] = cppu::UnoType<container::XEnumerationAccess>::get();
-
-        for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 
@@ -4750,15 +4742,13 @@ void SAL_CALL ScCellRangeObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes(ScCellRangesBase::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
+        uno::Sequence<uno::Type> tmp(ScCellRangesBase::getTypes());
+        long nParentLen = tmp.getLength();
 
-        aTypes.realloc( nParentLen + 17 );
-        uno::Type* pPtr = aTypes.getArray();
+        tmp.realloc( nParentLen + 17 );
+        uno::Type* pPtr = tmp.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<sheet::XCellRangeAddressable>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<sheet::XSheetCellRange>::get();
         pPtr[nParentLen + 2] = cppu::UnoType<sheet::XArrayFormulaRange>::get();
@@ -4776,10 +4766,8 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes()
         pPtr[nParentLen +14] = cppu::UnoType<util::XImportable>::get();
         pPtr[nParentLen +15] = cppu::UnoType<sheet::XCellFormatRangesSupplier>::get();
         pPtr[nParentLen +16] = cppu::UnoType<sheet::XUniqueCellFormatRangesSupplier>::get();
-
-        for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 
@@ -5993,14 +5981,11 @@ void SAL_CALL ScCellObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes(ScCellRangeObj::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
-        aTypes.realloc( nParentLen + 9 );
+        uno::Sequence<uno::Type> tmp(ScCellRangeObj::getTypes());
+        long nParentLen = tmp.getLength();
+        tmp.realloc( nParentLen + 9 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<table::XCell>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<sheet::XCellAddressable>::get();
@@ -6011,10 +5996,8 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes()
         pPtr[nParentLen + 6] = cppu::UnoType<document::XActionLockable>::get();
         pPtr[nParentLen + 7] = cppu::UnoType<sheet::XFormulaTokens>::get();
         pPtr[nParentLen + 8] = cppu::UnoType<table::XCell2>::get();
-
-        for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 
@@ -6756,15 +6739,11 @@ void SAL_CALL ScTableSheetObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes = ScCellRangeObj::getTypes();
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
-        aTypes.realloc(nParentLen + 19);
-
+        uno::Sequence<uno::Type> tmp = ScCellRangeObj::getTypes();
+        long nParentLen = tmp.getLength();
+        tmp.realloc(nParentLen + 19);
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSpreadsheet>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<container::XNamed>::get();
@@ -6785,10 +6764,8 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes()
         pPtr[nParentLen +16] = cppu::UnoType<sheet::XExternalSheetName>::get();
         pPtr[nParentLen +17] = cppu::UnoType<document::XEventsSupplier>::get();
         pPtr[nParentLen +18] = cppu::UnoType<table::XTablePivotChartsSupplier>::get();
-
-        for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 
@@ -8521,20 +8498,15 @@ void SAL_CALL ScTableColumnObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScTableColumnObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes(ScCellRangeObj::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
-        aTypes.realloc( nParentLen + 1 );
-        uno::Type* pPtr = aTypes.getArray();
+        uno::Sequence<uno::Type> tmp(ScCellRangeObj::getTypes());
+        long nParentLen = tmp.getLength();
+        tmp.realloc( nParentLen + 1 );
+        uno::Type* pPtr = tmp.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<container::XNamed>::get();
-
-        for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 

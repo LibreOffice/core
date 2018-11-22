@@ -66,22 +66,17 @@ void SAL_CALL ScCellCursorObj::release() throw()
 
 uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypes;
-    if ( aTypes.getLength() == 0 )
+    static uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aParentTypes(ScCellRangeObj::getTypes());
-        long nParentLen = aParentTypes.getLength();
-        const uno::Type* pParentPtr = aParentTypes.getConstArray();
-
+        uno::Sequence<uno::Type> tmp(ScCellRangeObj::getTypes());
+        long nParentLen = tmp.getLength();
         aTypes.realloc( nParentLen + 3 );
-        uno::Type* pPtr = aTypes.getArray();
+        uno::Type* pPtr = tmp.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSheetCellCursor>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<sheet::XUsedAreaCursor>::get();
         pPtr[nParentLen + 2] = cppu::UnoType<table::XCellCursor>::get();
-
-        for (long i=0; i<nParentLen; i++)
-            pPtr[i] = pParentPtr[i];                // parent types first
-    }
+        return tmp;
+    }();
     return aTypes;
 }
 
