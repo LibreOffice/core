@@ -407,12 +407,10 @@ void ScMultiBlockUndo::ShowBlock()
     }
 }
 
-ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocumentUniquePtr pRefDoc, std::unique_ptr<ScRefUndoData> pRefData,
-                                                ScMoveUndoMode eRefMode ) :
+ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocumentUniquePtr pRefDoc, std::unique_ptr<ScRefUndoData> pRefData ) :
     ScSimpleUndo( pDocSh ),
     pRefUndoDoc( std::move(pRefDoc) ),
-    pRefUndoData( std::move(pRefData) ),
-    eMode( eRefMode )
+    pRefUndoData( std::move(pRefData) )
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     if (pRefUndoData)
@@ -433,10 +431,7 @@ void ScMoveUndo::UndoRef()
     ScRange aRange(0,0,0, MAXCOL,MAXROW,pRefUndoDoc->GetTableCount()-1);
     pRefUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::FORMULA, false, rDoc, nullptr, false);
     if (pRefUndoData)
-        pRefUndoData->DoUndo( &rDoc, (eMode == SC_UNDO_REFFIRST) );
-        // HACK: ScDragDropUndo is the only one with REFFIRST.
-        // If not, results possibly in a too frequent adjustment
-        // of ChartRefs. Not that pretty, but not too bad either..
+        pRefUndoData->DoUndo( &rDoc, false );
 }
 
 void ScMoveUndo::BeginUndo()
@@ -444,16 +439,13 @@ void ScMoveUndo::BeginUndo()
     ScSimpleUndo::BeginUndo();
 
     EnableDrawAdjust( &pDocShell->GetDocument(), false );
-
-    if (pRefUndoDoc && eMode == SC_UNDO_REFFIRST)
-        UndoRef();
 }
 
 void ScMoveUndo::EndUndo()
 {
     DoSdrUndoAction( pDrawUndo.get(), &pDocShell->GetDocument() );     // must also be called when pointer is null
 
-    if (pRefUndoDoc && eMode == SC_UNDO_REFLAST)
+    if (pRefUndoDoc)
         UndoRef();
 
     EnableDrawAdjust( &pDocShell->GetDocument(), true );
