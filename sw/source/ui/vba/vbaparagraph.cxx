@@ -64,12 +64,10 @@ SwVbaParagraph::getServiceImplName()
 uno::Sequence< OUString >
 SwVbaParagraph::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.word.Paragraph";
-    }
+        "ooo.vba.word.Paragraph"
+    };
     return aServiceNames;
 }
 
@@ -168,12 +166,10 @@ SwVbaParagraphs::getServiceImplName()
 css::uno::Sequence<OUString>
 SwVbaParagraphs::getServiceNames()
 {
-    static uno::Sequence< OUString > sNames;
-    if ( sNames.getLength() == 0 )
+    static uno::Sequence< OUString > const sNames
     {
-        sNames.realloc( 1 );
-        sNames[0] = "ooo.vba.word.Paragraphs";
-    }
+        "ooo.vba.word.Paragraphs"
+    };
     return sNames;
 }
 

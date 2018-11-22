@@ -99,16 +99,16 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
                            const SwViewShell &rSh, const SwNoTextFrame *pFrame,
                            bool bDefect )
 {
-    static vcl::Font *pFont = nullptr;
-    if ( !pFont )
+    static vcl::Font aFont = [&]()
     {
-        pFont = new vcl::Font();
-        pFont->SetWeight( WEIGHT_BOLD );
-        pFont->SetStyleName( OUString() );
-        pFont->SetFamilyName("Arial Unicode");
-        pFont->SetFamily( FAMILY_SWISS );
-        pFont->SetTransparent( true );
-    }
+        vcl::Font tmp;
+        tmp.SetWeight( WEIGHT_BOLD );
+        tmp.SetStyleName( OUString() );
+        tmp.SetFamilyName("Arial Unicode");
+        tmp.SetFamily( FAMILY_SWISS );
+        tmp.SetTransparent( true );
+        return tmp;
+    }();
 
     Color aCol( COL_RED );
     FontLineStyle eUnderline = LINESTYLE_NONE;
@@ -138,11 +138,11 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
         eUnderline = pFormat->GetUnderline().GetLineStyle();
     }
 
-    pFont->SetUnderline( eUnderline );
-    pFont->SetColor( aCol );
+    aFont.SetUnderline( eUnderline );
+    aFont.SetColor( aCol );
 
     const BitmapEx& rBmp = const_cast<SwViewShell&>(rSh).GetReplacementBitmap(bDefect);
-    Graphic::DrawEx( rSh.GetOut(), rText, *pFont, rBmp, rRect.Pos(), rRect.SSize() );
+    Graphic::DrawEx( rSh.GetOut(), rText, aFont, rBmp, rRect.Pos(), rRect.SSize() );
 }
 
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )
