@@ -718,7 +718,7 @@ long SwFEShell::BeginDrag( const Point* pPt, bool bIsShift)
 long SwFEShell::Drag( const Point *pPt, bool )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "Drag without DrawView?" );
-    if ( Imp()->GetDrawView()->IsDragObj() )
+    if ( HasDrawViewDrag() )
     {
         ScrollTo( *pPt );
         Imp()->GetDrawView()->MovDragObj( *pPt );
@@ -772,7 +772,7 @@ void SwFEShell::EndDrag()
 void SwFEShell::BreakDrag()
 {
     OSL_ENSURE( Imp()->HasDrawView(), "BreakDrag without DrawView?" );
-    if ( Imp()->GetDrawView()->IsDragObj() )
+    if( HasDrawViewDrag() )
         Imp()->GetDrawView()->BrkDragObj();
     SetChainMarker();
 }
