@@ -3934,9 +3934,6 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode());
     std::unique_ptr<SwUndo> pUndo;
 
-    if( (TableChgWidthHeightType::InsertDeleteMode & eType) && dynamic_cast<const SwDDETable*>( &pTableNd->GetTable()) !=  nullptr)
-        return false;
-
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
     aMsgHint.m_eFlags = TBL_BOXPTR;
     getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
@@ -3974,8 +3971,6 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
     if( bRet )
     {
         getIDocumentState().SetModified();
-        if( TableChgWidthHeightType::InsertDeleteMode & eType )
-            getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
     }
     return bRet;
 }

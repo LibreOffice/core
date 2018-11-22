@@ -34,14 +34,10 @@ enum class TableChgWidthHeightType : sal_uInt16
     InvalidPos   = 0x0f,
 
     // The following can be "or"ed in.
-    InsertDeleteMode = 0x4000, // Insert/Del-mode: the Bigger-Flag
-                               // tells what happens:
-                               // bBigger -> box gets removed.
-                               // !bBigger-> box gets inserted.
     BiggerMode       = 0x8000, // Box becomes larger -> else smaller.
 };
 namespace o3tl {
-    template<> struct typed_flags<TableChgWidthHeightType> : is_typed_flags<TableChgWidthHeightType, 0xc00f> {};
+    template<> struct typed_flags<TableChgWidthHeightType> : is_typed_flags<TableChgWidthHeightType, 0x800f> {};
 }
 constexpr TableChgWidthHeightType extractPosition(TableChgWidthHeightType e) {
     return static_cast<TableChgWidthHeightType>(static_cast<sal_uInt16>(e) & 0xf);
