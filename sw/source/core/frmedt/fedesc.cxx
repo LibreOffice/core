@@ -102,7 +102,8 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         SwPaM aPaM( pFlow->IsTextFrame()
             ? *static_cast<SwTextFrame const*>(pFlow)->GetTextNodeFirst() // first, for PAGEDESC
             : *static_cast<const SwNoTextFrame*>(pFlow)->GetNode() );
-        GetDoc()->getIDocumentContentOperations().InsertPoolItem( aPaM, aNew );
+        GetDoc()->getIDocumentContentOperations().InsertPoolItem(
+                aPaM, aNew, SetAttrMode::DEFAULT, GetLayout());
     }
     EndAllActionAndCall();
 }
