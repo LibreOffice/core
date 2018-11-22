@@ -1836,7 +1836,7 @@
         <child>
           <object class="sfxlo-NotebookbarTabControl" id="ContextContainer">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <child>
               <object class="sfxlo-PriorityHBox" id="FileBox">
@@ -2716,7 +2716,7 @@
             <child type="tab">
               <object class="GtkLabel" id="FileLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|FileLabel">~File</property>
                 <property name="use_underline">True</property>
               </object>
@@ -4226,7 +4226,7 @@
             <child type="tab">
               <object class="GtkLabel" id="HomeLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|HomeLabel">~Home</property>
                 <property name="use_underline">True</property>
                 <style>
@@ -5364,7 +5364,7 @@
             <child type="tab">
               <object class="GtkLabel" id="InsertLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|InsertLabel">~Insert</property>
                 <property name="use_underline">True</property>
               </object>
@@ -6297,7 +6297,7 @@
             <child type="tab">
               <object class="GtkLabel" id="LayoutLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|LayoutLabel">~Layout</property>
                 <property name="use_underline">True</property>
               </object>
@@ -7627,7 +7627,7 @@
             <child type="tab">
               <object class="GtkLabel" id="ReviewLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|ReviewLabel">~Review</property>
                 <property name="use_underline">True</property>
               </object>
@@ -8309,7 +8309,7 @@
             <child type="tab">
               <object class="GtkLabel" id="ViewLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|ViewLabel">~View</property>
                 <property name="use_underline">True</property>
               </object>
@@ -9595,7 +9595,7 @@
             <child type="tab">
               <object class="GtkLabel" id="TableLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|TableLabel">~Table</property>
                 <property name="use_underline">True</property>
                 <style>
@@ -10821,7 +10821,7 @@
             <child type="tab">
               <object class="GtkLabel" id="ImageLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|ImageLabel">Ima~ge</property>
                 <property name="use_underline">True</property>
                 <style>
@@ -12042,7 +12042,7 @@
             <child type="tab">
               <object class="GtkLabel" id="DrawLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|DrawLabel">~Draw</property>
                 <property name="use_underline">True</property>
                 <style>
@@ -12568,7 +12568,7 @@
             <child type="tab">
               <object class="GtkLabel" id="PrintLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|PrintLabel">~Print</property>
                 <property name="use_underline">True</property>
                 <style>
@@ -13386,7 +13386,7 @@
             <child type="tab">
               <object class="GtkLabel" id="MediaLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|MediaLabel">~Media</property>
                 <property name="use_underline">True</property>
                 <style>
@@ -14311,7 +14311,7 @@
             <child type="tab">
               <object class="GtkLabel" id="ObjectLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|ObjectLabel">~Object</property>
                 <property name="use_underline">True</property>
                 <style>
@@ -15269,7 +15269,7 @@
             <child type="tab">
               <object class="GtkLabel" id="DevLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|ToolsLabel">~Tools</property>
                 <property name="use_underline">True</property>
               </object>
