@@ -367,6 +367,11 @@ void SwViewShell::MakeDrawView()
     Imp()->MakeDrawView( );
 }
 
+bool SwViewShell::HasDrawViewDrag() const
+{
+    return Imp()->HasDrawView() && Imp()->GetDrawView()->IsDragObj();
+}
+
 SdrView* SwViewShell::GetDrawView()
 {
     return Imp()->GetDrawView();

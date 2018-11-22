@@ -804,7 +804,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_ESCAPE:
         {
-            if ( m_pWrtShell->HasDrawView() && m_pWrtShell->GetDrawView()->IsDragObj() )
+            if ( m_pWrtShell->HasDrawViewDrag() )
             {
                 m_pWrtShell->BreakDrag();
                 m_pWrtShell->EnterSelFrameMode();
