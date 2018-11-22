@@ -24,6 +24,7 @@
 
 #include <officecfg/Office/UI/Sidebar.hxx>
 #include <unotools/confignode.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
@@ -258,7 +259,16 @@ void ResourceManager::ReadDeckList()
     maDecks.clear();
     for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
     {
-        const utl::OConfigurationNode aDeckNode(aDeckRootNode.openNode(aDeckNodeNames[nReadIndex]));
+        const OUString aDeckName = aDeckNodeNames[nReadIndex];
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Hide these decks in LOK as they aren't fully functional.
+            if (aDeckName == "GalleryDeck" || aDeckName == "NavigatorDeck"
+                || aDeckName == "StyleListDeck")
+                continue;
+        }
+
+        const utl::OConfigurationNode aDeckNode(aDeckRootNode.openNode(aDeckName));
         if (!aDeckNode.isValid())
             continue;
 
