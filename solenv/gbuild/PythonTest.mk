@@ -41,7 +41,7 @@ else
 	$(call gb_Output_announce,$*,$(true),PYT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_PythonTest_get_target,$*)) && \
-		mkdir -p $(dir $(call gb_PythonTest_get_target,$*)) && \
+		mkdir -p $(dir $(call gb_PythonTest_get_target,$*))user/user/autotext && \
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
