@@ -597,6 +597,12 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         // calc position and size
         ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // aVisArea is nonsensical in the LOK case, use the slide size
+            aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());
+        }
+
         Point aPagePos = aVisArea.Center();
         aPagePos.X() -= nDefaultObjectSizeWidth / 2;
         aPagePos.Y() -= nDefaultObjectSizeHeight / 2;
