@@ -79,15 +79,8 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlContainerModel::ge
 
 ::cppu::IPropertyArrayHelper& UnoControlContainerModel::getInfoHelper()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    static UnoPropertyArrayHelper* pHelper = nullptr;
-    if ( !pHelper )
-    {
-        css::uno::Sequence<sal_Int32>  aIDs = ImplGetPropertyIds();
-        pHelper = new UnoPropertyArrayHelper( aIDs );
-    }
-    return *pHelper;
+    static UnoPropertyArrayHelper aHelper( ImplGetPropertyIds() );
+    return aHelper;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
