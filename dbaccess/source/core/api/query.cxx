@@ -74,7 +74,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_xConnection(_rxConn)
     ,m_pWarnings( nullptr )
-    ,m_eDoingCurrently(NONE)
+    ,m_eDoingCurrently(AggregateAction::NONE)
 {
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
@@ -220,7 +220,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource )
         OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
             "OQuery::propertyChange : where did this call come from ?");
 
-        if (m_eDoingCurrently == SETTING_PROPERTIES)
+        if (m_eDoingCurrently == AggregateAction::SettingProperties)
             // we're setting the property ourself, so we will do the necessary notifications later
             return;
 
@@ -284,7 +284,7 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
         m_xCommandPropInfo->hasPropertyByName(sAggPropName))
     {   // the base class holds the property values itself, but we have to forward this to our CommandDefinition
 
-        m_eDoingCurrently = SETTING_PROPERTIES;
+        m_eDoingCurrently = AggregateAction::SettingProperties;
         OAutoActionReset aAutoReset(*this);
         m_xCommandDefinition->setPropertyValue(sAggPropName, _rValue);
 

@@ -69,8 +69,8 @@ namespace dbaccess
         css::uno::Reference< css::sdbc::XConnection >
                                         m_xConnection;
         // possible actions on our "aggregate"
-        enum AGGREGATE_ACTION { NONE, INSERTING, FLUSHING };
-        AGGREGATE_ACTION        m_eDoingCurrently;
+        enum class AggregateAction { NONE, Inserting };
+        AggregateAction        m_eDoingCurrently;
 
         /** a class which automatically resets m_eDoingCurrently in its destructor
         */
@@ -81,7 +81,7 @@ namespace dbaccess
             OQueryContainer&        m_rActor;
         public:
             OAutoActionReset(OQueryContainer& _rActor) : m_rActor(_rActor) { }
-            ~OAutoActionReset() { m_rActor.m_eDoingCurrently = NONE; }
+            ~OAutoActionReset() { m_rActor.m_eDoingCurrently = AggregateAction::NONE; }
         };
 
         // ODefinitionContainer
