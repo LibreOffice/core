@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff5d4b2f_bbef3586",
+        "filename": "sw/qa/python/check_xautotextcontainer.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:31:09Z",
+      "side": 1,
+      "message": "Why does this test pass if autotext is not operational?",
+      "revId": "4967d498c486800b72ba34192c82c232bc0685bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_9bf4715d",
+        "filename": "sw/qa/python/check_xautotextcontainer.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:31:09Z",
+      "side": 1,
+      "message": "Why does this test pass if autotext is not operational?",
+      "revId": "4967d498c486800b72ba34192c82c232bc0685bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_7be9bd7e",
+        "filename": "sw/qa/python/check_xautotextcontainer.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:31:09Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "4967d498c486800b72ba34192c82c232bc0685bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_5beef988",
+        "filename": "sw/qa/python/check_xautotextcontainer.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-22T00:31:09Z",
+      "side": 1,
+      "message": "etc",
+      "revId": "4967d498c486800b72ba34192c82c232bc0685bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
