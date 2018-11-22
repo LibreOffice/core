@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <unotools/fontdefs.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unohelp.hxx>
 #include <editeng/eeitem.hxx>
@@ -1744,6 +1745,18 @@ bool SvxColorItem::GetPresentation
     rText = ::GetColorString( mColor );
     return true;
 }
+
+void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxColorItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    OUString aStr;
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+    GetPresentation( SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, aStr, aIntlWrapper);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 
 
 void SvxColorItem::SetValue( const Color& rNewCol )

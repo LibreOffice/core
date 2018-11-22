@@ -44,6 +44,8 @@ public:
     const basegfx::B3DVector&           GetValue() const { return aVal; }
 
     virtual sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const override;
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
 #endif
