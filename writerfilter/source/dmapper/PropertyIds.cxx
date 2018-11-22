@@ -153,10 +153,6 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_ADJUST_CONTRAST       :    sName = "AdjustContrast"; break;
         case PROP_ADJUST_LUMINANCE      :    sName = "AdjustLuminance"; break;
         case PROP_GRAPHIC_COLOR_MODE    :    sName = "GraphicColorMode"; break;
-        case PROP_GAMMA                 :    sName = "Gamma"; break;
-        case PROP_HORI_MIRRORED_ON_EVEN_PAGES:    sName = "HoriMirroredOnEvenPages"; break;
-        case PROP_HORI_MIRRORED_ON_ODD_PAGES :    sName = "HoriMirroredOnOddPages"; break;
-        case PROP_VERT_MIRRORED        :    sName = "VertMirrored"; break;
         case PROP_CONTOUR_OUTSIDE      :    sName = "ContourOutside"; break;
         case PROP_CONTOUR_POLY_POLYGON :    sName = "ContourPolyPolygon"; break;
         case PROP_PAGE_TOGGLE          :    sName = "PageToggle"; break;
@@ -178,7 +174,6 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_TEXT_COLUMNS         :    sName = "TextColumns"; break;
         case PROP_AUTOMATIC_DISTANCE   :    sName = "AutomaticDistance"; break;
         case PROP_IS_LANDSCAPE         :    sName = "IsLandscape"; break;
-        case PROP_PRINTER_PAPER_TRAY_INDEX:    sName = "PrinterPaperTrayIndex"; break;
         case PROP_FIRST_PAGE       :    sName = "First Page"; break;
         case PROP_PAGE_DESC_NAME   :    sName = "PageDescName"; break;
         case PROP_PAGE_NUMBER_OFFSET:    sName = "PageNumberOffset"; break;

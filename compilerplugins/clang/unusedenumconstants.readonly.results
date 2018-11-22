@@ -1512,16 +1512,6 @@ vcl/source/gdi/CommonSalLayout.cxx:128
     enum (anonymous namespace)::VerticalOrientation Upright
 vcl/source/gdi/CommonSalLayout.cxx:131
     enum (anonymous namespace)::VerticalOrientation TransformedRotated
-writerfilter/source/dmapper/PropertyIds.hxx:134
-    enum writerfilter::dmapper::PropertyIds PROP_GAMMA
-writerfilter/source/dmapper/PropertyIds.hxx:157
-    enum writerfilter::dmapper::PropertyIds PROP_HORI_MIRRORED_ON_EVEN_PAGES
-writerfilter/source/dmapper/PropertyIds.hxx:158
-    enum writerfilter::dmapper::PropertyIds PROP_HORI_MIRRORED_ON_ODD_PAGES
-writerfilter/source/dmapper/PropertyIds.hxx:222
-    enum writerfilter::dmapper::PropertyIds PROP_PRINTER_PAPER_TRAY_INDEX
-writerfilter/source/dmapper/PropertyIds.hxx:274
-    enum writerfilter::dmapper::PropertyIds PROP_VERT_MIRRORED
 writerfilter/source/ooxml/OOXMLFactory.hxx:39
     enum writerfilter::ooxml::ResourceType List
 writerfilter/source/ooxml/OOXMLFactory.hxx:40
