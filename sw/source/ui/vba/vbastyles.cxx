@@ -358,12 +358,10 @@ SwVbaStyles::getServiceImplName()
 uno::Sequence< OUString >
 SwVbaStyles::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.word.XStyles";
-    }
+        "ooo.vba.word.XStyles"
+    };
     return aServiceNames;
 }
 

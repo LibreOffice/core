@@ -127,12 +127,10 @@ SwVbaHeadersFooters::getServiceImplName()
 uno::Sequence<OUString>
 SwVbaHeadersFooters::getServiceNames()
 {
-    static uno::Sequence< OUString > sNames;
-    if ( sNames.getLength() == 0 )
+    static uno::Sequence< OUString > const sNames
     {
-        sNames.realloc( 1 );
-        sNames[0] = "ooo.vba.word.HeadersFooters";
-    }
+        "ooo.vba.word.HeadersFooters"
+    };
     return sNames;
 }
 

@@ -258,12 +258,10 @@ SwVbaTabStops::getServiceImplName()
 css::uno::Sequence<OUString>
 SwVbaTabStops::getServiceNames()
 {
-    static uno::Sequence< OUString > sNames;
-    if ( sNames.getLength() == 0 )
+    static uno::Sequence< OUString > const sNames
     {
-        sNames.realloc( 1 );
-        sNames[0] = "ooo.vba.word.TabStops";
-    }
+        "ooo.vba.word.TabStops"
+    };
     return sNames;
 }
 

@@ -5686,20 +5686,19 @@ static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
             nWwId == ww::stiEmphasis )
         return true;
 
-    static std::set<OUString, OUStringIgnoreCase> aWhitelist;
-    if (aWhitelist.empty())
+    static std::set<OUString, OUStringIgnoreCase> const aWhitelist
     {
-        aWhitelist.insert("No Spacing");
-        aWhitelist.insert("List Paragraph");
-        aWhitelist.insert("Quote");
-        aWhitelist.insert("Intense Quote");
-        aWhitelist.insert("Subtle Emphasis,");
-        aWhitelist.insert("Intense Emphasis");
-        aWhitelist.insert("Subtle Reference");
-        aWhitelist.insert("Intense Reference");
-        aWhitelist.insert("Book Title");
-        aWhitelist.insert("TOC Heading");
-    }
+        "No Spacing",
+        "List Paragraph",
+        "Quote",
+        "Intense Quote",
+        "Subtle Emphasis,",
+        "Intense Emphasis",
+        "Subtle Reference",
+        "Intense Reference",
+        "Book Title",
+        "TOC Heading",
+    };
     // Not custom style? Then we have a list of standard styles which should be qFormat.
     return aWhitelist.find(rName) != aWhitelist.end();
 }
