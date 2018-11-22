@@ -737,8 +737,7 @@ bool ChildrenManagerImpl::ReplaceChild (
     auto I = std::find_if(maVisibleChildren.begin(), maVisibleChildren.end(),
         [&pCurrentChild](const ChildDescriptor& rChild) { return rChild.GetAccessibleShape() == pCurrentChild; });
 
-    bool bResult = I != maVisibleChildren.end();
-    if (bResult)
+    if (I != maVisibleChildren.end())
     {
         // Dispose the current child and send an event about its deletion.
         pCurrentChild->dispose();
@@ -754,12 +753,13 @@ bool ChildrenManagerImpl::ReplaceChild (
             AccessibleEventId::CHILD,
             uno::makeAny (I->mxAccessibleShape),
             uno::Any());
+
+        return true;
     }
 
     // When not found among the visible children we have to search the list
     // of accessible shapes.  This is not yet implemented.
-
-    return bResult;
+    return false;
 }
 
 // Add the impl method for IAccessibleParent interface
