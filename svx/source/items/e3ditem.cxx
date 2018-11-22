@@ -21,6 +21,7 @@
 #include <comphelper/fileformat.h>
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
+#include <libxml/xmlwriter.h>
 
 #include <svx/e3ditem.hxx>
 
@@ -96,6 +97,16 @@ bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 sal_uInt16 SvxB3DVectorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
 {
     return (nFileFormatVersion == SOFFICE_FILEFORMAT_31) ? USHRT_MAX : 0;
+}
+
+void SvxB3DVectorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxB3DVectorItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("x"), BAD_CAST(OString::number(aVal.getX()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("y"), BAD_CAST(OString::number(aVal.getY()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("z"), BAD_CAST(OString::number(aVal.getZ()).getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
