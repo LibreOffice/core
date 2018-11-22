@@ -467,6 +467,9 @@ public:
     bool HasDrawView() const;
     void MakeDrawView();
 
+    // Are we dragging draw shapes around.
+    bool HasDrawViewDrag() const;
+
     // DrawView may be used at UI.
           SdrView *GetDrawView();
     const SdrView *GetDrawView() const { return const_cast<SwViewShell*>(this)->GetDrawView(); }
