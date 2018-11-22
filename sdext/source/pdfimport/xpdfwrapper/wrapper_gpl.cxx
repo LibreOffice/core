@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 
     // read config file
     globalParams = new GlobalParams();
-    globalParams->setErrQuiet(gTrue);
+    globalParams->setErrQuiet(true);
 #if defined(_MSC_VER)
     globalParams->setupBaseFonts(NULL);
 #endif
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
                 i,
                 PDFI_OUTDEV_RESOLUTION,
                 PDFI_OUTDEV_RESOLUTION,
-                0, gTrue, gTrue, gTrue);
+                0, true, true, true);
         rDoc.processLinks(&aOutDev, i);
     }
 
