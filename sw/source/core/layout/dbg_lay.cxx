@@ -632,8 +632,6 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
     lcl_FrameType( aOut, pFrame );    // then the frame type
     switch ( nFunction )            // and the function
     {
-        case PROT::Snapshot: lcl_Flags( aOut, pFrame );
-                            break;
         case PROT::MakeAll:  aOut.append("SwFrame::MakeAll");
                             lcl_Start( aOut, aLayer, nAct );
                             if( nAct == DbgAction::Start )
@@ -681,7 +679,6 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                                 aOut.append(static_cast<sal_Int64>(*static_cast<long*>(pParam)));
                             }
                             break;
-        case PROT::Pos:      break;
         case PROT::PrintArea:  aOut.append("PROT::PrintArea");
                             lcl_Start( aOut, aLayer, nAct );
                             break;

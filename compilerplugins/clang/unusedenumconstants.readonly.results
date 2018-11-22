@@ -1448,10 +1448,6 @@ sw/inc/undobj.hxx:134
     enum DelContentType Fly
 sw/inc/undobj.hxx:135
     enum DelContentType Bkm
-sw/source/core/inc/dbg_lay.hxx:38
-    enum PROT Pos
-sw/source/core/inc/dbg_lay.hxx:46
-    enum PROT Snapshot
 sw/source/core/inc/SwXMLBlockImport.hxx:81
     enum SwXMLTextBlockToken OFFICE_BODY
 sw/source/core/inc/SwXMLBlockImport.hxx:82
