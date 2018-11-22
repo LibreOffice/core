@@ -243,8 +243,7 @@ void SwCondCollPage::SelectHdl(const weld::Widget* pBox)
             }
             pBase = pPool->Next();
         }
-        if (!bEmpty)
-            m_xStyleLB->select(bEmpty ? -1 : 0);
+        m_xStyleLB->select(bEmpty ? -1 : 0);
         SelectHdl(m_xStyleLB.get());
     }
     else
