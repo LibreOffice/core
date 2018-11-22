@@ -51,9 +51,7 @@ private:
 
     DECL_LINK( TimeoutHdl_Impl, Timer *, void ); ///< Handler for timer -timeout
 
-    enum EPathType { Type_Unknown, Type_Invalid,
-                     Type_ExistsFile, Type_File,
-                     Type_ExistsDir, Type_Dir };
+    enum class EPathType { Invalid, ExistsFile };
     static EPathType GetPathType ( const OUString& rStrPath );
 
     void FillDlgFields(const OUString& rStrURL) override;

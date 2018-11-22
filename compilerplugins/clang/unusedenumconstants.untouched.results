@@ -6,14 +6,6 @@ canvas/source/cairo/cairo_canvashelper.hxx:216
     enum cairocanvas::CanvasHelper::ColorType LINE_COLOR
 canvas/source/cairo/cairo_canvashelper.hxx:216
     enum cairocanvas::CanvasHelper::ColorType FILL_COLOR
-cui/source/inc/hldoctp.hxx:54
-    enum SvxHyperlinkDocTp::EPathType Type_Unknown
-cui/source/inc/hldoctp.hxx:55
-    enum SvxHyperlinkDocTp::EPathType Type_File
-cui/source/inc/hldoctp.hxx:56
-    enum SvxHyperlinkDocTp::EPathType Type_ExistsDir
-cui/source/inc/hldoctp.hxx:56
-    enum SvxHyperlinkDocTp::EPathType Type_Dir
 drawinglayer/source/tools/emfpbrush.hxx:32
     enum emfplushelper::EmfPlusHatchStyle HatchStyleVertical
 drawinglayer/source/tools/emfpbrush.hxx:33
