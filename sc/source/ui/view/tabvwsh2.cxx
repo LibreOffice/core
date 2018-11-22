@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/aeitem.hxx>
@@ -309,7 +310,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     // with qualifier construct directly
     FuPoor* pFuActual = GetDrawFuncPtr();
 
-    if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
+    if(pFuActual && (rReq.GetModifier() & KEY_MOD1 || comphelper::LibreOfficeKit::isActive()))
     {
         // Create default drawing objects via keyboard
         const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();

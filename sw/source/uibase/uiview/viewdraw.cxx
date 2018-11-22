@@ -334,7 +334,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
         pTempFuncPtr->Activate(nSlotId);
         NoRotate();
-        if(rReq.GetModifier() == KEY_MOD1)
+        if(rReq.GetModifier() == KEY_MOD1 || comphelper::LibreOfficeKit::isActive())
         {
             if(SID_OBJECT_SELECT == m_nDrawSfxId )
             {

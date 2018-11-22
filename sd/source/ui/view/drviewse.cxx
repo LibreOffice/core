@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
+#include <comphelper/lok.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
@@ -598,7 +599,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     }
 
     // with qualifier construct directly
-    if(HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
+    if(HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1 || comphelper::LibreOfficeKit::isActive()))
     {
         // get SdOptions
         SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
