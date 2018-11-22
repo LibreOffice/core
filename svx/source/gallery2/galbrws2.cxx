@@ -1115,7 +1115,7 @@ void GalleryBrowser2::Execute(const OString &rIdent)
 
             if( pObj )
             {
-                const OUString  aOldTitle( GetItemText( *mpCurTheme, *pObj, GalleryItemFlags::Title ) );
+                const OUString  aOldTitle( GetItemText( *pObj, GalleryItemFlags::Title ) );
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(GetFrameWeld(), aOldTitle));
@@ -1162,17 +1162,11 @@ void GalleryBrowser2::Execute(const OString &rIdent)
     }
 }
 
-OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, GalleryItemFlags nItemTextFlags )
+OUString GalleryBrowser2::GetItemText( const SgaObject& rObj, GalleryItemFlags nItemTextFlags )
 {
     OUString          aRet;
 
     const INetURLObject& aURL(rObj.GetURL());
-
-    if( nItemTextFlags & GalleryItemFlags::ThemeName )
-    {
-        aRet += rTheme.GetName();
-        aRet += " - ";
-    }
 
     if( nItemTextFlags & GalleryItemFlags::Title )
     {

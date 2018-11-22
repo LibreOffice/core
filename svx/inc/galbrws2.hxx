@@ -50,13 +50,12 @@ enum class GalleryBrowserTravel
 };
 
 enum class GalleryItemFlags {
-    ThemeName  = 0x0001,
     Title      = 0x0002,
     Path       = 0x0004
 };
 namespace o3tl
 {
-    template<> struct typed_flags<GalleryItemFlags> : is_typed_flags<GalleryItemFlags, 0x0007> {};
+    template<> struct typed_flags<GalleryItemFlags> : is_typed_flags<GalleryItemFlags, 0x0006> {};
 }
 
 
@@ -132,7 +131,7 @@ private:
 
 public:
 
-    static OUString     GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, GalleryItemFlags nItemTextFlags );
+    static OUString     GetItemText( const SgaObject& rObj, GalleryItemFlags nItemTextFlags );
 
 public:
 

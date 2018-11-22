@@ -335,7 +335,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
         if(pObj)
         {
             aBitmapEx = pObj->createPreviewBitmapEx(aSize);
-            aItemTextTitle = GalleryBrowser2::GetItemText(*mpTheme, *pObj, GalleryItemFlags::Title);
+            aItemTextTitle = GalleryBrowser2::GetItemText(*pObj, GalleryItemFlags::Title);
 
             mpTheme->SetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
         }
@@ -451,7 +451,7 @@ OUString GalleryListView::GetCellText(long _nRow, sal_uInt16 /*nColumnId*/) cons
 
         if( pObj )
         {
-            sRet = GalleryBrowser2::GetItemText( *mpTheme, *pObj, GalleryItemFlags::Title );
+            sRet = GalleryBrowser2::GetItemText( *pObj, GalleryItemFlags::Title );
         }
     }
 
@@ -515,8 +515,8 @@ void GalleryListView::PaintField(vcl::RenderContext& rDev, const tools::Rectangl
             if(pObj)
             {
                 aBitmapEx = pObj->createPreviewBitmapEx(aSize);
-                aItemTextTitle = GalleryBrowser2::GetItemText(*mpTheme, *pObj, GalleryItemFlags::Title);
-                aItemTextPath = GalleryBrowser2::GetItemText(*mpTheme, *pObj, GalleryItemFlags::Path);
+                aItemTextTitle = GalleryBrowser2::GetItemText(*pObj, GalleryItemFlags::Title);
+                aItemTextPath = GalleryBrowser2::GetItemText(*pObj, GalleryItemFlags::Path);
 
                 mpTheme->SetPreviewBitmapExAndStrings(mnCurRow, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
             }
