@@ -1,4 +1,18 @@
 <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-
-     /&gt;
- <path d="m2 1c-.554 0-1 .446-1 1v7c0 .554.446 1 1 1h9c .554 0 1-.446 1-1v-7c0-.554-.446-1-1-1zm0 1h9v7h-9z" fill="#808080"/><path d="m2 2h9v7h-9z" fill="#fff"/><g fill="#808080"><path d="m5 6c-.554 0-1 .446-1 1v7c0 .554.446 1 1 1h9c .554 0 1-.446 1-1v-7c0-.554-.446-1-1-1zm0 1h9v7h-9z"/><path d="m0 0h3v3h-3z"/><path d="m13 0h3v3h-3z"/><path d="m0 13h3v3h-3z"/></g><path d="m5 7h9v7h-9z" fill="#fff"/><path d="m13 13h3v3h-3z" fill="#808080"/><path d="m1 1h1v1h-1z" fill="#fff"/><path d="m14 1h1v1h-1z" fill="#fff"/><path d="m14 14h1v1h-1z" fill="#fff"/><path d="m1 14h1v1h-1z" fill="#fff"/></svg>
+  <path
+     style="fill:#808080"
+     d="M 9 0 L 9 5 L 15 5 L 15 0 L 9 0 z M 10 1 L 14 1 L 14 4 L 10 4 L 10 1 z M 9 6 L 9 10 L 15 10 L 15 6 L 9 6 z M 10 7 L 14 7 L 14 9 L 10 9 L 10 7 z M 9 11 L 9 16 L 15 16 L 15 11 L 9 11 z M 10 12 L 14 12 L 14 15 L 10 15 L 10 12 z "
+     />
+  <path
+     style="fill:#ffffff"
+     d="M 10 1 L 10 4 L 14 4 L 14 1 L 10 1 z M 10 7 L 10 9 L 14 9 L 14 7 L 10 7 z M 10 12 L 10 15 L 14 15 L 14 12 L 10 12 z "
+     />
+  <path
+     style="fill:#4d82b8"
+     d="M 3.5,2 C 3.223,2 3,2.223 3,2.5 v 2 C 3,4.777 3.223,5 3.5,5 3.777,5 4,4.777 4,4.5 V 3 H 7.5 C 7.777,3 8,2.777 8,2.5 8,2.223 7.777,2 7.5,2 Z m 0,9 C 3.223,11 3,11.223 3,11.5 v 2 C 3,13.777 3.223,14 3.5,14 h 4 C 7.777,14 8,13.777 8,13.5 8,13.223 7.777,13 7.5,13 H 4 V 11.5 C 4,11.223 3.777,11 3.5,11 Z"
+     />
+  <path
+     style="fill:#e68497"
+     d="M 1,7 H 7 V 9 H 1 Z"
+     />
+</svg>
