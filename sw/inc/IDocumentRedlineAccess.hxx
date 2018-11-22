@@ -52,15 +52,12 @@ enum class RedlineFlags
     // remove the original Redlines together with their content
     // (Clipboard/text modules).
     DeleteRedlines       = 0x100,
-    // When deleting within a RedlineObject
-    // ignore the DeleteRedline during Append.
-    IgnoreDeleteRedlines = 0x200,
     // don't combine any redlines. This flag may be only used in Undo.
     DontCombineRedlines  = 0x400,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<RedlineFlags> : is_typed_flags<RedlineFlags, 0x733> {};
+    template<> struct typed_flags<RedlineFlags> : is_typed_flags<RedlineFlags, 0x533> {};
 }
 
 typedef sal_uInt16 RedlineType_t;
