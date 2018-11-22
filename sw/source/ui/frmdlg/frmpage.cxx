@@ -2743,34 +2743,21 @@ void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
 }
 
 // set URL and ImageMap at frames
-SwFrameURLPage::SwFrameURLPage( vcl::Window *pParent, const SfxItemSet &rSet ) :
-    SfxTabPage(pParent, "FrameURLPage" , "modules/swriter/ui/frmurlpage.ui", &rSet)
+SwFrameURLPage::SwFrameURLPage(TabPageParent pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/frmurlpage.ui", "FrameURLPage", &rSet)
+    , m_xURLED(m_xBuilder->weld_entry("url"))
+    , m_xSearchPB(m_xBuilder->weld_button("search"))
+    , m_xNameED(m_xBuilder->weld_entry("name"))
+    , m_xFrameCB(m_xBuilder->weld_combo_box("frame"))
+    , m_xServerCB(m_xBuilder->weld_check_button("server"))
+    , m_xClientCB(m_xBuilder->weld_check_button("client"))
 {
-    get(pURLED,"url");
-    get(pSearchPB,"search");
-    get(pNameED,"name");
-    get(pFrameCB,"frame");
-
-    get(pServerCB,"server");
-    get(pClientCB,"client");
-
-    pSearchPB->SetClickHdl(LINK(this, SwFrameURLPage, InsertFileHdl));
+    m_xSearchPB->connect_clicked(LINK(this, SwFrameURLPage, InsertFileHdl));
 }
 
 SwFrameURLPage::~SwFrameURLPage()
 {
     disposeOnce();
-}
-
-void SwFrameURLPage::dispose()
-{
-    pURLED.clear();
-    pSearchPB.clear();
-    pNameED.clear();
-    pFrameCB.clear();
-    pServerCB.clear();
-    pClientCB.clear();
-    SfxTabPage::dispose();
 }
 
 void SwFrameURLPage::Reset( const SfxItemSet *rSet )
@@ -2783,9 +2770,9 @@ void SwFrameURLPage::Reset( const SfxItemSet *rSet )
         if( !pList->empty() )
         {
             size_t nCount = pList->size();
-            for ( size_t i = 0; i < nCount; i++ )
+            for (size_t i = 0; i < nCount; ++i)
             {
-                pFrameCB->InsertEntry( pList->at( i ) );
+                m_xFrameCB->append_text(pList->at(i));
             }
         }
     }
@@ -2793,22 +2780,22 @@ void SwFrameURLPage::Reset( const SfxItemSet *rSet )
     if ( SfxItemState::SET == rSet->GetItemState( RES_URL, true, &pItem ) )
     {
         const SwFormatURL* pFormatURL = static_cast<const SwFormatURL*>(pItem);
-        pURLED->SetText( INetURLObject::decode( pFormatURL->GetURL(),
-                                           INetURLObject::DecodeMechanism::Unambiguous ));
-        pNameED->SetText( pFormatURL->GetName());
+        m_xURLED->set_text(INetURLObject::decode(pFormatURL->GetURL(),
+                                           INetURLObject::DecodeMechanism::Unambiguous));
+        m_xNameED->set_text(pFormatURL->GetName());
 
-        pClientCB->Enable( pFormatURL->GetMap() != nullptr );
-        pClientCB->Check ( pFormatURL->GetMap() != nullptr );
-        pServerCB->Check ( pFormatURL->IsServerMap() );
+        m_xClientCB->set_sensitive(pFormatURL->GetMap() != nullptr);
+        m_xClientCB->set_active(pFormatURL->GetMap() != nullptr);
+        m_xServerCB->set_active(pFormatURL->IsServerMap());
 
-        pFrameCB->SetText(pFormatURL->GetTargetFrameName());
-        pFrameCB->SaveValue();
+        m_xFrameCB->set_entry_text(pFormatURL->GetTargetFrameName());
+        m_xFrameCB->save_value();
     }
     else
-        pClientCB->Enable( false );
+        m_xClientCB->set_sensitive(false);
 
-    pServerCB->SaveValue();
-    pClientCB->SaveValue();
+    m_xServerCB->save_state();
+    m_xClientCB->save_state();
 }
 
 bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
@@ -2822,27 +2809,27 @@ bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
         pFormatURL.reset(new SwFormatURL());
 
     {
-        const OUString sText = pURLED->GetText();
+        const OUString sText = m_xURLED->get_text();
 
         if( pFormatURL->GetURL() != sText ||
-            pFormatURL->GetName() != pNameED->GetText() ||
-            pServerCB->IsChecked() != pFormatURL->IsServerMap() )
+            pFormatURL->GetName() != m_xNameED->get_text() ||
+            m_xServerCB->get_active() != pFormatURL->IsServerMap() )
         {
-            pFormatURL->SetURL( sText, pServerCB->IsChecked() );
-            pFormatURL->SetName( pNameED->GetText() );
+            pFormatURL->SetURL(sText, m_xServerCB->get_active());
+            pFormatURL->SetName(m_xNameED->get_text());
             bModified = true;
         }
     }
 
-    if(!pClientCB->IsChecked() && pFormatURL->GetMap() != nullptr)
+    if (!m_xClientCB->get_active() && pFormatURL->GetMap() != nullptr)
     {
         pFormatURL->SetMap(nullptr);
         bModified = true;
     }
 
-    if(pFormatURL->GetTargetFrameName() != pFrameCB->GetText())
+    if(pFormatURL->GetTargetFrameName() != m_xFrameCB->get_active_text())
     {
-        pFormatURL->SetTargetFrameName(pFrameCB->GetText());
+        pFormatURL->SetTargetFrameName(m_xFrameCB->get_active_text());
         bModified = true;
     }
     rSet->Put(*pFormatURL);
@@ -2851,10 +2838,10 @@ bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
 
 VclPtr<SfxTabPage> SwFrameURLPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwFrameURLPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<SwFrameURLPage>::Create(pParent, *rSet);
 }
 
-IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, Button*, void)
+IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, weld::Button&, void)
 {
     FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                 FileDialogFlags::NONE, GetFrameWeld());
@@ -2862,14 +2849,14 @@ IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, Button*, void)
 
     try
     {
-        const OUString sTemp(pURLED->GetText());
+        const OUString sTemp(m_xURLED->get_text());
         if(!sTemp.isEmpty())
             xFP->setDisplayDirectory(sTemp);
     }
     catch( const uno::Exception& ) {}
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
-        pURLED->SetText( xFP->getSelectedFiles().getConstArray()[0] );
+        m_xURLED->set_text(xFP->getSelectedFiles().getConstArray()[0]);
     }
 }
 
