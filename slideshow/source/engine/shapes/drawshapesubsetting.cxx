@@ -604,8 +604,6 @@ namespace slideshow
             {
                 switch( eNodeType )
                 {
-                    case DocTreeNode::NodeType::Invalid:
-                        // FALLTHROUGH intended
                     default:
                         SAL_WARN( "slideshow", "DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
                         return DrawShapeSubsetting::CLASS_NOOP;

@@ -49,8 +49,6 @@ namespace slideshow
             /// Type of shape entity represented by this node
             enum class NodeType
             {
-                Invalid=0,
-
                 /// This node represents a paragraph
                 LogicalParagraph=129,
                 /// This node represents a word
