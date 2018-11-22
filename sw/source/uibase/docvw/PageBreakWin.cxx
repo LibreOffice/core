@@ -297,7 +297,8 @@ void SwPageBreakWin::Select()
             aSet.Put( SwFormatPageDesc( nullptr ) );
 
             SwPaM aPaM( *pNd );
-            pNd->GetDoc()->getIDocumentContentOperations().InsertItemSet( aPaM, aSet );
+            pNd->GetDoc()->getIDocumentContentOperations().InsertItemSet(
+                aPaM, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
 
             pNd->GetDoc()->GetIDocumentUndoRedo( ).EndUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
         }
