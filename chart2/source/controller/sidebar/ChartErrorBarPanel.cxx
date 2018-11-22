@@ -227,7 +227,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     assert(aAny.hasValue());
     OUString aCID;
     aAny >>= aCID;
-#ifdef DBG_UTIL
+#if defined DBG_UTIL && !defined NDEBUG
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
     assert(eType == OBJECTTYPE_DATA_ERRORS_X ||
             eType == OBJECTTYPE_DATA_ERRORS_Y ||

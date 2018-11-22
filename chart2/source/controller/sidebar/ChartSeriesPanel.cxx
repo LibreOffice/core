@@ -272,7 +272,7 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     if (aCID.isEmpty())
         return OUString();
 
-#ifdef DBG_UTIL
+#if defined DBG_UTIL && !defined NDEBUG
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
     assert(eType == OBJECTTYPE_DATA_SERIES);
 #endif
