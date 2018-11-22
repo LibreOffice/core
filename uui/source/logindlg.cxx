@@ -45,20 +45,9 @@ void LoginDialog::SetPassword( const OUString& rNew )
 
 void LoginDialog::HideControls_Impl( LoginFlags nFlags )
 {
-    if ( nFlags & LoginFlags::NoUsername )
-    {
-        m_xNameFT->hide();
-        m_xNameED->hide();
-    }
-    else if ( nFlags & LoginFlags::UsernameReadonly )
+    if ( nFlags & LoginFlags::UsernameReadonly )
     {
         m_xNameED->set_sensitive( false );
-    }
-
-    if ( nFlags & LoginFlags::NoPassword )
-    {
-        m_xPasswordFT->hide();
-        m_xPasswordED->hide();
     }
 
     if ( nFlags & LoginFlags::NoSavePassword )

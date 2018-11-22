@@ -26,8 +26,6 @@
 
 enum class LoginFlags {
     NONE                = 0x0000,
-    NoUsername          = 0x0002,  // hide "name"
-    NoPassword          = 0x0004,  // hide "password"
     NoSavePassword      = 0x0008,  // hide "save password"
     NoErrorText         = 0x0010,  // hide message
     UsernameReadonly    = 0x0040,  // "name" readonly
@@ -35,7 +33,7 @@ enum class LoginFlags {
     NoUseSysCreds       = 0x0100,  // hide "use system credentials"
 };
 namespace o3tl {
-    template<> struct typed_flags<LoginFlags> : is_typed_flags<LoginFlags, 0x01de> {};
+    template<> struct typed_flags<LoginFlags> : is_typed_flags<LoginFlags, 0x01d8> {};
 }
 
 
