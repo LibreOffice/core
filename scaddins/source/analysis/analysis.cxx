@@ -931,8 +931,8 @@ OUString SAL_CALL AnalysisAddIn::getImproduct( const uno::Reference< beans::XPro
 {
     ComplexList     z_list;
 
-    z_list.Append( aNum1, AH_IgnoreEmpty );
-    z_list.Append( aNL, AH_IgnoreEmpty );
+    z_list.Append( aNum1 );
+    z_list.Append( aNL );
 
     if( z_list.empty() )
         return Complex( 0 ).GetString();
@@ -972,8 +972,8 @@ OUString SAL_CALL AnalysisAddIn::getImsum( const uno::Reference< beans::XPropert
 {
     ComplexList     z_list;
 
-    z_list.Append( aNum1, AH_IgnoreEmpty );
-    z_list.Append( aFollowingPars, AH_IgnoreEmpty );
+    z_list.Append( aNum1 );
+    z_list.Append( aFollowingPars );
 
     if( z_list.empty() )
         return Complex( 0 ).GetString();

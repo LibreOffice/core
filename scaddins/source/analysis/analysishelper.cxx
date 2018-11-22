@@ -2034,13 +2034,11 @@ ComplexList::~ComplexList()
 }
 
 
-void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, ComplListAppendHandl eAH )
+void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r )
 {
     sal_Int32   n1, n2;
     sal_Int32   nE1 = r.getLength();
     sal_Int32   nE2;
-    bool        bEmpty0 = eAH == AH_EmpyAs0;
-    bool        bErrOnEmpty = eAH == AH_EmptyAsErr;
 
     for( n1 = 0 ; n1 < nE1 ; n1++ )
     {
@@ -2053,20 +2051,14 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, C
 
             if( !rStr.isEmpty() )
                 Append( Complex( rStr ) );
-            else if( bEmpty0 )
-                Append( Complex( 0.0 ) );
-            else if( bErrOnEmpty )
-                throw lang::IllegalArgumentException();
         }
     }
 }
 
 
-void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListAppendHandl eAH )
+void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars )
 {
     sal_Int32       nEle = aMultPars.getLength();
-    bool            bEmpty0 = eAH == AH_EmpyAs0;
-    bool            bErrOnEmpty = eAH == AH_EmptyAsErr;
 
     for( sal_Int32 i = 0 ; i < nEle ; i++ )
     {
@@ -2080,10 +2072,6 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
 
                 if( !pStr->isEmpty() )
                     Append( Complex( *pStr ) );
-                else if( bEmpty0 )
-                    Append( Complex( 0.0 ) );
-                else if( bErrOnEmpty )
-                    throw lang::IllegalArgumentException();
                 }
                 break;
             case uno::TypeClass_DOUBLE:
@@ -2098,7 +2086,7 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
                 sal_Int32           nE = aValArr.getLength();
                 const uno::Sequence< uno::Any >*   pArr = aValArr.getConstArray();
                 for( sal_Int32 n = 0 ; n < nE ; n++ )
-                    Append( pArr[ n ], eAH );
+                    Append( pArr[ n ] );
                 }
                 break;
             default:
