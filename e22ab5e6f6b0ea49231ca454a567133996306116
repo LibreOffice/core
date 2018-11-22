@@ -34,6 +34,24 @@
       "revId": "e22ab5e6f6b0ea49231ca454a567133996306116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff5d4b2f_5bbcb968",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-22T01:29:39Z",
+      "side": 1,
+      "message": "AVERAGE would still work, or am I missing something?\nOther than that, as long as it is a square matrix MDETERM(LARGE(...)) might be suitable maybe?",
+      "parentUuid": "ff5d4b2f_670925dc",
+      "revId": "e22ab5e6f6b0ea49231ca454a567133996306116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
