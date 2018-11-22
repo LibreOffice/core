@@ -987,8 +987,11 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     else if (bSupportsVCLOpenGL)
     {
         static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
-        static bool bHeadlessPlugin = (getenv("SAL_USE_VCLPLUGIN") &&
-            0 == strcmp(getenv("SAL_USE_VCLPLUGIN"), "svp"));
+        static bool bHeadlessPlugin = []{
+            OUString plugin;
+            rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", plugin);
+            return plugin == "svp";
+        }();
 
         bEnable = bEnableGLEnv;
 
