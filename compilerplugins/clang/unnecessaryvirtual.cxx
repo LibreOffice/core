@@ -13,7 +13,6 @@
 #include <set>
 #include <unordered_set>
 #include "plugin.hxx"
-#include "compat.hxx"
 #include <fstream>
 
 /**
@@ -95,7 +94,7 @@ std::string niceName(const CXXMethodDecl* cxxMethodDecl)
         cxxMethodDecl = dyn_cast<CXXMethodDecl>(cxxMethodDecl->getInstantiatedFromMemberFunction());
     std::string s = cxxMethodDecl->getReturnType().getCanonicalType().getAsString()
         + " " + cxxMethodDecl->getQualifiedNameAsString() + "(";
-    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*cxxMethodDecl)) {
+    for (const ParmVarDecl *pParmVarDecl : cxxMethodDecl->parameters()) {
         s += pParmVarDecl->getType().getCanonicalType().getAsString();
         s += ",";
     }

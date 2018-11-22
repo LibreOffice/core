@@ -109,7 +109,6 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
             }
         }
     }
-#if CLANG_VERSION >= 50000
     else if (type->isFloatingType())
     {
         APFloat x1(0.0f);
@@ -122,7 +121,6 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
             found = true;
         }
     }
-#endif
     // ignore this, it seems to trigger an infinite recursion
     else if (isa<UnaryExprOrTypeTraitExpr>(initexpr))
         ;

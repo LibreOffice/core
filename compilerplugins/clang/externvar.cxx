@@ -8,7 +8,6 @@
  */
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find variable declarations at namespace scope that need not have external
@@ -78,7 +77,7 @@ public:
             return true;
         }
         SourceLocation argLoc;
-        if (compat::isMacroArgExpansion(compiler, def->getLocation(), &argLoc)
+        if (compiler.getSourceManager().isMacroArgExpansion(def->getLocation(), &argLoc)
             && (Lexer::getImmediateMacroName(
                     argLoc, compiler.getSourceManager(), compiler.getLangOpts())
                 == "DEFINE_GUID"))

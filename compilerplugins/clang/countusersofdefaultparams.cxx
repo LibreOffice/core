@@ -114,7 +114,7 @@ void CountUsersOfDefaultParams::niceName(const FunctionDecl* functionDecl, MyFun
     }
     aInfo.nameAndParams += functionDecl->getNameAsString() + "(";
     bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
+    for (const ParmVarDecl *pParmVarDecl : functionDecl->parameters()) {
         if (bFirst)
             bFirst = false;
         else

@@ -11,7 +11,6 @@
 #include <set>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "check.hxx"
 
 /*
@@ -76,7 +75,7 @@ bool OverrideParam::VisitCXXMethodDecl(const CXXMethodDecl * methodDecl) {
             continue;
         }
         int i = 0;
-        for (const ParmVarDecl *superParmVarDecl : compat::parameters(*superMethodDecl)) {
+        for (const ParmVarDecl *superParmVarDecl : superMethodDecl->parameters()) {
             const ParmVarDecl *parmVarDecl = methodDecl->getParamDecl(i);
             if (parmVarDecl->hasDefaultArg() && !superParmVarDecl->hasDefaultArg()) {
                 report(

@@ -216,7 +216,7 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
 
     // calculate the ones we want to check
     bool foundInterestingParam = false;
-    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
+    for (const ParmVarDecl *pParmVarDecl : functionDecl->parameters()) {
         // ignore unused params
         if (pParmVarDecl->getName().empty()
             || pParmVarDecl->hasAttr<UnusedAttr>())

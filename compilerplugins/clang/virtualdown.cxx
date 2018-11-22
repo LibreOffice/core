@@ -12,7 +12,6 @@
 #include <iostream>
 #include <set>
 #include "plugin.hxx"
-#include "compat.hxx"
 #include <fstream>
 
 /**
@@ -74,9 +73,8 @@ public:
     bool TraverseFunctionDecl(FunctionDecl*);
     bool TraverseCXXMethodDecl(CXXMethodDecl*);
     bool TraverseCXXConversionDecl(CXXConversionDecl*);
-#if CLANG_VERSION >= 50000
     bool TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl*);
-#endif
+
 private:
     std::string toString(SourceLocation loc);
     std::string niceName(const CXXMethodDecl* functionDecl);
@@ -177,7 +175,6 @@ bool VirtualDown::TraverseCXXConversionDecl(CXXConversionDecl* f)
     currentFunctionDecl = copy;
     return ret;
 }
-#if CLANG_VERSION >= 50000
 bool VirtualDown::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
 {
     auto copy = currentFunctionDecl;
@@ -186,13 +183,12 @@ bool VirtualDown::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
     currentFunctionDecl = copy;
     return ret;
 }
-#endif
 
 std::string VirtualDown::niceName(const CXXMethodDecl* cxxMethodDecl)
 {
     std::string s = cxxMethodDecl->getReturnType().getCanonicalType().getAsString() + " "
                     + cxxMethodDecl->getQualifiedNameAsString() + "(";
-    for (const ParmVarDecl* pParmVarDecl : compat::parameters(*cxxMethodDecl))
+    for (const ParmVarDecl* pParmVarDecl : cxxMethodDecl->parameters())
     {
         s += pParmVarDecl->getType().getCanonicalType().getAsString();
         s += ",";

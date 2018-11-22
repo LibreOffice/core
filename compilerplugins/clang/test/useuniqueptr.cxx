@@ -219,7 +219,6 @@ class Foo17 {
 };
 
 // this only starts to work somewhere after clang 3.8 and before clang7
-#if CLANG_VERSION >= 30900
 class Foo18 {
     std::vector<char*> m_pbar1; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo18()
@@ -228,7 +227,6 @@ class Foo18 {
             delete *aIter; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
-#endif
 
 void foo19()
 {

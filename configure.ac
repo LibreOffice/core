@@ -6698,9 +6698,9 @@ if test "$COM_IS_CLANG" = "TRUE"; then
     else
         compiler_plugins=no
     fi
-    if test "$compiler_plugins" != no -a "$CLANGVER" -lt 30800; then
+    if test "$compiler_plugins" != no -a "$CLANGVER" -lt 50002; then
         if test "$compiler_plugins" = yes; then
-            AC_MSG_ERROR([Clang $CLANGVER is too old to build compiler plugins; need >= 3.8.0.])
+            AC_MSG_ERROR([Clang $CLANGVER is too old to build compiler plugins; need >= 5.0.2.])
         else
             compiler_plugins=no
         fi

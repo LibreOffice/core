@@ -133,9 +133,7 @@ public:
     bool VisitFunctionDecl(const FunctionDecl* );
     bool VisitCXXDeleteExpr(const CXXDeleteExpr* );
     bool TraverseFunctionDecl(FunctionDecl* );
-#if CLANG_VERSION >= 50000
     bool TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* );
-#endif
     bool TraverseCXXMethodDecl(CXXMethodDecl* );
     bool TraverseCXXConstructorDecl(CXXConstructorDecl* );
     bool TraverseCXXConversionDecl(CXXConversionDecl* );
@@ -957,7 +955,6 @@ bool UseUniquePtr::TraverseCXXMethodDecl(CXXMethodDecl* methodDecl)
     return ret;
 }
 
-#if CLANG_VERSION >= 50000
 bool UseUniquePtr::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* methodDecl)
 {
     if (ignoreLocation(methodDecl))
@@ -970,7 +967,6 @@ bool UseUniquePtr::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* methodDe
 
     return ret;
 }
-#endif
 
 bool UseUniquePtr::TraverseCXXConstructorDecl(CXXConstructorDecl* methodDecl)
 {
