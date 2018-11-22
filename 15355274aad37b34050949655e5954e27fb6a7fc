@@ -16,6 +16,24 @@
       "revId": "15355274aad37b34050949655e5954e27fb6a7fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df6247ed_891799ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-11-22T09:01:46Z",
+      "side": 1,
+      "message": "Neither Windows nor OSX have an svp plugin and there is nothing else on both platforms that handles svp. You\u0027ll just get a warning for a dbgutil build, that the salplug loader couldn\u0027t load svp and then it falls back to the win or osx plugin. The Linux JUnitTests work fine with svp for me.\n\nMy stance would be that every test should run with svp and otherwise declare gb_CppunitTest_use_vcl_non_headless.\nYou\u0027ll get a warning on Windows and OSX about the missing svp plugin and then it\u0027ll fall back to the platforms default.\n\nNow we can\u0027t detect, if a test run with gb_CppunitTest_use_vcl_non_headless actually works before the test runs or the platform plugin would fail, but that\u0027s the current state.",
+      "parentUuid": "df6247ed_4909a1db",
+      "revId": "15355274aad37b34050949655e5954e27fb6a7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
