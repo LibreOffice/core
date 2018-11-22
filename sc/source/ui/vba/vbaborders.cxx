@@ -148,12 +148,10 @@ protected:
     }
     virtual css::uno::Sequence<OUString> getServiceNames() override
     {
-        static uno::Sequence< OUString > aServiceNames;
-        if ( aServiceNames.getLength() == 0 )
+        static uno::Sequence< OUString > const aServiceNames
         {
-            aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = "ooo.vba.excel.Border";
-        }
+            "ooo.vba.excel.Border"
+        };
         return aServiceNames;
     }
 public:
@@ -574,12 +572,10 @@ ScVbaBorders::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaBorders::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.excel.Borders";
-    }
+        "ooo.vba.excel.Borders"
+    };
     return aServiceNames;
 }
 

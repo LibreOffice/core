@@ -187,12 +187,10 @@ ScVbaStyles::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaStyles::getServiceNames()
 {
-        static uno::Sequence< OUString > aServiceNames;
-        if ( aServiceNames.getLength() == 0 )
+        static uno::Sequence< OUString > const aServiceNames
         {
-                aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = "ooo.vba.excel.XStyles";
-        }
+            "ooo.vba.excel.XStyles"
+        };
         return aServiceNames;
 }
 
