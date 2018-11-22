@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df6247ed_a9aa5d16",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-22T11:38:28Z",
+      "side": 1,
+      "message": "typo \"Conent\"",
+      "revId": "542136df8524d0ee4b1ea530fd3018ffe91f42ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df6247ed_29d0adc9",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3091,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-22T11:38:28Z",
+      "side": 1,
+      "message": "this is probably wrong: if the node has no hard attributes, the returned item set is the set of the style, and not the one of the node.\n\nalso, casting away \"const\" is wrong because writes into nodes\u0027 item sets must go through AttrSetHandleHelper which handles the deduplication for the ODF export.",
+      "revId": "542136df8524d0ee4b1ea530fd3018ffe91f42ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df6247ed_49cbe11d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3099,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-22T11:38:28Z",
+      "side": 1,
+      "message": "having the *export* filter set the grab-bag item is an interesting abuse that didn\u0027t occur to me before; would it be possible to store this stuff in some WW8Export member instead? that might make it easier to export it to WW8/RTF too?",
+      "revId": "542136df8524d0ee4b1ea530fd3018ffe91f42ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
