@@ -60,13 +60,12 @@ enum class FuncFlags : sal_uInt16 {
     MACROCALL_NEW     = MACROCALL | MACROCALL_FN, /** New Excel functions not
                                                       defined in OOXML, _xlfn. prefix in all formats. OOXML name
                                                       must exist. */
-    BIFFIMPORTONLY    = 0x0800,   /// Only used in BIFF binary import filter.
     BIFFEXPORTONLY    = 0x1000,   /// Only used in BIFF binary export filter.
     INTERNAL          = 0x2000,   /// Function is internal in Calc.
     EUROTOOL          = 0x4000,   /// function of euro tool lib, FUNCLIB_EUROTOOL
 };
 namespace o3tl {
-    template<> struct typed_flags<FuncFlags> : is_typed_flags<FuncFlags, 0x7fff> {};
+    template<> struct typed_flags<FuncFlags> : is_typed_flags<FuncFlags, 0x77ff> {};
 }
 
 namespace oox {
@@ -191,13 +190,13 @@ struct FunctionData
 bool FunctionData::isSupported(bool bImportFilter) const
 {
     /*  For import filters: the FuncFlags::EXPORTONLY, FuncFlags::BIFFEXPORTONLY
-                            and FuncFlags::BIFFIMPORTONLY flag must not be set.
-        For export filters: the FuncFlags::IMPORTONLY, FuncFlags::BIFFIMPORTONLY
-                            and FuncFlags::BIFFEXPORTONLY flag must not be set. */
+                            must not be set.
+        For export filters: the FuncFlags::IMPORTONLY, FuncFlags::BIFFEXPORTONLY
+                            must not be set. */
     if (bImportFilter)
-        return !(mnFlags & ( FuncFlags::EXPORTONLY | FuncFlags::BIFFEXPORTONLY | FuncFlags::BIFFIMPORTONLY));
+        return !(mnFlags & ( FuncFlags::EXPORTONLY | FuncFlags::BIFFEXPORTONLY));
     else
-        return !(mnFlags & ( FuncFlags::IMPORTONLY | FuncFlags::BIFFIMPORTONLY | FuncFlags::BIFFEXPORTONLY));
+        return !(mnFlags & ( FuncFlags::IMPORTONLY | FuncFlags::BIFFEXPORTONLY));
 }
 
 const sal_uInt16 NOID = SAL_MAX_UINT16;     /// No BIFF function identifier available.
