@@ -132,8 +132,6 @@ filter/source/msfilter/eschesdo.hxx:29
     enum ImplEESdrPageType NOTICE
 filter/source/msfilter/eschesdo.hxx:29
     enum ImplEESdrPageType MASTER
-include/canvas/spriteredrawmanager.hxx:145
-    enum canvas::SpriteRedrawManager::SpriteChangeRecord::ChangeType none
 include/connectivity/dbtools.hxx:822
     enum connectivity::dbase::DBFType dBaseIVMemo
 include/desktop/exithelper.h:25
