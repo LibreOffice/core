@@ -254,24 +254,23 @@ public:
 class SwFrameURLPage : public SfxTabPage
 {
     // hyperlink
-    VclPtr<Edit>            pURLED;
-    VclPtr<PushButton>      pSearchPB;
-    VclPtr<Edit>            pNameED;
-    VclPtr<ComboBox>        pFrameCB;
+    std::unique_ptr<weld::Entry> m_xURLED;
+    std::unique_ptr<weld::Button> m_xSearchPB;
+    std::unique_ptr<weld::Entry> m_xNameED;
+    std::unique_ptr<weld::ComboBox> m_xFrameCB;
 
     // image map
-    VclPtr<CheckBox>        pServerCB;
-    VclPtr<CheckBox>        pClientCB;
+    std::unique_ptr<weld::CheckButton> m_xServerCB;
+    std::unique_ptr<weld::CheckButton> m_xClientCB;
 
-    DECL_LINK(InsertFileHdl, Button*, void);
+    DECL_LINK(InsertFileHdl, weld::Button&, void);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwFrameURLPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    SwFrameURLPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwFrameURLPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
 
