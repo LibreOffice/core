@@ -410,7 +410,6 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(TabPageParent pPage,
     m_xLevelLB->connect_changed(LINK(this,    SwOutlineSettingsTabPage, LevelHdl));
     m_xAllLevelNF->connect_value_changed(LINK(this, SwOutlineSettingsTabPage, ToggleComplete));
     m_xCollBox->connect_changed(LINK(this,    SwOutlineSettingsTabPage, CollSelect));
-    m_xCollBox->connect_focus_in(LINK(this,  SwOutlineSettingsTabPage, CollSelectGetFocus));
     m_xNumberBox->connect_changed(LINK(this,  SwOutlineSettingsTabPage, NumberSelect));
     m_xPrefixED->connect_changed(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
     m_xSuffixED->connect_changed(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
@@ -608,9 +607,10 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, weld::ComboBoxText&, rBox, void
             }
 
     SetModified();
+    CollSave();
 }
 
-IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CollSelectGetFocus, weld::Widget&, void)
+void SwOutlineSettingsTabPage::CollSave()
 {
     for (sal_uInt8 i = 0; i < MAXLEVEL; ++i)
         aSaveCollNames[i] =  pCollNames[i];
@@ -722,6 +722,8 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     // query this document's NumRules
     pNumRule = static_cast<SwOutlineTabDialog*>(GetDialogController())->GetNumRule();
     pCollNames = static_cast<SwOutlineTabDialog*>(GetDialogController())->GetCollNames();
+
+    CollSave();
 
     m_aPreviewWIN.SetNumRule(pNumRule);
     m_aPreviewWIN.SetOutlineNames(pCollNames);
