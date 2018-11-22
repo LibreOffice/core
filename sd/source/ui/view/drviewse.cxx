@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
+#include <comphelper/lok.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
@@ -226,6 +227,9 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         rBind.Invalidate(nOldSId);
         rBind.Update(nOldSId);
     }
+
+    // for LibreOfficeKit - choosing a shape should construct it directly
+    bool bCreateDirectly = false;
 
     switch ( nSId )
     {
@@ -521,6 +525,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             SetCurrentFunction( FuConstructCustomShape::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
             rReq.Done();
 
+            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+
             if ( nSId != SID_DRAW_CS_ID )
             {
                 SfxBindings& rBind = GetViewFrame()->GetBindings();
@@ -598,7 +604,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     }
 
     // with qualifier construct directly
-    if(HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
+    if(HasCurrentFunction() && ((rReq.GetModifier() & KEY_MOD1) || bCreateDirectly))
     {
         // get SdOptions
         SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
