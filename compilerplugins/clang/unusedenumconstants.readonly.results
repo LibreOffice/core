@@ -1194,14 +1194,6 @@ sc/source/ui/unoobj/condformatuno.cxx:274
     enum (anonymous namespace)::DateProperties Date_StyleName
 sc/source/ui/unoobj/condformatuno.cxx:275
     enum (anonymous namespace)::DateProperties DateType
-sc/source/ui/vba/vbasheetobject.hxx:140
-    enum ScVbaControlObjectBase::ListenerType LISTENER_MOUSE
-sc/source/ui/vba/vbasheetobject.hxx:141
-    enum ScVbaControlObjectBase::ListenerType LISTENER_TEXT
-sc/source/ui/vba/vbasheetobject.hxx:142
-    enum ScVbaControlObjectBase::ListenerType LISTENER_VALUE
-sc/source/ui/vba/vbasheetobject.hxx:143
-    enum ScVbaControlObjectBase::ListenerType LISTENER_CHANGE
 scaddins/source/datefunc/datefunc.hxx:41
     enum ScaCategory Finance
 scaddins/source/datefunc/datefunc.hxx:42

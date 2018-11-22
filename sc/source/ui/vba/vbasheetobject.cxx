@@ -36,6 +36,10 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
+constexpr OUStringLiteral gaListenerType = "XActionListener";
+constexpr OUStringLiteral gaEventMethod = "actionPerformed";
+
+
 ScVbaButtonCharacters::ScVbaButtonCharacters(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -292,37 +296,11 @@ ScVbaControlObjectBase::ScVbaControlObjectBase(
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< container::XIndexContainer >& rxFormIC,
-        const uno::Reference< drawing::XControlShape >& rxControlShape,
-        ListenerType eListenerType ) :
+        const uno::Reference< drawing::XControlShape >& rxControlShape ) :
     ScVbaControlObject_BASE( rxParent, rxContext, rxModel, uno::Reference< drawing::XShape >( rxControlShape, uno::UNO_QUERY_THROW ) ),
     mxFormIC( rxFormIC, uno::UNO_SET_THROW ),
     mxControlProps( rxControlShape->getControl(), uno::UNO_QUERY_THROW )
 {
-    // set listener and event name to be used for OnAction attribute
-    switch( eListenerType )
-    {
-        case LISTENER_ACTION:
-            maListenerType = "XActionListener";
-            maEventMethod = "actionPerformed";
-        break;
-        case LISTENER_MOUSE:
-            maListenerType = "XMouseListener";
-            maEventMethod = "mouseReleased";
-        break;
-        case LISTENER_TEXT:
-            maListenerType = "XTextListener";
-            maEventMethod = "textChanged";
-        break;
-        case LISTENER_VALUE:
-            maListenerType = "XAdjustmentListener";
-            maEventMethod = "adjustmentValueChanged";
-        break;
-        case LISTENER_CHANGE:
-            maListenerType = "XChangeListener";
-            maEventMethod = "changed";
-        break;
-        // no default, to let the compiler complain about missing case
-    }
 }
 
 // XSheetObject attributes
@@ -348,7 +326,7 @@ OUString SAL_CALL ScVbaControlObjectBase::getOnAction()
         const script::ScriptEventDescriptor* pEventEnd = pEvent + aEvents.getLength();
         const OUString aScriptType = "Script";
         for( ; pEvent < pEventEnd; ++pEvent )
-            if( (pEvent->ListenerType == maListenerType) && (pEvent->EventMethod == maEventMethod) && (pEvent->ScriptType == aScriptType) )
+            if( (pEvent->ListenerType == gaListenerType) && (pEvent->EventMethod == gaEventMethod) && (pEvent->ScriptType == aScriptType) )
                 return extractMacroName( pEvent->ScriptCode );
     }
     return OUString();
@@ -360,7 +338,7 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
     sal_Int32 nIndex = getModelIndexInForm();
 
     // first, remove a registered event (try/catch just in case implementation throws)
-    try { xEventMgr->revokeScriptEvent( nIndex, maListenerType, maEventMethod, OUString() ); } catch( uno::Exception& ) {}
+    try { xEventMgr->revokeScriptEvent( nIndex, gaListenerType, gaEventMethod, OUString() ); } catch( uno::Exception& ) {}
 
     // if a macro name has been passed, try to attach it to the event
     if( !rMacroName.isEmpty() )
@@ -369,8 +347,8 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName )
         if( !aResolvedMacro.mbFound )
             throw uno::RuntimeException();
         script::ScriptEventDescriptor aDescriptor;
-        aDescriptor.ListenerType = maListenerType;
-        aDescriptor.EventMethod = maEventMethod;
+        aDescriptor.ListenerType = gaListenerType;
+        aDescriptor.EventMethod = gaEventMethod;
         aDescriptor.ScriptType = "Script";
         aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.msResolvedMacro );
         xEventMgr->registerScriptEvent( nIndex, aDescriptor );
@@ -419,7 +397,7 @@ ScVbaButton::ScVbaButton(
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< container::XIndexContainer >& rxFormIC,
         const uno::Reference< drawing::XControlShape >& rxControlShape ) :
-    ScVbaButton_BASE( rxParent, rxContext, rxModel, rxFormIC, rxControlShape, LISTENER_ACTION )
+    ScVbaButton_BASE( rxParent, rxContext, rxModel, rxFormIC, rxControlShape )
 {
 }
 
