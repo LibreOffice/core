@@ -4928,8 +4928,6 @@
                       <object class="sfxlo-OptionalBox" id="Insert-Section-Field">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Insert-FieldButton:MenuField">
                             <property name="label" translatable="yes" context="CalcNotebookbar|FieldMenuButton">Fiel_d</property>
@@ -7235,8 +7233,6 @@
                       <object class="sfxlo-OptionalBox" id="Data-Section-Statistic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="vexpand">True</property>
                         <child>
                           <object class="svtlo-ManagedMenuButton" id="Data-StatisticsMenu:MenuStatistic">
                             <property name="label" translatable="yes" context="CalcNotebookbar|Statistics">_Statistics</property>
@@ -7247,6 +7243,7 @@
                             <property name="action_name">.uno:StatisticsMenu</property>
                             <property name="image">StatisticsImg</property>
                             <property name="relief">none</property>
+                            <property name="use_underline">True</property>
                             <property name="image_position">top</property>
                             <property name="always_show_image">True</property>
                           </object>
