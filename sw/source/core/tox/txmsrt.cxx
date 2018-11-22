@@ -191,7 +191,7 @@ void SwTOXSortTabBase::FillText( SwTextNode& rNd, const SwIndex& rInsPos,
     rNd.InsertText( GetText().sText, rInsPos );
 }
 
-bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
+bool SwTOXSortTabBase::equivalent(const SwTOXSortTabBase& rCmp)
 {
     bool bRet = nPos == rCmp.nPos && nCntPos == rCmp.nCntPos &&
             (!aTOXSources[0].pNd || !rCmp.aTOXSources[0].pNd ||
@@ -217,7 +217,7 @@ bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
     return bRet;
 }
 
-bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
+bool SwTOXSortTabBase::sort_lt(const SwTOXSortTabBase& rCmp)
 {
     if( nPos < rCmp.nPos )
         return true;
@@ -280,7 +280,7 @@ SwTOXIndex::SwTOXIndex( const SwTextNode& rNd,
 
 // Compare keywords. Only relates to the text.
 
-bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
+bool SwTOXIndex::equivalent(const SwTOXSortTabBase& rCmpBase)
 {
     const SwTOXIndex& rCmp = static_cast<const SwTOXIndex&>(rCmpBase);
 
@@ -302,7 +302,7 @@ bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 
 // operator, only depends on the text
 
-bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
+bool SwTOXIndex::sort_lt(const SwTOXSortTabBase& rCmpBase)
 {
     const SwTOXIndex& rCmp = static_cast<const SwTOXIndex&>(rCmpBase);
 
@@ -413,14 +413,14 @@ SwTOXCustom::SwTOXCustom(const TextAndReading& rKey,
 {
 }
 
-bool SwTOXCustom::operator==(const SwTOXSortTabBase& rCmpBase)
+bool SwTOXCustom::equivalent(const SwTOXSortTabBase& rCmpBase)
 {
     return GetLevel() == rCmpBase.GetLevel() &&
            pTOXIntl->IsEqual( GetText(), GetLocale(),
                               rCmpBase.GetText(), rCmpBase.GetLocale() );
 }
 
-bool SwTOXCustom::operator < (const SwTOXSortTabBase& rCmpBase)
+bool SwTOXCustom::sort_lt(const SwTOXSortTabBase& rCmpBase)
 {
     return  GetLevel() <= rCmpBase.GetLevel() &&
             pTOXIntl->IsLess( GetText(), GetLocale(),
@@ -725,21 +725,21 @@ void    SwTOXAuthority::FillText( SwTextNode& rNd,
     rNd.InsertText( sText, rInsPos );
 }
 
-bool    SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
+bool SwTOXAuthority::equivalent(const SwTOXSortTabBase& rCmp)
 {
     return nType == rCmp.nType &&
             static_cast<SwAuthorityField*>(m_rField.GetField())->GetHandle() ==
                 static_cast<SwAuthorityField*>(static_cast<const SwTOXAuthority&>(rCmp).m_rField.GetField())->GetHandle();
 }
 
-bool    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
+bool SwTOXAuthority::sort_lt(const SwTOXSortTabBase& rBase)
 {
     bool bRet = false;
     SwAuthorityField* pField = static_cast<SwAuthorityField*>(m_rField.GetField());
     SwAuthorityFieldType* pType = static_cast<SwAuthorityFieldType*>(
                                                 pField->GetTyp());
     if(pType->IsSortByDocument())
-        bRet = SwTOXSortTabBase::operator<(rBase);
+        bRet = SwTOXSortTabBase::sort_lt(rBase);
     else
     {
         SwAuthorityField* pCmpField =

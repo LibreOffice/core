@@ -118,6 +118,9 @@ public:
  */
 struct SwTOXSortTabBase
 {
+    bool operator==(const SwTOXSortTabBase&) = delete;
+    bool operator<(const SwTOXSortTabBase&) = delete;
+
     std::vector<SwTOXSource>       aTOXSources;
     css::lang::Locale aLocale;
     const SwTextNode* pTOXNd;
@@ -140,8 +143,8 @@ struct SwTOXSortTabBase
 
     virtual void    FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField ) const;
     virtual sal_uInt16  GetLevel()  const = 0;
-    virtual bool    operator==( const SwTOXSortTabBase& );
-    virtual bool    operator<( const SwTOXSortTabBase& );
+    virtual bool    equivalent( const SwTOXSortTabBase& );
+    virtual bool    sort_lt( const SwTOXSortTabBase& );
 
     virtual OUString  GetURL() const;
 
@@ -183,8 +186,8 @@ struct SwTOXIndex : public SwTOXSortTabBase
 
     virtual void    FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField ) const override;
     virtual sal_uInt16  GetLevel() const override;
-    virtual bool    operator==( const SwTOXSortTabBase& ) override;
-    virtual bool    operator<( const SwTOXSortTabBase& ) override;
+    virtual bool    equivalent( const SwTOXSortTabBase& ) override;
+    virtual bool    sort_lt( const SwTOXSortTabBase& ) override;
 
 private:
     virtual TextAndReading GetText_Impl() const override;
@@ -199,8 +202,8 @@ struct SwTOXCustom : public SwTOXSortTabBase
                  const css::lang::Locale& rLocale );
 
     virtual sal_uInt16 GetLevel() const override;
-    virtual bool   operator==( const SwTOXSortTabBase& ) override;
-    virtual bool   operator<( const SwTOXSortTabBase& ) override;
+    virtual bool   equivalent( const SwTOXSortTabBase& ) override;
+    virtual bool   sort_lt( const SwTOXSortTabBase& ) override;
 
 private:
     virtual TextAndReading GetText_Impl() const override;
@@ -272,8 +275,8 @@ public:
 
     SwFormatField& GetFieldFormat() {return m_rField;}
 
-    virtual bool    operator==( const SwTOXSortTabBase& ) override;
-    virtual bool    operator<( const SwTOXSortTabBase& ) override;
+    virtual bool    equivalent( const SwTOXSortTabBase& ) override;
+    virtual bool    sort_lt( const SwTOXSortTabBase& ) override;
     virtual sal_uInt16  GetLevel() const override;
 };
 

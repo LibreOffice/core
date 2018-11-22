@@ -1826,9 +1826,9 @@ void SwTOXBaseSection::InsertSorted(std::unique_ptr<SwTOXSortTabBase> pNew)
         for(short i = static_cast<short>(aRange.Min()); i < static_cast<short>(aRange.Max()); ++i)
         {
             SwTOXSortTabBase* pOld = m_aSortArr[i].get();
-            if(*pOld == *pNew)
+            if (pOld->equivalent(*pNew))
             {
-                if(*pOld < *pNew)
+                if (pOld->sort_lt(*pNew))
                 {
                     return;
                 }
@@ -1849,7 +1849,7 @@ void SwTOXBaseSection::InsertSorted(std::unique_ptr<SwTOXSortTabBase> pNew)
     for( i = aRange.Min(); i < aRange.Max(); ++i)
     {   // Only check for same level
         SwTOXSortTabBase* pOld = m_aSortArr[i].get();
-        if(*pOld == *pNew)
+        if (pOld->equivalent(*pNew))
         {
             if(TOX_AUTHORITIES != SwTOXBase::GetType())
             {
@@ -1873,7 +1873,7 @@ void SwTOXBaseSection::InsertSorted(std::unique_ptr<SwTOXSortTabBase> pNew)
                 OSL_FAIL("Bibliography entries cannot be found here");
 #endif
         }
-        if(*pNew < *pOld)
+        if (pNew->sort_lt(*pOld))
             break;
     }
     // Skip SubLevel
@@ -1921,7 +1921,7 @@ Range SwTOXBaseSection::GetKeyRange(const OUString& rStr, const OUString& rStrRe
                                              rNew.GetLocale() ));
         for(i = nMin; i < nMax; ++i)
         {
-            if(nLevel == m_aSortArr[i]->GetLevel() &&  *pKey < *(m_aSortArr[i]))
+            if (nLevel == m_aSortArr[i]->GetLevel() && pKey->sort_lt(*m_aSortArr[i]))
                 break;
         }
         m_aSortArr.insert(m_aSortArr.begin() + i, std::move(pKey));
