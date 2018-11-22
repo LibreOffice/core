@@ -22,6 +22,7 @@
 
 #include <map>
 #include <vector>
+#include <o3tl/enumarray.hxx>
 #include "workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -32,20 +33,17 @@ namespace oox {
 namespace xls {
 
 /** Units supported by the UnitConverter class. */
-enum Unit
+enum class Unit
 {
-    UNIT_INCH,          /// Inches.
-    UNIT_POINT,         /// Points.
-    UNIT_TWIP,          /// Twips (1/20 point).
-    UNIT_EMU,           /// English Metric Unit (1/360,000 cm).
-    UNIT_SCREENX,       /// Horizontal screen pixels.
-    UNIT_SCREENY,       /// Vertical screen pixels.
-    UNIT_REFDEVX,       /// Horizontal pixels in Calc reference device.
-    UNIT_REFDEVY,       /// Vertical pixels in Calc reference device.
-    UNIT_DIGIT,         /// Digit width of document default font.
-    UNIT_SPACE,         /// Space character width of document default font.
-
-    UNIT_ENUM_SIZE
+    Inch,          /// Inches.
+    Point,         /// Points.
+    Twip,          /// Twips (1/20 point).
+    Emu,           /// English Metric Unit (1/360,000 cm).
+    ScreenX,       /// Horizontal screen pixels.
+    ScreenY,       /// Vertical screen pixels.
+    Digit,         /// Digit width of document default font.
+    Space,         /// Space character width of document default font.
+    LAST
 };
 
 /** Helper class that provides functions to convert values from and to
@@ -97,7 +95,7 @@ private:
     void                addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode );
 
 private:
-    std::vector<double> maCoeffs;           /// Coefficients for unit conversion.
+    o3tl::enumarray<Unit, double> maCoeffs;           /// Coefficients for unit conversion.
     std::map<OUString, sal_uInt8>     maOoxErrCodes;      /// Maps error code strings to BIFF error constants.
     sal_Int32           mnNullDate;         /// Nulldate of this workbook (number of days since 0000-01-01).
 };
