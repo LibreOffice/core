@@ -100,12 +100,10 @@ ScVbaRadioButton::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaRadioButton::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.msforms.RadioButton";
-    }
+        "ooo.vba.msforms.RadioButton"
+    };
     return aServiceNames;
 }
 

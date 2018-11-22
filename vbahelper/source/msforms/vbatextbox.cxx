@@ -176,12 +176,10 @@ ScVbaTextBox::getServiceImplName()
 uno::Sequence< OUString >
 ScVbaTextBox::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames;
-    if ( aServiceNames.getLength() == 0 )
+    static uno::Sequence< OUString > const aServiceNames
     {
-        aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = "ooo.vba.msforms.TextBox";
-    }
+        "ooo.vba.msforms.TextBox"
+    };
     return aServiceNames;
 }
 
