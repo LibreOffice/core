@@ -209,6 +209,7 @@ FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
     // 'commandReceived' signal is emitted every time a command and its args have been read;
     // thread will run until the filepicker process is terminated
     m_ipcReaderThread = std::unique_ptr<std::thread>{ new std::thread(readCommands, this) };
+    m_ipcReaderThread->detach();
 }
 
 FilePickerIpc::~FilePickerIpc() = default;
