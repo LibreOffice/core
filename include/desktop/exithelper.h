@@ -23,8 +23,6 @@
 enum EExitCodes {
     /* e.g. used to force showing of the command line help */
     EXITHELPER_NO_ERROR = 0,
-    /* pipe was detected - second office must terminate itself */
-    EXITHELPER_SECOND_OFFICE = 1,
     /* an uno exception was caught during startup */
     EXITHELPER_FATAL_ERROR = 77,
     /* user force automatic restart after crash */
