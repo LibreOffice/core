@@ -79,15 +79,15 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
 
                 break;
             case  style::NumberingType::CHAR_SPECIAL:
-                bInsert = bool(nTypeFlags & SwInsertNumTypes::Bullet);
+                bInsert = false;
 
                 break;
             case  style::NumberingType::PAGE_DESCRIPTOR:
-                bInsert = bool(nTypeFlags & SwInsertNumTypes::PageStyleNumbering);
+                bInsert = false;
 
                 break;
             case  style::NumberingType::BITMAP:
-                bInsert = bool(nTypeFlags & SwInsertNumTypes::Bitmap );
+                bInsert = false;
 
                 break;
             case  style::NumberingType::BITMAP | LINK_TOKEN:

@@ -1490,12 +1490,6 @@ sw/source/uibase/inc/envimg.hxx:33
     enum SwEnvAlign ENV_VER_LEFT
 sw/source/uibase/inc/envimg.hxx:34
     enum SwEnvAlign ENV_VER_CNTR
-sw/source/uibase/inc/numberingtypelistbox.hxx:32
-    enum SwInsertNumTypes PageStyleNumbering
-sw/source/uibase/inc/numberingtypelistbox.hxx:33
-    enum SwInsertNumTypes Bitmap
-sw/source/uibase/inc/numberingtypelistbox.hxx:34
-    enum SwInsertNumTypes Bullet
 tools/source/generic/poly.cxx:1122
     enum (anonymous at /home/noel/libo2/tools/source/generic/poly.cxx:1122:5) maxRecursionDepth
 ucbhelper/source/client/proxydecider.cxx:119
