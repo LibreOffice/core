@@ -243,6 +243,13 @@ SalInstance *CreateSalInstance()
 #endif
         rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
 
+    if (aUsePlugin == "svp")
+    {
+        Application::EnableBitmapRendering();
+#ifndef HEADLESS_VCLPLUG
+        aUsePlugin.clear();
+#endif
+    }
     if( !aUsePlugin.isEmpty() )
         pInst = tryInstance( aUsePlugin, true );
 

@@ -1218,19 +1218,19 @@ public:
 
     /** Enable Console Only mode
 
-     Used to disable Mac specific app init that requires an app bundle.
+     Convenience function to enable headless and bitmap rendering.
     */
     static void                 EnableConsoleOnly();
 
-    /** Determines if console only mode is enabled.
+    /** Enable software-only bitmap rendering
+     */
+    static void                 EnableBitmapRendering();
 
-     Used to see if Mac specific app init has been disabled.
+    /** Determines if bitmap rendering is enabled
 
-     @returns True if console only mode is on, false if not.
-
-     @see EnableConsoleOnly
-    */
-    static bool                 IsConsoleOnly();
+      @return True if bitmap rendering is enabled.
+     */
+    static bool                 IsBitmapRendering();
 
     ///@}
 
