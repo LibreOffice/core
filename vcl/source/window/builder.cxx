@@ -519,7 +519,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         vcl::Window* pTarget = get<vcl::Window>(elem.m_sID);
         ListBox *pListBoxTarget = dynamic_cast<ListBox*>(pTarget);
         ComboBox *pComboBoxTarget = dynamic_cast<ComboBox*>(pTarget);
-        SvHeaderTabListBox *pTreeBoxTarget = dynamic_cast<SvHeaderTabListBox*>(pTarget);
+        SvTabListBox *pTreeBoxTarget = dynamic_cast<SvTabListBox*>(pTarget);
         // pStore may be empty
         const ListStore *pStore = get_model_by_name(elem.m_sValue.toUtf8());
         SAL_WARN_IF(!pListBoxTarget && !pComboBoxTarget && !pTreeBoxTarget, "vcl", "missing elements of combobox");
@@ -1899,9 +1899,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         //window we want to apply the packing props for this GtkTreeView to
         VclPtr<vcl::Window> xWindowForPackingProps;
         //To-Do
-        //a) make SvHeaderTabListBox the default target for GtkTreeView
+        //a) make SvHeaderTabListBox/SvTabListBox the default target for GtkTreeView
         //b) remove the non-drop down mode of ListBox and convert
-        //   everything over to SvHeaderTabListBox
+        //   everything over to SvHeaderTabListBox/SvTabListBox
         //c) remove the users of makeSvTabListBox and makeSvTreeListBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
@@ -1922,7 +1922,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         }
         else
         {
-            VclPtr<SvHeaderTabListBox> xBox;
+            VclPtr<SvTabListBox> xBox;
             bool bHeadersVisible = extractHeadersVisible(rMap);
             if (bHeadersVisible)
             {
@@ -1932,24 +1932,27 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 m_aChildren.emplace_back(containerid, xContainer, true);
 
                 VclPtrInstance<HeaderBar> xHeader(xContainer, WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP | WB_3DLOOK);
+                xHeader->set_width_request(0); // let the headerbar width not affect the size requistion
                 OString headerid(id + "-header");
                 xHeader->SetHelpId(m_sHelpRoot + headerid);
                 m_aChildren.emplace_back(headerid, xHeader, true);
 
-                xBox = VclPtr<SvHeaderTabListBox>::Create(xContainer, nWinStyle);
-                xBox->InitHeaderBar(xHeader);
+                VclPtr<SvHeaderTabListBox> xHeaderBox = VclPtr<SvHeaderTabListBox>::Create(xContainer, nWinStyle);
+                xHeaderBox->InitHeaderBar(xHeader);
                 xContainer->set_expand(true);
                 xHeader->Show();
                 xContainer->Show();
+                xBox = xHeaderBox;
                 xWindowForPackingProps = xContainer;
             }
             else
             {
-                xBox = VclPtr<SvHeaderTabListBox>::Create(pRealParent, nWinStyle);
+                xBox = VclPtr<SvTabListBox>::Create(pRealParent, nWinStyle);
                 xWindowForPackingProps = xBox;
             }
             xWindow = xBox;
             xBox->SetNoAutoCurEntry(true);
+            xBox->SetQuickSearch(true);
             xBox->SetHighlightRange(); // select over the whole width
         }
         if (pRealParent != pParent)
@@ -1959,8 +1962,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         if (!m_bLegacy)
         {
-            SvHeaderTabListBox* pTreeView = static_cast<SvHeaderTabListBox*>(pParent);
-            if (HeaderBar* pHeaderBar = pTreeView->GetHeaderBar())
+            SvHeaderTabListBox* pTreeView = dynamic_cast<SvHeaderTabListBox*>(pParent);
+            if (HeaderBar* pHeaderBar = pTreeView ? pTreeView->GetHeaderBar() : nullptr)
             {
                 OUString sTitle(extractTitle(rMap));
                 auto nItemId = pHeaderBar->GetItemCount() + 1;
@@ -4149,7 +4152,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         rTarget.SelectEntryPos(nActiveId);
 }
 
-void VclBuilder::mungeModel(SvHeaderTabListBox& rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
+void VclBuilder::mungeModel(SvTabListBox& rTarget, const ListStore &rStore, sal_uInt16 nActiveId)
 {
     for (auto const& entry : rStore.m_aEntries)
     {

@@ -45,7 +45,8 @@ public:
     SfxHelp();
     virtual ~SfxHelp() override;
 
-    virtual OUString        GetHelpText( const OUString&, const vcl::Window* pWindow ) override;
+    virtual OUString        GetHelpText(const OUString&, const vcl::Window* pWindow) override;
+    virtual OUString        GetHelpText(const OUString&, const weld::Widget* pWindow) override;
 
     static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );
     static OUString         GetDefaultHelpModule();

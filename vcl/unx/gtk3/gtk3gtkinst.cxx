@@ -4386,6 +4386,15 @@ public:
         enable_notify_events();
     }
 
+    virtual void scroll_to_row(int pos) override
+    {
+        disable_notify_events();
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
+        gtk_tree_path_free(path);
+        enable_notify_events();
+    }
+
     virtual void unselect(int pos) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
@@ -4572,6 +4581,17 @@ public:
         enable_notify_events();
     }
 
+    virtual void scroll_to_row(const weld::TreeIter& rIter) override
+    {
+        disable_notify_events();
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
+        gtk_tree_path_free(path);
+        enable_notify_events();
+    }
+
     virtual void unselect(const weld::TreeIter& rIter) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
@@ -4593,9 +4613,12 @@ public:
 
     virtual bool iter_has_child(const weld::TreeIter& rIter) const override
     {
-        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        return gtk_tree_model_iter_has_child(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+        weld::TreeIter& rNonConstIter = const_cast<weld::TreeIter&>(rIter);
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rNonConstIter);
+        GtkTreeIter restore(rGtkIter.iter);
+        bool ret = iter_children(rNonConstIter);
+        rGtkIter.iter = restore;
+        return ret;
     }
 
     virtual bool get_row_expanded(const weld::TreeIter& rIter) const override
@@ -6356,7 +6379,7 @@ namespace
             Help* pHelp = !sHelpId.isEmpty() ? Application::GetHelp() : nullptr;
             if (pHelp)
             {
-                OUString sHelpText = pHelp->GetHelpText(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), nullptr);
+                OUString sHelpText = pHelp->GetHelpText(OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), static_cast<weld::Widget*>(nullptr));
                 if (!sHelpText.isEmpty())
                 {
                     gtk_tooltip_set_text(tooltip, OUStringToOString(sHelpText, RTL_TEXTENCODING_UTF8).getStr());

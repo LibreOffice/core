@@ -3679,6 +3679,10 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
             nStyle |= (WB_HASBUTTONS | WB_HASBUTTONSATROOT);
         SetStyle(nStyle);
     }
+    else if (rKey == "enable-search")
+    {
+        SetQuickSearch(toBool(rValue));
+    }
     else
         return Control::set_property(rKey, rValue);
     return true;
