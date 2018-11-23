@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df6247ed_12ebd2b0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-11-23T15:13:06Z",
+      "side": 1,
+      "message": "It’s better to split this paragraph out in a separate string, to maintain its visual separation in the UI.",
+      "revId": "5eb15a1e7a1f9abf3bbcbda84d555cd50810aba9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
