@@ -412,7 +412,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("PictureDialog",
                                                     GetView().GetViewFrame(),
-                                                    GetView().GetWindow(),
+                                                    GetView().GetFrameWeld(),
                                                     aSet, false));
             if (nSlot == FN_DRAW_WRAP_DLG)
                 pDlg->SetCurPageId("wrap");

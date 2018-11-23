@@ -294,7 +294,7 @@ class SwFrameAddPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xAltNameFT;
     std::unique_ptr<weld::Entry> m_xAltNameED;
     std::unique_ptr<weld::Label> m_xDescriptionFT;
-    std::unique_ptr<weld::Entry> m_xDescriptionED;
+    std::unique_ptr<weld::TextView> m_xDescriptionED;
     std::unique_ptr<weld::Label> m_xPrevFT;
     std::unique_ptr<weld::ComboBox> m_xPrevLB;
     std::unique_ptr<weld::Label> m_xNextFT;
