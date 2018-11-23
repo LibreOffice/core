@@ -14,6 +14,8 @@
   </object>
   <object class="GtkTreeStore" id="liststore2">
     <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
@@ -37,6 +39,7 @@
     <property name="vexpand">True</property>
     <property name="row_spacing">12</property>
     <property name="column_spacing">12</property>
+    <property name="row_homogeneous">True</property>
     <child>
       <object class="GtkFrame" id="macroframe">
         <property name="visible">True</property>
@@ -77,9 +80,15 @@
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                         <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
+                          <attributes>
+                            <attribute name="pixbuf">0</attribute>
+                          </attributes>
+                        </child>
+                        <child>
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
-                            <attribute name="text">0</attribute>
+                            <attribute name="text">1</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -314,19 +323,5 @@
         <property name="height">2</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <widgets>
-      <widget name="macroframe"/>
-      <widget name="groupframe"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
-    <property name="mode">vertical</property>
-    <widgets>
-      <widget name="macros"/>
-      <widget name="libraries"/>
-      <widget name="assignments"/>
-    </widgets>
   </object>
 </interface>

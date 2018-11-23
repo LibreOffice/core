@@ -4058,13 +4058,19 @@ namespace
         comphelper::string::NaturalStringSorter* pSorter = static_cast<comphelper::string::NaturalStringSorter*>(data);
         gchar* pName1;
         gchar* pName2;
-        gtk_tree_model_get(pModel, a, 0, &pName1, -1);
-        gtk_tree_model_get(pModel, b, 0, &pName2, -1);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
+        gint sort_column_id(0);
+        GtkSortType order(GTK_SORT_ASCENDING);
+        gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, &order);
+        gtk_tree_model_get(pModel, a, sort_column_id, &pName1, -1);
+        gtk_tree_model_get(pModel, b, sort_column_id, &pName2, -1);
         gint ret = pSorter->compare(OUString(pName1, strlen(pName1), RTL_TEXTENCODING_UTF8),
                                     OUString(pName2, strlen(pName2), RTL_TEXTENCODING_UTF8));
         g_free(pName1);
         g_free(pName2);
-        return ret;
+        if (ret == 0)
+            return ret;
+        return order == GTK_SORT_ASCENDING ? ret : -ret;
     }
 }
 
@@ -4359,8 +4365,8 @@ public:
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeStore);
-        gtk_tree_sortable_set_sort_func(pSortable, m_nTextCol, sort_func, m_xSorter.get(), nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, m_nTextCol, GTK_SORT_ASCENDING);
+        gtk_tree_sortable_set_sort_func(pSortable, m_nTextCol, sort_func, m_xSorter.get(), nullptr);
     }
 
     virtual int n_children() const override
@@ -4388,6 +4394,7 @@ public:
 
     virtual void scroll_to_row(int pos) override
     {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
         disable_notify_events();
         GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
         gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
@@ -4583,6 +4590,7 @@ public:
 
     virtual void scroll_to_row(const weld::TreeIter& rIter) override
     {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
@@ -6080,8 +6088,8 @@ public:
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
-        gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
+        gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
     }
 
     virtual bool has_entry() const override

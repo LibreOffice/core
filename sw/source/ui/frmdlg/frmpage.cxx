@@ -834,7 +834,7 @@ void SwFramePage::EnableGraficMode()
 
 SwWrtShell *SwFramePage::getFrameDlgParentShell()
 {
-    return static_cast<SwFrameDlg*>(GetParentDialog())->GetWrtShell();
+    return static_cast<SwFrameDlg*>(GetDialogController())->GetWrtShell();
 }
 
 void SwFramePage::Reset( const SfxItemSet *rSet )
@@ -2785,7 +2785,7 @@ SwFrameAddPage::SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xAltNameFT(m_xBuilder->weld_label("altname_label"))
     , m_xAltNameED(m_xBuilder->weld_entry("altname"))
     , m_xDescriptionFT(m_xBuilder->weld_label("description_label"))
-    , m_xDescriptionED(m_xBuilder->weld_entry("description"))
+    , m_xDescriptionED(m_xBuilder->weld_text_view("description"))
     , m_xPrevFT(m_xBuilder->weld_label("prev_label"))
     , m_xPrevLB(m_xBuilder->weld_combo_box("prev"))
     , m_xNextFT(m_xBuilder->weld_label("next_label"))

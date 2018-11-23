@@ -474,7 +474,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
                                                   GetView().GetViewFrame(),
-                                                  &GetView().GetViewFrame()->GetWindow(),
+                                                  GetView().GetFrameWeld(),
                                                   aSet));
             if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
             {
