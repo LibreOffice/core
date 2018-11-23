@@ -346,9 +346,6 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
     // call Get- and LoseFocus
     if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
     {
-        if ( pOldFocusWindow->IsTracking() &&
-             (pSVData->maWinData.mnTrackFlags & StartTrackingFlags::FocusCancel) )
-            pOldFocusWindow->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Focus );
         NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pOldFocusWindow );
         if ( !ImplCallPreNotify( aNEvt ) )
             pOldFocusWindow->CompatLoseFocus();
