@@ -2773,6 +2773,16 @@ if test $_os = Darwin -o $_os = iOS; then
     FRAMEWORKSHOME="$MACOSX_SDK_PATH/System/Library/Frameworks"
     MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
 
+    AC_MSG_CHECKING([whether Xcode is new enough])
+    my_xcode_ver1=$(xcrun xcodebuild -version | head -n 1)
+    my_xcode_ver2=${my_xcode_ver1#Xcode }
+    my_xcode_ver3=$(printf %s "$my_xcode_ver2" | $AWK -F. '{ print $1*100+($2<100?$2:99) }')
+    if test "$my_xcode_ver3" -ge 903; then
+        AC_MSG_RESULT([yes ($my_xcode_ver2)])
+    else
+        AC_MSG_ERROR(["$my_xcode_ver1" is too old or unrecognized, must be at least Xcode 9.3])
+    fi
+
     case "$with_macosx_version_min_required" in
     10.9)
         MAC_OS_X_VERSION_MIN_REQUIRED="1090"
