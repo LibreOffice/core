@@ -105,12 +105,11 @@ enum class SvXMLImportFlags {
     SCRIPTS         = 0x0020,
     SETTINGS        = 0x0040,
     FONTDECLS       = 0x0080,
-    EMBEDDED        = 0x0100,
-    ALL             = 0xffff
+    ALL             = 0x00ff
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvXMLImportFlags> : is_typed_flags<SvXMLImportFlags, 0xffff> {};
+    template<> struct typed_flags<SvXMLImportFlags> : is_typed_flags<SvXMLImportFlags, 0x00ff> {};
 }
 
 class SvXMLImportFastNamespaceHandler : public ::cppu::WeakImplHelper< css::xml::sax::XFastNamespaceHandler >
