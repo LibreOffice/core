@@ -1208,7 +1208,7 @@ private:
     static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer)
     {
         // #i1820# use locale specific decimal separator
-        if (pEvent->keyval == GDK_KEY_KP_Decimal)
+        if (pEvent->keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
         {
             OUString aSep(Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
             pEvent->keyval = aSep[0];
