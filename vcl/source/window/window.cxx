@@ -2232,7 +2232,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                     aBounds.AdjustBottom(workaround_border );
                     aInvRegion = aBounds;
                 }
-                if ( !mpWindowImpl->mbNoParentUpdate && !(nFlags & ShowFlags::NoParentUpdate) )
+                if ( !mpWindowImpl->mbNoParentUpdate )
                 {
                     if ( !aInvRegion.IsEmpty() )
                         ImplInvalidateParentFrameRegion( aInvRegion );
