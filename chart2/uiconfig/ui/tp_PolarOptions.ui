@@ -29,7 +29,7 @@
               <object class="GtkCheckButton" id="CB_CLOCKWISE">
                 <property name="label" translatable="yes" context="tp_PolarOptions|CB_CLOCKWISE">_Clockwise direction</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
@@ -167,7 +167,7 @@
               <object class="GtkCheckButton" id="CB_INCLUDE_HIDDEN_CELLS_POLAR">
                 <property name="label" translatable="yes" context="tp_PolarOptions|CB_INCLUDE_HIDDEN_CELLS_POLAR">Include _values from hidden cells</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>

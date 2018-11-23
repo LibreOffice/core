@@ -23,7 +23,7 @@
       <object class="GtkCheckButton" id="CBX_RIGHT_ANGLED_AXES">
         <property name="label" translatable="yes" context="tp_3D_SceneGeometry|CBX_RIGHT_ANGLED_AXES">_Right-angled axes</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
@@ -81,7 +81,7 @@
       <object class="GtkCheckButton" id="CBX_PERSPECTIVE">
         <property name="label" translatable="yes" context="tp_3D_SceneGeometry|CBX_PERSPECTIVE">_Perspective</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
