@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <config_clang.h>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -466,7 +465,7 @@ public:
         mpSecondArg( rSecondArg )
     {
     }
-#if (defined(__clang__) && CLANG_VERSION >=30700) || (defined (__GNUC__) && __GNUC__ >= 8)
+#if defined(__clang__) || (defined (__GNUC__) && __GNUC__ >= 8)
     //GetEquationValueAsDouble calls isFinite on the result
     __attribute__((no_sanitize("float-divide-by-zero")))
 #endif
