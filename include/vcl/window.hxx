@@ -169,14 +169,13 @@ namespace o3tl
 enum class ShowFlags
 {
     NONE                       = 0x0000,
-    NoParentUpdate             = 0x0001,
     NoFocusChange              = 0x0002,
     NoActivate                 = 0x0004,
     ForegroundTask             = 0x0008,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ShowFlags> : is_typed_flags<ShowFlags, 0x000f> {};
+    template<> struct typed_flags<ShowFlags> : is_typed_flags<ShowFlags, 0x000e> {};
 }
 
 // Flags for SetZOrder()
