@@ -89,7 +89,7 @@
           <object class="GtkCheckButton" id="CB_SHADING">
             <property name="label" translatable="yes" context="tp_3D_SceneAppearance|CB_SHADING">_Shading</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
@@ -105,7 +105,7 @@
           <object class="GtkCheckButton" id="CB_OBJECTLINES">
             <property name="label" translatable="yes" context="tp_3D_SceneAppearance|CB_OBJECTLINES">_Object borders</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
@@ -121,7 +121,7 @@
           <object class="GtkCheckButton" id="CB_ROUNDEDEDGE">
             <property name="label" translatable="yes" context="tp_3D_SceneAppearance|CB_ROUNDEDEDGE">_Rounded edges</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
