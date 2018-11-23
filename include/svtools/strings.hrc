@@ -53,7 +53,7 @@
 #define STR_FORMAT_ID_STARIMPRESS_50            NC_("STR_FORMAT_ID_STARIMPRESS_50", "StarImpress 5.0 object")
 #define STR_FORMAT_ID_STARDRAW_50               NC_("STR_FORMAT_ID_STARDRAW_50", "StarDraw 5.0 object")
 #define STR_FORMAT_ID_STARCALC                  NC_("STR_FORMAT_ID_STARCALC", "StarCalc object")
-#define STR_FORMAT_ID_STARCALC_40               NC_("STR_FORMAT_ID_STARCALC_40", "StarCalc  4.0 object")
+#define STR_FORMAT_ID_STARCALC_40               NC_("STR_FORMAT_ID_STARCALC_40", "StarCalc 4.0 object")
 #define STR_FORMAT_ID_STARCALC_50               NC_("STR_FORMAT_ID_STARCALC_50", "StarCalc 5.0 object")
 #define STR_FORMAT_ID_STARCHART                 NC_("STR_FORMAT_ID_STARCHART", "StarChart object")
 #define STR_FORMAT_ID_STARCHART_40              NC_("STR_FORMAT_ID_STARCHART_40", "StarChart 4.0 object")

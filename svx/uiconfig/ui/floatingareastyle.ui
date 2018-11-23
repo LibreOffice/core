@@ -284,7 +284,7 @@
               <object class="GtkSpinButton" id="centery:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes" context="floatingareastyle|centery|tooltip_text">Specify the vertical offset percentage from the center for the gradient shading style.  50% is the vertical center.</property>
+                <property name="tooltip_text" translatable="yes" context="floatingareastyle|centery|tooltip_text">Specify the vertical offset percentage from the center for the gradient shading style. 50% is the vertical center.</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>

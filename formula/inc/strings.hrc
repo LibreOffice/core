@@ -26,7 +26,7 @@
 #define STR_REQUIRED        NC_("STR_REQUIRED", "(required)")
 
 #define STR_TITLE1          NC_("STR_TITLE1", "Function Wizard")
-#define STR_TITLE2          NC_("STR_TITLE2", "Function Wizard  -")
+#define STR_TITLE2          NC_("STR_TITLE2", "Function Wizard -")
 #define STR_END             NC_("STR_END", "~End")
 #define RID_STR_SHRINK      NC_("RID_STR_SHRINK", "Shrink")
 #define RID_STR_EXPAND      NC_("RID_STR_EXPAND", "Expand")
