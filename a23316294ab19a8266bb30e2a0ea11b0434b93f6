@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df6247ed_d2653ae3",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-23T09:57:21Z",
+      "side": 1,
+      "message": "If you could please separate this block of code into another patch? It fixes the lack of images in menus problem all right, but it\u0027s only tangential to the two tdf# bugs mentioned in the commit msg\n\nOtherwise as always, thumbs up, great work",
+      "revId": "a23316294ab19a8266bb30e2a0ea11b0434b93f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
