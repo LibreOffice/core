@@ -1506,7 +1506,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // rotation
     if (SfxItemState::SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_DELTA_ANGLE, true, &pPoolItem)) {
-        nRotateAngle = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() + nOldRotateAngle;
+        nRotateAngle = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         bRotate = (nRotateAngle != 0);
     }
 
