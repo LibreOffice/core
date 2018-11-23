@@ -77,7 +77,7 @@ class Qt5MenuItem : public SalMenuItem
 {
 public:
     Qt5MenuItem(const SalItemParams*);
-    virtual ~Qt5MenuItem();
+    virtual ~Qt5MenuItem() override;
 
     Qt5Menu* mpParentMenu; // The menu into which this menu item is inserted
     Qt5Menu* mpSubMenu; // Submenu of this item (if defined)
