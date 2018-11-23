@@ -673,7 +673,7 @@ public:
 
     virtual VclPtr<VclAbstractDialog>          CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateFrameTabDialog( const OUString &rDialogType,
-                                                SfxViewFrame *pFrame, vcl::Window *pParent,
+                                                SfxViewFrame *pFrame, weld::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrame  = true,
                                                 const OString& sDefPage = OString()) override;
