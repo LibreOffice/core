@@ -34,6 +34,7 @@
 #include <vcl/treelistbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld.hxx>
 
 class Button;
 class SaveInData;
@@ -123,6 +124,46 @@ public:
     OUString      GetHelpText( bool bConsiderParent = true );
 };
 
+class CuiConfigFunctionListBox
+{
+    friend class CuiConfigGroupListBox;
+    SfxGroupInfoArr_Impl aArr;
+
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+
+public:
+    CuiConfigFunctionListBox(std::unique_ptr<weld::TreeView> xTreeView);
+    void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_row_activated(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_row_activated(rLink); }
+    void freeze() { m_xTreeView->freeze(); }
+    void thaw() { m_xTreeView->thaw(); }
+    void append(const OUString& rId, const OUString& rStr) { m_xTreeView->append(rId, rStr); }
+    void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
+    {
+        m_xTreeView->insert(nullptr, -1, rStr, &rId, nullptr, nullptr, &rImage, false);
+    }
+    int n_children() const { return m_xTreeView->n_children(); }
+    void select(int pos) { m_xTreeView->select(pos); }
+    std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
+    bool get_iter_first(weld::TreeIter& rIter) const { return m_xTreeView->get_iter_first(rIter); }
+    // set iter to point to next node at the current level
+    bool iter_next_sibling(weld::TreeIter& rIter) const { return m_xTreeView->iter_next_sibling(rIter); }
+    // set iter to point to next node, depth first, then sibling
+    bool iter_next(weld::TreeIter& rIter) const { return m_xTreeView->iter_next(rIter); }
+    OUString get_text(const weld::TreeIter& rIter) const { return m_xTreeView->get_text(rIter); }
+    void scroll_to_row(const weld::TreeIter& rIter) { return m_xTreeView->scroll_to_row(rIter); }
+    void select(const weld::TreeIter& rIter) { m_xTreeView->select(rIter); }
+
+    ~CuiConfigFunctionListBox();
+
+    void          ClearAll();
+    OUString      GetCurCommand();
+    OUString      GetCurLabel();
+    OUString      GetSelectedScriptURI();
+    OUString      GetHelpText( bool bConsiderParent = true );
+};
+
 struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox : public SvTreeListBox
 {
@@ -172,6 +213,58 @@ public:
                              bool bEventMode);
     void                SetFunctionListBox( SfxConfigFunctionListBox *pBox )
                         { pFunctionListBox = pBox; }
+    void                GroupSelected();
+    void                SelectMacro( const SfxMacroInfoItem* );
+    void                SelectMacro( const OUString&, const OUString& );
+    void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
+};
+
+struct CuiConfigGroupBoxResource_Impl;
+class CuiConfigGroupListBox
+{
+    std::unique_ptr<CuiConfigGroupBoxResource_Impl> xImp;
+    CuiConfigFunctionListBox* m_pFunctionListBox;
+    SfxGroupInfoArr_Impl aArr;
+    OUString m_sModuleLongName;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
+    css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
+    css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
+    SfxStylesInfo_Impl* m_pStylesInfo;
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+
+    OUString GetImage(
+        const css::uno::Reference< css::script::browse::XBrowseNode >& node,
+        css::uno::Reference< css::uno::XComponentContext > const & xCtx,
+        bool bIsRootNode);
+
+    static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
+        css::uno::Reference< css::uno::XComponentContext > const & xCtx,
+        OUString const & docName);
+
+    void InitModule();
+    void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
+                        weld::TreeIter* pParentEntry, bool bCheapChildrenOnDemand);
+    void FillFunctionsList(const css::uno::Sequence< css::frame::DispatchInformation >& xCommands);
+    OUString MapCommand2UIName(const OUString& sCommand);
+
+    DECL_LINK(ExpandingHdl, weld::TreeIter&, bool);
+    DECL_LINK(OpenCurrentHdl, weld::TreeView&, void);
+
+public:
+    CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTreeView);
+    void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    ~CuiConfigGroupListBox();
+    void                ClearAll();
+
+    void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                             const css::uno::Reference< css::frame::XFrame >&          xFrame,
+                             const OUString&                                        sModuleLongName,
+                             bool bEventMode);
+    void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
+                        { m_pFunctionListBox = pBox; }
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const OUString&, const OUString& );

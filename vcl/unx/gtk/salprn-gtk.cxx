@@ -473,7 +473,7 @@ GtkPrintDialog::impl_initCustomTab()
                     const int nLen = aHelpIds.getLength();
                     aHelpTexts.realloc(nLen);
                     for (int j = 0; j != nLen; ++j)
-                        aHelpTexts[j] = pHelp->GetHelpText(aHelpIds[j], nullptr);
+                        aHelpTexts[j] = pHelp->GetHelpText(aHelpIds[j], static_cast<weld::Widget*>(nullptr));
                 }
                 else // fallback
                     aHelpTexts = aHelpIds;
