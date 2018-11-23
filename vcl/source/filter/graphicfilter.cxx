@@ -2497,7 +2497,6 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         case ConvertDataFormat::WMF: aShortName = WMF_SHORTNAME; break;
         case ConvertDataFormat::EMF: aShortName = EMF_SHORTNAME; break;
         case ConvertDataFormat::SVG: aShortName = SVG_SHORTNAME; break;
-        case ConvertDataFormat::PDF: aShortName = PDF_SHORTNAME; break;
 
         default:
         break;

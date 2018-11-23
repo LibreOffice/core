@@ -1068,8 +1068,6 @@ include/vcl/ptrstyle.hxx:78
     enum PointerStyle CopyFiles
 include/vcl/ptrstyle.hxx:92
     enum PointerStyle Chart
-include/vcl/salctype.hxx:41
-    enum ConvertDataFormat PDF
 include/vcl/vclenum.hxx:37
     enum MenuItemBits POPUPSELECT
 include/vcl/vclenum.hxx:143

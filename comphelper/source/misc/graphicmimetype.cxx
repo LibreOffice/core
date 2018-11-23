@@ -114,8 +114,6 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForConvertDataFormat(ConvertDataForma
             return OUString("image/x-emf");
         case ConvertDataFormat::SVG:
             return OUString("image/svg+xml");
-        case ConvertDataFormat::PDF:
-            return OUString("application/pdf");
         case ConvertDataFormat::MET: // What is this?
         case ConvertDataFormat::Unknown:
         default:
