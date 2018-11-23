@@ -708,8 +708,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
                 // extract the module name from the string like "Sheet1 (Example1)"
                 if( aDesc.GetLibSubName() == IDEResId(RID_STR_DOCUMENT_OBJECTS) )
                 {
-                    sal_Int32 nIndex = 0;
-                    aModName = aModName.getToken( 0, ' ', nIndex );
+                    aModName = aModName.getToken( 0, ' ' );
                 }
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(),
                                   aModName, TreeListBox::ConvertType( aDesc.GetType() ) );
