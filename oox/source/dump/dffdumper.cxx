@@ -154,7 +154,7 @@ sal_uInt32 DffStreamObject::dumpDffSimpleColor( const String& rName )
 
 namespace {
 
-enum PropType { PROPTYPE_BINARY, PROPTYPE_STRING, PROPTYPE_BLIP, PROPTYPE_COLORARRAY };
+enum class PropType { Binary };
 
 struct PropInfo
 {
@@ -185,7 +185,7 @@ void DffStreamObject::dumpDffOpt()
         if( getFlag( nPropId, DFF_OPT_COMPLEX ) )
         {
             writeHexItem( "complex-size", nValue, "CONV-DEC" );
-            aPropInfos.emplace_back( String( "property-data" ), PROPTYPE_BINARY, nBaseId, nValue );
+            aPropInfos.emplace_back( String( "property-data" ), PropType::Binary, nBaseId, nValue );
         }
         else
         {
@@ -205,18 +205,10 @@ void DffStreamObject::dumpDffOpt()
         IndentGuard aIndent( mxOut );
         switch(propInfo.meType)
         {
-            case PROPTYPE_BINARY:
+            case PropType::Binary:
                 dumpBinary( propInfo.maName, propInfo.mnSize );
             break;
-            case PROPTYPE_STRING:
-                dumpUnicodeArray( propInfo.maName, propInfo.mnSize / 2, true );
-            break;
-            case PROPTYPE_BLIP:
-                dumpBinary( propInfo.maName, propInfo.mnSize );
-            break;
-            case PROPTYPE_COLORARRAY:
-                dumpBinary( propInfo.maName, propInfo.mnSize );
-            break;
+            default: assert(false && "missing implementation?");
         }
     }
 }
