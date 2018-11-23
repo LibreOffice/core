@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df6247ed_92c5825e",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-23T13:33:10Z",
+      "side": 1,
+      "message": "Suggestion: Remove the if and let the sortCompare",
+      "range": {
+        "startLine": 299,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 19
+      },
+      "revId": "412266255e892773db21ac19bfb42c1f051706d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df6247ed_52a5cab4",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-23T13:33:10Z",
+      "side": 1,
+      "message": "use a local bool var to store returned value of is_sorted\nthen!\nif (!bIsorted)\n#if !defined NDEBUG\n  assert(false);\n#else\n  SAL_WARN(... \"not sorted message\")\n#end if",
+      "range": {
+        "startLine": 314,
+        "startChar": 16,
+        "endLine": 314,
+        "endChar": 30
+      },
+      "revId": "412266255e892773db21ac19bfb42c1f051706d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
