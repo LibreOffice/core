@@ -228,6 +228,9 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         rBind.Update(nOldSId);
     }
 
+    // for LibreOfficeKit - choosing a shape should construct it directly
+    bool bCreateDirectly = false;
+
     switch ( nSId )
     {
         case SID_TEXTEDIT:  // BASIC ???
@@ -522,6 +525,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             SetCurrentFunction( FuConstructCustomShape::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
             rReq.Done();
 
+            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+
             if ( nSId != SID_DRAW_CS_ID )
             {
                 SfxBindings& rBind = GetViewFrame()->GetBindings();
@@ -599,7 +604,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     }
 
     // with qualifier construct directly
-    if(HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1 || comphelper::LibreOfficeKit::isActive()))
+    if(HasCurrentFunction() && ((rReq.GetModifier() & KEY_MOD1) || bCreateDirectly))
     {
         // get SdOptions
         SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
