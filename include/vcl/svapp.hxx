@@ -70,7 +70,9 @@ class KeyEvent;
 class MouseEvent;
 struct ImplSVEvent;
 struct ConvertData;
-
+namespace {
+class XFrameImpl;
+}
 namespace com {
 namespace sun {
 namespace star {
@@ -1126,14 +1128,6 @@ public:
     */
     static DialogCancelMode     GetDialogCancelMode();
 
-    /** Sets the dialog cancel mode for headless environments.
-
-     @param     mode            DialogCancel mode value
-
-     @see GetDialogCancelMode, IsDialogCancelEnabled
-    */
-    static void                 SetDialogCancelMode( DialogCancelMode mode );
-
     /** Determines if dialog cancel mode is enabled.
 
      @returns True if dialog cancel mode is enabled, false if disabled.
@@ -1377,7 +1371,18 @@ public:
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage);
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
+
 private:
+    friend class XFrameImpl;
+
+    /** Sets the dialog cancel mode for headless environments.
+
+     @param     mode            DialogCancel mode value
+
+     @see GetDialogCancelMode, IsDialogCancelEnabled
+    */
+    static void SetDialogCancelMode(DialogCancelMode mode);
+
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };
 
