@@ -552,45 +552,45 @@ void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
 
 void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 {
+    if (!mpNSWindow)
+        return;
+
     OSX_SALDATA_RUNINMAIN( SetWindowState( pState ) )
 
-    if ( mpNSWindow )
+    // set normal state
+    NSRect aStateRect = [mpNSWindow frame];
+    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
+    CocoaToVCL(aStateRect);
+    if (pState->mnMask & WindowStateMask::X)
+        aStateRect.origin.x = float(pState->mnX);
+    if (pState->mnMask & WindowStateMask::Y)
+        aStateRect.origin.y = float(pState->mnY);
+    if (pState->mnMask & WindowStateMask::Width)
+        aStateRect.size.width = float(pState->mnWidth);
+    if (pState->mnMask & WindowStateMask::Height)
+        aStateRect.size.height = float(pState->mnHeight);
+    VCLToCocoa(aStateRect);
+    aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
+    [mpNSWindow setFrame: aStateRect display: NO];
+
+    if (pState->mnState == WindowStateState::Minimized)
+        [mpNSWindow miniaturize: NSApp];
+    else if ([mpNSWindow isMiniaturized])
+        [mpNSWindow deminiaturize: NSApp];
+
+    /* ZOOMED is not really maximized (actually it toggles between a user set size and
+       the program specified one), but comes closest since the default behavior is
+       "maximized" if the user did not intervene
+     */
+    if (pState->mnState == WindowStateState::Maximized)
     {
-        // set normal state
-        NSRect aStateRect = [mpNSWindow frame];
-        aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
-        CocoaToVCL( aStateRect );
-        if( pState->mnMask & WindowStateMask::X )
-            aStateRect.origin.x = float(pState->mnX);
-        if( pState->mnMask & WindowStateMask::Y )
-            aStateRect.origin.y = float(pState->mnY);
-        if( pState->mnMask & WindowStateMask::Width )
-            aStateRect.size.width = float(pState->mnWidth);
-        if( pState->mnMask & WindowStateMask::Height )
-            aStateRect.size.height = float(pState->mnHeight);
-        VCLToCocoa( aStateRect );
-        aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
-
-        [mpNSWindow setFrame: aStateRect display: NO];
-        if( pState->mnState == WindowStateState::Minimized )
-            [mpNSWindow miniaturize: NSApp];
-        else if( [mpNSWindow isMiniaturized] )
-            [mpNSWindow deminiaturize: NSApp];
-
-        /* ZOOMED is not really maximized (actually it toggles between a user set size and
-           the program specified one), but comes closest since the default behavior is
-           "maximized" if the user did not intervene
-        */
-        if( pState->mnState == WindowStateState::Maximized )
-        {
-            if(! [mpNSWindow isZoomed])
-                [mpNSWindow zoom: NSApp];
-        }
-        else
-        {
-            if( [mpNSWindow isZoomed] )
-                [mpNSWindow zoom: NSApp];
-        }
+        if (![mpNSWindow isZoomed])
+            [mpNSWindow zoom: NSApp];
+    }
+    else
+    {
+        if ([mpNSWindow isZoomed])
+            [mpNSWindow zoom: NSApp];
     }
 
     // get new geometry
@@ -602,7 +602,6 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
         mbPositioned = true;
         nEvent = SalEvent::Move;
     }
-
     if( pState->mnMask & (WindowStateMask::Width | WindowStateMask::Height) )
     {
         mbSized = true;
@@ -612,7 +611,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     if( nEvent != SalEvent::NONE )
         CallCallback( nEvent, nullptr );
 
-    if( mbShown && mpNSWindow )
+    if (mbShown)
     {
         // trigger filling our backbuffer
         SendPaintEvent();
@@ -757,31 +756,25 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
             [NSMenu setMenuBarVisible:NO];
 
         maFullScreenRect = [mpNSWindow frame];
-        {
-            [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: mbShown ? YES : NO];
-        }
 
-        UpdateFrameGeometry();
-
-        if( mbShown )
-            CallCallback( SalEvent::MoveResize, nullptr );
+        [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: mbShown ? YES : NO];
     }
     else
     {
-        {
-            [mpNSWindow setFrame: maFullScreenRect display: mbShown ? YES : NO];
-        }
-        UpdateFrameGeometry();
-
-        if( mbShown )
-            CallCallback( SalEvent::MoveResize, nullptr );
+        [mpNSWindow setFrame: maFullScreenRect display: mbShown ? YES : NO];
 
         // show the dock and the menubar
         [NSMenu setMenuBarVisible:YES];
     }
-    if( mbShown )
+
+    UpdateFrameGeometry();
+    if (mbShown)
+    {
+        CallCallback(SalEvent::MoveResize, nullptr);
+
         // trigger filling our backbuffer
         SendPaintEvent();
+    }
 }
 
 void AquaSalFrame::StartPresentation( bool bStart )
@@ -1661,11 +1654,8 @@ void AquaSalFrame::ResetClipRegion()
 
     if( mpNSView && mbShown )
         [mpNSView setNeedsDisplay: YES];
-    if( mpNSWindow )
-    {
-        [mpNSWindow setOpaque: YES];
-        [mpNSWindow invalidateShadow];
-    }
+    [mpNSWindow setOpaque: YES];
+    [mpNSWindow invalidateShadow];
 }
 
 void AquaSalFrame::BeginSetClipRegion( sal_uLong nRects )
@@ -1718,12 +1708,9 @@ void AquaSalFrame::EndSetClipRegion()
     }
     if( mpNSView && mbShown )
         [mpNSView setNeedsDisplay: YES];
-    if( mpNSWindow )
-    {
-        [mpNSWindow setOpaque: (mrClippingPath != nullptr) ? NO : YES];
-        [mpNSWindow setBackgroundColor: [NSColor clearColor]];
-        // shadow is invalidated when view gets drawn again
-    }
+    [mpNSWindow setOpaque: (mrClippingPath != nullptr) ? NO : YES];
+    [mpNSWindow setBackgroundColor: [NSColor clearColor]];
+    // shadow is invalidated when view gets drawn again
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
