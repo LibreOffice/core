@@ -1098,14 +1098,6 @@ include/vcl/window.hxx:121
     enum TrackingEventFlags DontCallHdl
 include/vcl/window.hxx:172
     enum ShowFlags NoParentUpdate
-include/vcl/window.hxx:298
-    enum StartTrackingFlags KeyInput
-include/vcl/window.hxx:300
-    enum StartTrackingFlags NoKeyCancel
-include/vcl/window.hxx:303
-    enum StartTrackingFlags MouseButtonDown
-include/vcl/window.hxx:304
-    enum StartTrackingFlags FocusCancel
 include/xmloff/shapeexport.hxx:53
     enum XMLShapeExportFlags WIDTH
 include/xmloff/shapeexport.hxx:54

@@ -687,8 +687,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
         }
         else if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
-            if ( pSVData->maWinData.mpTrackWin &&
-                 !(pSVData->maWinData.mnTrackFlags & StartTrackingFlags::MouseButtonDown) )
+            if ( pSVData->maWinData.mpTrackWin )
                 bRet = true;
             else
             {
@@ -919,7 +918,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         {
             sal_uInt16 nOrigCode = aKeyCode.GetCode();
 
-            if ( (nOrigCode == KEY_ESCAPE) && !(pSVData->maWinData.mnTrackFlags & StartTrackingFlags::NoKeyCancel) )
+            if ( nOrigCode == KEY_ESCAPE )
             {
                 pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Key );
                 if ( pSVData->maWinData.mpFirstFloat )
@@ -940,7 +939,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Key );
                 return true;
             }
-            else if ( !(pSVData->maWinData.mnTrackFlags & StartTrackingFlags::KeyInput) )
+            else
                 return true;
         }
 
