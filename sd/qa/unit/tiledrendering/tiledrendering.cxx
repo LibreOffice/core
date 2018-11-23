@@ -2187,10 +2187,8 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     CPPUNIT_ASSERT(pTextObj);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TEXT), pTextObj->GetObjIdentifier());
     Point aPos = pTextObj->GetLastBoundRect().TopLeft();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(6591), aPos.getX(), 100);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7430), aPos.getY(), 100);
-
-    comphelper::LibreOfficeKit::setActive(false);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(12957), aPos.getX(), 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7377), aPos.getY(), 100);
 }
 
 void SdTiledRenderingTest::testTdf115873()
