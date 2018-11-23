@@ -1617,7 +1617,11 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     {
         if( mpImpl->mpItemSet == nullptr )
         {
-            mpImpl->mpItemSet = GetSdrObject()->GetMergedItemSet().Clone();
+            mpImpl->mpItemSet.reset(new SfxItemSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(),  {{pMap->nWID, pMap->nWID}}));
+        }
+        else
+        {
+            mpImpl->mpItemSet->MergeRange(pMap->nWID, pMap->nWID);
         }
         pSet = mpImpl->mpItemSet.get();
     }
