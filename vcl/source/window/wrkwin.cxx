@@ -173,19 +173,16 @@ void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nF
         mbPresentationFull      = mbFullScreenMode;
         mnPresentationFlags     = nFlags;
 
-        if ( !(mnPresentationFlags & PresentationFlags::NoFullScreen) )
-            ShowFullScreenMode( true, nDisplayScreen );
+        ShowFullScreenMode( true, nDisplayScreen );
         if ( !mbSysChild )
         {
             if ( mnPresentationFlags & PresentationFlags::HideAllApps )
                 mpWindowImpl->mpFrame->SetAlwaysOnTop( true );
-            if ( !(mnPresentationFlags & PresentationFlags::NoAutoShow) )
-                ToTop();
+            ToTop();
             mpWindowImpl->mpFrame->StartPresentation( true );
         }
 
-        if ( !(mnPresentationFlags & PresentationFlags::NoAutoShow) )
-            Show();
+        Show();
     }
     else
     {
