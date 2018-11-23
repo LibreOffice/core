@@ -153,19 +153,8 @@ void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
         nTextStyle &= ~DrawTextFlags(DrawTextFlags::EndEllipsis | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
         nTextStyle |= DrawTextFlags::PathEllipsis;
     }
-    if ( nDrawFlags & DrawFlags::NoMnemonic )
-    {
-        if ( nTextStyle & DrawTextFlags::Mnemonic )
-        {
-            aText = GetNonMnemonicString( aText );
-            nTextStyle &= ~DrawTextFlags::Mnemonic;
-        }
-    }
-    if ( !(nDrawFlags & DrawFlags::NoDisable) )
-    {
-        if ( !IsEnabled() )
-            nTextStyle |= DrawTextFlags::Disable;
-    }
+    if ( !IsEnabled() )
+        nTextStyle |= DrawTextFlags::Disable;
     if ( (nDrawFlags & DrawFlags::Mono) ||
          (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
         nTextStyle |= DrawTextFlags::Mono;
@@ -232,8 +221,8 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();
 
-    bool bBorder = !(nFlags & DrawFlags::NoBorder ) && (GetStyle() & WB_BORDER);
-    bool bBackground = !(nFlags & DrawFlags::NoBackground) && IsControlBackground();
+    bool bBorder = (GetStyle() & WB_BORDER);
+    bool bBackground = IsControlBackground();
     if ( bBorder || bBackground )
     {
         tools::Rectangle aRect( aPos, aSize );
@@ -735,7 +724,7 @@ void FixedBitmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 }
 
 void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                        DrawFlags nFlags )
+                        DrawFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -745,7 +734,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
     pDev->SetMapMode();
 
     // Border
-    if ( !(nFlags & DrawFlags::NoBorder) && (GetStyle() & WB_BORDER) )
+    if ( GetStyle() & WB_BORDER )
     {
         DecorationView aDecoView( pDev );
         aRect = aDecoView.DrawFrame( aRect, DrawFrameStyle::DoubleIn );
@@ -825,15 +814,12 @@ FixedImage::FixedImage( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-void FixedImage::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
+void FixedImage::ImplDraw( OutputDevice* pDev,
                            const Point& rPos, const Size& rSize )
 {
     DrawImageFlags nStyle = DrawImageFlags::NONE;
-    if ( !(nDrawFlags & DrawFlags::NoDisable) )
-    {
-        if ( !IsEnabled() )
-            nStyle |= DrawImageFlags::Disable;
-    }
+    if ( !IsEnabled() )
+        nStyle |= DrawImageFlags::Disable;
 
     Image *pImage = &maImage;
 
@@ -876,7 +862,7 @@ void FixedImage::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void FixedImage::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    ImplDraw(&rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
+    ImplDraw(&rRenderContext, Point(), GetOutputSizePixel());
 }
 
 Size FixedImage::GetOptimalSize() const
@@ -885,7 +871,7 @@ Size FixedImage::GetOptimalSize() const
 }
 
 void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                       DrawFlags nFlags )
+                       DrawFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -895,12 +881,12 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetMapMode();
 
     // Border
-    if ( !(nFlags & DrawFlags::NoBorder) && (GetStyle() & WB_BORDER) )
+    if ( GetStyle() & WB_BORDER )
     {
         ImplDrawFrame( pDev, aRect );
     }
     pDev->IntersectClipRegion( aRect );
-    ImplDraw( pDev, nFlags, aRect.TopLeft(), aRect.GetSize() );
+    ImplDraw( pDev, aRect.TopLeft(), aRect.GetSize() );
 
     pDev->Pop();
 }

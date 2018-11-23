@@ -1106,16 +1106,6 @@ include/vcl/window.hxx:303
     enum StartTrackingFlags MouseButtonDown
 include/vcl/window.hxx:304
     enum StartTrackingFlags FocusCancel
-include/vcl/window.hxx:373
-    enum DrawFlags NoBorder
-include/vcl/window.hxx:375
-    enum DrawFlags NoDisable
-include/vcl/window.hxx:376
-    enum DrawFlags NoMnemonic
-include/vcl/window.hxx:377
-    enum DrawFlags NoSelection
-include/vcl/window.hxx:378
-    enum DrawFlags NoBackground
 include/xmloff/shapeexport.hxx:53
     enum XMLShapeExportFlags WIDTH
 include/xmloff/shapeexport.hxx:54

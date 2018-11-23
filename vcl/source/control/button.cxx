@@ -202,25 +202,13 @@ void Button::ImplSetSeparatorX( long nX )
     mpButtonData->mnSeparatorX = nX;
 }
 
-DrawTextFlags Button::ImplGetTextStyle(OUString& rText, WinBits nWinStyle, DrawFlags nDrawFlags )
+DrawTextFlags Button::ImplGetTextStyle( WinBits nWinStyle, DrawFlags nDrawFlags )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle(nWinStyle & ~WB_DEFBUTTON);
 
-    if (nDrawFlags & DrawFlags::NoMnemonic)
-    {
-        if (nTextStyle & DrawTextFlags::Mnemonic)
-        {
-            rText = GetNonMnemonicString( rText );
-            nTextStyle &= ~DrawTextFlags::Mnemonic;
-        }
-    }
-
-    if (!(nDrawFlags & DrawFlags::NoDisable))
-    {
-        if (!IsEnabled())
-            nTextStyle |= DrawTextFlags::Disable;
-    }
+    if (!IsEnabled())
+        nTextStyle |= DrawTextFlags::Disable;
 
     if ((nDrawFlags & DrawFlags::Mono) ||
         (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
@@ -233,7 +221,7 @@ DrawTextFlags Button::ImplGetTextStyle(OUString& rText, WinBits nWinStyle, DrawF
 
 void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
                                   Size& rSize,
-                                  sal_uLong nImageSep, DrawFlags nDrawFlags,
+                                  sal_uLong nImageSep,
                                   DrawTextFlags nTextStyle, tools::Rectangle *pSymbolRect,
                                   bool bAddImageSep)
 {
@@ -250,13 +238,6 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     tools::Rectangle aOutRect( rPos, rSize );
     ImageAlign eImageAlign = mpButtonData->meImageAlign;
     Size aImageSize = mpButtonData->maImage.GetSizePixel();
-
-    if ((nDrawFlags & DrawFlags::NoMnemonic) &&
-        (nTextStyle & DrawTextFlags::Mnemonic))
-    {
-        aText = GetNonMnemonicString(aText);
-        nTextStyle &= ~DrawTextFlags::Mnemonic;
-    }
 
     aImageSize.setWidth( CalcZoom( aImageSize.Width() ) );
     aImageSize.setHeight( CalcZoom( aImageSize.Height() ) );
@@ -482,8 +463,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
     DrawImageFlags nStyle = DrawImageFlags::NONE;
 
-    if (!(nDrawFlags & DrawFlags::NoDisable) &&
-        !IsEnabled())
+    if (!IsEnabled())
     {
         nStyle |= DrawImageFlags::Disable;
     }
@@ -786,7 +766,7 @@ DrawTextFlags PushButton::ImplGetTextStyle( DrawFlags nDrawFlags ) const
     else
         nTextStyle |= DrawTextFlags::VCenter;
 
-    if ( ! ( (nDrawFlags & DrawFlags::NoDisable) || IsEnabled() ) )
+    if ( !IsEnabled() )
         nTextStyle |= DrawTextFlags::Disable;
 
     return nTextStyle;
@@ -857,7 +837,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
 
     pDev->SetTextColor( aColor );
 
-    if ( IsEnabled() || (nDrawFlags & DrawFlags::NoDisable) )
+    if ( IsEnabled() )
         nStyle = DrawSymbolFlags::NONE;
     else
         nStyle = DrawSymbolFlags::Disable;
@@ -886,7 +866,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
             aSymbolRect.SetLeft( aSymbolRect.Right() - nSymbolSize );
 
             ImplDrawAlignedImage( pDev, aPos, aSize, nImageSep,
-                                  nDrawFlags, nTextStyle, nullptr, true );
+                                  nTextStyle, nullptr, true );
         }
         else
             ImplCalcSymbolRect( aSymbolRect );
@@ -907,7 +887,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
     else
     {
         tools::Rectangle aSymbolRect;
-        ImplDrawAlignedImage( pDev, aPos, aSize, nImageSep, nDrawFlags,
+        ImplDrawAlignedImage( pDev, aPos, aSize, nImageSep,
                               nTextStyle, IsSymbol() ? &aSymbolRect : nullptr, true );
 
         if ( IsSymbol() )
@@ -2042,7 +2022,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
              ( HasImage() &&  ! (ImplGetButtonState() & DrawButtonFlags::NoImage) ) )
         {
-            DrawTextFlags nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
+            DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
 
             const long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
             Size aSize( rSize );
@@ -2060,7 +2040,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                 aSize.setHeight( rImageSize.Height() );
             }
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, 1, nDrawFlags, nTextStyle );
+            ImplDrawAlignedImage( pDev, aPos, aSize, 1, nTextStyle );
 
             rMouseRect          = tools::Rectangle( aPos, aSize );
             rMouseRect.SetLeft( rPos.X() );
@@ -3050,7 +3030,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
     if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
          ( HasImage() && !  (ImplGetButtonState() & DrawButtonFlags::NoImage) ) )
     {
-        DrawTextFlags nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
+        DrawTextFlags nTextStyle = Button::ImplGetTextStyle( nWinStyle, nDrawFlags );
 
         const long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
         Size aSize( rSize );
@@ -3068,7 +3048,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
             aSize.setHeight( rImageSize.Height() );
         }
 
-        ImplDrawAlignedImage( pDev, aPos, aSize, 1, nDrawFlags, nTextStyle );
+        ImplDrawAlignedImage( pDev, aPos, aSize, 1, nTextStyle );
 
         rMouseRect          = tools::Rectangle( aPos, aSize );
         rMouseRect.SetLeft( rPos.X() );
