@@ -34,7 +34,7 @@
 #include <svdata.hxx>
 #include <listbox.hxx>
 #include <controldata.hxx>
-
+#include <comphelper/lok.hxx>
 
 struct ComboBoxBounds
 {
@@ -530,8 +530,12 @@ void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
 
 void ComboBox::AdaptDropDownLineCountToMaximum()
 {
-    // adapt to maximum allowed number
-    SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());
+    // Adapt to maximum allowed number.
+    // Limit for LOK as we can't render outside of the dialog canvas.
+    if (comphelper::LibreOfficeKit::isActive())
+        SetDropDownLineCount(11);
+    else
+        SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());
 }
 
 sal_uInt16 ComboBox::GetDropDownLineCount() const
