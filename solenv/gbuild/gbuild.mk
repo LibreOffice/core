@@ -248,6 +248,9 @@ gb_TEST_ENV_VARS := MAX_CONCURRENCY=4
 gb_TEST_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=0
 # Avoid hanging if the cups daemon requests a password:
 gb_TEST_ENV_VARS += SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
+ifeq (,$(SAL_USE_VCLPLUGIN))
+gb_TEST_ENV_VARS += SAL_USE_VCLPLUGIN=svp
+endif
 
 # This is used to detect whether LibreOffice is being built (as opposed to building
 # 3rd-party code). Used for tag deprecation for API we want to
