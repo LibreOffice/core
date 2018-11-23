@@ -16,6 +16,24 @@
       "revId": "a23316294ab19a8266bb30e2a0ea11b0434b93f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df6247ed_52edca23",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2018-11-23T11:09:01Z",
+      "side": 1,
+      "message": "This change actually doesn\u0027t fix lack of images in menus in all cases, it fixes this issue only for updated menu items. I\u0027m still working on correct fix for menu images.\n\nMore importantly, this change fixes crash which happens when I try to open menu \"View\" -\u003e \"Toolbars\" with all other changes from this commit applied, because that menu is updated and menu item \"Formula\" near the end of that menu contains image. It is actually an instance of SvpSalBitmap if you use KDE5 vcl plugin, but it\u0027s reinterpreted as Qt5Bitmap on lines 225-226, and that leads to crash.\n\nIf it\u0027s still necessary, I can move out change to this function into separate commit, but I\u0027ll place it before this change, otherwise this commit would fix one crash issue and introduce another crash issue.\n\nShould I still make a separate change for this function?",
+      "parentUuid": "df6247ed_d2653ae3",
+      "revId": "a23316294ab19a8266bb30e2a0ea11b0434b93f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
