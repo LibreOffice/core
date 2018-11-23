@@ -62,7 +62,8 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
-
+#include <svx/svdview.hxx>
+#include <comphelper/lok.hxx>
 
 // EditView
 
@@ -1600,6 +1601,15 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
         if(GetSdrPageView())
         {
+            const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+            if(bTiledRendering) {
+                // We gets the position in twips
+                if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
+                {
+                    if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                        aRef = OutputDevice::LogicToLogic(aRef, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
+                }
+            }
             GetSdrPageView()->PagePosToLogic(aRef);
         }
 
