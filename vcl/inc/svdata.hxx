@@ -154,6 +154,7 @@ struct ImplSVAppData
     bool                    mbAppQuit = false;              // is Application::Quit() called
     bool                    mbSettingsInit = false;         // true: Settings are initialized
     DialogCancelMode meDialogCancel = DialogCancelMode::Off; // true: All Dialog::Execute() calls will be terminated immediately with return false
+    bool mbRenderToBitmaps = false; // set via svp / headless plugin
 
     /** Controls whether showing any IME status window is toggled on or off.
 
