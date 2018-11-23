@@ -195,6 +195,17 @@ void MacroEventListBox::Enable()
     maHeaderBar->Enable();
 }
 
+CuiMacroEventListBox::CuiMacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView)
+    : m_xTreeView(std::move(xTreeView))
+{
+    m_xTreeView->set_help_id(HID_MACRO_HEADERTABLISTBOX);
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 40, m_xTreeView->get_height_rows(9));
+}
+
+CuiMacroEventListBox::~CuiMacroEventListBox()
+{
+}
+
 // assign button ("Add Command") is enabled only if it is not read only
 // delete button ("Remove Command") is enabled if a current binding exists
 //     and it is not read only

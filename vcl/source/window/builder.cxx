@@ -1932,6 +1932,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 m_aChildren.emplace_back(containerid, xContainer, true);
 
                 VclPtrInstance<HeaderBar> xHeader(xContainer, WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP | WB_3DLOOK);
+                xHeader->set_width_request(0); // let the headerbar width not affect the size requistion
                 OString headerid(id + "-header");
                 xHeader->SetHelpId(m_sHelpRoot + headerid);
                 m_aChildren.emplace_back(headerid, xHeader, true);
@@ -1951,6 +1952,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
             xWindow = xBox;
             xBox->SetNoAutoCurEntry(true);
+            xBox->SetQuickSearch(true);
             xBox->SetHighlightRange(); // select over the whole width
         }
         if (pRealParent != pParent)

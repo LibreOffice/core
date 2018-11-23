@@ -1916,6 +1916,14 @@ public:
         enable_notify_events();
     }
 
+    virtual void scroll_to_row(int pos) override
+    {
+        disable_notify_events();
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        m_xTreeView->MakeVisible(pEntry);
+        enable_notify_events();
+    }
+
     virtual void unselect(int pos) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
@@ -1946,6 +1954,8 @@ public:
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         if (col == -1)
             return SvTabListBox::GetEntryText(pEntry, 0);
+
+        ++col; //skip dummy/expander column
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
             return OUString();
@@ -2097,6 +2107,14 @@ public:
         enable_notify_events();
     }
 
+    virtual void scroll_to_row(const weld::TreeIter& rIter) override
+    {
+        disable_notify_events();
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        m_xTreeView->MakeVisible(rVclIter.iter);
+        enable_notify_events();
+    }
+
     virtual void unselect(const weld::TreeIter& rIter) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't unselect when frozen");
@@ -2114,8 +2132,12 @@ public:
 
     virtual bool iter_has_child(const weld::TreeIter& rIter) const override
     {
-        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-        return rVclIter.iter->HasChildren();
+        weld::TreeIter& rNonConstIter = const_cast<weld::TreeIter&>(rIter);
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rNonConstIter);
+        SvTreeListEntry* restore(rVclIter.iter);
+        bool ret = iter_children(rNonConstIter);
+        rVclIter.iter = restore;
+        return ret;
     }
 
     virtual bool get_row_expanded(const weld::TreeIter& rIter) const override
