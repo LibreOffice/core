@@ -1070,8 +1070,6 @@ include/vcl/ptrstyle.hxx:92
     enum PointerStyle Chart
 include/vcl/salctype.hxx:41
     enum ConvertDataFormat PDF
-include/vcl/splitwin.hxx:37
-    enum SplitWindowItemFlags Invisible
 include/vcl/vclenum.hxx:37
     enum MenuItemBits POPUPSELECT
 include/vcl/vclenum.hxx:143
