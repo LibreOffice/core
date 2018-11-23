@@ -488,6 +488,7 @@ public:
     virtual void unselect(const TreeIter& rIter) = 0;
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
     virtual void expand_row(TreeIter& rIter) = 0;
+    virtual void collapse_row(TreeIter& rIter) = 0;
     virtual OUString get_text(const TreeIter& rIter) const = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual void scroll_to_row(const TreeIter& rIter) = 0;
