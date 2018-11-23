@@ -232,6 +232,9 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     // for LibreOfficeKit - choosing a shape should construct it directly
     bool bCreateDirectly = false;
 
+    // for LibreOfficeKit - choosing a shape should construct it directly
+    bool bCreateDirectly = false;
+
     switch ( nSId )
     {
         case SID_TEXTEDIT:  // BASIC ???
