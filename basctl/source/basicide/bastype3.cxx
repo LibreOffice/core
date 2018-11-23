@@ -315,8 +315,7 @@ SbxVariable* SbTreeListBox::FindVariable(weld::TreeIter* pEntry)
                 // extract the module name from the string like "Sheet1 (Example1)"
                 if( bDocumentObjects )
                 {
-                    sal_Int32 nIndex = 0;
-                    aName = aName.getToken( 0, ' ', nIndex );
+                    aName = aName.getToken( 0, ' ' );
                 }
                 pVar = static_cast<StarBASIC*>(pVar)->FindModule( aName );
                 break;
