@@ -294,19 +294,15 @@ namespace o3tl
 // Flags for StartTracking()
 enum class StartTrackingFlags
 {
-    NONE                 = 0x0000,
-    KeyInput             = 0x0001,
+    NONE                 = 0x0001,
     KeyMod               = 0x0002,
-    NoKeyCancel          = 0x0004,
-    ScrollRepeat         = 0x0008,
-    ButtonRepeat         = 0x0010,
-    MouseButtonDown      = 0x0020,
-    FocusCancel          = 0x0040,
+    ScrollRepeat         = 0x0004,
+    ButtonRepeat         = 0x0008,
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<StartTrackingFlags> : is_typed_flags<StartTrackingFlags, 0x007f> {};
+    template<> struct typed_flags<StartTrackingFlags> : is_typed_flags<StartTrackingFlags, 0x000f> {};
 }
 
 // Flags for StartAutoScroll()
