@@ -41,7 +41,7 @@
                   <object class="GtkRadioButton" id="RBT_OPT_AXIS_1">
                     <property name="label" translatable="yes" context="tp_SeriesToAxis|RBT_OPT_AXIS_1">Primary Y axis</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
@@ -58,7 +58,7 @@
                   <object class="GtkRadioButton" id="RBT_OPT_AXIS_2">
                     <property name="label" translatable="yes" context="tp_SeriesToAxis|RBT_OPT_AXIS_2">Secondary Y axis</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
@@ -266,7 +266,7 @@
                       <object class="GtkRadioButton" id="RB_DONT_PAINT">
                         <property name="label" translatable="yes" context="tp_SeriesToAxis|RB_DONT_PAINT">_Leave gap</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -282,7 +282,7 @@
                       <object class="GtkRadioButton" id="RB_ASSUME_ZERO">
                         <property name="label" translatable="yes" context="tp_SeriesToAxis|RB_ASSUME_ZERO">_Assume zero</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -299,7 +299,7 @@
                       <object class="GtkRadioButton" id="RB_CONTINUE_LINE">
                         <property name="label" translatable="yes" context="tp_SeriesToAxis|RB_CONTINUE_LINE">_Continue line</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
