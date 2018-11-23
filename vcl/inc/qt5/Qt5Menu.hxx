@@ -11,6 +11,8 @@
 
 #include <salmenu.hxx>
 
+#include <memory>
+
 class MenuItemList;
 class QActionGroup;
 class QMenu;
@@ -77,15 +79,18 @@ class Qt5MenuItem : public SalMenuItem
 {
 public:
     Qt5MenuItem(const SalItemParams*);
-    virtual ~Qt5MenuItem() override;
+
+    QAction* getAction() const;
 
     Qt5Menu* mpParentMenu; // The menu into which this menu item is inserted
     Qt5Menu* mpSubMenu; // Submenu of this item (if defined)
-    QAction* mpAction; // action corresponding to this item
+    std::unique_ptr<QAction> mpAction; // action corresponding to this item
+    std::unique_ptr<QMenu> mpMenu; // menu corresponding to this item
     sal_uInt16 mnId; // Item ID
     MenuItemType mnType; // Item type
     bool mbVisible; // Item visibility.
     bool mbEnabled; // Item active.
+    Image maImage; // Item image
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
