@@ -55,12 +55,10 @@ public:
 
     Idle                            m_aFillGroupIdle;
     bool                            m_bGotEvents;
-    bool m_bDummyActivated; ///< has this tab page already been activated
 };
 
 SfxMacroTabPage_Impl::SfxMacroTabPage_Impl()
     : m_bGotEvents(false)
-    , m_bDummyActivated(false)
 {
 }
 
@@ -189,13 +187,6 @@ void SfxMacroTabPage::LaunchFillGroup()
 
 void SfxMacroTabPage::ActivatePage( const SfxItemSet& )
 {
-    // fdo#57553 lazily init script providers, because it is annoying if done
-    // on dialog open (SfxTabDialog::Start_Impl activates all tab pages once!)
-    if (!mpImpl->m_bDummyActivated)
-    {
-        mpImpl->m_bDummyActivated = true;
-        return;
-    }
     LaunchFillGroup();
 }
 
@@ -396,15 +387,15 @@ void SfxMacroTabPage::FillEvents()
 
 namespace
 {
-    VclPtr<SfxMacroTabPage> CreateSfxMacroTabPage( vcl::Window* pParent, const SfxItemSet& rAttrSet )
+    VclPtr<SfxMacroTabPage> CreateSfxMacroTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet)
     {
         return VclPtr<SfxMacroTabPage>::Create( pParent, nullptr, rAttrSet );
     }
 }
 
-VclPtr<SfxTabPage> SfxMacroTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SfxMacroTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    return CreateSfxMacroTabPage(pParent.pParent, *rAttrSet);
+    return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }
 
 SfxMacroAssignDlg::SfxMacroAssignDlg(vcl::Window* pParent,

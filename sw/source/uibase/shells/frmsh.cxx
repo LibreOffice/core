@@ -480,7 +480,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                         nSel & SelectionType::Ole ? OUString("ObjectDialog"):
                                                                                         OUString("FrameDialog"),
                                                         GetView().GetViewFrame(),
-                                                        GetView().GetWindow(),
+                                                        GetView().GetFrameWeld(),
                                                         aSet,
                                                         false,
                                                         sDefPage));

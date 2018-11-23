@@ -1918,6 +1918,7 @@ public:
 
     virtual void scroll_to_row(int pos) override
     {
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
         disable_notify_events();
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         m_xTreeView->MakeVisible(pEntry);
@@ -2109,6 +2110,7 @@ public:
 
     virtual void scroll_to_row(const weld::TreeIter& rIter) override
     {
+        assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
         disable_notify_events();
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
         m_xTreeView->MakeVisible(rVclIter.iter);
