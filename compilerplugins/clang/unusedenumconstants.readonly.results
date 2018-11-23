@@ -1116,10 +1116,6 @@ include/vcl/window.hxx:377
     enum DrawFlags NoSelection
 include/vcl/window.hxx:378
     enum DrawFlags NoBackground
-include/vcl/wrkwin.hxx:37
-    enum PresentationFlags NoFullScreen
-include/vcl/wrkwin.hxx:38
-    enum PresentationFlags NoAutoShow
 include/xmloff/shapeexport.hxx:53
     enum XMLShapeExportFlags WIDTH
 include/xmloff/shapeexport.hxx:54
