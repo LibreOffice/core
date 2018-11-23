@@ -101,19 +101,8 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
 
     if ( GetStyle() & WB_NOLABEL )
         nTextStyle &= ~DrawTextFlags::Mnemonic;
-    if ( nDrawFlags & DrawFlags::NoMnemonic )
-    {
-        if ( nTextStyle & DrawTextFlags::Mnemonic )
-        {
-            aText = GetNonMnemonicString( aText );
-            nTextStyle &= ~DrawTextFlags::Mnemonic;
-        }
-    }
-    if ( !(nDrawFlags & DrawFlags::NoDisable) )
-    {
-        if ( !IsEnabled() )
-            nTextStyle |= DrawTextFlags::Disable;
-    }
+    if ( !IsEnabled() )
+        nTextStyle |= DrawTextFlags::Disable;
     if ( (nDrawFlags & DrawFlags::Mono) ||
          (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
     {

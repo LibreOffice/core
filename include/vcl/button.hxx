@@ -49,9 +49,9 @@ private:
 public:
     SAL_DLLPRIVATE DrawButtonFlags  ImplGetButtonState() const;
     SAL_DLLPRIVATE DrawButtonFlags& ImplGetButtonState();
-    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( OUString& rText, WinBits nWinStyle, DrawFlags nDrawFlags );
+    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( WinBits nWinStyle, DrawFlags nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
-                                              sal_uLong nImageSep, DrawFlags nDrawFlags,
+                                              sal_uLong nImageSep,
                                               DrawTextFlags nTextStyle, tools::Rectangle *pSymbolRect=nullptr, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const tools::Rectangle &rFocusRect );
     SAL_DLLPRIVATE const tools::Rectangle& ImplGetFocusRect() const;

@@ -156,7 +156,7 @@ private:
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
 
 protected:
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev,
                               const Point& rPos, const Size& rSize );
 public:
     explicit        FixedImage( vcl::Window* pParent, WinBits nStyle = 0 );

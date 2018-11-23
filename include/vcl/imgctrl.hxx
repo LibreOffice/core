@@ -45,7 +45,7 @@ public:
     virtual void    LoseFocus() override;
 
 protected:
-    void    ImplDraw( OutputDevice& rDev, DrawFlags nDrawFlags, const Point& rPos, const Size& rSize ) const;
+    void    ImplDraw( OutputDevice& rDev, const Point& rPos, const Size& rSize ) const;
 };
 
 #endif // INCLUDED_VCL_IMGCTRL_HXX
