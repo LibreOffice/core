@@ -48,7 +48,8 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
                     Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()) {
                     report(
                             DiagnosticsEngine::Warning,
-                            "unnecessary copy, rather use <<= operator",
+                            ("unnecessary copy, rather use <<= operator directly with the 'makeAny'"
+                             " argument"),
                             expr->getOperatorLoc())
                       << expr->getSourceRange();
                     return true;
@@ -59,7 +60,8 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
             //expr->getArg(1)->dump();
             report(
                     DiagnosticsEngine::Warning,
-                    "unnecessary copy, rather use <<= operator",
+                    ("unnecessary copy, rather use <<= operator directly with the 'Any' constructor"
+                     " argument"),
                     expr->getOperatorLoc())
               << expr->getSourceRange();
             return true;
