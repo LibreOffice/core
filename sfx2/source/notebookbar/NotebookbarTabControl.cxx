@@ -126,6 +126,20 @@ public:
         mbUseDefaultButtonSize = false;
         SetToolboxButtonSize(ToolBoxButtonSize::Small);
     }
+
+    virtual void KeyInput( const KeyEvent& rKEvt ) override
+    {
+        if ( rKEvt.GetKeyCode().IsMod1() )
+        {
+            sal_uInt16 nCode( rKEvt.GetKeyCode().GetCode() );
+            if ( nCode == KEY_RIGHT || nCode == KEY_LEFT )
+            {
+                GetParent()->KeyInput( rKEvt );
+                return;
+            }
+        }
+        return sfx2::sidebar::SidebarToolBox::KeyInput( rKEvt );
+    }
 };
 
 NotebookbarTabControl::NotebookbarTabControl( Window* pParent )
@@ -137,6 +151,84 @@ NotebookbarTabControl::NotebookbarTabControl( Window* pParent )
 
 NotebookbarTabControl::~NotebookbarTabControl()
 {
+}
+
+void NotebookbarTabControl::ArrowStops( sal_uInt16 nCode )
+{
+    ToolBox* pToolBox( GetToolBox() );
+    PushButton* pOpenMenu( GetOpenMenu() );
+
+    if ( nCode == KEY_LEFT )
+    {
+        if ( HasFocus() )
+        {
+            if ( pToolBox )
+                pToolBox->GrabFocus();
+            else if ( pOpenMenu )
+                pOpenMenu->GrabFocus();
+        }
+        else if ( pToolBox && pToolBox->HasFocus() )
+        {
+            if ( pOpenMenu )
+                pOpenMenu->GrabFocus();
+            else
+                GrabFocus();
+        }
+        else if ( pOpenMenu && pOpenMenu->HasFocus() )
+        {
+            GrabFocus();
+        }
+    }
+    else if ( nCode == KEY_RIGHT )
+    {
+        if ( HasFocus() )
+        {
+            if ( pOpenMenu )
+                pOpenMenu->GrabFocus();
+            else if ( pToolBox )
+                pToolBox->GrabFocus();
+        }
+        else if ( pToolBox && pToolBox->HasFocus() )
+        {
+            GrabFocus();
+        }
+        else if ( pOpenMenu && pOpenMenu->HasFocus() )
+        {
+            if ( pToolBox )
+                pToolBox->GrabFocus();
+            else
+                GrabFocus();
+        }
+    }
+}
+
+void NotebookbarTabControl::KeyInput( const KeyEvent& rKEvt )
+{
+    if ( rKEvt.GetKeyCode().IsMod1() )
+    {
+        sal_uInt16 nCode( rKEvt.GetKeyCode().GetCode() );
+        if ( nCode == KEY_RIGHT || nCode == KEY_LEFT )
+        {
+            ArrowStops( nCode );
+            return;
+        }
+    }
+    return NotebookbarTabControlBase::KeyInput( rKEvt );
+}
+
+bool NotebookbarTabControl::EventNotify( NotifyEvent& rNEvt )
+{
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    {
+        const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
+        sal_uInt16 nCode = rKey.GetCode();
+        if ( rKey.IsMod1() && ( nCode == KEY_RIGHT || nCode == KEY_LEFT ) )
+        {
+            ArrowStops( nCode );
+            return true;
+        }
+    }
+    return NotebookbarTabControlBase::EventNotify( rNEvt );
 }
 
 void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)

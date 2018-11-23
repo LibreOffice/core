@@ -27,6 +27,8 @@ public:
     NotebookbarTabControl( Window* pParent );
     ~NotebookbarTabControl() override;
 
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     virtual void StateChanged(StateChangedType nStateChange) override;
     virtual Size calculateRequisition() const override;
 
@@ -36,6 +38,8 @@ private:
                                           const OUString& aModuleName,
                                           ToolBox* pShortcuts
                              );
+    void ArrowStops( sal_uInt16 nCode );
+
     DECL_LINK(OpenNotebookbarPopupMenu, NotebookBar*, void);
 
     css::uno::Reference<css::ui::XUIConfigurationListener> m_pListener;
