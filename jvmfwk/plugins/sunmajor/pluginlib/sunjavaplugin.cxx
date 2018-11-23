@@ -599,6 +599,12 @@ static void do_msvcr_magic(OUString const &jvm_dll)
 
 #endif
 
+// Silence "/opt/rh/devtoolset-7/root/usr/include/c++/7/bits/vector.tcc:407:15: error: variable
+// ‘__new_finish’ might be clobbered by ‘longjmp’ or ‘vfork’ [-Werror=clobbered]":
+#if (defined __GNUC__ && __GNUC__ == 7 && __GNUC_MINOR__ == 0) && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclobbered"
+#endif
 /** starts a Java Virtual Machine.
     <p>
     The function shall ensure, that the VM does not abort the process
@@ -850,6 +856,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
    return errorcode;
 }
+#if (defined __GNUC__ && __GNUC__ == 7 && __GNUC_MINOR__ == 0) && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
 javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist)
 {

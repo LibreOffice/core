@@ -151,6 +151,13 @@ if (defined $ENV{LODE_HOME})
         $ENV{PATH}="$ENV{LODE_HOME}/opt/bin:$ENV{PATH}";
         print STDERR "add LODE_HOME/opt/bin in PATH\n";
     }
+    # For the Config=linux_gcc_release_64 Jenkins jobs that build on CentOS against Developer
+    # Toolset 7:
+    if (-d '/opt/rh/devtoolset-7/root/usr/bin')
+    {
+        $ENV{PATH}="/opt/rh/devtoolset-7/root/usr/bin:$ENV{PATH}";
+        print STDERR "added /opt/rh/devtoolset-7/root/usr/bin to PATH\n";
+    }
 }
 
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
