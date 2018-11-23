@@ -2616,7 +2616,7 @@ void SdXMLObjectShapeContext::StartElement( const css::uno::Reference< css::xml:
     // #i13140# Check for more than empty string in maHref, there are
     // other possibilities that maHref results in empty container
     // storage names
-    if( !(GetImport().getImportFlags() & SvXMLImportFlags::EMBEDDED) && !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
+    if( !mbIsPlaceholder && ImpIsEmptyURL(maHref) )
         return;
 
     OUString service("com.sun.star.drawing.OLE2Shape");
