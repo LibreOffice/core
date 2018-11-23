@@ -10,7 +10,6 @@
 #include <Qt5Frame.hxx>
 #include <Qt5MainWindow.hxx>
 #include <Qt5Bitmap.hxx>
-#include <Qt5Tools.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5Menu.moc>
 
@@ -47,20 +46,25 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
     bool bChecked = mpVCLMenu->IsItemChecked(nId);
     MenuItemBits itemBits = mpVCLMenu->GetItemBits(nId);
 
+    pSalMenuItem->mpAction.reset();
+    pSalMenuItem->mpMenu.reset();
+
     if (mbMenuBar)
     {
         // top-level menu
         if (mpQMenuBar)
         {
+            pQMenu = new QMenu(toQString(aText), nullptr);
+            pSalMenuItem->mpMenu.reset(pQMenu);
+
             if ((nPos != MENU_APPEND)
                 && (static_cast<size_t>(nPos) < static_cast<size_t>(mpQMenuBar->actions().size())))
             {
-                pQMenu = new QMenu(toQString(aText), mpQMenuBar);
                 mpQMenuBar->insertMenu(mpQMenuBar->actions()[nPos], pQMenu);
             }
             else
             {
-                pQMenu = mpQMenuBar->addMenu(toQString(aText));
+                mpQMenuBar->addMenu(pQMenu);
             }
 
             connect(pQMenu, &QMenu::aboutToShow, this,
@@ -74,18 +78,20 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
         if (pSalMenuItem->mpSubMenu)
         {
             // submenu
+            QMenu* pTempQMenu = new QMenu(toQString(aText), nullptr);
+            pSalMenuItem->mpMenu.reset(pTempQMenu);
+
             if ((nPos != MENU_APPEND)
                 && (static_cast<size_t>(nPos) < static_cast<size_t>(pQMenu->actions().size())))
             {
-                QMenu* pTempQMenu = new QMenu(toQString(aText), pQMenu);
                 pQMenu->insertMenu(pQMenu->actions()[nPos], pTempQMenu);
-                pQMenu = pTempQMenu;
             }
             else
             {
-                pQMenu = pQMenu->addMenu(toQString(aText));
+                pQMenu->addMenu(pTempQMenu);
             }
 
+            pQMenu = pTempQMenu;
             mpQActionGroup = new QActionGroup(pQMenu);
 
             connect(pQMenu, &QMenu::aboutToShow, this,
@@ -95,37 +101,38 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
         }
         else
         {
-            delete pSalMenuItem->mpAction;
-
             if (pSalMenuItem->mnType == MenuItemType::SEPARATOR)
             {
+                QAction* pAction = new QAction(nullptr);
+                pSalMenuItem->mpAction.reset(pAction);
+                pAction->setSeparator(true);
+
                 if ((nPos != MENU_APPEND)
                     && (static_cast<size_t>(nPos) < static_cast<size_t>(pQMenu->actions().size())))
                 {
-                    pSalMenuItem->mpAction = pQMenu->insertSeparator(pQMenu->actions()[nPos]);
+                    pQMenu->insertAction(pQMenu->actions()[nPos], pAction);
                 }
                 else
                 {
-                    pSalMenuItem->mpAction = pQMenu->addSeparator();
+                    pQMenu->addAction(pAction);
                 }
             }
             else
             {
                 // leaf menu
-                QAction* pAction = nullptr;
+                QAction* pAction = new QAction(toQString(aText), nullptr);
+                pSalMenuItem->mpAction.reset(pAction);
 
                 if ((nPos != MENU_APPEND)
                     && (static_cast<size_t>(nPos) < static_cast<size_t>(pQMenu->actions().size())))
                 {
-                    pAction = new QAction(toQString(aText), pQMenu);
                     pQMenu->insertAction(pQMenu->actions()[nPos], pAction);
                 }
                 else
                 {
-                    pAction = pQMenu->addAction(toQString(aText));
+                    pQMenu->addAction(pAction);
                 }
 
-                pSalMenuItem->mpAction = pAction;
                 pAction->setShortcut(toQString(nAccelKey.GetName(GetFrame()->GetWindow())));
 
                 if (itemBits & MenuItemBits::CHECKABLE)
@@ -229,6 +236,7 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
     {
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nItem);
         QMenu* pQMenu = InsertMenuItem(pSalMenuItem, MENU_APPEND);
+        SetItemImage(nItem, pSalMenuItem, pSalMenuItem->maImage);
 
         if (pSalMenuItem->mpSubMenu != nullptr)
         {
@@ -244,8 +252,9 @@ void Qt5Menu::ShowItem(unsigned nPos, bool bShow)
     if (nPos < maItems.size())
     {
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nPos);
-        if (pSalMenuItem->mpAction)
-            pSalMenuItem->mpAction->setVisible(bShow);
+        QAction* pAction = pSalMenuItem->getAction();
+        if (pAction)
+            pAction->setVisible(bShow);
         pSalMenuItem->mbVisible = bShow;
     }
 }
@@ -255,8 +264,9 @@ void Qt5Menu::CheckItem(unsigned nPos, bool bChecked)
     if (nPos < maItems.size())
     {
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nPos);
-        if (pSalMenuItem->mpAction)
-            pSalMenuItem->mpAction->setChecked(bChecked);
+        QAction* pAction = pSalMenuItem->getAction();
+        if (pAction)
+            pAction->setChecked(bChecked);
     }
 }
 
@@ -265,8 +275,9 @@ void Qt5Menu::EnableItem(unsigned nPos, bool bEnable)
     if (nPos < maItems.size())
     {
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nPos);
-        if (pSalMenuItem->mpAction)
-            pSalMenuItem->mpAction->setEnabled(bEnable);
+        QAction* pAction = pSalMenuItem->getAction();
+        if (pAction)
+            pAction->setEnabled(bEnable);
         pSalMenuItem->mbEnabled = bEnable;
     }
 }
@@ -274,38 +285,46 @@ void Qt5Menu::EnableItem(unsigned nPos, bool bEnable)
 void Qt5Menu::SetItemText(unsigned, SalMenuItem* pItem, const OUString& rText)
 {
     Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
-    if (pSalMenuItem->mpAction)
-        pSalMenuItem->mpAction->setText(toQString(rText));
+    QAction* pAction = pSalMenuItem->getAction();
+    if (pAction)
+        pAction->setText(toQString(rText));
 }
 
 void Qt5Menu::SetItemImage(unsigned, SalMenuItem* pItem, const Image& rImage)
 {
-    if (!rImage)
+    Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
+
+    // Save new image to use it in DoFullMenuUpdate
+    pSalMenuItem->maImage = rImage;
+
+    QAction* pAction = pSalMenuItem->getAction();
+    if (!pAction)
         return;
 
-    Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
-    if (pSalMenuItem->mpAction)
+    QImage aImage;
+
+    if (!!rImage)
     {
         SvMemoryStream aMemStm;
         vcl::PNGWriter aWriter(rImage.GetBitmapEx());
         aWriter.Write(aMemStm);
 
-        QImage aImage;
-
-        if (aImage.loadFromData(static_cast<const uchar*>(aMemStm.GetData()), aMemStm.TellEnd()))
+        if (!aImage.loadFromData(static_cast<const uchar*>(aMemStm.GetData()), aMemStm.TellEnd()))
         {
-            pSalMenuItem->mpAction->setIcon(QPixmap::fromImage(aImage));
+            return;
         }
     }
+
+    pAction->setIcon(QPixmap::fromImage(aImage));
 }
 
 void Qt5Menu::SetAccelerator(unsigned, SalMenuItem* pItem, const vcl::KeyCode&,
                              const OUString& rText)
 {
     Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
-    if (pSalMenuItem->mpAction)
-        pSalMenuItem->mpAction->setShortcut(
-            QKeySequence(toQString(rText), QKeySequence::PortableText));
+    QAction* pAction = pSalMenuItem->getAction();
+    if (pAction)
+        pAction->setShortcut(QKeySequence(toQString(rText), QKeySequence::PortableText));
 }
 
 void Qt5Menu::GetSystemMenuData(SystemMenuData*) {}
@@ -379,14 +398,21 @@ void Qt5Menu::NativeItemText(OUString& rItemText)
 Qt5MenuItem::Qt5MenuItem(const SalItemParams* pItemData)
     : mpParentMenu(nullptr)
     , mpSubMenu(nullptr)
-    , mpAction(nullptr)
     , mnId(pItemData->nId)
     , mnType(pItemData->eType)
     , mbVisible(true)
     , mbEnabled(true)
+    , maImage(pItemData->aImage)
 {
 }
 
-Qt5MenuItem::~Qt5MenuItem() { delete mpAction; }
+QAction* Qt5MenuItem::getAction() const
+{
+    if (mpMenu)
+        return mpMenu->menuAction();
+    if (mpAction)
+        return mpAction.get();
+    return nullptr;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
