@@ -633,8 +633,6 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
 void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
 {
-    bool bDrawSelection = !(nFlags & DrawFlags::NoSelection);
-
     // we need pixel coordinates
     Size aRealSize = pDev->LogicToPixel(rSize);
     Point aRealPos = pDev->LogicToPixel(rPos);
@@ -745,7 +743,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
     pDev->SetClipRegion( pDev->PixelToLogic( aRegion ) );
 
     // do we have to paint the background
-    bool bBackground = !(nFlags & DrawFlags::NoBackground) && pDataWin->IsControlBackground();
+    bool bBackground = pDataWin->IsControlBackground();
     if ( bBackground )
     {
         tools::Rectangle aRect( aRealPos, aRealSize );
@@ -753,7 +751,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         pDev->DrawRect( aRect );
     }
 
-    ImplPaintData( *pDev, tools::Rectangle( aRealPos, aRealSize ), true, bDrawSelection );
+    ImplPaintData( *pDev, tools::Rectangle( aRealPos, aRealSize ), true, /*bDrawSelection*/true );
 
     // restore the column widths/data row height
     nDataRowHeight = nOriginalHeight;

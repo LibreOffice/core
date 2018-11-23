@@ -370,16 +370,11 @@ enum class DrawFlags
 {
     NONE                = 0x0000,
     Mono                = 0x0001,
-    NoBorder            = 0x0002,
     NoControls          = 0x0004,
-    NoDisable           = 0x0008,
-    NoMnemonic          = 0x0010,
-    NoSelection         = 0x0020,
-    NoBackground        = 0x0040,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DrawFlags> : is_typed_flags<DrawFlags, 0x007f> {};
+    template<> struct typed_flags<DrawFlags> : is_typed_flags<DrawFlags, 0x0005> {};
 }
 
 // DialogControl-Flags

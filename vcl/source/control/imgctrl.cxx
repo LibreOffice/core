@@ -67,14 +67,11 @@ namespace
     }
 }
 
-void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Point& rPos, const Size& rSize) const
+void ImageControl::ImplDraw(OutputDevice& rDev, const Point& rPos, const Size& rSize) const
 {
     DrawImageFlags nStyle = DrawImageFlags::NONE;
-    if ( !(nDrawFlags & DrawFlags::NoDisable) )
-    {
-        if ( !IsEnabled() )
-            nStyle |= DrawImageFlags::Disable;
-    }
+    if ( !IsEnabled() )
+        nStyle |= DrawImageFlags::Disable;
 
     const Image& rImage( GetModeImage() );
     const tools::Rectangle aDrawRect( rPos, rSize );
@@ -86,9 +83,8 @@ void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Poin
 
         WinBits nWinStyle = GetStyle();
         DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
-        if ( !(nDrawFlags & DrawFlags::NoDisable) )
-            if ( !IsEnabled() )
-                nTextStyle |= DrawTextFlags::Disable;
+        if ( !IsEnabled() )
+            nTextStyle |= DrawTextFlags::Disable;
 
         rDev.DrawText( aDrawRect, sText, nTextStyle );
         return;
@@ -129,7 +125,7 @@ void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Poin
 
 void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    ImplDraw(rRenderContext, DrawFlags::NONE, Point(), GetOutputSizePixel());
+    ImplDraw(rRenderContext, Point(), GetOutputSizePixel());
 
     if (!HasFocus())
         return;
@@ -154,7 +150,7 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 }
 
-void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags )
+void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags )
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
     const Size      aSize = pDev->LogicToPixel( rSize );
@@ -164,12 +160,12 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSiz
     pDev->SetMapMode();
 
     // Border
-    if ( !(nFlags & DrawFlags::NoBorder) && (GetStyle() & WB_BORDER) )
+    if ( GetStyle() & WB_BORDER )
     {
         ImplDrawFrame( pDev, aRect );
     }
     pDev->IntersectClipRegion( aRect );
-    ImplDraw( *pDev, nFlags, aRect.TopLeft(), aRect.GetSize() );
+    ImplDraw( *pDev, aRect.TopLeft(), aRect.GetSize() );
 
     pDev->Pop();
 }

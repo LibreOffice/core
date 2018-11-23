@@ -935,7 +935,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
         pDev->SetTextColor( GetTextColor() );
     pDev->SetTextFillColor();
 
-    if ( !(nFlags & DrawFlags::NoBackground) )
+    // draw background
     {
         pDev->DrawWallpaper( aRect, GetBackground() );
         if ( mnBorderOff1 || mnBorderOff2 )
