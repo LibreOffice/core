@@ -2297,7 +2297,7 @@ AC_ARG_WITH(macosx-sdk,
                           not terribly useful. It works fine to build with a new SDK and run the result
                           on an older OS.
 
-                          e. g.: --with-macosx-sdk=10.9
+                          e. g.: --with-macosx-sdk=10.10
 
                           there are 3 options to control the MacOSX build:
                           --with-macosx-sdk (referred as 'sdk' below)
@@ -2311,15 +2311,15 @@ AC_ARG_WITH(macosx-sdk,
                           ==========================================
                            command line      || config result
                           ==========================================
-                          min  | max  | sdk  || min  | max  | sdk  |
-                          ?    | ?    | ?    || 10.9 | 10.s | 10.s |
-                          ?    | ?    | 10.x || 10.9 | 10.x | 10.x |
-                          ?    | 10.x | ?    || 10.9 | 10.s | 10.s |
-                          ?    | 10.x | 10.y || 10.9 | 10.x | 10.y |
-                          10.x | ?    | ?    || 10.x | 10.s | 10.s |
-                          10.x | ?    | 10.y || 10.x | 10.y | 10.y |
-                          10.x | 10.y | ?    || 10.x | 10.y | 10.y |
-                          10.x | 10.y | 10.z || 10.x | 10.y | 10.z |
+                          min  | max  | sdk  || min   | max  | sdk  |
+                          ?    | ?    | ?    || 10.10 | 10.s | 10.s |
+                          ?    | ?    | 10.x || 10.10 | 10.x | 10.x |
+                          ?    | 10.x | ?    || 10.10 | 10.s | 10.s |
+                          ?    | 10.x | 10.y || 10.10 | 10.x | 10.y |
+                          10.x | ?    | ?    || 10.x  | 10.s | 10.s |
+                          10.x | ?    | 10.y || 10.x  | 10.y | 10.y |
+                          10.x | 10.y | ?    || 10.x  | 10.y | 10.y |
+                          10.x | 10.y | 10.z || 10.x  | 10.y | 10.z |
 
 
                           see: http://developer.apple.com/library/mac/#technotes/tn2064/_index.html
@@ -2333,7 +2333,7 @@ AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          e. g.: --with-macos-version-min-required=10.9
+                          e. g.: --with-macos-version-min-required=10.10
                           see --with-macosx-sdk for more info
     ],
 ,)
@@ -2342,7 +2342,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
     AS_HELP_STRING([--with-macosx-version-max-allowed=<version>],
         [set the maximum allowed OS version the LibreOffice compilation can use APIs from])
     [
-                          e. g.: --with-macos-version-max-allowed=10.9
+                          e. g.: --with-macos-version-max-allowed=10.10
                           see --with-macosx-sdk for more info
     ],
 ,)
@@ -2759,7 +2759,7 @@ if test $_os = Darwin -o $_os = iOS; then
     esac
 
     if test "$with_macosx_version_min_required" = "" ; then
-        with_macosx_version_min_required="10.9";
+        with_macosx_version_min_required="10.10";
     fi
 
     if test "$with_macosx_version_max_allowed" = "" ; then
@@ -2784,9 +2784,6 @@ if test $_os = Darwin -o $_os = iOS; then
     fi
 
     case "$with_macosx_version_min_required" in
-    10.9)
-        MAC_OS_X_VERSION_MIN_REQUIRED="1090"
-        ;;
     10.10)
         MAC_OS_X_VERSION_MIN_REQUIRED="101000"
         ;;
@@ -2803,7 +2800,7 @@ if test $_os = Darwin -o $_os = iOS; then
         MAC_OS_X_VERSION_MIN_REQUIRED="101400"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.9--14])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.10--14])
         ;;
     esac
     MAC_OS_X_VERSION_MIN_REQUIRED_DOTS=$with_macosx_version_min_required
@@ -2828,9 +2825,6 @@ if test $_os = Darwin -o $_os = iOS; then
     fi
 
     case "$with_macosx_version_max_allowed" in
-    10.9)
-        MAC_OS_X_VERSION_MAX_ALLOWED="1090"
-        ;;
     10.10)
         MAC_OS_X_VERSION_MAX_ALLOWED="101000"
         ;;
@@ -2847,7 +2841,7 @@ if test $_os = Darwin -o $_os = iOS; then
         MAC_OS_X_VERSION_MAX_ALLOWED="101400"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.9--14])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.10--14])
         ;;
     esac
 
