@@ -759,7 +759,6 @@ void SvXMLExportPropertyMapper::exportXML(
                         nPropMapStartIdx, nPropMapEndIdx );
 
             if( rExport.GetAttrList().getLength() > 0 ||
-                (nFlags & SvXmlExportFlags::EMPTY) ||
                 !aIndexArray.empty() )
             {
                 SvXMLElementExport aElem( rExport, nNamespace,
