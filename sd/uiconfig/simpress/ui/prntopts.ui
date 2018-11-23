@@ -36,7 +36,7 @@
                       <object class="GtkCheckButton" id="pagenmcb">
                         <property name="label" translatable="yes" context="prntopts|pagenmcb">_Page name</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -53,7 +53,7 @@
                       <object class="GtkCheckButton" id="datecb">
                         <property name="label" translatable="yes" context="prntopts|datecb">D_ate</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -70,7 +70,7 @@
                       <object class="GtkCheckButton" id="timecb">
                         <property name="label" translatable="yes" context="prntopts|timecb">Ti_me</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -87,7 +87,7 @@
                       <object class="GtkCheckButton" id="hiddenpgcb">
                         <property name="label" translatable="yes" context="prntopts|hiddenpgcb">H_idden pages</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -217,7 +217,7 @@
                       <object class="GtkCheckButton" id="papertryfrmprntrcb">
                         <property name="label" translatable="yes" context="prntopts|papertryfrmprntrcb">Paper tray from printer s_ettings</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -240,7 +240,7 @@
                           <object class="GtkCheckButton" id="frontcb">
                             <property name="label" translatable="yes" context="prntopts|frontcb">Fr_ont</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
@@ -259,7 +259,7 @@
                           <object class="GtkCheckButton" id="backcb">
                             <property name="label" translatable="yes" context="prntopts|backcb">Ba_ck</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="margin_left">50</property>
                             <property name="use_underline">True</property>
