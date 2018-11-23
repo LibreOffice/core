@@ -1588,7 +1588,7 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
 
 void CustomPropertiesWindow::ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox )
 {
-    if ( !IsLineValid( pLine ) )
+    if (pLine && !IsLineValid(pLine))
     {
         if ( bIsFromTypeBox ) // LoseFocus of TypeBox
             pLine->m_bTypeLostFocus = true;
@@ -1714,6 +1714,7 @@ bool CustomPropertiesWindow::AreAllLinesValid() const
 void CustomPropertiesWindow::ClearAllLines()
 {
     m_aCustomPropertiesLines.clear();
+    m_pCurrentLine = nullptr;
     m_aCustomProperties.clear();
     m_nScrollPos = 0;
 }
