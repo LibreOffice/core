@@ -33,6 +33,7 @@
 #include <controldata.hxx>
 #include <listbox.hxx>
 #include <dndeventdispatcher.hxx>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
@@ -536,8 +537,12 @@ void ListBox::SetDropDownLineCount( sal_uInt16 nLines )
 
 void ListBox::AdaptDropDownLineCountToMaximum()
 {
-    // adapt to maximum allowed number
-    SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());
+    // Adapt to maximum allowed number.
+    // Limit for LOK as we can't render outside of the dialog canvas.
+    if (comphelper::LibreOfficeKit::isActive())
+        SetDropDownLineCount(11);
+    else
+        SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());
 }
 
 sal_uInt16 ListBox::GetDropDownLineCount() const
