@@ -236,12 +236,12 @@ SalInstance *CreateSalInstance()
     SalInstance *pInst = nullptr;
 
     OUString aUsePlugin;
+    rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", aUsePlugin);
+    SAL_INFO_IF(!aUsePlugin.isEmpty(), "vcl", "Requested VCL plugin: " << aUsePlugin);
 #ifdef HEADLESS_VCLPLUG
-    if( IsHeadlessModeRequested() )
+    if (Application::IsBitmapRendering() || (aUsePlugin.isEmpty() && IsHeadlessModeRequested()))
         aUsePlugin = "svp";
-    else
 #endif
-        rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
 
     if (aUsePlugin == "svp")
     {
