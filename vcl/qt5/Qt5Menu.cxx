@@ -74,7 +74,18 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
         if (pSalMenuItem->mpSubMenu)
         {
             // submenu
-            pQMenu = pQMenu->addMenu(toQString(aText));
+            if ((nPos != MENU_APPEND)
+                && (static_cast<size_t>(nPos) < static_cast<size_t>(pQMenu->actions().size())))
+            {
+                QMenu* pTempQMenu = new QMenu(toQString(aText), pQMenu);
+                pQMenu->insertMenu(pQMenu->actions()[nPos], pTempQMenu);
+                pQMenu = pTempQMenu;
+            }
+            else
+            {
+                pQMenu = pQMenu->addMenu(toQString(aText));
+            }
+
             mpQActionGroup = new QActionGroup(pQMenu);
 
             connect(pQMenu, &QMenu::aboutToShow, this,
