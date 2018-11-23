@@ -1096,8 +1096,6 @@ include/vcl/wall.hxx:44
     enum WallpaperStyle Bottom
 include/vcl/window.hxx:121
     enum TrackingEventFlags DontCallHdl
-include/vcl/window.hxx:172
-    enum ShowFlags NoParentUpdate
 include/xmloff/shapeexport.hxx:53
     enum XMLShapeExportFlags WIDTH
 include/xmloff/shapeexport.hxx:54
