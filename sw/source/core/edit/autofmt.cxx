@@ -39,6 +39,8 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentRedlineManager.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <redline.hxx>
+#include <unocrsr.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <index.hxx>
@@ -173,6 +175,7 @@ class SwAutoFormat
     static bool HasSelBlanks( SwPaM& rPam );
     static bool HasBreakAttr( const SwTextNode& );
     void DeleteSel( SwPaM& rPam );
+    void DeleteSelImpl(SwPaM & rDelPam, SwPaM & rPamToCorrect);
     bool DeleteJoinCurNextPara( const OUString& rNxtPara );
     /// delete in the node start and/or end
     void DeleteLeadingTrailingBlanks( bool bStart = true, bool bEnd = true );
@@ -1094,26 +1097,87 @@ void SwAutoFormat::DeleteLeadingTrailingBlanks(bool bStart, bool bEnd)
     }
 }
 
-void SwAutoFormat::DeleteSel( SwPaM& rDelPam )
+bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
+        SwDoc & rDoc, SwPaM const& rDelPam)
 {
-    if( m_aFlags.bWithRedlining )
+    bool isNoRedline(true);
+    SwRedlineTable::size_type tmp;
+    IDocumentRedlineAccess const& rIDRA(rDoc.getIDocumentRedlineAccess());
+    if (!(rIDRA.GetRedlineFlags() & RedlineFlags::ShowDelete))
+    {
+        return isNoRedline;
+    }
+    rIDRA.GetRedline(*rDelPam.Start(), &tmp);
+    SwPosition const* pCurrent(rDelPam.Start());
+    for ( ; tmp < rIDRA.GetRedlineTable().size(); ++tmp)
+    {
+        SwRangeRedline const*const pRedline(rIDRA.GetRedlineTable()[tmp]);
+        if (*rDelPam.End() <= *pRedline->Start())
+        {
+            break;
+        }
+        if (*pRedline->End() <= *rDelPam.Start())
+        {
+            continue;
+        }
+        if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+        {
+            assert(*pRedline->Start() != *pRedline->End());
+            isNoRedline = false;
+            if (*pCurrent < *pRedline->Start())
+            {
+                rRanges.push_back(rDoc.CreateUnoCursor(*pCurrent));
+                rRanges.back()->SetMark();
+                *rRanges.back()->GetPoint() = *pRedline->Start();
+            }
+            pCurrent = pRedline->End();
+        }
+    }
+    if (!isNoRedline && *pCurrent < *rDelPam.End())
+    {
+        rRanges.push_back(rDoc.CreateUnoCursor(*pCurrent));
+        rRanges.back()->SetMark();
+        *rRanges.back()->GetPoint() = *rDelPam.End();
+    }
+    return isNoRedline;
+}
+
+void SwAutoFormat::DeleteSel(SwPaM & rDelPam)
+{
+    std::vector<std::shared_ptr<SwUnoCursor>> ranges; // need correcting cursor
+    if (GetRanges(ranges, *m_pDoc, rDelPam))
+    {
+        DeleteSelImpl(rDelPam, rDelPam);
+    }
+    else
+    {
+        for (auto const& pCursor : ranges)
+        {
+            DeleteSelImpl(*pCursor, rDelPam);
+        }
+    }
+}
+
+void SwAutoFormat::DeleteSelImpl(SwPaM & rDelPam, SwPaM & rPamToCorrect)
+{
+    if (m_aFlags.bWithRedlining || &rDelPam != &rPamToCorrect)
     {
         // Add to Shell-Cursor-Ring so that DelPam will be moved as well!
         SwPaM* pShCursor = m_pEditShell->GetCursor_();
         SwPaM aTmp( *m_pCurTextNd, 0, pShCursor );
 
-        SwPaM* pPrev = rDelPam.GetPrev();
-        rDelPam.GetRingContainer().merge( pShCursor->GetRingContainer() );
+        SwPaM* pPrev = rPamToCorrect.GetPrev();
+        rPamToCorrect.GetRingContainer().merge( pShCursor->GetRingContainer() );
 
         m_pEditShell->DeleteSel( rDelPam );
 
         // and remove Pam again:
         SwPaM* p;
-        SwPaM* pNext = &rDelPam;
+        SwPaM* pNext = &rPamToCorrect;
         do {
             p = pNext;
             pNext = p->GetNext();
-            p->MoveTo( &rDelPam );
+            p->MoveTo( &rPamToCorrect );
         } while( p != pPrev );
 
         m_aNdIdx = aTmp.GetPoint()->nNode;
