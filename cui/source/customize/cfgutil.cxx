@@ -1279,7 +1279,10 @@ IMPL_LINK_NOARG(CuiConfigGroupListBox, OpenCurrentHdl, weld::TreeView&, void)
     bool bValidIter = m_xTreeView->get_cursor(xIter.get());
     if (!bValidIter)
         return;
-    m_xTreeView->expand_row(*xIter);
+    if (!m_xTreeView->get_row_expanded(*xIter))
+        m_xTreeView->expand_row(*xIter);
+    else
+        m_xTreeView->collapse_row(*xIter);
 }
 
 CuiConfigGroupListBox::~CuiConfigGroupListBox()

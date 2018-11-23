@@ -1574,7 +1574,10 @@ IMPL_LINK_NOARG(SbTreeListBox, OpenCurrentHdl, weld::TreeView&, void)
             break;
 
         default:
-            m_xControl->expand_row(*m_xIter);
+            if (!m_xControl->get_row_expanded(*m_xIter))
+                m_xControl->expand_row(*m_xIter);
+            else
+                m_xControl->collapse_row(*m_xIter);
             break;
     }
 }
