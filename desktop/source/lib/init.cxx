@@ -2142,9 +2142,10 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     // what Calc's internal scaling would do - because that one is trying to
     // fit the lines between cells to integer multiples of pixels.
     comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::LibreOfficeKit::setDPIScale(1.0); });
+    double fDPIScaleX = 1;
     if (doc_getDocumentType(pThis) == LOK_DOCTYPE_SPREADSHEET)
     {
-        double fDPIScaleX = (nCanvasWidth * 3840.0) / (256.0 * nTileWidth);
+        fDPIScaleX = (nCanvasWidth * 3840.0) / (256.0 * nTileWidth);
         assert(fabs(fDPIScaleX - ((nCanvasHeight * 3840.0) / (256.0 * nTileHeight))) < 0.0001);
         comphelper::LibreOfficeKit::setDPIScale(fDPIScaleX);
     }
@@ -2155,7 +2156,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     CGContextRef cgc = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8, nCanvasWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
 
     CGContextTranslateCTM(cgc, 0, nCanvasHeight);
-    CGContextScaleCTM(cgc, 1, -1);
+    CGContextScaleCTM(cgc, fDPIScaleX, -fDPIScaleX);
 
     doc_paintTileToCGContext(pThis, (void*) cgc, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
@@ -3633,7 +3634,7 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
     CGContextRef cgc = CGBitmapContextCreate(pBuffer, nWidth, nHeight, 8, nWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
 
     CGContextTranslateCTM(cgc, 0, nHeight);
-    CGContextScaleCTM(cgc, 1, -1);
+    CGContextScaleCTM(cgc, fDPIScale, -fDPIScale);
 
     SystemGraphicsData aData;
     aData.rCGContext = cgc;
@@ -3644,7 +3645,7 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKW
     pDevice->SetOutputSizePixel(Size(nWidth, nHeight));
 
     MapMode aMapMode(pDevice->GetMapMode());
-    aMapMode.SetOrigin(Point(-nX, -nY));
+    aMapMode.SetOrigin(Point(-(nX / fDPIScale), -(nY / fDPIScale)));
     pDevice->SetMapMode(aMapMode);
 
     comphelper::LibreOfficeKit::setDialogPainting(true);
