@@ -173,9 +173,16 @@ void MysqlTestDriver::testIntegerInsertAndQuery()
         CPPUNIT_ASSERT_MESSAGE("not enough result after query", hasRow);
         CPPUNIT_ASSERT_EQUAL(i, xRow->getLong(1)); // first and only column
     }
-    bool hasRow = xResultSet->next();
-    // no more rows
+    CPPUNIT_ASSERT_MESSAGE("Cursor is not on last position.",
+                           xResultSet->isLast()); // cursor is on last position
+    CPPUNIT_ASSERT_EQUAL(ROW_COUNT, xResultSet->getRow()); // which is the last position
+
+    bool hasRow = xResultSet->next(); // go to afterlast
+    // no more rows, next should return false
     CPPUNIT_ASSERT_MESSAGE("next returns true after last row", !hasRow);
+    // cursor should be in afterlast position
+    CPPUNIT_ASSERT_EQUAL(ROW_COUNT + 1, xResultSet->getRow());
+    CPPUNIT_ASSERT_MESSAGE("Cursor is not on after-last position.", xResultSet->isAfterLast());
 
     nUpdateCount = xStatement->executeUpdate("DROP TABLE myTestTable");
     CPPUNIT_ASSERT_EQUAL(0, nUpdateCount); // it's a DDL statement
