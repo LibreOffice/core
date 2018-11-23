@@ -3639,37 +3639,52 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
     [AC_MSG_RESULT([yes])
      COM_IS_CLANG=TRUE],
     [AC_MSG_RESULT([no])])
+AC_SUBST(COM_IS_CLANG)
 
 CC_PLAIN=$CC
+CLANGVER=
 if test "$COM_IS_CLANG" = TRUE; then
-    AC_MSG_CHECKING([the Clang version])
-    if test "$_os" = WINNT; then
-        dnl In which case, assume clang-cl:
-        my_args="/EP /TC"
-        dnl Filter out -FIIntrin.h, which needs to be explicitly stated for
-        dnl clang-cl:
-        CC_PLAIN=
-        for i in $CC; do
-            case $i in
-            -FIIntrin.h)
-                ;;
-            *)
-                CC_PLAIN="$CC_PLAIN $i"
-                ;;
-            esac
-        done
+    AC_MSG_CHECKING([whether Clang is new enough])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+        #if !defined __apple_build_version__
+        #error
+        #endif
+        ]])],
+        [my_apple_clang=yes],[my_apple_clang=])
+    if test "$my_apple_clang" = yes; then
+        AC_MSG_RESULT([assumed yes (Apple Clang)])
     else
-        my_args="-E -P"
+        if test "$_os" = WINNT; then
+            dnl In which case, assume clang-cl:
+            my_args="/EP /TC"
+            dnl Filter out -FIIntrin.h, which needs to be explicitly stated for
+            dnl clang-cl:
+            CC_PLAIN=
+            for i in $CC; do
+                case $i in
+                -FIIntrin.h)
+                    ;;
+                *)
+                    CC_PLAIN="$CC_PLAIN $i"
+                    ;;
+                esac
+            done
+        else
+            my_args="-E -P"
+        fi
+        clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC_PLAIN $my_args -`
+        CLANG_FULL_VERSION=`echo __clang_version__ | $CC_PLAIN $my_args -`
+        CLANGVER=`echo $clang_version \
+            | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
+        if test "$CLANGVER" -ge 50002; then
+            AC_MSG_RESULT([yes ($clang_version)])
+        else
+            AC_MSG_ERROR(["$CLANG_FULL_VERSION" is too old or unrecognized, must be at least Clang 5.0.2])
+        fi
+        AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
+        AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
     fi
-    clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC_PLAIN $my_args -`
-    CLANG_FULL_VERSION=`echo __clang_version__ | $CC_PLAIN $my_args -`
-    CLANGVER=`echo $clang_version \
-        | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
-    AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
-    AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
-    AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
 fi
-AC_SUBST(COM_IS_CLANG)
 
 SHOWINCLUDES_PREFIX=
 if test "$_os" = WINNT; then
