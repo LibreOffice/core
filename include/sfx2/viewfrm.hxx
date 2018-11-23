@@ -77,6 +77,7 @@ protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     DECL_LINK(GetInvolvedHandler, Button*, void);
+    DECL_LINK(GetDonateHandler, Button*, void);
     DECL_LINK(SwitchReadOnlyHandler, Button*, void);
     DECL_LINK(SignDocumentHandler, Button*, void);
     SAL_DLLPRIVATE void KillDispatcher_Impl();
