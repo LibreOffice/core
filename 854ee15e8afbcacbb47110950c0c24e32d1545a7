@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df6247ed_326ff6c6",
+        "filename": "chart2/source/model/main/ChartModel_Persistence.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-11-23T09:54:13Z",
+      "side": 1,
+      "message": "it looks like this ctor calls Manager::registerGraphic which modifies the global Manager\u0027s state - so it should also be covered by the guard",
+      "revId": "854ee15e8afbcacbb47110950c0c24e32d1545a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
