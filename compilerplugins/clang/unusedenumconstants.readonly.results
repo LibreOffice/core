@@ -1138,12 +1138,6 @@ o3tl/qa/test-enumarray.cxx:30
     enum MyEnum TWO
 o3tl/qa/test-typed_flags.cxx:19
     enum ConfigurationChangedHint TWO
-oox/source/dump/dffdumper.cxx:157
-    enum oox::dump::(anonymous namespace)::PropType PROPTYPE_COLORARRAY
-oox/source/dump/dffdumper.cxx:157
-    enum oox::dump::(anonymous namespace)::PropType PROPTYPE_STRING
-oox/source/dump/dffdumper.cxx:157
-    enum oox::dump::(anonymous namespace)::PropType PROPTYPE_BLIP
 reportdesign/inc/conditionalexpression.hxx:78
     enum rptui::ComparisonOperation eNotBetween
 reportdesign/inc/conditionalexpression.hxx:79
