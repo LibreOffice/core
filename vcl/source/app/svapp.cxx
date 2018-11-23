@@ -1437,6 +1437,7 @@ const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()
 
 void Application::EnableHeadlessMode( bool dialogsAreFatal )
 {
+    assert(GetDialogCancelMode() == DialogCancelMode::Off);
     SetDialogCancelMode(
         dialogsAreFatal ? DialogCancelMode::Fatal : DialogCancelMode::Silent );
 }
@@ -1446,17 +1447,20 @@ bool Application::IsHeadlessModeEnabled()
     return IsDialogCancelEnabled() || comphelper::LibreOfficeKit::isActive();
 }
 
-static bool bConsoleOnly = false;
-
-bool Application::IsConsoleOnly()
+void Application::EnableBitmapRendering()
 {
-    return bConsoleOnly;
+    ImplGetSVData()->maAppData.mbRenderToBitmaps = true;
+}
+
+bool Application::IsBitmapRendering()
+{
+    return ImplGetSVData()->maAppData.mbRenderToBitmaps;
 }
 
 void Application::EnableConsoleOnly()
 {
     EnableHeadlessMode(true);
-    bConsoleOnly = true;
+    EnableBitmapRendering();
 }
 
 static bool bEventTestingMode = false;
