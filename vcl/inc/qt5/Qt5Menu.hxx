@@ -82,10 +82,12 @@ public:
     Qt5Menu* mpParentMenu; // The menu into which this menu item is inserted
     Qt5Menu* mpSubMenu; // Submenu of this item (if defined)
     QAction* mpAction; // action corresponding to this item
+    QMenu* mpMenu; // menu corresponding to this item
     sal_uInt16 mnId; // Item ID
     MenuItemType mnType; // Item type
     bool mbVisible; // Item visibility.
     bool mbEnabled; // Item active.
+    Image maImage; // Item image
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
