@@ -119,8 +119,8 @@ void CommonInitialize(int *argc, char ***argv)
         Application::Abort( "Failed to bootstrap" );
     comphelper::setProcessServiceFactory( xServiceManager );
     utl::ConfigManager::EnableFuzzing();
+    Application::EnableHeadlessMode(false);
     InitVCL();
-    Application::SetDialogCancelMode(DialogCancelMode::Silent);
 
     //we don't have a de-init, so inside this leak disabled region...
     //get the font info

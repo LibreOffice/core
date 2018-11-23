@@ -1129,9 +1129,13 @@ public:
 
     /** Sets the dialog cancel mode for headless environments.
 
+     This should be private, but XFrameImpl needs to access it and current
+     baseline gcc doesn't support forward definition of anonymous classes.
+     You probably should use EnableHeadlessMode instead.
+
      @param     mode            DialogCancel mode value
 
-     @see GetDialogCancelMode, IsDialogCancelEnabled
+     @see GetDialogCancelMode, IsDialogCancelEnabled, EnableHeadlessMode
     */
     static void                 SetDialogCancelMode( DialogCancelMode mode );
 
