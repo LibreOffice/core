@@ -663,7 +663,7 @@ void OutputDevice::SetTextColor( const Color& rColor )
     Color aColor( rColor );
 
     if ( mnDrawMode & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
-                        DrawModeFlags::GrayText | DrawModeFlags::GhostedText |
+                        DrawModeFlags::GrayText |
                         DrawModeFlags::SettingsText ) )
     {
         if ( mnDrawMode & DrawModeFlags::BlackText )
@@ -677,13 +677,6 @@ void OutputDevice::SetTextColor( const Color& rColor )
         }
         else if ( mnDrawMode & DrawModeFlags::SettingsText )
             aColor = GetSettings().GetStyleSettings().GetFontColor();
-
-        if ( mnDrawMode & DrawModeFlags::GhostedText )
-        {
-            aColor = Color( (aColor.GetRed() >> 1) | 0x80,
-                            (aColor.GetGreen() >> 1) | 0x80,
-                            (aColor.GetBlue() >> 1) | 0x80 );
-        }
     }
 
     if ( mpMetaFile )
@@ -724,7 +717,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
     {
         if ( mnDrawMode & ( DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill |
                             DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                            DrawModeFlags::GhostedFill | DrawModeFlags::SettingsFill ) )
+                            DrawModeFlags::SettingsFill ) )
         {
             if ( mnDrawMode & DrawModeFlags::BlackFill )
                 aColor = COL_BLACK;
@@ -741,13 +734,6 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
             {
                 aColor = COL_TRANSPARENT;
                 bTransFill = true;
-            }
-
-            if ( !bTransFill && (mnDrawMode & DrawModeFlags::GhostedFill) )
-            {
-                aColor = Color( (aColor.GetRed() >> 1) | 0x80,
-                                (aColor.GetGreen() >> 1) | 0x80,
-                                (aColor.GetBlue() >> 1) | 0x80 );
             }
         }
     }

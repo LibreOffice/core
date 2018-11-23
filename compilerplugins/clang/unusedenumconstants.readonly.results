@@ -926,18 +926,6 @@ include/vcl/outdev.hxx:190
     enum DrawImageFlags Highlight
 include/vcl/outdev.hxx:191
     enum DrawImageFlags Deactive
-include/vcl/outdev.hxx:228
-    enum DrawModeFlags NoBitmap
-include/vcl/outdev.hxx:229
-    enum DrawModeFlags NoGradient
-include/vcl/outdev.hxx:230
-    enum DrawModeFlags GhostedLine
-include/vcl/outdev.hxx:232
-    enum DrawModeFlags GhostedText
-include/vcl/outdev.hxx:233
-    enum DrawModeFlags GhostedBitmap
-include/vcl/outdev.hxx:234
-    enum DrawModeFlags GhostedGradient
 include/vcl/pdfwriter.hxx:110
     enum vcl::PDFWriter::PDFVersion PDF_1_3
 include/vcl/pdfwriter.hxx:110
