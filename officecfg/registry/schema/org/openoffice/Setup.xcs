@@ -295,6 +295,12 @@
           </info>
           <value>0</value>
       </prop>
+      <prop oor:name="LastTimeDonateShown" oor:type="xs:long" oor:nillable="false">
+          <info>
+              <desc>The last time when the Donate infobar was shown.</desc>
+          </info>
+          <value>0</value>
+      </prop>
     </group>
     <group oor:name="Office">
       <!--The default must be written by the setup.-->
