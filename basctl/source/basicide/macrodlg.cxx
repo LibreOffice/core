@@ -319,8 +319,7 @@ SbMethod* MacroChooser::CreateMacro()
             // extract the module name from the string like "Sheet1 (Example1)"
             if( aDesc.GetLibSubName() == IDEResId(RID_STR_DOCUMENT_OBJECTS) )
             {
-                sal_Int32 nIndex = 0;
-                aModName = aModName.getToken( 0, ' ', nIndex );
+                aModName = aModName.getToken( 0, ' ' );
             }
             pModule = pBasic->FindModule( aModName );
         }
@@ -627,8 +626,7 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
         // extract the module name from the string like "Sheet1 (Example1)"
         if( aDesc.GetLibSubName() == IDEResId(RID_STR_DOCUMENT_OBJECTS) )
         {
-            sal_Int32 nIndex = 0;
-            aMod = aMod.getToken( 0, ' ', nIndex );
+            aMod = aMod.getToken( 0, ' ' );
         }
         const OUString& aSub( aDesc.GetMethodName() );
         SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub, OUString() );
