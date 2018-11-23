@@ -118,11 +118,10 @@ enum class TrackingEventFlags
     Focus          = 0x0004,
     Repeat         = 0x0100,
     End            = 0x1000,
-    DontCallHdl    = 0x8000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<TrackingEventFlags> : is_typed_flags<TrackingEventFlags, 0x9107> {};
+    template<> struct typed_flags<TrackingEventFlags> : is_typed_flags<TrackingEventFlags, 0x1107> {};
 }
 
 
