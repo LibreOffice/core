@@ -3947,7 +3947,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
                 SwRect aPaintRect( aRect );
                 aPaintRect.Intersection_( pParentFlyFrame->getFrameArea() );
-                pParentFlyFrame->PaintSwFrameBackground( aPaintRect, pPage, rAttrs );
+                pParentFlyFrame->PaintSwFrameBackground( aPaintRect, pPage );
 
                 gProp.pSRetoucheFly2 = pOldRet;
             }
@@ -3999,7 +3999,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
 
                     for ( size_t i = 0; i < aRegion.size(); ++i )
                     {
-                        PaintSwFrameBackground( aRegion[i], pPage, rAttrs, false, true );
+                        PaintSwFrameBackground( aRegion[i], pPage, false, true );
                     }
 
                     rRenderContext.Pop();
@@ -4008,7 +4008,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
                 {
                     for ( size_t i = 0; i < aRegion.size(); ++i )
                     {
-                        PaintSwFrameBackground( aRegion[i], pPage, rAttrs, false, true );
+                        PaintSwFrameBackground( aRegion[i], pPage, false, true );
                     }
                 }
             }
@@ -6049,7 +6049,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
 
     // paint background
     {
-        PaintSwFrameBackground( rRect, pPage, rAttrs, false, true/*bLowerBorder*/, bOnlyTextBackground );
+        PaintSwFrameBackground( rRect, pPage, false, true/*bLowerBorder*/, bOnlyTextBackground );
     }
 
     // OD 06.08.2002 #99657# - paint border before painting background
@@ -6082,7 +6082,6 @@ static bool lcl_compareFillAttributes(const drawinglayer::attribute::SdrAllFillA
 /// Do not paint background for fly frames without a background brush by
 /// calling <PaintBaBo> at the page or at the fly frame its anchored
 void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pPage,
-                             const SwBorderAttrs & rAttrs,
                              const bool bLowerMode,
                              const bool bLowerBorder,
                              const bool bOnlyTextBackground ) const
@@ -6179,7 +6178,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             }
             else
             {
-                ::lcl_CalcBorderRect( aRect, this, rAttrs, false, gProp);
+                aRect = rRect;
                 if ( (IsTextFrame() || IsTabFrame()) && GetPrev() )
                 {
                     if ( GetPrev()->GetAttrSet()->GetBackground() == GetAttrSet()->GetBackground() &&
@@ -6302,7 +6301,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                 const SwBorderAttrs &rTmpAttrs = *aAccess.Get();
                 if ( ( pFrame->IsLayoutFrame() && bLowerBorder ) || aFrameRect.IsOver( aRect ) )
                 {
-                    pFrame->PaintSwFrameBackground( aRect, pPage, rTmpAttrs, bLowMode,
+                    pFrame->PaintSwFrameBackground( aRect, pPage, bLowMode,
                                            bLowerBorder, bOnlyTextBackground );
                 }
 

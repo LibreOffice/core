@@ -551,7 +551,6 @@ public:
     void PaintBaBo( const SwRect&, const SwPageFrame *pPage,
                     const bool bOnlyTextBackground = false) const;
     void PaintSwFrameBackground( const SwRect&, const SwPageFrame *pPage,
-                          const SwBorderAttrs &,
                           const bool bLowerMode = false,
                           const bool bLowerBorder = false,
                           const bool bOnlyTextBackground = false ) const;
