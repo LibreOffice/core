@@ -2352,6 +2352,10 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     if( !bForcePreview && !mpCBAutoPreview->IsChecked() )
         return;
 
+    // No preview in LOK.
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     if( maListSelection.empty() )
     {
         rtl::Reference< MotionPathTag > xMotionPathTag;
