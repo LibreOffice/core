@@ -22,6 +22,7 @@
 #include "impoptimizer.hxx"
 #include "fileopendialog.hxx"
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -501,24 +502,35 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 FileOpenDialog aFileOpenDialog( mrOptimizerDialog.GetComponentContext() );
 
                 // generating default file name
+                OUString aName;
                 Reference< XStorable > xStorable( mrOptimizerDialog.mxController->getModel(), UNO_QUERY );
                 if ( xStorable.is() && xStorable->hasLocation() )
                 {
                     INetURLObject aURLObj( xStorable->getLocation() );
-                    if ( !aURLObj.hasFinalSlash() ) {
+                    if ( !aURLObj.hasFinalSlash() )
+                    {
                         // tdf#105382 uri-decode file name
                         aURLObj.removeExtension(INetURLObject::LAST_SEGMENT, false);
-                        auto aName( aURLObj.getName( INetURLObject::LAST_SEGMENT,
-                                                     false,
-                                                     INetURLObject::DecodeMechanism::WithCharset ) );
-                        // Add "(minimized)"
-                        aName += " ";
-                        aName += mrOptimizerDialog.getString(STR_FILENAME_SUFFIX);
-                        aFileOpenDialog.setDefaultName( aName );
+                        aName = aURLObj.getName(INetURLObject::LAST_SEGMENT, false,
+                                                INetURLObject::DecodeMechanism::WithCharset);
                     }
                 }
-                 bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
-                if ( bDialogExecuted )
+                else
+                {
+                    // If no filename, try to use model title ("Untitled 1" or something like this)
+                    Reference<XTitle> xTitle(
+                        mrOptimizerDialog.GetFrame()->getController()->getModel(), UNO_QUERY);
+                    aName = xTitle->getTitle();
+                }
+
+                if (!aName.isEmpty())
+                {
+                    aName += " ";
+                    aName += mrOptimizerDialog.getString(STR_FILENAME_SUFFIX);
+                    aFileOpenDialog.setDefaultName(aName);
+                }
+
+                if (aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK)
                 {
                     aSaveAsURL = aFileOpenDialog.getURL();
                     mrOptimizerDialog.SetConfigProperty( TK_SaveAsURL, Any( aSaveAsURL ) );
