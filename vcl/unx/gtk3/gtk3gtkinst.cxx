@@ -4641,6 +4641,16 @@ public:
         gtk_tree_path_free(path);
     }
 
+    virtual void collapse_row(weld::TreeIter& rIter) override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreePath* path = gtk_tree_model_get_path(pModel, &rGtkIter.iter);
+        if (gtk_tree_view_row_expanded(m_pTreeView, path))
+            gtk_tree_view_collapse_row(m_pTreeView, path);
+        gtk_tree_path_free(path);
+    }
+
     virtual OUString get_text(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);

@@ -2153,6 +2153,13 @@ public:
             m_xTreeView->Expand(rVclIter.iter);
     }
 
+    virtual void collapse_row(weld::TreeIter& rIter) override
+    {
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+        if (m_xTreeView->IsExpanded(rVclIter.iter))
+            m_xTreeView->Collapse(rVclIter.iter);
+    }
+
     virtual OUString get_text(const weld::TreeIter& rIter) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
