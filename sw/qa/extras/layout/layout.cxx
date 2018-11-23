@@ -2370,7 +2370,7 @@ void SwLayoutWriter::testTableExtrusion1()
     xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nRight = getXPath(pXmlDoc, "//sectrectclipregion", "right").toInt32();
-    sal_Int32 nLeft = (nRight + getXPath(pXmlDoc, "(//rect)[1]", "right").toInt32()) / 2;
+    sal_Int32 nLeft = static_cast<sal_Int32>(nRight * 0.95);
 
     // Expect table borders in right page margin.
     const OString sXPath = "//polyline/point[@x>" + OString::number(nLeft) + " and @x<"

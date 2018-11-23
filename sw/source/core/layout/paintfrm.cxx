@@ -6179,7 +6179,15 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             }
             else
             {
-                ::lcl_CalcBorderRect( aRect, this, rAttrs, false, gProp);
+                if ( bPageFrame )
+                {
+                    aRect = getFrameArea();
+                }
+                else
+                {
+                   ::lcl_CalcBorderRect( aRect, this, rAttrs, false, gProp);
+                }
+
                 if ( (IsTextFrame() || IsTabFrame()) && GetPrev() )
                 {
                     if ( GetPrev()->GetAttrSet()->GetBackground() == GetAttrSet()->GetBackground() &&
