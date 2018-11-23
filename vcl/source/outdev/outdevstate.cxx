@@ -324,7 +324,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
 
     if( mnDrawMode & ( DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill |
                        DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                       DrawModeFlags::GhostedFill | DrawModeFlags::SettingsFill ) )
+                       DrawModeFlags::SettingsFill ) )
     {
         if( !ImplIsColorTransparent( aColor ) )
         {
@@ -348,13 +348,6 @@ void OutputDevice::SetFillColor( const Color& rColor )
             else if( mnDrawMode & DrawModeFlags::SettingsFill )
             {
                 aColor = GetSettings().GetStyleSettings().GetWindowColor();
-            }
-
-            if( mnDrawMode & DrawModeFlags::GhostedFill )
-            {
-                aColor = Color( (aColor.GetRed() >> 1) | 0x80,
-                                (aColor.GetGreen() >> 1) | 0x80,
-                                (aColor.GetBlue() >> 1) | 0x80);
             }
         }
     }
@@ -461,9 +454,9 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
 {
 
     vcl::Font aFont( rNewFont );
-    if ( mnDrawMode & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText | DrawModeFlags::GhostedText | DrawModeFlags::SettingsText |
+    if ( mnDrawMode & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText |
                        DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
-                       DrawModeFlags::GhostedFill | DrawModeFlags::SettingsFill ) )
+                       DrawModeFlags::SettingsFill ) )
     {
         Color aTextColor( aFont.GetColor() );
 
@@ -478,13 +471,6 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
         }
         else if ( mnDrawMode & DrawModeFlags::SettingsText )
             aTextColor = GetSettings().GetStyleSettings().GetFontColor();
-
-        if ( mnDrawMode & DrawModeFlags::GhostedText )
-        {
-            aTextColor = Color( (aTextColor.GetRed() >> 1 ) | 0x80,
-                                (aTextColor.GetGreen() >> 1 ) | 0x80,
-                                (aTextColor.GetBlue() >> 1 ) | 0x80 );
-        }
 
         aFont.SetColor( aTextColor );
 
@@ -508,13 +494,6 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
             {
                 aTextFillColor = COL_TRANSPARENT;
                 bTransFill = true;
-            }
-
-            if ( !bTransFill && (mnDrawMode & DrawModeFlags::GhostedFill) )
-            {
-                aTextFillColor = Color( (aTextFillColor.GetRed() >> 1) | 0x80,
-                                        (aTextFillColor.GetGreen() >> 1) | 0x80,
-                                        (aTextFillColor.GetBlue() >> 1) | 0x80 );
             }
 
             aFont.SetFillColor( aTextFillColor );

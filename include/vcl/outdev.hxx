@@ -225,27 +225,20 @@ enum class DrawModeFlags : sal_uInt32
     GrayBitmap             = 0x00000100,
     GrayGradient           = 0x00000200,
     NoFill                 = 0x00000400,
-    NoBitmap               = 0x00000800,
-    NoGradient             = 0x00001000,
-    GhostedLine            = 0x00002000,
-    GhostedFill            = 0x00004000,
-    GhostedText            = 0x00008000,
-    GhostedBitmap          = 0x00010000,
-    GhostedGradient        = 0x00020000,
-    WhiteLine              = 0x00100000,
-    WhiteFill              = 0x00200000,
-    WhiteText              = 0x00400000,
-    WhiteBitmap            = 0x00800000,
-    WhiteGradient          = 0x01000000,
-    SettingsLine           = 0x02000000,
-    SettingsFill           = 0x04000000,
-    SettingsText           = 0x08000000,
-    SettingsGradient       = 0x10000000,
-    NoTransparency         = 0x80000000,
+    WhiteLine              = 0x00000800,
+    WhiteFill              = 0x00001000,
+    WhiteText              = 0x00002000,
+    WhiteBitmap            = 0x00004000,
+    WhiteGradient          = 0x00008000,
+    SettingsLine           = 0x00010000,
+    SettingsFill           = 0x00020000,
+    SettingsText           = 0x00040000,
+    SettingsGradient       = 0x00080000,
+    NoTransparency         = 0x00100000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x9ff3ffff> {};
+    template<> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x1fffff> {};
 }
 
 // Antialiasing
