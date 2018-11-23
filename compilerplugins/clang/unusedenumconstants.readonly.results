@@ -1072,8 +1072,6 @@ include/vcl/salctype.hxx:41
     enum ConvertDataFormat PDF
 include/vcl/splitwin.hxx:37
     enum SplitWindowItemFlags Invisible
-include/vcl/treelistentry.hxx:38
-    enum SvTLEntryFlags IN_USE
 include/vcl/vclenum.hxx:37
     enum MenuItemBits POPUPSELECT
 include/vcl/vclenum.hxx:143

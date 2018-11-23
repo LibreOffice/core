@@ -202,12 +202,6 @@ bool SvTreeListEntry::HasChildrenOnDemand() const
     return static_cast<bool>(nEntryFlags & SvTLEntryFlags::CHILDREN_ON_DEMAND);
 }
 
-bool SvTreeListEntry::HasInUseEmphasis() const
-{
-    return static_cast<bool>(nEntryFlags & SvTLEntryFlags::IN_USE);
-}
-
-
 void SvTreeListEntry::SetFlags( SvTLEntryFlags nFlags )
 {
     nEntryFlags = nFlags;

@@ -2657,7 +2657,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
     Color aBackupColor = rRenderContext.GetFillColor();
 
     bool bCurFontIsSel = false;
-    bool bInUse = rEntry.HasInUseEmphasis();
     // if a ClipRegion was set from outside, we don't have to reset it
     const WinBits nWindowStyle = GetStyle();
     const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) !=0 && !HasFocus();
@@ -2712,37 +2711,29 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         Wallpaper aWallpaper = rRenderContext.GetBackground();
 
         bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
-        SvLBoxItemType nItemType = rItem.GetType();
 
         if (pViewDataEntry->IsHighlighted() && bSelTab)
         {
             Color aNewWallColor = rSettings.GetHighlightColor();
-            if (!bInUse || nItemType != SvLBoxItemType::ContextBmp)
+            // if the face color is bright then the deactive color is also bright
+            // -> so you can't see any deactive selection
+            if (bHideSelection && !rSettings.GetFaceColor().IsBright()
+               && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
             {
-                // if the face color is bright then the deactive color is also bright
-                // -> so you can't see any deactive selection
-                if (bHideSelection && !rSettings.GetFaceColor().IsBright()
-                   && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
-                {
-                    aNewWallColor = rSettings.GetDeactiveColor();
-                }
-                // set font color to highlight
-                if (!bCurFontIsSel)
-                {
-                    rRenderContext.SetTextColor(aHighlightTextColor);
-                    rRenderContext.SetFont(aHighlightFont);
-                    bCurFontIsSel = true;
-                }
+                aNewWallColor = rSettings.GetDeactiveColor();
+            }
+            // set font color to highlight
+            if (!bCurFontIsSel)
+            {
+                rRenderContext.SetTextColor(aHighlightTextColor);
+                rRenderContext.SetFont(aHighlightFont);
+                bCurFontIsSel = true;
             }
             aWallpaper.SetColor(aNewWallColor);
         }
         else  // no selection
         {
-            if (bInUse && nItemType == SvLBoxItemType::ContextBmp)
-            {
-                aWallpaper.SetColor(rSettings.GetFieldColor());
-            }
-            else if (bCurFontIsSel || rEntry.GetTextColor())
+            if (bCurFontIsSel || rEntry.GetTextColor())
             {
                 bCurFontIsSel = false;
                 if (const auto* pCustomTextColor = rEntry.GetTextColor())

@@ -35,16 +35,15 @@ enum class SvTLEntryFlags
     NONE                = 0x0000,
     CHILDREN_ON_DEMAND  = 0x0001,
     DISABLE_DROP        = 0x0002,
-    IN_USE              = 0x0004,
     // is set if RequestingChildren has not set any children
-    NO_NODEBMP          = 0x0008,
+    NO_NODEBMP          = 0x0004,
     // entry had or has children
     HAD_CHILDREN        = 0x0010,
     SEMITRANSPARENT     = 0x8000,      // draw semi-transparent entry bitmaps
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvTLEntryFlags> : is_typed_flags<SvTLEntryFlags, 0x801f> {};
+    template<> struct typed_flags<SvTLEntryFlags> : is_typed_flags<SvTLEntryFlags, 0x8017> {};
 }
 
 class VCL_DLLPUBLIC SvTreeListEntry
@@ -104,7 +103,6 @@ public:
     void        SetUserData( void* pPtr );
     void        EnableChildrenOnDemand( bool bEnable=true );
     bool        HasChildrenOnDemand() const;
-    bool        HasInUseEmphasis() const;
 
     SvTLEntryFlags GetFlags() const { return nEntryFlags;}
     void SetFlags( SvTLEntryFlags nFlags );
