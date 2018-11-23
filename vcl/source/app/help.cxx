@@ -73,6 +73,11 @@ OUString Help::GetHelpText( const OUString&, const vcl::Window* )
     return OUString();
 }
 
+OUString Help::GetHelpText( const OUString&, const weld::Widget* )
+{
+    return OUString();
+}
+
 void Help::EnableContextHelp()
 {
     ImplGetSVData()->maHelpData.mbContextHelp = true;

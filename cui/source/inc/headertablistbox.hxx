@@ -54,6 +54,22 @@ public:
     void                        Enable();  ///< same meaning as Windows::Enable()
 };
 
+class CuiMacroEventListBox final
+{
+private:
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+public:
+    CuiMacroEventListBox(std::unique_ptr<weld::TreeView> xTreeView);
+    void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
+    void show() { m_xTreeView->show(); }
+    ~CuiMacroEventListBox();
+
+    weld::TreeView& GetListBox()
+    {
+        return *m_xTreeView;
+    }
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

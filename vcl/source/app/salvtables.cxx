@@ -1765,7 +1765,7 @@ class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::Tr
 private:
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
-    VclPtr<SvHeaderTabListBox> m_xTreeView;
+    VclPtr<SvTabListBox> m_xTreeView;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
@@ -1773,7 +1773,7 @@ private:
     DECL_LINK(EndDragHdl, HeaderBar*, void);
 
 public:
-    SalInstanceTreeView(SvHeaderTabListBox* pTreeView, bool bTakeOwnership)
+    SalInstanceTreeView(SvTabListBox* pTreeView, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, bTakeOwnership)
         , m_xTreeView(pTreeView)
     {
@@ -1783,7 +1783,8 @@ public:
         m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
         const long aTabPositions[] = { 0 };
         m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
-        if (HeaderBar* pHeaderBar = m_xTreeView->GetHeaderBar())
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
         {
             //make the last entry fill available space
             pHeaderBar->SetItemSize(pHeaderBar->GetItemId(pHeaderBar->GetItemCount() - 1 ), HEADERBAR_FULLSIZE);
@@ -1797,7 +1798,8 @@ public:
         aTabPositions.push_back(0);
         aTabPositions.insert(aTabPositions.end(), rWidths.begin(), rWidths.end());
         m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
-        if (HeaderBar* pHeaderBar = m_xTreeView->GetHeaderBar())
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
         {
             for (size_t i = 0; i < rWidths.size(); ++i)
                 pHeaderBar->SetItemSize(pHeaderBar->GetItemId(i), rWidths[i]);
@@ -1914,6 +1916,14 @@ public:
         enable_notify_events();
     }
 
+    virtual void scroll_to_row(int pos) override
+    {
+        disable_notify_events();
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        m_xTreeView->MakeVisible(pEntry);
+        enable_notify_events();
+    }
+
     virtual void unselect(int pos) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't select when frozen");
@@ -1944,6 +1954,8 @@ public:
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
         if (col == -1)
             return SvTabListBox::GetEntryText(pEntry, 0);
+
+        ++col; //skip dummy/expander column
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
             return OUString();
@@ -2095,6 +2107,14 @@ public:
         enable_notify_events();
     }
 
+    virtual void scroll_to_row(const weld::TreeIter& rIter) override
+    {
+        disable_notify_events();
+        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        m_xTreeView->MakeVisible(rVclIter.iter);
+        enable_notify_events();
+    }
+
     virtual void unselect(const weld::TreeIter& rIter) override
     {
         assert(m_xTreeView->IsUpdateMode() && "don't unselect when frozen");
@@ -2112,8 +2132,12 @@ public:
 
     virtual bool iter_has_child(const weld::TreeIter& rIter) const override
     {
-        const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-        return rVclIter.iter->HasChildren();
+        weld::TreeIter& rNonConstIter = const_cast<weld::TreeIter&>(rIter);
+        SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rNonConstIter);
+        SvTreeListEntry* restore(rVclIter.iter);
+        bool ret = iter_children(rNonConstIter);
+        rVclIter.iter = restore;
+        return ret;
     }
 
     virtual bool get_row_expanded(const weld::TreeIter& rIter) const override
@@ -2172,14 +2196,15 @@ public:
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
     }
 
-    SvHeaderTabListBox& getTreeView()
+    SvTabListBox& getTreeView()
     {
         return *m_xTreeView;
     }
 
     virtual ~SalInstanceTreeView() override
     {
-        if (HeaderBar* pHeaderBar = m_xTreeView->GetHeaderBar())
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
         {
             pHeaderBar->SetEndDragHdl(Link<HeaderBar*, void>());
         }
@@ -3318,7 +3343,7 @@ public:
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
     {
-        SvHeaderTabListBox* pTreeView = m_xBuilder->get<SvHeaderTabListBox>(id);
+        SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
         return pTreeView ? o3tl::make_unique<SalInstanceTreeView>(pTreeView, bTakeOwnership) : nullptr;
     }
 

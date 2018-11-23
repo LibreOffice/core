@@ -620,6 +620,49 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
     return sHelpText;
 }
 
+OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* pWidget)
+{
+    OUString sModuleName = GetHelpModuleName_Impl(aCommandURL);
+    OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, getCurrentModuleIdentifier_Impl() );
+    OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
+
+    OString aNewHelpId;
+
+    if (pWidget && sHelpText.isEmpty())
+    {
+        // no help text found -> try with parent help id.
+        std::unique_ptr<weld::Widget> xParent(pWidget->weld_parent());
+        while (xParent)
+        {
+            aNewHelpId = xParent->get_help_id();
+            sHelpText = SfxHelp_Impl::GetHelpText( OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
+            if (!sHelpText.isEmpty())
+                xParent.reset();
+            else
+                xParent.reset(xParent->weld_parent());
+        }
+
+        if (bIsDebug && sHelpText.isEmpty())
+            aNewHelpId.clear();
+    }
+
+    // add some debug information?
+    if ( bIsDebug )
+    {
+        sHelpText += "\n-------------\n";
+        sHelpText += sModuleName;
+        sHelpText += ": ";
+        sHelpText += aCommandURL;
+        if ( !aNewHelpId.isEmpty() )
+        {
+            sHelpText += " - ";
+            sHelpText += OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
+        }
+    }
+
+    return sHelpText;
+}
+
 void SfxHelp::SearchKeyword( const OUString& rKeyword )
 {
     Start_Impl(OUString(), static_cast<vcl::Window*>(nullptr), rKeyword);

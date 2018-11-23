@@ -382,6 +382,7 @@ class VCL_DLLPUBLIC TreeView : virtual public Container
 protected:
     Link<TreeView&, void> m_aChangeHdl;
     Link<TreeView&, void> m_aRowActivatedHdl;
+    // if handler returns false, the expansion of the row is refused
     Link<TreeIter&, bool> m_aExpandingHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
@@ -438,6 +439,7 @@ public:
     virtual void set_top_entry(int pos) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
+    virtual void scroll_to_row(int pos) = 0;
 
     //by text
     virtual OUString get_text(int row, int col = -1) const = 0;
@@ -488,6 +490,7 @@ public:
     virtual void expand_row(TreeIter& rIter) = 0;
     virtual OUString get_text(const TreeIter& rIter) const = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
+    virtual void scroll_to_row(const TreeIter& rIter) = 0;
 
     void connect_expanding(const Link<TreeIter&, bool>& rLink) { m_aExpandingHdl = rLink; }
 
