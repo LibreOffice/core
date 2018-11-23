@@ -834,7 +834,7 @@ void SwFramePage::EnableGraficMode()
 
 SwWrtShell *SwFramePage::getFrameDlgParentShell()
 {
-    return static_cast<SwFrameDlg*>(GetParentDialog())->GetWrtShell();
+    return static_cast<SwFrameDlg*>(GetDialogController())->GetWrtShell();
 }
 
 void SwFramePage::Reset( const SfxItemSet *rSet )
