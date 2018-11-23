@@ -34,13 +34,11 @@ enum class PresentationFlags
 {
     NONE           = 0x0000,
     HideAllApps    = 0x0001,
-    NoFullScreen   = 0x0002,
-    NoAutoShow     = 0x0004,
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<PresentationFlags> : is_typed_flags<PresentationFlags, 0x0007> {};
+    template<> struct typed_flags<PresentationFlags> : is_typed_flags<PresentationFlags, 0x0001> {};
 }
 
 
