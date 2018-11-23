@@ -103,6 +103,7 @@ static const TokenTable pTokenTableArray[] =
     { "STR_CANCEL",                 STR_CANCEL },
     { "STR_INTRODUCTION",           STR_INTRODUCTION },
     { "STR_INTRODUCTION_T",         STR_INTRODUCTION_T },
+    { "STR_INTRODUCTION_T2",        STR_INTRODUCTION_T2 },
     { "STR_CHOSE_SETTINGS",         STR_CHOSE_SETTINGS },
     { "STR_REMOVE",                 STR_REMOVE },
     { "STR_GRAPHIC_OPTIMIZATION",   STR_GRAPHIC_OPTIMIZATION },
