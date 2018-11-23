@@ -261,8 +261,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_JAVA), \
 		connectivity/source/drivers/hsqldb/hsqldb \
 		connectivity/source/drivers/jdbc/jdbc \
-		connectivity/source/drivers/mysql_jdbc/mysql_jdbc \
 	) \
+	connectivity/source/drivers/mysql/mysql \
 	connectivity/source/manager/sdbc2 \
 	connectivity/source/drivers/writer/writer \
 	dbaccess/source/ext/macromigration/dbmm \
