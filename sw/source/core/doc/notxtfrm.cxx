@@ -32,7 +32,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <vcl/window.hxx>
 #include <fmturl.hxx>
 #include <fmtsrnd.hxx>
 #include <frmfmt.hxx>

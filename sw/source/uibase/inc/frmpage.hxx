@@ -20,19 +20,15 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FRMPAGE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRMPAGE_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/swframeposstrings.hxx>
-#include <swtypes.hxx>
-#include "bmpwin.hxx"
-#include <svx/swframeexample.hxx>
-#include "prcntfld.hxx"
-#include <globals.hrc>
 #include <svx/dialcontrol.hxx>
 #include <svx/frmdirlbox.hxx>
+#include <svx/swframeexample.hxx>
+#include <svx/swframeposstrings.hxx>
+#include <globals.hrc>
+#include <swtypes.hxx>
+#include "bmpwin.hxx"
+#include "prcntfld.hxx"
 
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;

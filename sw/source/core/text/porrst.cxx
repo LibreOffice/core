@@ -24,7 +24,6 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/pgrditem.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>

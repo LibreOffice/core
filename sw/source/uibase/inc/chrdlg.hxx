@@ -20,11 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CHRDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include "chrdlgmodes.hxx"
 
 class SwView;

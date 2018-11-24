@@ -21,14 +21,8 @@
 
 #include <svtools/svmedit.hxx>
 #include <sfx2/tabdlg.hxx>
-
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/customweld.hxx>
-
 #include "envimg.hxx"
 
 #define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::TWIP))

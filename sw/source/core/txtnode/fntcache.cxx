@@ -27,7 +27,6 @@
 #include <vcl/print.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lazydelete.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>

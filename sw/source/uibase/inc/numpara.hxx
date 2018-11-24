@@ -20,10 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NUMPARA_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
 
 // with this TabPage numbering settings at the paragraph / paragraph style
 // are performed.

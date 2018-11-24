@@ -41,7 +41,6 @@
 #include <UndoDelete.hxx>
 #include <UndoInsert.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 #include <viscrs.hxx>
 

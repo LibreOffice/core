@@ -68,7 +68,6 @@
 #include <wrong.hxx>
 #include <calbck.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <vcl/window.hxx>
 #include <docufld.hxx>
 #include <svx/srchdlg.hxx>
 

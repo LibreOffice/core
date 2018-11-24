@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NUMPREVW_HXX
 
 #include <vcl/customweld.hxx>
-#include <vcl/window.hxx>
 
 class SwNumRule;
 namespace rtl { class OUString; }

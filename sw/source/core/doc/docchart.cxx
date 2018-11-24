@@ -19,7 +19,6 @@
 
 #include <float.h>
 #include <hintids.hxx>
-#include <vcl/window.hxx>
 #include <doc.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>

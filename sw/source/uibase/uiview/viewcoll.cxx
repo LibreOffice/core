@@ -19,7 +19,6 @@
 
 #include <cmdid.h>
 #include <uiitems.hxx>
-#include <vcl/window.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
