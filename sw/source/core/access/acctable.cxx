@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
-#include <list>
+#include <vector>
 #include <set>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -76,7 +76,7 @@ class SwAccessibleTableData_Impl
     SwAccessibleMap& mrAccMap;
     Int32Set_Impl   maRows;
     Int32Set_Impl   maColumns;
-    std::list < Int32Pair_Impl > maExtents;     // cell extends for event processing only
+    std::vector < Int32Pair_Impl > maExtents;     // cell extends for event processing only
     Point   maTabFramePos;
     const SwTabFrame *mpTabFrame;
     bool const mbIsInPagePreview;
