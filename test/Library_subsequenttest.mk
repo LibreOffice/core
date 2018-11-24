@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/container/xnamed \
 	test/source/container/xnamereplace \
 	test/source/drawing/captionshape \
+	test/source/document/xlinktargetsupplier \
 	test/source/sheet/cellarealink \
 	test/source/sheet/cellproperties \
 	test/source/sheet/databaseimportdescriptor \
