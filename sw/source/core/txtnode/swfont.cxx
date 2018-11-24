@@ -50,7 +50,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <vcl/window.hxx>
 #include <charatr.hxx>
 #include <viewsh.hxx>
 #include <swfont.hxx>

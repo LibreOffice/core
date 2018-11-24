@@ -35,7 +35,6 @@
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
 #include <breakit.hxx>
-#include <vcl/window.hxx>
 
 SwCallLink::SwCallLink( SwCursorShell & rSh )
     : rShell( rSh )

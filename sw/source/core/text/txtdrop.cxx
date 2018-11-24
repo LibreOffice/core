@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <paratr.hxx>
 #include <txtfrm.hxx>

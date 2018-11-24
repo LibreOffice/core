@@ -67,7 +67,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
-#include <vcl/window.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/hyphenzoneitem.hxx>

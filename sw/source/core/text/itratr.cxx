@@ -27,7 +27,6 @@
 #include <svl/itemiter.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svdobj.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>

@@ -19,7 +19,6 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <vcl/window.hxx>
-
 #include <swtypes.hxx>
 #include <shdwcrsr.hxx>
 

@@ -41,7 +41,6 @@
 #include "redlnitr.hxx"
 #include <extinput.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 

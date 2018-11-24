@@ -22,7 +22,6 @@
 #include <hints.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <editeng/boxitem.hxx>
 #include <swwait.hxx>
 #include <fmtfsize.hxx>
