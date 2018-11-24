@@ -1464,32 +1464,16 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
 
     // do the filtering
-    auto aContentLoop = maContent.begin();
-    OUString sCompareString;
-    do
-    {
-        if ( (*aContentLoop)->mbIsFolder )
-            ++aContentLoop;
-        else
-        {
+    maContent.erase(std::remove_if(maContent.begin(), maContent.end(),
+        [&aFilters](const std::unique_ptr<SortingData_Impl>& rxContent) {
+            if (rxContent->mbIsFolder)
+                return false;
             // normalize the content title (we always match case-insensitive)
             // 91872 - 11.09.2001 - frank.schoenheit@sun.com
-            sCompareString = (*aContentLoop)->GetFileName(); // filter works on file name, not on title!
-            bool bDelete;
-
-            bDelete = ::std::none_of( aFilters.begin(), aFilters.end(),
-                                      FilterMatch( sCompareString ) );
-
-            if( bDelete )
-            {
-                // none of the filters did match
-                aContentLoop = maContent.erase(aContentLoop);
-            }
-            else
-                ++aContentLoop;
-        }
-    }
-    while ( aContentLoop != maContent.end() );
+            OUString sCompareString = rxContent->GetFileName(); // filter works on file name, not on title!
+            return std::none_of(aFilters.begin(), aFilters.end(), FilterMatch(sCompareString));
+        }),
+        maContent.end());
 }
 
 

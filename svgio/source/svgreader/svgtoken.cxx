@@ -324,12 +324,12 @@ namespace svgio
 
                     if(aCaseLindependentSVGTokenMapperList.empty())
                     {
-                        for(SVGTokenMapper::const_iterator aCurrent(aSVGTokenMapperList.begin()); aCurrent != aSVGTokenMapperList.end(); ++aCurrent)
+                        for(const auto& rCurrent : aSVGTokenMapperList)
                         {
                             aCaseLindependentSVGTokenMapperList.insert(
                                 SVGTokenValueType(
-                                    aCurrent->first.toAsciiLowerCase(),
-                                    aCurrent->second));
+                                    rCurrent.first.toAsciiLowerCase(),
+                                    rCurrent.second));
                         }
                     }
 

@@ -78,18 +78,9 @@ const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) con
 
 void SvObjectServerList::Remove( const SvGlobalName & rName )
 {
-    for( size_t i = 0; i < aObjectServerList.size(); )
-    {
-        if( aObjectServerList[ i ].GetClassName() == rName )
-        {
-            SvObjectServerList_impl::iterator it = aObjectServerList.begin() + i;
-            aObjectServerList.erase( it );
-        }
-        else
-        {
-            ++i;
-        }
-    }
+    aObjectServerList.erase(std::remove_if(aObjectServerList.begin(), aObjectServerList.end(),
+        [rName](const SvObjectServer& rServer) { return rServer.GetClassName() == rName; }),
+        aObjectServerList.end());
 }
 
 

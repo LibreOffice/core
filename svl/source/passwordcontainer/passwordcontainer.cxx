@@ -886,20 +886,20 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
     if( aIter == m_aContainer.end() )
         return;
 
-    for( std::vector< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
-        if( aNPIter->GetUserName() == aName )
-        {
-            if( aNPIter->HasPasswords( PERSISTENT_RECORD ) && m_pStorageFile )
-                m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
+    auto aNPIter = std::find_if(aIter->second.begin(), aIter->second.end(),
+        [&aName](const NamePassRecord& rNPRecord) { return rNPRecord.GetUserName() == aName; });
 
-            // the iterator will not be used any more so it can be removed directly
-            aIter->second.erase( aNPIter );
+    if (aNPIter != aIter->second.end())
+    {
+        if( aNPIter->HasPasswords( PERSISTENT_RECORD ) && m_pStorageFile )
+            m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
 
-            if( aIter->second.empty() )
-                m_aContainer.erase( aIter );
+        // the iterator will not be used any more so it can be removed directly
+        aIter->second.erase( aNPIter );
 
-            return;
-        }
+        if( aIter->second.empty() )
+            m_aContainer.erase( aIter );
+    }
 }
 
 
@@ -926,26 +926,26 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
     if( aIter == m_aContainer.end() )
         return;
 
-    for( std::vector< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
-        if( aNPIter->GetUserName() == aName )
+    auto aNPIter = std::find_if(aIter->second.begin(), aIter->second.end(),
+        [&aName](const NamePassRecord& rNPRecord) { return rNPRecord.GetUserName() == aName; });
+
+    if (aNPIter != aIter->second.end())
+    {
+        if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
         {
-            if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
-            {
-                // TODO/LATER: should the password be converted to MemoryPassword?
-                aNPIter->RemovePasswords( PERSISTENT_RECORD );
+            // TODO/LATER: should the password be converted to MemoryPassword?
+            aNPIter->RemovePasswords( PERSISTENT_RECORD );
 
-                if ( m_pStorageFile )
-                    m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
-            }
-
-            if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
-                aIter->second.erase( aNPIter );
-
-            if( aIter->second.empty() )
-                m_aContainer.erase( aIter );
-
-            return;
+            if ( m_pStorageFile )
+                m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
         }
+
+        if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
+            aIter->second.erase( aNPIter );
+
+        if( aIter->second.empty() )
+            m_aContainer.erase( aIter );
+    }
 }
 
 void SAL_CALL PasswordContainer::removeAllPersistent()
@@ -990,10 +990,10 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
     Sequence< UrlRecord > aResult;
 
     ::osl::MutexGuard aGuard( mMutex );
-    for( PassMap::const_iterator aIter = m_aContainer.begin(); aIter != m_aContainer.end(); ++aIter )
+    for( const auto& rEntry : m_aContainer )
     {
         Sequence< UserRecord > aUsers;
-        for (auto const& aNP : aIter->second)
+        for (auto const& aNP : rEntry.second)
             if( aNP.HasPasswords( PERSISTENT_RECORD ) )
             {
                 sal_Int32 oldLen = aUsers.getLength();
@@ -1005,7 +1005,7 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
         {
             sal_Int32 oldLen = aResult.getLength();
             aResult.realloc( oldLen + 1 );
-            aResult[ oldLen ] = UrlRecord( aIter->first, aUsers );
+            aResult[ oldLen ] = UrlRecord( rEntry.first, aUsers );
         }
     }
 
@@ -1262,24 +1262,22 @@ void PasswordContainer::Notify()
 {
     ::osl::MutexGuard aGuard( mMutex );
 
-    PassMap::iterator aIter;
-
     // remove the cached persistent values in the memory
-    for( aIter = m_aContainer.begin(); aIter != m_aContainer.end(); ++aIter )
+    for( auto& rEntry : m_aContainer )
     {
-        for( std::vector< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); )
+        for( std::vector< NamePassRecord >::iterator aNPIter = rEntry.second.begin(); aNPIter != rEntry.second.end(); )
         {
             if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
             {
                 aNPIter->RemovePasswords( PERSISTENT_RECORD );
 
                 if ( m_pStorageFile )
-                    m_pStorageFile->remove( aIter->first, aNPIter->GetUserName() ); // remove record ( aURL, aName )
+                    m_pStorageFile->remove( rEntry.first, aNPIter->GetUserName() ); // remove record ( aURL, aName )
             }
 
             if( !aNPIter->HasPasswords( MEMORY_RECORD ) )
             {
-                aNPIter = aIter->second.erase(aNPIter);
+                aNPIter = rEntry.second.erase(aNPIter);
             }
             else
                 ++aNPIter;
@@ -1290,14 +1288,14 @@ void PasswordContainer::Notify()
     if( m_pStorageFile )
         addon = m_pStorageFile->getInfo();
 
-    for( aIter = addon.begin(); aIter != addon.end(); ++aIter )
+    for( const auto& rEntry : addon )
     {
-        PassMap::iterator aSearchIter = m_aContainer.find( aIter->first );
+        PassMap::iterator aSearchIter = m_aContainer.find( rEntry.first );
         if( aSearchIter != m_aContainer.end() )
-            for (auto const& aNP : aIter->second)
+            for (auto const& aNP : rEntry.second)
                 UpdateVector( aSearchIter->first, aSearchIter->second, aNP, false );
         else
-            m_aContainer.insert( PairUrlRecord( aIter->first, aIter->second ) );
+            m_aContainer.insert( PairUrlRecord( rEntry.first, rEntry.second ) );
     }
 }
 

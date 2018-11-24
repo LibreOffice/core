@@ -388,9 +388,11 @@ uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType
     uno::Sequence<sal_Int32> aSeq(nCount);
     sal_Int32* pAry = aSeq.getArray();
     sal_uInt32 i=0;
-    for (SvNumberFormatTable::const_iterator it = rTable.begin(); it != rTable.end(); ++it, ++i)
-        pAry[i] = it->first;
-
+    for (const auto& rEntry : rTable)
+    {
+        pAry[i] = rEntry.first;
+        ++i;
+    }
     return aSeq;
 }
 

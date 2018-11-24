@@ -2036,14 +2036,11 @@ void SvxIconChoiceCtrl_Impl::ToTop( SvxIconChoiceCtrlEntry* pEntry )
            && pEntry != maZOrderList.back()))
         return;
 
-    for( auto it = maZOrderList.begin(); it != maZOrderList.end(); ++it)
+    auto it = std::find(maZOrderList.begin(), maZOrderList.end(), pEntry);
+    if (it != maZOrderList.end())
     {
-        if ( *it == pEntry )
-        {
-            maZOrderList.erase( it );
-            maZOrderList.push_back( pEntry );
-            break;
-        }
+        maZOrderList.erase( it );
+        maZOrderList.push_back( pEntry );
     }
 }
 
