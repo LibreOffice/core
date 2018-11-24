@@ -100,7 +100,9 @@ gb_CXXFLAGS_COMMON += -ffunction-sections -fdata-sections
 gb_LinkTarget_LDFLAGS += -Wl,--gc-sections
 endif
 
-ifeq ($(shell expr '$(GCC_VERSION)' '>=' 600),1)
+ifeq ($(COM_IS_CLANG),TRUE)
+gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
+else
 gb_CFLAGS_COMMON += \
     -Wduplicated-cond \
     -Wlogical-op \
@@ -118,16 +120,6 @@ ifeq ($(shell expr '$(GCC_VERSION)' '>=' 800),1)
 gb_CXXFLAGS_COMMON += \
     -Wno-cast-function-type
 endif
-
-ifeq ($(COM_IS_CLANG),TRUE)
-gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
-else
-# GCC 4.8, at least, is confused by boost 1.66 optional assignments
-ifeq ($(shell expr '$(GCC_VERSION)' '<' 409),1)
-gb_CXXFLAGS_COMMON += -Wno-maybe-uninitialized
-endif
-endif
-
 
 # If CC or CXX already include -fvisibility=hidden, don't duplicate it
 ifeq (,$(filter -fvisibility=hidden,$(CC)))

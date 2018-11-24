@@ -33,22 +33,6 @@ $(eval $(call gb_StaticLibrary_add_cxxflags,poppler,\
 ))
 endif
 
-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
-# can't easily check for 4.8.2 exactly so just apply to GCC 4.8.x
-ifeq ($(COM),GCC)
-ifeq ($(COM_IS_CLANG),)
-ifeq ($(CPUNAME),INTEL)
-ifeq ($(shell expr '$(GCC_VERSION)' '<' 409),1)
-ifeq ($(shell expr '$(GCC_VERSION)' '>=' 408),1)
-$(eval $(call gb_StaticLibrary_add_cxxflags,poppler,\
-	-march=i586 \
-))
-endif
-endif
-endif
-endif
-endif
-
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,poppler,cc))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\

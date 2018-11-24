@@ -444,7 +444,7 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), guard.p->m23.getLength());
 
 //This is a very platform specific test.
-#if defined __GNUC__ && __GNUC__ >= 3 // see CPPU_GCC3_ALIGN
+#if defined __GNUC__ // see CPPU_GCC3_ALIGN
 #if defined(LINUX) && (defined (X86_64) || defined(X86) || defined(PPC))
     CPPUNIT_ASSERT_EQUAL(
 #if defined X86_64 || defined PPC

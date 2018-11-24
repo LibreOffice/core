@@ -6258,13 +6258,13 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
 
             #if defined SYSTEM_LIBCMIS
             // See ucb/source/ucp/cmis/auth_provider.hxx:
-            #if __GNUC__ >= 7
+            #if !defined __clang__
             #pragma GCC diagnostic push
             #pragma GCC diagnostic ignored "-Wdeprecated"
             #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
             #endif
             #include <libcmis/libcmis.hxx>
-            #if __GNUC__ >= 7
+            #if !defined __clang__
             #pragma GCC diagnostic pop
             #endif
             #endif
