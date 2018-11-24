@@ -158,11 +158,10 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         if (!aBookmarkName.isEmpty()) {
             m_aFieldStack.back().SetBookmarkName(aBookmarkName);
             m_aFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
-            m_aFieldStack.back().getParameters()["Description"] <<= aFormula.msToolTip;
-            if ( aFormula.mbHelp && !aFormula.msHelp.isEmpty() )
-                m_aFieldStack.back().getParameters()["Help"] <<= aFormula.msHelp;
+            if ( aFormula.msToolTip.getLength() < 139 )
+                m_aFieldStack.back().getParameters()["Description"] <<= aFormula.msToolTip;
             m_aFieldStack.back().getParameters()["Name"] <<= aFormula.msTitle;
-            if (aFormula.mnMaxLen)
+            if (aFormula.mnMaxLen && aFormula.mnMaxLen < 32768 )
                 m_aFieldStack.back().getParameters()["MaxLength"] <<= aFormula.mnMaxLen;
 
             if ( aFormula.mfType == 1 )
@@ -175,15 +174,6 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
                 m_aFieldStack.back().getParameters()["Type"] <<= OUString("currentDate");
             else if ( aFormula.mfType == 5 )
                 m_aFieldStack.back().getParameters()["Type"] <<= OUString("calculated");
-
-            if ( !aFormula.msDefault.isEmpty() )
-                m_aFieldStack.back().getParameters()["Content"] <<= aFormula.msDefault;
-            if ( !aFormula.msFormatting.isEmpty() )
-                m_aFieldStack.back().getParameters()["Format"] <<= aFormula.msFormatting;
-            if ( !aFormula.msEntryMcr.isEmpty() )
-                m_aFieldStack.back().getParameters()["EntryMacro"] <<= aFormula.msEntryMcr;
-            if ( !aFormula.msExitMcr.isEmpty() )
-                m_aFieldStack.back().getParameters()["ExitMacro"] <<= aFormula.msExitMcr;
         }
         return eF_ResT::TEXT;
     }
