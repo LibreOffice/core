@@ -16,6 +16,24 @@
       "revId": "e09dfa4eaab4d0d19d0cc2a4bf9e35165a7d42db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_a847fbbc",
+        "filename": "sw/source/core/unocore/unocoll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-24T14:05:26Z",
+      "side": 1,
+      "message": "Indeed, I had overlooked this.\n\nAlso, we could add a resize after the loop to save memory but perhaps it\u0027s an overkill",
+      "parentUuid": "bf57530f_28342b4a",
+      "revId": "e09dfa4eaab4d0d19d0cc2a4bf9e35165a7d42db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
