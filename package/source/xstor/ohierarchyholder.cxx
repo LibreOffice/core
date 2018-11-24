@@ -267,9 +267,14 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
         for ( OWeakStorRefList_Impl::iterator pStorageIter = m_aOpenStreams.begin();
               pStorageIter != m_aOpenStreams.end(); )
         {
-            OWeakStorRefList_Impl::iterator pTmp = pStorageIter++;
-            if ( !pTmp->get().is() || pTmp->get() == xStream )
-                m_aOpenStreams.erase( pTmp );
+            if ( !pStorageIter->get().is() || pStorageIter->get() == xStream )
+            {
+                pStorageIter = m_aOpenStreams.erase(pStorageIter);
+            }
+            else
+            {
+                ++pStorageIter;
+            }
         }
 
         aGuard.clear();
