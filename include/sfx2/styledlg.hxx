@@ -26,26 +26,6 @@
 class SfxStyleSheetBase;
 class SfxStyleSheetBasePool;
 
-class SFX2_DLLPUBLIC SfxStyleDialog: public SfxTabDialog
-{
-private:
-    SfxStyleSheetBase*          pStyle;
-    DECL_DLLPRIVATE_LINK( CancelHdl, Button *, void );
-    sal_uInt16 m_nOrganizerId;
-
-public:
-    SfxStyleDialog(vcl::Window* pParent, const OUString& rID,
-        const OUString& rUIXMLDescription, SfxStyleSheetBase&);
-
-    virtual ~SfxStyleDialog() override;
-    virtual void dispose() override;
-
-    SfxStyleSheetBase&          GetStyleSheet() { return *pStyle; }
-    const SfxStyleSheetBase&    GetStyleSheet() const { return *pStyle; }
-
-    virtual short               Ok() override;
-};
-
 class SFX2_DLLPUBLIC SfxStyleDialogController : public SfxTabDialogController
 {
 private:
