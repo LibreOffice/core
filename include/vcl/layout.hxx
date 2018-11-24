@@ -12,13 +12,10 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/IContext.hxx>

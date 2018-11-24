@@ -24,6 +24,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <formula/funcvarargs.h>
+#include <vcl/fixed.hxx>
 
 #include <sc.hrc>
 #include <global.hxx>

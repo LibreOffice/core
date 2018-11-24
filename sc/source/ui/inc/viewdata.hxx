@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_VIEWDATA_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_VIEWDATA_HXX
 
+#include <tools/fract.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <rangelst.hxx>
 #include <scdllapi.h>

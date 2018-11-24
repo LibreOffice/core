@@ -22,11 +22,11 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
-#include <vcl/outdev.hxx>
+#include <tools/ref.hxx>
+#include <tools/gen.hxx>
 
 class ImplFontMetric;
-class ImplFontCharMap;
-class CmapResult;
+class FontCharMap;
 
 typedef sal_uInt32 sal_UCS4;
 typedef tools::SvRef<FontCharMap> FontCharMapRef;

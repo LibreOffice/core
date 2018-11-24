@@ -25,6 +25,8 @@
 #include <fontinstance.hxx>
 #include <vcl/glyphitem.hxx>
 
+class CmapResult;
+
 // FreetypeFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped
 // in up to nTTC*nSizes*nOrientation*nSynthetic times

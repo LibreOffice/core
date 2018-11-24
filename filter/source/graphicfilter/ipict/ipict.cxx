@@ -25,6 +25,7 @@
 #include <vcl/gdimtf.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <vcl/virdev.hxx>
 #include <math.h>
 

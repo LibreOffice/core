@@ -12,6 +12,7 @@
 #include <tools/XmlWriter.hxx>
 
 #include <vcl/metaact.hxx>
+#include <vcl/outdev.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 

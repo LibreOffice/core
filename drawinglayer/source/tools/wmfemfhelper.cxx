@@ -49,6 +49,7 @@
 #include <tools/stream.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
+#include <vcl/outdev.hxx>
 #include <emfplushelper.hxx>
 #include <numeric>
 

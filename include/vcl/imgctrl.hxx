@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 
 #include <vcl/fixed.hxx>
-#include <vcl/bitmapex.hxx>
 
 
 class VCL_DLLPUBLIC ImageControl : public FixedImage

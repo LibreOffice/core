@@ -18,6 +18,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <editeng/unoprnms.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/outdev.hxx>
 #include <unotools/datetime.hxx>
 #include <comphelper/sequence.hxx>
 

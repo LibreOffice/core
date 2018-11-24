@@ -20,6 +20,7 @@
 
 #include <graphic/UnoGraphicTransformer.hxx>
 
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>

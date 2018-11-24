@@ -26,6 +26,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/animate.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include "lzwdecom.hxx"
 #include "ccidecom.hxx"
 

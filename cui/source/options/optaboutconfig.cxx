@@ -13,6 +13,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/fixed.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

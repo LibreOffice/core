@@ -25,6 +25,7 @@
 #include <vcl/fltcall.hxx>
 #include <svl/solar.hrc>
 #include <vcl/FilterConfigItem.hxx>
+#include <tools/stream.hxx>
 
 //============================ PCDReader ==================================
 

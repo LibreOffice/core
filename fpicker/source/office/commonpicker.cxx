@@ -20,6 +20,7 @@
 
 #include "commonpicker.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

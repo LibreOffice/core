@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_ICONTHEMESCANNER_HXX
 
 #include <vcl/dllapi.h>
-#include <tools/solar.h>
 
 #include <rtl/ustring.hxx>
 #include <vcl/IconThemeInfo.hxx>
@@ -21,11 +20,6 @@
 
 // forward declaration of unit test class. Required for friend relationship.
 class IconThemeScannerTest;
-
-namespace osl {
-class Directory;
-class DirectoryItem;
-}
 
 namespace vcl {
 

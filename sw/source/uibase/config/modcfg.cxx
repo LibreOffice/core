@@ -27,6 +27,7 @@
 #include <editeng/svxenum.hxx>
 #include <osl/diagnose.h>
 
+#include <tools/mapunit.hxx>
 #include <tools/globname.hxx>
 #include <swtypes.hxx>
 #include <itabenum.hxx>

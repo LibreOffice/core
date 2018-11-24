@@ -21,10 +21,10 @@
 #define INCLUDED_VCL_MNEMONIC_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
+namespace com { namespace sun { namespace star { namespace i18n { class XCharacterClassification; } } } }
 
 // Mnemonic Chars, which we want support
 // Latin 0-9

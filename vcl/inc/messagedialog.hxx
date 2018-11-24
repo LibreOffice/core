@@ -12,6 +12,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/fixed.hxx>
 
 class MessageDialog : public Dialog
 {

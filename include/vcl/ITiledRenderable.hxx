@@ -11,16 +11,13 @@
 #ifndef INCLUDED_VCL_ITILEDRENDERABLE_HXX
 #define INCLUDED_VCL_ITILEDRENDERABLE_HXX
 
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <tools/gen.hxx>
-#include <svx/ruler.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/virdev.hxx>
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
+#include <map>
 
 namespace vcl
 {

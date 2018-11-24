@@ -25,6 +25,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/txencbox.hxx>
 #include <svx/langbox.hxx>
+#include <tools/lineend.hxx>
 
 class SwAsciiOptions;
 class SvStream;

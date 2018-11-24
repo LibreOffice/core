@@ -12,7 +12,7 @@
 #include <libpagemaker/libpagemaker.h>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-
+#include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "PageMakerImportFilter.hxx"

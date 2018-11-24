@@ -22,6 +22,7 @@
 
 #include <utility>
 #include <vcl/lstbox.hxx>
+#include <vcl/fixed.hxx>
 
 constexpr int MENU_START = 0;
 constexpr int MENU_COLUMN = 1;

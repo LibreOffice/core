@@ -20,6 +20,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <svl/solar.hrc>

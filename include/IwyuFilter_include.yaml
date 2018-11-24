@@ -319,3 +319,11 @@ blacklist:
     include/vcl/help.hxx:
     # Needed for template
     - o3tl/typed_flags_set.hxx
+    include/vcl/imap.hxx:
+    # Needed for implicit dtor
+    - vcl/imapobj.hxx
+    include/vcl/keycodes.hxx:
+    # Needed for macros
+    - com/sun/star/awt/Key.hpp
+    - com/sun/star/awt/KeyGroup.hpp
+

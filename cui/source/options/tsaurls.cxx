@@ -11,6 +11,7 @@
 #include <svx/svxdlg.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
+#include <vcl/fixed.hxx>
 
 #include "tsaurls.hxx"
 

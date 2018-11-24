@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INPUTCTX_HXX
 #define INCLUDED_VCL_INPUTCTX_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <o3tl/typed_flags_set.hxx>

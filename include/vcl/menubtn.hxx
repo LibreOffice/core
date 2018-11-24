@@ -24,11 +24,8 @@
 #include <vcl/dllapi.h>
 #include <memory>
 
-class FloatingWindow;
 class Timer;
 class PopupMenu;
-class VclBuilder;
-class VclSimpleEvent;
 
 class VCL_DLLPUBLIC MenuButton : public PushButton
 {
