@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_e8f733d4",
+        "filename": "sw/source/core/unocore/unodraw.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-24T10:42:45Z",
+      "side": 1,
+      "message": "if you are aiming for efficiency, you should do a reserve or resize before the loop",
+      "revId": "4d318fe3b91ab017a2ac82cf9d65988d0d7763dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
