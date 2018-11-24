@@ -112,7 +112,7 @@ public class OOoBean
     public OOoBean()
     {}
 
-       // @requirement FUNC.CON.MULT/0.3
+    // @requirement FUNC.CON.MULT/0.3
     /** Constructor for an OOoBean which uses a specific office connection.
 
         The connection must be established but no document is loaded.
@@ -251,7 +251,7 @@ public class OOoBean
     }
 
     // @requirement FUNC.CON.STOP/0.4 (via XComponent.dispose())
-       // @requirement FUNC.CON.NTFY/0.4 (via XComponent.addEventListener())
+    // @requirement FUNC.CON.NTFY/0.4 (via XComponent.addEventListener())
     /** Returns the a connection to an OOo instance.
 
         If no connection exists, a default connection will be created. An OfficeConnection
@@ -348,7 +348,7 @@ public class OOoBean
        This implementation simply calls clear.
 
        @param bClearStateToo
-           Not only the document content but also the state of the bean,
+        Not only the document content but also the state of the bean,
         like visibility of child components is cleared.
 
         @deprecated There is currently no way to dismiss changes, except for loading
@@ -514,8 +514,8 @@ public class OOoBean
         { throw new NoConnectionException(); }
     }
 
-       // @requirement FUNC.BEAN.LOAD/0.4
-       // @requirement FUNC.CON.AUTO/0.3
+    // @requirement FUNC.BEAN.LOAD/0.4
+    // @requirement FUNC.CON.AUTO/0.3
     /** Loads the bean from the given URL.
 
         If a document is already loaded and the content modified,
@@ -547,7 +547,7 @@ public class OOoBean
             com.sun.star.util.CloseVetoException
     {
         dbgPrint( "loadFromURL()" );
-         // try loading
+        // try loading
         try
         {
             boolean bLoaded = false;
@@ -713,7 +713,7 @@ public class OOoBean
 
     /** Loads a document from a Java stream.
 
-           See loadFromURL() for further information.
+        See loadFromURL() for further information.
      */
     public void loadFromStream(
             final java.io.InputStream iInStream,
@@ -764,7 +764,7 @@ public class OOoBean
 
     /** Loads a document from a byte array.
 
-           See loadFromURL() for further information.
+        See loadFromURL() for further information.
      */
     public void loadFromByteArray(
             final byte aInBuffer[],
@@ -853,7 +853,7 @@ public class OOoBean
 
     /** Stores a document to a stream.
 
-           See {@link #storeToURL storeToURL} for further information.
+        See {@link #storeToURL storeToURL} for further information.
         @see #storeToURL storeToURL
      */
     public java.io.OutputStream storeToStream(
@@ -893,7 +893,7 @@ public class OOoBean
 
     /** Stores a document to a byte array.
 
-           See {@link #storeToURL storeToURL} for further information.
+        See {@link #storeToURL storeToURL} for further information.
         @see #storeToURL storeToURL
      */
     public byte[] storeToByteArray(
@@ -957,8 +957,8 @@ public class OOoBean
         return aFrame;
     }
 
-       // @requirement FUNC.BEAN.PROG/0.5
-       // @requirement API.SIM.SEAP/0.2
+    // @requirement FUNC.BEAN.PROG/0.5
+    // @requirement API.SIM.SEAP/0.2
     /** returns the <type scope="com::sun::star::frame::Controller"> of the bean.
 
         @returns
@@ -986,7 +986,7 @@ public class OOoBean
     // @requirement FUNC.BEAN.STOR/0.4
     // @requirement FUNC.BEAN.PRNT/0.4
     // @requirement API.SIM.SEAP/0.2
-       /** returns the <type scope="com::sun::star::document::OfficeDocument">
+    /** returns the <type scope="com::sun::star::document::OfficeDocument">
         of the bean.
 
         @returns
@@ -1011,7 +1011,7 @@ public class OOoBean
 
     /** Sets visibility of all tool bars known by this OOoBean version.
 
-         Initially all tool bars are visible.  By hiding all tool bars
+        Initially all tool bars are visible.  By hiding all tool bars
         utilizing this method, it is possible to turn just a subset of
         tool bars on afterwards, no matter whether all available tool
         bars are known or not.
@@ -1067,7 +1067,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
     /** Helper method to set tool bar visibilty.
 
-         @param bnewValue
+        @param bnewValue
             If false, the tool bar is disabled,
             If true, the tool bar is visible.
 
@@ -1133,7 +1133,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         and automatically applied to the document after it is loaded.
         Same is valid when the connection dies within this function call.
 
-         @param bVisible
+        @param bVisible
             If false, the menu bar is disabled,
             If true, the menu bar is visible.
 
@@ -1154,9 +1154,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
     }
 
-      /** Returns the visibility of the menu bar.
+    /** Returns the visibility of the menu bar.
 
-           This method works independently from a connetion or loaded document.
+        This method works independently from a connetion or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1181,7 +1181,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         and automatically applied to the document after it is loaded.
         Same is valid when the connection dies within this function call.
 
-         @param bVisible
+        @param bVisible
             If false, the main function bar is disabled,
             If true, the main function bar is visible.
 
@@ -1202,9 +1202,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
     }
 
-      /** Returns the visibility of the main function bar.
+    /** Returns the visibility of the main function bar.
 
-           This method works independently from a connetion or loaded document.
+        This method works independently from a connetion or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1229,7 +1229,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         and automatically applied to the document after it is loaded.
         Same is valid when the connection dies within this function call.
 
-         @param bVisible
+        @param bVisible
             If false, the tool function bar is disabled,
             If true, the tool function bar is visible.
 
@@ -1250,9 +1250,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
     }
 
-      /** Returns the visibility of the tool function bar.
+    /** Returns the visibility of the tool function bar.
 
-           This method works independently from a connetion or loaded document.
+        This method works independently from a connetion or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1277,7 +1277,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         and automatically applied to the document after it is loaded.
         Same is valid when the connection dies within this function call.
 
-         @param bVisible
+        @param bVisible
             If false, the status function bar is disabled,
             If true, the status function bar is visible.
 
@@ -1298,9 +1298,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
     }
 
-      /**   Returns the visibility of the status function bar.
+    /** Returns the visibility of the status function bar.
 
-           This method works independently from a connetion or loaded document.
+        This method works independently from a connetion or loaded document.
         If no connection is established or no document is loaded,
         this method just returns a memorized status.
 
@@ -1438,7 +1438,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
 
         /// gets called when the user wants to terminate OOo
-           public void queryTermination( /*IN*/ com.sun.star.lang.EventObject Event )
+        public void queryTermination( /*IN*/ com.sun.star.lang.EventObject Event )
             throws com.sun.star.frame.TerminationVetoException
         {
             // disallow termination of OOo while a OOoBean exists

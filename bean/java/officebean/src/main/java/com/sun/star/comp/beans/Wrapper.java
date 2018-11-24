@@ -27,7 +27,7 @@ import com.sun.star.uno.UnoRuntime;
 
 //==========================================================================
 /** Wrapper base class for UNO services which emulates the upcoming
-     mode of automatic runtime Java classes to get rid of the need for
+    mode of automatic runtime Java classes to get rid of the need for
     queryInterface.
 
     Because it's not worth the effort to create a runtime generated wrapper

@@ -1,4 +1,5 @@
-/**************************************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,20 +18,24 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- *************************************************************/
+ ***********************************************************-->
 
 
 
-package com.sun.star.comp.beans;
+<project name="officebean" default="main" basedir=".">
 
-/** This exception is called when a method is called which
-     needs an established connection but no connection is
-    established yet or anymore.
+    <property file="../../../ant.properties"/>
+    <import file="${SRC_ROOT}/solenv/ant/aoo-ant.xml"/>
 
-    @since OOo 2.0.0
- */
-public class NoConnectionException extends Exception
-{
-};
+    <target name="init-project">
 
+        <path id="main.classpath">
+            <pathelement location="${OUTDIR}/bin/ridl.jar"/>
+            <pathelement location="${OUTDIR}/bin/unoil.jar"/>
+            <pathelement location="${OUTDIR}/bin/jurt.jar"/>
+            <pathelement location="${OUTDIR}/bin/juh.jar"/>
+        </path>
+    </target>
+
+</project>
 

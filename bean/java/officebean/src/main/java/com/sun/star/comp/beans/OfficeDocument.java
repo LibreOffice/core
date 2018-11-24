@@ -27,7 +27,7 @@ import com.sun.star.uno.UnoRuntime;
 
 //==========================================================================
 /** Wrapper class for service OfficeDocument which emulates the upcoming
-     mode of automatic runtime Java classes to get rid of the need for
+    mode of automatic runtime Java classes to get rid of the need for
     queryInterface.
 
     See further information on the wrapping and compatibility limitations

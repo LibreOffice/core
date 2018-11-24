@@ -33,7 +33,7 @@ import com.sun.star.awt.*;
 /* package */ class JavaWindowPeerFake
     implements XSystemDependentWindowPeer, XWindowPeer
 {
-     protected int localSystemType;
+    protected int localSystemType;
     protected Any wrappedHandle;
 
     /** Create the faked window peer.

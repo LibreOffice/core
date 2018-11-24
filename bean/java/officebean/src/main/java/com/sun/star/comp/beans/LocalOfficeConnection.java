@@ -402,7 +402,7 @@ public class LocalOfficeConnection
             com.sun.star.connection.ConnectionSetupException,
             com.sun.star.lang.IllegalArgumentException
     {
-         String conDcp = null;
+        String conDcp = null;
         String protDcp = null;
         String rootOid = null;
 

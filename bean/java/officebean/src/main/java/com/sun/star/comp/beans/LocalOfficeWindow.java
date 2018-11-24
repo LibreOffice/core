@@ -127,7 +127,7 @@ public class LocalOfficeWindow
                 return null;
        }
 
-           /// called when system parent is available, reparents the bean window
+        /// called when system parent is available, reparents the bean window
     private synchronized void aquireSystemWindow()
     {
         if ( !bPeer )
@@ -144,12 +144,12 @@ public class LocalOfficeWindow
         }
     }
 
-           /// called when system parent is about to die, reparents the bean window
+        /// called when system parent is about to die, reparents the bean window
     private synchronized void releaseSystemWindow()
     {
         if ( bPeer )
         {
-                   // hide document window
+                // hide document window
             XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( false );
 

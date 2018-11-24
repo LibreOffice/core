@@ -1,5 +1,0 @@
-..\%__SRC%\class\officebean.jar %_DEST%\bin%_EXT%\officebean.jar
-
-..\%__SRC%\bin\officebean.dll %_DEST%\bin%_EXT%\officebean.dll
-..\%__SRC%\lib\libofficebean.so %_DEST%\lib%_EXT%\libofficebean.so
-..\%__SRC%\lib\*officebean.dylib %_DEST%\lib%_EXT%\*officebean.dylib

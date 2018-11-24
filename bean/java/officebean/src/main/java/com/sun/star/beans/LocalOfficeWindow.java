@@ -123,7 +123,7 @@ public class LocalOfficeWindow
                 return null;
        }
 
-           /// called when system parent is available, reparents the bean window
+        /// called when system parent is available, reparents the bean window
     private void aquireSystemWindow()
     {
         if ( !bPeer )
@@ -134,18 +134,18 @@ public class LocalOfficeWindow
             xVclWindowPeer.setProperty( "PluginParent", getNativeWindow() );
             bPeer = true;
 
-                   // show document window
+                // show document window
             XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( true );
         }
     }
 
-           /// called when system parent is about to die, reparents the bean window
+        /// called when system parent is about to die, reparents the bean window
     private void releaseSystemWindow()
     {
         if ( bPeer )
         {
-                   // hide document window
+                // hide document window
             XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( false );
 
@@ -175,7 +175,7 @@ public class LocalOfficeWindow
         public void componentShown( java.awt.event.ComponentEvent e)
         {
             // only when we become visible, we get a system window
-             aquireSystemWindow();
+            aquireSystemWindow();
         }
     }
 
