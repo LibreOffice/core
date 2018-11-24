@@ -8,6 +8,7 @@
  */
 
 #include <test/unoapi_test.hxx>
+#include <test/document/xlinktargetsupplier.hxx>
 #include <test/sheet/spreadsheetdocumentsettings.hxx>
 #include <test/sheet/xcalculatable.hxx>
 #include <test/sheet/xconsolidatable.hxx>
@@ -35,6 +36,7 @@ class ScModelObj : public UnoApiTest,
                    public apitest::XCalculatable,
                    public apitest::XConsolidatable,
                    public apitest::XDocumentAuditing,
+                   public apitest::XLinkTargetSupplier,
                    public apitest::XGoalSeek
 {
 public:
@@ -63,6 +65,9 @@ public:
 
     // XDocumentAuditing
     CPPUNIT_TEST(testRefreshArrows);
+
+    // XLinkTargetSupplier
+    CPPUNIT_TEST(testGetLinks);
 
     // XGoalSeek
     CPPUNIT_TEST(testSeekGoal);
