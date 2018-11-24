@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
+
+
+<project name="xmrg_jooxu_registry" default="main" basedir=".">
+
+    <!-- ================================================================= -->
+    <!-- settings                                                          -->
+    <!-- ================================================================= -->
+
+    <!-- project prefix, used for targets and build.lst  -->
+    <property name="prj.prefix" value="xmrg"/>
+
+    <!-- name of this sub target used in recursive builds -->
+    <property name="target" value="xmrg_jooxu_registry"/>
+
+    <!-- relative path to project directory -->
+    <property name="prj" value="../../../../../.."/>
+
+    <!-- start of java source code package structure -->
+    <property name="java.dir" value="${prj}/java"/>
+
+    <!-- path component for current java package -->
+    <property name="package" value="org/openoffice/xmerge/util/registry"/>
+
+    <!-- define how to handle CLASSPATH environment -->
+    <property name="build.sysclasspath" value="ignore"/>
+
+    <property environment="env"/>
+    <property name="env.XML_APIS_JAR" value="${solar.jar}/xml-apis.jar"/>
+    <property name="env.XERCES_JAR" value="${solar.jar}/xercesImpl.jar"/>
+
+    <!-- classpath settings for javac tasks -->
+    <path id="classpath">
+        <pathelement location="${build.class}"/>
+        <pathelement location="${env.XML_APIS_JAR}"/>
+        <pathelement location="${env.XERCES_JAR}"/>
+    </path>
+
+    <!-- set whether we want to compile with or without deprecation -->
+    <property name="deprecation" value="on"/>
+
+    <!-- ================================================================= -->
+    <!--  solar build environment targets                                  -->
+    <!-- ================================================================= -->
+
+    <target name="build_dir" unless="build.dir">
+        <property name="build.dir" value="${out}"/>
+    </target>
+
+    <target name="solar" depends="build_dir" if="solar.update">
+        <property name="solar.properties"
+                  value="${solar.bin}/solar.properties"/>
+    </target>
+
+    <target name="init" depends="solar">
+        <property name="build.compiler" value="modern"/>
+        <property file="${solar.properties}"/>
+        <property file="${build.dir}/class/solar.properties"/>
+    </target>
+
+    <target name="info">
+        <echo message="--------------------"/>
+        <echo message="${target}"/>
+        <echo message="--------------------"/>
+    </target>
+
+
+    <!-- ================================================================= -->
+    <!-- custom targets                                                    -->
+    <!-- ================================================================= -->
+
+    <!-- the main target, called in recursive builds -->
+    <target name="main" depends="info,prepare,compile"/>
+
+    <!-- prepare output directories -->
+    <target name="prepare" depends="init" if="build.class">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.class}"/>
+    </target>
+
+    <!-- compile java sources in ${package} -->
+    <target name="compile" depends="prepare" if="build.class">
+        <javac srcdir="${java.dir}"
+               destdir="${build.class}"
+               debug="${debug}"
+               deprecation="${deprecation}"
+               optimize="${optimize}">
+            <classpath refid="classpath"/>
+            <include name="${package}/ConverterInfo.java"/>
+            <include name="${package}/ConverterInfoMgr.java"/>
+            <include name="${package}/ConverterInfoReader.java"/>
+            <include name="${package}/RegistryException.java"/>
+            <include name="${package}/UnoBridgeConverterInfo.java"/>
+        </javac>
+    </target>
+
+    <!-- clean up -->
+    <target name="clean" depends="prepare">
+        <delete includeEmptyDirs="true">
+            <fileset dir="${build.class}">
+                <patternset>
+                    <include name="${package}/*.class"/>
+                </patternset>
+            </fileset>
+        </delete>
+    </target>
+
+</project>
+

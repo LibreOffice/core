@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!--
+#**************************************************************
+#  
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#  
+#    http://www.apache.org/licenses/LICENSE-2.0
+#  
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+#  
+#**************************************************************
+ -->
+<html>
+<head>
+<title>org.openoffice.xmerge.merger package</title>
+</head>
+
+<body bgcolor="white">
+<p>The <code>DiffAlgorithm</code> and <code>MergeAlgorithm</code>
+are used to provide the merge capabilities of this project.</p>
+
+<p>Merge is useful when an <code>OfficeDocument</code>
+is converted to a &quot;Device&quot; <code>Document</code> format,
+and the &quot;Device&quot; <code>Document</code> version is modified.
+Those changes can be merged back into the original
+<code>OfficeDocument</code> with the merger.  The merger is capable
+of doing this even if the &quot;Device&quot; format is lossy in
+comparison to the <code>OfficeDocument</code> format.</p>
+
+<p>The <code>DiffAlgorithm</code> generates a list of
+<code>Difference</code> objects that represent the
+differences between two <code>OfficeDocument</code> objects.
+It is assumed that one is the original <code>OfficeDocument</code>
+object and the other is a &quot;lossy&quot; version of the same
+<code>Document</code> with edits to be merged.  Typically the
+&quot;lossy&quot; version is created by converting a &quot;Device&quot
+<code>Document</code> back into an <code>OfficeDocument</code>.
+
+<p>The <code>MergeAlgorithm</code> takes the <code>Difference</code>
+objects as input, and creates a merged <code>OfficeDocument</code>.
+A merged <code>OfficeDocument</code> has the following features:</p>
+
+<p><ul>
+<li>Tags in the <code>OfficeDocument</code> that are not
+    supported in the device format are not altered or removed.
+<li>Changes made to the device format are merged back into
+    the <code>OfficeDocument</code> in the location determined by
+    the <code>DiffAlgorithm</code>.
+</ul></p>
+
+<p>Each converter provides an implementation of the
+{@link org.openoffice.xmerge.ConverterCapabilities
+ConverterCapabilities} which specifies which 
+<code>OfficeDocument</code> tags are supported for the
+device format.</p>
+
+</body>
+</html>

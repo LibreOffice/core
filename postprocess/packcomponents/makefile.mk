@@ -278,7 +278,7 @@ my_components += \
     component/xmlhelp/java/LuceneHelpWrapper/LuceneHelpWrapper \
     ScriptFramework \
     ScriptProviderForJava \
-    XMergeBridge \
+    component/xmerge/java/XMergeBridge/XMergeBridge \
     XSLTValidate \
     component/wizards/com/sun/star/wizards/agenda/agenda \
     component/wizards/com/sun/star/wizards/fax/fax \

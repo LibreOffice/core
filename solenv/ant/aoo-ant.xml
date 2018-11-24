@@ -37,8 +37,10 @@
     <property name="build.base.dir" location="${WORKDIR}/Ant/${ant.project.name}"/>
 
     <property name="main.src.dir" location="src/main/java"/>
+    <property name="res.src.dir" location="src/main/resources"/>
     <property name="idl.src.dir" location="src/main/idl"/>
     <property name="test.src.dir" location="src/test/java"/>
+    <property name="test-res.src.dir" location="src/test/resources"/>
     <property name="test-idl.src.dir" location="src/test/idl"/>
 
     <property name="main.build.dir" location="${build.base.dir}/main"/>
@@ -93,23 +95,22 @@
         </path>
     </target>
 
+    <target name="dependencies" depends="prepare">
+        <local name="has.main.classpath"/>
+        <condition property="has.main.classpath">
+            <isreference refid="main.classpath"/>
+        </condition>
+
+        <pathconvert refid="main.classpath" setonempty="true" pathsep=" " property="deps" if:set="has.main.classpath"/>
+        <property name="dep" value=""/>
+        <echo message="${deps}" file="${dependencies.outfile}"/>
+    </target>
+
     <target name="res" depends="prepare">
         <mkdir dir="${main.build.dir}"/>
-        <copy todir="${main.build.dir}">
-             <fileset dir="${main.src.dir}">
-                 <include name="**/*.properties"/>
-                 <include name="**/*.css"/>
-                 <include name="**/*.dtd"/>
-                 <include name="**/*.form"/>
-                 <include name="**/*.gif "/>
-                 <include name="**/*.htm"/>
-                 <include name="**/*.html"/>
-                 <include name="**/*.js"/>
-                 <include name="**/*.mod"/>
-                 <include name="**/*.sql"/>
-                 <include name="**/*.xml"/>
-                 <include name="**/*.xsl"/>
-                 <include name="**/*.map"/>
+        <copy todir="${main.build.dir}" failonerror="false" quiet="true">
+             <fileset dir="${res.src.dir}">
+                 <include name="**/*"/>
              </fileset>
         </copy>
     </target>
@@ -160,7 +161,16 @@
         </sequential>
     </macrodef>
 
-    <target name="test-idl" depends="pre-compile">
+    <target name="test-res" depends="pre-compile">
+        <mkdir dir="${test.build.dir}" unless:set="test.skip"/>
+        <copy todir="${test.build.dir}" failonerror="false" quiet="true" unless:set="test.skip">
+             <fileset dir="${test-res.src.dir}">
+                 <include name="**/*"/>
+             </fileset>
+        </copy>
+    </target>
+
+    <target name="test-idl" depends="test-res">
         <fileset id="test-idl.files" dir="${test-idl.src.dir}" includes="**/*.idl" erroronmissingdir="false"/>
         <idl-javamaker
             idlFiles="test-idl.files"

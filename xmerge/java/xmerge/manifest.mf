@@ -1,0 +1,6 @@
+Main-Class: org.openoffice.xmerge.test.Driver
+Specification-Title: Apache OpenOffice XMerge Framework
+Specification-Vendor: Apache OpenOffice
+Specification-Version: 0.6.0
+Implementation-Version: #IMPL-VERSION#
+

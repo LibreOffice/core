@@ -46,6 +46,11 @@ $(call gb_Ant_get_target,%) : FORCE
 FORCE:
 
 
+define gb_Ant_add_dependency
+$(1) : $(2)
+
+endef
+
 # registers target and clean target
 # adds jar files to DeliverLogTarget
 # adds dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
@@ -60,6 +65,9 @@ endif
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Ant_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Ant_get_target,$(1)),$(1))
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Ant_get_target,$(1))
+
+__ant_out:=$(shell $(gb_Ant_ANTCOMMAND) -v -Ddependencies.outfile=$(WORKDIR)/Ant/$(1)/deps -f $(2) dependencies)
+$$(eval $(foreach dep,$(file < $(WORKDIR)/Ant/$(1)/deps),$$(call gb_Ant_add_dependency,$(call gb_Ant_get_target,$(1)),$(dep))))
 
 endef
 
