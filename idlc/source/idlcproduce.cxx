@@ -22,6 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <algorithm>
 
 #if defined(_WIN32)
 #include <io.h>
@@ -39,7 +40,7 @@
 
 using namespace ::osl;
 
-static std::list< OString >* pCreatedDirectories = nullptr;
+static std::vector< OString >* pCreatedDirectories = nullptr;
 
 static bool checkOutputPath(const OString& completeName)
 {
@@ -82,8 +83,8 @@ static bool checkOutputPath(const OString& completeName)
             } else
             {
                 if ( !pCreatedDirectories )
-                    pCreatedDirectories = new std::list< OString >;
-                pCreatedDirectories->push_front(buffer.getStr());
+                    pCreatedDirectories = new std::vector< OString >;
+                pCreatedDirectories->push_back(buffer.getStr());
             }
         }
         buffer.append(SEPARATOR);
@@ -95,6 +96,7 @@ static bool cleanPath()
 {
     if ( pCreatedDirectories )
     {
+        std::reverse(pCreatedDirectories->begin(), pCreatedDirectories->end());
         for (auto const& createdDirectory : *pCreatedDirectories)
         {
 //#ifdef SAL_UNX
