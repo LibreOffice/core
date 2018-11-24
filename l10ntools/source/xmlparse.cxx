@@ -314,6 +314,15 @@ XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created 
     m_aNodes_localize.emplace( OString("bookmark") , true );
     m_aNodes_localize.emplace( OString("variable") , true );
     m_aNodes_localize.emplace( OString("paragraph") , true );
+    m_aNodes_localize.emplace( OString("h1") , true );
+    m_aNodes_localize.emplace( OString("h2") , true );
+    m_aNodes_localize.emplace( OString("h3") , true );
+    m_aNodes_localize.emplace( OString("h4") , true );
+    m_aNodes_localize.emplace( OString("h5") , true );
+    m_aNodes_localize.emplace( OString("h6") , true );
+    m_aNodes_localize.emplace( OString("note") , true );
+    m_aNodes_localize.emplace( OString("tip") , true );
+    m_aNodes_localize.emplace( OString("warning") , true );
     m_aNodes_localize.emplace( OString("alt") , true );
     m_aNodes_localize.emplace( OString("caption") , true );
     m_aNodes_localize.emplace( OString("title") , true );
@@ -1055,12 +1064,14 @@ icu::UnicodeString lcl_QuotRange(
 
 bool lcl_isTag( const icu::UnicodeString& rString )
 {
-    static const int nSize = 15;
+    static const int nSize = 20;
     static const icu::UnicodeString vTags[nSize] = {
         "ahelp", "link", "item", "emph", "defaultinline",
         "switchinline", "caseinline", "variable",
         "bookmark_value", "image", "object",
-        "embedvar", "alt", "sup", "sub" };
+        "embedvar", "alt", "sup", "sub",
+        "menuitem", "keycode", "input", "literal", "widget"
+    };
 
     for( int nIndex = 0; nIndex < nSize; ++nIndex )
     {
