@@ -24,6 +24,7 @@
 #include <PhysicalFontCollection.hxx>
 #include <svdata.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;

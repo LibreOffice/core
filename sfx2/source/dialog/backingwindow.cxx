@@ -24,6 +24,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/fixed.hxx>
 
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/historyoptions.hxx>

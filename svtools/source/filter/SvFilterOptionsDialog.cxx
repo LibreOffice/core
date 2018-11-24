@@ -30,6 +30,7 @@
 #include "exportdialog.hxx"
 #include <uno/mapping.hxx>
 #include <tools/fldunit.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>

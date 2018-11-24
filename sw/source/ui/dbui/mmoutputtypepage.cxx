@@ -27,6 +27,7 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/mail/XSmtpService.hpp>
+#include <vcl/fixed.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

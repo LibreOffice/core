@@ -33,6 +33,7 @@
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

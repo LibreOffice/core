@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SCUIIMOPTDLG_HXX
 
 #include <vcl/layout.hxx>
+#include <vcl/dialog.hxx>
 #include <svx/txencbox.hxx>
 
 class ScDelimiterTable;

@@ -22,6 +22,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/outdev.hxx>
 #include <sal/log.hxx>
 
 #include <fontinstance.hxx>

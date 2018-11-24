@@ -29,7 +29,6 @@
 class Point;
 class Fraction;
 class SvStream;
-class OutputDevice;
 
 
 class VCL_DLLPUBLIC MapMode

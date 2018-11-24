@@ -21,6 +21,7 @@
 #include <memory>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <tools/stream.hxx>
 
 class FilterConfigItem;
 

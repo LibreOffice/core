@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_SALGDI_HXX
 
 #include <vcl/metric.hxx>
+#include <vcl/outdev.hxx>
 
 #include "impfontmetricdata.hxx"
 #include "salgdiimpl.hxx"

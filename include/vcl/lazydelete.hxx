@@ -21,17 +21,10 @@
 #define INCLUDED_VCL_LAZYDELETE_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
-
-#include <unordered_map>
-#include <vector>
-#include <algorithm>
-#include <sal/log.hxx>
-
-#include <typeinfo>
 
 #include <com/sun/star/lang/XComponent.hpp>
+
+#include <memory>
 
 namespace vcl
 {

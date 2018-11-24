@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/gdimtf.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>

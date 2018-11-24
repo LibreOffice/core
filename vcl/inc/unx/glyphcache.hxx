@@ -27,6 +27,7 @@
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <tools/gen.hxx>
+#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/metric.hxx>
 

@@ -34,6 +34,7 @@
 #include <helpids.h>
 
 #include <vcl/fixed.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>

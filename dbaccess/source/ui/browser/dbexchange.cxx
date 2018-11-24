@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <TokenWriter.hxx>
 #include <stringconstants.hxx>
 #include <svx/dataaccessdescriptor.hxx>

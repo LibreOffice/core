@@ -19,11 +19,9 @@
 #ifndef INCLUDED_VCL_INETIMG_HXX
 #define INCLUDED_VCL_INETIMG_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <sot/formats.hxx>
-
-class SvData;
-class SotDataObject;
 
 
 class INetImage
