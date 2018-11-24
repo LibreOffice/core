@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#if defined __GNUC__ && __GNUC__ >= 7
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated"
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
 #endif
 #include <libcmis/libcmis.hxx>
-#if defined __GNUC__ && __GNUC__ >= 7
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
 
