@@ -79,23 +79,16 @@ SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 bool SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
 {
     // Count different => odd in any case
-    if ( aSvxMacroTable.size() != rOther.aSvxMacroTable.size() )
-        return false;
-
     // Compare single ones; the sequence matters due to performance reasons
-    SvxMacroTable::const_iterator it1 = aSvxMacroTable.begin();
-    SvxMacroTable::const_iterator it2 = rOther.aSvxMacroTable.begin();
-    for ( ; it1 != aSvxMacroTable.end(); ++it1, ++it2 )
-    {
-        const SvxMacro& rOwnMac = it1->second;
-        const SvxMacro& rOtherMac = it2->second;
-        if (    it1->first != it2->first ||
-                rOwnMac.GetLibName() != rOtherMac.GetLibName() ||
-                rOwnMac.GetMacName() != rOtherMac.GetMacName() )
-            return false;
-    }
-
-    return true;
+    return std::equal(aSvxMacroTable.begin(), aSvxMacroTable.end(),
+        rOther.aSvxMacroTable.begin(), rOther.aSvxMacroTable.end(),
+        [](const SvxMacroTable::value_type& rOwnEntry, const SvxMacroTable::value_type& rOtherEntry) {
+            const SvxMacro& rOwnMac = rOwnEntry.second;
+            const SvxMacro& rOtherMac = rOtherEntry.second;
+            return rOwnEntry.first == rOtherEntry.first
+                && rOwnMac.GetLibName() == rOtherMac.GetLibName()
+                && rOwnMac.GetMacName() == rOtherMac.GetMacName();
+        });
 }
 
 void SvxMacroTableDtor::Read( SvStream& rStrm )
@@ -151,17 +144,17 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
 
     rStream.WriteUInt16( aSvxMacroTable.size() );
 
-    SvxMacroTable::const_iterator it = aSvxMacroTable.begin();
-    while( it != aSvxMacroTable.end() && rStream.GetError() == ERRCODE_NONE )
+    for( const auto& rEntry : aSvxMacroTable )
     {
-        const SvxMacro& rMac = it->second;
-        rStream.WriteUInt16( static_cast<sal_uInt16>(it->first) );
+        if (rStream.GetError() != ERRCODE_NONE)
+            break;
+        const SvxMacro& rMac = rEntry.second;
+        rStream.WriteUInt16( static_cast<sal_uInt16>(rEntry.first) );
         writeByteString(rStream, rMac.GetLibName());
         writeByteString(rStream, rMac.GetMacName());
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStream.WriteUInt16( rMac.GetScriptType() );
-        ++it;
     }
     return rStream;
 }

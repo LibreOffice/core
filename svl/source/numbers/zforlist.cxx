@@ -203,15 +203,9 @@ SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 
 void SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter const * pThis )
 {
-    for (SvNumberFormatterList_impl::iterator it = aFormatters.begin();
-            it != aFormatters.end(); ++it)
-    {
-        if ( *it == pThis )
-        {
-            aFormatters.erase( it );
-            break;
-        }
-    }
+    auto it = std::find(aFormatters.begin(), aFormatters.end(), pThis);
+    if (it != aFormatters.end())
+        aFormatters.erase( it );
 }
 
 void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*,
@@ -3142,11 +3136,10 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
     sal_uInt32 nCLOffset = 0;
     sal_uInt32 nOldKey, nOffset, nNewKey;
 
-    auto it = rTable.aFTable.begin();
-    while (it != rTable.aFTable.end())
+    for (const auto& rEntry : rTable.aFTable)
     {
-        SvNumberformat* pFormat = it->second.get();
-        nOldKey = it->first;
+        SvNumberformat* pFormat = rEntry.second.get();
+        nOldKey = rEntry.first;
         nOffset = nOldKey % SV_COUNTRY_LANGUAGE_OFFSET;     // relative index
         if (nOffset == 0)                                   // 1st format of CL
         {
@@ -3198,7 +3191,6 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                 (*pMergeTable)[nOldKey] = nNewKey;
             }
         }
-        ++it;
     }
     return pMergeTable.get();
 }
@@ -3212,10 +3204,10 @@ SvNumberFormatterMergeMap SvNumberFormatter::ConvertMergeTableToMap()
         return SvNumberFormatterMergeMap();
     }
     SvNumberFormatterMergeMap aMap;
-    for (SvNumberFormatterIndexTable::const_iterator it = pMergeTable->begin(); it != pMergeTable->end(); ++it)
+    for (const auto& rEntry : *pMergeTable)
     {
-        sal_uInt32 nOldKey = it->first;
-        aMap[ nOldKey ] = it->second;
+        sal_uInt32 nOldKey = rEntry.first;
+        aMap[ nOldKey ] = rEntry.second;
     }
     ClearMergeTable();
     return aMap;

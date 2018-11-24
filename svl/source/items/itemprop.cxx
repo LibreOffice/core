@@ -86,18 +86,16 @@ uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
         m_pImpl->m_aPropSeq.realloc( m_pImpl->size() );
         beans::Property* pPropArray = m_pImpl->m_aPropSeq.getArray();
         sal_uInt32 n = 0;
-        SfxItemPropertyHashMap_t::const_iterator aIt = m_pImpl->begin();
-        while( aIt != m_pImpl->end() )
+        for( const auto& rEntry : *m_pImpl )
         //for ( const SfxItemPropertyMap *pMap = _pMap; pMap->pName; ++pMap )
         {
-            const SfxItemPropertySimpleEntry* pEntry = &(*aIt).second;
-            pPropArray[n].Name = (*aIt).first;
+            const SfxItemPropertySimpleEntry* pEntry = &rEntry.second;
+            pPropArray[n].Name = rEntry.first;
             pPropArray[n].Handle = pEntry->nWID;
             pPropArray[n].Type = pEntry->aType;
             pPropArray[n].Attributes =
                 sal::static_int_cast< sal_Int16 >(pEntry->nFlags);
             n++;
-            ++aIt;
         }
     }
 
@@ -143,12 +141,10 @@ PropertyEntryVector_t SfxItemPropertyMap::getPropertyEntries() const
     PropertyEntryVector_t aRet;
     aRet.reserve(m_pImpl->size());
 
-    SfxItemPropertyHashMap_t::const_iterator aIt = m_pImpl->begin();
-    while( aIt != m_pImpl->end() )
+    for( const auto& rEntry : *m_pImpl )
     {
-        const SfxItemPropertySimpleEntry* pEntry = &(*aIt).second;
-        aRet.emplace_back( (*aIt).first, * pEntry );
-        ++aIt;
+        const SfxItemPropertySimpleEntry* pEntry = &rEntry.second;
+        aRet.emplace_back( rEntry.first, * pEntry );
     }
     return aRet;
 }

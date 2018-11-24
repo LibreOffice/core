@@ -76,11 +76,9 @@ void SvtListener::BroadcasterDying( SvtBroadcaster& rBroadcaster )
 
 void SvtListener::EndListeningAll()
 {
-    BroadcastersType::iterator it = maBroadcasters.begin();
-    BroadcastersType::const_iterator itEnd = maBroadcasters.end();
-    for (; it != itEnd; ++it)
+    for (SvtBroadcaster* p : maBroadcasters)
     {
-        SvtBroadcaster& rBC = **it;
+        SvtBroadcaster& rBC = *p;
         rBC.Remove(this);
     }
     maBroadcasters.clear();
@@ -92,11 +90,8 @@ void SvtListener::CopyAllBroadcasters( const SvtListener& r )
     EndListeningAll();
     BroadcastersType aCopy(r.maBroadcasters);
     maBroadcasters.swap(aCopy);
-    BroadcastersType::iterator it = maBroadcasters.begin();
-    BroadcastersType::const_iterator itEnd = maBroadcasters.end();
-    for (; it != itEnd; ++it)
+    for (SvtBroadcaster* p : maBroadcasters)
     {
-        SvtBroadcaster* p = *it;
         p->Add(this);
     }
 }

@@ -240,26 +240,19 @@ uno::Sequence< OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
                      + ( bOnlyPersistent ? 0 : m_aMemContainer.size() );
     uno::Sequence< OUString > aResult( nCount );
 
-    StringSet::const_iterator it = m_aCfgContainer.begin();
-    StringSet::const_iterator end = m_aCfgContainer.end();
     sal_Int32 n = 0;
 
-    while ( it != end )
+    for ( const auto& rItem : m_aCfgContainer )
     {
-        aResult[ n ] = *it;
-        ++it;
+        aResult[ n ] = rItem;
         ++n;
     }
 
     if ( !bOnlyPersistent )
     {
-        it = m_aMemContainer.begin();
-        end = m_aMemContainer.end();
-
-        while ( it != end )
+        for ( const auto& rItem : m_aMemContainer )
         {
-            aResult[ n ] = *it;
-            ++it;
+            aResult[ n ] = rItem;
             ++n;
         }
     }
