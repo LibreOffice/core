@@ -167,8 +167,9 @@ static sal_Int32 lcl_SkipWhiteSpaces( const OUString &rText, sal_Int32 nStartPos
     sal_Int32 nRes = nStartPos;
     if (0 <= nStartPos && nStartPos < nLen)
     {
+        const sal_Unicode* const pEnd = rText.getStr() + nLen;
         const sal_Unicode *pText = rText.getStr() + nStartPos;
-        while (nStartPos < nLen && lcl_IsWhiteSpace( *pText ))
+        while (pText != pEnd && lcl_IsWhiteSpace(*pText))
             ++pText;
         nRes = pText - rText.getStr();
     }
