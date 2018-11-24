@@ -1804,7 +1804,6 @@ bool ScTokenArray::IsFormulaVectorDisabled() const
     {
         case FormulaVectorDisabled:
         case FormulaVectorDisabledByOpCode:
-        case FormulaVectorDisabledNotInSoftwareSubset:
         case FormulaVectorDisabledByStackVariable:
         case FormulaVectorDisabledNotInSubSet:
             return true;

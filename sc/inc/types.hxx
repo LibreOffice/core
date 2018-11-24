@@ -53,7 +53,6 @@ enum ScFormulaVectorState
 {
     FormulaVectorDisabled,
     FormulaVectorDisabledNotInSubSet,
-    FormulaVectorDisabledNotInSoftwareSubset,
     FormulaVectorDisabledByOpCode,
     FormulaVectorDisabledByStackVariable,
 

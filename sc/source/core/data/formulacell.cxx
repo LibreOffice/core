@@ -4732,9 +4732,6 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
         case FormulaVectorDisabledByOpCode:
             aScope.addMessage("group calc disabled due to vector state (non-vector-supporting opcode)");
             break;
-        case FormulaVectorDisabledNotInSoftwareSubset:
-            aScope.addMessage("group calc disabled due to vector state (opcode not in software subset)");
-            break;
         case FormulaVectorDisabledByStackVariable:
             aScope.addMessage("group calc disabled due to vector state (non-vector-supporting stack variable)");
             break;
