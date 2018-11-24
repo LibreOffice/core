@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLDDELINKSCONTEXT_HXX
 
 #include "importcontext.hxx"
-#include <list>
+#include <vector>
 
 namespace sax_fastparser { class FastAttributeList; }
 
@@ -44,7 +44,7 @@ struct ScDDELinkCell
     bool bEmpty;
 };
 
-typedef std::list<ScDDELinkCell> ScDDELinkCells;
+typedef std::vector<ScDDELinkCell> ScDDELinkCells;
 
 class ScXMLDDELinkContext : public ScXMLImportContext
 {
