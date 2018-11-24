@@ -61,7 +61,6 @@
 #include <unochart.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <list>
 #include <iterator>
 #include <unosection.hxx>
 #include <unoparagraph.hxx>
@@ -1057,8 +1056,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            typedef std::list< Any > frmcontainer_t;
-            frmcontainer_t m_aFrames;
+            std::vector< Any > m_aFrames;
         protected:
             virtual ~SwXFrameEnumeration() override {};
         public:
@@ -1085,10 +1083,8 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
         return;
     // #i104937#
     const size_t nSize = pFormats->size();
-    std::insert_iterator<frmcontainer_t> pInserter = std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // #i104937#
     SwFrameFormat* pFormat( nullptr );
-
     for( size_t i = 0; i < nSize; ++i )
     {
         // #i104937#
@@ -1100,7 +1096,7 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
             continue;
         const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
         if(UnoFrameWrap_traits<T>::filter(pNd))
-            *pInserter++ = lcl_UnoWrapFrame<T>(pFormat);
+            m_aFrames.push_back(lcl_UnoWrapFrame<T>(pFormat));
     }
 }
 
@@ -1117,8 +1113,9 @@ Any SwXFrameEnumeration<T>::nextElement()
     SolarMutexGuard aGuard;
     if(m_aFrames.empty())
         throw NoSuchElementException();
-    Any aResult = *m_aFrames.begin();
-    m_aFrames.pop_front();
+
+    Any aResult = m_aFrames.back();
+    m_aFrames.pop_back();
     return aResult;
 }
 
