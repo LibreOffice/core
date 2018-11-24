@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_280e6be5",
+        "filename": "sc/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-24T10:41:16Z",
+      "side": 1,
+      "message": "this chunk of code is going to do weird stuff with std::vector, whereas it is fine with std::list, see, for example:\n  https://thispointer.com/stdvector-and-iterator-invalidation/\nand\n  https://stackoverflow.com/questions/6438086/iterator-invalidation-rules",
+      "revId": "f101f6f40b9a130faceb8c4e364f661e8ea82879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
