@@ -25,38 +25,6 @@ class SfxItemSet;
 class SwWrtShell;
 
 // the tab dialog carrier of TabPages
-class SwTemplateDlg: public SfxStyleDialog
-{
-
-    SfxStyleFamily const  nType;
-    sal_uInt16      nHtmlMode;
-    SwWrtShell*     pWrtShell;
-
-    sal_uInt16 m_nAreaId;
-    sal_uInt16 m_nTransparenceId;
-    sal_uInt16 m_nBorderId;
-    sal_uInt16 m_nTypeId;
-    sal_uInt16 m_nOptionsId;
-    sal_uInt16 m_nWrapId;
-    sal_uInt16 m_nColumnId;
-    sal_uInt16 m_nMacroId;
-
-public:
-    /// @param sPage
-    /// Identifies name of page to open at by default
-    SwTemplateDlg(  vcl::Window*        pParent,
-                    SfxStyleSheetBase&  rBase,
-                    SfxStyleFamily      nRegion,
-                    const OString&      sPage,
-                    SwWrtShell*         pActShell );
-
-    virtual void RefreshInputSet() override;
-
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
-    virtual short Ok() override;
-};
-
-// the tab dialog carrier of TabPages
 class SwTemplateDlgController : public SfxStyleDialogController
 {
 
