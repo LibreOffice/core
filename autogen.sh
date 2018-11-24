@@ -153,7 +153,7 @@ if (defined $ENV{LODE_HOME})
     }
     # For the Config=linux_gcc_release_64 Jenkins jobs that build on CentOS against Developer
     # Toolset 7:
-    if (-d '/opt/rh/devtoolset-7/root/usr/bin')
+    if ($ENV{Config} eq 'linux_gcc_release_64' && -d '/opt/rh/devtoolset-7/root/usr/bin')
     {
         $ENV{PATH}="/opt/rh/devtoolset-7/root/usr/bin:$ENV{PATH}";
         print STDERR "added /opt/rh/devtoolset-7/root/usr/bin to PATH\n";
