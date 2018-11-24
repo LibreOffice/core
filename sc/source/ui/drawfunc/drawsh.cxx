@@ -116,7 +116,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_ASSIGNMACRO:
             {
                 if ( pSingleSelectedObj )
-                    ExecuteMacroAssign( pSingleSelectedObj, pWin );
+                    ExecuteMacroAssign(pSingleSelectedObj, pWin ? pWin->GetFrameWeld() : nullptr);
             }
             break;
 
@@ -318,7 +318,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
     }
 }
 
-void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
+void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
 {
     SvxMacroItem aItem ( SfxGetpApp()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
     ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
