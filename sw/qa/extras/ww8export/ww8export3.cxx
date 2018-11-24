@@ -75,18 +75,20 @@ DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFiel
     uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
 
     OUString sTmp;
-    xParameters->getByName("EntryMacro") >>= sTmp;
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), sTmp);
-    xParameters->getByName("Help") >>= sTmp;
-    CPPUNIT_ASSERT_EQUAL(OUString("F1Help"), sTmp);
-    xParameters->getByName("ExitMacro") >>= sTmp;
-    CPPUNIT_ASSERT_EQUAL(OUString("test"), sTmp);
+    // Too often the string reader can fail during import - fix that first to prevent round-tripping garbage.
+    // (for example BR-1010B.doc from tdf#48097)
+    //xParameters->getByName("EntryMacro") >>= sTmp;
+    //CPPUNIT_ASSERT_EQUAL(OUString("test"), sTmp);
+    //xParameters->getByName("Help") >>= sTmp;
+    //CPPUNIT_ASSERT_EQUAL(OUString("F1Help"), sTmp);
+    //xParameters->getByName("ExitMacro") >>= sTmp;
+    //CPPUNIT_ASSERT_EQUAL(OUString("test"), sTmp);
     xParameters->getByName("Description") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("StatusHelp"), sTmp);
-    xParameters->getByName("Content") >>= sTmp;
-    CPPUNIT_ASSERT_EQUAL(OUString("Camelcase"), sTmp);
-    xParameters->getByName("Format") >>= sTmp;
-    CPPUNIT_ASSERT_EQUAL(OUString("TITLE CASE"), sTmp);
+    //xParameters->getByName("Content") >>= sTmp;
+    //CPPUNIT_ASSERT_EQUAL(OUString("Camelcase"), sTmp);
+    //xParameters->getByName("Format") >>= sTmp;
+    //CPPUNIT_ASSERT_EQUAL(OUString("TITLE CASE"), sTmp);
 
     sal_uInt16 nMaxLength = 0;
     xParameters->getByName("MaxLength") >>= nMaxLength;
