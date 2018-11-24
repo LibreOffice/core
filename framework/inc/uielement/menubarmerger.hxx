@@ -24,6 +24,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
+#include <vector>
 
 namespace framework
 {

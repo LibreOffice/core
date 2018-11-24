@@ -52,6 +52,7 @@
 #include <vcl/treelistentry.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/vclmedit.hxx>
 #include <bitmaps.hlst>
 
 SalFrame::SalFrame()

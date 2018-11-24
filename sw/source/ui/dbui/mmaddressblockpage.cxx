@@ -21,6 +21,7 @@
 #include <mailmergewizard.hxx>
 #include <swtypes.hxx>
 #include "addresslistdialog.hxx"
+#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/xtextedt.hxx>

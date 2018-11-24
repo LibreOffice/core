@@ -28,6 +28,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/window.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }

@@ -10,6 +10,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
 
 #include <libabw/libabw.h>
 

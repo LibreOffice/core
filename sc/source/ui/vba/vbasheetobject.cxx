@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>

@@ -23,6 +23,7 @@
 #include <vcl/outdev.hxx>
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <memory>
 
 class FilterConfigItem;

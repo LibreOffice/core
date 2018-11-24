@@ -38,6 +38,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
+#include <osl/diagnose.h>
 
 #define SC_ISFILTERED "IsFiltered"
 

@@ -30,6 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

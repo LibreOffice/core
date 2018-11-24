@@ -26,6 +26,8 @@
 #include <sal/types.h>
 // classes <Point>, <Size> and <Rectangle>
 #include <tools/gen.hxx>
+// RenderContext type
+#include <vcl/outdev.hxx>
 // datatype <SwTwips>
 #include "swtypes.hxx"
 

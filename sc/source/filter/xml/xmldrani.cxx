@@ -45,6 +45,7 @@
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
+#include <osl/diagnose.h>
 
 #include <memory>
 

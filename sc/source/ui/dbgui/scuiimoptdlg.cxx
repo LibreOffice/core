@@ -28,6 +28,8 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include <imoptdlg.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/dialog.hxx>
 
 // ScDelimiterTable
 

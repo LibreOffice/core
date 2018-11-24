@@ -29,6 +29,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <tools/fract.hxx>
 #include <o3tl/make_unique.hxx>

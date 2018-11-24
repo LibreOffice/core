@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

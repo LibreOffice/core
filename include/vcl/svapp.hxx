@@ -40,6 +40,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/vclenum.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/uno/Reference.h>

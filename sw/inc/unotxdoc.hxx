@@ -55,6 +55,7 @@
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/uno/XAggregation.hpp>
 #include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
 #include <svx/fmdmod.hxx>

@@ -32,6 +32,7 @@
 #include <strings.hrc>
 
 #include <consdlg.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
