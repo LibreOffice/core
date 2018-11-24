@@ -3796,8 +3796,8 @@ if test "$GCC" = "yes" -a -z "$COM_IS_CLANG"; then
 
     AC_MSG_RESULT([gcc $_gcc_version ($gcc_full_version)])
 
-    if test "$gcc_full_version" -lt 40801; then
-        AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 4.8.1])
+    if test "$gcc_full_version" -lt 70000; then
+        AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 7.0.0])
     fi
 else
     # Explicitly force GCC_VERSION to be empty, even for Clang, to check incorrect uses.
