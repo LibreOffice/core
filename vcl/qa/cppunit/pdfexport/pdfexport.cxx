@@ -816,7 +816,6 @@ void PdfExportTest::testTdf108963()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(793.7, aWidth, 0.01);
     const double aHeight = FPDF_GetPageHeight(pPdfPage.get());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(446.46, aHeight, 0.01);
-#endif
 
     // Make sure there is a filled rectangle inside.
     int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
@@ -875,6 +874,7 @@ void PdfExportTest::testTdf108963()
     }
 
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
+#endif
 }
 
 void PdfExportTest::testTdf118244_radioButtonGroup()
