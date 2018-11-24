@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_28342b4a",
+        "filename": "sw/source/core/unocore/unocoll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-24T14:02:39Z",
+      "side": 1,
+      "message": "the benefit of reserve is a little trickier when the push_back is conditional, like it is here, so I can\u0027t wether doing reserve here is a good thing or not :-) \nOn the one hand it will reduce re-alloc and copying, on the other hand, we might end up alloc too much.\nWho knows :-)",
+      "revId": "e09dfa4eaab4d0d19d0cc2a4bf9e35165a7d42db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
