@@ -240,12 +240,7 @@ struct ConstCharArrayDetector<sal_Unicode const [N], T> {
     { return literal; }
 };
 template<typename T> struct ConstCharArrayDetector<
-#if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
-        && !defined __clang__
-    OUStringLiteral1_ const,
-#else
     OUStringLiteral1,
-#endif
     T>
 {
     using TypeUtf16 = T;
@@ -271,12 +266,7 @@ struct ExceptConstCharArrayDetector< const char[ N ] >
 template<std::size_t N>
 struct ExceptConstCharArrayDetector<sal_Unicode const[N]> {};
 template<> struct ExceptConstCharArrayDetector<
-#if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 8 \
-        && !defined __clang__
-    OUStringLiteral1_ const
-#else
     OUStringLiteral1
-#endif
     >
 {};
 #endif

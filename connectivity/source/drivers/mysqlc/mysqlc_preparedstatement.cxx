@@ -444,7 +444,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
                 break;
             }
 
-#if defined __GNUC__ && __GNUC__ >= 7
+#if defined __GNUC__ && !defined __clang__
             [[fallthrough]];
 #else
             BOOST_FALLTHROUGH;
