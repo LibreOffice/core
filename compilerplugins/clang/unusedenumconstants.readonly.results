@@ -1168,8 +1168,6 @@ sc/inc/token.hxx:214
     enum ScTableRefToken::Item DATA_TOTALS
 sc/inc/types.hxx:38
     enum ScMatValType NonvalueMask
-sc/inc/types.hxx:56
-    enum ScFormulaVectorState FormulaVectorDisabledNotInSoftwareSubset
 sc/source/filter/lotus/lotread.cxx:41
     enum STATE S_WK1
 sc/source/ui/inc/viewdata.hxx:43
