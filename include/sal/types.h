@@ -678,7 +678,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #define __has_attribute(x) 0
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && ((defined __GNUC__ && __GNUC__ > 4) || (defined __clang__ && __has_attribute(returns_nonnull)))
+#if defined LIBO_INTERNAL_ONLY && ((defined __GNUC__ && !defined __clang__) || (defined __clang__ && __has_attribute(returns_nonnull)))
 #define SAL_RETURNS_NONNULL  __attribute__((returns_nonnull))
 #else
 #define SAL_RETURNS_NONNULL
