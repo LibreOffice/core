@@ -91,7 +91,7 @@ private:
     std::vector< std::string > _args;
 };
 
-} // namespace
+}
 
 #endif // COMPILEPLUGIN_H
 
