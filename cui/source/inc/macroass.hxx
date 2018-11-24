@@ -79,13 +79,16 @@ public:
     static VclPtr<SfxTabPage> Create( TabPageParent pParent, const SfxItemSet* rAttrSet );
 };
 
-class SfxMacroAssignDlg : public SfxSingleTabDialog
+class SfxMacroAssignDlg : public SfxSingleTabDialogController
 {
 public:
-    SfxMacroAssignDlg(
-        vcl::Window* pParent,
-        const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
-        const SfxItemSet& rSet );
+    SfxMacroAssignDlg(weld::Window* pParent,
+                      const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
+                      const SfxItemSet& rSet);
+    SfxMacroTabPage* GetTabPage()
+    {
+        return static_cast<SfxMacroTabPage*>(m_xSfxPage.get());
+    }
 };
 
 #endif

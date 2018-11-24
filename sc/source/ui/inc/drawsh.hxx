@@ -80,7 +80,7 @@ public:
     void    ExecFormatPaintbrush(const SfxRequest& rReq);
     void    StateFormatPaintbrush(SfxItemSet& rSet);
 
-    void    ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin );
+    void    ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin);
     void    ExecuteLineDlg( SfxRequest& rReq );
     void    ExecuteAreaDlg( SfxRequest& rReq );
     void    ExecuteTextAttrDlg( SfxRequest& rReq );
