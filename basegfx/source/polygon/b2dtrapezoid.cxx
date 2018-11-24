@@ -588,7 +588,7 @@ namespace basegfx
             {
                 // This is the central subdivider. The strategy is to use the first two entries
                 // from the traversing edges as a potential trapezoid and do the needed corrections
-                // and adaptions on the way.
+                // and adaptations on the way.
 
                 // There always must be two edges with the same YStart value: When adding the polygons
                 // in the constructor, there is always a topmost point from which two edges start; when
@@ -661,7 +661,7 @@ namespace basegfx
                     B2DPoint aLeftEnd(aLeft.getEnd());
                     B2DPoint aRightEnd(aRight.getEnd());
 
-                    // check if end points are on the same line. If yes, no adaption
+                    // check if end points are on the same line. If yes, no adaptation
                     // needs to be prepared. Also remember which one actually is longer.
                     const bool bEndOnSameLine(fTools::equal(aLeftEnd.getY(), aRightEnd.getY()));
                     bool bLeftIsLonger(false);
