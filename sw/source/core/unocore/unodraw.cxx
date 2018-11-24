@@ -390,8 +390,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            typedef std::list< css::uno::Any > shapescontainer_t;
-            shapescontainer_t m_aShapes;
+            std::vector< css::uno::Any > m_aShapes;
         protected:
             virtual ~SwXShapesEnumeration() override {};
         public:
@@ -412,12 +411,12 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
     : m_aShapes()
 {
     SolarMutexGuard aGuard;
-    std::insert_iterator<shapescontainer_t> pInserter = std::insert_iterator<shapescontainer_t>(m_aShapes, m_aShapes.begin());
     sal_Int32 nCount = pDrawPage->getCount();
+    m_aShapes.reserve(nCount);
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
     {
         uno::Reference<drawing::XShape> xShape(pDrawPage->getByIndex(nIdx), uno::UNO_QUERY);
-        *pInserter++ = uno::makeAny(xShape);
+        m_aShapes.push_back(uno::makeAny(xShape));
     }
 }
 
@@ -432,8 +431,8 @@ uno::Any SwXShapesEnumeration::nextElement()
     SolarMutexGuard aGuard;
     if(m_aShapes.empty())
         throw container::NoSuchElementException();
-    uno::Any aResult = *m_aShapes.begin();
-    m_aShapes.pop_front();
+    uno::Any aResult = m_aShapes.back();
+    m_aShapes.pop_back();
     return aResult;
 }
 
