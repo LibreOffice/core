@@ -82,15 +82,11 @@ namespace {
     // #i87808#
     std::shared_ptr<SfxItemSet> const & Node::getUsedOrLastAddedItemSet() const
     {
-        std::vector< std::shared_ptr<SfxItemSet> >::const_reverse_iterator aIter;
+        auto aIter = std::find_if(maItemSet.rbegin(), maItemSet.rend(),
+            [](const std::shared_ptr<SfxItemSet>& rxItemSet) { return rxItemSet.use_count() > 1; });
 
-        for ( aIter = maItemSet.rbegin(); aIter != maItemSet.rend(); ++aIter )
-        {
-            if ( (*aIter).use_count() > 1 )
-            {
-                return *aIter;
-            }
-        }
+        if (aIter != maItemSet.rend())
+            return *aIter;
 
         return maItemSet.back();
     }
@@ -104,16 +100,8 @@ namespace {
         {
             if ( bCheckUsage )
             {
-                std::vector< std::shared_ptr<SfxItemSet> >::const_reverse_iterator aIter;
-
-                for ( aIter = maItemSet.rbegin(); aIter != maItemSet.rend(); ++aIter )
-                {
-                    if ( (*aIter).use_count() > 1 )
-                    {
-                        bHasItemSet = true;
-                        break;
-                    }
-                }
+                bHasItemSet = std::any_of(maItemSet.rbegin(), maItemSet.rend(),
+                    [](const std::shared_ptr<SfxItemSet>& rxItemSet) { return rxItemSet.use_count() > 1; });
             }
             else
             {
@@ -208,23 +196,14 @@ namespace {
     // #i86923#
     bool Node::hasIgnorableChildren( const bool bCheckUsage ) const
     {
-        bool bHasIgnorableChildren( false );
-
-        auto aIter = mChildren.begin();
-        while( aIter != mChildren.end() && !bHasIgnorableChildren )
-        {
-            Node* pChild = aIter->get();
-            if ( pChild->mbIsItemIgnorable )
-            {
-                bHasIgnorableChildren =
-                    !bCheckUsage ||
-                    ( pChild->hasItemSet( bCheckUsage /* == true */ ) ||
-                      pChild->hasIgnorableChildren( bCheckUsage /* == true */ ) );
-            }
-            ++aIter;
-        }
-
-        return bHasIgnorableChildren;
+        return std::any_of(mChildren.begin(), mChildren.end(),
+            [&bCheckUsage](const std::unique_ptr<Node>& rxChild) {
+                Node* pChild = rxChild.get();
+                return pChild->mbIsItemIgnorable &&
+                    (!bCheckUsage ||
+                     ( pChild->hasItemSet( bCheckUsage /* == true */ ) ||
+                       pChild->hasIgnorableChildren( bCheckUsage /* == true */ ) ));
+            });
     }
 
     const std::shared_ptr<SfxItemSet> Node::getItemSetOfIgnorableChild(
@@ -233,10 +212,9 @@ namespace {
         DBG_ASSERT( hasIgnorableChildren( bSkipUnusedItemSets ),
                     "<Node::getItemSetOfIgnorableChild> - node has no ignorable children" );
 
-        auto aIter = mChildren.begin();
-        while( aIter != mChildren.end() )
+        for( const auto& rxChild : mChildren )
         {
-            Node* pChild = aIter->get();
+            Node* pChild = rxChild.get();
             if ( pChild->mbIsItemIgnorable )
             {
                 if ( pChild->hasItemSet( bSkipUnusedItemSets ) )
@@ -252,7 +230,6 @@ namespace {
                     }
                 }
             }
-            ++aIter;
         }
 
         std::shared_ptr<SfxItemSet> pReturn;

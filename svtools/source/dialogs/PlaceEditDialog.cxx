@@ -318,11 +318,10 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditLabelHdl, weld::Entry&, void )
 
 IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl, weld::Entry&, void )
 {
-    for ( std::vector< std::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
-            it != m_aDetailsContainers.end( ); ++it )
+    for ( auto& rxDetailsContainer : m_aDetailsContainers )
     {
-        ( *it )->setUsername( m_xEDUsername->get_text() );
-        ( *it )->setPassword( m_xEDPassword->get_text() );
+        rxDetailsContainer->setUsername( m_xEDUsername->get_text() );
+        rxDetailsContainer->setPassword( m_xEDPassword->get_text() );
     }
 
     EditHdl(nullptr);

@@ -390,16 +390,11 @@ namespace svt { namespace table
     void UnoControlTableModel::removeTableModelListener( const PTableModelListener& i_listener )
     {
         DBG_CHECK_ME();
-        for (   ModellListeners::iterator lookup = m_pImpl->m_aListeners.begin();
-                lookup != m_pImpl->m_aListeners.end();
-                ++lookup
-            )
+        auto lookup = std::find(m_pImpl->m_aListeners.begin(), m_pImpl->m_aListeners.end(), i_listener);
+        if (lookup != m_pImpl->m_aListeners.end())
         {
-            if ( *lookup == i_listener )
-            {
-                m_pImpl->m_aListeners.erase( lookup );
-                return;
-            }
+            m_pImpl->m_aListeners.erase( lookup );
+            return;
         }
         OSL_ENSURE( false, "UnoControlTableModel::removeTableModelListener: listener is not registered - sure you're doing the right thing here?" );
     }

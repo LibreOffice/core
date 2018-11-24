@@ -900,17 +900,9 @@ void SfxUndoManager::AddUndoListener( SfxUndoListener& i_listener )
 void SfxUndoManager::RemoveUndoListener( SfxUndoListener& i_listener )
 {
     UndoManagerGuard aGuard( *m_xData );
-    for (   UndoListeners::iterator lookup = m_xData->aListeners.begin();
-            lookup != m_xData->aListeners.end();
-            ++lookup
-        )
-    {
-        if ( (*lookup) == &i_listener )
-        {
-            m_xData->aListeners.erase( lookup );
-            break;
-        }
-    }
+    auto lookup = std::find(m_xData->aListeners.begin(), m_xData->aListeners.end(), &i_listener);
+    if (lookup != m_xData->aListeners.end())
+        m_xData->aListeners.erase( lookup );
 }
 
 /**
@@ -1106,16 +1098,11 @@ void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
     for ( size_t i=0; i<m_xData->pUndoArray->maUndoActions.size(); ++i )
     {
         MarkedUndoAction& rAction = m_xData->pUndoArray->maUndoActions[i];
-        for (   ::std::vector< UndoStackMark >::iterator markPos = rAction.aMarks.begin();
-                markPos != rAction.aMarks.end();
-                ++markPos
-            )
+        auto markPos = std::find(rAction.aMarks.begin(), rAction.aMarks.end(), i_mark);
+        if (markPos != rAction.aMarks.end())
         {
-            if ( *markPos == i_mark )
-            {
-                rAction.aMarks.erase( markPos );
-                return;
-            }
+            rAction.aMarks.erase( markPos );
+            return;
         }
     }
     SAL_WARN("svl", "SfxUndoManager::RemoveMark: mark not found!");
@@ -1136,16 +1123,8 @@ bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
 
     const MarkedUndoAction& rAction =
             m_xData->pUndoArray->maUndoActions[ nActionPos-1 ];
-    for (   ::std::vector< UndoStackMark >::const_iterator markPos = rAction.aMarks.begin();
-            markPos != rAction.aMarks.end();
-            ++markPos
-        )
-    {
-        if ( *markPos == i_mark )
-            return true;
-    }
 
-    return false;
+    return std::find(rAction.aMarks.begin(), rAction.aMarks.end(), i_mark) != rAction.aMarks.end();
 }
 
 
