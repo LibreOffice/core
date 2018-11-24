@@ -13,7 +13,6 @@
 
 #include <vcl/dllapi.h>
 
-#include <tools/gen.hxx>
 #include <rtl/ustring.hxx>
 
 #include <vector>

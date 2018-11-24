@@ -35,6 +35,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <svx/AccessibleTextHelper.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>

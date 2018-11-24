@@ -9,6 +9,7 @@
 
 #include "EPUBExportUIComponent.hxx"
 
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -42,6 +42,7 @@
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zformat.hxx>
+#include <tools/fract.hxx>
 
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>

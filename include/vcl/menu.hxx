@@ -23,17 +23,15 @@
 #include <memory>
 #include <vcl/vclenum.hxx>
 #include <tools/link.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/bitmapex.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/vclevent.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <list>
 
+class OutputDevice;
 struct ImplSVEvent;
 struct MenuItemData;
 class Point;
@@ -41,7 +39,6 @@ class Size;
 namespace tools { class Rectangle; }
 class Menu;
 class MenuItemList;
-class HelpEvent;
 class Image;
 class PopupMenu;
 class KeyEvent;
@@ -55,6 +52,8 @@ enum class FloatWinPopupFlags;
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
 }}}}
+
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 
 namespace vcl
 {

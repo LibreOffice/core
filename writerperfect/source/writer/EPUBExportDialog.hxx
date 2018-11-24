@@ -12,6 +12,7 @@
 
 #include <vcl/weld.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 namespace comphelper
 {

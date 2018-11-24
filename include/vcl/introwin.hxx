@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INTROWIN_HXX
 #define INCLUDED_VCL_INTROWIN_HXX
 
-#include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/wrkwin.hxx>
 

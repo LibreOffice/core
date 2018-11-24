@@ -23,6 +23,7 @@
 #include <svl/aeitem.hxx>
 #include <vcl/svtabbx.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/fixed.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/defaultoptions.hxx>

@@ -22,18 +22,14 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
-
 #include <memory>
-#include <vector>
 
 struct ImplImage;
-struct ImplImageList;
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 
 namespace vcl
 {

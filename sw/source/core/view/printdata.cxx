@@ -32,6 +32,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/outdev.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

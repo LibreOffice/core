@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/fixed.hxx>
 #include "general.hxx"
 #include "bibresid.hxx"
 #include "datman.hxx"

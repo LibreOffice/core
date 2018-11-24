@@ -27,6 +27,7 @@
 #include <drwlayer.hxx>
 
 #include <com/sun/star/embed/XComponentSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;

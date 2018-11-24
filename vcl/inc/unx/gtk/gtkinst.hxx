@@ -32,6 +32,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <gtk/gtk.h>
 

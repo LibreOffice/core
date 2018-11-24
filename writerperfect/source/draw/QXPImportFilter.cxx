@@ -12,7 +12,7 @@
 #include <libqxp/libqxp.h>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-
+#include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "QXPImportFilter.hxx"

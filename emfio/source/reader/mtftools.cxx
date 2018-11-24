@@ -29,6 +29,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>

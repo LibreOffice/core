@@ -27,6 +27,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 namespace chart
 {

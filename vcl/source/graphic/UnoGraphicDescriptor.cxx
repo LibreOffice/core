@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 
+#include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <memory>

@@ -41,8 +41,6 @@ namespace utl {
 
 class LocaleDataWrapper;
 
-class Date;
-
 namespace vcl
 {
 

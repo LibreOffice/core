@@ -20,6 +20,7 @@
 #include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <xmloff/nmspmap.hxx>
 #include <format.hxx>

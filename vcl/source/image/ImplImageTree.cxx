@@ -50,6 +50,7 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/IconThemeScanner.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/outdev.hxx>
 
 #include <BitmapLightenFilter.hxx>
 
