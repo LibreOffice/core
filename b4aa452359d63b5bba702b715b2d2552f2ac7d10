@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_88b43737",
+        "filename": "sw/source/core/unocore/unodraw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-11-24T10:48:54Z",
+      "side": 1,
+      "message": "just wonder if aResult is still valid here.\nIndeed, m_aShapes.back returns a ref so perhaps pop_back erases this ref and aResult is empty or invalid?",
+      "range": {
+        "startLine": 433,
+        "startChar": 22,
+        "endLine": 434,
+        "endChar": 14
+      },
+      "revId": "b4aa452359d63b5bba702b715b2d2552f2ac7d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
