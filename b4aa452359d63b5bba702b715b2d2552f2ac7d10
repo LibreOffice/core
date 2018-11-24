@@ -22,6 +22,30 @@
       "revId": "b4aa452359d63b5bba702b715b2d2552f2ac7d10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_a876db3d",
+        "filename": "sw/source/core/unocore/unodraw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-24T12:12:47Z",
+      "side": 1,
+      "message": "XXX foo \u003d \nalways makes a copy, so yes, it\u0027s still valid",
+      "parentUuid": "bf57530f_88b43737",
+      "range": {
+        "startLine": 433,
+        "startChar": 22,
+        "endLine": 434,
+        "endChar": 14
+      },
+      "revId": "b4aa452359d63b5bba702b715b2d2552f2ac7d10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
