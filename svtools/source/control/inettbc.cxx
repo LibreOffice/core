@@ -1023,9 +1023,12 @@ void SvtMatchContext_Impl::doExecute()
     aObj.SetSmartProtocol( eSmartProt == INetProtocol::NotValid ? INetProtocol::Http : eSmartProt );
     for( ;; )
     {
-        for(std::vector<OUString>::iterator i = aPickList.begin(); schedule() && i != aPickList.end(); ++i)
+        for(const auto& rPick : aPickList)
         {
-            aCurObj.SetURL(*i);
+            if (!schedule())
+                break;
+
+            aCurObj.SetURL(rPick);
             aCurObj.SetSmartURL( aCurObj.GetURLNoPass());
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
@@ -1264,9 +1267,12 @@ void MatchContext_Impl::doExecute()
     aObj.SetSmartProtocol( eSmartProt == INetProtocol::NotValid ? INetProtocol::Http : eSmartProt );
     for( ;; )
     {
-        for(std::vector<OUString>::iterator i = aPickList.begin(); schedule() && i != aPickList.end(); ++i)
+        for(const auto& rPick : aPickList)
         {
-            aCurObj.SetURL(*i);
+            if (!schedule())
+                break;
+
+            aCurObj.SetURL(rPick);
             aCurObj.SetSmartURL( aCurObj.GetURLNoPass());
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
