@@ -301,18 +301,6 @@ void AbstractTabController_Impl::SetText( const OUString& rStr )
     m_xDlg->set_title(rStr);
 }
 
-IMPL_LINK_NOARG(AbstractApplyTabDialog_Impl, ApplyHdl, Button*, void)
-{
-    if (pDlg->Apply())
-        m_aHandler.Call(nullptr);
-}
-
-void AbstractApplyTabDialog_Impl::SetApplyHdl( const Link<LinkParamNone*,void>& rLink )
-{
-    m_aHandler = rLink;
-    pDlg->SetApplyHandler(LINK(this, AbstractApplyTabDialog_Impl, ApplyHdl));
-}
-
 IMPL_LINK_NOARG(AbstractApplyTabController_Impl, ApplyHdl, weld::Button&, void)
 {
     if (m_xDlg->Apply())

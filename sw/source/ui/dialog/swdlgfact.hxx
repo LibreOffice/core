@@ -264,19 +264,6 @@ public:
     virtual void        SetText( const OUString& rStr ) override;
 };
 
-class AbstractApplyTabDialog_Impl : public AbstractTabDialog_Impl, virtual public SfxAbstractApplyTabDialog
-{
-public:
-    explicit AbstractApplyTabDialog_Impl( SfxTabDialog* p)
-        : AbstractTabDialog_Impl(p)
-    {
-    }
-    DECL_LINK(ApplyHdl, Button*, void);
-private:
-    Link<LinkParamNone*,void> m_aHandler;
-    virtual void                SetApplyHdl( const Link<LinkParamNone*,void>& rLink ) override;
-};
-
 class AbstractApplyTabController_Impl : public AbstractTabController_Impl, virtual public SfxAbstractApplyTabDialog
 {
 public:
