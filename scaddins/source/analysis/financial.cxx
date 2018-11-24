@@ -126,7 +126,7 @@ double SAL_CALL AnalysisAddIn::getCumprinc( double fRate, sal_Int32 nNumPeriods,
 {
     double fPmt, fPpmt;
 
-    if( nStartPer < 1 || nEndPer < nStartPer || fRate <= 0.0 || nEndPer > nNumPeriods  || nNumPeriods <= 0 ||
+    if( nStartPer < 1 || nEndPer < nStartPer || fRate <= 0.0 || nEndPer > nNumPeriods ||
         fVal <= 0.0 || ( nPayType != 0 && nPayType != 1 ) )
         throw css::lang::IllegalArgumentException();
 
@@ -164,7 +164,7 @@ double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, 
 {
     double fPmt, fIpmt;
 
-    if( nStartPer < 1 || nEndPer < nStartPer || fRate <= 0.0 || nEndPer > nNumPeriods  || nNumPeriods <= 0 ||
+    if( nStartPer < 1 || nEndPer < nStartPer || fRate <= 0.0 || nEndPer > nNumPeriods ||
         fVal <= 0.0 || ( nPayType != 0 && nPayType != 1 ) )
         throw css::lang::IllegalArgumentException();
 

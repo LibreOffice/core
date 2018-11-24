@@ -368,11 +368,10 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
                                             const OUString& rLiteralMask,
                                             bool bSameMask )
 {
-    sal_uInt16 nFormatFlags = 0;
     OUString aText = pEdit->GetText();
 
     // remove leading blanks
-    if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) && !rEditMask.isEmpty() )
+    if (bSameMask && !rEditMask.isEmpty())
     {
         sal_Int32 i = 0;
         sal_Int32 nMaxLen = aText.getLength();
@@ -390,7 +389,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
         aText = aText.copy( i );
     }
 
-    OUString aNewText = ImplPatternReformat( aText, rEditMask, rLiteralMask, nFormatFlags );
+    OUString aNewText = ImplPatternReformat(aText, rEditMask, rLiteralMask, 0);
     if ( aNewText != aText )
     {
         // adjust selection such that it remains at the end if it was there before
@@ -399,7 +398,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
         if ( nMaxSel >= aText.getLength() )
         {
             sal_Int32 nMaxPos = aNewText.getLength();
-            ImplPatternMaxPos( aNewText, rEditMask, nFormatFlags, bSameMask, nMaxSel, nMaxPos );
+            ImplPatternMaxPos(aNewText, rEditMask, 0, bSameMask, nMaxSel, nMaxPos);
             if ( aSel.Min() == aSel.Max() )
             {
                 aSel.Min() = nMaxPos;
@@ -1757,7 +1756,7 @@ bool DateField::EventNotify( NotifyEvent& rNEvt )
                         Reformat();
                 }
             }
-            else if ( !bTextLen && IsEmptyFieldValueEnabled() )
+            else
             {
                 ResetLastDate();
                 SetEmptyFieldValueData( true );
@@ -1859,7 +1858,7 @@ bool DateBox::EventNotify( NotifyEvent& rNEvt )
             bool bTextLen = !GetText().isEmpty();
             if ( bTextLen || !IsEmptyFieldValueEnabled() )
                 Reformat();
-            else if ( !bTextLen && IsEmptyFieldValueEnabled() )
+            else
             {
                 ResetLastDate();
                 SetEmptyFieldValueData( true );

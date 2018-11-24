@@ -3219,7 +3219,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     if (!bHasRefs)
     {
         bHasColRowNames = (formula::FormulaTokenArrayPlainIterator(*pCode).GetNextColRowName() != nullptr);
-        bHasRefs = bHasRefs || bHasColRowNames;
+        bHasRefs = bHasColRowNames;
     }
     bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
 
@@ -3347,7 +3347,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     if (!bHasRefs)
     {
         bHasColRowNames = (formula::FormulaTokenArrayPlainIterator(*pCode).GetNextColRowName() != nullptr);
-        bHasRefs = bHasRefs || bHasColRowNames;
+        bHasRefs = bHasColRowNames;
     }
     bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
 

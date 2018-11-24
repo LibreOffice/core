@@ -3188,10 +3188,10 @@ static void impl_borders( FSHelperPtr const & pSerializer,
             // If there is a shadow, and it's not the regular 'Bottom-Right',
             // then write only the 'shadowed' sides of the border
             if  (
-                    ( ( rOptions.aShadowLocation == SvxShadowLocation::TopLeft     || rOptions.aShadowLocation == SvxShadowLocation::TopRight      )    &&  *pBrd == SvxBoxItemLine::TOP   )  ||
-                    ( ( rOptions.aShadowLocation == SvxShadowLocation::TopLeft     || rOptions.aShadowLocation == SvxShadowLocation::BottomLeft    )    &&  *pBrd == SvxBoxItemLine::LEFT  )  ||
-                    ( ( rOptions.aShadowLocation == SvxShadowLocation::BottomLeft  || rOptions.aShadowLocation == SvxShadowLocation::BottomRight   )    &&  *pBrd == SvxBoxItemLine::BOTTOM)  ||
-                    ( ( rOptions.aShadowLocation == SvxShadowLocation::TopRight    || rOptions.aShadowLocation == SvxShadowLocation::BottomRight   )    &&  *pBrd == SvxBoxItemLine::RIGHT )
+                    ((rOptions.aShadowLocation == SvxShadowLocation::TopLeft    || rOptions.aShadowLocation == SvxShadowLocation::TopRight  ) && *pBrd == SvxBoxItemLine::TOP   ) ||
+                    ((rOptions.aShadowLocation == SvxShadowLocation::TopLeft    || rOptions.aShadowLocation == SvxShadowLocation::BottomLeft) && *pBrd == SvxBoxItemLine::LEFT  ) ||
+                    ((rOptions.aShadowLocation == SvxShadowLocation::BottomLeft                                                             ) && *pBrd == SvxBoxItemLine::BOTTOM) ||
+                    ((rOptions.aShadowLocation == SvxShadowLocation::TopRight                                                               ) && *pBrd == SvxBoxItemLine::RIGHT )
                 )
             {
                 bWriteShadow = true;

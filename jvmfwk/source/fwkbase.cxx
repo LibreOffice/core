@@ -365,9 +365,7 @@ OUString BootParams::getJREHome()
             "Using bootstrap parameter " UNO_JAVA_JFW_ENV_JREHOME
                 " with JAVA_HOME = " << pJRE);
     }
-    else if (getMode() == JFW_MODE_DIRECT
-        && !bEnvJRE
-        && !bJRE)
+    else if (getMode() == JFW_MODE_DIRECT && !bJRE)
     {
         throw FrameworkException(
             JFW_E_CONFIGURATION,

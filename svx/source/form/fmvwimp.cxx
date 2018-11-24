@@ -1218,8 +1218,7 @@ SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDe
             pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
         {// find OutDev
-            SdrPageView* pPageView = m_pView->GetSdrPageView();
-            if( pPageView && !pOutDev )
+            if (SdrPageView* pPageView = m_pView->GetSdrPageView())
             {
                 // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
                 // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
@@ -1368,8 +1367,7 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
             pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
         {// find OutDev
-            SdrPageView* pPageView = m_pView->GetSdrPageView();
-            if( pPageView && !pOutDev )
+            if (SdrPageView* pPageView = m_pView->GetSdrPageView())
             {
                 // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
                 // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();

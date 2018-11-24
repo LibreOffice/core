@@ -395,8 +395,8 @@ const SwContentFrame* SwContentFrame::ImplGetNextContentFrame( bool bFwd ) const
         }
 
         bGoingUp = !(bGoingFwdOrBwd || bGoingDown);
-
-        if ( !bFwd && bGoingDown && p )
+        assert(p);
+        if (!bFwd && bGoingDown)
         {
                 while ( p->GetNext() )
                     p = p->GetNext();

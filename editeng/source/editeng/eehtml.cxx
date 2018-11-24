@@ -625,7 +625,7 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
         aItems.Put( aHeightItemCTL );
 
         // Paragraph margins, when Heading:
-        if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
+        if (nHLevel <= 6)
         {
             SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
             aULSpaceItem.SetUpper( static_cast<sal_uInt16>(OutputDevice::LogicToLogic( 42, MapUnit::Map10thMM, eUnit )) );

@@ -1360,11 +1360,10 @@ void FormulaCompiler::Factor()
     CurrentFactor pFacToken( this );
 
     OpCode eOp = mpToken->GetOpCode();
-    if( eOp == ocPush || eOp == ocColRowNameAuto || eOp == ocMatRef ||
-            eOp == ocDBArea || eOp == ocTableRef
-            || (!mbJumpCommandReorder && ((eOp == ocName) || (eOp == ocDBArea)
-            || (eOp == ocTableRef) || (eOp == ocColRowName) || (eOp == ocBad)))
-        )
+    if (eOp == ocPush || eOp == ocColRowNameAuto || eOp == ocMatRef || eOp == ocDBArea
+        || eOp == ocTableRef
+        || (!mbJumpCommandReorder && ((eOp == ocName) || (eOp == ocColRowName) || (eOp == ocBad)))
+       )
     {
         PutCode( mpToken );
         eOp = NextToken();

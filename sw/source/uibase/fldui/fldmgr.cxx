@@ -883,7 +883,7 @@ bool SwFieldMgr::GoNextPrev( bool bNext, SwFieldType* pTyp )
         return pSh->MoveFieldType( nullptr, bNext, SwFieldIds::Database );
     }
 
-    return pTyp && pSh && pSh->MoveFieldType( pTyp, bNext );
+    return pTyp && pSh->MoveFieldType(pTyp, bNext);
 }
 
 // insert field types

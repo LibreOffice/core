@@ -393,7 +393,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     pStyleSheet = &(pStylePool->Make( aStyleName, eFamily,
                                                       SfxStyleSearchBits::UserDefined ) );
 
-                    if ( pStyleSheet && pStyleSheet->HasParentSupport() )
+                    if (pStyleSheet->HasParentSupport())
                         pStyleSheet->SetParent(aRefName);
                 }
                 break;
@@ -2180,7 +2180,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                         rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );
                         rSet.InvalidateItem(SID_FRAME_LINECOLOR);
                     }
-                    else if( !bCol && !bColDisable) // if no line available
+                    else if (!bCol) // if no line available
                     {
                         aCol = COL_AUTO;
                         rSet.Put( SvxColorItem(aCol, SID_FRAME_LINECOLOR ) );

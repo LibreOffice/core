@@ -65,15 +65,13 @@ namespace
 
     ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks )
     {
-        for(const auto & rLink : rLinks)
+        for (const auto& rLinkIter : rLinks)
         {
-            ::sfx2::SvBaseLink* pLnk = &(*rLink);
-            if( pLnk &&
-                ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
-                  OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
-                  dynamic_cast<const SwBaseLink*>( pLnk) !=  nullptr )
+            ::sfx2::SvBaseLink& rLnk = *rLinkIter;
+            if ((OBJECT_CLIENT_GRF == rLnk.GetObjType() || OBJECT_CLIENT_FILE == rLnk.GetObjType())
+                && dynamic_cast<const SwBaseLink*>(&rLnk) != nullptr)
             {
-                    tools::SvRef<sfx2::SvBaseLink> xLink = pLnk;
+                    tools::SvRef<sfx2::SvBaseLink> xLink(&rLnk);
 
                     OUString sFName;
                     sfx2::LinkManager::GetDisplayNames( xLink.get(), nullptr, &sFName );
@@ -81,7 +79,7 @@ namespace
                     INetURLObject aURL( sFName );
                     if( INetProtocol::File == aURL.GetProtocol() ||
                         INetProtocol::Cid == aURL.GetProtocol() )
-                        return pLnk;
+                        return &rLnk;
             }
         }
         return nullptr;

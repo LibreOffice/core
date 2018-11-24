@@ -584,7 +584,7 @@ void ScDocument::FillInfo(
 
                                 ++nArrRow;
                             }
-                            else if (bRowHidden && nLastHiddenRow >= 0)
+                            else if (nLastHiddenRow >= 0)
                             {
                                 nCurRow = nLastHiddenRow;
                                 if (nCurRow > nThisRow)
