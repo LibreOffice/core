@@ -1318,12 +1318,11 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog(weld::
     return VclPtr<AbstractSvxCharacterMapDialog_Impl>::Create(o3tl::make_unique<SvxCharacterMap>(pParent, &rAttr, bInsert));
 }
 
-VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog( vcl::Window* pParent,
-                                                                        const SfxItemSet& rAttr,
-                                                                        const Reference< XFrame >& _rxDocumentFrame)
+VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog(weld::Window* pParent,
+                                                                              const SfxItemSet& rAttr,
+                                                                              const Reference< XFrame >& _rxDocumentFrame)
 {
-    SfxModalDialog* pDlg = VclPtr<SfxMacroAssignDlg>::Create(pParent, _rxDocumentFrame, rAttr);
-    return VclPtr<CuiAbstractSfxDialog_Impl>::Create(pDlg);
+    return VclPtr<CuiAbstractController_Impl>::Create(o3tl::make_unique<SfxMacroAssignDlg>(pParent, _rxDocumentFrame, rAttr));
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(vcl::Window* pParent,

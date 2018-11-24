@@ -318,23 +318,12 @@ void SfxMacroTabPage::AssignDeleteHdl(const weld::Widget* pBtn)
 IMPL_LINK( SfxMacroTabPage, TimeOut_Impl, Timer*,, void )
 {
     // FillMacroList() can take a long time -> show wait cursor and disable input
-    SfxTabDialog* pTabDlg = GetTabDialog();
-    // perhaps the tabpage is part of a SingleTabDialog then pTabDlg == NULL
-    if ( pTabDlg )
-    {
-        pTabDlg->EnterWait();
-        pTabDlg->EnableInput( false );
-    }
+    weld::Window* pDialog = GetDialogFrameWeld();
+    // perhaps the tabpage is part of a SingleTabDialog then pDialog == nullptr
+    std::unique_ptr<weld::WaitObject> xWait(pDialog ? new weld::WaitObject(pDialog) : nullptr);
     // fill macro list
-    mpImpl->m_xGroupLB->Init(
-        comphelper::getProcessComponentContext(),
-        GetFrame(),
-        OUString(), false);
-    if ( pTabDlg )
-    {
-        pTabDlg->EnableInput();
-        pTabDlg->LeaveWait();
-    }
+    mpImpl->m_xGroupLB->Init(comphelper::getProcessComponentContext(), GetFrame(),
+                             OUString(), false);
 }
 
 void SfxMacroTabPage::InitAndSetHandler()
@@ -398,14 +387,15 @@ VclPtr<SfxTabPage> SfxMacroTabPage::Create(TabPageParent pParent, const SfxItemS
     return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }
 
-SfxMacroAssignDlg::SfxMacroAssignDlg(vcl::Window* pParent,
+SfxMacroAssignDlg::SfxMacroAssignDlg(weld::Window* pParent,
     const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet, "EventAssignDialog",
-        "cui/ui/eventassigndialog.ui")
+    : SfxSingleTabDialogController(pParent, rSet,"cui/ui/eventassigndialog.ui",
+                                   "EventAssignDialog")
 {
-    VclPtr<SfxMacroTabPage> pPage = CreateSfxMacroTabPage(get_content_area(), rSet);
-    pPage->SetFrame( rxDocumentFrame );
-    SetTabPage( pPage );
+    TabPageParent pPageParent(get_content_area(), this);
+    VclPtr<SfxMacroTabPage> pPage = CreateSfxMacroTabPage(pPageParent, rSet);
+    pPage->SetFrame(rxDocumentFrame);
+    SetTabPage(pPage);
     pPage->LaunchFillGroup();
 }
 

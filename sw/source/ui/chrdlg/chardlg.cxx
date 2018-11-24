@@ -307,7 +307,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwCharURLPage, EventHdl, weld::Button&, void)
 {
-    bModified |= SwMacroAssignDlg::INetFormatDlg(this,
+    bModified |= SwMacroAssignDlg::INetFormatDlg(GetDialogFrameWeld(),
                     ::GetActiveView()->GetWrtShell(), pINetItem);
 }
 
