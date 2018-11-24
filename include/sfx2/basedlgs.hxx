@@ -227,7 +227,6 @@ private:
 class SFX2_DLLPUBLIC SfxSingleTabDialogController : public SfxDialogController
 {
 private:
-    VclPtr<SfxTabPage>          m_xSfxPage;
     std::unique_ptr<SfxItemSet> m_xOutputSet;
     const SfxItemSet* m_pInputSet;
 
@@ -247,6 +246,7 @@ public:
     const SfxItemSet*   GetInputItemSet() const { return m_pInputSet; }
 
 protected:
+    VclPtr<SfxTabPage> m_xSfxPage;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Button> m_xOKBtn;
     std::unique_ptr<weld::Button> m_xHelpBtn;
