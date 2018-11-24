@@ -6155,11 +6155,14 @@ fi
 if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
     GPERF=`cygpath -m $GPERF`
 fi
-AC_MSG_CHECKING([gperf version])
-if test "`$GPERF --version | $EGREP ^GNU\ gperf | $AWK '{ print $3 }' | cut -d. -f1`" -ge "3"; then
-    AC_MSG_RESULT([OK])
+AC_MSG_CHECKING([whether gperf is new enough])
+my_gperf_ver1=$($GPERF --version | head -n 1)
+my_gperf_ver2=${my_gperf_ver1#GNU gperf }
+my_gperf_ver3=$(printf %s "$my_gperf_ver2" | $AWK -F. '{ print $1*100+($2<100?$2:99) }')
+if test "$my_gperf_ver3" -ge 301; then
+    AC_MSG_RESULT([yes ($my_gperf_ver2)])
 else
-    AC_MSG_ERROR([too old, you need at least 3.0.0])
+    AC_MSG_ERROR(["$my_gperf_ver1" is too old or unrecognized, must be at least gperf 3.1])
 fi
 AC_SUBST(GPERF)
 
@@ -6184,9 +6187,6 @@ CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
     CXXFLAGS_CXX11=-std:c++17
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-    dnl But only use C++17 if the gperf that is being used knows not to emit
-    dnl "register" in C++ output:
-    printf 'foo\n' | $GPERF -L C++ > conftest.inc
     my_flags='-std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z -std=gnu++14 -std=gnu++1y -std=c++14 -std=c++1y -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x'
     for flag in $my_flags; do
         if test "$COM" = MSC; then
@@ -6233,15 +6233,6 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             #include <functional>
             #include <vector>
 
-            #include <string.h>
-            #pragma GCC diagnostic push
-            #pragma GCC diagnostic ignored "-Wpragmas"
-                // make GCC not warn about next pragma
-            #pragma GCC diagnostic ignored "-Wdeprecated-register"
-                // make Clang with -std < C++17 not even warn about register
-            #include "conftest.inc"
-            #pragma GCC diagnostic pop
-
             #if defined SYSTEM_LIBCMIS
             // See ucb/source/ucp/cmis/auth_provider.hxx:
             #if __GNUC__ >= 7
@@ -6265,7 +6256,6 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             break
         fi
     done
-    rm conftest.inc
 fi
 if test -n "$CXXFLAGS_CXX11"; then
     AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
