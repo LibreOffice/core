@@ -243,8 +243,14 @@ DeactivateRC SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    maPaletteManager.AddRecentColor( aCurrentColor, OUString() );
-    rSet->Put( XFillColorItem( OUString(), aCurrentColor ) );
+    Color aColor = m_xValSetColorList->GetItemColor( m_xValSetColorList->GetSelectedItemId() );
+    OUString sColorName;
+    if ( aCurrentColor == aColor )
+       sColorName = m_xValSetColorList->GetItemText( m_xValSetColorList->GetSelectedItemId() );
+    else
+       sColorName = "#" + aCurrentColor.AsRGBHexString().toAsciiUpperCase();
+    maPaletteManager.AddRecentColor( aCurrentColor, sColorName );
+    rSet->Put( XFillColorItem( sColorName, aCurrentColor ) );
     rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     return true;
 }
