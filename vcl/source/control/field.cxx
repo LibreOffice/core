@@ -152,7 +152,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                 }
             }
         }
-        if ( !bNegative && bCurrency && !aStr.isEmpty() )
+        if (!bNegative && !aStr.isEmpty())
         {
             sal_uInt16 nFormat = rLocaleDataWrappper.getCurrNegativeFormat();
             if ( (nFormat == 3) || (nFormat == 6)  || // $1- || 1-$

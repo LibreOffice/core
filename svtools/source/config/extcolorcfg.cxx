@@ -491,7 +491,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
         m_bBroadcastWhenUnlocked = ExtendedColorConfig::m_pImpl != nullptr;
         if ( m_bBroadcastWhenUnlocked )
         {
-            if ( ExtendedColorConfig::m_pImpl && ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled )
+            if (ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled)
             {
                 m_bBroadcastWhenUnlocked = false;
                 ExtendedColorConfig::m_pImpl->Broadcast(SfxHint(SfxHintId::ColorsChanged));

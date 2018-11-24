@@ -1346,7 +1346,7 @@ void SwFootnoteBossFrame::InsertFootnote( SwFootnoteFrame* pNew )
             }
             if ( !bEnd && pSibling )
                 nCmpPos = ::lcl_FindFootnotePos( pDoc, pSibling->GetAttr() );
-            if ( pSibling && pLastSib && (pSibling != pLastSib) )
+            if (pSibling && (pSibling != pLastSib))
             {
                 // too far?
                 if ( (nLastPos < nCmpPos) && (nCmpPos > nStPos) )

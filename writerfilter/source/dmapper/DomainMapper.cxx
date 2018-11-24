@@ -1810,8 +1810,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
 
         PropertyMap * pTargetContext = rContext.get();
 
-        if (pSectionContext != nullptr &&
-            nSprmId == NS_ooxml::LN_EG_SectPrContents_textDirection)
+        if (pSectionContext)
         {
             pTargetContext = pSectionContext;
         }

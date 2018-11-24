@@ -217,10 +217,7 @@ ErrCode ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument
     OSL_ENSURE( pMedStrm, "::ScExportExcel5 - medium without output stream" );
     if( !pMedStrm ) return SCERR_IMPORT_OPEN;           // should not happen
 
-    ErrCode eRet = SCERR_IMPORT_UNKNOWN_BIFF;
-    if( eFormat == ExpBiff5 || eFormat == ExpBiff8 )
-        eRet = lcl_ExportExcelBiff( rMedium, pDocument, pMedStrm, eFormat == ExpBiff8, eNach );
-
+    ErrCode eRet = lcl_ExportExcelBiff(rMedium, pDocument, pMedStrm, eFormat == ExpBiff8, eNach);
     return eRet;
 }
 

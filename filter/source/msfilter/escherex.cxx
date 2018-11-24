@@ -3905,7 +3905,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
     sal_uInt32      nLen = static_cast<sal_uInt32>(rId.getLength());
     const sal_Char* pData = rId.getStr();
     GraphicType     eType( rObject.GetType() );
-    if ( nLen && pData && ( eType != GraphicType::NONE ) )
+    if (nLen && (eType != GraphicType::NONE))
     {
         mnIdentifier[ 0 ] = rtl_crc32( 0,pData, nLen );
         mnIdentifier[ 1 ] = 0;

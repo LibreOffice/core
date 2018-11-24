@@ -154,17 +154,16 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 }
 
 /// update tables of content
-void SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
+void SwEditShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
-    OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( &rTOX) !=  nullptr,  "no TOXBaseSection!" );
-    SwTOXBaseSection* pTOX = const_cast<SwTOXBaseSection*>(static_cast<const SwTOXBaseSection*>(&rTOX));
-    OSL_ENSURE(pTOX, "no current listing");
-    if( pTOX && nullptr != pTOX->GetFormat()->GetSectionNode() )
+    assert(dynamic_cast<const SwTOXBaseSection*>(&rTOX) && "no TOXBaseSection!");
+    SwTOXBaseSection& rTOXSect = static_cast<SwTOXBaseSection&>(const_cast<SwTOXBase&>(rTOX));
+    if (rTOXSect.GetFormat()->GetSectionNode())
     {
         SwDoc* pMyDoc = GetDoc();
         SwDocShell* pDocSh = pMyDoc->GetDocShell();
 
-        bool bInIndex = pTOX == GetCurTOX();
+        bool bInIndex = &rTOX == GetCurTOX();
         SET_CURR_SHELL( this );
         StartAllAction();
 
@@ -174,17 +173,17 @@ void SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         pMyDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
 
         // create listing stub
-        pTOX->Update(pSet);
+        rTOXSect.Update(pSet);
 
         // correct Cursor
         if( bInIndex )
-            pTOX->SetPosAtStartEnd( *GetCursor()->GetPoint() );
+            rTOXSect.SetPosAtStartEnd(*GetCursor()->GetPoint());
 
         // start formatting
         CalcLayout();
 
         // insert page numbering
-        pTOX->UpdatePageNum();
+        rTOXSect.UpdatePageNum();
 
         pMyDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::TOXCHANGE, nullptr);
 

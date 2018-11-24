@@ -1284,7 +1284,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
         else
         {
             // move handle with index nHandleIndex
-            if(pHdl && (nX || nY))
+            if (nX || nY)
             {
                 if( SdrHdlKind::Anchor == pHdl->GetKind() ||
                     SdrHdlKind::Anchor_TR == pHdl->GetKind() )
@@ -3114,8 +3114,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     // only try to select frame, if pointer already was
                     // switched accordingly
                     if ( m_aActHitType != SdrHitKind::NONE && !rSh.IsSelFrameMode() &&
-                        !GetView().GetViewFrame()->GetDispatcher()->IsLocked() &&
-                        !bExecDrawTextLink)
+                        !GetView().GetViewFrame()->GetDispatcher()->IsLocked())
                     {
                         // Test if there is a draw object at that position and if it should be selected.
                         bool bShould = rSh.ShouldObjectBeSelected(aDocPos);

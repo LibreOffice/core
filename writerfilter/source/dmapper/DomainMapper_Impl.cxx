@@ -1489,7 +1489,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                 // tdf#118521 set paragraph top or bottom margin based on the paragraph style
                 // if we already set the other margin with direct formatting
-                if ( pParaContext && m_xPreviousParagraph.is() )
+                if (m_xPreviousParagraph)
                 {
                     const bool bTopSet = pParaContext->isSet(PROP_PARA_TOP_MARGIN);
                     const bool bBottomSet = pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN);
@@ -1519,7 +1519,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                 // Left, Right, and Hanging settings are also grouped. Ensure that all or none are set.
                 // m_xPreviousParagraph was set earlier, so really it still is the current paragraph...
-                if ( pParaContext && m_xPreviousParagraph.is() )
+                if (m_xPreviousParagraph)
                 {
                     const bool bLeftSet  = pParaContext->isSet(PROP_PARA_LEFT_MARGIN);
                     const bool bRightSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN);

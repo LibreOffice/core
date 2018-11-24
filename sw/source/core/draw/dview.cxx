@@ -633,7 +633,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
                 // adjust loop counter
                 if ( bMovedForward )
                     ++i;
-                else if ( !bMovedForward && i > 0 )
+                else if (i > 0)
                     --i;
             }
 

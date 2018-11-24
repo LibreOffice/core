@@ -632,22 +632,22 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
 /// inherited from sd::ViewShell
 SdPage* DrawViewShell::getCurrentPage() const
 {
-    const sal_Int32 nPageCount = (meEditMode == EditMode::Page)?
+    const sal_uInt16 nPageCount = (meEditMode == EditMode::Page)?
                                     GetDoc()->GetSdPageCount(mePageKind):
                                     GetDoc()->GetMasterSdPageCount(mePageKind);
 
-    sal_Int32 nCurrentPage = maTabControl->GetCurPagePos();
-    DBG_ASSERT( (nPageCount>0) && (nCurrentPage<nPageCount), "sd::DrawViewShell::getCurrentPage(), illegal page index!" );
-    if( (nPageCount < 0) || (nCurrentPage>=nPageCount) )
+    sal_uInt16 nCurrentPage = maTabControl->GetCurPagePos();
+    DBG_ASSERT((nCurrentPage<nPageCount), "sd::DrawViewShell::getCurrentPage(), illegal page index!");
+    if (nCurrentPage >= nPageCount)
         nCurrentPage = 0; // play safe here
 
     if (meEditMode == EditMode::Page)
     {
-        return GetDoc()->GetSdPage(static_cast<sal_uInt16>(nCurrentPage), mePageKind);
+        return GetDoc()->GetSdPage(nCurrentPage, mePageKind);
     }
     else // EditMode::MasterPage
     {
-        return GetDoc()->GetMasterSdPage(static_cast<sal_uInt16>(nCurrentPage), mePageKind);
+        return GetDoc()->GetMasterSdPage(nCurrentPage, mePageKind);
     }
 }
 

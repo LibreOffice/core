@@ -722,7 +722,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     else
                     {
                         // move handle with index nHandleIndex
-                        if(pHdl && (nX || nY))
+                        if (nX || nY)
                         {
                             // now move the Handle (nX, nY)
                             Point aStartPoint(pHdl->GetPos());

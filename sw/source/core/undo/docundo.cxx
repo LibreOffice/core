@@ -133,7 +133,7 @@ size_t UndoManager::GetRedoActionCount(const bool bCurrentLevel) const
     if (!pAction)
         return nRet;
 
-    if (m_pView && !m_bRepair)
+    if (!m_bRepair)
     {
         // If another view created the first redo action, prevent redoing it from this view.
         ViewShellId nViewShellId = m_pView->GetViewShellId();

@@ -265,7 +265,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
                     bool bDone = false;
-                    if ( pOutView && ( eMode == HLINK_DEFAULT || eMode == HLINK_FIELD ) )
+                    if (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD)
                     {
                         const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
                         if (pFieldItem)

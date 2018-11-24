@@ -1305,12 +1305,11 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
 
 bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFontList )
 {
-    static const sal_uInt16 gFontSizeWichMap[] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL, 0 };
-
-    const SvxFontItem* pFontItem = &rSet.Get( EE_CHAR_FONTINFO );
-    if( !pFontItem || !pFontList )
+    if (!pFontList)
         return false;
 
+    static const sal_uInt16 gFontSizeWichMap[] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL, 0 };
+    const SvxFontItem& rFontItem = rSet.Get(EE_CHAR_FONTINFO);
     bool bRet = false;
 
     const sal_uInt16* pWhich = gFontSizeWichMap;
@@ -1321,7 +1320,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
         const MapUnit eUnit = rSet.GetPool()->GetMetric( *pWhich );
         nHeight = OutputDevice::LogicToLogic(nHeight * 10, eUnit, MapUnit::MapPoint);
 
-        FontMetric aFontMetric = pFontList->Get( pFontItem->GetFamilyName(), pFontItem->GetStyleName() );
+        FontMetric aFontMetric = pFontList->Get( rFontItem.GetFamilyName(), rFontItem.GetStyleName() );
         const sal_IntPtr* pAry = pFontList->GetSizeAry( aFontMetric );
 
         if( bGrow )

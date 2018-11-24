@@ -2561,12 +2561,11 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, long nTextWidth
 bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
 {
     const vcl::Font& rFnt = pFont ? *pFont : GetOut().GetFont();
-    bool bPrt = GetShell() && ! GetShell()->GetWin();
     Color nNewColor = COL_BLACK;
     bool bChgFntColor = false;
     bool bChgLineColor = false;
 
-    if( bPrt && GetShell() && GetShell()->GetViewOptions()->IsBlackFont() )
+    if (GetShell() && !GetShell()->GetWin() && GetShell()->GetViewOptions()->IsBlackFont())
     {
         if ( COL_BLACK != rFnt.GetColor() )
             bChgFntColor = true;
@@ -2582,7 +2581,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
         // LineColor has to be changed if:
         // 1. IsAlwaysAutoColor is set
 
-        bChgLineColor = ! bPrt && GetShell() &&
+        bChgLineColor = GetShell() && GetShell()->GetWin() &&
                 GetShell()->GetAccessibilityOptions()->IsAlwaysAutoColor();
 
         bChgFntColor = COL_AUTO == rFnt.GetColor() || bChgLineColor;

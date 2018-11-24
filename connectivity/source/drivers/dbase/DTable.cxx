@@ -558,7 +558,7 @@ void ODbaseTable::ReadMemoHeader()
             (*m_pMemoStream).ReadUInt16( m_aMemoHeader.db_size );
             if (m_aMemoHeader.db_size > 1 && m_aMemoHeader.db_size != 512)  // 1 is also for dBase 3
                 m_aMemoHeader.db_typ  = MemodBaseIV;
-            else if (m_aMemoHeader.db_size > 1 && m_aMemoHeader.db_size == 512)
+            else if (m_aMemoHeader.db_size == 512)
             {
                 // There are files using size specification, though they are dBase-files
                 char sHeader[4];

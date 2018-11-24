@@ -348,14 +348,14 @@ static bool LessY( Point const & aPt1, Point const & aPt2, bool bOld )
 
 bool SwFEShell::MoveAnchor( SwMove nDir )
 {
-    const SdrMarkList* pMrkList;
-    if( !Imp()->GetDrawView() ||
-        nullptr == (pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList()) ||
-        1 != pMrkList->GetMarkCount())
+    if (!Imp()->GetDrawView())
+        return false;
+    const SdrMarkList& pMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
+    if (1 != pMrkList.GetMarkCount())
         return false;
     SwFrame* pOld;
     SwFlyFrame* pFly = nullptr;
-    SdrObject *pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+    SdrObject *pObj = pMrkList.GetMark( 0 )->GetMarkedSdrObj();
     if (SwVirtFlyDrawObj* pVirtO = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
     {
         pFly = pVirtO->GetFlyFrame();
@@ -1546,7 +1546,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
                 (pVirtO && pVirtO->IsTextBox()) ||
                 ( eType == GotoObjFlags::DrawSimple && lcl_IsControlGroup( pObj ) ) ||
                 ( eType == GotoObjFlags::DrawControl && !lcl_IsControlGroup( pObj ) ) ||
-                ( pFilter && !pFilter->includeObject( *pObj ) ) )
+                !pFilter->includeObject( *pObj ) )
                 continue;
             if (pVirtO)
             {

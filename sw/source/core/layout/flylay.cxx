@@ -123,7 +123,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
 
     // #i28701# - use new method <GetPageFrame()>
-    if( !GetPageFrame() && GetAnchorFrame() && GetAnchorFrame()->IsInFly() )
+    if( !GetPageFrame() && GetAnchorFrame()->IsInFly() )
     {
         SwFlyFrame* pFly = AnchorFrame()->FindFlyFrame();
         SwPageFrame *pPageFrame = pFly ? pFly->FindPageFrame() : nullptr;
