@@ -19,7 +19,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTVCLCONTROL_HXX
 #define INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTVCLCONTROL_HXX
 
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>

@@ -21,19 +21,6 @@
 
 #include <memory>
 #include <sfx2/tabdlg.hxx>
-
-#include <vcl/menu.hxx>
-
-#include <vcl/button.hxx>
-
-#include <vcl/fixed.hxx>
-
-#include <vcl/lstbox.hxx>
-
-#include <vcl/edit.hxx>
-
-#include <vcl/field.hxx>
-
 #include <swtypes.hxx>
 #include "numprevw.hxx"
 #include "numberingtypelistbox.hxx"

@@ -42,10 +42,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <svl/urihelper.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/classids.hxx>
 #include <sfx2/filedlghelper.hxx>

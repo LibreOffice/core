@@ -20,9 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_CUITABAREA_HXX
 
 #include <svtools/valueset.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/slider.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/xsetit.hxx>
 #include <svx/xfillit0.hxx>

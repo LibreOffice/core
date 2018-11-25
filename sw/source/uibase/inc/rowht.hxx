@@ -19,10 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_ROWHT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_ROWHT_HXX
 
-#include <svx/stddlg.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 class SwWrtShell;
 

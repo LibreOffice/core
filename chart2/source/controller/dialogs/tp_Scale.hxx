@@ -20,11 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_SCALE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fmtfield.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 
 namespace chart
 {

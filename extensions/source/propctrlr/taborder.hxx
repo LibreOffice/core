@@ -27,12 +27,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vcl/dialog.hxx>
-
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
-
-#include <vcl/fixed.hxx>
-
 
 namespace pcr
 {

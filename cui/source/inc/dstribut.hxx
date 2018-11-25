@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_DSTRIBUT_HXX
 
 #include <svx/dlgctrl.hxx>
-#include <vcl/fixed.hxx>
 #include <svx/dstribut_enum.hxx>
 
 class SvxDistributePage : public SfxTabPage

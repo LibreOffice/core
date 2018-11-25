@@ -19,15 +19,11 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_LABDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_LABDLG_HXX
 
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/sxctitm.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/anchorid.hxx>
-
 
 class SdrView;
 
