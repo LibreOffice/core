@@ -130,7 +130,7 @@ public:
                                utils::importFromSvgD( aPoly, aPath1, false, nullptr ));
         aExport = utils::exportToSvgD( aPoly, true, true, false );
 
-        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        // Adaptations for B2DPolygon bezier change (see #i77162#):
 
         // The import/export of aPath1 does not reproduce aExport again. This is
         // correct since aPath1 contains a segment with non-used control points
@@ -150,7 +150,7 @@ public:
             "s-3810-11430-3810-11430z";
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting bezier polygon to SVG-D", OUString(sExportStringSimpleBezier), aExport);
 
-        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        // Adaptations for B2DPolygon bezier change (see #i77162#):
 
         // a 2nd good test is that re-importing of aExport has to create the same
         // B2DPolPolygon again:
@@ -161,7 +161,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D", utils::importFromSvgD( aPoly, aPath2, false, nullptr));
         aExport = utils::exportToSvgD( aPoly, true, true, false );
 
-        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        // Adaptations for B2DPolygon bezier change (see #i77162#):
 
         // same here, the corrected export with the corrected B2DPolygon is simply more efficient,
         // so i needed to change the compare string. Also adding the re-import comparison below.
