@@ -199,7 +199,7 @@ CuiMacroEventListBox::CuiMacroEventListBox(std::unique_ptr<weld::TreeView> xTree
     : m_xTreeView(std::move(xTreeView))
 {
     m_xTreeView->set_help_id(HID_MACRO_HEADERTABLISTBOX);
-    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 40, m_xTreeView->get_height_rows(9));
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 70, m_xTreeView->get_height_rows(9));
 }
 
 CuiMacroEventListBox::~CuiMacroEventListBox()
