@@ -25,6 +25,7 @@
 
 #include <svl/macitem.hxx>
 #include <stringio.hxx>
+#include <algorithm>
 
 SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLanguage)
     : aMacName( rMacName ), aLibName( rLanguage),
