@@ -478,13 +478,12 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
 
         SolarMutexResettableGuard aWriteLock;
         bool bGlobalSettings( bInGlobalSettings );
-        GlobalSettings* pGlobalSettings( nullptr );
         if ( rGlobalSettings == nullptr )
         {
             rGlobalSettings.reset( new GlobalSettings( rComponentContext ) );
             bGetSettingsState = true;
         }
-        pGlobalSettings = rGlobalSettings.get();
+        GlobalSettings* pGlobalSettings = rGlobalSettings.get();
         aWriteLock.clear();
 
         try
@@ -563,7 +562,7 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
             }
 
             // oversteer values with global settings
-            if ( pGlobalSettings && ( bGetSettingsState || bGlobalSettings ))
+            if (bGetSettingsState || bGlobalSettings)
             {
                 if ( pGlobalSettings->HasToolbarStatesInfo())
                 {

@@ -206,14 +206,11 @@ static sal_Int32 lcl_BacktraceWhiteSpaces( const OUString &rText, sal_Int32 nSta
     if (0 <= nPosBefore && nPosBefore < nLen && lcl_IsWhiteSpace( pStart[ nPosBefore ] ))
     {
         nStartPos = nPosBefore;
-        if (0 <= nStartPos && nStartPos < nLen)
-        {
-            const sal_Unicode *pText = rText.getStr() + nStartPos;
-            while (pText > pStart && lcl_IsWhiteSpace( *pText ))
-                --pText;
-            // now add 1 since we want to point to the first char after the last char in the sentence...
-            nRes = pText - pStart + 1;
-        }
+        const sal_Unicode *pText = rText.getStr() + nStartPos;
+        while (pText > pStart && lcl_IsWhiteSpace( *pText ))
+            --pText;
+        // now add 1 since we want to point to the first char after the last char in the sentence...
+        nRes = pText - pStart + 1;
     }
 
     DBG_ASSERT( 0 <= nRes && nRes <= nLen, "lcl_BacktraceWhiteSpaces return value out of range" );

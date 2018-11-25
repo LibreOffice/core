@@ -2352,7 +2352,7 @@ bool DbGridControl::SeekCursor(long nRow, bool bAbsolute)
                 DBG_ASSERT( !m_pSeekCursor->isAfterLast() && !m_pSeekCursor->isBeforeFirst(),
                     "DbGridControl::SeekCursor: how did the seek cursor get to this position?!" );
                 nSteps = nRow - (m_pSeekCursor->getRow() - 1);
-                bAbsolute = bAbsolute || (std::abs(nSteps) > 100);
+                bAbsolute = std::abs(nSteps) > 100;
             }
 
             if ( bAbsolute )

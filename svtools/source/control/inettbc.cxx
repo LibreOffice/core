@@ -1150,12 +1150,11 @@ void MatchContext_Impl::doExecute()
     INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( pBox->aBaseURL );
     if ( pBox->aBaseURL.isEmpty() )
         eBaseProt = INetURLObject::CompareProtocolScheme( SvtPathOptions().GetWorkPath() );
-    INetProtocol eSmartProt = INetProtocol::NotValid;
 
     // if the user input is a valid URL, go on with it
     // otherwise it could be parsed smart with a predefined smart protocol
     // ( or if this is not set with the protocol of a predefined base URL )
-    if( eProt == INetProtocol::NotValid || eProt == eSmartProt || (eSmartProt == INetProtocol::NotValid && eProt == eBaseProt) )
+    if (eProt == INetProtocol::NotValid || eProt == eBaseProt)
     {
         // not stopped yet ?
         if( schedule() )
@@ -1264,7 +1263,7 @@ void MatchContext_Impl::doExecute()
     INetURLObject aCurObj;
     OUString aCurString, aCurMainURL;
     INetURLObject aObj;
-    aObj.SetSmartProtocol( eSmartProt == INetProtocol::NotValid ? INetProtocol::Http : eSmartProt );
+    aObj.SetSmartProtocol(INetProtocol::Http);
     for( ;; )
     {
         for(const auto& rPick : aPickList)
@@ -1277,9 +1276,6 @@ void MatchContext_Impl::doExecute()
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             if( eProt != INetProtocol::NotValid && aCurObj.GetProtocol() != eProt )
-                continue;
-
-            if( eSmartProt != INetProtocol::NotValid && aCurObj.GetProtocol() != eSmartProt )
                 continue;
 
             switch( aCurObj.GetProtocol() )

@@ -887,8 +887,8 @@ void OGroupsSortingDialog::UpdateData( )
 
 void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
 {
-    sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
-    bool bEmpty = nGroupPos == NO_GROUP;
+    const sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
+    const bool bEmpty = nGroupPos == NO_GROUP;
     m_pProperties->Enable(!bEmpty);
 
     checkButtons(_nRow);
@@ -896,7 +896,7 @@ void OGroupsSortingDialog::DisplayData( sal_Int32 _nRow )
     if ( m_pCurrentGroupListener.is() )
         m_pCurrentGroupListener->dispose();
     m_pCurrentGroupListener = nullptr;
-    if ( !bEmpty && nGroupPos != NO_GROUP )
+    if (!bEmpty)
     {
         uno::Reference< report::XGroup> xGroup = getGroup(nGroupPos);
 

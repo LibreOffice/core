@@ -2425,7 +2425,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAd
             if( bSelected )
                 SelectEntry( pEntry, false, true );
         }
-        else if( bAdd && bOverlaps )
+        else if (bOverlaps)
         {
             // The entry is inside an old (=>span multiple rectangles with Ctrl)
             // selection rectangle.
