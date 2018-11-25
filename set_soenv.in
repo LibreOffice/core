@@ -1834,6 +1834,15 @@ else {
 if ( $GUI eq "UNX" ) {
    ToFile( "AWTLIB",           '@AWTLIB@',          "e" );
 }
+else {
+   if ( $GUI eq "WNT" ) {
+      if ( "@COM@" eq "GCC" ) {
+         ToFile( "AWTLIB",     '@JAVA_HOME@/lib/jawt.lib', "e" );
+      } else {
+         ToFile( "AWTLIB",     'jawt.lib', "e" );
+      }
+   }
+}
 if ( '@JDK@' ne '' )
 { 
    ToFile( "JDK",             "@JDK@",           "e" );
