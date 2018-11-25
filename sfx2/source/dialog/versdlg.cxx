@@ -111,105 +111,42 @@ SfxVersionInfo::SfxVersionInfo()
 {
 }
 
-void SfxVersionsTabListBox_Impl::KeyInput(const KeyEvent& rKeyEvent)
+namespace
 {
-    const vcl::KeyCode& rCode = rKeyEvent.GetKeyCode();
-    switch (rCode.GetCode())
+    void setColSizes(weld::TreeView& rVersionBox)
     {
-        case KEY_RETURN :
-        case KEY_ESCAPE :
-        case KEY_TAB :
+        // recalculate the datetime column width
+        int nWidestTime(rVersionBox.get_pixel_size(getWidestTime(Application::GetSettings().GetLocaleDataWrapper())).Width());
+        int nW1 = rVersionBox.get_pixel_size(rVersionBox.get_column_title(1)).Width();
+
+        int nMax = std::max(nWidestTime, nW1) + 12; // max width + a little offset
+        const int nRest = rVersionBox.get_preferred_size().Width() - nMax;
+
+        std::set<OUString> aAuthors;
+        SfxVersionInfo aInfo;
+        aAuthors.insert(SvtUserOptions().GetFullName());
+
+        for (int i = 0; i < rVersionBox.n_children(); ++i)
         {
-            Dialog *pParent = GetParentDialog();
-            if (pParent)
-                pParent->KeyInput(rKeyEvent);
-            else
-                SvSimpleTable::KeyInput(rKeyEvent);
-            break;
+            aAuthors.insert(reinterpret_cast<SfxVersionInfo*>(rVersionBox.get_id(i).toInt64())->aAuthor);
         }
-        default:
-            SvSimpleTable::KeyInput( rKeyEvent );
-            break;
-    }
-}
 
-void SfxVersionsTabListBox_Impl::setColSizes()
-{
-    HeaderBar &rBar = GetTheHeaderBar();
-    if (rBar.GetItemCount() < 3)
-        return;
-
-    // recalculate the datetime column width
-    long nWidestTime(GetTextWidth(getWidestTime(Application::GetSettings().GetLocaleDataWrapper())));
-    long nW1 = rBar.GetTextWidth(rBar.GetItemText(1));
-
-    long nMax = std::max(nWidestTime, nW1) + 12; // max width + a little offset
-    const long nRest = GetSizePixel().Width() - nMax;
-
-    std::set<OUString> aAuthors;
-    SfxVersionInfo aInfo;
-    aAuthors.insert(SvtUserOptions().GetFullName());
-
-    for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
-    {
-        aAuthors.insert(static_cast<SfxVersionInfo*>(pEntry->GetUserData())->aAuthor);
-    }
-
-    long nMaxAuthorWidth = nRest/4;
-    for (auto const& author : aAuthors)
-    {
-        nMaxAuthorWidth = std::max(nMaxAuthorWidth, GetTextWidth(author));
-        if (nMaxAuthorWidth > nRest/2)
+        int nMaxAuthorWidth = nRest/4;
+        for (auto const& author : aAuthors)
         {
-            nMaxAuthorWidth = nRest/2;
-            break;
+            nMaxAuthorWidth = std::max<int>(nMaxAuthorWidth, rVersionBox.get_pixel_size(author).Width());
+            if (nMaxAuthorWidth > nRest/2)
+            {
+                nMaxAuthorWidth = nRest/2;
+                break;
+            }
         }
+
+        std::vector<int> aWidths;
+        aWidths.push_back(nMax);
+        aWidths.push_back(nMaxAuthorWidth);
+        rVersionBox.set_column_fixed_widths(aWidths);
     }
-
-    long aTabPositions[] = { 0, nMax, nMax + nMaxAuthorWidth };
-    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
-}
-
-void SfxVersionsTabListBox_Impl::Resize()
-{
-    SvSimpleTable::Resize();
-    if (isInitialLayout(this))
-        setColSizes();
-}
-
-void SfxVersionDialog::setColSizes()
-{
-    // recalculate the datetime column width
-    int nWidestTime(m_xVersionBox->get_pixel_size(getWidestTime(Application::GetSettings().GetLocaleDataWrapper())).Width());
-    int nW1 = m_xVersionBox->get_pixel_size(m_xVersionBox->get_column_title(1)).Width();
-
-    int nMax = std::max(nWidestTime, nW1) + 12; // max width + a little offset
-    const int nRest = m_xVersionBox->get_preferred_size().Width() - nMax;
-
-    std::set<OUString> aAuthors;
-    SfxVersionInfo aInfo;
-    aAuthors.insert(SvtUserOptions().GetFullName());
-
-    for (int i = 0; i < m_xVersionBox->n_children(); ++i)
-    {
-        aAuthors.insert(reinterpret_cast<SfxVersionInfo*>(m_xVersionBox->get_id(i).toInt64())->aAuthor);
-    }
-
-    int nMaxAuthorWidth = nRest/4;
-    for (auto const& author : aAuthors)
-    {
-        nMaxAuthorWidth = std::max<int>(nMaxAuthorWidth, m_xVersionBox->get_pixel_size(author).Width());
-        if (nMaxAuthorWidth > nRest/2)
-        {
-            nMaxAuthorWidth = nRest/2;
-            break;
-        }
-    }
-
-    std::vector<int> aWidths;
-    aWidths.push_back(nMax);
-    aWidths.push_back(nMaxAuthorWidth);
-    m_xVersionBox->set_column_fixed_widths(aWidths);
 }
 
 SfxVersionDialog::SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pVwFrame, bool bIsSaveVersionOnClose)
@@ -227,7 +164,7 @@ SfxVersionDialog::SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pVwFrame
 {
     m_xVersionBox->set_size_request(m_xVersionBox->get_approximate_digit_width() * 90,
                                     m_xVersionBox->get_height_rows(15));
-    setColSizes();
+    setColSizes(*m_xVersionBox);
 
     Link<weld::Button&,void> aClickLink = LINK( this, SfxVersionDialog, ButtonHdl_Impl );
     m_xViewButton->connect_clicked( aClickLink );
@@ -438,8 +375,8 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xCmisButton.get())
     {
-        VclPtrInstance< SfxCmisVersionsDialog > pDlg(m_pViewFrame);
-        pDlg->Execute();
+        SfxCmisVersionsDialog aDlg(m_xDialog.get(), m_pViewFrame);
+        aDlg.run();
     }
 }
 
@@ -487,87 +424,48 @@ IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, weld::Button&, rButton, void)
     m_xDialog->response(RET_OK);
 }
 
-SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )
-    : SfxModalDialog(nullptr, "VersionsCmisDialog", "sfx/ui/versionscmis.ui")
-    , pViewFrame(pVwFrame)
+SfxCmisVersionsDialog::SfxCmisVersionsDialog(weld::Window* pParent, SfxViewFrame* pVwFrame)
+    : SfxDialogController(pParent, "sfx/ui/versionscmis.ui", "VersionsCmisDialog")
+    , m_pViewFrame(pVwFrame)
+    , m_xOpenButton(m_xBuilder->weld_button("open"))
+    , m_xViewButton(m_xBuilder->weld_button("show"))
+    , m_xDeleteButton(m_xBuilder->weld_button("delete"))
+    , m_xCompareButton(m_xBuilder->weld_button("compare"))
 {
-    get(m_pOpenButton, "open");
-    get(m_pViewButton, "show");
-    get(m_pDeleteButton, "delete");
-    get(m_pCompareButton, "compare");
+    m_xVersionBox->set_size_request(m_xVersionBox->get_approximate_digit_width() * 90,
+                                    m_xVersionBox->get_height_rows(15));
+    setColSizes(*m_xVersionBox);
 
-    SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("versions");
-    Size aControlSize(260, 114);
-    aControlSize = pContainer->LogicToPixel(aControlSize, MapMode(MapUnit::MapAppFont));
-    pContainer->set_width_request(aControlSize.Width());
-    pContainer->set_height_request(aControlSize.Height());
+    m_xVersionBox->grab_focus();
 
-    m_pVersionBox = VclPtr<SfxVersionsTabListBox_Impl>::Create(*pContainer, WB_TABSTOP);
-
-    m_pVersionBox->GrabFocus();
-    m_pVersionBox->SetStyle( m_pVersionBox->GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
-    m_pVersionBox->SetSelectionMode( SelectionMode::Single );
-
-    long aTabPositions[] = { 0, 0, 0 };
-    m_pVersionBox->SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
-    OUString sHeader1(get<FixedText>("datetime")->GetText());
-    OUString sHeader2(get<FixedText>("savedby")->GetText());
-    OUString sHeader3(get<FixedText>("comments")->GetText());
-    OUString sHeader = sHeader1 + "\t" + sHeader2 + "\t" + sHeader3;
-    m_pVersionBox->InsertHeaderEntry(sHeader);
-
-    HeaderBar &rBar = m_pVersionBox->GetTheHeaderBar();
-    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED;
-    nBits &= ~HeaderBarItemBits::CLICKABLE;
-    rBar.SetItemBits(1, nBits);
-    rBar.SetItemBits(2, nBits);
-    rBar.SetItemBits(3, nBits);
-
-    m_pVersionBox->Resize();
-
-    OUString sText = GetText();
-    sText = sText + " " + pViewFrame->GetObjectShell()->GetTitle();
-    SetText( sText );
+    OUString sText = m_xDialog->get_title();
+    sText = sText + " " + m_pViewFrame->GetObjectShell()->GetTitle();
+    m_xDialog->set_title(sText);
 
     LoadVersions();
-
-    m_pVersionBox->setColSizes();
-
 }
 
 SfxCmisVersionsDialog::~SfxCmisVersionsDialog()
 {
-    disposeOnce();
-}
-
-void SfxCmisVersionsDialog::dispose()
-{
-    m_pTable.reset();
-    m_pVersionBox.disposeAndClear();
-    m_pOpenButton.clear();
-    m_pViewButton.clear();
-    m_pDeleteButton.clear();
-    m_pCompareButton.clear();
-    SfxModalDialog::dispose();
 }
 
 void SfxCmisVersionsDialog::LoadVersions()
 {
-    SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
+    SfxObjectShell *pObjShell = m_pViewFrame->GetObjectShell();
     uno::Sequence < document::CmisVersion > aVersions = pObjShell->GetCmisVersions( );
     m_pTable.reset(new SfxVersionTableDtor( aVersions ));
-    for ( size_t n = 0; n < m_pTable->size(); ++n )
+    for (size_t n = 0; n < m_pTable->size(); ++n)
     {
         SfxVersionInfo *pInfo = m_pTable->at( n );
         OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
-        aEntry += "\t";
-        aEntry += pInfo->aAuthor;
-        aEntry += "\t";
-        aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
-        SvTreeListEntry *pEntry = m_pVersionBox->InsertEntry( aEntry );
-        pEntry->SetUserData( pInfo );
+        m_xVersionBox->append(OUString::number(reinterpret_cast<sal_Int64>(pInfo)), aEntry);
+        auto nLastRow = m_xVersionBox->n_children() - 1;
+        m_xVersionBox->set_text(nLastRow, pInfo->aAuthor, 1);
+        m_xVersionBox->set_text(nLastRow, ConvertWhiteSpaces_Impl(pInfo->aComment), 2);
     }
 
+    if (auto nCount = m_pTable->size())
+        m_xVersionBox->select(nCount - 1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
