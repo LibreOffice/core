@@ -29,7 +29,6 @@
 #include <vcl/splitwin.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>

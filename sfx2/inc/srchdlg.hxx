@@ -19,12 +19,7 @@
 #ifndef INCLUDED_SFX2_INC_SRCHDLG_HXX
 #define INCLUDED_SFX2_INC_SRCHDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
-
 
 namespace sfx2 {
 

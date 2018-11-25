@@ -28,9 +28,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
