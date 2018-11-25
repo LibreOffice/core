@@ -251,8 +251,14 @@ gb_COMPILER_PLUGINS_SETUP := ICECC_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.do
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS := \
     -Xclang -plugin-arg-loplugin -Xclang --warnings-as-errors
 else
-gb_COMPILER_TEST_FLAGS :=
+# Set CCACHE_CPP2 to prevent GCC -Werror=implicit-fallthrough= when ccache strips comments from C
+# code (which still needs /*fallthrough*/-style comments to silence that warning):
+ifeq ($(ENABLE_WERROR),TRUE)
+gb_COMPILER_SETUP := CCACHE_CPP2=1
+else
 gb_COMPILER_SETUP :=
+endif
+gb_COMPILER_TEST_FLAGS :=
 gb_COMPILER_PLUGINS :=
 gb_COMPILER_PLUGINS_SETUP :=
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS :=
