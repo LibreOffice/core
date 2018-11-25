@@ -19,11 +19,8 @@
 
 #include <sfx2/objface.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 

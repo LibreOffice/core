@@ -22,9 +22,6 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/anchorid.hxx>
-
-#include <vcl/fixed.hxx>
-
 #include <basegfx/range/b2drange.hxx>
 
 // predefines

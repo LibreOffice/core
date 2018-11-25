@@ -21,10 +21,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BREAK_HXX
 
 #include <vcl/weld.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
 #include <boost/optional.hpp>
 
 class SwWrtShell;

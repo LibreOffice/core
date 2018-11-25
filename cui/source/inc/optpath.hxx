@@ -22,7 +22,7 @@
 #include <memory>
 #include <sfx2/tabdlg.hxx>
 #include <svtools/simptabl.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>

@@ -20,9 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_PAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <svx/pagectrl.hxx>
 #include <svx/pagenumberlistbox.hxx>
 #include <svx/papersizelistbox.hxx>

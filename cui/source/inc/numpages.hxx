@@ -24,11 +24,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/Palette.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/field.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>

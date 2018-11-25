@@ -20,14 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NUM_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/edit.hxx>
-#include <svx/stddlg.hxx>
 #include "numprevw.hxx"
 #include <numrule.hxx>
 
