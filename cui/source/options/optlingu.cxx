@@ -613,40 +613,40 @@ static void lcl_MergeDisplayArray(
 
     for (sal_uLong i = 0;  i < nEntries;  ++i)
     {
-        ServiceInfo_Impl* pEntry = &rSvcInfoArr[i];
-        if (pEntry  &&  pEntry->sDisplayName == rToAdd.sDisplayName)
+        ServiceInfo_Impl& rEntry = rSvcInfoArr[i];
+        if (rEntry.sDisplayName == rToAdd.sDisplayName)
         {
             if(rToAdd.xSpell.is())
             {
-                DBG_ASSERT( !pEntry->xSpell.is() &&
-                            pEntry->sSpellImplName.isEmpty(),
+                DBG_ASSERT( !rEntry.xSpell.is() &&
+                            rEntry.sSpellImplName.isEmpty(),
                             "merge conflict" );
-                pEntry->sSpellImplName = rToAdd.sSpellImplName;
-                pEntry->xSpell = rToAdd.xSpell;
+                rEntry.sSpellImplName = rToAdd.sSpellImplName;
+                rEntry.xSpell = rToAdd.xSpell;
             }
             if(rToAdd.xGrammar.is())
             {
-                DBG_ASSERT( !pEntry->xGrammar.is() &&
-                            pEntry->sGrammarImplName.isEmpty(),
+                DBG_ASSERT( !rEntry.xGrammar.is() &&
+                            rEntry.sGrammarImplName.isEmpty(),
                             "merge conflict" );
-                pEntry->sGrammarImplName = rToAdd.sGrammarImplName;
-                pEntry->xGrammar = rToAdd.xGrammar;
+                rEntry.sGrammarImplName = rToAdd.sGrammarImplName;
+                rEntry.xGrammar = rToAdd.xGrammar;
             }
             if(rToAdd.xHyph.is())
             {
-                DBG_ASSERT( !pEntry->xHyph.is() &&
-                            pEntry->sHyphImplName.isEmpty(),
+                DBG_ASSERT( !rEntry.xHyph.is() &&
+                            rEntry.sHyphImplName.isEmpty(),
                             "merge conflict" );
-                pEntry->sHyphImplName = rToAdd.sHyphImplName;
-                pEntry->xHyph = rToAdd.xHyph;
+                rEntry.sHyphImplName = rToAdd.sHyphImplName;
+                rEntry.xHyph = rToAdd.xHyph;
             }
             if(rToAdd.xThes.is())
             {
-                DBG_ASSERT( !pEntry->xThes.is() &&
-                            pEntry->sThesImplName.isEmpty(),
+                DBG_ASSERT( !rEntry.xThes.is() &&
+                            rEntry.sThesImplName.isEmpty(),
                             "merge conflict" );
-                pEntry->sThesImplName = rToAdd.sThesImplName;
-                pEntry->xThes = rToAdd.xThes;
+                rEntry.sThesImplName = rToAdd.sThesImplName;
+                rEntry.xThes = rToAdd.xThes;
             }
             return ;
         }
@@ -797,17 +797,17 @@ void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices
     {
         for (sal_uLong i = 0;  i < nDisplayServices;  ++i)
         {
-            ServiceInfo_Impl* pEntry = &aDisplayServiceArr[i];
-            if (pEntry  &&  !pEntry->bConfigured)
+            ServiceInfo_Impl& rEntry = aDisplayServiceArr[i];
+            if (!rEntry.bConfigured)
             {
                 const OUString &rSrvcImplName = pConfiguredServices[n];
                 if (!rSrvcImplName.isEmpty()  &&
-                    (pEntry->sSpellImplName == rSrvcImplName  ||
-                        pEntry->sGrammarImplName  == rSrvcImplName  ||
-                        pEntry->sHyphImplName  == rSrvcImplName  ||
-                        pEntry->sThesImplName  == rSrvcImplName))
+                    (rEntry.sSpellImplName == rSrvcImplName ||
+                        rEntry.sGrammarImplName == rSrvcImplName ||
+                        rEntry.sHyphImplName == rSrvcImplName ||
+                        rEntry.sThesImplName == rSrvcImplName))
                 {
-                    pEntry->bConfigured = true;
+                    rEntry.bConfigured = true;
                     break;
                 }
             }
@@ -848,13 +848,12 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
     DBG_ASSERT( !rDisplayName.isEmpty(), "empty DisplayName" );
 
     ServiceInfo_Impl *pInfo = nullptr;
-    ServiceInfo_Impl *pTmp  = nullptr;
     for (sal_uLong i = 0;  i < nDisplayServices;  ++i)
     {
-        pTmp = &aDisplayServiceArr[i];
-        if (pTmp  &&  pTmp->sDisplayName == rDisplayName)
+        ServiceInfo_Impl& rTmp = aDisplayServiceArr[i];
+        if (rTmp.sDisplayName == rDisplayName)
         {
-            pInfo = pTmp;
+            pInfo = &rTmp;
             break;
         }
     }

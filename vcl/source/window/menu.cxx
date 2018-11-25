@@ -629,7 +629,7 @@ sal_uInt16 Menu::ImplGetPrevVisible( sal_uInt16 nPos ) const
 {
     for ( size_t n = nPos; n; )
     {
-        if ( n && ImplIsVisible( --n ) )
+        if (ImplIsVisible(--n))
             return n;
     }
     return ITEMPOS_INVALID;

@@ -2278,7 +2278,7 @@ SwLineEntry::OverlapType SwLineEntry::Overlaps( const SwLineEntry& rNew )  const
         eRet = OVERLAP1;
 
     // 4, 5, 6, 7
-    else if ( mnStartPos <= rNew.mnStartPos && mnEndPos >= rNew.mnEndPos )
+    else if (mnStartPos <= rNew.mnStartPos)
         eRet = OVERLAP2;
 
     // 8, 9

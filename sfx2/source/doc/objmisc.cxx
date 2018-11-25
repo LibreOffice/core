@@ -755,12 +755,13 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
         // Document called "Untitled" for the time being
         return aNoName;
     }
+    assert(pMed);
 
     const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : GetMedium()->GetName() );
     if ( nMaxLength > SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
     {
         sal_uInt16 nRemote;
-        if( !pMed || aURL.GetProtocol() == INetProtocol::File )
+        if (aURL.GetProtocol() == INetProtocol::File)
             nRemote = 0;
         else
             nRemote = 1;
