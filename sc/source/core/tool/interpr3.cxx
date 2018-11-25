@@ -218,7 +218,7 @@ double ScInterpreter::gauss(double x)
           0.00000000011301172,  0.00000000000511243, -0.00000000000021218 };
         nVal = taylor(t0, 11, (xAbs * xAbs)) * xAbs;
     }
-    else if ((xShort >= 1) && (xShort <= 2))
+    else if (xShort <= 2)
     {
         static const double t2[] =
         { 0.47724986805182079,  0.05399096651318805, -0.05399096651318805,
@@ -231,7 +231,7 @@ double ScInterpreter::gauss(double x)
          -0.00000000000172127, -0.00000000000008634,  0.00000000000007894 };
         nVal = taylor(t2, 23, (xAbs - 2.0));
     }
-    else if ((xShort >= 3) && (xShort <= 4))
+    else if (xShort <= 4)
     {
         static const double t4[] =
        { 0.49996832875816688,  0.00013383022576489, -0.00026766045152977,
@@ -4083,7 +4083,7 @@ void ScInterpreter::ScRank( bool bAverage )
             double fFirstPos = -1.0;
             bool bFinished = false;
             SCSIZE i;
-            for ( i = 0; i < nSize && !bFinished && nGlobalError == FormulaError::NONE; i++ )
+            for (i = 0; i < nSize && !bFinished; i++)
             {
                 if ( aSortArray[ i ] == fVal )
                 {

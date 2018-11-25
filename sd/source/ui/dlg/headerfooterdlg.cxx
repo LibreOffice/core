@@ -662,7 +662,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
             for (sal_Int32 nPara = 0; (nPara < nParaCount) && !bHasDateFieldItem; ++nPara)
             {
                 sal_uInt16 nFieldCount = pEdit->GetFieldCount(nPara);
-                for (sal_uInt16 nField = 0; (nField < nFieldCount) && !bHasDateFieldItem; ++nField)
+                for (sal_uInt16 nField = 0; (nField < nFieldCount); ++nField)
                 {
                     EFieldInfo aFieldInfo = pEdit->GetFieldInfo(nPara, nField);
                     if (aFieldInfo.pFieldItem)

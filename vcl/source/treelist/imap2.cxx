@@ -254,7 +254,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine  )
 
     // find instruction
     OStringBuffer aBuf;
-    while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
+    while ((cChar >= 'a') && (cChar <= 'z'))
     {
         aBuf.append(cChar);
         cChar = *pStr++;
@@ -389,7 +389,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine )
 
     // find instruction
     OStringBuffer aBuf;
-    while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
+    while ((cChar >= 'a') && (cChar <= 'z'))
     {
         aBuf.append(cChar);
         cChar = *pStr++;

@@ -1675,7 +1675,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
     ErrCode                        nStatus;
     GfxLinkType                    eLinkType = GfxLinkType::NONE;
     const bool                     bLinkSet = rGraphic.IsGfxLink();
-    std::unique_ptr<FilterConfigItem> pFilterConfigItem;
 
     Size                aPreviewSizeHint( 0, 0 );
     bool                bAllowPartialStreamRead = false;
@@ -2018,11 +2017,12 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 nStatus = ERRCODE_GRFILTER_FILTERERROR;
             else
             {
+                std::unique_ptr<FilterConfigItem> pFilterConfigItem;
                 OUString aShortName;
                 if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                 {
                     aShortName = GetImportFormatShortName( nFormat ).toAsciiUpperCase();
-                    if ( ( !pFilterConfigItem ) && aShortName == "PCD" )
+                    if (aShortName == "PCD")
                     {
                         OUString aFilterConfigPath( "Office.Common/Filter/Graphic/Import/PCD" );
                         pFilterConfigItem = o3tl::make_unique<FilterConfigItem>( aFilterConfigPath );
