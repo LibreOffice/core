@@ -81,16 +81,15 @@ bool SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
 {
     // Count different => odd in any case
     // Compare single ones; the sequence matters due to performance reasons
-    return aSvxMacroTable.size() == rOther.aSvxMacroTable.size()
-        && std::equal(aSvxMacroTable.begin(), aSvxMacroTable.end(),
-            rOther.aSvxMacroTable.begin(),
-            [](const SvxMacroTable::value_type& rOwnEntry, const SvxMacroTable::value_type& rOtherEntry) {
-                const SvxMacro& rOwnMac = rOwnEntry.second;
-                const SvxMacro& rOtherMac = rOtherEntry.second;
-                return rOwnEntry.first == rOtherEntry.first
-                    && rOwnMac.GetLibName() == rOtherMac.GetLibName()
-                    && rOwnMac.GetMacName() == rOtherMac.GetMacName();
-            });
+    return std::equal(aSvxMacroTable.begin(), aSvxMacroTable.end(),
+        rOther.aSvxMacroTable.begin(), rOther.aSvxMacroTable.end(),
+        [](const SvxMacroTable::value_type& rOwnEntry, const SvxMacroTable::value_type& rOtherEntry) {
+            const SvxMacro& rOwnMac = rOwnEntry.second;
+            const SvxMacro& rOtherMac = rOtherEntry.second;
+            return rOwnEntry.first == rOtherEntry.first
+                && rOwnMac.GetLibName() == rOtherMac.GetLibName()
+                && rOwnMac.GetMacName() == rOtherMac.GetMacName();
+        });
 }
 
 void SvxMacroTableDtor::Read( SvStream& rStrm )
