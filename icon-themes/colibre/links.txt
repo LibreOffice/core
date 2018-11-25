@@ -1751,7 +1751,8 @@ cmd/lc_columnwidth.png cmd/lc_setminimalcolumnwidth.png
 # ==============================================
 cmd/sc_margins.png cmd/sc_pagemargin.png
 cmd/sc_exportasgraphic.png cmd/sc_insertgraphic.png
-cmd/sc_namegroup.png cmd/sc_renameobject.png
+cmd/sc_namegroup.png cmd/sc_definename.png
+cmd/lc_namegroup.png cmd/lc_definename.png
 
 cmd/lc_margins.png cmd/lc_pagemargin.png
 cmd/lc_exportasgraphic.png cmd/lc_insertgraphic.png
