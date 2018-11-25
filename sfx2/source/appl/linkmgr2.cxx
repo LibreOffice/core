@@ -471,14 +471,15 @@ void LinkManager::InsertFileLink(
 void LinkManager::CancelTransfers()
 {
     SvFileObject* pFileObj;
-    sfx2::SvBaseLink* pLnk;
 
     const sfx2::SvBaseLinks& rLnks = GetLinks();
     for( size_t n = rLnks.size(); n; )
-        if( nullptr != ( pLnk = &(*rLnks[ --n ])) &&
-            OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
-            nullptr != ( pFileObj = static_cast<SvFileObject*>(pLnk->GetObj()) ) )
+    {
+        const sfx2::SvBaseLink& rLnk = *rLnks[--n];
+        if (OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & rLnk.GetObjType())
+            && nullptr != (pFileObj = static_cast<SvFileObject*>(rLnk.GetObj())))
             pFileObj->CancelTransfers();
+    }
 }
 
 // For the purpose of sending Status information from the file object to

@@ -2025,7 +2025,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
         }
         of.writeParameter("ReservedWord", str, nbOfWords);
         // "true", ..., "below" trigger untranslated warning.
-        if (!bEnglishLocale && curNode && (0 <= i && i <= 7) &&
+        if (!bEnglishLocale && curNode && i <= 7 &&
                 str.equalsIgnoreAsciiCaseAscii( ReserveWord[i].value))
         {
             fprintf( stderr,

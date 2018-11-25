@@ -1585,7 +1585,7 @@ void SAL_CALL
                 mxSpellDsp->SetServiceList( rLocale, rServiceImplNames );
                 SaveCfgSvcs( SN_SPELLCHECKER );
 
-                if (mxListenerHelper.is() && bChanged)
+                if (mxListenerHelper)
                     mxListenerHelper->AddLngSvcEvt(
                             linguistic2::LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN |
                             linguistic2::LinguServiceEventFlags::SPELL_WRONG_WORDS_AGAIN );
@@ -1602,7 +1602,7 @@ void SAL_CALL
                 mxGrammarDsp->SetServiceList( rLocale, rServiceImplNames );
                 SaveCfgSvcs( SN_GRAMMARCHECKER );
 
-                if (mxListenerHelper.is() && bChanged)
+                if (mxListenerHelper)
                     mxListenerHelper->AddLngSvcEvt(
                             linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN );
             }
@@ -1618,7 +1618,7 @@ void SAL_CALL
                 mxHyphDsp->SetServiceList( rLocale, rServiceImplNames );
                 SaveCfgSvcs( SN_HYPHENATOR );
 
-                if (mxListenerHelper.is() && bChanged)
+                if (mxListenerHelper)
                     mxListenerHelper->AddLngSvcEvt(
                             linguistic2::LinguServiceEventFlags::HYPHENATE_AGAIN );
             }

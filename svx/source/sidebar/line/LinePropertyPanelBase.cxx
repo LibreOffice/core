@@ -705,19 +705,19 @@ void LinePropertyPanelBase::SetWidthIcon()
 
     if(nVal <= 6)
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[0]);
-    else if(nVal > 6 && nVal <= 9)
+    else if (nVal <= 9)
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[1]);
-    else if(nVal > 9 && nVal <= 12)
+    else if (nVal <= 12)
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[2]);
-    else if(nVal > 12 && nVal <= 19)
+    else if (nVal <= 19)
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[3]);
-    else if(nVal > 19 && nVal <= 26)
+    else if (nVal <= 26)
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[4]);
-    else if(nVal > 26 && nVal <= 37)
+    else if (nVal <= 37)
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[5]);
-    else if(nVal > 37 && nVal <=52)
+    else if (nVal <= 52)
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[6]);
-    else if(nVal > 52)
+    else
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[7]);
 
 }

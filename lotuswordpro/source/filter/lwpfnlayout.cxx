@@ -264,7 +264,7 @@ LwpVirtualLayout* LwpEnSuperTableLayout::GetMainTableLayout()
         {
             break;
         }
-        if (pLayout && pLayout->GetLayoutType() == LWP_ENDNOTE_LAYOUT)
+        if (pLayout->GetLayoutType() == LWP_ENDNOTE_LAYOUT)
         {
             return pLayout;
         }
@@ -321,7 +321,7 @@ LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
         {
             break;
         }
-        if (pLayout && pLayout->GetLayoutType() == LWP_FOOTNOTE_LAYOUT)
+        if (pLayout->GetLayoutType() == LWP_FOOTNOTE_LAYOUT)
         {
             return pLayout;
         }
