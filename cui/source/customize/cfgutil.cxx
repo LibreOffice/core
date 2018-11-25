@@ -369,7 +369,7 @@ CuiConfigFunctionListBox::CuiConfigFunctionListBox(std::unique_ptr<weld::TreeVie
     : m_xTreeView(std::move(xTreeView))
 {
     m_xTreeView->make_sorted();
-    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 20, m_xTreeView->get_height_rows(9));
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 35, m_xTreeView->get_height_rows(9));
 }
 
 CuiConfigFunctionListBox::~CuiConfigFunctionListBox()
@@ -1272,7 +1272,7 @@ CuiConfigGroupListBox::CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTr
 {
     m_xTreeView->connect_row_activated(LINK(this, CuiConfigGroupListBox, OpenCurrentHdl));
     m_xTreeView->connect_expanding(LINK(this, CuiConfigGroupListBox, ExpandingHdl));
-    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 20, m_xTreeView->get_height_rows(9));
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 35, m_xTreeView->get_height_rows(9));
 }
 
 IMPL_LINK_NOARG(CuiConfigGroupListBox, OpenCurrentHdl, weld::TreeView&, void)
