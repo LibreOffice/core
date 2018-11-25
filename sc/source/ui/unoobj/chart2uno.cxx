@@ -2653,7 +2653,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                     aItem.mbIsValue = false;
                     aItem.maString = pMat->GetString(nC, nR).getString();
 
-                    m_aDataArray.emplace_back();
+                    m_aDataArray.emplace_back(aItem);
                     ++nDataCount;
                 }
             }
