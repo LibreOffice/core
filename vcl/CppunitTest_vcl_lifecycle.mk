@@ -49,4 +49,8 @@ $(eval $(call gb_CppunitTest_use_components,vcl_lifecycle,\
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_lifecycle))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,vcl_lifecycle, \
+    vcl \
+))
+
 # vim: set noet sw=4 ts=4:
