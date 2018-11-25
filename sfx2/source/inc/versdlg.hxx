@@ -44,31 +44,31 @@ public:
 };
 
 class SfxVersionTableDtor;
-class SfxVersionDialog : public SfxModalDialog
+class SfxVersionDialog : public SfxDialogController
 {
-    VclPtr<PushButton>                 m_pSaveButton;
-    VclPtr<CheckBox>                   m_pSaveCheckBox;
-    VclPtr<SfxVersionsTabListBox_Impl> m_pVersionBox;
-    VclPtr<PushButton>                 m_pOpenButton;
-    VclPtr<PushButton>                 m_pViewButton;
-    VclPtr<PushButton>                 m_pDeleteButton;
-    VclPtr<PushButton>                 m_pCompareButton;
-    VclPtr<PushButton>                 m_pCmisButton;
-    SfxViewFrame*               pViewFrame;
+    SfxViewFrame* m_pViewFrame;
+    bool m_bIsSaveVersionOnClose;
     std::unique_ptr<SfxVersionTableDtor> m_pTable;
-    bool                        m_bIsSaveVersionOnClose;
+    std::unique_ptr<weld::Button> m_xSaveButton;
+    std::unique_ptr<weld::CheckButton> m_xSaveCheckBox;
+    std::unique_ptr<weld::Button> m_xOpenButton;
+    std::unique_ptr<weld::Button> m_xViewButton;
+    std::unique_ptr<weld::Button> m_xDeleteButton;
+    std::unique_ptr<weld::Button> m_xCompareButton;
+    std::unique_ptr<weld::Button> m_xCmisButton;
+    std::unique_ptr<weld::TreeView> m_xVersionBox;
 
-    DECL_LINK(            DClickHdl_Impl, SvTreeListBox*, bool);
-    DECL_LINK(            SelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK(            ButtonHdl_Impl, Button*, void );
-    void                        Init_Impl();
-    void                        Open_Impl();
+    DECL_LINK(DClickHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
+    DECL_LINK(ButtonHdl_Impl, weld::Button&, void );
+    void Init_Impl();
+    void Open_Impl();
+    void setColSizes();
 
 public:
-                                SfxVersionDialog ( SfxViewFrame* pFrame, bool );
-    virtual                     ~SfxVersionDialog () override;
-    virtual void                dispose() override;
-    bool                        IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
+    SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pFrame, bool);
+    virtual ~SfxVersionDialog() override;
+    bool IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
 };
 
 class SfxViewVersionDialog_Impl : public SfxDialogController

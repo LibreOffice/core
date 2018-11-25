@@ -1796,7 +1796,8 @@ public:
     {
         std::vector<long> aTabPositions;
         aTabPositions.push_back(0);
-        aTabPositions.insert(aTabPositions.end(), rWidths.begin(), rWidths.end());
+        for (size_t i = 0; i < rWidths.size(); ++i)
+            aTabPositions.push_back(aTabPositions[i] + rWidths[i]);
         m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
         SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
         if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
@@ -1804,6 +1805,16 @@ public:
             for (size_t i = 0; i < rWidths.size(); ++i)
                 pHeaderBar->SetItemSize(pHeaderBar->GetItemId(i), rWidths[i]);
         }
+    }
+
+    virtual OUString get_column_title(int nColumn) const override
+    {
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        {
+            return pHeaderBar->GetItemText(pHeaderBar->GetItemId(nColumn));
+        }
+        return OUString();
     }
 
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rStr, const OUString* pId,
@@ -2243,7 +2254,7 @@ IMPL_LINK(SalInstanceTreeView, EndDragHdl, HeaderBar*, pHeaderBar, void)
     std::vector<long> aTabPositions;
     aTabPositions.push_back(0);
     for (int i = 0; i < pHeaderBar->GetItemCount() - 1; ++i)
-        aTabPositions.push_back(pHeaderBar->GetItemSize(pHeaderBar->GetItemId(i)));
+        aTabPositions.push_back(aTabPositions[i] + pHeaderBar->GetItemSize(pHeaderBar->GetItemId(i)));
     m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
 }
 

@@ -505,6 +505,7 @@ public:
     virtual int get_height_rows(int nRows) const = 0;
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) = 0;
+    virtual OUString get_column_title(int nColumn) const = 0;
 
     virtual void set_selection_mode(bool bMultiple) = 0;
     virtual int count_selected_rows() const = 0;
