@@ -22,7 +22,6 @@
 #include <comphelper/lok.hxx>
 
 #include <osl/file.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
