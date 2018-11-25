@@ -3070,14 +3070,14 @@ void MathType::HandleMath(SmNode *pNode)
         {
             nBias = 0xB; //typeface
         }
+        else if ((nArse == 0x2F) || (nArse == 0x2225))
+            nBias = 0x2; //typeface
         else if ((nArse > 0x2000) || (nArse == 0x00D7))
             nBias = 0x6; //typeface
         else if (nArse == 0x3d1)
             nBias = 0x4;
         else if ((nArse > 0xFF) && ((nArse < 0x393) || (nArse > 0x3c9)))
             nBias = 0xB; //typeface
-        else if ((nArse == 0x2F) || (nArse == 0x2225))
-            nBias = 0x2; //typeface
         else
             nBias = 0x3; //typeface
 
