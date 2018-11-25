@@ -67,7 +67,7 @@ $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call g
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Ant_get_target,$(1))
 
 __ant_out:=$(shell $(gb_Ant_ANTCOMMAND) -v -Ddependencies.outfile=$(WORKDIR)/Ant/$(1)/deps -f $(2) dependencies)
-$$(eval $(foreach dep,$(shell cat < $(WORKDIR)/Ant/$(1)/deps),$$(call gb_Ant_add_dependency,$(call gb_Ant_get_target,$(1)),$(dep))))
+$$(eval $(foreach dep,$(shell cat $(WORKDIR)/Ant/$(1)/deps),$$(call gb_Ant_add_dependency,$(call gb_Ant_get_target,$(1)),$(dep))))
 
 endef
 
