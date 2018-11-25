@@ -2,7 +2,7 @@
 GBuild is a set of makefile macros built on top of gmake that attempts to simplify LibreOffice development.
 
 See
-  https://wiki.documentfoundation.org/Development/Build_System/
+  https://wiki.documentfoundation.org/Development/Build_System
 for online build-system documentation.
 
 See
