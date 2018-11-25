@@ -339,7 +339,8 @@ static void insertSorted(migrations_available& rAvailableMigrations, supported_m
 {
     bool                           bInserted( false );
     migrations_available::iterator pIter = rAvailableMigrations.begin();
-    while ( !bInserted && pIter != rAvailableMigrations.end()) {
+    while (pIter != rAvailableMigrations.end())
+    {
         if ( pIter->nPriority < aSupportedMigration.nPriority ) {
             rAvailableMigrations.insert(pIter, aSupportedMigration );
             bInserted = true;

@@ -637,8 +637,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     {
         sal_Int32 nAltIdx = (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ?
                 nId - MN_SUGGESTION_START : nId - MN_AUTOCORR_START;
-        OSL_ENSURE( 0 <= nAltIdx && nAltIdx < m_aSuggestions.getLength(), "index out of range" );
-        if (0 <= nAltIdx && nAltIdx < m_aSuggestions.getLength() && (m_bGrammarResults || m_xSpellAlt.is()))
+        OSL_ENSURE(nAltIdx < m_aSuggestions.getLength(), "index out of range");
+        if (nAltIdx < m_aSuggestions.getLength() && (m_bGrammarResults || m_xSpellAlt.is()))
         {
             bool bOldIns = m_pSh->IsInsMode();
             m_pSh->SetInsMode();

@@ -1868,7 +1868,7 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
                         const SwTableNode* pTableNd = pSttNd->FindTableNode();
                         const SwTableBox* pBox;
                         if( pTableNd && nullptr != ( pBox = pTableNd->GetTable().
-                            GetTableBox( pSttNd->GetIndex() ) ) && pBox &&
+                            GetTableBox(pSttNd->GetIndex()) ) &&
                             pBox->IsInHeadline( &pTableNd->GetTable() ) )
                             nCond = Master_CollCondition::PARA_IN_TABLEHEAD;
                     }

@@ -713,7 +713,7 @@ namespace svxform
         {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
 
             // hidden controls can be copied to a form only
-            if ( !_pTargetEntry || ( _pTargetEntry == m_pRootEntry ) || !IsFormEntry( _pTargetEntry ) )
+            if ((_pTargetEntry == m_pRootEntry) || !IsFormEntry(_pTargetEntry))
                 return DND_ACTION_NONE;
 
             return bSelfSource ? ( DND_ACTION_COPYMOVE & _nAction ) : DND_ACTION_COPY;

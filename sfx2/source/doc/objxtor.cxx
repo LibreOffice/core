@@ -343,7 +343,7 @@ SfxObjectShell::~SfxObjectShell()
         pMedium->CloseAndReleaseStreams_Impl();
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-        if ( IsDocShared() && pMedium )
+        if (IsDocShared())
             FreeSharedFile( pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 #endif
         DELETEZ( pMedium );
