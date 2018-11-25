@@ -425,9 +425,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !IsOwnStorageFormat( *GetMedium() ) )
                 return;
 
-            ScopedVclPtrInstance< SfxVersionDialog > pDlg( pFrame, IsSaveVersionOnClose() );
-            pDlg->Execute();
-            SetSaveVersionOnClose( pDlg->IsSaveVersionOnClose() );
+            SfxVersionDialog aDlg(rReq.GetFrameWeld(), pFrame, IsSaveVersionOnClose());
+            aDlg.run();
+            SetSaveVersionOnClose(aDlg.IsSaveVersionOnClose());
             rReq.Done();
             return;
         }
