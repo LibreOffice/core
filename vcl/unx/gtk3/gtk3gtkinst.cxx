@@ -4281,6 +4281,17 @@ public:
         g_list_free(pColumns);
     }
 
+    virtual OUString get_column_title(int nColumn) const override
+    {
+        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(pColumns, nColumn));
+        assert(pColumn && "wrong count");
+        const gchar* pTitle = gtk_tree_view_column_get_title(pColumn);
+        OUString sRet = OUString(pTitle, pTitle ? strlen(pTitle) : 0, RTL_TEXTENCODING_UTF8);
+        g_list_free(pColumns);
+        return sRet;
+    }
+
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rText, const OUString* pId, const OUString* pIconName,
                         VirtualDevice* pImageSurface, const OUString* pExpanderName, bool bChildrenOnDemand) override
     {
@@ -4752,6 +4763,19 @@ public:
             return;
         }
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
+    }
+
+    virtual Size get_preferred_size() const override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+            return Size(gtk_scrolled_window_get_min_content_width(GTK_SCROLLED_WINDOW(pParent)),
+                        gtk_scrolled_window_get_min_content_height(GTK_SCROLLED_WINDOW(pParent)));
+        }
+        GtkRequisition size;
+        gtk_widget_get_preferred_size(m_pWidget, nullptr, &size);
+        return Size(size.width, size.height);
     }
 
     virtual void set_visible(bool visible) override
