@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/CertificateValidationRequest.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/zforlist.hxx>
@@ -235,6 +236,12 @@ handleCertificateValidationRequest_(
     uno::Reference< task::XInteractionApprove > xApprove;
     uno::Reference< task::XInteractionAbort > xAbort;
     getContinuations(rContinuations, &xApprove, &xAbort);
+
+    if ( comphelper::LibreOfficeKit::isActive() && xApprove.is() )
+    {
+        xApprove->select();
+        return;
+    }
 
     sal_Int32 failures = rRequest.CertificateValidity;
     bool trustCert = true;
