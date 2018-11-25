@@ -715,7 +715,7 @@ void SwPageFrame::PrepareHeader()
         if ( GetUpper() )
             ::RegistFlys( this, pH );
     }
-    else if ( pLay && pLay->IsHeaderFrame() )
+    else if (pLay->IsHeaderFrame())
     {   // Remove header if present.
         ::DelFlys( pLay, this );
         pLay->Cut();

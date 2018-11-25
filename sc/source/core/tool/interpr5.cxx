@@ -740,7 +740,7 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
 
     bool bSingular=false;
     for (SCSIZE i=0; i<n && !bSingular; i++)
-        bSingular = bSingular || ((mA->GetDouble(i,i))==0.0);
+        bSingular = (mA->GetDouble(i,i)) == 0.0;
     if (bSingular)
         nSign = 0;
 
@@ -2520,7 +2520,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
             // that they aren't zero.
             bool bIsSingular=false;
             for (SCSIZE row=0; row < K && !bIsSingular; row++)
-                bIsSingular = bIsSingular || aVecR[row]==0.0;
+                bIsSingular = aVecR[row] == 0.0;
             if (bIsSingular)
             {
                 PushNoValue();
@@ -2677,7 +2677,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
             // that they aren't zero.
             bool bIsSingular=false;
             for (SCSIZE row=0; row < K && !bIsSingular; row++)
-                bIsSingular = bIsSingular || aVecR[row]==0.0;
+                bIsSingular = aVecR[row] == 0.0;
             if (bIsSingular)
             {
                 PushNoValue();
@@ -3018,7 +3018,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             // that they aren't zero.
             bool bIsSingular=false;
             for (SCSIZE row=0; row < K && !bIsSingular; row++)
-                bIsSingular = bIsSingular || aVecR[row]==0.0;
+                bIsSingular = aVecR[row] == 0.0;
             if (bIsSingular)
             {
                 PushNoValue();
@@ -3077,7 +3077,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
             // that they aren't zero.
             bool bIsSingular=false;
             for (SCSIZE row=0; row < K && !bIsSingular; row++)
-                bIsSingular = bIsSingular || aVecR[row]==0.0;
+                bIsSingular = aVecR[row] == 0.0;
             if (bIsSingular)
             {
                 PushNoValue();

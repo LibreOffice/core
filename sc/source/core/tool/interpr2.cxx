@@ -627,7 +627,7 @@ void ScInterpreter::ScWorkday_MS()
                         while ( nRef >= 0 && nSortArray.at( nRef ) > nDate )
                             nRef--;
 
-                        if ( !( nRef >= 0 && nSortArray.at( nRef ) == nDate ) || nRef < 0 )
+                        if (nRef < 0 || nSortArray.at(nRef) != nDate)
                              nDays++;
                     }
                 }

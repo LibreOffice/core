@@ -755,7 +755,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 InsertTag( aToken2, rItemSet, rPropInfo );
                 return;
             }
-            else if( pNext && CSS1_SELTYPE_PSEUDO == eNextType )
+            else if (CSS1_SELTYPE_PSEUDO == eNextType)
             {
                 // maybe A:visited or A:link
 

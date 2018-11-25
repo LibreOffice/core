@@ -381,7 +381,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         {
             int leftrep = 0;
             bool hit = (n >= minLen);
-            if (!rep || !rep[i] || (i >= n))
+            if (!rep || !rep[i])
             {
                 hit = hit && (hyphens[i]&1) && (i < Leading);
                 hit = hit && (i >= (minLead-1) );
@@ -407,7 +407,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             if (hit)
             {
                 nHyphenationPos = i;
-                if (rep && (i < n) && rep[i])
+                if (rep && rep[i])
                 {
                     nHyphenationPosAlt = i - pos[i];
                     nHyphenationPosAltHyph = i + leftrep - pos[i];

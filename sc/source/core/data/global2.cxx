@@ -229,7 +229,7 @@ bool ScSolveParam::operator==( const ScSolveParam& r ) const
             bEqual = true;
         else if ( !pStrTargetVal || !r.pStrTargetVal )
             bEqual = false;
-        else if ( pStrTargetVal && r.pStrTargetVal )
+        else
             bEqual = ( *pStrTargetVal == *(r.pStrTargetVal) );
     }
 

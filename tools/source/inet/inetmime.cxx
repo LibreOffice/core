@@ -1163,7 +1163,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
     for (const sal_Char * p = pBegin; p != pEnd;)
     {
         OUString sEncodedText;
-        if (p != pEnd && *p == '=' /* && bStartEncodedWord */)
+        if (*p == '=' /* && bStartEncodedWord */)
         {
             const sal_Char * q = p + 1;
             bool bEncodedWord = q != pEnd && *q++ == '?';

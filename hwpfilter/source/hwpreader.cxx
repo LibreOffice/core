@@ -1146,7 +1146,7 @@ void HwpReader::makeMasterStyles()
             rendEl("style:header");
         }
                                                   /* Will be the default. */
-        else if( pPage->header_odd && !pPage->header_even )
+        else if (pPage->header_odd)
         {
             rstartEl("style:header", mxList.get());
             padd("text:style-name", sXML_CDATA, "Standard");
@@ -1181,7 +1181,7 @@ void HwpReader::makeMasterStyles()
             rendEl("style:header-left");
         }
                                                   /* Will be the default.  */
-        else if( pPage->header_even && !pPage->header_odd )
+        else if (pPage->header_even)
         {
             rstartEl("style:header-left", mxList.get());
             padd("text:style-name", sXML_CDATA, "Standard");
@@ -1247,7 +1247,7 @@ void HwpReader::makeMasterStyles()
             rendEl("style:footer");
         }
                                                   /* Will be the default. */
-        else if( pPage->footer_odd && !pPage->footer_even )
+        else if (pPage->footer_odd)
         {
             rstartEl("style:footer", mxList.get());
             padd("text:style-name", sXML_CDATA, "Standard");
@@ -1282,7 +1282,7 @@ void HwpReader::makeMasterStyles()
             rendEl("style:footer-left");
         }
                                                   /* Will be the default. */
-        else if( pPage->footer_even && !pPage->footer_odd )
+        else if (pPage->footer_even)
         {
             rstartEl("style:footer-left", mxList.get());
             padd("text:style-name", sXML_CDATA, "Standard");

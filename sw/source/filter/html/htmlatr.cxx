@@ -441,7 +441,6 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     bool bNoEndTag = false;         // don't output an end tag
 
     rHWrt.m_bNoAlign = false;       // no ALIGN=... possible
-    bool bNoStyle = false;          // no STYLE=... possible
     sal_uInt8 nBulletGrfLvl = 255;  // The bullet graphic we want to output
 
     // Are we in a bulleted or numbered list?
@@ -811,7 +810,6 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
         aToken = OOO_STRING_SVTOOLS_HTML_parabreak;
         bPara = true;
         rHWrt.m_bNoAlign = false;
-        bNoStyle = false;
     }
 
     LanguageType eLang;
@@ -921,7 +919,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                 pTextNd->GetAnyFormatColl().GetPoolFormatId(), pTextNd->GetText()) > -1;
 
         // and now, if necessary, the STYLE options
-        if( rHWrt.m_bCfgOutStyles && rInfo.pItemSet && !bNoStyle)
+        if (rHWrt.m_bCfgOutStyles && rInfo.pItemSet)
         {
             OutCSS1_ParaTagStyleOpt( rWrt, *rInfo.pItemSet );
         }
@@ -2368,8 +2366,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
             bool bOutChar = true;
             const SwTextAttr * pTextHt = nullptr;
-            if( nAttrPos < nCntAttr && pHt->GetStart() == nStrPos
-                && nStrPos != nEnd )
+            if (nAttrPos < nCntAttr && pHt->GetStart() == nStrPos)
             {
                 do {
                     if ( pHt->End() && !pHt->HasDummyChar() )

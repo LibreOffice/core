@@ -73,8 +73,7 @@ int main (int argc, char **argv)
 
     start = getTimeMS();
 
-    if( argc < 2 ||
-        ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
+    if (argc < 2 || !strcmp(argv[1], "--help") || !strcmp(argv[1], "-h"))
         return help();
 
 

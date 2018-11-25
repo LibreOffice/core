@@ -306,7 +306,7 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                         if ( ( aSourceSizePixel.Width > 0 ) && ( aSourceSizePixel.Height > 0 ) )
                         {
                             OUString aDestMimeType( "image/png"  );
-                            if ( rGraphicSettings.mbJPEGCompression && !bTransparent && !bAlpha && !bAnimated )
+                            if (rGraphicSettings.mbJPEGCompression && !bTransparent && !bAlpha)
                             {
                                 aDestMimeType = "image/jpeg";
 //                                      if( aSourceMimeType != aDestMimeType )

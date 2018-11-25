@@ -694,7 +694,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     {
         rWrt.OutBackground( pFrameFormat->GetAttrSet(), false );
 
-        if( rWrt.m_bCfgOutStyles && pFrameFormat )
+        if (rWrt.m_bCfgOutStyles)
             rWrt.OutCSS1_TableFrameFormatOptions( *pFrameFormat );
     }
 
