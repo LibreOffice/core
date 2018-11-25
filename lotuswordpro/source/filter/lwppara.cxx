@@ -546,7 +546,7 @@ void LwpPara::RegisterStyle()
                                 }
                                 else
                                 {
-                                    if (pNumbering && pNumbering->GetLevel() < nFoundBound && pParaSilverBullet
+                                    if (pNumbering->GetLevel() < nFoundBound
                                         &&  (pParaSilverBullet->GetObjectID() != m_pSilverBullet->GetObjectID()
                                             || pNumbering->GetPosition() != nPosition))
                                     {
