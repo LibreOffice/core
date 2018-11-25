@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_6b057d7a",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/PresentationMinimizer.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-25T10:48:44Z",
+      "side": 1,
+      "message": "These localized UI strings in .xcs/.xcu are a leftover hack from when the presentation minimizer was a standalone extension; we want to get rid of these, see \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d61950#c26\u003e \"Change Presentation Minimizer and Report Builder from bundled extensions to plain code\".\n\nTherefore, I would prefer it we do not introduce more of these configuration properties.",
+      "revId": "532394111b25bd69b6670866502afbb89f4db7d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
