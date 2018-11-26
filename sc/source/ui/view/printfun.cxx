@@ -2773,7 +2773,7 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
 {
     sal_uInt16 nRCount = pDoc->GetPrintRangeCount( nPrintTab );
     const ScRange* pThisRange = nullptr;
-    if ( nRangeNo != RANGENO_NORANGE || nRangeNo < nRCount )
+    if (nRangeNo != RANGENO_NORANGE && nRangeNo < nRCount)
         pThisRange = pDoc->GetPrintRange( nPrintTab, nRangeNo );
     if ( pThisRange )
     {
