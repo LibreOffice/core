@@ -1842,6 +1842,11 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
     vcl::Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
         pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
+
+    // Make sure that no menu is visible when a toplevel window loses focus.
+    VclPtr<FloatingWindow> pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat && !pWindow->GetParent())
+        pFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
 }
 
 struct DelayedCloseEvent
