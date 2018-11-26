@@ -89,13 +89,6 @@ static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::
 }
 
 
-static bool lcl_SeqHasLang( const std::vector< LanguageType > & rLangSeq, LanguageType nLang )
-{
-    for (auto const & i : rLangSeq)
-        if (i == nLang)
-            return true;
-    return false;
-}
 static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nLang )
 {
     sal_Int32 i = -1;
@@ -180,15 +173,14 @@ SvxLanguageBoxBase::~SvxLanguageBoxBase()
 
 namespace {
 
-bool lcl_isPrerequisite( LanguageType nLangType, SvxLanguageListFlags nLangList )
+bool lcl_isPrerequisite( LanguageType nLangType )
 {
     return
         nLangType != LANGUAGE_DONTKNOW &&
         nLangType != LANGUAGE_SYSTEM &&
         nLangType != LANGUAGE_NONE &&
         !MsLangId::isLegacy( nLangType) &&
-        (MsLangId::getSubLanguage( nLangType) ||
-         bool(nLangList & SvxLanguageListFlags::ALSO_PRIMARY_ONLY));
+        MsLangId::getSubLanguage( nLangType);
 }
 
 bool lcl_isScriptTypeRequested( LanguageType nLangType, SvxLanguageListFlags nLangList )
@@ -210,7 +202,7 @@ void SvxLanguageBoxBase::AddLanguages( const std::vector< LanguageType >& rLangu
 {
     for ( auto const & nLangType : rLanguageTypes )
     {
-        if (lcl_isPrerequisite( nLangType, nLangList))
+        if (lcl_isPrerequisite( nLangType ))
         {
             LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType );
             if (lcl_isScriptTypeRequested( nLang, nLangList))
@@ -244,24 +236,22 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
     std::vector< LanguageType > aHyphAvailLang;
     std::vector< LanguageType > aThesAvailLang;
     Sequence< sal_Int16 > aSpellUsedLang;
-    std::vector< LanguageType > aHyphUsedLang;
-    std::vector< LanguageType > aThesUsedLang;
     Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
     if (xAvail.is())
     {
         Sequence< css::lang::Locale > aTmp;
 
-        if (bAddAvailable || (SvxLanguageListFlags::SPELL_AVAIL & nLangList))
+        if (bAddAvailable)
         {
             aTmp = xAvail->getAvailableLocales( SN_SPELLCHECKER );
             aSpellAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
         }
-        if (bAddAvailable || (SvxLanguageListFlags::HYPH_AVAIL  & nLangList))
+        if (bAddAvailable)
         {
             aTmp = xAvail->getAvailableLocales( SN_HYPHENATOR );
             aHyphAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
         }
-        if (bAddAvailable || (SvxLanguageListFlags::THES_AVAIL  & nLangList))
+        if (bAddAvailable)
         {
             aTmp = xAvail->getAvailableLocales( SN_THESAURUS );
             aThesAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
@@ -272,22 +262,6 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
         Reference< XSpellChecker1 > xTmp1( LinguMgr::GetSpellChecker(), UNO_QUERY );
         if (xTmp1.is())
             aSpellUsedLang = xTmp1->getLanguages();
-    }
-    if (SvxLanguageListFlags::HYPH_USED  & nLangList)
-    {
-        Reference< XHyphenator > xTmp( LinguMgr::GetHyphenator() );
-        if (xTmp.is()) {
-            Sequence < css::lang::Locale > aLocaleSequence( xTmp->getLocales() );
-            aHyphUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
-        }
-    }
-    if (SvxLanguageListFlags::THES_USED  & nLangList)
-    {
-        Reference< XThesaurus > xTmp( LinguMgr::GetThesaurus() );
-        if (xTmp.is()) {
-            Sequence < css::lang::Locale > aLocaleSequence( xTmp->getLocales() );
-            aThesUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
-        }
     }
 
     std::vector<LanguageType> aKnown;
@@ -308,22 +282,13 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
             nLangType = aKnown[i];
         else
             nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
-        if ( lcl_isPrerequisite( nLangType, nLangList) &&
+        if ( lcl_isPrerequisite( nLangType ) &&
              (lcl_isScriptTypeRequested( nLangType, nLangList) ||
               (bool(nLangList & SvxLanguageListFlags::FBD_CHARS) &&
                MsLangId::hasForbiddenCharacters(nLangType)) ||
-              (bool(nLangList & SvxLanguageListFlags::SPELL_AVAIL) &&
-               lcl_SeqHasLang(aSpellAvailLang, nLangType)) ||
-              (bool(nLangList & SvxLanguageListFlags::HYPH_AVAIL) &&
-               lcl_SeqHasLang(aHyphAvailLang, nLangType)) ||
-              (bool(nLangList & SvxLanguageListFlags::THES_AVAIL) &&
-               lcl_SeqHasLang(aThesAvailLang, nLangType)) ||
               (bool(nLangList & SvxLanguageListFlags::SPELL_USED) &&
-               lcl_SeqHasLang(aSpellUsedLang, static_cast<sal_uInt16>(nLangType))) ||
-              (bool(nLangList & SvxLanguageListFlags::HYPH_USED) &&
-               lcl_SeqHasLang(aHyphUsedLang, nLangType)) ||
-              (bool(nLangList & SvxLanguageListFlags::THES_USED) &&
-               lcl_SeqHasLang(aThesUsedLang, nLangType))) )
+               lcl_SeqHasLang(aSpellUsedLang, static_cast<sal_uInt16>(nLangType)))
+              ) )
             InsertLanguage( nLangType );
     }
 
@@ -535,7 +500,7 @@ void LanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTypes
 {
     for ( auto const & nLangType : rLanguageTypes )
     {
-        if (lcl_isPrerequisite( nLangType, nLangList))
+        if (lcl_isPrerequisite( nLangType ))
         {
             LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType );
             if (lcl_isScriptTypeRequested( nLang, nLangList))
@@ -579,24 +544,22 @@ void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
     std::vector< LanguageType > aHyphAvailLang;
     std::vector< LanguageType > aThesAvailLang;
     Sequence< sal_Int16 > aSpellUsedLang;
-    std::vector< LanguageType > aHyphUsedLang;
-    std::vector< LanguageType > aThesUsedLang;
     Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
     if (xAvail.is())
     {
         Sequence< css::lang::Locale > aTmp;
 
-        if (bAddAvailable || (SvxLanguageListFlags::SPELL_AVAIL & nLangList))
+        if (bAddAvailable)
         {
             aTmp = xAvail->getAvailableLocales( SN_SPELLCHECKER );
             aSpellAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
         }
-        if (bAddAvailable || (SvxLanguageListFlags::HYPH_AVAIL  & nLangList))
+        if (bAddAvailable)
         {
             aTmp = xAvail->getAvailableLocales( SN_HYPHENATOR );
             aHyphAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
         }
-        if (bAddAvailable || (SvxLanguageListFlags::THES_AVAIL  & nLangList))
+        if (bAddAvailable)
         {
             aTmp = xAvail->getAvailableLocales( SN_THESAURUS );
             aThesAvailLang = lcl_LocaleSeqToLangSeq( aTmp );
@@ -607,22 +570,6 @@ void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
         Reference< XSpellChecker1 > xTmp1( LinguMgr::GetSpellChecker(), UNO_QUERY );
         if (xTmp1.is())
             aSpellUsedLang = xTmp1->getLanguages();
-    }
-    if (SvxLanguageListFlags::HYPH_USED  & nLangList)
-    {
-        Reference< XHyphenator > xTmp( LinguMgr::GetHyphenator() );
-        if (xTmp.is()) {
-            Sequence < css::lang::Locale > aLocaleSequence( xTmp->getLocales() );
-            aHyphUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
-        }
-    }
-    if (SvxLanguageListFlags::THES_USED  & nLangList)
-    {
-        Reference< XThesaurus > xTmp( LinguMgr::GetThesaurus() );
-        if (xTmp.is()) {
-            Sequence < css::lang::Locale > aLocaleSequence( xTmp->getLocales() );
-            aThesUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
-        }
     }
 
     std::vector<LanguageType> aKnown;
@@ -645,22 +592,13 @@ void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
             nLangType = aKnown[i];
         else
             nLangType = SvtLanguageTable::GetLanguageTypeAtIndex( i );
-        if ( lcl_isPrerequisite( nLangType, nLangList) &&
+        if ( lcl_isPrerequisite( nLangType ) &&
              (lcl_isScriptTypeRequested( nLangType, nLangList) ||
               (bool(nLangList & SvxLanguageListFlags::FBD_CHARS) &&
                MsLangId::hasForbiddenCharacters(nLangType)) ||
-              (bool(nLangList & SvxLanguageListFlags::SPELL_AVAIL) &&
-               lcl_SeqHasLang(aSpellAvailLang, nLangType)) ||
-              (bool(nLangList & SvxLanguageListFlags::HYPH_AVAIL) &&
-               lcl_SeqHasLang(aHyphAvailLang, nLangType)) ||
-              (bool(nLangList & SvxLanguageListFlags::THES_AVAIL) &&
-               lcl_SeqHasLang(aThesAvailLang, nLangType)) ||
               (bool(nLangList & SvxLanguageListFlags::SPELL_USED) &&
-               lcl_SeqHasLang(aSpellUsedLang, static_cast<sal_uInt16>(nLangType))) ||
-              (bool(nLangList & SvxLanguageListFlags::HYPH_USED) &&
-               lcl_SeqHasLang(aHyphUsedLang, nLangType)) ||
-              (bool(nLangList & SvxLanguageListFlags::THES_USED) &&
-               lcl_SeqHasLang(aThesUsedLang, nLangType))) )
+               lcl_SeqHasLang(aSpellUsedLang, static_cast<sal_uInt16>(nLangType)))
+              ) )
         {
             aEntries.push_back(BuildEntry(nLangType));
             if (aEntries.back().sString.isEmpty())
