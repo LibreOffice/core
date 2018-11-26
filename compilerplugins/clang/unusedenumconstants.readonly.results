@@ -310,8 +310,6 @@ include/editeng/editstat.hxx:32
     enum EEControlBits CRSRLEFTPARA
 include/editeng/editstat.hxx:49
     enum EEControlBits AUTOCOMPLETE
-include/editeng/editstat.hxx:64
-    enum EVControlBits BIGSCROLL
 include/editeng/flditem.hxx:94
     enum SvxDateFormat System
 include/editeng/flditem.hxx:96

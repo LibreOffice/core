@@ -61,7 +61,6 @@ namespace o3tl
 enum class EVControlBits
 {
     AUTOSCROLL         = 0x0001,  // Auto scrolling horizontally
-    BIGSCROLL          = 0x0002,  // Scroll further to the cursor
     ENABLEPASTE        = 0x0004,  // Enable Paste
     SINGLELINEPASTE    = 0x0008,  // View: Paste in input line ...
     OVERWRITE          = 0x0010,  // Overwrite mode
@@ -72,7 +71,7 @@ enum class EVControlBits
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EVControlBits> : is_typed_flags<EVControlBits, 0xff> {};
+    template<> struct typed_flags<EVControlBits> : is_typed_flags<EVControlBits, 0xfd> {};
 }
 
 enum class EditStatusFlags

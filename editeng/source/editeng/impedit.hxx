@@ -382,7 +382,6 @@ public:
 
     bool        DoSingleLinePaste() const       { return bool( nControl & EVControlBits::SINGLELINEPASTE ); }
     bool        DoAutoScroll() const            { return bool( nControl & EVControlBits::AUTOSCROLL ); }
-    bool        DoBigScroll() const             { return bool( nControl & EVControlBits::BIGSCROLL ); }
     bool        DoAutoSize() const              { return bool( nControl & EVControlBits::AUTOSIZE ); }
     bool        DoAutoWidth() const             { return bool( nControl & EVControlBits::AUTOSIZEX); }
     bool        DoAutoHeight() const            { return bool( nControl & EVControlBits::AUTOSIZEY); }
