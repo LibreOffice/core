@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_511826d2",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-26T13:03:09Z",
+      "side": 1,
+      "message": "the original code looked like:\n\n    std::vector\u003csal_UCS4\u003e::const_iterator itInt \u003d aSupportedRanges.begin();\n    for( pCP \u003d pCodePairs; itInt !\u003d aSupportedRanges.end(); ++itInt )\n            *(pCP++) \u003d *itInt;\n\nso the fixed code should look like:\n\n    pCP \u003d\u003d pCodePairs;\n    for (auto const\u0026 supportedRange : aSupportedRanges)\n        *(pCP++) \u003d supportedRange;",
+      "revId": "1035f480e10fdb76565fe9d0c973c444dd20a97b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
