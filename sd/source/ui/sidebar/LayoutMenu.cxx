@@ -530,12 +530,16 @@ void LayoutMenu::Fill()
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            BitmapEx aBmp(OUString::createFromAscii(pInfo->msBmpResId));
+            Image aImg("private:graphicrepository/" + OUString::createFromAscii(pInfo->msBmpResId));
 
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
-                aBmp.Mirror (BmpMirrorFlags::Horizontal);
+            { // FIXME: avoid interpolating RTL layouts.
+                BitmapEx aRTL = aImg.GetBitmapEx();
+                aRTL.Mirror(BmpMirrorFlags::Horizontal);
+                aImg = Image(aRTL);
+            }
 
-            InsertItem(i, Image(aBmp), SdResId(pInfo->mpStrResId));
+            InsertItem(i, aImg, SdResId(pInfo->mpStrResId));
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
         }
     }
