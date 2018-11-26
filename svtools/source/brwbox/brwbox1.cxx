@@ -97,7 +97,6 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
 
     aHScroll->SetLineSize(1);
     aHScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
-    aHScroll->SetEndScrollHdl( LINK( this, BrowseBox, EndScrollHdl ) );
     pDataWin->Show();
 
     SetMode( nMode );
@@ -961,11 +960,6 @@ long BrowseBox::ScrollColumns( long nCols )
 
 long BrowseBox::ScrollRows( long nRows )
 {
-
-    // out of range?
-    if ( pDataWin->bNoScrollBack && nRows < 0 )
-        return 0;
-
     // compute new top row
     long nTmpMin = std::min( static_cast<long>(nTopRow + nRows), static_cast<long>(nRowCount - 1) );
 
@@ -1399,9 +1393,6 @@ bool BrowseBox::GoToRow( long nRow, bool bRowColMove, bool bKeepSelection )
     // not allowed?
     if ( !bRowColMove && !IsCursorMoveAllowed( nRow, nCurColId ) )
         return false;
-
-    if ( pDataWin->bNoScrollBack && nRow < nTopRow )
-        nRow = nTopRow;
 
     // compute the last visible row
     Size aSz( pDataWin->GetSizePixel() );
@@ -2114,9 +2105,6 @@ void BrowseBox::SetMode( BrowserMode nMode )
 
     nControlAreaWidth = USHRT_MAX;
 
-    pDataWin->bNoScrollBack =
-            BrowserMode::NO_SCROLLBACK == ( nMode & BrowserMode::NO_SCROLLBACK);
-
     long nOldRowSel = bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
     MultiSelection *pOldRowSel = bMultiSelection ? uRow.pSel : nullptr;
 
@@ -2130,11 +2118,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
     // default: do not hide the cursor at all (untaken scrolling and such)
     bHideCursor = TRISTATE_FALSE;
 
-    if ( BrowserMode::SMART_HIDECURSOR == ( nMode & BrowserMode::SMART_HIDECURSOR ) )
-    {   // smart cursor hide overrules hard cursor hide
-        bHideCursor = TRISTATE_INDET;
-    }
-    else if ( BrowserMode::HIDECURSOR == ( nMode & BrowserMode::HIDECURSOR ) )
+    if ( BrowserMode::HIDECURSOR == ( nMode & BrowserMode::HIDECURSOR ) )
     {
         bHideCursor = TRISTATE_TRUE;
     }
@@ -2152,12 +2136,9 @@ void BrowseBox::SetMode( BrowserMode nMode )
     pVScroll->SetLineSize( 1 );
     pVScroll->SetPageSize(1);
     pVScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
-    pVScroll->SetEndScrollHdl( LINK( this, BrowseBox, EndScrollHdl ) );
 
     pDataWin->bAutoSizeLastCol =
             BrowserMode::AUTOSIZE_LASTCOL == ( nMode & BrowserMode::AUTOSIZE_LASTCOL );
-    pDataWin->bOwnDataChangedHdl =
-            BrowserMode::OWN_DATACHANGED == ( nMode & BrowserMode::OWN_DATACHANGED );
 
     // create a headerbar. what happens, if a headerbar has to be created and
     // there already are columns?

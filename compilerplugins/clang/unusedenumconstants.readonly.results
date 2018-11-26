@@ -466,12 +466,6 @@ include/svtools/apearcfg.hxx:35
     enum DragMode FullWindow
 include/svtools/apearcfg.hxx:36
     enum DragMode Frame
-include/svtools/brwbox.hxx:69
-    enum BrowserMode NO_SCROLLBACK
-include/svtools/brwbox.hxx:80
-    enum BrowserMode OWN_DATACHANGED
-include/svtools/brwbox.hxx:86
-    enum BrowserMode SMART_HIDECURSOR
 include/svtools/headbar.hxx:186
     enum HeaderBarItemBits RIGHT
 include/svtools/headbar.hxx:187

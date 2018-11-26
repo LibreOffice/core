@@ -103,7 +103,6 @@ public:
     std::vector<tools::Rectangle> aInvalidRegion; // invalidated Rectangles during !UpdateMode
     bool            bInPaint;       // TRUE while in Paint
     bool            bInCommand;     // TRUE while in Command
-    bool            bNoScrollBack;  // only scroll forward
     bool            bNoHScroll;     // no horizontal scrollbar
     bool            bNoVScroll;     // no vertical scrollbar
     bool            bAutoHScroll;   // autohide horizontaler Scrollbar
@@ -114,7 +113,6 @@ public:
     bool            bUpdateOnUnlock;  // Update() while locked
     bool            bInUpdateScrollbars;  // prevents recursions
     bool            bHadRecursion;        // a recursion occurred
-    bool            bOwnDataChangedHdl;   // don't change colors in DataChanged
     bool            bCallingDropCallback; // we're in a callback to AcceptDrop or ExecuteDrop currently
     sal_uInt16          nUpdateLock;    // lock count, don't call Control::Update()!
     short           nCursorHidden;  // new counter for DoHide/ShowCursor
