@@ -46,14 +46,17 @@ struct ImageRequestParameters
     bool mbLocalized;
     ImageLoadFlags const meFlags;
     bool mbWriteImageToCache;
+    sal_Int32 mnScalePercentage;
 
-    ImageRequestParameters(const OUString & rName, const OUString & rStyle, BitmapEx& rBitmap, bool bLocalized, ImageLoadFlags eFlags)
+    ImageRequestParameters(const OUString & rName, const OUString & rStyle, BitmapEx& rBitmap, bool bLocalized,
+                           ImageLoadFlags eFlags, sal_Int32 nScalePercentage)
         : msName(rName)
         , msStyle(rStyle)
         , mrBitmap(rBitmap)
         , mbLocalized(bLocalized)
         , meFlags(eFlags)
         , mbWriteImageToCache(false)
+        , mnScalePercentage(nScalePercentage)
     {}
 
     bool convertToDarkTheme();
@@ -75,7 +78,8 @@ public:
     bool loadImage(
         OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized,
-        const ImageLoadFlags eFlags);
+        const ImageLoadFlags eFlags,
+        sal_Int32 nScalePercentage = -1);
 
     /** a crude form of life cycle control (called from DeInitVCL; otherwise,
      *  if the ImplImageTree singleton were destroyed during exit that would
@@ -88,14 +92,15 @@ private:
     ImplImageTree(const ImplImageTree&) = delete;
     ImplImageTree& operator=(const ImplImageTree&) = delete;
 
-    typedef std::unordered_map<OUString, std::pair<bool, BitmapEx>> IconCache;
+    typedef std::unordered_map<OUString, std::pair<bool,BitmapEx>> IconCache;
+    typedef std::unordered_map<sal_Int32, std::unique_ptr<IconCache>> ScaledIconCache;
     typedef std::unordered_map<OUString, OUString> IconLinkHash;
 
     struct IconSet
     {
         OUString maURL;
         css::uno::Reference<css::container::XNameAccess> maNameAccess;
-        IconCache maIconCache;
+        ScaledIconCache maScaledIconCaches;
         IconLinkHash maLinkHash;
 
         IconSet()
@@ -127,6 +132,8 @@ private:
     void setStyle(OUString const & rStyle);
 
     void createStyle();
+
+    IconCache &getIconCache(ImageRequestParameters& rParameters);
 
     bool iconCacheLookup(ImageRequestParameters& rParameters);
 
