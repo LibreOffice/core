@@ -40,24 +40,28 @@ Image::Image(const BitmapEx& rBitmapEx)
 
 Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
-    const Graphic aGraphic(rxGraphic);
-    ImplInit(aGraphic.GetBitmapEx());
+    if (rxGraphic.is())
+    {
+        const Graphic aGraphic(rxGraphic);
+
+        OUString aPath;
+        if (aGraphic.getOriginURL().startsWith("private:graphicrepository/", &aPath))
+            mpImplData = std::make_shared<ImplImage>(aPath, Size());
+        else
+            ImplInit(aGraphic.GetBitmapEx());
+    }
 }
 
 Image::Image(const OUString & rFileUrl)
 {
     OUString sImageName;
     if (rFileUrl.startsWith("private:graphicrepository/", &sImageName))
-    {
         mpImplData = std::make_shared<ImplImage>(sImageName, Size());
-    }
     else
     {
         Graphic aGraphic;
         if (ERRCODE_NONE == GraphicFilter::LoadGraphic(rFileUrl, IMP_PNG, aGraphic))
-        {
             ImplInit(aGraphic.GetBitmapEx());
-        }
     }
 }
 
@@ -70,6 +74,13 @@ void Image::ImplInit(const BitmapEx& rBitmapEx)
 {
     if (!rBitmapEx.IsEmpty())
         mpImplData = std::make_shared<ImplImage>(rBitmapEx);
+}
+
+OUString Image::GetStock() const
+{
+    if (mpImplData)
+        return mpImplData->getStock();
+    return OUString();
 }
 
 Size Image::GetSizePixel() const

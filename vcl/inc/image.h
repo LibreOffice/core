@@ -48,6 +48,11 @@ public:
         return maStockName.getLength() > 0;
     }
 
+    OUString getStock() const
+    {
+        return maStockName;
+    }
+
     /// get size in co-ordinates not scaled for HiDPI
     Size getSizePixel();
     /// Legacy - the original bitmap

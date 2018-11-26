@@ -47,13 +47,37 @@ ImplImage::ImplImage(const OUString &aStockName, Size const & rPreferedSize)
 bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
 {
     BitmapEx aBitmapEx;
+
+    ImageLoadFlags eScalingFlags = ImageLoadFlags::NONE;
+    sal_Int32 nScalePercentage = -1;
+
+    if (comphelper::LibreOfficeKit::isActive()) // scale at the surface
+    {
+        nScalePercentage = fScale * 100.0;
+        eScalingFlags = ImageLoadFlags::IgnoreScalingFactor;
+    }
+
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
     if (!ImageTree::get().loadImage(maStockName, aIconTheme, aBitmapEx, true,
-                                    fScale * 100.0,
-                                    ImageLoadFlags::IgnoreScalingFactor))
+                                    nScalePercentage, eScalingFlags))
     {
-        SAL_WARN("vcl", "Failed to load scaled image from " << maStockName << " at " << fScale);
-        return false;
+        /* If the uno command has parameters, passed in from a toolbar,
+         * recover from failure by removing the parameters from the file name
+         */
+        if (maStockName.indexOf("%3f") > 0)
+        {
+            sal_Int32 nStart = maStockName.indexOf("%3f");
+            sal_Int32 nEnd = maStockName.lastIndexOf(".");
+
+            OUString aFileName = maStockName.replaceAt(nStart, nEnd - nStart, "");
+            if (!ImageTree::get().loadImage(aFileName, aIconTheme, aBitmapEx, true,
+                                            nScalePercentage, eScalingFlags))
+            {
+                SAL_WARN("vcl", "Failed to load scaled image from " << maStockName <<
+                         " and " << aFileName << " at " << fScale);
+                return false;
+            }
+        }
     }
     if (maPreferedSizePixel != Size())
     {
@@ -122,7 +146,7 @@ BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled)
         // FIXME: DPI scaling should be tied to the outdev really ...
         double fScale = comphelper::LibreOfficeKit::getDPIScale();
         Size aTarget(maSizePixel.Width()*fScale,
-                         maSizePixel.Height()*fScale);
+                     maSizePixel.Height()*fScale);
         if (maBitmapEx.GetSizePixel() != aTarget)
             loadStockAtScale(fScale, maBitmapEx);
     }
