@@ -94,7 +94,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
         else
         {
             VclPtr<ImplBorderWindow> pBorderWin;
-            BorderWindowStyle nBorderStyle = BorderWindowStyle::Border | BorderWindowStyle::Float;
+            BorderWindowStyle nBorderStyle = BorderWindowStyle::Float;
 
             if (nStyle & WB_OWNERDRAWDECORATION)
                 nBorderStyle |= BorderWindowStyle::Frame;
