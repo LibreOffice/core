@@ -199,7 +199,6 @@ struct FileHandle
         switch (eAccessMode)
         {
         case storeAccessMode::Create:
-        case storeAccessMode::ReadCreate:
             nFlags |= osl_File_OpenFlag_Create;
             SAL_FALLTHROUGH;
         case storeAccessMode::ReadWrite:

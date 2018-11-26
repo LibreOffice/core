@@ -412,8 +412,6 @@ include/sfx2/objsh.hxx:121
     enum SfxObjectShellFlags NODOCINFO
 include/sfx2/viewsh.hxx:101
     enum SfxViewShellFlags NO_SHOW
-include/store/types.h:65
-    enum storeAccessMode ReadCreate
 include/svl/ctloptions.hxx:64
     enum SvtCTLOptions::TextNumerals NUMERALS_HINDI
 include/svl/ctloptions.hxx:65
