@@ -117,13 +117,11 @@ enum class SfxObjectShellFlags
 {
     STD_NORMAL      = 0x0000000,
     HASMENU         = 0x0000004,
-    DONTCLOSE       = 0x0000010,
-    NODOCINFO       = 0x0000020,
     UNDEFINED       = 0xf000000
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SfxObjectShellFlags> : is_typed_flags<SfxObjectShellFlags, 0xf000034> {};
+    template<> struct typed_flags<SfxObjectShellFlags> : is_typed_flags<SfxObjectShellFlags, 0xf000004> {};
 }
 
 #define SFX_TITLE_TITLE    0

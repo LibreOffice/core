@@ -406,10 +406,6 @@ include/oox/ppt/animationspersist.hxx:45
     enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_KEYTIMES
 include/oox/ppt/animationspersist.hxx:45
     enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_FORMULA
-include/sfx2/objsh.hxx:120
-    enum SfxObjectShellFlags DONTCLOSE
-include/sfx2/objsh.hxx:121
-    enum SfxObjectShellFlags NODOCINFO
 include/svl/ctloptions.hxx:64
     enum SvtCTLOptions::TextNumerals NUMERALS_HINDI
 include/svl/ctloptions.hxx:65
