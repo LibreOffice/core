@@ -53,10 +53,13 @@ ImplImageList::~ImplImageList()
         delete *aIt;
 }
 
-void ImplImageList::AddImage( const OUString &aName,
-                              sal_uInt16 nId, const BitmapEx &aBitmapEx )
+void ImplImageList::AddImage( const OUString &aPrefix, const OUString &aName,
+                              sal_uInt16 nId, const Image &aImage )
 {
-    ImageAryData *pImg = new ImageAryData( aName, nId, aBitmapEx );
+    Image aInsert = aImage;
+    if (!aInsert)
+        aInsert = Image( "private:graphicrepository/" + aPrefix + aName );
+    ImageAryData *pImg = new ImageAryData( aName, nId, aInsert );
     maImages.push_back( pImg );
     if( !aName.isEmpty() )
         maNameHash [ aName ] = pImg;

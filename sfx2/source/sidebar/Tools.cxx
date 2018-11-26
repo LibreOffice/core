@@ -55,11 +55,14 @@ Image Tools::GetImage (
 {
     if (rsURL.getLength() > 0)
     {
+        OUString sPath;
+
         if (rsURL.startsWith(".uno:"))
-        {
-            const Image aPanelImage(vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame));
-            return aPanelImage;
-        }
+            return vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame);
+
+        else if (rsURL.startsWith("private:graphicrepository/", &sPath))
+            return Image(rsURL);
+
         else
         {
             const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext());
@@ -70,8 +73,7 @@ Image Tools::GetImage (
             const Reference<graphic::XGraphic> xGraphic (
                 xGraphicProvider->queryGraphic(aMediaProperties.getPropertyValues()),
                 UNO_QUERY);
-            if (xGraphic.is())
-                return Image(xGraphic);
+            return Image(xGraphic);
         }
     }
     return Image();

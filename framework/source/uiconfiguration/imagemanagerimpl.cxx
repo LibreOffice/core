@@ -722,7 +722,7 @@ namespace
 {
     css::uno::Reference< css::graphic::XGraphic > GetXGraphic(const Image &rImage)
     {
-        return Graphic(rImage.GetBitmapEx()).GetXGraphic();
+        return Graphic(rImage).GetXGraphic();
     }
 }
 

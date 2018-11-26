@@ -52,7 +52,6 @@ namespace vcl
 class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
 {
     friend class ::OutputDevice;
-
 public:
                     Image();
                     explicit Image( const BitmapEx& rBitmapEx );
@@ -66,6 +65,8 @@ public:
     bool            operator!() const { return !mpImplData; }
     bool            operator==( const Image& rImage ) const;
     bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
+
+    SAL_DLLPRIVATE  OUString GetStock() const;
 
     void Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = nullptr);
 

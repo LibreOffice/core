@@ -48,21 +48,24 @@ Image::Image(const BitmapEx& rBitmapEx)
 
 Image::Image(const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
 {
-    const Graphic aGraphic(rxGraphic);
-    ImplInit(aGraphic.GetBitmapEx());
+    if (rxGraphic.is())
+    {
+        const Graphic aGraphic(rxGraphic);
+
+        OUString aPath;
+        if (aGraphic.getOriginURL().startsWith("private:graphicrepository/", &aPath))
+            mpImplData.reset(new ImplImage(aPath));
+        else
+            ImplInit(aGraphic.GetBitmapEx());
+    }
 }
 
 Image::Image(const OUString & rFileUrl)
 {
     OUString aPath;
-    sal_Int32 nIndex = 0;
-    if (rFileUrl.getToken( 0, '/', nIndex ) == "private:graphicrepository")
-    {
-        OUString sPathName(rFileUrl.copy(nIndex));
-        BitmapEx aBitmapEx;
-        if (vcl::ImageRepository::loadImage(sPathName, aBitmapEx))
-            mpImplData.reset(new ImplImage(rFileUrl.copy(nIndex)));
-    }
+    if (rFileUrl.startsWith("private:graphicrepository/", &aPath))
+        mpImplData.reset(new ImplImage(aPath));
+
     else
     {
         osl::FileBase::getSystemPathFromFileURL(rFileUrl, aPath);
@@ -77,6 +80,13 @@ void Image::ImplInit(const BitmapEx& rBitmapEx)
 {
     if (!rBitmapEx.IsEmpty())
         mpImplData.reset(new ImplImage(rBitmapEx));
+}
+
+OUString Image::GetStock() const
+{
+    if (mpImplData)
+        return mpImplData->maStockName;
+    return OUString();
 }
 
 Size Image::GetSizePixel() const

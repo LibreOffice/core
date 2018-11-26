@@ -293,13 +293,13 @@ OUString GetRealCommandForCommand(const OUString& rCommandName,
     return GetCommandProperty("TargetURL", rCommandName, rsModuleName);
 }
 
-BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
-                             const Reference<frame::XFrame>& rxFrame,
-                             vcl::ImageType eImageType)
+Image GetImageForCommand(const OUString& rsCommandName,
+                         const Reference<frame::XFrame>& rxFrame,
+                         vcl::ImageType eImageType)
 {
 
     if (rsCommandName.isEmpty())
-        return BitmapEx();
+        return Image();
 
     sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
 
@@ -307,6 +307,8 @@ BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
         nImageType |= ui::ImageType::SIZE_LARGE;
     else if (eImageType == vcl::ImageType::Size32)
         nImageType |= ui::ImageType::SIZE_32;
+
+    Image aRet;
 
     try
     {
@@ -321,12 +323,11 @@ BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
             Sequence<OUString> aImageCmdSeq { rsCommandName };
 
             aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
-            Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
-            const Graphic aGraphic(xGraphic);
-            BitmapEx aBitmap(aGraphic.GetBitmapEx());
 
-            if (!!aBitmap)
-                return aBitmap;
+            aRet = Image( aGraphicSeq[0] );
+
+            if (!!aRet)
+                return aRet;
         }
     }
     catch (Exception&)
@@ -344,31 +345,19 @@ BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
 
         aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
 
-        Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
-
-        const Graphic aGraphic(xGraphic);
-
-        return aGraphic.GetBitmapEx();
+        aRet = Image(aGraphicSeq[0]);
     }
     catch (Exception&)
     {
     }
 
-    return BitmapEx();
-}
-
-Image GetImageForCommand(const OUString& rsCommandName,
-                         const Reference<frame::XFrame>& rxFrame,
-                         vcl::ImageType eImageType)
-{
-    return Image(GetBitmapForCommand(rsCommandName, rxFrame, eImageType));
+    return aRet;
 }
 
 sal_Int32 GetPropertiesForCommand (
     const OUString& rsCommandName,
     const OUString& rsModuleName)
 {
-
     sal_Int32 nValue = 0;
     const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rsModuleName));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)

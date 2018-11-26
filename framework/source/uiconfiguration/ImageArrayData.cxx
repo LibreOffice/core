@@ -38,13 +38,13 @@
 ImageAryData::ImageAryData( const ImageAryData& rData ) :
     maName( rData.maName ),
     mnId( rData.mnId ),
-    maBitmapEx( rData.maBitmapEx )
+    maImage( rData.maImage )
 {
 }
 
 ImageAryData::ImageAryData( const OUString &aName,
-                            sal_uInt16 nId, const BitmapEx &aBitmap )
-        : maName( aName ), mnId( nId ), maBitmapEx( aBitmap )
+                            sal_uInt16 nId, const Image &aImage )
+        : maName( aName ), mnId( nId ), maImage( aImage )
 {
 }
 
@@ -56,23 +56,9 @@ ImageAryData& ImageAryData::operator=( const ImageAryData& rData )
 {
     maName = rData.maName;
     mnId = rData.mnId;
-    maBitmapEx = rData.maBitmapEx;
+    maImage = rData.maImage;
 
     return *this;
 }
-
-void ImageAryData::Load(const OUString &rPrefix)
-{
-    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-
-    OUString aFileName = rPrefix;
-    aFileName += maName;
-
-    bool bSuccess = ImageTree::get().loadImage(aFileName, aIconTheme, maBitmapEx, true);
-
-    SAL_WARN_IF(!bSuccess, "fwk.uiconfiguration", "Failed to load image '" << aFileName
-              << "' from icon theme '" << aIconTheme << "'");
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

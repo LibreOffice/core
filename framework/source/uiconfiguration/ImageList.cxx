@@ -44,9 +44,7 @@ ImageList::ImageList(const std::vector< OUString >& rNameVector,
 
     mpImplData->maPrefix = rPrefix;
     for( size_t i = 0; i < rNameVector.size(); ++i )
-    {
-        mpImplData->AddImage( rNameVector[ i ], static_cast< sal_uInt16 >( i ) + 1, BitmapEx() );
-    }
+        mpImplData->AddImage( rPrefix, rNameVector[ i ], static_cast< sal_uInt16 >( i ) + 1, Image() );
 }
 
 void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
@@ -65,15 +63,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
         return BitmapEx();
     aSize.Width() *= nCount;
 
-    // Load any stragglers
-    for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
-    {
-        ImageAryData *pData = mpImplData->maImages[ nIdx ];
-        if( pData->IsLoadable() )
-            pData->Load( mpImplData->maPrefix );
-    }
-
-    BitmapEx aTempl = mpImplData->maImages[ 0 ]->maBitmapEx;
+    BitmapEx aTempl = mpImplData->maImages[ 0 ]->maImage.GetBitmapEx();
     BitmapEx aResult;
     Bitmap aPixels( aSize, aTempl.GetBitmap().GetBitCount() );
     if( aTempl.IsAlpha() )
@@ -87,9 +77,10 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
     {
         tools::Rectangle aDestRect( Point( nIdx * mpImplData->maImageSize.Width(), 0 ),
-                             mpImplData->maImageSize );
+                                    mpImplData->maImageSize );
         ImageAryData *pData = mpImplData->maImages[ nIdx ];
-        aResult.CopyPixel( aDestRect, aSrcRect, &pData->maBitmapEx);
+        BitmapEx aTmp = pData->maImage.GetBitmapEx();
+        aResult.CopyPixel( aDestRect, aSrcRect, &aTmp );
     }
 
     return aResult;
@@ -112,7 +103,7 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
     for (sal_uInt16 nIdx = 0; nIdx < nItems; nIdx++)
     {
         BitmapEx aBitmap( rBitmapEx, Point( nIdx * aSize.Width(), 0 ), aSize );
-        mpImplData->AddImage( rNameVector[ nIdx ], nIdx + 1, aBitmap );
+        mpImplData->AddImage( mpImplData->maPrefix, rNameVector[ nIdx ], nIdx + 1, Image( aBitmap ) );
     }
 }
 
@@ -132,8 +123,7 @@ void ImageList::AddImage( const OUString& rImageName, const Image& rImage )
     if( !mpImplData )
         ImplInit( 0, rImage.GetSizePixel() );
 
-    mpImplData->AddImage( rImageName, GetImageCount() + 1,
-                          rImage.GetBitmapEx() );
+    mpImplData->AddImage( mpImplData->maPrefix, rImageName, GetImageCount() + 1, rImage );
 }
 
 void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
@@ -142,10 +132,10 @@ void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 
     if( nId )
     {
-        //Just replace the bitmap rather than doing RemoveImage / AddImage
-        //which breaks index-based iteration.
+        // Just replace the bitmap rather than doing RemoveImage / AddImage
+        // which breaks index-based iteration.
         ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
-        pImg->maBitmapEx = rImage.GetBitmapEx();
+        pImg->maImage = rImage;
     }
 }
 
@@ -166,13 +156,8 @@ Image ImageList::GetImage( const OUString& rImageName ) const
     if( mpImplData )
     {
         ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
-
         if( pImg )
-        {
-            if( pImg->IsLoadable() )
-                pImg->Load( mpImplData->maPrefix );
-            return Image( pImg->maBitmapEx );
-        }
+            return pImg->maImage;
     }
 
     return Image();

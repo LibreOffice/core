@@ -30,15 +30,12 @@ struct ImageAryData
     OUString maName;
     // Images identified by either name, or by id
     sal_uInt16              mnId;
-    BitmapEx                maBitmapEx;
+    Image                   maImage;
 
     ImageAryData( const OUString &aName,
-                  sal_uInt16 nId, const BitmapEx &aBitmap );
+                  sal_uInt16 nId, const Image &aImage );
     ImageAryData( const ImageAryData& rData );
     ~ImageAryData();
-
-    bool IsLoadable() { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
-    void Load(const OUString &rPrefix);
 
     ImageAryData&   operator=( const ImageAryData& rData );
 };
@@ -57,8 +54,8 @@ struct ImplImageList
     ImplImageList( const ImplImageList &aSrc );
     ~ImplImageList();
 
-    void AddImage( const OUString &aName,
-                   sal_uInt16 nId, const BitmapEx &aBitmapEx );
+    void AddImage( const OUString &aPrefix, const OUString &aName,
+                   sal_uInt16 nId, const Image &aImage );
     void RemoveImage( sal_uInt16 nPos );
 };
 

@@ -101,6 +101,7 @@ public:
     bool            getSnapHorVerLines() const { return mbSnapHorVerLines; }
 };
 
+class Image;
 class VCL_DLLPUBLIC Graphic
 {
 private:
@@ -117,6 +118,7 @@ public:
                     Graphic( const Graphic& rGraphic );
                     Graphic( Graphic&& rGraphic );
                     Graphic( const Bitmap& rBmp );
+                    Graphic( const Image& rImage );
                     Graphic( const BitmapEx& rBmpEx );
                     Graphic( const VectorGraphicDataPtr& rVectorGraphicDataPtr );
                     Graphic( const Animation& rAnimation );
