@@ -43,13 +43,22 @@ namespace
         }
     }
 
-    void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
+    void lcl_enableRangeChoosing(bool bEnable, Dialog * pDialog)
     {
         if( pDialog )
         {
-            pDialog->Show( !bEnable );
             pDialog->SetModalInputMode( !bEnable );
+            pDialog->Show(!bEnable);
         }
+    }
+
+    void lcl_enableRangeChoosing(bool bEnable, weld::DialogController* pDialog)
+    {
+        if (!pDialog)
+            return;
+        weld::Dialog* pDlg = pDialog->getDialog();
+        pDlg->set_modal(!bEnable);
+        pDlg->show(!bEnable);
     }
 
 } // anonymous namespace
@@ -63,15 +72,17 @@ using ::com::sun::star::uno::Sequence;
 
 RangeChooserTabPage::RangeChooserTabPage(TabPageParent pParent, DialogModel & rDialogModel,
                                          ChartTypeTemplateProvider* pTemplateProvider,
-                                         Dialog * pParentDialog, bool bHideDescription /* = false */)
+                                         Dialog* pParentDialog, bool bHideDescription /* = false */)
     : OWizardPage(pParent, "modules/schart/ui/tp_RangeChooser.ui", "tp_RangeChooser")
     , m_nChangingControlCalls(0)
     , m_bIsDirty(false)
     , m_aLastValidRangeString()
     , m_pTemplateProvider(pTemplateProvider)
     , m_rDialogModel( rDialogModel )
-    , m_pParentDialog( pParentDialog )
-    , m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
+    , m_pParentDialog(pParentDialog)
+    , m_pParentController(pParent.pController)
+    , m_pTabPageNotifiable(pParentDialog ? dynamic_cast<TabPageNotifiable*>(pParentDialog)
+                                         : dynamic_cast<TabPageNotifiable*>(m_pParentController))
     , m_xFT_Caption(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
     , m_xFT_Range(m_xBuilder->weld_label("FT_RANGE"))
     , m_xED_Range(m_xBuilder->weld_entry("ED_RANGE"))
@@ -140,6 +151,7 @@ void RangeChooserTabPage::ActivatePage()
 {
     OWizardPage::ActivatePage();
     initControlsFromModel();
+    m_xED_Range->grab_focus();
 }
 
 void RangeChooserTabPage::initControlsFromModel()
@@ -352,6 +364,7 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl, weld::Button&, void)
     OUString aTitle = m_xFTTitle->get_label();
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
+    lcl_enableRangeChoosing( true, m_pParentController );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );
 }
 
@@ -378,6 +391,7 @@ void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
         changeDialogModelAccordingToControls();
 
     lcl_enableRangeChoosing( false, m_pParentDialog );
+    lcl_enableRangeChoosing( false, m_pParentController );
 }
 void RangeChooserTabPage::disposingRangeSelection()
 {
