@@ -170,13 +170,12 @@ enum class HelpEventMode
 {
     NONE           = 0x0000,
     CONTEXT        = 0x0001,
-    EXTENDED       = 0x0002,
-    BALLOON        = 0x0004,
-    QUICK          = 0x0008
+    BALLOON        = 0x0002,
+    QUICK          = 0x0004
 };
 namespace o3tl
 {
-    template<> struct typed_flags<HelpEventMode> : is_typed_flags<HelpEventMode, 0x0f> {};
+    template<> struct typed_flags<HelpEventMode> : is_typed_flags<HelpEventMode, 0x07> {};
 }
 
 class VCL_DLLPUBLIC HelpEvent
