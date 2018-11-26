@@ -33,7 +33,9 @@ enum class SignatureState
     NOTVALIDATED  = 4,
     // signature and certificate are ok, but not all files are signed, as it was the case in
     // OOo 2.x - OOo 3.1.1. This state is only used together with document signatures.
-    PARTIAL_OK    = 5
+    PARTIAL_OK    = 5,
+    /// Certificate could not be validated and the document is only partially signed.
+    NOTVALIDATED_PARTIAL_OK = 6
 };
 
 #endif // INCLUDED_SFX2_SIGNATURESTATE_HXX
