@@ -1358,8 +1358,8 @@ void ChartController::executeDispatch_SourceData()
         SchResId(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager);
 
     SolarMutexGuard aSolarGuard;
-    ScopedVclPtrInstance< ::chart::DataSourceDialog > aDlg( GetChartWindow(), xChartDoc, m_xCC );
-    if( aDlg->Execute() == RET_OK )
+    ::chart::DataSourceDialog aDlg(GetChartFrame(), xChartDoc, m_xCC);
+    if (aDlg.run() == RET_OK)
     {
         impl_adaptDataSeriesAutoResize();
         aUndoGuard.commit();

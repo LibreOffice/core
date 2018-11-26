@@ -62,11 +62,12 @@ public:
                                bool bHideDescription = false);
     virtual ~DataSourceTabPage() override;
 
+    virtual void ActivatePage() override;
+
     void commitPage();
 
 private:
     // OWizardPage
-    virtual void ActivatePage() override;
     virtual void dispose() override;
     virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
 
@@ -127,6 +128,7 @@ private:
     bool                        m_bIsDirty;
 
     VclPtr<Dialog>              m_pParentDialog;
+    weld::DialogController*     m_pParentController;
     TabPageNotifiable *         m_pTabPageNotifiable;
 
     std::unique_ptr<weld::Label> m_xFT_CAPTION;
