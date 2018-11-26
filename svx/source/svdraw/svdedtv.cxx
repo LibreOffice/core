@@ -971,11 +971,7 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
         pObj->SetMergedItemSet(maDefaultAttr);
     }
     if (!pObj->IsInserted()) {
-        if (nOptions & SdrInsertFlags::NOBROADCAST) {
-            rPV.GetObjList()->NbcInsertObject(pObj, SAL_MAX_SIZE);
-        } else {
-            rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE);
-        }
+        rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE);
     }
     if( IsUndoEnabled() )
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));

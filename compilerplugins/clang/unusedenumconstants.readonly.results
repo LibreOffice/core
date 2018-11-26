@@ -492,8 +492,6 @@ include/svx/ruler.hxx:60
     enum SvxRulerDragFlags OBJECT_LEFT_INDENT_ONLY
 include/svx/sdtakitm.hxx:31
     enum SdrTextAniKind Blink
-include/svx/svdedtv.hxx:65
-    enum SdrInsertFlags NOBROADCAST
 include/svx/svdhdl.hxx:108
     enum BitmapMarkerKind RectPlus_7x7
 include/svx/svdograf.hxx:52

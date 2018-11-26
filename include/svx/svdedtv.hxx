@@ -62,11 +62,10 @@ enum class SdrInsertFlags
     ADDMARK     = 0x0002, /* object will be added an existing selection  */
     SETDEFATTR  = 0x0004, /* actual attributes (+StyleSheet) are assigned to the object */
     SETDEFLAYER = 0x0008, /* actual layer is assigned to the object */
-    NOBROADCAST = 0x0010, /* insert with NbcInsertObject() for SolidDragging */
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SdrInsertFlags> : is_typed_flags<SdrInsertFlags, 0x1f> {};
+    template<> struct typed_flags<SdrInsertFlags> : is_typed_flags<SdrInsertFlags, 0x0f> {};
 }
 
 class SVX_DLLPUBLIC SdrEditView : public SdrMarkView
