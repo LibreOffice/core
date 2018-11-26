@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/alpha.hxx>
@@ -26,7 +27,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/imagerepository.hxx>
+#include <vcl/ImageTree.hxx>
+#include <comphelper/lok.hxx>
 #include <BitmapProcessor.hxx>
 
 #include <image.h>
@@ -46,6 +48,21 @@ ImplImage::ImplImage(const OUString &aStockName)
 {
 }
 
+bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
+{
+    BitmapEx aBitmapEx;
+    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+    if (!ImageTree::get().loadImage(maStockName, aIconTheme, aBitmapEx, true,
+                                    fScale * 100.0,
+                                    ImageLoadFlags::IgnoreScalingFactor))
+    {
+        SAL_WARN("vcl", "Failed to load scaled image from " << maStockName << " at " << fScale);
+        return false;
+    }
+    rBitmapEx = aBitmapEx;
+    return true;
+}
+
 Size ImplImage::getSizePixel()
 {
     Size aRet;
@@ -53,13 +70,11 @@ Size ImplImage::getSizePixel()
         aRet = maSizePixel;
     else if (isStock())
     {
-        BitmapEx aBitmapEx;
-        if (vcl::ImageRepository::loadImage(maStockName, aBitmapEx))
+        if (loadStockAtScale(1.0, maBitmapEx))
         {
             assert(!maDisabledBitmapEx);
             assert(maBitmapChecksum == 0);
-            maBitmapEx = aBitmapEx;
-            maSizePixel = aBitmapEx.GetSizePixel();
+            maSizePixel = maBitmapEx.GetSizePixel();
             aRet = maSizePixel;
         }
         else
@@ -96,6 +111,20 @@ bool ImplImage::isEqual(const ImplImage &ref) const
         return maStockName == ref.maStockName;
     else
         return maBitmapEx == ref.maBitmapEx;
+}
+
+BitmapEx ImplImage::getBitmapExForHiDPI(bool bDisabled)
+{
+    if (isStock())
+    {   // check we have the right bitmap cached.
+        // FIXME: DPI scaling should be tied to the outdev really ...
+        double fScale = comphelper::LibreOfficeKit::getDPIScale();
+        Size aTarget(maSizePixel.Width()*fScale,
+                     maSizePixel.Height()*fScale);
+        if (maBitmapEx.GetSizePixel() != aTarget)
+            loadStockAtScale(fScale, maBitmapEx);
+    }
+    return getBitmapEx(bDisabled);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

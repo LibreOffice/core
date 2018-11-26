@@ -119,7 +119,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
 
     Size aOutSize = pSize ? *pSize : pOutDev->PixelToLogic(aBitmapSizePixel);
 
-    BitmapEx aRenderBmp = mpImplData->getBitmapEx(!!(nStyle & DrawImageFlags::Disable));
+    BitmapEx aRenderBmp = mpImplData->getBitmapExForHiDPI(!!(nStyle & DrawImageFlags::Disable));
 
     if (!(nStyle & DrawImageFlags::Disable) &&
         (nStyle & (DrawImageFlags::ColorTransform | DrawImageFlags::Highlight |
@@ -156,7 +156,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
         aRenderBmp = aTempBitmapEx;
     }
 
-    pOutDev->DrawBitmapEx(rPos, aOutSize, aSrcPos, aBitmapSizePixel, aRenderBmp);
+    pOutDev->DrawBitmapEx(rPos, aOutSize, aRenderBmp);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
