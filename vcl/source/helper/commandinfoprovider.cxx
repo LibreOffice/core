@@ -295,13 +295,13 @@ OUString GetRealCommandForCommand(const OUString& rCommandName,
     return GetCommandProperty("TargetURL", rCommandName, rsModuleName);
 }
 
-static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
-                             const Reference<frame::XFrame>& rxFrame,
-                             vcl::ImageType eImageType)
+static Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName,
+                                                          const Reference<frame::XFrame>& rxFrame,
+                                                          vcl::ImageType eImageType)
 {
 
     if (rsCommandName.isEmpty())
-        return BitmapEx();
+        return nullptr;
 
     sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
 
@@ -324,11 +324,7 @@ static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
 
             aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
             Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
-            const Graphic aGraphic(xGraphic);
-            BitmapEx aBitmap(aGraphic.GetBitmapEx());
-
-            if (!!aBitmap)
-                return aBitmap;
+            return xGraphic;
         }
     }
     catch (Exception&)
@@ -347,23 +343,20 @@ static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
         aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
 
         Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
-
-        const Graphic aGraphic(xGraphic);
-
-        return aGraphic.GetBitmapEx();
+        return xGraphic;
     }
     catch (Exception&)
     {
     }
 
-    return BitmapEx();
+    return nullptr;
 }
 
 Image GetImageForCommand(const OUString& rsCommandName,
                          const Reference<frame::XFrame>& rxFrame,
                          vcl::ImageType eImageType)
 {
-    return Image(GetBitmapForCommand(rsCommandName, rxFrame, eImageType));
+    return Image(GetXGraphicForCommand(rsCommandName, rxFrame, eImageType));
 }
 
 sal_Int32 GetPropertiesForCommand (
