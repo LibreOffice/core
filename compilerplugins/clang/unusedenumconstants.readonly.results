@@ -516,20 +516,6 @@ include/svx/flagsdef.hxx:119
     enum TabulatorDisableFlags FillSolidLine
 include/svx/flagsdef.hxx:120
     enum TabulatorDisableFlags FillSpecial
-include/svx/langbox.hxx:34
-    enum SvxLanguageListFlags EMPTY
-include/svx/langbox.hxx:40
-    enum SvxLanguageListFlags SPELL_AVAIL
-include/svx/langbox.hxx:41
-    enum SvxLanguageListFlags HYPH_AVAIL
-include/svx/langbox.hxx:42
-    enum SvxLanguageListFlags THES_AVAIL
-include/svx/langbox.hxx:45
-    enum SvxLanguageListFlags HYPH_USED
-include/svx/langbox.hxx:46
-    enum SvxLanguageListFlags THES_USED
-include/svx/langbox.hxx:47
-    enum SvxLanguageListFlags ALSO_PRIMARY_ONLY
 include/svx/ruler.hxx:60
     enum SvxRulerDragFlags OBJECT_LEFT_INDENT_ONLY
 include/svx/sdtakitm.hxx:31

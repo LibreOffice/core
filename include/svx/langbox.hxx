@@ -37,21 +37,12 @@ enum class SvxLanguageListFlags
     CTL               = 0x0004,
     CJK               = 0x0008,
     FBD_CHARS         = 0x0010,
-    SPELL_AVAIL       = 0x0020,
-    HYPH_AVAIL        = 0x0040,
-    THES_AVAIL        = 0x0080,
-    ONLY_KNOWN        = 0x0100,  // list only locales provided by I18N
-    SPELL_USED        = 0x0200,
-    HYPH_USED         = 0x0400,
-    THES_USED         = 0x0800,
-    ALSO_PRIMARY_ONLY = 0x1000,  // Do not exclude primary-only
-                                 // languages that do not form a
-                                 // locale, such as Arabic as
-                                 // opposed to Arabic-Egypt.
+    ONLY_KNOWN        = 0x0020,  // list only locales provided by I18N
+    SPELL_USED        = 0x0040,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxLanguageListFlags> : is_typed_flags<SvxLanguageListFlags, 0x1fff> {};
+    template<> struct typed_flags<SvxLanguageListFlags> : is_typed_flags<SvxLanguageListFlags, 0x007f> {};
 }
 
 // load language strings from resource
