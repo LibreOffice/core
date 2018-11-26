@@ -38,12 +38,12 @@
       </prop>
       <prop oor:name="SubstFontsPS" oor:type="xs:string">
         <info>
-          <desc>Contains a list of substitute fonts used in a PostScript context (for example, EPS export).</desc>
+          <desc>Unused. Used to contain a list of substitute fonts used in a PostScript context (for example, EPS export).</desc>
         </info>
       </prop>
       <prop oor:name="SubstFontsHTML" oor:type="xs:string">
         <info>
-          <desc>Contains a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
+          <desc>Unused. Used to contain a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
         </info>
       </prop>
       <prop oor:name="FontWeight" oor:type="xs:string">

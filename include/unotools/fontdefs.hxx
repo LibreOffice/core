@@ -27,14 +27,12 @@
 enum class SubsFontFlags
 {
     ONLYONE    = 0x01,
-    MS         = 0x02,
-    PS         = 0x04,
-    HTML       = 0x08,
+    MS         = 0x02
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<SubsFontFlags> : is_typed_flags<SubsFontFlags, 0x0f> {};
+    template<> struct typed_flags<SubsFontFlags> : is_typed_flags<SubsFontFlags, 0x03> {};
 }
 
 UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags );

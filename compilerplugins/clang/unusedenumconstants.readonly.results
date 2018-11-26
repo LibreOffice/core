@@ -580,10 +580,6 @@ include/unotools/fontcfg.hxx:85
     enum ImplFontAttrs AllSubscript
 include/unotools/fontcfg.hxx:86
     enum ImplFontAttrs AllSerifStyle
-include/unotools/fontdefs.hxx:31
-    enum SubsFontFlags PS
-include/unotools/fontdefs.hxx:32
-    enum SubsFontFlags HTML
 include/unotools/fontdefs.hxx:70
     enum DefaultFontType LATIN_DISPLAY
 include/unotools/fontdefs.hxx:71

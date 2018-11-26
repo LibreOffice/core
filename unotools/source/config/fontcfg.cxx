@@ -1002,8 +1002,6 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                 // strings for subst retrieval, construct only once
                 OUString const aSubstFontsStr     ( "SubstFonts" );
                 OUString const aSubstFontsMSStr   ( "SubstFontsMS" );
-                OUString const aSubstFontsPSStr   ( "SubstFontsPS" );
-                OUString const aSubstFontsHTMLStr ( "SubstFontsHTML" );
                 OUString const aSubstWeightStr    ( "FontWeight" );
                 OUString const aSubstWidthStr     ( "FontWidth" );
                 OUString const aSubstTypeStr      ( "FontType" );
@@ -1032,8 +1030,6 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
                     aAttr.Name = pFontNames[i];
                     fillSubstVector( xFont, aSubstFontsStr, aAttr.Substitutions );
                     fillSubstVector( xFont, aSubstFontsMSStr, aAttr.MSSubstitutions );
-                    fillSubstVector( xFont, aSubstFontsPSStr, aAttr.PSSubstitutions );
-                    fillSubstVector( xFont, aSubstFontsHTMLStr, aAttr.HTMLSubstitutions );
                     aAttr.Weight = getSubstWeight( xFont, aSubstWeightStr );
                     aAttr.Width = getSubstWidth( xFont, aSubstWidthStr );
                     aAttr.Type = getSubstType( xFont, aSubstTypeStr );
