@@ -38,6 +38,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svx/hdft.hxx>
 #include <sfx2/dispatch.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
@@ -428,9 +429,12 @@ void SwHeaderFooterWin::ExecuteCommand(const OString& rIdent)
             *pPool,
             svl::Items<
                 RES_BACKGROUND, RES_SHADOW,
+                XATTR_FILL_FIRST, XATTR_FILL_LAST,
                 SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
 
         aSet.Put( pHFFormat->GetAttrSet() );
+
+        aSet.Put( pHFFormat->makeBackgroundBrushItem() );
 
         // Create a box info item... needed by the dialog
         SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
