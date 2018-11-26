@@ -639,12 +639,14 @@ void SigningTest::testOOXMLPartial()
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
     // This was SignatureState::BROKEN due to missing RelationshipTransform and SHA-256 support.
-    // We expect NOTVALIDATED in case the root CA is not imported on the system, and PARTIAL_OK otherwise, so accept both.
+    // We expect NOTVALIDATED_PARTIAL_OK in case the root CA is not imported on the system, and PARTIAL_OK otherwise, so accept both.
+    // But reject NOTVALIDATED, hiding incompleteness is not OK.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
     CPPUNIT_ASSERT_MESSAGE(
         (OString::number(static_cast<std::underlying_type<SignatureState>::type>(nActual))
              .getStr()),
-        (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::PARTIAL_OK));
+        (nActual == SignatureState::NOTVALIDATED_PARTIAL_OK
+         || nActual == SignatureState::PARTIAL_OK));
 }
 
 void SigningTest::testOOXMLBroken()
