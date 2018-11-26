@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/alpha.hxx>
@@ -25,15 +26,80 @@
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/BitmapFilter.hxx>
+#include <vcl/ImageTree.hxx>
+#include <vcl/imagerepository.hxx>
+#include <BitmapDisabledImageFilter.hxx>
+#include <comphelper/lok.hxx>
 
 #include <image.h>
 #include <memory>
 
 ImplImage::ImplImage(const BitmapEx &rBitmapEx)
     : maBitmapChecksum(0)
+    , maSizePixel(rBitmapEx.GetSizePixel())
     , maBitmapEx(rBitmapEx)
-    , maDisabledBitmapEx()
 {
+}
+
+ImplImage::ImplImage(const OUString &aStockName)
+    : maBitmapChecksum(0)
+    , maSizePixel(0,0) // defer size lookup
+    , maStockName( aStockName )
+{
+}
+
+Size ImplImage::getSizePixel()
+{
+    Size aRet;
+    if (!isSizeEmpty())
+        aRet = maSizePixel;
+    else if (isStock())
+    {
+        BitmapEx aBitmapEx;
+        if (vcl::ImageRepository::loadImage(maStockName, aBitmapEx))
+        {
+            assert(!maDisabledBitmapEx);
+            assert(maBitmapChecksum == 0);
+            maBitmapEx = aBitmapEx;
+            maSizePixel = aBitmapEx.GetSizePixel();
+            aRet = maSizePixel;
+        }
+        else
+            SAL_WARN("vcl", "Failed to load stock icon " << maStockName);
+    }
+    return aRet;
+}
+
+/// non-HiDPI compatibility method.
+BitmapEx ImplImage::getBitmapEx(bool bDisabled)
+{
+    getSizePixel(); // force load, and at unity scale.
+    if (bDisabled)
+    {
+        // Changed since we last generated this.
+        BitmapChecksum aChecksum = maBitmapEx.GetChecksum();
+        if (maBitmapChecksum != aChecksum ||
+            maDisabledBitmapEx.GetSizePixel() != maBitmapEx.GetSizePixel())
+        {
+            maDisabledBitmapEx = maBitmapEx;
+            BitmapFilter::Filter(maDisabledBitmapEx, BitmapDisabledImageFilter());
+            maBitmapChecksum = aChecksum;
+        }
+        return maDisabledBitmapEx;
+    }
+
+    return maBitmapEx;
+}
+
+bool ImplImage::isEqual(const ImplImage &ref) const
+{
+    if (isStock() != ref.isStock())
+        return false;
+    if (isStock())
+        return maStockName == ref.maStockName;
+    else
+        return maBitmapEx == ref.maBitmapEx;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
