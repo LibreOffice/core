@@ -105,7 +105,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	(echo '[Version]' \
 	&& echo 'AllLanguages=en-US' \
 	&& echo 'BuildVersion=' \
-	&& echo "buildid=$(BUILDID)" \
+	&& echo "buildid=$(shell git -C $(SRCDIR) log -1 --format=%H)" \
 	    ) > $(IOSRES)/program/versionrc
 
 	$(SRCDIR)/bin/lo-all-static-libs | sed -e 's/ /\
