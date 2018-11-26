@@ -33,12 +33,11 @@ enum class GraphicManagerDrawFlags
 {
     CACHED                  = 0x01,
     SMOOTHSCALE             = 0x02,
-    USE_DRAWMODE_SETTINGS   = 0x04,
-    STANDARD                = (CACHED|SMOOTHSCALE),
+    STANDARD                = CACHED | SMOOTHSCALE,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<GraphicManagerDrawFlags> : is_typed_flags<GraphicManagerDrawFlags, 0x07> {};
+    template<> struct typed_flags<GraphicManagerDrawFlags> : is_typed_flags<GraphicManagerDrawFlags, 0x02> {};
 }
 
 // Adjustment defines
@@ -255,8 +254,7 @@ private:
                                 int nNumTilesX,
                                 int nNumTilesY,
                                 const Size& rTileSize,
-                                const GraphicAttr* pAttr,
-                                GraphicManagerDrawFlags nFlags
+                                const GraphicAttr* pAttr
                             );
 
     void VCL_DLLPRIVATE     ImplTransformBitmap(
@@ -336,8 +334,7 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicAttr* pAttr = nullptr,
-                                GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD
+                                const GraphicAttr* pAttr = nullptr
                             );
 
     /** Draw the graphic repeatedly into the given output rectangle

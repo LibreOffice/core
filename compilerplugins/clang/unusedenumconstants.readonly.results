@@ -884,8 +884,6 @@ include/vcl/fontcapabilities.hxx:191
     enum vcl::CodePageCoverage::CodePageCoverageEnum CP850
 include/vcl/fontcapabilities.hxx:192
     enum vcl::CodePageCoverage::CodePageCoverageEnum CP437
-include/vcl/GraphicObject.hxx:36
-    enum GraphicManagerDrawFlags USE_DRAWMODE_SETTINGS
 include/vcl/GraphicObject.hxx:55
     enum GraphicAdjustmentFlags DRAWMODE
 include/vcl/GraphicObject.hxx:56
