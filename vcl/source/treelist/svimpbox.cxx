@@ -1983,6 +1983,8 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
         return;
 
+    if( !pCursor )
+        pCursor = pStartEntry;
     SvTreeListEntry* pEntry = GetEntry( aPos );
     if ( pEntry != pCursor )
         // new entry selected -> reset current tab position to first tab
