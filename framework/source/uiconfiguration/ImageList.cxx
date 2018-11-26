@@ -44,9 +44,7 @@ ImageList::ImageList(const std::vector< OUString >& rNameVector,
 
     maPrefix = rPrefix;
     for( size_t i = 0; i < rNameVector.size(); ++i )
-    {
-        ImplAddImage( rNameVector[ i ], static_cast< sal_uInt16 >( i ) + 1, BitmapEx() );
-    }
+        ImplAddImage( rPrefix, rNameVector[ i ], static_cast< sal_uInt16 >( i ) + 1, Image() );
 }
 
 // FIXME: Rather a performance hazard
@@ -57,15 +55,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
         return BitmapEx();
     Size aSize( maImageSize.Width() * nCount, maImageSize.Height() );
 
-    // Load any stragglers
-    for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
-    {
-        ImageAryData *pData = maImages[ nIdx ].get();
-        if( pData->IsLoadable() )
-            ImplLoad(*pData);
-    }
-
-    BitmapEx aTempl = maImages[ 0 ]->maBitmapEx;
+    BitmapEx aTempl = maImages[ 0 ]->maImage.GetBitmapEx();
     BitmapEx aResult( aTempl, Point(), aSize );
 
     tools::Rectangle aSrcRect( Point( 0, 0 ), maImageSize );
@@ -74,7 +64,8 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
         tools::Rectangle aDestRect( Point( nIdx * maImageSize.Width(), 0 ),
                              maImageSize );
         ImageAryData *pData = maImages[ nIdx ].get();
-        aResult.CopyPixel( aDestRect, aSrcRect, &pData->maBitmapEx);
+        BitmapEx aTmp = pData->maImage.GetBitmapEx();
+        aResult.CopyPixel( aDestRect, aSrcRect, &aTmp);
     }
 
     return aResult;
@@ -101,7 +92,7 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
     for (sal_uInt16 nIdx = 0; nIdx < nItems; nIdx++)
     {
         BitmapEx aBitmap( rBitmapEx, Point( nIdx * aSize.Width(), 0 ), aSize );
-        ImplAddImage( rNameVector[ nIdx ], nIdx + 1, aBitmap );
+        ImplAddImage( maPrefix, rNameVector[ nIdx ], nIdx + 1, Image( aBitmap ) );
     }
 }
 
@@ -117,8 +108,7 @@ void ImageList::AddImage( const OUString& rImageName, const Image& rImage )
 {
     SAL_WARN_IF( GetImagePos( rImageName ) != IMAGELIST_IMAGE_NOTFOUND, "vcl", "ImageList::AddImage() - ImageName already exists" );
 
-    ImplAddImage( rImageName, GetImageCount() + 1,
-                          rImage.GetBitmapEx() );
+    ImplAddImage( maPrefix, rImageName, GetImageCount() + 1, rImage );
 }
 
 void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
@@ -127,10 +117,10 @@ void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 
     if( nId )
     {
-        //Just replace the bitmap rather than doing RemoveImage / AddImage
-        //which breaks index-based iteration.
+        // Just replace the bitmap rather than doing RemoveImage / AddImage
+        // which breaks index-based iteration.
         ImageAryData *pImg = maNameHash[ rImageName ];
-        pImg->maBitmapEx = rImage.GetBitmapEx();
+        pImg->maImage = rImage;
     }
 }
 
@@ -151,10 +141,7 @@ Image ImageList::GetImage( const OUString& rImageName ) const
     auto it = maNameHash.find( rImageName );
     if (it == maNameHash.end())
         return Image();
-    ImageAryData *pImg = it->second;
-    if( pImg->IsLoadable() )
-        ImplLoad( *pImg );
-    return Image( pImg->maBitmapEx );
+    return it->second->maImage;
 }
 
 sal_uInt16 ImageList::GetImageCount() const
@@ -200,10 +187,14 @@ void ImageList::GetImageNames( std::vector< OUString >& rNames ) const
     }
 }
 
-void ImageList::ImplAddImage( const OUString &aName,
-                              sal_uInt16 nId, const BitmapEx &aBitmapEx )
+void ImageList::ImplAddImage( const OUString &aPrefix, const OUString &aName,
+                              sal_uInt16 nId, const Image &aImage )
 {
-    ImageAryData *pImg = new ImageAryData{ aName, nId, aBitmapEx };
+    Image aInsert = aImage;
+    if (!aInsert)
+        aInsert = Image( "private:graphicrepository/" + aPrefix + aName );
+
+    ImageAryData *pImg = new ImageAryData{ aName, nId, aInsert };
     maImages.emplace_back( pImg );
     if( !aName.isEmpty() )
         maNameHash [ aName ] = pImg;
@@ -216,30 +207,5 @@ void ImageList::ImplRemoveImage( sal_uInt16 nPos )
         maNameHash.erase( pImg->maName );
     maImages.erase( maImages.begin() + nPos );
 }
-
-void ImageList::ImplLoad(ImageAryData& rImageData) const
-{
-    OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-
-    OUString aFileName = maPrefix + rImageData.maName;
-
-    bool bSuccess = ImageTree::get().loadImage(aFileName, aIconTheme, rImageData.maBitmapEx, true);
-
-    /* If the uno command has parameters, passed in from a toolbar,
-     * recover from failure by removing the parameters from the file name
-     */
-    if (!bSuccess && aFileName.indexOf("%3f") > 0)
-    {
-        sal_Int32 nStart = aFileName.indexOf("%3f");
-        sal_Int32 nEnd = aFileName.lastIndexOf(".");
-
-        aFileName = aFileName.replaceAt(nStart, nEnd - nStart, "");
-        bSuccess = ImageTree::get().loadImage(aFileName, aIconTheme, rImageData.maBitmapEx, true);
-    }
-
-    SAL_WARN_IF(!bSuccess, "fwk.uiconfiguration", "Failed to load image '" << aFileName
-              << "' from icon theme '" << aIconTheme << "'");
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

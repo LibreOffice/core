@@ -21,6 +21,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -33,6 +34,7 @@
 #include <graphic/UnoGraphic.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 
+#include <image.h>
 
 using namespace ::com::sun::star;
 
@@ -214,6 +216,17 @@ Graphic::Graphic(const Bitmap& rBmp)
 Graphic::Graphic(const BitmapEx& rBmpEx)
     : mxImpGraphic(vcl::graphic::Manager::get().newInstance(rBmpEx))
 {
+}
+
+// We use XGraphic for passing toolbar images across app UNO aps
+// and we need to be able to see and preserve 'stock' images too.
+Graphic::Graphic(const Image& rImage)
+    // FIXME: should really defer the BitmapEx load.
+    : mxImpGraphic(new ImpGraphic(rImage.GetBitmapEx()))
+{
+    OUString aStock = rImage.GetStock();
+    if (aStock.getLength())
+        mxImpGraphic->setOriginURL("private:graphicrepository/" + aStock);
 }
 
 Graphic::Graphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr)
