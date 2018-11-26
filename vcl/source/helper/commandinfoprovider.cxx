@@ -350,20 +350,11 @@ Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName
     return nullptr;
 }
 
-static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
-                             const Reference<frame::XFrame>& rxFrame,
-                             vcl::ImageType eImageType)
-{
-    const Graphic aGraphic(GetXGraphicForCommand(rsCommandName, rxFrame, eImageType));
-    BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    return aBitmap;
-}
-
 Image GetImageForCommand(const OUString& rsCommandName,
                          const Reference<frame::XFrame>& rxFrame,
                          vcl::ImageType eImageType)
 {
-    return Image(GetBitmapForCommand(rsCommandName, rxFrame, eImageType));
+    return Image(GetXGraphicForCommand(rsCommandName, rxFrame, eImageType));
 }
 
 sal_Int32 GetPropertiesForCommand (

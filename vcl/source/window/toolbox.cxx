@@ -2666,6 +2666,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
         const Image* pImage = &(pItem->maImage);
         const Image& rOverlayImage = pItem->maOverlayImage;
         aImageSize = pImage->GetSizePixel();
+        float fScaleFactor = rRenderContext.GetDPIScaleFactor();
 
         // determine drawing flags
         DrawImageFlags nImageStyle = DrawImageFlags::NONE;
