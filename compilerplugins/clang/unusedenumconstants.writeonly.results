@@ -10654,10 +10654,6 @@ vcl/source/fontsubset/ttcr.hxx:53
     enum vcl::TTCRErrCodes TTCR_NAMETOOLONG
 vcl/source/fontsubset/ttcr.hxx:54
     enum vcl::TTCRErrCodes TTCR_POSTFORMAT
-vcl/source/gdi/pdfwriter_impl.hxx:75
-    enum GraphicsStateUpdateFlags TextLineColor
-vcl/source/gdi/pdfwriter_impl.hxx:76
-    enum GraphicsStateUpdateFlags OverlineColor
 vcl/source/gdi/pdfwriter_impl.hxx:81
     enum GraphicsStateUpdateFlags All
 vcl/source/gdi/pdfwriter_impl.hxx:795
