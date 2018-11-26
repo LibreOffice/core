@@ -1268,6 +1268,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     case OWN_ATTR_GRAPHIC_URL:
     {
         OUString aURL;
+        uno::Reference<awt::XBitmap> xBitmap;
         if (rValue >>= aURL)
         {
             Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
@@ -1275,6 +1276,19 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             {
                 static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(aGraphic);
                 bOk = true;
+            }
+        }
+        else if (rValue >>= xBitmap)
+        {
+            uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+            if (xGraphic.is())
+            {
+                Graphic aGraphic = xGraphic;
+                if (aGraphic)
+                {
+                    static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(aGraphic);
+                    bOk = true;
+                }
             }
         }
         break;
