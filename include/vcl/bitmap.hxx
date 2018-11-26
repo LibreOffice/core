@@ -62,13 +62,11 @@ enum class BmpScaleFlag
 enum class BmpDitherFlags
 {
     NONE             = 0x0000,
-    Matrix           = 0x0001,
-    Floyd            = 0x0002,
-    Floyd16          = 0x0004,
+    Floyd            = 0x0001,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x07> {};
+    template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x01> {};
 }
 
 #define BMP_COL_TRANS               Color( 252, 3, 251 )
@@ -535,9 +533,7 @@ public:
     SAL_DLLPRIVATE void     ImplSetSalBitmap( const std::shared_ptr<SalBitmap>& xImpBmp );
 
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplDitherMatrix();
     SAL_DLLPRIVATE bool     ImplDitherFloyd();
-    SAL_DLLPRIVATE bool     ImplDitherFloyd16();
 
 public:
 

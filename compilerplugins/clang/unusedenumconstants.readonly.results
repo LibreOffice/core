@@ -590,10 +590,6 @@ include/unotools/fontdefs.hxx:71
     enum DefaultFontType LATIN_FIXED
 include/unotools/fontdefs.hxx:81
     enum DefaultFontType CTL_DISPLAY
-include/vcl/bitmap.hxx:65
-    enum BmpDitherFlags Matrix
-include/vcl/bitmap.hxx:67
-    enum BmpDitherFlags Floyd16
 include/vcl/errinf.hxx:84
     enum DialogMask ButtonsYesNo
 include/vcl/errinf.hxx:87
