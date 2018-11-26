@@ -44,9 +44,13 @@ struct ImplImage
 
     /// get size in co-ordinates not scaled for HiDPI
     Size getSizePixel();
+    /// Legacy - the original bitmap
     BitmapEx getBitmapEx(bool bDisabled = false);
+    /// Taking account of HiDPI scaling
+    BitmapEx getBitmapExForHiDPI(bool bDisabled = false);
     bool isEqual(const ImplImage &ref) const;
     bool isSizeEmpty() const { return maSizePixel == Size(0, 0); }
+    bool loadStockAtScale(double fScale, BitmapEx &rBitmapEx);
 };
 
 #endif // INCLUDED_VCL_INC_IMAGE_H
