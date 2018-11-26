@@ -1068,6 +1068,10 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         sMessage = SfxResId(STR_SIGNATURE_OK);
                         aInfoBarType = InfoBarType::Info;
                         break;
+                    case SignatureState::NOTVALIDATED_PARTIAL_OK:
+                        sMessage = SfxResId(STR_SIGNATURE_NOTVALIDATED_PARTIAL_OK);
+                        aInfoBarType = InfoBarType::Warning;
+                        break;
                     //FIXME SignatureState::Unknown, own message?
                     default:
                         break;
@@ -1285,7 +1289,9 @@ SignatureState SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequen
         }
     }
 
-    if ( nResult == SignatureState::OK && !bCertValid )
+    if (nResult == SignatureState::OK && !bCertValid && !bCompleteSignature)
+        nResult = SignatureState::NOTVALIDATED_PARTIAL_OK;
+    else if (nResult == SignatureState::OK && !bCertValid)
         nResult = SignatureState::NOTVALIDATED;
     else if ( nResult == SignatureState::OK && bCertValid && !bCompleteSignature)
         nResult = SignatureState::PARTIAL_OK;
