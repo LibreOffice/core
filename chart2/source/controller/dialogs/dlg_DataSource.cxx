@@ -76,41 +76,6 @@ Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCu
     return m_xTemplate;
 }
 
-class DataSourceTabControl : public TabControl
-{
-public:
-    explicit DataSourceTabControl(vcl::Window* pParent);
-
-    virtual bool DeactivatePage() override;
-
-    void DisableTabToggling();
-    void EnableTabToggling();
-
-private:
-    bool m_bTogglingEnabled;
-};
-
-DataSourceTabControl::DataSourceTabControl(vcl::Window* pParent)
-    : TabControl(pParent)
-    , m_bTogglingEnabled(true)
-{
-}
-
-bool DataSourceTabControl::DeactivatePage()
-{
-    return TabControl::DeactivatePage() && m_bTogglingEnabled;
-}
-
-void DataSourceTabControl::DisableTabToggling()
-{
-    m_bTogglingEnabled = false;
-}
-
-void DataSourceTabControl::EnableTabToggling()
-{
-    m_bTogglingEnabled = true;
-}
-
 sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
 
 enum DataSourceDialogPages
@@ -119,56 +84,47 @@ enum DataSourceDialogPages
     TP_DATA_SOURCE = 2
 };
 
-DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
+DataSourceDialog::DataSourceDialog(weld::Window * pParent,
     const Reference< XChartDocument > & xChartDocument,
     const Reference< uno::XComponentContext > & xContext)
-    : TabDialog(pParent, "DataRangeDialog",
-        "modules/schart/ui/datarangedialog.ui")
+    : GenericDialogController(pParent, "modules/schart/ui/datarangedialog.ui",
+                              "DataRangeDialog")
     , m_apDocTemplateProvider(new DocumentChartTypeTemplateProvider(xChartDocument))
     , m_apDialogModel(new DialogModel(xChartDocument, xContext))
-    , m_pTabControl(VclPtr<DataSourceTabControl>::Create(get_content_area()))
     , m_pRangeChooserTabPage(nullptr)
     , m_pDataSourceTabPage(nullptr)
     , m_bRangeChooserTabIsValid(true)
     , m_bDataSourceTabIsValid(true)
+    , m_bTogglingEnabled(true)
+    , m_xTabControl(m_xBuilder->weld_notebook("notebook"))
+    , m_xBtnOK(m_xBuilder->weld_button("ok"))
 {
-    get(m_pBtnOK, "ok");
-
-    m_pTabControl->Show();
-
-    m_pRangeChooserTabPage = VclPtr<RangeChooserTabPage>::Create(TabPageParent(m_pTabControl), *(m_apDialogModel.get()),
-                                     m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
-    m_pDataSourceTabPage = VclPtr<DataSourceTabPage>::Create(TabPageParent(m_pTabControl), *(m_apDialogModel.get()),
-                                    m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
-
-    m_pTabControl->InsertPage( TP_RANGECHOOSER, SchResId(STR_PAGE_DATA_RANGE) );
-    m_pTabControl->InsertPage( TP_DATA_SOURCE,  SchResId(STR_OBJECT_DATASERIES_PLURAL) );
-
-    m_pTabControl->SetTabPage( TP_DATA_SOURCE,  m_pDataSourceTabPage );
-    m_pTabControl->SetTabPage( TP_RANGECHOOSER, m_pRangeChooserTabPage );
-
-    m_pTabControl->SelectTabPage( m_nLastPageId );
+    TabPageParent aRangeParent(m_xTabControl->get_page("range"), this);
+    m_pRangeChooserTabPage = VclPtr<RangeChooserTabPage>::Create(aRangeParent, *(m_apDialogModel.get()),
+                                     m_apDocTemplateProvider.get(), nullptr, true /* bHideDescription */ );
+    TabPageParent aSeriesParent(m_xTabControl->get_page("series"), this);
+    m_pDataSourceTabPage = VclPtr<DataSourceTabPage>::Create(aSeriesParent, *(m_apDialogModel.get()),
+                                    m_apDocTemplateProvider.get(), nullptr, true /* bHideDescription */ );
+    m_xTabControl->connect_enter_page(LINK(this, DataSourceDialog, ActivatePageHdl));
+    m_xTabControl->connect_leave_page(LINK(this, DataSourceDialog, DeactivatePageHdl));
+    ActivatePageHdl(m_xTabControl->get_current_page_ident());
+    if (m_nLastPageId != 0)
+    {
+        m_xTabControl->set_current_page(m_nLastPageId);
+        ActivatePageHdl(m_xTabControl->get_current_page_ident());
+    }
 }
 
 DataSourceDialog::~DataSourceDialog()
 {
-    disposeOnce();
-}
-
-void DataSourceDialog::dispose()
-{
     m_pRangeChooserTabPage.disposeAndClear();
     m_pDataSourceTabPage.disposeAndClear();
-    if (m_pTabControl)
-        m_nLastPageId = m_pTabControl->GetCurPageId();
-    m_pTabControl.disposeAndClear();
-    m_pBtnOK.clear();
-    TabDialog::dispose();
+    m_nLastPageId = m_xTabControl->get_current_page();
 }
 
-short DataSourceDialog::Execute()
+short DataSourceDialog::run()
 {
-    short nResult = TabDialog::Execute();
+    short nResult = GenericDialogController::run();
     if( nResult == RET_OK )
     {
         if( m_pRangeChooserTabPage )
@@ -179,25 +135,48 @@ short DataSourceDialog::Execute()
     return nResult;
 }
 
+IMPL_LINK(DataSourceDialog, ActivatePageHdl, const OString&, rPage, void)
+{
+    if (rPage == "range")
+        m_pRangeChooserTabPage->ActivatePage();
+    else if (rPage == "series")
+        m_pDataSourceTabPage->ActivatePage();
+}
+
+// allow/disallow user to leave page
+IMPL_LINK_NOARG(DataSourceDialog, DeactivatePageHdl, const OString&, bool)
+{
+    return m_bTogglingEnabled;
+}
+
+void DataSourceDialog::DisableTabToggling()
+{
+    m_bTogglingEnabled = false;
+}
+
+void DataSourceDialog::EnableTabToggling()
+{
+    m_bTogglingEnabled = true;
+}
+
 void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 {
-    if( pTabPage == m_pRangeChooserTabPage )
+    if (pTabPage == m_pRangeChooserTabPage)
         m_bRangeChooserTabIsValid = false;
-    else if( pTabPage == m_pDataSourceTabPage )
+    else if (pTabPage == m_pDataSourceTabPage)
         m_bDataSourceTabIsValid = false;
 
-    if( ! (m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid ))
+    if (!(m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid))
     {
-        m_pBtnOK->Enable( false );
-        OSL_ASSERT( m_pTabControl );
+        m_xBtnOK->set_sensitive(false);
         // note: there seems to be no suitable mechanism to address pages by
         // identifier, at least it is unclear what the page identifiers are.
         // @todo: change the fixed numbers to identifiers
         if( m_bRangeChooserTabIsValid )
-            m_pTabControl->SetCurPageId( m_pTabControl->GetPageId( 1 ));
+            m_xTabControl->set_current_page(1);
         else if( m_bDataSourceTabIsValid )
-            m_pTabControl->SetCurPageId( m_pTabControl->GetPageId( 0 ));
-        m_pTabControl->DisableTabToggling();
+            m_xTabControl->set_current_page(0);
+        DisableTabToggling();
     }
 }
 
@@ -208,11 +187,10 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
     else if( pTabPage == m_pDataSourceTabPage )
         m_bDataSourceTabIsValid = true;
 
-    if( m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid )
+    if (m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid)
     {
-        m_pBtnOK->Enable();
-        OSL_ASSERT( m_pTabControl );
-        m_pTabControl->EnableTabToggling();
+        m_xBtnOK->set_sensitive(true);
+        EnableTabToggling();
     }
 }
 
