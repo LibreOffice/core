@@ -98,10 +98,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)
     // add filter
     try
     {
-        xFilePicker->appendFilter(
-             OUString(),
-             "*.*"
-             );
+        xFilePicker->appendFilter(CuiResId(RID_SVXSTR_FILTER_ALL), "*.*");
     }
     catch( const IllegalArgumentException& )
     {
