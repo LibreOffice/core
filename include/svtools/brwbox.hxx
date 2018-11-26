@@ -69,7 +69,6 @@ enum class BrowserMode
     HIDECURSOR           = 0x000200,
 
     NO_HSCROLL           = 0x000400,
-    NO_SCROLLBACK        = 0x000800,
 
     AUTO_VSCROLL         = 0x001000,
     AUTO_HSCROLL         = 0x002000,
@@ -80,21 +79,15 @@ enum class BrowserMode
 
     HEADERBAR_NEW        = 0x040000,
     AUTOSIZE_LASTCOL     = 0x080000,
-    OWN_DATACHANGED      = 0x100000,
 
     CURSOR_WO_FOCUS      = 0x200000,
     // Allows a cursor which is shown even if the control does not have the focus. This does not affect other
     // situations which require to temporarily hide the cursor (such as scrolling).
 
-    SMART_HIDECURSOR     = 0x400000,
-    // is an enhanced version of BrowserMode::HIDECURSOR.
-    // When set, BrowserMode::HIDECURSOR is overruled, and the cursor is hidden as long as no selection exists,
-    // but shown otherwise. This does not affect other situations which require to temporarily hide the
-    // cursor (such as scrolling).
 };
 namespace o3tl
 {
-    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x7cff3f> {};
+    template<> struct typed_flags<BrowserMode> : is_typed_flags<BrowserMode, 0x2cf73f> {};
 }
 
 #define BROWSER_NONE                      0
@@ -293,7 +286,6 @@ private:
     SVT_DLLPRIVATE void            ColumnInserted( sal_uInt16 nPos );
 
     DECL_DLLPRIVATE_LINK(    ScrollHdl, ScrollBar*, void );
-    DECL_DLLPRIVATE_LINK(    EndScrollHdl, ScrollBar*, void );
     DECL_DLLPRIVATE_LINK(    StartDragHdl, HeaderBar*, void );
 
     SVT_DLLPRIVATE long            GetFrozenWidth() const;
