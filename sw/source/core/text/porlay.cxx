@@ -1510,7 +1510,7 @@ sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTextNode& rNode, OUStringBuffe
 
         while ( nHiddenStart < nHiddenEnd && nHiddenStart < nEnd )
         {
-            if ( nHiddenStart >= nStt && nHiddenStart < nEnd )
+            if (nHiddenStart >= nStt)
             {
                 rText[nHiddenStart] = cChar;
                 ++nNumOfHiddenChars;
@@ -1605,7 +1605,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nP
 
             if ( nHiddenStart > nPos )
                 break;
-            if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
+            if (nPos < nHiddenEnd)
             {
                 rnStartPos = nHiddenStart;
                 rnEndPos   = std::min<sal_Int32>(nHiddenEnd,
@@ -1644,7 +1644,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange(TextFrameIndex nPos,
 
         if ( nHiddenStart > nPos )
             break;
-        if ( nHiddenStart <= nPos && nPos < nHiddenEnd )
+        if (nPos < nHiddenEnd)
         {
             rnStartPos = nHiddenStart;
             rnEndPos   = nHiddenEnd;
