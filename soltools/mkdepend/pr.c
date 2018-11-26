@@ -59,7 +59,7 @@ void add_include(struct filepointer *filep, struct inclist *file, struct inclist
     if (newfile) {
 
         /* Only add new dependency files if they don't have "/usr/include" in them. */
-        if (!(newfile && newfile->i_file && strstr(newfile->i_file, "/usr/"))) {
+        if (!(newfile->i_file && strstr(newfile->i_file, "/usr/"))) {
             included_by(file, newfile);
         }
 

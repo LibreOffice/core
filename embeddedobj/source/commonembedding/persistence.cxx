@@ -1771,7 +1771,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( !m_bIsLink )
+    if (!m_bIsLink || m_nObjectState == -1)
     {
         // it must be a linked initialized object
         throw embed::WrongStateException(
@@ -1790,14 +1790,6 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
         throw lang::IllegalArgumentException( "Empty element name is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
-
-    if ( !m_bIsLink || m_nObjectState == -1 )
-    {
-        // it must be a linked initialized object
-        throw embed::WrongStateException(
-                    "The object is not a valid linked object!",
-                    static_cast< ::cppu::OWeakObject* >(this) );
-    }
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
