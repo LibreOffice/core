@@ -52,7 +52,7 @@ enum class XMLShapeExportFlags {
      POSITION = 0x0003,
      WIDTH    = 0x0004,
      HEIGHT   = 0x0008,
-     SIZE     = 0x000c,
+     SIZE     = WIDTH | HEIGHT,
 // when you set this flag a chart does NOT export its own data as table element
      NO_CHART_DATA = 0x0010,
 // When setting the flag below no ignorableWhiteSpace will be called around

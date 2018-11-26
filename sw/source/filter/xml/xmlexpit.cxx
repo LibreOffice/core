@@ -66,7 +66,6 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                 const SfxItemSet& rSet,
                                 const SvXMLUnitConverter& rUnitConverter,
                                 const SvXMLNamespaceMap& rNamespaceMap,
-                                SvXmlExportFlags nFlags,
                                 std::vector<sal_uInt16> *pIndexArray ) const
 {
     const sal_uInt16 nCount = mrMapEntries->getCount();
@@ -79,8 +78,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
         // we have a valid map entry here, so lets use it...
         if( 0 == (rEntry.nMemberId & MID_SW_FLAG_NO_ITEM_EXPORT) )
         {
-            const SfxPoolItem* pItem = GetItem( rSet, rEntry.nWhichId,
-                                                nFlags );
+            const SfxPoolItem* pItem = GetItem( rSet, rEntry.nWhichId );
             // do we have an item?
             if(pItem)
             {
@@ -232,7 +230,7 @@ void SvXMLExportItemMapper::exportElementItems(
         OSL_ENSURE( 0 != (rEntry.nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
                     "wrong mid flag!" );
 
-        const SfxPoolItem* pItem = GetItem( rSet, rEntry.nWhichId, nFlags );
+        const SfxPoolItem* pItem = GetItem( rSet, rEntry.nWhichId );
         // do we have an item?
         if(pItem)
         {
@@ -248,29 +246,18 @@ void SvXMLExportItemMapper::exportElementItems(
 }
 
 /** returns the item with the given WhichId from the given ItemSet if its
-    set or its default item if it's not set and the SvXmlExportFlags::DEEP
-    is set in the flags
+    set
 */
 const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
-                                                   sal_uInt16 nWhichId,
-                                                   SvXmlExportFlags nFlags )
+                                                   sal_uInt16 nWhichId)
 {
     // first get item from itemset
     const SfxPoolItem* pItem;
-    SfxItemState eState =
-        rSet.GetItemState( nWhichId,
-                           bool( nFlags & SvXmlExportFlags::DEEP ),
-                           &pItem );
+    SfxItemState eState = rSet.GetItemState( nWhichId, false, &pItem );
 
     if( SfxItemState::SET == eState )
     {
         return pItem;
-    }
-    else if( (nFlags & SvXmlExportFlags::DEFAULTS) &&
-              SfxItemPool::IsWhich(nWhichId))
-    {
-        // if it's not set, try the pool if we export defaults
-        return &rSet.GetPool()->GetDefaultItem(nWhichId);
     }
     else
     {
@@ -293,22 +280,18 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
                     XMLTokenEnum ePropToken ) const
 {
     std::vector<sal_uInt16> aIndexArray;
-    const SvXmlExportFlags nFlags = SvXmlExportFlags::IGN_WS;
 
     exportXML( rExport, rExport.GetAttrList(), rSet, rUnitConverter,
-               rExport.GetNamespaceMap(), nFlags, &aIndexArray );
+               rExport.GetNamespaceMap(), &aIndexArray );
 
     if( rExport.GetAttrList().getLength() > 0 || !aIndexArray.empty() )
     {
-        if( nFlags & SvXmlExportFlags::IGN_WS )
-        {
-            rExport.IgnorableWhitespace();
-        }
+        rExport.IgnorableWhitespace();
 
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, ePropToken,
                                   false, false );
         exportElementItems( rExport, rUnitConverter,
-                            rSet, nFlags, aIndexArray );
+                            rSet, SvXmlExportFlags::IGN_WS, aIndexArray );
     }
 }
 
