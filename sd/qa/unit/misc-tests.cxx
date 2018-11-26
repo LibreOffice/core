@@ -77,6 +77,7 @@ public:
     void testTdf119392();
     void testTdf67248();
     void testTdf119956();
+    void testTdf120527();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(testTdf119392);
     CPPUNIT_TEST(testTdf67248);
     CPPUNIT_TEST(testTdf119956);
+    CPPUNIT_TEST(testTdf120527);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -423,6 +425,48 @@ void SdMiscTest::testTdf38225()
     CPPUNIT_ASSERT(!pStyle);
     pStyle = pSSPool->Find("StyleWithName2", SfxStyleFamily::Para);
     CPPUNIT_ASSERT(pStyle);
+}
+
+void SdMiscTest::testTdf120527()
+{
+    sd::DrawDocShellRef xDocShRef
+        = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Draw);
+    uno::Reference<frame::XLoadable> xLoadable(xDocShRef->GetModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xLoadable.is());
+    xLoadable->initNew();
+
+    // Load a bitmap into the bitmap table.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xDocShRef->GetModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFactory.is());
+    uno::Reference<container::XNameContainer> xBitmaps(
+        xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBitmaps.is());
+    OUString aGraphicURL = m_directories.getURLFromSrc("/sd/qa/unit/data/tdf120527.jpg");
+    xBitmaps->insertByName("test", uno::makeAny(aGraphicURL));
+
+    // Create a graphic.
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapeProperySet.is());
+    xShapeProperySet->setPropertyValue("GraphicURL", xBitmaps->getByName("test"));
+
+    // Insert it.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xDocShRef->GetModel(),
+                                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    CPPUNIT_ASSERT(xDrawPages.is());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDrawPage.is());
+    // This failed with a lang.IllegalArgumentException.
+    xDrawPage->add(xShape);
+
+    // Verify that the graphic was actually consumed.
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShapeProperySet->getPropertyValue("Graphic") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
 }
 
 /// Draw miscellaneous tests.
