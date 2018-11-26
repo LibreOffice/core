@@ -509,15 +509,12 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
                                        aOrigFillRect.Right(), aOrigFillRect.Bottom() ) );
         }
 
-        if ( !(nStyle & DrawButtonFlags::NoFill) )
-        {
-            // Hack: in monochrome mode on printers we like to have grey buttons
-            if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
-                pDev->SetFillColor( COL_LIGHTGRAY );
-            else
-                pDev->SetFillColor( COL_WHITE );
-            pDev->DrawRect( aFillRect );
-        }
+        // Hack: in monochrome mode on printers we like to have grey buttons
+        if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
+            pDev->SetFillColor( COL_LIGHTGRAY );
+        else
+            pDev->SetFillColor( COL_WHITE );
+        pDev->DrawRect( aFillRect );
     }
     else
     {
@@ -574,15 +571,12 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
             ImplDraw2ColorFrame( pDev, aFillRect, aColor1, aColor2 );
         }
 
-        if ( !(nStyle & DrawButtonFlags::NoFill) )
-        {
-            pDev->SetLineColor();
-            if ( nStyle & (DrawButtonFlags::Checked | DrawButtonFlags::DontKnow) )
-                pDev->SetFillColor( rStyleSettings.GetCheckedColor() );
-            else
-                pDev->SetFillColor( rStyleSettings.GetFaceColor() );
-            pDev->DrawRect( aFillRect );
-        }
+        pDev->SetLineColor();
+        if ( nStyle & (DrawButtonFlags::Checked | DrawButtonFlags::DontKnow) )
+            pDev->SetFillColor( rStyleSettings.GetCheckedColor() );
+        else
+            pDev->SetFillColor( rStyleSettings.GetFaceColor() );
+        pDev->DrawRect( aFillRect );
     }
 }
 

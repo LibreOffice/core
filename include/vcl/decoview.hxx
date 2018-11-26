@@ -85,8 +85,7 @@ enum class DrawButtonFlags
     Checked                 = 0x0008,
     DontKnow                = 0x0010,
     Mono                    = 0x0020,
-    NoFill                  = 0x0040,
-    Disabled                = 0x0080,
+    Disabled                = 0x0040,
     Highlight               = 0x0100,
     Flat                    = 0x0200,
     NoLeftLightBorder       = 0x1000,
@@ -95,7 +94,7 @@ enum class DrawButtonFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DrawButtonFlags> : is_typed_flags<DrawButtonFlags, 0x73ff> {};
+    template<> struct typed_flags<DrawButtonFlags> : is_typed_flags<DrawButtonFlags, 0x737f> {};
 }
 
 class VCL_DLLPUBLIC DecorationView

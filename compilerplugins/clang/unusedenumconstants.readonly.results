@@ -594,8 +594,6 @@ include/vcl/bitmap.hxx:65
     enum BmpDitherFlags Matrix
 include/vcl/bitmap.hxx:67
     enum BmpDitherFlags Floyd16
-include/vcl/decoview.hxx:87
-    enum DrawButtonFlags NoFill
 include/vcl/errinf.hxx:84
     enum DialogMask ButtonsYesNo
 include/vcl/errinf.hxx:87

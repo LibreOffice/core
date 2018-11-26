@@ -319,19 +319,6 @@ void SvxEditDictionaryDialog::dispose()
 }
 
 
-/*
-void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
-{
-    ModalDialog::Paint(rRect );
-
-    //Rectangle aRect(aEditDictsBox.GetPosPixel(),aEditDictsBox.GetSizePixel());
-
-    sal_uInt16 nStyle=DrawButtonFlags::NoFill;
-//    aDecoView.DrawButton( aRect, nStyle);
-}
-*/
-
-
 void SvxEditDictionaryDialog::SetDicReadonly_Impl(
             Reference< XDictionary > const &xDic )
 {
