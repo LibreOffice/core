@@ -44,7 +44,6 @@ struct SfxViewShell_Impl
     SfxShellArr_Impl aArr;
     Size aMargin;
     bool const m_bHasPrintOptions;
-    bool const m_bIsShowView;
     sal_uInt16 m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
     std::unique_ptr< ::svt::AcceleratorExecute > m_xAccExec;
