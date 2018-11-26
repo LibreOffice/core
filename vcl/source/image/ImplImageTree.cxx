@@ -69,6 +69,8 @@ sal_Int32 ImageRequestParameters::scalePercentage()
     sal_Int32 aScalePercentage = 100;
     if (!(meFlags & ImageLoadFlags::IgnoreScalingFactor))
         aScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
+    else if (mnScalePercentage > 0)
+        aScalePercentage = mnScalePercentage;
     return aScalePercentage;
 }
 
@@ -96,17 +98,17 @@ OUString createPath(OUString const & name, sal_Int32 pos, OUString const & local
     return name.copy(0, pos + 1) + locale + name.copy(pos);
 }
 
-OUString getIconCacheUrl(OUString const & sStyle, OUString const & sVariant, OUString const & sName)
+OUString getIconCacheUrl(OUString const & sVariant, ImageRequestParameters const & rParameters)
 {
     OUString sUrl("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
-    sUrl += sStyle + "/" + sVariant + "/" + sName;
+    sUrl += rParameters.msStyle + "/" + sVariant + "/" + rParameters.msName;
     rtl::Bootstrap::expandMacros(sUrl);
     return sUrl;
 }
 
-OUString createIconCacheUrl(OUString const & sStyle, OUString const & sVariant, OUString const & sName)
+OUString createIconCacheUrl(OUString const & sVariant, ImageRequestParameters const & rParameters)
 {
-    OUString sUrl(getIconCacheUrl(sStyle, sVariant, sName));
+    OUString sUrl(getIconCacheUrl(sVariant, rParameters));
     OUString sDir = sUrl.copy(0, sUrl.lastIndexOf('/'));
     osl::Directory::createPath(sDir);
     return sUrl;
@@ -315,14 +317,15 @@ OUString ImplImageTree::fallbackStyle(const OUString& rsStyle)
     return sResult;
 }
 
-bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, BitmapEx & rBitmap, bool localized, const ImageLoadFlags eFlags)
+bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, BitmapEx & rBitmap, bool localized,
+                              const ImageLoadFlags eFlags, sal_Int32 nScalePercentage)
 {
     OUString aCurrentStyle(rStyle);
     while (!aCurrentStyle.isEmpty())
     {
         try
         {
-            ImageRequestParameters aParameters(rName, aCurrentStyle, rBitmap, localized, eFlags);
+            ImageRequestParameters aParameters(rName, aCurrentStyle, rBitmap, localized, eFlags, nScalePercentage);
             if (doLoadImage(aParameters))
                 return true;
         }
@@ -349,7 +352,7 @@ static OUString createVariant(ImageRequestParameters& rParameters)
 
 static bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rParameters)
 {
-    OUString sUrl(getIconCacheUrl(rParameters.msStyle, sVariant, rParameters.msName));
+    OUString sUrl(getIconCacheUrl(sVariant, rParameters));
     if (!urlExists(sUrl))
         return false;
     SvFileStream aFileStream(sUrl, StreamMode::READ);
@@ -361,7 +364,7 @@ static bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParamet
 
 static void cacheBitmapToDisk(OUString const & sVariant, ImageRequestParameters const & rParameters)
 {
-    OUString sUrl(createIconCacheUrl(rParameters.msStyle, sVariant, rParameters.msName));
+    OUString sUrl(createIconCacheUrl(sVariant, rParameters));
     vcl::PNGWriter aWriter(rParameters.mrBitmap);
     try
     {
@@ -382,9 +385,7 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
 
     OUString aVariant = createVariant(rParameters);
     if (loadDiskCachedVersion(aVariant, rParameters))
-    {
         return true;
-    }
 
     if (!rParameters.mrBitmap.IsEmpty())
         rParameters.mrBitmap.SetEmpty();
@@ -414,7 +415,7 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
         {
             cacheBitmapToDisk(aVariant, rParameters);
         }
-        getCurrentIconSet().maIconCache[rParameters.msName] = std::make_pair(rParameters.mbLocalized, rParameters.mrBitmap);
+        getIconCache(rParameters)[rParameters.msName] = std::make_pair(rParameters.mbLocalized, rParameters.mrBitmap);
     }
 
     return bFound;
@@ -482,9 +483,20 @@ void ImplImageTree::createStyle()
     loadImageLinks();
 }
 
+/// Find an icon cache for the right scale factor
+ImplImageTree::IconCache &ImplImageTree::getIconCache(ImageRequestParameters& rParameters)
+{
+    IconSet &rSet = getCurrentIconSet();
+    auto it = rSet.maScaledIconCaches.find(rParameters.mnScalePercentage);
+    if ( it != rSet.maScaledIconCaches.end() )
+        return *it->second.get();
+    rSet.maScaledIconCaches[rParameters.mnScalePercentage] = std::unique_ptr<IconCache>(new IconCache);
+    return *rSet.maScaledIconCaches[rParameters.mnScalePercentage].get();
+}
+
 bool ImplImageTree::iconCacheLookup(ImageRequestParameters& rParameters)
 {
-    IconCache& rIconCache = getCurrentIconSet().maIconCache;
+    IconCache& rIconCache = getIconCache(rParameters);
 
     IconCache::iterator i(rIconCache.find(getRealImageName(rParameters.msName)));
     if (i != rIconCache.end() && i->second.first == rParameters.mbLocalized)
@@ -513,6 +525,7 @@ bool ImplImageTree::findImage(std::vector<OUString> const & rPaths, ImageRequest
             (void)ok; // prevent unused warning in release build
 
             loadImageFromStream(wrapStream(aStream), rPath, rParameters);
+
             return true;
         }
     }
