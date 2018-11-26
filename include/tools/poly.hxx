@@ -31,15 +31,13 @@
 
 enum class PolyOptimizeFlags {
     NONE      = 0x0000,
-    OPEN      = 0x0001,
-    CLOSE     = 0x0002,
-    NO_SAME   = 0x0004,
-    REDUCE    = 0x0008,
-    EDGES     = 0x0010,
+    CLOSE     = 0x0001,
+    NO_SAME   = 0x0002,
+    EDGES     = 0x0004,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<PolyOptimizeFlags> : is_typed_flags<PolyOptimizeFlags, 0x001f> {};
+    template<> struct typed_flags<PolyOptimizeFlags> : is_typed_flags<PolyOptimizeFlags, 0x0007> {};
 }
 
 enum class PolyStyle
