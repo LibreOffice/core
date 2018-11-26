@@ -1294,19 +1294,15 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
     //check if the folder exist at all. The shared extension folder
     //may not exist for a normal user.
-    bool bOk=true;
     try
     {
-        bOk = create_ucb_content(
-                nullptr, m_activePackages_expanded, Reference<css::ucb::XCommandEnvironment>(), false);
+        create_ucb_content(nullptr, m_activePackages_expanded,
+                           Reference<css::ucb::XCommandEnvironment>(), false);
     }
     catch (const css::ucb::ContentCreationException&)
     {
-        bOk = false;
-    }
-
-    if (!bOk)
         return bModified;
+    }
 
     ::ucbhelper::Content tempFolder( m_activePackages_expanded, xCmdEnv, m_xComponentContext );
     Reference<sdbc::XResultSet> xResultSet(
