@@ -556,10 +556,6 @@ include/svx/xoutbmp.hxx:36
     enum XOutFlags ContourVert
 include/tools/inetmsg.hxx:70
     enum InetMessageMime NUMHDR
-include/tools/poly.hxx:34
-    enum PolyOptimizeFlags OPEN
-include/tools/poly.hxx:37
-    enum PolyOptimizeFlags REDUCE
 include/unotools/fontcfg.hxx:51
     enum ImplFontAttrs Default
 include/unotools/fontcfg.hxx:52

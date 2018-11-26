@@ -1033,11 +1033,10 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
             Optimize( PolyOptimizeFlags::NO_SAME );
             ImplReduceEdges( *this, fArea, nPercent );
         }
-        else if( nOptimizeFlags & ( PolyOptimizeFlags::REDUCE | PolyOptimizeFlags::NO_SAME ) )
+        else if( nOptimizeFlags & PolyOptimizeFlags::NO_SAME )
         {
             tools::Polygon aNewPoly;
             const Point& rFirst = mpImplPolygon->mxPointAry[ 0 ];
-            const int nReduce = ( nOptimizeFlags & PolyOptimizeFlags::REDUCE ) ? 4 : 0;
 
             while( nSize && ( mpImplPolygon->mxPointAry[ nSize - 1 ] == rFirst ) )
                 nSize--;
@@ -1051,8 +1050,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 
                 for( sal_uInt16 i = 1; i < nSize; i++ )
                 {
-                    if( ( mpImplPolygon->mxPointAry[ i ] != mpImplPolygon->mxPointAry[ nLast ] ) &&
-                        ( !nReduce || ( nReduce < FRound( CalcDistance( nLast, i ) ) ) ) )
+                    if( mpImplPolygon->mxPointAry[ i ] != mpImplPolygon->mxPointAry[ nLast ])
                     {
                         nLast = i;
                         aNewPoly[ nNewCount++ ] = mpImplPolygon->mxPointAry[ i ];
@@ -1077,16 +1075,6 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
             {
                 SetSize( mpImplPolygon->mnPoints + 1 );
                 mpImplPolygon->mxPointAry[ mpImplPolygon->mnPoints - 1 ] = mpImplPolygon->mxPointAry[ 0 ];
-            }
-            else if( ( nOptimizeFlags & PolyOptimizeFlags::OPEN ) &&
-                     ( mpImplPolygon->mxPointAry[ 0 ] == mpImplPolygon->mxPointAry[ nSize - 1 ] ) )
-            {
-                const Point& rFirst = mpImplPolygon->mxPointAry[ 0 ];
-
-                while( nSize && ( mpImplPolygon->mxPointAry[ nSize - 1 ] == rFirst ) )
-                    nSize--;
-
-                SetSize( nSize );
             }
         }
     }
