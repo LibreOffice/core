@@ -480,12 +480,6 @@ include/svtools/headbar.hxx:189
     enum HeaderBarItemBits BOTTOM
 include/svtools/headbar.hxx:191
     enum HeaderBarItemBits RIGHTIMAGE
-include/svtools/ivctrl.hxx:43
-    enum SvxIconViewFlags CURSORED
-include/svtools/ivctrl.hxx:45
-    enum SvxIconViewFlags DROP_TARGET
-include/svtools/ivctrl.hxx:46
-    enum SvxIconViewFlags BLOCK_EMPHASIS
 include/svtools/table/tablemodel.hxx:48
     enum ColumnAttributeGroup ALL
 include/svx/EnhancedCustomShapeGeometry.hxx:46

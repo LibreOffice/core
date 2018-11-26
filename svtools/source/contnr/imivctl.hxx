@@ -382,8 +382,8 @@ public:
                         }
     static bool         IsBoundingRectValid( const tools::Rectangle& rRect ) { return ( rRect.Right() != LONG_MAX ); }
 
-    void                PaintEmphasis(const tools::Rectangle& rRect1, bool bSelected,
-                                      bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext );
+    static void         PaintEmphasis(const tools::Rectangle& rRect1, bool bSelected,
+                                      vcl::RenderContext& rRenderContext );
 
     void                PaintItem(const tools::Rectangle& rRect, IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry,
                             sal_uInt16 nPaintFlags, vcl::RenderContext& rRenderContext);
