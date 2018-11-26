@@ -962,16 +962,11 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
 
             case SID_DOCINFO:
-                if ( pImpl->eFlags & SfxObjectShellFlags::NODOCINFO )
-                    rSet.DisableItem( nWhich );
                 break;
 
             case SID_CLOSEDOC:
             {
-                if ( GetFlags() & SfxObjectShellFlags::DONTCLOSE )
-                    rSet.DisableItem(nWhich);
-                else
-                    rSet.Put(SfxStringItem(nWhich, SfxResId(STR_CLOSEDOC)));
+                rSet.Put(SfxStringItem(nWhich, SfxResId(STR_CLOSEDOC)));
                 break;
             }
 
