@@ -72,8 +72,6 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs const &rArgs)
         TEST(DisableKerning);
         TEST(KerningAsian);
         TEST(Vertical);
-        TEST(EnableLigatures);
-        TEST(SubstituteDigits);
         TEST(KashidaJustification);
         TEST(ForFallback);
 #undef TEST
