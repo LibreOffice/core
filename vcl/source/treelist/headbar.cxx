@@ -1028,18 +1028,6 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
                 return;
             }
         }
-        else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )
-        {
-            OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
-            if ( !aHelpId.isEmpty() )
-            {
-                // display it if help is available
-                Help* pHelp = Application::GetHelp();
-                if ( pHelp )
-                    pHelp->Start( aHelpId, this );
-                return;
-            }
-        }
     }
 
     Window::RequestHelp( rHEvt );

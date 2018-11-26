@@ -86,7 +86,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu const * pMen
         ImplChangeTipTimeout( oldTimeout, pMenuWindow );
         bDone = true;
     }
-    else if ( rHEvt.GetMode() & (HelpEventMode::CONTEXT | HelpEventMode::EXTENDED) )
+    else if ( rHEvt.GetMode() & HelpEventMode::CONTEXT )
     {
         // is help in the application selected
         Help* pHelp = Application::GetHelp();

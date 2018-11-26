@@ -1391,18 +1391,6 @@ void TabBar::RequestHelp(const HelpEvent& rHEvt)
                 return;
             }
         }
-        else if (rHEvt.GetMode() & HelpEventMode::EXTENDED)
-        {
-            OUString aHelpId(OStringToOUString(GetHelpId(nItemId), RTL_TEXTENCODING_UTF8));
-            if ( !aHelpId.isEmpty() )
-            {
-                // trigger Help if available
-                Help* pHelp = Application::GetHelp();
-                if (pHelp)
-                    pHelp->Start(aHelpId, this);
-                return;
-            }
-        }
 
         // show text for quick- or balloon-help
         // if this is isolated or not fully visible

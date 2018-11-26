@@ -604,8 +604,6 @@ include/vcl/errinf.hxx:88
     enum DialogMask ButtonDefaultsYes
 include/vcl/errinf.hxx:89
     enum DialogMask ButtonDefaultsNo
-include/vcl/event.hxx:181
-    enum HelpEventMode EXTENDED
 include/vcl/fontcapabilities.hxx:30
     enum vcl::UnicodeCoverage::UnicodeCoverageEnum IPA_EXTENSIONS
 include/vcl/fontcapabilities.hxx:31

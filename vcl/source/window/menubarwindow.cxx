@@ -1017,7 +1017,7 @@ sal_uInt16 MenuBarWindow::ImplFindEntry( const Point& rMousePos ) const
 void MenuBarWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     sal_uInt16 nId = nHighlightedItem;
-    if ( rHEvt.GetMode() & (HelpEventMode::CONTEXT | HelpEventMode::EXTENDED) )
+    if ( rHEvt.GetMode() & HelpEventMode::CONTEXT )
         ChangeHighlightItem( ITEMPOS_INVALID, true );
 
     tools::Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );

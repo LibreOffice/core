@@ -3864,25 +3864,6 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                 Help::ShowQuickHelp( this, aTempRect, aStr, rHelpStr, QuickHelpFlags::CtrlText );
             return;
         }
-        else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )
-        {
-            OUString aCommand = GetItemCommand( nItemId );
-            OString  aHelpId( GetHelpId( nItemId ) );
-
-            if ( !aCommand.isEmpty() || !aHelpId.isEmpty() )
-            {
-                // If help is available then trigger it
-                Help* pHelp = Application::GetHelp();
-                if ( pHelp )
-                {
-                    if ( !aCommand.isEmpty() )
-                        pHelp->Start( aCommand, this );
-                    else if ( !aHelpId.isEmpty() )
-                        pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
-                }
-                return;
-            }
-        }
     }
 
     DockingWindow::RequestHelp( rHEvt );

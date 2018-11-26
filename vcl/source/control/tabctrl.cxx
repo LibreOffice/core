@@ -1365,18 +1365,6 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
                 return;
             }
         }
-        else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )
-        {
-            OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
-            if ( !aHelpId.isEmpty() )
-            {
-                // call Help if existing
-                Help* pHelp = Application::GetHelp();
-                if ( pHelp )
-                    pHelp->Start( aHelpId, this );
-                return;
-            }
-        }
 
         // for Quick or Ballon Help, we show the text, if it is cut
         if ( rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON) )
