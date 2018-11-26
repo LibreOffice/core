@@ -645,10 +645,7 @@ void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
     if ( aOutArea.Bottom() < aOutArea.Top() )
         aOutArea.SetBottom( aOutArea.Top() );
 
-    if ( DoBigScroll() )
-        SetScrollDiffX( static_cast<sal_uInt16>(aOutArea.GetWidth()) * 3 / 10 );
-    else
-        SetScrollDiffX( static_cast<sal_uInt16>(aOutArea.GetWidth()) * 2 / 10 );
+    SetScrollDiffX( static_cast<sal_uInt16>(aOutArea.GetWidth()) * 2 / 10 );
 }
 
 void ImpEditView::InvalidateAtWindow(const tools::Rectangle& rRect)
@@ -994,31 +991,6 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         {
             long nDiffX = !IsVertical() ? nDocDiffX : (IsTopToBottom() ? -nDocDiffY : nDocDiffY);
             long nDiffY = !IsVertical() ? nDocDiffY : (IsTopToBottom() ? nDocDiffX : -nDocDiffX);
-
-            // Negative: Back to the top or left edge
-            if ( ( std::abs( nDiffY ) > pEditEngine->GetOnePixelInRef() ) && DoBigScroll() )
-            {
-                long nH = aOutArea.GetHeight() / 4;
-                if ( ( nH > aEditCursor.GetHeight() ) && ( std::abs( nDiffY ) < nH ) )
-                {
-                    if ( nDiffY < 0 )
-                        nDiffY -= nH;
-                    else
-                        nDiffY += nH;
-                }
-            }
-
-            if ( ( std::abs( nDiffX ) > pEditEngine->GetOnePixelInRef() ) && DoBigScroll() )
-            {
-                long nW = aOutArea.GetWidth() / 4;
-                if ( std::abs( nDiffX ) < nW )
-                {
-                    if ( nDiffY < 0 )
-                        nDiffY -= nW;
-                    else
-                        nDiffY += nW;
-                }
-            }
 
             if ( nDiffX )
                 pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EditStatusFlags::HSCROLL;
