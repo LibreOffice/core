@@ -47,12 +47,13 @@ public:
     virtual void listeningFinished( const OUString & rNewRange ) override;
     virtual void disposingRangeSelection() override;
 
+    virtual void ActivatePage() override;
+
     void commitPage();
 
 private:
 
     //OWizardPage
-    virtual void ActivatePage() override;
     virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
@@ -78,6 +79,7 @@ private:
 
     DialogModel &                                           m_rDialogModel;
     VclPtr<Dialog>                                          m_pParentDialog;
+    weld::DialogController*                                 m_pParentController;
     TabPageNotifiable *                                     m_pTabPageNotifiable;
 
     std::unique_ptr<weld::Label> m_xFT_Caption;
