@@ -117,6 +117,7 @@ public:
     void testTdf114179();
     void testDeletedDataLabel();
     void testDataPointInheritedColorDOCX();
+    void testExternalStrRefsXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -188,6 +189,7 @@ public:
     CPPUNIT_TEST(testTdf114179);
     CPPUNIT_TEST(testDeletedDataLabel);
     CPPUNIT_TEST(testDataPointInheritedColorDOCX);
+    CPPUNIT_TEST(testExternalStrRefsXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1683,6 +1685,19 @@ void Chart2ImportTest::testDataPointInheritedColorDOCX()
     CPPUNIT_ASSERT(xPropertySet.is());
     sal_Int32 nColor = xPropertySet->getPropertyValue("FillColor").get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16776960), nColor);
+}
+
+void Chart2ImportTest::testExternalStrRefsXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "external_str_ref.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    css::uno::Sequence<css::uno::Any> aValues = aScaleData.Categories->getValues()->getData();
+    CPPUNIT_ASSERT_EQUAL(OUString("test1"), aValues[0].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("test2"), aValues[1].get<OUString>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
