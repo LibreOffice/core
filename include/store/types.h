@@ -62,7 +62,6 @@ extern "C" {
 enum class storeAccessMode
 {
     Create,
-    ReadCreate,
     ReadWrite,
     ReadOnly,
     FORCE_EQUAL_SIZE = SAL_MAX_ENUM
