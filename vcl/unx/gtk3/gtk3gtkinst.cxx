@@ -4587,6 +4587,7 @@ public:
 
     virtual int get_selected_index() const override
     {
+        assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
         int nRet = -1;
         GtkTreeIter iter;
         GtkTreeModel* pModel;
