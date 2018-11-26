@@ -41,13 +41,6 @@ namespace o3tl
     template<> struct typed_flags<GraphicManagerDrawFlags> : is_typed_flags<GraphicManagerDrawFlags, 0x07> {};
 }
 
-// AutoSwap defines
-
-#define GRFMGR_AUTOSWAPSTREAM_LINK nullptr
-#define GRFMGR_AUTOSWAPSTREAM_LOADED reinterpret_cast<SvStream*>(sal_IntPtr(-3))
-#define GRFMGR_AUTOSWAPSTREAM_TEMP   reinterpret_cast<SvStream*>(sal_IntPtr(-2))
-#define GRFMGR_AUTOSWAPSTREAM_NONE   reinterpret_cast<SvStream*>(sal_IntPtr(-1))
-
 // Adjustment defines
 enum class GraphicAdjustmentFlags
 {
