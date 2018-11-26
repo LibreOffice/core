@@ -73,8 +73,6 @@ enum class GraphicsStateUpdateFlags {
     MapMode               = 0x0002,
     LineColor             = 0x0004,
     FillColor             = 0x0008,
-    TextLineColor         = 0x0010,
-    OverlineColor         = 0x0020,
     ClipRegion            = 0x0040,
     LayoutMode            = 0x0100,
     TransparentPercent    = 0x0200,
@@ -1080,25 +1078,21 @@ public:
     void setTextLineColor()
     {
         m_aGraphicsStack.front().m_aTextLineColor = COL_TRANSPARENT;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::TextLineColor;
     }
 
     void setTextLineColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aTextLineColor = rColor;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::TextLineColor;
     }
 
     void setOverlineColor()
     {
         m_aGraphicsStack.front().m_aOverlineColor = COL_TRANSPARENT;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::OverlineColor;
     }
 
     void setOverlineColor( const Color& rColor )
     {
         m_aGraphicsStack.front().m_aOverlineColor = rColor;
-        m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::OverlineColor;
     }
 
     void setTextFillColor( const Color& rColor )
