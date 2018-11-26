@@ -306,8 +306,6 @@ include/editeng/editeng.hxx:126
     enum GetAttribsFlags STYLESHEET
 include/editeng/editeng.hxx:127
     enum GetAttribsFlags PARAATTRIBS
-include/editeng/editstat.hxx:32
-    enum EEControlBits CRSRLEFTPARA
 include/editeng/editstat.hxx:49
     enum EEControlBits AUTOCOMPLETE
 include/editeng/flditem.hxx:94

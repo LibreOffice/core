@@ -902,11 +902,6 @@ EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, Edit
     if ( aOldPaM != aPaM )
     {
         CursorMoved( aOldPaM.GetNode() );
-        if ( aStatus.NotifyCursorMovements() && ( aOldPaM.GetNode() != aPaM.GetNode() ) )
-        {
-            aStatus.GetStatusWord() = aStatus.GetStatusWord() | EditStatusFlags::CRSRLEFTPARA;
-            aStatus.GetPrevParagraph() = aEditDoc.GetPos( aOldPaM.GetNode() );
-        }
     }
     else
         aStatus.GetStatusWord() = aStatus.GetStatusWord() | EditStatusFlags::CRSRMOVEFAIL;

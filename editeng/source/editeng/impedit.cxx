@@ -1302,14 +1302,6 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * p
 
 bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
-    if ( pEditEngine->GetInternalEditStatus().NotifyCursorMovements() )
-    {
-        if ( pEditEngine->GetInternalEditStatus().GetPrevParagraph() != pEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() ) )
-        {
-            pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EditStatusFlags::CRSRLEFTPARA;
-            pEditEngine->pImpEditEngine->CallStatusHdl();
-        }
-    }
     nTravelXPos = TRAVEL_X_DONTKNOW;
     nCursorBidiLevel = CURSOR_BIDILEVEL_DONTKNOW;
     nExtraCursorFlags = GetCursorFlags::NONE;
@@ -1338,8 +1330,6 @@ void ImpEditView::ReleaseMouse()
 bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     pEditEngine->CheckIdleFormatter();  // If fast typing and mouse button downs
-    if ( pEditEngine->GetInternalEditStatus().NotifyCursorMovements() )
-        pEditEngine->GetInternalEditStatus().GetPrevParagraph() = pEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() );
     nTravelXPos         = TRAVEL_X_DONTKNOW;
     nExtraCursorFlags   = GetCursorFlags::NONE;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
