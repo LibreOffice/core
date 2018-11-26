@@ -43,7 +43,6 @@ protected:
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap,
-                    SvXmlExportFlags nFlags,
                     std::vector<sal_uInt16> *pIndexArray ) const;
 
     void exportXML( const SvXMLExport& rExport,
@@ -61,8 +60,7 @@ protected:
                               const std::vector<sal_uInt16> &rIndexArray ) const;
 
     static const SfxPoolItem* GetItem( const SfxItemSet &rSet,
-                                       sal_uInt16 nWhichId,
-                                       SvXmlExportFlags nFlags );
+                                       sal_uInt16 nWhichId );
 
 public:
     explicit SvXMLExportItemMapper( SvXMLItemMapEntriesRef rMapEntries );

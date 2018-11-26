@@ -1102,12 +1102,6 @@ include/xmloff/shapeexport.hxx:53
     enum XMLShapeExportFlags WIDTH
 include/xmloff/shapeexport.hxx:54
     enum XMLShapeExportFlags HEIGHT
-include/xmloff/xmlexppr.hxx:35
-    enum SvXmlExportFlags DEFAULTS
-include/xmloff/xmlexppr.hxx:36
-    enum SvXmlExportFlags DEEP
-include/xmloff/xmlexppr.hxx:38
-    enum SvXmlExportFlags EMPTY
 include/xmloff/xmlimp.hxx:108
     enum SvXMLImportFlags EMBEDDED
 o3tl/qa/test-enumarray.cxx:30

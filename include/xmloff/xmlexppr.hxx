@@ -32,16 +32,11 @@
 
 enum class SvXmlExportFlags {
     NONE        = 0x0000,
-    DEFAULTS    = 0x0001,  // export also default items
-    DEEP        = 0x0002,  // export also items from
-                           // parent item sets
-    EMPTY       = 0x0004,  // export attribs element
-                           // even if its empty
     IGN_WS      = 0x0008
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvXmlExportFlags> : is_typed_flags<SvXmlExportFlags, 0xf> {};
+    template<> struct typed_flags<SvXmlExportFlags> : is_typed_flags<SvXmlExportFlags, 0x08> {};
 }
 
 class SvXMLUnitConverter;
