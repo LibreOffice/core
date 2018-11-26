@@ -2408,7 +2408,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
     if( rSeries.isAttributedDataPoint( nPointIndex ) )
         xPointSet.set( rSeries.getPropertiesOfPoint( nPointIndex ));
 
-    // if a data point has no own color use a color fom the diagram's color scheme
+    // if a data point has no own color use a color from the diagram's color scheme
     if( ! rSeries.hasPointOwnColor( nPointIndex ))
     {
         Reference< util::XCloneable > xCloneable( xPointSet,uno::UNO_QUERY );
