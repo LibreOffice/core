@@ -124,9 +124,18 @@ void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
     if( pDialog )
     {
-        pDialog->Show( !bEnable );
         pDialog->SetModalInputMode( !bEnable );
+        pDialog->Show( !bEnable );
     }
+}
+
+void lcl_enableRangeChoosing(bool bEnable, weld::DialogController* pDialog)
+{
+    if (!pDialog)
+        return;
+    weld::Dialog* pDlg = pDialog->getDialog();
+    pDlg->set_modal(!bEnable);
+    pDlg->show(!bEnable);
 }
 
 void lcl_addLSequenceToDataSource(
@@ -178,7 +187,9 @@ DataSourceTabPage::DataSourceTabPage(TabPageParent pParent, DialogModel & rDialo
     , m_pCurrentRangeChoosingField( nullptr )
     , m_bIsDirty( false )
     , m_pParentDialog( pParentDialog )
-    , m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
+    , m_pParentController(pParent.pController)
+    , m_pTabPageNotifiable(pParentDialog ? dynamic_cast<TabPageNotifiable*>(pParentDialog)
+                                         : dynamic_cast<TabPageNotifiable*>(m_pParentController))
     , m_xFT_CAPTION(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
     , m_xFT_SERIES(m_xBuilder->weld_label("FT_SERIES"))
     , m_xLB_SERIES(m_xBuilder->weld_tree_view("LB_SERIES"))
@@ -232,7 +243,6 @@ DataSourceTabPage::DataSourceTabPage(TabPageParent pParent, DialogModel & rDialo
     // select first series
     if (m_xLB_SERIES->n_children())
         m_xLB_SERIES->select(0);
-    m_xLB_SERIES->grab_focus();
 }
 
 void DataSourceTabPage::InsertRoleLBEntry(const OUString& rRole, const OUString& rRange)
@@ -260,6 +270,7 @@ void DataSourceTabPage::ActivatePage()
 {
     OWizardPage::ActivatePage();
     updateControlsFromDialogModel();
+    m_xLB_SERIES->grab_focus();
 }
 
 void DataSourceTabPage::initializePage()
@@ -340,8 +351,6 @@ void DataSourceTabPage::updateControlsFromDialogModel()
 
 void DataSourceTabPage::fillSeriesListBox()
 {
-    m_xLB_SERIES->freeze();
-
     Reference< XDataSeries > xSelected;
     SeriesEntry* pEntry = nullptr;
     int nEntry = m_xLB_SERIES->get_selected_index();
@@ -353,6 +362,8 @@ void DataSourceTabPage::fillSeriesListBox()
 
     bool bHasSelectedEntry = (pEntry != nullptr);
     int nSelectedEntry = -1;
+
+    m_xLB_SERIES->freeze();
     m_xLB_SERIES->clear();
 
     std::vector< DialogModel::tSeriesWithChartTypeByName > aSeries(
@@ -464,14 +475,14 @@ void DataSourceTabPage::updateControlState()
 
     m_xIMB_RANGE_CAT->show(bShowIB);
 
-    m_xFT_SERIES->set_sensitive(true);
-    m_xLB_SERIES->set_sensitive(true);
-
     m_xFT_ROLE->set_sensitive(bHasSelectedSeries);
     m_xLB_ROLE->set_sensitive(bHasSelectedSeries);
 
     m_xFT_RANGE->set_sensitive(bHasValidRole);
     m_xEDT_RANGE->set_sensitive(bHasValidRole);
+
+    m_xFT_SERIES->set_sensitive(true);
+    m_xLB_SERIES->set_sensitive(true);
 
     m_xIMB_RANGE_MAIN->show(bShowIB);
 
@@ -548,6 +559,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, weld::Button&, voi
         }
 
         lcl_enableRangeChoosing( true, m_pParentDialog );
+        lcl_enableRangeChoosing( true, m_pParentController );
         m_rDialogModel.getRangeSelectionHelper()->chooseRange( aSelectedRolesRange, aUIStr, *this );
     }
     else
@@ -564,6 +576,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl, weld::Button
 
     OUString aStr(SchResId(m_xFT_CATEGORIES->get_visible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS));
     lcl_enableRangeChoosing(true, m_pParentDialog);
+    lcl_enableRangeChoosing(true, m_pParentController);
     m_rDialogModel.getRangeSelectionHelper()->chooseRange(
         m_rDialogModel.getCategoriesRange(), aStr, *this );
 }
@@ -744,6 +757,7 @@ void DataSourceTabPage::listeningFinished(
 
     updateControlState();
     lcl_enableRangeChoosing(false, m_pParentDialog);
+    lcl_enableRangeChoosing(false, m_pParentController);
 }
 
 void DataSourceTabPage::disposingRangeSelection()

@@ -2028,6 +2028,7 @@ public:
 
     virtual int get_selected_index() const override
     {
+        assert(m_xTreeView->IsUpdateMode() && "don't request selection when frozen");
         SvTreeListEntry* pEntry = m_xTreeView->FirstSelected();
         if (!pEntry)
             return -1;
