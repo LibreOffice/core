@@ -35,9 +35,6 @@ public:
     bool    UseCharAttribs() const
                 { return bool( nControlBits & EEControlBits::USECHARATTRIBS ); }
 
-    bool    NotifyCursorMovements() const
-                { return bool( nControlBits & EEControlBits::CRSRLEFTPARA ); }
-
     bool    UseIdleFormatter() const
                 { return bool( nControlBits & EEControlBits::DOIDLEFORMAT); }
 

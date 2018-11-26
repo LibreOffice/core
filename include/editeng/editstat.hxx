@@ -29,7 +29,6 @@ enum class EEControlBits
 {
     NONE               = 0x00000000,
     USECHARATTRIBS     = 0x00000001,  // Use of hard character attributes
-    CRSRLEFTPARA       = 0x00000004,  // Cursor is moved to another paragraph
     DOIDLEFORMAT       = 0x00000008,  // Formatting idle
     PASTESPECIAL       = 0x00000010,  // Allow PasteSpecial
     AUTOINDENTING      = 0x00000020,  // Automatic indenting
@@ -55,7 +54,7 @@ enum class EEControlBits
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x037efffd> {};
+    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x037efff9> {};
 }
 
 enum class EVControlBits
