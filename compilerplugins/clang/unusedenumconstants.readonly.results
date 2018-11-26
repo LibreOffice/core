@@ -900,8 +900,6 @@ include/vcl/graphictools.hxx:229
     enum SvtGraphicFill::FillType fillSolid
 include/vcl/help.hxx:42
     enum QuickHelpFlags NoAutoPos
-include/vcl/help.hxx:45
-    enum QuickHelpFlags NoDelay
 include/vcl/keycod.hxx:32
     enum KeyFuncType REDO
 include/vcl/keycod.hxx:32
