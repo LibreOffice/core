@@ -28,10 +28,25 @@
 struct ImplImage
 {
     BitmapChecksum maBitmapChecksum;
-    BitmapEx const maBitmapEx;
+    /// if non-empty: cached original size of maStockName else Size of maBitmap
+    Size     maSizePixel;
+    /// If set - defines the bitmap via images.zip*
+    OUString maStockName;
+
+    /// Original bitmap - or cache of a potentially scaled bitmap
+    BitmapEx maBitmapEx;
     BitmapEx maDisabledBitmapEx;
 
     ImplImage(const BitmapEx& rBitmapEx);
+    ImplImage(const OUString &aStockName);
+
+    bool isStock() const { return maStockName.getLength() > 0; }
+
+    /// get size in co-ordinates not scaled for HiDPI
+    Size getSizePixel();
+    BitmapEx getBitmapEx(bool bDisabled = false);
+    bool isEqual(const ImplImage &ref) const;
+    bool isSizeEmpty() const { return maSizePixel == Size(0, 0); }
 };
 
 #endif // INCLUDED_VCL_INC_IMAGE_H
