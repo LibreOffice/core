@@ -39,22 +39,18 @@ enum class SdrSearchOptions
     TESTMARKABLE = 0x0008, /* just markable objects/points/handles/... */
     TESTMACRO    = 0x0010, /* Just objects with macro */
     TESTTEXTEDIT = 0x0020, /* Just TextEdit-enabled objects */
-    WITHTEXT     = 0x0040, /* Just objects with text */
-    TESTTEXTAREA = 0x0080, /* The textarea of objects with text  (TextEditHit) */
-    BACKWARD     = 0x0100, /* Backwards search */
-    MARKED       = 0x0400, /* Just marked objects/points/... */
-    PASS2BOUND   = 0x0800, /* In case of empty search results, then 2nd. try with BoundRectHit */
-    PASS3NEAREST = 0x1000, /* In case of empty search results, then new 3rd. Try with NearestBoundRectHit */
-    BEFOREMARK   = 0x2000, /* if one marked one found, ignore all behind that */
+    MARKED       = 0x0040, /* Just marked objects/points/... */
+    PASS2BOUND   = 0x0080, /* In case of empty search results, then 2nd. try with BoundRectHit */
+    BEFOREMARK   = 0x0100, /* if one marked one found, ignore all behind that */
 
-    IMPISMASTER  = 0x8000, /* MasterPage is being searched right now */
+    IMPISMASTER  = 0x0200, /* MasterPage is being searched right now */
     PICKMARKABLE = TESTMARKABLE,
     PICKTEXTEDIT = DEEP | TESTMARKABLE | TESTTEXTEDIT,
     PICKMACRO    = DEEP | ALSOONMASTER | WHOLEPAGE | TESTMACRO,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SdrSearchOptions> : is_typed_flags<SdrSearchOptions, 0xbdff> {};
+    template<> struct typed_flags<SdrSearchOptions> : is_typed_flags<SdrSearchOptions, 0x03ff> {};
 }
 
 enum class SdrHitKind
@@ -267,13 +263,13 @@ public:
 
     // Pick: Supported options for nOptions are:
     // SdrSearchOptions::DEEP SdrSearchOptions::ALSOONMASTER SdrSearchOptions::TESTMARKABLE SdrSearchOptions::TESTTEXTEDIT
-    // SdrSearchOptions::WITHTEXT SdrSearchOptions::TESTTEXTAREA SdrSearchOptions::BACKWARD SdrSearchOptions::MARKED
+    // SdrSearchOptions::MARKED
     // SdrSearchOptions::WHOLEPAGE
     SdrObject* PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions, SdrObject** ppRootObj, bool* pbHitPassDirect=nullptr) const;
     SdrObject* PickObj(const Point& rPnt, short nTol, SdrPageView*& rpPV, SdrSearchOptions nOptions=SdrSearchOptions::NONE) const;
     bool MarkObj(const Point& rPnt, short nTol=-2, bool bToggle=false, bool bDeep=false);
 
-    // Pick: Supported options for nOptions are SdrSearchOptions::PASS2BOUND and SdrSearchOptions::PASS3NEAREST
+    // Pick: Supported options for nOptions are SdrSearchOptions::PASS2BOUND
     bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, SdrSearchOptions nOptions) const;
 
     // Selects the most upper of the marked objects (O1) and scans from there

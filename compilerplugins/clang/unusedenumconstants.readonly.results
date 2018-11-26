@@ -538,14 +538,6 @@ include/svx/svdedtv.hxx:65
     enum SdrInsertFlags NOBROADCAST
 include/svx/svdhdl.hxx:108
     enum BitmapMarkerKind RectPlus_7x7
-include/svx/svdmrkv.hxx:42
-    enum SdrSearchOptions WITHTEXT
-include/svx/svdmrkv.hxx:43
-    enum SdrSearchOptions TESTTEXTAREA
-include/svx/svdmrkv.hxx:44
-    enum SdrSearchOptions BACKWARD
-include/svx/svdmrkv.hxx:47
-    enum SdrSearchOptions PASS3NEAREST
 include/svx/svdograf.hxx:52
     enum SdrGrafObjTransformsAttrs ROTATE
 include/svx/swframeposstrings.hxx:78

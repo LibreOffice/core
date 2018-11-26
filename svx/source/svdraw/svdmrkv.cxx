@@ -1772,17 +1772,16 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     rpRootObj=nullptr;
     if (pOL!=nullptr)
     {
-        const bool bBack(nOptions & SdrSearchOptions::BACKWARD);
         const bool bRemap(
             nullptr != pOL->getSdrObjectFromSdrObjList()
             && nullptr != dynamic_cast< const E3dScene* >(pOL->getSdrObjectFromSdrObjList()));
         const E3dScene* pRemapScene(bRemap ? static_cast< E3dScene* >(pOL->getSdrObjectFromSdrObjList()) : nullptr);
         const size_t nObjCount(pOL->GetObjCount());
-        size_t nObjNum(bBack ? 0 : nObjCount);
+        size_t nObjNum(nObjCount);
 
-        while (pRet==nullptr && (bBack ? nObjNum<nObjCount : nObjNum>0))
+        while (pRet==nullptr && nObjNum>0)
         {
-            if (!bBack) nObjNum--;
+            nObjNum--;
             SdrObject* pObj;
 
             if(bRemap)
@@ -1805,7 +1804,6 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
             }
             pRet=CheckSingleSdrObjectHit(rPnt,nTol,pObj,pPV,nOptions,pMVisLay);
             if (pRet!=nullptr) rpRootObj=pObj;
-            if (bBack) nObjNum++;
         }
     }
     return pRet;
@@ -1825,7 +1823,6 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
     rpPV=nullptr;
     bool bMarked(nOptions & SdrSearchOptions::MARKED);
     bool bMasters=!bMarked && bool(nOptions & SdrSearchOptions::ALSOONMASTER);
-    bool bBack(nOptions & SdrSearchOptions::BACKWARD);
     // nOptions & SdrSearchOptions::NEXT: n.i.
     // nOptions & SdrSearchOptions::PASS2BOUND: n.i.
     // nOptions & SdrSearchOptions::PASS3NEAREST// n.i.
@@ -1833,21 +1830,20 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
     SdrObject* pObj=nullptr;
     SdrObject* pHitObj=nullptr;
     SdrPageView* pPV=nullptr;
-    if (!bBack && static_cast<const SdrObjEditView*>(this)->IsTextEditFrameHit(rPnt)) {
+    if (static_cast<const SdrObjEditView*>(this)->IsTextEditFrameHit(rPnt)) {
         pObj=static_cast<const SdrObjEditView*>(this)->GetTextEditObject();
         pHitObj=pObj;
         pPV=static_cast<const SdrObjEditView*>(this)->GetTextEditPageView();
     }
     if (bMarked) {
         const size_t nMrkCnt=GetMarkedObjectCount();
-        size_t nMrkNum=bBack ? 0 : nMrkCnt;
-        while (pHitObj==nullptr && (bBack ? nMrkNum<nMrkCnt : nMrkNum>0)) {
-            if (!bBack) nMrkNum--;
+        size_t nMrkNum=nMrkCnt;
+        while (pHitObj==nullptr && nMrkNum>0) {
+            nMrkNum--;
             SdrMark* pM=GetSdrMarkByIndex(nMrkNum);
             pObj=pM->GetMarkedSdrObj();
             pPV=pM->GetPageView();
             pHitObj=CheckSingleSdrObjectHit(rPnt,nTol,pObj,pPV,nOptions,nullptr);
-            if (bBack) nMrkNum++;
         }
     }
     else
@@ -1866,10 +1862,10 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
             bool bWholePage(nOptions & SdrSearchOptions::WHOLEPAGE);
             bool bExtraPassForWholePage=bWholePage && pPage!=pPV->GetObjList();
             if (bExtraPassForWholePage) nPgCount++; // First search in AktObjList, then on the entire page
-            sal_uInt16 nPgNum=bBack ? 0 : nPgCount;
-            while (pHitObj==nullptr && (bBack ? nPgNum<nPgCount : nPgNum>0)) {
+            sal_uInt16 nPgNum=nPgCount;
+            while (pHitObj==nullptr && nPgNum>0) {
                 SdrSearchOptions nTmpOptions=nOptions;
-                if (!bBack) nPgNum--;
+                nPgNum--;
                 const SdrLayerIDSet* pMVisLay=nullptr;
                 SdrObjList* pObjList=nullptr;
                 if (pbHitPassDirect!=nullptr) *pbHitPassDirect = true;
@@ -1892,7 +1888,6 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
                     nTmpOptions=nTmpOptions | SdrSearchOptions::IMPISMASTER;
                 }
                 pHitObj=CheckSingleSdrObjectHit(rPnt,nTol,pObjList,pPV,nTmpOptions,pMVisLay,pObj,&(GetMarkedObjectList()));
-                if (bBack) nPgNum++;
             }
         }
     }
@@ -1913,14 +1908,6 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
             aHitRec.pPageView=pPV;
             if (!pObj->HasMacro() || !pObj->IsMacroHit(aHitRec)) pObj=nullptr;
         }
-        if (pObj!=nullptr && (nOptions & SdrSearchOptions::WITHTEXT) && pObj->GetOutlinerParaObject()==nullptr) pObj=nullptr;
-        if (pObj!=nullptr && (nOptions & SdrSearchOptions::TESTTEXTAREA) && pPV)
-        {
-            if(!SdrObjectPrimitiveHit(*pObj, rPnt, 0, *pPV, nullptr, true))
-            {
-                pObj = nullptr;
-            }
-        }
         if (pObj!=nullptr) {
             pRet=pObj;
             rpPV=pPV;
@@ -1933,7 +1920,6 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
 {
     SortMarkedObjects();
     const bool bBoundCheckOn2ndPass(nOptions & SdrSearchOptions::PASS2BOUND);
-    const bool bCheckNearestOn3rdPass(nOptions & SdrSearchOptions::PASS3NEAREST);
     rpObj=nullptr;
     rpPV=nullptr;
     const size_t nMarkCount=GetMarkedObjectCount();
@@ -1948,10 +1934,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
             return true;
         }
     }
-    if (bBoundCheckOn2ndPass || bCheckNearestOn3rdPass) {
-        SdrObject* pBestObj=nullptr;
-        SdrPageView* pBestPV=nullptr;
-        sal_uIntPtr nBestDist=ULONG_MAX;
+    if (bBoundCheckOn2ndPass) {
         for (size_t nMarkNum=nMarkCount; nMarkNum>0;) {
             --nMarkNum;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
@@ -1967,23 +1950,6 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
                 rpPV=pPV;
                 return true;
             }
-            if (bCheckNearestOn3rdPass) {
-                sal_uIntPtr nDist=0;
-                if (rPnt.X()<aRect.Left())   nDist+=aRect.Left()-rPnt.X();
-                if (rPnt.X()>aRect.Right())  nDist+=rPnt.X()-aRect.Right();
-                if (rPnt.Y()<aRect.Top())    nDist+=aRect.Top()-rPnt.Y();
-                if (rPnt.Y()>aRect.Bottom()) nDist+=rPnt.Y()-aRect.Bottom();
-                if (nDist<nBestDist) {
-                    nBestDist = nDist;
-                    pBestObj=pObj;
-                    pBestPV=pPV;
-                }
-            }
-        }
-        if (bCheckNearestOn3rdPass) {
-            rpObj=pBestObj;
-            rpPV=pBestPV;
-            return pBestObj!=nullptr;
         }
     }
     return false;
