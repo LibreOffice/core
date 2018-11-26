@@ -37,12 +37,13 @@
 static void ImplInitMsgBoxImageList()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if (pSVData->maWinData.maMsgBoxImgList.empty())
+    std::vector<Image> &rImages = pSVData->maWinData.maMsgBoxImgList;
+    if (rImages.empty())
     {
-        pSVData->maWinData.maMsgBoxImgList.emplace_back(BitmapEx(SV_RESID_BITMAP_ERRORBOX));
-        pSVData->maWinData.maMsgBoxImgList.emplace_back(BitmapEx(SV_RESID_BITMAP_QUERYBOX));
-        pSVData->maWinData.maMsgBoxImgList.emplace_back(BitmapEx(SV_RESID_BITMAP_WARNINGBOX));
-        pSVData->maWinData.maMsgBoxImgList.emplace_back(BitmapEx(SV_RESID_BITMAP_INFOBOX));
+        rImages.emplace_back(Image("private:graphicrepository/" SV_RESID_BITMAP_ERRORBOX));
+        rImages.emplace_back(Image("private:graphicrepository/" SV_RESID_BITMAP_QUERYBOX));
+        rImages.emplace_back(Image("private:graphicrepository/" SV_RESID_BITMAP_WARNINGBOX));
+        rImages.emplace_back(Image("private:graphicrepository/" SV_RESID_BITMAP_INFOBOX));
     }
 }
 
