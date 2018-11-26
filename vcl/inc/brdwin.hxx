@@ -32,13 +32,12 @@ enum class DrawButtonFlags;
 enum class BorderWindowStyle {
     NONE             = 0x0000,
     Overlap          = 0x0001,
-    Border           = 0x0002,
     Float            = 0x0004,
     Frame            = 0x0008,
     App              = 0x0010
 };
 namespace o3tl {
-    template<> struct typed_flags<BorderWindowStyle> : is_typed_flags<BorderWindowStyle, 0x001f> {};
+    template<> struct typed_flags<BorderWindowStyle> : is_typed_flags<BorderWindowStyle, 0x001d> {};
 };
 
 enum class BorderWindowHitTest {

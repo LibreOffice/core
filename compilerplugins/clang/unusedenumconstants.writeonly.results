@@ -10410,8 +10410,6 @@ uui/source/iahndl-errorhandler.cxx:148
     enum Source SOURCE_SVX
 uui/source/iahndl-errorhandler.cxx:148
     enum Source SOURCE_UUI
-vcl/inc/brdwin.hxx:35
-    enum BorderWindowStyle Border
 vcl/inc/headless/svpgdi.hxx:74
     enum PaintMode Over
 vcl/inc/headless/svpinst.hxx:65
