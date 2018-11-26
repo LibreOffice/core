@@ -129,8 +129,6 @@ struct UNOTOOLS_DLLPUBLIC FontNameAttr
     OUString                            Name;
     ::std::vector< OUString >           Substitutions;
     ::std::vector< OUString >           MSSubstitutions;
-    ::std::vector< OUString >           PSSubstitutions;
-    ::std::vector< OUString >           HTMLSubstitutions;
     FontWeight                          Weight;
     FontWidth                           Width;
     ImplFontAttrs                       Type;

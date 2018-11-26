@@ -529,37 +529,18 @@ OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
     const utl::FontNameAttr* pAttr = utl::FontSubstConfiguration::get().getSubstInfo( aOrgName );
     if ( pAttr )
     {
-        for( int i = 0; i < 3; i++ )
-        {
-            const ::std::vector< OUString >* pVector = nullptr;
-            switch( i )
+            if( nFlags & SubsFontFlags::MS  &&  !pAttr->MSSubstitutions.empty() )
             {
-                case 0:
-                    if( nFlags & SubsFontFlags::MS  &&  !pAttr->MSSubstitutions.empty() )
-                        pVector = &pAttr->MSSubstitutions;
-                    break;
-                case 1:
-                    if( nFlags & SubsFontFlags::PS  &&  !pAttr->PSSubstitutions.empty() )
-                        pVector = &pAttr->PSSubstitutions;
-                    break;
-                case 2:
-                    if( nFlags & SubsFontFlags::HTML  &&  !pAttr->HTMLSubstitutions.empty() )
-                        pVector = &pAttr->HTMLSubstitutions;
-                    break;
-            }
-            if( ! pVector )
-                continue;
-            for( const auto& rSubstitution : *pVector )
-                if( ! ImplIsFontToken( rName, rSubstitution ) )
-                {
-                    ImplAppendFontToken( aName, rSubstitution );
-                    if( nFlags & SubsFontFlags::ONLYONE )
+                for( const auto& rSubstitution : pAttr->MSSubstitutions )
+                    if( ! ImplIsFontToken( rName, rSubstitution ) )
                     {
-                        i = 4;
-                        break;
+                        ImplAppendFontToken( aName, rSubstitution );
+                        if( nFlags & SubsFontFlags::ONLYONE )
+                        {
+                            break;
+                        }
                     }
-                }
-        }
+            }
     }
 
     return aName;
