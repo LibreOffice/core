@@ -221,7 +221,6 @@ sal_uInt32 SfxViewShell_Impl::m_nLastViewShellId = 0;
 SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 : aInterceptorContainer( aMutex )
 ,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
-,   m_bIsShowView(!(nFlags & SfxViewShellFlags::NO_SHOW))
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pLibreOfficeKitViewCallback(nullptr)
 ,   m_pLibreOfficeKitViewData(nullptr)
@@ -1719,11 +1718,6 @@ void SfxViewShell::SetMargin( const Size& rSize )
 
 void SfxViewShell::MarginChanged()
 {
-}
-
-bool SfxViewShell::IsShowView_Impl() const
-{
-    return pImpl->m_bIsShowView;
 }
 
 void SfxViewShell::JumpToMark( const OUString& rMark )

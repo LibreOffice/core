@@ -1220,7 +1220,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
         }
 
         vcl::Window* pEditWin = m_pData->m_pViewShell->GetWindow();
-        if ( pEditWin && m_pData->m_pViewShell->IsShowView_Impl() )
+        if ( pEditWin )
             pEditWin->Show();
 
         if ( SfxViewFrame::Current() == pViewFrame )
