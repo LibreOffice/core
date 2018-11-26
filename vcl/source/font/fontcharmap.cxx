@@ -358,7 +358,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             return false;
         pCodePairs = new sal_UCS4[ nRangeCount * 2 ];
         for (auto const& supportedRange : aSupportedRanges)
-            *(pCP++) = supportedRange;
+            if ( pCP == pCodePairs )
+                *(pCP++) = supportedRange;
     }
 
     // prepare the glyphid-array if needed
