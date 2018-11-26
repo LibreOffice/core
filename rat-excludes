@@ -1181,6 +1181,7 @@ main/testautomation/writer/optional/input/number/format86.txt
 main/writerfilter/documentation/sprms.txt
 main/xmerge/source/activesync/guids.txt
 main/xmerge/source/bridge/antcall.txt
+main/xmerge/java/XMergeBridge/antcall.txt
 main/xmlsecurity/test_docs/CAs/Root_1/demoCA/index.txt
 main/xmlsecurity/test_docs/CAs/Root_10/demoCA/index.txt
 main/xmlsecurity/test_docs/CAs/Root_11/demoCA/index.txt
