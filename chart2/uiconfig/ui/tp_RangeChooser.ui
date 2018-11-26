@@ -8,18 +8,16 @@
     <property name="tooltip_text" translatable="yes" context="tp_RangeChooser|imageIB_RANGE|tooltip_text">Select data range</property>
     <property name="icon_name">chart2/res/selectrange.png</property>
   </object>
-  <object class="GtkBox" id="tp_RangeChooser">
+  <object class="GtkGrid" id="tp_RangeChooser">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="spacing">12</property>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkGrid" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="row_spacing">6</property>
         <child>
           <object class="GtkLabel" id="FT_CAPTION_FOR_WIZARD">
             <property name="visible">True</property>
@@ -31,17 +29,16 @@
             </attributes>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box2">
+          <object class="GtkGrid" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="spacing">12</property>
+            <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="FT_RANGE">
                 <property name="visible">True</property>
@@ -52,9 +49,8 @@
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
@@ -65,9 +61,8 @@
                 <property name="activates_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
@@ -79,16 +74,14 @@
                 <property name="image">imageIB_RANGE</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
           </packing>
         </child>
         <child>
@@ -103,9 +96,8 @@
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
@@ -120,9 +112,8 @@
             <property name="group">RB_DATAROWS</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
@@ -136,9 +127,8 @@
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
           </packing>
         </child>
         <child>
@@ -152,9 +142,8 @@
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -163,9 +152,8 @@
             <property name="can_focus">False</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">6</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
           </packing>
         </child>
         <child>
@@ -179,9 +167,8 @@
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">7</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
@@ -246,9 +233,8 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">8</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">8</property>
           </packing>
         </child>
         <child>
@@ -257,16 +243,14 @@
             <property name="label" translatable="yes" context="tp_RangeChooser|STR_PAGE_DATA_RANGE">Data Range</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">11</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
   </object>
