@@ -1414,45 +1414,28 @@ void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
     }
 }
 
-// priorities of the emphasis:  bDropTarget => bCursored => bSelected
+// priorities of the emphasis:  bSelected
 void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect, bool bSelected,
-                                           bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext)
+                                           vcl::RenderContext& rRenderContext)
 {
     static Color aTransparent(COL_TRANSPARENT);
 
-    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     Color aOldFillColor(rRenderContext.GetFillColor());
 
     bool bSolidTextRect = false;
 
-    if(bDropTarget && (eSelectionMode != SelectionMode::NONE))
+    if (!bSelected)
     {
-        rRenderContext.SetFillColor(rSettings.GetHighlightColor());
-        bSolidTextRect = true;
-    }
-    else
-    {
-        if (!bSelected || bCursored)
-        {
-            const Color& rFillColor = rRenderContext.GetFont().GetFillColor();
-            rRenderContext.SetFillColor(rFillColor);
-            if (rFillColor != aTransparent)
-                bSolidTextRect = true;
-        }
+        const Color& rFillColor = rRenderContext.GetFont().GetFillColor();
+        rRenderContext.SetFillColor(rFillColor);
+        if (rFillColor != aTransparent)
+            bSolidTextRect = true;
     }
 
     // draw text rectangle
     if (bSolidTextRect)
     {
-        Color aOldLineColor;
-        if (bCursored)
-        {
-            aOldLineColor = rRenderContext.GetLineColor();
-            rRenderContext.SetLineColor(COL_GRAY);
-        }
         rRenderContext.DrawRect(rTextRect);
-        if (bCursored)
-            rRenderContext.SetLineColor(aOldLineColor);
     }
 
     rRenderContext.SetFillColor(aOldFillColor);
@@ -1494,17 +1477,13 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     if (eSelectionMode != SelectionMode::NONE)
         bSelected = pEntry->IsSelected();
 
-    bool bCursored = pEntry->IsCursored();
-    bool bDropTarget = pEntry->IsDropTarget();
-    bool bNoEmphasis = pEntry->IsBlockingEmphasis();
-
     rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     OUString aEntryText(SvtIconChoiceCtrl::GetEntryText(pEntry));
     tools::Rectangle aTextRect(CalcTextRect(pEntry, &rPos, false, &aEntryText));
     tools::Rectangle aBmpRect(CalcBmpRect(pEntry, &rPos));
 
-    bool bShowSelection = ((bSelected && !bCursored) && !bNoEmphasis && (eSelectionMode != SelectionMode::NONE));
+    bool bShowSelection = (bSelected && (eSelectionMode != SelectionMode::NONE));
 
     bool bActiveSelection = (0 != (nWinBits & WB_NOHIDESELECTION)) || pView->HasFocus();
 
@@ -1550,8 +1529,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         nBmpPaintFlags |= PAINTFLAG_HOR_CENTERED;
     sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
 
-    if( !bNoEmphasis )
-        PaintEmphasis(aTextRect, bSelected, bDropTarget, bCursored, rRenderContext);
+    PaintEmphasis(aTextRect, bSelected, rRenderContext);
 
     if ( bShowSelection )
         vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView.get(), CalcFocusRect(pEntry),
@@ -1563,7 +1541,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
 
     // draw highlight frame
-    if (pEntry == pCurHighlightFrame && !bNoEmphasis)
+    if (pEntry == pCurHighlightFrame)
         DrawHighlightFrame(rRenderContext, CalcFocusRect(pEntry));
 
     rRenderContext.Pop();
