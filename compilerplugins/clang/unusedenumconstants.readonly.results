@@ -916,10 +916,6 @@ include/vcl/menu.hxx:76
     enum PopupMenuFlags ExecuteLeft
 include/vcl/menu.hxx:84
     enum PopupMenuFlags NoHorzPlacement
-include/vcl/outdev.hxx:142
-    enum SalLayoutFlags EnableLigatures
-include/vcl/outdev.hxx:143
-    enum SalLayoutFlags SubstituteDigits
 include/vcl/outdev.hxx:175
     enum DrawTextFlags NewsEllipsis
 include/vcl/outdev.hxx:190
