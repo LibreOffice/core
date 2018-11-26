@@ -20,18 +20,16 @@
 #ifndef FRAMEWORK_SOURCE_UICONFIGURATION_IMAGELIST_HXX
 #define FRAMEWORK_SOURCE_UICONFIGURATION_IMAGELIST_HXX
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/image.hxx>
 #include <unordered_map>
 #include <vector>
 
 // Images identified by either name, or by id
 struct ImageAryData
 {
-    OUString                maName;
-    sal_uInt16              mnId;
-    BitmapEx                maBitmapEx;
-
-    bool IsLoadable() { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
+    OUString    maName;
+    sal_uInt16  mnId;
+    Image       maImage;
 };
 
 class ImageList
@@ -69,7 +67,7 @@ private:
     Size                   maImageSize;
 
     sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
-    void ImplAddImage( const OUString &aName, sal_uInt16 nId, const BitmapEx &aBitmapEx );
+    void ImplAddImage( const OUString &aPrefix, const OUString &aName, sal_uInt16 nId, const Image &aImage );
     void ImplRemoveImage( sal_uInt16 nPos );
     void ImplLoad(ImageAryData&) const;
 };
