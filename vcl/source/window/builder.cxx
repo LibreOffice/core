@@ -365,8 +365,8 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
                 SAL_WARN_IF(eType != SymbolType::IMAGE, "vcl.layout", "inimplemented symbol type for radiobuttons");
             if (eType == SymbolType::IMAGE)
             {
-                BitmapEx aBitmap(mapStockToImageResource(rImageInfo.m_sStock));
-                Image const aImage(aBitmap);
+                Image const aImage("private:graphicrepository/" +
+                                   mapStockToImageResource(rImageInfo.m_sStock));
                 if (!aI->m_bRadio)
                     pTargetButton->SetModeImage(aImage);
                 else
