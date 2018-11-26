@@ -486,10 +486,6 @@ include/svtools/ivctrl.hxx:45
     enum SvxIconViewFlags DROP_TARGET
 include/svtools/ivctrl.hxx:46
     enum SvxIconViewFlags BLOCK_EMPHASIS
-include/svtools/ruler.hxx:506
-    enum RulerBorderStyle Snap
-include/svtools/ruler.hxx:507
-    enum RulerBorderStyle Margin
 include/svtools/table/tablemodel.hxx:48
     enum ColumnAttributeGroup ALL
 include/svx/EnhancedCustomShapeGeometry.hxx:46
