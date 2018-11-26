@@ -80,7 +80,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	echo '[Version]'            >  $(IOSRES)/program/versionrc
 	echo 'AllLanguages=en-US'   >> $(IOSRES)/program/versionrc
 	echo 'BuildVersion='        >> $(IOSRES)/program/versionrc
-	echo "buildid=$(BUILDID)"   >> $(IOSRES)/program/versionrc
+	echo "buildid=$(shell git -C $(SRCDIR) log -1 --format=%H)" >> $(IOSRES)/program/versionrc
 
 
 	$(SRCDIR)/bin/lo-all-static-libs | sed -e 's/ /\
