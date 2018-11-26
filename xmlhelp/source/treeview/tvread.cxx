@@ -50,7 +50,7 @@ namespace treeview {
     public:
 
         explicit TVDom( TVDom* arent = nullptr )
-            : kind( other ),
+            : kind( Kind::other ),
               parent( arent ),
               children( 0 )
         {
@@ -76,13 +76,13 @@ namespace treeview {
                 return const_cast<TVDom*>(this);    // I am my own parent, if I am the root
         }
 
-        enum Kind {
+        enum class Kind {
             tree_node,
             tree_leaf,
             other
         };
 
-        bool isLeaf() const { return kind == TVDom::tree_leaf; }
+        bool isLeaf() const { return kind == TVDom::Kind::tree_leaf; }
         void setKind( Kind ind ) { kind = ind; }
 
         void setApplication( const char* appl )
@@ -330,9 +330,9 @@ static void start_handler(void *userData,
 
     if( strcmp( name,"help_section" ) == 0  ||
         strcmp( name,"node" ) == 0 )
-        kind = TVDom::tree_node;
+        kind = TVDom::Kind::tree_node;
     else if( strcmp( name,"topic" ) == 0 )
-        kind = TVDom::tree_leaf;
+        kind = TVDom::Kind::tree_leaf;
     else
         return;
 
