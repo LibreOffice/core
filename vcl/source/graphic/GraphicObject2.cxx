@@ -178,7 +178,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             Point aCurrPos(aTileInfo.aNextTileTopLeft.X(), aTileInfo.aTileTopLeft.Y());
             for (int nX=0; nX < aTileInfo.nTilesEmptyX; nX += nMSBFactor)
             {
-                if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags))
+                if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
                     return false;
 
                 aCurrPos.AdjustX(aTileInfo.aTileSizePixel.Width() );
@@ -199,7 +199,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             aCurrPos.setY( aTileInfo.aNextTileTopLeft.Y() );
             for (int nY=0; nY < aTileInfo.nTilesEmptyY; nY += nMSBFactor)
             {
-                if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags))
+                if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
                     return false;
 
                 aCurrPos.AdjustY(aTileInfo.aTileSizePixel.Height() );
@@ -259,7 +259,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         {
             if( bNoFirstTileDraw )
                 bNoFirstTileDraw = false; // don't draw first tile position
-            else if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags))
+            else if (!pTileGraphic->Draw(&rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr))
                 return false;
 
             aCurrPos.AdjustX(aTileInfo.aTileSizePixel.Width() );
@@ -378,7 +378,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
         bRet = ImplDrawTiled( *pOut, aOutStart,
                               (aOutArea.GetWidth() + aOutArea.Left() - aOutStart.X() + rSizePixel.Width() - 1) / rSizePixel.Width(),
                               (aOutArea.GetHeight() + aOutArea.Top() - aOutStart.Y() + rSizePixel.Height() - 1) / rSizePixel.Height(),
-                              rSizePixel, pAttr, nFlags );
+                              rSizePixel, pAttr );
 
         pOut->Pop();
     }
@@ -388,7 +388,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
 
 bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                                    int nNumTilesX, int nNumTilesY,
-                                   const Size& rTileSizePixel, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags )
+                                   const Size& rTileSizePixel, const GraphicAttr* pAttr )
 {
     Point   aCurrPos( rPosPixel );
     Size    aTileSizeLogic( rOut.PixelToLogic( rTileSizePixel ) );
@@ -420,7 +420,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
             bRet |= Draw( &rOut,
                           bDrawInPixel ? aCurrPos : rOut.PixelToLogic( aCurrPos ),
                           bDrawInPixel ? rTileSizePixel : aTileSizeLogic,
-                          pAttr, nFlags );
+                          pAttr );
 
             aCurrPos.AdjustX(rTileSizePixel.Width() );
         }

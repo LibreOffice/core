@@ -463,7 +463,7 @@ void GraphicObject::SetUserData( const OUString& rUserData )
 }
 
 bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                          const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags )
+                          const GraphicAttr* pAttr )
 {
     GraphicAttr         aAttr( pAttr ? *pAttr : GetAttr() );
     Point               aPt( rPt );
@@ -475,8 +475,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     // #i29534# Provide output rects for PDF writer
     tools::Rectangle           aCropRect;
 
-    if( !( GraphicManagerDrawFlags::USE_DRAWMODE_SETTINGS & nFlags ) )
-        pOut->SetDrawMode( nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ) );
+    pOut->SetDrawMode( nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ) );
 
     // mirrored horizontically
     if( aSz.Width() < 0 )
