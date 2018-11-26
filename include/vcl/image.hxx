@@ -51,7 +51,6 @@ enum class StockImage { Yes };
 class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
 {
     friend class ::OutputDevice;
-
 public:
     Image();
     explicit Image(BitmapEx const & rBitmapEx);
@@ -71,6 +70,8 @@ public:
     {
         return !(Image::operator==(rImage));
     }
+
+    SAL_DLLPRIVATE  OUString GetStock() const;
 
     void Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = nullptr);
 

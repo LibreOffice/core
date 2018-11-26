@@ -53,14 +53,13 @@ Image Tools::GetImage (
 {
     if (rsURL.getLength() > 0)
     {
+        OUString sPath;
+
         if (rsURL.startsWith(".uno:"))
-        {
             return vcl::CommandInfoProvider::GetImageForCommand(rsURL, rxFrame);
-        }
-        else
-        {
+
+        else if (rsURL.startsWith("private:graphicrepository/", &sPath))
             return Image(rsURL);
-        }
     }
     return Image();
 }
