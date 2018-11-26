@@ -33,7 +33,7 @@ in this Software without prior written authorization from the X Consortium.
 static char *hash_lookup( char *symbol, struct symhash *symbols );
 static int gobble( struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, struct symhash *symbols );
-static int deftype ( char *line, struct filepointer *filep,
+static int deftype ( char *line, struct filepointer *filep, struct inclist *file,
     int parse_it, struct symhash *symbols);
 static int zero_value(char const *exp, struct symhash *symbols);
 
@@ -45,7 +45,7 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
     int    type;
 
     while ((line = get_line(filep))) {
-        type = deftype(line, filep, TRUE, symbols);
+        type = deftype(line, filep, file, TRUE, symbols);
         switch(type) {
         case IF:
         doif:
@@ -106,7 +106,7 @@ int gobble(struct filepointer *filep,
     int    type;
 
     while ((line = get_line(filep))) {
-        type = deftype(line, filep, FALSE, symbols);
+        type = deftype(line, filep, file, FALSE, symbols);
         switch(type) {
         case IF:
         case IFFALSE:
@@ -133,11 +133,13 @@ int gobble(struct filepointer *filep,
 /*
  * Decide what type of # directive this line is.
  */
-int deftype (char *line, struct filepointer *filep, int parse_it, struct symhash *symbols)
+int deftype (char *line, struct filepointer *filep, struct inclist * file,
+            int parse_it, struct symhash *symbols)
 {
     char   *p;
     char    *directive, savechar;
     int    ret;
+    (void)file; // used in DEBUG mode
     (void)filep;
     /*
      * Parse the directive...
