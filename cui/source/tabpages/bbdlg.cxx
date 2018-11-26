@@ -46,7 +46,7 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
     }
     else
     {
-        AddTabPage("background", SvxBackgroundTabPage::Create, nullptr );
+        AddTabPage("background", SvxBkgTabPage::Create, nullptr );
     }
 }
 
@@ -54,11 +54,11 @@ void SvxBorderBackgroundDlg::PageCreated(const OString& rPageId, SfxTabPage& rTa
 {
     if (rPageId == "background")
     {
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         // allow switching between Color/graphic
-        if(mbEnableBackgroundSelector)
-        {
-            static_cast< SvxBackgroundTabPage& >(rTabPage).ShowSelector();
-        }
+        if (mbEnableBackgroundSelector)
+            aSet.Put(SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_SELECTOR)));
+        rTabPage.PageCreated(aSet);
     }
     // inits for Area and Transparency TabPages
     // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
