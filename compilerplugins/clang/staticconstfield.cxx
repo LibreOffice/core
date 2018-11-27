@@ -130,7 +130,7 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
     else
     {
         APSInt x1;
-        if (initexpr->EvaluateAsInt(x1, compiler.getASTContext()))
+        if (compat::EvaluateAsInt(initexpr, x1, compiler.getASTContext()))
         {
             value = x1.toString(10);
             found = true;

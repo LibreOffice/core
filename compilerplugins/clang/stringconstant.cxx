@@ -848,7 +848,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                     return true;
                 }
                 APSInt res;
-                if (!expr->getArg(1)->EvaluateAsInt(
+                if (!compat::EvaluateAsInt(expr->getArg(1),
                         res, compiler.getASTContext()))
                 {
                     return true;
@@ -863,14 +863,14 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                     return true;
                 }
                 APSInt enc;
-                if (!expr->getArg(2)->EvaluateAsInt(
+                if (!compat::EvaluateAsInt(expr->getArg(2),
                         enc, compiler.getASTContext()))
                 {
                     return true;
                 }
                 auto const encIsAscii = enc == 11; // RTL_TEXTENCODING_ASCII_US
                 auto const encIsUtf8 = enc == 76; // RTL_TEXTENCODING_UTF8
-                if (!expr->getArg(3)->EvaluateAsInt(
+                if (!compat::EvaluateAsInt(expr->getArg(3),
                         res, compiler.getASTContext())
                     || res != 0x333) // OSTRING_TO_OUSTRING_CVTFLAGS
                 {
@@ -1438,7 +1438,7 @@ bool StringConstant::isStringConstant(
 
 bool StringConstant::isZero(Expr const * expr) {
     APSInt res;
-    return expr->EvaluateAsInt(res, compiler.getASTContext()) && res == 0;
+    return compat::EvaluateAsInt(expr, res, compiler.getASTContext()) && res == 0;
 }
 
 void StringConstant::reportChange(
@@ -1729,7 +1729,7 @@ void StringConstant::handleCharLen(
         return;
     }
     APSInt res;
-    if (expr->getArg(arg2)->EvaluateAsInt(res, compiler.getASTContext())) {
+    if (compat::EvaluateAsInt(expr->getArg(arg2), res, compiler.getASTContext())) {
         if (res != n) {
             return;
         }
@@ -1754,7 +1754,7 @@ void StringConstant::handleCharLen(
                   &cont2, &emb2, &trm2)
               && n2 == n && cont2 == cont && emb2 == emb && trm2 == trm
                   //TODO: same strings
-              && subs->getIdx()->EvaluateAsInt(res, compiler.getASTContext())
+              && compat::EvaluateAsInt(subs->getIdx(), res, compiler.getASTContext())
               && res == 0))
         {
             return;
@@ -1981,7 +1981,7 @@ void StringConstant::handleFunArgOstring(
                         &cont, &emb, &trm))
                 {
                     APSInt res;
-                    if (cexpr->getArg(1)->EvaluateAsInt(
+                    if (compat::EvaluateAsInt(cexpr->getArg(1),
                             res, compiler.getASTContext()))
                     {
                         if (res == n && !emb && trm) {

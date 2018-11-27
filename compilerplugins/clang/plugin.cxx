@@ -161,7 +161,7 @@ void Plugin::registerPlugin( Plugin* (*create)( const InstantiationData& ), cons
 
 bool Plugin::evaluate(const Expr* expr, APSInt& x)
 {
-    if (expr->EvaluateAsInt(x, compiler.getASTContext()))
+    if (compat::EvaluateAsInt(expr, x, compiler.getASTContext()))
     {
         return true;
     }

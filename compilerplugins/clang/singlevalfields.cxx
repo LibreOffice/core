@@ -461,7 +461,7 @@ std::string SingleValFields::getExprValue(const Expr* arg)
         }
     }
     APSInt x1;
-    if (arg->EvaluateAsInt(x1, compiler.getASTContext()))
+    if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
         return x1.toString(10);
     if (isa<CXXNullPtrLiteralExpr>(arg))
         return "0";

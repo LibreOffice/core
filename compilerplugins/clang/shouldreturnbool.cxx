@@ -235,7 +235,7 @@ bool ShouldReturnBool::isExprOneOrZero(const Expr* arg) const
         return false;
     }
     APSInt x1;
-    if (arg->EvaluateAsInt(x1, compiler.getASTContext()))
+    if (compat::EvaluateAsInt(arg, x1, compiler.getASTContext()))
     {
         return x1 == 1 || x1 == 0;
     }
