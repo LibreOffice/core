@@ -29,7 +29,10 @@ public:
     /// This one doesn't.
     OString makeStringAndClear();
     bool isGraphic() const;
+    OStringBuffer& getBuffer() { return m_aBuffer; }
+    const OStringBuffer& getBuffer() const { return m_aBuffer; }
 
+private:
     OStringBuffer m_aBuffer;
     const SwFlyFrameFormat* m_pFlyFrameFormat = nullptr;
     const SwGrfNode* m_pGrfNode = nullptr;
