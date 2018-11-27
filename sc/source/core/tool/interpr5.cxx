@@ -281,6 +281,21 @@ void ScInterpreter:: ScLCM()
     }
 }
 
+void ScInterpreter::MakeMatNew(ScMatrixRef& rMat, SCSIZE nC, SCSIZE nR)
+{
+    rMat->SetErrorInterpreter( this);
+    // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
+    // very matrix.
+    rMat->SetMutable();
+    SCSIZE nCols, nRows;
+    rMat->GetDimensions( nCols, nRows);
+    if ( nCols != nC || nRows != nR )
+    {   // arbitrary limit of elements exceeded
+        SetError( FormulaError::MatrixSize);
+        rMat.reset();
+    }
+}
+
 ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
 {
     ScMatrixRef pMat;
@@ -288,18 +303,14 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
         pMat = new ScMatrix(nC, nR);
     else
         pMat = new ScMatrix(nC, nR, 0.0);
+    MakeMatNew(pMat, nC, nR);
+    return pMat;
+}
 
-    pMat->SetErrorInterpreter( this);
-    // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
-    // very matrix.
-    pMat->SetMutable();
-    SCSIZE nCols, nRows;
-    pMat->GetDimensions( nCols, nRows);
-    if ( nCols != nC || nRows != nR )
-    {   // arbitrary limit of elements exceeded
-        SetError( FormulaError::MatrixSize);
-        pMat.reset();
-    }
+ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, const std::vector<double>& rValues)
+{
+    ScMatrixRef pMat(new ScMatrix(nC, nR, rValues));
+    MakeMatNew(pMat, nC, nR);
     return pMat;
 }
 

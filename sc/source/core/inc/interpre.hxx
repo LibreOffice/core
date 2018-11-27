@@ -175,6 +175,8 @@ public:
 
     ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty = false);
 
+    ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR, const std::vector<double>& rValues);
+
     enum VolatileType {
         VOLATILE,
         VOLATILE_MACRO,
@@ -224,6 +226,8 @@ private:
     bool        bMatrixFormula;         // formula cell is a matrix formula
 
     VolatileType meVolatileType;
+
+    void MakeMatNew(ScMatrixRef& rMat, SCSIZE nC, SCSIZE nR);
 
     /// Merge global and document specific settings.
     void MergeCalcConfig();
@@ -934,6 +938,7 @@ private:
     void ScMedian();
     double GetMedian( ::std::vector<double> & rArray );
     double GetPercentileExclusive( ::std::vector<double> & rArray, double fPercentile );
+    std::vector<double> GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow );
     void GetNumberSequenceArray( sal_uInt8 nParamCount, ::std::vector<double>& rArray, bool bConvertTextInArray );
     void GetSortArray( sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray );
     static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder);
