@@ -76,8 +76,6 @@ public:
                  const bool        _bNewTOX = false );
     void UpdatePageNum();               // insert page numbering
 
-    const std::vector<std::unique_ptr<SwTOXSortTabBase>>& GetTOXSortTabBases() const { return m_aSortArr; }
-
     bool SetPosAtStartEnd( SwPosition& rPos ) const;
 };
 

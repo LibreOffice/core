@@ -218,12 +218,9 @@ public:
     void            ScanAllEntries();
     void            UpdateEntries();
 
-    bool            IsEntryProtected( SvTreeListEntry* pEntry );
-
     void            SetMode( BrowseMode nM ) { nMode = nM; }
     BrowseMode      GetMode() const { return nMode; }
 
-    SbModule*       FindModule( SvTreeListEntry* pEntry );
     SbxVariable*    FindVariable( SvTreeListEntry* pEntry );
     SvTreeListEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     SvTreeListEntry*    FindEntry( SvTreeListEntry* pParent, const OUString& rText, EntryType eType );
@@ -318,7 +315,6 @@ public:
     bool iter_children(weld::TreeIter& rIter) const { return m_xControl->iter_children(rIter); }
     bool iter_parent(weld::TreeIter& rIter) const { return m_xControl->iter_parent(rIter); }
     int get_iter_depth(const weld::TreeIter& rIter) const { return m_xControl->get_iter_depth(rIter); }
-    OUString get_text(const weld::TreeIter& rIter) const { return m_xControl->get_text(rIter); }
     bool get_row_expanded(const weld::TreeIter& rIter) const { return m_xControl->get_row_expanded(rIter); }
     void expand_row(weld::TreeIter& rIter) { m_xControl->expand_row(rIter); }
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }

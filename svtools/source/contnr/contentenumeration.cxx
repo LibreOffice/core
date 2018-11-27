@@ -332,40 +332,6 @@ namespace svt
     }
 
 
-    bool FileViewContentEnumerator::implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const
-    {
-        bool bRet = false;
-
-        try
-        {
-            ::osl::MutexGuard aGuard( m_aMutex );
-            if (!m_xDocProps.is())
-            {
-                m_xDocProps.set(DocumentProperties::create(
-                            ::comphelper::getProcessComponentContext()));
-            }
-
-            assert(m_xDocProps.is());
-            if (!m_xDocProps.is())
-                return false;
-
-            m_xDocProps->loadFromMedium(_rTargetURL, Sequence<PropertyValue>());
-
-            OUString const sTitle(m_xDocProps->getTitle());
-            if (!sTitle.isEmpty())
-            {
-                _rRet = sTitle;
-                bRet = true;
-            }
-        }
-        catch ( const Exception& )
-        {
-        }
-
-        return bRet;
-    }
-
-
     void FileViewContentEnumerator::execute()
     {
         enumerateFolderContent();

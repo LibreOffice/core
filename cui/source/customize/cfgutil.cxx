@@ -305,18 +305,6 @@ void SfxConfigFunctionListBox::ClearAll()
     Clear();
 }
 
-OUString SfxConfigFunctionListBox::GetSelectedScriptURI()
-{
-    SvTreeListEntry *pEntry = FirstSelected();
-    if ( pEntry )
-    {
-        SfxGroupInfo_Impl *pData = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
-        if ( pData && ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT ) )
-            return *static_cast<OUString*>(pData->pObject);
-    }
-    return OUString();
-}
-
 OUString SfxConfigFunctionListBox::GetHelpText( bool bConsiderParent )
 {
     SvTreeListEntry *pEntry = FirstSelected();
@@ -418,54 +406,6 @@ OUString CuiConfigFunctionListBox::GetSelectedScriptURI()
             return *static_cast<OUString*>(pData->pObject);
     }
     return OUString();
-}
-
-OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
-{
-    int nSelected = m_xTreeView->get_selected_index();
-    if (nSelected != -1)
-    {
-        SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(nSelected).toInt64());
-        if ( pData )
-        {
-            if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
-            {
-                if (bConsiderParent)
-                    return Application::GetHelp()->GetHelpText(pData->sCommand, m_xTreeView.get());
-                else
-                    return Application::GetHelp()->GetHelpText(pData->sCommand, static_cast<weld::Widget*>(nullptr));
-            }
-            else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
-            {
-                return pData->sHelpText;
-            }
-        }
-    }
-    return OUString();
-}
-
-OUString CuiConfigFunctionListBox::GetCurCommand()
-{
-    int nSelected = m_xTreeView->get_selected_index();
-    if (nSelected == -1)
-        return OUString();
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(nSelected).toInt64());
-    if (!pData)
-        return OUString();
-    return pData->sCommand;
-}
-
-OUString CuiConfigFunctionListBox::GetCurLabel()
-{
-    int nSelected = m_xTreeView->get_selected_index();
-    if (nSelected == -1)
-        return OUString();
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(nSelected).toInt64());
-    if (!pData)
-        return OUString();
-    if (!pData->sLabel.isEmpty())
-        return pData->sLabel;
-    return pData->sCommand;
 }
 
 struct SvxConfigGroupBoxResource_Impl
@@ -1312,11 +1252,6 @@ void CuiConfigGroupListBox::ClearAll()
     m_xTreeView->clear();
 }
 
-void CuiConfigGroupListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
-{
-    m_pStylesInfo = pStyles;
-}
-
 void CuiConfigGroupListBox::InitModule()
 {
     try
@@ -1843,12 +1778,6 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, weld::TreeIter&, rIter, bool)
             break;
     }
     return true;
-}
-
-void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
-{
-    SelectMacro( pItem->GetBasicManager()->GetName(),
-                 pItem->GetQualifiedName() );
 }
 
 void CuiConfigGroupListBox::SelectMacro( const OUString& rBasic,

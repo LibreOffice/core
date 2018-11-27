@@ -159,8 +159,6 @@ short AbstractTabController_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
-
 short AbstractSwConvertTableDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -242,32 +240,6 @@ short AbstractIndexMarkFloatDlg_Impl::Execute()
 short AbstractAuthMarkFloatDlg_Impl::Execute()
 {
     return m_xDlg->run();
-}
-
-void AbstractTabDialog_Impl::SetCurPageId( const OString &rName )
-{
-    pDlg->SetCurPageId( rName );
-}
-
-const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
-{
-    return pDlg->GetOutputItemSet();
-}
-
-const sal_uInt16* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
-{
-    return pDlg->GetInputRanges( pItem );
-}
-
-void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
-{
-     pDlg->SetInputSet( pInSet );
-}
-
-//From class Window.
-void AbstractTabDialog_Impl::SetText( const OUString& rStr )
-{
-    pDlg->SetText( rStr );
 }
 
 void AbstractTabController_Impl::SetCurPageId( const OString &rName )

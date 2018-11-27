@@ -787,11 +787,6 @@ bool SbTreeListBox::IsValidEntry(weld::TreeIter& rEntry)
     return bIsValid;
 }
 
-SbModule* TreeListBox::FindModule( SvTreeListEntry* pEntry )
-{
-    return dynamic_cast<SbModule*>(FindVariable(pEntry));
-}
-
 SbModule* SbTreeListBox::FindModule(weld::TreeIter* pEntry)
 {
     return dynamic_cast<SbModule*>(FindVariable(pEntry));

@@ -131,9 +131,6 @@ public:
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc);  // can be 0
 
-    sal_uInt16          AddTabPage ( const OString &rName,          // Name of the label for the page in the notebook .ui
-                                     sal_uInt16 nPageCreateId );    // Identifier of the Factory Method to create the page
-
     void                AddTabPage( sal_uInt16 nId,
                                     const OUString &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0
@@ -179,20 +176,13 @@ public:
     const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
 
-    void                RemoveStandardButton();
-
     short               Execute() override;
     bool                StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx ) override;
     void                Start();
 
     const SfxItemSet*   GetExampleSet() const { return m_pExampleSet; }
 
-    void                SetApplyHandler(const Link<Button*,void>& _rHdl);
-
     SAL_DLLPRIVATE void Start_Impl();
-
-    //calls Ok without closing dialog
-    bool Apply();
 
     virtual FactoryFunction GetUITestFactory() const override;
     // Screenshot interface

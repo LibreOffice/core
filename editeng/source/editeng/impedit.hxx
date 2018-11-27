@@ -862,8 +862,6 @@ public:
 
     bool            IsInSelectionMode() { return bInSelection; }
 
-    void            IndentBlock( EditView* pView, bool bRight );
-
 //  For Undo/Redo
     void            Undo( EditView* pView );
     void            Redo( EditView* pView );
