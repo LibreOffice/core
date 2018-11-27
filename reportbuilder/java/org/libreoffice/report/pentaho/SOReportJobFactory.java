@@ -38,6 +38,9 @@ import com.sun.star.registry.InvalidRegistryException;
 import com.sun.star.registry.InvalidValueException;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;
+import com.sun.star.sdbc.SQLException;
+import org.jfree.report.ReportDataFactoryException;
+import org.libreoffice.report.DataSourceException;
 import org.libreoffice.report.DataSourceFactory;
 import org.libreoffice.report.JobProperties;
 import org.libreoffice.report.ReportEngineParameterNames;
@@ -194,6 +197,26 @@ public class SOReportJobFactory
             return currentLocale;
         }
 
+        // tdf#94446 if this is a SQLException in disguise, throw that
+        // original exception instead of the wrapper exception, so that
+        // dbaccess can apply its special handling for
+        // SQLException::ErrorCode of dbtools::ParameterInteractionCancelled
+        // in OLinkedDocumentsAccess::open if ParameterInteractionCancelled
+        // was the root cause
+        public void rethrow_sql_exception(Throwable exception)
+                throws com.sun.star.sdbc.SQLException
+        {
+            if (exception instanceof ReportDataFactoryException == false)
+                return;
+            exception = ((ReportDataFactoryException)exception).getParent();
+            if (exception instanceof DataSourceException == false)
+                return;
+            exception = ((DataSourceException)exception).getCause();
+            if (exception instanceof SQLException == false)
+                return;
+            throw (SQLException)exception;
+        }
+
         public Object execute(final NamedValue[] namedValue)
                 throws com.sun.star.lang.IllegalArgumentException, com.sun.star.uno.Exception
         {
@@ -223,6 +246,10 @@ public class SOReportJobFactory
                 Writer result = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(result);
                 e.printStackTrace(printWriter);
+
+                // if this is a wrapped SQLException, rethrow that instead
+                rethrow_sql_exception(e.getCause());
+
                 throw new com.sun.star.lang.WrappedTargetException(e, e.toString() + '\n' + result.toString(), this, null);
             }
             catch (java.lang.IncompatibleClassChangeError e)
