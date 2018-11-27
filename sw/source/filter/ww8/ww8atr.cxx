@@ -4195,19 +4195,16 @@ void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     if ( !m_rWW8Export.m_bOutPageDescs )
     {
         WW8_SHD aSHD;
-
         WW8Export::TransBrush( rBrush.GetColor(), aSHD );
-        // sprmPShd
+
         m_rWW8Export.InsUInt16( NS_sprm::sprmPShd80 );
         m_rWW8Export.InsUInt16( aSHD.GetValue() );
 
-        // Quite a few unknowns, some might be transparency or something
-        // of that nature...
-        m_rWW8Export.InsUInt16( 0xC64D );
-        m_rWW8Export.pO->push_back( 10 );
-        m_rWW8Export.InsUInt32( 0xFF000000 );
-        m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor() ) );
-        m_rWW8Export.InsUInt16( 0x0000 );
+        m_rWW8Export.InsUInt16( NS_sprm::sprmPShd );
+        m_rWW8Export.pO->push_back( 10 ); //size of operand: MUST be 10
+        m_rWW8Export.InsUInt32( 0xFF000000 ); //cvFore: Foreground BGR = cvAuto
+        m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor() ) ); //cvBack
+        m_rWW8Export.InsUInt16( 0x0000 ); //iPat: specifies the pattern used for shading = clear/100% background
     }
 }
 
