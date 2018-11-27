@@ -42,6 +42,7 @@
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/threadpool.hxx>
 #include <unx/gendata.hxx>
 
 #if ENABLE_CAIRO_CANVAS
@@ -2042,6 +2043,118 @@ cairo_user_data_key_t* SvpSalGraphics::getDamageKey()
     return &aDamageKey;
 }
 
+namespace
+{
+    void xor_block(sal_Int32 nStartY, sal_Int32 nEndY, sal_Int32 nStride,
+                   sal_Int32 nStartX, sal_Int32 nEndX,
+                   unsigned char *target_surface_data, unsigned char *xor_surface_data)
+    {
+        for (sal_Int32 y = nStartY; y < nEndY; ++y)
+        {
+            unsigned char *true_row = target_surface_data + (nStride*y);
+            unsigned char *xor_row = xor_surface_data + (nStride*y);
+            unsigned char *true_data = true_row + (nStartX * 4);
+            unsigned char *xor_data = xor_row + (nStartX * 4);
+            for (sal_Int32 x = nStartX; x < nEndX; ++x)
+            {
+                sal_uInt8 b = unpremultiply(true_data[SVP_CAIRO_BLUE], true_data[SVP_CAIRO_ALPHA]) ^
+                              unpremultiply(xor_data[SVP_CAIRO_BLUE], xor_data[SVP_CAIRO_ALPHA]);
+                sal_uInt8 g = unpremultiply(true_data[SVP_CAIRO_GREEN], true_data[SVP_CAIRO_ALPHA]) ^
+                              unpremultiply(xor_data[SVP_CAIRO_GREEN], xor_data[SVP_CAIRO_ALPHA]);
+                sal_uInt8 r = unpremultiply(true_data[SVP_CAIRO_RED], true_data[SVP_CAIRO_ALPHA]) ^
+                              unpremultiply(xor_data[SVP_CAIRO_RED], xor_data[SVP_CAIRO_ALPHA]);
+                true_data[0] = premultiply(b, true_data[SVP_CAIRO_ALPHA]);
+                true_data[1] = premultiply(g, true_data[SVP_CAIRO_ALPHA]);
+                true_data[2] = premultiply(r, true_data[SVP_CAIRO_ALPHA]);
+                true_data+=4;
+                xor_data+=4;
+            }
+        }
+    }
+
+    class XorTask : public comphelper::ThreadTask
+    {
+        sal_Int32 m_nStartY;
+        sal_Int32 m_nEndY;
+        sal_Int32 m_nStride;
+        sal_Int32 m_nStartX;
+        sal_Int32 m_nEndX;
+        unsigned char *m_target_surface_data;
+        unsigned char *m_xor_surface_data;
+
+    public:
+        explicit XorTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
+                         sal_Int32 nStartY, sal_Int32 nEndY, sal_Int32 nStride,
+                         sal_Int32 nStartX, sal_Int32 nEndX,
+                         unsigned char *target_surface_data, unsigned char *xor_surface_data)
+            : comphelper::ThreadTask(pTag)
+            , m_nStartY(nStartY)
+            , m_nEndY(nEndY)
+            , m_nStride(nStride)
+            , m_nStartX(nStartX)
+            , m_nEndX(nEndX)
+            , m_target_surface_data(target_surface_data)
+            , m_xor_surface_data(xor_surface_data)
+        {
+        }
+        virtual void doWork() override
+        {
+            xor_block(m_nStartY, m_nEndY, m_nStride, m_nStartX, m_nEndX,
+                      m_target_surface_data, m_xor_surface_data);
+        }
+    };
+
+    void parallel_xor_block(sal_Int32 nUnscaledExtentsTop, sal_Int32 nUnscaledExtentsBottom, sal_Int32 nStride,
+                            sal_Int32 nUnscaledExtentsLeft, sal_Int32 nUnscaledExtentsRight,
+                            unsigned char *target_surface_data, unsigned char *xor_surface_data)
+    {
+        auto nFullBlockX = nUnscaledExtentsRight - nUnscaledExtentsLeft;
+        auto nFullBlockY = nUnscaledExtentsBottom - nUnscaledExtentsTop;
+        if (nFullBlockX < 100 && nFullBlockY < 100)
+        {
+            //don't bother for small areas
+            xor_block(nUnscaledExtentsTop, nUnscaledExtentsBottom,
+                      nStride, nUnscaledExtentsLeft, nUnscaledExtentsRight,
+                      target_surface_data, xor_surface_data);
+            return;
+        }
+
+        comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
+        std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+        sal_uInt32 nThreads = rShared.getWorkerCount();
+        assert(nThreads > 0);
+
+        auto nBlockY = std::min<sal_Int32>(nFullBlockY / nThreads, 1);
+        auto nStartY = nUnscaledExtentsTop;
+
+        for (sal_uInt32 t = 0; t < nThreads - 1; ++t)
+        {
+            if (nStartY == nUnscaledExtentsBottom)
+            {
+                // some awesome piece of hardware with more threads than max(row,col)
+                break;
+            }
+
+            rShared.pushTask(std::unique_ptr<comphelper::ThreadTask>(new XorTask(pTag, nStartY, nStartY + nBlockY,
+                                                                     nStride, nUnscaledExtentsLeft, nUnscaledExtentsRight,
+                                                                     target_surface_data,
+                                                                     xor_surface_data)));
+            nStartY += nBlockY;
+        }
+
+        // scoop up the remainder in the final task
+        if (nStartY != nUnscaledExtentsBottom)
+        {
+            rShared.pushTask(std::unique_ptr<comphelper::ThreadTask>(new XorTask(pTag, nStartY, nUnscaledExtentsBottom,
+                                                                     nStride, nUnscaledExtentsLeft, nUnscaledExtentsRight,
+                                                                     target_surface_data,
+                                                                     xor_surface_data)));
+        }
+
+        rShared.waitUntilDone(pTag);
+    }
+}
+
 void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const
 {
     const bool bXoring = (m_ePaintMode == PaintMode::Xor && bXorModeAllowed);
@@ -2101,27 +2214,11 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         sal_Int32 nUnscaledExtentsRight = nExtentsRight * m_fScale;
         sal_Int32 nUnscaledExtentsTop = nExtentsTop * m_fScale;
         sal_Int32 nUnscaledExtentsBottom = nExtentsBottom * m_fScale;
-        for (sal_Int32 y = nUnscaledExtentsTop; y < nUnscaledExtentsBottom; ++y)
-        {
-            unsigned char *true_row = target_surface_data + (nStride*y);
-            unsigned char *xor_row = xor_surface_data + (nStride*y);
-            unsigned char *true_data = true_row + (nUnscaledExtentsLeft * 4);
-            unsigned char *xor_data = xor_row + (nUnscaledExtentsLeft * 4);
-            for (sal_Int32 x = nUnscaledExtentsLeft; x < nUnscaledExtentsRight; ++x)
-            {
-                sal_uInt8 b = unpremultiply(true_data[SVP_CAIRO_BLUE], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_BLUE], xor_data[SVP_CAIRO_ALPHA]);
-                sal_uInt8 g = unpremultiply(true_data[SVP_CAIRO_GREEN], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_GREEN], xor_data[SVP_CAIRO_ALPHA]);
-                sal_uInt8 r = unpremultiply(true_data[SVP_CAIRO_RED], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_RED], xor_data[SVP_CAIRO_ALPHA]);
-                true_data[0] = premultiply(b, true_data[SVP_CAIRO_ALPHA]);
-                true_data[1] = premultiply(g, true_data[SVP_CAIRO_ALPHA]);
-                true_data[2] = premultiply(r, true_data[SVP_CAIRO_ALPHA]);
-                true_data+=4;
-                xor_data+=4;
-            }
-        }
+
+        parallel_xor_block(nUnscaledExtentsTop, nUnscaledExtentsBottom, nStride,
+                           nUnscaledExtentsLeft, nUnscaledExtentsRight,
+                           target_surface_data, xor_surface_data);
+
         cairo_surface_mark_dirty(target_surface);
 
         if (target_surface != m_pSurface)
