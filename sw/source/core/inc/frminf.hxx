@@ -21,7 +21,10 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_FRMINF_HXX
 
 #include <swtypes.hxx>
+
 #include "TextFrameIndex.hxx"
+
+#include <vector>
 
 class SwTextFrame;
 class SwPaM;
@@ -50,7 +53,8 @@ public:
     SwTwips GetCharPos(TextFrameIndex nChar, bool bCenter = true) const;
 
     // collect all whitespaces at the beginning and end of a line in Pam
-    void GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const;
+    void GetSpaces(std::vector<std::pair<TextFrameIndex, TextFrameIndex>> &,
+            bool bWithLineBreak) const;
 
     // Is a bullet point/symbol/etc. at the first text position?
     bool IsBullet(TextFrameIndex nTextPos) const;
