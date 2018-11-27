@@ -17,17 +17,24 @@
  */
 package org.libreoffice.report;
 
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XChild;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.XCompletedExecution;
+import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.XParametersSupplier;
 import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
@@ -159,6 +166,26 @@ public class SDBCReportDataFactory implements DataSourceFactory
         m_cmpCtx = cmpCtx;
     }
 
+    public XWindow getParentWindow()
+    {
+        final XChild child = UnoRuntime.queryInterface(XChild.class, connection);
+        if (child == null)
+            return null;
+        final XDocumentDataSource docSource = UnoRuntime.queryInterface(XDocumentDataSource.class, child.getParent());
+        if (docSource == null)
+            return null;
+        final XModel model = UnoRuntime.queryInterface(XModel.class, docSource.getDatabaseDocument());
+        if (model == null)
+            return null;
+        final XController controller = model.getCurrentController();
+        if (controller == null)
+            return null;
+        final XFrame frame = controller.getFrame();
+        if (frame == null)
+            return null;
+        return frame.getContainerWindow();
+    }
+
     public DataSource queryData(final String command, final Map<String,Object> parameters) throws DataSourceException
     {
         try
@@ -201,7 +228,8 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 final XCompletedExecution execute = UnoRuntime.queryInterface(XCompletedExecution.class, rowSet);
                 if (rowSetCreated && execute != null && paramDef.parameterCount > 0)
                 {
-                    final XInteractionHandler handler = UnoRuntime.queryInterface(XInteractionHandler.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.InteractionHandler", m_cmpCtx));
+                    final XWindow window = getParentWindow();
+                    final XInteractionHandler handler = UnoRuntime.queryInterface(XInteractionHandler.class, m_cmpCtx.getServiceManager().createInstanceWithArgumentsAndContext("com.sun.star.sdb.InteractionHandler", new Object[] { new NamedValue("Parent", window) }, m_cmpCtx));
                     execute.executeWithCompletion(handler);
                 }
                 else
