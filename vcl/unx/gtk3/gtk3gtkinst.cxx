@@ -2029,10 +2029,117 @@ namespace
     }
 }
 
+struct DialogRunner
+{
+    GtkDialog *m_pDialog;
+    gint m_nResponseId;
+    GMainLoop *m_pLoop;
+    VclPtr<vcl::Window> m_xFrameWindow;
+
+    DialogRunner(GtkDialog* pDialog)
+       : m_pDialog(pDialog)
+       , m_nResponseId(GTK_RESPONSE_NONE)
+       , m_pLoop(nullptr)
+    {
+        GtkWindow* pParent = gtk_window_get_transient_for(GTK_WINDOW(m_pDialog));
+        GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pParent);
+        m_xFrameWindow = pFrame ? pFrame->GetWindow() : nullptr;
+    }
+
+    bool loop_is_running() const
+    {
+        return m_pLoop && g_main_loop_is_running(m_pLoop);
+    }
+
+    void loop_quit()
+    {
+        if (g_main_loop_is_running(m_pLoop))
+            g_main_loop_quit(m_pLoop);
+    }
+
+    static void signal_response(GtkDialog*, gint nResponseId, gpointer data)
+    {
+        DialogRunner* pThis = static_cast<DialogRunner*>(data);
+        pThis->m_nResponseId = nResponseId;
+        pThis->loop_quit();
+    }
+
+    static gboolean signal_delete(GtkDialog*, GdkEventAny*, gpointer data)
+    {
+        DialogRunner* pThis = static_cast<DialogRunner*>(data);
+        pThis->loop_quit();
+        return true; /* Do not destroy */
+    }
+
+    static void signal_destroy(GtkDialog*, gpointer data)
+    {
+        DialogRunner* pThis = static_cast<DialogRunner*>(data);
+        pThis->loop_quit();
+    }
+
+    void inc_modal_count()
+    {
+        if (m_xFrameWindow)
+            m_xFrameWindow->IncModalCount();
+    }
+
+    void dec_modal_count()
+    {
+        if (m_xFrameWindow)
+            m_xFrameWindow->DecModalCount();
+    }
+
+    // same as gtk_dialog_run except that unmap doesn't auto-respond
+    // so we can hide the dialog and restore it without a response getting
+    // triggered
+    gint run()
+    {
+        g_object_ref(m_pDialog);
+
+        inc_modal_count();
+
+        bool bWasModal = gtk_window_get_modal(GTK_WINDOW(m_pDialog));
+        if (!bWasModal)
+            gtk_window_set_modal(GTK_WINDOW(m_pDialog), true);
+
+        if (!gtk_widget_get_visible(GTK_WIDGET(m_pDialog)))
+            gtk_widget_show(GTK_WIDGET(m_pDialog));
+
+        gulong nSignalResponseId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signal_response), this);
+        gulong nSignalDeleteId = g_signal_connect(m_pDialog, "delete-event", G_CALLBACK(signal_delete), this);
+        gulong nSignalDestroyId = g_signal_connect(m_pDialog, "destroy", G_CALLBACK(signal_destroy), this);
+
+        m_pLoop = g_main_loop_new(nullptr, false);
+        m_nResponseId = GTK_RESPONSE_NONE;
+
+        gdk_threads_leave();
+        g_main_loop_run(m_pLoop);
+        gdk_threads_enter();
+
+        g_main_loop_unref(m_pLoop);
+
+        m_pLoop = nullptr;
+
+        if (!bWasModal)
+            gtk_window_set_modal(GTK_WINDOW(m_pDialog), false);
+
+        g_signal_handler_disconnect(m_pDialog, nSignalResponseId);
+        g_signal_handler_disconnect(m_pDialog, nSignalDeleteId);
+        g_signal_handler_disconnect(m_pDialog, nSignalDestroyId);
+
+        dec_modal_count();
+
+        g_object_unref(m_pDialog);
+
+        return m_nResponseId;
+    }
+};
+
 class GtkInstanceDialog : public GtkInstanceWindow, public virtual weld::Dialog
 {
 private:
     GtkDialog* m_pDialog;
+    DialogRunner m_aDialogRun;
     std::shared_ptr<weld::DialogController> m_xDialogController;
     std::function<void(sal_Int32)> m_aFunc;
     gulong m_nCloseSignalId;
@@ -2082,10 +2189,12 @@ private:
         m_aFunc = nullptr;
         m_xDialogController.reset();
     }
+
 public:
     GtkInstanceDialog(GtkDialog* pDialog, bool bTakeOwnership)
         : GtkInstanceWindow(GTK_WINDOW(pDialog), bTakeOwnership)
         , m_pDialog(pDialog)
+        , m_aDialogRun(pDialog)
         , m_nCloseSignalId(g_signal_connect(m_pDialog, "close", G_CALLBACK(signalClose), this))
         , m_nResponseSignalId(0)
     {
@@ -2115,16 +2224,9 @@ public:
     {
         sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
         int ret;
-        GtkWindow* pParent = gtk_window_get_transient_for(GTK_WINDOW(m_pDialog));
-        GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pParent);
-        vcl::Window* pFrameWindow = pFrame ? pFrame->GetWindow() : nullptr;
         while (true)
         {
-            if (pFrameWindow)
-                pFrameWindow->IncModalCount();
-            ret = gtk_dialog_run(m_pDialog);
-            if (pFrameWindow)
-                pFrameWindow->DecModalCount();
+            ret = m_aDialogRun.run();
             if (ret == GTK_RESPONSE_HELP)
             {
                 help();
@@ -2137,6 +2239,34 @@ public:
         }
         hide();
         return GtkToVcl(ret);
+    }
+
+    virtual void hide() override
+    {
+        if (!gtk_widget_get_visible(m_pWidget))
+            return;
+        gtk_widget_hide(m_pWidget);
+        // if we hide the dialog while its running, then decrement the parent LibreOffice window
+        // modal count, we expect the dialog to restored while its running and match up with
+        // the inc_modal_count of show()
+        //
+        // This hide while running case is for the calc/chart dialogs which put
+        // up an extra range chooser dialog, hides the original, the user can
+        // select a range of cells and on completion the original dialog is
+        // restored
+        if (m_aDialogRun.loop_is_running())
+            m_aDialogRun.dec_modal_count();
+    }
+
+    virtual void show() override
+    {
+        if (gtk_widget_get_visible(m_pWidget))
+            return;
+        sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+        gtk_widget_show(m_pWidget);
+        // see hide comment
+        if (m_aDialogRun.loop_is_running())
+            m_aDialogRun.inc_modal_count();
     }
 
     static int VclToGtk(int nResponse)
@@ -2359,7 +2489,6 @@ static void crippled_viewport_class_init(GtkViewportClass *klass)
     /* GObject signals */
     o_class->set_property = crippled_viewport_set_property;
     o_class->get_property = crippled_viewport_get_property;
-//    o_class->finalize = gtk_tree_view_finalize;
 
     /* Properties */
     g_object_class_override_property(o_class, PROP_HADJUSTMENT,    "hadjustment");
