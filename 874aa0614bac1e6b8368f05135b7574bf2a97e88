@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf57530f_b7aab216",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2018-11-27T14:44:38Z",
+      "side": 1,
+      "message": "Thank you. Done",
+      "parentUuid": "bf57530f_b7e5123b",
+      "revId": "874aa0614bac1e6b8368f05135b7574bf2a97e88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf57530f_d7c1a682",
         "filename": "vcl/qt5/Qt5Menu.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-11-27T09:39:33Z",
       "side": 1,
       "message": "A similar pattern keeps repeating in this class often:\n\nif pSalMenuItem-\u003empAction\n    do_thing_with_action\nif pSalMenuItem-\u003empMenu\n    do_the_same_thing_with_menu\n\nso maybe you\u0027d want to move such code (setVisible, setChecked, setEnabled, setIcon,...) to Qt5MenuItem item class",
+      "revId": "874aa0614bac1e6b8368f05135b7574bf2a97e88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_5767f626",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2018-11-27T14:44:38Z",
+      "side": 1,
+      "message": "Initially I didn\u0027t want to do it due to code being different in some cases.\n\nStill, it\u0027s a good point and I\u0027ve made a helper function and used it everywhere I could, although it might be different from your suggestion.\n\nI didn\u0027t check every function, but at least setting images and text works for me.",
+      "parentUuid": "bf57530f_d7c1a682",
       "revId": "874aa0614bac1e6b8368f05135b7574bf2a97e88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
