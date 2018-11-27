@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_b7e5123b",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-27T09:39:33Z",
+      "side": 1,
+      "message": "Seeing code like this makes me think if those items wouldn\u0027t benefit from being smart pointers, std::unique_ptr or alike\n\nI haven\u0027t tried if it\u0027s possible in this particular context, though. If it ain\u0027t, feel free to ignore",
+      "revId": "874aa0614bac1e6b8368f05135b7574bf2a97e88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_d7c1a682",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-27T09:39:33Z",
+      "side": 1,
+      "message": "A similar pattern keeps repeating in this class often:\n\nif pSalMenuItem-\u003empAction\n    do_thing_with_action\nif pSalMenuItem-\u003empMenu\n    do_the_same_thing_with_menu\n\nso maybe you\u0027d want to move such code (setVisible, setChecked, setEnabled, setIcon,...) to Qt5MenuItem item class",
+      "revId": "874aa0614bac1e6b8368f05135b7574bf2a97e88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
