@@ -203,15 +203,16 @@ protected:
 
         // Convert string back to a transformation;
         drawing::HomogenMatrix3 aExpectedTransform;
-        aExpectedTransform.Line1.Column1 = rExpectedTranform.getToken(0, ';').toDouble();
-        aExpectedTransform.Line1.Column2 = rExpectedTranform.getToken(1, ';').toDouble();
-        aExpectedTransform.Line1.Column3 = rExpectedTranform.getToken(2, ';').toDouble();
-        aExpectedTransform.Line2.Column1 = rExpectedTranform.getToken(3, ';').toDouble();
-        aExpectedTransform.Line2.Column2 = rExpectedTranform.getToken(4, ';').toDouble();
-        aExpectedTransform.Line2.Column3 = rExpectedTranform.getToken(5, ';').toDouble();
-        aExpectedTransform.Line3.Column1 = rExpectedTranform.getToken(6, ';').toDouble();
-        aExpectedTransform.Line3.Column2 = rExpectedTranform.getToken(7, ';').toDouble();
-        aExpectedTransform.Line3.Column3 = rExpectedTranform.getToken(8, ';').toDouble();
+        sal_Int32 nIdx {0};
+        aExpectedTransform.Line1.Column1 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line1.Column2 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line1.Column3 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line2.Column1 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line2.Column2 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line2.Column3 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line3.Column1 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line3.Column2 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line3.Column3 = rExpectedTranform.getToken(0, ';', nIdx).toDouble();
 
         // Check the equality of the two transformation
         return (std::abs(aExpectedTransform.Line1.Column1 - rTransform.Line1.Column1) < fEPS &&
