@@ -1181,6 +1181,18 @@ namespace sdr
 
         bool ObjectContactOfScDrawView::supportsGridOffsets() const
         {
+            // no GridOffset support for printer
+            if(isOutputToPrinter())
+            {
+                return false;
+            }
+
+            // no GridOffset support for PDF export
+            if(isOutputToPDFFile())
+            {
+                return false;
+            }
+
             // yes - we support it
             return true;
         }
