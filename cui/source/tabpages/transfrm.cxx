@@ -1115,6 +1115,11 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     OUString aStr = GetUserData();
     m_xCbxScale->set_active(aStr.toInt32() != 0);
 
+    m_xMtrPosX->save_value();
+    m_xMtrPosY->save_value();
+    m_xMtrWidth->save_value();
+    m_xMtrHeight->save_value();
+
     m_xTsbSizeProtect->save_state();
     m_xTsbAutoGrowWidth->save_state();
     m_xTsbAutoGrowHeight->save_state();
