@@ -306,7 +306,6 @@ void MediaWindow::executeFormatErrorBox(weld::Window* pParent)
 bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep, Size* pPreferredSizePixel )
 {
     const INetURLObject aURL( rURL );
-    bool                bRet = false;
 
     if( aURL.GetProtocol() != INetProtocol::NotValid )
     {
@@ -320,8 +319,6 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
 
                 if( xPlayer.is() )
                 {
-                    bRet = true;
-
                     if( pPreferredSizePixel )
                     {
                         const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
@@ -329,6 +326,8 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
                         pPreferredSizePixel->setWidth( aAwtSize.Width );
                         pPreferredSizePixel->setHeight( aAwtSize.Height );
                     }
+
+                    return true;
                 }
             }
             catch( ... )
@@ -342,18 +341,18 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
 
             getMediaFilters( aFilters );
 
-            for( FilterNameVector::size_type i = 0; ( i < aFilters.size() ) && !bRet; ++i )
+            for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
             {
-                for( sal_Int32 nIndex = 0; nIndex >= 0 && !bRet; )
+                for( sal_Int32 nIndex = 0; nIndex >= 0; )
                 {
                     if( aExt.equalsIgnoreAsciiCase( aFilters[ i ].second.getToken( 0, ';', nIndex ) ) )
-                        bRet = true;
+                        return true;
                 }
             }
         }
     }
 
-    return bRet;
+    return false;
 }
 
 
