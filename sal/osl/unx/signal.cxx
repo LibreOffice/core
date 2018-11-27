@@ -294,7 +294,7 @@ bool onInitSignal()
         }
     }
 
-    /* Clear signal mask inherited from parent process (on Mac OS X, upon a
+    /* Clear signal mask inherited from parent process (on macOS, upon a
        crash soffice re-execs itself from within the signal handler, so the
        second soffice would have the guilty signal blocked and would freeze upon
        encountering a similar crash again): */

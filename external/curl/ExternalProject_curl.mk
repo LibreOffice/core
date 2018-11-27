@@ -35,8 +35,8 @@ ifeq ($(SYSTEM_NSS),)
 curl_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss
 endif
 
-# use --with-darwinssl on Mac OS X >10.5 and iOS to get a native UI for SSL certs for CMIS usage
-# use --with-nss only on platforms other than Mac OS X and iOS
+# use --with-darwinssl on macOS >10.5 and iOS to get a native UI for SSL certs for CMIS usage
+# use --with-nss only on platforms other than macOS and iOS
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure \

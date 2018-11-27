@@ -89,7 +89,7 @@ void SalAquaPicker::implInitialize()
              * [(NSSavePanel*)m_pDialog setExtensionHidden:YES];
              * here but unfortunately this
              * a) only works when the dialog is already displayed because it seems to act on the corresponding checkbox (that we don't show but that doesn't matter)
-             * b) Mac OS X saves this setting on an application-based level which means that the last state is always being restored again when the app runs for the next time
+             * b) macOS saves this setting on an application-based level which means that the last state is always being restored again when the app runs for the next time
              *
              * So the only reliable way seems to be using the NSUserDefaults object because that is where that value is stored and
              * to just overwrite it if it has the wrong value.

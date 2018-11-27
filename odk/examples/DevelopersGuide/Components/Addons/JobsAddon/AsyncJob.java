@@ -304,7 +304,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     final String sFinalTitle = sTitle;
     final String sFinalMessage = sMessage;
 
-    // On Mac OS X, AWT/Swing must not be accessed from the AppKit thread, so call
+    // On macOS, AWT/Swing must not be accessed from the AppKit thread, so call
     // SwingUtilities.invokeLater always on a fresh thread to avoid that problem
     // (also, the current thread must not wait for that fresh thread to terminate,
     // as that would cause a deadlock if this thread is the AppKit thread):

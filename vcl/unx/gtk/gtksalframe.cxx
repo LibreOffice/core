@@ -105,7 +105,7 @@ sal_uInt16 GtkSalFrame::GetKeyModCode( guint state )
         nCode |= KEY_MOD2;
 
     // Map Meta/Super keys to MOD3 modifier on all Unix systems
-    // except Mac OS X
+    // except macOS
     if ( (state & GDK_META_MASK ) || ( state & GDK_SUPER_MASK ) )
         nCode |= KEY_MOD3;
     return nCode;
@@ -3025,7 +3025,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
                 nModMask = KEY_SHIFT;
                 break;
             // Map Meta/Super to MOD3 modifier on all Unix systems
-            // except Mac OS X
+            // except macOS
             case GDK_KEY_Meta_L:
             case GDK_KEY_Super_L:
                 nExtModMask = ModKeyFlags::LeftMod3;

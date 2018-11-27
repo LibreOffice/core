@@ -49,7 +49,7 @@ int
             }
         else if (strcmp(argv[optind], "-isysroot") == 0)
             {
-                // skip Mac OS X SDK selection flags
+                // skip macOS SDK selection flags
                 optind++; optind++;
             }
     }

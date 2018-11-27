@@ -1218,7 +1218,7 @@ void FileDialogHelper_Impl::preExecute()
     // through before it returns from execution
     mnPostUserEventId = Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
 #else
-    // However, the Mac OS X implementation's pickers run modally in execute and so the event doesn't
+    // However, the macOS implementation's pickers run modally in execute and so the event doesn't
     // get through in time... so we call the methods directly
     enablePasswordBox( true );
     updateFilterOptionsBox( );

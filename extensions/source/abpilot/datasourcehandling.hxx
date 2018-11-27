@@ -77,7 +77,7 @@ namespace abp
         /// creates a new KDE address book data source
         ODataSource createNewKab( const OUString& _rName );
 
-        /// creates a new Mac OS X address book data source
+        /// creates a new macOS address book data source
         ODataSource createNewMacab( const OUString& _rName );
 
         /// creates a new dBase data source

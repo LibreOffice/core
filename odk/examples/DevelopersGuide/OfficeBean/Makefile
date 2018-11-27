@@ -61,7 +61,7 @@ SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(URE
 .PHONY: ALL
 ifeq "$(OS)" "MACOSX"
 ALL :
-	@printf 'This example does not work on Mac OS X\n'
+	@printf 'This example does not work on macOS\n'
 else
 ALL : \
     OOoBeanViewer

@@ -399,7 +399,7 @@ bool getJavaProps(const OUString & exePath,
     OUString usStartDir;
     //We need to set the CLASSPATH in case the office is started from
     //a different directory. The JREProperties.class is expected to reside
-    //next to the plugin, except on OS X where it is in ../Resources/java relative
+    //next to the plugin, except on macOS where it is in ../Resources/java relative
     //to the plugin.
     OUString sThisLib;
     if (!osl_getModuleURLFromAddress(reinterpret_cast<void *>(&getJavaProps),
@@ -1137,7 +1137,7 @@ void addJavaInfoFromJavaHome(
 #if !defined JVM_ONE_PATH_CHECK
     // Get Java from JAVA_HOME environment
 
-    // Note that on OS X is it not normal at all to have a JAVA_HOME environment
+    // Note that on macOS is it not normal at all to have a JAVA_HOME environment
     // variable. We set it in our build environment for build-time programs, though,
     // so it is set when running unit tests that involve Java functionality. (Which affects
     // at least CppunitTest_dbaccess_dialog_save, too, and not only the JunitTest ones.)
@@ -1188,8 +1188,8 @@ void addJavaInfosDirScan(
 {
 #ifdef MACOSX
     // Ignore all but Oracle's JDK as loading Apple's Java and Oracle's JRE
-    // will cause OS X's JavaVM framework to display a dialog and invoke
-    // exit() when loaded via JNI on OS X 10.10
+    // will cause macOS's JavaVM framework to display a dialog and invoke
+    // exit() when loaded via JNI on macOS 10.10
     Directory aDir("file:///Library/Java/JavaVirtualMachines");
     if (aDir.open() == File::E_None)
     {

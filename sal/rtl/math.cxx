@@ -1270,7 +1270,7 @@ double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C()
 {
 #ifdef __APPLE__
     if (fValue == -0.0)
-        return fValue; // OS X 10.8 libc returns 0.0 for -0.0
+        return fValue; // macOS 10.8 libc returns 0.0 for -0.0
 #endif
 
     return log1p(fValue);

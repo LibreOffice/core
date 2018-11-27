@@ -9,7 +9,7 @@
      private void updateToolTip() {
 -        // in case fileName is very long, try to set tool tip on frame
 -        Component c = getComponent(1);
-+        // Try to set tool tip on frame. On Mac OS X 10.5,
++        // Try to set tool tip on frame. On macOS 10.5,
 +        // the number of components is different, so try to be safe.
 +        int n = getComponentCount() - 1;
 +        if (n > 1) {

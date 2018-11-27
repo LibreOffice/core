@@ -69,7 +69,7 @@ bool GetSystemDateTime(sal_Int32* pDate, sal_Int64* pTime)
 #else
     struct timespec tsTime;
 #if defined(__MACH__)
-    // OS X does not have clock_gettime, use clock_get_time
+    // macOS does not have clock_gettime, use clock_get_time
     clock_serv_t cclock;
     mach_timespec_t mts;
     host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);

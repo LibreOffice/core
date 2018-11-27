@@ -114,9 +114,9 @@ namespace /* private */
 
         CFStringRef sref = (CFGetTypeID(ref) == CFArrayGetTypeID()) ? static_cast<CFStringRef>(CFArrayGetValueAtIndex(static_cast<CFArrayRef>(ref), 0)) : static_cast<CFStringRef>(ref);
 
-        // NOTE: this API is only available with Mac OS X >=10.3. We need to use it because
+        // NOTE: this API is only available with macOS >=10.3. We need to use it because
         // Apple used non-ISO values on systems <10.2 like "German" for instance but didn't
-        // upgrade those values during upgrade to newer Mac OS X versions. See also #i54337#
+        // upgrade those values during upgrade to newer macOS versions. See also #i54337#
         return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);
     }
 

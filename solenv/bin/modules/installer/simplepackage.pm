@@ -223,7 +223,7 @@ sub replace_variables_in_scriptfile
 # Creating the "simple" package.
 # "zip" for Windows
 # "tar.gz" for all other platforms
-# additionally "dmg" on Mac OS X
+# additionally "dmg" on macOS
 #############################################
 
 sub create_package
@@ -405,7 +405,7 @@ sub create_package
         {
             my $subdir = "$tempdir/$packagename/$volume_name_classic_app.app/Contents/Resources";
             if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
-            # iterate over OS X localizations
+            # iterate over macOS localizations
             foreach $lang ("ca", "cs", "da", "de", "el", "en", "es", "fi", "fr", "hr", "hu", "id", "it", "ja", "ko", "ms", "nl", "no", "pl", "pt", "pt_PT", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh_CN", "zh_TW")
             {
                 installer::systemactions::create_directory($subdir . "/" . $lang . ".lproj");

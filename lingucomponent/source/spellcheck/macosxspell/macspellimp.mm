@@ -105,7 +105,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
     if (!numdict) {
 
         // invoke a dictionary manager to get the user dictionary list
-        // TODO How on Mac OS X?
+        // TODO How on macOS?
 
         // invoke a second  dictionary manager to get the shared dictionary list
         NSArray *aSpellCheckLanguages = [[NSSpellChecker sharedSpellChecker] availableLanguages];
@@ -526,7 +526,7 @@ OUString SAL_CALL
     MacSpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return OUString( "Mac OS X Spell Checker" );
+    return OUString( "macOS Spell Checker" );
 }
 
 

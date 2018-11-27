@@ -3270,7 +3270,7 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
                 nModMask = KEY_SHIFT;
                 break;
             // Map Meta/Super to MOD3 modifier on all Unix systems
-            // except Mac OS X
+            // except macOS
             case GDK_KEY_Meta_L:
             case GDK_KEY_Super_L:
                 nExtModMask = ModKeyFlags::LeftMod3;

@@ -94,7 +94,7 @@ OUString macosx_getLocale()
         buf.append("_");
         append(buf, static_cast<CFStringRef>(CFArrayGetValueAtIndex(subs, 1)));
     }
-    // Append 'UTF-8' to the locale because the Mac OS X file
+    // Append 'UTF-8' to the locale because the macOS file
     // system interface is UTF-8 based and sal tries to determine
     // the file system locale from the locale information
     buf.append(".UTF-8");
