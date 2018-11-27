@@ -2492,9 +2492,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
             case ocNegBinomVert :
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpNegbinomdist, nResultSize));
                 break;
-            case ocPearson:
+            /*case ocPearson:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPearson, nResultSize));
-                break;
+                break;*/
             case ocRSQ:
                 mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpRsq, nResultSize));
                 break;
