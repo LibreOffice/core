@@ -15,6 +15,7 @@ avmedia/res/avl02054.png cmd/lc_mediamute.png
 cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
 cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png 
 cmd/32/adddatefield.png cmd/32/datefield.png
+cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/32/adjust.png cmd/32/zoomoptimal.png
 cmd/32/advancedmode.png cmd/32/toggleobjectrotatemode.png
 cmd/32/alignframemenu.png cmd/32/objectalign.png
@@ -358,6 +359,7 @@ cmd/tr/sc_underlinesimple.png cmd/tr/sc_underline.png
 cmd/lc_acceptchanges.png cmd/lc_accepttrackedchanges.png
 cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png 
 cmd/lc_adddatefield.png cmd/lc_datefield.png
+cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/lc_adjust.png cmd/lc_zoomoptimal.png
 cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
 cmd/lc_alignframemenu.png cmd/lc_objectalign.png
@@ -650,6 +652,7 @@ cmd/nl/sc_underlinesimple.png cmd/nl/sc_underline.png
 cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
 cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png 
 cmd/sc_adddatefield.png cmd/sc_datefield.png
+cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 cmd/sc_adjust.png cmd/sc_zoomoptimal.png
 cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
 cmd/sc_alignframemenu.png cmd/sc_objectalign.png
