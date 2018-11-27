@@ -1040,39 +1040,39 @@ static SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, c
 
         const SfxPoolItem* pParaItem = nullptr;
 
-        for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
+        for(const auto& rAttrib : aAttribs)
         {
-            OSL_ENSURE( i->pAttr, "GetCharAttribs gives corrupt data" );
+            OSL_ENSURE( rAttrib.pAttr, "GetCharAttribs gives corrupt data" );
 
-            const bool bEmptyPortion = (i->nStart == i->nEnd);
-            if( (!bEmptyPortion && (i->nStart >= nEndPos)) || (bEmptyPortion && (i->nStart > nEndPos)) )
+            const bool bEmptyPortion = (rAttrib.nStart == rAttrib.nEnd);
+            if( (!bEmptyPortion && (rAttrib.nStart >= nEndPos)) || (bEmptyPortion && (rAttrib.nStart > nEndPos)) )
                 break;  // break if we are already behind our selection
 
-            if( (!bEmptyPortion && (i->nEnd <= nPos)) || (bEmptyPortion && (i->nEnd < nPos)) )
+            if( (!bEmptyPortion && (rAttrib.nEnd <= nPos)) || (bEmptyPortion && (rAttrib.nEnd < nPos)) )
                 continue;   // or if the attribute ends before our selection
 
-            if( i->pAttr->Which() != nWhich )
+            if( rAttrib.pAttr->Which() != nWhich )
                 continue; // skip if is not the searched item
 
             // if we already found an item
             if( pParaItem )
             {
                 // ... and its different to this one than the state is don't care
-                if( *pParaItem != *(i->pAttr) )
+                if( *pParaItem != *(rAttrib.pAttr) )
                     return SfxItemState::DONTCARE;
             }
             else
             {
-                pParaItem = i->pAttr;
+                pParaItem = rAttrib.pAttr;
             }
 
             if( bEmpty )
                 bEmpty = false;
 
-            if( !bGaps && i->nStart > nLastEnd )
+            if( !bGaps && rAttrib.nStart > nLastEnd )
                 bGaps = true;
 
-            nLastEnd = i->nEnd;
+            nLastEnd = rAttrib.nEnd;
         }
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )

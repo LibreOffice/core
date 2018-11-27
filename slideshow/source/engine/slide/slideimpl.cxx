@@ -818,12 +818,9 @@ void SlideImpl::addPolygons(const PolyPolygonVector& rPolygons)
 {
     if(!rPolygons.empty())
     {
-        for( PolyPolygonVector::const_iterator aIter = rPolygons.begin(),
-                 aEnd = rPolygons.end();
-             aIter!=aEnd;
-             ++aIter )
+        for( const auto& rxPolygon : rPolygons )
         {
-            maPolygons.push_back(*aIter);
+            maPolygons.push_back(rxPolygon);
         }
     }
 }

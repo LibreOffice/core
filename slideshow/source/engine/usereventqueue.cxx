@@ -314,23 +314,20 @@ protected:
 
         // find matching shape (scan reversely, to coarsely match
         // paint order)
-        ImpShapeEventMap::reverse_iterator       aCurrShape(maShapeEventMap.rbegin());
-        const ImpShapeEventMap::reverse_iterator aEndShape( maShapeEventMap.rend() );
-        while( aCurrShape != aEndShape )
+        auto aCurrShape = std::find_if(maShapeEventMap.rbegin(), maShapeEventMap.rend(),
+            [&aPosition](const ImpShapeEventMap::value_type& rShape) {
+                // TODO(F2): Get proper geometry polygon from the
+                // shape, to avoid having areas outside the shape
+                // react on the mouse
+                return rShape.first->getBounds().isInside( aPosition )
+                    && rShape.first->isVisible();
+            });
+        if (aCurrShape != maShapeEventMap.rend())
         {
-            // TODO(F2): Get proper geometry polygon from the
-            // shape, to avoid having areas outside the shape
-            // react on the mouse
-            if( aCurrShape->first->getBounds().isInside( aPosition ) &&
-                aCurrShape->first->isVisible() )
-            {
-                // shape hit, and shape is visible - report a
-                // hit
-                o_rHitShape = aCurrShape;
-                return true;
-            }
-
-            ++aCurrShape;
+            // shape hit, and shape is visible - report a
+            // hit
+            o_rHitShape = aCurrShape;
+            return true;
         }
 
         return false; // nothing hit

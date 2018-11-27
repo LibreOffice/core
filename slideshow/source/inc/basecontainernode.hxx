@@ -72,10 +72,7 @@ protected:
     void forEachChildNode( FuncT func,
                                   int nodeStateMask ) const
     {
-        VectorOfNodes::const_iterator iPos( maChildren.begin() );
-        VectorOfNodes::const_iterator const iEnd( maChildren.end() );
-        for ( ; iPos != iEnd; ++iPos ) {
-            AnimationNodeSharedPtr const& pNode = *iPos;
+        for (AnimationNodeSharedPtr const& pNode : maChildren) {
             if (nodeStateMask != -1 && (pNode->getState() & nodeStateMask) == 0)
                 continue;
             func(pNode);

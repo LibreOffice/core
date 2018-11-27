@@ -1318,20 +1318,8 @@ const SotAction_Impl* GetExchangeDestinationWriterFreeAreaCopy()
 
 bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, SotClipboardFormatId nId )
 {
-    auto aIter( rDataFlavorExVector.begin() );
-    auto aEnd( rDataFlavorExVector.end() );
-    bool bRet = false;
-
-    while( aIter != aEnd )
-    {
-        if( nId == (*aIter++).mnSotId )
-        {
-            bRet = true;
-            aIter = aEnd;
-        }
-    }
-
-    return bRet;
+    return std::any_of(rDataFlavorExVector.begin(), rDataFlavorExVector.end(),
+        [nId](const DataFlavorEx& rDataFlavorEx) { return nId == rDataFlavorEx.mnSotId; });
 }
 
 
