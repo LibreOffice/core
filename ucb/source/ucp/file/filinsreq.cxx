@@ -45,17 +45,16 @@ XInteractionRequestImpl::XInteractionRequestImpl(
     TaskManager *pShell,sal_Int32 CommandId)
     : p1( new XInteractionSupplyNameImpl ),
       p2( new XInteractionAbortImpl ),
-      m_nErrorCode(0),
-      m_nMinorError(0),
       m_xOrigin(xOrigin)
 {
+    sal_Int32 nErrorCode(0), nMinorError(0);
     if( pShell )
-        pShell->retrieveError(CommandId,m_nErrorCode,m_nMinorError);
+        pShell->retrieveError(CommandId,nErrorCode,nMinorError);
     std::vector<uno::Reference<task::XInteractionContinuation>> continuations{
         Reference<XInteractionContinuation>(p1),
         Reference<XInteractionContinuation>(p2) };
     Any aAny;
-    if(m_nErrorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR)
+    if(nErrorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR)
     {
         NameClashException excep;
         excep.Name = aClashingName;
@@ -64,7 +63,7 @@ XInteractionRequestImpl::XInteractionRequestImpl(
         excep.Message = "folder exists and overwrite forbidden";
         aAny <<= excep;
     }
-    else if(m_nErrorCode == TASKHANDLING_INVALID_NAME_MKDIR)
+    else if(nErrorCode == TASKHANDLING_INVALID_NAME_MKDIR)
     {
         InteractiveAugmentedIOException excep;
         excep.Code = IOErrorCode_INVALID_CHARACTER;

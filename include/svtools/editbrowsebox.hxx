@@ -478,8 +478,8 @@ namespace svt
             // and the asynchronous event the focus has changed, we won't grab it for ourself.
 
         long    nPaintRow;  // row being painted
-        long    nEditRow, nOldEditRow;
-        sal_uInt16  nEditCol, nOldEditCol;
+        long    nEditRow;
+        sal_uInt16  nEditCol;
 
         bool            bHasFocus : 1;
         mutable bool    bPaintStatus : 1;   // paint a status (image) in the handle column

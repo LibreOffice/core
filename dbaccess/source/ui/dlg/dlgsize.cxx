@@ -30,20 +30,20 @@ DlgSize::DlgSize(weld::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nA
     : GenericDialogController(pParent, bRow ? OUString("dbaccess/ui/rowheightdialog.ui") : OUString("dbaccess/ui/colwidthdialog.ui"),
                               bRow ? OString("RowHeightDialog") : OString("ColWidthDialog"))
     , m_nPrevValue(nVal)
-    , m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
     , m_xMF_VALUE(m_xBuilder->weld_metric_spin_button("value", FieldUnit::CM))
     , m_xCB_STANDARD(m_xBuilder->weld_check_button("automatic"))
 {
+    sal_Int32 nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH);
     if ( _nAlternativeStandard > 0 )
-        m_nStandard = _nAlternativeStandard;
+        nStandard = _nAlternativeStandard;
     m_xCB_STANDARD->connect_toggled(LINK(this,DlgSize,CbClickHdl));
 
     bool bDefault = -1 == nVal;
     m_xCB_STANDARD->set_active(bDefault);
     if (bDefault)
     {
-        SetValue(m_nStandard);
-        m_nPrevValue = m_nStandard;
+        SetValue(nStandard);
+        m_nPrevValue = nStandard;
     }
     CbClickHdl(*m_xCB_STANDARD);
 }

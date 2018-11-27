@@ -44,9 +44,9 @@ class PixmapHolder
     Pixmap          m_aBitmap;
     XVisualInfo     m_aInfo;
 
-    int             m_nRedShift, m_nRedShift2;
-    int             m_nGreenShift, m_nGreenShift2;
-    int             m_nBlueShift, m_nBlueShift2;
+    int             m_nRedShift;
+    int             m_nGreenShift;
+    int             m_nBlueShift;
     unsigned long   m_nBlueShift2Mask, m_nRedShift2Mask, m_nGreenShift2Mask;
 
     // these expect data pointers to bitmapinfo header

@@ -423,6 +423,7 @@ ScXMLColumnNumberContext::ScXMLColumnNumberContext(
     , maType(sc::NUMBER_TRANSFORM_TYPE::ROUND)
     , maPrecision(0)
 {
+    OUString aType;
     if (rAttrList.is())
     {
         for (auto& aIter : *rAttrList)

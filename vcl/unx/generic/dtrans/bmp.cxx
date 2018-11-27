@@ -360,11 +360,8 @@ PixmapHolder::PixmapHolder( Display* pDisplay )
     , m_aPixmap(None)
     , m_aBitmap(None)
     , m_nRedShift(0)
-    , m_nRedShift2(0)
     , m_nGreenShift(0)
-    , m_nGreenShift2(0)
     , m_nBlueShift(0)
-    , m_nBlueShift2(0)
     , m_nBlueShift2Mask(0)
     , m_nRedShift2Mask(0)
     , m_nGreenShift2Mask(0)
@@ -400,14 +397,17 @@ PixmapHolder::PixmapHolder( Display* pDisplay )
 #endif
     if( m_aInfo.c_class == TrueColor )
     {
+        int nRedShift2(0);
+        int nGreenShift2(0);
+        int nBlueShift2(0);
         int nRedSig, nGreenSig, nBlueSig;
-        getShift( m_aInfo.red_mask, m_nRedShift, nRedSig, m_nRedShift2 );
-        getShift( m_aInfo.green_mask, m_nGreenShift, nGreenSig, m_nGreenShift2 );
-        getShift( m_aInfo.blue_mask, m_nBlueShift, nBlueSig, m_nBlueShift2 );
+        getShift( m_aInfo.red_mask, m_nRedShift, nRedSig, nRedShift2 );
+        getShift( m_aInfo.green_mask, m_nGreenShift, nGreenSig, nGreenShift2 );
+        getShift( m_aInfo.blue_mask, m_nBlueShift, nBlueSig, nBlueShift2 );
 
-        m_nBlueShift2Mask = m_nBlueShift2 ? ~static_cast<unsigned long>((1<<m_nBlueShift2)-1) : ~0L;
-        m_nGreenShift2Mask = m_nGreenShift2 ? ~static_cast<unsigned long>((1<<m_nGreenShift2)-1) : ~0L;
-        m_nRedShift2Mask = m_nRedShift2 ? ~static_cast<unsigned long>((1<<m_nRedShift2)-1) : ~0L;
+        m_nBlueShift2Mask = nBlueShift2 ? ~static_cast<unsigned long>((1<<nBlueShift2)-1) : ~0L;
+        m_nGreenShift2Mask = nGreenShift2 ? ~static_cast<unsigned long>((1<<nGreenShift2)-1) : ~0L;
+        m_nRedShift2Mask = nRedShift2 ? ~static_cast<unsigned long>((1<<nRedShift2)-1) : ~0L;
     }
 }
 

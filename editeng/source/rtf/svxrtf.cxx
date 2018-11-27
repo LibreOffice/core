@@ -315,7 +315,7 @@ void SvxRTFParser::ReadStyleTable()
             break;
 
         case RTF_SBASEDON:  pStyle->nBasedOn = sal_uInt16(nTokenValue); break;
-        case RTF_SNEXT:     pStyle->nNext = sal_uInt16(nTokenValue);    break;
+        case RTF_SNEXT:     break;
         case RTF_OUTLINELEVEL:
         case RTF_SOUTLVL:   pStyle->nOutlineNo = sal_uInt8(nTokenValue);    break;
         case RTF_S:         nStyleNo = static_cast<short>(nTokenValue);
@@ -925,7 +925,6 @@ SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRa
 {
     nOutlineNo = sal_uInt8(-1);         // not set
     nBasedOn = 0;
-    nNext = 0;
 }
 
 

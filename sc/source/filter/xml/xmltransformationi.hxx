@@ -119,7 +119,6 @@ public:
 
 class ScXMLColumnNumberContext : public ScXMLImportContext
 {
-    OUString aType;
     sc::NUMBER_TRANSFORM_TYPE maType;
     int maPrecision;
     std::set<SCCOL> maColumns;
