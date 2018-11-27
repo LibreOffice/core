@@ -4016,6 +4016,7 @@ void OpNormdist::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT(3,4);
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -4028,7 +4029,8 @@ void OpNormdist::GenSlidingWindowFunction(
     ss << "{\n";
     ss << "    double x,mue,sigma,c;\n";
     ss << "    int gid0=get_global_id(0);\n";
-    ss << "    double tmp0,tmp1,tmp2,tmp3;\n";
+    ss << "    double tmp0,tmp1,tmp2;\n";
+    ss << "    double tmp3 = 0;\n"; // optional argument
     ss <<"\n    ";
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
