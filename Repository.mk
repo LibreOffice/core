@@ -69,6 +69,7 @@ $(eval $(call gb_Helper_register_executables,UREBIN, \
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     AppleRemote \
     MacOSXSpell \
+    acc \
     adabas \
     adabasui \
     agg \
@@ -118,6 +119,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwm \
     guesslang \
     i18npaper \
+    java_uno_accessbridge \
     juh \
     juhx \
     lng \

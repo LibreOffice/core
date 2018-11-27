@@ -22,13 +22,11 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_accessibility.hxx"
+#include "precompiled_accessibility_accessbridge.hxx"
 
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
-
-#include <WindowsAccessBridgeAdapter.h>
 
 #include <tools/prewin.h>
 #include <wtypes.h>

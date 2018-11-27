@@ -21,29 +21,9 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_Ant_Ant,java_uno_accessbridge,$(SRCDIR)/accessibility/java/java_uno_accessbridge/build.xml))
 
-PRJNAME=accessibility
-TARGET=helper
+$(eval $(call gb_Ant_set_componentfile,java_uno_accessbridge,accessibility/java/java_uno_accessbridge/java_uno_accessbridge,OOO))
 
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :	settings.mk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES=   \
-            $(SLO)$/acc_factory.obj                 \
-            $(SLO)$/accresmgr.obj                   \
-            $(SLO)$/characterattributeshelper.obj   \
-
-SRS1NAME=$(TARGET)
-SRC1FILES=\
-            accessiblestrings.src
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:
 

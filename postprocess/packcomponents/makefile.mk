@@ -323,6 +323,7 @@ my_components += \
 .IF "$(OS)" == "WNT"
 my_components += \
     ado \
+    component/accessibility/java/java_uno_accessbridge/java_uno_accessbridge \
     component/avmedia/source/win/avmediawin \
     component/dtrans/source/generic/dtrans \
     component/dtrans/util/dnd \
@@ -330,7 +331,6 @@ my_components += \
     component/dtrans/util/sysdtrans \
     component/fpicker/util/fop \
     component/fpicker/util/fps \
-    java_uno_accessbridge \
     sysmail \
     winaccessibility \
     wininetbe1

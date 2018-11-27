@@ -20,24 +20,20 @@
 #**************************************************************
 
 
-PRJ=..
 
-PRJNAME=accessibility
-TARGET=inc
+$(eval $(call gb_Module_Module,accessibility))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_add_targets,accessibility,\
+	AllLangResTarget_acc \
+	Library_acc \
+))
 
-.INCLUDE :  settings.mk
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,accessibility,\
+	Ant_java_uno_accessbridge \
+	Library_java_uno_accessbridge \
+))
+endif
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
 
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:
