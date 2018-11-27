@@ -160,7 +160,7 @@ void LoopVarTooSmall::checkSubExpr(Expr const * expr, bool positive) {
     //
     // with dependent type T:
     if (!binOpRHS->isValueDependent()
-        && binOpRHS->EvaluateAsInt(aIntResult, compiler.getASTContext()))
+        && compat::EvaluateAsInt(binOpRHS, aIntResult, compiler.getASTContext()))
     {
         if (less && aIntResult.isStrictlyPositive()) {
             --aIntResult;

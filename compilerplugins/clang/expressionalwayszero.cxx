@@ -139,7 +139,7 @@ std::unique_ptr<APSInt> ExpressionAlwaysZero::getExprValue(Expr const * expr)
         return std::unique_ptr<APSInt>();
     }
     APSInt x1;
-    if (expr->EvaluateAsInt(x1, compiler.getASTContext()))
+    if (compat::EvaluateAsInt(expr, x1, compiler.getASTContext()))
         return std::unique_ptr<APSInt>(new APSInt(x1));
     return std::unique_ptr<APSInt>();
 }

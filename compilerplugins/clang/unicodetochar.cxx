@@ -58,7 +58,7 @@ public:
             return true;
         }
         APSInt res;
-        if (expr->getSubExpr()->EvaluateAsInt(res, compiler.getASTContext())
+        if (compat::EvaluateAsInt(expr->getSubExpr(), res, compiler.getASTContext())
             && res >= 0 && res <= 0x7F)
         {
             return true;

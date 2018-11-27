@@ -156,6 +156,18 @@ inline bool CPlusPlus17(clang::LangOptions const & opts) {
 #endif
 }
 
+inline bool EvaluateAsInt(clang::Expr const * expr, llvm::APSInt& intRes, const clang::ASTContext& ctx) {
+#if CLANG_VERSION >= 80000
+    clang::Expr::EvalResult res;
+    bool b = expr->EvaluateAsInt(res, ctx);
+    if (b && res.Val.isInt())
+        intRes = res.Val.getInt();
+    return b;
+#else
+    return expr->EvaluateAsInt(intRes, ctx);
+#endif
+}
+
 // Work around <http://reviews.llvm.org/D22128>:
 //
 // SfxErrorHandler::GetClassString (svtools/source/misc/ehdl.cxx):
