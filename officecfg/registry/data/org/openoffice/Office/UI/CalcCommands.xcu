@@ -948,7 +948,7 @@
       </node>
       <node oor:name=".uno:ZTestDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~z-test...</value>
+          <value xml:lang="en-US">~Z-test...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
