@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_f7114a55",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-11-27T08:22:25Z",
+      "side": 1,
+      "message": "Think we should keep the t in lower case as it is a math symbol (see [1]) in contrast to the Z- and F-Test [2,3].\n[1] https://en.wikipedia.org/wiki/T-statistic\n[2] https://en.wikipedia.org/wiki/Z-test\n[3] https://en.wikipedia.org/wiki/F-test",
+      "range": {
+        "startLine": 935,
+        "startChar": 42,
+        "endLine": 935,
+        "endChar": 43
+      },
+      "revId": "32c6e112c14cabee7f0c0974adfb161dfac4f7f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
