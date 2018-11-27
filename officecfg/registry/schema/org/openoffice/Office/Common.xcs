@@ -5356,6 +5356,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="UseWebDAVFileLocking" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Allows to specify whether WebDAV-specific file locking should be
+	  used for documents on WebDAV shares. FIXME: warning not to set this
+	  to false in cases when multiple users need read/write access to WebDAV.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="UseDocumentOOoLockFile" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Allows to specify whether the OOo document file locking
