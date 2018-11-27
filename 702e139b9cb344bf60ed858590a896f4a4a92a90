@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_5799361d",
+        "filename": "vcl/headless/svpgdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2142,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-27T13:47:52Z",
+      "side": 1,
+      "message": "I would think you would always want to split along the Y axis, so that the different processor caches get the maximum opportunity to run on independent data - splitting along the X axis will mean that sometimes the data will be bouncing between L1 caches",
+      "revId": "702e139b9cb344bf60ed858590a896f4a4a92a90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
