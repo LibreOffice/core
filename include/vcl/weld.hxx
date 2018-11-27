@@ -98,13 +98,13 @@ public:
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink)
     {
-        assert(!m_aFocusInHdl.IsSet());
+        assert(!m_aFocusInHdl.IsSet() || !rLink.IsSet());
         m_aFocusInHdl = rLink;
     }
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink)
     {
-        assert(!m_aFocusOutHdl.IsSet());
+        assert(!m_aFocusOutHdl.IsSet() || !rLink.IsSet());
         m_aFocusOutHdl = rLink;
     }
 
