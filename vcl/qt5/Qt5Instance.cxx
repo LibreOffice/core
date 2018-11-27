@@ -44,6 +44,7 @@
 #include <vclpluginapi.h>
 #include <sal/log.hxx>
 #include <osl/process.h>
+#include <o3tl/make_unique.hxx>
 
 #include <headless/svpbmp.hxx>
 
