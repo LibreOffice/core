@@ -340,34 +340,31 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
                                                       const SmCaretPos& rCaretPos)
 {
     //Find iterator for position
-    SmNodeList::iterator it;
-    for(it = pLineList->begin(); it != pLineList->end(); ++it){
-        if(*it == rCaretPos.pSelectedNode)
+    SmNodeList::iterator it = std::find(pLineList->begin(), pLineList->end(), rCaretPos.pSelectedNode);
+    if (it != pLineList->end())
+    {
+        if((*it)->GetType() == SmNodeType::Text)
         {
-            if((*it)->GetType() == SmNodeType::Text)
+            //Split textnode if needed
+            if(rCaretPos.nIndex > 0)
             {
-                //Split textnode if needed
-                if(rCaretPos.nIndex > 0)
-                {
-                    SmTextNode* pText = static_cast<SmTextNode*>(rCaretPos.pSelectedNode);
-                    if (rCaretPos.nIndex == pText->GetText().getLength())
-                        return ++it;
-                    OUString str1 = pText->GetText().copy(0, rCaretPos.nIndex);
-                    OUString str2 = pText->GetText().copy(rCaretPos.nIndex);
-                    pText->ChangeText(str1);
-                    ++it;
-                    //Insert str2 as new text node
-                    assert(!str2.isEmpty());
-                    SmTextNode* pNewText = new SmTextNode(pText->GetToken(), pText->GetFontDesc());
-                    pNewText->ChangeText(str2);
-                    it = pLineList->insert(it, pNewText);
-                }
-            }else
+                SmTextNode* pText = static_cast<SmTextNode*>(rCaretPos.pSelectedNode);
+                if (rCaretPos.nIndex == pText->GetText().getLength())
+                    return ++it;
+                OUString str1 = pText->GetText().copy(0, rCaretPos.nIndex);
+                OUString str2 = pText->GetText().copy(rCaretPos.nIndex);
+                pText->ChangeText(str1);
                 ++it;
-            //it now pointer to the node following pos, so pLineList->insert(it, ...) will insert correctly
-            return it;
-
-        }
+                //Insert str2 as new text node
+                assert(!str2.isEmpty());
+                SmTextNode* pNewText = new SmTextNode(pText->GetToken(), pText->GetFontDesc());
+                pNewText->ChangeText(str2);
+                it = pLineList->insert(it, pNewText);
+            }
+        }else
+            ++it;
+        //it now pointer to the node following pos, so pLineList->insert(it, ...) will insert correctly
+        return it;
     }
     //If we didn't find pSelectedNode, it must be because the caret is in front of the line
     return pLineList->begin();

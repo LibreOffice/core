@@ -640,12 +640,11 @@ void OServiceManager::disposing()
         m_bInDisposing = true;
         aImpls = m_ImplementationMap;
     }
-    HashSet_Ref::iterator aIt = aImpls.begin();
-    while( aIt != aImpls.end() )
+    for( const auto& rxImpl : aImpls )
     {
         try
         {
-            Reference<XComponent > xComp( Reference<XComponent >::query( *aIt++ ) );
+            Reference<XComponent > xComp( Reference<XComponent >::query( rxImpl ) );
             if( xComp.is() )
                 xComp->dispose();
         }
@@ -779,9 +778,8 @@ Sequence< OUString > OServiceManager::getUniqueAvailableServiceNames(
 {
     check_undisposed();
     MutexGuard aGuard( m_mutex );
-    HashMultimap_OWString_Interface::iterator aSIt = m_ServiceMap.begin();
-    while( aSIt != m_ServiceMap.end() )
-        aNameSet.insert( (*aSIt++).first );
+    for( const auto& rEntry : m_ServiceMap )
+        aNameSet.insert( rEntry.first );
 
     /* do not return the implementation names
     HashMap_OWString_Interface      m_ImplementationNameMap;
