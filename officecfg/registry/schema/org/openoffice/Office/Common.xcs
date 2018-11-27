@@ -1616,7 +1616,7 @@
           </info>
           <value>$(insturl)/@LIBO_SHARE_FOLDER@/config</value>
         </prop>
-        <prop oor:name="Dictionary" oor:type="xs:string" oor:nillable="false">
+        <prop oor:name="Dictionary" oor:type="xs:string">
           <info>
             <desc>Contains the provided dictionaries.</desc>
           </info>
