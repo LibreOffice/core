@@ -141,39 +141,31 @@ SwTwips SwTextFrameInfo::GetCharPos(TextFrameIndex const nChar, bool bCenter) co
     return (( nNext + nStt ) / 2 ) - aRectFnSet.GetLeft(pFrame->getFrameArea());
 }
 
-SwPaM *AddPam( SwPaM *pPam, const SwTextFrame* pTextFrame,
+static void
+AddRange(std::vector<std::pair<TextFrameIndex, TextFrameIndex>> & rRanges,
             TextFrameIndex const nPos, TextFrameIndex const nLen)
 {
+    assert(rRanges.empty() || rRanges.back().second <= nPos);
     if( nLen )
     {
-        SwPosition const start(pTextFrame->MapViewToModelPos(nPos));
-        SwPosition const end(pTextFrame->MapViewToModelPos(nPos + nLen));
-        // It could be the first
-        if( pPam->HasMark() )
+        if (!rRanges.empty() && nPos == rRanges.back().second)
         {
-            // If the new position is right after the current one, then
-            // simply extend the Pam
-            if (start == *pPam->GetPoint())
-            {
-                *pPam->GetPoint() = end;
-                return pPam;
-            }
-            pPam = new SwPaM(*pPam, pPam);
+            rRanges.back().second += nLen;
         }
-
-        *pPam->GetPoint() = start;
-        pPam->SetMark();
-        *pPam->GetPoint() = end;
+        else
+        {
+            rRanges.emplace_back(nPos, nPos + nLen);
+        }
     }
-    return pPam;
 }
 
-// Accumulates the whitespace at line start and end in the Pam
-void SwTextFrameInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
+// Accumulates the whitespace at line start and end in the vector
+void SwTextFrameInfo::GetSpaces(
+    std::vector<std::pair<TextFrameIndex, TextFrameIndex>> & rRanges,
+    bool const bWithLineBreak) const
 {
     SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
     SwTextMargin aLine( const_cast<SwTextFrame*>(pFrame), &aInf );
-    SwPaM *pPam = &rPam;
     bool bFirstLine = true;
     do {
 
@@ -183,8 +175,7 @@ void SwTextFrameInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
             // Do NOT include the blanks/tabs from the first line
             // in the selection
             if( !bFirstLine && nPos > aLine.GetStart() )
-                pPam = AddPam( pPam, pFrame, aLine.GetStart(),
-                                nPos - aLine.GetStart() );
+                AddRange( rRanges, aLine.GetStart(), nPos - aLine.GetStart() );
 
             // Do NOT include the blanks/tabs from the last line
             // in the selection
@@ -197,7 +188,7 @@ void SwTextFrameInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
                     TextFrameIndex const nOff( !bWithLineBreak && CH_BREAK ==
                         aLine.GetInfo().GetChar(aLine.GetEnd() - TextFrameIndex(1))
                                 ? 1 : 0 );
-                    pPam = AddPam( pPam, pFrame, nPos, aLine.GetEnd() - nPos - nOff );
+                    AddRange( rRanges, nPos, aLine.GetEnd() - nPos - nOff );
                 }
             }
         }

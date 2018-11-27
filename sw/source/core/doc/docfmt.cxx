@@ -1811,6 +1811,9 @@ void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nP
     {
         aPam.SetMark();
         aPam.GetMark()->nContent.Assign(pTNd, pTNd->GetText().getLength());
+        // sw_redlinehide: don't need layout currently because the only caller
+        // passes in the properties node
+        assert(static_cast<SwTextFrame const*>(pTNd->getLayoutFrame(nullptr))->GetTextNodeForParaProps() == pTNd);
         getIDocumentContentOperations().InsertItemSet( aPam, *pSet );
     }
 }
