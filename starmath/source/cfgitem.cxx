@@ -484,11 +484,9 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
     sal_Int32 nNodes = aNodes.getLength();
 
     rSymbols.resize( nNodes );
-    std::vector< SmSym >::iterator aIt( rSymbols.begin() );
-    std::vector< SmSym >::iterator aEnd( rSymbols.end() );
-    while (aIt != aEnd)
+    for (auto& rSymbol : rSymbols)
     {
-        ReadSymbol( *aIt++, *pNode++, SYMBOL_LIST );
+        ReadSymbol( rSymbol, *pNode++, SYMBOL_LIST );
     }
 }
 
@@ -506,11 +504,8 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
 
     PropertyValue *pVal = pValues;
     OUString aDelim( "/" );
-    std::vector< SmSym >::const_iterator aIt( rNewSymbols.begin() );
-    std::vector< SmSym >::const_iterator aEnd( rNewSymbols.end() );
-    while (aIt != aEnd)
+    for (const SmSym& rSymbol : rNewSymbols)
     {
-        const SmSym &rSymbol = *aIt++;
         OUString  aNodeNameDelim( SYMBOL_LIST );
         aNodeNameDelim += aDelim;
         aNodeNameDelim += rSymbol.GetExportName();

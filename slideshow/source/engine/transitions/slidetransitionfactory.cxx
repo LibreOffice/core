@@ -205,14 +205,12 @@ public:
         SAL_INFO("slideshow", "PluginSlideChange viewRemoved");
         SlideChangeBase::viewRemoved( rView );
 
-        for( auto aIter = maTransitions.begin(); aIter != maTransitions.end(); ++aIter )
+        auto aIter = std::find_if(maTransitions.begin(), maTransitions.end(),
+            [&rView](const std::unique_ptr<TransitionViewPair>& rxTransition) { return rxTransition->mpView == rView; });
+        if (aIter != maTransitions.end())
         {
-            if( ( *aIter )->mpView == rView )
-            {
-                SAL_INFO("slideshow", "view removed" );
-                maTransitions.erase( aIter );
-                break;
-            }
+            SAL_INFO("slideshow", "view removed" );
+            maTransitions.erase( aIter );
         }
     }
 
