@@ -102,8 +102,6 @@ protected:
     virtual short               Ok();
     // Is deleted in Sfx!
     virtual SfxItemSet*         CreateInputItemSet( sal_uInt16 nId );
-    // Is not deleted in Sfx!
-    virtual void                RefreshInputSet();
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
     VclPtr<VclButtonBox>   m_pActionArea;

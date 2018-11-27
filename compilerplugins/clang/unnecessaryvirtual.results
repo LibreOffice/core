@@ -16,11 +16,11 @@ basic/source/comp/codegen.cxx:490
     void BufferTransformer::processOpCode1(enum SbiOpcode,type-parameter-0-0,)
 basic/source/comp/codegen.cxx:515
     void BufferTransformer::processOpCode2(enum SbiOpcode,type-parameter-0-0,type-parameter-0-0,)
-basic/source/comp/codegen.cxx:525
+basic/source/comp/codegen.cxx:524
     _Bool BufferTransformer::processParams()
 chart2/source/inc/WeakListenerAdapter.hxx:57
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
-extensions/source/dbpilots/unoautopilot.hxx:98
+extensions/source/dbpilots/unoautopilot.hxx:99
     class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
 extensions/source/propctrlr/commoncontrol.hxx:127
     short pcr::CommonBehaviourControl::getControlType()
@@ -52,115 +52,51 @@ forms/source/xforms/namedcollection.hxx:106
     class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:111
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
+include/basegfx/utils/systemdependentdata.hxx:122
+    unsigned int basegfx::SystemDependentData::getHoldCyclesInSeconds()const
 include/basegfx/utils/unopolypolygon.hxx:97
     void basegfx::unotools::UnoPolyPolygon::modifying()const
 include/comphelper/interaction.hxx:54
     void comphelper::OInteraction::select()
 include/comphelper/proparrhlp.hxx:87
     class cppu::IPropertyArrayHelper * comphelper::OAggregationArrayUsageHelper::createArrayHelper()const
-include/comphelper/servicedecl.hxx:165
+include/comphelper/servicedecl.hxx:164
     class rtl::OUString comphelper::service_decl::detail::OwnServiceImpl::getImplementationName()
-include/comphelper/servicedecl.hxx:168
+include/comphelper/servicedecl.hxx:167
     unsigned char comphelper::service_decl::detail::OwnServiceImpl::supportsService(const class rtl::OUString &,)
-include/comphelper/servicedecl.hxx:172
+include/comphelper/servicedecl.hxx:171
     class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
-include/comphelper/solarmutex.hxx:53
+include/comphelper/solarmutex.hxx:57
     _Bool comphelper::SolarMutex::tryToAcquire()
-include/comphelper/unique_disposing_ptr.hxx:169
+include/comphelper/unique_disposing_ptr.hxx:170
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
-include/comphelper/weakeventlistener.hxx:118
+include/comphelper/weakeventlistener.hxx:120
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
 include/cppcanvas/font.hxx:38
     void cppcanvas::Font::~Font()
-include/sfx2/controlwrapper.hxx:257
-    _Bool sfx::MetricFieldWrapper::IsControlDontKnow()const
-include/sfx2/controlwrapper.hxx:258
-    void sfx::MetricFieldWrapper::SetControlDontKnow(_Bool,)
-include/sfx2/controlwrapper.hxx:260
-    type-parameter-0-0 sfx::MetricFieldWrapper::GetControlValue()const
-include/sfx2/controlwrapper.hxx:261
-    void sfx::MetricFieldWrapper::SetControlValue(type-parameter-0-0,)
-include/sfx2/controlwrapper.hxx:292
-    _Bool sfx::ListBoxWrapper::IsControlDontKnow()const
-include/sfx2/controlwrapper.hxx:294
-    void sfx::ListBoxWrapper::SetControlDontKnow(_Bool,)
-include/sfx2/controlwrapper.hxx:297
+include/sfx2/basedlgs.hxx:137
+    void SfxModelessDialogController::FillInfo(struct SfxChildWinInfo &,)const
+include/sfx2/basedlgs.hxx:238
+    class weld::Container * SfxSingleTabDialogController::get_content_area()
+include/sfx2/controlwrapper.hxx:215
     type-parameter-0-0 sfx::ListBoxWrapper::GetControlValue()const
-include/sfx2/controlwrapper.hxx:298
+include/sfx2/controlwrapper.hxx:216
     void sfx::ListBoxWrapper::SetControlValue(type-parameter-0-0,)
-include/sfx2/controlwrapper.hxx:325
-    _Bool sfx::ValueSetWrapper::IsControlDontKnow()const
-include/sfx2/controlwrapper.hxx:327
-    void sfx::ValueSetWrapper::SetControlDontKnow(_Bool,)
-include/sfx2/controlwrapper.hxx:330
-    type-parameter-0-0 sfx::ValueSetWrapper::GetControlValue()const
-include/sfx2/controlwrapper.hxx:331
-    void sfx::ValueSetWrapper::SetControlValue(type-parameter-0-0,)
-include/sfx2/itemwrapper.hxx:136
-    type-parameter-0-1 sfx::ValueItemWrapper::GetItemValue(const type-parameter-0-0 &,)const
-include/sfx2/itemwrapper.hxx:138
-    void sfx::ValueItemWrapper::SetItemValue(type-parameter-0-0 &,type-parameter-0-1,)const
-include/sfx2/itemwrapper.hxx:156
-    const type-parameter-0-0 & sfx::IdentItemWrapper::GetItemValue(const type-parameter-0-0 &,)const
-include/sfx2/itemwrapper.hxx:158
-    void sfx::IdentItemWrapper::SetItemValue(type-parameter-0-0 &,const type-parameter-0-0 &,)const
-include/svl/svdde.hxx:244
+include/sfx2/tabdlg.hxx:106
+    void SfxTabDialog::RefreshInputSet()
+include/svl/svdde.hxx:237
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
-include/svl/svdde.hxx:245
+include/svl/svdde.hxx:238
     _Bool DdeTopic::Put(const class DdeData *,)
-include/svl/svdde.hxx:246
+include/svl/svdde.hxx:239
     _Bool DdeTopic::Execute(const class rtl::OUString *,)
-include/svl/svdde.hxx:248
+include/svl/svdde.hxx:241
     _Bool DdeTopic::MakeItem(const class rtl::OUString &,)
-include/svl/svdde.hxx:251
+include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
-include/svl/svdde.hxx:307
+include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/svl/undo.hxx:202
-    void SfxUndoManager::SetMaxUndoActionCount(unsigned long,)
-include/svl/undo.hxx:205
-    class rtl::OUString SfxUndoManager::GetUndoActionComment(unsigned long,const _Bool,)const
-include/svl/undo.hxx:206
-    class SfxUndoAction * SfxUndoManager::GetUndoAction(unsigned long,)const
-include/svl/undo.hxx:210
-    class rtl::OUString SfxUndoManager::GetRedoActionComment(unsigned long,const _Bool,)const
-include/svl/undo.hxx:211
-    class SfxUndoAction * SfxUndoManager::GetRedoAction()const
-include/svl/undo.hxx:231
-    void SfxUndoManager::Reset()
-include/svl/undo.hxx:234
-    _Bool SfxUndoManager::IsDoing()const
-include/svl/undo.hxx:235
-    unsigned long SfxUndoManager::GetRepeatActionCount()const
-include/svl/undo.hxx:236
-    class rtl::OUString SfxUndoManager::GetRepeatActionComment(class SfxRepeatTarget &,)const
-include/svl/undo.hxx:237
-    _Bool SfxUndoManager::Repeat(class SfxRepeatTarget &,)
-include/svl/undo.hxx:238
-    _Bool SfxUndoManager::CanRepeat(class SfxRepeatTarget &,)const
-include/svl/undo.hxx:244
-    unsigned long SfxUndoManager::LeaveListAction()
-include/svl/undo.hxx:261
-    unsigned long SfxUndoManager::LeaveAndMergeListAction()
-include/svl/undo.hxx:263
-    _Bool SfxUndoManager::IsInListAction()const
-include/svl/undo.hxx:265
-    unsigned long SfxUndoManager::GetListActionDepth()const
-include/svl/undo.hxx:267
-    void SfxUndoManager::RemoveLastUndoAction()
-include/svl/undo.hxx:276
-    void SfxUndoManager::EnableUndo(_Bool,)
-include/svl/undo.hxx:280
-    _Bool SfxUndoManager::IsUndoEnabled()const
-include/svl/undo.hxx:282
-    void SfxUndoManager::AddUndoListener(class SfxUndoListener &,)
-include/svl/undo.hxx:283
-    void SfxUndoManager::RemoveUndoListener(class SfxUndoListener &,)
-include/svl/undo.hxx:284
-    _Bool SfxUndoManager::IsEmptyActions()const
-include/svtools/treelistbox.hxx:718
-    void SvTreeListBox::SelectAll(_Bool,_Bool,)
-include/svtools/valueset.hxx:490
+include/svtools/valueset.hxx:492
     void SvtValueSet::Select()
 include/toolkit/controls/geometrycontrolmodel.hxx:191
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
@@ -186,21 +122,17 @@ include/vbahelper/vbareturntypes.hxx:40
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/weld.hxx:304
-    void weld::TreeView::append_text(const class rtl::OUString &,)
-include/vcl/weld.hxx:307
-    void weld::TreeView::append(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,)
-sc/source/core/opencl/formulagroupcl.cxx:909
+sc/source/core/opencl/formulagroupcl.cxx:914
     void sc::opencl::DynamicKernelMixedArgument::GenNumDeclRef(class std::__cxx11::basic_stringstream<char> &,)const
-sc/source/ui/inc/anyrefdg.hxx:219
+sc/source/ui/inc/anyrefdg.hxx:208
     void ScRefHdlrImpl::dispose()
-sc/source/ui/inc/StatisticsTwoVariableDialog.hxx:47
-    void ScStatisticsTwoVariableDialog::ValidateDialogInput()
+sc/source/ui/inc/condformatdlgentry.hxx:82
+    void ScCondFrmtEntry::SetPos(const class ScAddress &,)
 sc/source/ui/vba/vbacondition.hxx:39
     class rtl::OUString ScVbaCondition::Formula1()
 sc/source/ui/vba/vbacondition.hxx:40
     class rtl::OUString ScVbaCondition::Formula2()
-sc/source/ui/vba/vbacondition.hxx:44
+sc/source/ui/vba/vbacondition.hxx:42
     int ScVbaCondition::Operator(_Bool,)
 sc/source/ui/vba/vbaformat.hxx:73
     class com::sun::star::uno::Any ScVbaFormat::Borders(const class com::sun::star::uno::Any &,)
@@ -260,8 +192,8 @@ sc/source/ui/vba/vbapagebreak.hxx:48
     void ScVbaPageBreak::Delete()
 sc/source/ui/vba/vbapagebreak.hxx:49
     class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaPageBreak::Location()
-sd/source/ui/framework/module/SlideSorterModule.hxx:63
-    void sd::framework::SlideSorterModule::SaveResourceState()
+sd/source/ui/animations/CustomAnimationList.hxx:102
+    void sd::CustomAnimationList::ReorderEffectsInUiDuringDragOver(class SvTreeListEntry *,)
 slideshow/source/engine/activities/activitiesfactory.cxx:173
     void slideshow::internal::(anonymous namespace)::FromToByActivity::startAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:242
@@ -280,16 +212,12 @@ slideshow/source/engine/animationfactory.cxx:443
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 slideshow/source/engine/animationfactory.cxx:447
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
-svx/source/inc/eventhandler.hxx:50
-    void sdr::event::BaseEvent::~BaseEvent()
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
-vcl/inc/qt5/Qt5Frame.hxx:90
-    void Qt5Frame::InitSvpSalGraphics(class SvpSalGraphics *,)
 vcl/inc/salframe.hxx:135
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
-vcl/inc/sallayout.hxx:185
-    _Bool SalLayout::GetBoundRect(class SalGraphics &,class tools::Rectangle &,)const
+vcl/inc/salframe.hxx:180
+    void SalFrame::Flush(const class tools::Rectangle &,)
 vcl/inc/salmenu.hxx:79
     _Bool SalMenu::AddMenuBarButton(const struct SalMenuButtonItem &,)
 vcl/inc/salmenu.hxx:80
@@ -298,47 +226,49 @@ vcl/inc/salmenu.hxx:92
     class tools::Rectangle SalMenu::GetMenuBarButtonRectPixel(unsigned short,class SalFrame *,)
 vcl/inc/salobj.hxx:48
     void SalObject::Enable(_Bool,)
-vcl/inc/salprn.hxx:112
+vcl/inc/salprn.hxx:115
     enum SalPrinterError SalPrinter::GetErrorCode()
+vcl/inc/unx/glyphcache.hxx:56
+    void GlyphCache::~GlyphCache()
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
-vcl/qt5/Qt5Widget.cxx:401
-    void Qt5Widget::focusInEvent(class QFocusEvent *,)
-vcl/qt5/Qt5Widget.cxx:406
-    void Qt5Widget::focusOutEvent(class QFocusEvent *,)
-vcl/qt5/Qt5Widget.cxx:411
-    void Qt5Widget::keyPressEvent(class QKeyEvent *,)
-vcl/qt5/Qt5Widget.cxx:416
-    void Qt5Widget::keyReleaseEvent(class QKeyEvent *,)
-vcl/qt5/Qt5Widget.cxx:421
-    void Qt5Widget::mouseMoveEvent(class QMouseEvent *,)
-vcl/qt5/Qt5Widget.cxx:426
-    void Qt5Widget::mousePressEvent(class QMouseEvent *,)
-vcl/qt5/Qt5Widget.cxx:431
-    void Qt5Widget::mouseReleaseEvent(class QMouseEvent *,)
-vcl/qt5/Qt5Widget.cxx:436
-    void Qt5Widget::moveEvent(class QMoveEvent *,)
-vcl/qt5/Qt5Widget.cxx:438
-    void Qt5Widget::paintEvent(class QPaintEvent *,)
-vcl/qt5/Qt5Widget.cxx:443
-    void Qt5Widget::resizeEvent(class QResizeEvent *,)
-vcl/qt5/Qt5Widget.cxx:448
-    void Qt5Widget::showEvent(class QShowEvent *,)
-vcl/qt5/Qt5Widget.cxx:450
-    void Qt5Widget::wheelEvent(class QWheelEvent *,)
-vcl/qt5/Qt5Widget.cxx:452
-    void Qt5Widget::closeEvent(class QCloseEvent *,)
-workdir/../vcl/inc/qt5/Qt5FilePicker.hxx:122
-    void Qt5FilePicker::disposing(const struct com::sun::star::lang::EventObject &,)
-workdir/../vcl/unx/kde4/KDE4FilePicker.hxx:137
-    void KDE4FilePicker::disposing(const struct com::sun::star::lang::EventObject &,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:71
-    void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+vcl/inc/unx/saldata.hxx:65
+    void X11SalData::Init()
+vcl/inc/unx/saldata.hxx:68
+    void X11SalData::initNWF()
+vcl/inc/unx/saldata.hxx:69
+    void X11SalData::deInitNWF()
+vcl/inc/unx/saldisp.hxx:185
+    void SalXLib::~SalXLib()
+vcl/inc/unx/saldisp.hxx:186
+    void SalXLib::Init()
+vcl/inc/unx/saldisp.hxx:188
+    _Bool SalXLib::Yield(_Bool,_Bool,)
+vcl/inc/unx/saldisp.hxx:189
+    void SalXLib::Wakeup()
+vcl/inc/unx/saldisp.hxx:192
+    void SalXLib::Insert(int,void *,int (*)(int, void *),int (*)(int, void *),int (*)(int, void *),)
+vcl/inc/unx/saldisp.hxx:196
+    void SalXLib::Remove(int,)
+vcl/inc/unx/saldisp.hxx:198
+    void SalXLib::StartTimer(unsigned long,)
+vcl/inc/unx/saldisp.hxx:199
+    void SalXLib::StopTimer()
+vcl/inc/unx/saldisp.hxx:201
+    _Bool SalXLib::CheckTimeout(_Bool,)
+vcl/inc/unx/saldisp.hxx:412
+    void SalX11Display::Yield()
+vcl/inc/unx/salframe.h:210
+    void X11SalFrame::updateGraphics(_Bool,)
+vcl/inc/unx/salinst.h:47
+    class SalX11Display * X11SalInstance::CreateDisplay()const
 writerfilter/source/ooxml/OOXMLFactory.hxx:72
-    void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
+    void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:73
-    void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+    void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:74
+    void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+writerfilter/source/ooxml/OOXMLFactory.hxx:75
     void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
 xmloff/source/forms/elementimport.hxx:575
     class rtl::Reference<class SvXMLImportContext> xmloff::OContainerImport::CreateChildContext(unsigned short,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XAttributeList> &,)
