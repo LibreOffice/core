@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_f775cacd",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-11-27T14:54:21Z",
+      "side": 1,
+      "message": "This needs to be reverted",
+      "revId": "ddab6c62b7b9b5fda3a0bf10f8a8272a1009d2a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
