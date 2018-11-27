@@ -7982,7 +7982,7 @@ void ScInterpreter::ScIndirect()
         // to determine which syntax to use during doc import
         bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1);
 
-        if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
+        if (nParamCount == 2 && 0.0 == GetDouble() )
         {
             // Overwrite the config and try Excel R1C1.
             eConv = FormulaGrammar::CONV_XL_R1C1;
