@@ -56,6 +56,7 @@ private:
     void DoDispose();
 
     const bool mbSidebarVisibleInLOK;
+    const SfxViewShell* mpOldViewShell;
 };
 
 } } // end of namespace sfx2::sidebar
