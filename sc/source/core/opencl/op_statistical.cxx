@@ -6843,6 +6843,7 @@ void OpPoisson::GenSlidingWindowFunction(
 void OpCovar::GenSlidingWindowFunction(std::stringstream& ss,
     const std::string &sSymName, SubArguments& vSubArguments)
 {
+        CHECK_PARAMETER_COUNT(2,2);
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
         for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -6944,7 +6945,7 @@ void OpCovar::GenSlidingWindowFunction(std::stringstream& ss,
             else {
                 ss << "int i = 0; i < " << nCurWindowSizeX << " && ";
                 ss << " i + gid0 < " << pCurDVRX->GetArrayLength();
-                ss << " && i + gid0 < " << pCurDVRX->GetArrayLength();
+                ss << " && i + gid0 < " << pCurDVRY->GetArrayLength();
                 ss << "; i++) {\n";
                 ss << "if ((isnan(";
                 ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ")) || ";
@@ -7053,6 +7054,10 @@ void OpCovar::GenSlidingWindowFunction(std::stringstream& ss,
             ss << "    return vSum / cnt;\n";
             ss << "    }\n";
             ss << "}";
+        }
+        else
+        {
+            throw Unhandled(__FILE__, __LINE__);
         }
         }
         else {
