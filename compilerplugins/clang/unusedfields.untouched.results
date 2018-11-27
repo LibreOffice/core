@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -20,13 +20,17 @@ canvas/source/vcl/canvasbitmap.hxx:117
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
-chart2/source/controller/dialogs/res_DataLabel.hxx:87
+chart2/source/controller/dialogs/res_DataLabel.hxx:86
     chart::DataLabelResources m_xDC_Dial std::unique_ptr<weld::CustomWeld>
-chart2/source/controller/dialogs/tp_AxisLabel.hxx:53
+chart2/source/controller/dialogs/tp_AxisLabel.hxx:60
     chart::SchAxisLabelTabPage m_xFlOrient std::unique_ptr<weld::Label>
-chart2/source/controller/dialogs/tp_RangeChooser.hxx:88
+chart2/source/controller/dialogs/tp_AxisPositions.hxx:62
+    chart::AxisPositionsTabPage m_xCB_AxisBetweenCategories std::unique_ptr<weld::CheckButton>
+chart2/source/controller/dialogs/tp_AxisPositions.hxx:66
+    chart::AxisPositionsTabPage m_xED_LabelDistance std::unique_ptr<weld::FormattedSpinButton>
+chart2/source/controller/dialogs/tp_RangeChooser.hxx:84
     chart::RangeChooserTabPage m_xFT_Range std::unique_ptr<weld::Label>
-chart2/source/controller/dialogs/tp_TitleRotation.hxx:38
+chart2/source/controller/dialogs/tp_TitleRotation.hxx:44
     chart::SchAlignmentTabPage m_xFtTextDirection std::unique_ptr<weld::Label>
 chart2/source/controller/inc/RangeSelectionListener.hxx:63
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
@@ -66,33 +70,33 @@ cui/source/inc/cuigrfflt.hxx:79
     GraphicFilterDialog mxPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuigrfflt.hxx:175
     GraphicFilterEmboss mxCtlLight std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:709
+cui/source/inc/cuitabarea.hxx:706
     SvxColorTabPage m_xCtlPreviewOld std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuitabarea.hxx:710
+cui/source/inc/cuitabarea.hxx:707
     SvxColorTabPage m_xCtlPreviewNew std::unique_ptr<weld::CustomWeld>
 cui/source/inc/FontFeaturesDialog.hxx:53
     cui::FontFeaturesDialog m_xPreviewWindow std::unique_ptr<weld::CustomWeld>
-cui/source/inc/page.hxx:104
+cui/source/inc/page.hxx:101
     SvxPageDescPage m_xOrientationFT std::unique_ptr<weld::Label>
-cui/source/inc/page.hxx:134
+cui/source/inc/page.hxx:131
     SvxPageDescPage m_xBspWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/paragrph.hxx:67
+cui/source/inc/paragrph.hxx:64
     SvxStdParagraphTabPage m_xRightLabel std::unique_ptr<weld::Label>
-cui/source/inc/paragrph.hxx:91
+cui/source/inc/paragrph.hxx:88
     SvxStdParagraphTabPage m_xExampleWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/paragrph.hxx:154
+cui/source/inc/paragrph.hxx:151
     SvxParaAlignTabPage m_xExampleWin std::unique_ptr<weld::CustomWeld>
-cui/source/inc/paragrph.hxx:159
+cui/source/inc/paragrph.hxx:156
     SvxParaAlignTabPage m_xPropertiesFL std::unique_ptr<weld::Widget>
 cui/source/inc/swpossizetabpage.hxx:88
     SvxSwPosSizeTabPage m_xExampleWN std::unique_ptr<weld::CustomWeld>
-cui/source/inc/textattr.hxx:66
+cui/source/inc/textattr.hxx:65
     SvxTextAttrPage m_xCtlPosition std::unique_ptr<weld::CustomWeld>
-cui/source/inc/transfrm.hxx:104
+cui/source/inc/transfrm.hxx:101
     SvxPositionSizeTabPage m_xCtlPos std::unique_ptr<weld::CustomWeld>
-cui/source/inc/transfrm.hxx:190
+cui/source/inc/transfrm.hxx:187
     SvxAngleTabPage m_xCtlRect std::unique_ptr<weld::CustomWeld>
-cui/source/inc/transfrm.hxx:193
+cui/source/inc/transfrm.hxx:190
     SvxAngleTabPage m_xCtlAngle std::unique_ptr<weld::CustomWeld>
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
@@ -120,6 +124,8 @@ filter/source/xsltdialog/xmlfiltertabpagebasic.hxx:36
     XMLFilterTabPageBasic m_xContainer std::unique_ptr<weld::Widget>
 filter/source/xsltdialog/xmlfiltertabpagexslt.hxx:48
     XMLFilterTabPageXSLT m_xContainer std::unique_ptr<weld::Widget>
+helpcompiler/inc/HelpCompiler.hxx:230
+    HelpCompiler lang const std::string
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/unotext.hxx:612
@@ -138,7 +144,127 @@ include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs const sal_uInt16
-include/svtools/ctrlbox.hxx:353
+include/sfx2/msg.hxx:132
+    SfxType1 pType const std::type_info *
+include/sfx2/msg.hxx:132
+    SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:132
+    SfxType1 nAttribs sal_uInt16
+include/sfx2/msg.hxx:132
+    SfxType1 aAttrib struct SfxTypeAttrib [1]
+include/sfx2/msg.hxx:133
+    SfxType2 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:133
+    SfxType2 pType const std::type_info *
+include/sfx2/msg.hxx:133
+    SfxType2 nAttribs sal_uInt16
+include/sfx2/msg.hxx:133
+    SfxType2 aAttrib struct SfxTypeAttrib [2]
+include/sfx2/msg.hxx:134
+    SfxType3 pType const std::type_info *
+include/sfx2/msg.hxx:134
+    SfxType3 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:134
+    SfxType3 nAttribs sal_uInt16
+include/sfx2/msg.hxx:134
+    SfxType3 aAttrib struct SfxTypeAttrib [3]
+include/sfx2/msg.hxx:135
+    SfxType4 aAttrib struct SfxTypeAttrib [4]
+include/sfx2/msg.hxx:135
+    SfxType4 nAttribs sal_uInt16
+include/sfx2/msg.hxx:135
+    SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:135
+    SfxType4 pType const std::type_info *
+include/sfx2/msg.hxx:136
+    SfxType5 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:136
+    SfxType5 aAttrib struct SfxTypeAttrib [5]
+include/sfx2/msg.hxx:136
+    SfxType5 pType const std::type_info *
+include/sfx2/msg.hxx:136
+    SfxType5 nAttribs sal_uInt16
+include/sfx2/msg.hxx:137
+    SfxType6 pType const std::type_info *
+include/sfx2/msg.hxx:137
+    SfxType6 nAttribs sal_uInt16
+include/sfx2/msg.hxx:137
+    SfxType6 aAttrib struct SfxTypeAttrib [6]
+include/sfx2/msg.hxx:137
+    SfxType6 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:138
+    SfxType7 nAttribs sal_uInt16
+include/sfx2/msg.hxx:138
+    SfxType7 aAttrib struct SfxTypeAttrib [7]
+include/sfx2/msg.hxx:138
+    SfxType7 pType const std::type_info *
+include/sfx2/msg.hxx:138
+    SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:139
+    SfxType8 pType const std::type_info *
+include/sfx2/msg.hxx:139
+    SfxType8 nAttribs sal_uInt16
+include/sfx2/msg.hxx:139
+    SfxType8 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:139
+    SfxType8 aAttrib struct SfxTypeAttrib [8]
+include/sfx2/msg.hxx:140
+    SfxType10 pType const std::type_info *
+include/sfx2/msg.hxx:140
+    SfxType10 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:140
+    SfxType10 nAttribs sal_uInt16
+include/sfx2/msg.hxx:140
+    SfxType10 aAttrib struct SfxTypeAttrib [10]
+include/sfx2/msg.hxx:141
+    SfxType11 nAttribs sal_uInt16
+include/sfx2/msg.hxx:141
+    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:141
+    SfxType11 pType const std::type_info *
+include/sfx2/msg.hxx:141
+    SfxType11 aAttrib struct SfxTypeAttrib [11]
+include/sfx2/msg.hxx:143
+    SfxType13 pType const std::type_info *
+include/sfx2/msg.hxx:143
+    SfxType13 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:143
+    SfxType13 aAttrib struct SfxTypeAttrib [13]
+include/sfx2/msg.hxx:143
+    SfxType13 nAttribs sal_uInt16
+include/sfx2/msg.hxx:144
+    SfxType14 nAttribs sal_uInt16
+include/sfx2/msg.hxx:144
+    SfxType14 pType const std::type_info *
+include/sfx2/msg.hxx:144
+    SfxType14 aAttrib struct SfxTypeAttrib [14]
+include/sfx2/msg.hxx:144
+    SfxType14 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:145
+    SfxType16 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:145
+    SfxType16 pType const std::type_info *
+include/sfx2/msg.hxx:145
+    SfxType16 nAttribs sal_uInt16
+include/sfx2/msg.hxx:145
+    SfxType16 aAttrib struct SfxTypeAttrib [16]
+include/sfx2/msg.hxx:146
+    SfxType17 pType const std::type_info *
+include/sfx2/msg.hxx:146
+    SfxType17 aAttrib struct SfxTypeAttrib [17]
+include/sfx2/msg.hxx:146
+    SfxType17 nAttribs sal_uInt16
+include/sfx2/msg.hxx:146
+    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:147
+    SfxType23 nAttribs sal_uInt16
+include/sfx2/msg.hxx:147
+    SfxType23 aAttrib struct SfxTypeAttrib [23]
+include/sfx2/msg.hxx:147
+    SfxType23 pType const std::type_info *
+include/sfx2/msg.hxx:147
+    SfxType23 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/svtools/ctrlbox.hxx:301
     SvtLineListBox m_xLineSetWin std::unique_ptr<weld::CustomWeld>
 include/svtools/genericunodialog.hxx:218
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
@@ -152,13 +278,11 @@ include/svx/colorwindow.hxx:132
     ColorWindow mxColorSetWin std::unique_ptr<weld::CustomWeld>
 include/svx/colorwindow.hxx:133
     ColorWindow mxRecentColorSetWin std::unique_ptr<weld::CustomWeld>
-include/svx/dialcontrol.hxx:115
-    svx::DialControl::DialControl_Impl mnInitialAngle sal_Int32
 include/svx/hdft.hxx:86
     SvxHFPage m_xBspWin std::unique_ptr<weld::CustomWeld>
 include/vcl/font/Feature.hxx:102
     vcl::font::Feature m_eType const enum vcl::font::FeatureType
-include/vcl/uitest/uiobject.hxx:270
+include/vcl/uitest/uiobject.hxx:271
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
@@ -192,7 +316,7 @@ libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
     GtvMainToolbarClass parentClass GtkBoxClass
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
-opencl/source/openclwrapper.cxx:306
+opencl/source/openclwrapper.cxx:304
     openclwrapper::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
 pyuno/source/module/pyuno_impl.hxx:224
     pyuno::(anonymous) ob_base PyObject
@@ -216,20 +340,76 @@ sal/osl/unx/thread.cxx:95
     osl_thread_priority_st m_Lowest const int
 sal/osl/unx/thread.cxx:113
     osl_thread_global_st m_priority const struct osl_thread_priority_st
-sc/inc/interpretercontext.hxx:36
-    ScInterpreterContext mrDoc const class ScDocument &
+sal/qa/osl/condition/osl_Condition.cxx:68
+    osl_Condition::ctors bRes1 _Bool
+sal/qa/osl/condition/osl_Condition.cxx:198
+    osl_Condition::wait bRes2 _Bool
+sal/qa/osl/condition/osl_Condition.cxx:269
+    osl_Condition::check bRes2 _Bool
+sal/qa/osl/file/osl_File.cxx:1586
+    osl_FileStatus::getFileType m_aVolumeItem class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:1586
+    osl_FileStatus::getFileType m_aFifoItem class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:1587
+    osl_FileStatus::getFileType m_aLinkItem class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:1587
+    osl_FileStatus::getFileType m_aSocketItem class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:1587
+    osl_FileStatus::getFileType m_aSpecialItem class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:3419
+    osl_File::setAttributes rItem_hidden class osl::DirectoryItem
+sal/qa/osl/module/osl_Module.cxx:67
+    osl_Module::ctors bRes1 _Bool
+sal/qa/osl/module/osl_Module.cxx:111
+    osl_Module::getUrlFromAddress bRes1 _Bool
+sal/qa/osl/module/osl_Module.cxx:171
+    osl_Module::load bRes1 _Bool
+sal/qa/osl/module/osl_Module.cxx:198
+    osl_Module::unload bRes1 _Bool
+sal/qa/osl/module/osl_Module.cxx:339
+    osl_Module::getFunctionSymbol bRes1 _Bool
+sal/qa/osl/pipe/osl_Pipe.cxx:359
+    osl_Pipe::clear bRes1 _Bool
+sal/qa/osl/pipe/osl_Pipe.cxx:524
+    osl_Pipe::getError bRes1 _Bool
+sal/qa/osl/pipe/osl_Pipe.cxx:524
+    osl_Pipe::getError bRes _Bool
+sal/qa/osl/pipe/osl_Pipe.cxx:562
+    osl_Pipe::getHandle bRes1 _Bool
+sal/qa/osl/pipe/osl_Pipe.cxx:846
+    osl_StreamPipe::recv bRes1 _Bool
+sal/qa/osl/pipe/osl_Pipe.cxx:846
+    osl_StreamPipe::recv bRes _Bool
+sal/qa/osl/security/osl_Security.cxx:61
+    osl_Security::ctors bRes _Bool
+sal/qa/osl/security/osl_Security.cxx:61
+    osl_Security::ctors bRes1 _Bool
+sal/qa/osl/security/osl_Security.cxx:126
+    osl_Security::getUserIdent bRes1 _Bool
+sal/qa/osl/security/osl_Security.cxx:157
+    osl_Security::getUserName bRes1 _Bool
+sal/qa/osl/security/osl_Security.cxx:191
+    osl_Security::getConfigDir bRes1 _Bool
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
-sc/source/core/data/document.cxx:1244
+sc/source/core/data/document.cxx:1225
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1245
+sc/source/core/data/document.cxx:1226
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk const class ScBulkBroadcast
-sc/source/filter/html/htmlpars.cxx:3029
-    (anonymous namespace)::CSSHandler::MemStr mp const char *
 sc/source/filter/html/htmlpars.cxx:3030
+    (anonymous namespace)::CSSHandler::MemStr mp const char *
+sc/source/filter/html/htmlpars.cxx:3031
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
+sc/source/filter/xml/xmlimprt.hxx:176
+    tScMyCellRange EndColumn sal_Int32
+sc/source/filter/xml/xmlimprt.hxx:176
+    tScMyCellRange StartColumn sal_Int32
+sc/source/filter/xml/xmlimprt.hxx:177
+    tScMyCellRange StartRow sal_Int32
+sc/source/filter/xml/xmlimprt.hxx:177
+    tScMyCellRange EndRow sal_Int32
 sc/source/ui/inc/crdlg.hxx:32
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
 sc/source/ui/inc/delcodlg.hxx:39
@@ -268,30 +448,52 @@ sd/source/ui/inc/custsdlg.hxx:75
     SdDefineCustomShowDlg m_xBtnHelp std::unique_ptr<weld::Button>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port const uint
-sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
+sd/source/ui/slidesorter/view/SlsLayouter.cxx:64
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:104
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1313
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1211
+sd/source/ui/view/viewshel.cxx:1208
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1212
+sd/source/ui/view/viewshel.cxx:1209
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock const sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1213
+sd/source/ui/view/viewshel.cxx:1210
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock const sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1214
+sd/source/ui/view/viewshel.cxx:1211
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
+    PDFGrammar::definition value rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
+    PDFGrammar::definition array rule<ScannerT>
 sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
     SfxPickList mxImpl std::unique_ptr<SfxPickListImpl>
+sfx2/source/inc/versdlg.hxx:81
+    SfxCmisVersionsDialog m_xOpenButton std::unique_ptr<weld::Button>
+sfx2/source/inc/versdlg.hxx:82
+    SfxCmisVersionsDialog m_xViewButton std::unique_ptr<weld::Button>
+sfx2/source/inc/versdlg.hxx:83
+    SfxCmisVersionsDialog m_xDeleteButton std::unique_ptr<weld::Button>
+sfx2/source/inc/versdlg.hxx:84
+    SfxCmisVersionsDialog m_xCompareButton std::unique_ptr<weld::Button>
+sfx2/source/view/sfxbasecontroller.cxx:112
+    GroupIDToCommandGroup nGroupID const enum SfxGroupId
+sfx2/source/view/sfxbasecontroller.cxx:113
+    GroupIDToCommandGroup nCommandGroup const sal_Int16
 sfx2/source/view/viewfrm.cxx:163
     (anonymous namespace)::SfxEditDocumentDialog m_xEditDocument std::unique_ptr<weld::Button>
 sfx2/source/view/viewfrm.cxx:164
     (anonymous namespace)::SfxEditDocumentDialog m_xCancel std::unique_ptr<weld::Button>
+slideshow/source/engine/opengl/TransitionImpl.cxx:1990
+    (anonymous namespace)::ThreeFloats z GLfloat
+slideshow/source/engine/opengl/TransitionImpl.cxx:1990
+    (anonymous namespace)::ThreeFloats y GLfloat
+slideshow/source/engine/opengl/TransitionImpl.cxx:1990
+    (anonymous namespace)::ThreeFloats x GLfloat
 starmath/inc/dialog.hxx:91
     SmFontDialog m_xShowFont std::unique_ptr<weld::CustomWeld>
 starmath/inc/dialog.hxx:331
@@ -310,22 +512,36 @@ starmath/inc/view.hxx:218
     SmViewShell maGraphicController const class SmGraphicController
 starmath/source/accessibility.hxx:271
     SmEditSource rEditAcc class SmEditAccessible &
-svl/source/crypto/cryptosign.cxx:121
-    (anonymous namespace)::(anonymous) extnID const SECItem
-svl/source/crypto/cryptosign.cxx:122
-    (anonymous namespace)::(anonymous) critical const SECItem
 svl/source/crypto/cryptosign.cxx:123
+    (anonymous namespace)::(anonymous) extnID const SECItem
+svl/source/crypto/cryptosign.cxx:124
+    (anonymous namespace)::(anonymous) critical const SECItem
+svl/source/crypto/cryptosign.cxx:125
     (anonymous namespace)::(anonymous) extnValue const SECItem
-svl/source/crypto/cryptosign.cxx:281
+svl/source/crypto/cryptosign.cxx:283
     (anonymous namespace)::(anonymous) statusString SECItem
-svl/source/crypto/cryptosign.cxx:282
+svl/source/crypto/cryptosign.cxx:284
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/filter/exportdialog.hxx:124
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
 svx/source/inc/datanavi.hxx:604
     svxform::AddInstanceDialog m_xURLFT std::unique_ptr<weld::Label>
+sw/inc/ddefld.hxx:43
+    sw::InRangeSearchHint m_nEnd const sal_Int32
+sw/inc/ddefld.hxx:43
+    sw::InRangeSearchHint m_nStt const sal_Int32
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
+sw/source/core/doc/tblrwcl.cxx:98
+    CR_SetBoxWidth m_Boxes class SwSelBoxes
+sw/source/core/doc/tblrwcl.cxx:104
+    CR_SetBoxWidth nBoxWidth sal_uInt16
+sw/source/core/doc/tblrwcl.cxx:105
+    CR_SetBoxWidth bSplittBox _Bool
+sw/source/core/doc/tblrwcl.cxx:179
+    CR_SetLineHeight m_Boxes class SwSelBoxes
+sw/source/core/doc/tblrwcl.cxx:180
+    CR_SetLineHeight aShareFormats class SwShareBoxFormats
 sw/source/core/frmedt/fetab.cxx:79
     TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:170
@@ -350,23 +566,25 @@ sw/source/ui/misc/impfnote.hxx:44
     SwEndNoteOptionPage m_xPosFT std::unique_ptr<weld::Label>
 sw/source/uibase/inc/dbui.hxx:31
     PrintMonitor m_xDocName std::unique_ptr<weld::Label>
-sw/source/uibase/inc/drpcps.hxx:141
+sw/source/uibase/inc/drpcps.hxx:133
     SwDropCapsPage m_xPict std::unique_ptr<weld::CustomWeld>
-sw/source/uibase/inc/frmpage.hxx:227
+sw/source/uibase/inc/frmpage.hxx:123
+    SwFramePage m_xExampleWN std::unique_ptr<weld::CustomWeld>
+sw/source/uibase/inc/frmpage.hxx:224
     SwGrfExtPage m_xFlAngle std::unique_ptr<weld::Frame>
-sw/source/uibase/inc/frmpage.hxx:296
+sw/source/uibase/inc/frmpage.hxx:292
     SwFrameAddPage m_xDescriptionFT std::unique_ptr<weld::Label>
-sw/source/uibase/inc/frmpage.hxx:298
+sw/source/uibase/inc/frmpage.hxx:294
     SwFrameAddPage m_xPrevFT std::unique_ptr<weld::Label>
-sw/source/uibase/inc/frmpage.hxx:300
+sw/source/uibase/inc/frmpage.hxx:296
     SwFrameAddPage m_xNextFT std::unique_ptr<weld::Label>
 sw/source/uibase/inc/insfnote.hxx:38
     SwInsFootNoteDlg m_xNumberFrame std::unique_ptr<weld::Widget>
-sw/source/uibase/inc/num.hxx:55
+sw/source/uibase/inc/num.hxx:47
     SwNumPositionTabPage m_xPositionFrame std::unique_ptr<weld::Widget>
-sw/source/uibase/inc/num.hxx:82
+sw/source/uibase/inc/num.hxx:74
     SwNumPositionTabPage m_xPreviewWIN std::unique_ptr<weld::CustomWeld>
-sw/source/uibase/inc/outline.hxx:98
+sw/source/uibase/inc/outline.hxx:85
     SwOutlineSettingsTabPage m_xPreviewWIN std::unique_ptr<weld::CustomWeld>
 sw/source/uibase/inc/pggrid.hxx:44
     SwTextGridPage m_xExampleWN std::unique_ptr<weld::CustomWeld>
@@ -376,14 +594,10 @@ sw/source/uibase/inc/splittbl.hxx:30
     SwSplitTableDlg m_xHorzBox std::unique_ptr<weld::RadioButton>
 sw/source/uibase/inc/splittbl.hxx:31
     SwSplitTableDlg m_xContentCopyRB std::unique_ptr<weld::RadioButton>
-sw/source/uibase/inc/swuiidxmrk.hxx:72
-    SwIndexMarkPane m_xFrame std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh const class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard const class SolarMutexGuard
-sw/source/uibase/inc/wordcountdialog.hxx:46
-    SwWordCountFloatDlg m_xClosePB std::unique_ptr<weld::Button>
 toolkit/source/awt/stylesettings.cxx:90
     toolkit::StyleMethodGuard m_aGuard const class SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:672
@@ -396,8 +610,24 @@ vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone const class OpenGLZone
 vcl/inc/salprn.hxx:44
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
-vcl/source/app/salvtables.cxx:617
+vcl/inc/WidgetThemeLibrary.hxx:87
+    vcl::ControlDrawParameters nSize uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:88
+    vcl::ControlDrawParameters pCairo vcl::ControlDrawParameters::cairo_t *
+vcl/inc/WidgetThemeLibrary.hxx:89
+    vcl::ControlDrawParameters ePart enum ControlPart
+vcl/inc/WidgetThemeLibrary.hxx:90
+    vcl::ControlDrawParameters eState enum ControlState
+vcl/inc/WidgetThemeLibrary.hxx:106
+    vcl::WidgetThemeLibrary_t nSize uint32_t
+vcl/source/app/salvtables.cxx:622
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
+vcl/source/bitmap/BitmapScaleSuperFilter.cxx:54
+    (anonymous namespace)::ScaleContext mnSrcW long
+vcl/source/bitmap/BitmapScaleSuperFilter.cxx:55
+    (anonymous namespace)::ScaleContext mnSrcH long
+vcl/source/bitmap/BitmapScaleSuperFilter.cxx:55
+    (anonymous namespace)::ScaleContext mnDestH long
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:36
@@ -408,7 +638,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2495
+vcl/unx/gtk3/gtk3gtkinst.cxx:2516
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink

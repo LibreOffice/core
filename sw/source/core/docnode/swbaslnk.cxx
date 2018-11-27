@@ -358,7 +358,7 @@ bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
     return false;
 }
 
-bool SwBaseLink::IsInRange( sal_uLong, sal_uLong, sal_Int32, sal_Int32 ) const
+bool SwBaseLink::IsInRange( sal_uLong, sal_uLong ) const
 {
     // Not Graphic or OLE Links
     // Fields or Sections have their own derivation!

@@ -82,8 +82,7 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
     virtual const SwNode* GetAnchor() const override;
-    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
-                            sal_Int32 nEnd = -1 ) const override;
+    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const override;
 
     SwSectionNode* GetSectNode()
     {
@@ -1578,8 +1577,7 @@ const SwNode* SwIntrnlSectRefLink::GetAnchor() const
     return rSectFormat.GetSectionNode();
 }
 
-bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
-                                     sal_Int32 , sal_Int32 ) const
+bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const
 {
     SwStartNode* pSttNd = rSectFormat.GetSectionNode();
     return pSttNd &&

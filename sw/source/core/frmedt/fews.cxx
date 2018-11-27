@@ -652,7 +652,6 @@ sal_uInt16 SwFEShell::GetCurColNum_( const SwFrame *pFrame,
                     {
                         pPara->pFrameFormat = static_cast<const SwLayoutFrame*>(pFrame)->GetFormat();
                         pPara->pPrtRect = &pFrame->getFramePrintArea();
-                        pPara->pFrameRect = &pFrame->getFrameArea();
                         break;
                     }
                     pFrame = pFrame->GetUpper();
@@ -661,7 +660,6 @@ sal_uInt16 SwFEShell::GetCurColNum_( const SwFrame *pFrame,
                 {
                     pPara->pFrameFormat = nullptr;
                     pPara->pPrtRect = nullptr;
-                    pPara->pFrameRect = nullptr;
                 }
             }
             break;

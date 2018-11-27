@@ -247,7 +247,7 @@ SwUndoRedlineSort::SwUndoRedlineSort( const SwPaM& rRange,
                                     const SwSortOptions& rOpt )
     : SwUndoRedline( SwUndoId::SORT_TXT, rRange ),
     pOpt( new SwSortOptions( rOpt ) ),
-    nSaveEndNode( nEndNode ), nOffset( 0 ), nSaveEndContent( nEndContent )
+    nSaveEndNode( nEndNode ), nSaveEndContent( nEndContent )
 {
 }
 
@@ -349,11 +349,6 @@ void SwUndoRedlineSort::SetSaveRange( const SwPaM& rRange )
     const SwPosition& rPos = *rRange.End();
     nSaveEndNode = rPos.nNode.GetIndex();
     nSaveEndContent = rPos.nContent.GetIndex();
-}
-
-void SwUndoRedlineSort::SetOffset( const SwNodeIndex& rIdx )
-{
-    nOffset = rIdx.GetIndex() - nSttNode;
 }
 
 SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange )
