@@ -151,7 +151,6 @@ next_priority:
                 // TODO: shutdown these timers before Scheduler de-init
                 // TODO: remove Task from static object
                 if ( pTask->GetDebugName() && ( false
-                        || !strcmp( pTask->GetDebugName(), "AquaBlinker" )
                         || !strcmp( pTask->GetDebugName(), "desktop::Desktop m_firstRunTimer" )
                         || !strcmp( pTask->GetDebugName(), "DrawWorkStartupTimer" )
                         || !strcmp( pTask->GetDebugName(), "editeng::ImpEditEngine aOnlineSpellTimer" )

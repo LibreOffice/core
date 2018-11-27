@@ -42,7 +42,6 @@ class AquaSalFrame;
 class AquaSalTimer;
 class AquaSalInstance;
 class AquaSalMenu;
-class AquaBlinker;
 
 typedef struct SalFrame::SalPointerState SalPointerState;
 
@@ -86,8 +85,6 @@ public:
 
     CGMutablePathRef                mrClippingPath;         // used for "shaping"
     std::vector< CGRect >           maClippingRects;
-
-    std::list<AquaBlinker*>         maBlinkers;
 
     tools::Rectangle                       maInvalidRect;
 
