@@ -152,7 +152,6 @@ public:
     void            SetRightToLeft( bool bRightToLeft );
 
     void            SaveValue()                         { aSaveValue = GetText(); }
-    const OUString&    GetSavedValue() const            { return aSaveValue; }
 
     void            SetModifyHdl( const Link<Edit&,void>& rLink ) override { aModifyHdlLink = rLink; }
     const Link<Edit&,void>&   GetModifyHdl() const override                { return aModifyHdlLink; }

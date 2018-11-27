@@ -194,10 +194,6 @@ public:
                     long nMn, long nMx,
                     sal_uInt16 nCnt, bool bFlg, bool bSameHeight );
 
-    // for SetColWidth
-    SwUndoTableNdsChg( SwUndoId UndoId, const SwSelBoxes& rBoxes,
-                    const SwTableNode& rTableNd );
-
     virtual ~SwUndoTableNdsChg() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

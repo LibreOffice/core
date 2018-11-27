@@ -234,17 +234,6 @@ public:
     virtual SplitTable_HeadlineOption GetSplitMode() override;
 };
 
-class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog
-{
-    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
-    virtual void                SetCurPageId( const OString &rName ) override;
-    virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
-    virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
-        //From class Window.
-    virtual void        SetText( const OUString& rStr ) override;
-};
-
 class AbstractTabController_Impl : virtual public SfxAbstractTabDialog
 {
 protected:

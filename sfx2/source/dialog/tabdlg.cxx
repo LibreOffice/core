@@ -555,11 +555,6 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     }
 }
 
-void SfxTabDialog::RemoveStandardButton()
-{
-    m_pBaseFmtBtn->Hide();
-}
-
 short SfxTabDialog::Execute()
 {
     if ( !m_pTabCtrl->GetPageCount() )
@@ -589,14 +584,6 @@ void SfxTabDialog::Start()
 
     if ( IsVisible() && ( !HasChildPathFocus() || HasFocus() ) )
         GrabFocusToFirstControl();
-}
-
-
-void SfxTabDialog::SetApplyHandler(const Link<Button*, void>& _rHdl)
-{
-    DBG_ASSERT( m_pApplyBtn, "SfxTabDialog::GetApplyHandler: no apply button enabled!" );
-    if ( m_pApplyBtn )
-        m_pApplyBtn->SetClickHdl( _rHdl );
 }
 
 
@@ -644,26 +631,6 @@ sal_uInt16 SfxTabDialog::AddTabPage
     m_pImpl->aData.push_back(new Data_Impl(nId, rName, pCreateFunc, pRangesFunc));
     return nId;
 }
-
-/*
-    Adds a page to the dialog. The Name must correspond to a entry in the
-    TabControl in the dialog .ui
- */
-sal_uInt16 SfxTabDialog::AddTabPage
-(
-    const OString &rName,          // Page ID
-    sal_uInt16 nPageCreateId       // Identifier of the Factory Method to create the page
-)
-{
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    CreateTabPage pCreateFunc = pFact->GetTabPageCreatorFunc(nPageCreateId);
-    assert(pCreateFunc);
-    GetTabPageRanges pRangesFunc = pFact->GetTabPageRangesFunc(nPageCreateId);
-    sal_uInt16 nPageId = m_pTabCtrl->GetPageId(rName);
-    m_pImpl->aData.push_back(new Data_Impl(nPageId, rName, pCreateFunc, pRangesFunc));
-    return nPageId;
-}
-
 
 void SfxTabDialog::AddTabPage
 
@@ -894,26 +861,6 @@ IMPL_LINK_NOARG(SfxTabDialog, OkHdl, Button*, void)
         }
     }
 }
-
-bool SfxTabDialog::Apply()
-{
-    bool bApplied = false;
-    if (PrepareLeaveCurrentPage())
-    {
-         bApplied = (Ok() == RET_OK);
-         //let the pages update their saved values
-         GetInputSetImpl()->Put(*GetOutputItemSet());
-         sal_uInt16 pageCount = m_pTabCtrl->GetPageCount();
-         for (sal_uInt16 pageIdx = 0; pageIdx < pageCount; ++pageIdx)
-         {
-             SfxTabPage* pPage = dynamic_cast<SfxTabPage*> (m_pTabCtrl->GetTabPage(m_pTabCtrl->GetPageId(pageIdx)));
-             if (pPage)
-                pPage->ChangesApplied();
-         }
-    }
-    return bApplied;
-}
-
 
 bool SfxTabDialog::PrepareLeaveCurrentPage()
 {

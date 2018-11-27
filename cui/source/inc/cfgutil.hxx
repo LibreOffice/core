@@ -120,7 +120,6 @@ public:
     using Window::GetHelpText;
     OUString      GetCurCommand();
     OUString      GetCurLabel();
-    OUString      GetSelectedScriptURI();
     OUString      GetHelpText( bool bConsiderParent = true );
 };
 
@@ -147,8 +146,6 @@ public:
     void select(int pos) { m_xTreeView->select(pos); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
     bool get_iter_first(weld::TreeIter& rIter) const { return m_xTreeView->get_iter_first(rIter); }
-    // set iter to point to next node at the current level
-    bool iter_next_sibling(weld::TreeIter& rIter) const { return m_xTreeView->iter_next_sibling(rIter); }
     // set iter to point to next node, depth first, then sibling
     bool iter_next(weld::TreeIter& rIter) const { return m_xTreeView->iter_next(rIter); }
     OUString get_text(const weld::TreeIter& rIter) const { return m_xTreeView->get_text(rIter); }
@@ -158,10 +155,7 @@ public:
     ~CuiConfigFunctionListBox();
 
     void          ClearAll();
-    OUString      GetCurCommand();
-    OUString      GetCurLabel();
     OUString      GetSelectedScriptURI();
-    OUString      GetHelpText( bool bConsiderParent = true );
 };
 
 struct SvxConfigGroupBoxResource_Impl;
@@ -266,9 +260,7 @@ public:
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
-    void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const OUString&, const OUString& );
-    void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
 class SvxScriptSelectorDialog : public ModalDialog

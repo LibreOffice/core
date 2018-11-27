@@ -268,7 +268,6 @@ public:
     void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry );
 #endif
 
-    Point               GetPixelPos( const Point& rPosLogic ) const;
     void                SetSelectionMode( SelectionMode eMode );
 
     tools::Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;

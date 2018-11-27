@@ -71,8 +71,6 @@ public:
     int NormalizePercent(int nValue);
     int DenormalizePercent(int nValue);
 
-    int normalize(int nValue) const { return m_pField->normalize(nValue); }
-
     void SetRefValue(int nValue);
     int GetRealValue(FieldUnit eOutUnit);
 

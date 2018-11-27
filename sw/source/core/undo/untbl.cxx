@@ -1483,24 +1483,6 @@ SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
     ReNewBoxes( rBoxes );
 }
 
-SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
-                                    const SwSelBoxes& rBoxes,
-                                    const SwTableNode& rTableNd )
-    : SwUndo( nAction, rTableNd.GetDoc() ),
-    m_nMin( 0 ), m_nMax( 0 ),
-    m_nSttNode( rTableNd.GetIndex() ), m_nCurrBox( 0 ),
-    m_nCount( 0 ), m_nRelDiff( 0 ), m_nAbsDiff( 0 ),
-    m_nSetColType( TableChgWidthHeightType::InvalidPos ),
-    m_bFlag( false ),
-    m_bSameHeight( false )
-{
-    const SwTable& rTable = rTableNd.GetTable();
-    m_pSaveTable.reset( new SaveTable( rTable ) );
-
-    // and remember selection
-    ReNewBoxes( rBoxes );
-}
-
 void SwUndoTableNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
 {
     if (rBoxes.size() != m_Boxes.size())

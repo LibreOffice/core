@@ -620,31 +620,6 @@ bool TreeListBox::ExpandingHdl()
     return bOK;
 }
 
-bool TreeListBox::IsEntryProtected( SvTreeListEntry* pEntry )
-{
-    bool bProtected = false;
-    if ( pEntry && ( GetModel()->GetDepth( pEntry ) == 1 ) )
-    {
-        EntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
-        const ScriptDocument& aDocument( aDesc.GetDocument() );
-        OSL_ENSURE( aDocument.isAlive(), "TreeListBox::IsEntryProtected: no document, or document is dead!" );
-        if ( aDocument.isAlive() )
-        {
-            const OUString& aOULibName( aDesc.GetLibName() );
-            Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
-            if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
-            {
-                Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
-                {
-                    bProtected = true;
-                }
-            }
-        }
-    }
-    return bProtected;
-}
-
 //Fills up treelist for macros and dialogs
 void TreeListBox::FillTreeListBox( SvTreeListEntry* pRootEntry, const Sequence< OUString >& rNames,
                             const EntryType& eType, const OUString& aBmpMacro )

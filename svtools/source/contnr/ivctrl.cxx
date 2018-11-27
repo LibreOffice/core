@@ -178,13 +178,6 @@ void SvtIconChoiceCtrl::Resize()
     Control::Resize();
 }
 
-Point SvtIconChoiceCtrl::GetPixelPos( const Point& rPosLogic ) const
-{
-    Point aPos( rPosLogic );
-    aPos += GetMapMode().GetOrigin();
-    return aPos;
-}
-
 void SvtIconChoiceCtrl::GetFocus()
 {
     _pImpl->GetFocus();
