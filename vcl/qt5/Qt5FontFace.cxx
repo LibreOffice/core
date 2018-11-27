@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <unotools/fontdefs.hxx>
+
 #include <Qt5FontFace.hxx>
 #include <Qt5Font.hxx>
 #include <Qt5Tools.hxx>

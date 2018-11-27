@@ -28,6 +28,7 @@
 
 #include "PhysicalFontFace.hxx"
 
+class ImplDeviceFontList;
 class PhysicalFontFace;
 class PhysicalFontCollection;
 
