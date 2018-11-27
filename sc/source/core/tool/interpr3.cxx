@@ -3639,14 +3639,15 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
     if ( !MustHaveParamCount( GetByte(), 2 )  )
         return;
 
-    std::vector<double> aArray;
-    GetNumberSequenceArray(1, aArray, false);
+    SCSIZE nCol = 0, nRow = 0;
+    auto aArray = GetTopNumberArray(nCol, nRow);
     auto aArraySize = aArray.size();
     if (aArraySize == 0 || nGlobalError != FormulaError::NONE)
     {
         PushNoValue();
         return;
     }
+    assert(aArraySize == nCol * nRow);
     for (double fArg : aArray)
     {
         double f = ::rtl::math::approxFloor(fArg);
@@ -3701,8 +3702,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
         aArray.clear();
         for (SCSIZE n : aRankArray)
             aArray.push_back(aSortArray[bSmall ? n-1 : nSize-n]);
-        ScMatrixRef pResult = GetNewMat(1, aArraySize, true);
-        pResult->PutDoubleVector(aArray, 0, 0);
+        ScMatrixRef pResult = GetNewMat(nCol, nRow, aArray);
         PushMatrix(pResult);
     }
 }
@@ -3839,6 +3839,91 @@ void ScInterpreter::ScTrimMean()
             fSum += aSortArray[i];
         PushDouble(fSum/static_cast<double>(nSize-2*nIndex));
     }
+}
+
+std::vector<double> ScInterpreter::GetTopNumberArray( SCSIZE& rCol, SCSIZE& rRow )
+{
+    std::vector<double> aArray;
+    switch (GetStackType())
+    {
+        case svDouble:
+            aArray.push_back(PopDouble());
+            rCol = rRow = 1;
+        break;
+        case svSingleRef:
+        {
+            ScAddress aAdr;
+            PopSingleRef(aAdr);
+            ScRefCellValue aCell(*pDok, aAdr);
+            if (aCell.hasNumeric())
+            {
+                aArray.push_back(GetCellValue(aAdr, aCell));
+                rCol = rRow = 1;
+            }
+        }
+        break;
+        case svDoubleRef:
+        {
+            ScRange aRange;
+            PopDoubleRef(aRange, true);
+            if (nGlobalError != FormulaError::NONE)
+                break;
+
+            // give up unless the start and end are in the same sheet
+            if (aRange.aStart.Tab() != aRange.aEnd.Tab())
+            {
+                SetError(FormulaError::IllegalParameter);
+                break;
+            }
+
+            // the range already is in order
+            assert(aRange.aStart.Col() <= aRange.aEnd.Col());
+            assert(aRange.aStart.Row() <= aRange.aEnd.Row());
+            rCol = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
+            rRow = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
+            aArray.reserve(rCol * rRow);
+
+            FormulaError nErr = FormulaError::NONE;
+            double fCellVal;
+            ScValueIterator aValIter(pDok, aRange, mnSubTotalFlags);
+            if (aValIter.GetFirst(fCellVal, nErr))
+            {
+                do
+                    aArray.push_back(fCellVal);
+                while (aValIter.GetNext(fCellVal, nErr) && nErr == FormulaError::NONE);
+            }
+            if (aArray.size() != rCol * rRow)
+            {
+                aArray.clear();
+                SetError(nErr);
+            }
+        }
+        break;
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            ScMatrixRef pMat = GetMatrix();
+            if (!pMat)
+                break;
+
+            if (pMat->IsNumeric())
+            {
+                SCSIZE nCount = pMat->GetElementCount();
+                aArray.reserve(nCount);
+                for (SCSIZE i = 0; i < nCount; ++i)
+                    aArray.push_back(pMat->GetDouble(i));
+                pMat->GetDimensions(rCol, rRow);
+            }
+            else
+                SetError(FormulaError::IllegalParameter);
+        }
+        break;
+        default:
+            SetError(FormulaError::IllegalParameter);
+        break;
+    }
+    return aArray;
 }
 
 void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double>& rArray, bool bConvertTextInArray )
