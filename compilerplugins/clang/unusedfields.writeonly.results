@@ -2,8 +2,10 @@ basctl/source/basicide/basicbox.hxx:69
     basctl::DocListenerBox m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:185
+basctl/source/inc/bastype2.hxx:183
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
+basctl/source/inc/bastype2.hxx:262
+    basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basic/qa/cppunit/test_scanner.cxx:26
     (anonymous namespace)::Symbol line sal_uInt16
 basic/qa/cppunit/test_scanner.cxx:27
@@ -18,7 +20,7 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:59
     Data pGPR sal_uInt64 *
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:60
     Data pFPR double *
-bridges/source/cpp_uno/gcc3_linux_x86-64/cpp2uno.cxx:437
+bridges/source/cpp_uno/gcc3_linux_x86-64/cpp2uno.cxx:438
     bridges::cpp_uno::shared::VtableFactory::Slot fn void *
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:115
     __cxxabiv1::__cxa_exception exceptionDestructor void (*)(void *)
@@ -66,6 +68,10 @@ chart2/source/view/charttypes/PieChart.hxx:128
     chart::PieChart::PieLabelInfo fValue double
 codemaker/source/cppumaker/dependencies.hxx:108
     codemaker::cppumaker::Dependencies m_voidDependency _Bool
+codemaker/source/javamaker/classfile.cxx:508
+     floatBytes float
+codemaker/source/javamaker/classfile.cxx:540
+     doubleBytes double
 comphelper/qa/container/comphelper_ifcontainer.cxx:45
     ContainerListener m_pStats struct ContainerStats *const
 configmgr/source/components.cxx:164
@@ -148,12 +154,16 @@ cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:288
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
-dbaccess/source/ui/inc/dbadmin.hxx:52
-    dbaui::ODbAdminDialog m_bUIEnabled _Bool
 desktop/qa/desktop_lib/test_desktop_lib.cxx:186
     DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
+desktop/unx/source/splashx.c:370
+     functions unsigned long
+desktop/unx/source/splashx.c:370
+     decorations unsigned long
+desktop/unx/source/splashx.c:370
+     flags unsigned long
 desktop/unx/source/splashx.c:371
      input_mode long
 drawinglayer/source/attribute/sdrfillgraphicattribute.cxx:44
@@ -174,23 +184,23 @@ drawinglayer/source/tools/emfppen.hxx:58
     emfplushelper::EMFPPen dashOffset float
 drawinglayer/source/tools/emfppen.hxx:60
     emfplushelper::EMFPPen alignment sal_Int32
-embeddedobj/source/inc/oleembobj.hxx:134
+embeddedobj/source/inc/oleembobj.hxx:136
     OleEmbeddedObject m_nTargetState sal_Int32
-embeddedobj/source/inc/oleembobj.hxx:146
+embeddedobj/source/inc/oleembobj.hxx:148
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
-embeddedobj/source/inc/oleembobj.hxx:168
-    OleEmbeddedObject m_bHasSizeToSet _Bool
-embeddedobj/source/inc/oleembobj.hxx:169
-    OleEmbeddedObject m_aSizeToSet css::awt::Size
 embeddedobj/source/inc/oleembobj.hxx:170
+    OleEmbeddedObject m_bHasSizeToSet _Bool
+embeddedobj/source/inc/oleembobj.hxx:171
+    OleEmbeddedObject m_aSizeToSet css::awt::Size
+embeddedobj/source/inc/oleembobj.hxx:172
     OleEmbeddedObject m_nAspectToSet sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:175
-    OleEmbeddedObject m_bGotStatus _Bool
-embeddedobj/source/inc/oleembobj.hxx:176
-    OleEmbeddedObject m_nStatus sal_Int64
 embeddedobj/source/inc/oleembobj.hxx:177
+    OleEmbeddedObject m_bGotStatus _Bool
+embeddedobj/source/inc/oleembobj.hxx:178
+    OleEmbeddedObject m_nStatus sal_Int64
+embeddedobj/source/inc/oleembobj.hxx:179
     OleEmbeddedObject m_nStatusAspect sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:191
+embeddedobj/source/inc/oleembobj.hxx:193
     OleEmbeddedObject m_bFromClipboard _Bool
 emfio/inc/mtftools.hxx:121
     emfio::LOGFONTW lfOrientation sal_Int32
@@ -200,9 +210,9 @@ emfio/inc/mtftools.hxx:128
     emfio::LOGFONTW lfClipPrecision sal_uInt8
 emfio/inc/mtftools.hxx:129
     emfio::LOGFONTW lfQuality sal_uInt8
-emfio/source/reader/emfreader.cxx:311
-    (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
 emfio/source/reader/emfreader.cxx:312
+    (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
+emfio/source/reader/emfreader.cxx:313
     (anonymous namespace)::BLENDFUNCTION aBlendFlags unsigned char
 extensions/source/scanner/scanner.hxx:45
     ScannerManager mpData void *
@@ -210,20 +220,30 @@ framework/inc/services/layoutmanager.hxx:258
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:285
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
+i18nutil/source/utility/paper.cxx:298
+    paperword string char *
 include/basic/basmgr.hxx:52
     BasicError nReason enum BasicErrorReason
 include/basic/sbxvar.hxx:70
     SbxValues::(anonymous) pData void *
-include/canvas/base/canvascustomspritehelper.hxx:207
-    canvas::CanvasCustomSpriteHelper mbAlphaDirty _Bool
-include/canvas/base/canvascustomspritehelper.hxx:210
-    canvas::CanvasCustomSpriteHelper mbPositionDirty _Bool
-include/canvas/base/canvascustomspritehelper.hxx:216
-    canvas::CanvasCustomSpriteHelper mbClipDirty _Bool
-include/canvas/base/canvascustomspritehelper.hxx:219
-    canvas::CanvasCustomSpriteHelper mbPrioDirty _Bool
-include/canvas/base/canvascustomspritehelper.hxx:222
-    canvas::CanvasCustomSpriteHelper mbVisibilityDirty _Bool
+include/canvas/rendering/irendermodule.hxx:40
+    canvas::Vertex b float
+include/canvas/rendering/irendermodule.hxx:40
+    canvas::Vertex r float
+include/canvas/rendering/irendermodule.hxx:40
+    canvas::Vertex a float
+include/canvas/rendering/irendermodule.hxx:40
+    canvas::Vertex g float
+include/canvas/rendering/irendermodule.hxx:41
+    canvas::Vertex u float
+include/canvas/rendering/irendermodule.hxx:41
+    canvas::Vertex v float
+include/canvas/rendering/irendermodule.hxx:42
+    canvas::Vertex y float
+include/canvas/rendering/irendermodule.hxx:42
+    canvas::Vertex x float
+include/canvas/rendering/irendermodule.hxx:42
+    canvas::Vertex z float
 include/drawinglayer/attribute/sdrallattribute3d.hxx:44
     drawinglayer::attribute::SdrLineFillShadowAttribute3D maLineStartEnd const class drawinglayer::attribute::SdrLineStartEndAttribute
 include/drawinglayer/primitive2d/mediaprimitive2d.hxx:51
@@ -238,6 +258,8 @@ include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
 include/editeng/outlobj.hxx:42
     OutlinerParaObjData mbIsEditDoc _Bool
+include/editeng/svxrtf.hxx:98
+    SvxRTFStyleType nNext sal_uInt16
 include/LibreOfficeKit/LibreOfficeKit.h:108
     _LibreOfficeKitDocumentClass nSize size_t
 include/LibreOfficeKit/LibreOfficeKit.h:310
@@ -254,34 +276,56 @@ include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/sfx2/minfitem.hxx:35
     SfxMacroInfoItem aCommentText const class rtl::OUString
-include/svtools/brwbox.hxx:252
+include/svtools/brwbox.hxx:255
     BrowseBox::CursorMoveAttempt m_nCol const long
-include/svtools/brwbox.hxx:253
+include/svtools/brwbox.hxx:256
     BrowseBox::CursorMoveAttempt m_nRow const long
-include/svtools/brwbox.hxx:254
+include/svtools/brwbox.hxx:257
     BrowseBox::CursorMoveAttempt m_bScrolledToReachCell const _Bool
+include/svtools/editbrowsebox.hxx:481
+    svt::EditBrowseBox nOldEditRow long
+include/svtools/editbrowsebox.hxx:482
+    svt::EditBrowseBox nOldEditCol sal_uInt16
 include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
+include/svx/viewpt3d.hxx:62
+    Viewport3D::(anonymous) X double
+include/svx/viewpt3d.hxx:62
+    Viewport3D::(anonymous) H double
+include/svx/viewpt3d.hxx:62
+    Viewport3D::(anonymous) Y double
 include/vcl/opengl/OpenGLContext.hxx:41
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:446
     ToolbarValue mbIsTopDockingArea _Bool
-include/vcl/salnativewidgets.hxx:507
+include/vcl/salnativewidgets.hxx:511
     PushButtonValue mbBevelButton _Bool
-include/vcl/salnativewidgets.hxx:508
+include/vcl/salnativewidgets.hxx:512
     PushButtonValue mbSingleLine _Bool
 include/vcl/textrectinfo.hxx:31
     TextRectInfo mnLineCount sal_uInt16
+include/vcl/vclenum.hxx:197
+    ItalicMatrix xy double
+include/vcl/vclenum.hxx:197
+    ItalicMatrix yx double
+include/vcl/vclenum.hxx:197
+    ItalicMatrix yy double
+include/vcl/vclenum.hxx:197
+    ItalicMatrix xx double
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
+io/source/stm/odata.cxx:241
+    io_stm::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n2 sal_uInt32
+io/source/stm/odata.cxx:241
+    io_stm::ODataInputStream::readDouble()::(anonymous union)::(anonymous) n1 sal_uInt32
 l10ntools/inc/common.hxx:31
     common::HandledArgs m_bUTF8BOM _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:61
@@ -292,6 +336,10 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
+package/inc/ByteChucker.hxx:38
+    ByteChucker p2Sequence sal_Int8 *const
+package/inc/ByteChucker.hxx:38
+    ByteChucker p4Sequence sal_Int8 *const
 registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflread.cxx:467
@@ -302,6 +350,16 @@ registry/source/reflread.cxx:718
     ReferenceList m_pCP class ConstantPool *const
 registry/source/reflread.cxx:819
     MethodList m_pCP class ConstantPool *const
+sal/qa/osl/file/osl_File.cxx:2426
+    osl_File::setPos nCount_read sal_uInt64
+sal/qa/osl/file/osl_File.cxx:2898
+    osl_File::write nCount_read sal_uInt64
+sal/qa/osl/file/osl_File.cxx:4156
+    osl_Directory::isOpen nError1 osl::class FileBase::RC
+sal/qa/osl/file/osl_File.cxx:4156
+    osl_Directory::isOpen nError2 osl::class FileBase::RC
+sal/qa/osl/file/osl_File.cxx:4214
+    osl_Directory::close nError2 osl::class FileBase::RC
 sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
 sal/rtl/alloc_arena.hxx:36
@@ -330,10 +388,10 @@ sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2526
+sc/inc/document.hxx:2533
     ScMutationDisable mpDocument class ScDocument *
-sc/inc/lookupcache.hxx:62
-    ScLookupCache::QueryCriteria  union ScLookupCache::QueryCriteria::(anonymous at /media/noel/disk2/libo5/sc/inc/lookupcache.hxx:62:9)
+sc/inc/interpretercontext.hxx:39
+    ScInterpreterContext mpDoc const class ScDocument *
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:78
@@ -342,39 +400,39 @@ sc/inc/scmatrix.hxx:118
     ScMatrix mbCloneIfConst _Bool
 sc/inc/tabopparams.hxx:38
     ScInterpreterTableOpParams bValid _Bool
-sc/source/core/data/cellvalues.cxx:25
+sc/source/core/data/cellvalues.cxx:24
     sc::(anonymous namespace)::BlockPos mnEnd size_t
-sc/source/core/data/column4.cxx:1316
+sc/source/core/data/column4.cxx:1314
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
-sc/source/core/data/column.cxx:1389
+sc/source/core/data/column.cxx:1381
     (anonymous namespace)::CopyByCloneHandler meListenType sc::StartListeningType
-sc/source/core/data/column.cxx:1390
+sc/source/core/data/column.cxx:1382
     (anonymous namespace)::CopyByCloneHandler mnFormulaCellCloneFlags const enum ScCloneFlags
-sc/source/filter/excel/xltoolbar.hxx:23
-    TBCCmd cmdID sal_uInt16
 sc/source/filter/excel/xltoolbar.hxx:24
-    TBCCmd A _Bool
+    TBCCmd cmdID sal_uInt16
 sc/source/filter/excel/xltoolbar.hxx:25
-    TBCCmd B _Bool
+    TBCCmd A _Bool
 sc/source/filter/excel/xltoolbar.hxx:26
-    TBCCmd cmdType sal_uInt16
+    TBCCmd B _Bool
 sc/source/filter/excel/xltoolbar.hxx:27
-    TBCCmd C _Bool
+    TBCCmd cmdType sal_uInt16
 sc/source/filter/excel/xltoolbar.hxx:28
+    TBCCmd C _Bool
+sc/source/filter/excel/xltoolbar.hxx:29
     TBCCmd reserved3 sal_uInt16
-sc/source/filter/excel/xltoolbar.hxx:54
+sc/source/filter/excel/xltoolbar.hxx:55
     ScCTB ectbid sal_uInt32
-sc/source/filter/excel/xltoolbar.hxx:72
-    CTBS bSignature sal_uInt8
 sc/source/filter/excel/xltoolbar.hxx:73
-    CTBS bVersion sal_uInt8
+    CTBS bSignature sal_uInt8
 sc/source/filter/excel/xltoolbar.hxx:74
-    CTBS reserved1 sal_uInt16
+    CTBS bVersion sal_uInt8
 sc/source/filter/excel/xltoolbar.hxx:75
-    CTBS reserved2 sal_uInt16
+    CTBS reserved1 sal_uInt16
 sc/source/filter/excel/xltoolbar.hxx:76
+    CTBS reserved2 sal_uInt16
+sc/source/filter/excel/xltoolbar.hxx:77
     CTBS reserved3 sal_uInt16
-sc/source/filter/excel/xltoolbar.hxx:79
+sc/source/filter/excel/xltoolbar.hxx:80
     CTBS ictbView sal_uInt16
 sc/source/filter/excel/xltools.cxx:104
      smD union sal_math_Double
@@ -398,11 +456,11 @@ sc/source/filter/inc/tokstack.hxx:142
     TokenPool pP_Err TokenPoolPool<sal_uInt16, 8>
 sc/source/filter/oox/biffhelper.cxx:41
     oox::xls::(anonymous namespace)::DecodedDouble maStruct union sal_math_Double
-sc/source/filter/xml/xmldpimp.hxx:253
+sc/source/filter/xml/xmldpimp.hxx:252
     ScXMLDataPilotFieldContext mbHasHiddenMember _Bool
-sc/source/filter/xml/xmldrani.hxx:75
+sc/source/filter/xml/xmldrani.hxx:72
     ScXMLDatabaseRangeContext bIsSelection _Bool
-sc/source/filter/xml/xmlexternaltabi.hxx:112
+sc/source/filter/xml/xmlexternaltabi.hxx:113
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader const _Bool
@@ -414,8 +472,6 @@ sc/source/ui/inc/uiitems.hxx:47
     ScInputStatusItem aStartPos const class ScAddress
 sc/source/ui/inc/uiitems.hxx:48
     ScInputStatusItem aEndPos const class ScAddress
-sd/source/filter/eppt/eppt.hxx:142
-    PPTWriter mnTxId sal_uInt32
 sd/source/filter/ppt/ppt97animations.hxx:41
     Ppt97AnimationInfoAtom nSlideCount sal_uInt16
 sd/source/filter/ppt/ppt97animations.hxx:47
@@ -448,17 +504,17 @@ store/source/storbios.cxx:58
     OStoreSuperBlock m_nMarked sal_uInt32
 store/source/storbios.cxx:59
     OStoreSuperBlock m_aMarked OStoreSuperBlock::L
-svl/source/crypto/cryptosign.cxx:145
-    (anonymous namespace)::(anonymous) version SECItem
 svl/source/crypto/cryptosign.cxx:147
-    (anonymous namespace)::(anonymous) reqPolicy SECItem
-svl/source/crypto/cryptosign.cxx:148
-    (anonymous namespace)::(anonymous) nonce SECItem
+    (anonymous namespace)::(anonymous) version SECItem
 svl/source/crypto/cryptosign.cxx:149
-    (anonymous namespace)::(anonymous) certReq SECItem
+    (anonymous namespace)::(anonymous) reqPolicy SECItem
 svl/source/crypto/cryptosign.cxx:150
+    (anonymous namespace)::(anonymous) nonce SECItem
+svl/source/crypto/cryptosign.cxx:151
+    (anonymous namespace)::(anonymous) certReq SECItem
+svl/source/crypto/cryptosign.cxx:152
     (anonymous namespace)::(anonymous) extensions (anonymous namespace)::Extension *
-svl/source/crypto/cryptosign.cxx:194
+svl/source/crypto/cryptosign.cxx:196
     (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
 svl/source/misc/inethist.cxx:48
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
@@ -468,7 +524,7 @@ svx/inc/sdr/primitive2d/sdrolecontentprimitive2d.hxx:46
     drawinglayer::primitive2d::SdrOleContentPrimitive2D mnGraphicVersion const sal_uInt32
 svx/source/dialog/contimp.hxx:56
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
-svx/source/form/dataaccessdescriptor.cxx:44
+svx/source/form/dataaccessdescriptor.cxx:40
     svx::ODADescriptorImpl m_bSetOutOfDate _Bool
 svx/source/form/formcontroller.cxx:211
     svxform::ColumnInfo nNullable sal_Int32
@@ -502,10 +558,20 @@ svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:54
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-sw/inc/shellio.hxx:147
+sw/inc/fesh.hxx:152
+    SwGetCurColNumPara pFrameRect const class SwRect *
+sw/inc/shellio.hxx:152
     SwReader aFileName const class rtl::OUString
 sw/source/core/doc/tblafmt.cxx:186
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
+sw/source/core/doc/tblrwcl.cxx:104
+    CR_SetBoxWidth nRemainWidth sal_uInt16
+sw/source/core/doc/tblrwcl.cxx:104
+    CR_SetBoxWidth nTableWidth sal_uInt16
+sw/source/core/doc/tblrwcl.cxx:105
+    CR_SetBoxWidth bAnyBoxFnd _Bool
+sw/source/core/doc/tblrwcl.cxx:185
+    CR_SetLineHeight bTop _Bool
 sw/source/core/inc/swfont.hxx:973
     SvStatistics nGetTextSize sal_uInt16
 sw/source/core/inc/swfont.hxx:974
@@ -516,6 +582,10 @@ sw/source/core/inc/swfont.hxx:976
     SvStatistics nDrawStretchText sal_uInt16
 sw/source/core/inc/swfont.hxx:977
     SvStatistics nChangeFont sal_uInt16
+sw/source/core/inc/UndoRedline.hxx:80
+    SwUndoRedlineSort nOffset sal_uLong
+sw/source/core/text/porfld.hxx:59
+    SwFieldPortion m_nAttrFieldType sal_uInt16
 sw/source/filter/inc/rtf.hxx:28
     RTFSurround::(anonymous union)::(anonymous) nGoldCut sal_uInt8
 sw/source/filter/inc/rtf.hxx:29
@@ -523,7 +593,9 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo5/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
+ucb/source/ucp/file/filtask.hxx:91
+    fileaccess::TaskManager::TaskHandling m_bAbort _Bool
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -580,7 +652,15 @@ vcl/inc/unx/gtk/gtkframe.hxx:89
     GtkSalFrame::IMHandler::PreviousKeyPress send_event gint8
 vcl/inc/unx/gtk/gtkframe.hxx:90
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
-vcl/opengl/salbmp.cxx:440
+vcl/inc/WidgetThemeLibrary.hxx:20
+    vcl::WidgetDrawStyle nSize uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:91
+    vcl::ControlDrawParameters eButtonValue enum ButtonValue
+vcl/inc/WidgetThemeLibrary.hxx:92
+    vcl::ControlDrawParameters bIsStock _Bool
+vcl/inc/WidgetThemeLibrary.hxx:93
+    vcl::ControlDrawParameters nValue int64_t
+vcl/opengl/salbmp.cxx:441
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
 vcl/source/filter/graphicfilter.cxx:906
     ImpFilterLibCacheEntry maFiltername const class rtl::OUString
@@ -594,6 +674,12 @@ vcl/source/gdi/pdfwriter_impl.hxx:181
     vcl::PDFWriterImpl::BitmapID m_nChecksum BitmapChecksum
 vcl/source/gdi/pdfwriter_impl.hxx:182
     vcl::PDFWriterImpl::BitmapID m_nMaskChecksum BitmapChecksum
+vcl/unx/generic/app/wmadaptor.cxx:1268
+    _mwmhints deco unsigned long
+vcl/unx/generic/app/wmadaptor.cxx:1268
+    _mwmhints func unsigned long
+vcl/unx/generic/app/wmadaptor.cxx:1268
+    _mwmhints flags unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1269
     _mwmhints input_mode long
 vcl/unx/generic/app/wmadaptor.cxx:1270
@@ -604,6 +690,8 @@ vcl/unx/generic/gdi/cairotextrender.cxx:56
     (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
 vcl/unx/generic/gdi/cairotextrender.cxx:57
     (anonymous namespace)::CairoFontsCache::CacheId mbVerticalMetrics _Bool
+vcl/unx/gtk3/gtk3gtkinst.cxx:1155
+     in char *
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
 vcl/unx/gtk/a11y/atkwrapper.hxx:80
@@ -618,5 +706,5 @@ vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
 writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:256
-    writerfilter::rtftok::RTFFrame m_nAnchorType sal_Int16
+writerfilter/source/ooxml/Handler.hxx:111
+    writerfilter::ooxml::OOXMLBreakHandler mnClear sal_Int32

@@ -77,7 +77,7 @@ public:
 class SwUndoRedlineSort : public SwUndoRedline
 {
     std::unique_ptr<SwSortOptions> pOpt;
-    sal_uLong nSaveEndNode, nOffset;
+    sal_uLong nSaveEndNode;
     sal_Int32 nSaveEndContent;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
@@ -91,7 +91,6 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void SetSaveRange( const SwPaM& rRange );
-    void SetOffset( const SwNodeIndex& rIdx );
 };
 
 class SwUndoAcceptRedline : public SwUndoRedline

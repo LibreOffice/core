@@ -40,10 +40,9 @@ namespace sw
     struct InRangeSearchHint final : public SfxHint
     {
         const sal_uLong m_nSttNd, m_nEndNd;
-        const sal_Int32 m_nStt, m_nEnd;
         bool& m_rIsInRange;
-        InRangeSearchHint(const sal_uLong nSttNd, const sal_uLong nEndNd, const sal_Int32 nStt, const sal_Int32 nEnd, bool& rIsInRange)
-            : m_nSttNd(nSttNd), m_nEndNd(nEndNd), m_nStt(nStt), m_nEnd(nEnd), m_rIsInRange(rIsInRange) {}
+        InRangeSearchHint(const sal_uLong nSttNd, const sal_uLong nEndNd, bool& rIsInRange)
+            : m_nSttNd(nSttNd), m_nEndNd(nEndNd), m_rIsInRange(rIsInRange) {}
     };
 }
 

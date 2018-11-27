@@ -57,8 +57,7 @@ public:
         const OUString& rMimeType, const css::uno::Any & rValue ) override;
 
     virtual const SwNode* GetAnchor() const override;
-    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
-                            sal_Int32 nEnd = -1 ) const override;
+    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const override;
 };
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const OUString& rMimeType,
@@ -179,13 +178,11 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
     return pNd;
 }
 
-bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
-                                sal_Int32 nStt, sal_Int32 nEnd ) const
+bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const
 {
     bool bInRange = false;
     rFieldType.CallSwClientNotify(sw::InRangeSearchHint(
-        nSttNd, nEndNd, nStt, nEnd,
-        bInRange));
+        nSttNd, nEndNd, bInRange));
     return bInRange;
 }
 

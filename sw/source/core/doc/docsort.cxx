@@ -459,9 +459,6 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             pRedlUndo->SetValues( *pRedlPam );
         }
 
-        if( pRedlUndo )
-            pRedlUndo->SetOffset( aSttIdx );
-
         delete pRedlPam;
         pRedlPam = nullptr;
     }

@@ -100,7 +100,6 @@ class SwAutoFormat
     mutable std::unique_ptr<CharClass> m_pCharClass; // Character classification
     mutable LanguageType m_eCharClassLang;
 
-    sal_uInt16 m_nLastHeadLvl, m_nLastCalcHeadLvl;
     sal_uInt16 m_nRedlAutoFormatSeqId;
 
     enum
@@ -2148,8 +2147,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
     // If multiple lines, then do not merge with next paragraph
     m_bMoreLines = false;
 
-    m_nLastCalcHeadLvl = 0;
-    m_nLastHeadLvl = USHRT_MAX;
+    sal_uInt16 nLastCalcHeadLvl = 0;
+    sal_uInt16 nLastHeadLvl = USHRT_MAX;
     sal_uInt16 nLevel = 0;
     sal_uInt16 nDigitLvl = 0;
 
@@ -2367,25 +2366,25 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                         if( nLevel >= MAXLEVEL )
                             nLevel = MAXLEVEL-1;
 
-                        if( USHRT_MAX == m_nLastHeadLvl )
-                            m_nLastHeadLvl = 0;
-                        else if( m_nLastCalcHeadLvl < nLevel )
+                        if( USHRT_MAX == nLastHeadLvl )
+                            nLastHeadLvl = 0;
+                        else if( nLastCalcHeadLvl < nLevel )
                         {
-                            if( m_nLastHeadLvl+1 < MAXLEVEL )
-                                ++m_nLastHeadLvl;
+                            if( nLastHeadLvl+1 < MAXLEVEL )
+                                ++nLastHeadLvl;
                         }
                         // one level above?
-                        else if( m_nLastCalcHeadLvl > nLevel )
+                        else if( nLastCalcHeadLvl > nLevel )
                         {
-                            if( m_nLastHeadLvl )
-                                --m_nLastHeadLvl;
+                            if( nLastHeadLvl )
+                                --nLastHeadLvl;
                         }
-                        m_nLastCalcHeadLvl = nLevel;
+                        nLastCalcHeadLvl = nLevel;
 
                         if( m_aFlags.bAFormatByInput )
                             BuildHeadLine( nLevel );
                         else
-                            BuildHeadLine( m_nLastHeadLvl );
+                            BuildHeadLine( nLastHeadLvl );
                         eStat = READ_NEXT_PARA;
                         break;
                     }

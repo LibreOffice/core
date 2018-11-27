@@ -95,21 +95,17 @@ struct CpyTabFrame
 
 struct CR_SetBoxWidth
 {
-    SwSelBoxes m_Boxes;
     SwShareBoxFormats aShareFormats;
     SwTableNode* pTableNd;
     SwUndoTableNdsChg* pUndo;
     SwTwips nDiff, nSide, nMaxSize, nLowerDiff;
     TableChgMode nMode;
-    sal_uInt16 nTableWidth, nRemainWidth, nBoxWidth;
-    bool bBigger, bLeft, bSplittBox, bAnyBoxFnd;
+    bool bBigger, bLeft;
 
-    CR_SetBoxWidth( TableChgWidthHeightType eType, SwTwips nDif, SwTwips nSid, SwTwips nTableW,
+    CR_SetBoxWidth( TableChgWidthHeightType eType, SwTwips nDif, SwTwips nSid,
                     SwTwips nMax, SwTableNode* pTNd )
         : pTableNd( pTNd ), pUndo( nullptr ),
-        nDiff( nDif ), nSide( nSid ), nMaxSize( nMax ), nLowerDiff( 0 ),
-        nTableWidth( static_cast<sal_uInt16>(nTableW) ), nRemainWidth( 0 ), nBoxWidth( 0 ),
-        bSplittBox( false ), bAnyBoxFnd( false )
+        nDiff( nDif ), nSide( nSid ), nMaxSize( nMax ), nLowerDiff( 0 )
     {
         bLeft = TableChgWidthHeightType::ColLeft == extractPosition( eType ) ||
                 TableChgWidthHeightType::CellLeft == extractPosition( eType );
@@ -121,16 +117,14 @@ struct CR_SetBoxWidth
         pUndo( rCpy.pUndo ),
         nDiff( rCpy.nDiff ), nSide( rCpy.nSide ),
         nMaxSize( rCpy.nMaxSize ), nLowerDiff( 0 ),
-        nMode( rCpy.nMode ), nTableWidth( rCpy.nTableWidth ),
-        nRemainWidth( rCpy.nRemainWidth ), nBoxWidth( rCpy.nBoxWidth ),
-        bBigger( rCpy.bBigger ), bLeft( rCpy.bLeft ),
-        bSplittBox( rCpy.bSplittBox ), bAnyBoxFnd( rCpy.bAnyBoxFnd )
+        nMode( rCpy.nMode ),
+        bBigger( rCpy.bBigger ), bLeft( rCpy.bLeft )
     {
     }
 
     void LoopClear()
     {
-        nLowerDiff = 0; nRemainWidth = 0;
+        nLowerDiff = 0;
     }
 };
 
@@ -176,19 +170,16 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
 
 struct CR_SetLineHeight
 {
-    SwSelBoxes m_Boxes;
-    SwShareBoxFormats aShareFormats;
     SwTableNode* pTableNd;
     SwUndoTableNdsChg* pUndo;
     SwTwips nMaxSpace, nMaxHeight;
     TableChgMode nMode;
-    bool bBigger, bTop;
+    bool bBigger;
 
     CR_SetLineHeight( TableChgWidthHeightType eType, SwTableNode* pTNd )
         : pTableNd( pTNd ), pUndo( nullptr ),
         nMaxSpace( 0 ), nMaxHeight( 0 )
     {
-        bTop = TableChgWidthHeightType::CellTop == extractPosition( eType );
         bBigger = bool(eType & TableChgWidthHeightType::BiggerMode );
         nMode = pTableNd->GetTable().GetTableChgMode();
     }
@@ -196,7 +187,7 @@ struct CR_SetLineHeight
         : pTableNd( rCpy.pTableNd ), pUndo( rCpy.pUndo ),
         nMaxSpace( rCpy.nMaxSpace ), nMaxHeight( rCpy.nMaxHeight ),
         nMode( rCpy.nMode ),
-        bBigger( rCpy.bBigger ), bTop( rCpy.bTop )
+        bBigger( rCpy.bBigger )
     {}
 };
 
@@ -2347,7 +2338,6 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                 || (!rParam.bBigger
                     && (std::abs(nDist + ((rParam.nMode != TableChgMode::FixedWidthChangeAbs && rParam.bLeft) ? 0 : nWidth) - rParam.nSide) < COLFUZZY)))
             {
-                rParam.bAnyBoxFnd = true;
                 SwTwips nLowerDiff;
                 if( bGreaterBox && TableChgMode::FixedWidthChangeProp == rParam.nMode )
                 {
@@ -2445,7 +2435,6 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     : ( rParam.bLeft ? nDist < rParam.nSide - COLFUZZY
                                      : nDist >= rParam.nSide - COLFUZZY )) )
             {
-                rParam.bAnyBoxFnd = true;
                 SwTwips nDiff;
                 if( TableChgMode::FixedWidthChangeProp == rParam.nMode )        // Table fixed, proportional
                 {
@@ -2576,7 +2565,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
     // Only needed for manipulating the width
     const SwTwips nDist = ::lcl_GetDistance( &rCurrentBox, bLeft );
     SwTwips nDistStt = 0;
-    CR_SetBoxWidth aParam( eType, nRelDiff, nDist, rSz.GetWidth(),
+    CR_SetBoxWidth aParam( eType, nRelDiff, nDist,
                             bLeft ? nDist : rSz.GetWidth() - nDist,
                             const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode()) );
     bBigger = aParam.bBigger;
@@ -2650,7 +2639,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                     {
                         // Break down to USHRT_MAX / 2
                         CR_SetBoxWidth aTmpPara( TableChgWidthHeightType::ColLeft, aSz.GetWidth() / 2,
-                                        0, aSz.GetWidth(), aSz.GetWidth(), aParam.pTableNd );
+                                        0, aSz.GetWidth(), aParam.pTableNd );
                         for( size_t nLn = 0; nLn < m_aLines.size(); ++nLn )
                             ::lcl_AjustLines( m_aLines[ nLn ], aTmpPara );
                         aSz.SetWidth( aSz.GetWidth() / 2 );
@@ -2709,7 +2698,6 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                         ( aSz.GetWidth() + aLR.GetRight() + aLR.GetLeft())));
 
                 GetFrameFormat()->SetFormatAttr( aSz );
-                aParam.nTableWidth = sal_uInt16( aSz.GetWidth() );
 
                 UnlockModify();
 

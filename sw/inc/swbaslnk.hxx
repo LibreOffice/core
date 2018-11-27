@@ -53,8 +53,7 @@ public:
     using SvBaseLink::SetObjType;
 
     bool IsRecursion( const SwBaseLink* pChkLnk ) const;
-    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
-                            sal_Int32 nEnd = -1 ) const;
+    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd ) const;
 
     void SetNoDataFlag() { m_bNoDataFlag = true; }
     bool ChkNoDataFlag() { const bool bRet = m_bNoDataFlag; m_bNoDataFlag = false; return bRet; }

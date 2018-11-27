@@ -149,8 +149,8 @@ enum class CurRectType
 struct SwGetCurColNumPara
 {
     const SwFrameFormat* pFrameFormat;
-    const SwRect* pPrtRect, *pFrameRect;
-    SwGetCurColNumPara() : pFrameFormat( nullptr ), pPrtRect( nullptr ), pFrameRect( nullptr ) {}
+    const SwRect* pPrtRect;
+    SwGetCurColNumPara() : pFrameFormat( nullptr ), pPrtRect( nullptr ) {}
 };
 
 enum class SwPasteSdr

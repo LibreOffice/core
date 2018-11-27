@@ -235,7 +235,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
             if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
                 dynamic_cast<const SwBaseLink*>( pLnk) !=  nullptr &&
                 !static_cast<const SwBaseLink*>(pLnk)->IsNoDataFlag() &&
-                static_cast<const SwBaseLink*>(pLnk)->IsInRange( nSttNd, nEndNd, nStt, nEnd ))
+                static_cast<const SwBaseLink*>(pLnk)->IsInRange( nSttNd, nEndNd ))
             {
                 if( pChkLnk )
                 {
