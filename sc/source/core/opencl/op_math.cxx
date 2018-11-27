@@ -2711,7 +2711,8 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    int i = 0;\n";
-    ss << "    double product=1.0;\n\n";
+    ss << "    double product=1.0;\n";
+    ss << "    int count = 0;\n\n";
     for (DynamicKernelArgumentRef & rArg : vSubArguments)
     {
         FormulaToken *pCur = rArg->GetFormulaToken();
@@ -2747,25 +2748,35 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
                  ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
                  ss << "    {\n";
             }
-            ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
-            ss << "product = product*";
+            ss << "        if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
+            ss << "        {\n";
+            ss << "            product = product*";
             ss << rArg->GenSlidingWindowDeclRef()<<";\n";
+            ss << "            ++count;\n";
+            ss << "        }\n";
             ss << "    }\n";
         }
         else if (pCur->GetType() == formula::svSingleVectorRef)
         {
-            ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
-            ss << "product = product*";
+            ss << "    if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
+            ss << "    {\n";
+            ss << "        product = product*";
             ss << rArg->GenSlidingWindowDeclRef()<<";\n";
-
+            ss << "        ++count;\n";
+            ss << "    }\n";
         }
         else
         {
-            ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
-            ss << "product = product*";
+            ss << "    if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
+            ss << "    {\n";
+            ss << "        product = product*";
             ss << rArg->GenSlidingWindowDeclRef()<<";\n";
+            ss << "        ++count;\n";
+            ss << "    }\n";
         }
     }
+    ss << "    if(count == 0)\n";
+    ss << "        return 0;\n";
     ss << "    return product;\n";
     ss << "}";
 }
