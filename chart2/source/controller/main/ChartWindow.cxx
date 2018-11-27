@@ -58,11 +58,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
         , m_pWindowController( pController )
         , m_bInPaint(false)
         , m_pViewShellWindow( nullptr )
-#if HAVE_FEATURE_OPENGL
-        , m_pOpenGLWindow(VclPtr<OpenGLWindow>::Create(this, false))
-#else
         , m_pOpenGLWindow(nullptr)
-#endif
 {
     set_id("chart_window");
     SetHelpId( HID_SCH_WIN_DOCUMENT );

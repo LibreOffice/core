@@ -112,9 +112,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
                 "com.sun.star.xml.NamespaceMap", "com.sun.star.comp.chart.XMLNameSpaceMap" ), uno::UNO_QUERY)
     , mnStart(0)
     , mnEnd(0)
-#if HAVE_FEATURE_OPENGL
-    , mpOpenGLWindow(nullptr)
-#endif
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -156,9 +153,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
     , mnStart(rOther.mnStart)
     , mnEnd(rOther.mnEnd)
-#if HAVE_FEATURE_OPENGL
-    , mpOpenGLWindow(nullptr)
-#endif
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -1309,12 +1303,7 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
 
 void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
 {
-#if HAVE_FEATURE_OPENGL
-    OpenGLWindow* pWindow = reinterpret_cast<OpenGLWindow*>(nWindowPtr);
-    mpOpenGLWindow = pWindow;
-#else
     (void)nWindowPtr;
-#endif
 }
 
 void ChartModel::update()
@@ -1325,9 +1314,6 @@ void ChartModel::update()
     }
     mxChartView->setViewDirty();
     mxChartView->update();
-#if HAVE_FEATURE_OPENGL
-    mxChartView->updateOpenGLWindow();
-#endif
 }
 
 bool ChartModel::isDataFromSpreadsheet()
