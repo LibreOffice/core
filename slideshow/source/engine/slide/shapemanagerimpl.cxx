@@ -128,35 +128,30 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
 
     // find matching shape (scan reversely, to coarsely match
     // paint order)
-    ShapeToListenersMap::reverse_iterator aCurrBroadcaster(
-        maShapeListenerMap.rbegin() );
-    ShapeToListenersMap::reverse_iterator const aEndBroadcasters(
-        maShapeListenerMap.rend() );
-    while( aCurrBroadcaster != aEndBroadcasters )
+    auto aCurrBroadcaster = std::find_if(maShapeListenerMap.rbegin(), maShapeListenerMap.rend(),
+        [&aPosition](const ShapeToListenersMap::value_type& rBroadcaster) {
+            // TODO(F2): Get proper geometry polygon from the
+            // shape, to avoid having areas outside the shape
+            // react on the mouse
+            return rBroadcaster.first->getBounds().isInside( aPosition )
+                && rBroadcaster.first->isVisible();
+        });
+    if (aCurrBroadcaster != maShapeListenerMap.rend())
     {
-        // TODO(F2): Get proper geometry polygon from the
-        // shape, to avoid having areas outside the shape
-        // react on the mouse
-        if( aCurrBroadcaster->first->getBounds().isInside( aPosition ) &&
-            aCurrBroadcaster->first->isVisible() )
-        {
-            // shape hit, and shape is visible. Raise
-            // event.
+        // shape hit, and shape is visible. Raise
+        // event.
 
-            std::shared_ptr<comphelper::OInterfaceContainerHelper2> const pCont(
-                aCurrBroadcaster->second );
-            uno::Reference<drawing::XShape> const xShape(
-                aCurrBroadcaster->first->getXShape() );
+        std::shared_ptr<comphelper::OInterfaceContainerHelper2> const pCont(
+            aCurrBroadcaster->second );
+        uno::Reference<drawing::XShape> const xShape(
+            aCurrBroadcaster->first->getXShape() );
 
-            // DON'T do anything with /this/ after this point!
-            pCont->forEach<presentation::XShapeEventListener>(
-                [&xShape, &e]( const uno::Reference< presentation::XShapeEventListener >& rListener )
-                { return rListener->click( xShape, e ); } );
+        // DON'T do anything with /this/ after this point!
+        pCont->forEach<presentation::XShapeEventListener>(
+            [&xShape, &e]( const uno::Reference< presentation::XShapeEventListener >& rListener )
+            { return rListener->click( xShape, e ); } );
 
-            return true; // handled this event
-        }
-
-        ++aCurrBroadcaster;
+        return true; // handled this event
     }
 
     return false; // did not handle this event
@@ -185,25 +180,19 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
     {
         // find matching shape (scan reversely, to coarsely match
         // paint order)
-        ShapeToCursorMap::reverse_iterator aCurrCursor(
-            maShapeCursorMap.rbegin() );
-        ShapeToCursorMap::reverse_iterator const aEndCursors(
-            maShapeCursorMap.rend() );
-        while( aCurrCursor != aEndCursors )
+        auto aCurrCursor = std::find_if(maShapeCursorMap.rbegin(), maShapeCursorMap.rend(),
+            [&aPosition](const ShapeToCursorMap::value_type& rCursor) {
+                // TODO(F2): Get proper geometry polygon from the
+                // shape, to avoid having areas outside the shape
+                // react on the mouse
+                return rCursor.first->getBounds().isInside( aPosition )
+                    && rCursor.first->isVisible();
+            });
+        if (aCurrCursor != maShapeCursorMap.rend())
         {
-            // TODO(F2): Get proper geometry polygon from the
-            // shape, to avoid having areas outside the shape
-            // react on the mouse
-            if( aCurrCursor->first->getBounds().isInside( aPosition ) &&
-                aCurrCursor->first->isVisible() )
-            {
-                // shape found, and it's visible. set
-                // requested cursor to shape's
-                nNewCursor = aCurrCursor->second;
-                break;
-            }
-
-            ++aCurrCursor;
+            // shape found, and it's visible. set
+            // requested cursor to shape's
+            nNewCursor = aCurrCursor->second;
         }
     }
 

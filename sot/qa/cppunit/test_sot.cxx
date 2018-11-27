@@ -107,16 +107,15 @@ namespace
         SvStorageInfoList aInfoList;
         xObjStor->FillInfoList( &aInfoList );
 
-        for( SvStorageInfoList::iterator aIt = aInfoList.begin();
-             aIt != aInfoList.end(); ++aIt )
+        for (auto& rInfo : aInfoList)
         {
-            if( aIt->IsStorage() )
+            if( rInfo.IsStorage() )
             {
-                tools::SvRef<SotStorage> xChild( xObjStor->OpenSotStorage( aIt->GetName() ) );
+                tools::SvRef<SotStorage> xChild( xObjStor->OpenSotStorage( rInfo.GetName() ) );
                 checkStorage( xChild );
             }
-            else if( aIt->IsStream() )
-                checkStream( xObjStor, aIt->GetName(), aIt->GetSize() );
+            else if( rInfo.IsStream() )
+                checkStream( xObjStor, rInfo.GetName(), rInfo.GetSize() );
         }
 
         return true;
