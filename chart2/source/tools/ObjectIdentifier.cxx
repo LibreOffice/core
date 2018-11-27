@@ -1120,11 +1120,8 @@ OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType,
 
 sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const OUString& rParticleOrCID )
 {
-    OUString aIndexString = lcl_getIndexStringAfterString( rParticleOrCID, "=" );
-    sal_Int32 nCharacterIndex=0;
-    sal_Int32 nRet = lcl_StringToIndex( aIndexString.getToken( 0, ',', nCharacterIndex ) );
-
-    return nRet;
+    const OUString aIndexString = lcl_getIndexStringAfterString( rParticleOrCID, "=" );
+    return lcl_StringToIndex( aIndexString.getToken( 0, ',' ) );
 }
 
 OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
