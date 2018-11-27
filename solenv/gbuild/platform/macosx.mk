@@ -110,7 +110,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist)))) && \
-	cat $${FILELIST} | sed 's/ /\$(NEWLINE)/g' | grep -v '^$$' > $${FILELIST}.1 && \
+	cat $${FILELIST} | tr "[:space:]" "\n" | grep -v '^$$' > $${FILELIST}.1 && \
 	mv $${FILELIST}.1 $${FILELIST} && \
 	$(if $(CXXOBJECTS)$(OBJCXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
