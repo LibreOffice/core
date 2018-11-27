@@ -4794,10 +4794,18 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro8">
-     <table:table-cell table:style-name="ce10"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce22"/>
+     <table:table-cell table:style-name="ce11" table:formula="of:=MDETERM(LARGE([.I30:.I39];{1;2|3;4}))" office:value-type="float" office:value="-2" calcext:value-type="float">
+      <text:p>-2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="-2" calcext:value-type="float">
+      <text:p>-2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" table:formula="of:=ROUND([.A30];12)=ROUND([.B30];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce22" table:formula="of:=FORMULA([.A30])" office:value-type="string" office:string-value="=MDETERM(LARGE(I30:I39,{1,2;3,4}))" calcext:value-type="string">
+      <text:p>=MDETERM(LARGE(I30:I39,{1,2;3,4}))</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell table:style-name="ce11" office:value-type="float" office:value="2" calcext:value-type="float">
       <text:p>2</text:p>
