@@ -1505,12 +1505,10 @@ public:
         typename Map::size_type const MAX = 100;
         assert(map_.size() <= MAX);
         if (map_.size() == MAX) {
-            typename Map::iterator del(map_.begin());
-            for (typename Map::iterator i(map_.begin()); i != map_.end(); ++i) {
-                if (i->second.hits < del->second.hits) {
-                    del = i;
-                }
-            }
+            typename Map::iterator del = std::min_element(map_.begin(), map_.end(),
+                [](const typename Map::value_type& a, const typename Map::value_type& b) {
+                    return a.second.hits < b.second.hits;
+                });
             map_.erase(del);
         }
         bool ins = map_.emplace(key, Data(access)).second;

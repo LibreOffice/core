@@ -1186,9 +1186,8 @@ void SmSymbolDialog::FillSymbolSets()
     m_xSymbolSets->set_active(-1);
 
     std::set< OUString >  aSybolSetNames( rSymbolMgr.GetSymbolSetNames() );
-    std::set< OUString >::const_iterator aIt( aSybolSetNames.begin() );
-    for ( ; aIt != aSybolSetNames.end(); ++aIt)
-        m_xSymbolSets->append_text(*aIt);
+    for (const auto& rSymbolSetName : aSybolSetNames)
+        m_xSymbolSets->append_text(rSymbolSetName);
 }
 
 IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl, weld::ComboBox&, void )
@@ -1440,9 +1439,8 @@ void SmSymDefineDialog::FillSymbolSets(weld::ComboBox& rComboBox, bool bDeleteTe
         rComboBox.set_entry_text(OUString());
 
     const std::set< OUString >  aSymbolSetNames( m_aSymbolMgrCopy.GetSymbolSetNames() );
-    std::set< OUString >::const_iterator aIt( aSymbolSetNames.begin() );
-    for ( ;  aIt != aSymbolSetNames.end();  ++aIt)
-        rComboBox.append_text(*aIt);
+    for (const auto& rSymbolSetName : aSymbolSetNames)
+        rComboBox.append_text(rSymbolSetName);
 }
 
 void SmSymDefineDialog::FillFonts()

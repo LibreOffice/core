@@ -870,14 +870,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
 PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage)
 {
     // TODO(P2): optimize research in the map.
-    PolygonMap::iterator aEnd = maPolygons.end();
-    for( PolygonMap::iterator aIter = maPolygons.begin();
-         aIter != aEnd;
-         ++aIter )
-        if( aIter->first == xDrawPage )
-            return aIter;
-
-    return aEnd;
+    return maPolygons.find(xDrawPage);
 }
 
 SlideSharedPtr SlideShowImpl::makeSlide(
@@ -1769,19 +1762,14 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             && (aValues[1] >>= bValue))
         {
             // Look up the view.
-            for (UnoViewVector::const_iterator
-                     iView (maViewContainer.begin()),
-                     iEnd (maViewContainer.end());
-                 iView!=iEnd;
-                 ++iView)
+            auto iView = std::find_if(maViewContainer.begin(), maViewContainer.end(),
+                [&xView](const UnoViewSharedPtr& rxView) { return rxView && rxView->getUnoView() == xView; });
+            if (iView != maViewContainer.end())
             {
-                if (*iView && (*iView)->getUnoView()==xView)
-                {
-                    // Store the flag at the view so that media shapes have
-                    // access to it.
-                    (*iView)->setIsSoundEnabled(bValue);
-                    return true;
-                }
+                // Store the flag at the view so that media shapes have
+                // access to it.
+                (*iView)->setIsSoundEnabled(bValue);
+                return true;
             }
         }
     }

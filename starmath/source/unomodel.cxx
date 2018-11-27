@@ -843,21 +843,21 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 Sequence < SymbolDescriptor > aSequence ( aVector.size() );
                 SymbolDescriptor * pDescriptor = aSequence.getArray();
 
-                vector < const SmSym * >::const_iterator aIter = aVector.begin(), aEnd = aVector.end();
-                for(; aIter != aEnd; pDescriptor++, ++aIter)
+                for (const SmSym* pSymbol : aVector)
                 {
-                    pDescriptor->sName = (*aIter)->GetName();
-                    pDescriptor->sExportName = (*aIter)->GetExportName();
-                    pDescriptor->sSymbolSet = (*aIter)->GetSymbolSetName();
-                    pDescriptor->nCharacter = static_cast < sal_Int32 > ((*aIter)->GetCharacter());
+                    pDescriptor->sName = pSymbol->GetName();
+                    pDescriptor->sExportName = pSymbol->GetExportName();
+                    pDescriptor->sSymbolSet = pSymbol->GetSymbolSetName();
+                    pDescriptor->nCharacter = static_cast < sal_Int32 > (pSymbol->GetCharacter());
 
-                    vcl::Font rFont = (*aIter)->GetFace();
+                    vcl::Font rFont = pSymbol->GetFace();
                     pDescriptor->sFontName = rFont.GetFamilyName();
                     pDescriptor->nCharSet  = sal::static_int_cast< sal_Int16 >(rFont.GetCharSet());
                     pDescriptor->nFamily   = sal::static_int_cast< sal_Int16 >(rFont.GetFamilyType());
                     pDescriptor->nPitch    = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
                     pDescriptor->nWeight   = sal::static_int_cast< sal_Int16 >(rFont.GetWeight());
                     pDescriptor->nItalic   = sal::static_int_cast< sal_Int16 >(rFont.GetItalic());
+                    pDescriptor++;
                 }
                 *pValue <<= aSequence;
             }

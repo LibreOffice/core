@@ -766,11 +766,9 @@ static AdapterImpl * lookup_adapter(
     // find matching adapter
     Type const * pTypes = rTypes.getConstArray();
     sal_Int32 nTypes = rTypes.getLength();
-    t_ptr_set::const_iterator iPos( adapters_set.begin() );
-    t_ptr_set::const_iterator const iEnd( adapters_set.end() );
-    while (iEnd != iPos)
+    for (const auto& rpAdapter : adapters_set)
     {
-        AdapterImpl * that = static_cast< AdapterImpl * >( *iPos );
+        AdapterImpl * that = static_cast< AdapterImpl * >( rpAdapter );
         // iterate through all types if that is a matching adapter
         sal_Int32 nPosTypes;
         for ( nPosTypes = nTypes; nPosTypes--; )
@@ -793,7 +791,6 @@ static AdapterImpl * lookup_adapter(
         }
         if (nPosTypes < 0) // all types found
             return that;
-        ++iPos;
     }
     return nullptr;
 }

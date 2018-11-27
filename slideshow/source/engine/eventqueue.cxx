@@ -59,11 +59,9 @@ namespace slideshow
         EventQueue::~EventQueue()
         {
             // add in all that have been added explicitly for this round:
-            EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
-            for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
-                  iPos != iEnd; ++iPos )
+            for ( const auto& rEvent : maNextEvents )
             {
-                maEvents.push(*iPos);
+                maEvents.push(rEvent);
             }
             EventEntryVector().swap( maNextEvents );
 
@@ -166,10 +164,8 @@ namespace slideshow
             SAL_INFO("slideshow.verbose", "EventQueue: heartbeat" );
 
             // add in all that have been added explicitly for this round:
-            EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
-            for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
-                  iPos != iEnd; ++iPos ) {
-                maEvents.push(*iPos);
+            for ( const auto& rEvent : maNextEvents ) {
+                maEvents.push(rEvent);
             }
             EventEntryVector().swap( maNextEvents );
 
