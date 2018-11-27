@@ -458,7 +458,8 @@ void SdImportTestSmartArt::testAccentProcess()
         m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-accent-process.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroup.is());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xGroup->getCount());
+    // 3 children: first pair, connector, second pair.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
     uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroupShape.is());
 
