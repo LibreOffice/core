@@ -3081,7 +3081,7 @@ namespace basegfx
 
             if(nPointCount > 1)
             {
-                // Start by copying the source polygon to get a writeable copy. The closed state is
+                // Start by copying the source polygon to get a writable copy. The closed state is
                 // copied by aRetval's initialisation, too, so no need to copy it in this method
                 B2DPolygon aRetval(rCandidate);
 
