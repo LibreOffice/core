@@ -1076,10 +1076,20 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
 
         case MID_HIDE_SIDEBAR:
         {
-            const util::URL aURL (Tools::GetURL(".uno:Sidebar"));
-            Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(mxFrame, aURL));
-            if (xDispatch.is())
+            if (!comphelper::LibreOfficeKit::isActive())
+            {
+                const util::URL aURL(Tools::GetURL(".uno:Sidebar"));
+                Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(mxFrame, aURL));
+                if (xDispatch.is())
                     xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
+            }
+            else
+            {
+                // In LOK we don't really destroy the sidebar when "closing";
+                // we simply hide it. This is because recreating it is problematic
+                // See notes in SidebarDockingWindow::NotifyResize().
+                RequestCloseDeck();
+            }
             break;
         }
         default:
