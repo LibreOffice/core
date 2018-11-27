@@ -476,16 +476,9 @@ public:
 
     void removeDataProviders();
 
-#if HAVE_FEATURE_OPENGL
-    OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
-#endif
-
 private:
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
-#if HAVE_FEATURE_OPENGL
-    VclPtr<OpenGLWindow> mpOpenGLWindow;
-#endif
 };
 
 }  // namespace chart
