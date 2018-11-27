@@ -1793,17 +1793,16 @@ namespace emfplushelper
                             sal_uInt32 pos = 0;
                             while (pos < glyphsCount)
                             {
-                                //determine the current length
+                                // determine length with the same charsPosY values
                                 sal_uInt32 aLength = 1;
                                 while (pos + aLength < glyphsCount && std::abs( charsPosY[pos + aLength] - charsPosY[pos] ) < std::numeric_limits< float >::epsilon())
                                     aLength++;
 
                                 // generate the DX-Array
                                 aDXArray.clear();
-                                double mappedPosX = Map(charsPosX[pos], charsPosY[pos]).getX();
-                                for (size_t i = 0; i < aLength-1; i++)
+                                for (size_t i = 0; i < aLength - 1; i++)
                                 {
-                                    aDXArray.push_back(Map(charsPosX[pos + i + 1], charsPosY[pos + i + 1]).getX() - mappedPosX);
+                                    aDXArray.push_back(charsPosX[pos + i + 1] - charsPosX[pos]);
                                 }
                                 // last entry
                                 aDXArray.push_back(0);
