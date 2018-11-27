@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf57530f_e2374ae3",
+        "filename": "config_host/config_features.h.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-11-27T15:57:50Z",
+      "side": 1,
+      "message": "Please also change “an” to “a”, as the next word no longer begins with a vowel sound :)",
+      "revId": "ddab6c62b7b9b5fda3a0bf10f8a8272a1009d2a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf57530f_f775cacd",
         "filename": "vcl/osx/salinst.cxx",
         "patchSetId": 1
