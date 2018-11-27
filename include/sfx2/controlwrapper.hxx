@@ -212,8 +212,8 @@ public:
     explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap ) :
                             SingleControlWrapper< ListBox, ValueT >( rListBox ), MapperType( WRAPPER_LISTBOX_ENTRY_NOTFOUND, pMap ) {}
 
-    virtual ValueT      GetControlValue() const override;
-    virtual void        SetControlValue( ValueT nValue ) override;
+    ValueT       GetControlValue() const override;
+    void         SetControlValue( ValueT nValue ) override;
 };
 
 

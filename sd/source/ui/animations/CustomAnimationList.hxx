@@ -99,7 +99,7 @@ protected:
     // drag & drop
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry ) override;
     virtual sal_Int8     AcceptDrop( const AcceptDropEvent& rEvt ) override;
-    virtual void         ReorderEffectsInUiDuringDragOver( SvTreeListEntry* pOverEntry);
+            void         ReorderEffectsInUiDuringDragOver( SvTreeListEntry* pOverEntry);
     virtual sal_Int8     ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
     virtual void         DragFinished( sal_Int8 nDropAction ) override;
 

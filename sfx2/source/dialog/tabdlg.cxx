@@ -872,20 +872,6 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 }
 
 
-void SfxTabDialog::RefreshInputSet()
-
-/*  [Description]
-
-    Default implementation of the virtual Method.
-    This is called, when <SfxTabPage::DeactivatePage(SfxItemSet *)>
-    returns <DeactivateRC::RefreshSet>.
-*/
-
-{
-    SAL_INFO ( "sfx.dialog", "RefreshInputSet not implemented" );
-}
-
-
 IMPL_LINK_NOARG(SfxTabDialog, OkHdl, Button*, void)
 
 /*  [Description]
@@ -1259,7 +1245,6 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
 
     if ( nRet & DeactivateRC::RefreshSet )
     {
-        RefreshInputSet();
         // Flag all Pages as to be initialized as new
 
         for (auto const& elem : m_pImpl->aData)

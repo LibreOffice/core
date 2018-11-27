@@ -134,7 +134,7 @@ protected:
     virtual ~SfxModelessDialogController() override;
 
 public:
-    virtual void            FillInfo(SfxChildWinInfo&) const;
+    void                    FillInfo(SfxChildWinInfo&) const;
     virtual void            Activate() {}
     void                    Initialize (SfxChildWinInfo const * pInfo);
     void                    Close();
@@ -235,7 +235,7 @@ public:
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"),
         const OString& rID = OString("SingleTabDialog"));
 
-    virtual weld::Container* get_content_area() { return m_xContainer.get(); }
+    weld::Container* get_content_area() { return m_xContainer.get(); }
 
     virtual             ~SfxSingleTabDialogController() override;
 
