@@ -40,7 +40,7 @@ public:
     virtual void onSelect() = 0;
     virtual void onDoubleClick() = 0;
     virtual void onContextMenu(const OString &rIdent) = 0;
-    virtual void onDragNDropComplete( CustomAnimationEffectPtr pEffectDragged, CustomAnimationEffectPtr pEffectInsertBefore ) = 0;
+    virtual void onDragNDropComplete( std::vector< CustomAnimationEffectPtr > pEffectsDragged, CustomAnimationEffectPtr pEffectInsertBefore ) = 0;
     virtual ~ICustomAnimationListController() {}
 };
 
@@ -97,8 +97,10 @@ public:
 
 protected:
     // drag & drop
+    virtual void         StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry ) override;
     virtual sal_Int8     AcceptDrop( const AcceptDropEvent& rEvt ) override;
+            void         ReparentChildrenDuringDrag();
             void         ReorderEffectsInUiDuringDragOver( SvTreeListEntry* pOverEntry);
     virtual sal_Int8     ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
     virtual void         DragFinished( sal_Int8 nDropAction ) override;
@@ -123,6 +125,7 @@ private:
     // drag & drop
     SvTreeListEntry* mpDndEffectDragging;
     SvTreeListEntry* mpDndEffectInsertBefore;
+    std::vector< SvTreeListEntry* > mDndEffectsSelected;
 };
 
 OUString getPropertyName( sal_Int32 nPropertyType );
