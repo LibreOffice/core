@@ -48,6 +48,14 @@ void ShapeCreationVisitor::visit(AlgAtom& rAtom)
 
 void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
 {
+    if (rAtom.iterator().mnAxis == XML_followSib)
+    {
+        // If the axis is the follow sibling, then the last atom should not be
+        // visited.
+        if (mnCurrIdx + mnCurrStep >= mnCurrCnt)
+            return;
+    }
+
     const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
 
     sal_Int32 nChildren=1;
@@ -67,7 +75,11 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
         rAtom.iterator().mnCnt==-1 ? nChildren : rAtom.iterator().mnCnt);
 
     const sal_Int32 nOldIdx=mnCurrIdx;
+    const sal_Int32 nOldStep = mnCurrStep;
+    const sal_Int32 nOldCnt = mnCurrCnt;
     const sal_Int32 nStep=rAtom.iterator().mnStep;
+    mnCurrStep = nStep;
+    mnCurrCnt = nCnt;
     for( mnCurrIdx=0; mnCurrIdx<nCnt && nStep>0; mnCurrIdx+=nStep )
     {
         // TODO there is likely some conditions
@@ -77,6 +89,8 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
 
     // and restore idx
     mnCurrIdx = nOldIdx;
+    mnCurrStep = nOldStep;
+    mnCurrCnt = nOldCnt;
 }
 
 void ShapeCreationVisitor::visit(ConditionAtom& rAtom)
