@@ -27,7 +27,7 @@ using namespace connectivity::macab;
 
 /* A MacabGroup is basically a MacabRecords with a different constructor.
  * It only exists as a different entity for clarification purposes (a group
- * is its own entity in the Mac OS X Address Book) and because its
+ * is its own entity in the macOS Address Book) and because its
  * construction is so unique (it is based on an already existent
  * MacabRecords of the entire address book).
  */

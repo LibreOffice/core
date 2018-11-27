@@ -30,7 +30,7 @@
 
 #if defined(MACOSX) || defined(IOS) || defined(OPENBSD) || defined(NETBSD) || defined(HAIKU)
 
-//No mutex needed on Mac OS X, gethostbyname is thread safe
+//No mutex needed on macOS, gethostbyname is thread safe
 
 #if defined(MACOSX)
 

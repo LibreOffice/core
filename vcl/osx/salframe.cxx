@@ -1185,7 +1185,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     aStyleSettings.SetToolbarIconSize( ToolbarIconSize::Large );
 
-    // TODO: better mapping of OS X<->LibreOffice font settings
+    // TODO: better mapping of macOS<->LibreOffice font settings
     vcl::Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], nDPIY, aAppFont ) );
     aStyleSettings.BatchSetFonts( aAppFont, aLabelFont );
     vcl::Font aMenuFont( getFont( [NSFont menuFontOfSize: 0], nDPIY, aAppFont ) );
@@ -1220,7 +1220,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     aStyleSettings.SetCursorBlinkTime( 500 );
 
-    // no mnemonics on OS X
+    // no mnemonics on macOS
     aStyleSettings.SetOptions( aStyleSettings.GetOptions() | StyleSettingsOptions::NoMnemonics );
 
     getAppleScrollBarVariant(aStyleSettings);

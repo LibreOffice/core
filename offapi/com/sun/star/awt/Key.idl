@@ -25,7 +25,7 @@
 
 
 /** These values are used to specify distinct physical keys, plus
-    some special values used by the OS X implementation.
+    some special values used by the macOS implementation.
  */
 published constants Key
 {
@@ -368,7 +368,7 @@ published constants Key
 
 
     /** The following values don't correspond to physical keys on any
-        keyboard but are used in the OS X implementation of VCL. They
+        keyboard but are used in the macOS implementation of VCL. They
         correspond to some of the action messages of the NSResponder
         abstract class.
     */

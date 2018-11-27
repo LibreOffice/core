@@ -2542,7 +2542,7 @@ static sal_uInt16 sal_GetCode( int state )
         nCode |= KEY_MOD2;
 
     // Map Meta/Super modifier to MOD3 on all Unix systems
-    // except Mac OS X
+    // except macOS
     if( state & Mod3Mask )
         nCode |= KEY_MOD3;
 
@@ -3132,7 +3132,7 @@ bool X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                 nModMask = KEY_SHIFT;
                 break;
             // Map Meta/Super keys to MOD3 modifier on all Unix systems
-            // except Mac OS X
+            // except macOS
             case XK_Meta_L:
             case XK_Super_L:
                 nExtModMask = ModKeyFlags::LeftMod3;

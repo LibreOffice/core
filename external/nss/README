@@ -16,7 +16,7 @@ See also
 
 == libsqlite3 ==
 
-With all supported Mac OS X SDK we use
+With all supported macOS SDK we use
 NSS_USE_SYSTEM_SQLITE=1
 to build using the system sqlite.
 

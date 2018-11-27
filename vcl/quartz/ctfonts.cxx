@@ -371,7 +371,7 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     // get font-enabled status
     if( bFontEnabled )
     {
-        int bEnabled = TRUE; // by default (and when we're on OS X < 10.6) it's "enabled"
+        int bEnabled = TRUE; // by default (and when we're on macOS < 10.6) it's "enabled"
         CFNumberRef pEnabled = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontEnabledAttribute ));
         CFNumberGetValue( pEnabled, kCFNumberIntType, &bEnabled );
         *bFontEnabled = bEnabled;

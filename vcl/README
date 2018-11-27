@@ -17,13 +17,13 @@ android/
 	+ Android backend
 
 osx/
-	+ OS X backend
+	+ macOS backend
 
 ios/
 	+ iOS backend
 
 quartz/
-	+ code common to OS X and iOS
+	+ code common to macOS and iOS
 
 win/
 	+ Windows backend

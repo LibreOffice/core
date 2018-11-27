@@ -436,7 +436,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     }
     else
     {
-        // FIXME: this is currently only on OS X, check with other
+        // FIXME: this is currently only on macOS, check with other
         // platforms
         if( ImplGetSVData()->maNWFData.mbNoFocusRects && !( nBorderStyle & WindowBorderStyle::NWF ) )
         {
@@ -673,9 +673,9 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
             nState |= ControlState::FOCUSED;
         else if(mbNWFBorder)
         {
-            // FIXME: this is currently only on OS X, see if other platforms can profit
+            // FIXME: this is currently only on macOS, see if other platforms can profit
 
-            // FIXME: for OS X focus rings all controls need to support GetNativeControlRegion
+            // FIXME: for macOS focus rings all controls need to support GetNativeControlRegion
             // for the dropdown style
             if (pCtrl->HasFocus() || pCtrl->HasChildPathFocus())
                 nState |= ControlState::FOCUSED;

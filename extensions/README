@@ -35,7 +35,7 @@ See extensions/source/activex/
 
 == Spotlight provider ==
 
-On Mac OS X, this allows indexing ODF documents with Spotlight.
+On macOS, this allows indexing ODF documents with Spotlight.
 See extensions/source/macosx/spotlight/
 
 == Scanner support ==

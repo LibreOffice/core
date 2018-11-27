@@ -19,7 +19,7 @@
 cat << EOF
 
 Error: a unit test failed, please do one of:
-make $1Test_$2 CPPUNITTRACE="lldb --"       # for interactive debugging on OS X
+make $1Test_$2 CPPUNITTRACE="lldb --"       # for interactive debugging on macOS
 make $1Test_$2 VALGRIND=memcheck            # for memory checking
 
 You can limit the execution to just one particular test by:

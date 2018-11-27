@@ -11,13 +11,13 @@ soffice
 =======
 
 In the "program" directory ("program/" on Linux and Windows, "Contents/MacOS/"
-on Mac OS X).
+on macOS).
 
 unoinfo
 =======
 
 In the "program" directory ("program/" on Linux and Windows, "Contents/MacOS/"
-on Mac OS X).
+on macOS).
 
 When called with a sole argument of "c++", it prints to stdout an absolute
 pathname denoting the directory where the public URE libraries are found.
@@ -27,7 +27,7 @@ character (either an ASCII '0' or '1') followed by a sequence of zero or more
 absolute pathnames denoting jars or directories that need to be included in a
 class loader's search locations.
 
-If the marker character is '0' (on Linux and Mac OS X), the pathnames are
+If the marker character is '0' (on Linux and macOS), the pathnames are
 encoded as bytes, and any two pathnames in the sequence are separated from each
 other by NUL bytes.
 

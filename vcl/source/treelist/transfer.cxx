@@ -970,7 +970,7 @@ void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceAct
 
     const Point aPt( pWindow->GetPointerPosPixel() );
 
-    // On Mac OS X we are forced to execute 'startDrag' synchronously
+    // On macOS we are forced to execute 'startDrag' synchronously
     // contrary to the XDragSource interface specification because
     // we can receive drag events from the system only in the main
     // thread

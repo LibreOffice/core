@@ -47,7 +47,7 @@ namespace abp
         //TODO:  For now, try to keep offering the same choices like before the
         // Mozilla/MORK cleanup, even if the status of what driver actually
         // provides which functionality is somewhat unclear, see the discussions
-        // of fdo#57285 "Address Book Data Source Wizard lists 'Mac OS X address
+        // of fdo#57285 "Address Book Data Source Wizard lists 'macOS address
         // book' on Linux" and fdo#57322 "Moz-free LDAP Address Book driver."
         // In accordance with ancient OOo 3.3, this is as follows:
         //
@@ -57,7 +57,7 @@ namespace abp
         // - KAB (if applicable)
         // - OTHER
         //
-        // On Mac OS X:
+        // On macOS:
         // - MACAB (if applicable)
         // - MORK (via mork driver, which is built unconditionally)
         // - OTHER
@@ -97,7 +97,7 @@ namespace abp
 
         try
         {
-            // check whether Mac OS X address book is available
+            // check whether macOS address book is available
             Reference< XDriver > xDriver( xManager->getDriverByURL("sdbc:address:macab") );
             if ( xDriver.is() )
                 bHaveMacab = true;

@@ -68,12 +68,12 @@ Obviously we want it to be possible to eventually distribute apps
 using LibreOffice code through the App Store. Technically, one
 important special aspect of iOS is that apps in the App Store are not
 allowed to load own dynamic libraries. (System libraries are used in
-the form of dynamic libraries, just like on Mac OS X, of which iOS is
+the form of dynamic libraries, just like on macOS, of which iOS is
 a variant.)
 
 Thus all the libraries in LibreOffice that normally are shared
 libraries (DLLs on Windows, shared objects (.so) on Linux, dynamic
-libraries on Mac OS X (.dylib)) must be built as static archives
+libraries on macOS (.dylib)) must be built as static archives
 instead. This has some interesting consequences for how UNO is
 implemented and used.
 
@@ -86,7 +86,7 @@ X. In order to be able to run and debug an app on an actual device
 (and not just the iOS Simulator) you need to be registered in the iOS
 Developer Program.
 
-Here is an autogen.input for iOS (device) using Xcode 4.6, on OS X 10.8:
+Here is an autogen.input for iOS (device) using Xcode 4.6, on macOS 10.8:
 
 --build=i386-apple-darwin10.7.0
 --host=arm-apple-darwin10
@@ -133,9 +133,9 @@ For the GUI, the same holds as said above for iOS. The GUI layer needs
 to be platform-specific, written in Java.
 
 Android cross-compilation work has been done mainly on Linux (openSUSE
-in particular). Earlier also cross-compiling from OS X was tried. The
+in particular). Earlier also cross-compiling from macOS was tried. The
 Android cross-compilation tool-chain (the "Native Development Kit", or
-NDK) is available for Linux, OS X and Windows, but trying to
+NDK) is available for Linux, macOS and Windows, but trying to
 cross-compile LibreOffice from Windows will probably drive you insane.
 
 You will also need the Android SDK as full "make" also builds a couple

@@ -109,7 +109,7 @@ public final class NativeLibraryLoader {
                         if (path.exists()) {
                             return path;
                         }
-                        // On OS X, dir is now the Resources dir,
+                        // On macOS, dir is now the Resources dir,
                         // we want to look in Frameworks
                         if (System.getProperty("os.name").startsWith("Mac")
                             && dir.getName().equals("Resources")) {

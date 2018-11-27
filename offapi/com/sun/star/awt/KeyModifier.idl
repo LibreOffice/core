@@ -34,7 +34,7 @@ published constants KeyModifier
     const short SHIFT = 1;
 
 
-    /** refers in the most cases to the "Ctrl" key (Cmd on Mac OS X).
+    /** refers in the most cases to the "Ctrl" key (Cmd on macOS).
      */
     const short MOD1 = 2;
 
@@ -43,7 +43,7 @@ published constants KeyModifier
      */
     const short MOD2 = 4;
 
-    /** refers in the most cases to the "Ctrl" key (Mac OS X)
+    /** refers in the most cases to the "Ctrl" key (macOS)
          */
     const short MOD3 = 8;
 };

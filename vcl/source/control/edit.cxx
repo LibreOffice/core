@@ -441,7 +441,7 @@ void Edit::ImplInvalidateOrRepaint()
     if( IsPaintTransparent() )
     {
         Invalidate();
-        // FIXME: this is currently only on OS X
+        // FIXME: this is currently only on macOS
         if( ImplGetSVData()->maNWFData.mbNoFocusRects )
             Update();
     }
@@ -1874,7 +1874,7 @@ void Edit::GetFocus()
 
         ImplShowCursor();
 
-        // FIXME: this is currently only on OS X
+        // FIXME: this is currently only on macOS
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
@@ -1908,7 +1908,7 @@ void Edit::LoseFocus()
 
     if ( !mpSubEdit )
     {
-        // FIXME: this is currently only on OS X
+        // FIXME: this is currently only on macOS
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
@@ -2359,7 +2359,7 @@ void Edit::Modify()
 
         // #i13677# notify edit listeners about caret position change
         CallEventListeners( VclEventId::EditCaretChanged );
-        // FIXME: this is currently only on OS X
+        // FIXME: this is currently only on macOS
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&

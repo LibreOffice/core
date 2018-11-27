@@ -35,7 +35,7 @@ namespace jfw_plugin
    by "\xXX\xXX"
  */
 BEGIN_VENDOR_MAP()
-// For OS X, don't bother with implementations that aren't relevant (or have never existed)
+// For macOS, don't bother with implementations that aren't relevant (or have never existed)
 #ifdef MACOSX
     VENDOR_MAP_ENTRY("Apple Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("Apple Computer, Inc.", OtherInfo)
