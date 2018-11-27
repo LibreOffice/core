@@ -166,6 +166,11 @@ bool IsLockingUsed()
 
 #endif
 
+bool IsWebDAVLockingUsed()
+{
+    return officecfg::Office::Common::Misc::UseWebDAVFileLocking::get();
+}
+
 } // anonymous namespace
 
 class SfxMedium_Impl
@@ -1004,6 +1009,10 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
     if ( GetURLObject().isAnyKnownWebDAVScheme() )
     {
+        // do nothing if WebDAV locking is disabled
+        if (!IsWebDAVLockingUsed())
+            return;
+
         try
         {
             bool bResult = pImpl->m_bLocked;
@@ -2789,6 +2798,12 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
     // check if webdav
     if ( GetURLObject().isAnyKnownWebDAVScheme() )
     {
+        // do nothing if WebDAV locking if disabled
+        // (shouldn't happen because we already skipped locking,
+        // see LockOrigFileOnDemand, but just in case ...)
+        if (!IsWebDAVLockingUsed())
+            return;
+
         if ( pImpl->m_bLocked )
         {
             // an interaction handler should be used for authentication, if needed
