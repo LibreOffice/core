@@ -2510,7 +2510,7 @@ void CustomAnimationPane::onSelect()
 
 // ICustomAnimationListController
 // pEffectInsertBefore may be null if moving to end of list.
-void CustomAnimationPane::onDragNDropComplete(CustomAnimationEffectPtr pEffectDragged, CustomAnimationEffectPtr pEffectInsertBefore)
+void CustomAnimationPane::onDragNDropComplete(std::vector< CustomAnimationEffectPtr > pEffectsDragged, CustomAnimationEffectPtr pEffectInsertBefore)
 {
     if ( mpMainSequence.get() )
     {
@@ -2518,22 +2518,28 @@ void CustomAnimationPane::onDragNDropComplete(CustomAnimationEffectPtr pEffectDr
 
         MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-        // Move the dragged effect and any hidden sub-effects
-        EffectSequence::iterator aIter = mpMainSequence->find( pEffectDragged );
-        const EffectSequence::iterator aEnd( mpMainSequence->getEnd() );
-
-        while( aIter != aEnd )
+        // Move all selected effects
+        for( auto const& pEffectDragged : pEffectsDragged )
         {
-            CustomAnimationEffectPtr pEffect = *aIter++;
+            // Move this dragged effect and any hidden sub-effects
+            EffectSequence::iterator aIter = mpMainSequence->find( pEffectDragged );
+            const EffectSequence::iterator aEnd( mpMainSequence->getEnd() );
 
-            // Update model with new location (function triggers a rebuild)
-            // target may be null, which will insert at the end.
-            mpMainSequence->moveToBeforeEffect( pEffect, pEffectInsertBefore );
+            while( aIter != aEnd )
+            {
+                CustomAnimationEffectPtr pEffect = *aIter++;
 
-            // Done moving effect and its hidden sub-effects when *next* effect is visible.
-            if ( mpCustomAnimationList->isVisible( *aIter ) )
-                break;
+                // Update model with new location (function triggers a rebuild)
+                // target may be null, which will insert at the end.
+                mpMainSequence->moveToBeforeEffect( pEffect, pEffectInsertBefore );
+
+                // Done moving effect and its hidden sub-effects when *next* effect is visible.
+                if ( mpCustomAnimationList->isVisible( *aIter ) )
+                    break;
+            }
+
         }
+
 
         updateControls();
         mrBase.GetDocShell()->SetModified();

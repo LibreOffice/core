@@ -452,16 +452,41 @@ CustomAnimationList::CustomAnimationList( vcl::Window* pParent )
     SetDragDropMode(DragDropMode::CTRL_MOVE);
 }
 
-// D'n'D #1: Prepare selected element for moving.
+// D'n'D #1: Record selected effects for drag'n'drop.
+void CustomAnimationList::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    // Record which effects are selected:
+    // Since NextSelected(..) iterates through the selected items in the order they
+    // were selected, create a sorted list for simpler drag'n'drop algorithms.
+    mDndEffectsSelected.clear();
+    for( SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry) )
+    {
+        if( IsSelected(pEntry) )
+        {
+            mDndEffectsSelected.push_back( pEntry );
+        }
+    }
+
+    // Allow normal proccessing; this calls our NotifyStartDrag().
+    SvTreeListBox::StartDrag( nAction, rPosPixel );
+}
+
+// D'n'D #2: Prepare selected element for moving.
 DragDropMode CustomAnimationList::NotifyStartDrag( TransferDataContainer& /*rData*/, SvTreeListEntry* pEntry )
 {
+    // Restore selection for multiple selected effects.
+    // Do it here to remove a flicker on the UI with effects being unselected and reselected.
+    for( auto &pEffect : mDndEffectsSelected )
+        SelectListEntry( pEffect, true);
+
+    // Note: pEntry is the effect with focus (if multiple effects are selected)
     mpDndEffectDragging = pEntry;
     mpDndEffectInsertBefore = pEntry;
 
     return DragDropMode::CTRL_MOVE;
 }
 
-// D'n'D #2: Called each time mouse moves during drag
+// D'n'D #3: Called each time mouse moves during drag
 sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     /*
@@ -470,41 +495,17 @@ sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
     */
 
     sal_Int8 ret = DND_ACTION_NONE;
-    const bool bIsMove = ( DND_ACTION_MOVE == rEvt.mnAction );
 
+    const bool bIsMove = ( DND_ACTION_MOVE == rEvt.mnAction );
     if( mpDndEffectDragging && !rEvt.mbLeaving && bIsMove )
     {
         SvTreeListEntry* pEntry = GetDropTarget( rEvt.maPosPixel );
 
-        const bool bNotOverSelf = ( pEntry != mpDndEffectDragging );
-        if( pEntry && bNotOverSelf )
+        const bool bOverASelectedEffect =
+            std::find( mDndEffectsSelected.begin(), mDndEffectsSelected.end(), pEntry ) != mDndEffectsSelected.end();
+        if( pEntry && !bOverASelectedEffect )
         {
-            /*
-                If dragged effect has visible children then we must re-parent the children
-                first so that they are not dragged with the parent. Re-parenting (only in the UI!)
-                dragged effect's first child to the root, and the remaining children to 1st child.
-            */
-            if( GetVisibleChildCount( mpDndEffectDragging ) > 0 )
-            {
-                SvTreeListEntry* pFirstChild = FirstChild( mpDndEffectDragging );
-                SvTreeListEntry* pEntryParent = GetParent( mpDndEffectDragging );
-                sal_uLong nInsertAfterPos = SvTreeList::GetRelPos( mpDndEffectDragging ) + 1;
-
-                // Re-parent 1st child to root, below all the other children.
-                pModel->Move( pFirstChild, pEntryParent, nInsertAfterPos );
-
-                // Re-parent children after 1st child to the first child
-                sal_uLong nInsertNextChildPos = 0;
-                while( FirstChild( mpDndEffectDragging ) )
-                {
-                    SvTreeListEntry* pNextChild = FirstChild( mpDndEffectDragging );
-                    ++nInsertNextChildPos;
-                    pModel->Move( pNextChild, pFirstChild, nInsertNextChildPos );
-                }
-
-                // Expand all children (they were previously visible)
-                Expand( pFirstChild );
-            }
+            ReparentChildrenDuringDrag();
 
             ReorderEffectsInUiDuringDragOver( pEntry );
         }
@@ -517,17 +518,74 @@ sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
     return ret;
 }
 
+// D'n'D: For each dragged effect, re-parent (only in the UI) non-selected
+//        visible children so they are not dragged with the parent.
+void CustomAnimationList::ReparentChildrenDuringDrag()
+{
+    /*
+        Re-parent (only in the UI!):
+          a) the dragged effect's first non-selected child to the root, and
+          b) the remaining non-selected children to that re-parented 1st child.
+    */
+    for( auto &pEffect : mDndEffectsSelected )
+    {
+        const bool bExpandedWithChildren = GetVisibleChildCount( pEffect ) > 0;
+        if( bExpandedWithChildren )
+        {
+            SvTreeListEntry* pEntryParent = GetParent( pEffect );
+
+            SvTreeListEntry* pFirstNonSelectedChild = nullptr;
+            sal_uLong nInsertNextChildPos = 0;
+
+            // Process all children of this effect
+            SvTreeListEntry* pChild = FirstChild( pEffect );
+            while( pChild && ( GetParent( pChild ) == pEffect ) )
+            {
+                // Start by finding next child because if pChild moves, we cannot then
+                // ask it what the next child is because it's no longer with its siblings.
+                SvTreeListEntry* pNextChild = Next( pChild );
+
+                // Skip selected effects: they stay with their previous parent to be moved.
+                // During drag, the IsSelected() set changes, so use mDndEffectsSelected instead
+                const bool bIsSelected = std::find( mDndEffectsSelected.begin(), mDndEffectsSelected.end(), pChild ) != mDndEffectsSelected.end();
+                if( !bIsSelected )
+                {
+                    // Re-parent 1st non-selected child to root, below all the other children.
+                    if( !pFirstNonSelectedChild )
+                    {
+                        pFirstNonSelectedChild = pChild;
+                        sal_uLong nInsertAfterPos = SvTreeList::GetRelPos( pEffect ) + 1;
+                        pModel->Move( pFirstNonSelectedChild, pEntryParent, nInsertAfterPos );
+                    }
+                    else
+                    {
+                        // Re-parent remaining non-selected children to 1st child
+                        ++nInsertNextChildPos;
+                        pModel->Move( pChild, pFirstNonSelectedChild, nInsertNextChildPos );
+                    }
+                }
+
+                pChild = pNextChild;
+            }
+
+            // Expand all children (they were previously visible)
+            if( pFirstNonSelectedChild )
+                Expand( pFirstNonSelectedChild );
+
+        }
+    }
+}
+
 // D'n'D: Update UI to show where dragged event will appear if dropped now.
 void CustomAnimationList::ReorderEffectsInUiDuringDragOver( SvTreeListEntry* pOverEntry )
 {
     /*
-        Update the order of effects on *just the UI* as the user drags.
+        Update the order of effects in *just the UI* while the user is dragging.
         The model (MainSequence) will only be changed after the user drops
-        the effect because this triggers a rebuild of the list which removes
-        and recreates all effects (on a background timer). Hence, this would
-        invalidate the pointer for the entry currently being dragged.
-        Plus, reordering the model during drag would have to reverse any model changes
-        if the drag were canceled, and ensure only one Undo record created per successful drag.
+        the effect so that there is minimal work to do if the drag is canceled.
+        Plus only one undo record should be created per drag, and changing
+        the model recreates all effects (on a background timer) which invalidates
+        all effect pointers.
     */
 
     // Compute new location in *UI*
@@ -565,14 +623,46 @@ void CustomAnimationList::ReorderEffectsInUiDuringDragOver( SvTreeListEntry* pOv
         }
     }
 
-    // Update *just* the UI to show where dragged element would currently be if dropped.
-    pModel->Move( mpDndEffectDragging, pNewParent, nInsertAfterPos );
+    // Move each selected effect in *just* the UI to show where it would be if dropped.
+    // This leaves the exist parent relationships in the non-dragged elements so that
+    // the list does not seem to change structure during drag. Parent relationships will
+    // be correctly recreated on drop.
+    for( auto aItr = mDndEffectsSelected.rbegin();
+         aItr != mDndEffectsSelected.rend();
+         ++aItr)
+    {
+        SvTreeListEntry* pEffect = *aItr;
 
-    // Restore selection
-    Select( mpDndEffectDragging );
+        // Move only effects whose parents is not selected because
+        // they will automatically move when their parent is moved.
+        const bool bParentIsSelected =
+            std::find(mDndEffectsSelected.begin(), mDndEffectsSelected.end(), GetParent(pEffect)) != mDndEffectsSelected.end();
+
+        if( !bParentIsSelected )
+        {
+            // If the current effect is being moved down, the insert position must be decremented
+            // after move if it will have the same parent as it currently does because it moves
+            // from above the insertion point to below it, hence changing its index.
+            // Must decide move-up vs move-down for each effect being dragged because we may be
+            // processing a discontinuous set of selected effects (some below, some above insertion point)
+            Point aCurPosOverEffect( GetEntryPosition( pOverEntry ) );
+            Point aCurPosMovedEffect( GetEntryPosition( pEffect ) );
+            const bool bCurDraggingDown = ( aCurPosMovedEffect.Y() - aCurPosOverEffect.Y() ) < 0;
+            const bool bWillHaveSameParent = ( pNewParent == GetParent(pEffect) );
+
+            pModel->Move( pEffect, pNewParent, nInsertAfterPos );
+
+            if( bCurDraggingDown && bWillHaveSameParent )
+                --nInsertAfterPos;
+        }
+    }
+
+    // Restore selection (calling Select() is slow; SelectListEntry() is faster)
+    for( auto &pEffect : mDndEffectsSelected )
+        SelectListEntry( pEffect, true);
 }
 
-// D'n'D #4: Tell model to update effect order.
+// D'n'D #5: Tell model to update effect order.
 sal_Int8 CustomAnimationList::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 {
     // NOTE: We cannot just override NotifyMoving() because it's not called
@@ -586,13 +676,20 @@ sal_Int8 CustomAnimationList::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 
     if( bMovingEffect && bMoveNotSelf && bHaveSequence )
     {
-        CustomAnimationListEntry*  pEntryMoved = static_cast< CustomAnimationListEntry* >( mpDndEffectDragging );
         CustomAnimationListEntry*  pTarget = static_cast< CustomAnimationListEntry* >( mpDndEffectInsertBefore );
+
+        // Build list of effects
+        std::vector< CustomAnimationEffectPtr > aEffects;
+        for( auto &pEntry : mDndEffectsSelected )
+        {
+            CustomAnimationListEntry* pCustomAnimationEffect = static_cast< CustomAnimationListEntry* >( pEntry );
+            aEffects.push_back( pCustomAnimationEffect->getEffect() );
+        }
 
         // Callback to observer to have it update the model.
         // If pTarget is null, pass nullptr to indicate end of list.
         mpController->onDragNDropComplete(
-            pEntryMoved->getEffect(),
+            aEffects,
             pTarget ? pTarget->getEffect() : nullptr );
 
         // Reset selection
@@ -604,11 +701,12 @@ sal_Int8 CustomAnimationList::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
     return ret;
 }
 
-// D'n'D #5: Cleanup (regardless of if we were target of drop or not)
+// D'n'D #6: Cleanup (regardless of if we were target of drop or not)
 void CustomAnimationList::DragFinished( sal_Int8 nDropAction )
 {
     mpDndEffectDragging = nullptr;
     mpDndEffectInsertBefore = nullptr;
+    mDndEffectsSelected.clear();
 
     // Rebuild because we may have re-parented the dragged effect's first child.
     // Can hit this without running ExecuteDrop(...) when drag canceled.
