@@ -51,8 +51,7 @@ void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
 struct ScaleContext {
     BitmapReadAccess  * const mpSrc;
     BitmapWriteAccess *mpDest;
-    long mnSrcW, mnDestW;
-    long mnSrcH, mnDestH;
+    long mnDestW;
     bool mbHMirr, mbVMirr;
     std::unique_ptr<long[]> mpMapIX;
     std::unique_ptr<long[]> mpMapIY;
@@ -64,8 +63,7 @@ struct ScaleContext {
                   long nSrcH, long nDestH,
                   bool bHMirr, bool bVMirr)
         : mpSrc( pSrc ), mpDest( pDest )
-        , mnSrcW( nSrcW ), mnDestW( nDestW )
-        , mnSrcH( nSrcH ), mnDestH( nDestH )
+        , mnDestW( nDestW )
         , mbHMirr( bHMirr ), mbVMirr( bVMirr )
         , mpMapIX( new long[ nDestW ] )
         , mpMapIY( new long[ nDestH ] )

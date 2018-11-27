@@ -171,12 +171,6 @@ class XMLShapeImportHelper;
 class ScXMLChangeTrackingImportHelper;
 class SolarMutexGuard;
 
-struct tScMyCellRange
-{
-    sal_Int32 StartColumn, EndColumn;
-    sal_Int32 StartRow, EndRow;
-};
-
 struct ScMyNamedExpression
 {
     OUString      sName;

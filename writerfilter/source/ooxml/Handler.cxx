@@ -238,7 +238,7 @@ void OOXMLHeaderHandler::sprm(Sprm & /*sprm*/)
   class OOXMLBreakHandler
  */
 OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream)
-: mnType(0), mnClear(0),
+: mnType(0),
   mrStream(rStream)
 {
 }
@@ -270,7 +270,6 @@ void OOXMLBreakHandler::attribute(Id name, Value & val)
         mnType = val.getInt();
         break;
     case NS_ooxml::LN_CT_Br_clear:
-        mnClear = val.getInt();
         break;
     default:
         break;

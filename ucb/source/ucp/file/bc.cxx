@@ -264,9 +264,8 @@ BaseContent::createCommandIdentifier()
 
 
 void SAL_CALL
-BaseContent::abort( sal_Int32 CommandId )
+BaseContent::abort( sal_Int32 /*CommandId*/ )
 {
-    m_pMyShell->abort( CommandId );
 }
 
 

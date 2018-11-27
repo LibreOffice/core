@@ -131,7 +131,6 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
 
         XInteractionSupplyNameImpl* const p1;
         XInteractionAbortImpl* const p2;
-        sal_Int32 m_nErrorCode,m_nMinorError;
 
         css::uno::Reference<css::task::XInteractionRequest> m_xRequest;
 

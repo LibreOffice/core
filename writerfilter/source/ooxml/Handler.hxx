@@ -108,7 +108,7 @@ public:
 
 class OOXMLBreakHandler : public Properties
 {
-    sal_Int32 mnType, mnClear;
+    sal_Int32 mnType;
     Stream & mrStream;
 public:
     explicit OOXMLBreakHandler(Stream & rStream);

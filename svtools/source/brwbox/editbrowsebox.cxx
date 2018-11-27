@@ -126,9 +126,7 @@ namespace svt
                   ,m_pFocusWhileRequest(nullptr)
                   ,nPaintRow(-1)
                   ,nEditRow(-1)
-                  ,nOldEditRow(-1)
                   ,nEditCol(0)
-                  ,nOldEditCol(0)
                   ,bHasFocus(false)
                   ,bPaintStatus(true)
                   ,bActiveBeforeTracking( false )
@@ -167,8 +165,8 @@ namespace svt
     void EditBrowseBox::RemoveRows()
     {
         BrowseBox::Clear();
-        nOldEditRow = nEditRow = nPaintRow = -1;
-        nEditCol = nOldEditCol = 0;
+        nEditRow = nPaintRow = -1;
+        nEditCol = 0;
     }
 
 
@@ -1019,9 +1017,6 @@ return;
         if (bUpdate)
             Update();
 
-        nOldEditCol = nEditCol;
-        nOldEditRow = nEditRow;
-
         // release the controller (asynchronously)
         if (nEndEvent)
             Application::RemoveUserEvent(nEndEvent);
@@ -1046,8 +1041,6 @@ return;
         nEndEvent = nullptr;
 
         aOldController  = CellControllerRef();
-        nOldEditRow     = -1;
-        nOldEditCol     =  0;
     }
 
 

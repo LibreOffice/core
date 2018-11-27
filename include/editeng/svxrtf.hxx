@@ -95,7 +95,7 @@ struct SvxRTFStyleType
 {
     SfxItemSet aAttrSet;        // the attributes of Style (+ derivate!)
     OUString sName;
-    sal_uInt16 nBasedOn, nNext;
+    sal_uInt16 nBasedOn;
     sal_uInt8 nOutlineNo;
 
     SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange );

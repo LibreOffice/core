@@ -27,7 +27,7 @@ namespace dbaui
     class DlgSize final : public weld::GenericDialogController
     {
     private:
-        sal_Int32       m_nPrevValue, m_nStandard;
+        sal_Int32       m_nPrevValue;
         void            SetValue( sal_Int32 nVal );
 
         DECL_LINK(CbClickHdl, weld::ToggleButton&, void);

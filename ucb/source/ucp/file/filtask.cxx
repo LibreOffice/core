@@ -415,21 +415,6 @@ TaskManager::endTask( sal_Int32 CommandId,
 }
 
 
-void
-TaskManager::abort( sal_Int32 CommandId )
-{
-    if( CommandId )
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-        TaskMap::iterator it = m_aTaskMap.find( CommandId );
-        if( it == m_aTaskMap.end() )
-            return;
-        else
-            it->second.abort();
-    }
-}
-
-
 void TaskManager::clearError( sal_Int32 CommandId )
 {
     osl::MutexGuard aGuard( m_aMutex );

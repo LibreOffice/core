@@ -88,7 +88,7 @@ namespace fileaccess
         {
         private:
 
-            bool m_bAbort,m_bHandled;
+            bool m_bHandled;
             sal_Int32 m_nErrorCode,m_nMinorCode;
             css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
             css::uno::Reference< css::ucb::XCommandEnvironment >  m_xCommandEnvironment;
@@ -98,17 +98,11 @@ namespace fileaccess
 
             explicit TaskHandling(
                 const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv )
-                : m_bAbort( false ),
-                  m_bHandled( false ),
+                : m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
                   m_nMinorCode( TASKHANDLER_NO_ERROR ),
                   m_xCommandEnvironment( xCommandEnv )
             {
-            }
-
-            void abort()
-            {
-                m_bAbort = true;
             }
 
             void setHandled()
@@ -253,7 +247,6 @@ namespace fileaccess
             const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv );
 
         sal_Int32 getCommandId();
-        void abort( sal_Int32 CommandId );
 
 
         /**

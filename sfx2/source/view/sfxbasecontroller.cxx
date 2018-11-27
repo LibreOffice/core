@@ -107,12 +107,6 @@ using ::com::sun::star::frame::XTitle;
 using ::com::sun::star::ui::XSidebarProvider;
 
 
-struct GroupIDToCommandGroup
-{
-    SfxGroupId const  nGroupID;
-    sal_Int16 const   nCommandGroup;
-};
-
 typedef std::unordered_map< SfxGroupId, sal_Int16 > GroupHashMap;
 
 sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID )
