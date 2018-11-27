@@ -489,10 +489,9 @@ void Key::setAsciiListValue(
         list.push_back(utf8);
     }
     std::vector< char * > list2;
-    for (std::vector< OString >::iterator i(list.begin()); i != list.end();
-         ++i)
+    for (const auto& rItem : list)
     {
-        list2.push_back(const_cast< char * >(i->getStr()));
+        list2.push_back(const_cast< char * >(rItem.getStr()));
     }
     RegError err = key_.setStringListValue(
         OUString(), list2.data(), static_cast< sal_uInt32 >(list2.size()));

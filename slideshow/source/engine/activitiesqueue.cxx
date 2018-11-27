@@ -81,13 +81,9 @@ namespace slideshow
 
             // accumulate time lag for all activities, and lag time
             // base if necessary:
-            ActivityQueue::const_iterator iPos(
-                maCurrentActivitiesWaiting.begin() );
-            const ActivityQueue::const_iterator iEnd(
-                maCurrentActivitiesWaiting.end() );
             double fLag = 0.0;
-            for ( ; iPos != iEnd; ++iPos )
-                fLag = std::max<double>( fLag, (*iPos)->calcTimeLag() );
+            for ( const auto& rxActivity : maCurrentActivitiesWaiting )
+                fLag = std::max<double>( fLag, rxActivity->calcTimeLag() );
             if (fLag > 0.0)
             {
                 mpTimer->adjustTimer( -fLag );
