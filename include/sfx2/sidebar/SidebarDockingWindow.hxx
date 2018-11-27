@@ -23,6 +23,8 @@
 
 #include <rtl/ref.hxx>
 
+class SfxViewShell;
+
 namespace svt { class AcceleratorExecute; }
 
 namespace sfx2 { namespace sidebar {
@@ -65,6 +67,7 @@ private:
     void DoDispose();
 
     const bool mbSidebarVisibleInLOK;
+    const SfxViewShell* mpOldViewShell;
 };
 
 } } // end of namespace sfx2::sidebar
