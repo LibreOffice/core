@@ -45,6 +45,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <tools/gen.hxx>
 
 
 using namespace ::com::sun::star;
@@ -427,10 +428,6 @@ bool ToolbarLayoutManager::requestToolbar( const OUString& rResourceURL )
         bMustCallCreate = true;
 
     bool bCreateOrShowToolbar( aRequestedToolbar.m_bVisible && !aRequestedToolbar.m_bMasterHide );
-
-    uno::Reference< awt::XWindow2 > xContainerWindow( m_xContainerWindow, uno::UNO_QUERY );
-    if ( xContainerWindow.is() && aRequestedToolbar.m_bFloating )
-        bCreateOrShowToolbar &= bool( xContainerWindow->isActive());
 
     if ( bCreateOrShowToolbar )
         bNotify = bMustCallCreate ? createToolbar( rResourceURL ) : showToolbar( rResourceURL );
@@ -1835,7 +1832,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
     xDockAreaWindow = m_xDockAreaWindows[static_cast<int>(eDockingArea)];
     for (auto const& elem : m_aUIElements)
     {
-        if ( elem.m_aDockedData.m_nDockedArea == eDockingArea && elem.m_bVisible && !elem.m_bFloating )
+        if ( elem.m_aDockedData.m_nDockedArea == eDockingArea && elem.m_bVisible )
         {
             uno::Reference< ui::XUIElement > xUIElement( elem.m_xUIElement );
             if ( xUIElement.is() )
@@ -1844,8 +1841,33 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
                 uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
                 if ( xDockWindow.is() )
                 {
-                    // docked windows
-                    aWindowVector.push_back(elem);
+                    if (!elem.m_bFloating)
+                    {
+                        // docked windows
+                        aWindowVector.push_back(elem);
+                    }
+                    else
+                    {
+                        // floating windows
+                        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
+                        DockingManager* pDockMgr = vcl::Window::GetDockingManager();
+                        if (pDockMgr != nullptr)
+                        {
+                            ImplDockingWindowWrapper* pWrapper = pDockMgr->GetDockingWindowWrapper(pWindow);
+                            if (pWrapper != nullptr && pWrapper->GetFloatingWindow())
+                            {
+                                // update the position data of the floating window
+                                if (pWrapper->GetFloatingWindow()->UpdatePositionData())
+                                {
+                                    awt::Rectangle aTmpRect = xWindow->getPosSize();
+                                    UIElement uiElem = elem;
+                                    uiElem.m_aFloatingData.m_aPos = awt::Point(aTmpRect.X, aTmpRect.Y);
+                                    implts_setToolbar(uiElem);
+                                    implts_writeWindowStateData(uiElem);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

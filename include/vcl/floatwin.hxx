@@ -153,6 +153,7 @@ public:
     void            SetPopupModeEndHdl( const Link<FloatingWindow*,void>& rLink ) { maPopupModeEndHdl = rLink; }
 
     bool            GrabsFocus() const { return mbGrabFocus; }
+    bool            UpdatePositionData();
 
     static Point    CalcFloatingPosition( vcl::Window* pWindow, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags, sal_uInt16& rArrangeIndex );
 };
