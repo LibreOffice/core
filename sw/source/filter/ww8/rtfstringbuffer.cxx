@@ -41,7 +41,7 @@ sal_Int32 RtfStringBuffer::getLength() const
     sal_Int32 nRet = 0;
     for (const auto& rValue : m_aValues)
         if (!rValue.isGraphic())
-            nRet += rValue.m_aBuffer.getLength();
+            nRet += rValue.getBuffer().getLength();
     return nRet;
 }
 
@@ -64,7 +64,7 @@ OStringBuffer& RtfStringBuffer::getLastBuffer()
 {
     if (m_aValues.empty() || m_aValues.back().isGraphic())
         m_aValues.emplace_back(RtfStringBufferValue());
-    return m_aValues.back().m_aBuffer;
+    return m_aValues.back().getBuffer();
 }
 
 OStringBuffer* RtfStringBuffer::operator->() { return &getLastBuffer(); }
