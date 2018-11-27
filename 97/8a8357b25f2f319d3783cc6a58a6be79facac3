@@ -1,0 +1,8 @@
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Jenkins
+Submitted-by: Stephan Bergmann <sbergman@redhat.com>
+Submitted-at: Tue, 27 Nov 2018 20:43:06 +0100
+Reviewed-on: https://gerrit.libreoffice.org/64121
+Project: core
+Branch: refs/heads/master
