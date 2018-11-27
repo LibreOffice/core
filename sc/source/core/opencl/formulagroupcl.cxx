@@ -911,10 +911,6 @@ public:
         ss << ",";
         mStringArgument.GenDeclRef(ss);
     }
-    virtual void GenNumDeclRef( std::stringstream& ss ) const
-    {
-        VectorRef::GenSlidingWindowDecl(ss);
-    }
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
         std::stringstream ss;
