@@ -696,6 +696,16 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 endef
 
 
+# Ant class
+
+define gb_Ant_add_dependencies
+__ant_out:=$(shell $(gb_Ant_ANTCOMMAND) -Ddependencies.outfile=`cygpath -m $(WORKDIR)/Ant/$(1)/deps` -f `cygpath -m $(2)` dependencies)
+$$(eval $(foreach dep,$(shell cat $(WORKDIR)/Ant/$(1)/deps),$$(call gb_Ant_add_dependency,$(call gb_Ant_get_target,$(1)),$(shell cygpath -u $(dep)))))
+
+endef
+
+
+
 # SdiTarget class
 
 gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"

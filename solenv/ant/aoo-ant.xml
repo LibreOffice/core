@@ -102,7 +102,7 @@
         </condition>
 
         <pathconvert refid="main.classpath" setonempty="true" pathsep=" " property="deps" if:set="has.main.classpath"/>
-        <property name="dep" value=""/>
+        <property name="deps" value=""/>
         <echo message="${deps}" file="${dependencies.outfile}"/>
     </target>
 

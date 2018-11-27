@@ -471,6 +471,16 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
+
+# Ant class
+
+define gb_Ant_add_dependencies
+__ant_out:=$(shell $(gb_Ant_ANTCOMMAND) -v -Ddependencies.outfile=$(WORKDIR)/Ant/$(1)/deps -f $(2) dependencies)
+$$(eval $(foreach dep,$(shell cat $(WORKDIR)/Ant/$(1)/deps),$$(call gb_Ant_add_dependency,$(call gb_Ant_get_target,$(1)),$(dep))))
+
+endef
+
+
 # SdiTarget class
 
 gb_SdiTarget_SVIDLPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
