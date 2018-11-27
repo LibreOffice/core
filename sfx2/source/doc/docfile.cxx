@@ -173,6 +173,11 @@ bool IsLockingUsed()
 
 #endif
 
+bool IsWebDAVLockingUsed()
+{
+    return officecfg::Office::Common::Misc::UseWebDAVFileLocking::get();
+}
+
 /// Gets default attributes of a file:// URL.
 sal_uInt64 GetDefaultFileAttributes(const OUString& rURL)
 {
@@ -1088,6 +1093,10 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
 
     if ( GetURLObject().isAnyKnownWebDAVScheme() )
     {
+        // do nothing if WebDAV locking is disabled
+        if (!IsWebDAVLockingUsed())
+            return LockFileResult::Succeeded;
+
         try
         {
             bool bResult = pImpl->m_bLocked;
@@ -2866,6 +2875,12 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
     // check if webdav
     if ( GetURLObject().isAnyKnownWebDAVScheme() )
     {
+        // do nothing if WebDAV locking if disabled
+        // (shouldn't happen because we already skipped locking,
+        // see LockOrigFileOnDemand, but just in case ...)
+        if (!IsWebDAVLockingUsed())
+            return;
+
         if ( pImpl->m_bLocked )
         {
             // an interaction handler should be used for authentication, if needed
