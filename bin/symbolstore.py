@@ -50,7 +50,7 @@
 #     -c           : Copy debug info files to the same directory structure
 #                    as sym files
 #     -a "<archs>" : Run dump_syms -a <arch> for each space separated
-#                    cpu architecture in <archs> (only on OS X)
+#                    cpu architecture in <archs> (only on macOS)
 #     -s <srcdir>  : Use <srcdir> as the top source directory to
 #                    generate relative filenames.
 
@@ -606,7 +606,7 @@ def main():
                       help="Copy debug info files into the same directory structure as symbol files")
     parser.add_option("-a", "--archs",
                       action="store", dest="archs",
-                      help="Run dump_syms -a <arch> for each space separated cpu architecture in ARCHS (only on OS X)")
+                      help="Run dump_syms -a <arch> for each space separated cpu architecture in ARCHS (only on macOS)")
     parser.add_option("-s", "--srcdir",
                       action="store", dest="srcdir",
                       help="Use SRCDIR to determine relative paths to source files")

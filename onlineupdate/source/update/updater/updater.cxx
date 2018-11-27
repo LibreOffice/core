@@ -709,7 +709,7 @@ static int ensure_copy(const NS_tchar *path, const NS_tchar *dest)
     }
 
     // This block size was chosen pretty arbitrarily but seems like a reasonable
-    // compromise. For example, the optimal block size on a modern OS X machine
+    // compromise. For example, the optimal block size on a modern macOS machine
     // is 100k */
     const int blockSize = 32 * 1024;
     void* buffer = malloc(blockSize);
@@ -2524,7 +2524,7 @@ ProcessReplaceRequest()
     }
 
 #ifdef MACOSX
-    // On OS X, we need to remove the staging directory after its Contents
+    // On macOS, we need to remove the staging directory after its Contents
     // directory has been moved.
     NS_tchar updatedAppDir[MAXPATHLEN];
     NS_tsnprintf(updatedAppDir, sizeof(updatedAppDir)/sizeof(updatedAppDir[0]),
@@ -2794,7 +2794,7 @@ UpdateThreadFunc(void * /*param*/)
         {
 #ifdef MACOSX
             // If the update was successful we need to update the timestamp on the
-            // top-level Mac OS X bundle directory so that Mac OS X's Launch Services
+            // top-level macOS bundle directory so that macOS's Launch Services
             // picks up any major changes when the bundle is updated.
             if (!sStagedUpdate && utimes(gInstallDirPath, nullptr) != 0)
             {

@@ -349,7 +349,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
      * at least one record in the set has that property filled. The reason
      * is that some properties, like the kABTitleProperty are required by
      * the mail merge wizard (in module sw) but are by default not shown in
-     * the Mac OS X address book, so they would be weeded out at this stage
+     * the macOS address book, so they would be weeded out at this stage
      * and not shown if they were not required.
      *
      * Note: with the addition of required properties, I am not sure that

@@ -803,7 +803,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTextDrawInfo.state=getState( nState );
                 aTextDrawInfo.isFocused=false;
 
-                rc.size.width+=1;//else there's a white space because an OS X theme has no 3D border
+                rc.size.width+=1; // else there's a white space because a macOS theme has no 3D border
                 rc.size.height+=1;
                 HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
 
@@ -825,7 +825,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTextDrawInfo.state=getState( nState );
             aTextDrawInfo.isFocused=false;
 
-            rc.size.width  += 1; // else there may be a white space because an OS X theme has no 3D border
+            rc.size.width  += 1; // else there may be a white space because a macOS theme has no 3D border
             // change rc so that the frame will encompass only the content region
             // see counterpart in GetNativeControlRegion
             rc.size.width  += 2;

@@ -2090,7 +2090,7 @@ bool TaskManager::ensuredir( sal_Int32 CommandId,
     // arbitrary (?) directory does not seem to cause any sandbox
     // violation, while opendir() does. (Sorry I could not be bothered
     // to use some complex cross-platform abstraction over stat() here
-    // in this OS X specific code block.)
+    // in this macOS specific code block.)
 
     OUString aDirName;
     struct stat s;

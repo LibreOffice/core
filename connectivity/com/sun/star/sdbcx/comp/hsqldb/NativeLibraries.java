@@ -33,10 +33,10 @@ final class NativeLibraries {
     }
 
     private static void loadLibrary(String libname) {
-        // At least on Mac OS X Tiger, System.loadLibrary("hsqldb2") does not
+        // At least on macOS Tiger, System.loadLibrary("hsqldb2") does not
         // find the hsqldb2 library one directory above sdbc_hsqldb.jar, even
         // though ".." is on the jar's Class-Path; however, the alternative
-        // code (needing Java 1.5, which is given for Mac OS X Tiger) works
+        // code (needing Java 1.5, which is given for macOS Tiger) works
         // there:
         try {
             System.loadLibrary(libname);

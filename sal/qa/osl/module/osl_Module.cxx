@@ -131,7 +131,7 @@ namespace osl_Module
         void getUrlFromAddress_002( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            // TODO: Find out why this fails on macOS
             ::osl::Module aMod( getDllURL( ) );
             FuncPtr pFunc = reinterpret_cast<FuncPtr>(aMod.getSymbol( "firstfunc" ));
 
@@ -260,7 +260,7 @@ namespace osl_Module
         void getSymbol_001( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            // TODO: Find out why this fails on macOS
             ::osl::Module aMod( getDllURL( ) );
             FuncPtr pFunc = reinterpret_cast<FuncPtr>(aMod.getSymbol( "firstfunc" ));
             bRes = false;
@@ -289,7 +289,7 @@ namespace osl_Module
         void optr_oslModule_001( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            // TODO: Find out why this fails on macOS
             ::osl::Module aMod;
             bRes = ( static_cast<oslModule>(aMod) == nullptr );
 
@@ -308,7 +308,7 @@ namespace osl_Module
         void optr_oslModule_002( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            // TODO: Find out why this fails on macOS
             ::osl::Module aMod( getDllURL( ) );
             OUString funcName( "firstfunc" );
 
@@ -341,7 +341,7 @@ namespace osl_Module
         void getFunctionSymbol_001( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            // TODO: Find out why this fails on macOS
             ::osl::Module aMod( getDllURL( ) );
             oslGenericFunction oslFunc = aMod.getFunctionSymbol( "firstfunc" );
             OUString aLibraryURL;

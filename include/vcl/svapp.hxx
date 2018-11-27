@@ -1025,7 +1025,7 @@ public:
 
     /** @name Accelerators and Mnemonics
 
-     Accelerators allow a user to hold down Ctrl+key (or CMD+key on OS X)
+     Accelerators allow a user to hold down Ctrl+key (or CMD+key on macOS)
      combination to gain quick access to functionality.
 
      Mnemonics are underline letters in things like menus and dialog boxes

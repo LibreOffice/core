@@ -34,7 +34,7 @@ UDK_3_0_0 { # should have been UDK_3.0
 
     # Introducing a question mark at the end because of
     # marginal type discrepancy there is a difference in the
-    # mangled name between Linux and Mac OS X, see #i69351#
+    # mangled name between Linux and macOS, see #i69351#
     _ZN9salhelper21SimpleReferenceObjectnwE?; # salhelper::SimpleReferenceObject::operator new (std::size_t)
 
     _ZNK9salhelper18ORealDynamicLoader6getApiEv;
@@ -55,7 +55,7 @@ UDK_3.1 {
 
     # Introducing a wildcard right in the middle because due to
     # marginal type discrepancy there is a difference in the
-    # mangled name between Linux and Mac OS X see #i69351#
+    # mangled name between Linux and macOS see #i69351#
     _ZN9salhelper21SimpleReferenceObjectnwE?RKSt9nothrow_t; # salhelper::SimpleReferenceObject::operator new (std::size_t, std::nothrow_t const&)
 
         _ZN9salhelper9ConditionC1ERN3osl5MutexE;

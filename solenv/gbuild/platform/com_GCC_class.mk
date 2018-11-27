@@ -147,7 +147,7 @@ gb_ICU_PRECOMMAND := $(call gb_Helper_extend_ld_path,$(WORKDIR_FOR_BUILD)/Unpack
 
 # UIConfig class
 
-# Mac OS X sort(1) cannot read a response file
+# macOS sort(1) cannot read a response file
 define gb_UIConfig__command
 $(call gb_Helper_abbreviate_dirs,\
 	$(SORT) -u $(UI_IMAGELISTS) /dev/null > $@ \

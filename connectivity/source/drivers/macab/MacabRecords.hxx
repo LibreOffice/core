@@ -69,7 +69,7 @@ namespace connectivity
                 /* All of the private methods are for creating a MacabHeader or a
                  * MacabRecord. They are used by the initialize method that goes
                  * about filling a MacabRecords using all of the records in the
-                 * Mac OS X Address Book.
+                 * macOS Address Book.
                  */
                 void bootstrap_CF_types();
                 void bootstrap_requiredProperties();

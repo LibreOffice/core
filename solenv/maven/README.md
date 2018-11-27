@@ -132,7 +132,7 @@ To install it system wide:
 
 Put $HOME/watchman/bin/watchman in path or link to $HOME/bin/watchman.
 
-To install watchman on OS X:
+To install watchman on macOS:
 
 ----
   brew install --HEAD watchman
@@ -230,7 +230,7 @@ credentials:
 </settings>
 ----
 
-It can also be included in the key chain on OS X.
+It can also be included in the key chain on macOS.
 
 
 == Update Versions

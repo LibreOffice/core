@@ -11,7 +11,7 @@ set -o pipefail
 # from installer::simplepackage::create_package() in solenv/bin/modules/installer/simplepackage.pm
 # and the test-install target in Makefile.in.
 
-test `uname` = Darwin || { echo This is for OS X only; exit 1; }
+test `uname` = Darwin || { echo This is for macOS only; exit 1; }
 
 test $# = 1 || { echo Usage: $0 app-bundle; exit 1; }
 

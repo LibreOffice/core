@@ -70,7 +70,7 @@ published constants SystemDependent
     /** The called interface method returns a value specified for <em>OS/2</em>.
      */
     const short SYSTEM_OS2 = 4;
-    /** The called interface method returns a value specified for <em>Mac OS X</em>.
+    /** The called interface method returns a value specified for <em>macOS</em>.
      */
     const short SYSTEM_MAC = 5;
 

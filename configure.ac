@@ -34,7 +34,7 @@ FilterLibs()
             -L/lib|-L/lib/|-L/lib64|-L/lib64/|-L/usr/lib|-L/usr/lib/|-L/usr/lib64|-L/usr/lib64/)
                 # ignore it: on UNIXoids it is searched by default anyway
                 # but if it's given explicitly then it may override other paths
-                # (on Mac OS X it would be an error to use it instead of SDK)
+                # (on macOS it would be an error to use it instead of SDK)
                 ;;
             *)
                 filteredlibs="$filteredlibs $f"
@@ -469,7 +469,7 @@ if test -n "$with_android_ndk"; then
         ndk_build_os=darwin
         ;;
     *)
-        AC_MSG_ERROR([We only support building for Android from Linux or OS X])
+        AC_MSG_ERROR([We only support building for Android from Linux or macOS])
         ;;
     esac
     ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86_64/bin
@@ -641,7 +641,7 @@ cygwin*|interix*)
     LINKFLAGSNOUNDEFS=
     ;;
 
-darwin*) # Mac OS X or iOS
+darwin*) # macOS or iOS
     test_gtk=yes
     test_randr=no
     test_xrender=no
@@ -1437,7 +1437,7 @@ AC_ARG_ENABLE(macosx-sandbox,
 
 AC_ARG_WITH(macosx-bundle-identifier,
     AS_HELP_STRING([--with-macosx-bundle-identifier=tld.mumble.orifice.TheOffice],
-        [Define the OS X bundle identifier. Default is the somewhat weird
+        [Define the macOS bundle identifier. Default is the somewhat weird
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
@@ -2701,7 +2701,7 @@ dnl ENABLE_JAVA="TRUE" if we want there to be *run-time* (and build-time) suppor
 dnl ENABLE_JAVA="" indicate no Java support at all
 
 dnl ===================================================================
-dnl Check OS X SDK and compiler
+dnl Check macOS SDK and compiler
 dnl ===================================================================
 
 if test $_os = Darwin -o $_os = iOS; then
@@ -2714,7 +2714,7 @@ if test $_os = Darwin -o $_os = iOS; then
     # For developers with a current Xcode, the lowest-numbered SDK
     # higher than or equal to the minimum required should be found.
 
-    AC_MSG_CHECKING([what Mac OS X SDK to use])
+    AC_MSG_CHECKING([what macOS SDK to use])
     for _macosx_sdk in ${with_macosx_sdk-10.14 10.13 10.12}; do
         MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
@@ -2729,7 +2729,7 @@ if test $_os = Darwin -o $_os = iOS; then
         fi
     done
     if test ! -d "$MACOSX_SDK_PATH"; then
-        AC_MSG_ERROR([Could not find an appropriate Mac OS X SDK])
+        AC_MSG_ERROR([Could not find an appropriate macOS SDK])
     fi
 
     if test $_os = iOS; then
@@ -2919,9 +2919,9 @@ if test $_os = Darwin -o $_os = iOS; then
     AC_MSG_CHECKING([whether to sandbox the application])
 
     if test -z "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
-        AC_MSG_ERROR([OS X sandboxing requires code signing])
+        AC_MSG_ERROR([macOS sandboxing requires code signing])
     elif test -n "$ENABLE_JAVA" -a "$enable_macosx_sandbox" = yes; then
-        AC_MSG_ERROR([OS X sandboxing (actually App Store rules) disallows use of Java])
+        AC_MSG_ERROR([macOS sandboxing (actually App Store rules) disallows use of Java])
     elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
         ENABLE_MACOSX_SANDBOX=TRUE
         AC_DEFINE(HAVE_FEATURE_MACOSX_SANDBOX)
@@ -2930,7 +2930,7 @@ if test $_os = Darwin -o $_os = iOS; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([what OS X app bundle identifier to use])
+    AC_MSG_CHECKING([what macOS app bundle identifier to use])
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
 fi
@@ -2940,7 +2940,7 @@ AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED_DOTS)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(INSTALL_NAME_TOOL)
-AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libtool
+AC_SUBST(LIBTOOL) # Note that the macOS libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
@@ -4468,7 +4468,7 @@ rpm - RedHat software distribution
 
 LibreOffice additionally supports:
 archive - .tar.gz or .zip
-dmg - Mac OS X .dmg
+dmg - macOS .dmg
 installed - installation tree
 msi - Windows .msi
         ])
@@ -4824,7 +4824,7 @@ else
 fi
 AC_SUBST(WITH_MYSPELL_DICTS)
 
-# There are no "system" myspell, hyphen or mythes dictionaries on OS X, Windows, Android or iOS.
+# There are no "system" myspell, hyphen or mythes dictionaries on macOS, Windows, Android or iOS.
 if test $_os = Darwin -o $_os = WINNT -o $_os = iOS -o $_os = Android; then
     if test "$with_system_dicts" = yes; then
         AC_MSG_ERROR([There are no system dicts on this OS in the formats the 3rd-party libs we use expect]);
@@ -5148,7 +5148,7 @@ AC_SUBST(STRIP)
 AC_SUBST(WINDRES)
 
 dnl ===================================================================
-dnl pkg-config checks on Mac OS X
+dnl pkg-config checks on macOS
 dnl ===================================================================
 
 if test $_os = Darwin; then
@@ -6868,7 +6868,7 @@ if test "$ENABLE_JAVA" != ""; then
         fi
     fi
 
-    # MacOS X: /usr/libexec/java_home helps to set the current JDK_HOME. Actually JDK_HOME should NOT be set where java (/usr/bin/java) is located.
+    # macOS: /usr/libexec/java_home helps to set the current JDK_HOME. Actually JDK_HOME should NOT be set where java (/usr/bin/java) is located.
     # /usr/bin/java -> /System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/java, but /usr does not contain the JDK libraries
     if test -z "$with_jdk_home" -a "$_os" = "Darwin" -a -x /usr/libexec/java_home; then
         with_jdk_home=`/usr/libexec/java_home`
@@ -7681,7 +7681,7 @@ if test "$with_system_zlib" = "auto"; then
     esac
 fi
 
-dnl we want to use libo_CHECK_SYSTEM_MODULE here too, but OS X is too stupid
+dnl we want to use libo_CHECK_SYSTEM_MODULE here too, but macOS is too stupid
 dnl and has no pkg-config for it at least on some tinderboxes,
 dnl so leaving that out for now
 dnl libo_CHECK_SYSTEM_MODULE([zlib],[ZLIB],[zlib])
@@ -8624,7 +8624,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         WITH_GSSAPI=
         case "$_os" in
         Darwin)
-            # MacOS X has system MIT Kerberos 5 since 10.4
+            # macOS has system MIT Kerberos 5 since 10.4
             if test "$with_krb5" != "no"; then
                 WITH_KRB5=TRUE
                 save_LIBS=$LIBS
@@ -9862,7 +9862,7 @@ if test -z "$PATCH"; then
     AC_MSG_ERROR(["patch" not found in \$PATH, install it])
 fi
 
-dnl On Solaris, FreeBSD or MacOS X, check if --with-gnu-patch was used
+dnl On Solaris, FreeBSD or macOS, check if --with-gnu-patch was used
 if test "$_os" = "SunOS" -o "$_os" = "FreeBSD" -o "$_os" = "Darwin"; then
     if test -z "$with_gnu_patch"; then
         GNUPATCH=$PATCH
@@ -10367,7 +10367,7 @@ ENABLE_OPENGL_CANVAS=
 if test $_os = iOS -o $_os = Android -o "$ENABLE_FUZZERS" = "TRUE"; then
    : # disable
 elif test "$_os" = "Darwin"; then
-    # We use frameworks on Mac OS X, no need for detail checks
+    # We use frameworks on macOS, no need for detail checks
     ENABLE_OPENGL_TRANSITIONS=TRUE
     AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE

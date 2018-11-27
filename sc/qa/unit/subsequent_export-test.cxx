@@ -754,7 +754,7 @@ void ScExportTest::testCommentExportXLSX_2_XLSX()
 #if HAVE_MORE_FONTS
 void ScExportTest::testCustomColumnWidthExportXLSX()
 {
-    //tdf#100946 FILESAVE Excel on OS X ignored column widths in XLSX last saved by LO
+    //tdf#100946 FILESAVE Excel on macOS ignored column widths in XLSX last saved by LO
     ScDocShellRef xShell = loadDoc("custom_column_width.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.is());
 

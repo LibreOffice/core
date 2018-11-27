@@ -1101,7 +1101,7 @@ void restartOnMac(bool passArguments) {
     }
     argPtrs.push_back(nullptr);
     execv(execPath8.getStr(), const_cast< char ** >(&argPtrs[0]));
-    if (errno == ENOTSUP) { // happens when multithreaded on OS X < 10.6
+    if (errno == ENOTSUP) { // happens when multithreaded on macOS < 10.6
         pid_t pid = fork();
         if (pid == 0) {
             execv(execPath8.getStr(), const_cast< char ** >(&argPtrs[0]));
@@ -1843,7 +1843,7 @@ bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >& rx
         // unfortunately this broke the Mac behavior which is to always run
         // in quickstart mode since Mac applications do not usually quit
         // when the last document closes.
-        // Note that this claim that on OS X we "always run in quickstart mode"
+        // Note that this claim that on macOS we "always run in quickstart mode"
         // has nothing to do with (quick) *starting* (i.e. starting automatically
         // when the user logs in), though, but with not quitting when no documents
         // are open.

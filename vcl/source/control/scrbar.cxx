@@ -30,9 +30,9 @@
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we
-    abuse the HitTestNativeScrollbar interface. All theming engines but OS X
+    abuse the HitTestNativeScrollbar interface. All theming engines but macOS
     are actually able to draw the thumb according to our internal representation.
-    However OS X draws a little outside. The canonical way would be to enhance the
+    However macOS draws a little outside. The canonical way would be to enhance the
     HitTestNativeScrollbar passing a ScrollbarValue additionally so all necessary
     information is available in the call.
     .

@@ -583,7 +583,7 @@ void ControlHelper::createControls()
         }
     }
 
-    //preview is always on with Mac OS X
+    //preview is always on with macOS
     NSControl *pPreviewBox = m_pToggles[PREVIEW];
     if (pPreviewBox != nil) {
         [pPreviewBox setEnabled:NO];

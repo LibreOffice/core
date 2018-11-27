@@ -1188,7 +1188,7 @@ void Window::ImplInitAppFontData( vcl::Window const * pWindow )
     pSVData->maGDIData.mnAppFontY = nTextHeight * 10;
 
 #ifdef MACOSX
-    // FIXME: this is currently only on OS X, check with other
+    // FIXME: this is currently only on macOS, check with other
     // platforms
     if( pSVData->maNWFData.mbNoFocusRects )
     {

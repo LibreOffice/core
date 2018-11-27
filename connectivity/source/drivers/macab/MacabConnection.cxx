@@ -57,7 +57,7 @@ void MacabConnection::construct(const OUString&, const Sequence< PropertyValue >
 {
     osl_atomic_increment( &m_refCount );
 
-    // get the Mac OS X shared address book
+    // get the macOS shared address book
     m_pAddressBook = new MacabAddressBook();
 
     osl_atomic_decrement( &m_refCount );

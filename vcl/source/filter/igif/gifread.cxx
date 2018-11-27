@@ -192,7 +192,7 @@ void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
     // 32-bit system. We have at least one unit tests that is expected
     // to fail (loading a 65535*65535 size GIF
     // svtools/qa/cppunit/data/gif/fail/CVE-2008-5937-1.gif), but
-    // which doesn't fail on 64-bit Mac OS X at least. Why the loading
+    // which doesn't fail on 64-bit macOS at least. Why the loading
     // fails on 64-bit Linux, no idea.
     if (nCombinedPixSize >= SAL_MAX_INT32/3*2)
     {

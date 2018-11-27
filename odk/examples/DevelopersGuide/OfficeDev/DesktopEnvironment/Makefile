@@ -82,7 +82,7 @@ endif
 .PHONY: ALL
 ifeq "$(OS)" "MACOSX"
 ALL :
-	@printf 'This example does not work on Mac OS X\n'
+	@printf 'This example does not work on macOS\n'
 else
 ALL : $(SUBDIR) \
 	$(EXAMPLE_NAME)
