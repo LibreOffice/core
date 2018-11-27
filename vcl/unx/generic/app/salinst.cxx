@@ -38,6 +38,7 @@
 
 #include <salwtype.hxx>
 #include <sal/macros.h>
+#include <o3tl/make_unique.hxx>
 
 // plugin factory function
 extern "C"

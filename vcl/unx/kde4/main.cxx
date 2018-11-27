@@ -25,6 +25,7 @@
 #include <vclpluginapi.h>
 
 #include <rtl/string.hxx>
+#include <o3tl/make_unique.hxx>
 
 /// entry point for the KDE4 VCL plugin
 extern "C" {
