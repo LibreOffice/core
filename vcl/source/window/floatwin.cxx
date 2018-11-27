@@ -888,10 +888,22 @@ void FloatingWindow::EndPopupMode( FloatWinPopupEndFlags nFlags )
     ImplEndPopupMode(nFlags, mxPrevFocusWin);
 }
 
-void FloatingWindow::AddPopupModeWindow( vcl::Window* pWindow )
+void FloatingWindow::AddPopupModeWindow(vcl::Window* pWindow)
 {
     // !!! up-to-now only 1 window and not yet a list
     mpFirstPopupModeWin = pWindow;
+}
+bool FloatingWindow::UpdatePositionData()
+{
+    auto pWin = ImplGetParent();
+    if (pWin)
+    {
+        // Simulate Move, so the relative position of the floating window will be recalculated
+        pWin->ImplCallMove();
+        return true;
+    }
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
