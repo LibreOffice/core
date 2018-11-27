@@ -2049,6 +2049,12 @@ cmd/sc_deletenote.png cmd/sc_deleteannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
 cmd/sc_showinlinetooltips.png cmd/sc_editannotation.png
 
+# writer
+# ===============================================
+cmd/32/addtextbox.png cmd/32/insertfixedtext.png
+cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
+cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
+
 # Other
 cmd/32/questionanswers.png cmd/32/browseview.png
 cmd/lc_questionanswers.png cmd/lc_browseview.png
