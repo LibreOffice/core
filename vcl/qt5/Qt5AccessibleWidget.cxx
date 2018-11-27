@@ -464,9 +464,6 @@ QAccessible::Role Qt5AccessibleWidget::role() const
         case AccessibleRole::DOCUMENT_TEXT:
             return QAccessible::Document;
 
-        case AccessibleRole::STATIC:
-            return QAccessible::StaticText;
-
         /* Ignore window objects for sub-menus, combo- and list boxes,
          *  which are exposed as children of their parents.
          */
