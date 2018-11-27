@@ -1798,10 +1798,9 @@ namespace emfplushelper
 
                                 // generate the DX-Array
                                 aDXArray.clear();
-                                double mappedPosX = Map(charsPosX[pos], charsPosY[pos]).getX();
-                                for (size_t i = 0; i < aLength-1; i++)
+                                for (size_t i = 0; i < aLength - 1; i++)
                                 {
-                                    aDXArray.push_back(Map(charsPosX[pos + i + 1], charsPosY[pos + i + 1]).getX() - mappedPosX);
+                                    aDXArray.push_back(charsPosX[pos + i + 1] - charsPosX[pos]);
                                 }
                                 // last entry
                                 aDXArray.push_back(0);
