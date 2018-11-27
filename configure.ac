@@ -6179,12 +6179,6 @@ dnl ===================================================================
 dnl C++11
 dnl ===================================================================
 
-my_cxx17switches=
-libo_FUZZ_ARG_ENABLE(c++17,
-    AS_HELP_STRING([--disable-c++17],
-        [Do not attempt to run GCC/Clang in C++17 mode (needed for Coverity).])
-)
-
 AC_MSG_CHECKING([whether $CXX supports C++17, C++14, or C++11])
 CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
@@ -6193,10 +6187,7 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     dnl But only use C++17 if the gperf that is being used knows not to emit
     dnl "register" in C++ output:
     printf 'foo\n' | $GPERF -L C++ > conftest.inc
-    my_flags='-std=gnu++14 -std=gnu++1y -std=c++14 -std=c++1y -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x'
-    if test "$enable_c__17" != no; then
-        my_flags="-std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z $my_flags"
-    fi
+    my_flags='-std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z -std=gnu++14 -std=gnu++1y -std=c++14 -std=c++1y -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x'
     for flag in $my_flags; do
         if test "$COM" = MSC; then
             flag="-Xclang $flag"
