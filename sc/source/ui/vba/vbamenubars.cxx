@@ -10,6 +10,7 @@
 #include "vbamenubar.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XlSheetType.hpp>
+#include <ooo/vba/XCommandBars.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

@@ -21,16 +21,11 @@
 #define INCLUDED_SC_SOURCE_UI_UNOOBJ_SCDETECT_HXX
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <cppuhelper/factory.hxx>
 
 #include <rtl/ustring.hxx>
-#include <sfx2/sfxuno.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }

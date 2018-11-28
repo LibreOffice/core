@@ -18,6 +18,7 @@
  */
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>

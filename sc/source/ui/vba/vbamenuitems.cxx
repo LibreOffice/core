@@ -11,6 +11,7 @@
 #include "vbamenu.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/office/MsoControlType.hpp>
+#include <ooo/vba/XCommandBarControls.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

@@ -20,7 +20,10 @@
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XNamedRange.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
 
+#include "excelvbahelper.hxx"
 #include "vbanames.hxx"
 #include "vbaname.hxx"
 #include "vbarange.hxx"

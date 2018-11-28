@@ -21,6 +21,8 @@
 #include <basic/sberrors.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <ooo/vba/excel/XRange.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

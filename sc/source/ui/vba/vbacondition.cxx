@@ -22,6 +22,7 @@
 #include <ooo/vba/excel/XFormatCondition.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <basic/sberrors.hxx>
 
 using namespace ::ooo::vba;

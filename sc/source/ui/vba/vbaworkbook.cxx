@@ -44,6 +44,7 @@
 #include <nameuno.hxx>
 #include <docoptio.hxx>
 #include <unonames.hxx>
+#include <docsh.hxx>
 
 // Much of the impl. for the equivalent UNO module is
 // sc/source/ui/unoobj/docuno.cxx, viewuno.cxx

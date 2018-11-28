@@ -31,6 +31,7 @@
 #include <svl/itemset.hxx>
 #include "excelvbahelper.hxx"
 #include "vbafont.hxx"
+#include "vbapalette.hxx"
 #include <scitems.hxx>
 #include <cellsuno.hxx>
 

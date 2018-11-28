@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/ref.hxx>
 
 #include "vbawindow.hxx"
 #include "vbaglobals.hxx"

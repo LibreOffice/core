@@ -18,6 +18,7 @@
  */
 #include "vbachart.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/XAxisYSupplier.hpp>
@@ -39,6 +40,7 @@
 #include "vbarange.hxx"
 #include "vbacharttitle.hxx"
 #include "vbaaxes.hxx"
+#include <document.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

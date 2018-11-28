@@ -21,16 +21,15 @@
 
 #include <vector>
 
-#include <ooo/vba/XSink.hpp>
 #include <ooo/vba/XSinkCaller.hpp>
-#include <ooo/vba/excel/XWorksheetFunction.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
-#include <ooo/vba/excel/XFileDialog.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace ooo { namespace vba { class XSink; } }
+namespace ooo { namespace vba { namespace excel { class XFileDialog; } } }
 
 typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ov::excel::XApplication, ov::XSinkCaller > ScVbaApplication_BASE;
 

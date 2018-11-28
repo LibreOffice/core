@@ -27,6 +27,7 @@
 #include "vbachartobjects.hxx"
 #include "vbachartobject.hxx"
 #include "vbaglobals.hxx"
+#include <docsh.hxx>
 #include <cellsuno.hxx>
 #include <vector>
 #include <basic/sberrors.hxx>

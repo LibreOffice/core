@@ -21,9 +21,11 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -22,9 +22,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/XAssistant.hpp>
 
-#include <sfx2/sfxhelp.hxx>
-
-#include "excelvbahelper.hxx"
 #include <vbahelper/vbahelperinterface.hxx>
 
 typedef ::cppu::WeakImplHelper< ov::XAssistant > Assistant;

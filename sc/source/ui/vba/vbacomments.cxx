@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbacomments.hxx"
+#include "vbacomment.hxx"
 
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 
 #include "vbaglobals.hxx"
 

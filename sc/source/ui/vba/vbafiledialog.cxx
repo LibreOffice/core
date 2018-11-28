@@ -18,6 +18,7 @@
  */
 
 #include "vbafiledialog.hxx"
+#include "vbafiledialogitems.hxx"
 
 #include <osl/file.hxx>
 

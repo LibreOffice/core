@@ -22,6 +22,8 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <cppuhelper/component_context.hxx>
 
 #include "vbaapplication.hxx"

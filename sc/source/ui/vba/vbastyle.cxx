@@ -20,6 +20,7 @@
 #include "vbastyle.hxx"
 #include <basic/sberrors.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

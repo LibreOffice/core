@@ -21,6 +21,11 @@
 #include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XWorksheet.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XSheetPageBreak.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
