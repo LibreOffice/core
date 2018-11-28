@@ -335,15 +335,14 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
 
 //                             DialogHelper
 
-DialogHelper::DialogHelper( const uno::Reference< uno::XComponentContext > &xContext,
-                            Dialog *pWindow ) :
-    m_pVCLWindow( pWindow ),
-    m_nEventID(   nullptr ),
-    m_bIsBusy(    false )
+DialogHelper::DialogHelper(const uno::Reference< uno::XComponentContext > &xContext,
+                           Dialog *pWindow)
+    : m_xVCLWindow(pWindow)
+    , m_nEventID(nullptr)
+    , m_nBusy(0)
 {
     m_xContext = xContext;
 }
-
 
 DialogHelper::~DialogHelper()
 {
@@ -365,17 +364,21 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const SolarMutexGuard guard;
+        incBusy();
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
         bHadWarning = true;
 
-        return RET_OK == xBox->run();
+        bool bRet = RET_OK == xBox->run();
+        xBox.reset();
+        decBusy();
+        return bRet;
     }
     else
         return true;
 }
 
-void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle ) const
+void DialogHelper::openWebBrowser(const OUString& sURL, const OUString& sTitle)
 {
     if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
         return;
@@ -392,29 +395,35 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
+        incBusy();
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(getFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok, msg));
         xErrorBox->set_title(sTitle);
         xErrorBox->run();
+        xErrorBox.reset();
+        decBusy();
     }
 }
 
-
-bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
+bool DialogHelper::installExtensionWarn(const OUString &rExtensionName)
 {
     const SolarMutexGuard guard;
 
     // Check if extension installation is disabled in the expert configurations
     if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
     {
+        incBusy();
         std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(getFrameWeld(),
                                                       VclMessageType::Warning, VclButtonsType::Ok,
                                                       DpResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED)));
         xWarnBox->run();
+        xWarnBox.reset();
+        decBusy();
 
         return false;
     }
 
+    incBusy();
     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(getFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::OkCancel,
                                                   DpResId(RID_STR_WARNING_INSTALL_EXTENSION)));
@@ -422,15 +431,21 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
     sText = sText.replaceAll("%NAME", rExtensionName);
     xInfoBox->set_primary_text(sText);
 
-    return (RET_OK == xInfoBox->run());
+    bool bRet = RET_OK == xInfoBox->run();
+    xInfoBox.reset();
+    decBusy();
+    return bRet;
 }
 
-bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
+bool DialogHelper::installForAllUsers(bool &bInstallForAll)
 {
     const SolarMutexGuard guard;
+    incBusy();
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(getFrameWeld(), "desktop/ui/installforalldialog.ui"));
     std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("InstallForAllDialog"));
     short nRet = xQuery->run();
+    xQuery.reset();
+    decBusy();
     if (nRet == RET_CANCEL)
         return false;
 
@@ -444,6 +459,34 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
         Application::RemoveUserEvent( m_nEventID );
 
     m_nEventID = Application::PostUserEvent( rLink, pCaller, true/*bReferenceLink*/ );
+}
+
+void DialogHelper::incBusy()
+{
+    ++m_nBusy;
+    // lock any toplevel windows from being closed until busy is over
+    // ensure any dialogs are reset before entering
+    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
+    while (xTopWin)
+    {
+        if (xTopWin != m_xVCLWindow)
+            xTopWin->IncModalCount();
+        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
+    }
+}
+
+void DialogHelper::decBusy()
+{
+    --m_nBusy;
+    // unlock any toplevel windows from being closed until busy is over
+    // ensure any dialogs are reset before entering
+    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
+    while (xTopWin)
+    {
+        if (xTopWin != m_xVCLWindow)
+            xTopWin->DecModalCount();
+        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
+    }
 }
 
 //                             ExtMgrDialog
@@ -587,9 +630,10 @@ void ExtMgrDialog::checkEntries()
     m_pExtensionBox->checkEntries();
 }
 
-bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
+bool ExtMgrDialog::removeExtensionWarn(const OUString &rExtensionName)
 {
     const SolarMutexGuard guard;
+    incBusy();
     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                   VclMessageType::Warning, VclButtonsType::OkCancel,
                                                   DpResId(RID_STR_WARNING_REMOVE_EXTENSION)));
@@ -598,7 +642,11 @@ bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
     sText = sText.replaceAll("%NAME", rExtensionName);
     xInfoBox->set_primary_text(sText);
 
-    return (RET_OK == xInfoBox->run());
+    bool bRet = RET_OK == xInfoBox->run();
+    xInfoBox.reset();
+    decBusy();
+
+    return bRet;
 }
 
 void ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
@@ -905,7 +953,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleOptionsBtn, Button*, void)
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, Button*, void)
 {
-    setBusy( true );
+    incBusy();
 
     uno::Sequence< OUString > aFileList = raiseAddPicker();
 
@@ -914,7 +962,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, Button*, void)
         m_pManager->installPackage( aFileList[0] );
     }
 
-    setBusy( false );
+    decBusy();
 }
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleRemoveBtn, Button*, void)
@@ -1418,7 +1466,7 @@ void UpdateRequiredDialog::disableAllEntries()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    setBusy( true );
+    incBusy();
 
     long nCount = m_pExtensionBox->GetEntryCount();
     for ( long nIndex = 0; nIndex < nCount; nIndex++ )
@@ -1427,7 +1475,7 @@ void UpdateRequiredDialog::disableAllEntries()
         m_pManager->getCmdQueue()->enableExtension( pEntry->m_xPackage, false );
     }
 
-    setBusy( false );
+    decBusy();
 
     if ( ! hasActiveEntries() )
         m_pCloseBtn->SetText( m_sCloseText );
