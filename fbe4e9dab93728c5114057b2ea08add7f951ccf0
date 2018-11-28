@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_1d5e3fe6",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2018-11-28T10:47:15Z",
+      "side": 1,
+      "message": "Ádám, could you fix the bad indentation here, please? Then it will be ok.",
+      "range": {
+        "startLine": 687,
+        "startChar": 8,
+        "endLine": 687,
+        "endChar": 17
+      },
+      "revId": "fbe4e9dab93728c5114057b2ea08add7f951ccf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
