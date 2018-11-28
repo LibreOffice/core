@@ -30,7 +30,6 @@
 #include <svx/svxids.hrc>
 #include <svx/pageitem.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/lstbox.hxx>
 
 ScHFEditDlg::ScHFEditDlg( vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,

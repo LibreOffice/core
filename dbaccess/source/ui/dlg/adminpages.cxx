@@ -38,7 +38,6 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <algorithm>

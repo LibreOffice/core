@@ -21,7 +21,6 @@
 #include <vcl/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/lstbox.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/dispatch.hxx>
@@ -37,6 +36,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/dialmgr.hxx>

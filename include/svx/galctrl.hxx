@@ -23,7 +23,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>

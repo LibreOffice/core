@@ -23,7 +23,6 @@
 
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/ServerDetailsControls.hxx>
-#include <vcl/lstbox.hxx>
 
 #include <config_oauth2.h>
 

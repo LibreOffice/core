@@ -20,21 +20,12 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <sfx2/basedlgs.hxx>
-
-#include <svx/stddlg.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/weld.hxx>
-
-#include <sfx2/childwin.hxx>
-#include <toxe.hxx>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#include <sfx2/basedlgs.hxx>
+#include <sfx2/childwin.hxx>
+#include <svx/stddlg.hxx>
+#include <vcl/weld.hxx>
+#include <toxe.hxx>
 #include <memory>
 
 class SwWrtShell;

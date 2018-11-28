@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/fixedhyper.hxx>
 

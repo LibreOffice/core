@@ -21,7 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/svdattr.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 class SdrView;
 

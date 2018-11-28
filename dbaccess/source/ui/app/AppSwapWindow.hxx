@@ -20,7 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPSWAPWINDOW_HXX
 
 #include <IClipBoardTest.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/vclptr.hxx>
 #include "AppIconControl.hxx"
 #include <AppElementType.hxx>

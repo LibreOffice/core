@@ -23,7 +23,6 @@
 #include <ucbhelper/commandenvironment.hxx>
 
 #include <vcl/image.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/treelistentry.hxx>
 
 using namespace ::com::sun::star::ucb;

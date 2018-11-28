@@ -21,9 +21,7 @@
 #include <svtools/wizardmachine.hxx>
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/objsh.hxx>

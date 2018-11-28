@@ -21,7 +21,6 @@
 
 #include <hintids.hxx>
 #include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

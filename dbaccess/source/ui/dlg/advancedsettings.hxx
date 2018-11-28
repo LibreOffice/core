@@ -25,7 +25,6 @@
 
 #include <svtools/dialogcontrolling.hxx>
 
-#include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 
 #include <vector>

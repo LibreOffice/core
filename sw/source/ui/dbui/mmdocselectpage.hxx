@@ -21,8 +21,8 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <mailmergehelper.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
+
 class SwMailMergeWizard;
 
 class SwMailMergeDocSelectPage : public svt::OWizardPage

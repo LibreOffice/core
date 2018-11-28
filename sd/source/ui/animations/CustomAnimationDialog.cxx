@@ -46,7 +46,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>

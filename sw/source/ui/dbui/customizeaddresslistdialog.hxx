@@ -18,11 +18,9 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_DBUI_CUSTOMIZEADDRESSLISTDIALOG_HXX
 #define INCLUDED_SW_SOURCE_UI_DBUI_CUSTOMIZEADDRESSLISTDIALOG_HXX
-#include <sfx2/basedlgs.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
+#include <sfx2/basedlgs.hxx>
+#include <vcl/weld.hxx>
 
 struct SwCSVData;
 

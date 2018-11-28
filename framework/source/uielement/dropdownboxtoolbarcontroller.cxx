@@ -25,6 +25,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star;

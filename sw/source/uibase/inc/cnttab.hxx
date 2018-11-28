@@ -24,7 +24,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include <tox.hxx>

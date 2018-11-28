@@ -32,8 +32,9 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/asyncnotification.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
 
