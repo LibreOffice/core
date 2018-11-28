@@ -121,6 +121,7 @@ public:
     void testCustomDataLabelMultipleSeries();
     void testTdf119029();
     void testTdf122031();
+    void testTdf121744();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -204,6 +205,7 @@ public:
     CPPUNIT_TEST(testCustomDataLabelMultipleSeries);
     CPPUNIT_TEST(testTdf119029);
     CPPUNIT_TEST(testTdf122031);
+    CPPUNIT_TEST(testTdf121744);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1937,6 +1939,19 @@ void Chart2ExportTest::testTdf122031()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "formatCode", "0.000%");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[2]/c:numFmt", "formatCode", "0.000%");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[3]/c:numFmt", "formatCode", "0.000%");
+}
+
+void Chart2ExportTest::testTdf121744()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf121744.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OUString XValueId = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[1]", "val");
+    OUString YValueId = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[2]", "val");
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[1]", "val", XValueId );
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[2]", "val", YValueId );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
