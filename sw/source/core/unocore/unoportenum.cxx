@@ -1176,29 +1176,26 @@ static void lcl_ExportAnnotationStarts(
     SwAnnotationStartPortion_ImplList& rAnnotationStartArr,
     const sal_Int32 nIndex)
 {
-    if ( !rAnnotationStartArr.empty() )
+    for ( SwAnnotationStartPortion_ImplList::iterator aIter = rAnnotationStartArr.begin(), aEnd = rAnnotationStartArr.end();
+          aIter != aEnd; )
     {
-        for ( SwAnnotationStartPortion_ImplList::iterator aIter = rAnnotationStartArr.begin(), aEnd = rAnnotationStartArr.end();
-              aIter != aEnd; )
+        SwAnnotationStartPortion_ImplSharedPtr pPtr = (*aIter);
+        if ( nIndex > pPtr->getIndex() )
         {
-            SwAnnotationStartPortion_ImplSharedPtr pPtr = (*aIter);
-            if ( nIndex > pPtr->getIndex() )
-            {
-                aIter = rAnnotationStartArr.erase(aIter);
-                continue;
-            }
-            if ( pPtr->getIndex() > nIndex )
-            {
-                break;
-            }
-
-            SwXTextPortion* pPortion =
-                new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
-            pPortion->SetTextField( pPtr->mxAnnotationField );
-            rPortions.emplace_back(pPortion);
-
             aIter = rAnnotationStartArr.erase(aIter);
+            continue;
         }
+        if ( pPtr->getIndex() > nIndex )
+        {
+            break;
+        }
+
+        SwXTextPortion* pPortion =
+            new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
+         pPortion->SetTextField( pPtr->mxAnnotationField );
+        rPortions.emplace_back(pPortion);
+
+        aIter = rAnnotationStartArr.erase(aIter);
     }
 }
 

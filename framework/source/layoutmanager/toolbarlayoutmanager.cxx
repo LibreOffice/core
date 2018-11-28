@@ -1269,12 +1269,9 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
     {
     }
 
-    if ( !aMakeVisibleToolbars.empty() )
+    for (auto const& rURL : aMakeVisibleToolbars)
     {
-        for (auto const& rURL : aMakeVisibleToolbars)
-        {
-            requestToolbar(rURL);
-        }
+        requestToolbar(rURL);
     }
 }
 

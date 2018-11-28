@@ -1228,12 +1228,9 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
             }
         }
     }
-    if (! all_elements.empty())
+    for (ElementDescriptor* p : all_elements)
     {
-        for (ElementDescriptor* p : all_elements)
-        {
-            addSubElement( p );
-        }
+        addSubElement( p );
     }
 }
 

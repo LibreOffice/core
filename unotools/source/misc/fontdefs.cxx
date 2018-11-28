@@ -529,7 +529,7 @@ OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
     const utl::FontNameAttr* pAttr = utl::FontSubstConfiguration::get().getSubstInfo( aOrgName );
     if ( pAttr )
     {
-            if( nFlags & SubsFontFlags::MS  &&  !pAttr->MSSubstitutions.empty() )
+            if( nFlags & SubsFontFlags::MS )
             {
                 for( const auto& rSubstitution : pAttr->MSSubstitutions )
                     if( ! ImplIsFontToken( rName, rSubstitution ) )

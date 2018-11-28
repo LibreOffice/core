@@ -1099,14 +1099,11 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         bRet = SetEditCell(rPos, *pNewData, !bApi);
 
         // Set the paragraph attributes back to the EditEngine.
-        if (!aRememberItems.empty())
+        ScMyRememberItemVector::iterator aItr = aRememberItems.begin();
+        while (aItr != aRememberItems.end())
         {
-            ScMyRememberItemVector::iterator aItr = aRememberItems.begin();
-            while (aItr != aRememberItems.end())
-            {
-                rEngine.SetParaAttribs((*aItr)->nIndex, (*aItr)->aItemSet);
-                ++aItr;
-            }
+            rEngine.SetParaAttribs((*aItr)->nIndex, (*aItr)->aItemSet);
+            ++aItr;
         }
 
         // #i61702# if the content isn't accessed, there's no need to set the UpdateMode again

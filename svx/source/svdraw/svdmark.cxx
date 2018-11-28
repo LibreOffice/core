@@ -247,7 +247,7 @@ size_t SdrMarkList::FindObject(const SdrObject* pObj) const
     // is not inserted in a object list.
     // Since this may be by purpose and necessary somewhere else i decided that it is
     // less dangerous to change this method then changing SdrObject::GetOrdNum().
-    if(pObj && !maList.empty())
+    if(pObj)
     {
         for(size_t a = 0; a < maList.size(); ++a)
         {

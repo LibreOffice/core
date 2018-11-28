@@ -730,32 +730,29 @@ void SdrDragMethod::CreateOverlayGeometry(
         }
 
         // #i54102# if there are edges, reconnect their ends to the corresponding clones (if found)
-        if(!aEdges.empty())
+        for(SdrEdgeObj* pSdrEdgeObj: aEdges)
         {
-            for(SdrEdgeObj* pSdrEdgeObj: aEdges)
+            SdrObject* pConnectedTo = pSdrEdgeObj->GetConnectedNode(true);
+
+            if(pConnectedTo)
             {
-                SdrObject* pConnectedTo = pSdrEdgeObj->GetConnectedNode(true);
+                SdrObjectAndCloneMap::iterator aEntry = aOriginalAndClones.find(pConnectedTo);
 
-                if(pConnectedTo)
+                if(aEntry != aOriginalAndClones.end())
                 {
-                    SdrObjectAndCloneMap::iterator aEntry = aOriginalAndClones.find(pConnectedTo);
-
-                    if(aEntry != aOriginalAndClones.end())
-                    {
-                        pSdrEdgeObj->ConnectToNode(true, aEntry->second);
-                    }
+                    pSdrEdgeObj->ConnectToNode(true, aEntry->second);
                 }
+            }
 
-                pConnectedTo = pSdrEdgeObj->GetConnectedNode(false);
+            pConnectedTo = pSdrEdgeObj->GetConnectedNode(false);
 
-                if(pConnectedTo)
+            if(pConnectedTo)
+            {
+                SdrObjectAndCloneMap::iterator aEntry = aOriginalAndClones.find(pConnectedTo);
+
+                if(aEntry != aOriginalAndClones.end())
                 {
-                    SdrObjectAndCloneMap::iterator aEntry = aOriginalAndClones.find(pConnectedTo);
-
-                    if(aEntry != aOriginalAndClones.end())
-                    {
-                        pSdrEdgeObj->ConnectToNode(false, aEntry->second);
-                    }
+                    pSdrEdgeObj->ConnectToNode(false, aEntry->second);
                 }
             }
         }

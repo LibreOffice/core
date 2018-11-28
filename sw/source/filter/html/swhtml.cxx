@@ -4722,13 +4722,9 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     }
 
     // remove previous hard attribution of paragraph
-    if( !m_aParaAttrs.empty() )
-    {
-        for( auto pParaAttr : m_aParaAttrs )
-            pParaAttr->Invalidate();
-
-        m_aParaAttrs.clear();
-    }
+    for( auto pParaAttr : m_aParaAttrs )
+        pParaAttr->Invalidate();
+    m_aParaAttrs.clear();
 
     // set the style
     m_xDoc->SetTextFormatColl( *m_pPam, pCollToSet );

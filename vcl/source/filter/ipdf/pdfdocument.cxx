@@ -2295,12 +2295,9 @@ size_t PDFDictionaryElement::Parse(const std::vector<std::unique_ptr<PDFElement>
         auto pEndArr = dynamic_cast<PDFEndArrayElement*>(rElements[i].get());
         if (pArray && pEndArr)
         {
-            if (!aNumbers.empty())
-            {
-                for (auto& pNumber : aNumbers)
-                    pArray->PushBack(pNumber);
-                aNumbers.clear();
-            }
+            for (auto& pNumber : aNumbers)
+                pArray->PushBack(pNumber);
+            aNumbers.clear();
             rDictionary[aName] = pArray;
             if (pThisDictionary)
             {

@@ -372,7 +372,7 @@ void HelpLinker::link()
             addBookmark( pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
 
             const std::vector<std::string> *hidlist = streamTable.appl_hidlist.get();
-            if (hidlist && !hidlist->empty())
+            if (hidlist)
             {
                 // now iterate over all elements of the hidlist
                 for (auto & elem : *hidlist)
@@ -413,7 +413,7 @@ void HelpLinker::link()
 
             // and last the helptexts
             const Stringtable *helpTextHash = streamTable.appl_helptexts.get();
-            if (helpTextHash && !helpTextHash->empty())
+            if (helpTextHash)
             {
                 for (auto const& elem : *helpTextHash)
                 {

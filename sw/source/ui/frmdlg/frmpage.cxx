@@ -2680,13 +2680,10 @@ void SwFrameURLPage::Reset( const SfxItemSet *rSet )
     {
         std::unique_ptr<TargetList> pList(new TargetList);
         SfxFrame::GetDefaultTargetList(*pList);
-        if( !pList->empty() )
+        size_t nCount = pList->size();
+        for (size_t i = 0; i < nCount; ++i)
         {
-            size_t nCount = pList->size();
-            for (size_t i = 0; i < nCount; ++i)
-            {
-                m_xFrameCB->append_text(pList->at(i));
-            }
+            m_xFrameCB->append_text(pList->at(i));
         }
     }
 

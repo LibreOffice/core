@@ -515,7 +515,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
         ScMenuFloatingWindow* pSubMenu = mpDPFieldPopup->addSubMenuItem(
             ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
 
-        if (pSubMenu && !aUserSortNames.empty())
+        if (pSubMenu)
         {
             size_t n = aUserSortNames.size();
             for (size_t i = 0; i < n; ++i)

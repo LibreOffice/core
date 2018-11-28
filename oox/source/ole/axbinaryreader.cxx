@@ -247,7 +247,7 @@ bool AxBinaryPropertyReader::finalizeImport()
 {
     // read large properties
     maInStrm.align( 4 );
-    if( ensureValid( mnPropFlags == 0 ) && !maLargeProps.empty() )
+    if( ensureValid( mnPropFlags == 0 ) )
     {
         for (auto const& largeProp : maLargeProps)
         {
@@ -260,7 +260,7 @@ bool AxBinaryPropertyReader::finalizeImport()
     maInStrm.seek( mnPropsEnd );
 
     // read stream properties (no stream alignment between properties!)
-    if( ensureValid() && !maStreamProps.empty() )
+    if( ensureValid() )
     {
         for (auto const& streamProp : maStreamProps)
         {

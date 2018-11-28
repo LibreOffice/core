@@ -486,60 +486,57 @@ EntryDescriptor TreeListBox::GetEntryDescriptor( SvTreeListEntry* pEntry )
         pEntry = GetParent( pEntry );
     }
 
-    if ( !aEntries.empty() )
+    for (SvTreeListEntry* pLE : aEntries)
     {
-        for (SvTreeListEntry* pLE : aEntries)
+        assert(pLE && "Entry not found in array");
+        Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
+        assert(pBE && "No data found in entry!");
+
+        switch ( pBE->GetType() )
         {
-            assert(pLE && "Entry not found in array");
-            Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
-            assert(pBE && "No data found in entry!");
-
-            switch ( pBE->GetType() )
+            case OBJ_TYPE_LIBRARY:
             {
-                case OBJ_TYPE_LIBRARY:
-                {
-                    aLibName = GetEntryText( pLE );
-                    eType = pBE->GetType();
-                }
-                break;
-                case OBJ_TYPE_MODULE:
-                {
-                    aName = GetEntryText( pLE );
-                    eType = pBE->GetType();
-                }
-                break;
-                case OBJ_TYPE_METHOD:
-                {
-                    aMethodName = GetEntryText( pLE );
-                    eType = pBE->GetType();
-                }
-                break;
-                case OBJ_TYPE_DIALOG:
-                {
-                    aName = GetEntryText( pLE );
-                    eType = pBE->GetType();
-                }
-                break;
-                case OBJ_TYPE_DOCUMENT_OBJECTS:
-                case OBJ_TYPE_USERFORMS:
-                case OBJ_TYPE_NORMAL_MODULES:
-                case OBJ_TYPE_CLASS_MODULES:
-                {
-                    aLibSubName = GetEntryText( pLE );
-                    eType = pBE->GetType();
-                }
-                break;
-                default:
-                {
-                    OSL_FAIL( "GetEntryDescriptor: unknown type" );
-                    eType = OBJ_TYPE_UNKNOWN;
-                }
-                break;
+                aLibName = GetEntryText( pLE );
+                eType = pBE->GetType();
             }
-
-            if ( eType == OBJ_TYPE_UNKNOWN )
-                break;
+            break;
+            case OBJ_TYPE_MODULE:
+            {
+                aName = GetEntryText( pLE );
+                eType = pBE->GetType();
+            }
+            break;
+            case OBJ_TYPE_METHOD:
+            {
+                aMethodName = GetEntryText( pLE );
+                eType = pBE->GetType();
+            }
+            break;
+            case OBJ_TYPE_DIALOG:
+            {
+                aName = GetEntryText( pLE );
+                eType = pBE->GetType();
+            }
+            break;
+            case OBJ_TYPE_DOCUMENT_OBJECTS:
+            case OBJ_TYPE_USERFORMS:
+            case OBJ_TYPE_NORMAL_MODULES:
+            case OBJ_TYPE_CLASS_MODULES:
+            {
+                aLibSubName = GetEntryText( pLE );
+                eType = pBE->GetType();
+            }
+            break;
+            default:
+            {
+                OSL_FAIL( "GetEntryDescriptor: unknown type" );
+                eType = OBJ_TYPE_UNKNOWN;
+            }
+            break;
         }
+
+        if ( eType == OBJ_TYPE_UNKNOWN )
+            break;
     }
 
     return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );

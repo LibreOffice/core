@@ -569,18 +569,16 @@ static void generateMemberInitialization(std::ostream& o,
                                   rtl::Reference< TypeManager > const & manager,
                                   AttributeInfo const & members)
 {
-    if (!members.empty()) {
-        for (const auto& rMember : members)
+    for (const auto& rMember : members)
+    {
+        sal_Int32 rank;
+        if ((manager->decompose(rMember.type, true, nullptr, &rank, nullptr, nullptr)
+             <= codemaker::UnoType::Sort::Char)
+            && rank == 0)
         {
-            sal_Int32 rank;
-            if ((manager->decompose(rMember.type, true, nullptr, &rank, nullptr, nullptr)
-                 <= codemaker::UnoType::Sort::Char)
-                && rank == 0)
-            {
-                o << ",\n    m_" << rMember.name << "(";
-                printType(o, options, manager, rMember.type, 16, true);
-                o << ")";
-            }
+            o << ",\n    m_" << rMember.name << "(";
+            printType(o, options, manager, rMember.type, 16, true);
+            o << ")";
         }
     }
 }

@@ -911,47 +911,44 @@ void XMLShapeImportHelper::addShapeConnection( css::uno::Reference< css::drawing
 
 void XMLShapeImportHelper::restoreConnections()
 {
-    if( !mpImpl->maConnections.empty() )
+    const vector<ConnectionHint>::size_type nCount = mpImpl->maConnections.size();
+    for( vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
     {
-        const vector<ConnectionHint>::size_type nCount = mpImpl->maConnections.size();
-        for( vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
+        ConnectionHint& rHint = mpImpl->maConnections[i];
+        uno::Reference< beans::XPropertySet > xConnector( rHint.mxConnector, uno::UNO_QUERY );
+        if( xConnector.is() )
         {
-            ConnectionHint& rHint = mpImpl->maConnections[i];
-            uno::Reference< beans::XPropertySet > xConnector( rHint.mxConnector, uno::UNO_QUERY );
-            if( xConnector.is() )
+            // #86637# remember line deltas
+            uno::Any aLine1Delta;
+            uno::Any aLine2Delta;
+            uno::Any aLine3Delta;
+            OUString aStr1("EdgeLine1Delta");
+            OUString aStr2("EdgeLine2Delta");
+            OUString aStr3("EdgeLine3Delta");
+            aLine1Delta = xConnector->getPropertyValue(aStr1);
+            aLine2Delta = xConnector->getPropertyValue(aStr2);
+            aLine3Delta = xConnector->getPropertyValue(aStr3);
+
+            // #86637# simply setting these values WILL force the connector to do
+            // an new layout promptly. So the line delta values have to be rescued
+            // and restored around connector changes.
+            uno::Reference< drawing::XShape > xShape(
+                mrImporter.getInterfaceToIdentifierMapper().getReference( rHint.aDestShapeId ), uno::UNO_QUERY );
+            if( xShape.is() )
             {
-                // #86637# remember line deltas
-                uno::Any aLine1Delta;
-                uno::Any aLine2Delta;
-                uno::Any aLine3Delta;
-                OUString aStr1("EdgeLine1Delta");
-                OUString aStr2("EdgeLine2Delta");
-                OUString aStr3("EdgeLine3Delta");
-                aLine1Delta = xConnector->getPropertyValue(aStr1);
-                aLine2Delta = xConnector->getPropertyValue(aStr2);
-                aLine3Delta = xConnector->getPropertyValue(aStr3);
+                xConnector->setPropertyValue( rHint.bStart ? gsStartShape : gsEndShape, uno::Any(xShape) );
 
-                // #86637# simply setting these values WILL force the connector to do
-                // an new layout promptly. So the line delta values have to be rescued
-                // and restored around connector changes.
-                uno::Reference< drawing::XShape > xShape(
-                    mrImporter.getInterfaceToIdentifierMapper().getReference( rHint.aDestShapeId ), uno::UNO_QUERY );
-                if( xShape.is() )
-                {
-                    xConnector->setPropertyValue( rHint.bStart ? gsStartShape : gsEndShape, uno::Any(xShape) );
-
-                    sal_Int32 nGlueId = rHint.nDestGlueId < 4 ? rHint.nDestGlueId : getGluePointId( xShape, rHint.nDestGlueId );
-                    xConnector->setPropertyValue( rHint.bStart ? gsStartGluePointIndex : gsEndGluePointIndex, uno::Any(nGlueId) );
-                }
-
-                // #86637# restore line deltas
-                xConnector->setPropertyValue(aStr1, aLine1Delta );
-                xConnector->setPropertyValue(aStr2, aLine2Delta );
-                xConnector->setPropertyValue(aStr3, aLine3Delta );
+                sal_Int32 nGlueId = rHint.nDestGlueId < 4 ? rHint.nDestGlueId : getGluePointId( xShape, rHint.nDestGlueId );
+                xConnector->setPropertyValue( rHint.bStart ? gsStartGluePointIndex : gsEndGluePointIndex, uno::Any(nGlueId) );
             }
+
+            // #86637# restore line deltas
+            xConnector->setPropertyValue(aStr1, aLine1Delta );
+            xConnector->setPropertyValue(aStr2, aLine2Delta );
+            xConnector->setPropertyValue(aStr3, aLine3Delta );
         }
-        mpImpl->maConnections.clear();
     }
+    mpImpl->maConnections.clear();
 }
 
 SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )

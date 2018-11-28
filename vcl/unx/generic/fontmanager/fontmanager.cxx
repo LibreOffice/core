@@ -174,15 +174,12 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
     if( aFontIds.empty() )
     {
         std::vector<std::unique_ptr<PrintFont>> aNewFonts = analyzeFontFile(nDirID, aName);
-        if (!aNewFonts.empty())
+        for (auto & font : aNewFonts)
         {
-            for (auto & font : aNewFonts)
-            {
-                fontID nFontId = m_nNextFontID++;
-                m_aFonts[nFontId] = std::move(font);
-                m_aFontFileToFontID[ aName ].insert( nFontId );
-                aFontIds.push_back(nFontId);
-            }
+            fontID nFontId = m_nNextFontID++;
+            m_aFonts[nFontId] = std::move(font);
+            m_aFontFileToFontID[ aName ].insert( nFontId );
+            aFontIds.push_back(nFontId);
         }
     }
     return aFontIds;

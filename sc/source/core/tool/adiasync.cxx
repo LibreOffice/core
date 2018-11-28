@@ -121,20 +121,17 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
 
 void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
 {
-    if ( !theAddInAsyncTbl.empty() )
-    {
-        for( ScAddInAsyncs::reverse_iterator iter1 = theAddInAsyncTbl.rbegin(); iter1 != theAddInAsyncTbl.rend(); ++iter1 )
-        {   // backwards because of pointer-movement in array
-            ScAddInAsync* pAsync = iter1->get();
-            ScAddInDocs* p = pAsync->pDocs.get();
-            ScAddInDocs::iterator iter2 = p->find( pDocumentP );
-            if( iter2 != p->end() )
-            {
-                p->erase( iter2 );
-                if ( p->empty() )
-                {   // this AddIn is not used anymore
-                    theAddInAsyncTbl.erase( --(iter1.base()) );
-                }
+    for( ScAddInAsyncs::reverse_iterator iter1 = theAddInAsyncTbl.rbegin(); iter1 != theAddInAsyncTbl.rend(); ++iter1 )
+    {   // backwards because of pointer-movement in array
+        ScAddInAsync* pAsync = iter1->get();
+        ScAddInDocs* p = pAsync->pDocs.get();
+        ScAddInDocs::iterator iter2 = p->find( pDocumentP );
+        if( iter2 != p->end() )
+        {
+            p->erase( iter2 );
+            if ( p->empty() )
+            {   // this AddIn is not used anymore
+                theAddInAsyncTbl.erase( --(iter1.base()) );
             }
         }
     }

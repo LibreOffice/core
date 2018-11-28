@@ -1311,16 +1311,13 @@ void SwPostItMgr::AddPostIts(bool bCheckExistence, bool bFocus)
 
 void SwPostItMgr::RemoveSidebarWin()
 {
-    if (!mvPostItFields.empty())
+    for (auto const& postItField : mvPostItFields)
     {
-        for (auto const& postItField : mvPostItFields)
-        {
-            EndListening( *const_cast<SfxBroadcaster*>(postItField->GetBroadCaster()) );
-            postItField->pPostIt.disposeAndClear();
-            delete postItField;
-        }
-        mvPostItFields.clear();
+        EndListening( *const_cast<SfxBroadcaster*>(postItField->GetBroadCaster()) );
+        postItField->pPostIt.disposeAndClear();
+        delete postItField;
     }
+    mvPostItFields.clear();
 
     // all postits removed, no items should be left in pages
     PreparePageContainer();

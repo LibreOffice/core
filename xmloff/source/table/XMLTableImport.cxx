@@ -594,20 +594,17 @@ void XMLTableImportContext::StartElement( const Reference< XAttributeList >& /*x
 
 void XMLTableImportContext::EndElement()
 {
-    if( !maMergeInfos.empty() )
+    for( const std::shared_ptr< MergeInfo >& xInfo : maMergeInfos )
     {
-        for( const std::shared_ptr< MergeInfo >& xInfo : maMergeInfos )
+        if( xInfo.get() ) try
         {
-            if( xInfo.get() ) try
-            {
-                Reference< XCellRange > xRange( mxTable->getCellRangeByPosition( xInfo->mnStartColumn, xInfo->mnStartRow, xInfo->mnEndColumn, xInfo->mnEndRow ) );
-                Reference< XMergeableCellRange > xCursor( mxTable->createCursorByRange( xRange ), UNO_QUERY_THROW );
-                xCursor->merge();
-            }
-            catch( Exception& )
-            {
-                OSL_FAIL("XMLTableImportContext::EndElement(), exception caught while merging cells!");
-            }
+            Reference< XCellRange > xRange( mxTable->getCellRangeByPosition( xInfo->mnStartColumn, xInfo->mnStartRow, xInfo->mnEndColumn, xInfo->mnEndRow ) );
+            Reference< XMergeableCellRange > xCursor( mxTable->createCursorByRange( xRange ), UNO_QUERY_THROW );
+            xCursor->merge();
+        }
+        catch( Exception& )
+        {
+            OSL_FAIL("XMLTableImportContext::EndElement(), exception caught while merging cells!");
         }
     }
 }

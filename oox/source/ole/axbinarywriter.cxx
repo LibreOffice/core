@@ -155,28 +155,22 @@ void AxBinaryPropertyWriter::finalizeExport()
 {
     // write large properties
     maOutStrm.align( 4 );
-    if( !maLargeProps.empty() )
+    for (auto const& largeProp : maLargeProps)
     {
-        for (auto const& largeProp : maLargeProps)
-        {
-            if (!ensureValid())
-                break;
-            largeProp->writeProperty( maOutStrm );
-            maOutStrm.align( 4 );
-        }
+        if (!ensureValid())
+            break;
+        largeProp->writeProperty( maOutStrm );
+        maOutStrm.align( 4 );
     }
 
     mnBlockSize = maOutStrm.tell() - mnPropFlagsStart;
 
     // write stream properties (no stream alignment between properties!)
-    if( !maStreamProps.empty() )
+    for (auto const& streamProp : maStreamProps)
     {
-        for (auto const& streamProp : maStreamProps)
-        {
-            if (!ensureValid())
-                break;
-           streamProp->writeProperty( maOutStrm );
-        }
+        if (!ensureValid())
+            break;
+        streamProp->writeProperty( maOutStrm );
     }
 
     sal_Int64 nPos = maOutStrm.tell();

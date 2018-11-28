@@ -123,22 +123,19 @@ public:
     virtual sal_Bool SAL_CALL
     hasChildNodes() override
     {
-        if ( !m_Nodes.empty() )
+        for (Reference<XBrowseNode> & xNode : m_Nodes)
         {
-            for (Reference<XBrowseNode> & xNode : m_Nodes)
+            try
             {
-                try
+                if ( xNode->hasChildNodes() )
                 {
-                    if ( xNode->hasChildNodes() )
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-                catch ( Exception& )
-                {
-                    // some form of exception getting child nodes so move
-                    // on to the next one
-                }
+            }
+            catch ( Exception& )
+            {
+                // some form of exception getting child nodes so move
+                // on to the next one
             }
         }
 

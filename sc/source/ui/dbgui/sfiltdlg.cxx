@@ -163,19 +163,16 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         pLbFilterArea->Clear();
         pLbFilterArea->InsertEntry( aStrUndefined, 0 );
 
-        if (!pRangeNames->empty())
+        ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
+        for (; itr != itrEnd; ++itr)
         {
-            ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
-            for (; itr != itrEnd; ++itr)
-            {
-                if (!itr->second->HasType(ScRangeData::Type::Criteria))
-                    continue;
+            if (!itr->second->HasType(ScRangeData::Type::Criteria))
+                continue;
 
-                const sal_Int32 nInsert = pLbFilterArea->InsertEntry(itr->second->GetName());
-                OUString aSymbol;
-                itr->second->GetSymbol(aSymbol);
-                pLbFilterArea->SetEntryData(nInsert, new OUString(aSymbol));
-            }
+            const sal_Int32 nInsert = pLbFilterArea->InsertEntry(itr->second->GetName());
+            OUString aSymbol;
+            itr->second->GetSymbol(aSymbol);
+            pLbFilterArea->SetEntryData(nInsert, new OUString(aSymbol));
         }
 
         //  is there a stored source range?

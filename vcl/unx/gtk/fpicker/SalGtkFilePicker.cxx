@@ -1923,7 +1923,7 @@ void SalGtkFilePicker::SetFilters()
     if( GTK_FILE_CHOOSER_ACTION_SAVE == gtk_file_chooser_get_action( GTK_FILE_CHOOSER( m_pDialog ) ) )
     {
         std::set<OUString> aAllFormats;
-        if( m_pFilterVector && !m_pFilterVector->empty() )
+        if( m_pFilterVector )
         {
             for (auto & filter : *m_pFilterVector)
             {
@@ -1954,7 +1954,7 @@ void SalGtkFilePicker::SetFilters()
         }
     }
 
-    if( m_pFilterVector && !m_pFilterVector->empty() )
+    if( m_pFilterVector )
     {
         for (auto & filter : *m_pFilterVector)
         {

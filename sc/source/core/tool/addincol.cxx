@@ -605,19 +605,16 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
         if ( pFuncData )
         {
             const ::std::vector<ScUnoAddInFuncData::LocalizedName>& rNames = pFuncData->GetCompNames();
-            if ( !rNames.empty() )
+            ::std::vector<ScUnoAddInFuncData::LocalizedName>::const_iterator it( rNames.begin());
+            for ( ; it != rNames.end(); ++it)
             {
-                ::std::vector<ScUnoAddInFuncData::LocalizedName>::const_iterator it( rNames.begin());
-                for ( ; it != rNames.end(); ++it)
+                if ( ScGlobal::pCharClass->uppercase( (*it).maName ) == aUpperCmp )
                 {
-                    if ( ScGlobal::pCharClass->uppercase( (*it).maName ) == aUpperCmp )
-                    {
-                        //TODO: store upper case for comparing?
+                    //TODO: store upper case for comparing?
 
-                        //  use the first function that has this name for any language
-                        rRetCalcName = pFuncData->GetOriginalName();
-                        return true;
-                    }
+                    //  use the first function that has this name for any language
+                    rRetCalcName = pFuncData->GetOriginalName();
+                    return true;
                 }
             }
         }
