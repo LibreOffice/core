@@ -2013,7 +2013,7 @@ void XMLParaContext::EndElement()
         }
     }
 
-    if (m_xHints && !m_xHints->GetHints().empty())
+    if (m_xHints)
     {
         for (const auto & i : m_xHints->GetHints())
         {

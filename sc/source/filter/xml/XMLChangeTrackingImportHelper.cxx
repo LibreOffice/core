@@ -484,21 +484,18 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAc
 
 void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(std::deque<ScMyGenerated>& rList)
 {
-    if (!rList.empty())
+    for (ScMyGenerated & rGenerated : rList)
     {
-        for (ScMyGenerated & rGenerated : rList)
+        if (rGenerated.nID == 0)
         {
-            if (rGenerated.nID == 0)
-            {
-                ScCellValue aCell;
-                if (rGenerated.pCellInfo)
-                    aCell = rGenerated.pCellInfo->CreateCell(pDoc);
+            ScCellValue aCell;
+            if (rGenerated.pCellInfo)
+                aCell = rGenerated.pCellInfo->CreateCell(pDoc);
 
-                if (!aCell.isEmpty())
-                {
-                    rGenerated.nID = pTrack->AddLoadedGenerated(aCell, rGenerated.aBigRange, rGenerated.pCellInfo->sInputString);
-                    OSL_ENSURE(rGenerated.nID, "could not insert generated action");
-                }
+            if (!aCell.isEmpty())
+            {
+                rGenerated.nID = pTrack->AddLoadedGenerated(aCell, rGenerated.aBigRange, rGenerated.pCellInfo->sInputString);
+                OSL_ENSURE(rGenerated.nID, "could not insert generated action");
             }
         }
     }

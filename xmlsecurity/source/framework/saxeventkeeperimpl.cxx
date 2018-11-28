@@ -169,15 +169,11 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
             m_pNewBlocker = nullptr;
         }
 
-        if (!m_vNewElementCollectors.empty())
+        for( const auto& i : m_vNewElementCollectors )
         {
-            for( const auto& i : m_vNewElementCollectors )
-            {
-                pBufferNode->addElementCollector(i);
-            }
-
-            m_vNewElementCollectors.clear();
+            pBufferNode->addElementCollector(i);
         }
+        m_vNewElementCollectors.clear();
     }
 
     return pBufferNode;

@@ -276,11 +276,8 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
 
 void SmartTagSet::addCustomHandles( SdrHdlList& rHandlerList )
 {
-    if( !maSet.empty() )
-    {
-        for( std::set< SmartTagReference >::iterator aIter( maSet.begin() ); aIter != maSet.end(); )
-            (*aIter++)->addCustomHandles( rHandlerList );
-    }
+    for( std::set< SmartTagReference >::iterator aIter( maSet.begin() ); aIter != maSet.end(); )
+        (*aIter++)->addCustomHandles( rHandlerList );
 }
 
 /** returns true if the currently selected smart tag has

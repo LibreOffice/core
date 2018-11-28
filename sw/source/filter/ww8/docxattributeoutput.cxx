@@ -649,17 +649,14 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_pSerializer->mergeTopMarks(Tag_StartParagraph_1);
 
     // Write framePr
-    if(!aFramePrTextbox.empty())
+    for ( const auto & pFrame : aFramePrTextbox )
     {
-        for ( const auto & pFrame : aFramePrTextbox )
-        {
-            DocxTableExportContext aTableExportContext(*this);
-            m_pCurrentFrame = pFrame.get();
-            m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
-            m_pCurrentFrame = nullptr;
-        }
-        aFramePrTextbox.clear();
+        DocxTableExportContext aTableExportContext(*this);
+        m_pCurrentFrame = pFrame.get();
+        m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
+        m_pCurrentFrame = nullptr;
     }
+    aFramePrTextbox.clear();
     // Check for end of cell, rows, tables here
     FinishTableRowCell( pTextNodeInfoInner );
 
@@ -2376,20 +2373,17 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
 
-    if (!m_aTextEffectsGrabBag.empty())
+    for (beans::PropertyValue & i : m_aTextEffectsGrabBag)
     {
-        for (beans::PropertyValue & i : m_aTextEffectsGrabBag)
+        boost::optional<sal_Int32> aElementId = lclGetElementIdForName(i.Name);
+        if(aElementId)
         {
-            boost::optional<sal_Int32> aElementId = lclGetElementIdForName(i.Name);
-            if(aElementId)
-            {
-                uno::Sequence<beans::PropertyValue> aGrabBagSeq;
-                i.Value >>= aGrabBagSeq;
-                lclProcessRecursiveGrabBag(*aElementId, aGrabBagSeq, m_pSerializer);
-            }
+            uno::Sequence<beans::PropertyValue> aGrabBagSeq;
+            i.Value >>= aGrabBagSeq;
+            lclProcessRecursiveGrabBag(*aElementId, aGrabBagSeq, m_pSerializer);
         }
-        m_aTextEffectsGrabBag.clear();
     }
+    m_aTextEffectsGrabBag.clear();
 }
 
 void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )

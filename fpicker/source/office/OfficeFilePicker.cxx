@@ -189,7 +189,7 @@ void SvtFilePicker::prepareExecute()
 
     }
 
-    if ( m_pFilterList && !m_pFilterList->empty() )
+    if ( m_pFilterList )
     {
         for (auto & elem : *m_pFilterList)
         {
@@ -652,7 +652,7 @@ Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAc
         ::svt::OControlAccess aAccess( getDialog(), getDialog()->GetView() );
         aAny = aAccess.getValue( nElementID, nControlAction );
     }
-    else if ( m_pElemList && !m_pElemList->empty() )
+    else if ( m_pElemList )
     {
         for (auto const& elem : *m_pElemList)
         {
@@ -718,7 +718,7 @@ OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
         ::svt::OControlAccess aAccess( getDialog(), getDialog()->GetView() );
         aLabel = aAccess.getLabel( nLabelID );
     }
-    else if ( m_pElemList && !m_pElemList->empty() )
+    else if ( m_pElemList )
     {
         for (auto const& elem : *m_pElemList)
         {

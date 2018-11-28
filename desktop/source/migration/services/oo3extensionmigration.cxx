@@ -344,12 +344,9 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
         sSourceDir += "/user/uno_packages/cache/uno_packages";
         TStringVector aExtensionToMigrate;
         scanUserExtensions( sSourceDir, aExtensionToMigrate );
-        if (!aExtensionToMigrate.empty())
+        for (auto const& extensionToMigrate : aExtensionToMigrate)
         {
-            for (auto const& extensionToMigrate : aExtensionToMigrate)
-            {
-                migrateExtension(extensionToMigrate);
-            }
+            migrateExtension(extensionToMigrate);
         }
     }
 

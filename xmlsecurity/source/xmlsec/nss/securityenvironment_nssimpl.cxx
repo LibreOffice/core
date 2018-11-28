@@ -126,10 +126,8 @@ SecurityEnvironment_NssImpl::~SecurityEnvironment_NssImpl() {
         PK11_FreeSlot(slot);
     }
 
-    if( !m_tSymKeyList.empty()  ) {
-        for( auto& symKey : m_tSymKeyList )
-            PK11_FreeSymKey( symKey ) ;
-    }
+    for( auto& symKey : m_tSymKeyList )
+        PK11_FreeSymKey( symKey ) ;
 }
 
 /* XServiceInfo */

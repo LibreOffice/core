@@ -52,7 +52,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
 
     // b) No match by registration - but a valid interceptor list.
     //    Find first interceptor w/o pattern, so we need to query it
-    if (!xInterceptor.is() && !m_lInterceptionRegs.empty())
+    if (!xInterceptor.is())
     {
         for (auto const& lInterceptionReg : m_lInterceptionRegs)
         {

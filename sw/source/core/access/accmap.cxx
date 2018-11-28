@@ -1389,16 +1389,14 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         mpSeletedFrameMap->clear();
     }
 
-    if( !mapTemp.empty() )
+    SwAccessibleContextMap_Impl::iterator aIter = mapTemp.begin();
+    while( aIter != mapTemp.end() )
     {
-        SwAccessibleContextMap_Impl::iterator aIter = mapTemp.begin();
-        while( aIter != mapTemp.end() )
-        {
-            mpSeletedFrameMap->emplace( (*aIter).first, (*aIter).second );
-            ++aIter;
-        }
-        mapTemp.clear();
+        mpSeletedFrameMap->emplace( (*aIter).first, (*aIter).second );
+        ++aIter;
     }
+    mapTemp.clear();
+
     if( bMarkChanged && mpFrameMap)
     {
         for (SwAccessibleContext* pAccPara : vecAdd)

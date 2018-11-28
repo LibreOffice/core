@@ -474,29 +474,26 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, SvTreeListEntr
         SwSections aTmpArr;
         SvTreeListEntry* pNEntry;
         pFormat->GetChildSections(aTmpArr, SectionSort::Pos);
-        if( !aTmpArr.empty() )
+        for( const auto pSect : aTmpArr )
         {
-            for( const auto pSect : aTmpArr )
+            SectionType eTmpType;
+            pFormat = pSect->GetFormat();
+            if( pFormat->IsInNodesArr() &&
+                (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                && TOX_HEADER_SECTION != eTmpType )
             {
-                SectionType eTmpType;
-                pFormat = pSect->GetFormat();
-                if( pFormat->IsInNodesArr() &&
-                    (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                    && TOX_HEADER_SECTION != eTmpType )
-                {
-                    SectRepr* pSectRepr=new SectRepr(
-                                    FindArrPos( pSect->GetFormat() ), *pSect );
-                    Image aImage = BuildBitmap( pSect->IsProtect(),
-                                            pSect->IsHidden());
-                    pNEntry = m_pTree->InsertEntry(
-                        pSect->GetSectionName(), aImage, aImage, pEntry);
-                    pNEntry->SetUserData(pSectRepr);
-                    RecurseList( pSect->GetFormat(), pNEntry );
-                    if( pNEntry->HasChildren())
-                        m_pTree->Expand(pNEntry);
-                    if (pCurrSect==pSect)
-                        pSelEntry = pNEntry;
-                }
+                SectRepr* pSectRepr=new SectRepr(
+                                FindArrPos( pSect->GetFormat() ), *pSect );
+                Image aImage = BuildBitmap( pSect->IsProtect(),
+                                        pSect->IsHidden());
+                pNEntry = m_pTree->InsertEntry(
+                    pSect->GetSectionName(), aImage, aImage, pEntry);
+                pNEntry->SetUserData(pSectRepr);
+                RecurseList( pSect->GetFormat(), pNEntry );
+                if( pNEntry->HasChildren())
+                    m_pTree->Expand(pNEntry);
+                if (pCurrSect==pSect)
+                    pSelEntry = pNEntry;
             }
         }
     }

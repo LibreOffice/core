@@ -2746,16 +2746,13 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             /*
                 Insert text if necessary into textboxes contained in groups.
             */
-            if (!aData.empty())
+            for (const auto& it : aData)
             {
-                for (const auto& it : aData)
-                {
-                    pRecord = it.get();
-                    if (pRecord->pObj && pRecord->aTextId.nTxBxS)
-                    { // #i52825# pRetFrameFormat can be NULL
-                        pRetFrameFormat = MungeTextIntoDrawBox(
-                            pRecord, nGrafAnchorCp, pRetFrameFormat);
-                    }
+                pRecord = it.get();
+                if (pRecord->pObj && pRecord->aTextId.nTxBxS)
+                { // #i52825# pRetFrameFormat can be NULL
+                    pRetFrameFormat = MungeTextIntoDrawBox(
+                        pRecord, nGrafAnchorCp, pRetFrameFormat);
                 }
             }
         }

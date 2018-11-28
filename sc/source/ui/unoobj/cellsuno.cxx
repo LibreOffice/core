@@ -4438,24 +4438,21 @@ static bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
 
     //  named entry in this object?
 
-    if ( !rNamedEntries.empty() )
-    {
-        for (const auto & rNamedEntry : rNamedEntries)
-            if ( rNamedEntry.GetName() == rName )
-            {
-                //  test if named entry is contained in rRanges
+    for (const auto & rNamedEntry : rNamedEntries)
+        if ( rNamedEntry.GetName() == rName )
+        {
+            //  test if named entry is contained in rRanges
 
-                const ScRange& rComp = rNamedEntry.GetRange();
-                ScMarkData aMarkData;
-                aMarkData.MarkFromRangeList( rRanges, false );
-                aMarkData.MarkToMulti();        // needed for IsAllMarked
-                if ( aMarkData.IsAllMarked( rComp ) )
-                {
-                    rFound = rComp;
-                    return true;
-                }
+            const ScRange& rComp = rNamedEntry.GetRange();
+            ScMarkData aMarkData;
+            aMarkData.MarkFromRangeList( rRanges, false );
+            aMarkData.MarkToMulti();        // needed for IsAllMarked
+            if ( aMarkData.IsAllMarked( rComp ) )
+            {
+                rFound = rComp;
+                return true;
             }
-    }
+        }
 
     return false;       // not found
 }
@@ -4483,7 +4480,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
         ScRangeList aDiff;
         bool bValid = ( aDiff.Parse( aName, &pDocSh->GetDocument() ) & ScRefFlags::VALID )
                                                                        == ScRefFlags::VALID;
-        if (!bValid && !m_pImpl->m_aNamedEntries.empty())
+        if (!bValid)
         {
             sal_uInt16 nCount = m_pImpl->m_aNamedEntries.size();
             for (sal_uInt16 n=0; n<nCount && !bValid; n++)

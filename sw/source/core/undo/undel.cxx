@@ -54,18 +54,15 @@
 */
 static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, sal_uLong nMovedIndex )
 {
-    if( !rSpzArr.empty() )
+    for( size_t n = 0; n < rSpzArr.size(); ++n )
     {
-        for( size_t n = 0; n < rSpzArr.size(); ++n )
+        SwFrameFormat * pFormat = rSpzArr[n];
+        const SwFormatAnchor* pAnchor = &pFormat->GetAnchor();
+        if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
         {
-            SwFrameFormat * pFormat = rSpzArr[n];
-            const SwFormatAnchor* pAnchor = &pFormat->GetAnchor();
-            if (pAnchor->GetAnchorId() == RndStdIds::FLY_AT_CHAR)
-            {
-                const SwPosition* pAPos = pAnchor->GetContentAnchor();
-                if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
-                    pFormat->MakeFrames();
-            }
+            const SwPosition* pAPos = pAnchor->GetContentAnchor();
+            if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
+                pFormat->MakeFrames();
         }
     }
 }

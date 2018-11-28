@@ -1032,15 +1032,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         bool    bOutline[MAXLEVEL] = {false};
                         const SwOutlineNodes& rOutlNds = m_xDoc->GetNodes().GetOutLineNds();
-                        if( !rOutlNds.empty() )
+                        for( size_t n = 0; n < rOutlNds.size(); ++n )
                         {
-                            for( size_t n = 0; n < rOutlNds.size(); ++n )
+                            const int nLevel = rOutlNds[n]->GetTextNode()->GetAttrOutlineLevel();
+                            if( nLevel > 0 && ! bOutline[nLevel-1] )
                             {
-                                const int nLevel = rOutlNds[n]->GetTextNode()->GetAttrOutlineLevel();
-                                if( nLevel > 0 && ! bOutline[nLevel-1] )
-                                {
-                                    bOutline[nLevel-1] = true;
-                                }
+                                bOutline[nLevel-1] = true;
                             }
                         }
 

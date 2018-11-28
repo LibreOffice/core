@@ -239,17 +239,14 @@ void PropertyMap::assignAll( const PropertyMap& rPropMap )
 Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
 {
     Sequence< PropertyValue > aSeq( static_cast< sal_Int32 >( maProperties.size() ) );
-    if( !maProperties.empty() )
+    PropertyValue* pValues = aSeq.getArray();
+    for (auto const& prop : maProperties)
     {
-        PropertyValue* pValues = aSeq.getArray();
-        for (auto const& prop : maProperties)
-        {
-            OSL_ENSURE( (0 <= prop.first) && (prop.first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
-            pValues->Name = (*mpPropNames)[ prop.first ];
-            pValues->Value = prop.second;
-            pValues->State = PropertyState_DIRECT_VALUE;
-            ++pValues;
-        }
+        OSL_ENSURE( (0 <= prop.first) && (prop.first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
+        pValues->Name = (*mpPropNames)[ prop.first ];
+        pValues->Value = prop.second;
+        pValues->State = PropertyState_DIRECT_VALUE;
+        ++pValues;
     }
     return aSeq;
 }

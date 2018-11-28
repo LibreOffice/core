@@ -1904,19 +1904,16 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
     // this method must not contain any locking
     // the locking is done in the listener
 
-    if ( !m_pData->m_aOpenSubComponentsVector.empty() )
+    for ( WeakComponentVector::iterator pCompIter = m_pData->m_aOpenSubComponentsVector.begin();
+          pCompIter != m_pData->m_aOpenSubComponentsVector.end(); )
     {
-        for ( WeakComponentVector::iterator pCompIter = m_pData->m_aOpenSubComponentsVector.begin();
-              pCompIter != m_pData->m_aOpenSubComponentsVector.end(); )
+        uno::Reference< lang::XComponent > xTmp = (*pCompIter);
+        if ( !xTmp.is() || xTmp == xChild )
         {
-            uno::Reference< lang::XComponent > xTmp = (*pCompIter);
-            if ( !xTmp.is() || xTmp == xChild )
-            {
-                pCompIter = m_pData->m_aOpenSubComponentsVector.erase(pCompIter);
-            }
-            else
-                ++pCompIter;
+            pCompIter = m_pData->m_aOpenSubComponentsVector.erase(pCompIter);
         }
+         else
+            ++pCompIter;
     }
 }
 

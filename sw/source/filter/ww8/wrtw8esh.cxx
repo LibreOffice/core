@@ -1102,19 +1102,16 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
     //duplicate attributes in docx export. Doesn't matter in doc
     //export as later props just override earlier ones.
     std::set<sal_uInt16> aUsedRunWhichs;
-    if (!aTextAtrArr.empty())
+    for(const auto& rTextAtr : aTextAtrArr)
     {
-        for(const auto& rTextAtr : aTextAtrArr)
+        if (nSwPos >= rTextAtr.nStart && nSwPos < rTextAtr.nEnd)
         {
-            if (nSwPos >= rTextAtr.nStart && nSwPos < rTextAtr.nEnd)
-            {
-                sal_uInt16 nWhich = rTextAtr.pAttr->Which();
-                aUsedRunWhichs.insert(nWhich);
-            }
-
-            if( nSwPos < rTextAtr.nStart )
-                break;
+            sal_uInt16 nWhich = rTextAtr.pAttr->Which();
+            aUsedRunWhichs.insert(nWhich);
         }
+
+        if( nSwPos < rTextAtr.nStart )
+            break;
     }
 
     OutParaAttr(true, &aUsedRunWhichs);

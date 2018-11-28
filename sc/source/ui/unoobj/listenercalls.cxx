@@ -46,28 +46,25 @@ void ScUnoListenerCalls::ExecuteAndClear()
     //  During each modified() call, Add may be called again.
     //  These new calls are executed here, too.
 
-    if (!aEntries.empty())
+    std::vector<ScUnoListenerEntry>::iterator aItr(aEntries.begin());
+    while (aItr != aEntries.end())
     {
-        std::vector<ScUnoListenerEntry>::iterator aItr(aEntries.begin());
-        while (aItr != aEntries.end())
+        ScUnoListenerEntry aEntry = *aItr;
+        try
         {
-            ScUnoListenerEntry aEntry = *aItr;
-            try
-            {
-                aEntry.xListener->modified( aEntry.aEvent );
-            }
-            catch ( const uno::RuntimeException& )
-            {
-                // the listener is an external object and may throw a RuntimeException
-                // for reasons we don't know
-            }
-
-            //  New calls that are added during the modified() call are appended to the end
-            //  of aEntries, so the loop will catch them, too (as long as erase happens
-            //  after modified).
-
-            aItr = aEntries.erase(aItr);
+            aEntry.xListener->modified( aEntry.aEvent );
         }
+        catch ( const uno::RuntimeException& )
+        {
+            // the listener is an external object and may throw a RuntimeException
+            // for reasons we don't know
+        }
+
+        //  New calls that are added during the modified() call are appended to the end
+        //  of aEntries, so the loop will catch them, too (as long as erase happens
+        //  after modified).
+
+        aItr = aEntries.erase(aItr);
     }
 }
 

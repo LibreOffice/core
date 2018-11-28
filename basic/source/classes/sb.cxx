@@ -1149,26 +1149,23 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
     if( pModule->pClassData != nullptr )
     {
         std::vector< OUString >& rReqTypes = pModule->pClassData->maRequiredTypes;
-        if( !rReqTypes.empty() )
+        for( const auto& rStr : rReqTypes )
         {
-            for( const auto& rStr : rReqTypes )
+            // Is required type a class module?
+            ModuleInitDependencyMap::iterator itFind = rMap.find( rStr );
+            if( itFind != rMap.end() )
             {
-                // Is required type a class module?
-                ModuleInitDependencyMap::iterator itFind = rMap.find( rStr );
-                if( itFind != rMap.end() )
+                ClassModuleRunInitItem& rParentItem = itFind->second;
+                if( rParentItem.m_bProcessing )
                 {
-                    ClassModuleRunInitItem& rParentItem = itFind->second;
-                    if( rParentItem.m_bProcessing )
-                    {
-                        // TODO: raise error?
-                        OSL_FAIL( "Cyclic module dependency detected" );
-                        continue;
-                    }
+                    // TODO: raise error?
+                    OSL_FAIL( "Cyclic module dependency detected" );
+                    continue;
+                }
 
-                    if( !rParentItem.m_bRunInitDone )
-                    {
-                        implProcessModuleRunInit( rMap, rParentItem );
-                    }
+                if( !rParentItem.m_bRunInitDone )
+                {
+                    implProcessModuleRunInit( rMap, rParentItem );
                 }
             }
         }

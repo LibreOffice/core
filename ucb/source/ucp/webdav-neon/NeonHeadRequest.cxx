@@ -47,12 +47,9 @@ void process_headers( ne_request * req,
 
 #if defined SAL_LOG_INFO
     {
-        if( !rHeaderNames.empty() )
+        for ( const auto& rHeader : rHeaderNames )
         {
-            for ( const auto& rHeader : rHeaderNames )
-            {
-                SAL_INFO( "ucb.ucp.webdav", "HEAD - requested header: " << rHeader );
-            }
+            SAL_INFO( "ucb.ucp.webdav", "HEAD - requested header: " << rHeader );
         }
     }
 #endif
