@@ -615,7 +615,7 @@ void PushButton::ImplInitPushButtonData()
     mnDDStyle       = PushButtonDropdownStyle::NONE;
     mbIsActive    = false;
     mbPressed       = false;
-    mbIsStock       = false;
+    mbIsAction      = false;
 }
 
 namespace
@@ -1026,7 +1026,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     if (bNativeOK)
     {
         PushButtonValue aControlValue;
-        aControlValue.mbIsStock = isStock();
+        aControlValue.mbIsAction = isAction();
 
         tools::Rectangle aCtrlRegion(aInRect);
         ControlState nState = ControlState::NONE;
@@ -1682,7 +1682,7 @@ void PushButton::ShowFocus(const tools::Rectangle& rRect)
     if (IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
     {
         PushButtonValue aControlValue;
-        aControlValue.mbIsStock = isStock();
+        aControlValue.mbIsAction = isAction();
         tools::Rectangle aInRect(Point(), GetOutputSizePixel());
         GetOutDev()->DrawNativeControl(ControlType::Pushbutton, ControlPart::Focus, aInRect,
                                        ControlState::FOCUSED, aControlValue, OUString());

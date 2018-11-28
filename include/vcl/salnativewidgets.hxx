@@ -497,7 +497,7 @@ public:
         : ImplControlValue( ControlType::Pushbutton, 0 )
         , mbBevelButton(false)
         , mbSingleLine(true)
-        , mbIsStock(false)
+        , mbIsAction(false)
     {}
 
     virtual ~PushButtonValue() override;
@@ -510,7 +510,7 @@ public:
 
     bool mbBevelButton:1; // only used on OSX
     bool mbSingleLine:1;  // only used on OSX
-    bool mbIsStock:1;
+    bool mbIsAction:1;
 };
 
 

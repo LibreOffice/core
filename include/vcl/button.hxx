@@ -160,14 +160,14 @@ public:
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
     virtual void    ShowFocus(const tools::Rectangle& rRect) override;
 
-    void setStock(bool bIsStock)
+    void setAction(bool bIsAction)
     {
-        mbIsStock = bIsStock;
+        mbIsAction = bIsAction;
     }
 
-    bool isStock()
+    bool isAction()
     {
-        return mbIsStock;
+        return mbIsAction;
     }
 
 protected:
@@ -206,7 +206,7 @@ private:
     SymbolType      meSymbol;
     TriState        meState;
     bool            mbPressed;
-    bool            mbIsStock;
+    bool            mbIsAction;
 };
 
 inline void PushButton::Check( bool bCheck )

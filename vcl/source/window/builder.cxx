@@ -2806,7 +2806,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                             if (bIsButtonBox)
                             {
                                 if (PushButton* pPushButton = dynamic_cast<PushButton*>(pChild))
-                                    pPushButton->setStock(true);
+                                    pPushButton->setAction(true);
                             }
 
                             aChilds.push_back(pChild);

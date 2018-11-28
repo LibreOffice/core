@@ -97,7 +97,7 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
         {
             const PushButtonValue* pPushButtonValue = static_cast<const PushButtonValue*>(&rValue);
             if (pPushButtonValue)
-                aParameters.bIsStock = pPushButtonValue->mbIsStock;
+                aParameters.bIsAction = pPushButtonValue->mbIsAction;
             bOK = s_pWidgetImplementation->drawPushButton(aParameters, nWidth, nHeight);
         }
         break;
