@@ -1774,6 +1774,15 @@ formula::VectorRefArray ScDocument::FetchVectorRefArray( const ScAddress& rPos, 
     return maTabs[nTab]->FetchVectorRefArray(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
 }
 
+#ifdef DBG_UTIL
+void ScDocument::AssertNoInterpretNeeded( const ScAddress& rPos, SCROW nLength )
+{
+    SCTAB nTab = rPos.Tab();
+    assert(TableExists(nTab));
+    return maTabs[nTab]->AssertNoInterpretNeeded(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
+}
+#endif
+
 void ScDocument::UnlockAdjustHeight()
 {
     assert(nAdjustHeightLock > 0);
