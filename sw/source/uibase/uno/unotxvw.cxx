@@ -312,6 +312,33 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
                 bRet = true;
             }
         }
+
+        // tdf#112696 if we selected every individual element of a group, then
+        // select that group instead
+        const SdrMarkList &rMrkList = pDrawView->GetMarkedObjectList();
+        size_t nMarkCount = rMrkList.GetMarkCount();
+        if (nMarkCount > 1)
+        {
+            SdrObject* pObject = rMrkList.GetMark(0)->GetMarkedSdrObj();
+            SdrObject* pGroupParent = pObject->getParentSdrObjectFromSdrObject();
+            for (size_t i = 1; i < nMarkCount; ++i)
+            {
+                pObject = rMrkList.GetMark(i)->GetMarkedSdrObj();
+                SdrObject* pParent = pObject->getParentSdrObjectFromSdrObject();
+                if (pParent != pGroupParent)
+                {
+                    pGroupParent = nullptr;
+                    break;
+                }
+            }
+
+            if (pGroupParent && pGroupParent->IsGroupObject() &&
+                pGroupParent->getChildrenOfSdrObject()->GetObjCount() == nMarkCount)
+            {
+                pDrawView->UnmarkAll();
+                pDrawView->MarkObj(pGroupParent, pPV);
+            }
+        }
     }
     return bRet;
 }
