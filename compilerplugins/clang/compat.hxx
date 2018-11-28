@@ -157,7 +157,8 @@ inline bool CPlusPlus17(clang::LangOptions const & opts) {
 }
 
 inline bool EvaluateAsInt(clang::Expr const * expr, llvm::APSInt& intRes, const clang::ASTContext& ctx) {
-#if CLANG_VERSION >= 80000
+// this keeps getting landed and then reverted in clang
+#if 0 && CLANG_VERSION >= 80000
     clang::Expr::EvalResult res;
     bool b = expr->EvaluateAsInt(res, ctx);
     if (b && res.Val.isInt())
