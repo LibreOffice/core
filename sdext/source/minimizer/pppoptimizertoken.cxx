@@ -153,6 +153,7 @@ static const TokenTable pTokenTableArray[] =
     { "STR_CREATING_OLE_REPLACEMENTS",STR_CREATING_OLE_REPLACEMENTS },
     { "STR_FileSizeSeparator",      STR_FILESIZESEPARATOR },
     { "STR_FILENAME_SUFFIX",        STR_FILENAME_SUFFIX },
+    { "STR_WARN_UNSAVED_PRESENTATION", STR_WARN_UNSAVED_PRESENTATION },
 
 
     { "NotFound",           TK_NotFound }
