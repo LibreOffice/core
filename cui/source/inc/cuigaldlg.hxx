@@ -232,14 +232,6 @@ class TPGalleryThemeProperties : public SfxTabPage
     friend class TakeProgress;
     friend class TakeThread;
 
-    VclPtr<ComboBox>           m_pCbbFileType;
-    VclPtr<ListBox>            m_pLbxFound;
-    VclPtr<PushButton>         m_pBtnSearch;
-    VclPtr<PushButton>         m_pBtnTake;
-    VclPtr<PushButton>         m_pBtnTakeAll;
-    VclPtr<CheckBox>           m_pCbxPreview;
-    VclPtr<GalleryPreview>     m_pWndPreview;
-
     ExchangeData*           pData;
     std::vector<OUString>   aFoundList;
     std::vector< std::unique_ptr<FilterEntry> >
@@ -248,7 +240,6 @@ class TPGalleryThemeProperties : public SfxTabPage
     OUString                aLastFilterName;
     OUString                aPreviewString;
     INetURLObject           aURL;
-    sal_uInt16              nFirstExtFilterPos;
     bool                    bEntriesFound;
     bool                    bInputAllowed;
     bool                    bTakeAll;
@@ -257,6 +248,15 @@ class TPGalleryThemeProperties : public SfxTabPage
     rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;
     css::uno::Reference< css::media::XPlayer >              xMediaPlayer;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
+
+    SvxGalleryPreview m_aWndPreview;
+    std::unique_ptr<weld::ComboBox> m_xCbbFileType;
+    std::unique_ptr<weld::TreeView> m_xLbxFound;
+    std::unique_ptr<weld::Button> m_xBtnSearch;
+    std::unique_ptr<weld::Button> m_xBtnTake;
+    std::unique_ptr<weld::Button> m_xBtnTakeAll;
+    std::unique_ptr<weld::CheckButton> m_xCbxPreview;
+    std::unique_ptr<weld::CustomWeld> m_xWndPreview;
 
     virtual void        Reset( const SfxItemSet* /*rSet*/ ) override {}
     virtual bool        FillItemSet( SfxItemSet* /*rSet*/ ) override { return true; }
@@ -268,19 +268,19 @@ class TPGalleryThemeProperties : public SfxTabPage
     void                DoPreview();
     void                EndSearchProgressHdl(sal_Int32 nResult);
 
-                        DECL_LINK( ClickPreviewHdl, Button*, void );
-                        DECL_LINK( ClickSearchHdl, Button*, void );
-                        DECL_LINK( ClickTakeHdl, Button*, void );
-                        DECL_LINK( ClickTakeAllHdl, Button*, void );
-                        DECL_LINK( SelectFoundHdl, ListBox&, void );
-                        DECL_LINK( SelectFileTypeHdl, ComboBox&, void );
-                        DECL_LINK( DClickFoundHdl, ListBox&, void );
-                        DECL_LINK( PreviewTimerHdl, Timer*, void );
-                        DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
+    DECL_LINK(ClickPreviewHdl, weld::ToggleButton&, void);
+    DECL_LINK(ClickSearchHdl, weld::Button&, void);
+    DECL_LINK(ClickTakeHdl, weld::Button&, void);
+    DECL_LINK(ClickTakeAllHdl, weld::Button&, void);
+    DECL_LINK(SelectFoundHdl, weld::TreeView&, void);
+    DECL_LINK(SelectFileTypeHdl, weld::ComboBox&, void);
+    DECL_LINK(DClickFoundHdl, weld::TreeView&, void);
+    DECL_LINK(PreviewTimerHdl, Timer*, void);
+    DECL_LINK(DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void);
 
 public:
-                        TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet );
-                        virtual ~TPGalleryThemeProperties() override;
+    TPGalleryThemeProperties(TabPageParent pWindow, const SfxItemSet& rSet);
+    virtual ~TPGalleryThemeProperties() override;
     virtual void        dispose() override;
 
     void                SetXChgData( ExchangeData* pData );
@@ -288,7 +288,7 @@ public:
 
     void                StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult );
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
