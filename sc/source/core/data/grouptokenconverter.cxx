@@ -135,7 +135,20 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
 
                     formula::VectorRefArray aArray;
                     if (nTrimLen)
+                    {
+#ifdef DBG_UTIL
+                        // All the necessary Interpret() calls for all the cells
+                        // should have been already handled by ScDependantsCalculator
+                        // calling HandleRefArrayForParallelism(), and that handling also checks
+                        // for cycles etc. Recursively calling Interpret() from here (which shouldn't
+                        // happen) could lead to unhandled problems.
+                        // Also, because of caching FetchVectorRefArray() fetches values for all rows
+                        // up to the maximum one, so check those too.
+                        mrDoc.AssertNoInterpretNeeded(
+                            ScAddress(aRefPos.Col(), 0, aRefPos.Tab()), nTrimLen + aRefPos.Row());
+#endif
                         aArray = mrDoc.FetchVectorRefArray(aRefPos, nTrimLen);
+                    }
 
                     if (!aArray.isValid())
                         return false;
@@ -230,7 +243,13 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                     aRefPos.SetCol(i);
                     formula::VectorRefArray aArray;
                     if (nArrayLength)
+                    {
+#ifdef DBG_UTIL
+                        mrDoc.AssertNoInterpretNeeded(
+                            ScAddress(aRefPos.Col(), 0, aRefPos.Tab()), nArrayLength + aRefPos.Row());
+#endif
                         aArray = mrDoc.FetchVectorRefArray(aRefPos, nArrayLength);
+                    }
 
                     if (!aArray.isValid())
                         return false;
