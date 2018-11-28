@@ -59,7 +59,7 @@ class SearchThread: public salhelper::Thread
 {
 private:
 
-    VclPtr<SearchProgress>             mpProgress;
+    SearchProgress* mpProgress;
     VclPtr<TPGalleryThemeProperties>   mpBrowser;
     INetURLObject               maStartURL;
 
@@ -72,42 +72,39 @@ private:
 
 public:
 
-                                SearchThread( SearchProgress* pProgress,
-                                              TPGalleryThemeProperties* pBrowser,
-                                              const INetURLObject& rStartURL );
+                                SearchThread(SearchProgress* pProgress,
+                                             TPGalleryThemeProperties* pBrowser,
+                                             const INetURLObject& rStartURL);
 };
 
-class SearchProgress : public ModalDialog
+class SearchProgress : public weld::GenericDialogController
 {
 private:
-    VclPtr<FixedText>          m_pFtSearchDir;
-    VclPtr<FixedText>          m_pFtSearchType;
-    VclPtr<CancelButton>       m_pBtnCancel;
-    VclPtr<vcl::Window>        parent_;
     INetURLObject startUrl_;
-    rtl::Reference< SearchThread > maSearchThread;
+    VclPtr<TPGalleryThemeProperties> m_xTabPage;
+    rtl::Reference< SearchThread > m_aSearchThread;
+    std::unique_ptr<weld::Label> m_xFtSearchDir;
+    std::unique_ptr<weld::Label> m_xFtSearchType;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
 
-                        DECL_LINK( ClickCancelBtn, Button*, void );
+    DECL_LINK(ClickCancelBtn, weld::Button&, void);
 
 public:
-                        SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL );
-    virtual             ~SearchProgress() override;
-    virtual void        dispose() override;
+    SearchProgress(weld::Window* pParent, TPGalleryThemeProperties* pTabPage, const INetURLObject& rStartURL);
+    void LaunchThread();
+    virtual ~SearchProgress() override;
 
-                        DECL_LINK( CleanUpHdl, void*, void );
+    DECL_LINK( CleanUpHdl, void*, void );
 
-    virtual short       Execute() override;
-    using ModalDialog::StartExecuteAsync;
-    virtual bool        StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
-    void                SetFileType( const OUString& rType ) { m_pFtSearchType->SetText( rType ); }
-    void                SetDirectory( const INetURLObject& rURL ) { m_pFtSearchDir->SetText( GetReducedString( rURL, 30 ) ); }
+    void                SetFileType( const OUString& rType ) { m_xFtSearchType->set_label(rType); }
+    void                SetDirectory( const INetURLObject& rURL ) { m_xFtSearchDir->set_label(GetReducedString(rURL, 30)); }
 };
 
 class TakeThread: public salhelper::Thread
 {
 private:
 
-    VclPtr<TakeProgress>               mpProgress;
+    TakeProgress* mpProgress;
     VclPtr<TPGalleryThemeProperties>   mpBrowser;
     TokenList_impl&             mrTakenList;
 
@@ -123,29 +120,27 @@ public:
                                 );
 };
 
-class TakeProgress : public ModalDialog
+class TakeProgress : public weld::GenericDialogController
 {
 private:
-    VclPtr<FixedText>          m_pFtTakeFile;
-    VclPtr<CancelButton>       m_pBtnCancel;
-    VclPtr<vcl::Window>        window_;
+    weld::Window* m_pParent;
+    VclPtr<TPGalleryThemeProperties> m_xTabPage;
     rtl::Reference< TakeThread > maTakeThread;
     TokenList_impl      maTakenList;
+    std::unique_ptr<weld::Label> m_xFtTakeFile;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
 
-    DECL_LINK( ClickCancelBtn, Button*, void );
+    DECL_LINK(ClickCancelBtn, weld::Button&, void);
 
 public:
 
-    TakeProgress( vcl::Window* pWindow );
+    TakeProgress(weld::Window* pParent, TPGalleryThemeProperties* pTabPage);
+    void LaunchThread();
     virtual ~TakeProgress() override;
-    virtual void dispose() override;
 
     DECL_LINK( CleanUpHdl, void*, void );
 
-    void                SetFile( const INetURLObject& rURL ) { m_pFtTakeFile->SetText( GetReducedString( rURL, 30 ) ); }
-    virtual short       Execute() override;
-    using ModalDialog::StartExecuteAsync;
-    virtual bool        StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
+    void                SetFile( const INetURLObject& rURL ) { m_xFtTakeFile->set_label(GetReducedString(rURL, 30)); }
 };
 
 class ActualizeProgress : public ModalDialog
@@ -193,16 +188,14 @@ public:
     sal_uInt32 GetId() const { return m_xLbResName->get_active(); }
 };
 
-class GalleryThemeProperties : public SfxTabDialog
+class GalleryThemeProperties : public SfxTabDialogController
 {
     ExchangeData*   pData;
 
-    sal_uInt16 m_nGeneralPageId;
-
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 public:
-    GalleryThemeProperties(vcl::Window* pParent, ExchangeData* pData, SfxItemSet const * pItemSet);
+    GalleryThemeProperties(weld::Window* pParent, ExchangeData* pData, SfxItemSet const * pItemSet);
 };
 
 class TPGalleryThemeGeneral : public SfxTabPage
