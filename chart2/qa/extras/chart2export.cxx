@@ -120,9 +120,9 @@ public:
     void testChartTitlePropertiesColorFillPPTX();
     void testChartTitlePropertiesGradientFillPPTX();
     void testChartTitlePropertiesBitmapFillPPTX();
-    void testxAxisLabelsRotation();
     void testTdf116163();
     void testTdf119029();
+    void testTdf121744();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -205,9 +205,9 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesColorFillPPTX);
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillPPTX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
-    CPPUNIT_TEST(testxAxisLabelsRotation);
     CPPUNIT_TEST(testTdf116163);
     CPPUNIT_TEST(testTdf119029);
+    CPPUNIT_TEST(testTdf121744);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1947,6 +1947,19 @@ void Chart2ExportTest::testTdf119029()
     assertXPath(pXmlDoc,
                 "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:txPr/a:bodyPr", "rot",
                 "-5400000");
+}
+
+void Chart2ExportTest::testTdf121744()
+{
+    load("/chart2/qa/extras/data/docx/", "tdf121744.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OUString XValueId = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[1]", "val");
+    OUString YValueId = getXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[2]", "val");
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[1]", "val", XValueId );
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:axId[2]", "val", YValueId );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
