@@ -1662,7 +1662,14 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
                     FSEND );
         }
 
-        exportAxesId(bPrimaryAxes);
+        if( bPrimaryAxes && maAxes.size() == 2 )
+        {
+            exportAxesIdforCombined( maAxes[0], maAxes[1] );
+        }
+        else
+        {
+            exportAxesId(bPrimaryAxes);
+        }
 
         pFS->endElement( FSNS( XML_c, nTypeId ) );
     }
@@ -3366,6 +3373,31 @@ void ChartExport::exportDataPoints(
                 pFS->endElement( FSNS( XML_c, XML_dPt ) );
             }
         }
+    }
+}
+
+void ChartExport::exportAxesIdforCombined( AxisIdPair& nAIdx ,AxisIdPair& nAIdy )
+{
+    sal_Int32 nAxisIdx = nAIdx.nAxisId;
+    sal_Int32 nAxisIdy = nAIdy.nAxisId;
+    FSHelperPtr pFS = GetFS();
+    pFS->singleElement( FSNS( XML_c, XML_axId ),
+            XML_val, I32S( nAxisIdx ),
+            FSEND );
+    pFS->singleElement( FSNS( XML_c, XML_axId ),
+            XML_val, I32S( nAxisIdy ),
+            FSEND );
+    if (mbHasZAxis)
+    {
+        sal_Int32 nAxisIdz = 0;
+        if( isDeep3dChart() )
+        {
+            nAxisIdz = lcl_generateRandomValue();
+            maAxes.emplace_back( AXIS_PRIMARY_Z, nAxisIdz, nAxisIdy );
+        }
+        pFS->singleElement( FSNS( XML_c, XML_axId ),
+            XML_val, I32S( nAxisIdz ),
+            FSEND );
     }
 }
 
