@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_7dbd3b67",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-28T15:06:11Z",
+      "side": 1,
+      "message": "Merge markers still in file.",
+      "revId": "4f58d4e1764c1e890d29b12e3f0c15f187299218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_5dc277eb",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-28T15:06:11Z",
+      "side": 1,
+      "message": "Merge markers.",
+      "revId": "4f58d4e1764c1e890d29b12e3f0c15f187299218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_bd9173f4",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1668,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-28T15:06:11Z",
+      "side": 1,
+      "message": "Please put the exportAxesId part on a new line.",
+      "revId": "4f58d4e1764c1e890d29b12e3f0c15f187299218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_9d8eafce",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2967,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-28T15:06:11Z",
+      "side": 1,
+      "message": "Whitespace errors.",
+      "revId": "4f58d4e1764c1e890d29b12e3f0c15f187299218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
