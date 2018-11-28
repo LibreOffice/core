@@ -357,6 +357,7 @@ static const char* STR_POOLCOLL_LISTS_ARY[]
 static const char* STR_POOLCOLL_EXTRA_ARY[]
 {
     // Subcategory Header
+    STR_POOLCOLL_HEADERFOOTER,
     STR_POOLCOLL_HEADER,
     STR_POOLCOLL_HEADERL,
     STR_POOLCOLL_HEADERR,
@@ -875,6 +876,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
         // Special sections:
         // Header
+        case RES_POOLCOLL_HEADERFOOTER:
         case RES_POOLCOLL_HEADER:
         case RES_POOLCOLL_HEADERL:
         case RES_POOLCOLL_HEADERR:
@@ -894,6 +896,11 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aTStops.Insert( SvxTabStop( nRightMargin, SvxTabAdjust::Right ) );
 
                 aSet.Put( aTStops );
+
+                if ( (nId==RES_POOLCOLL_HEADERR) || (nId==RES_POOLCOLL_FOOTERR) ) {
+                    SvxAdjustItem aAdjust(SvxAdjust::Right, RES_PARATR_ADJUST );
+                    aSet.Put(aAdjust);
+                }
             }
             break;
 

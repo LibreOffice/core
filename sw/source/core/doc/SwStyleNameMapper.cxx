@@ -147,7 +147,8 @@ const struct SwTableEntry ListsProgNameTable [] =
 
 const struct SwTableEntry ExtraProgNameTable [] =
 {
-    ENTRY( "Header" ), // RES_POOLCOLL_EXTRA_BEGIN
+    ENTRY( "Header and Footer" ), // RES_POOLCOLL_EXTRA_BEGIN
+    ENTRY( "Header" ),
     ENTRY( "Header left" ),
     ENTRY( "Header right" ),
     ENTRY( "Footer" ),
