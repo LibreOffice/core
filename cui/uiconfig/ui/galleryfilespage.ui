@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkGrid" id="GalleryFilesPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -15,6 +22,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="row_spacing">12</property>
         <child>
           <object class="GtkGrid" id="grid2">
@@ -26,10 +34,10 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="galleryfilespage|label1">_File type:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">filetype</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -37,16 +45,16 @@
               </packing>
             </child>
             <child>
-              <object class="VclComboBoxText" id="filetype">
+              <object class="GtkComboBoxText" id="filetype">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="has_entry">True</property>
-                <property name="max_width_chars">30</property>
+                <property name="width_request">0</property>
                 <child internal-child="entry">
                   <object class="GtkEntry" id="comboboxtext-entry">
                     <property name="can_focus">False</property>
-                    <property name="width_chars">30</property>
+                    <property name="activates_default">True</property>
                   </object>
                 </child>
               </object>
@@ -62,20 +70,43 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTreeView" id="files:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="show_expanders">False</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="treeview-selection1">
-                <property name="mode">multiple</property>
-              </object>
-            </child>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="files:border-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="galleryfilespage|files-atkobject">Files Found</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="files">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="headers_visible">False</property>
+                <property name="headers_clickable">False</property>
+                <property name="search_column">0</property>
+                <property name="show_expanders">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="treeview-selection1">
+                    <property name="mode">multiple</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="types-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="galleryfilespage|files-atkobject">Files Found</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -116,14 +147,27 @@
               </packing>
             </child>
             <child>
-              <object class="svxcorelo-GalleryPreview" id="image:border">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="image:border-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="galleryfilespage|image-atkobject">Preview</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="image">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="image-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="galleryfilespage|image-atkobject">Preview</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

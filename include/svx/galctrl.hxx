@@ -26,6 +26,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/customweld.hxx>
 #include <svl/slstitm.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/valueset.hxx>
@@ -73,6 +74,26 @@ public:
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
     bool                SetGraphic( const INetURLObject& );
     static void         PreviewMedia( const INetURLObject& rURL );
+};
+
+class SVX_DLLPUBLIC SvxGalleryPreview : public weld::CustomWidgetController
+{
+private:
+    GraphicObject aGraphicObj;
+    tools::Rectangle aPreviewRect;
+
+    SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
+    SVX_DLLPRIVATE void             InitSettings();
+
+    SVX_DLLPRIVATE virtual void     Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+
+public:
+
+    SvxGalleryPreview();
+
+    virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
+    bool                SetGraphic( const INetURLObject& );
 };
 
 class GalleryIconView : public ValueSet, public DropTargetHelper, public DragSourceHelper
