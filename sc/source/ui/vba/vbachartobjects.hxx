@@ -21,13 +21,12 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBACHARTOBJECTS_HXX
 
 #include <ooo/vba/excel/XChartObjects.hpp>
-#include <ooo/vba/excel/XChartObject.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/table/XTableCharts.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
-#include "excelvbahelper.hxx"
+
+namespace com { namespace sun { namespace star { namespace container { class XEnumeration; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPageSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XTableCharts; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;
 

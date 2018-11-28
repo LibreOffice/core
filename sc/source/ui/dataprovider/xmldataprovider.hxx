@@ -15,7 +15,6 @@
 namespace sc
 {
 class XMLFetchThread;
-class DataTransformation;
 
 class XMLDataProvider : public DataProvider
 {

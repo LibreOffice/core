@@ -19,9 +19,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBASTYLES_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBASTYLES_HXX
 #include <ooo/vba/excel/XStyles.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
 
 typedef CollTestImplHelper< ov::excel::XStyles > ScVbaStyles_BASE;
 class ScVbaStyles: public ScVbaStyles_BASE

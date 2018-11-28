@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XDialog.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadialogbase.hxx>
 
 typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::excel::XDialog > ScVbaDialog_BASE;

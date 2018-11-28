@@ -19,18 +19,25 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_EXCELVBAHELPER_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_EXCELVBAHELPER_HXX
 
-#include <vbahelper/vbahelper.hxx>
-#include <docsh.hxx>
-#include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <ooo/vba/XHelperInterface.hpp>
+#include <vector>
+#include <global.hxx>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+
+namespace com { namespace sun { namespace star { namespace sheet { class XDatabaseRange; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XUnnamedDatabaseRanges; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XCell; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSheetCellRangeContainer; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
+namespace ooo { namespace vba { class XHelperInterface; } }
 
 class ScCellRangesBase;
+class ScTabViewShell;
+class SfxViewFrame;
 
 namespace ooo {
 namespace vba {

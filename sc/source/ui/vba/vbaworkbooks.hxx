@@ -20,11 +20,8 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOKS_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/excel/XWorkbooks.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <vbahelper/vbadocumentsbase.hxx>
-#include "excelvbahelper.hxx"
 
 typedef cppu::ImplInheritanceHelper< VbaDocumentsBase, ov::excel::XWorkbooks > ScVbaWorkbooks_BASE;
 

@@ -19,14 +19,14 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAPAGEBREAK_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAPAGEBREAK_HXX
 
-#include <ooo/vba/excel/XPageBreak.hpp>
 #include <ooo/vba/excel/XHPageBreak.hpp>
 #include <ooo/vba/excel/XVPageBreak.hpp>
-#include <ooo/vba/excel/XRange.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace ooo { namespace vba { namespace excel { class XRange; } } }
 
 template< typename... Ifc >
 class ScVbaPageBreak : public InheritedHelperInterfaceWeakImpl< Ifc... >

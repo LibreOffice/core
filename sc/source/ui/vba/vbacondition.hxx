@@ -18,10 +18,12 @@
  */
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBACONDITION_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBACONDITION_HXX
-#include <com/sun/star/sheet/XSheetCondition.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
+
+namespace com { namespace sun { namespace star { namespace sheet { class XCellRangeAddressable; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSheetCondition; } } } }
 
 template< typename... Ifc >
 class ScVbaCondition : public InheritedHelperInterfaceWeakImpl< Ifc... >

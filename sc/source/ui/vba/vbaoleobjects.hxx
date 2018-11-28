@@ -22,7 +22,6 @@
 #include <ooo/vba/excel/XOLEObjects.hpp>
 
 #include <vbahelper/vbacollectionimpl.hxx>
-#include "excelvbahelper.hxx"
 
 typedef CollTestImplHelper< ov::excel::XOLEObjects > OLEObjectsImpl_BASE;
 

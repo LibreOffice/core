@@ -21,11 +21,13 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAFORMATCONDITIONS_HXX
 
 #include <ooo/vba/excel/XFormatConditions.hpp>
-#include <ooo/vba/excel/XStyles.hpp>
-#include <ooo/vba/excel/XRange.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSheetConditionalEntries; } } } }
+namespace ooo { namespace vba { namespace excel { class XRange; } } }
+namespace ooo { namespace vba { namespace excel { class XStyle; } } }
+namespace ooo { namespace vba { namespace excel { class XStyles; } } }
 
 // This class is used only as a target for casting, it seems,
 // and no objects of this type are created as such, I think.
