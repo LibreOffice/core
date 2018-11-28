@@ -1662,7 +1662,7 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
                     FSEND );
         }
 
-        exportAxesId(bPrimaryAxes);
+        exportAxesId(bPrimaryAxes, true);
 
         pFS->endElement( FSNS( XML_c, nTypeId ) );
     }
@@ -3381,14 +3381,24 @@ void ChartExport::exportDataPoints(
     }
 }
 
-void ChartExport::exportAxesId(bool bPrimaryAxes)
+void ChartExport::exportAxesId(bool bPrimaryAxes, bool bCheckCombinedAxes)
 {
-    sal_Int32 nAxisIdx = lcl_generateRandomValue();
-    sal_Int32 nAxisIdy = lcl_generateRandomValue();
-    AxesType eXAxis = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
-    AxesType eYAxis = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
-    maAxes.emplace_back( eXAxis, nAxisIdx, nAxisIdy );
-    maAxes.emplace_back( eYAxis, nAxisIdy, nAxisIdx );
+    sal_Int32 nAxisIdx, nAxisIdy;
+    // tdf#114181 keep axes of combined charts
+    if ( bCheckCombinedAxes && bPrimaryAxes && maAxes.size() == 2 )
+    {
+        nAxisIdx = maAxes[0].nAxisId;
+        nAxisIdy = maAxes[1].nAxisId;
+    }
+    else
+    {
+        nAxisIdx = lcl_generateRandomValue();
+        nAxisIdy = lcl_generateRandomValue();
+        AxesType eXAxis = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
+        AxesType eYAxis = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
+        maAxes.emplace_back( eXAxis, nAxisIdx, nAxisIdy );
+        maAxes.emplace_back( eYAxis, nAxisIdy, nAxisIdx );
+    }
     FSHelperPtr pFS = GetFS();
     pFS->singleElement( FSNS( XML_c, XML_axId ),
             XML_val, I32S( nAxisIdx ),
