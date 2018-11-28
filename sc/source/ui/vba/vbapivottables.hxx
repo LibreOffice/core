@@ -20,12 +20,10 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAPIVOTTABLES_HXX
 
 #include <ooo/vba/excel/XPivotTables.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "excelvbahelper.hxx"
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 typedef CollTestImplHelper< ov::excel::XPivotTables > ScVbaPivotTables_BASE;
 

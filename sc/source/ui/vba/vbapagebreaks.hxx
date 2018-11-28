@@ -20,18 +20,11 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAPAGEBREAKS_HXX
 
 #include <ooo/vba/excel/XHPageBreaks.hpp>
-#include <ooo/vba/excel/XHPageBreak.hpp>
 #include <ooo/vba/excel/XVPageBreaks.hpp>
-#include <ooo/vba/excel/XVPageBreak.hpp>
-#include <ooo/vba/excel/XRange.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/sheet/XSheetPageBreak.hpp>
-#include <com/sun/star/sheet/TablePageBreakData.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/table/XColumnRowRange.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
+
+namespace com { namespace sun { namespace star { namespace sheet { class XSheetPageBreak; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 typedef CollTestImplHelper< ov::excel::XHPageBreaks > ScVbaHPageBreaks_BASE;
 

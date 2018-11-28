@@ -20,6 +20,7 @@
 #include "vbatextboxshape.hxx"
 #include "vbacharacters.hxx"
 #include <com/sun/star/text/XSimpleText.hpp>
+#include <docsh.hxx>
 #include <vector>
 
 using namespace com::sun::star;

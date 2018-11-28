@@ -10,11 +10,9 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAMENUBARS_HXX
 
 #include <ooo/vba/excel/XMenuBars.hpp>
-#include <ooo/vba/excel/XMenuBar.hpp>
-#include <ooo/vba/XCommandBars.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
+
+namespace ooo { namespace vba { class XCommandBars; } }
 
 typedef CollTestImplHelper< ov::excel::XMenuBars > MenuBars_BASE;
 

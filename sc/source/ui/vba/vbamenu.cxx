@@ -9,6 +9,7 @@
 
 #include "vbamenu.hxx"
 #include "vbamenuitems.hxx"
+#include <ooo/vba/XCommandBarControls.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

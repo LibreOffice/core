@@ -18,10 +18,12 @@
  */
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAAXES_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAAXES_HXX
+
 #include <ooo/vba/excel/XAxes.hpp>
-#include <ooo/vba/excel/XAxis.hpp>
-#include <ooo/vba/excel/XChart.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+
+namespace ooo { namespace vba { namespace excel { class XAxis; } } }
+namespace ooo { namespace vba { namespace excel { class XChart; } } }
 
 typedef CollTestImplHelper< ov::excel::XAxes > ScVbaAxes_BASE;
 class ScVbaAxes : public ScVbaAxes_BASE

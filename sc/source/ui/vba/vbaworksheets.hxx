@@ -20,14 +20,15 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEETS_HXX
 
 #include <ooo/vba/excel/XWorksheets.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vbahelper/vbacollectionimpl.hxx>
 
-#include <address.hxx>
+#include <types.hxx>
+
+namespace com { namespace sun { namespace star { namespace container { class XEnumerationAccess; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheets; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 typedef CollTestImplHelper< ov::excel::XWorksheets > ScVbaWorksheets_BASE;
 

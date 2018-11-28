@@ -25,13 +25,9 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
-#include <editeng/svxenum.hxx>
 
-class ToolBox;
 class MetricField;
 class MetricBox;
-class CheckBox;
-namespace svx { namespace sidebar { class SidebarDialControl; }}
 
 namespace sc { namespace sidebar {
 

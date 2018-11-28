@@ -21,11 +21,12 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAHYPERLINK_HXX
 
 #include <ooo/vba/excel/XHyperlink.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <ooo/vba/excel/XRange.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
+
+namespace ooo { namespace vba { namespace excel { class XRange; } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XCell; } } } }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XHyperlink > HyperlinkImpl_BASE;
 

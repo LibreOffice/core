@@ -20,12 +20,12 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBANAME_HXX
 
 #include <ooo/vba/excel/XName.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <formula/grammar.hxx>
-class ScDocument;
+
+namespace com { namespace sun { namespace star { namespace sheet { class XNamedRange; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XNamedRanges; } } } }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XName > NameImpl_BASE;
 

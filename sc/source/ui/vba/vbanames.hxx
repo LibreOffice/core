@@ -20,13 +20,11 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBANAMES_HXX
 
 #include <ooo/vba/excel/XNames.hpp>
-#include <ooo/vba/XCollection.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
+namespace com { namespace sun { namespace star { namespace sheet { class XNamedRanges; } } } }
+
 class ScDocument;
-class ScDocShell;
 
 typedef CollTestImplHelper< ov::excel::XNames > ScVbaNames_BASE;
 

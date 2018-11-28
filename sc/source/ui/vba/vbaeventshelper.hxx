@@ -22,9 +22,9 @@
 
 #include <rtl/ref.hxx>
 #include <vbahelper/vbaeventshelperbase.hxx>
-#include "excelvbahelper.hxx"
-#include <rangelst.hxx>
 
+class ScDocShell;
+class ScDocument;
 class ScVbaEventListener;
 
 class ScVbaEventsHelper : public VbaEventsHelperBase

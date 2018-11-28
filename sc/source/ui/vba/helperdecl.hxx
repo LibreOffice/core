@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_HELPERDECL_HXX
 
 #include <comphelper/servicedecl.hxx>
-#include <ooo/vba/XHelperInterface.hpp>
 
 namespace comphelper {
 namespace service_decl {

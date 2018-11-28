@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaformat.hxx"
+#include <ooo/vba/excel/XFont.hpp>
 #include <ooo/vba/excel/XStyle.hpp>
 #include <ooo/vba/excel/XlVAlign.hpp>
 #include <ooo/vba/excel/XlHAlign.hpp>
@@ -29,6 +30,10 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <basic/sberrors.hxx>
 #include <rtl/math.hxx>
@@ -39,6 +44,8 @@
 #include "vbafont.hxx"
 #include "vbainterior.hxx"
 
+#include <docsh.hxx>
+#include <document.hxx>
 #include <unonames.hxx>
 #include <cellsuno.hxx>
 #include <scitems.hxx>

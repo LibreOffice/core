@@ -27,8 +27,6 @@ class SfxDispatcher;
 
 namespace sc { namespace sidebar {
 
-class CellAppearancePropertyPanel;
-
 class CellLineStylePopup : public FloatingWindow
 {
     SfxDispatcher*                     mpDispatcher;

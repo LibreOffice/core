@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAPALETTE_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAPALETTE_HXX
 
-#include <vbahelper/vbahelper.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XIndexAccess; }

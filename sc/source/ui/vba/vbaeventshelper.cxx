@@ -18,6 +18,7 @@
  */
 
 #include "vbaeventshelper.hxx"
+#include "excelvbahelper.hxx"
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XTopWindowListener.hpp>
@@ -39,6 +40,8 @@
 #include <vcl/window.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 
+#include <docsh.hxx>
+#include <document.hxx>
 #include <cellsuno.hxx>
 #include <convuno.hxx>
 #include "vbaapplication.hxx"

@@ -19,16 +19,14 @@
 #ifndef SC_VBA_GLOBALS
 #define SC_VBA_GLOBALS
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <ooo/vba/excel/XGlobals.hpp>
-#include <ooo/vba/excel/XApplication.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include "excelvbahelper.hxx"
 
 #include <vbahelper/vbaglobalbase.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace ooo { namespace vba { namespace excel { class XApplication; } } }
 
     // class ScVbaGlobals
 

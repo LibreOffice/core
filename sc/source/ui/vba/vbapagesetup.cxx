@@ -20,6 +20,7 @@
 #include <cellsuno.hxx>
 #include <convuno.hxx>
 #include <rangelst.hxx>
+#include <docsh.hxx>
 #include "excelvbahelper.hxx"
 #include "vbarange.hxx"
 #include <com/sun/star/sheet/XPrintAreas.hpp>
@@ -30,6 +31,7 @@
 #include <ooo/vba/excel/XlPageOrientation.hpp>
 #include <ooo/vba/excel/XlOrder.hpp>
 #include <ooo/vba/excel/Constants.hpp>
+#include <ooo/vba/excel/XRange.hpp>
 #include <basic/sberrors.hxx>
 #include <i18nutil/paper.hxx>
 #include <sal/macros.h>

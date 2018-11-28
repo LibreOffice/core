@@ -499,6 +499,135 @@ blacklist:
     sc/source/ui/inc/StatisticsTwoVariableDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
+    sc/source/ui/unoobj/exceldetect.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XExtendedFilterDetection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sc/source/ui/unoobj/scdetect.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XExtendedFilterDetection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sc/source/ui/unoobj/celllistsource.hxx:
+    # base class has to be a complete type
+    - com/sun/star/form/binding/XListEntryTypedSource.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    sc/source/ui/unoobj/cellvaluebinding.hxx:
+    # base class has to be a complete type
+    - com/sun/star/form/binding/XValueBinding.hpp
+    - com/sun/star/util/XModifyBroadcaster.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sc/source/ui/sidebar/ScPanelFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/ui/XUIElementFactory.hpp
+    sc/source/ui/vba/service.hxx:
+    # Used in extern declaration
+    - namespace comphelper { namespace service_decl { class ServiceDecl; } }
+    sc/source/ui/vba/vbaassistant.hxx:
+    # base class has to be a complete type
+    - ooo/vba/XAssistant.hpp
+    sc/source/ui/vba/vbaapplication.hxx:
+    # base class has to be a complete type
+    - ooo/vba/XSinkCaller.hpp
+    - ooo/vba/excel/XApplication.hpp
+    - vbahelper/vbaapplicationbase.hxx
+    sc/source/ui/vba/vbaaxes.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XAxes.hpp
+    sc/source/ui/vba/vbaborders.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XBorders.hpp
+    sc/source/ui/vba/vbachartobjects.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XChartObjects.hpp
+    sc/source/ui/vba/vbacomments.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XComments.hpp
+    sc/source/ui/vba/vbafiledialog.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XFileDialog.hpp
+    # FIXME IWYU segfaults after removing this
+    - vbahelper/vbacollectionimpl.hxx
+    sc/source/ui/vba/vbafiledialogitems.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XFileDialogSelectedItems.hpp
+    sc/source/ui/vba/vbafont.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XFont.hpp
+    - vbahelper/vbafontbase.hxx
+    sc/source/ui/vba/vbaformatconditions.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XFormatConditions.hpp
+    sc/source/ui/vba/vbaglobals.hxx:
+    # base class has to be a complete type
+    - vbahelper/vbaglobalbase.hxx
+    - ooo/vba/excel/XGlobals.hpp
+    sc/source/ui/vba/vbahyperlinks.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XHyperlinks.hpp
+    sc/source/ui/vba/vbahyperlink.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XHyperlink.hpp
+    sc/source/ui/vba/vbamenubars.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XMenuBars.hpp
+    sc/source/ui/vba/vbamenuitems.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XMenuItems.hpp
+    sc/source/ui/vba/vbamenus.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XMenus.hpp
+    sc/source/ui/vba/vbaname.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XName.hpp
+    sc/source/ui/vba/vbaoleobjects.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XOLEObjects.hpp
+    sc/source/ui/vba/vbanames.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XNames.hpp
+    sc/source/ui/vba/vbaoutline.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XOutline.hpp
+    sc/source/ui/vba/vbapagebreak.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XHPageBreak.hpp
+    - ooo/vba/excel/XVPageBreak.hpp
+    sc/source/ui/vba/vbapagebreaks.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XHPageBreaks.hpp
+    - ooo/vba/excel/XVPageBreaks.hpp
+    sc/source/ui/vba/vbapivottables.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XPivotTables.hpp
+    sc/source/ui/vba/vbarange.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XRange.hpp
+    sc/source/ui/vba/vbasheetobjects.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XGraphicObjects.hpp
+    sc/source/ui/vba/vbastyles.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XStyles.hpp
+    sc/source/ui/vba/vbavalidation.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XValidation.hpp
+    sc/source/ui/vba/vbaworkbooks.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XWorkbooks.hpp
+    - vbahelper/vbadocumentsbase.hxx
+    sc/source/ui/vba/vbawindows.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XWindows.hpp
+    sc/source/ui/vba/vbaworksheet.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XWorksheet.hpp
+    sc/source/ui/vba/vbaworksheets.hxx:
+    # base class has to be a complete type
+    - ooo/vba/excel/XWorksheets.hpp
     sc/source/core/data/column2.cxx:
     # Used in #if DEBUG_COLUMN_STORAGE
     - tokenstringcontext.hxx
