@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_bdb7333b",
+        "filename": "sw/inc/fmtfollowtextflow.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-28T09:16:48Z",
+      "side": 1,
+      "message": "I suggest systematically review what member functions you need to override from SfxBoolItem: operator\u003d\u003d() and Clone() is missing, but perhaps others as well.",
+      "revId": "405f7124d9dfa51e6119da4c5c6f443c8f6c5c29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_ddaae7d0",
+        "filename": "sw/source/uibase/utlui/attrdesc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-28T09:16:48Z",
+      "side": 1,
+      "message": "Area should be sw.ui here.",
+      "revId": "405f7124d9dfa51e6119da4c5c6f443c8f6c5c29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
