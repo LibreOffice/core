@@ -24,13 +24,11 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svl/macitem.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <memory>
 
 class SfxMacroTabPage_;
-class SvTabListBox;
-class SvTreeListBox;
 class SfxMacroTabPage_Impl;
 
 class SfxMacroTabPage final : public SfxTabPage

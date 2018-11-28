@@ -31,7 +31,6 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/thread.h>
 #include <tools/vcompat.hxx>
-#include <vcl/lstbox.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <unotools/configmgr.hxx>

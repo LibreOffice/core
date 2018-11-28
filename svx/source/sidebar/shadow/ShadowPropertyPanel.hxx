@@ -18,7 +18,6 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <sfx2/request.hxx>

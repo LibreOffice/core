@@ -56,7 +56,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <galobj.hxx>
 #include <svx/gallery1.hxx>
-#include <vcl/lstbox.hxx>
 #include "gallerydrawmodel.hxx"
 #include <memory>
 

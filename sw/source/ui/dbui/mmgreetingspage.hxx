@@ -21,11 +21,9 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
 #include <mailmergehelper.hxx>
 #include <svtools/svmedit.hxx>
+#include <vcl/weld.hxx>
 
 class SwMailMergeWizard;
 

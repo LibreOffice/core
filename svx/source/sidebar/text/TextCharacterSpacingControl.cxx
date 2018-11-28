@@ -25,7 +25,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/lstbox.hxx>
 #include <svl/itempool.hxx>
 #include <helpids.h>
 

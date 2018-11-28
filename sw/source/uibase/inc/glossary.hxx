@@ -26,8 +26,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
-#include <vcl/combobox.hxx>
-
 #include <vcl/menubtn.hxx>
 #include <com/sun/star/text/XAutoTextContainer2.hpp>
 

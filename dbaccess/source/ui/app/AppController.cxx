@@ -82,7 +82,6 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 
 #include <unotools/closeveto.hxx>

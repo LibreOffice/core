@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/vclptr.hxx>
 
 class ToolBox;

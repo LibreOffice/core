@@ -26,7 +26,6 @@
 #include <svtools/unitconv.hxx>
 #include <svx/tbxctl.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 
 #include <vector>
 #include <svtools/valueset.hxx>

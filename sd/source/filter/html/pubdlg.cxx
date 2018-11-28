@@ -23,7 +23,6 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/combobox.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/intitem.hxx>
 #include <svl/aeitem.hxx>

@@ -48,7 +48,6 @@
 #include <swerror.h>
 #include <frmmgr.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/lstbox.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <sfx2/event.hxx>

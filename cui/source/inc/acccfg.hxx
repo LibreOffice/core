@@ -33,7 +33,6 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/svtabbx.hxx>
 #include <vcl/treelistbox.hxx>
 #include <sfx2/tabdlg.hxx>

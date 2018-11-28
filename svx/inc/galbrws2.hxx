@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_INC_GALBRWS2_HXX
 #define INCLUDED_SVX_INC_GALBRWS2_HXX
 
-#include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>

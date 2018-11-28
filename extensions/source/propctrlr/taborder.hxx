@@ -28,7 +28,6 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 
 namespace pcr
 {

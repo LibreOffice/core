@@ -19,12 +19,9 @@
 #ifndef INCLUDED_SFX2_MGETEMPL_HXX
 #define INCLUDED_SFX2_MGETEMPL_HXX
 
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/vclmedit.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
 
 /* expected:

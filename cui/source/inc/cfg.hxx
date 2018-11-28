@@ -21,7 +21,6 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>

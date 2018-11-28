@@ -28,7 +28,6 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
