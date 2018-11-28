@@ -1,0 +1,12 @@
+diff -ur a/src/Soros.cxx b/src/Soros.cxx
+--- a/src/Soros.cxx	2018-10-09 10:33:20.000000000 +0200
++++ b/src/Soros.cxx	2018-11-15 16:49:08.000000000 +0100
+@@ -50,7 +50,7 @@
+     program = regex_replace(program, wregex(L"(^|[\n;])([^\n;#]*#[^\n]*\\[:[^\n:\\]]*:\\][^\n]*)"), L"$1#$2");
+     replace(filtered_lang, L"_", L"-");
+     program = regex_replace(program, wregex(L"(^|[\n;])#([^\n;#]*#[^\n]*\\[:" + filtered_lang + L":\\][^\n]*)"), L"$1$2");
+-    program = regex_replace(program, wregex(L"(#[^\n]*)?(\n|$)"), L";"); // remove comments
++    program = regex_replace(program, wregex(L"(#[^\n]*)?(\n|$)"), L";", std::regex_constants::match_not_null); // remove comments
+     // __numbertext__ sets the place of left zero deletion rule
+     if (program.find(L"__numbertext__") == std::wstring::npos)
+         program.insert(0, L"__numbertext__;");

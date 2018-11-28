@@ -1,22 +1,26 @@
 --- a/boost/type_traits/detail/is_function_cxx_11.hpp
 +++ b/boost/type_traits/detail/is_function_cxx_11.hpp
-@@ -18,7 +18,7 @@
+@@ -18,7 +18,9 @@
     template <class T>
     struct is_function : public false_type {};
  
 -#if defined(__cpp_noexcept_function_type) && !defined(_MSC_VER)
-+#if defined(__cpp_noexcept_function_type) && !defined(_MSC_VER) && !(defined __ANDROID__ && defined __clang__ && __clang_major__ == 5 && __clang_minor__ == 0 && __clang_patchlevel__ == 300080)
++#if defined(__cpp_noexcept_function_type) && !defined(_MSC_VER) && \
++	!(defined __ANDROID__ && defined __clang__ && __clang_major__ == 5 && __clang_minor__ == 0 && __clang_patchlevel__ == 300080) && \
++	!(defined __apple_build_version__ && __apple_build_version__ <= 9000038)
  #define BOOST_TT_NOEXCEPT_PARAM , bool NE
  #define BOOST_TT_NOEXCEPT_DECL noexcept(NE)
  #else
 --- a/boost/type_traits/detail/is_member_function_pointer_cxx_11.hpp
 +++ b/boost/type_traits/detail/is_member_function_pointer_cxx_11.hpp
-@@ -31,7 +31,7 @@
+@@ -31,7 +31,9 @@
     template <class T>
     struct is_member_function_pointer<T const volatile> : public is_member_function_pointer<T> {};
  
 -#if defined(_MSVC_LANG) && (_MSVC_LANG >= 201703) 
-+#if (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703)) || (defined __ANDROID__ && defined __clang__ && __clang_major__ == 5 && __clang_minor__ == 0 && __clang_patchlevel__ == 300080)
++#if (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703)) || \
++	(defined __ANDROID__ && defined __clang__ && __clang_major__ == 5 && __clang_minor__ == 0 && __clang_patchlevel__ == 300080) || \
++	(defined __apple_build_version__ && __apple_build_version__ <= 9000038)
     // MSVC can't handle noexcept(b) as a deduced template parameter 
     // so we will have to write everything out :(
  #define BOOST_TT_NOEXCEPT_PARAM
