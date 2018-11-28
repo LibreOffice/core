@@ -21,6 +21,8 @@
 #include "vbaglobals.hxx"
 #include "vbafont.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 

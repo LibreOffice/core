@@ -20,7 +20,6 @@
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLEVALUESET_HXX
 
 #include <svtools/valueset.hxx>
-#include <vcl/image.hxx>
 
 #define CELL_LINE_STYLE_ENTRIES 9
 

@@ -18,6 +18,7 @@
  */
 
 #include "vbapane.hxx"
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>

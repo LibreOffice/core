@@ -18,20 +18,21 @@
  */
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAFORMAT_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAFORMAT_HXX
-#include <ooo/vba/excel/XFormat.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <svl/itemset.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertyState; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatTypes; } } } }
+namespace ooo { namespace vba { namespace excel { class XFont; } } }
+namespace ooo { namespace vba { namespace excel { class XInterior; } } }
+
 class ScCellRangesBase;
+class SfxItemSet;
 
 template< typename... Ifc >
 class ScVbaFormat : public InheritedHelperInterfaceWeakImpl< Ifc... >

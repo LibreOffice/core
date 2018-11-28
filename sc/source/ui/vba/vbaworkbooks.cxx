@@ -25,12 +25,14 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 
+#include "excelvbahelper.hxx"
 #include "vbaglobals.hxx"
 #include "vbaworkbook.hxx"
 #include "vbaworkbooks.hxx"

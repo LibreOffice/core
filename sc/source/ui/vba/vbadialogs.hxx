@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBADIALOGS_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBADIALOGS_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <ooo/vba/excel/XDialogs.hpp>
-#include <ooo/vba/XCollection.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadialogsbase.hxx>
 #include <cppuhelper/implbase.hxx>
+
+namespace ooo { namespace vba { class XHelperInterface; } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 typedef cppu::ImplInheritanceHelper< VbaDialogsBase, ov::excel::XDialogs > ScVbaDialogs_BASE;
 

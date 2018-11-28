@@ -22,6 +22,7 @@
 #include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 
 #include "vbaoleobject.hxx"

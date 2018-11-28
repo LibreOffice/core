@@ -51,6 +51,7 @@
 #include <com/sun/star/sheet/XSheetCellCursor.hpp>
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -137,6 +138,7 @@
 #include <sc.hrc>
 #include <unonames.hxx>
 
+#include "excelvbahelper.hxx"
 #include "service.hxx"
 #include "vbaapplication.hxx"
 #include "vbafont.hxx"

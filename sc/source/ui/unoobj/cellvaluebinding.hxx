@@ -28,13 +28,12 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+
+namespace com { namespace sun { namespace star { namespace table { class XCell; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheetDocument; } } } }
+namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
 
 namespace calc
 {

@@ -21,9 +21,15 @@
 
 #include <basic/basmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vbahelper/vbahelper.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XDatabaseRange.hpp>
 
+#include <document.hxx>
 #include <docuno.hxx>
 #include <tabvwsh.hxx>
 #include <transobj.hxx>

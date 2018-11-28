@@ -21,13 +21,14 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XFont.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbafontbase.hxx>
-#include "vbapalette.hxx"
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 
 class ScCellRangeObj;
+class SfxItemSet;
+class ScVbaPalette;
 
 typedef cppu::ImplInheritanceHelper< VbaFontBase, ov::excel::XFont > ScVbaFont_BASE;
 

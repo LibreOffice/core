@@ -18,10 +18,12 @@
  */
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAVALIDATION_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAVALIDATION_HXX
-#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <ooo/vba/excel/XValidation.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+
+namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 typedef InheritedHelperInterfaceWeakImpl<ov::excel::XValidation > ValidationImpl_BASE;
 

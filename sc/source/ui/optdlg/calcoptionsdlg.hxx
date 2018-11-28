@@ -14,11 +14,6 @@
 #include <vcl/weld.hxx>
 #include <calcconfig.hxx>
 
-#if HAVE_FEATURE_OPENCL
-#include <opencl/openclconfig.hxx>
-#include <opencl/platforminfo.hxx>
-#endif
-
 class ScCalcOptionsDialog : public weld::GenericDialogController
 {
 public:

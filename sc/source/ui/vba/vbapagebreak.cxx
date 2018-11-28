@@ -20,6 +20,9 @@
 #include "vbarange.hxx"
 #include <basic/sberrors.hxx>
 #include <ooo/vba/excel/XlPageBreak.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
