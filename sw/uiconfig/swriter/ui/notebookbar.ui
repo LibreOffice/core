@@ -1543,38 +1543,10 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuTools-MacroOrganizer">
+      <object class="GtkMenuItem" id="MenuTools-MacroRecorder">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:MacroOrganizer?TabId:short=1</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuTools-MacroSignature">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:MacroSignature</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuTools-ScriptOrganizer">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ScriptOrganizer</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuTools-ViewDataSourceBrowser">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:ViewDataSourceBrowser</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuTools-BasicIDEAppear">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:BasicIDEAppear</property>
+        <property name="action_name">.uno:MacroRecorder</property>
       </object>
     </child>
     <child>
@@ -1585,10 +1557,31 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuTools-MacroRecorder">
+      <object class="GtkMenuItem" id="MenuTools-BasicIDEAppear">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:MacroRecorder</property>
+        <property name="action_name">.uno:BasicIDEAppear</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-MacroOrganizer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:MacroOrganizer?TabId:short=1</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-ScriptOrganizer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ScriptOrganizer</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuTools-MacroSignature">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:MacroSignature</property>
       </object>
     </child>
     <child>
@@ -1632,6 +1625,12 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuTools-ChangeDatabaseField">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1639,7 +1638,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuTools-separator3">
+      <object class="GtkMenuItem" id="MenuTools-ViewDataSourceBrowser">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ViewDataSourceBrowser</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -1649,28 +1655,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OpenXMLFilterSettings</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuTools-PackageManagerDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">service:com.sun.star.deployment.ui.PackageManagerDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuTools-UpdateMenu">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" translatable="yes" context="WriterNotebookbar|Tools">_Check for Updates...</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuTools-OptionsTreeDialog">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:OptionsTreeDialog</property>
       </object>
     </child>
   </object>
