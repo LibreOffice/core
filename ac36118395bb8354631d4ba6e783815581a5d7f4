@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_efaa92d0",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2618,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-28T17:11:52Z",
+      "side": 1,
+      "message": "Perhaps don\u0027t hardcode the number here, rather assert that the top of the fly frame is below the top of the cell? The actual position may depend on fonts.",
+      "revId": "ac36118395bb8354631d4ba6e783815581a5d7f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
