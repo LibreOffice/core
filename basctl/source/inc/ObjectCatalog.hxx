@@ -32,7 +32,7 @@ namespace basctl
  *
  *  The class creates Object Catalog window with the currently loaded macros
  *  in a tree structure which allows user to quickly select the necessary
- *  one or macros in BasicIDE.
+ *  macro in BasicIDE.
  */
 class ObjectCatalog : public DockingWindow
 {

@@ -19,7 +19,7 @@
 
 #include <strings.hrc>
 
-#include <objdlg.hxx>
+#include <ObjectCatalog.hxx>
 #include <helpids.h>
 
 #include <svl/itemset.hxx>
