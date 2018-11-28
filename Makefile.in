@@ -214,7 +214,7 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/config.status \
         $(BUILDDIR)/config_build.mk \
         $(BUILDDIR)/config_build_lang.mk \
-        $(BUILDDIR)/config_build/*.h \
+        $(BUILDDIR)/config_build \
         $(BUILDDIR)/config_host.mk \
         $(BUILDDIR)/config_host.mk.stamp \
         $(BUILDDIR)/config_host_lang.mk \
