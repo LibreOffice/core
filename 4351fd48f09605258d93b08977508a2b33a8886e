@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bf57530f_6f3b429c",
+        "filename": "slideshow/source/engine/eventqueue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-11-28T18:18:59Z",
+      "side": 1,
+      "message": "EventQueue::maEvents is std::priority_queue, it doesn\u0027t have insert() method.",
+      "parentUuid": "bf57530f_426cd607",
+      "revId": "4351fd48f09605258d93b08977508a2b33a8886e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf57530f_2271e2e1",
         "filename": "slideshow/source/engine/eventqueue.cxx",
         "patchSetId": 1
