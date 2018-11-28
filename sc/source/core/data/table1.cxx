@@ -2336,6 +2336,15 @@ formula::VectorRefArray ScTable::FetchVectorRefArray( SCCOL nCol, SCROW nRow1, S
     return aCol[nCol].FetchVectorRefArray(nRow1, nRow2);
 }
 
+#ifdef DBG_UTIL
+void ScTable::AssertNoInterpretNeeded( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+{
+    assert( nRow2 >= nRow1 );
+    assert( IsColValid( nCol ) && ValidRow( nRow1 ) && ValidRow( nRow2 ) );
+    return aCol[nCol].AssertNoInterpretNeeded(nRow1, nRow2);
+}
+#endif
+
 bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
 {
     if (nRow2 < nRow1)

@@ -4235,17 +4235,24 @@ struct ScDependantsCalculator
     const ScFormulaCellGroupRef& mxGroup;
     const SCROW mnLen;
     const ScAddress& mrPos;
+    const bool mFromFirstRow;
 
-    ScDependantsCalculator(ScDocument& rDoc, const ScTokenArray& rCode, const ScFormulaCell& rCell, const ScAddress& rPos) :
+    ScDependantsCalculator(ScDocument& rDoc, const ScTokenArray& rCode, const ScFormulaCell& rCell,
+            const ScAddress& rPos, bool fromFirstRow) :
         mrDoc(rDoc),
         mrCode(rCode),
         mxGroup(rCell.GetCellGroup()),
         mnLen(mxGroup->mnLength),
-        mrPos(rPos)
+        mrPos(rPos),
+        // ScColumn::FetchVectorRefArray() always fetches data from row 0, even if the data is used
+        // only from further rows. This data fetching could also lead to Interpret() calls, so
+        // in OpenCL mode the formula in practice depends on those cells too.
+        mFromFirstRow(fromFirstRow)
     {
     }
 
     // FIXME: copy-pasted from ScGroupTokenConverter. factor out somewhere else
+    // (note already modified a bit, mFromFirstRow)
 
     // I think what this function does is to check whether the relative row reference nRelRow points
     // to a row that is inside the range of rows covered by the formula group.
@@ -4270,6 +4277,9 @@ struct ScDependantsCalculator
             nTest += nRelRow;
             if (nTest <= nEndRow)
                 return true;
+            // If pointing below the formula, it's always included if going from first row.
+            if (mFromFirstRow)
+                return true;
         }
 
         return false;
@@ -4290,7 +4300,8 @@ struct ScDependantsCalculator
         if (rRefPos.Row() < mrPos.Row())
             return false;
 
-        if (rRefPos.Row() > nEndRow)
+        // If pointing below the formula, it's always included if going from first row.
+        if (rRefPos.Row() > nEndRow && !mFromFirstRow)
             return false;
 
         return true;
@@ -4324,6 +4335,11 @@ struct ScDependantsCalculator
 
         if (!bIsRef2RowRel &&
             nRefStartRow <= nStartRow && nRefEndRow >= nEndRow)
+            return true;
+
+        // If going from first row, the referenced range must be entirely above the formula,
+        // otherwise the formula would be included.
+        if (mFromFirstRow && nRefEndRow >= nStartRow)
             return true;
 
         return false;
@@ -4482,8 +4498,15 @@ struct ScDependantsCalculator
             assert(rRange.aStart.Tab() == rRange.aEnd.Tab());
             for (auto nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); nCol++)
             {
-                if (!mrDoc.HandleRefArrayForParallelism(ScAddress(nCol, rRange.aStart.Row(), rRange.aStart.Tab()),
-                                                        rRange.aEnd.Row() - rRange.aStart.Row() + 1, mxGroup))
+                SCROW nStartRow = rRange.aStart.Row();
+                SCROW nLength = rRange.aEnd.Row() - rRange.aStart.Row() + 1;
+                if( mFromFirstRow )
+                {   // include also all previous rows
+                    nLength += nStartRow;
+                    nStartRow = 0;
+                }
+                if (!mrDoc.HandleRefArrayForParallelism(ScAddress(nCol, nStartRow, rRange.aStart.Tab()),
+                                                        nLength, mxGroup))
                     return false;
             }
         }
@@ -4564,7 +4587,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     return false;
 }
 
-bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rScope)
+bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rScope, bool fromFirstRow)
 {
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
     // iterate over code in the formula ...
@@ -4582,7 +4605,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
         }
 
         ScFormulaGroupDependencyComputeGuard aDepComputeGuard(rRecursionHelper);
-        ScDependantsCalculator aCalculator(*pDocument, *pCode, *this, mxGroup->mpTopCell->aPos);
+        ScDependantsCalculator aCalculator(*pDocument, *pCode, *this, mxGroup->mpTopCell->aPos, fromFirstRow);
         bOKToParallelize = aCalculator.DoIt();
     }
 
@@ -4763,7 +4786,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
     if (bDependencyCheckFailed)
         return false;
 
-    if(!bDependencyComputed && !CheckComputeDependencies(aScope))
+    if(!bDependencyComputed && !CheckComputeDependencies(aScope, true))
     {
         bDependencyComputed = true;
         bDependencyCheckFailed = true;
