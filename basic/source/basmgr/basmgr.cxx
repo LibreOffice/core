@@ -1043,7 +1043,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
         aNewLibName += "_";
     }
     BasicLibInfo* pLibInfo = CreateLibInfo();
-    // Use original name otherwise ImpLoadLibrary failes...
+    // Use original name otherwise ImpLoadLibrary fails...
     pLibInfo->SetLibName( rLibName );
     // but doesn't work this way if name exists twice
     sal_uInt16 nLibId = static_cast<sal_uInt16>(mpImpl->aLibs.size()) - 1;
