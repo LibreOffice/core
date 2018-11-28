@@ -3012,6 +3012,7 @@ private:
     GtkNotebook* m_pNotebook;
     gulong m_nSwitchPageSignalId;
     gulong m_nSizeAllocateSignalId;
+    gulong m_nScrollSignalId;
     mutable std::vector<std::unique_ptr<GtkInstanceContainer>> m_aPages;
 
     static void signalSwitchPage(GtkNotebook*, GtkWidget*, guint nNewPage, gpointer widget)
@@ -3031,6 +3032,50 @@ private:
         }
         OString sNewIdent(get_page_ident(nNewPage));
         m_aEnterPageHdl.Call(sNewIdent);
+    }
+
+    static gboolean signalScroll(GtkWidget*, GdkEventScroll* event, gpointer widget)
+    {
+        GtkInstanceNotebook* pThis = static_cast<GtkInstanceNotebook*>(widget);
+        return pThis->signal_scroll(event);
+    }
+
+    bool signal_scroll(GdkEventScroll* event)
+    {
+        bool bNext(false), bPrev(false);
+        switch (event->direction)
+        {
+            case GDK_SCROLL_RIGHT:
+            case GDK_SCROLL_DOWN:
+                bNext = true;
+                break;
+            case GDK_SCROLL_LEFT:
+            case GDK_SCROLL_UP:
+                bPrev = true;
+                break;
+            case GDK_SCROLL_SMOOTH:
+            {
+                switch (gtk_notebook_get_tab_pos(m_pNotebook))
+                {
+                    case GTK_POS_LEFT:
+                    case GTK_POS_RIGHT:
+                        bNext = event->delta_y > 0;
+                        bPrev = event->delta_y < 0;
+                        break;
+                    case GTK_POS_TOP:
+                    case GTK_POS_BOTTOM:
+                        bNext = event->delta_x > 0;
+                        bPrev = event->delta_x < 0;
+                        break;
+                }
+                break;
+            }
+        }
+        if (bNext)
+            gtk_notebook_next_page(m_pNotebook);
+        else if (bPrev)
+            gtk_notebook_prev_page(m_pNotebook);
+        return true;
     }
 
     OString get_page_ident(guint nPage) const
@@ -3097,6 +3142,8 @@ public:
         , m_pNotebook(pNotebook)
         , m_nSwitchPageSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
     {
+        gtk_widget_add_events(GTK_WIDGET(pNotebook), GDK_SCROLL_MASK);
+        m_nScrollSignalId = g_signal_connect(pNotebook, "scroll-event", G_CALLBACK(signalScroll), this);
         if (get_n_pages() > 6)
             m_nSizeAllocateSignalId = g_signal_connect(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
         else
@@ -3188,9 +3235,10 @@ public:
 
     virtual ~GtkInstanceNotebook() override
     {
-        g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
         if (m_nSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pNotebook, m_nSizeAllocateSignalId);
+        g_signal_handler_disconnect(m_pNotebook, m_nScrollSignalId);
+        g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
     }
 };
 
