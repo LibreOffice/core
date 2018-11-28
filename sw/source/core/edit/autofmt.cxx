@@ -19,6 +19,10 @@
 
 #include <hintids.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
+#include <comphelper/processfactory.hxx>
+
 #include <unotools/charclass.hxx>
 
 #include <editeng/boxitem.hxx>
@@ -2264,14 +2268,21 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                          m_nEndNdIdx = m_aEndNdIdx.GetIndex(),
                          m_pDoc->GetDocShell() );
 
+    uno::Reference<uno::XComponentContext> const xContext(
+            comphelper::getProcessComponentContext());
+    bool const isExp(officecfg::Office::Common::Misc::ExperimentalMode::get(xContext));
     RedlineFlags eRedlMode = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
     if( m_aFlags.bWithRedlining )
     {
         m_pDoc->SetAutoFormatRedline( true );
-        eRedlMode = RedlineFlags::On | RedlineFlags::ShowInsert;
+        eRedlMode = isExp
+            ? RedlineFlags::On | (eOldMode & RedlineFlags::ShowMask)
+            : RedlineFlags::On | RedlineFlags::ShowInsert;
     }
     else
-      eRedlMode = RedlineFlags::ShowInsert | RedlineFlags::Ignore;
+      eRedlMode = isExp
+          ? RedlineFlags::Ignore | (eOldMode & RedlineFlags::ShowMask)
+          : RedlineFlags::ShowInsert | RedlineFlags::Ignore;
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( eRedlMode );
 
     // save undo state (might be turned off)
