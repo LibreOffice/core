@@ -359,7 +359,7 @@ public:
                                              const OUString& rOldText) = 0;
     virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog(weld::Window* pParent,
                                             GalleryTheme* pThm) = 0;
-    virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
+    virtual VclPtr<VclAbstractDialog> CreateGalleryThemePropertiesDialog(weld::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet ) = 0;
     virtual VclPtr<AbstractURLDlg> CreateURLDialog( vcl::Window* pParent,
