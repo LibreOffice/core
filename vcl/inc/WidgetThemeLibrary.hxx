@@ -79,7 +79,7 @@ struct ControlDrawParameters
         , ePart(i_ePart)
         , eState(i_eState)
         , eButtonValue(ButtonValue::DontKnow)
-        , bIsStock(false)
+        , bIsAction(false)
         , nValue(0)
     {
     }
@@ -89,7 +89,7 @@ struct ControlDrawParameters
     ControlPart ePart;
     ControlState eState;
     ButtonValue eButtonValue;
-    bool bIsStock;
+    bool bIsAction;
     int64_t nValue;
 };
 
