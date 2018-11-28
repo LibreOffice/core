@@ -30,8 +30,11 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <sal/macros.h>
 #include <osl/time.h>
+#include <vcl/layout.hxx>
+#include <vcl/svapp.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
@@ -508,6 +511,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             mrOptimizerDialog.getControlProperty( "RadioButton1Pg4", "State" ) >>= nInt16;
             if ( nInt16 )
             {
+                // Duplicate presentation before applying changes
                 OUString aSaveAsURL;
                 FileOpenDialog aFileOpenDialog( mrOptimizerDialog.GetComponentContext() );
 
@@ -558,6 +562,29 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                     mrOptimizerDialog.mxReschedule->reschedule();
                     for ( sal_uInt32 i = osl_getGlobalTimer(); ( i + 500 ) > ( osl_getGlobalTimer() ); )
                     mrOptimizerDialog.mxReschedule->reschedule();
+                }
+            }
+            else
+            {
+                // Apply changes to current presentation
+                Reference<XModifiable> xModifiable(mrOptimizerDialog.mxController->getModel(),
+                                                   UNO_QUERY_THROW );
+                if ( xModifiable->isModified() )
+                {
+                    SolarMutexGuard aSolarGuard;
+                    if ( RET_YES != ScopedVclPtrInstance<MessageDialog>(nullptr,
+                        mrOptimizerDialog.getString(STR_WARN_UNSAVED_PRESENTATION),
+                        VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() )
+                    {
+                        // Selected not "yes" ("no" or dialog was cancelled) so return to previous step
+                        mrOptimizerDialog.setControlProperty("btnNavBack", "Enabled",
+                                                                  Any(true));
+                        mrOptimizerDialog.setControlProperty("btnNavNext", "Enabled", Any(false));
+                        mrOptimizerDialog.setControlProperty("btnNavFinish", "Enabled", Any(true));
+                        mrOptimizerDialog.setControlProperty("btnNavCancel", "Enabled", Any(true));
+                        mrOptimizerDialog.EnablePage(ITEM_ID_SUMMARY);
+                        return;
+                    }
                 }
             }
             if ( bSuccessfullyExecuted )
