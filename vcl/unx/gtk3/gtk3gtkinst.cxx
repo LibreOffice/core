@@ -4637,13 +4637,22 @@ public:
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't request selection when frozen");
         int nRet = -1;
-        GtkTreeIter iter;
-        GtkTreeModel* pModel;
-        if (gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), &pModel, &iter))
+        GtkTreeSelection *selection = gtk_tree_view_get_selection(m_pTreeView);
+        if (gtk_tree_selection_get_mode(selection) != GTK_SELECTION_MULTIPLE)
         {
-            GtkTreePath* path = gtk_tree_model_get_path(pModel, &iter);
-            nRet = gtk_tree_path_get_indices(path)[0];
-            gtk_tree_path_free(path);
+            GtkTreeIter iter;
+            GtkTreeModel* pModel;
+            if (gtk_tree_selection_get_selected(gtk_tree_view_get_selection(m_pTreeView), &pModel, &iter))
+            {
+                GtkTreePath* path = gtk_tree_model_get_path(pModel, &iter);
+                nRet = gtk_tree_path_get_indices(path)[0];
+                gtk_tree_path_free(path);
+            }
+        }
+        else
+        {
+            auto vec = get_selected_rows();
+            return vec.empty() ? -1 : vec[0];
         }
         return nRet;
     }
