@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="GallerySearchProgress">
@@ -7,7 +7,11 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="gallerysearchprogress|GallerySearchProgress">Find</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -62,11 +66,11 @@
                       <object class="GtkLabel" id="file">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="ellipsize">end</property>
                         <property name="width_chars">40</property>
                         <property name="single_line_mode">True</property>
                         <property name="max_width_chars">40</property>
+                        <property name="xalign">0</property>
                       </object>
                     </child>
                   </object>
