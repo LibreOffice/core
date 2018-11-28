@@ -264,7 +264,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
     ImplFillExchangeData( pTheme, *mpExchangeData );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    mpThemePropertiesDialog = pFact->CreateGalleryThemePropertiesDialog(this, mpExchangeData.get(), mpThemePropsDlgItemSet.get());
+    mpThemePropertiesDialog = pFact->CreateGalleryThemePropertiesDialog(GetFrameWeld(), mpExchangeData.get(), mpThemePropsDlgItemSet.get());
 
     if ( bCreateNew )
     {

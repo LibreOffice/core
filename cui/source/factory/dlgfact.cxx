@@ -1118,12 +1118,12 @@ VclPtr<AbstractGalleryIdDialog> AbstractDialogFactory_Impl::CreateGalleryIdDialo
    return VclPtr<AbstractGalleryIdDialog_Impl>::Create(o3tl::make_unique<GalleryIdDialog>(pParent, pThm));
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(vcl::Window* pParent,
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(weld::Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet)
 {
-    VclPtrInstance<GalleryThemeProperties> pDlg(pParent, pData, pItemSet);
-    return VclPtr<CuiVclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<CuiAbstractTabController_Impl>::Create(o3tl::make_unique<GalleryThemeProperties>(
+                                                         pParent, pData, pItemSet));
 }
 
 VclPtr<AbstractURLDlg> AbstractDialogFactory_Impl::CreateURLDialog( vcl::Window* pParent,
