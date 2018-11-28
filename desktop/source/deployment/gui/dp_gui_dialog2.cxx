@@ -1080,7 +1080,9 @@ bool ExtMgrDialog::Close()
     if (!m_bClosed && m_pManager->isModified())
     {
         m_pManager->clearModified();
-        Application::PostUserEvent(LINK(nullptr, ExtMgrDialog, Restart), m_xRestartParent);
+        //only suggest restart if we're actually running, e.g. not from standalone unopkg gui
+        if (dp_misc::office_is_running())
+            Application::PostUserEvent(LINK(nullptr, ExtMgrDialog, Restart), m_xRestartParent);
     }
     m_bClosed = true;
     return bRet;
