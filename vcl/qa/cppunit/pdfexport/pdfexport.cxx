@@ -1577,8 +1577,8 @@ void PdfExportTest::testTdf115262()
     }
     // Make sure that the top of the "400" is below the top of the image (in
     // bottom-right-corner-based PDF coordinates).
-    // This was: expected less than 144, actual is 199.
-    CPPUNIT_ASSERT_LESS(nFirstImageTop, nRowTop);
+    CPPUNIT_ASSERT_EQUAL(232, nFirstImageTop);
+    CPPUNIT_ASSERT_EQUAL(199, nRowTop);
     FPDFText_ClosePage(pTextPage);
 }
 
