@@ -183,8 +183,6 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
 bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 {
     sal_uLong nSttNd = 0, nEndNd = 0;
-    sal_Int32 nStt = 0;
-    sal_Int32 nEnd = 0;
     const SwNode* pNd = nullptr;
     const SwNodes* pNds = nullptr;
 
@@ -197,9 +195,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
                             * pEnd = &CNTNT_TYPE.pBkmk->GetMarkEnd();
 
             nSttNd = pStt->nNode.GetIndex();
-            nStt = pStt->nContent.GetIndex();
             nEndNd = pEnd->nNode.GetIndex();
-            nEnd = pEnd->nContent.GetIndex();
             pNds = &pStt->nNode.GetNodes();
         }
         break;
@@ -215,8 +211,6 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     {
         nSttNd = pNd->GetIndex();
         nEndNd = pNd->EndOfSectionIndex();
-        nStt = 0;
-        nEnd = -1;
         pNds = &pNd->GetNodes();
     }
 
