@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_dd20a7b3",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1944,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-28T15:40:21Z",
+      "side": 1,
+      "message": "Why add a new line here?",
+      "revId": "1fa0e3458fe617b2f334e0261a24fcc5ab041372",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_fd236bbd",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1669,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-28T15:40:21Z",
+      "side": 1,
+      "message": "whitespace error",
+      "revId": "1fa0e3458fe617b2f334e0261a24fcc5ab041372",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
