@@ -159,15 +159,15 @@ namespace vcl
         VclPtr<NumericField>                    mpPageEdit;
 
         OUString                                maPageStr;
-        OUString                                maNoPageStr;
-        OUString                                maNoPreviewStr;
+        OUString const                          maNoPageStr;
+        OUString const                          maNoPreviewStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
         BitmapEx const                          maCollateBmp;
         BitmapEx const                          maNoCollateBmp;
 
-        long                                    mnCollateUIMode;
+        bool                                    mbCollateAlwaysOff;
 
         VclPtr<RadioButton>                     mpPagesBtn;
         VclPtr<RadioButton>                     mpBrochureBtn;
@@ -201,7 +201,6 @@ namespace vcl
                                                 maPropertyToWindowMap;
         std::map< VclPtr<vcl::Window>, sal_Int32 >
                                                 maControlToNumValMap;
-        std::set< OUString >                    maReverseDependencySet;
 
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
