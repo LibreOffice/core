@@ -73,31 +73,29 @@ SearchThread::SearchThread( SearchProgress* pProgress,
 {
 }
 
-
 SearchThread::~SearchThread()
 {
 }
 
-
 void SearchThread::execute()
 {
-    const OUString aFileType( mpBrowser->m_pCbbFileType->GetText() );
+    const OUString aFileType(mpBrowser->m_xCbbFileType->get_active_text());
 
-    if( !aFileType.isEmpty() )
+    if (!aFileType.isEmpty())
     {
-        const sal_Int32 nFileNumber = mpBrowser->m_pCbbFileType->GetEntryPos( aFileType );
+        const int nFileNumber = mpBrowser->m_xCbbFileType->find_text(aFileType);
         sal_Int32 nBeginFormat, nEndFormat;
         std::vector< OUString > aFormats;
 
-        if( !nFileNumber || ( nFileNumber >= mpBrowser->m_pCbbFileType->GetEntryCount() ) )
+        if( !nFileNumber || nFileNumber == -1)
         {
             nBeginFormat = 1;
-            nEndFormat = mpBrowser->m_pCbbFileType->GetEntryCount() - 1;
+            nEndFormat = mpBrowser->m_xCbbFileType->get_count() - 1;
         }
         else
             nBeginFormat = nEndFormat = nFileNumber;
 
-        for( sal_Int32 i = nBeginFormat; i <= nEndFormat; ++i )
+        for (sal_Int32 i = nBeginFormat; i <= nEndFormat; ++i)
             aFormats.push_back( mpBrowser->aFilterEntryList[ i ]->aFilterName.toAsciiLowerCase() );
 
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
@@ -171,9 +169,9 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                             mpBrowser->aFoundList.push_back(
                                 aFoundURL.GetMainURL( INetURLObject::DecodeMechanism::NONE )
                             );
-                            mpBrowser->m_pLbxFound->InsertEntry(
-                                GetReducedString( aFoundURL, 50 ),
-                                static_cast<sal_uInt16>(mpBrowser->aFoundList.size()) - 1 );
+                            mpBrowser->m_xLbxFound->insert_text(
+                                mpBrowser->aFoundList.size() - 1,
+                                GetReducedString(aFoundURL, 50));
                         }
                     }
                 }
@@ -279,16 +277,24 @@ void TakeThread::execute()
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
     std::unique_ptr<GalleryProgress> pStatusProgress;
 
+    std::vector<int> aSelectedRows;
+
     {
         SolarMutexGuard aGuard;
         pStatusProgress.reset(new GalleryProgress);
-        nEntries = mpBrowser->bTakeAll ? mpBrowser->m_pLbxFound->GetEntryCount() : mpBrowser->m_pLbxFound->GetSelectedEntryCount();
+        if (mpBrowser->bTakeAll)
+            nEntries = mpBrowser->m_xLbxFound->n_children();
+        else
+        {
+            aSelectedRows = mpBrowser->m_xLbxFound->get_selected_rows();
+            nEntries = aSelectedRows.size();
+        }
         pThm->LockBroadcaster();
     }
 
     for( sal_Int32 i = 0; i < nEntries && schedule(); ++i )
     {
-        const sal_Int32 nPos = mpBrowser->bTakeAll ? i : mpBrowser->m_pLbxFound->GetSelectedEntryPos( i );
+        const sal_Int32 nPos = mpBrowser->bTakeAll ? i : aSelectedRows[i];
         const INetURLObject aURL( mpBrowser->aFoundList[ nPos ]);
 
         mrTakenList.push_back( static_cast<sal_uLong>(nPos) );
@@ -359,8 +365,8 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
     sal_uInt32                  i, nCount;
 
     GetParent()->EnterWait();
-    pBrowser->m_pLbxFound->SetUpdateMode( false );
-    pBrowser->m_pLbxFound->SetNoSelection();
+    pBrowser->m_xLbxFound->select(-1);
+    pBrowser->m_xLbxFound->freeze();
 
     // mark all taken positions in aRemoveEntries
     for( i = 0, nCount = maTakenList.size(); i < nCount; ++i )
@@ -382,17 +388,17 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
     // refill list box
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
-            aRemainingVector.push_back( pBrowser->m_pLbxFound->GetEntry( static_cast<sal_uInt16>(i) ) );
+            aRemainingVector.push_back(pBrowser->m_xLbxFound->get_text(i));
 
-    pBrowser->m_pLbxFound->Clear();
+    pBrowser->m_xLbxFound->clear();
 
     for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
-        pBrowser->m_pLbxFound->InsertEntry( aRemainingVector[ i ] );
+        pBrowser->m_xLbxFound->append_text(aRemainingVector[i]);
 
     aRemainingVector.clear();
 
-    pBrowser->m_pLbxFound->SetUpdateMode( true );
-    pBrowser->SelectFoundHdl( *pBrowser->m_pLbxFound );
+    pBrowser->m_xLbxFound->thaw();
+    pBrowser->SelectFoundHdl( *pBrowser->m_xLbxFound );
     GetParent()->LeaveWait();
 
     EndDialog( RET_OK );
@@ -653,31 +659,27 @@ VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create(TabPageParent pParent, const Sf
     return VclPtr<TPGalleryThemeGeneral>::Create(pParent, *rSet);
 }
 
-TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet )
-    : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", &rSet)
+TPGalleryThemeProperties::TPGalleryThemeProperties(TabPageParent pWindow, const SfxItemSet& rSet)
+    : SfxTabPage(pWindow, "cui/ui/galleryfilespage.ui", "GalleryFilesPage", &rSet)
     , pData(nullptr)
-    , nFirstExtFilterPos(0)
     , bEntriesFound(false)
     , bInputAllowed(true)
     , bTakeAll(false)
     , bSearchRecursive(false)
     , xDialogListener(new ::svt::DialogClosedListener())
+    , m_xCbbFileType(m_xBuilder->weld_combo_box("filetype"))
+    , m_xLbxFound(m_xBuilder->weld_tree_view("files"))
+    , m_xBtnSearch(m_xBuilder->weld_button("findfiles"))
+    , m_xBtnTake(m_xBuilder->weld_button("add"))
+    , m_xBtnTakeAll(m_xBuilder->weld_button("addall"))
+    , m_xCbxPreview(m_xBuilder->weld_check_button("preview"))
+    , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "image", m_aWndPreview))
 {
-    get(m_pCbbFileType, "filetype");
-    get(m_pLbxFound, "files");
-    Size aSize(LogicToPixel(Size(172, 156), MapMode(MapUnit::MapAppFont)));
-    m_pLbxFound->set_width_request(aSize.Width());
-    m_pLbxFound->set_height_request(aSize.Height());
-    m_pLbxFound->EnableMultiSelection(true);
-    get(m_pBtnSearch, "findfiles");
-    get(m_pBtnTake, "add");
-    get(m_pBtnTakeAll, "addall");
-    get(m_pCbxPreview, "preview");
-    get(m_pWndPreview, "image");
-
+    m_xLbxFound->set_size_request(m_xLbxFound->get_approximate_digit_width() * 35,
+                                  m_xLbxFound->get_height_rows(15));
+    m_xLbxFound->set_selection_mode(true);
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
 }
-
 
 void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 {
@@ -685,24 +687,22 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 
     aPreviewTimer.SetInvokeHandler( LINK( this, TPGalleryThemeProperties, PreviewTimerHdl ) );
     aPreviewTimer.SetTimeout( 500 );
-    m_pBtnSearch->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickSearchHdl));
-    m_pBtnTake->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickTakeHdl));
-    m_pBtnTakeAll->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickTakeAllHdl));
-    m_pCbxPreview->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickPreviewHdl));
-    m_pCbbFileType->SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFileTypeHdl));
-    m_pCbbFileType->EnableDDAutoWidth( false );
-    m_pLbxFound->SetDoubleClickHdl(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
-    m_pLbxFound->SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
-    m_pLbxFound->InsertEntry(CuiResId(RID_SVXSTR_GALLERY_NOFILES));
-    m_pLbxFound->Show();
+    m_xBtnSearch->connect_clicked(LINK(this, TPGalleryThemeProperties, ClickSearchHdl));
+    m_xBtnTake->connect_clicked(LINK(this, TPGalleryThemeProperties, ClickTakeHdl));
+    m_xBtnTakeAll->connect_clicked(LINK(this, TPGalleryThemeProperties, ClickTakeAllHdl));
+    m_xCbxPreview->connect_toggled(LINK(this, TPGalleryThemeProperties, ClickPreviewHdl));
+    m_xCbbFileType->connect_changed(LINK(this, TPGalleryThemeProperties, SelectFileTypeHdl));
+    m_xLbxFound->connect_row_activated(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
+    m_xLbxFound->connect_changed(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
+    m_xLbxFound->append_text(CuiResId(RID_SVXSTR_GALLERY_NOFILES));
+    m_xLbxFound->show();
 
     FillFilterList();
 
-    m_pBtnTake->Enable();
-    m_pBtnTakeAll->Disable();
-    m_pCbxPreview->Disable();
+    m_xBtnTake->set_sensitive(true);
+    m_xBtnTakeAll->set_sensitive(false);
+    m_xCbxPreview->set_sensitive(false);
 }
-
 
 void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult )
 {
@@ -714,36 +714,23 @@ void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, sh
     }
 }
 
-
 TPGalleryThemeProperties::~TPGalleryThemeProperties()
 {
     disposeOnce();
 }
 
-
 void TPGalleryThemeProperties::dispose()
 {
     xMediaPlayer.clear();
     xDialogListener.clear();
-
     aFilterEntryList.clear();
-
-    m_pCbbFileType.clear();
-    m_pLbxFound.clear();
-    m_pBtnSearch.clear();
-    m_pBtnTake.clear();
-    m_pBtnTakeAll.clear();
-    m_pCbxPreview.clear();
-    m_pWndPreview.clear();
     SfxTabPage::dispose();
 }
 
-
-VclPtr<SfxTabPage> TPGalleryThemeProperties::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> TPGalleryThemeProperties::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<TPGalleryThemeProperties>::Create( pParent.pParent, *rSet );
+    return VclPtr<TPGalleryThemeProperties>::Create(pParent, *rSet);
 }
-
 
 OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )
 {
@@ -754,7 +741,6 @@ OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, 
     }
     return sRet;
 }
-
 
 void TPGalleryThemeProperties::FillFilterList()
 {
@@ -803,12 +789,8 @@ void TPGalleryThemeProperties::FillFilterList()
         {
             std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
             pFilterEntry->aFilterName = aExt;
-            size_t pos = m_pCbbFileType->InsertEntry( aName );
-            if ( pos < aFilterEntryList.size() ) {
-                aFilterEntryList.insert( aFilterEntryList.begin() + pos, std::move(pFilterEntry) );
-            } else {
-                aFilterEntryList.push_back( std::move(pFilterEntry) );
-            }
+            m_xCbbFileType->append_text(aName);
+            aFilterEntryList.push_back(std::move(pFilterEntry));
         }
     }
 
@@ -827,21 +809,10 @@ void TPGalleryThemeProperties::FillFilterList()
             std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
             pFilterEntry->aFilterName = aFilter.second.getToken( 0, ';', nIndex );
             aFilterWildcard += pFilterEntry->aFilterName;
-            nFirstExtFilterPos = m_pCbbFileType->InsertEntry(
-                addExtension( aFilter.first, aFilterWildcard )
-            );
-            if ( nFirstExtFilterPos < aFilterEntryList.size() ) {
-                aFilterEntryList.insert(
-                    aFilterEntryList.begin() + nFirstExtFilterPos,
-                    std::move(pFilterEntry)
-                );
-            } else {
-                aFilterEntryList.push_back( std::move(pFilterEntry) );
-            }
+            m_xCbbFileType->append_text(addExtension(aFilter.first, aFilterWildcard));
+            aFilterEntryList.push_back( std::move(pFilterEntry) );
         }
     }
-#else
-    (void) nFirstExtFilterPos;
 #endif
 
     // 'All' filters
@@ -887,19 +858,15 @@ void TPGalleryThemeProperties::FillFilterList()
 
     std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
     pFilterEntry->aFilterName = CuiResId(RID_SVXSTR_GALLERY_ALLFILES);
-    pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
-    size_t pos = m_pCbbFileType->InsertEntry( pFilterEntry->aFilterName, 0 );
-    m_pCbbFileType->SetText( pFilterEntry->aFilterName );
-    if ( pos < aFilterEntryList.size() ) {
-        aFilterEntryList.insert( aFilterEntryList.begin() + pos, std::move(pFilterEntry) );
-    } else {
-        aFilterEntryList.push_back( std::move(pFilterEntry) );
-    }
+    pFilterEntry->aFilterName = addExtension(pFilterEntry->aFilterName, aExtensions);
+    m_xCbbFileType->insert_text(0, pFilterEntry->aFilterName);
+    m_xCbbFileType->set_active(0);
+    aFilterEntryList.insert(aFilterEntryList.begin(), std::move(pFilterEntry));
 }
 
-IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, weld::ComboBox&, void)
 {
-    OUString aText( m_pCbbFileType->GetText() );
+    OUString aText(m_xCbbFileType->get_active_text());
 
     if( bInputAllowed && ( aLastFilterName != aText ) )
     {
@@ -917,9 +884,9 @@ void TPGalleryThemeProperties::SearchFiles()
     VclPtrInstance<SearchProgress> pProgress( this, aURL );
 
     aFoundList.clear();
-    m_pLbxFound->Clear();
+    m_xLbxFound->clear();
 
-    pProgress->SetFileType( m_pCbbFileType->GetText() );
+    pProgress->SetFileType( m_xCbbFileType->get_active_text() );
     pProgress->SetDirectory( INetURLObject() );
     pProgress->Update();
 
@@ -928,8 +895,7 @@ void TPGalleryThemeProperties::SearchFiles()
     });
 }
 
-
-IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, weld::Button&, void)
 {
     if( bInputAllowed )
     {
@@ -966,7 +932,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
 
 void TPGalleryThemeProperties::TakeFiles()
 {
-    if( m_pLbxFound->GetSelectedEntryCount() || ( bTakeAll && bEntriesFound ) )
+    if (m_xLbxFound->count_selected_rows() || (bTakeAll && bEntriesFound))
     {
         VclPtrInstance<TakeProgress> pTakeProgress( this );
         pTakeProgress->Update();
@@ -978,39 +944,38 @@ void TPGalleryThemeProperties::TakeFiles()
     }
 }
 
-
-IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, Button*, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, weld::ToggleButton&, void)
 {
     if ( bInputAllowed )
     {
         aPreviewTimer.Stop();
         aPreviewString.clear();
 
-        if( !m_pCbxPreview->IsChecked() )
+        if (!m_xCbxPreview->get_active())
         {
             xMediaPlayer.clear();
-            m_pWndPreview->SetGraphic( Graphic() );
-            m_pWndPreview->Invalidate();
+            m_aWndPreview.SetGraphic(Graphic());
+            m_aWndPreview.Invalidate();
         }
         else
             DoPreview();
     }
 }
 
-
 void TPGalleryThemeProperties::DoPreview()
 {
-    OUString aString( m_pLbxFound->GetSelectedEntry() );
+    int nIndex = m_xLbxFound->get_selected_index();
+    OUString aString(m_xLbxFound->get_text(nIndex));
 
-    if( aString != aPreviewString )
+    if (aString != aPreviewString)
     {
-        INetURLObject   _aURL( aFoundList[ m_pLbxFound->GetEntryPos( aString ) ] );
+        INetURLObject _aURL(aFoundList[nIndex]);
         bInputAllowed = false;
 
-        if ( !m_pWndPreview->SetGraphic( _aURL ) )
+        if (!m_aWndPreview.SetGraphic(_aURL))
         {
             GetParent()->LeaveWait();
-            ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
+            ErrorHandler::HandleError(ERRCODE_IO_NOTEXISTSPATH, GetDialogFrameWeld());
             GetParent()->EnterWait();
         }
 #if HAVE_FEATURE_AVMEDIA
@@ -1026,14 +991,13 @@ void TPGalleryThemeProperties::DoPreview()
     }
 }
 
-
-IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, weld::Button&, void)
 {
     if( bInputAllowed )
     {
         aPreviewTimer.Stop();
 
-        if( !m_pLbxFound->GetSelectedEntryCount() || !bEntriesFound )
+        if (!m_xLbxFound->count_selected_rows() || !bEntriesFound)
         {
             SvxOpenGraphicDialog aDlg("Gallery", GetFrameWeld());
             aDlg.EnableLink(false);
@@ -1050,8 +1014,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
     }
 }
 
-
-IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl, Button*, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl, weld::Button&, void)
 {
     if( bInputAllowed )
     {
@@ -1061,10 +1024,9 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl, Button*, void)
     }
 }
 
-
-IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl, weld::TreeView&, void)
 {
-    if( bInputAllowed )
+    if (bInputAllowed)
     {
         bool bPreviewPossible = false;
 
@@ -1072,37 +1034,35 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
 
         if( bEntriesFound )
         {
-            if( m_pLbxFound->GetSelectedEntryCount() == 1 )
+            if (m_xLbxFound->count_selected_rows() == 1)
             {
-                m_pCbxPreview->Enable();
+                m_xCbxPreview->set_sensitive(true);
                 bPreviewPossible = true;
             }
             else
-                m_pCbxPreview->Disable();
+                m_xCbxPreview->set_sensitive(false);
 
             if( !aFoundList.empty() )
-                m_pBtnTakeAll->Enable();
+                m_xBtnTakeAll->set_sensitive(true);
             else
-                m_pBtnTakeAll->Disable();
+                m_xBtnTakeAll->set_sensitive(false);
         }
 
-        if( bPreviewPossible && m_pCbxPreview->IsChecked() )
+        if (bPreviewPossible && m_xCbxPreview->get_active())
             aPreviewTimer.Start();
     }
 }
 
-
-IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl, weld::TreeView&, void)
 {
     if( bInputAllowed )
     {
         aPreviewTimer.Stop();
 
-        if (m_pLbxFound->GetSelectedEntryCount() == 1 && bEntriesFound)
-            ClickTakeHdl(nullptr);
+        if (m_xLbxFound->count_selected_rows() == 1 && bEntriesFound)
+            ClickTakeHdl(*m_xBtnTake);
     }
 }
-
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl, Timer *, void)
 {
@@ -1114,16 +1074,16 @@ void TPGalleryThemeProperties::EndSearchProgressHdl(sal_Int32 /*nResult*/)
 {
   if( !aFoundList.empty() )
   {
-      m_pLbxFound->SelectEntryPos( 0 );
-      m_pBtnTakeAll->Enable();
-      m_pCbxPreview->Enable();
+      m_xLbxFound->select(0);
+      m_xBtnTakeAll->set_sensitive(true);
+      m_xCbxPreview->set_sensitive(true);
       bEntriesFound = true;
   }
   else
   {
-      m_pLbxFound->InsertEntry( CuiResId( RID_SVXSTR_GALLERY_NOFILES ) );
-      m_pBtnTakeAll->Disable();
-      m_pCbxPreview->Disable();
+      m_xLbxFound->append_text(CuiResId(RID_SVXSTR_GALLERY_NOFILES));
+      m_xBtnTakeAll->set_sensitive(false);
+      m_xCbxPreview->set_sensitive(false);
       bEntriesFound = false;
   }
 }
