@@ -1073,9 +1073,12 @@ public:
                         ss << "i = outLoop*" << outLoopSize << "+" << count << ";\n\t";
                         if (count == 0)
                         {
+                            temp1 << "if(i < " << mpDVR->GetArrayLength();
+                            temp1 << "){\n\t\t";
                             temp1 << "tmp = legalize(";
                             temp1 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                             temp1 << ", tmp);\n\t\t\t";
+                            temp1 << "}\n\t";
                         }
                         ss << temp1.str();
                     }
@@ -1087,9 +1090,12 @@ public:
                     ss << "i = " << count << ";\n\t";
                     if (count == nCurWindowSize / outLoopSize * outLoopSize)
                     {
+                        temp2 << "if(i < " << mpDVR->GetArrayLength();
+                        temp2 << "){\n\t\t";
                         temp2 << "tmp = legalize(";
                         temp2 << mpCodeGen->Gen2(GenSlidingWindowDeclRef(), "tmp");
                         temp2 << ", tmp);\n\t\t\t";
+                        temp2 << "}\n\t";
                     }
                     ss << temp2.str();
                 }
