@@ -1150,6 +1150,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuInsert-VerticalText">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:VerticalText</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="FontworkGalleryFloaterD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2607,8 +2614,8 @@
             <child type="tab">
               <object class="GtkLabel" id="FileLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|FileLabel">~File</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|FileLabel">File</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -3843,8 +3850,8 @@
             <child type="tab">
               <object class="GtkLabel" id="HomeLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|CalcLabel">~Home</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|CalcLabel">Home</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-default"/>
@@ -4500,8 +4507,8 @@
             <child type="tab">
               <object class="GtkLabel" id="InsertLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|InsertLabel">~Insert</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|InsertLabel">Insert</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -5032,8 +5039,8 @@
             <child type="tab">
               <object class="GtkLabel" id="LayoutLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|LayoutLabel">~Layout</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|LayoutLabel">Layout</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -5720,8 +5727,8 @@
             <child type="tab">
               <object class="GtkLabel" id="DataLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|DataLabel">~Data</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|DataLabel">Data</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -6128,8 +6135,8 @@
             <child type="tab">
               <object class="GtkLabel" id="ReviewLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ReviewLabel">~Review</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|ReviewLabel">Review</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -6657,8 +6664,8 @@
             <child type="tab">
               <object class="GtkLabel" id="ViewLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ViewLabel">~View</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|ViewLabel">View</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -7352,8 +7359,8 @@
             <child type="tab">
               <object class="GtkLabel" id="ImageLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ImageLabel">Ima~ge</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|ImageLabel">Image</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Graphic"/>
@@ -8150,8 +8157,8 @@
             <child type="tab">
               <object class="GtkLabel" id="ShapeLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|ShapeLabel"> ~Draw</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|ShapeLabel">Draw</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Draw"/>
@@ -8732,8 +8739,8 @@
             <child type="tab">
               <object class="GtkLabel" id="FrameLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|FrameLabel">~Object</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|FrameLabel">Object</property>
                 <property name="use_underline">True</property>
                 <style>
                   <class name="context-Frame"/>
@@ -8846,10 +8853,10 @@
                             <property name="toolbar_style">both-horiz</property>
                             <property name="show_arrow">False</property>
                             <child>
-                              <object class="GtkToolButton" id="Tools-MacroRecorder">
+                              <object class="GtkToolButton" id="Tools-RunMacro">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:MacroRecorder</property>
+                                <property name="action_name">.uno:RunMacro</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -8857,10 +8864,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolButton" id="Tools-RunMacro">
+                              <object class="GtkToolButton" id="Tools-BasicIDEAppear">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:RunMacro</property>
+                                <property name="action_name">.uno:BasicIDEAppear</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -9637,8 +9644,8 @@
             <child type="tab">
               <object class="GtkLabel" id="DevLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes" context="notebookbar_compact|DevLabel">~Tools</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="notebookbar_compact|DevLabel">Tools</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
