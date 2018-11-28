@@ -21,12 +21,14 @@
 #include "optimizerdialog.hxx"
 #include "impoptimizer.hxx"
 #include "fileopendialog.hxx"
+#include "questiondialog.hxx"
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <sal/macros.h>
 #include <osl/time.h>
 #include <vcl/errinf.hxx>
@@ -497,6 +499,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             mrOptimizerDialog.getControlProperty( "RadioButton1Pg4", "State" ) >>= nInt16;
             if ( nInt16 )
             {
+                // Duplicate presentation before applying changes
                 OUString aSaveAsURL;
                 FileOpenDialog aFileOpenDialog( mrOptimizerDialog.GetComponentContext() );
 
@@ -517,7 +520,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                         aFileOpenDialog.setDefaultName( aName );
                     }
                 }
-                 bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
+                bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
                 if ( bDialogExecuted )
                 {
                     aSaveAsURL = aFileOpenDialog.getURL();
@@ -536,6 +539,24 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                     mrOptimizerDialog.mxReschedule->reschedule();
                     for ( sal_uInt32 i = osl_getGlobalTimer(); ( i + 500 ) > ( osl_getGlobalTimer() ); )
                     mrOptimizerDialog.mxReschedule->reschedule();
+                }
+            }
+            else
+            {
+                // Apply changes to current presentation
+                Reference<XModifiable> xModifiable(mrOptimizerDialog.mxController->getModel(),
+                                                   UNO_QUERY_THROW );
+                if ( xModifiable->isModified() )
+                {
+                    QuestionDialog aQuestionDialog(
+                        mrOptimizerDialog.GetComponentContext(), mrOptimizerDialog.GetFrame(),
+                        mrOptimizerDialog.getString(STR_SUN_OPTIMIZATION_WIZARD2),
+                        mrOptimizerDialog.getString(STR_IMAGE_RESOLUTION_0));
+                    aQuestionDialog.execute();
+                    if (!aQuestionDialog.mbStatus)
+                    {
+                        return;
+                    }
                 }
             }
             if ( bSuccessfullyExecuted )

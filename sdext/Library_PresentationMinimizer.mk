@@ -45,6 +45,7 @@ $(eval $(call gb_Library_add_exception_objects,PresentationMinimizer,\
     sdext/source/minimizer/graphiccollector \
     sdext/source/minimizer/impoptimizer \
     sdext/source/minimizer/informationdialog \
+    sdext/source/minimizer/questiondialog \
     sdext/source/minimizer/optimizationstats \
     sdext/source/minimizer/optimizerdialog \
     sdext/source/minimizer/optimizerdialogcontrols \
