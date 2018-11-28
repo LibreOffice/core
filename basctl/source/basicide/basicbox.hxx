@@ -26,116 +26,229 @@
 
 namespace basctl
 {
-
-class LibBoxControl: public SfxToolBoxControl
+/*!
+ * @brief Manage states of macro and dialog Library ComboBox
+ *
+ * @see LibBox Class
+ */
+class LibBoxControl : public SfxToolBoxControl
 {
 public:
-                        SFX_DECL_TOOLBOX_CONTROL();
+    /*! Macro for registring two metods
+     *
+     * @code
+     * static SfxToolBoxControl* CreateImpl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+     * static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule* pMod=nullptr)
+     * @endcode
+     * @see Macro SFX_IMPL_TOOLBOX_CONTROL
+     */
+    SFX_DECL_TOOLBOX_CONTROL();
 
-                        LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    /*!
+     * @param nSlotId -- the slot as internal operation number
+     * @param nId -- unique this item number in ToolBox
+     * @param rTbx -- the ToolBox which contane this ComboBox
+     */
+    LibBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) override;
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
+    /*!
+     * Triggered if state was changed
+     *
+     * @param nSlotID -- the slot as internal operation number (not used in this place)
+     * @param eState -- enum value which contane state ComboBox
+     * @param pState --
+     */
+    virtual void StateChanged(sal_uInt16 nSlotID, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+    /*!
+     * Create combobox of Macro and Dialog Library
+     *
+     * @param pParent -- parent window
+     * @return ComboBox of macro and dialog Library
+     */
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
-/** base class for list boxes which need to update their content according to the list
-    of open documents
-*/
-class DocListenerBox    :public ListBox
-                        ,public DocumentEventListener
+/*!
+ * @brief Base class for all ComboBox elements.
+ *
+ * Base class for ComboBoxes which need to update their content according
+ * to the list of open documents.
+ */
+class DocListenerBox : public ListBox, public DocumentEventListener
 {
 protected:
-    DocListenerBox( vcl::Window* pParent );
+    /// @param pParent -- parent window
+    DocListenerBox(vcl::Window* pParent);
     virtual ~DocListenerBox() override;
     virtual void dispose() override;
 
-protected:
-    virtual void    FillBox() = 0;
+    virtual void FillBox() = 0;
 
 private:
+    DocumentEventNotifier maNotifier;
+
     // DocumentEventListener
-    virtual void onDocumentCreated( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentOpened( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentSave( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentClosed( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument ) override;
-    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument ) override;
-
-private:
-    DocumentEventNotifier m_aNotifier;
+    virtual void onDocumentCreated(const ScriptDocument& _rDoc) override;
+    virtual void onDocumentOpened(const ScriptDocument& _rDoc) override;
+    virtual void onDocumentSave(const ScriptDocument& _rDoc) override;
+    virtual void onDocumentSaveDone(const ScriptDocument& _rDoc) override;
+    virtual void onDocumentSaveAs(const ScriptDocument& _rDoc) override;
+    virtual void onDocumentSaveAsDone(const ScriptDocument& _rDoc) override;
+    virtual void onDocumentClosed(const ScriptDocument& _rDoc) override;
+    virtual void onDocumentTitleChanged(const ScriptDocument& _rDoc) override;
+    virtual void onDocumentModeChanged(const ScriptDocument& _rDoc) override;
 };
 
-
+/*!
+ * @brief Macros and Dialogs Library ComboBox
+ *
+ * @see LibBoxControl Class
+ */
 class LibBox : public DocListenerBox
 {
-private:
-    OUString        aCurText;
-    bool            bIgnoreSelect;
-    bool            bFillBox;
+public:
+    /// @param pParent
+    LibBox(vcl::Window* pParent);
+    virtual ~LibBox() override;
+    virtual void dispose() override;
 
-    static void     ReleaseFocus();
-    void            InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation );
-
-    void            ClearBox();
-    void            NotifyIDE();
-
-    // DocListenerBox
-    virtual void    FillBox() override;
+    using Window::Update;
+    /*!
+     * Ubdate selectin in CgomboBox of macro and dialog Library
+     *
+     * @param pItem -- string that was selected
+     */
+    void Update(const SfxStringItem* pItem);
 
 protected:
-    virtual void    Select() override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    /// Called for setting language when user selects a language in ComboBox
+    virtual void Select() override;
 
-public:
-                    LibBox( vcl::Window* pParent );
-    virtual         ~LibBox() override;
-    virtual void    dispose() override;
+    /*!
+     * Handle keystrokes and mouse
+     *
+     * @param rNEvt is number which present notified event mouse
+     * @return a bool value: true if was done handling,
+     *      and false if there was nothing handling
+     */
+    virtual bool PreNotify(NotifyEvent& rNEvt) override;
 
-    using           Window::Update;
-    void            Update( const SfxStringItem* pItem );
+private:
+    OUString maCurrentText;
+    bool mbIgnoreSelect;
+    bool mbFillBox; ///< If stay as true, when FillBox() is called
+
+    static void ReleaseFocus();
+
+    /*!
+     * Insert name library in position that necessary
+     *
+     * @param rDocument -- macro or dialog
+     * @param eLocation -- enum value of Locations
+     */
+    void InsertEntries(const ScriptDocument& rDocument, LibraryLocation eLocation);
+
+    void ClearBox();
+    void NotifyIDE();
+
+    /// Fill up the combobox
+    virtual void FillBox() override;
 };
 
-class LanguageBoxControl: public SfxToolBoxControl
+/*!
+ * @brief Manage stats of Language ComboBox
+ *
+ * @see LanguageBox Class
+ */
+class LanguageBoxControl : public SfxToolBoxControl
 {
 public:
-                        SFX_DECL_TOOLBOX_CONTROL();
+    /*! Macro for registring two metods
+     *
+     * @code
+     * static SfxToolBoxControl* CreateImpl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+     * static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule* pMod=nullptr)
+     * @endcode
+     * @see Macro SFX_IMPL_TOOLBOX_CONTROL
+     */
+    SFX_DECL_TOOLBOX_CONTROL();
 
-                        LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    /*!
+     * @param nSlotId -- the slot as internal operation number
+     * @param nId -- unique this item number in ToolBox
+     * @param rTbx -- the ToolBox which contane this ComboBox
+     */
+    LanguageBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
+    /*!
+     * Triggered if state was changed
+     *
+     * @param nSlotID -- the slot as internal operation number (not used in this place)
+     * @param eState -- enum value which contane state ComboBox
+     * @param pState --
+     */
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
+                              const SfxPoolItem* pState) override;
+    /*!
+     * Create ComboBox of Language
+     *
+     * @param pParent
+     * @return LanguageBox ComboBox
+     */
+    virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 };
 
+/*!
+ * @brief Class language ComboBox
+ *
+ * @see LanguageBoxControl Class
+ */
 class LanguageBox : public DocListenerBox
 {
-private:
-    OUString        m_sNotLocalizedStr;
-    OUString        m_sDefaultLanguageStr;
-    OUString        m_sCurrentText;
+public:
+    /*!
+     * @param pParent
+     */
+    LanguageBox(vcl::Window* pParent);
+    virtual ~LanguageBox() override;
+    virtual void dispose() override;
 
-    bool            m_bIgnoreSelect;
-
-    void            ClearBox();
-    void            SetLanguage();
-
-    // DocListenerBox
-    virtual void    FillBox() override;
+    using Window::Update;
+    /*!
+     * Ubdate selectin in ComboBox of macro and dialog Library
+     *
+     * @param pItem -- string that was selected
+     */
+    void Update(const SfxStringItem* pItem);
 
 protected:
-    virtual void    Select() override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    /// Called for setting language when user selects a language in ComboBox
+    virtual void Select() override;
 
-public:
-    LanguageBox( vcl::Window* pParent );
-    virtual ~LanguageBox() override;
-    virtual void    dispose() override;
+    /*!
+     * Handle keystrokes and mouse
+     *
+     * @param rNEvt is number which present notified event mouse
+     * @return a bool value: true if was done handling,
+     *      and false if there was nothing handling
+     */
+    virtual bool PreNotify(NotifyEvent& rNEvt) override;
 
-    using           Window::Update;
-    void            Update( const SfxStringItem* pItem );
+private:
+    OUString msNotLocalizedStr;
+    OUString msDefaultLanguageStr;
+    OUString msCurrentText;
+
+    bool mbIgnoreSelect; ///< do not use in this class
+
+    /// Delete all langiages form ComboBox
+    void ClearBox();
+    /// Swich inferface of dialog to selected language
+    void SetLanguage();
+
+    /// Fill up the language combobox
+    virtual void FillBox() override;
 };
 
 } // namespace basctl
