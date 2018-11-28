@@ -25,7 +25,6 @@
 #include <charsetlistbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
 #include "TextConnectionHelper.hxx"

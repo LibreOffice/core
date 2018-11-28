@@ -23,7 +23,6 @@
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>

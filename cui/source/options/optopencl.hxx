@@ -24,7 +24,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <svtools/simptabl.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 
 class SvxOpenCLTabPage : public SfxTabPage
 {

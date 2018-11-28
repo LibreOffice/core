@@ -24,7 +24,6 @@
 #include <basidesh.hxx>
 
 #include <sfx2/dispatch.hxx>
-#include <vcl/lstbox.hxx>
 
 namespace basctl
 {

@@ -26,7 +26,6 @@
 #include <ucbhelper/content.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>

@@ -25,13 +25,14 @@
 #include <vcl/txtattr.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <comphelper/string.hxx>
-#include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
 
 #include <vector>

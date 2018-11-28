@@ -29,7 +29,6 @@
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/image.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>

@@ -47,7 +47,6 @@
 #include <vcl/fixed.hxx>
 
 #include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/scrbar.hxx>
 
 #include <comphelper/sequence.hxx>

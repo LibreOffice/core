@@ -21,7 +21,6 @@
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX
 
 #include <svtools/svmedit.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>

@@ -21,7 +21,6 @@
 #include <vcl/fixed.hxx>
 
 #include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/txencbox.hxx>
 #include <svx/langbox.hxx>

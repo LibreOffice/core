@@ -24,7 +24,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include "tabletree.hxx"
 
 namespace dbaui

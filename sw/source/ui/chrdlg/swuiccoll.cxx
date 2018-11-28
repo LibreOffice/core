@@ -35,7 +35,6 @@
 #include <hints.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vcl/lstbox.hxx>
 
 #include <swuiccoll.hxx>
 

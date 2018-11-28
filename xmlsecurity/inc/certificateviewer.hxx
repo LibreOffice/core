@@ -22,7 +22,6 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>

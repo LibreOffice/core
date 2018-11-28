@@ -28,7 +28,6 @@
 #include <svtools/roadmapwizard.hxx>
 #include <vcl/field.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/lstbox.hxx>
 
 namespace dbaui
 

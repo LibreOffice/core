@@ -9,12 +9,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
 #define INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
 
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/field.hxx>
-#include <vcl/treelistbox.hxx>
 
 #include "RemoteDialogClientBox.hxx"
 

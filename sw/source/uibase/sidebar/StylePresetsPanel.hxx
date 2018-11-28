@@ -28,7 +28,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <svl/intitem.hxx>
 #include <svl/lstner.hxx>

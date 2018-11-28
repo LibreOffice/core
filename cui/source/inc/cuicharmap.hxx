@@ -19,11 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUICHARMAP_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUICHARMAP_HXX
 
-#include <vcl/ctrl.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>

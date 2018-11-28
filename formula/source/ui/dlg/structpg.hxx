@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
 
-#include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>

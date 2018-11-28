@@ -22,7 +22,6 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
