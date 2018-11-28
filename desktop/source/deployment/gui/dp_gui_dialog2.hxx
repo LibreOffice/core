@@ -58,18 +58,18 @@ class TheExtensionManager;
 class DialogHelper
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    VclPtr<Dialog>  m_pVCLWindow;
+    VclPtr<Dialog>  m_xVCLWindow;
     ImplSVEvent *   m_nEventID;
-    bool            m_bIsBusy;
+    int             m_nBusy;
 
 public:
                     DialogHelper( const css::uno::Reference< css::uno::XComponentContext > &,
                                   Dialog *pWindow );
     virtual        ~DialogHelper();
 
-    void            openWebBrowser( const OUString & sURL, const OUString & sTitle ) const;
-    Dialog*         getWindow() const { return m_pVCLWindow; };
-    weld::Window*   getFrameWeld() const { return m_pVCLWindow ? m_pVCLWindow->GetFrameWeld() : nullptr; }
+    void            openWebBrowser(const OUString& rURL, const OUString& rTitle);
+    Dialog*         getWindow() const { return m_xVCLWindow; };
+    weld::Window*   getFrameWeld() const { return m_xVCLWindow ? m_xVCLWindow->GetFrameWeld() : nullptr; }
     void            PostUserEvent( const Link<void*,void>& rLink, void* pCaller );
     void            clearEventID() { m_nEventID = nullptr; }
 
@@ -86,15 +86,16 @@ public:
     virtual void    checkEntries() = 0;
 
     static bool     IsSharedPkgMgr( const css::uno::Reference< css::deployment::XPackage > &);
-    static bool     continueOnSharedExtension( const css::uno::Reference< css::deployment::XPackage > &,
+           bool     continueOnSharedExtension( const css::uno::Reference< css::deployment::XPackage > &,
                                                weld::Widget* pParent,
                                                const char* pResID,
                                                bool &bHadWarning );
 
-    void            setBusy( const bool bBusy ) { m_bIsBusy = bBusy; }
-    bool            isBusy() const { return m_bIsBusy; }
-    bool            installExtensionWarn( const OUString &rExtensionURL ) const;
-    bool            installForAllUsers( bool &bInstallForAll ) const;
+    void            incBusy();
+    void            decBusy();
+    bool            isBusy() const { return m_nBusy > 0; }
+    bool            installExtensionWarn(const OUString &rExtensionURL);
+    bool            installForAllUsers(bool &bInstallForAll);
 };
 
 
@@ -134,7 +135,7 @@ class ExtMgrDialog : public ModelessDialog,
 
     css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
-    bool removeExtensionWarn( const OUString &rExtensionTitle ) const;
+    bool removeExtensionWarn(const OUString &rExtensionTitle);
 
     DECL_LINK( HandleOptionsBtn, Button*, void );
     DECL_LINK( HandleAddBtn, Button*, void );
