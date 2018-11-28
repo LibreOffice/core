@@ -188,7 +188,7 @@ class SwAutoFormat
     /// join with the previous paragraph
     void JoinPrevPara();
     /// execute AutoCorrect on current TextNode
-    void AutoCorrect( sal_Int32 nSttPos = 0 );
+    void AutoCorrect(TextFrameIndex nSttPos = TextFrameIndex(0));
 
     bool CanJoin(const SwTextFrame * pNextFrame) const
     {
@@ -1497,7 +1497,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     DeleteLeadingTrailingBlanks();
 
     bool bChgBullet = false, bChgEnum = false;
-    sal_Int32 nAutoCorrPos = 0;
+    TextFrameIndex nAutoCorrPos(0);
 
     // if numbering is set, get the current one
     SwNumRule aRule( m_pDoc->GetUniqueNumRuleName(),
@@ -1750,7 +1750,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                                   RES_CHRATR_FONT ) );
                 m_pDoc->SetFormatItemByAutoFormat( m_aDelPam, aSet );
                 m_aDelPam.DeleteMark();
-                nAutoCorrPos = 2;
+                nAutoCorrPos = TextFrameIndex(2);
                 aSet.ClearItem();
             }
             SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
@@ -1908,7 +1908,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
 }
 
 /// Start autocorrection for the current TextNode
-void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
+void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
 {
     SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get().GetAutoCorrect();
     ACFlags aSvxFlags = pATst->GetFlags( );
@@ -1923,8 +1923,8 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
         !m_aFlags.bChgWeightUnderl && !m_aFlags.bAddNonBrkSpace) )
         return;
 
-    const OUString* pText = &m_pCurTextNd->GetText();
-    if (nPos >= pText->getLength())
+    const OUString* pText = &m_pCurTextFrame->GetText();
+    if (TextFrameIndex(pText->getLength()) <= nPos)
         return;
 
     bool bGetLanguage = m_aFlags.bChgOrdinalNumber ||
@@ -1933,14 +1933,13 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                         m_aFlags.bAddNonBrkSpace;
 
     m_aDelPam.DeleteMark();
-    m_aDelPam.GetPoint()->nNode = m_aNdIdx;
-    m_aDelPam.GetPoint()->nContent.Assign( m_pCurTextNd, 0 );
+    *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));
 
     SwAutoCorrDoc aACorrDoc( *m_pEditShell, m_aDelPam );
 
     SwTextFrameInfo aFInfo( nullptr );
 
-    sal_Int32 nSttPos, nLastBlank = nPos;
+    TextFrameIndex nSttPos, nLastBlank = nPos;
     bool bFirst = m_aFlags.bCapitalStartSentence, bFirstSent = bFirst;
     sal_Unicode cChar = 0;
     bool bNbspRunNext = false;
@@ -1948,14 +1947,15 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
     CharClass& rAppCC = GetAppCharClass();
 
     do {
-        while (nPos < pText->getLength() && IsSpace(cChar = (*pText)[nPos]))
+        while (nPos < TextFrameIndex(pText->getLength())
+                && IsSpace(cChar = (*pText)[sal_Int32(nPos)]))
             ++nPos;
-        if (nPos == pText->getLength())
+        if (nPos == TextFrameIndex(pText->getLength()))
             break;      // that's it
 
         if( ( ( bReplaceQuote && '\"' == cChar ) ||
               ( bReplaceSglQuote && '\'' == cChar ) ) &&
-            (!nPos || ' ' == (*pText)[nPos-1]))
+            (!nPos || ' ' == (*pText)[sal_Int32(nPos)-1]))
         {
 
             // note: special case symbol fonts !!!
@@ -1964,14 +1964,14 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             if( !aFInfo.IsBullet( nPos ))
             {
                 SetRedlineText( STR_AUTOFMTREDL_TYPO );
-                m_aDelPam.GetPoint()->nContent = nPos;
+                *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
                 bool bSetHardBlank = false;
 
                 OUString sReplace( pATst->GetQuote( aACorrDoc,
-                                    nPos, cChar, true ));
+                                    sal_Int32(nPos), cChar, true ));
 
                 m_aDelPam.SetMark();
-                m_aDelPam.GetPoint()->nContent = nPos+1;
+                m_aDelPam.GetPoint()->nContent = m_aDelPam.GetMark()->nContent.GetIndex() + 1;
                 if( 2 == sReplace.getLength() && ' ' == sReplace[ 1 ])
                 {
                     sReplace = sReplace.copy( 0, 1 );
@@ -1983,12 +1983,13 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 {
                     m_aNdIdx = m_aDelPam.GetPoint()->nNode;
                     m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
-                    pText = &m_pCurTextNd->GetText();
+                    m_pCurTextFrame = GetFrame( *m_pCurTextNd );
+                    pText = &m_pCurTextFrame->GetText();
                     m_aDelPam.SetMark();
                     aFInfo.SetFrame( nullptr );
                 }
 
-                nPos += sReplace.getLength() - 1;
+                nPos += TextFrameIndex(sReplace.getLength() - 1);
                 m_aDelPam.DeleteMark();
                 if( bSetHardBlank )
                 {
@@ -2000,10 +2001,10 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
         bool bCallACorr = false;
         int bBreak = 0;
-        if (nPos && IsSpace((*pText)[nPos-1]))
+        if (nPos && IsSpace((*pText)[sal_Int32(nPos) - 1]))
             nLastBlank = nPos;
-        for (nSttPos = nPos; !bBreak && nPos < pText->getLength(); ++nPos)
-            switch (cChar = (*pText)[nPos])
+        for (nSttPos = nPos; !bBreak && nPos < TextFrameIndex(pText->getLength()); ++nPos)
+            switch (cChar = (*pText)[sal_Int32(nPos)])
             {
             case '\"':
             case '\'':
@@ -2016,9 +2017,9 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                     {
                         SetRedlineText( STR_AUTOFMTREDL_TYPO );
                         bool bSetHardBlank = false;
-                        m_aDelPam.GetPoint()->nContent = nPos;
+                        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
                         OUString sReplace( pATst->GetQuote( aACorrDoc,
-                                                    nPos, cChar, false ));
+                                            sal_Int32(nPos), cChar, false) );
 
                         if( 2 == sReplace.getLength() && ' ' == sReplace[ 0 ])
                         {
@@ -2027,27 +2028,29 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                         }
 
                         m_aDelPam.SetMark();
-                        m_aDelPam.GetPoint()->nContent = nPos+1;
+                        m_aDelPam.GetPoint()->nContent = m_aDelPam.GetMark()->nContent.GetIndex() + 1;
                         m_pDoc->getIDocumentContentOperations().ReplaceRange( m_aDelPam, sReplace, false );
 
                         if( m_aFlags.bWithRedlining )
                         {
                             m_aNdIdx = m_aDelPam.GetPoint()->nNode;
                             m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
-                            pText = &m_pCurTextNd->GetText();
+                            m_pCurTextFrame = GetFrame( *m_pCurTextNd );
+                            pText = &m_pCurTextFrame->GetText();
                             m_aDelPam.SetMark();
                             m_aDelPam.DeleteMark();
                             aFInfo.SetFrame( nullptr );
                         }
 
-                        nPos += sReplace.getLength() - 1;
+                        nPos += TextFrameIndex(sReplace.getLength() - 1);
                         m_aDelPam.DeleteMark();
 
                         if( bSetHardBlank )
                         {
-                            m_aDelPam.GetPoint()->nContent = nPos;
+                            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
                             m_pDoc->getIDocumentContentOperations().InsertString( m_aDelPam, OUString(CHAR_HARDBLANK) );
-                            m_aDelPam.GetPoint()->nContent = ++nPos;
+                            ++nPos;
+                            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
                         }
                     }
                 }
@@ -2065,25 +2068,26 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                                             ? STR_AUTOFMTREDL_BOLD
                                             : STR_AUTOFMTREDL_UNDER );
 
-                        sal_Unicode cBlank = nSttPos ? (*pText)[nSttPos - 1] : 0;
-                        m_aDelPam.GetPoint()->nContent = nPos;
+                        sal_Unicode cBlank = nSttPos ? (*pText)[sal_Int32(nSttPos) - 1] : 0;
+                        *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
 
-                        if( pATst->FnChgWeightUnderl( aACorrDoc, *pText, nPos ))
+                        if (pATst->FnChgWeightUnderl(aACorrDoc, *pText, sal_Int32(nPos)))
                         {
                             if( m_aFlags.bWithRedlining )
                             {
                                 m_aNdIdx = m_aDelPam.GetPoint()->nNode;
                                 m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
-                                pText = &m_pCurTextNd->GetText();
+                                m_pCurTextFrame = GetFrame( *m_pCurTextNd );
+                                pText = &m_pCurTextFrame->GetText();
                                 m_aDelPam.SetMark();
                                 m_aDelPam.DeleteMark();
                                 aFInfo.SetFrame( nullptr );
                             }
                             //#125102# in case of the mode RedlineFlags::ShowDelete the ** are still contained in pText
                             if(!(m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags() & RedlineFlags::ShowDelete))
-                                nPos = m_aDelPam.GetPoint()->nContent.GetIndex() - 1;
+                                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint()) - TextFrameIndex(1);
                             // Was a character deleted before starting?
-                            if (cBlank && cBlank != (*pText)[nSttPos - 1])
+                            if (cBlank && cBlank != (*pText)[sal_Int32(nSttPos) - 1])
                                 --nSttPos;
                         }
                     }
@@ -2093,11 +2097,11 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 if ( m_aFlags.bAddNonBrkSpace )
                 {
                     LanguageType eLang = bGetLanguage
-                                           ? m_pCurTextNd->GetLang( nSttPos )
-                                           : LANGUAGE_SYSTEM;
+                        ? m_pCurTextFrame->GetLangOfChar(nSttPos, 0, true)
+                        : LANGUAGE_SYSTEM;
 
                     SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
-                    if ( pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nPos, eLang, bNbspRunNext ) )
+                    if (pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext))
                         --nPos;
                 }
                 break;
@@ -2109,7 +2113,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                     bFirstSent = true;
                 SAL_FALLTHROUGH;
             default:
-                if( !( rAppCC.isLetterNumeric( *pText, nPos )
+                if (!(rAppCC.isLetterNumeric(*pText, sal_Int32(nPos))
                         || '/' == cChar )) //  '/' should not be a word separator (e.g. '1/2' needs to be handled as one word for replacement)
                 {
                     --nPos;     // revert ++nPos which was decremented in for loop
@@ -2120,7 +2124,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
         if( nPos == nSttPos )
         {
-            if (++nPos == pText->getLength())
+            if (++nPos == TextFrameIndex(pText->getLength()))
                 bCallACorr = true;
         }
         else
@@ -2128,18 +2132,19 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
         if( bCallACorr )
         {
-            m_aDelPam.GetPoint()->nContent = nPos;
+            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(nPos);
             SetRedlineText( STR_AUTOFMTREDL_USE_REPLACE );
             if( m_aFlags.bAutoCorrect &&
-                aACorrDoc.ChgAutoCorrWord( nSttPos, nPos, *pATst, nullptr ) )
+                aACorrDoc.ChgAutoCorrWord(reinterpret_cast<sal_Int32&>(nSttPos), sal_Int32(nPos), *pATst, nullptr))
             {
-                nPos = m_aDelPam.GetPoint()->nContent.GetIndex();
+                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint()) - TextFrameIndex(1);
 
                 if( m_aFlags.bWithRedlining )
                 {
                     m_aNdIdx = m_aDelPam.GetPoint()->nNode;
                     m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
-                    pText = &m_pCurTextNd->GetText();
+                    m_pCurTextFrame = GetFrame( *m_pCurTextNd );
+                    pText = &m_pCurTextFrame->GetText();
                     m_aDelPam.SetMark();
                     m_aDelPam.DeleteMark();
                 }
@@ -2148,39 +2153,41 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             }
 
             LanguageType eLang = bGetLanguage
-                                           ? m_pCurTextNd->GetLang( nSttPos )
-                                           : LANGUAGE_SYSTEM;
+                    ? m_pCurTextFrame->GetLangOfChar(nSttPos, 0, true)
+                    : LANGUAGE_SYSTEM;
 
             if ( m_aFlags.bAddNonBrkSpace )
             {
                 SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
-                pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nPos, eLang, bNbspRunNext );
+                pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext);
             }
 
             if( ( m_aFlags.bChgOrdinalNumber &&
                     SetRedlineText( STR_AUTOFMTREDL_ORDINAL ) &&
-                    pATst->FnChgOrdinalNumber( aACorrDoc, *pText, nSttPos, nPos, eLang ) ) ||
+                    pATst->FnChgOrdinalNumber(aACorrDoc, *pText, sal_Int32(nSttPos), sal_Int32(nPos), eLang)) ||
                 ( m_aFlags.bChgToEnEmDash &&
                     SetRedlineText( STR_AUTOFMTREDL_DASH ) &&
-                    pATst->FnChgToEnEmDash( aACorrDoc, *pText, nSttPos, nPos, eLang ) ) ||
+                    pATst->FnChgToEnEmDash(aACorrDoc, *pText, sal_Int32(nSttPos), sal_Int32(nPos), eLang)) ||
                 ( m_aFlags.bSetINetAttr &&
-                    (nPos == pText->getLength() || IsSpace((*pText)[nPos])) &&
+                    (nPos == TextFrameIndex(pText->getLength()) || IsSpace((*pText)[sal_Int32(nPos)])) &&
                     SetRedlineText( STR_AUTOFMTREDL_DETECT_URL ) &&
-                    pATst->FnSetINetAttr( aACorrDoc, *pText, nLastBlank, nPos, eLang ) ) )
-                    nPos = m_aDelPam.GetPoint()->nContent.GetIndex();
+                    pATst->FnSetINetAttr(aACorrDoc, *pText, sal_Int32(nLastBlank), sal_Int32(nPos), eLang)))
+            {
+                nPos = m_pCurTextFrame->MapModelToViewPos(*m_aDelPam.GetPoint()) - TextFrameIndex(1);
+            }
             else
             {
                 // two capital letters at the beginning of a word?
                 if( m_aFlags.bCapitalStartWord )
                 {
                     SetRedlineText( STR_AUTOFMTREDL_CPTL_STT_WORD );
-                    pATst->FnCapitalStartWord( aACorrDoc, *pText, nSttPos, nPos, eLang );
+                    pATst->FnCapitalStartWord(aACorrDoc, *pText, sal_Int32(nSttPos), sal_Int32(nPos), eLang);
                 }
                 // capital letter at the beginning of a sentence?
                 if( m_aFlags.bCapitalStartSentence && bFirst )
                 {
                     SetRedlineText( STR_AUTOFMTREDL_CPTL_STT_SENT );
-                    pATst->FnCapitalStartSentence( aACorrDoc, *pText, true, nSttPos, nPos, eLang);
+                    pATst->FnCapitalStartSentence(aACorrDoc, *pText, true, sal_Int32(nSttPos), sal_Int32(nPos), eLang);
                 }
 
                 bFirst = bFirstSent;
@@ -2190,13 +2197,15 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 {
                     m_aNdIdx = m_aDelPam.GetPoint()->nNode;
                     m_pCurTextNd = m_aNdIdx.GetNode().GetTextNode();
-                    pText = &m_pCurTextNd->GetText();
+                    m_pCurTextFrame = GetFrame( *m_pCurTextNd );
+                    pText = &m_pCurTextFrame->GetText();
                     m_aDelPam.SetMark();
                     m_aDelPam.DeleteMark();
                 }
             }
         }
-    } while (nPos < pText->getLength());
+    }
+    while (nPos < TextFrameIndex(pText->getLength()));
     ClearRedlineText();
 }
 
