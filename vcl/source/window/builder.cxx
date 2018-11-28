@@ -1904,7 +1904,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         //   everything over to SvHeaderTabListBox/SvTabListBox
         //c) remove the users of makeSvTabListBox and makeSvTreeListBox
         extractModel(id, rMap);
-        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
         if (m_bLegacy)
         {
             OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
@@ -1917,7 +1917,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             nWinStyle |= WB_BORDER;
         if (m_bLegacy)
         {
-            xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle);
+            xWindow = VclPtr<ListBox>::Create(pRealParent, nWinStyle | WB_SIMPLEMODE);
             xWindowForPackingProps = xWindow;
         }
         else
