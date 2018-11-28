@@ -804,9 +804,6 @@ namespace
                 xWindow = VclPtr<PushButton>::Create(pParent, nBits);
                 xWindow->SetText(getStockText(sType));
             }
-            PushButton* pPushButton = dynamic_cast<PushButton*>(xWindow.get());
-            if (pPushButton)
-                pPushButton->setStock(true);
         }
 
         if (!xWindow)
@@ -2160,16 +2157,22 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                             }
                         }
 
+                        bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pCurrentChild) != nullptr;
+
                         //To-Do make reorder a virtual in Window, move this foo
                         //there and see above
                         std::vector<vcl::Window*> aChilds;
                         for (vcl::Window* pChild = pCurrentChild->GetWindow(GetWindowType::FirstChild); pChild;
                             pChild = pChild->GetWindow(GetWindowType::Next))
                         {
+                            if (bIsButtonBox)
+                            {
+                                if (PushButton* pPushButton = dynamic_cast<PushButton*>(pChild))
+                                    pPushButton->setStock(true);
+                            }
+
                             aChilds.push_back(pChild);
                         }
-
-                        bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pCurrentChild) != nullptr;
 
                         //sort child order within parent so that tabbing
                         //between controls goes in a visually sensible sequence
