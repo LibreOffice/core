@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_6f0902dc",
+        "filename": "slideshow/source/engine/slide/slideimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-28T18:29:20Z",
+      "side": 1,
+      "message": "aaargh, I\u0027m an idiot, I meant to make the\n   std::make_move_iterator\ncomment about the ones in the previous file, because there we were immediately clearing the source vector after inserting into the dest vector, doesn\u0027t make sense here",
+      "revId": "0d613041f4d2982fc4090e16372544f2b5f2b884",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
