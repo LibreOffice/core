@@ -16,6 +16,24 @@
       "revId": "5eb15a1e7a1f9abf3bbcbda84d555cd50810aba9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_a255d21f",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-11-28T08:08:50Z",
+      "side": 1,
+      "message": "This had been implemented in (meanwhile abandoned) \u003chttps://gerrit.libreoffice.org/#/c/63920/\u003e \"Correct and clean some double spaces from UI\", where I argued that it is better to not add any further localized UI string props here (and instead fix tdf#61950).  I added the above comment as a reminder at \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d61950#c34\u003e \"Change Presentation Minimizer and Report Builder from bundled extensions to plain code\" now.",
+      "parentUuid": "df6247ed_12ebd2b0",
+      "revId": "5eb15a1e7a1f9abf3bbcbda84d555cd50810aba9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
