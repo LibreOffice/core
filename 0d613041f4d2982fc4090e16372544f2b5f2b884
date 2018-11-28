@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bf57530f_2f130a10",
+        "filename": "slideshow/source/engine/eventqueue.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-28T18:30:37Z",
+      "side": 1,
+      "message": "here is where using some kind of move, either std::move or std::make_over_iterator, would make sense, but lets leave my fancy ideas alone for now, not important",
+      "revId": "0d613041f4d2982fc4090e16372544f2b5f2b884",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf57530f_6f0902dc",
         "filename": "slideshow/source/engine/slide/slideimpl.cxx",
         "patchSetId": 2
