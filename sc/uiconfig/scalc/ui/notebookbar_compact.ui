@@ -1130,13 +1130,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertObjectChartFromFileD">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertObjectChartFromFile</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="separator85">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
