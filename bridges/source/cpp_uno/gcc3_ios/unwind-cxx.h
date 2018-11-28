@@ -109,52 +109,6 @@ struct __cxa_exception
   _Unwind_Exception unwindHeader;
 };
 
-struct __cxa_dependent_exception
-{
-#if __LP64__
-  void* primaryException;
-#endif
-
-  // Unused dummy data (should be set to null)
-  std::type_info *exceptionType;
-  void (*exceptionDestructor)(void *); 
-
-  // The C++ standard has entertaining rules wrt calling set_terminate
-  // and set_unexpected in the middle of the exception cleanup process.
-  std::unexpected_handler unexpectedHandler;
-  std::terminate_handler terminateHandler;
-
-  // The caught exception stack threads through here.
-  __cxa_exception *nextException;
-
-  // How many nested handlers have caught this exception.  A negated
-  // value is a signal that this object has been rethrown.
-  int handlerCount;
-
-#ifdef __ARM_EABI_UNWINDER__
-  // Stack of exceptions in cleanups.
-  __cxa_exception* nextPropagatingException;
-
-  // The number of active cleanup handlers for this exception.
-  int propagationCount;
-#else
-  // Cache parsed handler data from the personality routine Phase 1
-  // for Phase 2 and __cxa_call_unexpected.
-  int handlerSwitchValue;
-  const unsigned char *actionRecord;
-  const unsigned char *languageSpecificData;
-  _Unwind_Ptr catchTemp;
-  void *adjustedPtr;
-#endif
-
-#if !__LP64__
-  void* primaryException;
-#endif
-
- // The generic exception header.  Must be last.
-  _Unwind_Exception unwindHeader;
-};
-
 // Each thread in a C++ program has access to a __cxa_eh_globals object.
 struct __cxa_eh_globals
 {
@@ -220,15 +174,6 @@ extern "C" bool __cxa_type_match(_Unwind_Exception*, const std::type_info*,
 extern "C" void __cxa_begin_cleanup (_Unwind_Exception*);
 extern "C" void __cxa_end_cleanup (void);
 #endif
-
-#pragma GCC visibility push(hidden)
-
-// Invokes given handler, dying appropriately if the user handler was
-// so inconsiderate as to return.
-extern void __terminate(std::terminate_handler) __attribute__((noreturn));
-extern void __unexpected(std::unexpected_handler) __attribute__((noreturn));
-
-#pragma GCC visibility pop
 
 // These are explicitly GNU C++ specific.
 
