@@ -4216,8 +4216,26 @@ void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
 }
 
-void WW8AttributeOutput::FormatFillStyle( const XFillStyleItem& /*rFillStyle*/ )
+void WW8AttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 {
+    // WW cannot have background in a section
+    if ( !m_rWW8Export.m_bOutPageDescs )
+    {
+        // see MSWordExportBase::OutputItemSet for how _SOLID is handled
+        if ( rFillStyle.GetValue() == drawing::FillStyle_NONE )
+        {
+            //Shd80Nil
+            m_rWW8Export.InsUInt16( NS_sprm::sprmPShd80 );
+            m_rWW8Export.InsUInt16( 0xffff );
+
+            //cvAuto
+            m_rWW8Export.InsUInt16( NS_sprm::sprmPShd );
+            m_rWW8Export.pO->push_back( 10 );
+            m_rWW8Export.InsUInt32( 0xFF000000 );
+            m_rWW8Export.InsUInt32( 0xFF000000 );
+            m_rWW8Export.InsUInt16( 0x0000 );
+        }
+    }
 }
 
 void WW8AttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGradient*/ )
