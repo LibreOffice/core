@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 #include <drawdoc.hxx>
+#include <svx/xfillit0.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -167,6 +168,18 @@ DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControl
 
     // The actual name isn't critical, but if it fails, it is worth asking why.
     CPPUNIT_ASSERT_EQUAL(OUString("Text1"), sTextFieldName);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.docx")
+{
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Numbering - First level"),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(184,204,228), Color(getProperty<sal_uInt32>(xStyle, "ParaBackColor")));//R:184 G:204 B:228
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
+
+    uno::Reference<text::XTextRange> xText(getParagraph(12));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(getProperty<sal_uInt32>(xText, "ParaBackColor")));
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xText, "FillStyle"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf94009_zeroPgMargin, "tdf94009_zeroPgMargin.odt")
