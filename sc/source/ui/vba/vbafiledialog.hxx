@@ -20,10 +20,13 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAFILEDIALOG_HXX
 
 #include <ooo/vba/excel/XFileDialog.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
-#include "vbafiledialogitems.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace ooo { namespace vba { class XHelperInterface; } }
+namespace ooo { namespace vba { namespace excel { class XFileDialogSelectedItems; } } }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XFileDialog > ScVbaFileDialog_BASE;
 

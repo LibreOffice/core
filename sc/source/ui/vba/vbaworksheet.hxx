@@ -19,22 +19,18 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEET_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEET_HXX
 
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <ooo/vba/excel/XWorksheet.hpp>
-#include <ooo/vba/excel/XComments.hpp>
-#include <ooo/vba/excel/XRange.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <ooo/vba/excel/XOutline.hpp>
-#include <ooo/vba/excel/XPageSetup.hpp>
-#include <ooo/vba/excel/XHPageBreaks.hpp>
-#include <ooo/vba/excel/XVPageBreaks.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <rtl/ref.hxx>
 
 #include <vbahelper/vbahelperinterface.hxx>
-#include <address.hxx>
+#include <types.hxx>
+
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace sheet { class XSpreadsheet; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace ooo { namespace vba { namespace excel { class XOutline; } } }
+namespace ooo { namespace vba { namespace excel { class XPageSetup; } } }
+namespace ooo { namespace vba { namespace excel { class XRange; } } }
 
 namespace ooo { namespace vba { namespace excel {
     class XChartObjects;

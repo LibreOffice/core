@@ -39,6 +39,7 @@
 #include <ooo/vba/excel/XApplication.hpp>
 #include <tabvwsh.hxx>
 
+#include "excelvbahelper.hxx"
 #include "vbaglobals.hxx"
 #include "vbaworksheet.hxx"
 #include "vbaworkbook.hxx"

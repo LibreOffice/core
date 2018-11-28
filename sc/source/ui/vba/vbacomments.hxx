@@ -21,9 +21,7 @@
 
 #include <ooo/vba/excel/XComments.hpp>
 
-#include "excelvbahelper.hxx"
 #include <vbahelper/vbacollectionimpl.hxx>
-#include "vbacomment.hxx"
 
 typedef CollTestImplHelper< ov::excel::XComments > ScVbaComments_BASE;
 

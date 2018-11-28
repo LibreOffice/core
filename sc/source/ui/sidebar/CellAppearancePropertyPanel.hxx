@@ -22,12 +22,8 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/floatwin.hxx>
-#include <memory>
+#include <vcl/image.hxx>
 
-namespace sc { namespace sidebar {
-    class CellBorderUpdater;
-}}
 class ToolBox;
 
 namespace sc { namespace sidebar {

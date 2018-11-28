@@ -15,7 +15,6 @@
 namespace sc
 {
 class SQLFetchThread;
-class DataTransformation;
 
 class SQLDataProvider : public DataProvider
 {

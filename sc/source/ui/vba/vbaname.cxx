@@ -22,6 +22,7 @@
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 
+#include "excelvbahelper.hxx"
 #include "vbaname.hxx"
 #include "vbarange.hxx"
 #include "vbaglobals.hxx"

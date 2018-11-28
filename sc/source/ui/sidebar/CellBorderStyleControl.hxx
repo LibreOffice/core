@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERSTYLECONTROL_HXX
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERSTYLECONTROL_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 

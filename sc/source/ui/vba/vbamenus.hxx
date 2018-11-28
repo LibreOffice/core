@@ -10,10 +10,10 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAMENUS_HXX
 
 #include <ooo/vba/excel/XMenus.hpp>
-#include <ooo/vba/excel/XMenu.hpp>
-#include <ooo/vba/XCommandBarControls.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
+
+namespace ooo { namespace vba { class XCommandBarControls; } }
+namespace ooo { namespace vba { namespace excel { class XMenu; } } }
 
 typedef CollTestImplHelper< ov::excel::XMenus > Menus_BASE;
 

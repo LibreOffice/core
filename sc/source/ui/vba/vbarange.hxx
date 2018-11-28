@@ -19,36 +19,31 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBARANGE_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBARANGE_HXX
 
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-
 #include <ooo/vba/excel/XRange.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <ooo/vba/excel/XFont.hpp>
-#include <ooo/vba/excel/XComment.hpp>
-#include <ooo/vba/XCollection.hpp>
-#include <ooo/vba/excel/XlPasteType.hpp>
-#include <ooo/vba/excel/XlPasteSpecialOperation.hpp>
 
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/FillDateMode.hpp>
 #include <com/sun/star/sheet/FillMode.hpp>
 #include <com/sun/star/sheet/FillDirection.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 #include "vbaformat.hxx"
 #include <address.hxx>
 #include <formula/grammar.hxx>
-#include <svl/itemset.hxx>
 
+namespace com { namespace sun { namespace star { namespace sheet { class XSheetCellRangeContainer; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XCell; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com { namespace sun { namespace star { namespace table { struct CellRangeAddress; } } } }
+namespace ooo { namespace vba { class XCollection; } }
+namespace ooo { namespace vba { namespace excel { class XComment; } } }
+namespace ooo { namespace vba { namespace excel { class XFont; } } }
+
+class SfxItemSet;
 class ScCellRangesBase;
 class ScCellRangeObj;
 class ScDocShell;
 class ScDocument;
 class ScRangeList;
-class ScRange;
 
 typedef ScVbaFormat< ov::excel::XRange > ScVbaRange_BASE;
 

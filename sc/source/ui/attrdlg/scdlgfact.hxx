@@ -21,7 +21,7 @@
 
 #include <scabstdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
-class Dialog;
+
 class ScImportAsciiDlg;
 class ScAutoFormatDlg;
 class ScColRowLabelDlg;
@@ -54,7 +54,6 @@ class ScShowTabDlg;
 class ScStringInputDlg;
 class ScTabBgColorDlg;
 class ScImportOptionsDlg;
-class SfxTabDialog;
 class ScTextImportOptionsDlg;
 class ScCondFormatManagerDlg;
 

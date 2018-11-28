@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbaoutline.hxx"
+#include <com/sun/star/sheet/XSheetOutline.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 

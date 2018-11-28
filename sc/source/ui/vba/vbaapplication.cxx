@@ -29,6 +29,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/util/PathSettings.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <ooo/vba/XCommandBars.hpp>
 #include <ooo/vba/XExecutableDialog.hpp>
 #include <ooo/vba/excel/XApplicationOutgoing.hpp>
 #include <ooo/vba/excel/XlCalculation.hpp>

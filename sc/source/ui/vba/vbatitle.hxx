@@ -20,16 +20,14 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBATITLE_HXX
 
 #include <vbahelper/vbahelperinterface.hxx>
-#include "excelvbahelper.hxx"
 #include "vbainterior.hxx"
 #include "vbafont.hxx"
 #include "vbapalette.hxx"
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <ooo/vba/excel/XTitle.hpp>
-#include <ooo/vba/excel/XCharacters.hpp>
 #include <basic/sberrors.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
 template< typename... Ifc >
 class TitleImpl : public InheritedHelperInterfaceImpl< Ifc... >

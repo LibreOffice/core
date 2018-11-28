@@ -21,11 +21,11 @@
 
 #include <ooo/vba/excel/XBorders.hpp>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <vbahelper/vbacollectionimpl.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
 
 typedef CollTestImplHelper< ov::excel::XBorders > ScVbaBorders_BASE;
 class ScVbaPalette;
