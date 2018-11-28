@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_7d5f7be5",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-28T10:41:11Z",
+      "side": 1,
+      "message": "With smart pointers those two lines are no longer needed, because (given there is some $old_object, managed by smartptr):\n\n  smartptr.reset($new_object)\n\nnot only acquires the ownership of $new_object, it also deletes $old_object\n\nReference: http://www.cplusplus.com/reference/memory/unique_ptr/reset/",
+      "revId": "ecdc94516c8f5d57a46b456bd32274bc81078555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
