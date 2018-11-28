@@ -27,6 +27,8 @@
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
+#include <unocrsr.hxx>
+#include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <acorrect.hxx>
 #include <shellio.hxx>
@@ -99,12 +101,32 @@ SwAutoCorrDoc::~SwAutoCorrDoc()
 
 void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
 {
+    // this should work with plain SwPaM as well because start and end
+    // are always in same node, but since there is GetRanges already...
+    std::vector<std::shared_ptr<SwUnoCursor>> ranges;
+    if (sw::GetRanges(ranges, *rEditSh.GetDoc(), rDelPam))
+    {
+        DeleteSelImpl(rDelPam);
+    }
+    else
+    {
+        for (auto const& pCursor : ranges)
+        {
+            DeleteSelImpl(*pCursor);
+        }
+    }
+}
+
+void SwAutoCorrDoc::DeleteSelImpl(SwPaM & rDelPam)
+{
     SwDoc* pDoc = rEditSh.GetDoc();
     if( pDoc->IsAutoFormatRedline() )
     {
         // so that also the DelPam be moved,  include it in the
         // Shell-Cursr-Ring !!
-        PaMIntoCursorShellRing aTmp( rEditSh, rCursor, rDelPam );
+        // ??? is that really necessary - this should never join nodes, so Update should be enough?
+//        PaMIntoCursorShellRing aTmp( rEditSh, rCursor, rDelPam );
+        assert(rDelPam.GetPoint()->nNode == rDelPam.GetMark()->nNode);
         pDoc->getIDocumentContentOperations().DeleteAndJoin( rDelPam );
     }
     else
@@ -115,8 +137,12 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
 
 bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 {
-    const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
-    SwPaM aSel( rNd, nStt, rNd, nEnd );
+    SwTextNode const*const pTextNd = rCursor.GetNode().GetTextNode();
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+                pTextNd->getLayoutFrame(rEditSh.GetLayout())));
+    assert(pFrame);
+    SwPaM aSel(pFrame->MapViewToModelPos(TextFrameIndex(nStt)),
+               pFrame->MapViewToModelPos(TextFrameIndex(nEnd)));
     DeleteSel( aSel );
 
     if( bUndoIdInitialized )
@@ -126,7 +152,11 @@ bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
 
 bool SwAutoCorrDoc::Insert( sal_Int32 nPos, const OUString& rText )
 {
-    SwPaM aPam( rCursor.GetPoint()->nNode.GetNode(), nPos );
+    SwTextNode const*const pTextNd = rCursor.GetNode().GetTextNode();
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+                pTextNd->getLayoutFrame(rEditSh.GetLayout())));
+    assert(pFrame);
+    SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(nPos)));
     rEditSh.GetDoc()->getIDocumentContentOperations().InsertString( aPam, rText );
     if( !bUndoIdInitialized )
     {
@@ -147,28 +177,43 @@ bool SwAutoCorrDoc::Replace( sal_Int32 nPos, const OUString& rText )
 
 bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rText )
 {
-    SwPaM* pPam = &rCursor;
-    if( pPam->GetPoint()->nContent.GetIndex() != nPos )
-    {
-        pPam = new SwPaM( *rCursor.GetPoint() );
-        pPam->GetPoint()->nContent = nPos;
-    }
+    assert(nSourceLength == 1); // sw_redlinehide: this is currently the case,
+    // and ensures that the replace range cannot *contain* delete redlines,
+    // so we don't need something along the lines of:
+    //    if (sw::GetRanges(ranges, *rEditSh.GetDoc(), aPam))
+    //        ReplaceImpl(...)
+    //    else
+    //        ReplaceImpl(ranges.begin())
+    //        for (ranges.begin() + 1; ranges.end(); )
+    //            DeleteImpl(*it)
 
-    SwTextNode * const pNd = pPam->GetNode().GetTextNode();
+    SwTextNode * const pNd = rCursor.GetNode().GetTextNode();
     if ( !pNd )
     {
         return false;
     }
 
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+                pNd->getLayoutFrame(rEditSh.GetLayout())));
+    assert(pFrame);
+    std::pair<SwTextNode *, sal_Int32> const pos(pFrame->MapViewToModel(TextFrameIndex(nPos)));
+
+    SwPaM* pPam = &rCursor;
+    if (pPam->GetPoint()->nNode != *pos.first
+        || pPam->GetPoint()->nContent != pos.second)
+    {
+        pPam = new SwPaM(*pos.first, pos.second);
+    }
+
     // text attributes with dummy characters must not be replaced!
     bool bDoReplace = true;
     sal_Int32 const nLen = rText.getLength();
-    for ( sal_Int32 n = 0; n < nLen && n + nPos < pNd->GetText().getLength(); ++n )
+    for (sal_Int32 n = 0; n < nLen && n + nPos < pFrame->GetText().getLength(); ++n)
     {
-        sal_Unicode const Char = pNd->GetText()[n + nPos];
-        if ( ( CH_TXTATR_BREAKWORD == Char || CH_TXTATR_INWORD == Char )
-             && pNd->GetTextAttrForCharAt( n + nPos ) )
+        sal_Unicode const Char = pFrame->GetText()[n + nPos];
+        if (CH_TXTATR_BREAKWORD == Char || CH_TXTATR_INWORD == Char)
         {
+            assert(pFrame->MapViewToModel(TextFrameIndex(n+nPos)).first->GetTextAttrForCharAt(pFrame->MapViewToModel(TextFrameIndex(n+nPos)).second));
             bDoReplace = false;
             break;
         }
@@ -180,17 +225,18 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
 
         if( pDoc->IsAutoFormatRedline() )
         {
-            if (nPos == pNd->GetText().getLength()) // at the End do an Insert
+            if (nPos == pFrame->GetText().getLength()) // at the End do an Insert
             {
                 pDoc->getIDocumentContentOperations().InsertString( *pPam, rText );
             }
             else
             {
+                assert(pos.second != pos.first->Len()); // must be _before_ char
                 PaMIntoCursorShellRing aTmp( rEditSh, rCursor, *pPam );
 
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = std::min<sal_Int32>(
-                        pNd->GetText().getLength(), nPos + nSourceLength);
+                    pos.first->GetText().getLength(), pos.second + nSourceLength);
                 pDoc->getIDocumentContentOperations().ReplaceRange( *pPam, rText, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
@@ -202,7 +248,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
             {
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = std::min<sal_Int32>(
-                        pNd->GetText().getLength(), nPos + nSourceLength);
+                    pos.first->GetText().getLength(), pos.second + nSourceLength);
                 pDoc->getIDocumentContentOperations().ReplaceRange( *pPam, rText, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
@@ -231,8 +277,12 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
 void SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                                         SfxPoolItem& rItem )
 {
-    const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
-    SwPaM aPam( rNd, nStt, rNd, nEnd );
+    SwTextNode const*const pTextNd = rCursor.GetNode().GetTextNode();
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+                pTextNd->getLayoutFrame(rEditSh.GetLayout())));
+    assert(pFrame);
+    SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(nStt)),
+               pFrame->MapViewToModelPos(TextFrameIndex(nEnd)));
 
     SfxItemPool& rPool = rEditSh.GetDoc()->GetAttrPool();
     sal_uInt16 nWhich = rPool.GetWhich( nSlotId, false );
@@ -252,8 +302,12 @@ void SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
 
 bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString& rURL )
 {
-    const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
-    SwPaM aPam( rNd, nStt, rNd, nEnd );
+    SwTextNode const*const pTextNd = rCursor.GetNode().GetTextNode();
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+                pTextNd->getLayoutFrame(rEditSh.GetLayout())));
+    assert(pFrame);
+    SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(nStt)),
+               pFrame->MapViewToModelPos(TextFrameIndex(nEnd)));
 
     SfxItemSet aSet( rEditSh.GetDoc()->GetAttrPool(),
                         svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{} );
@@ -275,18 +329,25 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
     OUString const* pStr(nullptr);
 
     if( bAtNormalPos || !pIdx )
-        pIdx.reset(new SwNodeIndex( rCursor.GetPoint()->nNode, -1 ));
-    else
-        --(*pIdx);
-
-    SwTextNode* pTNd = pIdx->GetNode().GetTextNode();
-    while (pTNd && !pTNd->GetText().getLength())
     {
-        --(*pIdx);
-        pTNd = pIdx->GetNode().GetTextNode();
+        pIdx.reset(new SwNodeIndex(rCursor.GetPoint()->nNode));
     }
-    if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )
-        pStr = & pTNd->GetText();
+    sw::GotoPrevLayoutTextFrame(*pIdx, rEditSh.GetLayout());
+
+    SwTextFrame const* pFrame(nullptr);
+    for (SwTextNode * pTextNd = pIdx->GetNode().GetTextNode();
+             pTextNd; pTextNd = pIdx->GetNode().GetTextNode())
+    {
+        pFrame = static_cast<SwTextFrame const*>(
+                pTextNd->getLayoutFrame(rEditSh.GetLayout()));
+        if (pFrame && !pFrame->GetText().isEmpty())
+        {
+            break;
+        }
+        sw::GotoPrevLayoutTextFrame(*pIdx, rEditSh.GetLayout());
+    }
+    if (pFrame && 0 == pFrame->GetTextNodeForParaProps()->GetAttrOutlineLevel())
+        pStr = & pFrame->GetText();
 
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
@@ -315,20 +376,24 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         eLang = GetAppLanguage();
     LanguageTag aLanguageTag( eLang);
 
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+                pTextNd->getLayoutFrame(rEditSh.GetLayout())));
+    assert(pFrame);
+
     //JP 22.04.99: Bug 63883 - Special treatment for dots.
-    bool bLastCharIsPoint = nEndPos < pTextNd->GetText().getLength() &&
-                            ('.' == pTextNd->GetText()[nEndPos]);
+    bool bLastCharIsPoint = nEndPos < pFrame->GetText().getLength() &&
+                            ('.' == pFrame->GetText()[nEndPos]);
 
     const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
-                                pTextNd->GetText(), rSttPos, nEndPos, *this, aLanguageTag );
+                pFrame->GetText(), rSttPos, nEndPos, *this, aLanguageTag);
     SwDoc* pDoc = rEditSh.GetDoc();
     if( pFnd )
     {
         // replace also last colon of keywords surrounded by colons (for example, ":name:")
         bool replaceLastChar = pFnd->GetShort()[0] == ':' && pFnd->GetShort().endsWith(":");
 
-        const SwNodeIndex& rNd = rCursor.GetPoint()->nNode;
-        SwPaM aPam( rNd, rSttPos, rNd, nEndPos + (replaceLastChar ? 1 : 0) );
+        SwPaM aPam(pFrame->MapViewToModelPos(TextFrameIndex(rSttPos)),
+                   pFrame->MapViewToModelPos(TextFrameIndex(nEndPos + (replaceLastChar ? 1 : 0))));
 
         if( pFnd->IsTextOnly() )
         {
@@ -337,7 +402,23 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 '.' != pFnd->GetLong()[ pFnd->GetLong().getLength() - 1 ] )
             {
                 // replace the selection
-                pDoc->getIDocumentContentOperations().ReplaceRange( aPam, pFnd->GetLong(), false);
+                std::vector<std::shared_ptr<SwUnoCursor>> ranges;
+                if (sw::GetRanges(ranges, *rEditSh.GetDoc(), aPam))
+                {
+                    pDoc->getIDocumentContentOperations().ReplaceRange(aPam, pFnd->GetLong(), false);
+                }
+                else
+                {
+                    assert(!ranges.empty());
+                    assert(ranges.front()->GetPoint()->nNode == ranges.front()->GetMark()->nNode);
+                    pDoc->getIDocumentContentOperations().ReplaceRange(
+                            *ranges.front(), pFnd->GetLong(), false);
+                    for (auto it = ranges.begin() + 1; it != ranges.end(); ++it)
+                    {
+                        DeleteSel(**it);
+                    }
+                }
+
                 // tdf#83260 After calling sw::DocumentContentOperationsManager::ReplaceRange
                 // pTextNd may become invalid when change tracking is on and Edit -> Track Changes -> Show == OFF.
                 // ReplaceRange shows changes, this moves deleted nodes from special section to document.
@@ -359,7 +440,8 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 if( pPara )
                 {
                     OSL_ENSURE( !pIdx, "who has not deleted his Index?" );
-                    pIdx.reset(new SwNodeIndex( rCursor.GetPoint()->nNode, -1 ));
+                    pIdx.reset(new SwNodeIndex( rCursor.GetPoint()->nNode ));
+                    sw::GotoPrevLayoutTextFrame(*pIdx, rEditSh.GetLayout());
                 }
 
                 SwDoc* pAutoDoc = aTBlks.GetDoc();
@@ -390,7 +472,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
                 if( pPara )
                 {
-                    ++(*pIdx);
+                    sw::GotoNextLayoutTextFrame(*pIdx, rEditSh.GetLayout());
                     pTextNd = pIdx->GetNode().GetTextNode();
                 }
                 bRet = true;
@@ -400,7 +482,11 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     }
 
     if( bRet && pPara && pTextNd )
-        *pPara = pTextNd->GetText();
+    {
+        SwTextFrame const*const pNewFrame(static_cast<SwTextFrame const*>(
+                    pTextNd->getLayoutFrame(rEditSh.GetLayout())));
+        *pPara = pNewFrame->GetText();
+    }
 
     return bRet;
 }
@@ -427,7 +513,12 @@ LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
     SwTextNode* pNd = rCursor.GetPoint()->nNode.GetNode().GetTextNode();
 
     if( pNd )
-        eRet = pNd->GetLang( nPos );
+    {
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+                    pNd->getLayoutFrame(rEditSh.GetLayout())));
+        assert(pFrame);
+        eRet = pFrame->GetLangOfChar(TextFrameIndex(nPos), 0, true);
+    }
     if(LANGUAGE_SYSTEM == eRet)
         eRet = GetAppLanguage();
     return eRet;

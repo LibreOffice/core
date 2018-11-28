@@ -1120,6 +1120,8 @@ void SwAutoFormat::DeleteLeadingTrailingBlanks(bool bStart, bool bEnd)
     }
 }
 
+namespace sw {
+
 bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
         SwDoc & rDoc, SwPaM const& rDelPam)
 {
@@ -1164,6 +1166,8 @@ bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
     }
     return isNoRedline;
 }
+
+} // namespace sw
 
 void SwAutoFormat::DeleteSel(SwPaM & rDelPam)
 {
