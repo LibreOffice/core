@@ -284,7 +284,6 @@ basctl/source/basicide/macrodlg.hxx
 basctl/source/basicide/moduldl2.cxx
 basctl/source/basicide/moduldlg.cxx
 basctl/source/basicide/moduldlg.hxx
-basctl/source/basicide/objdlg.cxx
 basctl/source/basicide/register.cxx
 basctl/source/basicide/sbxitem.cxx
 basctl/source/basicide/scriptdocument.cxx
@@ -325,7 +324,6 @@ basctl/source/inc/iderid.hxx
 basctl/source/inc/layout.hxx
 basctl/source/inc/localizationmgr.hxx
 basctl/source/inc/managelang.hxx
-basctl/source/inc/objdlg.hxx
 basctl/source/inc/propbrw.hxx
 basctl/source/inc/sbxitem.hxx
 basctl/source/inc/scriptdocument.hxx

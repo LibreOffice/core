@@ -27,31 +27,38 @@
 
 namespace basctl
 {
-
-
-// ObjectCatalog -- a docking window that contains the currently loaded macros
-// in a tree structure.
-
+/*!
+ *  @brief A docking window that contains a tree of the currently loaded macros
+ *
+ *  The class creates Object Catalog window with the currently loaded macros
+ *  in a tree structure which allows user to quickly select the necessary
+ *  macro in BasicIDE.
+ */
 class ObjectCatalog : public DockingWindow
 {
 public:
     explicit ObjectCatalog(vcl::Window* pParent);
     virtual ~ObjectCatalog() override;
     virtual void dispose() override;
-public:
-    void UpdateEntries () { aTree->UpdateEntries(); }
-    void SetCurrentEntry (BaseWindow* pCurWin);
+
+    ///  Update the entries of Object Catalog Treelist
+    void UpdateEntries() { aTree->UpdateEntries(); }
+    void SetCurrentEntry(BaseWindow* pCurWin);
 
 private:
-    // title: "Object Catalog"
-    VclPtr<FixedText> aTitle;
-    // the tree-list of the objects
-    VclPtr<TreeListBox> aTree;
+    VclPtr<FixedText> aTitle; ///< Title of the Object Catalog window
+    VclPtr<TreeListBox> aTree; ///< The Treelist of the objects in window
 
-private:
-    virtual void Resize () override; // Window
-    virtual void ToggleFloatingMode () override; // DockingWindow
-    void ArrangeWindows ();
+    /// Function is called by Window. Use only for arranging the controls.
+    virtual void Resize() override;
+    /*!
+     *  Function for resize by DockingWindow.
+     *  It is called by DockingWindow when IsFloatingMode() changes.
+     */
+    virtual void ToggleFloatingMode() override;
+
+    /// Uses by Resize() and ToggleFloatingMode() functions for resizing
+    void ArrangeWindows();
 };
 
 } // namespace basctl
