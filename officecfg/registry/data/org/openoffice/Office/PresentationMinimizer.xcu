@@ -199,6 +199,9 @@ The current presentation contains no OLE objects.</value>
         <prop oor:name="STR_FILENAME_SUFFIX">
             <value xml:lang="en-US">(minimized)</value>
         </prop>
+        <prop oor:name="STR_WARN_UNSAVED_PRESENTATION">
+            <value xml:lang="en-US">Do you want to minimize presentation without saving?</value>
+        </prop>
     </node>
     <node oor:name="LastUsedSettings">
         <prop oor:name="Name">

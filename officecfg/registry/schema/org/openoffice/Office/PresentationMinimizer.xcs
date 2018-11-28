@@ -365,6 +365,10 @@ The current presentation contains no OLE objects.</value>
 		<info><desc>String STR_FILENAME_SUFFIX.</desc></info>
 				<value>(minimized)</value>
 			</prop>
+			<prop oor:name="STR_WARN_UNSAVED_PRESENTATION" oor:type="xs:string" oor:localized="true">
+		<info><desc>String STR_WARN_UNSAVED_PRESENTATION.</desc></info>
+				<value>Do you want to minimize presentation without saving?</value>
+			</prop>
 		</group>
 		<node-ref oor:name="LastUsedSettings" oor:node-type="OptimizerSettings">
 			<info>

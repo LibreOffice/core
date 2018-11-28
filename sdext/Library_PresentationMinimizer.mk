@@ -25,6 +25,7 @@ $(eval $(call gb_Library_use_api,PresentationMinimizer,\
 ))
 
 $(eval $(call gb_Library_use_libraries,PresentationMinimizer,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \
