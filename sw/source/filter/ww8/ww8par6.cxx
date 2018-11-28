@@ -68,6 +68,8 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 #include "sprmids.hxx"
 #include <fmtpdsc.hxx>
 #include <node.hxx>
@@ -4877,7 +4879,8 @@ void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen
         aSHD.SetWWValue( *reinterpret_cast<SVBT16 const *>(pData) );
         SwWW8Shade aSh( m_bVer67, aSHD );
 
-        NewAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));
+        NewAttr( XFillStyleItem(drawing::FillStyle_SOLID) );
+        NewAttr( XFillColorItem(OUString(), aSh.aColor) );
     }
 }
 
@@ -4893,7 +4896,9 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
         OSL_ENSURE(nLen == 10, "Len of para back colour not 10!");
         if (nLen != 10)
             return;
-        NewAttr(SvxBrushItem(ExtractColour(pData, m_bVer67), RES_BACKGROUND));
+
+        NewAttr( XFillStyleItem(drawing::FillStyle_SOLID) );
+        NewAttr( XFillColorItem(OUString(), ExtractColour(pData, m_bVer67)) );
     }
 }
 
