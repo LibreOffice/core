@@ -3145,7 +3145,7 @@ sal_uInt32 getDisplayNumberFormat(const ScDocument* pDoc, const ScAddress& rPos)
         for (const Item& rItem : m_aDataArray)
         {
             ScRefCellValue aCell(*m_pDocument, rItem.mAddress);
-            if (!aCell.isEmpty())
+            if (!aCell.isEmpty() && aCell.hasNumeric())
             {
                 return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, rItem.mAddress));
             }
