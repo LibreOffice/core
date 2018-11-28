@@ -59,7 +59,8 @@ static ForceCalculationType forceCalculationTypeInit()
             SAL_INFO("sc.core.formulagroup", "Forcing calculations to use core");
             return ForceCalculationCore;
         }
-        SAL_WARN("sc.core.formulagroup", "Unrecognized value of SC_TEST_CALCULATION");
+        SAL_WARN("sc.core.formulagroup", "Unrecognized value of SC_FORCE_CALCULATION");
+        abort();
     }
     return ForceCalculationNone;
 }
