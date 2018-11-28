@@ -22,6 +22,30 @@
       "revId": "f4ac50d726cb018cb8cb33d8fc0a3ba96a0f1887",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_0f4a8626",
+        "filename": "basctl/source/inc/objdlg.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2018-11-28T18:19:42Z",
+      "side": 1,
+      "message": "Yes, it is typo.",
+      "parentUuid": "bf57530f_9d722f11",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "f4ac50d726cb018cb8cb33d8fc0a3ba96a0f1887",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
