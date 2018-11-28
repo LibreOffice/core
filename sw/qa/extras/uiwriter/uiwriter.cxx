@@ -262,6 +262,10 @@ public:
     void testTdf96943();
     void testTdf96536();
     void testTdf96479();
+    void testBookmarkCollapsed();
+    void testRemoveBookmarkText();
+    void testRemoveBookmarkTextAndAddNew();
+    void testRemoveBookmarkTextAndAddNewAfterReload();
     void testTdf96961();
     void testTdf88453();
     void testTdf88453Table();
@@ -461,6 +465,10 @@ public:
     CPPUNIT_TEST(testTdf96943);
     CPPUNIT_TEST(testTdf96536);
     CPPUNIT_TEST(testTdf96479);
+    CPPUNIT_TEST(testBookmarkCollapsed);
+    CPPUNIT_TEST(testRemoveBookmarkText);
+    CPPUNIT_TEST(testRemoveBookmarkTextAndAddNew);
+    CPPUNIT_TEST(testRemoveBookmarkTextAndAddNewAfterReload);
     CPPUNIT_TEST(testTdf96961);
     CPPUNIT_TEST(testTdf88453);
     CPPUNIT_TEST(testTdf88453Table);
@@ -4601,6 +4609,302 @@ void SwUiWriterTest::testTdf96479()
         CPPUNIT_ASSERT(mark->IsExpanded());
         SwPaM pam(mark->GetMarkStart(), mark->GetMarkEnd());
         CPPUNIT_ASSERT_EQUAL(emptyInputTextField, pam.GetText());
+    }
+}
+
+// If you resave original document the bookmark will be changed from
+//
+//  <text:p text:style-name="Standard">
+//      <text:bookmark-start text:name="test"/>
+//      <text:bookmark-end text:name="test"/>
+//      def
+//  </text:p>
+//
+// to
+//
+//  <text:p text:style-name="Standard">
+//      <text:bookmark text:name="test"/>
+//      def
+//  </text:p>
+//
+void SwUiWriterTest::testBookmarkCollapsed()
+{
+    // load document
+    SwDoc* pDoc = createDoc("collapsed_bookmark.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    // save original document
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+
+    // load only content.xml from the resaved document
+    if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    {
+        const OString aPath("/office:document-content/office:body/office:text/text:p");
+
+        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
+        const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
+        const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+
+        CPPUNIT_ASSERT_EQUAL(0, pos1); // found, and it is first
+        CPPUNIT_ASSERT_EQUAL(2, pos2); // not found
+        CPPUNIT_ASSERT_EQUAL(2, pos3); // not found
+    }
+}
+
+// 1. Open a new writer document
+// 2. Enter the text "abcdef"
+// 3. Select "abc"
+// 4. Insert a bookmark on "abc" using Insert->Bookmark. Name the bookmark "test".
+// 5. Open the navigator (F5)
+//    Select the bookmark "test" using the navigator.
+// 6. Hit Del, thus deleting "abc" (The bookmark "test" is still there).
+// 7. Save the document:
+//      <text:p text:style-name="Standard">
+//          <text:bookmark-start text:name="test"/>
+//          <text:bookmark-end text:name="test"/>
+//          def
+//      </text:p>
+//
+void SwUiWriterTest::testRemoveBookmarkText()
+{
+    // create document
+    {
+        // create a text document with "abcdef"
+        SwDoc* pDoc = createDoc();
+        SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+
+        {
+            SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+            SwPaM aPaM(aIdx);
+            pDoc->getIDocumentContentOperations().InsertString(aPaM, "abcdef");
+        }
+
+        // mark "abc" with "testBookmark" bookmark
+        {
+            SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+            SwPaM aPaM(aIdx);
+
+            lcl_selectCharacters(aPaM, 0, 3);
+            IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
+            sw::mark::IMark *pMark =
+                rIDMA.makeMark(aPaM, "testBookmark",
+                    IDocumentMarkAccess::MarkType::BOOKMARK,
+                    ::sw::mark::InsertMode::New);
+
+            // verify
+            CPPUNIT_ASSERT(pMark->IsExpanded());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+        }
+
+        // remove text marked with bookmark
+        {
+            SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+            SwPaM aPaM(aIdx);
+
+            lcl_selectCharacters(aPaM, 0, 3);
+            pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
+
+            // verify: bookmark is still exist
+            IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+        }
+    }
+
+    // save document
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+
+    // load only content.xml from the resaved document
+    if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    {
+        const OString aPath("/office:document-content/office:body/office:text/text:p");
+
+        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
+        const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
+        const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+
+        CPPUNIT_ASSERT_EQUAL(3, pos1); // not found
+        CPPUNIT_ASSERT_EQUAL(0, pos2); // found, and it is first
+        CPPUNIT_ASSERT_EQUAL(1, pos3); // found, and it is second
+    }
+}
+
+// 1. Open a new writer document
+// 2. Enter the text "abcdef"
+// 3. Select "abc"
+// 4. Insert a bookmark on "abc" using Insert->Bookmark. Name the bookmark "test".
+// 5. Open the navigator (F5)
+//    Select the bookmark "test" using the navigator.
+// 6. Hit Del, thus deleting "abc" (The bookmark "test" is still there).
+// 7. Call our macro
+//
+//      Sub Main
+//          bookmark = ThisComponent.getBookmarks().getByName("test")
+//          bookmark.getAnchor().setString("abc")
+//      End Sub
+//
+//    The text "abc" gets inserted inside the bookmark "test", and the document now contains the string "abcdef".
+// 7. Save the document:
+//      <text:p text:style-name="Standard">
+//          <text:bookmark-start text:name="test"/>
+//          abc
+//          <text:bookmark-end text:name="test"/>
+//          def
+//      </text:p>
+//
+void SwUiWriterTest::testRemoveBookmarkTextAndAddNew()
+{
+    // create document
+    {
+        // create a text document with "abcdef"
+        SwDoc* pDoc = createDoc();
+        SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+
+        {
+            SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+            SwPaM aPaM(aIdx);
+            pDoc->getIDocumentContentOperations().InsertString(aPaM, "abcdef");
+        }
+
+        // mark "abc" with "testBookmark" bookmark
+        {
+            SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+            SwPaM aPaM(aIdx);
+
+            lcl_selectCharacters(aPaM, 0, 3);
+            IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
+            sw::mark::IMark *pMark =
+                rIDMA.makeMark(aPaM, "testBookmark",
+                    IDocumentMarkAccess::MarkType::BOOKMARK,
+                    ::sw::mark::InsertMode::New);
+
+            // verify
+            CPPUNIT_ASSERT(pMark->IsExpanded());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+        }
+
+        // remove text marked with bookmark
+        {
+            SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+            SwPaM aPaM(aIdx);
+
+            lcl_selectCharacters(aPaM, 0, 3);
+            pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
+
+            // verify: bookmark is still exist
+            IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+        }
+
+        // write "abc" to area marked with "testBookmark" bookmark
+        {
+            // Get helper objects
+            uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+            uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+
+            // Create cursor from bookmark
+            uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("testBookmark"), uno::UNO_QUERY);
+            uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(OUString(""), xRange->getString());
+
+            // write "abc"
+            xRange->setString("abc");
+
+            // verify: bookmark is still exist
+            IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+        }
+    }
+
+    // save document
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+
+    // load only content.xml from the resaved document
+    if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    {
+        const OString aPath("/office:document-content/office:body/office:text/text:p");
+
+        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
+        const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
+        const int pos3 = getXPathPosition(pXmlDoc, aPath, "text");
+        const int pos4 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+
+        CPPUNIT_ASSERT_EQUAL(4, pos1); // not found
+        CPPUNIT_ASSERT_EQUAL(0, pos2);
+        CPPUNIT_ASSERT_EQUAL(1, pos3);
+        CPPUNIT_ASSERT_EQUAL(2, pos4);
+    }
+}
+
+// 1. Load document:
+//  <text:p text:style-name="Standard">
+//      <text:bookmark-start text:name="test"/>
+//      <text:bookmark-end text:name="test"/>
+//      def
+//  </text:p>
+//
+// 2. Call our macro
+//
+//      Sub Main
+//          bookmark = ThisComponent.getBookmarks().getByName("test")
+//          bookmark.getAnchor().setString("abc")
+//      End Sub
+//
+//    The text "abc" gets inserted inside the bookmark "test", and the document now contains the string "abcdef".
+// 3. Save the document:
+//      <text:p text:style-name="Standard">
+//          <text:bookmark text:name="test"/>
+//          abcdef
+//      </text:p>
+//
+void SwUiWriterTest::testRemoveBookmarkTextAndAddNewAfterReload()
+{
+    // load document
+    SwDoc* pDoc = createDoc("collapsed_bookmark.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    // write "abc" to area marked with "testBookmark" bookmark
+    {
+        // Get helper objects
+        uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+
+        // Create cursor from bookmark
+        uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("test"), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString(""), xRange->getString());
+
+        // write "abc"
+        xRange->setString("abc");
+
+        // verify: bookmark is still exist
+        IDocumentMarkAccess &rIDMA = *pDoc->getIDocumentMarkAccess();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
+    }
+
+    // save original document
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+
+    // load only content.xml from the resaved document
+    if (xmlDocPtr pXmlDoc = parseExportInternal(aTempFile.GetURL(), "content.xml"))
+    {
+        const OString aPath("/office:document-content/office:body/office:text/text:p");
+
+        const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
+        const int pos2 = getXPathPosition(pXmlDoc, aPath, "text");
+
+        const int pos3 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
+        const int pos4 = getXPathPosition(pXmlDoc, aPath, "bookmark-end");
+
+        CPPUNIT_ASSERT_EQUAL(0, pos1);
+        CPPUNIT_ASSERT_EQUAL(1, pos2);
+        CPPUNIT_ASSERT_EQUAL(2, pos3); // not found
+        CPPUNIT_ASSERT_EQUAL(2, pos4); // not found
     }
 }
 
