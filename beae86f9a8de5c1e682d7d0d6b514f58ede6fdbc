@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf57530f_9dd6aff1",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-28T13:41:30Z",
+      "side": 1,
+      "message": "When manually creating an interim ScMatrix please call SetMutable() at it, see GetNewMat().",
+      "revId": "beae86f9a8de5c1e682d7d0d6b514f58ede6fdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_ddcc2763",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3870,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-28T13:41:30Z",
+      "side": 1,
+      "message": "This local scope nParam and nRefInList is not how it is supposed to work for svRefList, compare with the original GetNumberSequenceArray(). Effectively this now handles only the first reference of a svRefList. Either handle all references (which, given the dimensional result, probably isn\u0027t possible in array evaluation mode for LARGE()/SMALL() unless there\u0027s a defined way to glue individual references) or set an error in array evaluation mode if svRefList is encountered.",
+      "range": {
+        "startLine": 3869,
+        "startChar": 0,
+        "endLine": 3870,
+        "endChar": 34
+      },
+      "revId": "beae86f9a8de5c1e682d7d0d6b514f58ede6fdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_9d446fb9",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3920,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-28T13:41:30Z",
+      "side": 1,
+      "message": "If all values have to be numeric then this else branch checking single elements is unnecessary, as pMat-\u003eIsNumeric() returns false if not all elements are numeric. Simply set an error instead.",
+      "revId": "beae86f9a8de5c1e682d7d0d6b514f58ede6fdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_5d1837d2",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3921,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-11-28T13:41:30Z",
+      "side": 1,
+      "message": "Checking every element in this else branch whether it\u0027s numeric is unnecessary. pMat-\u003eIsNumeric() already returns false if not all elements are numeric, so simply set an error here instead.",
+      "revId": "beae86f9a8de5c1e682d7d0d6b514f58ede6fdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
