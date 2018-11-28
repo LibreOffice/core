@@ -69,6 +69,24 @@
       "revId": "874aa0614bac1e6b8368f05135b7574bf2a97e88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_5d64b7b9",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-28T10:41:11Z",
+      "side": 1,
+      "message": "It\u0027s good enough the way you wrote it. The main purpose of the refactoring I suggested was reduction of duplicated code and that goal has been achieved",
+      "parentUuid": "bf57530f_5767f626",
+      "revId": "874aa0614bac1e6b8368f05135b7574bf2a97e88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
