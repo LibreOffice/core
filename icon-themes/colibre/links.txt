@@ -1801,3 +1801,14 @@ cmd/lc_tableevents.png cmd/lc_animationeffects.png
 cmd/sc_sheetlefttoright.png cmd/sc_paralefttoright.png
 cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
+
+
+# Macro
+cmd/32/macrosmenu.png cmd/32/choosemacro.png
+cmd/32/basicideappear.png cmd/32/toolsmacroedit.png
+
+cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
+cmd/lc_basicideappear.png cmd/lc_toolsmacroedit.png
+
+cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
+cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
