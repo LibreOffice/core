@@ -254,6 +254,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes" context="printdialog|forward">Next page</property>
                                 <property name="image">image2</property>
                               </object>
                               <packing>
@@ -293,6 +294,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes" context="printdialog|backward">Previous page</property>
                                 <property name="image">image1</property>
                               </object>
                               <packing>
@@ -372,11 +374,14 @@
                   <object class="GtkNotebook" id="tabcontrol">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="scrollable">True</property>
+                    <property name="enable_popup">True</property>
                     <child>
                       <object class="GtkBox" id="box11">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">6</property>
+                        <property name="margin_right">6</property>
                         <property name="margin_top">6</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
@@ -419,6 +424,9 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes" context="printdialog|labelstatus">Status:</property>
+                                            <accessibility>
+                                              <relation type="label-for" target="status"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -431,6 +439,9 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes" context="printdialog|status">Default Printer</property>
+                                            <accessibility>
+                                              <relation type="labelled-by" target="labelstatus"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -606,6 +617,9 @@
                                             <property name="label" translatable="yes" context="printdialog|labelpages">Pages:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">pagerange</property>
+                                            <accessibility>
+                                              <relation type="label-for" target="pagerange"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -616,6 +630,9 @@
                                           <object class="GtkEntry" id="pagerange">
                                             <property name="can_focus">True</property>
                                             <property name="placeholder_text" translatable="yes" context="printdialog|pagerange">e.g.: 1, 3-5, 7, 9</property>
+                                            <accessibility>
+                                              <relation type="labelled-by" target="printrange"/>
+                                            </accessibility>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
