@@ -245,8 +245,6 @@ basctl/source/accessibility/accessibledialogcontrolshape.cxx
 basctl/source/accessibility/accessibledialogwindow.cxx
 basctl/source/basicide/basdoc.cxx
 basctl/source/basicide/basdoc.hxx
-basctl/source/basicide/basicbox.cxx
-basctl/source/basicide/basicbox.hxx
 basctl/source/basicide/basicmod.hxx
 basctl/source/basicide/basicrenderable.cxx
 basctl/source/basicide/basicrenderable.hxx
