@@ -201,6 +201,7 @@ private:
         const char* sAxisPos,
         const AxisIdPair& rAxisIdPair );
     void exportAxesId(bool bPrimaryAxes);
+    void exportAxesIdforCombined(AxisIdPair& nAIdx, AxisIdPair& nAIdy);
     void exportView3D();
     bool isDeep3dChart();
 
