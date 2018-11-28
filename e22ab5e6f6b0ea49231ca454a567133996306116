@@ -52,6 +52,24 @@
       "revId": "e22ab5e6f6b0ea49231ca454a567133996306116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf57530f_c24e86c0",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2018-11-28T01:40:49Z",
+      "side": 1,
+      "message": "\u003e AVERAGE would still work, or am I missing something?\n\nBecause AVERAGE() is element-wise, AVERAGE(LARGE(..., matrix)) looks OK even with the current imcomplete implementation.\nOn the other hand, as you suggest, MDETERM(LARGE(...)) is more demanding, so better for a test case. Thanks.",
+      "parentUuid": "ff5d4b2f_5bbcb968",
+      "revId": "e22ab5e6f6b0ea49231ca454a567133996306116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
