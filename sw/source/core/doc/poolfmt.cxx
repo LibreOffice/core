@@ -250,7 +250,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             switch( nId )
             {
             case RES_POOLCOLL_TABLE_HDLN:
-                    nRet = RES_POOLCOLL_TABLE;                  break;
+                    nRet = RES_POOLCOLL_TABLE;                 break;
 
             case RES_POOLCOLL_FRAME:
             case RES_POOLCOLL_TABLE:
@@ -258,14 +258,19 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             case RES_POOLCOLL_ENDNOTE:
             case RES_POOLCOLL_JAKETADRESS:
             case RES_POOLCOLL_SENDADRESS:
+            case RES_POOLCOLL_HEADERFOOTER:
+            case RES_POOLCOLL_LABEL:
+                    nRet = RES_POOLCOLL_STANDARD;              break;        
             case RES_POOLCOLL_HEADER:
+                    nRet = RES_POOLCOLL_HEADERFOOTER;          break;
             case RES_POOLCOLL_HEADERL:
             case RES_POOLCOLL_HEADERR:
+                    nRet = RES_POOLCOLL_HEADER;                break;
             case RES_POOLCOLL_FOOTER:
+                    nRet = RES_POOLCOLL_HEADERFOOTER;          break;
             case RES_POOLCOLL_FOOTERL:
             case RES_POOLCOLL_FOOTERR:
-            case RES_POOLCOLL_LABEL:
-                    nRet = RES_POOLCOLL_STANDARD;               break;
+                    nRet = RES_POOLCOLL_FOOTER;                break;
 
             case RES_POOLCOLL_LABEL_ABB:
             case RES_POOLCOLL_LABEL_TABLE:

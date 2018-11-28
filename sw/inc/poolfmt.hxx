@@ -327,7 +327,8 @@ RES_POOLCOLL_LISTS_END,
 RES_POOLCOLL_EXTRA_BEGIN = COLL_EXTRA_BITS,
 
 /// Subgroup header.
-RES_POOLCOLL_HEADER = RES_POOLCOLL_EXTRA_BEGIN,         ///< Header Left&Right.
+RES_POOLCOLL_HEADERFOOTER = RES_POOLCOLL_EXTRA_BEGIN,   ///< Header and Footer.
+RES_POOLCOLL_HEADER,                                    ///< Header Left&Right.
 RES_POOLCOLL_HEADERL,                                   ///< Header Left.
 RES_POOLCOLL_HEADERR,                                   ///< Header Right.
 
