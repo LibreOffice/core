@@ -3060,10 +3060,12 @@
                                       <object class="sfxlo-NotebookbarToolBox" id="font">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="hexpand">True</property>
                                         <child>
-                                          <object class="GtkToolButton" id="Home-CarFontName">
+                                          <object class="GtkToolButton" id="Home-CharFontName">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="hexpand">True</property>
                                             <property name="action_name">.uno:CharFontName</property>
                                           </object>
                                           <packing>
@@ -3105,8 +3107,6 @@
                                       <object class="sfxlo-NotebookbarToolBox" id="ExtTop6">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="halign">end</property>
-                                        <property name="hexpand">True</property>
                                         <property name="toolbar_style">icons</property>
                                         <property name="show_arrow">False</property>
                                         <child>
@@ -14588,12 +14588,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
-                                <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Tools-MacroOrganizer">
+                                  <object class="GtkToolButton" id="Tools-ScriptOrganizer">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:MacroOrganizer?TabId:short=1</property>
+                                    <property name="action_name">.uno:ScriptOrganizer</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
