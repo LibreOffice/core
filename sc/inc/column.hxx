@@ -575,6 +575,9 @@ public:
     void FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const;
     formula::VectorRefArray FetchVectorRefArray( SCROW nRow1, SCROW nRow2 );
     bool HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup );
+#ifdef DBG_UTIL
+    void AssertNoInterpretNeeded( SCROW nRow1, SCROW nRow2 );
+#endif
     void SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen );
 
     void CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal );

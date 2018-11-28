@@ -2398,6 +2398,9 @@ public:
 
     formula::VectorRefArray FetchVectorRefArray( const ScAddress& rPos, SCROW nLength );
     bool HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength, const ScFormulaCellGroupRef& mxGroup );
+#ifdef DBG_UTIL
+    void AssertNoInterpretNeeded( const ScAddress& rPos, SCROW nLength );
+#endif
 
     /**
      * Call this before any operations that might trigger one or more formula

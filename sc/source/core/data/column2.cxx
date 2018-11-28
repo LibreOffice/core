@@ -2834,6 +2834,35 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     return formula::VectorRefArray(formula::VectorRefArray::Invalid);
 }
 
+#ifdef DBG_UTIL
+static void assertNoInterpretNeededHelper( const sc::CellStoreType::value_type& node,
+    size_t nOffset, size_t nDataSize )
+{
+    switch (node.type)
+    {
+        case sc::element_type_formula:
+        {
+            sc::formula_block::const_iterator it = sc::formula_block::begin(*node.data);
+            std::advance(it, nOffset);
+            sc::formula_block::const_iterator itEnd = it;
+            std::advance(itEnd, nDataSize);
+            for (; it != itEnd; ++it)
+            {
+                const ScFormulaCell* pCell = *it;
+                assert( !pCell->NeedsInterpret());
+            }
+            break;
+        }
+    }
+}
+void ScColumn::AssertNoInterpretNeeded( SCROW nRow1, SCROW nRow2 )
+{
+    assert(nRow2 >= nRow1);
+    sc::ParseBlock( maCells.begin(), maCells, assertNoInterpretNeededHelper, 0, nRow2 );
+}
+#endif
+
+
 bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
 {
     if (nRow1 > nRow2)
