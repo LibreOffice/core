@@ -733,41 +733,4 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     // BM/IHA --
 }
 
-FuInsertChartFromFile::FuInsertChartFromFile(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-           SdrModel* pDoc, const SfxRequest& rReq, const OUString& rURL):
-    FuPoor(rViewSh, pWin, pViewP, pDoc, rReq)
-{
-    uno::Reference< io::XInputStream > xStorage = comphelper::OStorageHelper::GetInputStreamFromURL(
-            rURL, comphelper::getProcessComponentContext());
-
-    comphelper::EmbeddedObjectContainer& rObjContainer =
-        rViewShell.GetObjectShell()->GetEmbeddedObjectContainer();
-
-    OUString aName;
-    uno::Reference< embed::XEmbeddedObject > xObj = rObjContainer.InsertEmbeddedObject( xStorage, aName );
-
-    const sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-    awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-    Size aSize( aSz.Width, aSz.Height );
-
-    ScRange aPositionRange = rViewSh.GetViewData().GetCurPos();
-    Point aStart = rViewSh.GetChartInsertPos( aSize, aPositionRange );
-    tools::Rectangle aRect (aStart, aSize);
-    SdrOle2Obj* pObj = new SdrOle2Obj(
-        *pDoc, // TTTT should be reference
-        svt::EmbeddedObjectRef(xObj, nAspect),
-        aName,
-        aRect);
-
-    SdrPageView* pPV = pView->GetSdrPageView();
-
-    // use the page instead of the view to insert, so no undo action is created yet
-    SdrPage* pInsPage = pPV->GetPage();
-    pInsPage->InsertObject( pObj );
-    pView->UnmarkAllObj();
-    pView->MarkObj( pObj, pPV );
-
-    rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

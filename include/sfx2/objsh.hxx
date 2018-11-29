@@ -602,7 +602,7 @@ public:
      */
     void            SetupStorage(
                         const css::uno::Reference< css::embed::XStorage >& xStorage,
-                        sal_Int32 nVersion, bool bTemplate, bool bChart = false ) const;
+                        sal_Int32 nVersion, bool bTemplate ) const;
 
     css::uno::Reference< css::embed::XStorage > const & GetStorage();
 

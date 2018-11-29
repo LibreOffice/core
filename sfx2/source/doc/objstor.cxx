@@ -300,38 +300,9 @@ SvGlobalName const & SfxObjectShell::GetClassName() const
     return GetFactory().GetClassId();
 }
 
-namespace {
-
-/**
- * Chart2 does not have an Object shell, so handle this here for now
- * If we ever implement a full scale object shell in chart2 move it there
- */
-SotClipboardFormatId GetChartVersion( sal_Int32 nVersion, bool bTemplate )
-{
-    if( nVersion == SOFFICE_FILEFORMAT_60)
-    {
-        return SotClipboardFormatId::STARCHART_60;
-    }
-    else if( nVersion == SOFFICE_FILEFORMAT_8)
-    {
-        if (bTemplate)
-        {
-            SAL_WARN("sfx.doc", "no chart template support yet");
-            return SotClipboardFormatId::STARCHART_8;
-        }
-        else
-            return SotClipboardFormatId::STARCHART_8;
-    }
-
-    SAL_WARN("sfx.doc", "unsupported version");
-    return SotClipboardFormatId::NONE;
-}
-
-}
-
 
 void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xStorage,
-                                   sal_Int32 nVersion, bool bTemplate, bool bChart ) const
+                                   sal_Int32 nVersion, bool bTemplate ) const
 {
     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
 
@@ -339,14 +310,9 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     {
         SotClipboardFormatId nClipFormat = SotClipboardFormatId::NONE;
 
-        if(!bChart)
-        {
-            SvGlobalName aName;
-            OUString aFullTypeName, aShortTypeName, aAppName;
-            FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
-        }
-        else
-            nClipFormat = GetChartVersion(nVersion, bTemplate);
+        SvGlobalName aName;
+        OUString aFullTypeName, aShortTypeName, aAppName;
+        FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
 
         if ( nClipFormat != SotClipboardFormatId::NONE )
         {
@@ -3069,12 +3035,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         const bool bTemplate = rMedium.GetFilter()->IsOwnTemplateFormat()
             && nVersion > SOFFICE_FILEFORMAT_60;
 
-        std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
-        bool bChart = false;
-        if(pFilter->GetName() == "chart8")
-            bChart = true;
-
-        SetupStorage( xStorage, nVersion, bTemplate, bChart );
+        SetupStorage( xStorage, nVersion, bTemplate );
 #if HAVE_FEATURE_SCRIPTING
         if ( HasBasic() )
         {

@@ -4789,25 +4789,6 @@ SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
 ]
 
 
-SfxVoidItem InsertObjectChartFromFile SID_INSERT_DIAGRAM_FROM_FILE
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Insert;
-]
-
-
 SfxVoidItem InsertSymbol SID_CHARMAP
 (SfxStringItem Symbols SID_CHARMAP, SfxStringItem FontName SID_ATTR_SPECIALCHAR)
 [
