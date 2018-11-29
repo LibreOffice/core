@@ -124,6 +124,14 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     return xLabeledSeq;
 }
 
+void convertTextProperty(PropertySet& rPropSet, ObjectFormatter& rFormatter,
+        DataLabelModelBase::TextBodyRef xTextProps)
+{
+    rFormatter.convertTextFormatting( rPropSet, xTextProps, OBJECTTYPE_DATALABEL );
+    ObjectFormatter::convertTextRotation( rPropSet, xTextProps, false );
+    ObjectFormatter::convertTextWrap( rPropSet, xTextProps );
+}
+
 void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
                                 const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup,
                                 bool bDataSeriesLabel, bool bMSO2007Doc, const PropertySet* pSeriesPropSet )
@@ -171,10 +179,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat, false, bShowPercent );
 
         // data label text formatting (frame formatting not supported by Chart2)
-        rFormatter.convertTextFormatting( rPropSet, rDataLabel.mxTextProp, OBJECTTYPE_DATALABEL );
-        ObjectFormatter::convertTextRotation( rPropSet, rDataLabel.mxTextProp, false );
-        ObjectFormatter::convertTextWrap( rPropSet, rDataLabel.mxTextProp );
-
+        convertTextProperty(rPropSet, rFormatter, rDataLabel.mxTextProp);
 
         // data label separator (do not overwrite series separator, if no explicit point separator is present)
         if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
@@ -338,6 +343,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             }
 
             aPropSet.setProperty( PROP_CustomLabelFields, makeAny( aSequence ) );
+            convertTextProperty(aPropSet, getFormatter(), mrModel.mxText->mxTextBody);
         }
     }
     catch( Exception& )
