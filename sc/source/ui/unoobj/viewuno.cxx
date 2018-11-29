@@ -1778,6 +1778,19 @@ void ScTabViewObj::SelectionChanged()
     }
 }
 
+
+void ScTabViewObj::TextSelectionChanged()
+{
+    lang::EventObject aEvent;
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+    for (const auto& rListener : aSelectionChgListeners)
+    {
+        const uno::Reference<lang::XServiceInfo> xServiceInfo(rListener, uno::UNO_QUERY);
+        if (xServiceInfo.is() && xServiceInfo->supportsService("TextSelectionChangeListener"))
+            rListener->selectionChanged( aEvent );
+    }
+}
+
 //  XPropertySet (view options)
 //! provide those also in application?
 

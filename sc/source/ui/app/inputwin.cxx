@@ -1534,6 +1534,13 @@ IMPL_LINK(ScTextWnd, NotifyHdl, EENotify&, rNotify, void)
     if ( rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED
          || rNotify.eNotificationType == EE_NOTIFY_TextHeightChanged )
         SetScrollBarRange();
+    else if (rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSELECTIONCHANGED
+            || rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA)
+    {
+        ScTabView* pView = mpViewShell ? mpViewShell->GetViewData().GetView() : nullptr;
+        if (pView)
+            pView->TextSelectionChanged();
+    }
 }
 
 IMPL_LINK_NOARG(ScTextWnd, ModifyHdl, LinkParamNone*, void)

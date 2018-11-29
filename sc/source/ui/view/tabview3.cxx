@@ -596,6 +596,21 @@ void ScTabView::SelectionChanged()
     CellContentChanged();
 }
 
+void ScTabView::TextSelectionChanged()
+{
+    SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
+    if (pViewFrame)
+    {
+        uno::Reference<frame::XController> xController = pViewFrame->GetFrame().GetController();
+        if (xController.is())
+        {
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->TextSelectionChanged();
+        }
+    }
+}
+
 void ScTabView::CursorPosChanged()
 {
     bool bRefMode = SC_MOD()->IsFormulaMode();

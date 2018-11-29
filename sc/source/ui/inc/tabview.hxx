@@ -391,6 +391,7 @@ public:
 
     SC_DLLPUBLIC void           CellContentChanged();
     void            SelectionChanged();
+    void            TextSelectionChanged();
     void            CursorPosChanged();
     void            UpdateInputContext();
 
