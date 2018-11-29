@@ -19,6 +19,7 @@
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
 #include <redline.hxx>
+#include <UndoManager.hxx>
 
 namespace
 {
@@ -36,6 +37,7 @@ public:
     void testTdf108687_tabstop();
     void testTdf119571();
     void testTdf119019();
+    void testTdf119824();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -45,6 +47,7 @@ public:
     CPPUNIT_TEST(testTdf108687_tabstop);
     CPPUNIT_TEST(testTdf119571);
     CPPUNIT_TEST(testTdf119019);
+    CPPUNIT_TEST(testTdf119824);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -273,6 +276,7 @@ void SwUiWriterTest2::testTdf119571()
 
 void SwUiWriterTest2::testTdf119019()
 {
+    // check handling of overlapping redlines
     load(DATA_DIRECTORY, "tdf119019.docx");
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -302,6 +306,70 @@ void SwUiWriterTest2::testTdf119019()
 
     // make sure that the tracked paragraph formatting is removed
     CPPUNIT_ASSERT(!hasProperty(getRun(getParagraph(2), 1), "RedlineType"));
+}
+
+void SwUiWriterTest2::testTdf119824()
+{
+    // check handling of overlapping redlines with Redo
+    SwDoc* pDoc = createDoc("tdf119019.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Pellentesque habitant morbi tristique senectus "
+                                  "et netus et malesuada fames ac turpis egestas. "
+                                  "Proin pharetra nonummy pede. Mauris et orci."),
+                         getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 1)->getString());
+    // third paragraph has got a tracked paragraph formatting at this point
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 1), "RedlineType"));
+
+    // and a tracked text deletion at the beginning of the paragraph
+    CPPUNIT_ASSERT_EQUAL(OUString("Pellentesque habitant morbi tristique senectus "),
+                         getRun(getParagraph(3), 3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 2)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 2), "RedlineType"));
+
+    // delete last word of the third paragraph to remove tracked paragraph formatting
+    // of this paragraph to track and show word deletion correctly.
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Cut();
+
+    // check tracking of the new text deletion
+    CPPUNIT_ASSERT_EQUAL(OUString("orci."), getRun(getParagraph(3), 7)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 6)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 6), "RedlineType"));
+
+    // make sure that the tracked paragraph formatting is removed (tracked deletion is in the second run)
+    CPPUNIT_ASSERT_EQUAL(OUString("Pellentesque habitant morbi tristique senectus "),
+                         getRun(getParagraph(3), 2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 1)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 1), "RedlineType"));
+
+    // tdf#119824 check redo
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.Undo();
+    rUndoManager.Undo();
+    rUndoManager.Redo();
+    rUndoManager.Redo();
+
+    // check again the first tracked text deletion (we lost this before the redo fix)
+    CPPUNIT_ASSERT_EQUAL(OUString("Pellentesque habitant morbi tristique senectus "),
+                         getRun(getParagraph(3), 2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 1)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 1), "RedlineType"));
+
+    // check redo of the new tracked text deletion
+    CPPUNIT_ASSERT_EQUAL(OUString("orci."), getRun(getParagraph(3), 7)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 6)->getString());
+    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 6), "RedlineType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
