@@ -154,22 +154,21 @@ void OfaAutoCorrDlg::EnableLanguage(bool bEnable)
     m_pLanguageBox->Enable(bEnable);
 }
 
-static bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
-                    CollatorWrapper const & rCmpClass )
+static bool lcl_FindEntry(weld::TreeView& rLB, const OUString& rEntry,
+                          CollatorWrapper const & rCmpClass)
 {
-    sal_Int32 nCount = rLB.GetEntryCount();
-    sal_Int32 nSelPos = rLB.GetSelectedEntryPos();
-    sal_Int32 i;
-    for(i = 0; i < nCount; i++)
+    int nCount = rLB.n_children();
+    int nSelPos = rLB.get_selected_index();
+    for (int i = 0; i < nCount; i++)
     {
-        if( 0 == rCmpClass.compareString(rEntry, rLB.GetEntry(i) ))
+        if (0 == rCmpClass.compareString(rEntry, rLB.get_text(i)))
         {
-            rLB.SelectEntryPos(i);
+            rLB.select(i);
             return true;
         }
     }
-    if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
-        rLB.SelectEntryPos(nSelPos, false);
+    if (nSelPos != -1)
+        rLB.unselect(nSelPos);
     return false;
 }
 
@@ -1387,42 +1386,42 @@ static bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rSt
     return false;
 }
 
-OfaAutocorrExceptPage::OfaAutocorrExceptPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "AcorExceptPage", "cui/ui/acorexceptpage.ui", &rSet)
+OfaAutocorrExceptPage::OfaAutocorrExceptPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/acorexceptpage.ui", "AcorExceptPage", &rSet)
     , eLang(eLastDialogLanguage)
+    , m_xAbbrevED(m_xBuilder->weld_entry("abbrev"))
+    , m_xAbbrevLB(m_xBuilder->weld_tree_view("abbrevlist"))
+    , m_xNewAbbrevPB(m_xBuilder->weld_button("newabbrev"))
+    , m_xDelAbbrevPB(m_xBuilder->weld_button("delabbrev"))
+    , m_xAutoAbbrevCB(m_xBuilder->weld_check_button("autoabbrev"))
+    , m_xDoubleCapsED(m_xBuilder->weld_entry("double"))
+    , m_xDoubleCapsLB(m_xBuilder->weld_tree_view("doublelist"))
+    , m_xNewDoublePB(m_xBuilder->weld_button("newdouble"))
+    , m_xDelDoublePB(m_xBuilder->weld_button("deldouble"))
+    , m_xAutoCapsCB(m_xBuilder->weld_check_button("autodouble"))
 {
-    get(m_pAbbrevED, "abbrev");
-    get(m_pAbbrevLB, "abbrevlist");
-    m_pAbbrevLB->SetStyle(m_pAbbrevLB->GetStyle() | WB_SORT);
-    m_pAbbrevLB->SetDropDownLineCount(7);
-    get(m_pNewAbbrevPB, "newabbrev");
-    get(m_pDelAbbrevPB, "delabbrev");
-    get(m_pAutoAbbrevCB, "autoabbrev");
+    m_xAbbrevLB->make_sorted();
+    m_xAbbrevLB->set_size_request(-1, m_xAbbrevLB->get_height_rows(7));
 
-    get(m_pDoubleCapsED, "double");
-    get(m_pDoubleCapsLB, "doublelist");
-    m_pDoubleCapsLB->SetStyle(m_pDoubleCapsLB->GetStyle() | WB_SORT);
-    m_pDoubleCapsLB->SetDropDownLineCount(7);
-    get(m_pNewDoublePB, "newdouble");
-    get(m_pDelDoublePB, "deldouble");
-    get(m_pAutoCapsCB, "autodouble");
+    m_xDoubleCapsLB->make_sorted();
+    m_xDoubleCapsLB->set_size_request(-1, m_xDoubleCapsLB->get_height_rows(7));
 
     css::lang::Locale aLcl( LanguageTag::convertToLocale(eLastDialogLanguage ));
     pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
     pCompareClass->loadDefaultCollator( aLcl, 0 );
 
-    m_pNewAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
-    m_pDelAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
-    m_pNewDoublePB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
-    m_pDelDoublePB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
+    m_xNewAbbrevPB->connect_clicked(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
+    m_xDelAbbrevPB->connect_clicked(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
+    m_xNewDoublePB->connect_clicked(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
+    m_xDelDoublePB->connect_clicked(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
 
-    m_pAbbrevLB->SetSelectHdl(LINK(this, OfaAutocorrExceptPage, SelectHdl));
-    m_pDoubleCapsLB->SetSelectHdl(LINK(this, OfaAutocorrExceptPage, SelectHdl));
-    m_pAbbrevED->SetModifyHdl(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
-    m_pDoubleCapsED->SetModifyHdl(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
+    m_xAbbrevLB->connect_changed(LINK(this, OfaAutocorrExceptPage, SelectHdl));
+    m_xDoubleCapsLB->connect_changed(LINK(this, OfaAutocorrExceptPage, SelectHdl));
+    m_xAbbrevED->connect_changed(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
+    m_xDoubleCapsED->connect_changed(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
 
-    m_pAbbrevED->SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelActionHdl));
-    m_pDoubleCapsED->SetActionHdl(LINK(this, OfaAutocorrExceptPage, NewDelActionHdl));
+    m_xAbbrevED->connect_activate(LINK(this, OfaAutocorrExceptPage, NewDelActionHdl));
+    m_xDoubleCapsED->connect_activate(LINK(this, OfaAutocorrExceptPage, NewDelActionHdl));
 }
 
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
@@ -1434,23 +1433,13 @@ void OfaAutocorrExceptPage::dispose()
 {
     aStringsTable.clear();
     pCompareClass.reset();
-    m_pAbbrevED.clear();
-    m_pAbbrevLB.clear();
-    m_pNewAbbrevPB.clear();
-    m_pDelAbbrevPB.clear();
-    m_pAutoAbbrevCB.clear();
-    m_pDoubleCapsED.clear();
-    m_pDoubleCapsLB.clear();
-    m_pNewDoublePB.clear();
-    m_pDelDoublePB.clear();
-    m_pAutoCapsCB.clear();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaAutocorrExceptPage::Create( TabPageParent pParent,
-                                                  const SfxItemSet* rSet)
+VclPtr<SfxTabPage> OfaAutocorrExceptPage::Create(TabPageParent pParent,
+                                                 const SfxItemSet* rSet)
 {
-    return VclPtr<OfaAutocorrExceptPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<OfaAutocorrExceptPage>::Create(pParent, *rSet);
 }
 
 void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
@@ -1532,15 +1521,15 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
         for( i = nCount; i; )
         {
             OUString aString = (*pWrdList)[ --i ];
-            if( LISTBOX_ENTRY_NOTFOUND == m_pDoubleCapsLB->GetEntryPos(aString) )
+            if (m_xDoubleCapsLB->find_text(aString) == -1)
             {
                 pWrdList->erase(i);
             }
         }
-        nCount = m_pDoubleCapsLB->GetEntryCount();
+        nCount = m_xDoubleCapsLB->n_children();
         for( i = 0; i < nCount; ++i )
         {
-            pWrdList->insert( m_pDoubleCapsLB->GetEntry( i ) );
+            pWrdList->insert(m_xDoubleCapsLB->get_text(i));
         }
         pAutoCorrect->SaveWrdSttExceptList(eLang);
     }
@@ -1553,22 +1542,22 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
         for( size_t i = nCount; i; )
         {
             OUString aString = (*pCplList)[ --i ];
-            if( LISTBOX_ENTRY_NOTFOUND == m_pAbbrevLB->GetEntryPos(aString) )
+            if (m_xAbbrevLB->find_text(aString) == -1)
             {
                 pCplList->erase(i);
             }
         }
-        sal_Int32 nAbbrevCount = m_pAbbrevLB->GetEntryCount();
+        sal_Int32 nAbbrevCount = m_xAbbrevLB->n_children();
         for( sal_Int32 ia = 0; ia < nAbbrevCount; ++ia )
         {
-            pCplList->insert( m_pAbbrevLB->GetEntry( ia ) );
+            pCplList->insert(m_xAbbrevLB->get_text(ia));
         }
         pAutoCorrect->SaveCplSttExceptList(eLang);
     }
-    if(m_pAutoAbbrevCB->IsValueChangedFromSaved())
-        pAutoCorrect->SetAutoCorrFlag( ACFlags::SaveWordCplSttLst, m_pAutoAbbrevCB->IsChecked());
-    if(m_pAutoCapsCB->IsValueChangedFromSaved())
-        pAutoCorrect->SetAutoCorrFlag( ACFlags::SaveWordWrdSttLst, m_pAutoCapsCB->IsChecked());
+    if (m_xAutoAbbrevCB->get_state_changed_from_saved())
+        pAutoCorrect->SetAutoCorrFlag( ACFlags::SaveWordCplSttLst, m_xAutoAbbrevCB->get_active());
+    if (m_xAutoCapsCB->get_state_changed_from_saved())
+        pAutoCorrect->SetAutoCorrFlag( ACFlags::SaveWordWrdSttLst, m_xAutoCapsCB->get_active());
     return false;
 }
 
@@ -1581,8 +1570,8 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         eLastDialogLanguage = eSet;
         pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
         pCompareClass->loadDefaultCollator( LanguageTag::convertToLocale( eLastDialogLanguage ), 0 );
-        ModifyHdl(*m_pAbbrevED);
-        ModifyHdl(*m_pDoubleCapsED);
+        ModifyHdl(*m_xAbbrevED);
+        ModifyHdl(*m_xDoubleCapsED);
     }
 }
 
@@ -1609,27 +1598,29 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
             pArrays = &aStringsTable[eOldLanguage]; // create new array
         }
 
-        sal_Int32 i;
-        for(i = 0; i < m_pAbbrevLB->GetEntryCount(); i++)
-            pArrays->aAbbrevStrings.push_back(m_pAbbrevLB->GetEntry(i));
+        sal_Int32 i, nCount;
+        nCount = m_xAbbrevLB->n_children();
+        for(i = 0; i < nCount; i++)
+            pArrays->aAbbrevStrings.push_back(m_xAbbrevLB->get_text(i));
 
-        for(i = 0; i < m_pDoubleCapsLB->GetEntryCount(); i++)
-            pArrays->aDoubleCapsStrings.push_back(m_pDoubleCapsLB->GetEntry(i));
+        nCount = m_xDoubleCapsLB->n_children();
+        for(i = 0; i < nCount; i++)
+            pArrays->aDoubleCapsStrings.push_back(m_xDoubleCapsLB->get_text(i));
     }
-    m_pDoubleCapsLB->Clear();
-    m_pAbbrevLB->Clear();
+    m_xDoubleCapsLB->clear();
+    m_xAbbrevLB->clear();
     OUString sTemp;
-    m_pAbbrevED->SetText(sTemp);
-    m_pDoubleCapsED->SetText(sTemp);
+    m_xAbbrevED->set_text(sTemp);
+    m_xDoubleCapsED->set_text(sTemp);
 
     if(aStringsTable.find(eLang) != aStringsTable.end())
     {
         StringsArrays& rArrays = aStringsTable[eLang];
         for (auto const& elem : rArrays.aAbbrevStrings)
-            m_pAbbrevLB->InsertEntry(elem);
+            m_xAbbrevLB->append_text(elem);
 
         for (auto const& elem : rArrays.aDoubleCapsStrings)
-            m_pDoubleCapsLB->InsertEntry(elem);
+            m_xDoubleCapsLB->append_text(elem);
     }
     else
     {
@@ -1639,11 +1630,11 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
         size_t i;
         for( i = 0; i < pCplList->size(); i++ )
         {
-            m_pAbbrevLB->InsertEntry((*pCplList)[i]);
+            m_xAbbrevLB->append_text((*pCplList)[i]);
         }
         for( i = 0; i < pWrdList->size(); i++ )
         {
-            m_pDoubleCapsLB->InsertEntry((*pWrdList)[i]);
+            m_xDoubleCapsLB->append_text((*pWrdList)[i]);
         }
     }
 }
@@ -1652,127 +1643,85 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     RefillReplaceBoxes(true, eLang, eLang);
-    m_pAutoAbbrevCB->  Check(  pAutoCorrect->IsAutoCorrFlag( ACFlags::SaveWordCplSttLst ));
-    m_pAutoCapsCB->    Check(  pAutoCorrect->IsAutoCorrFlag( ACFlags::SaveWordWrdSttLst ));
-    m_pAutoAbbrevCB->SaveValue();
-    m_pAutoCapsCB->SaveValue();
+    m_xAutoAbbrevCB->set_active(pAutoCorrect->IsAutoCorrFlag( ACFlags::SaveWordCplSttLst));
+    m_xAutoCapsCB->set_active(pAutoCorrect->IsAutoCorrFlag( ACFlags::SaveWordWrdSttLst));
+    m_xAutoAbbrevCB->save_state();
+    m_xAutoCapsCB->save_state();
 }
 
-IMPL_LINK(OfaAutocorrExceptPage, NewDelButtonHdl, Button*, pBtn, void)
+IMPL_LINK(OfaAutocorrExceptPage, NewDelButtonHdl, weld::Button&, rBtn, void)
 {
-    NewDelHdl(pBtn);
+    NewDelHdl(&rBtn);
 }
 
-IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
+IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, weld::Entry&, rEdit, bool)
 {
     NewDelHdl(&rEdit);
     return false;
 }
 
-void OfaAutocorrExceptPage::NewDelHdl(void const * pBtn)
+void OfaAutocorrExceptPage::NewDelHdl(const weld::Widget* pBtn)
 {
-    if((pBtn == m_pNewAbbrevPB || pBtn == m_pAbbrevED.get() )
-        && !m_pAbbrevED->GetText().isEmpty())
+    if ((pBtn == m_xNewAbbrevPB.get() || pBtn == m_xAbbrevED.get())
+        && !m_xAbbrevED->get_text().isEmpty())
     {
-        m_pAbbrevLB->InsertEntry(m_pAbbrevED->GetText());
-        ModifyHdl(*m_pAbbrevED);
+        m_xAbbrevLB->append_text(m_xAbbrevED->get_text());
+        ModifyHdl(*m_xAbbrevED);
     }
-    else if(pBtn == m_pDelAbbrevPB)
+    else if(pBtn == m_xDelAbbrevPB.get())
     {
-        m_pAbbrevLB->RemoveEntry(m_pAbbrevED->GetText());
-        ModifyHdl(*m_pAbbrevED);
+        m_xAbbrevLB->remove_text(m_xAbbrevED->get_text());
+        ModifyHdl(*m_xAbbrevED);
     }
-    else if((pBtn == m_pNewDoublePB || pBtn == m_pDoubleCapsED.get() )
-            && !m_pDoubleCapsED->GetText().isEmpty())
+    else if((pBtn == m_xNewDoublePB.get() || pBtn == m_xDoubleCapsED.get() )
+            && !m_xDoubleCapsED->get_text().isEmpty())
     {
-        m_pDoubleCapsLB->InsertEntry(m_pDoubleCapsED->GetText());
-        ModifyHdl(*m_pDoubleCapsED);
+        m_xDoubleCapsLB->append_text(m_xDoubleCapsED->get_text());
+        ModifyHdl(*m_xDoubleCapsED);
     }
-    else if(pBtn == m_pDelDoublePB)
+    else if (pBtn == m_xDelDoublePB.get())
     {
-        m_pDoubleCapsLB->RemoveEntry(m_pDoubleCapsED->GetText());
-        ModifyHdl(*m_pDoubleCapsED);
+        m_xDoubleCapsLB->remove_text(m_xDoubleCapsED->get_text());
+        ModifyHdl(*m_xDoubleCapsED);
     }
 }
 
-IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)
+IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, weld::TreeView&, rBox, void)
 {
-    if (&rBox == m_pAbbrevLB)
+    if (&rBox == m_xAbbrevLB.get())
     {
-        m_pAbbrevED->SetText(rBox.GetSelectedEntry());
-        m_pNewAbbrevPB->Enable(false);
-        m_pDelAbbrevPB->Enable();
+        m_xAbbrevED->set_text(rBox.get_selected_text());
+        m_xNewAbbrevPB->set_sensitive(false);
+        m_xDelAbbrevPB->set_sensitive(true);
     }
     else
     {
-        m_pDoubleCapsED->SetText(rBox.GetSelectedEntry());
-        m_pNewDoublePB->Enable(false);
-        m_pDelDoublePB->Enable();
+        m_xDoubleCapsED->set_text(rBox.get_selected_text());
+        m_xNewDoublePB->set_sensitive(false);
+        m_xDelDoublePB->set_sensitive(true);
     }
 }
 
-IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit&, rEdt, void)
+IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, weld::Entry&, rEdt, void)
 {
-//  sal_Bool bSame = pEdt->GetText() == ->GetSelectedEntry();
-    const OUString& sEntry = rEdt.GetText();
+    const OUString& sEntry = rEdt.get_text();
     bool bEntryLen = !sEntry.isEmpty();
-    if(&rEdt == m_pAbbrevED)
+    if (&rEdt == m_xAbbrevED.get())
     {
-        bool bSame = lcl_FindEntry(*m_pAbbrevLB, sEntry, *pCompareClass);
-        if(bSame && sEntry != m_pAbbrevLB->GetSelectedEntry())
-            rEdt.SetText(m_pAbbrevLB->GetSelectedEntry());
-        m_pNewAbbrevPB->Enable(!bSame && bEntryLen);
-        m_pDelAbbrevPB->Enable(bSame && bEntryLen);
+        bool bSame = lcl_FindEntry(*m_xAbbrevLB, sEntry, *pCompareClass);
+        if(bSame && sEntry != m_xAbbrevLB->get_selected_text())
+            rEdt.set_text(m_xAbbrevLB->get_selected_text());
+        m_xNewAbbrevPB->set_sensitive(!bSame && bEntryLen);
+        m_xDelAbbrevPB->set_sensitive(bSame && bEntryLen);
     }
     else
     {
-        bool bSame = lcl_FindEntry(*m_pDoubleCapsLB, sEntry, *pCompareClass);
-        if(bSame && sEntry != m_pDoubleCapsLB->GetSelectedEntry())
-            rEdt.SetText(m_pDoubleCapsLB->GetSelectedEntry());
-        m_pNewDoublePB->Enable(!bSame && bEntryLen);
-        m_pDelDoublePB->Enable(bSame && bEntryLen);
+        bool bSame = lcl_FindEntry(*m_xDoubleCapsLB, sEntry, *pCompareClass);
+        if(bSame && sEntry != m_xDoubleCapsLB->get_selected_text())
+            rEdt.set_text(m_xDoubleCapsLB->get_selected_text());
+        m_xNewDoublePB->set_sensitive(!bSame && bEntryLen);
+        m_xDelDoublePB->set_sensitive(bSame && bEntryLen);
     }
-}
-
-VCL_BUILDER_FACTORY(AutoCorrEdit)
-
-void AutoCorrEdit::dispose()
-{
-    m_xReplaceTLB.disposeAndClear();
-    Edit::dispose();
-}
-
-AutoCorrEdit::~AutoCorrEdit() {
-    disposeOnce();
-}
-
-void AutoCorrEdit::ConnectColumn(const VclPtr<SvTabListBox>& rTable, sal_Int32 nCol)
-{
-    m_xReplaceTLB = rTable;
-    m_nCol = nCol;
-}
-
-void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
-{
-    const vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
-    const sal_uInt16 nModifier = aKeyCode.GetModifier();
-    if( aKeyCode.GetCode() == KEY_RETURN )
-    {
-        // if there's nothing done on enter, call the
-        // base class after all to close the dialog
-        if(!nModifier && !aActionLink.Call(*this))
-                 Edit::KeyInput(rKEvt);
-    }
-    else if(bSpaces || aKeyCode.GetCode() != KEY_SPACE)
-        Edit::KeyInput(rKEvt);
-}
-
-void AutoCorrEdit::Resize()
-{
-    Edit::Resize();
-    if (!m_xReplaceTLB)
-        return;
-    m_xReplaceTLB->SetTab(m_nCol, GetPosPixel().X(), MapUnit::MapPixel);
 }
 
 enum OfaQuoteOptions

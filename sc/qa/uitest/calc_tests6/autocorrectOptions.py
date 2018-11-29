@@ -59,16 +59,16 @@ class autocorrectOptions(UITestCase):
         delabbrev = xDialog.getChild("delabbrev")
         abbrevlist = xDialog.getChild("abbrevlist")
 
-        nrRowsAbb = get_state_as_dict(abbrevlist)["EntryCount"]
+        nrRowsAbb = get_state_as_dict(abbrevlist)["Children"]
         abbrev.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         abbrev.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         abbrev.executeAction("TYPE", mkPropertyValues({"TEXT":"qqqqq"}))
         newabbrev.executeAction("CLICK", tuple())
-        nrRowsAbbNew = get_state_as_dict(abbrevlist)["EntryCount"]
+        nrRowsAbbNew = get_state_as_dict(abbrevlist)["Children"]
         nrRowsAbbDiff = int(nrRowsAbbNew) - int(nrRowsAbb)
         self.assertEqual(nrRowsAbbDiff, 1)  #we have +1 rule
         delabbrev.executeAction("CLICK", tuple())
-        self.assertEqual(get_state_as_dict(abbrevlist)["EntryCount"], nrRowsAbb)   #we have default nr of rules
+        self.assertEqual(get_state_as_dict(abbrevlist)["Children"], nrRowsAbb)   #we have default nr of rules
 
         #words with two initial capitals
         double = xDialog.getChild("double")
@@ -76,16 +76,16 @@ class autocorrectOptions(UITestCase):
         deldouble = xDialog.getChild("deldouble")
         doublelist = xDialog.getChild("doublelist")
 
-        nrRowsDouble = get_state_as_dict(doublelist)["EntryCount"]
+        nrRowsDouble = get_state_as_dict(doublelist)["Children"]
         double.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         double.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         double.executeAction("TYPE", mkPropertyValues({"TEXT":"QQqqq"}))
         newdouble.executeAction("CLICK", tuple())
-        nrRowsDoubleNew = get_state_as_dict(doublelist)["EntryCount"]
+        nrRowsDoubleNew = get_state_as_dict(doublelist)["Children"]
         nrRowsDoubleDiff = int(nrRowsDoubleNew) - int(nrRowsDouble) #convert string and
         self.assertEqual(nrRowsDoubleDiff, 1)  #we have +1 rule
         deldouble.executeAction("CLICK", tuple())
-        self.assertEqual(get_state_as_dict(doublelist)["EntryCount"], nrRowsDouble)   #we have default nr of rules
+        self.assertEqual(get_state_as_dict(doublelist)["Children"], nrRowsDouble)   #we have default nr of rules
 
         xCancelButton = xDialog.getChild("cancel")
         xCancelButton.executeAction("CLICK", tuple())
