@@ -163,9 +163,22 @@ private:
         CallExpr const * expr, unsigned arg, FunctionDecl const * callee,
         bool explicitFunctionalCastNotation);
 
+    void handleOStringCtor(
+        CallExpr const * expr, unsigned arg, FunctionDecl const * callee,
+        bool explicitFunctionalCastNotation);
+
     void handleOUStringCtor(
         Expr const * expr, Expr const * argExpr, FunctionDecl const * callee,
         bool explicitFunctionalCastNotation);
+
+    void handleOStringCtor(
+        Expr const * expr, Expr const * argExpr, FunctionDecl const * callee,
+        bool explicitFunctionalCastNotation);
+
+    enum class StringKind { Unicode, Char };
+    void handleStringCtor(
+        Expr const * expr, Expr const * argExpr, FunctionDecl const * callee,
+        bool explicitFunctionalCastNotation, StringKind stringKind);
 
     void handleFunArgOstring(
         CallExpr const * expr, unsigned arg, FunctionDecl const * callee);
@@ -266,6 +279,16 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                   || hasOverloads(fdecl, expr->getNumArgs())))
             {
                 handleOUStringCtor(expr, i, fdecl, true);
+            }
+        }
+        if (loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
+            .LvalueReference().Const().NotSubstTemplateTypeParmType()
+            .Class("OString").Namespace("rtl").GlobalNamespace())
+        {
+            if (!(isLhsOfAssignment(fdecl, i)
+                  || hasOverloads(fdecl, expr->getNumArgs())))
+            {
+                handleOStringCtor(expr, i, fdecl, true);
             }
         }
     }
@@ -1166,6 +1189,19 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                 }
             }
         }
+        if (loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
+            .LvalueReference().Const().NotSubstTemplateTypeParmType()
+            .Class("OString").Namespace("rtl").GlobalNamespace())
+        {
+            auto argExpr = expr->getArg(i);
+            if (argExpr && i <= consDecl->getNumParams())
+            {
+                if (!hasOverloads(consDecl, expr->getNumArgs()))
+                {
+                    handleOStringCtor(expr, argExpr, consDecl, true);
+                }
+            }
+        }
     }
 
     return true;
@@ -1785,9 +1821,30 @@ void StringConstant::handleOUStringCtor(
     handleOUStringCtor(expr, expr->getArg(arg), callee, explicitFunctionalCastNotation);
 }
 
+void StringConstant::handleOStringCtor(
+    CallExpr const * expr, unsigned arg, FunctionDecl const * callee,
+    bool explicitFunctionalCastNotation)
+{
+    handleOStringCtor(expr, expr->getArg(arg), callee, explicitFunctionalCastNotation);
+}
+
 void StringConstant::handleOUStringCtor(
     Expr const * expr, Expr const * argExpr, FunctionDecl const * callee,
     bool explicitFunctionalCastNotation)
+{
+    handleStringCtor(expr, argExpr, callee, explicitFunctionalCastNotation, StringKind::Unicode);
+}
+
+void StringConstant::handleOStringCtor(
+    Expr const * expr, Expr const * argExpr, FunctionDecl const * callee,
+    bool explicitFunctionalCastNotation)
+{
+    handleStringCtor(expr, argExpr, callee, explicitFunctionalCastNotation, StringKind::Char);
+}
+
+void StringConstant::handleStringCtor(
+    Expr const * expr, Expr const * argExpr, FunctionDecl const * callee,
+    bool explicitFunctionalCastNotation, StringKind stringKind)
 {
     auto e0 = argExpr->IgnoreParenImpCasts();
     auto e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
@@ -1808,7 +1865,7 @@ void StringConstant::handleOUStringCtor(
         return;
     }
     if (!loplugin::DeclCheck(e3->getConstructor()).MemberFunction()
-        .Class("OUString").Namespace("rtl").GlobalNamespace())
+        .Class(stringKind == StringKind::Unicode ? "OUString" : "OString").Namespace("rtl").GlobalNamespace())
     {
         return;
     }
@@ -1825,7 +1882,7 @@ void StringConstant::handleOUStringCtor(
         && e3->getConstructor()->getNumParams() == 1
         && (loplugin::TypeCheck(
                 e3->getConstructor()->getParamDecl(0)->getType())
-            .Typedef("sal_Unicode").GlobalNamespace()))
+            .Typedef(stringKind == StringKind::Unicode ? "sal_Unicode" : "char").GlobalNamespace()))
     {
         // It may not be easy to rewrite OUString(c), esp. given there is no
         // OUString ctor taking an OUStringLiteral1 arg, so don't warn there:

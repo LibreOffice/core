@@ -508,7 +508,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         {
             if( aFile.getLength() > 4 )
             {
-                if( aFile.matchIgnoreAsciiCase( OString( ".pdf" ), aFile.getLength()-4 ) )
+                if( aFile.matchIgnoreAsciiCase( ".pdf", aFile.getLength()-4 ) )
                     aOutFile.append( pInFile, aFile.getLength() - 4 );
                 else
                     aOutFile.append( aFile );

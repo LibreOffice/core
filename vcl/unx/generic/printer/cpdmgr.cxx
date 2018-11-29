@@ -625,19 +625,19 @@ void CPDManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner,
             if (!sPayLoad.isEmpty()) {
                 OString aKey = OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US );
                 OString aValue = OUStringToOString( sPayLoad, RTL_TEXTENCODING_ASCII_US );
-                if (aKey.equals(OString("Duplex"))) {
+                if (aKey.equals("Duplex")) {
                     aKey = OString("sides");
-                } else if (aKey.equals(OString("Resolution"))) {
+                } else if (aKey.equals("Resolution")) {
                     aKey = OString("printer-resolution");
-                } else if (aKey.equals(OString("PageSize"))) {
+                } else if (aKey.equals("PageSize")) {
                     aKey = OString("media");
                 }
-                if (aKey.equals(OString("sides"))) {
-                    if (aValue.equals(OString("None"))) {
+                if (aKey.equals("sides")) {
+                    if (aValue.equals("None")) {
                         aValue = OString("one-sided");
-                    } else if (aValue.equals(OString("DuplexNoTumble"))) {
+                    } else if (aValue.equals("DuplexNoTumble")) {
                         aValue = OString("two-sided-long-edge");
-                    } else if (aValue.equals(OString("DuplexTumble"))) {
+                    } else if (aValue.equals("DuplexTumble")) {
                         aValue = OString("two-sided-short-edge");
                     }
                 }

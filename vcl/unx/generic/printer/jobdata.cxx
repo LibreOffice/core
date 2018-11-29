@@ -118,7 +118,7 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     SvMemoryStream aStream;
 
     // write header job data
-    aStream.WriteLine(OString("JobData 1"));
+    aStream.WriteLine("JobData 1");
 
     OStringBuffer aLine;
 

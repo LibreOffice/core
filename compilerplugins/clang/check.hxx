@@ -24,8 +24,8 @@ class TerminalCheck;
 
 namespace detail {
 
-template<std::size_t N> ContextCheck checkRecordDecl(
-    clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N]);
+inline ContextCheck checkRecordDecl(
+    clang::Decl const * decl, clang::TagTypeKind tag, llvm::StringRef id);
 
 }
 
@@ -59,16 +59,13 @@ public:
 
     TypeCheck LvalueReference() const;
 
-    template<std::size_t N> inline ContextCheck Class(char const (& id)[N])
-        const;
+    inline ContextCheck Class(llvm::StringRef id) const;
 
-    template<std::size_t N> inline ContextCheck Struct(char const (& id)[N])
-        const;
+    inline ContextCheck Struct(llvm::StringRef id) const;
 
     TypeCheck Typedef() const;
 
-    template<std::size_t N> inline ContextCheck Typedef(char const (& id)[N])
-        const;
+    inline ContextCheck Typedef(llvm::StringRef id) const;
 
     TypeCheck NotSubstTemplateTypeParmType() const;
 
@@ -84,22 +81,17 @@ public:
 
     explicit operator bool() const { return decl_ != nullptr; }
 
-    template<std::size_t N> inline ContextCheck Class(char const (& id)[N])
-        const;
+    inline ContextCheck Class(llvm::StringRef id) const;
 
-    template<std::size_t N> inline ContextCheck Struct(char const (& id)[N])
-        const;
+    inline ContextCheck Struct(llvm::StringRef id) const;
 
-    template<std::size_t N> inline ContextCheck Union(char const (& id)[N])
-        const;
+    inline ContextCheck Union(llvm::StringRef id) const;
 
-    template<std::size_t N> inline ContextCheck Function(char const (& id)[N])
-        const;
+    inline ContextCheck Function(llvm::StringRef id) const;
 
     ContextCheck Operator(clang::OverloadedOperatorKind op) const;
 
-    template<std::size_t N> inline ContextCheck Var(char const (& id)[N])
-        const;
+    inline ContextCheck Var(llvm::StringRef id) const;
 
     ContextCheck MemberFunction() const;
 
@@ -113,24 +105,21 @@ public:
 
     TerminalCheck GlobalNamespace() const;
 
-    template<std::size_t N> inline ContextCheck Namespace(
-        char const (& id)[N]) const;
+    inline ContextCheck Namespace(llvm::StringRef id) const;
 
     TerminalCheck StdNamespace() const;
 
     ContextCheck AnonymousNamespace() const;
 
-    template<std::size_t N> inline ContextCheck Class(char const (& id)[N])
-        const;
+    inline ContextCheck Class(llvm::StringRef id) const;
 
-    template<std::size_t N> inline ContextCheck Struct(char const (& id)[N])
-        const;
+    inline ContextCheck Struct(llvm::StringRef id) const;
 
 private:
     friend DeclCheck;
     friend TypeCheck;
-    template<std::size_t N> friend ContextCheck detail::checkRecordDecl(
-        clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N]);
+    friend ContextCheck detail::checkRecordDecl(
+        clang::Decl const * decl, clang::TagTypeKind tag, llvm::StringRef id);
 
     explicit ContextCheck(clang::DeclContext const * context = nullptr):
         context_(context) {}
@@ -153,13 +142,13 @@ private:
 
 namespace detail {
 
-template<std::size_t N> ContextCheck checkRecordDecl(
-    clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N])
+ContextCheck checkRecordDecl(
+    clang::Decl const * decl, clang::TagTypeKind tag, llvm::StringRef id)
 {
     auto r = llvm::dyn_cast_or_null<clang::RecordDecl>(decl);
     if (r != nullptr && r->getTagKind() == tag) {
         auto const i = r->getIdentifier();
-        if (i != nullptr && i->isStr(id)) {
+        if (i != nullptr && i->getName() == id) {
             return ContextCheck(r->getDeclContext());
         }
     }
@@ -168,7 +157,7 @@ template<std::size_t N> ContextCheck checkRecordDecl(
 
 }
 
-template<std::size_t N> ContextCheck TypeCheck::Class(char const (& id)[N])
+ContextCheck TypeCheck::Class(llvm::StringRef id)
     const
 {
     if (!type_.isNull()) {
@@ -180,8 +169,7 @@ template<std::size_t N> ContextCheck TypeCheck::Class(char const (& id)[N])
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck TypeCheck::Struct(char const (& id)[N])
-    const
+ContextCheck TypeCheck::Struct(llvm::StringRef id) const
 {
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::RecordType>();
@@ -192,15 +180,14 @@ template<std::size_t N> ContextCheck TypeCheck::Struct(char const (& id)[N])
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck TypeCheck::Typedef(char const (& id)[N])
-    const
+ContextCheck TypeCheck::Typedef(llvm::StringRef id) const
 {
     if (!type_.isNull()) {
         if (auto const t = type_->getAs<clang::TypedefType>()) {
             auto const d = t->getDecl();
             auto const i = d->getIdentifier();
             assert(i != nullptr);
-            if (i->isStr(id)) {
+            if (i->getName() == id) {
                 return ContextCheck(d->getDeclContext());
             }
         }
@@ -208,58 +195,52 @@ template<std::size_t N> ContextCheck TypeCheck::Typedef(char const (& id)[N])
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck DeclCheck::Class(char const (& id)[N])
-    const
+ContextCheck DeclCheck::Class(llvm::StringRef id) const
 {
     return detail::checkRecordDecl(decl_, clang::TTK_Class, id);
 }
 
-template<std::size_t N> ContextCheck DeclCheck::Struct(char const (& id)[N])
-    const
+ContextCheck DeclCheck::Struct(llvm::StringRef id) const
 {
     return detail::checkRecordDecl(decl_, clang::TTK_Struct, id);
 }
 
-template<std::size_t N> ContextCheck DeclCheck::Union(char const (& id)[N])
-    const
+ContextCheck DeclCheck::Union(llvm::StringRef id) const
 {
     return detail::checkRecordDecl(decl_, clang::TTK_Union, id);
 }
 
-template<std::size_t N> ContextCheck DeclCheck::Function(char const (& id)[N])
-    const
+ContextCheck DeclCheck::Function(llvm::StringRef id) const
 {
     auto f = llvm::dyn_cast_or_null<clang::FunctionDecl>(decl_);
     if (f != nullptr) {
         auto const i = f->getIdentifier();
-        if (i != nullptr && i->isStr(id)) {
+        if (i != nullptr && i->getName() == id) {
             return ContextCheck(f->getDeclContext());
         }
     }
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck DeclCheck::Var(char const (& id)[N])
-    const
+ContextCheck DeclCheck::Var(llvm::StringRef id) const
 {
     auto f = llvm::dyn_cast_or_null<clang::VarDecl>(decl_);
     if (f != nullptr) {
         auto const i = f->getIdentifier();
-        if (i != nullptr && i->isStr(id)) {
+        if (i != nullptr && i->getName() == id) {
             return ContextCheck(f->getDeclContext());
         }
     }
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck ContextCheck::Namespace(
-    char const (& id)[N]) const
+ContextCheck ContextCheck::Namespace(llvm::StringRef id) const
 {
     if (context_) {
         auto n = llvm::dyn_cast<clang::NamespaceDecl>(context_);
         if (n != nullptr) {
             auto const i = n->getIdentifier();
-            if (i != nullptr && i->isStr(id)) {
+            if (i != nullptr && i->getName() == id) {
                 return ContextCheck(n->getParent());
             }
         }
@@ -267,15 +248,13 @@ template<std::size_t N> ContextCheck ContextCheck::Namespace(
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck ContextCheck::Class(char const (& id)[N])
-    const
+ContextCheck ContextCheck::Class(llvm::StringRef id) const
 {
     return detail::checkRecordDecl(
         llvm::dyn_cast_or_null<clang::Decl>(context_), clang::TTK_Class, id);
 }
 
-template<std::size_t N> ContextCheck ContextCheck::Struct(char const (& id)[N])
-    const
+ContextCheck ContextCheck::Struct(llvm::StringRef id) const
 {
     return detail::checkRecordDecl(
         llvm::dyn_cast_or_null<clang::Decl>(context_), clang::TTK_Struct, id);

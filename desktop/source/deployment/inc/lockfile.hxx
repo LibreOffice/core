@@ -41,12 +41,12 @@
 
 #include "dp_misc_api.hxx"
 
-#define LOCKFILE_GROUP    OString( "Lockdata" )
-#define LOCKFILE_USERKEY  OString( "User" )
-#define LOCKFILE_HOSTKEY  OString( "Host" )
-#define LOCKFILE_STAMPKEY OString( "Stamp" )
-#define LOCKFILE_TIMEKEY  OString( "Time" )
-#define LOCKFILE_IPCKEY   OString( "IPCServer" )
+#define LOCKFILE_GROUP    "Lockdata"
+#define LOCKFILE_USERKEY  "User"
+#define LOCKFILE_HOSTKEY  "Host"
+#define LOCKFILE_STAMPKEY "Stamp"
+#define LOCKFILE_TIMEKEY  "Time"
+#define LOCKFILE_IPCKEY   "IPCServer"
 
 namespace desktop {
 
