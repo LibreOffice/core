@@ -65,6 +65,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <vcl/layout.hxx>
+#include <comphelper/lok.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -1389,7 +1390,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         }
     }
 
-    if ( !( nStoreMode & EXPORT_REQUESTED ) )
+    if (!comphelper::LibreOfficeKit::isActive() && !( nStoreMode & EXPORT_REQUESTED ) )
     {
         // if it is no export, warn user that the signature will be removed
         if (  SignatureState::OK == nDocumentSignatureState
@@ -1402,7 +1403,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             {
                 // the user has decided not to store the document
                 throw task::ErrorCodeIOException(
-                    "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_ABORT",
+                    "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_ABORT (Preserve Signature)",
                     uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
             }
         }
