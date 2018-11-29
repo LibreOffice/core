@@ -144,7 +144,7 @@
       </node>
       <node oor:name=".uno:SmallestWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fit to smallest width</value>
+          <value xml:lang="en-US">Fit to Smallest Width</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -152,7 +152,7 @@
       </node>
       <node oor:name=".uno:SmallestHeight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fit to smallest height</value>
+          <value xml:lang="en-US">Fit to Smallest Height</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -160,7 +160,7 @@
       </node>
       <node oor:name=".uno:GreatestWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fit to greatest width</value>
+          <value xml:lang="en-US">Fit to Greatest Width</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -168,7 +168,7 @@
       </node>
       <node oor:name=".uno:GreatestHeight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fit to greatest height</value>
+          <value xml:lang="en-US">Fit to Greatest Height</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -239,12 +239,12 @@
       </node>
       <node oor:name=".uno:SelectAllLabels" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select all Labels</value>
+          <value xml:lang="en-US">Select All Labels</value>
         </prop>
       </node>
       <node oor:name=".uno:SelectAllEdits" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select all Formatted Fields</value>
+          <value xml:lang="en-US">Select All Formatted Fields</value>
         </prop>
       </node>
       <!-- You will find corresponding icons in icon-themes/(name of theme)/cmd. -->
@@ -294,7 +294,7 @@
       </node>
       <node oor:name=".uno:SectionShrinkTop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Shrink from top</value>
+          <value xml:lang="en-US">Shrink from Top</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -302,7 +302,7 @@
       </node>
       <node oor:name=".uno:SectionShrinkBottom" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Shrink from bottom</value>
+          <value xml:lang="en-US">Shrink from Bottom</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

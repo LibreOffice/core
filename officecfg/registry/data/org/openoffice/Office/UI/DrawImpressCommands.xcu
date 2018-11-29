@@ -489,7 +489,7 @@
       </node>
       <node oor:name=".uno:InsertDateFieldVar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Dat~e (variable)</value>
+          <value xml:lang="en-US">Dat~e (Variable)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -497,7 +497,7 @@
       </node>
       <node oor:name=".uno:InsertDateFieldFix" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Date (fixed)</value>
+          <value xml:lang="en-US">~Date (Fixed)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -505,7 +505,7 @@
       </node>
       <node oor:name=".uno:InsertTimeFieldVar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">T~ime (variable)</value>
+          <value xml:lang="en-US">T~ime (Variable)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -513,7 +513,7 @@
       </node>
       <node oor:name=".uno:InsertTimeFieldFix" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Time (fixed)</value>
+          <value xml:lang="en-US">~Time (Fixed)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1130,7 +1130,7 @@
       </node>
       <node oor:name=".uno:CrookRotate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Set in Circle (perspective)</value>
+          <value xml:lang="en-US">Set in Circle (Perspective)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1138,7 +1138,7 @@
       </node>
       <node oor:name=".uno:CrookSlant" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Set to circle (slant)</value>
+          <value xml:lang="en-US">Set to Circle (Slant)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1146,7 +1146,7 @@
       </node>
       <node oor:name=".uno:CrookStretch" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Set in Circle (distort)</value>
+          <value xml:lang="en-US">Set in Circle (Distort)</value>
         </prop>
       </node>
       <node oor:name=".uno:Connect" oor:op="replace">
@@ -1175,10 +1175,10 @@
       </node>
       <node oor:name=".uno:InteractiveTransparence" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Transparency tool</value>
+          <value xml:lang="en-US">Transparency Tool</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Interactive transparency tool</value>
+          <value xml:lang="en-US">Interactive Transparency Tool</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1186,10 +1186,10 @@
       </node>
       <node oor:name=".uno:InteractiveGradient" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Gradient tool</value>
+          <value xml:lang="en-US">Gradient Tool</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Interactive gradient tool</value>
+          <value xml:lang="en-US">Interactive Gradient Tool</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1293,7 +1293,7 @@
       </node>
       <node oor:name=".uno:ConnectorLineArrowStart" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Straight Connector starts with Arrow</value>
+          <value xml:lang="en-US">Straight Connector Starts with Arrow</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1309,7 +1309,7 @@
       </node>
       <node oor:name=".uno:ConnectorLineArrowEnd" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Straight Connector ends with Arrow</value>
+          <value xml:lang="en-US">Straight Connector Ends with Arrow</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1325,7 +1325,7 @@
       </node>
       <node oor:name=".uno:ConnectorLineCircleStart" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Straight Connector starts with Circle</value>
+          <value xml:lang="en-US">Straight Connector Starts with Circle</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1333,7 +1333,7 @@
       </node>
       <node oor:name=".uno:ConnectorLineCircleEnd" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Straight Connector ends with Circle</value>
+          <value xml:lang="en-US">Straight Connector Ends with Circle</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1537,7 +1537,7 @@
       </node>
       <node oor:name=".uno:DoubleClickTextEdit" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Double-click to edit Text</value>
+          <value xml:lang="en-US">Double-click to Edit Text</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
