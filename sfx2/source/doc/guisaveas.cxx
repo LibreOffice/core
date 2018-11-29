@@ -355,27 +355,6 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 , m_bRecommendReadOnly( false )
 {
     CheckInteractionHandler();
-    try
-    {
-        uno::Reference< lang::XComponent > xCurrentComponent = frame::Desktop::create( comphelper::getProcessComponentContext() )->getCurrentComponent();
-        if (aOwner.GetModuleManager()->identify(xCurrentComponent) == "com.sun.star.chart2.ChartDocument")
-        {
-            // let us switch the model and set the xStorable and
-            // XStorable2 to the old model.
-            // This is an ugly hack because we have no SfxObjectShell for chart2 yet.
-            // We need SfxObjectShell for the heavy work around ODF document creation
-            // because chart2 only writes the basic stream out.
-            // In future in might make sense to implement a full scale object shell in
-            // chart2 and make chart2 an own program.
-            m_xModel.set(xCurrentComponent, uno::UNO_QUERY_THROW );
-            m_xStorable.set(xModel, uno::UNO_QUERY_THROW );
-            m_xStorable2.set(xModel, uno::UNO_QUERY_THROW );
-        }
-    }
-    catch(...)
-    {
-        // we don't want to pass on any errors;
-    }
 }
 
 
