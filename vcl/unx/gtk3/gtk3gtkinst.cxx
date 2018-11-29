@@ -1178,6 +1178,18 @@ namespace
         const gchar* pStr = static_cast<const gchar*>(pData);
         return OString(pStr, pStr ? strlen(pStr) : 0);
     }
+
+    KeyEvent GtkToVcl(GdkEventKey& rEvent)
+    {
+        sal_uInt16 nKeyCode = GtkSalFrame::GetKeyCode(rEvent.keyval);
+        if (nKeyCode == 0)
+        {
+            guint updated_keyval = GtkSalFrame::GetKeyValFor(gdk_keymap_get_default(), rEvent.hardware_keycode, rEvent.group);
+            nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
+        }
+        nKeyCode |= GtkSalFrame::GetKeyModCode(rEvent.state);
+        return KeyEvent(gdk_keyval_to_unicode(rEvent.keyval), nKeyCode, 0);
+    }
 }
 
 class GtkInstanceWidget : public virtual weld::Widget
@@ -1190,6 +1202,7 @@ private:
     gulong m_nFocusInSignalId;
     gulong m_nFocusOutSignalId;
     gulong m_nKeyPressSignalId;
+    gulong m_nKeyReleaseSignalId;
     gulong m_nSizeAllocateSignalId;
 
     static void signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
@@ -1199,11 +1212,21 @@ private:
         pThis->signal_focus_in();
     }
 
+    void signal_focus_in()
+    {
+        m_aFocusInHdl.Call(*this);
+    }
+
     static void signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_focus_out();
+    }
+
+    void signal_focus_out()
+    {
+        m_aFocusOutHdl.Call(*this);
     }
 
     static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
@@ -1213,7 +1236,7 @@ private:
         pThis->signal_size_allocate(allocation->width, allocation->height);
     }
 
-    static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer)
+    static gboolean signalKey(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
     {
         // #i1820# use locale specific decimal separator
         if (pEvent->keyval == GDK_KEY_KP_Decimal && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
@@ -1221,7 +1244,9 @@ private:
             OUString aSep(Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep());
             pEvent->keyval = aSep[0];
         }
-        return false;
+
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        return pThis->signal_key(pEvent);
     }
 
 public:
@@ -1235,9 +1260,13 @@ public:
     {
         GdkEventMask eEventMask(static_cast<GdkEventMask>(gtk_widget_get_events(pWidget)));
         if (eEventMask & GDK_BUTTON_PRESS_MASK)
-            m_nKeyPressSignalId = g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
+            m_nKeyPressSignalId = g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalKey), this);
         else
             m_nKeyPressSignalId = 0;
+        if (eEventMask & GDK_BUTTON_RELEASE_MASK)
+            m_nKeyReleaseSignalId = g_signal_connect(pWidget, "key-release-event", G_CALLBACK(signalKey), this);
+        else
+            m_nKeyReleaseSignalId = 0;
     }
 
     virtual void set_sensitive(bool sensitive) override
@@ -1517,6 +1546,21 @@ public:
     virtual void signal_size_allocate(guint nWidth, guint nHeight)
     {
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
+    }
+
+    gboolean signal_key(GdkEventKey* pEvent)
+    {
+        if (pEvent->type == GDK_KEY_PRESS && m_aKeyPressHdl.IsSet())
+        {
+            SolarMutexGuard aGuard;
+            return m_aKeyPressHdl.Call(GtkToVcl(*pEvent));
+        }
+        if (pEvent->type == GDK_KEY_RELEASE && m_aKeyReleaseHdl.IsSet())
+        {
+            SolarMutexGuard aGuard;
+            return m_aKeyReleaseHdl.Call(GtkToVcl(*pEvent));
+        }
+        return false;
     }
 
     virtual void grab_add() override
@@ -3319,6 +3363,12 @@ public:
     virtual OUString get_label() const override
     {
         return ::get_label(m_pButton);
+    }
+
+    virtual void set_label_line_wrap(bool wrap) override
+    {
+        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pButton));
+        gtk_label_set_line_wrap(GTK_LABEL(pChild), wrap);
     }
 
     // allow us to block buttons with click handlers making dialogs return a response
@@ -5484,18 +5534,6 @@ static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
 namespace
 {
     AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
-
-    KeyEvent GtkToVcl(GdkEventKey& rEvent)
-    {
-        sal_uInt16 nKeyCode = GtkSalFrame::GetKeyCode(rEvent.keyval);
-        if (nKeyCode == 0)
-        {
-            guint updated_keyval = GtkSalFrame::GetKeyValFor(gdk_keymap_get_default(), rEvent.hardware_keycode, rEvent.group);
-            nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
-        }
-        nKeyCode |= GtkSalFrame::GetKeyModCode(rEvent.state);
-        return KeyEvent(gdk_keyval_to_unicode(rEvent.keyval), nKeyCode, 0);
-    }
 }
 
 class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::DrawingArea
@@ -5511,8 +5549,6 @@ private:
     gulong m_nButtonPressSignalId;
     gulong m_nMotionSignalId;
     gulong m_nButtonReleaseSignalId;
-    gulong m_nKeyPressSignalId;
-    gulong m_nKeyReleaseSignalId;
     gulong m_nStyleUpdatedSignalId;
     gulong m_nQueryTooltip;
     gulong m_nPopupMenu;
@@ -5689,25 +5725,6 @@ private:
         m_aMouseMotionHdl.Call(aMEvt);
         return true;
     }
-    static gboolean signalKey(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
-    {
-        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
-        SolarMutexGuard aGuard;
-        return pThis->signal_key(pEvent);
-    }
-    gboolean signal_key(GdkEventKey* pEvent)
-    {
-        KeyEvent aKeyEvt(GtkToVcl(*pEvent));
-
-        bool bProcessed;
-        if (pEvent->type == GDK_KEY_PRESS)
-            bProcessed = m_aKeyPressHdl.Call(aKeyEvt);
-        else
-            bProcessed = m_aKeyReleaseHdl.Call(aKeyEvt);
-
-        return bProcessed;
-    }
-
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, const a11yref& rA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), bTakeOwnership)
@@ -5721,8 +5738,6 @@ public:
         , m_nButtonPressSignalId(g_signal_connect(m_pDrawingArea, "button-press-event", G_CALLBACK(signalButton), this))
         , m_nMotionSignalId(g_signal_connect(m_pDrawingArea, "motion-notify-event", G_CALLBACK(signalMotion), this))
         , m_nButtonReleaseSignalId(g_signal_connect(m_pDrawingArea, "button-release-event", G_CALLBACK(signalButton), this))
-        , m_nKeyPressSignalId(g_signal_connect(m_pDrawingArea, "key-press-event", G_CALLBACK(signalKey), this))
-        , m_nKeyReleaseSignalId(g_signal_connect(m_pDrawingArea,"key-release-event", G_CALLBACK(signalKey), this))
         , m_nStyleUpdatedSignalId(g_signal_connect(m_pDrawingArea,"style-updated", G_CALLBACK(signalStyleUpdated), this))
         , m_nQueryTooltip(g_signal_connect(m_pDrawingArea, "query-tooltip", G_CALLBACK(signalQueryTooltip), this))
         , m_nPopupMenu(g_signal_connect(m_pDrawingArea, "popup-menu", G_CALLBACK(signalPopupMenu), this))
@@ -5817,8 +5832,6 @@ public:
         g_signal_handler_disconnect(m_pDrawingArea, m_nPopupMenu);
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
         g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
-        g_signal_handler_disconnect(m_pDrawingArea, m_nKeyPressSignalId);
-        g_signal_handler_disconnect(m_pDrawingArea, m_nKeyReleaseSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nButtonPressSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nMotionSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nButtonReleaseSignalId);

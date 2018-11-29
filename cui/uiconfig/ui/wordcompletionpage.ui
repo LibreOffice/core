@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">50</property>
     <property name="upper">65535</property>
@@ -52,11 +51,39 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-AutoCompleteMultiListBox" id="entries:border">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="entries">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="headers_visible">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -83,10 +110,10 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="wordcompletionpage|label1">_Max. entries:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">maxentries</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -98,7 +125,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="text" translatable="no">500</property>
+                    <property name="text">500</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="value">500</property>
                   </object>
@@ -122,10 +149,10 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="wordcompletionpage|label2">Mi_n. word length:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">maxentries</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -137,7 +164,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="text" translatable="no">100</property>
+                    <property name="text">100</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="value">100</property>
                   </object>
@@ -189,7 +216,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
-                            <property name="xalign">0.019999999552965164</property>
+                            <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -242,7 +269,7 @@
                         <property name="can_focus">False</property>
                         <property name="row_spacing">6</property>
                         <child>
-                          <object class="GtkCheckButton" id="whenclosing:wrap">
+                          <object class="GtkCheckButton" id="whenclosing">
                             <property name="label" translatable="yes" context="wordcompletionpage|whenclosing">_When closing a document, remove the words collected from it from the list</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -272,7 +299,6 @@
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
-                    <property name="yalign">0.5899999737739563</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -295,10 +321,10 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="wordcompletionpage|label3">Acc_ept with:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">acceptwith</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -340,5 +366,13 @@
       <widget name="maxentries"/>
       <widget name="minwordlen"/>
     </widgets>
+  </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
   </object>
 </interface>

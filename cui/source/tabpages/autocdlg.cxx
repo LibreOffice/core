@@ -2109,38 +2109,36 @@ OUString OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
     return aOUStr;
 }
 
-OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
+OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(TabPageParent pParent,
     const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "WordCompletionPage",
-        "cui/ui/wordcompletionpage.ui", &rSet)
+    : SfxTabPage(pParent, "cui/ui/wordcompletionpage.ui",
+                 "WordCompletionPage", &rSet)
     , m_pAutoCompleteList(nullptr)
     , m_nAutoCmpltListCnt(0)
+    , m_xCBActiv(m_xBuilder->weld_check_button("enablewordcomplete"))
+    , m_xCBAppendSpace(m_xBuilder->weld_check_button("appendspace"))
+    , m_xCBAsTip(m_xBuilder->weld_check_button("showastip"))
+    , m_xCBCollect(m_xBuilder->weld_check_button("collectwords"))
+    , m_xCBRemoveList(m_xBuilder->weld_check_button("whenclosing"))
+    , m_xDCBExpandKey(m_xBuilder->weld_combo_box("acceptwith"))
+    , m_xNFMinWordlen(m_xBuilder->weld_spin_button("minwordlen"))
+    , m_xNFMaxEntries(m_xBuilder->weld_spin_button("maxentries"))
+    , m_xLBEntries(m_xBuilder->weld_tree_view("entries"))
+    , m_xPBEntries(m_xBuilder->weld_button("delete"))
 {
-    get(m_pCBActiv, "enablewordcomplete");
-    get(m_pCBAppendSpace, "appendspace");
-    get(m_pCBAsTip, "showastip");
-    get(m_pCBCollect, "collectwords");
-    get(m_pCBRemoveList, "whenclosing");
-
     //fdo#65595, we need height-for-width support here, but for now we can
     //bodge it
-    Size aPrefSize(m_pCBRemoveList->get_preferred_size());
-    Size aSize(m_pCBRemoveList->CalcMinimumSize(32*approximate_char_width()));
-    if (aPrefSize.Width() > aSize.Width())
+    Size aPrefSize(m_xCBRemoveList->get_preferred_size());
+    int nMaxWidth = m_xCBRemoveList->get_approximate_digit_width() * 40;
+    if (aPrefSize.Width() > nMaxWidth)
     {
-        m_pCBRemoveList->set_width_request(aSize.Width());
-        m_pCBRemoveList->set_height_request(aSize.Height());
+        m_xCBRemoveList->set_label_line_wrap(true);
+        m_xCBRemoveList->set_size_request(nMaxWidth, -1);
+        aPrefSize = m_xCBRemoveList->get_preferred_size();
     }
 
-    get(m_pDCBExpandKey, "acceptwith");
-    get(m_pNFMinWordlen, "minwordlen");
-    get(m_pNFMaxEntries, "maxentries");
-    get(m_pLBEntries, "entries");
-    m_pLBEntries->SetPage(this);
-    aSize = LogicToPixel(Size(121, 158), MapMode(MapUnit::MapAppFont));
-    m_pLBEntries->set_width_request(aSize.Width());
-    m_pLBEntries->set_height_request(aSize.Height());
-    get(m_pPBEntries, "delete");
+    m_xLBEntries->set_size_request(m_xLBEntries->get_approximate_digit_width() * 30,
+                                   m_xLBEntries->get_height_rows(20));
 
     // the defined KEYs
     static const sal_uInt16 aKeyCodes[] = {
@@ -2154,16 +2152,16 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
 
     for( const sal_uInt16* pKeys = aKeyCodes; *pKeys; ++pKeys )
     {
-        vcl::KeyCode aKCode( *pKeys );
-        sal_Int32 nPos = m_pDCBExpandKey->InsertEntry( aKCode.GetName() );
-        m_pDCBExpandKey->SetEntryData( nPos, reinterpret_cast<void*>(*pKeys) );
-        if( KEY_RETURN == *pKeys )      // default to RETURN
-            m_pDCBExpandKey->SelectEntryPos( nPos );
+        vcl::KeyCode aKCode(*pKeys);
+        m_xDCBExpandKey->append(OUString::number(static_cast<sal_Int32>(*pKeys)), aKCode.GetName());
+        if (KEY_RETURN == *pKeys)      // default to RETURN
+            m_xDCBExpandKey->set_active(std::distance(aKeyCodes, pKeys));
     }
 
-    m_pPBEntries->SetClickHdl(LINK(this, OfaAutoCompleteTabPage, DeleteHdl));
-    m_pCBActiv->SetToggleHdl(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
-    m_pCBCollect->SetToggleHdl(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
+    m_xPBEntries->connect_clicked(LINK(this, OfaAutoCompleteTabPage, DeleteHdl));
+    m_xCBActiv->connect_toggled(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
+    m_xCBCollect->connect_toggled(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
+    m_xLBEntries->connect_key_release(LINK(this, OfaAutoCompleteTabPage, KeyReleaseHdl));
 }
 
 OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
@@ -2171,25 +2169,10 @@ OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
     disposeOnce();
 }
 
-void OfaAutoCompleteTabPage::dispose()
+VclPtr<SfxTabPage> OfaAutoCompleteTabPage::Create(TabPageParent pParent,
+                                                  const SfxItemSet* rSet)
 {
-    m_pCBActiv.clear();
-    m_pCBAppendSpace.clear();
-    m_pCBAsTip.clear();
-    m_pCBCollect.clear();
-    m_pCBRemoveList.clear();
-    m_pDCBExpandKey.clear();
-    m_pNFMinWordlen.clear();
-    m_pNFMaxEntries.clear();
-    m_pLBEntries.clear();
-    m_pPBEntries.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> OfaAutoCompleteTabPage::Create( TabPageParent pParent,
-                                                   const SfxItemSet* rSet)
-{
-    return VclPtr<OfaAutoCompleteTabPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<OfaAutoCompleteTabPage>::Create(pParent, *rSet);
 }
 
 bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
@@ -2199,39 +2182,39 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     sal_uInt16 nVal;
 
-    bCheck = m_pCBActiv->IsChecked();
+    bCheck = m_xCBActiv->get_active();
     bModified |= pOpt->bAutoCompleteWords != bCheck;
     pOpt->bAutoCompleteWords = bCheck;
-    bCheck = m_pCBCollect->IsChecked();
+    bCheck = m_xCBCollect->get_active();
     bModified |= pOpt->bAutoCmpltCollectWords != bCheck;
     pOpt->bAutoCmpltCollectWords = bCheck;
-    bCheck = !m_pCBRemoveList->IsChecked(); // inverted value!
+    bCheck = !m_xCBRemoveList->get_active(); // inverted value!
     bModified |= pOpt->bAutoCmpltKeepList != bCheck;
     pOpt->bAutoCmpltKeepList = bCheck;
-    bCheck = m_pCBAppendSpace->IsChecked();
+    bCheck = m_xCBAppendSpace->get_active();
     bModified |= pOpt->bAutoCmpltAppendBlanc != bCheck;
     pOpt->bAutoCmpltAppendBlanc = bCheck;
-    bCheck = m_pCBAsTip->IsChecked();
+    bCheck = m_xCBAsTip->get_active();
     bModified |= pOpt->bAutoCmpltShowAsTip != bCheck;
     pOpt->bAutoCmpltShowAsTip = bCheck;
 
-    nVal = static_cast<sal_uInt16>(m_pNFMinWordlen->GetValue());
+    nVal = static_cast<sal_uInt16>(m_xNFMinWordlen->get_value());
     bModified |= nVal != pOpt->nAutoCmpltWordLen;
     pOpt->nAutoCmpltWordLen = nVal;
 
-    nVal = static_cast<sal_uInt16>(m_pNFMaxEntries->GetValue());
+    nVal = static_cast<sal_uInt16>(m_xNFMaxEntries->get_value());
     bModified |= nVal != pOpt->nAutoCmpltListLen;
     pOpt->nAutoCmpltListLen = nVal;
 
-    const sal_Int32 nPos = m_pDCBExpandKey->GetSelectedEntryPos();
-    if( nPos < m_pDCBExpandKey->GetEntryCount() )
+    const int nPos = m_xDCBExpandKey->get_active();
+    if (nPos != -1)
     {
-        sal_uLong nKey = reinterpret_cast<sal_uLong>(m_pDCBExpandKey->GetEntryData( nPos ));
+        sal_Int32 nKey = m_xDCBExpandKey->get_id(nPos).toInt32();
         bModified |= nKey != pOpt->nAutoCmpltExpandKey;
         pOpt->nAutoCmpltExpandKey = static_cast<sal_uInt16>(nKey);
     }
 
-    if (m_pAutoCompleteList && m_nAutoCmpltListCnt != m_pLBEntries->GetEntryCount())
+    if (m_pAutoCompleteList && m_nAutoCmpltListCnt != m_xLBEntries->n_children())
     {
         bModified = true;
         pOpt->m_pAutoCompleteList = m_pAutoCompleteList;
@@ -2250,24 +2233,26 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-    m_pCBActiv->Check( pOpt->bAutoCompleteWords );
-    m_pCBCollect->Check( pOpt->bAutoCmpltCollectWords );
-    m_pCBRemoveList->Check( !pOpt->bAutoCmpltKeepList ); //inverted value!
-    m_pCBAppendSpace->Check( pOpt->bAutoCmpltAppendBlanc );
-    m_pCBAsTip->Check( pOpt->bAutoCmpltShowAsTip );
+    m_xCBActiv->set_active( pOpt->bAutoCompleteWords );
+    m_xCBCollect->set_active( pOpt->bAutoCmpltCollectWords );
+    m_xCBRemoveList->set_active( !pOpt->bAutoCmpltKeepList ); //inverted value!
+    m_xCBAppendSpace->set_active( pOpt->bAutoCmpltAppendBlanc );
+    m_xCBAsTip->set_active( pOpt->bAutoCmpltShowAsTip );
 
-    m_pNFMinWordlen->SetValue( pOpt->nAutoCmpltWordLen );
-    m_pNFMaxEntries->SetValue( pOpt->nAutoCmpltListLen );
+    m_xNFMinWordlen->set_value( pOpt->nAutoCmpltWordLen );
+    m_xNFMaxEntries->set_value( pOpt->nAutoCmpltListLen );
 
     // select the specific KeyCode:
     {
-        sal_uLong nKey = pOpt->nAutoCmpltExpandKey;
-        for( sal_Int32 n = 0, nCnt = m_pDCBExpandKey->GetEntryCount(); n < nCnt; ++n )
-            if( nKey == reinterpret_cast<sal_uLong>(m_pDCBExpandKey->GetEntryData( n )))
+        sal_Int32 nKey = pOpt->nAutoCmpltExpandKey;
+        for (int n = 0, nCnt = m_xDCBExpandKey->get_count(); n < nCnt; ++n)
+        {
+            if (nKey == m_xDCBExpandKey->get_id(n).toInt32())
             {
-                m_pDCBExpandKey->SelectEntryPos( n );
+                m_xDCBExpandKey->set_active(n);
                 break;
             }
+        }
     }
 
     if (pOpt->m_pAutoCompleteList && !pOpt->m_pAutoCompleteList->empty())
@@ -2280,18 +2265,18 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
         {
             const OUString* pStr =
                 &(*m_pAutoCompleteList)[n]->GetAutoCompleteString();
-            sal_Int32 nPos = m_pLBEntries->InsertEntry( *pStr );
-            m_pLBEntries->SetEntryData( nPos, const_cast<OUString *>(pStr) );
+            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pStr)));
+            m_xLBEntries->append(sId, *pStr);
         }
     }
     else
     {
-        m_pLBEntries->Disable();
-        m_pPBEntries->Disable();
+        m_xLBEntries->set_sensitive(false);
+        m_xPBEntries->set_sensitive(false);
     }
 
-    CheckHdl(*m_pCBActiv);
-    CheckHdl(*m_pCBCollect);
+    CheckHdl(*m_xCBActiv);
+    CheckHdl(*m_xCBCollect);
 }
 
 void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
@@ -2299,38 +2284,39 @@ void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
     static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage( false );
 }
 
-IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl, weld::Button&, void)
 {
-    sal_Int32 nSelCnt =
-        (m_pAutoCompleteList) ? m_pLBEntries->GetSelectedEntryCount() : 0;
-    while( nSelCnt )
+    auto rows = m_xLBEntries->get_selected_rows();
+    std::sort(rows.begin(), rows.end());
+    while (!rows.empty())
     {
-        sal_Int32 nPos = m_pLBEntries->GetSelectedEntryPos( --nSelCnt );
-        OUString* pStr = static_cast<OUString*>(m_pLBEntries->GetEntryData(nPos));
-        m_pLBEntries->RemoveEntry( nPos );
+        sal_Int32 nPos = rows.back();
+        OUString* pStr = reinterpret_cast<OUString*>(m_xLBEntries->get_id(nPos).toInt64());
+        m_xLBEntries->remove(nPos);
         editeng::IAutoCompleteString hack(*pStr); // UGLY
         m_pAutoCompleteList->erase(&hack);
+        rows.pop_back();
     }
 }
 
-IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox&, rBox, void )
+IMPL_LINK(OfaAutoCompleteTabPage, CheckHdl, weld::ToggleButton&, rBox, void)
 {
-    bool bEnable = rBox.IsChecked();
-    if (&rBox == m_pCBActiv)
+    bool bEnable = rBox.get_active();
+    if (&rBox == m_xCBActiv.get())
     {
-        m_pCBAppendSpace->Enable( bEnable );
-        m_pCBAppendSpace->Enable( bEnable );
-        m_pCBAsTip->Enable( bEnable );
-        m_pDCBExpandKey->Enable( bEnable );
+        m_xCBAppendSpace->set_sensitive(bEnable);
+        m_xCBAppendSpace->set_sensitive(bEnable);
+        m_xCBAsTip->set_sensitive(bEnable);
+        m_xDCBExpandKey->set_sensitive(bEnable);
     }
-    else if (m_pCBCollect == &rBox)
-        m_pCBRemoveList->Enable( bEnable );
+    else if (&rBox == m_xCBCollect.get())
+        m_xCBRemoveList->set_sensitive(bEnable);
 }
 
 void OfaAutoCompleteTabPage::CopyToClipboard() const
 {
-    sal_Int32 nSelCnt = m_pLBEntries->GetSelectedEntryCount();
-    if (m_pAutoCompleteList && nSelCnt)
+    auto rows = m_xLBEntries->get_selected_rows();
+    if (m_pAutoCompleteList && !rows.empty())
     {
         rtl::Reference<TransferDataContainer> pCntnr = new TransferDataContainer;
 
@@ -2338,10 +2324,9 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
         rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
 
-        for( sal_Int32 n = 0; n < nSelCnt; ++n )
+        for (auto a : rows)
         {
-            sData.append(OUStringToOString(m_pLBEntries->GetSelectedEntry(n),
-                nEncode));
+            sData.append(OUStringToOString(m_xLBEntries->get_text(a), nEncode));
 #if defined(_WIN32)
             sData.append("\015\012");
 #else
@@ -2353,53 +2338,25 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
     }
 }
 
-OfaAutoCompleteTabPage::AutoCompleteMultiListBox::~AutoCompleteMultiListBox()
+IMPL_LINK(OfaAutoCompleteTabPage, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 {
-    disposeOnce();
-}
-
-void OfaAutoCompleteTabPage::AutoCompleteMultiListBox::dispose()
-{
-    m_pPage.clear();
-    MultiListBox::dispose();
-}
-
-bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
-            NotifyEvent& rNEvt )
-{
-    bool bHandled = MultiListBox::PreNotify( rNEvt );
-
-    if( !bHandled && MouseNotifyEvent::KEYUP == rNEvt.GetType() )
+    bool bHandled = false;
+    const vcl::KeyCode& rKeyCode = rEvent.GetKeyCode();
+    switch (rKeyCode.GetModifier() | rKeyCode.GetCode())
     {
-        const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
-        {
         case KEY_DELETE:
-            m_pPage->DeleteHdl( nullptr );
+            DeleteHdl(*m_xPBEntries);
             bHandled = true;
             break;
-
         default:
-            if( KeyFuncType::COPY == rKeyCode.GetFunction() )
+            if (KeyFuncType::COPY == rKeyCode.GetFunction())
             {
-                m_pPage->CopyToClipboard();
+                CopyToClipboard();
                 bHandled = true;
             }
             break;
-        }
     }
     return bHandled;
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeAutoCompleteMultiListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    WinBits nWinBits = WB_TABSTOP;
-
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-       nWinBits |= WB_BORDER;
-
-    rRet = VclPtr<OfaAutoCompleteTabPage::AutoCompleteMultiListBox>::Create(pParent, nWinBits);
 }
 
 // class OfaSmartTagOptionsTabPage ---------------------------------------------

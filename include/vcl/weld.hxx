@@ -42,9 +42,8 @@ protected:
     Link<Widget&, void> m_aFocusInHdl;
     Link<Widget&, void> m_aFocusOutHdl;
     Link<const Size&, void> m_aSizeAllocateHdl;
-
-    void signal_focus_in() { m_aFocusInHdl.Call(*this); }
-    void signal_focus_out() { m_aFocusOutHdl.Call(*this); }
+    Link<const KeyEvent&, bool> m_aKeyPressHdl;
+    Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
 
 public:
     virtual void set_sensitive(bool sensitive) = 0;
@@ -116,6 +115,18 @@ public:
     {
         assert(!m_aSizeAllocateHdl.IsSet() || !rLink.IsSet());
         m_aSizeAllocateHdl = rLink;
+    }
+
+    virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink)
+    {
+        assert(!m_aKeyPressHdl.IsSet() || !rLink.IsSet());
+        m_aKeyPressHdl = rLink;
+    }
+
+    virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink)
+    {
+        assert(!m_aKeyReleaseHdl.IsSet() || !rLink.IsSet());
+        m_aKeyReleaseHdl = rLink;
     }
 
     virtual void grab_add() = 0;
@@ -534,6 +545,7 @@ public:
     virtual void set_image(VirtualDevice* pDevice) = 0;
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual OUString get_label() const = 0;
+    virtual void set_label_line_wrap(bool wrap) = 0;
     void clicked() { signal_clicked(); }
 
     void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
@@ -1171,8 +1183,6 @@ protected:
     Link<const MouseEvent&, void> m_aMousePressHdl;
     Link<const MouseEvent&, void> m_aMouseMotionHdl;
     Link<const MouseEvent&, void> m_aMouseReleaseHdl;
-    Link<const KeyEvent&, bool> m_aKeyPressHdl;
-    Link<const KeyEvent&, bool> m_aKeyReleaseHdl;
     Link<Widget&, void> m_aStyleUpdatedHdl;
     Link<const Point&, bool> m_aPopupMenuHdl;
     Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
@@ -1197,8 +1207,6 @@ public:
     {
         m_aMouseReleaseHdl = rLink;
     }
-    void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_aKeyPressHdl = rLink; }
-    void connect_key_release(const Link<const KeyEvent&, bool>& rLink) { m_aKeyReleaseHdl = rLink; }
     void connect_style_updated(const Link<Widget&, void>& rLink) { m_aStyleUpdatedHdl = rLink; }
     void connect_popup_menu(const Link<const Point&, bool>& rLink) { m_aPopupMenuHdl = rLink; }
     void connect_focus_rect(const Link<Widget&, tools::Rectangle>& rLink)

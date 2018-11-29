@@ -382,55 +382,39 @@ public:
 class OfaAutoCompleteTabPage : public SfxTabPage
 {
     friend class VclPtr<OfaAutoCompleteTabPage>;
-public:
-    class AutoCompleteMultiListBox : public MultiListBox
-    {
-        VclPtr<OfaAutoCompleteTabPage> m_pPage;
-    public:
-        AutoCompleteMultiListBox(vcl::Window *pParent, WinBits nBits)
-            : MultiListBox(pParent, nBits)
-            , m_pPage(nullptr)
-        {
-        }
-        virtual ~AutoCompleteMultiListBox() override;
-        virtual void dispose() override;
-        void SetPage(OfaAutoCompleteTabPage *pPage) { m_pPage = pPage; }
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
-    };
-
 private:
     using TabPage::ActivatePage;
-    VclPtr<CheckBox>       m_pCBActiv; ///<Enable word completion
-    VclPtr<CheckBox>       m_pCBAppendSpace;///<Append space
-    VclPtr<CheckBox>       m_pCBAsTip; ///<Show as tip
-
-    VclPtr<CheckBox>       m_pCBCollect;///<Collect words
-    VclPtr<CheckBox>       m_pCBRemoveList;///<...save the list for later use...
-
-    VclPtr<ListBox>        m_pDCBExpandKey;
-    VclPtr<NumericField>   m_pNFMinWordlen;
-    VclPtr<NumericField>   m_pNFMaxEntries;
-    VclPtr<AutoCompleteMultiListBox> m_pLBEntries;
-    VclPtr<PushButton>     m_pPBEntries;
     editeng::SortedAutoCompleteStrings* m_pAutoCompleteList;
     sal_uInt16      m_nAutoCmpltListCnt;
 
-    DECL_LINK( CheckHdl, CheckBox&, void );
+    std::unique_ptr<weld::CheckButton> m_xCBActiv; ///<Enable word completion
+    std::unique_ptr<weld::CheckButton> m_xCBAppendSpace;///<Append space
+    std::unique_ptr<weld::CheckButton> m_xCBAsTip; ///<Show as tip
 
-                        OfaAutoCompleteTabPage( vcl::Window* pParent,
-                                                const SfxItemSet& rSet );
+    std::unique_ptr<weld::CheckButton> m_xCBCollect;///<Collect words
+    std::unique_ptr<weld::CheckButton> m_xCBRemoveList;///<...save the list for later use...
+
+    std::unique_ptr<weld::ComboBox> m_xDCBExpandKey;
+    std::unique_ptr<weld::SpinButton> m_xNFMinWordlen;
+    std::unique_ptr<weld::SpinButton> m_xNFMaxEntries;
+    std::unique_ptr<weld::TreeView> m_xLBEntries;
+    std::unique_ptr<weld::Button> m_xPBEntries;
+
+    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
+    DECL_LINK(KeyReleaseHdl, const KeyEvent&, bool);
+
+    OfaAutoCompleteTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 public:
     virtual ~OfaAutoCompleteTabPage() override;
-    virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
-                                const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent,
+                                     const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& ) override;
 
     void CopyToClipboard() const;
-    DECL_LINK(DeleteHdl, Button*, void);
+    DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
 // class OfaSmartTagOptionsTabPage ---------------------------------------------
