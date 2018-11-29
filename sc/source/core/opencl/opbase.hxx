@@ -180,6 +180,8 @@ public:
         std::set<std::string>& ) { }
     virtual bool takeString() const = 0;
     virtual bool takeNumeric() const = 0;
+    // Whether DoubleRef containing more than one column is handled properly.
+    virtual bool canHandleMultiVector() const { return false; }
     //Continue process 'Zero' or Not(like OpMul, not continue process when meet
     // 'Zero'
     virtual bool ZeroReturnZero() { return false;}

@@ -1651,6 +1651,7 @@ public:
         return ss.str();
     }
     virtual std::string BinFuncName() const override { return "fcount"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpEqual : public Binary
@@ -1718,6 +1719,8 @@ public:
         return ss.str();
     }
     virtual std::string BinFuncName() const override { return "fsum"; }
+    // All arguments are simply summed, so it doesn't matter if SvDoubleVector is split.
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpAverage : public Reduction
@@ -1734,6 +1737,7 @@ public:
     }
     virtual std::string BinFuncName() const override { return "average"; }
     virtual bool isAverage() const override { return true; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpSub : public Reduction
@@ -1811,6 +1815,7 @@ public:
     }
     virtual std::string BinFuncName() const override { return "min"; }
     virtual bool isMinOrMax() const override { return true; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpMax : public Reduction
@@ -1825,6 +1830,7 @@ public:
     }
     virtual std::string BinFuncName() const override { return "max"; }
     virtual bool isMinOrMax() const override { return true; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpSumProduct : public SumOfProduct
@@ -2217,6 +2223,22 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 {
                     const formula::DoubleVectorRefToken* pDVR =
                         static_cast<const formula::DoubleVectorRefToken*>(pChild);
+
+                    // The code below will split one svDoubleVectorRef into one subargument
+                    // for each column of data, and then all these subarguments will be later
+                    // passed to the code generating the function. Most of the code then
+                    // simply treats each subargument as one argument to the function, and thus
+                    // could break in this case.
+                    // As a simple solution, simply prevent this case, unless the code in question
+                    // explicitly claims it will handle this situation properly.
+                    if( pDVR->GetArrays().size() > 1 )
+                    {
+                        if( pCodeGen->canHandleMultiVector())
+                            SAL_INFO("sc.opencl", "multi-column DoubleRef");
+                        else
+                            throw UnhandledToken(("Function '" + pCodeGen->BinFuncName()
+                                + "' cannot handle multi-column DoubleRef").c_str(), __FILE__, __LINE__);
+                    }
 
                     // FIXME: The Right Thing to do would be to compare the accumulated kernel
                     // parameter size against the CL_DEVICE_MAX_PARAMETER_SIZE of the device, but

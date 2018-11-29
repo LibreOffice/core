@@ -20,6 +20,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "VLookup"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 }}
