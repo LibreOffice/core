@@ -174,12 +174,24 @@ walk_up:
     else if (const CXXOperatorCallExpr * operatorCall = dyn_cast<CXXOperatorCallExpr>(parent))
     {
         auto oo = operatorCall->getOperator();
-        // if assignment op
-        if (oo == OO_Equal || oo == OO_StarEqual || oo == OO_SlashEqual || oo == OO_PercentEqual
+        if (oo == OO_AmpEqual)
+        {
+            // Ignore a common pattern that does not introduce any new information, merely removes
+            // information:     foo &= ~Enum6::Top
+            bool found = false;
+            if (auto innerOperatorCall = dyn_cast<CXXOperatorCallExpr>(operatorCall->getArg(1)))
+            {
+                found = innerOperatorCall->getOperator() == OO_Tilde;
+            }
+            if (!found)
+                bWrite = true;
+        }
+            // if assignment op
+        else if (oo == OO_Equal || oo == OO_StarEqual || oo == OO_SlashEqual || oo == OO_PercentEqual
            || oo == OO_PlusEqual || oo == OO_MinusEqual || oo == OO_LessLessEqual
-           || oo == OO_AmpEqual || oo == OO_CaretEqual || oo == OO_PipeEqual)
+           || oo == OO_CaretEqual || oo == OO_PipeEqual)
             bWrite = true;
-        // else if comparison op
+            // else if comparison op
         else if (oo == OO_AmpAmp || oo == OO_PipePipe || oo == OO_Subscript
             || oo == OO_Less || oo == OO_Greater || oo == OO_LessEqual || oo == OO_GreaterEqual || oo == OO_EqualEqual || oo == OO_ExclaimEqual)
             bRead = true;

@@ -81,6 +81,8 @@ struct Test4 : public Test4Base
 };
 };
 
+//-----------------------------------------------------------------------------------
+
 // check that conditional operator walks up the tree
 namespace test5
 {
@@ -91,6 +93,26 @@ enum Enum
 };
 
 Enum foo(int x) { return x == 1 ? Enum::ONE : Enum::TWO; }
+};
+
+//-----------------------------------------------------------------------------------
+// Ignore a common pattern that does not introduce any new information, merely removes
+// information.
+enum class Enum6
+{
+    Modules = 0x01, // expected-error {{write Modules [loplugin:unusedenumconstants]}}
+    Top = 0x02,
+};
+namespace o3tl
+{
+template <> struct typed_flags<Enum6> : is_typed_flags<Enum6, 0x03>
+{
+};
+}
+void test6()
+{
+    Enum6 foo = Enum6::Modules;
+    foo &= ~Enum6::Top;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
