@@ -1190,6 +1190,7 @@ private:
     gulong m_nFocusInSignalId;
     gulong m_nFocusOutSignalId;
     gulong m_nKeyPressSignalId;
+    gulong m_nSizeAllocateSignalId;
 
     static void signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
@@ -1203,6 +1204,13 @@ private:
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
         pThis->signal_focus_out();
+    }
+
+    static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
+    {
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_size_allocate(allocation->width, allocation->height);
     }
 
     static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer)
@@ -1223,6 +1231,7 @@ public:
         , m_bFrozen(false)
         , m_nFocusInSignalId(0)
         , m_nFocusOutSignalId(0)
+        , m_nSizeAllocateSignalId(0)
     {
         GdkEventMask eEventMask(static_cast<GdkEventMask>(gtk_widget_get_events(pWidget)));
         if (eEventMask & GDK_BUTTON_PRESS_MASK)
@@ -1439,6 +1448,17 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual bool get_extents_relative_to(weld::Widget& rRelative, int& x, int &y, int& width, int &height) override
+    {
+        //for toplevel windows this is sadly futile under wayland, so we can't tell where a dialog is in order to allow
+        //the document underneath to auto-scroll to place content in a visible location
+        gboolean ret = gtk_widget_translate_coordinates(dynamic_cast<GtkInstanceWidget&>(rRelative).getWidget(),
+                                                        m_pWidget, 0, 0, &x, &y);
+        width = gtk_widget_get_allocated_width(m_pWidget);
+        height = gtk_widget_get_allocated_height(m_pWidget);
+        return ret;
+    }
+
     virtual void set_tooltip_text(const OUString& rTip) override
     {
         gtk_widget_set_tooltip_text(m_pWidget, OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
@@ -1485,6 +1505,17 @@ public:
     {
         m_nFocusOutSignalId = g_signal_connect(m_pWidget, "focus-out-event", G_CALLBACK(signalFocusOut), this);
         weld::Widget::connect_focus_out(rLink);
+    }
+
+    virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
+    {
+        m_nSizeAllocateSignalId = g_signal_connect(m_pWidget, "size_allocate", G_CALLBACK(signalSizeAllocate), this);
+        weld::Widget::connect_size_allocate(rLink);
+    }
+
+    virtual void signal_size_allocate(guint nWidth, guint nHeight)
+    {
+        m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
     }
 
     virtual void grab_add() override
@@ -1534,6 +1565,8 @@ public:
             g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
         if (m_nFocusOutSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nFocusOutSignalId);
+        if (m_nSizeAllocateSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nSizeAllocateSignalId);
         if (m_bTakeOwnership)
             gtk_widget_destroy(m_pWidget);
     }
@@ -1544,10 +1577,14 @@ public:
             g_signal_handler_block(m_pWidget, m_nFocusInSignalId);
         if (m_nFocusOutSignalId)
             g_signal_handler_block(m_pWidget, m_nFocusOutSignalId);
+        if (m_nSizeAllocateSignalId)
+            g_signal_handler_block(m_pWidget, m_nSizeAllocateSignalId);
     }
 
     virtual void enable_notify_events()
     {
+        if (m_nSizeAllocateSignalId)
+            g_signal_handler_unblock(m_pWidget, m_nSizeAllocateSignalId);
         if (m_nFocusOutSignalId)
             g_signal_handler_unblock(m_pWidget, m_nFocusOutSignalId);
         if (m_nFocusInSignalId)
@@ -2093,16 +2130,6 @@ public:
     virtual void window_move(int x, int y) override
     {
         gtk_window_move(m_pWindow, x, y);
-    }
-
-    virtual bool get_extents_relative_to(Window& rRelative, int& x, int &y, int& width, int &height) override
-    {
-        //this is sadly futile under wayland, so we can't tell where a dialog is in order to allow
-        //the document underneath to auto-scroll to place content in a visible location
-        gboolean ret = gtk_widget_translate_coordinates(dynamic_cast<GtkInstanceWindow&>(rRelative).getWidget(), m_pWidget, 0, 0, &x, &y);
-        width = gtk_widget_get_allocated_width(m_pWidget);
-        height = gtk_widget_get_allocated_height(m_pWidget);
-        return ret;
     }
 
     virtual SystemEnvData get_system_data() const override
@@ -3113,7 +3140,7 @@ private:
     // if > 6, but only if the notebook would auto-scroll, then flip tabs
     // to left which allows themes like Ambience under Ubuntu 16.04 to keep
     // tabs on top when they would fit
-    void signal_size_allocate()
+    void signal_notebook_size_allocate()
     {
         gint nPages = gtk_notebook_get_n_pages(m_pNotebook);
         if (nPages > 6 && gtk_notebook_get_tab_pos(m_pNotebook) == GTK_POS_TOP)
@@ -3133,7 +3160,7 @@ private:
     static void signalSizeAllocate(GtkWidget*, GdkRectangle*, gpointer widget)
     {
         GtkInstanceNotebook* pThis = static_cast<GtkInstanceNotebook*>(widget);
-        pThis->signal_size_allocate();
+        pThis->signal_notebook_size_allocate();
     }
 
 public:
@@ -4571,6 +4598,13 @@ public:
         enable_notify_events();
     }
 
+    virtual void set_cursor(int pos) override
+    {
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
+        gtk_tree_path_free(path);
+    }
+
     virtual void scroll_to_row(int pos) override
     {
         assert(gtk_tree_view_get_model(m_pTreeView) && "don't select when frozen");
@@ -5473,7 +5507,6 @@ private:
     cairo_surface_t* m_pSurface;
     sal_uInt16 m_nLastMouseButton;
     gulong m_nDrawSignalId;
-    gulong m_nSizeAllocateSignalId;
     gulong m_nButtonPressSignalId;
     gulong m_nMotionSignalId;
     gulong m_nButtonReleaseSignalId;
@@ -5510,17 +5543,11 @@ private:
                              aFocusRect.Left(), aFocusRect.Top(), aFocusRect.GetWidth(), aFocusRect.GetHeight());
         }
     }
-    static void signalSizeAllocate(GtkWidget*, GdkRectangle* allocation, gpointer widget)
-    {
-        GtkInstanceDrawingArea* pThis = static_cast<GtkInstanceDrawingArea*>(widget);
-        SolarMutexGuard aGuard;
-        pThis->signal_size_allocate(allocation->width, allocation->height);
-    }
-    void signal_size_allocate(guint nWidth, guint nHeight)
+    virtual void signal_size_allocate(guint nWidth, guint nHeight) override
     {
         m_xDevice->SetOutputSizePixel(Size(nWidth, nHeight));
         m_pSurface = get_underlying_cairo_surface(*m_xDevice);
-        m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
+        GtkInstanceWidget::signal_size_allocate(nWidth, nHeight);
     }
     static void signalStyleUpdated(GtkWidget*, gpointer widget)
     {
@@ -5690,7 +5717,6 @@ public:
         , m_pSurface(nullptr)
         , m_nLastMouseButton(0)
         , m_nDrawSignalId(g_signal_connect(m_pDrawingArea, "draw", G_CALLBACK(signalDraw), this))
-        , m_nSizeAllocateSignalId(g_signal_connect(m_pDrawingArea, "size_allocate", G_CALLBACK(signalSizeAllocate), this))
         , m_nButtonPressSignalId(g_signal_connect(m_pDrawingArea, "button-press-event", G_CALLBACK(signalButton), this))
         , m_nMotionSignalId(g_signal_connect(m_pDrawingArea, "motion-notify-event", G_CALLBACK(signalMotion), this))
         , m_nButtonReleaseSignalId(g_signal_connect(m_pDrawingArea, "button-release-event", G_CALLBACK(signalButton), this))
@@ -5795,7 +5821,6 @@ public:
         g_signal_handler_disconnect(m_pDrawingArea, m_nButtonPressSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nMotionSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nButtonReleaseSignalId);
-        g_signal_handler_disconnect(m_pDrawingArea, m_nSizeAllocateSignalId);
         g_signal_handler_disconnect(m_pDrawingArea, m_nDrawSignalId);
     }
 
@@ -5858,8 +5883,8 @@ private:
         if (m_aEntryActivateHdl.IsSet())
         {
             SolarMutexGuard aGuard;
-            m_aEntryActivateHdl.Call(*this);
-            g_signal_stop_emission_by_name(get_entry(), "activate");
+            if (m_aEntryActivateHdl.Call(*this))
+                g_signal_stop_emission_by_name(get_entry(), "activate");
         }
     }
 

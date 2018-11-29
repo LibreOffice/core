@@ -99,7 +99,7 @@ private:
     Link<Edit&,void>    maModifyHdl;
     Link<Edit&,void>    maUpdateDataHdl;
     Link<Edit&,void>    maAutocompleteHdl;
-    Link<Edit&,void>    maActivateHdl;
+    Link<Edit&,bool>    maActivateHdl;
     std::unique_ptr<VclBuilder> mpUIBuilder;
 
     css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
@@ -244,7 +244,7 @@ public:
     virtual const Link<Edit&,void>& GetModifyHdl() const { return maModifyHdl; }
     virtual void        SetUpdateDataHdl( const Link<Edit&,void>& rLink ) { maUpdateDataHdl = rLink; }
 
-    void                SetActivateHdl(const Link<Edit&,void>& rLink) { maActivateHdl = rLink; }
+    void                SetActivateHdl(const Link<Edit&,bool>& rLink) { maActivateHdl = rLink; }
 
     void                SetSubEdit( Edit* pEdit );
     Edit*               GetSubEdit() const { return mpSubEdit; }
