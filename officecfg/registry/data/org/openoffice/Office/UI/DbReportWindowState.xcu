@@ -77,7 +77,7 @@
       </node>
       <node oor:name="private:resource/toolbar/drawbar" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Drawing objects</value>
+          <value xml:lang="en-US">Drawing Objects</value>
         </prop>
         <prop oor:name="DockPos" oor:type="xs:string">
           <value>297,2</value>
