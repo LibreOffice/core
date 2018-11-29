@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f5c4f37_07af1695",
+        "filename": "slideshow/source/engine/shapes/drawshapesubsetting.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-29T09:06:35Z",
+      "side": 1,
+      "message": "Seems unrelated ;-)",
+      "range": {
+        "startLine": 267,
+        "startChar": 18,
+        "endLine": 267,
+        "endChar": 28
+      },
+      "revId": "933660e591211f06a1be43e83c64ad1e8529bc2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f5c4f37_e793e25b",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-11-29T09:06:35Z",
+      "side": 1,
+      "message": "... and this (yes, I realize the need to look at the mirror first ;-))",
+      "range": {
+        "startLine": 229,
+        "startChar": 94,
+        "endLine": 229,
+        "endChar": 104
+      },
+      "revId": "933660e591211f06a1be43e83c64ad1e8529bc2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
