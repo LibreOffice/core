@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9f5c4f37_c7aa1ed1",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2018-11-29T03:58:44Z",
+      "side": 1,
+      "message": "\u003e When manually creating an interim ScMatrix please call SetMutable()\n \u003e at it, see GetNewMat().\n\nOK.\nAs filling elements one by one can be slower, in the revised patch I\u0027ve added another GetNewMat() to initialize a matrix with a vector.",
+      "parentUuid": "bf57530f_9dd6aff1",
+      "revId": "beae86f9a8de5c1e682d7d0d6b514f58ede6fdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf57530f_ddcc2763",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "9f5c4f37_e7ad22eb",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3870,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2018-11-29T03:58:44Z",
+      "side": 1,
+      "message": "\u003e This local scope nParam and nRefInList is not how it is supposed to\n \u003e work for svRefList, compare with the original GetNumberSequenceArray().\n \u003e Effectively this now handles only the first reference of a\n \u003e svRefList. Either handle all references (which, given the\n \u003e dimensional result, probably isn\u0027t possible in array evaluation\n \u003e mode for LARGE()/SMALL() unless there\u0027s a defined way to glue\n \u003e individual references) or set an error in array evaluation mode if\n \u003e svRefList is encountered.\n\nI see.\nA proper handling of svRefList will need more work, so let\u0027s leave it an error for now.",
+      "parentUuid": "bf57530f_ddcc2763",
+      "range": {
+        "startLine": 3869,
+        "startChar": 0,
+        "endLine": 3870,
+        "endChar": 34
+      },
+      "revId": "beae86f9a8de5c1e682d7d0d6b514f58ede6fdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf57530f_9d446fb9",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2018-11-28T13:41:30Z",
       "side": 1,
       "message": "If all values have to be numeric then this else branch checking single elements is unnecessary, as pMat-\u003eIsNumeric() returns false if not all elements are numeric. Simply set an error instead.",
+      "revId": "beae86f9a8de5c1e682d7d0d6b514f58ede6fdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f5c4f37_a7b72a3b",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3920,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2018-11-29T03:58:44Z",
+      "side": 1,
+      "message": "\u003e If all values have to be numeric then this else branch checking\n \u003e single elements is unnecessary, as pMat-\u003eIsNumeric() returns false\n \u003e if not all elements are numeric. Simply set an error instead.\n\nGot it. Thank you for your advice.",
+      "parentUuid": "bf57530f_9d446fb9",
       "revId": "beae86f9a8de5c1e682d7d0d6b514f58ede6fdbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
