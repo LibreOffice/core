@@ -26,6 +26,7 @@
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"
 #include <OAuthenticationContinuation.hxx>
+#include <svtools/miscopt.hxx>
 
 #include <hsqlimport.hxx>
 #include <migrwarndlg.hxx>
@@ -603,7 +604,9 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
 #if ENABLE_FIREBIRD_SDBC
     bool bNeedMigration = false;
-    if(m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
+    SvtMiscOptions aMiscOptions;
+
+    if(aMiscOptions.IsExperimentalMode() && m_pImpl->m_sConnectURL == "sdbc:embedded:hsqldb")
     {
         OUString sMigrEnvVal;
         osl_getEnvironment(OUString("DBACCESS_HSQL_MIGRATION").pData,
