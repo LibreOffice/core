@@ -105,7 +105,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
 
-     setErrorRecorder();
+    setErrorRecorder();
 
     pMngr = pSecEnv->createKeysManager();
     if( !pMngr ) {
@@ -271,14 +271,14 @@ OUString SAL_CALL XMLSignature_NssImpl::getImplementationName() {
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService( const OUString& serviceName) {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
-    const OUString* pArray = seqServiceNames.getConstArray() ;
-    for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
-        if( *( pArray + i ) == serviceName )
-            return true ;
+sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService(const OUString& rServiceName)
+{
+    for (OUString const & rCurrentServiceName : getSupportedServiceNames())
+    {
+        if (rCurrentServiceName == rServiceName)
+            return true;
     }
-    return false ;
+    return false;
 }
 
 /* XServiceInfo */
