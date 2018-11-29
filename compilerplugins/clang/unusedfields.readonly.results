@@ -178,37 +178,37 @@ dbaccess/source/filter/hsqldb/parseschema.hxx:36
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
 dbaccess/source/ui/control/tabletree.cxx:182
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
-dbaccess/source/ui/dlg/advancedsettings.hxx:42
+dbaccess/source/ui/dlg/advancedsettings.hxx:41
     dbaui::SpecialSettingsPage m_xIsSQL92Check std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:43
+dbaccess/source/ui/dlg/advancedsettings.hxx:42
     dbaui::SpecialSettingsPage m_xAppendTableAlias std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:44
+dbaccess/source/ui/dlg/advancedsettings.hxx:43
     dbaui::SpecialSettingsPage m_xAsBeforeCorrelationName std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:45
+dbaccess/source/ui/dlg/advancedsettings.hxx:44
     dbaui::SpecialSettingsPage m_xEnableOuterJoin std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:46
+dbaccess/source/ui/dlg/advancedsettings.hxx:45
     dbaui::SpecialSettingsPage m_xIgnoreDriverPrivileges std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:47
+dbaccess/source/ui/dlg/advancedsettings.hxx:46
     dbaui::SpecialSettingsPage m_xParameterSubstitution std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:48
+dbaccess/source/ui/dlg/advancedsettings.hxx:47
     dbaui::SpecialSettingsPage m_xSuppressVersionColumn std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:49
+dbaccess/source/ui/dlg/advancedsettings.hxx:48
     dbaui::SpecialSettingsPage m_xCatalog std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:50
+dbaccess/source/ui/dlg/advancedsettings.hxx:49
     dbaui::SpecialSettingsPage m_xSchema std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:51
+dbaccess/source/ui/dlg/advancedsettings.hxx:50
     dbaui::SpecialSettingsPage m_xIndexAppendix std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:52
+dbaccess/source/ui/dlg/advancedsettings.hxx:51
     dbaui::SpecialSettingsPage m_xDosLineEnds std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:53
+dbaccess/source/ui/dlg/advancedsettings.hxx:52
     dbaui::SpecialSettingsPage m_xCheckRequiredFields std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:54
+dbaccess/source/ui/dlg/advancedsettings.hxx:53
     dbaui::SpecialSettingsPage m_xIgnoreCurrency std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:55
+dbaccess/source/ui/dlg/advancedsettings.hxx:54
     dbaui::SpecialSettingsPage m_xEscapeDateTime std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:56
+dbaccess/source/ui/dlg/advancedsettings.hxx:55
     dbaui::SpecialSettingsPage m_xPrimaryKeySupport std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/advancedsettings.hxx:57
+dbaccess/source/ui/dlg/advancedsettings.hxx:56
     dbaui::SpecialSettingsPage m_xRespectDriverResultSetType std::unique_ptr<weld::CheckButton>
 dbaccess/source/ui/inc/charsetlistbox.hxx:44
     dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
@@ -216,7 +216,7 @@ dbaccess/source/ui/inc/WCopyTable.hxx:269
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
 drawinglayer/source/processor2d/vclprocessor2d.hxx:83
     drawinglayer::processor2d::VclProcessor2D maDrawinglayerOpt const class SvtOptionsDrawinglayer
-editeng/source/editeng/impedit.hxx:450
+editeng/source/editeng/impedit.hxx:449
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:108
     OCommonEmbeddedObject m_aClassName class rtl::OUString
@@ -246,7 +246,7 @@ extensions/source/propctrlr/eformshelper.hxx:63
     pcr::EFormsHelper m_aBindingUINames pcr::MapStringToPropertySet
 extensions/source/update/check/updatehdl.hxx:85
     UpdateHandler mbStringsLoaded _Bool
-filter/source/graphicfilter/eps/eps.cxx:114
+filter/source/graphicfilter/eps/eps.cxx:115
     PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 filter/source/graphicfilter/icgm/cgm.hxx:60
     CGM mbPicture _Bool
@@ -558,6 +558,8 @@ sfx2/source/inc/versdlg.hxx:85
     SfxCmisVersionsDialog m_xVersionBox std::unique_ptr<weld::TreeView>
 slideshow/source/engine/slideshowimpl.cxx:153
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
+slideshow/test/testview.cxx:59
+    ImplTestView mbIsClearCalled _Bool
 sot/source/sdstor/ucbstorage.cxx:403
     UCBStorageStream_Impl m_aKey const class rtl::OString
 starmath/source/view.cxx:861
@@ -938,7 +940,7 @@ vcl/source/gdi/dibtools.cxx:117
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:280
+vcl/source/gdi/pdfwriter_impl.hxx:279
     vcl::PDFWriterImpl::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:38
     ImplHeadItem maHelpId const class rtl::OString

@@ -173,9 +173,6 @@ namespace svt
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
 
-        mutable css::uno::Reference< css::document::XDocumentProperties>
-                                        m_xDocProps;
-
         css::uno::Sequence< OUString > m_rBlackList;
 
         bool URLOnBlackList ( const OUString& sRealURL );

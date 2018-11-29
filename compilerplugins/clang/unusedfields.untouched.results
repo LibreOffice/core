@@ -28,7 +28,7 @@ chart2/source/controller/dialogs/tp_AxisPositions.hxx:62
     chart::AxisPositionsTabPage m_xCB_AxisBetweenCategories std::unique_ptr<weld::CheckButton>
 chart2/source/controller/dialogs/tp_AxisPositions.hxx:66
     chart::AxisPositionsTabPage m_xED_LabelDistance std::unique_ptr<weld::FormattedSpinButton>
-chart2/source/controller/dialogs/tp_RangeChooser.hxx:84
+chart2/source/controller/dialogs/tp_RangeChooser.hxx:86
     chart::RangeChooserTabPage m_xFT_Range std::unique_ptr<weld::Label>
 chart2/source/controller/dialogs/tp_TitleRotation.hxx:44
     chart::SchAlignmentTabPage m_xFtTextDirection std::unique_ptr<weld::Label>
@@ -52,20 +52,22 @@ cui/source/dialogs/colorpicker.cxx:714
     cui::ColorPickerDialog m_xColorField std::unique_ptr<weld::CustomWeld>
 cui/source/dialogs/colorpicker.cxx:716
     cui::ColorPickerDialog m_xColorPreview std::unique_ptr<weld::CustomWeld>
-cui/source/inc/align.hxx:97
+cui/source/inc/align.hxx:92
     svx::AlignmentTabPage m_xBoxDirection std::unique_ptr<weld::Widget>
-cui/source/inc/cfg.hxx:574
+cui/source/inc/cfg.hxx:573
     SvxNewToolbarDialog m_xBtnOK std::unique_ptr<weld::Button>
-cui/source/inc/cuicharmap.hxx:104
+cui/source/inc/cuicharmap.hxx:99
     SvxCharacterMap m_xShowChar std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuicharmap.hxx:105
+cui/source/inc/cuicharmap.hxx:100
     SvxCharacterMap m_xRecentCharView std::unique_ptr<weld::CustomWeld> [16]
-cui/source/inc/cuicharmap.hxx:106
+cui/source/inc/cuicharmap.hxx:101
     SvxCharacterMap m_xFavCharView std::unique_ptr<weld::CustomWeld> [16]
-cui/source/inc/cuicharmap.hxx:108
+cui/source/inc/cuicharmap.hxx:103
     SvxCharacterMap m_xShowSetArea std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuicharmap.hxx:110
+cui/source/inc/cuicharmap.hxx:105
     SvxCharacterMap m_xSearchSetArea std::unique_ptr<weld::CustomWeld>
+cui/source/inc/cuigaldlg.hxx:252
+    TPGalleryThemeProperties m_xWndPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuigrfflt.hxx:79
     GraphicFilterDialog mxPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuigrfflt.hxx:175
@@ -100,19 +102,19 @@ cui/source/inc/transfrm.hxx:190
     SvxAngleTabPage m_xCtlAngle std::unique_ptr<weld::CustomWeld>
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-dbaccess/source/ui/dlg/advancedsettings.hxx:98
+dbaccess/source/ui/dlg/advancedsettings.hxx:97
     dbaui::GeneratedValuesPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/advancedsettings.hxx:100
+dbaccess/source/ui/dlg/advancedsettings.hxx:99
     dbaui::GeneratedValuesPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/detailpages.hxx:67
+dbaccess/source/ui/dlg/detailpages.hxx:66
     dbaui::OCommonBehaviourTabPage m_xAutoRetrievingEnabled std::unique_ptr<weld::CheckButton>
-dbaccess/source/ui/dlg/detailpages.hxx:68
+dbaccess/source/ui/dlg/detailpages.hxx:67
     dbaui::OCommonBehaviourTabPage m_xAutoIncrementLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/detailpages.hxx:69
+dbaccess/source/ui/dlg/detailpages.hxx:68
     dbaui::OCommonBehaviourTabPage m_xAutoIncrement std::unique_ptr<weld::Entry>
-dbaccess/source/ui/dlg/detailpages.hxx:70
+dbaccess/source/ui/dlg/detailpages.hxx:69
     dbaui::OCommonBehaviourTabPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
-dbaccess/source/ui/dlg/detailpages.hxx:71
+dbaccess/source/ui/dlg/detailpages.hxx:70
     dbaui::OCommonBehaviourTabPage m_xAutoRetrieving std::unique_ptr<weld::Entry>
 emfio/source/emfuno/xemfparser.cxx:60
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
@@ -138,7 +140,7 @@ include/oox/vml/vmlshapecontext.hxx:116
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/registry/registry.hxx:35
     Registry_Api acquire void (*)(RegHandle)
-include/sfx2/mgetempl.hxx:63
+include/sfx2/mgetempl.hxx:60
     SfxManageStyleSheetPage m_xNameFt std::unique_ptr<weld::Label>
 include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
@@ -177,11 +179,11 @@ include/sfx2/msg.hxx:135
 include/sfx2/msg.hxx:135
     SfxType4 pType const std::type_info *
 include/sfx2/msg.hxx:136
-    SfxType5 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:136
     SfxType5 aAttrib struct SfxTypeAttrib [5]
 include/sfx2/msg.hxx:136
     SfxType5 pType const std::type_info *
+include/sfx2/msg.hxx:136
+    SfxType5 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:136
     SfxType5 nAttribs sal_uInt16
 include/sfx2/msg.hxx:137
@@ -197,9 +199,9 @@ include/sfx2/msg.hxx:138
 include/sfx2/msg.hxx:138
     SfxType7 aAttrib struct SfxTypeAttrib [7]
 include/sfx2/msg.hxx:138
-    SfxType7 pType const std::type_info *
-include/sfx2/msg.hxx:138
     SfxType7 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:138
+    SfxType7 pType const std::type_info *
 include/sfx2/msg.hxx:139
     SfxType8 pType const std::type_info *
 include/sfx2/msg.hxx:139
@@ -217,9 +219,9 @@ include/sfx2/msg.hxx:140
 include/sfx2/msg.hxx:140
     SfxType10 aAttrib struct SfxTypeAttrib [10]
 include/sfx2/msg.hxx:141
-    SfxType11 nAttribs sal_uInt16
-include/sfx2/msg.hxx:141
     SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:141
+    SfxType11 nAttribs sal_uInt16
 include/sfx2/msg.hxx:141
     SfxType11 pType const std::type_info *
 include/sfx2/msg.hxx:141
@@ -280,7 +282,7 @@ include/svx/colorwindow.hxx:133
     ColorWindow mxRecentColorSetWin std::unique_ptr<weld::CustomWeld>
 include/svx/hdft.hxx:86
     SvxHFPage m_xBspWin std::unique_ptr<weld::CustomWeld>
-include/vcl/font/Feature.hxx:102
+include/vcl/font/Feature.hxx:99
     vcl::font::Feature m_eType const enum vcl::font::FeatureType
 include/vcl/uitest/uiobject.hxx:271
     TabPageUIObject mxTabPage VclPtr<class TabPage>
@@ -402,14 +404,6 @@ sc/source/filter/html/htmlpars.cxx:3031
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
-sc/source/filter/xml/xmlimprt.hxx:176
-    tScMyCellRange EndColumn sal_Int32
-sc/source/filter/xml/xmlimprt.hxx:176
-    tScMyCellRange StartColumn sal_Int32
-sc/source/filter/xml/xmlimprt.hxx:177
-    tScMyCellRange StartRow sal_Int32
-sc/source/filter/xml/xmlimprt.hxx:177
-    tScMyCellRange EndRow sal_Int32
 sc/source/ui/inc/crdlg.hxx:32
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
 sc/source/ui/inc/delcodlg.hxx:39
@@ -418,21 +412,21 @@ sc/source/ui/inc/docsh.hxx:456
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/instbdlg.hxx:66
     ScInsertTableDlg m_xBtnBehind std::unique_ptr<weld::RadioButton>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1746
+sd/source/ui/animations/CustomAnimationDialog.cxx:1745
     sd::CustomAnimationEffectTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1752
+sd/source/ui/animations/CustomAnimationDialog.cxx:1751
     sd::CustomAnimationEffectTabPage mxFTSound std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:1755
+sd/source/ui/animations/CustomAnimationDialog.cxx:1754
     sd::CustomAnimationEffectTabPage mxFTAfterEffect std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2276
+sd/source/ui/animations/CustomAnimationDialog.cxx:2275
     sd::CustomAnimationDurationTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2277
+sd/source/ui/animations/CustomAnimationDialog.cxx:2276
     sd::CustomAnimationDurationTabPage mxFTStart std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2279
+sd/source/ui/animations/CustomAnimationDialog.cxx:2278
     sd::CustomAnimationDurationTabPage mxFTStartDelay std::unique_ptr<weld::Label>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2642
+sd/source/ui/animations/CustomAnimationDialog.cxx:2641
     sd::CustomAnimationTextAnimTabPage mxContainer std::unique_ptr<weld::Container>
-sd/source/ui/animations/CustomAnimationDialog.cxx:2643
+sd/source/ui/animations/CustomAnimationDialog.cxx:2642
     sd::CustomAnimationTextAnimTabPage mxFTGroupText std::unique_ptr<weld::Label>
 sd/source/ui/animations/CustomAnimationDialog.hxx:147
     sd::SdPropertySubControl mxContainer std::unique_ptr<weld::Container>
@@ -480,10 +474,6 @@ sfx2/source/inc/versdlg.hxx:83
     SfxCmisVersionsDialog m_xDeleteButton std::unique_ptr<weld::Button>
 sfx2/source/inc/versdlg.hxx:84
     SfxCmisVersionsDialog m_xCompareButton std::unique_ptr<weld::Button>
-sfx2/source/view/sfxbasecontroller.cxx:112
-    GroupIDToCommandGroup nGroupID const enum SfxGroupId
-sfx2/source/view/sfxbasecontroller.cxx:113
-    GroupIDToCommandGroup nCommandGroup const sal_Int16
 sfx2/source/view/viewfrm.cxx:163
     (anonymous namespace)::SfxEditDocumentDialog m_xEditDocument std::unique_ptr<weld::Button>
 sfx2/source/view/viewfrm.cxx:164
@@ -522,26 +512,14 @@ svl/source/crypto/cryptosign.cxx:283
     (anonymous namespace)::(anonymous) statusString SECItem
 svl/source/crypto/cryptosign.cxx:284
     (anonymous namespace)::(anonymous) failInfo SECItem
-svtools/source/filter/exportdialog.hxx:124
+svtools/source/contnr/contentenumeration.hxx:177
+    svt::FileViewContentEnumerator m_xDocProps css::uno::Reference<css::document::XDocumentProperties>
+svtools/source/filter/exportdialog.hxx:125
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
 svx/source/inc/datanavi.hxx:604
     svxform::AddInstanceDialog m_xURLFT std::unique_ptr<weld::Label>
-sw/inc/ddefld.hxx:43
-    sw::InRangeSearchHint m_nEnd const sal_Int32
-sw/inc/ddefld.hxx:43
-    sw::InRangeSearchHint m_nStt const sal_Int32
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
-sw/source/core/doc/tblrwcl.cxx:98
-    CR_SetBoxWidth m_Boxes class SwSelBoxes
-sw/source/core/doc/tblrwcl.cxx:104
-    CR_SetBoxWidth nBoxWidth sal_uInt16
-sw/source/core/doc/tblrwcl.cxx:105
-    CR_SetBoxWidth bSplittBox _Bool
-sw/source/core/doc/tblrwcl.cxx:179
-    CR_SetLineHeight m_Boxes class SwSelBoxes
-sw/source/core/doc/tblrwcl.cxx:180
-    CR_SetLineHeight aShareFormats class SwShareBoxFormats
 sw/source/core/frmedt/fetab.cxx:79
     TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:170
@@ -550,17 +528,17 @@ sw/source/ui/config/mailconfigpage.cxx:56
     SwTestAccountSettingsDialog m_xEstablish std::unique_ptr<weld::Label>
 sw/source/ui/config/mailconfigpage.cxx:57
     SwTestAccountSettingsDialog m_xFind std::unique_ptr<weld::Label>
-sw/source/ui/dbui/mmgreetingspage.hxx:116
+sw/source/ui/dbui/mmgreetingspage.hxx:114
     SwMailBodyDialog m_xBodyFT std::unique_ptr<weld::Label>
 sw/source/ui/envelp/labfmt.hxx:75
     SwLabFormatPage m_xPreview std::unique_ptr<weld::CustomWeld>
-sw/source/ui/inc/mmresultdialogs.hxx:72
+sw/source/ui/inc/mmresultdialogs.hxx:70
     SwMMResultPrintDialog m_xPrinterFT std::unique_ptr<weld::Label>
-sw/source/ui/inc/mmresultdialogs.hxx:102
+sw/source/ui/inc/mmresultdialogs.hxx:100
     SwMMResultEmailDialog m_xMailToFT std::unique_ptr<weld::Label>
-sw/source/ui/inc/mmresultdialogs.hxx:105
+sw/source/ui/inc/mmresultdialogs.hxx:103
     SwMMResultEmailDialog m_xSubjectFT std::unique_ptr<weld::Label>
-sw/source/ui/inc/mmresultdialogs.hxx:107
+sw/source/ui/inc/mmresultdialogs.hxx:105
     SwMMResultEmailDialog m_xSendAsFT std::unique_ptr<weld::Label>
 sw/source/ui/misc/impfnote.hxx:44
     SwEndNoteOptionPage m_xPosFT std::unique_ptr<weld::Label>
@@ -588,7 +566,7 @@ sw/source/uibase/inc/outline.hxx:85
     SwOutlineSettingsTabPage m_xPreviewWIN std::unique_ptr<weld::CustomWeld>
 sw/source/uibase/inc/pggrid.hxx:44
     SwTextGridPage m_xExampleWN std::unique_ptr<weld::CustomWeld>
-sw/source/uibase/inc/regionsw.hxx:232
+sw/source/uibase/inc/regionsw.hxx:231
     SwSectionIndentTabPage m_xPreviewWin std::unique_ptr<weld::CustomWeld>
 sw/source/uibase/inc/splittbl.hxx:30
     SwSplitTableDlg m_xHorzBox std::unique_ptr<weld::RadioButton>
@@ -622,12 +600,6 @@ vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
 vcl/source/app/salvtables.cxx:622
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
-vcl/source/bitmap/BitmapScaleSuperFilter.cxx:54
-    (anonymous namespace)::ScaleContext mnSrcW long
-vcl/source/bitmap/BitmapScaleSuperFilter.cxx:55
-    (anonymous namespace)::ScaleContext mnSrcH long
-vcl/source/bitmap/BitmapScaleSuperFilter.cxx:55
-    (anonymous namespace)::ScaleContext mnDestH long
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:36
@@ -638,7 +610,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2516
+vcl/unx/gtk3/gtk3gtkinst.cxx:2637
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink
