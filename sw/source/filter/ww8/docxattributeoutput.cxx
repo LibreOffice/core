@@ -133,6 +133,7 @@
 #include <txtatr.hxx>
 
 #include <osl/file.hxx>
+#include <utility>
 #include <vcl/embeddedfontshelper.hxx>
 #include <svtools/miscopt.hxx>
 
@@ -207,14 +208,14 @@ class FFDataWriterHelper
 
         if ( !rHelp.isEmpty() )
             m_pSerializer->singleElementNS( XML_w, XML_helpText,
-                FSNS(XML_w, XML_type), OString("text"),
+                FSNS(XML_w, XML_type), "text",
                 FSNS(XML_w, XML_val),
                 OUStringToOString( rHelp, RTL_TEXTENCODING_UTF8 ).getStr(),
                 FSEND );
 
         if ( !rHint.isEmpty() )
             m_pSerializer->singleElementNS( XML_w, XML_statusText,
-                FSNS(XML_w, XML_type), OString("text"),
+                FSNS(XML_w, XML_type), "text",
                 FSNS(XML_w, XML_val),
                 OUStringToOString( rHint, RTL_TEXTENCODING_UTF8 ).getStr(),
                 FSEND );
@@ -225,7 +226,7 @@ class FFDataWriterHelper
         m_pSerializer->endElementNS( XML_w, XML_ffData );
     }
 public:
-    explicit FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr& rSerializer ) : m_pSerializer( rSerializer ){}
+    explicit FFDataWriterHelper( ::sax_fastparser::FSHelperPtr  rSerializer ) : m_pSerializer(std::move( rSerializer )){}
     void WriteFormCheckbox( const OUString& rName,
                             const OUString& rEntryMacro,
                             const OUString& rExitMacro,
@@ -6769,14 +6770,14 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
            FSNS( XML_w, XML_val ), sIss.getStr(), FSEND );
 
     const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
-    if (sIss.isEmpty() || sIss.match(OString("baseline")))
+    if (sIss.isEmpty() || sIss.match("baseline"))
     {
         long nHeight = rItem.GetHeight();
         OString sPos = OString::number( ( nHeight * nEsc + 500 ) / 1000 );
         m_pSerializer->singleElementNS( XML_w, XML_position,
                 FSNS( XML_w, XML_val ), sPos.getStr( ), FSEND );
 
-        if( ( 100 != nProp || sIss.match( OString( "baseline" ) ) ) && !m_rExport.m_bFontSizeWritten )
+        if( ( 100 != nProp || sIss.match( "baseline" ) ) && !m_rExport.m_bFontSizeWritten )
         {
             OString sSize = OString::number( ( nHeight * nProp + 500 ) / 1000 );
                 m_pSerializer->singleElementNS( XML_w, XML_sz,
@@ -7782,7 +7783,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
         if ( nCurrTab == nCount || pInheritedTabs->At(i) < rTabStop[nCurrTab] )
         {
             m_pSerializer->singleElementNS( XML_w, XML_tab,
-                FSNS( XML_w, XML_val ), OString("clear"),
+                FSNS( XML_w, XML_val ), "clear",
                 FSNS( XML_w, XML_pos ), OString::number(pInheritedTabs->At(i).GetTabPos()),
                 FSEND );
         }

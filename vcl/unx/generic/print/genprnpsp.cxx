@@ -254,7 +254,7 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
 
     // setup command line for exec
     if( ! bPipe )
-        aCmdLine = aCmdLine.replaceAll(OString("(TMP)"), aFilename);
+        aCmdLine = aCmdLine.replaceAll("(TMP)", aFilename);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s commandline: \"%s\"\n",

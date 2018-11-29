@@ -237,13 +237,13 @@ static void checkFunctionNames(const OString& aLanguage)
         {
         case 0:
         {
-            PoHeader hd(OString("formula/inc"));
+            PoHeader hd("formula/inc");
             aPoOutput.writeHeader(hd);
             break;
         }
         case 1:
         {
-            PoHeader hd(OString("scaddins/inc"));
+            PoHeader hd("scaddins/inc");
             aPoOutput.writeHeader(hd);
             break;
         }

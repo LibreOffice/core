@@ -59,7 +59,7 @@ namespace slideshow
                 generated with verbose text comments switched on).
              */
             DrawShapeSubsetting( const DocTreeNode&                         rShapeSubset,
-                                 const ::std::shared_ptr< GDIMetaFile >&  rMtf );
+                                 ::std::shared_ptr< GDIMetaFile >   rMtf );
 
             /// Forbid copy construction
             DrawShapeSubsetting(const DrawShapeSubsetting&) = delete;

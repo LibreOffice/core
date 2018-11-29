@@ -56,13 +56,13 @@ public:
     {
         Config aConfig(maConfigFile);
 
-        aConfig.SetGroup(OString("TestGroup"));
+        aConfig.SetGroup("TestGroup");
         CPPUNIT_ASSERT_EQUAL(OString("TestGroup"), aConfig.GetGroup());
 
         // so this is a quirk of Config - you can set the group name,
         // but it might not exist so you really should first check if
         // it exists via HasGroup()
-        aConfig.SetGroup(OString("TestGroupA"));
+        aConfig.SetGroup("TestGroupA");
         CPPUNIT_ASSERT(!aConfig.HasGroup("TestGroupA"));
         CPPUNIT_ASSERT_EQUAL(OString("TestGroupA"), aConfig.GetGroup());
     }
@@ -72,7 +72,7 @@ public:
         {
             Config aConfig(maConfigFile);
 
-            aConfig.DeleteGroup(OString("TestGroup"));
+            aConfig.DeleteGroup("TestGroup");
             CPPUNIT_ASSERT(!aConfig.HasGroup("TestGroup"));
             CPPUNIT_ASSERT_EQUAL(OString("TestGroup2"), aConfig.GetGroupName(0));
 
@@ -86,7 +86,7 @@ public:
             Config aConfig(maConfigFile);
 
             CPPUNIT_ASSERT(!aConfig.HasGroup("NonExistentTestGroup"));
-            aConfig.DeleteGroup(OString("NonExistentTestGroup"));
+            aConfig.DeleteGroup("NonExistentTestGroup");
             CPPUNIT_ASSERT_EQUAL(OString("TestGroup"), aConfig.GetGroupName(0));
 
             sal_uInt16 nActual = aConfig.GetGroupCount();
@@ -106,64 +106,64 @@ public:
     void testReadKey()
     {
         Config aConfig(maConfigFile);
-        aConfig.SetGroup(OString("TestGroup"));
+        aConfig.SetGroup("TestGroup");
         CPPUNIT_ASSERT_EQUAL(OString("testvalue"), aConfig.ReadKey(OString("testkey")));
         CPPUNIT_ASSERT_EQUAL(OString(), aConfig.ReadKey(OString("nonexistenttestkey")));
         CPPUNIT_ASSERT_EQUAL(OString("notexists"),
-                             aConfig.ReadKey(OString("nonexistenttestkey"), OString("notexists")));
+                             aConfig.ReadKey("nonexistenttestkey", "notexists"));
 
-        aConfig.SetGroup(OString("TestGroup2"));
+        aConfig.SetGroup("TestGroup2");
         CPPUNIT_ASSERT_EQUAL(OString("testvalue"), aConfig.ReadKey(OString("testkey2")));
         CPPUNIT_ASSERT_EQUAL(OString(), aConfig.ReadKey(OString("nonexistenttestkey")));
         CPPUNIT_ASSERT_EQUAL(OString("notexists"),
-                             aConfig.ReadKey(OString("nonexistenttestkey"), OString("notexists")));
+                             aConfig.ReadKey("nonexistenttestkey", "notexists"));
     }
 
     void testGetKeyName()
     {
         Config aConfig(maConfigFile);
-        aConfig.SetGroup(OString("TestGroup"));
+        aConfig.SetGroup("TestGroup");
         CPPUNIT_ASSERT_EQUAL(OString("testkey"), aConfig.GetKeyName(0));
 
-        aConfig.SetGroup(OString("TestGroup2"));
+        aConfig.SetGroup("TestGroup2");
         CPPUNIT_ASSERT_EQUAL(OString("testkey2"), aConfig.GetKeyName(0));
     }
 
     void testWriteDeleteKey()
     {
         Config aConfig(maConfigFile);
-        aConfig.SetGroup(OString("TestGroup"));
-        aConfig.WriteKey(OString("testkey_new"), OString("testvalue"));
+        aConfig.SetGroup("TestGroup");
+        aConfig.WriteKey("testkey_new", "testvalue");
 
         sal_uInt16 nExpected = 2;
         sal_uInt16 nActual = aConfig.GetKeyCount();
         CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
         CPPUNIT_ASSERT_EQUAL(OString("testvalue"), aConfig.ReadKey(OString("testkey_new")));
 
-        aConfig.DeleteKey(OString("testkey_new"));
+        aConfig.DeleteKey("testkey_new");
 
         nExpected = 1;
         nActual = aConfig.GetKeyCount();
         CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
         CPPUNIT_ASSERT_EQUAL(OString(), aConfig.ReadKey(OString("testkey_new")));
 
-        aConfig.SetGroup(OString("TestGroup2"));
-        aConfig.WriteKey(OString("testkey_new"), OString("testvalue"));
+        aConfig.SetGroup("TestGroup2");
+        aConfig.WriteKey("testkey_new", "testvalue");
 
         nActual = aConfig.GetKeyCount();
         nExpected = 2;
         CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
         CPPUNIT_ASSERT_EQUAL(OString("testvalue"), aConfig.ReadKey(OString("testkey_new")));
 
-        aConfig.DeleteKey(OString("testkey_new"));
+        aConfig.DeleteKey("testkey_new");
 
         nActual = aConfig.GetKeyCount();
         nExpected = 1;
         CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
         CPPUNIT_ASSERT_EQUAL(OString(), aConfig.ReadKey(OString("testkey_new")));
 
-        aConfig.SetGroup(OString("TestGroup3"));
-        aConfig.WriteKey(OString("testkey_new_group3"), OString("testvalue"));
+        aConfig.SetGroup("TestGroup3");
+        aConfig.WriteKey("testkey_new_group3", "testvalue");
 
         nActual = aConfig.GetKeyCount();
         nExpected = 1;

@@ -155,7 +155,7 @@ namespace desktop {
         Config aConfig(aLockname);
         aConfig.SetGroup(LOCKFILE_GROUP);
         OString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY );
-        if (!aIPCserver.equalsIgnoreAsciiCase(OString("true")))
+        if (!aIPCserver.equalsIgnoreAsciiCase("true"))
             return false;
 
         OString aHost = aConfig.ReadKey( LOCKFILE_HOSTKEY );

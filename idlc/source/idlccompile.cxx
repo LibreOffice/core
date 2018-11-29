@@ -210,8 +210,8 @@ bool copyFile(const OString* source, const OString& target)
 sal_Int32 compileFile(const OString * pathname)
 {
     // preprocess input file
-    OString tmpFile = makeTempName(OString("idli_"));
-    OString preprocFile = makeTempName(OString("idlf_"));
+    OString tmpFile = makeTempName("idli_");
+    OString preprocFile = makeTempName("idlf_");
 
     OString fileName;
     if (pathname == nullptr) {

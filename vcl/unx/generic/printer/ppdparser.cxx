@@ -710,7 +710,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
             OString aCurLine = aStream.ReadLine();
             if( aCurLine.startsWith("*") )
             {
-                if (aCurLine.matchIgnoreAsciiCase(OString("*include:")))
+                if (aCurLine.matchIgnoreAsciiCase("*include:"))
                 {
                     aCurLine = aCurLine.copy(9);
                     aCurLine = comphelper::string::stripStart(aCurLine, ' ');
@@ -726,7 +726,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
                     continue;
                 }
                 else if( ! bLanguageEncoding &&
-                         aCurLine.matchIgnoreAsciiCase(OString("*languageencoding")) )
+                         aCurLine.matchIgnoreAsciiCase("*languageencoding") )
                 {
                     bLanguageEncoding = true; // generally only the first one counts
                     OString aLower = aCurLine.toAsciiLowerCase();

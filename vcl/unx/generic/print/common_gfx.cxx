@@ -1078,7 +1078,7 @@ PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt3
             char cChar = aLine[1];
             if( cChar == '%' )
             {
-                if( aLine.matchIgnoreAsciiCase( OString( "%%BoundingBox:") ) )
+                if( aLine.matchIgnoreAsciiCase( "%%BoundingBox:" ) )
                 {
                     aLine = WhitespaceToSpace( aLine.getToken(1, ':') );
                     if( !aLine.isEmpty() && aLine.indexOf( "atend" ) == -1 )

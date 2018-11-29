@@ -43,19 +43,19 @@ void Test::testStartsWithIgnoreAsciiCase() {
     {
         OString r;
         CPPUNIT_ASSERT(
-            OString("foo").startsWithIgnoreAsciiCase(OString("F"), &r));
+            OString("foo").startsWithIgnoreAsciiCase("F", &r));
         CPPUNIT_ASSERT_EQUAL(OString("oo"), r);
     }
     {
         OString r("other");
         CPPUNIT_ASSERT(
-            !OString("foo").startsWithIgnoreAsciiCase(OString("bar"), &r));
+            !OString("foo").startsWithIgnoreAsciiCase("bar", &r));
         CPPUNIT_ASSERT_EQUAL(OString("other"), r);
     }
     {
         OString r("other");
         CPPUNIT_ASSERT(
-            !OString("foo").startsWithIgnoreAsciiCase(OString("foobar"), &r));
+            !OString("foo").startsWithIgnoreAsciiCase("foobar", &r));
         CPPUNIT_ASSERT_EQUAL(OString("other"), r);
     }
 

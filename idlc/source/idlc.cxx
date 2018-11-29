@@ -102,25 +102,25 @@ static void predefineXInterface(AstModule* pRoot)
 {
     // define the modules  com::sun::star::uno
     AstModule* pParentScope = pRoot;
-    AstModule* pModule = new AstModule(OString("com"), pParentScope);
+    AstModule* pModule = new AstModule("com", pParentScope);
     pModule->setPredefined(true);
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
-    pModule = new AstModule(OString("sun"), pParentScope);
+    pModule = new AstModule("sun", pParentScope);
     pModule->setPredefined(true);
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
-    pModule = new AstModule(OString("star"), pParentScope);
+    pModule = new AstModule("star", pParentScope);
     pModule->setPredefined(true);
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
-    pModule = new AstModule(OString("uno"), pParentScope);
+    pModule = new AstModule("uno", pParentScope);
     pModule->setPredefined(true);
     pParentScope->addDeclaration(pModule);
     pParentScope = pModule;
 
     // define XInterface
-    AstInterface* pInterface = new AstInterface(OString("XInterface"), nullptr, pParentScope);
+    AstInterface* pInterface = new AstInterface("XInterface", nullptr, pParentScope);
     pInterface->setDefined();
     pInterface->setPredefined(true);
     pInterface->setPublished();
@@ -128,21 +128,21 @@ static void predefineXInterface(AstModule* pRoot)
 
     // define XInterface::queryInterface
     AstOperation* pOp = new AstOperation(static_cast<AstType*>(pRoot->lookupPrimitiveType(ET_any)),
-                                         OString("queryInterface"), pInterface);
+                                         "queryInterface", pInterface);
     AstParameter* pParam = new AstParameter(DIR_IN, false,
                                             static_cast<AstType*>(pRoot->lookupPrimitiveType(ET_type)),
-                                            OString("aType"), pOp);
+                                            "aType", pOp);
     pOp->addDeclaration(pParam);
     pInterface->addMember(pOp);
 
     // define XInterface::acquire
     pOp = new AstOperation(static_cast<AstType*>(pRoot->lookupPrimitiveType(ET_void)),
-                           OString("acquire"), pInterface);
+                           "acquire", pInterface);
     pInterface->addMember(pOp);
 
     // define XInterface::release
     pOp = new AstOperation(static_cast<AstType*>(pRoot->lookupPrimitiveType(ET_void)),
-                           OString("release"), pInterface);
+                           "release", pInterface);
     pInterface->addMember(pOp);
 }
 
@@ -150,49 +150,49 @@ static void initializePredefinedTypes(AstModule* pRoot)
 {
     if ( pRoot )
     {
-         AstBaseType* pPredefined = new AstBaseType(ET_long, OString("long"), pRoot);
+         AstBaseType* pPredefined = new AstBaseType(ET_long, "long", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_ulong, OString("unsigned long"), pRoot);
+         pPredefined = new AstBaseType(ET_ulong, "unsigned long", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_hyper, OString("hyper"), pRoot);
+         pPredefined = new AstBaseType(ET_hyper, "hyper", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_uhyper, OString("unsigned hyper"), pRoot);
+         pPredefined = new AstBaseType(ET_uhyper, "unsigned hyper", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_short, OString("short"), pRoot);
+         pPredefined = new AstBaseType(ET_short, "short", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_ushort, OString("unsigned short"), pRoot);
+         pPredefined = new AstBaseType(ET_ushort, "unsigned short", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_float, OString("float"), pRoot);
+         pPredefined = new AstBaseType(ET_float, "float", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_double, OString("double"), pRoot);
+         pPredefined = new AstBaseType(ET_double, "double", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_char, OString("char"), pRoot);
+         pPredefined = new AstBaseType(ET_char, "char", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_byte, OString("byte"), pRoot);
+         pPredefined = new AstBaseType(ET_byte, "byte", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_any, OString("any"), pRoot);
+         pPredefined = new AstBaseType(ET_any, "any", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_string, OString("string"), pRoot);
+         pPredefined = new AstBaseType(ET_string, "string", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_type, OString("type"), pRoot);
+         pPredefined = new AstBaseType(ET_type, "type", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_boolean, OString("boolean"), pRoot);
+         pPredefined = new AstBaseType(ET_boolean, "boolean", pRoot);
          pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_void, OString("void"), pRoot);
+         pPredefined = new AstBaseType(ET_void, "void", pRoot);
          pRoot->addDeclaration(pPredefined);
     }
 }
