@@ -32,7 +32,7 @@
       </node>
       <node oor:name="private:resource/popupmenu/3dscene2" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">3D Scene (group)</value>
+          <value xml:lang="en-US">3D Scene (Group)</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/connector" oor:op="replace">
@@ -127,7 +127,7 @@
       </node>
       <node oor:name="private:resource/popupmenu/pagepanenosel" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Slide Sorter/Pane (no selection)</value>
+          <value xml:lang="en-US">Slide Sorter/Pane (No Selection)</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/pagepanemaster" oor:op="replace">
@@ -137,7 +137,7 @@
       </node>
       <node oor:name="private:resource/popupmenu/pagepanenoselmaster" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Master Slide Sorter/Pane (no selection)</value>
+          <value xml:lang="en-US">Master Slide Sorter/Pane (No Selection)</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/table" oor:op="replace">
@@ -152,7 +152,7 @@
       </node>
       <node oor:name="private:resource/popupmenu/textbox" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Text Box (drawing)</value>
+          <value xml:lang="en-US">Text Box (Drawing)</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/extrusionobjectbar" oor:op="replace">
@@ -169,7 +169,7 @@
           <value>true</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">3D-Settings</value>
+          <value xml:lang="en-US">3D Settings</value>
         </prop>
         <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
           <value>false</value>
@@ -206,7 +206,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">3D-Objects</value>
+          <value xml:lang="en-US">3D Objects</value>
         </prop>
         <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
           <value>false</value>
@@ -1030,7 +1030,7 @@
       </node>
       <node oor:name="private:resource/toolbar/notebookbarshortcuts" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Notebookbar shortcuts</value>
+          <value xml:lang="en-US">Notebookbar Shortcuts</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>

@@ -58,7 +58,7 @@
       </node>
       <node oor:name=".uno:DBViewTableNames" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Table name</value>
+          <value xml:lang="en-US">Table Name</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -500,7 +500,7 @@
       </node>
       <node oor:name=".uno:DBSendReportAsMail" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Report As E-Mail...</value>
+          <value xml:lang="en-US">Report as Email...</value>
         </prop>
       </node>
       <node oor:name=".uno:DBSendReportToWriter" oor:op="replace">
@@ -548,7 +548,7 @@
       </node>
       <node oor:name=".uno:DSBAdministrate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Registered databases ...</value>
+          <value xml:lang="en-US">Registered Databases...</value>
         </prop>
       </node>
     </node>
