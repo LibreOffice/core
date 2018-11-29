@@ -3696,7 +3696,8 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
 
 Size CheckBox::GetOptimalSize() const
 {
-    return CalcMinimumSize();
+    int nWidthRequest(get_width_request());
+    return CalcMinimumSize(nWidthRequest != -1 ? nWidthRequest : 0);
 }
 
 void CheckBox::ShowFocus(const tools::Rectangle& rRect)
