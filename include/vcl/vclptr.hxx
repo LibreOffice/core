@@ -35,8 +35,6 @@
 #endif
 #endif
 
-#if !(defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__)
-
 namespace vcl { namespace detail {
 
 template<typename>
@@ -48,8 +46,6 @@ template<typename T> constexpr bool isIncompleteOrDerivedFromVclReferenceBase(
 
 }; }; // namespace detail, namespace vcl
 
-#endif
-
 /**
  * A thin wrapper around rtl::Reference to implement the acquire and dispose semantics we want for references to vcl::Window subclasses.
  *
@@ -60,12 +56,10 @@ template<typename T> constexpr bool isIncompleteOrDerivedFromVclReferenceBase(
 template <class reference_type>
 class VclPtr
 {
-#if !(defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__)
     static_assert(
         vcl::detail::isIncompleteOrDerivedFromVclReferenceBase<reference_type>(
             nullptr),
         "template argument type must be derived from VclReferenceBase");
-#endif
 
     ::rtl::Reference<reference_type> m_rInnerRef;
 

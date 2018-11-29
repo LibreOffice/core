@@ -65,12 +65,7 @@ namespace rtl
 
     Instances of OUStringLiteral1 need to be const, as those literal-optimized
     functions take the literal argument by non-const lvalue reference, for
-    technical reasons.  Except with MSVC, at least up to Visual Studio 2013:
-    For one, it fails to take that const-ness into account when trying to match
-    "OUStringLiteral1_ const" against T in a "T & literal" parameter of a
-    function template.  But for another, as a language extension, it allows to
-    bind non-const temporary OUStringLiteral1_ instances to non-const lvalue
-    references, but also with a warning that thus needs to be disabled.
+    technical reasons.
 
     @since LibreOffice 5.0
 */
@@ -78,13 +73,7 @@ struct SAL_WARN_UNUSED OUStringLiteral1_ {
     constexpr OUStringLiteral1_(sal_Unicode theC): c(theC) {}
     sal_Unicode const c;
 };
-#if defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__
-    // Visual Studio 2015
-using OUStringLiteral1 = OUStringLiteral1_;
-#pragma warning(disable: 4239) // nonstandard extension used: 'argument': conversion from 'rtl::OUStringLiteral1_' to 'rtl::OUStringLiteral1_ &'
-#else
 using OUStringLiteral1 = OUStringLiteral1_ const;
-#endif
 
 /// @endcond
 #endif
