@@ -3826,8 +3826,8 @@ const char* SC_OPCODE_REGEX_ARY[] =
     NC_("SC_OPCODE_REGEX", "The regular expression pattern to be matched."),
     NC_("SC_OPCODE_REGEX", "Replacement"),
     NC_("SC_OPCODE_REGEX", "The replacement text and references to capture groups."),
-    NC_("SC_OPCODE_REGEX", "Flags"),
-    NC_("SC_OPCODE_REGEX", "Text specifying option flags, \"g\" for global replacement.")
+    NC_("SC_OPCODE_REGEX", "Flags or Occurrence"),
+    NC_("SC_OPCODE_REGEX", "Text specifying option flags, \"g\" for global replacement. Or number of occurrence to match or replace.")
 };
 
 // -=*# Resource for function BASE #*=-

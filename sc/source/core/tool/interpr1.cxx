@@ -9226,17 +9226,48 @@ void ScInterpreter::ScSearch()
 
 void ScInterpreter::ScRegex()
 {
-    sal_uInt8 nParamCount = GetByte();
-    if (MustHaveParamCount( nParamCount, 2, 4))
+    const sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount( nParamCount, 2, 4))
+        return;
+
+    // Flags are supported only for replacement, search match flags can be
+    // individually and much more flexible set in the regular expression
+    // pattern using (?ismwx-ismwx)
+    bool bGlobalReplacement = false;
+    sal_Int32 nOccurrence = 1;  // default first occurrence, if any
+    if (nParamCount == 4)
     {
-        // Flags are supported only for replacement, search match flags can be
-        // individually and much more flexible set in the regular expression
-        // pattern using (?ismwx-ismwx)
-        bool bGlobalReplacement = false;
-        if (nParamCount == 4)
+        // Argument can be either string or double.
+        double fOccurrence;
+        svl::SharedString aFlagsString;
+        bool bDouble;
+        if (!IsMissing())
+            bDouble = GetDoubleOrString( fOccurrence, aFlagsString);
+        else
         {
+            // For an omitted argument keep the default.
+            PopError();
+            bDouble = true;
+            fOccurrence = nOccurrence;
+        }
+        if (nGlobalError != FormulaError::NONE)
+        {
+            PushError( nGlobalError);
+            return;
+        }
+        if (bDouble)
+        {
+            if (!CheckStringPositionArgument( fOccurrence))
+            {
+                PushError( FormulaError::IllegalArgument);
+                return;
+            }
+            nOccurrence = static_cast<sal_Int32>(fOccurrence);
+        }
+        else
+        {
+            const OUString aFlags( aFlagsString.getString());
             // Empty flags string is valid => no flag set.
-            OUString aFlags( GetString().getString());
             if (aFlags.getLength() > 1)
             {
                 // Only one flag supported.
@@ -9255,87 +9286,126 @@ void ScInterpreter::ScRegex()
                 }
             }
         }
-
-        bool bReplacement = false;
-        OUString aReplacement;
-        if (nParamCount >= 3)
-        {
-            // A missing argument is not an empty string to replace the match.
-            if (IsMissing())
-                Pop();
-            else
-            {
-                aReplacement = GetString().getString();
-                bReplacement = true;
-            }
-        }
-        // If bGlobalReplacement==true and bReplacement==false then
-        // bGlobalReplacement is silently ignored.
-
-        OUString aExpression = GetString().getString();
-        OUString aText = GetString().getString();
-
-        if (nGlobalError != FormulaError::NONE)
-        {
-            PushError( nGlobalError);
-            return;
-        }
-
-        const icu::UnicodeString aIcuExpression(
-                reinterpret_cast<const UChar*>(aExpression.getStr()), aExpression.getLength());
-        UErrorCode status = U_ZERO_ERROR;
-        icu::RegexMatcher aRegexMatcher( aIcuExpression, 0, status);
-        if (U_FAILURE(status))
-        {
-            // Invalid regex.
-            PushIllegalArgument();
-            return;
-        }
-        // Guard against pathological patterns, limit steps of engine, see
-        // https://ssl.icu-project.org/apiref/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
-        aRegexMatcher.setTimeLimit ( 23*1000, status);
-
-        const icu::UnicodeString aIcuText( reinterpret_cast<const UChar*>(aText.getStr()), aText.getLength());
-        aRegexMatcher.reset( aIcuText);
-
-        if (!bReplacement)
-        {
-            // Find first occurrence.
-            if (!aRegexMatcher.find())
-            {
-                PushError( FormulaError::NotAvailable);
-                return;
-            }
-            // Extract matched text.
-            icu::UnicodeString aMatch( aRegexMatcher.group( status));
-            if (U_FAILURE(status))
-            {
-                // Some error.
-                PushIllegalArgument();
-                return;
-            }
-            OUString aResult( reinterpret_cast<const sal_Unicode*>(aMatch.getBuffer()), aMatch.length());
-            PushString( aResult);
-            return;
-        }
-
-        // Replace first occurrence of match with replacement.
-        const icu::UnicodeString aIcuReplacement(
-                reinterpret_cast<const UChar*>(aReplacement.getStr()), aReplacement.getLength());
-        icu::UnicodeString aReplaced;
-        if (bGlobalReplacement)
-            aReplaced = aRegexMatcher.replaceAll( aIcuReplacement, status);
-        else
-            aReplaced = aRegexMatcher.replaceFirst( aIcuReplacement, status);
-        if (U_FAILURE(status))
-        {
-            // Some error, e.g. extraneous $1 without group.
-            PushIllegalArgument();
-            return;
-        }
-        OUString aResult( reinterpret_cast<const sal_Unicode*>(aReplaced.getBuffer()), aReplaced.length());
-        PushString( aResult);
     }
+
+    bool bReplacement = false;
+    OUString aReplacement;
+    if (nParamCount >= 3)
+    {
+        // A missing argument is not an empty string to replace the match.
+        // nOccurrence==0 forces no replacement, so simply discard the
+        // argument.
+        if (IsMissing() || nOccurrence == 0)
+            PopError();
+        else
+        {
+            aReplacement = GetString().getString();
+            bReplacement = true;
+        }
+    }
+    // If bGlobalReplacement==true and bReplacement==false then
+    // bGlobalReplacement is silently ignored.
+
+    OUString aExpression = GetString().getString();
+    OUString aText = GetString().getString();
+
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError( nGlobalError);
+        return;
+    }
+
+    // 0-th match or replacement is none, return original string early.
+    if (nOccurrence == 0)
+    {
+        PushString( aText);
+        return;
+    }
+
+    const icu::UnicodeString aIcuExpression(
+            reinterpret_cast<const UChar*>(aExpression.getStr()), aExpression.getLength());
+    UErrorCode status = U_ZERO_ERROR;
+    icu::RegexMatcher aRegexMatcher( aIcuExpression, 0, status);
+    if (U_FAILURE(status))
+    {
+        // Invalid regex.
+        PushIllegalArgument();
+        return;
+    }
+    // Guard against pathological patterns, limit steps of engine, see
+    // https://ssl.icu-project.org/apiref/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
+    aRegexMatcher.setTimeLimit( 23*1000, status);
+
+    const icu::UnicodeString aIcuText( reinterpret_cast<const UChar*>(aText.getStr()), aText.getLength());
+    aRegexMatcher.reset( aIcuText);
+
+    if (!bReplacement)
+    {
+        // Find n-th occurrence.
+        sal_Int32 nCount = 0;
+        while (aRegexMatcher.find( status) && U_SUCCESS(status) && ++nCount < nOccurrence)
+            ;
+        if (U_FAILURE(status))
+        {
+            // Some error.
+            PushIllegalArgument();
+            return;
+        }
+        // n-th match found?
+        if (nCount != nOccurrence)
+        {
+            PushError( FormulaError::NotAvailable);
+            return;
+        }
+        // Extract matched text.
+        icu::UnicodeString aMatch( aRegexMatcher.group( status));
+        if (U_FAILURE(status))
+        {
+            // Some error.
+            PushIllegalArgument();
+            return;
+        }
+        OUString aResult( reinterpret_cast<const sal_Unicode*>(aMatch.getBuffer()), aMatch.length());
+        PushString( aResult);
+        return;
+    }
+
+    const icu::UnicodeString aIcuReplacement(
+            reinterpret_cast<const UChar*>(aReplacement.getStr()), aReplacement.getLength());
+    icu::UnicodeString aReplaced;
+    if (bGlobalReplacement)
+        // Replace all occurrences of match with replacement.
+        aReplaced = aRegexMatcher.replaceAll( aIcuReplacement, status);
+    else if (nOccurrence == 1)
+        // Replace first occurrence of match with replacement.
+        aReplaced = aRegexMatcher.replaceFirst( aIcuReplacement, status);
+    else
+    {
+        // Replace n-th occurrence of match with replacement.
+        sal_Int32 nCount = 0;
+        while (aRegexMatcher.find( status) && U_SUCCESS(status))
+        {
+            // XXX NOTE: After several RegexMatcher::find() the
+            // RegexMatcher::appendReplacement() still starts at the
+            // beginning (or after the last appendReplacement() position
+            // which is none here) and copies the original text up to the
+            // current found match and then replaces the found match.
+            if (++nCount == nOccurrence)
+            {
+                aRegexMatcher.appendReplacement( aReplaced, aIcuReplacement, status);
+                break;
+            }
+        }
+        aRegexMatcher.appendTail( aReplaced);
+    }
+    if (U_FAILURE(status))
+    {
+        // Some error, e.g. extraneous $1 without group.
+        PushIllegalArgument();
+        return;
+    }
+    OUString aResult( reinterpret_cast<const sal_Unicode*>(aReplaced.getBuffer()), aReplaced.length());
+    PushString( aResult);
 }
 
 void ScInterpreter::ScMid()
