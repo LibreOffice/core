@@ -256,18 +256,12 @@
     <glade-widget-class title="Chart Light Button" name="chartcontrollerlo-LightButton"
                         generic-name="ChartLightButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
-    <glade-widget-class title="Category Edit" name="swuilo-FEdit"
-                        generic-name="CategoryEdit" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="Ruby Edit" name="svxlo-RubyEdit"
                         generic-name="RubyEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="Dictionary Edit" name="cuilo-SvxDictEdit"
                         generic-name="SvxDictEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
-    <glade-widget-class title="Glossary List" name="swuilo-SwGlossaryGroupTLB"
-                        generic-name="Glossary List" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Extended Macro Library" name="basctllo-ExtTreeListBox"
                         generic-name="Extended Macro Library List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
