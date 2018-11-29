@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f5c4f37_0dba95dd",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-11-29T22:08:53Z",
+      "side": 1,
+      "message": "This breaks on Qt5.6, which is the baseline for master.",
+      "revId": "cb37c789c93825232924e797ffcac7fd5edfca6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
