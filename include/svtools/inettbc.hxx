@@ -117,7 +117,7 @@ public:
 
     void                            SetText(const OUString& rStr) { m_xWidget->set_entry_text(rStr); }
     void                            Clear() { m_xWidget->clear(); }
-    void connect_entry_activate(const Link<weld::ComboBox&, void>& rLink) { m_xWidget->connect_entry_activate(rLink); }
+    void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xWidget->connect_entry_activate(rLink); }
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xWidget->connect_changed(rLink); }
     void                            append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
     OUString                        get_active_text() const { return m_xWidget->get_active_text(); }

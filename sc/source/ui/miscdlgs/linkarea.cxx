@@ -49,7 +49,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Window* pParent)
 {
     m_xLbRanges->set_selection_mode(true);
 
-    m_xCbUrl->connect_entry_activate(LINK( this, ScLinkedAreaDlg, FileHdl));
+    m_xCbUrl->connect_entry_activate(LINK(this, ScLinkedAreaDlg, FileHdl));
     m_xBtnBrowse->connect_clicked(LINK( this, ScLinkedAreaDlg, BrowseHdl));
     m_xLbRanges->connect_changed(LINK( this, ScLinkedAreaDlg, RangeHdl));
     m_xLbRanges->set_size_request(m_xLbRanges->get_approximate_digit_width() * 54,
@@ -71,7 +71,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, BrowseHdl, weld::Button&, void)
     m_xDocInserter->StartExecuteModal( LINK( this, ScLinkedAreaDlg, DialogClosedHdl ) );
 }
 
-IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, weld::ComboBox&, void)
+IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, weld::ComboBox&, bool)
 {
     OUString aEntered = m_xCbUrl->GetURL();
     if (m_pSourceShell)
@@ -80,7 +80,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, weld::ComboBox&, void)
         if ( aEntered == pMed->GetName() )
         {
             //  already loaded - nothing to do
-            return;
+            return true;
         }
     }
 
@@ -89,7 +89,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, weld::ComboBox&, void)
     //  get filter name by looking at the file content (bWithContent = true)
     // Break operation if any error occurred inside.
     if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, true, false ))
-        return;
+        return true;
 
     // #i53241# replace HTML filter with DataQuery filter
     if (aFilter == FILTERNAME_HTML)
@@ -99,6 +99,8 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, weld::ComboBox&, void)
 
     UpdateSourceRanges();
     UpdateEnable();
+
+    return true;
 }
 
 void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilter, const OUString& rOptions )
