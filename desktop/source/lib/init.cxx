@@ -49,6 +49,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
+#include <comphelper/base64.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -533,6 +534,48 @@ int lcl_getViewId(const std::string& payload)
         return strtol(payload.substr(numberPos).c_str(), nullptr, 10);
 
     return 0;
+}
+
+std::string extractCertificate(const std::string & certificate)
+{
+    const std::string header("-----BEGIN CERTIFICATE-----");
+    const std::string footer("-----END CERTIFICATE-----");
+
+    std::string result;
+
+    size_t pos1 = certificate.find(header);
+    if (pos1 == std::string::npos)
+        return result;
+
+    size_t pos2 = certificate.find(footer, pos1 + 1);
+    if (pos2 == std::string::npos)
+        return result;
+
+    pos1 = pos1 + header.length();
+    pos2 = pos2 - pos1;
+
+    return certificate.substr(pos1, pos2);
+}
+
+std::string extractPrivateKey(const std::string & privateKey)
+{
+    const std::string header("-----BEGIN PRIVATE KEY-----");
+    const std::string footer("-----END PRIVATE KEY-----");
+
+    std::string result;
+
+    size_t pos1 = privateKey.find(header);
+    if (pos1 == std::string::npos)
+        return result;
+
+    size_t pos2 = privateKey.find(footer, pos1 + 1);
+    if (pos2 == std::string::npos)
+        return result;
+
+    pos1 = pos1 + header.length();
+    pos2 = pos2 - pos1;
+
+    return privateKey.substr(pos1, pos2);
 }
 
 }  // end anonymous namespace
@@ -3856,11 +3899,34 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     if (!xCertificateCreator.is())
         return false;
 
-    uno::Sequence<sal_Int8> aCertificateSequence(nCertificateBinarySize);
-    std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+    uno::Sequence<sal_Int8> aCertificateSequence;
 
-    uno::Sequence<sal_Int8> aPrivateKeySequence(nPrivateKeySize);
-    std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeySize, aPrivateKeySequence.begin());
+    std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
+    std::string aCertificateBase64String = extractCertificate(aCertificateString);
+    if (!aCertificateBase64String.empty())
+    {
+        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String.c_str());
+        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
+    }
+    else
+    {
+        aCertificateSequence.realloc(nCertificateBinarySize);
+        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+    }
+
+    uno::Sequence<sal_Int8> aPrivateKeySequence;
+    std::string aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeySize);
+    std::string aPrivateKeyBase64String = extractPrivateKey(aPrivateKeyString);
+    if (!aPrivateKeyBase64String.empty())
+    {
+        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String.c_str());
+        comphelper::Base64::decode(aPrivateKeySequence, aBase64OUString);
+    }
+    else
+    {
+        aPrivateKeySequence.realloc(nPrivateKeySize);
+        std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeySize, aPrivateKeySequence.begin());
+    }
 
     uno::Reference<security::XCertificate> xCertificate;
     xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
@@ -3904,8 +3970,20 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
     if (!xCertificateCreator.is())
         return false;
 
-    uno::Sequence<sal_Int8> aCertificateSequence(nCertificateBinarySize);
-    std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+    uno::Sequence<sal_Int8> aCertificateSequence;
+
+    std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
+    std::string aCertificateBase64String = extractCertificate(aCertificateString);
+    if (!aCertificateBase64String.empty())
+    {
+        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String.c_str());
+        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
+    }
+    else
+    {
+        aCertificateSequence.realloc(nCertificateBinarySize);
+        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+    }
 
     uno::Reference<security::XCertificate> xCertificate;
     xCertificate = xCertificateCreator->addDERCertificateToTheDatabase(aCertificateSequence, "TCu,Cu,Tu");
