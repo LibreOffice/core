@@ -101,12 +101,6 @@ public:
     virtual SfxBindings& GetBindings() = 0;
 };
 
-class AbstractSearchProgress :public VclAbstractRefreshableDialog
-{
-protected:
-    virtual ~AbstractSearchProgress() override = default;
-};
-
 class AbstractTakeProgress :public VclAbstractRefreshableDialog
 {
 protected:
