@@ -429,22 +429,11 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     long nTxtPosY = 0;
     if (!pItem->maOutText.isEmpty() || (nArrowWidth && aTxtSize.Height()))
     {
-        if (nBits & HeaderBarItemBits::TOP)
-        {
-            nTxtPosY = aRect.Top();
-            if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
-                nTxtPosY += aImageSize.Height();
-        }
-        else if (nBits & HeaderBarItemBits::BOTTOM)
-            nTxtPosY = aRect.Bottom()-aTxtSize.Height();
-        else
-        {
-            long nTempHeight = aTxtSize.Height();
-                nTempHeight += aImageSize.Height();
-            nTxtPosY = aRect.Top()+((aRect.GetHeight()-nTempHeight)/2);
-            if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
-                nTxtPosY += aImageSize.Height();
-        }
+        long nTempHeight = aTxtSize.Height();
+        nTempHeight += aImageSize.Height();
+        nTxtPosY = aRect.Top()+((aRect.GetHeight()-nTempHeight)/2);
+        if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
+            nTxtPosY += aImageSize.Height();
     }
 
     // display text
@@ -490,21 +479,11 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
                 nImagePos = aRect.Left() + HEADERBAR_TEXTOFF;
         }
 
-        if (nBits & HeaderBarItemBits::TOP)
-            nImagePosY = aRect.Top();
-        else if (nBits & HeaderBarItemBits::BOTTOM)
-        {
-            nImagePosY = aRect.Bottom() - aImageSize.Height();
-            if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
-                nImagePosY -= aTxtSize.Height();
-        }
-        else
-        {
-            long nTempHeight = aImageSize.Height();
-            if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
-                nTempHeight += aTxtSize.Height();
-            nImagePosY = aRect.Top() + ((aRect.GetHeight() - nTempHeight) / 2);
-        }
+        long nTempHeight = aImageSize.Height();
+        if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
+            nTempHeight += aTxtSize.Height();
+        nImagePosY = aRect.Top() + ((aRect.GetHeight() - nTempHeight) / 2);
+
         if (nImagePos + aImageSize.Width() <= aRect.Right())
         {
             DrawImageFlags nStyle = DrawImageFlags::NONE;
@@ -559,14 +538,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
         else if (aImageSize.Width() && aImageSize.Height())
             nArrowY = nImagePosY + (aImageSize.Height() / 2);
         else
-        {
-            if (nBits & HeaderBarItemBits::TOP)
-                nArrowY = aRect.Top() + 1;
-            else if (nBits & HeaderBarItemBits::BOTTOM)
-                nArrowY = aRect.Bottom() - HEAD_ARROWSIZE2 - 1;
-            else
-                nArrowY = aRect.Top() + ((aRect.GetHeight() - HEAD_ARROWSIZE2) / 2);
-        }
+            nArrowY = aRect.Top() + ((aRect.GetHeight() - HEAD_ARROWSIZE2) / 2);
         nArrowY -= HEAD_ARROWSIZE1 - 1;
         if (nBits & HeaderBarItemBits::DOWNARROW)
         {

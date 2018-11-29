@@ -216,10 +216,10 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(),
                             0,
-                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
     rBar.InsertItem( ITEMID_PATH, get<FixedText>("path")->GetText(),
                             0,
-                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
+                            HeaderBarItemBits::LEFT );
 
     long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(ITEMID_TYPE));
     long nWidth2 = rBar.GetTextWidth(rBar.GetItemText(ITEMID_PATH));

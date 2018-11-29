@@ -167,7 +167,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
 
     OUString sHeader = sHeader1 + "\t" + sHeader2 + "\t";
     m_pCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
-                    HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED );
+                    HeaderBarItemBits::CENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED );
 
     m_pCheckLB->SetStyle( m_pCheckLB->GetStyle()|WB_HSCROLL| WB_VSCROLL );
 }

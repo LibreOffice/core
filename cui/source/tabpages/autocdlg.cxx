@@ -452,7 +452,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     OUString sHeader = get<vcl::Window>("m")->GetText() + "\t"
                      + get<vcl::Window>("t")->GetText() + "\t";
     m_pCheckLB->InsertHeaderEntry(sHeader, HEADERBAR_APPEND,
-                        HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
+                        HeaderBarItemBits::CENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
 
     m_pEditPB->SetClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
 }
@@ -1860,7 +1860,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
         m_pSwCheckLB->SvSimpleTable::SetTabs(SAL_N_ELEMENTS(aStaticTabs), aStaticTabs);
         OUString sHeader = get<vcl::Window>("m")->GetText() + "\t" + get<vcl::Window>("t")->GetText() + "\t";
         m_pSwCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
-                        HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
+                        HeaderBarItemBits::CENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
         m_pCheckLB->Hide();
     }
     else
