@@ -78,7 +78,9 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mbExportShapeSelection(false),
     maFilterData(),
     mxDefaultPage(),
-    mbWriterOrCalcFilter(false),
+    mbWriterFilter(false),
+    mbCalcFilter(false),
+    mbImpressFilter(false),
     mpDefaultSdrPage( nullptr ),
     mpSdrModel( nullptr ),
     mbPresentation( false ),
@@ -97,7 +99,9 @@ SVGFilter::~SVGFilter()
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
 {
-    mbWriterOrCalcFilter = false;
+    mbWriterFilter = false;
+    mbCalcFilter = false;
+    mbImpressFilter = false;
 
     if(mxDstDoc.is()) // Import works for Impress / draw only
         return filterImpressOrDraw(rDescriptor);
@@ -110,9 +114,19 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             {
                 OUString sFilterName;
                 rDescriptor[nInd].Value >>= sFilterName;
-                if(sFilterName != "impress_svg_Export")
+                if(sFilterName == "impress_svg_Export")
                 {
-                    mbWriterOrCalcFilter = true;
+                    mbImpressFilter = true;
+                    return filterImpressOrDraw(rDescriptor);
+                }
+                else if(sFilterName == "writer_svg_Export")
+                {
+                    mbWriterFilter = true;
+                    return filterWriterOrCalc(rDescriptor);
+                }
+                else if(sFilterName == "calc_svg_Export")
+                {
+                    mbCalcFilter = true;
                     return filterWriterOrCalc(rDescriptor);
                 }
                 break;
@@ -327,7 +341,7 @@ sal_Bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescri
         }
     }
 
-    if(!bSelectionOnly) // For Writer onéy the selection-only mode is supported
+    if(!bSelectionOnly) // For Writer only the selection-only mode is supported
         return false;
 
     uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
@@ -342,10 +356,18 @@ sal_Bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescri
     if (!xSelection.is())
         return false;
 
-    xSelection->getSelection() >>= maShapeSelection;
+    bool bGotSelection = xSelection->getSelection() >>= maShapeSelection;
 
-    if (!maShapeSelection)
-        return false;
+    if (!bGotSelection)
+    {
+        if (mbWriterFilter)
+        {
+            // For Writer we might have a non-shape graphic
+            bGotSelection = implExportWriterTextGraphic(xSelection);
+        }
+        if (!bGotSelection)
+            return false;
+    }
 
     // Select only one draw page
     uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
