@@ -143,25 +143,24 @@ public:
     void                SetFile( const INetURLObject& rURL ) { m_xFtTakeFile->set_label(GetReducedString(rURL, 30)); }
 };
 
-class ActualizeProgress : public ModalDialog
+class ActualizeProgress : public weld::GenericDialogController
 {
 private:
-    VclPtr<FixedText>          m_pFtActualizeFile;
-    VclPtr<CancelButton>       m_pBtnCancel;
     Idle*               pIdle;
     GalleryTheme*       pTheme;
     GalleryProgress     aStatusProgress;
+    std::unique_ptr<weld::Label> m_xFtActualizeFile;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
 
-                        DECL_LINK( ClickCancelBtn, Button*, void );
-                        DECL_LINK( TimeoutHdl, Timer*, void );
-                        DECL_LINK( ActualizeHdl, const INetURLObject&, void );
+    DECL_LINK(ClickCancelBtn, weld::Button&, void);
+    DECL_LINK(TimeoutHdl, Timer*, void);
+    DECL_LINK(ActualizeHdl, const INetURLObject&, void);
 
 public:
-                        ActualizeProgress( vcl::Window* pWindow, GalleryTheme* pThm );
-    virtual             ~ActualizeProgress() override;
-    virtual void        dispose() override;
+    ActualizeProgress(weld::Window* pWindow, GalleryTheme* pThm);
+    virtual ~ActualizeProgress() override;
 
-    virtual short       Execute() override;
+    virtual short run() override;
 };
 
 class TitleDialog : public weld::GenericDialogController

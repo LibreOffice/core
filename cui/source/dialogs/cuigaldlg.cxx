@@ -374,77 +374,54 @@ void TakeProgress::LaunchThread()
     maTakeThread->launch();
 }
 
-ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
-    : ModalDialog(pWindow, "GalleryUpdateProgress",
-        "cui/ui/galleryupdateprogress.ui")
+ActualizeProgress::ActualizeProgress(weld::Window* pWindow, GalleryTheme* pThm)
+    : GenericDialogController(pWindow, "cui/ui/galleryupdateprogress.ui",
+                              "GalleryUpdateProgress")
     , pIdle(nullptr)
     , pTheme(pThm)
+    , m_xFtActualizeFile(m_xBuilder->weld_label("file"))
+    , m_xBtnCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pFtActualizeFile, "file");
-    get(m_pBtnCancel, "cancel");
-    m_pBtnCancel->SetClickHdl( LINK( this, ActualizeProgress, ClickCancelBtn ) );
+    m_xBtnCancel->connect_clicked(LINK(this, ActualizeProgress, ClickCancelBtn));
 }
-
 
 ActualizeProgress::~ActualizeProgress()
 {
-    disposeOnce();
 }
 
-
-void ActualizeProgress::dispose()
+short ActualizeProgress::run()
 {
-    m_pFtActualizeFile.clear();
-    m_pBtnCancel.clear();
-    ModalDialog::dispose();
-}
-
-
-short ActualizeProgress::Execute()
-{
-    short nRet;
-
     pIdle = new Idle("ActualizeProgressTimeout");
     pIdle->SetInvokeHandler( LINK( this, ActualizeProgress, TimeoutHdl ) );
     pIdle->SetPriority( TaskPriority::LOWEST );
     pIdle->Start();
 
-    nRet = ModalDialog::Execute();
-
-    return nRet;
+    return GenericDialogController::run();
 }
 
-
-IMPL_LINK_NOARG(ActualizeProgress, ClickCancelBtn, Button*, void)
+IMPL_LINK_NOARG(ActualizeProgress, ClickCancelBtn, weld::Button&, void)
 {
     pTheme->AbortActualize();
-    EndDialog( RET_OK );
+    m_xDialog->response(RET_OK);
 }
-
 
 IMPL_LINK( ActualizeProgress, TimeoutHdl, Timer*, _pTimer, void)
 {
-    if ( _pTimer )
+    if (_pTimer)
     {
         _pTimer->Stop();
         delete _pTimer;
     }
 
-    pTheme->Actualize( LINK( this, ActualizeProgress, ActualizeHdl ), &aStatusProgress );
-    ClickCancelBtn( nullptr );
+    pTheme->Actualize(LINK(this, ActualizeProgress, ActualizeHdl), &aStatusProgress);
+    ClickCancelBtn(*m_xBtnCancel);
 }
-
 
 IMPL_LINK( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, void )
 {
-    Application::Reschedule( true );
-
-    Flush();
-
-    m_pFtActualizeFile->SetText( GetReducedString( rURL, 30 ) );
-    m_pFtActualizeFile->Flush();
+    Application::Reschedule(true);
+    m_xFtActualizeFile->set_label(GetReducedString(rURL, 30));
 }
-
 
 TitleDialog::TitleDialog(weld::Window* pParent, const OUString& rOldTitle)
     : GenericDialogController(pParent, "cui/ui/gallerytitledialog.ui", "GalleryTitleDialog")
