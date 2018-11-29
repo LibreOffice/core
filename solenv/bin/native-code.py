@@ -428,7 +428,6 @@ custom_widgets = [
     'FontSizeBox',
     'FontStyleBox',
     'FormulaListBox',
-    'GalleryPreview',
     'IndexBox',
     'IndexBox',
     'IntellectualPropertyPartEdit',
