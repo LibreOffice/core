@@ -321,7 +321,8 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
 
     // sw_redlinehide: Seek(0) must move before the first character, which
     // has a special case where the first node starts with delete redline.
-    if ((!nNewPos && (!m_pMergedPara || newPos.first != m_pTextNode))
+    if ((!nNewPos && !m_pMergedPara)
+        || newPos.first != m_pTextNode
         || newPos.second < m_nPosition)
     {
         if (m_pMergedPara)
