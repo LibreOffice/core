@@ -177,16 +177,7 @@ public:
 #if HAVE_CXX14_CONSTEXPR
     constexpr
 #endif
-    basic_string_view & operator =(basic_string_view const & other) noexcept
-#if defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__
-    {
-        data_ = other.data_;
-        size_ = other.size_;
-        return *this;
-    }
-#else
-        = default;
-#endif
+    basic_string_view & operator =(basic_string_view const & other) noexcept = default;
 
     // The various character types are handled below in the "LO specifics, to
     // make up for traits::length not necessarily being constexpr yet for
