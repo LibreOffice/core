@@ -20,30 +20,13 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_GLOSBIB_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLOSBIB_HXX
 
-#include <vcl/edit.hxx>
-#include <svx/stddlg.hxx>
-
-#include <vcl/lstbox.hxx>
-#include <vcl/svtabbx.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/weld.hxx>
 
 #include <vector>
 
 class SwGlossaryHdl;
-
-class FEdit : public Edit
-{
-public:
-    FEdit(vcl::Window* pParent)
-        : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
-    {
-    }
-
-    virtual void KeyInput( const KeyEvent& rKEvent ) override;
-};
 
 struct GlosBibUserData
 {
@@ -52,51 +35,43 @@ struct GlosBibUserData
     OUString sGroupTitle;
 };
 
-class SwGlossaryGroupTLB : public SvTabListBox
+class SwGlossaryGroupDlg final : public SfxDialogController
 {
-public:
-    SwGlossaryGroupTLB(vcl::Window* pParent)
-        : SvTabListBox(pParent, WB_BORDER|WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT)
-    {
-    }
-
-    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
-};
-
-class SwGlossaryGroupDlg final : public SvxStandardDialog
-{
-    VclPtr<FEdit>              m_pNameED;
-    VclPtr<ListBox>            m_pPathLB;
-    VclPtr<SwGlossaryGroupTLB> m_pGroupTLB;
-
-    VclPtr<PushButton>     m_pNewPB;
-    VclPtr<PushButton>     m_pDelPB;
-    VclPtr<PushButton>     m_pRenamePB;
-
     std::vector<OUString> m_RemovedArr;
     std::vector<OUString> m_InsertedArr;
     std::vector<OUString> m_RenamedArr;
 
-    SwGlossaryHdl   *pGlosHdl;
+    weld::Window* m_pParent;
+    SwGlossaryHdl* pGlosHdl;
 
     OUString        sCreatedGroup;
 
-    bool            IsDeleteAllowed(const OUString &rGroup);
+    std::unique_ptr<weld::Entry> m_xNameED;
+    std::unique_ptr<weld::ComboBox> m_xPathLB;
+    std::unique_ptr<weld::TreeView> m_xGroupTLB;
 
-    virtual void Apply() override;
-    DECL_LINK( SelectHdl, SvTreeListBox*, void );
-    DECL_LINK( NewHdl, Button *, void );
-    DECL_LINK( DeleteHdl, Button*, void  );
-    DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( ModifyListBoxHdl, ListBox&, void );
-    DECL_LINK( RenameHdl, Button *, void );
+    std::unique_ptr<weld::Button> m_xNewPB;
+    std::unique_ptr<weld::Button> m_xDelPB;
+    std::unique_ptr<weld::Button> m_xRenamePB;
+
+    bool IsDeleteAllowed(const OUString &rGroup);
+
+    void Apply();
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(NewHdl, weld::Button&, void);
+    DECL_LINK(DeleteHdl, weld::Button&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_LINK(ModifyListBoxHdl, weld::ComboBox&, void);
+    DECL_LINK(RenameHdl, weld::Button&, void);
+    DECL_STATIC_LINK(SwGlossaryGroupDlg, EditInsertTextHdl, OUString&, bool);
+    DECL_LINK(EntrySizeAllocHdl, const Size&, void);
 
 public:
-    SwGlossaryGroupDlg(vcl::Window * pParent,
-                        std::vector<OUString> const& rPathArr,
-                        SwGlossaryHdl *pGlosHdl);
+    SwGlossaryGroupDlg(weld::Window* pParent,
+                       std::vector<OUString> const& rPathArr,
+                       SwGlossaryHdl *pGlosHdl);
+    virtual short run() override;
     virtual ~SwGlossaryGroupDlg() override;
-    virtual void dispose() override;
 
     const OUString&     GetCreatedGroupName() const {return sCreatedGroup;}
 };
