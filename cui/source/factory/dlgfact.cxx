@@ -110,7 +110,6 @@ short CuiAbstractSingleTabController_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
-IMPL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl);
 IMPL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl);
 
 short AbstractSvxDistributeDialog_Impl::Execute()
@@ -552,11 +551,6 @@ OUString AbstractTitleDialog_Impl::GetTitle() const
 sal_uInt32 AbstractGalleryIdDialog_Impl::GetId() const
 {
     return m_xDlg->GetId();
-}
-
-void VclAbstractRefreshableDialog_Impl::Update()
-{
-    pDlg->Update();
 }
 
 OUString AbstractURLDlg_Impl::GetURL() const

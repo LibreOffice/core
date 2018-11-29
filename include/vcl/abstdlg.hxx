@@ -86,14 +86,6 @@ public:
     virtual void        EndDialog(sal_Int32 nResult) = 0;
 };
 
-class VCL_DLLPUBLIC VclAbstractRefreshableDialog : public VclAbstractDialog
-{
-protected:
-    virtual             ~VclAbstractRefreshableDialog() override = default;
-public:
-    virtual void        Update() = 0;
-};
-
 class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
 {
 protected:
