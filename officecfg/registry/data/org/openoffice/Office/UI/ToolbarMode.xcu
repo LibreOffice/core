@@ -100,7 +100,7 @@
         </node>
         <node oor:name="ContextualGroups" oor:op="replace">
           <prop oor:name="Label">
-            <value xml:lang="en-US">Contextual groups</value>
+            <value xml:lang="en-US">Contextual Groups</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>true</value>
@@ -360,7 +360,7 @@
         </node>
         <node oor:name="ContextualGroups" oor:op="replace">
           <prop oor:name="Label">
-            <value xml:lang="en-US">Contextual groups</value>
+            <value xml:lang="en-US">Contextual Groups</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>true</value>
@@ -564,7 +564,7 @@
         </node>
         <node oor:name="ContextualGroups" oor:op="replace">
           <prop oor:name="Label">
-            <value xml:lang="en-US">Contextual groups</value>
+            <value xml:lang="en-US">Contextual Groups</value>
           </prop>
           <prop oor:name="HasNotebookbar">
             <value>true</value>
