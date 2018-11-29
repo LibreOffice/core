@@ -20,6 +20,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "And"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 
 class OpOr: public Normal
@@ -28,6 +29,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Or"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 class OpNot: public Normal
 {
@@ -42,6 +44,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "Xor"; }
+    virtual bool canHandleMultiVector() const override { return true; }
 };
 class OpIf:public Normal
 {
