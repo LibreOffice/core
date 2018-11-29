@@ -782,6 +782,17 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
         if(SfxViewShell* pViewShell = GetSfxViewShell())
         {
+
+            long nRotAngle(0);
+            if(GetMarkedObjectCount())
+            {
+                SdrMark* pM = GetSdrMarkByIndex(0);
+                SdrObject* pO = pM->GetMarkedSdrObj();
+
+                nRotAngle = pO->GetRotateAngle();
+                sSelection += OString(", ") + OString::number(nRotAngle);
+            }
+
             if (pOtherShell)
             {
                 // Another shell wants to know about our existing
