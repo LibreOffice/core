@@ -286,13 +286,21 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 {
     bool bReturn = false;
     SwDocShell* pDocShell = GetDocShell();
-    const sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
+    SwDoc* pDoc = pDocShell->GetDoc();
+
+    OUString sGraphicFormat = SwResId(STR_POOLFRM_GRAPHIC);
+
+// No file pickers in a non-desktop (mobile app) build.
+
+#if HAVE_FEATURE_DESKTOP
     // when in HTML mode insert only as a link
+    const sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
     std::unique_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
         ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
         FileDialogFlags::Graphic, GetFrameWeld()));
     pFileDlg->SetTitle(SwResId(STR_INSERT_GRAPHIC ));
     pFileDlg->SetContext( FileDialogHelper::SW_INSERT_GRAPHIC );
+
     uno::Reference < XFilePicker3 > xFP = pFileDlg->GetFilePicker();
     uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
     if(nHtmlMode & HTMLMODE_ON)
@@ -302,7 +310,6 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
 
     std::vector<OUString> aFormats;
-    SwDoc* pDoc = pDocShell->GetDoc();
     const size_t nArrLen = pDoc->GetFrameFormats()->size();
     for( size_t i = 0; i < nArrLen; ++i )
     {
@@ -327,7 +334,6 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     Sequence<OUString> aListBoxEntries(aFormats.size());
     OUString* pEntries = aListBoxEntries.getArray();
     sal_Int16 nSelect = 0;
-    OUString sGraphicFormat = SwResId(STR_POOLFRM_GRAPHIC);
     for( size_t i = 0; i < aFormats.size(); ++i )
     {
         pEntries[i] = aFormats[i];
@@ -349,10 +355,15 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     {
         OSL_FAIL("control access failed");
     }
+#endif
 
     const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
     bool bShowError = !pName;
-    if( pName || ERRCODE_NONE == pFileDlg->Execute() )
+    if( pName
+#if HAVE_FEATURE_DESKTOP
+        || ERRCODE_NONE == pFileDlg->Execute()
+#endif
+        )
     {
 
         OUString aFileName, aFilterName;
@@ -363,6 +374,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             if ( pFilter )
                 aFilterName = pFilter->GetValue();
         }
+#if HAVE_FEATURE_DESKTOP
         else
         {
             aFileName = pFileDlg->GetPath();
@@ -394,11 +406,13 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             }
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
         }
-
         const SfxBoolItem* pAsLink = rReq.GetArg<SfxBoolItem>(FN_PARAM_1);
         const SfxStringItem* pStyle = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+#endif
 
         bool bAsLink = false;
+
+#if HAVE_FEATURE_DESKTOP
         if( nHtmlMode & HTMLMODE_ON )
             bAsLink = true;
         else
@@ -434,6 +448,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
                     bAsLink=false; // don't store as link
             }
         }
+#endif
 
         SwWrtShell& rSh = GetWrtShell();
         rSh.LockPaint();
