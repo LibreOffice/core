@@ -268,7 +268,7 @@
           <value>true</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">3D-Settings</value>
+          <value xml:lang="en-US">3D Settings</value>
         </prop>
         <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
           <value>false</value>
@@ -484,7 +484,7 @@
           <value>true</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">OLE-Object</value>
+          <value xml:lang="en-US">OLE Object</value>
         </prop>
         <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
           <value>false</value>

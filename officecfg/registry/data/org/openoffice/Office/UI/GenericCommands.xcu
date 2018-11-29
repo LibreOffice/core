@@ -3239,7 +3239,7 @@
       </node>
       <node oor:name=".uno:SetBorderStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Borders (Shift to overwrite)</value>
+          <value xml:lang="en-US">Borders (Shift to Overwrite)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3255,7 +3255,7 @@
       </node>
       <node oor:name=".uno:InsertFixedText" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Label field</value>
+          <value xml:lang="en-US">Label Field</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4424,7 +4424,7 @@
       </node>
       <node oor:name=".uno:EllipseCut_Unfilled" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Ellipse Segment, unfilled</value>
+          <value xml:lang="en-US">Ellipse Segment, Unfilled</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5483,7 +5483,7 @@
       </node>
       <node oor:name=".uno:RecUndo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Undo: Data entry</value>
+          <value xml:lang="en-US">Undo: Data Entry</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5724,7 +5724,7 @@
       </node>
       <node oor:name=".uno:SbaNativeSql" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Run SQL command directly</value>
+          <value xml:lang="en-US">Run SQL Command Directly</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -5916,7 +5916,7 @@
       </node>
       <node oor:name=".uno:ViewFormAsGrid" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Data source as Table</value>
+          <value xml:lang="en-US">Data Source as Table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -6572,12 +6572,12 @@
       </node>
       <node oor:name=".uno:InsertLRM" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Left-to-right Mark</value>
+          <value xml:lang="en-US">~Left-to-Right Mark</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertRLM" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Right-to-left Mark</value>
+          <value xml:lang="en-US">~Right-to-Left Mark</value>
         </prop>
       </node>
       <!-- 2018/10: 2015/06 The next two is to be deprecated one day or another -->
@@ -6678,17 +6678,17 @@
       </node>
       <node oor:name=".uno:ClassificationApply" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Apply document classification</value>
+          <value xml:lang="en-US">Apply Document Classification</value>
         </prop>
       </node>
       <node oor:name=".uno:ClassificationDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Manage document classification</value>
+          <value xml:lang="en-US">Manage Document Classification</value>
         </prop>
       </node>
       <node oor:name=".uno:ParagraphClassificationDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Manage paragraph classification</value>
+          <value xml:lang="en-US">Manage Paragraph Classification</value>
         </prop>
       </node>
       <node oor:name=".uno:EditSelectMenu" oor:op="replace">

@@ -508,7 +508,7 @@
       </node>
       <node oor:name=".uno:ResetAllDataPoints" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reset all Data Points</value>
+          <value xml:lang="en-US">Reset All Data Points</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatStockLoss" oor:op="replace">
@@ -632,7 +632,7 @@
       </node>
       <node oor:name=".uno:NumberOfLines" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number of lines in combination chart</value>
+          <value xml:lang="en-US">Number of Lines in Combination Chart</value>
         </prop>
       </node>
       <node oor:name=".uno:TextAttributes" oor:op="replace">

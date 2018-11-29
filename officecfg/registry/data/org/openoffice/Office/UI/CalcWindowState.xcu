@@ -246,7 +246,7 @@
           <value>true</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">3D-Settings</value>
+          <value xml:lang="en-US">3D Settings</value>
         </prop>
         <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
           <value>false</value>
@@ -735,7 +735,7 @@
       </node>
       <node oor:name="private:resource/toolbar/notebookbarshortcuts" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Notebookbar shortcuts</value>
+          <value xml:lang="en-US">Notebookbar Shortcuts</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>

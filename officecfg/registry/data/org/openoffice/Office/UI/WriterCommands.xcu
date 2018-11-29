@@ -204,7 +204,7 @@
           <value xml:lang="en-US">Current ~Index</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Update index</value>
+          <value xml:lang="en-US">Update Index</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -212,7 +212,7 @@
       </node>
       <node oor:name=".uno:RemoveTableOf" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete index</value>
+          <value xml:lang="en-US">Delete Index</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -355,7 +355,7 @@
       </node>
       <node oor:name=".uno:UseHeaderFooterMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Use header/footer menu</value>
+          <value xml:lang="en-US">Use Header/Footer Menu</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Use the advanced popup menu to create header/footer on the fly</value>
@@ -412,7 +412,7 @@
       </node>
       <node oor:name=".uno:EditCurIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Edit index</value>
+          <value xml:lang="en-US">Edit Index</value>
         </prop>
       </node>
       <node oor:name=".uno:AuthoritiesEntryDialog" oor:op="replace">
@@ -613,7 +613,7 @@
       </node>
       <node oor:name=".uno:InsertFrameInteractNoColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert single-column frame manually</value>
+          <value xml:lang="en-US">Insert Single-column Frame Manually</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -741,7 +741,7 @@
       </node>
       <node oor:name=".uno:MailMergeEmailDocuments" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Send E-Mail Messages</value>
+          <value xml:lang="en-US">Send E-mail Messages</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1295,7 +1295,7 @@
       </node>
       <node oor:name=".uno:PrintPagePreview" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Print document</value>
+          <value xml:lang="en-US">Print Document</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2076,7 +2076,7 @@
       </node>
       <node oor:name=".uno:ResetTableProtection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Unprotect sheet</value>
+          <value xml:lang="en-US">Unprotect Sheet</value>
         </prop>
       </node>
       <node oor:name=".uno:NumberFormatTime" oor:op="replace">
@@ -2447,22 +2447,22 @@
       </node>
       <node oor:name=".uno:GotoNextTableFormula" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Go to next table formula</value>
+          <value xml:lang="en-US">Go to Next Table Formula</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoPrevTableFormula" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Go to previous table formula</value>
+          <value xml:lang="en-US">Go to Previous Table Formula</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoNextWrongTableFormula" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Go to next faulty table formula</value>
+          <value xml:lang="en-US">Go to Next Faulty Table Formula</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoPrevWrongTableFormula" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Go to previous faulty table formula</value>
+          <value xml:lang="en-US">Go to Previous Faulty Table Formula</value>
         </prop>
       </node>
       <node oor:name=".uno:SelectTextMode" oor:op="replace">
@@ -2805,7 +2805,7 @@
       </node>
       <node oor:name=".uno:PageSettingDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Page Settings - Paper format</value>
+          <value xml:lang="en-US">Page Settings - Paper Format</value>
         </prop>
       </node>
       <node oor:name=".uno:SelectionModeMenu" oor:op="replace">
@@ -2815,7 +2815,7 @@
       </node>
       <node oor:name=".uno:ContinueNumbering" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Continue previous numbering</value>
+          <value xml:lang="en-US">Continue Previous Numbering</value>
         </prop>
       </node>
       <node oor:name=".uno:NavElement" oor:op="replace">
