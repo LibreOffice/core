@@ -1462,10 +1462,17 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
             aNullDate = m_apNumberFormatterWrapper->getNullDate();
         if( aIt!=aEnd )
         {
+            while (rtl::math::isNan(*aIt) && aIt != aEnd)
+            {
+                ++aIt;
+            }
             Date aPrevious(aNullDate); aPrevious.AddDays(rtl::math::approxFloor(*aIt));
             ++aIt;
             for(;aIt!=aEnd;++aIt)
             {
+                if (rtl::math::isNan(*aIt))
+                    continue;
+
                 Date aCurrent(aNullDate); aCurrent.AddDays(rtl::math::approxFloor(*aIt));
                 if( nRet == css::chart::TimeUnit::YEAR )
                 {

@@ -757,7 +757,12 @@ void AreaChart::createShapes()
                     //collect data point information (logic coordinates, style ):
                     double fLogicX = (*aSeriesIter)->getXValue(nIndex);
                     if (bDateCategory)
+                    {
+                        if (rtl::math::isNan(fLogicX))
+                            continue;
+
                         fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
+                    }
                     double fLogicY = (*aSeriesIter)->getYValue(nIndex);
 
                     if( m_nDimension==3 && m_bArea && rSeriesList.size()!=1 )
