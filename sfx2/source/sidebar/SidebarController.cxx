@@ -1038,7 +1038,7 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
 
     pMenu->RemoveDisabledEntries(false);
 
-    return pMenu;
+    return std::move(pMenu);
 }
 
 IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
