@@ -132,11 +132,11 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     aSz.setWidth( TAB_WIDTH1 );
     rBar.InsertItem( ITEMID_TYPE, CuiResId( RID_SVXSTR_TYPE ),
                             LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
-                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
+                            HeaderBarItemBits::LEFT | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
     aSz.setWidth( TAB_WIDTH2 );
     rBar.InsertItem( ITEMID_PATH, CuiResId( RID_SVXSTR_PATH ),
                             LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
-                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
+                            HeaderBarItemBits::LEFT );
 
     static long aTabs[] = {0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
     Size aHeadSize = rBar.GetSizePixel();

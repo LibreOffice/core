@@ -3377,7 +3377,7 @@ void DbGridControl::ShowColumn(sal_uInt16 nId)
 
     OUString aName;
     pColumn->getModel()->getPropertyValue(FM_PROP_LABEL) >>= aName;
-    InsertDataColumn(nId, aName, CalcZoom(pColumn->m_nLastVisibleWidth), HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE, nNewViewPos);
+    InsertDataColumn(nId, aName, CalcZoom(pColumn->m_nLastVisibleWidth), HeaderBarItemBits::CENTER | HeaderBarItemBits::CLICKABLE, nNewViewPos);
     pColumn->m_bHidden = false;
 
     ActivateCell();

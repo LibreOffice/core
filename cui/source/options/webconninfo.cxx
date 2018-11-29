@@ -113,9 +113,9 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     long const aStaticTabs[]= { 0, 0 };
     m_pPasswordsLB->SetTabs( SAL_N_ELEMENTS(aStaticTabs), aStaticTabs );
     m_pPasswordsLB->InsertHeaderItem( 1, get<FixedText>("website")->GetText(),
-        HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
+        HeaderBarItemBits::LEFT | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
     m_pPasswordsLB->InsertHeaderItem( 2, get<FixedText>("username")->GetText(),
-        HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS );
+        HeaderBarItemBits::LEFT | HeaderBarItemBits::FIXEDPOS );
     pPasswordsLBContainer->set_height_request(m_pPasswordsLB->GetTextHeight()*8);
 
     m_pPasswordsLB->SetHeaderBarClickHdl( LINK( this, WebConnectionInfoDialog, HeaderBarClickedHdl ) );
