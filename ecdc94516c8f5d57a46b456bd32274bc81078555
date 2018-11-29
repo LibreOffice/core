@@ -34,6 +34,24 @@
       "revId": "ecdc94516c8f5d57a46b456bd32274bc81078555",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f5c4f37_ea260717",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-11-29T17:37:23Z",
+      "side": 1,
+      "message": "fair point",
+      "parentUuid": "9f5c4f37_aa536fe2",
+      "revId": "ecdc94516c8f5d57a46b456bd32274bc81078555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
