@@ -3078,7 +3078,7 @@ void RTL_Impl_HasInterfaces( SbxArray& rPar )
         }
     }
 
-    // Every thing works; then return TRUE
+    // Everything works; then return TRUE
     refVar->PutBool( true );
 }
 
