@@ -97,12 +97,6 @@ public:
     virtual short Execute() override;
 };
 
-class VclAbstractRefreshableDialog_Impl : public VclAbstractRefreshableDialog
-{
-    DECL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl,Dialog)
-    virtual void        Update() override ;
-};
-
 class CuiAbstractSfxDialog_Impl : public SfxAbstractDialog
 {
     DECL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl,SfxModalDialog)
