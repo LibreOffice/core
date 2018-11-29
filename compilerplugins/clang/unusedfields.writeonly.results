@@ -4,7 +4,7 @@ basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/bastype2.hxx:183
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:262
+basctl/source/inc/bastype2.hxx:259
     basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basic/qa/cppunit/test_scanner.cxx:26
     (anonymous namespace)::Symbol line sal_uInt16
@@ -258,8 +258,6 @@ include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
 include/editeng/outlobj.hxx:42
     OutlinerParaObjData mbIsEditDoc _Bool
-include/editeng/svxrtf.hxx:98
-    SvxRTFStyleType nNext sal_uInt16
 include/LibreOfficeKit/LibreOfficeKit.h:108
     _LibreOfficeKitDocumentClass nSize size_t
 include/LibreOfficeKit/LibreOfficeKit.h:310
@@ -276,16 +274,12 @@ include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/sfx2/minfitem.hxx:35
     SfxMacroInfoItem aCommentText const class rtl::OUString
-include/svtools/brwbox.hxx:255
+include/svtools/brwbox.hxx:248
     BrowseBox::CursorMoveAttempt m_nCol const long
-include/svtools/brwbox.hxx:256
+include/svtools/brwbox.hxx:249
     BrowseBox::CursorMoveAttempt m_nRow const long
-include/svtools/brwbox.hxx:257
+include/svtools/brwbox.hxx:250
     BrowseBox::CursorMoveAttempt m_bScrolledToReachCell const _Bool
-include/svtools/editbrowsebox.hxx:481
-    svt::EditBrowseBox nOldEditRow long
-include/svtools/editbrowsebox.hxx:482
-    svt::EditBrowseBox nOldEditCol sal_uInt16
 include/svx/bmpmask.hxx:130
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/imapdlg.hxx:118
@@ -492,7 +486,7 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
-slideshow/source/engine/slideshowimpl.cxx:1043
+slideshow/source/engine/slideshowimpl.cxx:1036
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
 soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
@@ -558,20 +552,10 @@ svx/source/svdraw/svdpdf.hxx:196
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:54
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-sw/inc/fesh.hxx:152
-    SwGetCurColNumPara pFrameRect const class SwRect *
 sw/inc/shellio.hxx:152
     SwReader aFileName const class rtl::OUString
 sw/source/core/doc/tblafmt.cxx:186
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
-sw/source/core/doc/tblrwcl.cxx:104
-    CR_SetBoxWidth nRemainWidth sal_uInt16
-sw/source/core/doc/tblrwcl.cxx:104
-    CR_SetBoxWidth nTableWidth sal_uInt16
-sw/source/core/doc/tblrwcl.cxx:105
-    CR_SetBoxWidth bAnyBoxFnd _Bool
-sw/source/core/doc/tblrwcl.cxx:185
-    CR_SetLineHeight bTop _Bool
 sw/source/core/inc/swfont.hxx:973
     SvStatistics nGetTextSize sal_uInt16
 sw/source/core/inc/swfont.hxx:974
@@ -582,8 +566,6 @@ sw/source/core/inc/swfont.hxx:976
     SvStatistics nDrawStretchText sal_uInt16
 sw/source/core/inc/swfont.hxx:977
     SvStatistics nChangeFont sal_uInt16
-sw/source/core/inc/UndoRedline.hxx:80
-    SwUndoRedlineSort nOffset sal_uLong
 sw/source/core/text/porfld.hxx:59
     SwFieldPortion m_nAttrFieldType sal_uInt16
 sw/source/filter/inc/rtf.hxx:28
@@ -594,8 +576,6 @@ sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
     RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo4/sw/source/filter/inc/rtf.hxx:27:9)
-ucb/source/ucp/file/filtask.hxx:91
-    fileaccess::TaskManager::TaskHandling m_bAbort _Bool
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -670,9 +650,9 @@ vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
 vcl/source/filter/jpeg/Exif.hxx:57
     Exif::ExifIFD count sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:181
+vcl/source/gdi/pdfwriter_impl.hxx:180
     vcl::PDFWriterImpl::BitmapID m_nChecksum BitmapChecksum
-vcl/source/gdi/pdfwriter_impl.hxx:182
+vcl/source/gdi/pdfwriter_impl.hxx:181
     vcl::PDFWriterImpl::BitmapID m_nMaskChecksum BitmapChecksum
 vcl/unx/generic/app/wmadaptor.cxx:1268
     _mwmhints deco unsigned long
@@ -706,5 +686,3 @@ vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
 writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-writerfilter/source/ooxml/Handler.hxx:111
-    writerfilter::ooxml::OOXMLBreakHandler mnClear sal_Int32
