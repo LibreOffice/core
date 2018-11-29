@@ -1834,6 +1834,8 @@ public:
             for (size_t i = 0; i < rWidths.size(); ++i)
                 pHeaderBar->SetItemSize(pHeaderBar->GetItemId(i), rWidths[i]);
         }
+        // call Resize to recalculate based on the new tabs
+        m_xTreeView->Resize();
     }
 
     virtual OUString get_column_title(int nColumn) const override
@@ -1905,7 +1907,7 @@ public:
     {
         for (SvTreeListEntry* pEntry = m_xTreeView->First(); pEntry; pEntry = m_xTreeView->Next(pEntry))
         {
-            if (m_xTreeView->GetEntryText(pEntry) == rText)
+            if (SvTabListBox::GetEntryText(pEntry, 0) == rText)
                 return m_xTreeView->GetAbsPos(pEntry);
         }
         return -1;
@@ -2217,7 +2219,7 @@ public:
     virtual OUString get_text(const weld::TreeIter& rIter) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
-        return m_xTreeView->GetEntryText(rVclIter.iter);
+        return SvTabListBox::GetEntryText(rVclIter.iter, 0);
     }
 
     virtual OUString get_id(const weld::TreeIter& rIter) const override
@@ -2255,6 +2257,7 @@ public:
     virtual void make_sorted() override
     {
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
+        m_xTreeView->GetModel()->Resort();
     }
 
     SvTabListBox& getTreeView()
