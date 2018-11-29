@@ -637,25 +637,39 @@ namespace
             ++n;
         }
 
-        for( ; n < rArr.size(); ++n )
+        // tdf#119824 first we will accept only overlapping paragraph format changes
+        // in the first loop to avoid potential content changes during Redo
+        bool bHasParagraphFormatChange = false;
+        for( int m = 0 ; m < 2 && !bHasParagraphFormatChange; ++m )
         {
-            SwRangeRedline* pTmp = rArr[ n ];
-            if( pTmp->HasMark() && pTmp->IsVisible() )
+            for(SwRedlineTable::size_type o = n ; o < rArr.size(); ++o )
             {
-                if( *pTmp->End() <= *pEnd )
+                SwRangeRedline* pTmp = rArr[ o ];
+                if( pTmp->HasMark() && pTmp->IsVisible() )
                 {
-                    if( (*fn_AcceptReject)( rArr, n, bCallDelete, nullptr, nullptr ))
-                        nCount++;
-                }
-                else
-                {
-                    if( *pTmp->Start() < *pEnd )
+                    if( *pTmp->End() <= *pEnd )
                     {
-                        // Only revoke the partial selection
-                        if( (*fn_AcceptReject)( rArr, n, bCallDelete, pStt, pEnd ))
+                        if( (m > 0 || nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT == pTmp->GetType()) &&
+                            (*fn_AcceptReject)( rArr, o, bCallDelete, nullptr, nullptr ))
+                        {
+                            bHasParagraphFormatChange = true;
                             nCount++;
+                        }
                     }
-                    break;
+                    else
+                    {
+                        if( *pTmp->Start() < *pEnd )
+                        {
+                            // Only revoke the partial selection
+                            if( (m > 0 || nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT == pTmp->GetType()) &&
+                                (*fn_AcceptReject)( rArr, o, bCallDelete, pStt, pEnd ))
+                            {
+                                bHasParagraphFormatChange = true;
+                                nCount++;
+                            }
+                        }
+                        break;
+                    }
                 }
             }
         }
