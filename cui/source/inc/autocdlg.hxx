@@ -178,41 +178,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
 };
 
-// class AutoCorrEdit ----------------------------------------------------
-
-class AutoCorrEdit : public Edit
-{
-    Link<AutoCorrEdit&,bool>  aActionLink;
-    VclPtr<SvTabListBox> m_xReplaceTLB;
-    sal_Int32 m_nCol;
-    bool bSpaces;
-
-    void dispose() override;
-
-public:
-    AutoCorrEdit(vcl::Window* pParent)
-        : Edit(pParent)
-        , m_nCol(0)
-        , bSpaces(false)
-    {
-    }
-
-    virtual ~AutoCorrEdit() override;
-
-    void            SetActionHdl( const Link<AutoCorrEdit&,bool>& rLink )
-                                { aActionLink = rLink;}
-
-    void            ConnectColumn(const VclPtr<SvTabListBox>& rTable, sal_Int32 nCol);
-
-    void            SetSpaces(bool bSet)
-                                {bSpaces = bSet;}
-
-    virtual void    KeyInput( const KeyEvent& rKEvent ) override;
-    virtual void    Resize() override;
-};
-
 // class OfaAutocorrReplacePage ------------------------------------------
-
 
 struct DoubleString
 {
@@ -308,34 +274,34 @@ class OfaAutocorrExceptPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    VclPtr<AutoCorrEdit>   m_pAbbrevED;
-    VclPtr<ListBox>        m_pAbbrevLB;
-    VclPtr<PushButton>     m_pNewAbbrevPB;
-    VclPtr<PushButton>     m_pDelAbbrevPB;
-    VclPtr<CheckBox>       m_pAutoAbbrevCB;
-
-    VclPtr<AutoCorrEdit>   m_pDoubleCapsED;
-    VclPtr<ListBox>        m_pDoubleCapsLB;
-    VclPtr<PushButton>     m_pNewDoublePB;
-    VclPtr<PushButton>     m_pDelDoublePB;
-    VclPtr<CheckBox>       m_pAutoCapsCB;
-
     StringsTable    aStringsTable;
     std::unique_ptr<CollatorWrapper> pCompareClass;
     LanguageType    eLang;
 
-    DECL_LINK(NewDelButtonHdl, Button*, void);
-    DECL_LINK(NewDelActionHdl, AutoCorrEdit&, bool);
-    DECL_LINK(SelectHdl, ListBox&, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
-    void            NewDelHdl(void const *);
+    std::unique_ptr<weld::Entry> m_xAbbrevED;
+    std::unique_ptr<weld::TreeView> m_xAbbrevLB;
+    std::unique_ptr<weld::Button> m_xNewAbbrevPB;
+    std::unique_ptr<weld::Button> m_xDelAbbrevPB;
+    std::unique_ptr<weld::CheckButton> m_xAutoAbbrevCB;
+
+    std::unique_ptr<weld::Entry> m_xDoubleCapsED;
+    std::unique_ptr<weld::TreeView> m_xDoubleCapsLB;
+    std::unique_ptr<weld::Button> m_xNewDoublePB;
+    std::unique_ptr<weld::Button> m_xDelDoublePB;
+    std::unique_ptr<weld::CheckButton> m_xAutoCapsCB;
+
+    DECL_LINK(NewDelButtonHdl, weld::Button&, void);
+    DECL_LINK(NewDelActionHdl, weld::Entry&, bool);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
+    void            NewDelHdl(const weld::Widget*);
                     /// Box filled with new language
     void            RefillReplaceBoxes(bool bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:
-                        OfaAutocorrExceptPage( vcl::Window* pParent, const SfxItemSet& rSet );
-                        virtual ~OfaAutocorrExceptPage() override;
+    OfaAutocorrExceptPage(TabPageParent pParent, const SfxItemSet& rSet);
+    virtual ~OfaAutocorrExceptPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
