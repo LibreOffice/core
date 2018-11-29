@@ -210,17 +210,26 @@ class SalInstanceWidget : public virtual weld::Widget
 private:
     VclPtr<vcl::Window> m_xWidget;
 
-    DECL_LINK(FocusInListener, VclWindowEvent&, void);
-    DECL_LINK(FocusOutListener, VclWindowEvent&, void);
-    DECL_LINK(ResizeListener, VclWindowEvent&, void);
+    DECL_LINK(EventListener, VclWindowEvent&, void);
 
     const bool m_bTakeOwnership;
+    bool m_bEventListener;
     int m_nBlockNotify;
+
+    void ensure_event_listener()
+    {
+        if (!m_bEventListener)
+        {
+            m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, EventListener));
+            m_bEventListener = true;
+        }
+    }
 
 public:
     SalInstanceWidget(vcl::Window* pWidget, bool bTakeOwnership)
         : m_xWidget(pWidget)
         , m_bTakeOwnership(bTakeOwnership)
+        , m_bEventListener(false)
         , m_nBlockNotify(0)
     {
     }
@@ -415,20 +424,32 @@ public:
 
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
-        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, FocusInListener));
+        ensure_event_listener();
         weld::Widget::connect_focus_in(rLink);
     }
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
-        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, FocusOutListener));
+        ensure_event_listener();
         weld::Widget::connect_focus_out(rLink);
     }
 
     virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
     {
-        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, ResizeListener));
+        ensure_event_listener();
         weld::Widget::connect_size_allocate(rLink);
+    }
+
+    virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
+    {
+        ensure_event_listener();
+        weld::Widget::connect_key_press(rLink);
+    }
+
+    virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override
+    {
+        ensure_event_listener();
+        weld::Widget::connect_key_release(rLink);
     }
 
     virtual bool get_extents_relative_to(Widget& rRelative, int& x, int &y, int& width, int &height) override
@@ -480,12 +501,8 @@ public:
 
     virtual ~SalInstanceWidget() override
     {
-        if (m_aSizeAllocateHdl.IsSet())
-            m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, ResizeListener));
-        if (m_aFocusInHdl.IsSet())
-            m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, FocusInListener));
-        if (m_aFocusOutHdl.IsSet())
-            m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, FocusOutListener));
+        if (m_bEventListener)
+            m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, EventListener));
         if (m_bTakeOwnership)
             m_xWidget.disposeAndClear();
     }
@@ -516,23 +533,23 @@ public:
     }
 };
 
-IMPL_LINK(SalInstanceWidget, FocusInListener, VclWindowEvent&, rEvent, void)
+IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VclEventId::WindowGetFocus || rEvent.GetId() == VclEventId::WindowActivate)
-        signal_focus_in();
-}
-
-IMPL_LINK(SalInstanceWidget, FocusOutListener, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() == VclEventId::WindowLoseFocus || rEvent.GetId() == VclEventId::WindowDeactivate)
-        signal_focus_out();
-}
-
-IMPL_LINK(SalInstanceWidget, ResizeListener, VclWindowEvent&, rEvent, void)
-{
-    if (rEvent.GetId() == VclEventId::WindowResize)
-    {
+        m_aFocusInHdl.Call(*this);
+    else if (rEvent.GetId() == VclEventId::WindowLoseFocus || rEvent.GetId() == VclEventId::WindowDeactivate)
+        m_aFocusOutHdl.Call(*this);
+    else if (rEvent.GetId() == VclEventId::WindowResize)
         m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
+    else if (rEvent.GetId() == VclEventId::WindowKeyInput)
+    {
+        const KeyEvent* pKeyEvent = static_cast<const KeyEvent*>(rEvent.GetData());
+        m_aKeyPressHdl.Call(*pKeyEvent);
+    }
+    else if (rEvent.GetId() == VclEventId::WindowKeyUp)
+    {
+        const KeyEvent* pKeyEvent = static_cast<const KeyEvent*>(rEvent.GetData());
+        m_aKeyReleaseHdl.Call(*pKeyEvent);
     }
 }
 
@@ -1220,6 +1237,16 @@ public:
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
         m_xButton->SetModeImage(::Image(BitmapEx(rIconName)));
+    }
+
+    virtual void set_label_line_wrap(bool wrap) override
+    {
+        WinBits nBits = m_xButton->GetStyle();
+        nBits &= ~WB_WORDBREAK;
+        if (wrap)
+            nBits |= WB_WORDBREAK;
+        m_xButton->SetStyle(nBits);
+        m_xButton->queue_resize();
     }
 
     virtual OUString get_label() const override
@@ -2680,6 +2707,16 @@ public:
     virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
     {
         weld::Widget::connect_size_allocate(rLink);
+    }
+
+    virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
+    {
+        weld::Widget::connect_key_press(rLink);
+    }
+
+    virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override
+    {
+        weld::Widget::connect_key_release(rLink);
     }
 
     virtual a11yref get_accessible_parent() override

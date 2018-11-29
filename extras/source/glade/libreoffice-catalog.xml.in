@@ -169,9 +169,6 @@
     <glade-widget-class title="MultiLine Edit" name="svtlo-MultiLineEditSyntaxHighlight"
                         generic-name="MultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
-    <glade-widget-class title="AutoComplete MultiLine Edit" name="cuilo-AutoCompleteMultiListBox"
-                        generic-name="MultiLineEdit" parent="GtkTextView"
-                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="Address MultiLine Edit" name="swuilo-AddressMultiLineEdit"
                         generic-name="AddressMultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
