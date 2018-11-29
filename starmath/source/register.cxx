@@ -46,14 +46,7 @@ SAL_DLLPUBLIC_EXPORT void* sm_component_getFactory( const sal_Char* pImplementat
         Reference< XSingleServiceFactory >   xFactory                                                                                                ;
         Reference< XMultiServiceFactory >    xServiceManager( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
-        if (SmXMLImportSettings_getImplementationName().equalsAscii(pImplementationName))
-        {
-            xFactory = ::cppu::createSingleFactory( xServiceManager,
-            SmXMLImportSettings_getImplementationName(),
-            SmXMLImportSettings_createInstance,
-            SmXMLImportSettings_getSupportedServiceNames() );
-        }
-        else if( SmDocument_getImplementationName().equalsAscii( pImplementationName ))
+        if (SmDocument_getImplementationName().equalsAscii(pImplementationName))
         {
             xFactory = ::sfx2::createSfxModelFactory( xServiceManager,
             SmDocument_getImplementationName(),
