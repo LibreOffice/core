@@ -179,6 +179,7 @@ public:
     virtual void SAL_CALL   release() throw() override;
 
     void                    SelectionChanged();
+    void                    TextSelectionChanged();
     void                    VisAreaChanged();
     // bSameTabButMoved = true if the same sheet as before is activated, used after moving/copying/inserting/deleting a sheet
     void                    SheetChanged( bool bSameTabButMoved );

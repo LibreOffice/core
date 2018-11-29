@@ -710,6 +710,7 @@ void ScInputHandler::ImplCreateEditEngine()
         mpEditEngine->SetControlWord( mpEditEngine->GetControlWord() | EEControlBits::AUTOCORRECT );
         mpEditEngine->SetReplaceLeadingSingleQuotationMark( false );
         mpEditEngine->SetModifyHdl( LINK( this, ScInputHandler, ModifyHdl ) );
+        mpEditEngine->SetNotifyHdl( LINK( this, ScInputHandler, NotifyHdl ) );
     }
 }
 
@@ -2231,6 +2232,17 @@ void ScInputHandler::SyncViews( const EditView* pSourceView )
     {
         ESelection aSel(pTopView->GetSelection());
         lcl_SetTopSelection( pTableView, aSel );
+    }
+}
+
+IMPL_LINK(ScInputHandler, NotifyHdl, EENotify&, rNotify, void)
+{
+    if (rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSELECTIONCHANGED
+            || rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA)
+    {
+        ScTabView* pView = pActiveViewSh ? pActiveViewSh->GetViewData().GetView() : nullptr;
+        if (pView)
+            pView->TextSelectionChanged();
     }
 }
 

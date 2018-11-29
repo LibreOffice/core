@@ -38,6 +38,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/layout.hxx>
@@ -83,7 +84,7 @@ SfxChildWinInfo SvxRubyChildWindow::GetInfo() const
     return SfxChildWindow::GetInfo();
 }
 
-class SvxRubyData_Impl : public cppu::WeakImplHelper<css::view::XSelectionChangeListener>
+class SvxRubyData_Impl : public cppu::WeakImplHelper<css::view::XSelectionChangeListener, css::lang::XServiceInfo>
 {
     Reference<XModel> xModel;
     Reference<XRubySelection> xSelection;
@@ -130,6 +131,10 @@ public:
     virtual void SAL_CALL selectionChanged(const css::lang::EventObject& aEvent) override;
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source) override;
 
+    //XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 SvxRubyData_Impl::SvxRubyData_Impl()
@@ -166,6 +171,22 @@ void SvxRubyData_Impl::SetController(const Reference<XController>& xCtrl)
 void SvxRubyData_Impl::selectionChanged(const EventObject& )
 {
     bHasSelectionChanged = true;
+}
+
+OUString SvxRubyData_Impl::getImplementationName()
+{
+    return OUString("SvxRubyData_Impl");
+}
+
+sal_Bool SvxRubyData_Impl::supportsService(const OUString& rServiceName)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+Sequence<OUString> SvxRubyData_Impl::getSupportedServiceNames()
+{
+    Sequence<OUString> aRetval { "TextSelectionChangeListener" };
+    return aRetval;
 }
 
 void SvxRubyData_Impl::disposing(const EventObject&)
