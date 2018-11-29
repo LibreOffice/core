@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f5c4f37_c720deb3",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-11-29T11:51:04Z",
+      "side": 1,
+      "message": "Starting here. They should be indented the same as the previous statement.",
+      "revId": "31d0294459ad5b5491680e4deafeeac1761e1788",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
