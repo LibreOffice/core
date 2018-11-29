@@ -1672,8 +1672,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             case KEY_RETURN:
                 if (maActivateHdl.IsSet())
                 {
-                    maActivateHdl.Call(*this);
-                    bDone = true;
+                    bDone = maActivateHdl.Call(*this);
                 }
             break;
 

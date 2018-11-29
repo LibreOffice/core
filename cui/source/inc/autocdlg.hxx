@@ -233,49 +233,51 @@ typedef std::map<LanguageType, StringChangeList> StringChangeTable;
 
 class OfaAutocorrReplacePage : public SfxTabPage
 {
-        using TabPage::ActivatePage;
-        using TabPage::DeactivatePage;
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
 
 private:
 
-        StringChangeTable aChangesTable;
+    StringChangeTable aChangesTable;
 
-        VclPtr<CheckBox>       m_pTextOnlyCB;
-        VclPtr<AutoCorrEdit>   m_pShortED;
-        VclPtr<AutoCorrEdit>   m_pReplaceED;
-        VclPtr<SvTabListBox>   m_pReplaceTLB;
-        VclPtr<PushButton>     m_pNewReplacePB;
-        VclPtr<PushButton>     m_pDeleteReplacePB;
+    OUString        sModify;
+    OUString        sNew;
 
-        OUString        sModify;
-        OUString        sNew;
+    std::set<OUString>      aFormatText;
+    std::map<LanguageType, DoubleStringArray>
+                            aDoubleStringTable;
+    std::unique_ptr<CollatorWrapper>  pCompareClass;
+    std::unique_ptr<CharClass>        pCharClass;
+    LanguageType            eLang;
 
-        std::set<OUString>      aFormatText;
-        std::map<LanguageType, DoubleStringArray>
-                                aDoubleStringTable;
-        std::unique_ptr<CollatorWrapper>  pCompareClass;
-        std::unique_ptr<CharClass>        pCharClass;
-        LanguageType            eLang;
+    bool bHasSelectionText;
+    bool bFirstSelect:1;
+    bool bReplaceEditChanged:1;
+    bool bSWriter:1;
 
-        bool bHasSelectionText;
-        bool bFirstSelect:1;
-        bool bReplaceEditChanged:1;
-        bool bSWriter:1;
+    std::unique_ptr<weld::CheckButton> m_xTextOnlyCB;
+    std::unique_ptr<weld::Entry> m_xShortED;
+    std::unique_ptr<weld::Entry> m_xReplaceED;
+    std::unique_ptr<weld::TreeView> m_xReplaceTLB;
+    std::unique_ptr<weld::Button> m_xNewReplacePB;
+    std::unique_ptr<weld::Button> m_xReplacePB;
+    std::unique_ptr<weld::Button> m_xDeleteReplacePB;
 
-        DECL_LINK(SelectHdl, SvTreeListBox*, void);
-        DECL_LINK(NewDelButtonHdl, Button*, void);
-        DECL_LINK(NewDelActionHdl, AutoCorrEdit&, bool);
-        DECL_LINK(ModifyHdl, Edit&, void);
-        bool NewDelHdl(void const *);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(NewDelButtonHdl, weld::Button&, void);
+    DECL_LINK(NewDelActionHdl, weld::Entry&, bool);
+    DECL_LINK(EntrySizeAllocHdl, const Size&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
+    bool NewDelHdl(const weld::Widget*);
 
-        void RefillReplaceBox(  bool bFromReset,
-                                LanguageType eOldLanguage,
-                                LanguageType eNewLanguage);
+    void RefillReplaceBox(  bool bFromReset,
+                            LanguageType eOldLanguage,
+                            LanguageType eNewLanguage);
 
 public:
-                        OfaAutocorrReplacePage( vcl::Window* pParent, const SfxItemSet& rSet );
-                        virtual ~OfaAutocorrReplacePage() override;
-    virtual void        dispose() override;
+    OfaAutocorrReplacePage(TabPageParent pParent, const SfxItemSet& rSet);
+    virtual ~OfaAutocorrReplacePage() override;
+    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
 

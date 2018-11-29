@@ -857,24 +857,25 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
         SvSimpleTable::KeyInput(rKEvt);
 }
 
-OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
-                                                const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "AcorReplacePage", "cui/ui/acorreplacepage.ui", &rSet)
+OfaAutocorrReplacePage::OfaAutocorrReplacePage(TabPageParent pParent,
+                                               const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/acorreplacepage.ui", "AcorReplacePage", &rSet)
     , eLang(eLastDialogLanguage)
     , bHasSelectionText(false)
     , bFirstSelect(true)
     , bReplaceEditChanged(false)
     , bSWriter(true)
+    , m_xTextOnlyCB(m_xBuilder->weld_check_button("textonly"))
+    , m_xShortED(m_xBuilder->weld_entry("origtext"))
+    , m_xReplaceED(m_xBuilder->weld_entry("newtext"))
+    , m_xReplaceTLB(m_xBuilder->weld_tree_view("tabview"))
+    , m_xNewReplacePB(m_xBuilder->weld_button("new"))
+    , m_xReplacePB(m_xBuilder->weld_button("replace"))
+    , m_xDeleteReplacePB(m_xBuilder->weld_button("delete"))
 {
-    get(m_pTextOnlyCB, "textonly");
-    get(m_pDeleteReplacePB, "delete");
-    get(m_pNewReplacePB, "new");
-    sNew = m_pNewReplacePB->GetText();
-    sModify = get<PushButton>("replace")->GetText();
-    get(m_pShortED, "origtext");
-    get(m_pReplaceED, "newtext");
-    get(m_pReplaceTLB, "tabview");
-    m_pReplaceTLB->set_height_request(16 * GetTextHeight());
+    sNew = m_xNewReplacePB->get_label();
+    sModify = m_xReplacePB->get_label();
+    m_xReplaceTLB->set_size_request(-1, m_xReplaceTLB->get_height_rows(16));
 
     SfxModule *pMod = SfxApplication::GetModule(SfxToolsModule::Writer);
     bSWriter = pMod == SfxModule::GetActiveModule();
@@ -884,23 +885,19 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
     pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
     pCharClass.reset( new CharClass( aLanguageTag ) );
 
-    static long const aTabs[] = { 1, 61 };
-    m_pReplaceTLB->SetTabs( SAL_N_ELEMENTS(aTabs), aTabs );
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xReplaceTLB->get_approximate_digit_width() * 32);
+    m_xReplaceTLB->set_column_fixed_widths(aWidths);
 
-    m_pReplaceTLB->SetStyle( m_pReplaceTLB->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN );
-    m_pReplaceTLB->SetSelectHdl( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
-    m_pNewReplacePB->SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
-    m_pDeleteReplacePB->SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
-    m_pShortED->SetModifyHdl( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
-    m_pReplaceED->SetModifyHdl( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
-    m_pShortED->SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelActionHdl) );
-    m_pReplaceED->SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelActionHdl) );
-
-    m_pReplaceED->SetSpaces(true);
-    m_pShortED->SetSpaces(true);
-
-    m_pShortED->ConnectColumn(m_pReplaceTLB, 0);
-    m_pReplaceED->ConnectColumn(m_pReplaceTLB, 1);
+    m_xReplaceTLB->connect_changed( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
+    m_xNewReplacePB->connect_clicked( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
+    m_xDeleteReplacePB->connect_clicked( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
+    m_xShortED->connect_changed( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
+    m_xReplaceED->connect_changed( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
+    m_xShortED->connect_activate( LINK(this, OfaAutocorrReplacePage, NewDelActionHdl) );
+    m_xReplaceED->connect_activate( LINK(this, OfaAutocorrReplacePage, NewDelActionHdl) );
+    m_xShortED->connect_size_allocate(LINK(this, OfaAutocorrReplacePage, EntrySizeAllocHdl));
+    m_xReplaceED->connect_size_allocate(LINK(this, OfaAutocorrReplacePage, EntrySizeAllocHdl));
 }
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
@@ -916,18 +913,12 @@ void OfaAutocorrReplacePage::dispose()
     pCompareClass.reset();
     pCharClass.reset();
 
-    m_pTextOnlyCB.clear();
-    m_pShortED.clear();
-    m_pReplaceED.clear();
-    m_pReplaceTLB.clear();
-    m_pNewReplacePB.clear();
-    m_pDeleteReplacePB.clear();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> OfaAutocorrReplacePage::Create( TabPageParent pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> OfaAutocorrReplacePage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<OfaAutocorrReplacePage>::Create(pParent.pParent, *rSet);
+    return VclPtr<OfaAutocorrReplacePage>::Create(pParent, *rSet);
 }
 
 void OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
@@ -1003,22 +994,23 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
             pArray = &aDoubleStringTable[eOldLanguage]; // create new array
         }
 
-        sal_uInt32 nListBoxCount = static_cast<sal_uInt32>(m_pReplaceTLB->GetEntryCount());
+        sal_uInt32 nListBoxCount = m_xReplaceTLB->n_children();
         sal_uInt32 i;
         for(i = 0; i < nListBoxCount; i++)
         {
             pArray->push_back(DoubleString());
             DoubleString& rDouble = (*pArray)[pArray->size() - 1];
-            SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( i );
-            rDouble.sShort = SvTabListBox::GetEntryText(pEntry, 0);
-            rDouble.sLong = SvTabListBox::GetEntryText(pEntry, 1);
-            rDouble.pUserData = pEntry->GetUserData();
+            rDouble.sShort = m_xReplaceTLB->get_text(i, 0);
+            rDouble.sLong = m_xReplaceTLB->get_text(i, 1);
+            rDouble.pUserData = reinterpret_cast<void*>(m_xReplaceTLB->get_id(i).toInt64());
         }
     }
 
-    m_pReplaceTLB->Clear();
+    m_xReplaceTLB->clear();
     if( !bSWriter )
         aFormatText.clear();
+
+    m_xReplaceTLB->freeze();
 
     if( aDoubleStringTable.find(eLang) != aDoubleStringTable.end() )
     {
@@ -1027,13 +1019,17 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
         {
             bool bTextOnly = nullptr == rDouble.pUserData;
             // formatted text is only in Writer
-            if(bSWriter || bTextOnly)
+            if (bSWriter || bTextOnly)
             {
-                OUString sEntry = rDouble.sShort + "\t" + rDouble.sLong;
-                SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
-                m_pTextOnlyCB->Check(bTextOnly);
-                if(!bTextOnly)
-                    pEntry->SetUserData(rDouble.pUserData); // that means: with format info or even with selection text
+                m_xTextOnlyCB->set_active(bTextOnly);
+                OUString sId;
+                if (!bTextOnly)
+                {
+                    // that means: with format info or even with selection text
+                    sId = OUString::number(reinterpret_cast<sal_Int64>(rDouble.pUserData));
+                }
+                m_xReplaceTLB->append(sId, rDouble.sShort);
+                m_xReplaceTLB->set_text(m_xReplaceTLB->n_children() - 1, rDouble.sLong, 1);
             }
             else
             {
@@ -1045,49 +1041,53 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
     {
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
-        m_pReplaceTLB->SetUpdateMode(false);
         SvxAutocorrWordList::Content aContent = pWordList->getSortedContent();
         for (auto const& elem : aContent)
         {
             bool bTextOnly = elem->IsTextOnly();
             // formatted text is only in Writer
-            if(bSWriter || bTextOnly)
+            if (bSWriter || bTextOnly)
             {
-                OUString sEntry = elem->GetShort() + "\t" + elem->GetLong();
-                SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
-                m_pTextOnlyCB->Check(elem->IsTextOnly());
-                if(!bTextOnly)
-                    pEntry->SetUserData(m_pTextOnlyCB); // that means: with format info
+                m_xTextOnlyCB->set_active(elem->IsTextOnly());
+                OUString sId;
+                if (!bTextOnly)
+                {
+                    // that means: with format info or even with selection text
+                    sId = OUString::number(reinterpret_cast<sal_Int64>(m_xTextOnlyCB.get()));
+                }
+                m_xReplaceTLB->append(sId, elem->GetShort());
+                m_xReplaceTLB->set_text(m_xReplaceTLB->n_children() - 1, elem->GetLong(), 1);
             }
             else
             {
                 aFormatText.insert(elem->GetShort());
             }
         }
-        m_pNewReplacePB->Enable(false);
-        m_pDeleteReplacePB->Enable(false);
-        m_pReplaceTLB->SetUpdateMode(true);
+        m_xNewReplacePB->set_sensitive(false);
+        m_xDeleteReplacePB->set_sensitive(false);
     }
 
+    m_xReplaceTLB->thaw();
+
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if( pViewShell && pViewShell->HasSelection() )
+    if (pViewShell && pViewShell->HasSelection())
     {
         bHasSelectionText = true;
         const OUString sSelection( pViewShell->GetSelectionText() );
-        m_pReplaceED->SetText( sSelection );
-        m_pTextOnlyCB->Check( !bSWriter );
-        m_pTextOnlyCB->Enable( bSWriter && !sSelection.isEmpty() );
+        m_xReplaceED->set_text(sSelection);
+        m_xTextOnlyCB->set_active(!bSWriter);
+        m_xTextOnlyCB->set_sensitive(bSWriter && !sSelection.isEmpty());
     }
     else
     {
-        m_pTextOnlyCB->Enable( false );
+        m_xTextOnlyCB->set_sensitive(false);
     }
 }
 
 void OfaAutocorrReplacePage::Reset( const SfxItemSet* )
 {
     RefillReplaceBox(true, eLang, eLang);
-    m_pShortED->GrabFocus();
+    m_xShortED->grab_focus();
 }
 
 void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
@@ -1102,40 +1102,41 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
         pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
         pCharClass.reset( new CharClass( aLanguageTag ) );
-        ModifyHdl(*m_pShortED);
+        ModifyHdl(*m_xShortED);
     }
 }
 
-IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTreeListBox*, pBox, void)
+IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, weld::TreeView&, rBox, void)
 {
     if(!bFirstSelect || !bHasSelectionText)
     {
-        SvTreeListEntry* pEntry = pBox->FirstSelected();
-        OUString sTmpShort(SvTabListBox::GetEntryText(pEntry, 0));
+        int nEntry = rBox.get_selected_index();
+        OUString sTmpShort(rBox.get_text(nEntry, 0));
         // if the text is set via ModifyHdl, the cursor is always at the beginning
         // of a word, although you're editing here
-        bool bSameContent = 0 == pCompareClass->compareString( sTmpShort, m_pShortED->GetText() );
-        Selection aSel = m_pShortED->GetSelection();
-        if(m_pShortED->GetText() != sTmpShort)
+        bool bSameContent = 0 == pCompareClass->compareString(sTmpShort, m_xShortED->get_text());
+        int nStartPos, nEndPos;
+        m_xShortED->get_selection_bounds(nStartPos, nEndPos);
+        if (m_xShortED->get_text() != sTmpShort)
         {
-            m_pShortED->SetText(sTmpShort);
+            m_xShortED->set_text(sTmpShort);
             // if it was only a different notation, the selection has to be set again
-            if(bSameContent)
+            if (bSameContent)
             {
-                m_pShortED->SetSelection(aSel);
+                m_xShortED->select_region(nStartPos, nEndPos);
             }
         }
-        m_pReplaceED->SetText( SvTabListBox::GetEntryText(pEntry, 1) );
+        m_xReplaceED->set_text(rBox.get_text(nEntry, 1));
         // with UserData there is a Formatinfo
-        m_pTextOnlyCB->Check( pEntry->GetUserData() == nullptr);
+        m_xTextOnlyCB->set_active(rBox.get_id(nEntry).isEmpty());
     }
     else
     {
         bFirstSelect = false;
     }
 
-    m_pNewReplacePB->Enable(false);
-    m_pDeleteReplacePB->Enable();
+    m_xNewReplacePB->set_sensitive(false);
+    m_xDeleteReplacePB->set_sensitive(true);
 };
 
 void OfaAutocorrReplacePage::NewEntry(const OUString& sShort, const OUString& sLong, bool bKeepSourceFormatting)
@@ -1196,72 +1197,84 @@ void OfaAutocorrReplacePage::DeleteEntry(const OUString& sShort, const OUString&
     rDeletedArray.push_back(aDeletedString);
 }
 
-IMPL_LINK(OfaAutocorrReplacePage, NewDelButtonHdl, Button*, pBtn, void)
+IMPL_LINK(OfaAutocorrReplacePage, NewDelButtonHdl, weld::Button&, rBtn, void)
 {
-    NewDelHdl(pBtn);
+    NewDelHdl(&rBtn);
 }
 
-IMPL_LINK(OfaAutocorrReplacePage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
+IMPL_LINK(OfaAutocorrReplacePage, NewDelActionHdl, weld::Entry&, rEdit, bool)
 {
     return NewDelHdl(&rEdit);
 }
-bool OfaAutocorrReplacePage::NewDelHdl(void const * pBtn)
+
+IMPL_LINK_NOARG(OfaAutocorrReplacePage, EntrySizeAllocHdl, const Size&, void)
 {
-    SvTreeListEntry* pEntry = m_pReplaceTLB->FirstSelected();
-    if( pBtn == m_pDeleteReplacePB )
+    std::vector<int> aWidths;
+    int x, y, width, height;
+    if (m_xReplaceED->get_extents_relative_to(*m_xReplaceTLB, x, y, width, height))
     {
-        DBG_ASSERT( pEntry, "no entry selected" );
-        if( pEntry )
+        aWidths.push_back(x);
+        m_xReplaceTLB->set_column_fixed_widths(aWidths);
+    }
+}
+
+bool OfaAutocorrReplacePage::NewDelHdl(const weld::Widget* pBtn)
+{
+    int nEntry = m_xReplaceTLB->get_selected_index();
+    if (pBtn == m_xDeleteReplacePB.get())
+    {
+        DBG_ASSERT( nEntry != -1, "no entry selected" );
+        if (nEntry != -1)
         {
-            DeleteEntry(SvTabListBox::GetEntryText(pEntry, 0), SvTabListBox::GetEntryText(pEntry, 1));
-            m_pReplaceTLB->GetModel()->Remove(pEntry);
-            ModifyHdl(*m_pShortED);
+            DeleteEntry(m_xReplaceTLB->get_text(nEntry, 0), m_xReplaceTLB->get_text(nEntry, 1));
+            m_xReplaceTLB->remove(nEntry);
+            ModifyHdl(*m_xShortED);
             return false;
         }
     }
-    if(pBtn == m_pNewReplacePB || m_pNewReplacePB->IsEnabled())
+
+    if (pBtn == m_xNewReplacePB.get() || m_xNewReplacePB->get_sensitive())
     {
-        SvTreeListEntry* _pNewEntry = m_pReplaceTLB->FirstSelected();
-        OUString sEntry(m_pShortED->GetText());
-        if(!sEntry.isEmpty() && ( !m_pReplaceED->GetText().isEmpty() ||
+        OUString sEntry(m_xShortED->get_text());
+        if (!sEntry.isEmpty() && (!m_xReplaceED->get_text().isEmpty() ||
                 ( bHasSelectionText && bSWriter ) ))
         {
-            bool bKeepSourceFormatting = !bReplaceEditChanged && !m_pTextOnlyCB->IsChecked();
+            bool bKeepSourceFormatting = !bReplaceEditChanged && !m_xTextOnlyCB->get_active();
 
-            NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText(), bKeepSourceFormatting);
-            m_pReplaceTLB->SetUpdateMode(false);
-            sal_uLong nPos = TREELIST_ENTRY_NOTFOUND;
-            sEntry += "\t" + m_pReplaceED->GetText();
-            if(_pNewEntry)
+            NewEntry(m_xShortED->get_text(), m_xReplaceED->get_text(), bKeepSourceFormatting);
+            m_xReplaceTLB->freeze();
+            int nPos = -1;
+            if (nEntry != -1)
             {
-                nPos = m_pReplaceTLB->GetModel()->GetAbsPos(_pNewEntry);
-                m_pReplaceTLB->GetModel()->Remove(_pNewEntry);
+                nPos = nEntry;
+                m_xReplaceTLB->remove(nEntry);
             }
             else
             {
-                sal_uLong j;
-                for( j = 0; j < m_pReplaceTLB->GetEntryCount(); j++ )
+                int j;
+                int nCount = m_xReplaceTLB->n_children();
+                for (j = 0; j < nCount; ++j)
                 {
-                    SvTreeListEntry* pReplaceEntry = m_pReplaceTLB->GetEntry(j);
-                    if( 0 >=  pCompareClass->compareString(sEntry, SvTabListBox::GetEntryText(pReplaceEntry, 0) ) )
+                    if (0 >= pCompareClass->compareString(sEntry, m_xReplaceTLB->get_text(j, 0)))
                         break;
                 }
                 nPos = j;
             }
-            SvTreeListEntry* pInsEntry = m_pReplaceTLB->InsertEntry(
-                                        sEntry, static_cast< SvTreeListEntry * >(nullptr), false,
-                                        nPos == TREELIST_ENTRY_NOTFOUND ? TREELIST_APPEND : nPos);
+
+            OUString sId;
             if (bKeepSourceFormatting)
             {
-                pInsEntry->SetUserData(&bHasSelectionText); // new formatted text
+                sId = OUString::number(reinterpret_cast<sal_Int64>(&bHasSelectionText)); // new formatted text
             }
 
-            m_pReplaceTLB->MakeVisible( pInsEntry );
-            m_pReplaceTLB->SetUpdateMode( true );
+            m_xReplaceTLB->insert(nPos, sEntry, &sId, nullptr, nullptr);
+            m_xReplaceTLB->set_text(nPos, m_xReplaceED->get_text(), 1);
+            m_xReplaceTLB->thaw();
+            m_xReplaceTLB->scroll_to_row(nPos);
             // if the request came from the ReplaceEdit, give focus to the ShortEdit
-            if(m_pReplaceED->HasFocus())
+            if (m_xReplaceED->has_focus())
             {
-                m_pShortED->GrabFocus();
+                m_xShortED->grab_focus();
             }
         }
     }
@@ -1271,17 +1284,17 @@ bool OfaAutocorrReplacePage::NewDelHdl(void const * pBtn)
         // which means EndDialog() - has to be evaluated in KeyInput
         return false;
     }
-    ModifyHdl(*m_pShortED);
+    ModifyHdl(*m_xShortED);
     return true;
 }
 
-IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
+IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
 {
-    SvTreeListEntry* pFirstSel = m_pReplaceTLB->FirstSelected();
-    bool bShort = &rEdt == m_pShortED;
-    const OUString rEntry = rEdt.GetText();
-    const OUString rRepString = m_pReplaceED->GetText();
-    OUString aWordStr( pCharClass->lowercase( rEntry ));
+    int nFirstSel = m_xReplaceTLB->get_selected_index();
+    bool bShort = &rEdt == m_xShortED.get();
+    const OUString rEntry = rEdt.get_text();
+    const OUString rRepString = m_xReplaceED->get_text();
+    OUString aWordStr(pCharClass->lowercase(rEntry));
 
     if(bShort)
     {
@@ -1290,19 +1303,20 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
             bool bFound = false;
             bool bTmpSelEntry=false;
 
-            for(sal_uLong i = 0; i < m_pReplaceTLB->GetEntryCount(); i++)
+            int nCount = m_xReplaceTLB->n_children();
+            for (int i = 0; i < nCount; ++i)
             {
-                SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( i );
-                OUString aTestStr = SvTabListBox::GetEntryText(pEntry, 0);
+                int nEntry = i;
+                OUString aTestStr = m_xReplaceTLB->get_text(i, 0);
                 if( pCompareClass->compareString(rEntry, aTestStr ) == 0 )
                 {
                     if( !rRepString.isEmpty() )
                     {
                         bFirstSelect = true;
                     }
-                    m_pReplaceTLB->SetCurEntry(pEntry);
-                    pFirstSel = pEntry;
-                    m_pNewReplacePB->SetText(sModify);
+                    m_xReplaceTLB->set_cursor(nEntry);
+                    nFirstSel = i;
+                    m_xNewReplacePB->set_label(sModify);
                     bFound = true;
                     break;
                 }
@@ -1311,43 +1325,42 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
                     aTestStr = pCharClass->lowercase( aTestStr );
                     if( aTestStr.startsWith(aWordStr) && !bTmpSelEntry )
                     {
-                        m_pReplaceTLB->MakeVisible( pEntry );
+                        m_xReplaceTLB->scroll_to_row(nEntry);
                         bTmpSelEntry = true;
                     }
                 }
             }
             if( !bFound )
             {
-                m_pReplaceTLB->SelectAll( false );
-                pFirstSel = nullptr;
-                m_pNewReplacePB->SetText( sNew );
+                m_xReplaceTLB->select(-1);
+                nFirstSel = -1;
+                m_xNewReplacePB->set_label(sNew);
                 if( bReplaceEditChanged )
-                    m_pTextOnlyCB->Enable(false);
+                    m_xTextOnlyCB->set_sensitive(false);
             }
-            m_pDeleteReplacePB->Enable( bFound );
+            m_xDeleteReplacePB->set_sensitive(bFound);
         }
-        else if( m_pReplaceTLB->GetEntryCount() > 0 )
+        else if (m_xReplaceTLB->n_children() > 0)
         {
-            SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( 0 );
-            m_pReplaceTLB->MakeVisible( pEntry );
+            m_xReplaceTLB->scroll_to_row(0);
         }
 
     }
     else if( !bShort )
     {
         bReplaceEditChanged = true;
-        if( pFirstSel )
+        if (nFirstSel != -1)
         {
-            m_pNewReplacePB->SetText( sModify );
+            m_xNewReplacePB->set_label(sModify);
         }
     }
 
-    const OUString& rShortTxt = m_pShortED->GetText();
+    const OUString& rShortTxt = m_xShortED->get_text();
     bool bEnableNew = !rShortTxt.isEmpty() &&
                         ( !rRepString.isEmpty() ||
                                 ( bHasSelectionText && bSWriter )) &&
-                        ( !pFirstSel || rRepString !=
-                                SvTabListBox::GetEntryText( pFirstSel, 1 ) );
+                        ( nFirstSel == -1 || rRepString !=
+                                m_xReplaceTLB->get_text(nFirstSel, 1) );
     if( bEnableNew )
     {
         for (auto const& elem : aFormatText)
@@ -1359,7 +1372,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
             }
         }
     }
-    m_pNewReplacePB->Enable( bEnableNew );
+    m_xNewReplacePB->set_sensitive(bEnableNew);
 }
 
 static bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rString)
