@@ -17,6 +17,7 @@
 #include <vcl/tabctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -208,7 +209,15 @@ bool SfxNotebookBar::IsActive()
             return false;
 
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
-        eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
+        try
+        {
+            eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
+        }
+        catch (css::frame::UnknownModuleException& e)
+        {
+            SAL_WARN("sfx.appl", "SfxNotebookBar::IsActive(): " + e.Message);
+            return false;
+        }
     }
     else
         return false;
