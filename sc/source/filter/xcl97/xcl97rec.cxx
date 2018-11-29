@@ -647,7 +647,7 @@ void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const tools::R
 
 sal_Int32 VmlCommentExporter::StartShape()
 {
-    AddShapeAttribute( XML_type, OString( "#_x0000_t202") );
+    AddShapeAttribute( XML_type, "#_x0000_t202" );
 
     sal_Int32 nId = VMLExport::StartShape();
 

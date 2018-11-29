@@ -119,7 +119,7 @@ DECLARE_TXTIMPORT_TEST(testTdf112191, "bullets.odt")
     bool bSuccess = sw::XTextRangeToSwPaM(aPaM, xPara);
     CPPUNIT_ASSERT(bSuccess);
 
-    assertExportedRange(OString("First bullet"), aPaM);
+    assertExportedRange("First bullet", aPaM);
 
     // but when we extend to the next paragraph - now there are bullets
     xPara = getParagraph(6);

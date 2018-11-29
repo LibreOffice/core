@@ -24,8 +24,8 @@ class TerminalCheck;
 
 namespace detail {
 
-template<std::size_t N> ContextCheck checkRecordDecl(
-    clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N]);
+inline ContextCheck checkRecordDecl(
+    clang::Decl const * decl, clang::TagTypeKind tag, char const * id);
 
 }
 
@@ -59,16 +59,14 @@ public:
 
     TypeCheck LvalueReference() const;
 
-    template<std::size_t N> inline ContextCheck Class(char const (& id)[N])
-        const;
+    inline ContextCheck Class(char const * id) const;
 
     template<std::size_t N> inline ContextCheck Struct(char const (& id)[N])
         const;
 
     TypeCheck Typedef() const;
 
-    template<std::size_t N> inline ContextCheck Typedef(char const (& id)[N])
-        const;
+    inline ContextCheck Typedef(char const * id) const;
 
     TypeCheck NotSubstTemplateTypeParmType() const;
 
@@ -84,8 +82,7 @@ public:
 
     explicit operator bool() const { return decl_ != nullptr; }
 
-    template<std::size_t N> inline ContextCheck Class(char const (& id)[N])
-        const;
+    inline ContextCheck Class(char const * id) const;
 
     template<std::size_t N> inline ContextCheck Struct(char const (& id)[N])
         const;
@@ -120,8 +117,7 @@ public:
 
     ContextCheck AnonymousNamespace() const;
 
-    template<std::size_t N> inline ContextCheck Class(char const (& id)[N])
-        const;
+    inline ContextCheck Class(char const * id) const;
 
     template<std::size_t N> inline ContextCheck Struct(char const (& id)[N])
         const;
@@ -129,8 +125,8 @@ public:
 private:
     friend DeclCheck;
     friend TypeCheck;
-    template<std::size_t N> friend ContextCheck detail::checkRecordDecl(
-        clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N]);
+    friend ContextCheck detail::checkRecordDecl(
+        clang::Decl const * decl, clang::TagTypeKind tag, char const * id);
 
     explicit ContextCheck(clang::DeclContext const * context = nullptr):
         context_(context) {}
@@ -153,8 +149,8 @@ private:
 
 namespace detail {
 
-template<std::size_t N> ContextCheck checkRecordDecl(
-    clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N])
+ContextCheck checkRecordDecl(
+    clang::Decl const * decl, clang::TagTypeKind tag, char const * id)
 {
     auto r = llvm::dyn_cast_or_null<clang::RecordDecl>(decl);
     if (r != nullptr && r->getTagKind() == tag) {
@@ -168,7 +164,7 @@ template<std::size_t N> ContextCheck checkRecordDecl(
 
 }
 
-template<std::size_t N> ContextCheck TypeCheck::Class(char const (& id)[N])
+ContextCheck TypeCheck::Class(char const * id)
     const
 {
     if (!type_.isNull()) {
@@ -192,7 +188,7 @@ template<std::size_t N> ContextCheck TypeCheck::Struct(char const (& id)[N])
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck TypeCheck::Typedef(char const (& id)[N])
+ContextCheck TypeCheck::Typedef(char const * id)
     const
 {
     if (!type_.isNull()) {
@@ -208,7 +204,7 @@ template<std::size_t N> ContextCheck TypeCheck::Typedef(char const (& id)[N])
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck DeclCheck::Class(char const (& id)[N])
+ContextCheck DeclCheck::Class(char const * id)
     const
 {
     return detail::checkRecordDecl(decl_, clang::TTK_Class, id);
@@ -267,7 +263,7 @@ template<std::size_t N> ContextCheck ContextCheck::Namespace(
     return ContextCheck();
 }
 
-template<std::size_t N> ContextCheck ContextCheck::Class(char const (& id)[N])
+ContextCheck ContextCheck::Class(char const * id)
     const
 {
     return detail::checkRecordDecl(

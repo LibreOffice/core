@@ -431,7 +431,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
     // Always write as the latest version, i.e. DIC_VERSION_7
 
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
-    pStream->WriteLine(OString(pVerOOo7));
+    pStream->WriteLine(pVerOOo7);
     ErrCode nErr = pStream->GetError();
     if (nErr != ERRCODE_NONE)
         return nErr;
@@ -439,7 +439,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
      * undetermined or multiple? Earlier versions did not know about 'und' and
      * 'mul' and 'zxx' codes. Sync with ReadDicVersion() */
     if (LinguIsUnspecified(nLanguage))
-        pStream->WriteLine(OString("lang: <none>"));
+        pStream->WriteLine("lang: <none>");
     else
     {
         OStringBuffer aLine("lang: ");
@@ -449,9 +449,9 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
     if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;
     if (eDicType == DictionaryType_POSITIVE)
-        pStream->WriteLine(OString("type: positive"));
+        pStream->WriteLine("type: positive");
     else
-        pStream->WriteLine(OString("type: negative"));
+        pStream->WriteLine("type: negative");
     if (aDicName.endsWith(EXTENSION_FOR_TITLE_TEXT))
     {
         pStream->WriteLine(OUStringToOString("title: " +
@@ -460,7 +460,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
     }
     if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;
-    pStream->WriteLine(OString("---"));
+    pStream->WriteLine("---");
     if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;
     for (Reference<XDictionaryEntry> & aEntrie : aEntries)
