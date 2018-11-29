@@ -341,9 +341,8 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
         GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<VclAbstractRefreshableDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog( this, pTheme ));
+        ScopedVclPtr<VclAbstractDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog(GetFrameWeld(), pTheme));
 
-        aActualizeProgress->Update();
         aActualizeProgress->Execute();
         mpGallery->ReleaseTheme( pTheme, *this );
     }

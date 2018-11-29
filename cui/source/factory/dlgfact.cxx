@@ -104,6 +104,11 @@ short CuiAbstractController_Impl::Execute()
     return m_xDlg->run();
 }
 
+short CuiAbstractSingleTabController_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
 IMPL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl);
 IMPL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl);
@@ -339,12 +344,12 @@ void CuiAbstractTabController_Impl::SetText( const OUString& rStr )
     m_xDlg->set_title(rStr);
 }
 
-const SfxItemSet* CuiAbstractController_Impl::GetOutputItemSet() const
+const SfxItemSet* CuiAbstractSingleTabController_Impl::GetOutputItemSet() const
 {
     return m_xDlg->GetOutputItemSet();
 }
 
-void CuiAbstractController_Impl::SetText(const OUString& rStr)
+void CuiAbstractSingleTabController_Impl::SetText(const OUString& rStr)
 {
     m_xDlg->set_title(rStr);
 }
@@ -1068,10 +1073,10 @@ VclPtr<AbstractSpellDialog> AbstractDialogFactory_Impl::CreateSvxSpellDialog(
     return VclPtr<AbstractSpellDialog_Impl>::Create(pDlg);
 }
 
-VclPtr<VclAbstractRefreshableDialog> AbstractDialogFactory_Impl::CreateActualizeProgressDialog( vcl::Window* pParent, GalleryTheme* pThm )
+VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateActualizeProgressDialog(weld::Window* pParent,
+                                                                                               GalleryTheme* pThm)
 {
-   VclPtrInstance<ActualizeProgress> pDlg(pParent, pThm);
-   return VclPtr<VclAbstractRefreshableDialog_Impl>::Create( pDlg );
+   return VclPtr<CuiAbstractController_Impl>::Create(o3tl::make_unique<ActualizeProgress>(pParent, pThm));
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateScriptErrorDialog(const css::uno::Any& rException)
@@ -1322,7 +1327,7 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog(we
                                                                               const SfxItemSet& rAttr,
                                                                               const Reference< XFrame >& _rxDocumentFrame)
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(o3tl::make_unique<SfxMacroAssignDlg>(pParent, _rxDocumentFrame, rAttr));
+    return VclPtr<CuiAbstractSingleTabController_Impl>::Create(o3tl::make_unique<SfxMacroAssignDlg>(pParent, _rxDocumentFrame, rAttr));
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(vcl::Window* pParent,
@@ -1335,10 +1340,10 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(vcl::Windo
     {
         case RID_SVXPAGE_MEASURE :
         {
-            return VclPtr<CuiAbstractController_Impl>::Create(o3tl::make_unique<SvxMeasureDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
+            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(o3tl::make_unique<SvxMeasureDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
         }
         case RID_SVXPAGE_CONNECTION :
-            return VclPtr<CuiAbstractController_Impl>::Create(o3tl::make_unique<SvxConnectionDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
+            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(o3tl::make_unique<SvxConnectionDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
 
         case RID_SFXPAGE_DBREGISTER :
             pDlg = VclPtr<DatabaseRegistrationDialog>::Create( pParent, rAttr );
