@@ -19,6 +19,13 @@ extern void foo(OUString const &);
 struct Foo {
     Foo(OUString const &, int) {}
     Foo(OUString const &) {}
+    void foo(OUString const &) const {}
+};
+
+struct Foo2 {
+    Foo2(OString const &, int) {}
+    Foo2(OString const &) {}
+    void foo(OString const &) const {}
 };
 
 int main() {
@@ -59,7 +66,10 @@ int main() {
     Foo aFoo(OUString("xxx"), 1); // expected-error {{in call of 'Foo::Foo', replace 'OUString' constructed from a string literal directly with the string literal}}
     (void)aFoo;
     Foo aFoo2(OUString("xxx")); // expected-error {{in call of 'Foo::Foo', replace 'OUString' constructed from a string literal directly with the string literal}}
-    (void)aFoo2;
+    aFoo2.foo(OUString("xxx")); // expected-error {{in call of 'Foo::foo', replace 'OUString' constructed from a string literal directly with the string literal}}
+
+    Foo2 aFoo3(OString("xxx")); // expected-error {{in call of 'Foo2::Foo2', replace 'OUString' constructed from a string literal directly with the string literal}}
+    aFoo3.foo(OString("xxx")); // expected-error {{in call of 'Foo2::foo', replace 'OUString' constructed from a string literal directly with the string literal}}
 
     (void) OUString("xxx", 3, RTL_TEXTENCODING_ASCII_US); // expected-error {{simplify construction of 'OUString' with string constant argument [loplugin:stringconstant]}}
     (void) OUString("xxx", 3, RTL_TEXTENCODING_ISO_8859_1); // expected-error {{suspicious 'rtl::OUString' constructor with text encoding 12 but plain ASCII content; use 'RTL_TEXTENCODING_ASCII_US' instead [loplugin:stringconstant]}}

@@ -409,7 +409,7 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
             MetaCommentAction * pAct =
                 static_cast<MetaCommentAction *>(pCurrAct);
             // skip comment if not a special XTEXT... comment
-            if( pAct->GetComment().matchIgnoreAsciiCase( OString("XTEXT") ) )
+            if( pAct->GetComment().matchIgnoreAsciiCase( "XTEXT" ) )
             {
                 if (pAct->GetComment().equalsIgnoreAsciiCase("XTEXT_SCROLLRECT"))
                 {

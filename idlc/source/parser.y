@@ -626,7 +626,7 @@ interface_dcl :
             && ifc->getScopedName() != "com::sun::star::uno::XInterface")
         {
             addInheritedInterface(
-                ifc, OString("::com::sun::star::uno::XInterface"), false,
+                ifc, "::com::sun::star::uno::XInterface", false,
                 OUString());
         }
         ifc->setDefined();

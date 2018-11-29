@@ -165,12 +165,12 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     else
     {
         // Let's try to retrieve the list in Collected Addresses book
-        pMork = xConnection->getMorkParser(OString("CollectedAddressBook"));
+        pMork = xConnection->getMorkParser("CollectedAddressBook");
         if (std::find(pMork->lists_.begin(), pMork->lists_.end(), m_aAddressbook) == pMork->lists_.end())
         {
             // so the list is in Address book
             // TODO : manage case where an address book has been created
-            pMork = xConnection->getMorkParser(OString("AddressBook"));
+            pMork = xConnection->getMorkParser("AddressBook");
         }
         handleListTable = true;
         // retrieve row ids for that list table

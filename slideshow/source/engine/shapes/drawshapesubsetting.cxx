@@ -23,6 +23,7 @@
 #include <rtl/math.hxx>
 
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -73,7 +74,7 @@ namespace slideshow
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
                         // skip comment if not a special XTEXT... comment
-                        if( pAct->GetComment().matchIgnoreAsciiCase( OString("XTEXT") ) )
+                        if( pAct->GetComment().matchIgnoreAsciiCase( "XTEXT" ) )
                         {
                             // fill classification vector with NOOPs,
                             // then insert corresponding classes at
@@ -261,9 +262,9 @@ namespace slideshow
         }
 
         DrawShapeSubsetting::DrawShapeSubsetting( const DocTreeNode&            rShapeSubset,
-                                                  const GDIMetaFileSharedPtr&   rMtf ) :
+                                                  GDIMetaFileSharedPtr    rMtf ) :
             maActionClassVector(),
-            mpMtf( rMtf ),
+            mpMtf(std::move( rMtf )),
             maSubset( rShapeSubset ),
             maSubsetShapes(),
             maCurrentSubsets(),
