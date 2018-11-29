@@ -347,8 +347,8 @@ public:
                                             SfxBindings* pBindings,
                                             svx::SpellDialogChildWindow* pSpellChildWindow )=0;
 
-    virtual VclPtr<VclAbstractRefreshableDialog> CreateActualizeProgressDialog( vcl::Window* pParent,
-                                            GalleryTheme* pThm ) = 0;
+    virtual VclPtr<VclAbstractDialog> CreateActualizeProgressDialog(weld::Window* pParent,
+                                            GalleryTheme* pThm) = 0;
     virtual VclPtr<AbstractTitleDialog> CreateTitleDialog(weld::Window* pParent,
                                              const OUString& rOldText) = 0;
     virtual VclPtr<AbstractGalleryIdDialog> CreateGalleryIdDialog(weld::Window* pParent,
