@@ -45,13 +45,6 @@ public:
            SdrModel* pDoc, SfxRequest& rReq);
 };
 
-class FuInsertChartFromFile : public FuPoor
-{
-public:
-    FuInsertChartFromFile(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, const SfxRequest& rReq, const OUString& rURL);
-};
-
 class FuInsertMedia : public FuPoor
 {
 public:
