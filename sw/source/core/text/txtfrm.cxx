@@ -2132,9 +2132,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             if( IsIdxInside( nPos, nLen ) )
             {
                 // We need to reformat anyways, even if the invalidated
-                // area is NULL.
+                // range is empty.
                 // E.g.: empty line, set 14 pt!
-                // if( !nLen ) nLen = 1;
 
                 // FootnoteNumbers need to be formatted
                 if( !nLen )

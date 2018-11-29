@@ -3261,10 +3261,7 @@ bool SwpHints::TryInsertHint(
     // ... and notify listeners
     if ( rNode.HasWriterListeners() )
     {
-        SwUpdateAttr aHint(
-            nHtStart,
-            nHtStart == nHintEnd ? nHintEnd + 1 : nHintEnd,
-            nWhich);
+        SwUpdateAttr aHint(nHtStart, nHintEnd, nWhich);
 
         rNode.ModifyNotification( nullptr, &aHint );
     }
