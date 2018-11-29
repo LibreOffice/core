@@ -657,7 +657,7 @@
       </node>
       <node oor:name=".uno:AutoFill" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">AutoFill Data Series: automatic</value>
+          <value xml:lang="en-US">AutoFill Data Series: Automatic</value>
         </prop>
       </node>
       <node oor:name=".uno:Cancel" oor:op="replace">
@@ -1641,7 +1641,7 @@
       </node>
       <node oor:name=".uno:SetOptimalColumnWidthDirect" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Optimal Column Width, direct</value>
+          <value xml:lang="en-US">Optimal Column Width, Direct</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1736,7 +1736,7 @@
       </node>
       <node oor:name=".uno:DataStreamsPlay" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Resume streaming</value>
+          <value xml:lang="en-US">Resume Streaming</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1744,7 +1744,7 @@
       </node>
       <node oor:name=".uno:DataStreamsStop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Stop streaming</value>
+          <value xml:lang="en-US">Stop Streaming</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2149,7 +2149,7 @@
           <value xml:lang="en-US">To P~age</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Anchor to p~age</value>
+          <value xml:lang="en-US">Anchor to Page</value>
         </prop>
       </node>
       <node oor:name=".uno:SetAnchorToCell" oor:op="replace">
@@ -2160,18 +2160,18 @@
           <value xml:lang="en-US">To ~Cell</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Anchor to ~cell (move with cell)</value>
+          <value xml:lang="en-US">Anchor to Cell (Move with Cell)</value>
         </prop>
       </node>
       <node oor:name=".uno:SetAnchorToCellResize" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Anchor: To Cell (~resize with cell)</value>
+          <value xml:lang="en-US">Anchor: To Cell (~Resize with Cell)</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">To Cell (~resize with cell)</value>
+          <value xml:lang="en-US">To Cell (~Resize with Cell)</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Anchor to cell (move and ~resize with cell)</value>
+          <value xml:lang="en-US">Anchor to Cell (Move and Resize with Cell)</value>
         </prop>
       </node>
       <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
