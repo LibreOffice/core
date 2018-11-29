@@ -2,7 +2,16 @@
 <!-- Generated with glade 3.16.0 on Wed Jan 29 10:50:29 2014 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name text2 -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkGrid" id="AcorReplacePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -71,12 +80,52 @@
       </packing>
     </child>
     <child>
-      <object class="vcllo-SvTabListBox" id="tabview:border">
-        <property name="width_request">1</property>
+      <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="tabview">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="headers_visible">False</property>
+            <property name="model">liststore1</property>
+            <property name="search_column">0</property>
+            <property name="show_expanders">False</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer1"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                <property name="resizable">True</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderer2"/>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -86,7 +135,7 @@
       </packing>
     </child>
     <child>
-      <object class="cuilo-AutoCorrEdit" id="newtext">
+      <object class="GtkEntry" id="newtext">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
@@ -100,7 +149,7 @@
       </packing>
     </child>
     <child>
-      <object class="cuilo-AutoCorrEdit" id="origtext">
+      <object class="GtkEntry" id="origtext">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>

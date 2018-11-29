@@ -41,6 +41,7 @@ class VCL_DLLPUBLIC Widget
 protected:
     Link<Widget&, void> m_aFocusInHdl;
     Link<Widget&, void> m_aFocusOutHdl;
+    Link<const Size&, void> m_aSizeAllocateHdl;
 
     void signal_focus_in() { m_aFocusInHdl.Call(*this); }
     void signal_focus_out() { m_aFocusOutHdl.Call(*this); }
@@ -89,6 +90,9 @@ public:
     virtual void set_margin_top(int nMargin) = 0;
     virtual void set_margin_bottom(int nMargin) = 0;
 
+    virtual bool get_extents_relative_to(Widget& rRelative, int& x, int& y, int& width, int& height)
+        = 0;
+
     virtual void set_accessible_name(const OUString& rName) = 0;
     virtual OUString get_accessible_name() const = 0;
 
@@ -106,6 +110,12 @@ public:
     {
         assert(!m_aFocusOutHdl.IsSet() || !rLink.IsSet());
         m_aFocusOutHdl = rLink;
+    }
+
+    virtual void connect_size_allocate(const Link<const Size&, void>& rLink)
+    {
+        assert(!m_aSizeAllocateHdl.IsSet() || !rLink.IsSet());
+        m_aSizeAllocateHdl = rLink;
     }
 
     virtual void grab_add() = 0;
@@ -199,8 +209,6 @@ public:
     virtual void window_move(int x, int y) = 0;
     virtual void set_modal(bool bModal) = 0;
     virtual bool get_modal() const = 0;
-    virtual bool get_extents_relative_to(Window& rRelative, int& x, int& y, int& width, int& height)
-        = 0;
     virtual bool get_resizable() const = 0;
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
@@ -293,7 +301,7 @@ private:
 
 protected:
     Link<ComboBox&, void> m_aChangeHdl;
-    Link<ComboBox&, void> m_aEntryActivateHdl;
+    Link<ComboBox&, bool> m_aEntryActivateHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
 
@@ -359,7 +367,8 @@ public:
 
     virtual bool get_popup_shown() const = 0;
 
-    void connect_entry_activate(const Link<ComboBox&, void>& rLink) { m_aEntryActivateHdl = rLink; }
+    // callback returns true to indicated no further processing of activate wanted
+    void connect_entry_activate(const Link<ComboBox&, bool>& rLink) { m_aEntryActivateHdl = rLink; }
 
     void save_value() { m_sSavedValue = get_active_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
@@ -440,6 +449,7 @@ public:
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
     virtual void scroll_to_row(int pos) = 0;
+    virtual void set_cursor(int pos) = 0;
 
     //by text
     virtual OUString get_text(int row, int col = -1) const = 0;
@@ -653,6 +663,7 @@ protected:
     Link<Entry&, void> m_aChangeHdl;
     Link<OUString&, bool> m_aInsertTextHdl;
     Link<Entry&, void> m_aCursorPositionHdl;
+    Link<Entry&, bool> m_aActivateHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
@@ -678,6 +689,8 @@ public:
 
     void connect_changed(const Link<Entry&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_insert_text(const Link<OUString&, bool>& rLink) { m_aInsertTextHdl = rLink; }
+    // callback returns true to indicated no further processing of activate wanted
+    void connect_activate(const Link<Entry&, bool>& rLink) { m_aActivateHdl = rLink; }
     virtual void connect_cursor_position(const Link<Entry&, void>& rLink)
     {
         m_aCursorPositionHdl = rLink;
@@ -1155,7 +1168,6 @@ public:
 
 protected:
     Link<draw_args, void> m_aDrawHdl;
-    Link<const Size&, void> m_aSizeAllocateHdl;
     Link<const MouseEvent&, void> m_aMousePressHdl;
     Link<const MouseEvent&, void> m_aMouseMotionHdl;
     Link<const MouseEvent&, void> m_aMouseReleaseHdl;
@@ -1173,7 +1185,6 @@ protected:
 
 public:
     void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
-    void connect_size_allocate(const Link<const Size&, void>& rLink) { m_aSizeAllocateHdl = rLink; }
     void connect_mouse_press(const Link<const MouseEvent&, void>& rLink)
     {
         m_aMousePressHdl = rLink;

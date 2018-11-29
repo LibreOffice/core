@@ -44,7 +44,7 @@ private:
     std::unique_ptr<weld::Label> m_xFtSeconds;
     std::unique_ptr<weld::Button> m_xBtnOk;
 
-    DECL_LINK(FileHdl, weld::ComboBox&, void);
+    DECL_LINK(FileHdl, weld::ComboBox&, bool);
     DECL_LINK(BrowseHdl, weld::Button&, void);
     DECL_LINK(RangeHdl, weld::TreeView&, void);
     DECL_LINK(ReloadHdl, weld::Button&, void);
