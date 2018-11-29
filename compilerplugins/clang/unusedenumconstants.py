@@ -105,6 +105,11 @@ def is_ignore(srcLoc):
          "sc/source/filter/inc/flttypes.hxx", # BiffTyp
          "sc/inc/optutil.hxx", # ScOptionsUtil::KeyBindingType
          "include/sfx2/chalign.hxx", # SfxChildAlignment
+         "drawinglayer/source/tools/emfpbrush.hxx",
+         "drawinglayer/source/tools/emfppen.cxx",
+         "include/oox/ppt/animationspersist.hxx",
+         "include/vcl/fontcapabilities.hxx",
+         "sw/inc/poolfmt.hxx",
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on

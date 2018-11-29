@@ -1,95 +1,21 @@
-drawinglayer/source/tools/emfpbrush.hxx:32
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleVertical
-drawinglayer/source/tools/emfpbrush.hxx:33
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleForwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:34
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleBackwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:35
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleLargeGrid
-drawinglayer/source/tools/emfpbrush.hxx:36
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDiagonalCross
-drawinglayer/source/tools/emfpbrush.hxx:49
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleLightDownwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:50
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleLightUpwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:51
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDarkDownwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:52
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDarkUpwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:53
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleWideDownwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:54
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleWideUpwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:55
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleLightVertical
-drawinglayer/source/tools/emfpbrush.hxx:56
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleLightHorizontal
-drawinglayer/source/tools/emfpbrush.hxx:57
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleNarrowVertical
-drawinglayer/source/tools/emfpbrush.hxx:58
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleNarrowHorizontal
-drawinglayer/source/tools/emfpbrush.hxx:59
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDarkVertical
-drawinglayer/source/tools/emfpbrush.hxx:60
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDarkHorizontal
-drawinglayer/source/tools/emfpbrush.hxx:61
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDashedDownwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:62
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDashedUpwardDiagonal
-drawinglayer/source/tools/emfpbrush.hxx:63
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDashedHorizontal
-drawinglayer/source/tools/emfpbrush.hxx:64
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDashedVertical
-drawinglayer/source/tools/emfpbrush.hxx:65
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleSmallConfetti
-drawinglayer/source/tools/emfpbrush.hxx:66
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleLargeConfetti
-drawinglayer/source/tools/emfpbrush.hxx:67
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleZigZag
-drawinglayer/source/tools/emfpbrush.hxx:68
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleWave
-drawinglayer/source/tools/emfpbrush.hxx:69
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDiagonalBrick
-drawinglayer/source/tools/emfpbrush.hxx:70
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleHorizontalBrick
-drawinglayer/source/tools/emfpbrush.hxx:71
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleWeave
-drawinglayer/source/tools/emfpbrush.hxx:72
-    enum emfplushelper::EmfPlusHatchStyle HatchStylePlaid
-drawinglayer/source/tools/emfpbrush.hxx:73
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDivot
-drawinglayer/source/tools/emfpbrush.hxx:74
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDottedGrid
-drawinglayer/source/tools/emfpbrush.hxx:75
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleDottedDiamond
-drawinglayer/source/tools/emfpbrush.hxx:76
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleShingle
-drawinglayer/source/tools/emfpbrush.hxx:77
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleTrellis
-drawinglayer/source/tools/emfpbrush.hxx:78
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleSphere
-drawinglayer/source/tools/emfpbrush.hxx:79
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleSmallGrid
-drawinglayer/source/tools/emfpbrush.hxx:80
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleSmallCheckerBoard
-drawinglayer/source/tools/emfpbrush.hxx:81
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleLargeCheckerBoard
-drawinglayer/source/tools/emfpbrush.hxx:82
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleOutlinedDiamond
-drawinglayer/source/tools/emfpbrush.hxx:83
-    enum emfplushelper::EmfPlusHatchStyle HatchStyleSolidDiamond
+chart2/source/controller/dialogs/dlg_DataSource.cxx:83
+    enum chart::DataSourceDialogPages TP_RANGECHOOSER
+chart2/source/controller/dialogs/dlg_DataSource.cxx:84
+    enum chart::DataSourceDialogPages TP_DATA_SOURCE
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeUnknown
 include/connectivity/dbtools.hxx:822
     enum connectivity::dbase::DBFType dBaseIVMemo
 include/desktop/exithelper.h:25
-    enum EExitCodes EXITHELPER_NO_ERROR
-include/desktop/exithelper.h:25
     int EXITHELPER_NO_ERROR
-include/desktop/exithelper.h:29
+include/desktop/exithelper.h:25
+    enum EExitCodes EXITHELPER_NO_ERROR
+include/desktop/exithelper.h:27
     int EXITHELPER_FATAL_ERROR
 include/editeng/borderline.hxx:128
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
+include/editeng/editstat.hxx:83
+    enum EditStatusFlags CRSRLEFTPARA
 include/i18nutil/transliteration.hxx:45
     enum TransliterationFlags NumToTextLower_zh_CN
 include/i18nutil/transliteration.hxx:47
@@ -114,8 +40,6 @@ include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled
 include/oox/ole/axfontdata.hxx:40
     enum AxFontFlags AutoColor
-include/oox/ppt/animationspersist.hxx:43
-    enum oox::ppt::(anonymous at /home/noel/libo2/include/oox/ppt/animationspersist.hxx:36:5) NP_ENDSYNC
 include/unotools/eventcfg.hxx:29
     enum GlobalEventId STARTAPP
 include/unotools/eventcfg.hxx:30
@@ -123,15 +47,15 @@ include/unotools/eventcfg.hxx:30
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::beans::XPropertySet, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
-    enum utl::SharedUNOComponent<class com::sun::star::sdb::XSingleSelectQueryComposer, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+    enum utl::SharedUNOComponent<class com::sun::star::sdbc::XPreparedStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::sdbc::XStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
-include/unotools/sharedunocomponent.hxx:149
-    enum utl::SharedUNOComponent<class com::sun::star::sdbc::XPreparedStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::uno::XInterface, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::sdb::XSingleSelectQueryComposer, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::embed::XStorage, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/vcl/keycod.hxx:29
@@ -154,18 +78,20 @@ include/vcl/keycod.hxx:33
     enum KeyFuncType FINDBACKWARD
 include/vcl/syswin.hxx:54
     enum WindowStateState FullScreen
+include/vcl/window.hxx:118
+    enum TrackingEventFlags Focus
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
-    enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
+    enum (anonymous at /media/noel/disk2/libo4/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
 libreofficekit/source/gtk/lokdocview.cxx:287
-    enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
+    enum (anonymous at /media/noel/disk2/libo4/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
 sc/source/filter/excel/xiescher.cxx:460
-    enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
+    enum (anonymous at /media/noel/disk2/libo4/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
     enum WKTYP eWK4
 sc/source/ui/inc/anyrefdg.hxx:192
-    enum ScRefHdlrImpl<class ScValidationDlg, class SfxTabDialog, false>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
+    enum ScRefHdlrImpl::(anonymous at /media/noel/disk2/libo4/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:192
-    enum ScRefHdlrImpl::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
+    enum ScRefHdlrImpl<class ScValidationDlg, class SfxTabDialog, false>::(anonymous at /media/noel/disk2/libo4/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:105
     enum (anonymous namespace)::ScRegType LINEAR
 svx/inc/sxmkitm.hxx:25
@@ -184,76 +110,12 @@ sw/inc/docary.hxx:74
     enum SwVectorModifyBase::DestructorPolicy KeepElements
 sw/inc/docary.hxx:75
     enum SwVectorModifyBase::DestructorPolicy FreeElements
-sw/inc/poolfmt.hxx:96
-    enum RES_POOLFMT RES_POOL_CHRFMT
-sw/inc/poolfmt.hxx:97
-    enum RES_POOLFMT RES_POOL_FRMFMT
-sw/inc/poolfmt.hxx:98
-    enum RES_POOLFMT RES_POOL_TXTCOLL
-sw/inc/poolfmt.hxx:99
-    enum RES_POOLFMT RES_POOL_PAGEFMT
-sw/inc/poolfmt.hxx:101
-    enum RES_POOLFMT RES_POOL_PARFMT
-sw/inc/poolfmt.hxx:102
-    enum RES_POOLFMT RES_POOL_GRFFMT
-sw/inc/poolfmt.hxx:103
-    enum RES_POOLFMT RES_POOLFMT_END
-sw/inc/poolfmt.hxx:209
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLACK1
-sw/inc/poolfmt.hxx:210
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLACK2
-sw/inc/poolfmt.hxx:211
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BLUE
-sw/inc/poolfmt.hxx:212
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_BROWN
-sw/inc/poolfmt.hxx:213
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY
-sw/inc/poolfmt.hxx:214
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_3D
-sw/inc/poolfmt.hxx:215
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_GRAY
-sw/inc/poolfmt.hxx:216
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_LAVENDER
-sw/inc/poolfmt.hxx:217
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_CURRENCY_TURQUOISE
-sw/inc/poolfmt.hxx:218
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_GRAY
-sw/inc/poolfmt.hxx:219
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_GREEN
-sw/inc/poolfmt.hxx:220
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LAVENDER
-sw/inc/poolfmt.hxx:221
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_RED
-sw/inc/poolfmt.hxx:222
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_TURQUOISE
-sw/inc/poolfmt.hxx:223
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_YELLOW
-sw/inc/poolfmt.hxx:225
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_ACADEMIC
-sw/inc/poolfmt.hxx:226
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_BOX_LIST_BLUE
-sw/inc/poolfmt.hxx:227
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_BOX_LIST_GREEN
-sw/inc/poolfmt.hxx:228
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_BOX_LIST_RED
-sw/inc/poolfmt.hxx:229
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_BOX_LIST_YELLOW
-sw/inc/poolfmt.hxx:230
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_ELEGANT
-sw/inc/poolfmt.hxx:231
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_FINANCIAL
-sw/inc/poolfmt.hxx:232
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_COLUMNS
-sw/inc/poolfmt.hxx:233
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_ROWS
-sw/inc/poolfmt.hxx:234
-    enum RES_POOL_TABSTYLE_TYPE RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
 sw/source/filter/ww8/ww8scan.hxx:388
     enum ePLCFT SEP
 sw/source/filter/ww8/ww8struc.hxx:944
-    enum WW8_FSPA::FSPAOrient RelText
-sw/source/filter/ww8/ww8struc.hxx:944
     enum WW8_FSPA::FSPAOrient RelPgMargin
+sw/source/filter/ww8/ww8struc.hxx:944
+    enum WW8_FSPA::FSPAOrient RelText
 sw/source/ui/fldui/fldref.cxx:762
     enum FMT_REF_IDX FMT_REF_PAGE_IDX
 sw/source/ui/fldui/fldref.cxx:763
@@ -288,10 +150,10 @@ vcl/inc/unx/saldisp.hxx:65
     srv_vendor_t vendor_none
 vcl/source/gdi/CommonSalLayout.cxx:129
     enum (anonymous namespace)::VerticalOrientation Rotated
-vcl/unx/gtk3/gtk3gtkinst.cxx:2524
-    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:2522:1) PROP_0
-vcl/unx/gtk3/gtk3gtkinst.cxx:2529
-    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:2522:1) PROP_SHADOW_TYPE
+vcl/unx/gtk3/gtk3gtkinst.cxx:2645
+    enum (anonymous at /media/noel/disk2/libo4/vcl/unx/gtk3/gtk3gtkinst.cxx:2643:1) PROP_0
+vcl/unx/gtk3/gtk3gtkinst.cxx:2650
+    enum (anonymous at /media/noel/disk2/libo4/vcl/unx/gtk3/gtk3gtkinst.cxx:2643:1) PROP_SHADOW_TYPE
 writerfilter/source/ooxml/OOXMLFactory.hxx:36
     enum writerfilter::ooxml::ResourceType NoResource
 writerfilter/source/ooxml/OOXMLFactory.hxx:37
