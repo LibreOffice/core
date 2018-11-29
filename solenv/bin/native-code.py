@@ -61,7 +61,8 @@ core_factory_list = [
     ("libxmlscriptlo.a", "xmlscript_component_getFactory"),
     ("libmcnttype.a", "mcnttype_component_getFactory"),
     ("libvcllo.a", "vcl_component_getFactory"),
-    ("libspelllo.a", "spell_component_getFactory")
+    ("libspelllo.a", "spell_component_getFactory"),
+    ("libsvtlo.a", "svt_component_getFactory")
     ]
 
 core_constructor_list = [
