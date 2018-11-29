@@ -118,6 +118,7 @@ public:
     void testDeletedDataLabel();
     void testDataPointInheritedColorDOCX();
     void testExternalStrRefsXLSX();
+    void testSourceNumberFormatComplexCategoriesXLS();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -190,6 +191,7 @@ public:
     CPPUNIT_TEST(testDeletedDataLabel);
     CPPUNIT_TEST(testDataPointInheritedColorDOCX);
     CPPUNIT_TEST(testExternalStrRefsXLSX);
+    CPPUNIT_TEST(testSourceNumberFormatComplexCategoriesXLS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1698,6 +1700,18 @@ void Chart2ImportTest::testExternalStrRefsXLSX()
     css::uno::Sequence<css::uno::Any> aValues = aScaleData.Categories->getValues()->getData();
     CPPUNIT_ASSERT_EQUAL(OUString("test1"), aValues[0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("test2"), aValues[1].get<OUString>());
+}
+
+void Chart2ImportTest::testSourceNumberFormatComplexCategoriesXLS()
+{
+    load("/chart2/qa/extras/data/xls/", "source_number_format_axis.xls");
+    uno::Reference< chart2::XChartDocument > xChartDoc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    sal_Int32 nNumberFormat =  aScaleData.Categories->getValues()->getNumberFormatKeyByIndex(-1);
+    CPPUNIT_ASSERT(nNumberFormat != 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
