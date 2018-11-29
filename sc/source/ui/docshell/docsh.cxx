@@ -580,28 +580,6 @@ bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const css::uno::Reference< css
     return bRet;
 }
 
-bool ScDocShell::SaveCurrentChart( SfxMedium& rMedium )
-{
-    try
-    {
-
-        uno::Reference< lang::XComponent > xCurrentComponent = frame::Desktop::create( comphelper::getProcessComponentContext() )->getCurrentComponent();
-
-        uno::Reference< frame::XStorable2 > xStorable( xCurrentComponent, uno::UNO_QUERY_THROW );
-
-        uno::Reference< frame::XModel > xChartDoc ( xCurrentComponent, uno::UNO_QUERY_THROW );
-
-        ScXMLChartExportWrapper aExport( xChartDoc, rMedium );
-        aExport.Export();
-        return true;
-    }
-    catch(...)
-    {
-        SAL_WARN("sc", "exception thrown while saving chart. Bug!!!");
-        return false;
-    }
-}
-
 bool ScDocShell::Load( SfxMedium& rMedium )
 {
     LoadMediumGuard aLoadGuard(&m_aDocument);
@@ -1846,21 +1824,10 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
 
     PrepareSaveGuard aPrepareGuard( *this);
 
-    OUString aFltName = rMedium.GetFilter()->GetFilterName();
-    bool bChartExport = aFltName.indexOf("chart8") != -1;
-
     //  wait cursor is handled with progress bar
-    bool bRet = false;
-    if(!bChartExport)
-    {
-        bRet = SfxObjectShell::SaveAs( rMedium );
-        if (bRet)
-            bRet = SaveXML( &rMedium, nullptr );
-    }
-    else
-    {
-        bRet = SaveCurrentChart( rMedium );
-    }
+    bool bRet = SfxObjectShell::SaveAs( rMedium );
+    if (bRet)
+        bRet = SaveXML( &rMedium, nullptr );
 
     return bRet;
 }

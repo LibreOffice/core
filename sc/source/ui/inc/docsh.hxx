@@ -137,8 +137,6 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE bool          SaveXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
     SAL_DLLPRIVATE SCTAB         GetSaveTab();
 
-    SAL_DLLPRIVATE static bool   SaveCurrentChart( SfxMedium& rMedium );
-
     SAL_DLLPRIVATE ErrCode       DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
                                              std::map<SCCOL, ScColWidthParam>& aColWidthParam, ScFlatBoolRowSegments& rRowHeightsRecalc );
     SAL_DLLPRIVATE ErrCode       DBaseExport(
