@@ -79,9 +79,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-
-#define IMPORT_SVC_NAME "com.sun.star.xml.XMLImportFilter"
-
 namespace {
 
 SmNode* popOrZero(SmNodeStack& rStack)
@@ -450,21 +447,12 @@ Math_XMLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
                                          SvXMLImportFlags::META));
 }
 
-OUString SmXMLImportSettings_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+Math_XMLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
+                                                 uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return OUString( "com.sun.star.comp.Math.XMLOasisSettingsImporter" );
-}
-
-uno::Sequence< OUString > SmXMLImportSettings_getSupportedServiceNames()
-        throw()
-{
-    return uno::Sequence<OUString>{ IMPORT_SVC_NAME };
-}
-
-uno::Reference< uno::XInterface > SmXMLImportSettings_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportSettings_getImplementationName(), SvXMLImportFlags::SETTINGS ));
+    return cppu::acquire(new SmXMLImport(pCtx, "com.sun.star.comp.Math.XMLOasisSettingsImporter",
+                                         SvXMLImportFlags::SETTINGS));
 }
 
 sal_Int64 SAL_CALL SmXMLImport::getSomething(
