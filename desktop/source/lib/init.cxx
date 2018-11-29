@@ -3807,6 +3807,8 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     if (!xCertificate.is())
         return false;
 
+    SolarMutexGuard aGuard;
+
     return pObjectShell->SignDocumentContentUsingCertificate(xCertificate);
 }
 
@@ -3883,6 +3885,8 @@ static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     if (!pObjectShell)
         return int(SignatureState::UNKNOWN);
+
+    SolarMutexGuard aGuard;
 
     pObjectShell->RecheckSignature(false);
 
