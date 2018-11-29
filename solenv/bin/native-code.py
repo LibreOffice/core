@@ -401,7 +401,6 @@ constructor_map = {
 custom_widgets = [
     'ArgEdit',
     'AutoCompleteMultiListBox',
-    'AutoCorrEdit',
     'BookmarksBox',
     'CaptionComboBox',
     'CategoryListBox',
