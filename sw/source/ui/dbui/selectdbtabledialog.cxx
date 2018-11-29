@@ -63,7 +63,7 @@ SwAddressTable::SwAddressTable(SvSimpleTableContainer& rParent)
 
 void SwAddressTable::InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText)
 {
-    GetTheHeaderBar().InsertItem( nColumn, rText, 0, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
+    GetTheHeaderBar().InsertItem( nColumn, rText, 0, HeaderBarItemBits::LEFT );
 }
 
 void SwAddressTable::Resize()

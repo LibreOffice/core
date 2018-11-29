@@ -1368,10 +1368,8 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
 
     long nTabSize = aBoxSize.Width() / 2;
 
-    m_pHeaderBar->InsertItem( ITEMID_NAME, aStr1, nTabSize,
-                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
-    m_pHeaderBar->InsertItem( ITEMID_TYPE, aStr2, nTabSize,
-                            HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
+    m_pHeaderBar->InsertItem( ITEMID_NAME, aStr1, nTabSize, HeaderBarItemBits::LEFT );
+    m_pHeaderBar->InsertItem( ITEMID_TYPE, aStr2, nTabSize, HeaderBarItemBits::LEFT );
 
     static long nTabs[] = {0, nTabSize };
 

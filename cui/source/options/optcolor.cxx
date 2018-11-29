@@ -840,7 +840,7 @@ void ColorConfigCtrl_Impl::InitHeaderBar(const OUString &rOn, const OUString &rU
     const OUString &rColorSetting)
 {
     // filling
-    const HeaderBarItemBits nHeadBits = HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS;
+    const HeaderBarItemBits nHeadBits = HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS;
     m_pHeaderHB->InsertItem(1, rOn, 0, nHeadBits | HeaderBarItemBits::CENTER);
     m_pHeaderHB->InsertItem(2, rUIElems, 0, nHeadBits | HeaderBarItemBits::LEFT);
     m_pHeaderHB->InsertItem(3, rColorSetting, 0, nHeadBits | HeaderBarItemBits::LEFT);

@@ -45,7 +45,7 @@ namespace textconversiondlgs
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define HEADER_BAR_BITS ( HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS )
+#define HEADER_BAR_BITS ( HeaderBarItemBits::LEFT | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS )
 
 DictionaryList::DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits)
     : SvSimpleTable(rParent, nBits)

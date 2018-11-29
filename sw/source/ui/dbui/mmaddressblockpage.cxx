@@ -1173,7 +1173,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
     Size aOutputSize(m_pFieldsControl->m_aHeaderHB->GetSizePixel());
     sal_Int32 nFirstWidth;
     sal_Int32 nSecondWidth = nFirstWidth = aOutputSize.Width() / 3;
-    const HeaderBarItemBits nHeadBits = HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXED| HeaderBarItemBits::FIXEDPOS;
+    const HeaderBarItemBits nHeadBits = HeaderBarItemBits::FIXED| HeaderBarItemBits::FIXEDPOS;
     m_pFieldsControl->m_aHeaderHB->InsertItem( 1, sAddressElement, nFirstWidth, nHeadBits|HeaderBarItemBits::LEFT);
     m_pFieldsControl->m_aHeaderHB->InsertItem( 2, sMatchesTo,      nSecondWidth, nHeadBits|HeaderBarItemBits::LEFT);
     m_pFieldsControl->m_aHeaderHB->InsertItem( 3, sPreview,

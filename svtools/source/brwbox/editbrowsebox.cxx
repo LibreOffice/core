@@ -1094,7 +1094,7 @@ return;
         if (!w)
             w = GetDefaultColumnWidth(rName);
 
-        InsertDataColumn(nId, rName, w, (HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE), nPos);
+        InsertDataColumn(nId, rName, w, (HeaderBarItemBits::CENTER | HeaderBarItemBits::CLICKABLE), nPos);
         return nId;
     }
 
