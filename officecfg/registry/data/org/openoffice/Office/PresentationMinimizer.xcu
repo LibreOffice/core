@@ -88,7 +88,7 @@
             <value xml:lang="en-US">~Embed external images</value>
         </prop>
         <prop oor:name="STR_OLE_OBJECTS">
-            <value xml:lang="en-US">OLE Objects</value>
+            <value xml:lang="en-US">OLE-Objects</value>
         </prop>
         <prop oor:name="STR_OLE_OPTIMIZATION">
             <value xml:lang="en-US">Choose settings for replacing OLE objects</value>

@@ -82,7 +82,7 @@
       </node>
       <node oor:name="private:resource/popupmenu/oleobject" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">OLE Object</value>
+          <value xml:lang="en-US">OLE-Object</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/pagebreak" oor:op="replace">
@@ -735,7 +735,7 @@
       </node>
       <node oor:name="private:resource/toolbar/notebookbarshortcuts" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Notebookbar shortcuts</value>
+          <value xml:lang="en-US">Notebookbar Shortcuts</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>

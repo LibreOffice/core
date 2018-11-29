@@ -47,7 +47,7 @@
       </node>
       <node oor:name="private:resource/popupmenu/oleobject" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">OLE Object</value>
+          <value xml:lang="en-US">OLE-Object</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/preview" oor:op="replace">
