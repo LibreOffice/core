@@ -1427,7 +1427,20 @@ static Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
 
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 {
+    bool bDealingWithTwips = false;
     const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+    if (bTiledRendering)
+    {
+        // We gets the position in twips
+        if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
+        {
+            if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+            {
+                bDealingWithTwips = true;
+            }
+        }
+    }
+
     tools::Rectangle aRect(GetMarkedObjRect());
 
     if(GetSdrPageView())
@@ -1442,8 +1455,14 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     SdrObject* pObj=nullptr;
 
     RectPoint eSizePoint=RectPoint::MM;
-    long nPosDX=0;
-    long nPosDY=0;
+    long nPosX=aRect.Left();
+    long nPosY=aRect.Top();
+    if (bDealingWithTwips)
+    {
+        nPosX = OutputDevice::LogicToLogic(nPosX, MapUnit::Map100thMM, MapUnit::MapTwip);
+        nPosY = OutputDevice::LogicToLogic(nPosY, MapUnit::Map100thMM, MapUnit::MapTwip);
+    }
+
     long nSizX=0;
     long nSizY=0;
     long nRotateAngle=0;
@@ -1485,26 +1504,29 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // position
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem)) {
-        nPosDX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - aRect.Left();
+        nPosX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         bChgPos=true;
     }
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,true,&pPoolItem)){
-        nPosDY=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - aRect.Top();
+        nPosY=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         bChgPos=true;
     }
     // size
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,true,&pPoolItem)) {
-        nSizX=static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
+        nSizX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         bChgSiz=true;
         bChgWdh=true;
     }
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,true,&pPoolItem)) {
-        nSizY=static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
+        nSizY=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         bChgSiz=true;
         bChgHgt=true;
     }
     if (bChgSiz) {
-        eSizePoint=static_cast<RectPoint>(rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT).GetValue());
+        if (bTiledRendering && SfxItemState::SET != rAttr.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT, true, &pPoolItem))
+            eSizePoint = RectPoint::LT;
+        else
+            eSizePoint = static_cast<RectPoint>(rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT).GetValue());
     }
 
     // rotation
@@ -1570,6 +1592,18 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         bSetAttr=true;
     }
 
+    if(bDealingWithTwips) {
+        nPosX = OutputDevice::LogicToLogic(nPosX, MapUnit::MapTwip, MapUnit::Map100thMM);
+        nPosY = OutputDevice::LogicToLogic(nPosY, MapUnit::MapTwip, MapUnit::Map100thMM);
+        nSizX = OutputDevice::LogicToLogic(nSizX, MapUnit::MapTwip, MapUnit::Map100thMM);
+        nSizY = OutputDevice::LogicToLogic(nSizY, MapUnit::MapTwip, MapUnit::Map100thMM);
+        nRotateX = OutputDevice::LogicToLogic(nRotateX, MapUnit::MapTwip, MapUnit::Map100thMM);
+        nRotateY = OutputDevice::LogicToLogic(nRotateY, MapUnit::MapTwip, MapUnit::Map100thMM);
+    }
+
+    long nPosDX = nPosX - aRect.Left();
+    long nPosDY = nPosY - aRect.Top();
+
     ForcePossibilities();
 
     BegUndo(SvxResId(STR_EditTransform),GetDescriptionOfMarkedObjects());
@@ -1598,14 +1632,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
         if(GetSdrPageView())
         {
-            if(bTiledRendering) {
-                // We gets the position in twips
-                if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
-                {
-                    if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                        aRef = OutputDevice::LogicToLogic(aRef, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
-                }
-            }
             GetSdrPageView()->PagePosToLogic(aRef);
         }
 

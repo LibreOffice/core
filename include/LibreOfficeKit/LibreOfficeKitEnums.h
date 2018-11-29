@@ -171,9 +171,11 @@ typedef enum
      */
     LOK_CALLBACK_CURSOR_VISIBLE = 5,
     /**
-     * The size and/or the position of the graphic selection changed.
+     * The size and/or the position of the graphic selection changed and
+     * the rotation angle of the embedded graphic object
      *
-     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     * Format is "x, y, width, height, angle", where angle is in 100th
+     * of degree.
      */
     LOK_CALLBACK_GRAPHIC_SELECTION = 6,
 
