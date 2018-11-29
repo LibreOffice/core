@@ -2283,6 +2283,7 @@ public:
     virtual void make_sorted() override
     {
         m_xTreeView->SetStyle(m_xTreeView->GetStyle() | WB_SORT);
+        m_xTreeView->Resort();
     }
 
     SvTabListBox& getTreeView()
