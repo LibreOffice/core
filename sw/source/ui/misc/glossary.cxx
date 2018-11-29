@@ -632,12 +632,12 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, Button*, void)
         if(bIsWritable)
         {
 
-            ScopedVclPtrInstance< SwGlossaryGroupDlg > pDlg( this, pGloss->GetPathArray(), pGlossaryHdl );
-            if ( RET_OK == pDlg->Execute() )
+            SwGlossaryGroupDlg aDlg(GetFrameWeld(), pGloss->GetPathArray(), pGlossaryHdl);
+            if (aDlg.run() == RET_OK)
             {
                 Init();
                 //if new groups were created - select one of them
-                const OUString sNewGroup = pDlg->GetCreatedGroupName();
+                const OUString sNewGroup = aDlg.GetCreatedGroupName();
                 SvTreeListEntry* pEntry = m_pCategoryBox->First();
                 while (!sNewGroup.isEmpty() && pEntry)
                 {
