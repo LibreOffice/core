@@ -211,6 +211,7 @@ private:
 
     DECL_LINK(FocusInListener, VclWindowEvent&, void);
     DECL_LINK(FocusOutListener, VclWindowEvent&, void);
+    DECL_LINK(ResizeListener, VclWindowEvent&, void);
 
     const bool m_bTakeOwnership;
     int m_nBlockNotify;
@@ -423,6 +424,22 @@ public:
         weld::Widget::connect_focus_out(rLink);
     }
 
+    virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
+    {
+        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, ResizeListener));
+        weld::Widget::connect_size_allocate(rLink);
+    }
+
+    virtual bool get_extents_relative_to(Widget& rRelative, int& x, int &y, int& width, int &height) override
+    {
+        tools::Rectangle aRect(m_xWidget->GetWindowExtentsRelative(dynamic_cast<SalInstanceWidget&>(rRelative).getWidget()));
+        x = aRect.Left();
+        y = aRect.Top();
+        width = aRect.GetWidth();
+        height = aRect.GetHeight();
+        return true;
+    }
+
     virtual void grab_add() override
     {
         m_xWidget->CaptureMouse();
@@ -462,6 +479,8 @@ public:
 
     virtual ~SalInstanceWidget() override
     {
+        if (m_aSizeAllocateHdl.IsSet())
+            m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, ResizeListener));
         if (m_aFocusInHdl.IsSet())
             m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, FocusInListener));
         if (m_aFocusOutHdl.IsSet())
@@ -506,6 +525,14 @@ IMPL_LINK(SalInstanceWidget, FocusOutListener, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VclEventId::WindowLoseFocus || rEvent.GetId() == VclEventId::WindowDeactivate)
         signal_focus_out();
+}
+
+IMPL_LINK(SalInstanceWidget, ResizeListener, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::WindowResize)
+    {
+        m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
+    }
 }
 
 namespace
@@ -749,21 +776,6 @@ public:
     virtual void window_move(int x, int y) override
     {
         m_xWindow->SetPosPixel(Point(x, y));
-    }
-
-    vcl::Window* getWindow()
-    {
-        return m_xWindow.get();
-    }
-
-    virtual bool get_extents_relative_to(Window& rRelative, int& x, int &y, int& width, int &height) override
-    {
-        tools::Rectangle aRect(m_xWindow->GetWindowExtentsRelative(dynamic_cast<SalInstanceWindow&>(rRelative).getWindow()));
-        x = aRect.Left();
-        y = aRect.Top();
-        width = aRect.GetWidth();
-        height = aRect.GetHeight();
-        return true;
     }
 
     virtual Size get_size() const override
@@ -1591,6 +1603,7 @@ private:
 
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(CursorListener, VclWindowEvent&, void);
+    DECL_LINK(ActivateHdl, Edit&, bool);
 
     class WeldTextFilter : public TextFilter
     {
@@ -1623,6 +1636,7 @@ public:
         , m_aTextFilter(m_aInsertTextHdl)
     {
         m_xEntry->SetModifyHdl(LINK(this, SalInstanceEntry, ChangeHdl));
+        m_xEntry->SetActivateHdl(LINK(this, SalInstanceEntry, ActivateHdl));
         m_xEntry->SetTextFilter(&m_aTextFilter);
     }
 
@@ -1743,6 +1757,7 @@ public:
         if (m_aCursorPositionHdl.IsSet())
             m_xEntry->RemoveEventListener(LINK(this, SalInstanceEntry, CursorListener));
         m_xEntry->SetTextFilter(nullptr);
+        m_xEntry->SetActivateHdl(Link<Edit&, bool>());
         m_xEntry->SetModifyHdl(Link<Edit&, void>());
     }
 };
@@ -1758,6 +1773,11 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
         return;
     if (rEvent.GetId() == VclEventId::EditSelectionChanged || rEvent.GetId() == VclEventId::EditCaretChanged)
         signal_cursor_position();
+}
+
+IMPL_LINK_NOARG(SalInstanceEntry, ActivateHdl, Edit&, bool)
+{
+    return m_aActivateHdl.Call(*this);
 }
 
 struct SalInstanceTreeIter : public weld::TreeIter
@@ -1934,6 +1954,17 @@ public:
             m_xTreeView->Select(pEntry, true);
         }
         enable_notify_events();
+    }
+
+    virtual void set_cursor(int pos) override
+    {
+        if (pos == -1)
+            m_xTreeView->SetCurEntry(nullptr);
+        else
+        {
+            SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+            m_xTreeView->SetCurEntry(pEntry);
+        }
     }
 
     virtual void scroll_to_row(int pos) override
@@ -2645,6 +2676,11 @@ public:
         m_xDrawingArea->queue_resize();
     }
 
+    virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override
+    {
+        weld::Widget::connect_size_allocate(rLink);
+    }
+
     virtual a11yref get_accessible_parent() override
     {
         vcl::Window* pParent = m_xDrawingArea->GetParent();
@@ -2979,7 +3015,7 @@ class SalInstanceComboBoxWithEdit : public SalInstanceComboBox<ComboBox>
 {
 private:
     DECL_LINK(ChangeHdl, Edit&, void);
-    DECL_LINK(EntryActivateHdl, Edit&, void);
+    DECL_LINK(EntryActivateHdl, Edit&, bool);
 public:
     SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, bool bTakeOwnership)
         : SalInstanceComboBox<::ComboBox>(pComboBox, bTakeOwnership)
@@ -3064,7 +3100,7 @@ public:
 
     virtual ~SalInstanceComboBoxWithEdit() override
     {
-        m_xComboBox->SetEntryActivateHdl(Link<Edit&, void>());
+        m_xComboBox->SetEntryActivateHdl(Link<Edit&, bool>());
         m_xComboBox->SetModifyHdl(Link<Edit&, void>());
     }
 };
@@ -3074,9 +3110,9 @@ IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, ChangeHdl, Edit&, void)
     signal_changed();
 }
 
-IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, EntryActivateHdl, Edit&, void)
+IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, EntryActivateHdl, Edit&, bool)
 {
-    m_aEntryActivateHdl.Call(*this);
+    return m_aEntryActivateHdl.Call(*this);
 }
 
 class SalInstanceEntryTreeView : public SalInstanceContainer, public virtual weld::EntryTreeView
