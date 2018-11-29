@@ -1123,7 +1123,7 @@ SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rM
 
     pMenu->RemoveDisabledEntries(false);
 
-    return pMenu;
+    return std::move(pMenu);
 }
 
 IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
