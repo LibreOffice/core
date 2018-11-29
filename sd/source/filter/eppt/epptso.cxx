@@ -664,7 +664,6 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
     bool                bFirstParagraph = true;
     sal_uInt32          nCharCount;
     sal_uInt32          nPropertyFlags = 0;
-    sal_uInt16          nDepth = 0;
     sal_Int16           nLineSpacing;
     int                 nInstance = rTextObj.GetInstance();
 
@@ -673,10 +672,6 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         ParagraphObj* pPara = rTextObj.GetParagraph(i);
         const PortionObj& rPortion = pPara->front();
         nCharCount = pPara->CharacterCount();
-
-        nDepth = pPara->nDepth;
-        if ( nDepth > 4)
-            nDepth = 4;
 
         if ( ( pPara->meTextAdjust == css::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_Adjust, pPara->mnTextAdjust ) ) )
@@ -727,7 +722,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbParagraphPunctation ? 1 : 0 ) ) )
             nPropertyFlags |= 0x00080000;
         if ( ( pPara->meBiDi == css::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, nDepth, ParaAttr_BiDi, pPara->mnBiDi ) ) )
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_BiDi, pPara->mnBiDi ) ) )
             nPropertyFlags |= 0x00200000;
 
         sal_Int32 nBuRealSize = pPara->nBulletRealSize;
@@ -742,16 +737,16 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         }
 
         // Write nTextOfs and nBullets
-        if ( mpStyleSheet->IsHardAttribute( nInstance, nDepth, ParaAttr_TextOfs, pPara->nTextOfs ) )
+        if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_TextOfs, pPara->nTextOfs ) )
             nPropertyFlags |= 0x100;
-        if ( mpStyleSheet->IsHardAttribute( nInstance, nDepth, ParaAttr_BulletOfs, pPara->nBulletOfs ))
+        if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_BulletOfs, pPara->nBulletOfs ))
             nPropertyFlags |= 0x400;
 
         FontCollectionEntry aFontDescEntry( pPara->aFontDesc.Name, pPara->aFontDesc.Family, pPara->aFontDesc.Pitch, pPara->aFontDesc.CharSet );
         sal_uInt16  nFontId = static_cast<sal_uInt16>(maFontCollection.GetId( aFontDescEntry ));
 
         rOut.WriteUInt32( nCharCount )
-            .WriteUInt16( nDepth )                          // Level
+            .WriteUInt16( pPara->nDepth )       // Level
             .WriteUInt32( nPropertyFlags );     // Paragraph Attribut Set
 
         if ( nPropertyFlags & 0xf )
@@ -1213,7 +1208,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         {
             pPara = aTextObj.GetParagraph(0);
             sal_uInt32  nParaFlags = 0x1f;
-            sal_Int16   nDepth, nMask, nNumberingRule[ 10 ];
+            sal_Int16   nMask, nNumberingRule[ 10 ];
             sal_uInt32  nTextOfs = pPara->nTextOfs;
             sal_uInt32  nTabs = pPara->maTabStop.getLength();
             const css::style::TabStop* pTabStop = pPara->maTabStop.getConstArray();
@@ -1223,20 +1218,16 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                 pPara = aTextObj.GetParagraph(i);
                 if ( pPara->bExtendedParameters )
                 {
-                    nDepth = pPara->nDepth;
-                    if ( nDepth < 5 )
+                    nMask = 1 << pPara->nDepth;
+                    if ( nParaFlags & nMask )
                     {
-                        nMask = 1 << nDepth;
-                        if ( nParaFlags & nMask )
+                        nParaFlags &=~ nMask;
+                        if ( ( rParaSheet.maParaLevel[ pPara->nDepth ].mnTextOfs != pPara->nTextOfs ) ||
+                            ( rParaSheet.maParaLevel[ pPara->nDepth ].mnBulletOfs != pPara->nBulletOfs ) )
                         {
-                            nParaFlags &=~ nMask;
-                            if ( ( rParaSheet.maParaLevel[ nDepth ].mnTextOfs != pPara->nTextOfs ) ||
-                                ( rParaSheet.maParaLevel[ nDepth ].mnBulletOfs != pPara->nBulletOfs ) )
-                            {
-                                nParaFlags |= nMask << 16;
-                                nNumberingRule[ nDepth << 1 ] = pPara->nTextOfs;
-                                nNumberingRule[ ( nDepth << 1 ) + 1 ] = static_cast<sal_Int16>(pPara->nBulletOfs);
-                            }
+                            nParaFlags |= nMask << 16;
+                            nNumberingRule[ pPara->nDepth << 1 ] = pPara->nTextOfs;
+                            nNumberingRule[ ( pPara->nDepth << 1 ) + 1 ] = static_cast<sal_Int16>(pPara->nBulletOfs);
                         }
                     }
                 }
@@ -2445,13 +2436,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount() ; ++i )
                                 {
                                     ParagraphObj* pPara = aTextObj.GetParagraph(i);
-                                    sal_uInt32 nCharCount = pPara->CharacterCount();
-                                    sal_uInt16 nDepth = pPara->nDepth;
-                                    if ( nDepth > 4)
-                                        nDepth = 4;
-
-                                    mpStrm->WriteUInt32( nCharCount )
-                                           .WriteUInt16( nDepth );
+                                    mpStrm->WriteUInt32( pPara->CharacterCount() )
+                                           .WriteUInt16( pPara->nDepth );
                                 }
                                 mpPptEscherEx->EndAtom( EPP_BaseTextPropAtom );
                                 mpPptEscherEx->AddAtom( 10, EPP_TextSpecInfoAtom );
