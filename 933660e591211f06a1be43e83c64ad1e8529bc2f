@@ -45,6 +45,30 @@
       "revId": "933660e591211f06a1be43e83c64ad1e8529bc2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f5c4f37_a7760a3e",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-11-29T09:13:32Z",
+      "side": 1,
+      "message": "ha, you are correct, that was accidental, I managed to run clang-tidy briefly while working on this",
+      "parentUuid": "9f5c4f37_e793e25b",
+      "range": {
+        "startLine": 229,
+        "startChar": 94,
+        "endLine": 229,
+        "endChar": 104
+      },
+      "revId": "933660e591211f06a1be43e83c64ad1e8529bc2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
