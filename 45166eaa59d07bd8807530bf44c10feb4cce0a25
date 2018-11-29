@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f5c4f37_87fe66ac",
+        "filename": "sc/IwyuFilter_sc.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-11-29T07:48:29Z",
+      "side": 1,
+      "message": "I was unable to figure out this one. Copying over all the headers has no effect either, after removing this include IWYU segfaults on the next run in any case.",
+      "range": {
+        "startLine": 552,
+        "startChar": 6,
+        "endLine": 552,
+        "endChar": 46
+      },
+      "revId": "45166eaa59d07bd8807530bf44c10feb4cce0a25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
