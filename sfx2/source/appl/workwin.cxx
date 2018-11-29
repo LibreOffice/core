@@ -55,6 +55,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <type_traits>
 #include <unordered_map>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1203,7 +1204,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
 
         // Is a ToolBox required in this context ?
         bool bModesMatching = (nUpdateMode != SfxVisibilityFlags::Invisible) && ((nTbxMode & nUpdateMode) == nUpdateMode);
-        if ( bDestroy )
+        if ( bDestroy || sfx2::SfxNotebookBar::IsActive())
         {
             OUString aTbxId = g_aTbxTypeName + GetResourceURLFromToolbarId(eId);
             xLayoutManager->destroyElement( aTbxId );
