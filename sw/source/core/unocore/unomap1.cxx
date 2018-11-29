@@ -147,6 +147,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextCursorPropertyM
     static SfxItemPropertyMapEntry const aCharAndParaMap_Impl[] =
     {
         COMPLETE_TEXT_CURSOR_MAP
+        FILL_PROPERTIES_SW
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
@@ -1015,6 +1016,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextPortionExtensio
     static SfxItemPropertyMapEntry const aTextPortionExtensionMap_Impl[] =
     {
         COMPLETE_TEXT_CURSOR_MAP
+        FILL_PROPERTIES_SW
         {OUString(UNO_NAME_BOOKMARK), FN_UNO_BOOKMARK, cppu::UnoType<css::text::XTextContent>::get(),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
         {OUString(UNO_NAME_CONTROL_CHARACTER), FN_UNO_CONTROL_CHARACTER, cppu::UnoType<sal_Int16>::get(),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
         {OUString(UNO_NAME_IS_COLLAPSED), FN_UNO_IS_COLLAPSED, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
@@ -1081,6 +1083,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePortionPrope
     static SfxItemPropertyMapEntry const aRedlinePortionMap_Impl[] =
     {
         COMPLETE_TEXT_CURSOR_MAP
+        FILL_PROPERTIES_SW
         {OUString(UNO_NAME_BOOKMARK), FN_UNO_BOOKMARK, cppu::UnoType<css::text::XTextContent>::get(),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
         {OUString(UNO_NAME_CONTROL_CHARACTER), FN_UNO_CONTROL_CHARACTER, cppu::UnoType<sal_Int16>::get(),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
         {OUString(UNO_NAME_IS_COLLAPSED), FN_UNO_IS_COLLAPSED, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
