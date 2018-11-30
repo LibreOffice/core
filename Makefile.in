@@ -178,9 +178,6 @@ clean-host:
 	rm -fr $(TESTINSTALLDIR)
 	rm -fr $(INSTDIR)
 	rm -fr $(WORKDIR)
-ifeq ($(OS),iOS)
-	rm -fr $(SRCDIR)/ios/generated
-endif
 
 clean-build:
 ifneq ($(CROSS_COMPILING),)
