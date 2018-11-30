@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -23,12 +24,16 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <cppu/unotype.hxx>
+
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScCellsObj : public CalcUnoApiTest, public apitest::XEnumerationAccess
+class ScCellsObj : public CalcUnoApiTest,
+                   public apitest::XElementAccess,
+                   public apitest::XEnumerationAccess
 {
 public:
     ScCellsObj();
@@ -38,6 +43,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScCellsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testHasElements);
+    CPPUNIT_TEST(testGetElementType);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -50,6 +59,7 @@ private:
 
 ScCellsObj::ScCellsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<table::XCell>::get())
 {
 }
 
