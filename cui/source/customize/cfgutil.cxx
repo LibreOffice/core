@@ -442,10 +442,6 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
 
 struct CuiConfigGroupBoxResource_Impl
 {
-    OUString m_hdImage;
-    OUString m_libImage;
-    OUString m_macImage;
-    OUString m_docImage;
     OUString m_sMyMacros;
     OUString m_sProdMacros;
     OUString m_sMacros;
@@ -456,10 +452,6 @@ struct CuiConfigGroupBoxResource_Impl
 };
 
 CuiConfigGroupBoxResource_Impl::CuiConfigGroupBoxResource_Impl() :
-    m_hdImage(RID_CUIBMP_HARDDISK),
-    m_libImage(RID_CUIBMP_LIB),
-    m_macImage(RID_CUIBMP_MACRO),
-    m_docImage(RID_CUIBMP_DOC),
     m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS)),
     m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
     m_sMacros(CuiResId(RID_SVXSTR_BASICMACROS)),
@@ -1493,7 +1485,7 @@ OUString CuiConfigGroupListBox::GetImage(
     {
         if (node->getName() == "user" || node->getName() == "share" )
         {
-            aImage = xImp->m_hdImage;
+            aImage = RID_CUIBMP_HARDDISK;
         }
         else
         {
@@ -1530,16 +1522,16 @@ OUString CuiConfigGroupListBox::GetImage(
             }
             else
             {
-                aImage = xImp->m_docImage;
+                aImage = RID_CUIBMP_DOC;
             }
         }
     }
     else
     {
         if( node->getType() == browse::BrowseNodeTypes::SCRIPT )
-            aImage = xImp->m_macImage;
+            aImage = RID_CUIBMP_MACRO;
         else
-            aImage = xImp->m_libImage;
+            aImage = RID_CUIBMP_LIB;
     }
     return aImage;
 }

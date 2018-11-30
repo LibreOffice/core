@@ -68,7 +68,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 {
     bChooseWithCursor = false;
     pEntryPaintDev = nullptr;
-    pCurEditedEntry = nullptr;
     pCurHighlightFrame = nullptr;
     pAnchor = nullptr;
     pHdlEntry = nullptr;
@@ -124,7 +123,6 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
 SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
 {
-    pCurEditedEntry = nullptr;
     Clear(false);
     CancelUserEvents();
     pImpCursor.reset();

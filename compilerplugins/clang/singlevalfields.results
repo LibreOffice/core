@@ -10,7 +10,7 @@ basctl/source/basicide/baside2.hxx:87
 basctl/source/inc/dlged.hxx:132
     basctl::DlgEditor aMarkIdle
     basctl DlgEditor Mark
-basic/source/runtime/methods.cxx:3450
+basic/source/runtime/methods.cxx:3439
     (anonymous namespace)::RandomNumberGenerator global_rng
     5489
 binaryurp/source/proxy.hxx:83
@@ -91,24 +91,45 @@ connectivity/source/inc/OColumn.hxx:48
 connectivity/source/inc/writer/WTable.hxx:69
     connectivity::writer::OWriterTable m_nStartCol
     0
-cui/source/inc/linkdlg.hxx:64
+cui/source/customize/cfgutil.cxx:445
+    CuiConfigGroupBoxResource_Impl m_hdImage
+    res/harddisk_16.png
+cui/source/customize/cfgutil.cxx:446
+    CuiConfigGroupBoxResource_Impl m_libImage
+    res/im30820.png
+cui/source/customize/cfgutil.cxx:447
+    CuiConfigGroupBoxResource_Impl m_macImage
+    res/im30821.png
+cui/source/customize/cfgutil.cxx:448
+    CuiConfigGroupBoxResource_Impl m_docImage
+    res/im30826.png
+cui/source/inc/cfgutil.hxx:228
+    CuiConfigGroupListBox m_pStylesInfo
+    0
+cui/source/inc/linkdlg.hxx:63
     SvBaseLinksDlg aUpdateIdle
     cui SvBaseLinksDlg UpdateIdle
-cui/source/inc/thesdlg.hxx:37
+cui/source/inc/thesdlg.hxx:38
     LookUpComboBox m_aModifyIdle
     cui LookUpComboBox Modify
 cui/source/options/optgdlg.cxx:1102
     LanguageConfig_Impl aLanguageOptions
     0
-cui/source/options/optjava.hxx:79
+cui/source/options/optjava.hxx:78
     SvxJavaOptionsPage m_aResetIdle
     cui options SvxJavaOptionsPage Reset
 cui/source/options/treeopt.cxx:456
     OptionsPageInfo m_pPage
     0
-cui/source/options/treeopt.cxx:472
-    OptionsGroupInfo m_bLoadError
-    0
+dbaccess/source/filter/xml/xmlStyleImport.hxx:74
+    dbaxml::OTableStylesContext sTableStyleServiceName
+    table
+dbaccess/source/filter/xml/xmlStyleImport.hxx:75
+    dbaxml::OTableStylesContext sColumnStyleServiceName
+    table-column
+dbaccess/source/filter/xml/xmlStyleImport.hxx:76
+    dbaxml::OTableStylesContext sCellStyleServiceName
+    table-cell
 desktop/source/app/cmdlineargs.hxx:137
     desktop::CommandLineArgs m_quickstart
     0
@@ -139,9 +160,6 @@ framework/source/uiconfiguration/imagemanagerimpl.hxx:182
 helpcompiler/inc/BasCodeTagger.hxx:35
     BasicCodeTagger m_Highlighter
     0
-i18npool/inc/collator_unicode.hxx:65
-    i18npool::Collator_Unicode implementationName
-    com.sun.star.i18n.Collator_Unicode
 include/basegfx/pixel/bpixel.hxx:43
     basegfx::BPixel::(anonymous union)::(anonymous) mnValue
     0
@@ -283,16 +301,16 @@ include/svx/svdmark.hxx:144
 include/svx/svdmark.hxx:145
     SdrMarkList mbGluePointNameOk
     0
-include/svx/svdmrkv.hxx:116
+include/svx/svdmrkv.hxx:111
     SdrMarkView mnFrameHandlesLimit
     50
 include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet maPropsToTest
     1
-include/vcl/ITiledRenderable.hxx:90
+include/vcl/ITiledRenderable.hxx:91
     vcl::ITiledRenderable mnTilePixelWidth
     256
-include/vcl/ITiledRenderable.hxx:90
+include/vcl/ITiledRenderable.hxx:91
     vcl::ITiledRenderable mnTilePixelHeight
     256
 include/vcl/opengl/OpenGLContext.hxx:57
@@ -301,6 +319,9 @@ include/vcl/opengl/OpenGLContext.hxx:57
 include/vcl/slider.hxx:39
     Slider mnChannelPixOffset
     0
+include/vcl/xtextedt.hxx:36
+    ExtTextEngine maGroupChars
+    (){}[]
 libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading
     0
@@ -328,6 +349,9 @@ sal/osl/unx/signal.cxx:82
 sal/osl/unx/sockimpl.hxx:37
     oslSocketImpl m_bIsInShutdown
     1
+sal/qa/osl/process/osl_process.cxx:151
+    Test_osl_executeProcess env_param_
+    -env
 sal/qa/osl/process/osl_Thread.cxx:214
     myThread m_aFlag
     0
@@ -364,7 +388,7 @@ sc/inc/scmod.hxx:81
 sc/inc/table.hxx:178
     ScTable mpRowHeights
     0
-sc/qa/unit/ucalc.hxx:41
+sc/qa/unit/ucalc.hxx:42
     Test::RangeNameDef mnIndex
     1
 sc/source/core/data/column.cxx:3377
@@ -388,16 +412,16 @@ sc/source/ui/inc/acredlin.hxx:50
 sc/source/ui/inc/acredlin.hxx:51
     ScAcceptChgDlg aReOpenIdle
     ScAcceptChgDlg ReOpenIdle
-sc/source/ui/inc/autostyl.hxx:57
+sc/source/ui/inc/autostyl.hxx:58
     ScAutoStyleList aTimer
     ScAutoStyleList Timer
-sc/source/ui/inc/autostyl.hxx:58
+sc/source/ui/inc/autostyl.hxx:59
     ScAutoStyleList aInitIdle
     ScAutoStyleList InitIdle
-sc/source/ui/inc/checklistmenu.hxx:155
+sc/source/ui/inc/checklistmenu.hxx:156
     ScMenuFloatingWindow::MenuItemData mpAction
     0
-sc/source/ui/inc/checklistmenu.hxx:156
+sc/source/ui/inc/checklistmenu.hxx:157
     ScMenuFloatingWindow::MenuItemData mpSubMenuWin
     0
 sc/source/ui/inc/conflictsdlg.hxx:134
@@ -412,7 +436,7 @@ sc/source/ui/inc/viewdata.hxx:288
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
     0
-sd/source/filter/html/htmlex.hxx:113
+sd/source/filter/html/htmlex.hxx:114
     HtmlExport mbAutoSlide
     1
 sd/source/ui/framework/module/ShellStackGuard.hxx:82
@@ -451,16 +475,16 @@ sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:92
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:60
     StringEmitContext m_aBuf
     256
-sfx2/source/appl/lnkbase2.cxx:76
+sfx2/source/appl/lnkbase2.cxx:77
     sfx2::ImplBaseLinkData::tDDEType pItem
     0
-sfx2/source/appl/lnkbase2.cxx:81
+sfx2/source/appl/lnkbase2.cxx:82
     sfx2::ImplBaseLinkData::(anonymous) DDEType
     0
-sfx2/source/appl/newhelp.hxx:292
+sfx2/source/appl/newhelp.hxx:291
     SfxHelpIndexWindow_Impl aIdle
     sfx2 appl SfxHelpIndexWindow_Impl
-sfx2/source/appl/newhelp.hxx:424
+sfx2/source/appl/newhelp.hxx:423
     SfxHelpTextWindow_Impl aSelectIdle
     sfx2 appl SfxHelpTextWindow_Impl Select
 sfx2/source/control/itemdel.cxx:31
@@ -469,15 +493,21 @@ sfx2/source/control/itemdel.cxx:31
 slideshow/source/engine/slideshowimpl.cxx:479
     (anonymous namespace)::SlideShowImpl maFrameSynchronization
     0.02
+slideshow/test/testview.cxx:59
+    ImplTestView mbIsClearCalled
+    0
 soltools/cpp/cpp.h:120
     includelist deleted
     1
-soltools/mkdepend/def.h:130
+soltools/mkdepend/def.h:116
     inclist i_notified
     1
-soltools/mkdepend/def.h:132
+soltools/mkdepend/def.h:118
     inclist i_searched
     1
+soltools/mkdepend/def.h:119
+    inclist i_included_sym
+    0
 starmath/inc/edit.hxx:54
     SmEditWindow aModifyIdle
     SmEditWindow ModifyIdle
@@ -487,7 +517,7 @@ starmath/source/cfgitem.hxx:102
 stoc/source/corereflection/lrucache.hxx:51
     LRU_Cache _pBlock
     0
-stoc/source/inspect/introspection.cxx:1530
+stoc/source/inspect/introspection.cxx:1528
     (anonymous namespace)::Cache::Data hits
     1
 stoc/source/security/access_controller.cxx:306
@@ -511,7 +541,10 @@ svtools/source/contnr/imivctl.hxx:161
 svtools/source/contnr/imivctl.hxx:162
     SvxIconChoiceCtrl_Impl aCallSelectHdlIdle
     svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl
-svtools/source/dialogs/roadmapwizard.cxx:54
+svtools/source/contnr/imivctl.hxx:192
+    SvxIconChoiceCtrl_Impl pCurEditedEntry
+    0
+svtools/source/dialogs/roadmapwizard.cxx:55
     svt::RoadmapWizardImpl pRoadmap
     0
 svx/inc/sdr/overlay/overlaymanagerbuffered.hxx:44
@@ -559,6 +592,12 @@ sw/inc/viewopt.hxx:189
 sw/source/core/bastyp/calc.cxx:95
     CalcOp eOp
     0
+sw/source/core/doc/tblrwcl.cxx:100
+    CR_SetBoxWidth pUndo
+    0
+sw/source/core/doc/tblrwcl.cxx:174
+    CR_SetLineHeight pUndo
+    0
 sw/source/core/docnode/threadmanager.hxx:125
     ThreadManager maStartNewThreadIdle
     SW ThreadManager StartNewThreadIdle
@@ -568,28 +607,28 @@ sw/source/core/inc/UndoSort.hxx:38
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
     0
-sw/source/filter/ww8/ww8par3.cxx:323
+sw/source/filter/ww8/ww8par3.cxx:335
     WW8LST bSimpleList
     1
-sw/source/filter/ww8/ww8par3.cxx:324
+sw/source/filter/ww8/ww8par3.cxx:336
     WW8LST bRestartHdn
     1
-sw/source/filter/ww8/ww8par3.cxx:356
+sw/source/filter/ww8/ww8par3.cxx:368
     WW8LVL bV6Prev
     1
-sw/source/filter/ww8/ww8par3.cxx:357
+sw/source/filter/ww8/ww8par3.cxx:369
     WW8LVL bV6PrSp
     1
-sw/source/filter/ww8/ww8par3.cxx:358
+sw/source/filter/ww8/ww8par3.cxx:370
     WW8LVL bV6
     1
-sw/source/filter/ww8/ww8par.hxx:659
+sw/source/filter/ww8/ww8par.hxx:660
     WW8FormulaControl mfUnknown
     0
-sw/source/filter/ww8/ww8par.hxx:668
+sw/source/filter/ww8/ww8par.hxx:667
     WW8FormulaControl mhpsCheckBox
     20
-sw/source/filter/ww8/ww8par.hxx:1011
+sw/source/filter/ww8/ww8par.hxx:1013
     WW8TabBandDesc mbHasSpacing
     1
 sw/source/filter/ww8/ww8scan.hxx:1166
@@ -601,7 +640,7 @@ sw/source/filter/ww8/ww8scan.hxx:1516
 sw/source/filter/ww8/ww8scan.hxx:1517
     WW8Fib m_lcbHplxsdr
     0
-sw/source/filter/ww8/ww8struc.hxx:892
+sw/source/filter/ww8/ww8struc.hxx:893
     WW8_TablePos nSp37
     2
 sw/source/ui/envelp/labfmt.hxx:67
@@ -622,6 +661,9 @@ sw/source/uibase/inc/srcedtw.hxx:87
 sw/source/uibase/inc/unotools.hxx:63
     SwOneExampleFrame m_aLoadedIdle
     sw uibase SwOneExampleFrame Loaded
+unotools/source/config/extendedsecurityoptions.cxx:88
+    SvtExtendedSecurityOptions_Impl m_aSecureExtensionsSetName
+    SecureExtensions
 unotools/source/config/saveopt.cxx:77
     SvtSaveOptions_Impl bROUserAutoSave
     0
@@ -718,11 +760,8 @@ vcl/source/gdi/dibtools.cxx:117
 vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5Reserved
     0
-vcl/source/gdi/pdfwriter_impl.hxx:741
+vcl/source/gdi/pdfwriter_impl.hxx:740
     vcl::PDFWriterImpl m_DocDigest
-    0
-vcl/source/window/cursor.cxx:39
-    ImplCursorData mnPixSlant
     0
 writerfilter/source/dmapper/SettingsTable.cxx:239
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps

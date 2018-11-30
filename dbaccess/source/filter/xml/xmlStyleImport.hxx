@@ -71,9 +71,6 @@ namespace dbaxml
 
     class OTableStylesContext : public SvXMLStylesContext
     {
-        const OUString sTableStyleServiceName;
-        const OUString sColumnStyleServiceName;
-        const OUString sCellStyleServiceName;
         sal_Int32 m_nNumberFormatIndex;
         sal_Int32 m_nMasterPageNameIndex;
         bool bAutoStyles : 1;

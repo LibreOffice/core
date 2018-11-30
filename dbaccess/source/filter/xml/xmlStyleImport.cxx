@@ -139,9 +139,6 @@ OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
                                           const Reference< XAttributeList > & xAttrList,
                                           const bool bTempAutoStyles )
     : SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
-    , sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))
-    , sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))
-    , sCellStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ))
     , m_nNumberFormatIndex(-1)
     , m_nMasterPageNameIndex(-1)
     , bAutoStyles(bTempAutoStyles)
@@ -238,13 +235,13 @@ OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
         switch( nFamily )
         {
         case XML_STYLE_FAMILY_TABLE_TABLE:
-            sServiceName = sTableStyleServiceName;
+            sServiceName = XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME;
             break;
         case XML_STYLE_FAMILY_TABLE_COLUMN:
-            sServiceName = sColumnStyleServiceName;
+            sServiceName = XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME;
             break;
         case XML_STYLE_FAMILY_TABLE_CELL:
-            sServiceName = sCellStyleServiceName;
+            sServiceName = XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME;
             break;
 
         }

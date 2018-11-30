@@ -188,7 +188,6 @@ class SvxIconChoiceCtrl_Impl
     LocalFocus              aFocus;                             // Data for focusrect
     ::vcl::AccessibleFactoryAccess aAccFactory;
 
-    SvxIconChoiceCtrlEntry* pCurEditedEntry;
     SvxIconChoiceCtrlTextMode eTextMode;
     SelectionMode           eSelectionMode;
     sal_Int32               nSelectionCount;
@@ -422,7 +421,6 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry
                         );
 #endif
-    bool                IsEntryEditing() const { return (pCurEditedEntry!=nullptr); }
     size_t              GetEntryCount() const { return aEntries.size(); }
     SvxIconChoiceCtrlEntry* GetEntry( size_t nPos )
                             {

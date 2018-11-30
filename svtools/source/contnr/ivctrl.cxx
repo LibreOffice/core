@@ -285,11 +285,7 @@ void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
 }
 bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
 {
-    // under OS/2, we get key up/down even while editing
-    if( _pImpl->IsEntryEditing() )
-        return true;
-    bool bHandled = _pImpl->KeyInput( rKEvt );
-    return bHandled;
+    return _pImpl->KeyInput( rKEvt );
 }
 sal_Int32 SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry const * pEntry ) const
 {
