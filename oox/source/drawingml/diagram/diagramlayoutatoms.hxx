@@ -162,6 +162,13 @@ public:
         { maMap[nType]=nVal; }
     void layoutShape( const ShapePtr& rShape,
                       const std::vector<Constraint>& rConstraints ) const;
+
+    /// Gives access to <dgm:alg type="..."/>.
+    sal_Int32 getType() const { return mnType; }
+
+    /// Gives access to <dgm:param type="..." val="..."/>.
+    const ParamMap& getMap() const { return maMap; }
+
 private:
     sal_Int32 mnType;
     ParamMap  maMap;

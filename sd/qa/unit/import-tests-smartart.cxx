@@ -14,6 +14,8 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 
+#include <comphelper/sequenceashashmap.hxx>
+
 using namespace ::com::sun::star;
 
 class SdImportTestSmartArt : public SdModelTestBase
@@ -489,6 +491,17 @@ void SdImportTestSmartArt::testAccentProcess()
     // 'Expected less than: 3881, Actual  : 3881', i.e. xFirstChild was not
     // below xFirstParent (a good position is 9081).
     CPPUNIT_ASSERT_LESS(nFirstChildTop, nFirstParentTop);
+
+    // Make sure that we have an arrow shape between the two pairs.
+    uno::Reference<beans::XPropertySet> xArrow(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xArrow.is());
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(
+        xArrow->getPropertyValue("CustomShapeGeometry"));
+    // Without the accompanying fix in place, this test would have failed, i.e.
+    // the custom shape lacked a type -> arrow was not visible.
+    CPPUNIT_ASSERT(aCustomShapeGeometry["Type"].has<OUString>());
+    OUString aType = aCustomShapeGeometry["Type"].get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("ooxml-rightArrow"), aType);
 
     uno::Reference<drawing::XShapes> xSecondPair(xGroup->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSecondPair.is());
