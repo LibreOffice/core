@@ -1173,7 +1173,7 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
     if ( nAction == DBG_FUNC_GETDATA )
         return (void*)&(pDebugData->aDbgData);
     else if ( nAction == DBG_FUNC_GETPRINTMSGBOX )
-        return (void*)(long)(pDebugData->pDbgPrintMsgBox);
+        return (void*)(sal_IntPtr)(pDebugData->pDbgPrintMsgBox);
     else if ( nAction == DBG_FUNC_FILTERMESSAGE )
         if ( ImplDbgFilterMessage( (const sal_Char*) pParam ) )
             return (void*) -1;
@@ -1197,19 +1197,19 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 break;
 
             case DBG_FUNC_SETPRINTMSGBOX:
-                pDebugData->pDbgPrintMsgBox = (DbgPrintLine)(long)pParam;
+                pDebugData->pDbgPrintMsgBox = (DbgPrintLine)(sal_IntPtr)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTWINDOW:
-                pDebugData->pDbgPrintWindow = (DbgPrintLine)(long)pParam;
+                pDebugData->pDbgPrintWindow = (DbgPrintLine)(sal_IntPtr)pParam;
                 break;
 
             case DBG_FUNC_SETPRINTTESTTOOL:
-                pDebugData->pDbgPrintTestTool = (DbgPrintLine)(long)pParam;
+                pDebugData->pDbgPrintTestTool = (DbgPrintLine)(sal_IntPtr)pParam;
                 break;
 
             case DBG_FUNC_SET_ABORT:
-                pDebugData->pDbgAbort = (DbgPrintLine)(long)pParam;
+                pDebugData->pDbgAbort = (DbgPrintLine)(sal_IntPtr)pParam;
                 break;
 
             case DBG_FUNC_SAVEDATA:
@@ -1299,7 +1299,7 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 return (void*)(sal_uIntPtr)sal_True;
 
             case DBG_FUNC_SETTESTSOLARMUTEX:
-                pDebugData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)(long)pParam;
+                pDebugData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)(sal_IntPtr)pParam;
                 break;
 
             case DBG_FUNC_TESTSOLARMUTEX:
