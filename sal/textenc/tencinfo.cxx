@@ -433,7 +433,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         pTempBuf++;
     }
 
-    /* Parttrenner gefunden */
+    /* Part separator found */
     if ( pSecondPart )
     {
         /* Search for the part tab */
