@@ -95,6 +95,28 @@ published constants KParseTokens
     /// Unicode (above 127) other number
     const long UNI_OTHER_NUMBER     = 0x00080000;
 
+    /** If this bit is set in <em>nContCharFlags</em> parameters, the
+        locale's group separator characters in numbers are accepted and
+        ignored/skipped. Else a group separator in a number ends the
+        current token. A leading group separator is never accepted. If
+        an accepted group separator was encountered in a number
+        (ParseResult::TokenType is KParseType::ASC_NUMBER or
+        KParseType::UNI_NUMBER) this bit is also set in
+        ParseResult::ContFlags.
+
+        <p> <strong>NOTE:</strong> absence of this bit in
+        <em>nContCharFlags</em> changes the default behaviour that in
+        prior releases accepted numbers with group separators but lead
+        to unexpected results when parsing formula expressions where the
+        user entered a (wrong) separator that happened to be the group
+        separator instead of an intended decimal separator. Usually
+        inline numbers in a formula expression do not contain group
+        separators.
+
+        @since LibreOffice 6.2
+     */
+    const long GROUP_SEPARATOR_IN_NUMBER = 0x08000000;
+
     /** If this bit is set in <em>nContCharFlags</em> parameters and a
         string enclosed in double quotes is parsed and two consecutive
         double quotes are encountered, the string is ended. If this bit
