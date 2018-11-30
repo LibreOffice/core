@@ -815,11 +815,6 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     nFlags &= ~IconChoiceFlags(IconChoiceFlags::DownCtrl | IconChoiceFlags::DownDeselect);
-    if( nFlags & IconChoiceFlags::StartEditTimerInMouseUp )
-    {
-        bHandled = true;
-        nFlags &= ~IconChoiceFlags::StartEditTimerInMouseUp;
-    }
 
     if((nWinBits & WB_HIGHLIGHTFRAME) && bHighlightFramePressed && pCurHighlightFrame)
     {
