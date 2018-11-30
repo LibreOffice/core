@@ -1452,8 +1452,9 @@ public:
     {
         //for toplevel windows this is sadly futile under wayland, so we can't tell where a dialog is in order to allow
         //the document underneath to auto-scroll to place content in a visible location
-        gboolean ret = gtk_widget_translate_coordinates(dynamic_cast<GtkInstanceWidget&>(rRelative).getWidget(),
-                                                        m_pWidget, 0, 0, &x, &y);
+        gboolean ret = gtk_widget_translate_coordinates(m_pWidget,
+                                                        dynamic_cast<GtkInstanceWidget&>(rRelative).getWidget(),
+                                                        0, 0, &x, &y);
         width = gtk_widget_get_allocated_width(m_pWidget);
         height = gtk_widget_get_allocated_height(m_pWidget);
         return ret;
