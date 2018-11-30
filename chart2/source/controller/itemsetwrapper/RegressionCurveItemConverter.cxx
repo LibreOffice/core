@@ -20,7 +20,6 @@
 #include <RegressionCurveHelper.hxx>
 #include <RegressionCurveItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <ItemPropertyMap.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
@@ -29,9 +28,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-
-#include <functional>
-#include <algorithm>
 
 using namespace ::com::sun::star;
 

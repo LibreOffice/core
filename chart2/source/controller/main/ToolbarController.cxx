@@ -9,16 +9,13 @@
 
 #include <ChartToolbarController.hxx>
 
-#include <rtl/ref.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart {
 

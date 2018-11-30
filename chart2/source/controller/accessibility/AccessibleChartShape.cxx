@@ -18,8 +18,6 @@
  */
 
 #include "AccessibleChartShape.hxx"
-#include <ObjectHierarchy.hxx>
-#include <ObjectIdentifier.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>

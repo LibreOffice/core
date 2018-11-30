@@ -23,7 +23,6 @@
 #include <ObjectIdentifier.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -33,23 +32,12 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/uuid.h>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <svl/itemset.hxx>
-#include <editeng/unofdesc.hxx>
-#include <editeng/outliner.hxx>
-#include <svx/svdoutl.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/unoshape.hxx>
-#include <svx/unoprov.hxx>
 #include <vcl/unohelp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/functional.hxx>
 #include <tools/diagnose_ex.h>

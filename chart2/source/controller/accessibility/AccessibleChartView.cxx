@@ -19,14 +19,12 @@
 
 #include <AccessibleChartView.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <servicenames.hxx>
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
 #include "AccessibleViewForwarder.hxx"
 
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

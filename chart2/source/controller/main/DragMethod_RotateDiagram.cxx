@@ -21,14 +21,12 @@
 #include <DrawViewWrapper.hxx>
 
 #include <SelectionHelper.hxx>
-#include <CommonConverters.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
-#include <svx/sdr/overlay/overlaymanager.hxx>
 
 #include <svx/scene3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>

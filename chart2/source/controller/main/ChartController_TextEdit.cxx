@@ -30,13 +30,13 @@
 #include <strings.hrc>
 #include <chartview/DrawModelWrapper.hxx>
 
-#include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <editeng/editids.hrc>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <memory>

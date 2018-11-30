@@ -18,7 +18,6 @@
  */
 
 #include "ChartDropTargetHelper.hxx"
-#include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>

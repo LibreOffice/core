@@ -25,14 +25,12 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/crossedoutitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <o3tl/any.hxx>
 #include <svl/stritem.hxx>
 
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <tools/diagnose_ex.h>

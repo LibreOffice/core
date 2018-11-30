@@ -24,7 +24,6 @@
 
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
-#include <config_features.h>
 
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>

@@ -26,17 +26,6 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 
 #include <svx/xtable.hxx>
-#include <svx/XPropertyTable.hxx>
-#include <svx/unofill.hxx>
-#include <svx/unoapi.hxx>
-#include <svx/xit.hxx>
-#include <svx/xbtmpit.hxx>
-#include <svx/xflftrit.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xflhtit.hxx>
-#include <svx/xflgrit.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnedit.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/svapp.hxx>

@@ -36,7 +36,6 @@
 #include <svx/rectenum.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
 #include <memory>
 

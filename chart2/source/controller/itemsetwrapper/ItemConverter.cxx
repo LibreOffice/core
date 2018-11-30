@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 #include <svl/itempool.hxx>
-#include <svl/itemprop.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>

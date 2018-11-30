@@ -40,11 +40,9 @@
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
-#include <LegendHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ColorPerPointHelper.hxx>
 #include <DiagramHelper.hxx>
-#include <servicenames_charttypes.hxx>
 #include <ControllerLockGuard.hxx>
 #include "UndoGuard.hxx"
 #include <ObjectNameProvider.hxx>

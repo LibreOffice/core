@@ -42,7 +42,6 @@
 #include "UndoGuard.hxx"
 #include "ChartDropTargetHelper.hxx"
 
-#include <dlg_CreationWizard.hxx>
 #include <dlg_ChartType.hxx>
 #include <AccessibleChartView.hxx>
 #include "DrawCommandDispatch.hxx"
@@ -52,28 +51,22 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/frame/XController2.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/embed/XEmbeddedClient.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
-#include <com/sun/star/document/XUndoAction.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 
 #include <sal/log.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
-#include <svx/svdundo.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
@@ -83,7 +76,6 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 // this is needed to properly destroy the unique_ptr to the AcceleratorExecute
 // object in the DTOR

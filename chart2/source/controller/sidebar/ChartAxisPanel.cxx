@@ -17,22 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/ControlFactory.hxx>
-
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
+#include <com/sun/star/chart2/AxisOrientation.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
+
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include "ChartAxisPanel.hxx"
 #include <ChartController.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
-#include <vcl/toolbox.hxx>
-#include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 
 using namespace css;
 using namespace css::uno;

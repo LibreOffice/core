@@ -19,30 +19,18 @@
 
 #include <ErrorBarItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <ItemPropertyMap.hxx>
-#include <ErrorBar.hxx>
-#include <PropertyHelper.hxx>
-#include <ChartModelHelper.hxx>
-#include <ChartTypeHelper.hxx>
 #include <StatisticsHelper.hxx>
 
 #include <GraphicPropertyItemConverter.hxx>
 
 #include <svl/stritem.hxx>
 #include <svx/chrtitem.hxx>
-#include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 
-#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
 #include <tools/diagnose_ex.h>
-
-#include <functional>
-#include <algorithm>
-#include <vector>
 
 using namespace ::com::sun::star;
 

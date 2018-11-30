@@ -22,15 +22,11 @@
 #include <ItemPropertyMap.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>
-#include <MultipleItemConverter.hxx>
 #include <unonames.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <svl/intitem.hxx>
-#include <rtl/math.hxx>
 
-#include <functional>
-#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;
