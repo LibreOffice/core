@@ -57,7 +57,7 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void dragFailed();
-    void fire_dragEnd();
+    void fire_dragEnd(sal_Int8 nAction);
     css::uno::Reference<css::datatransfer::XTransferable> const& GetTransferable() const
     {
         return m_xTrans;
@@ -72,6 +72,8 @@ class Qt5DropTarget
 {
     osl::Mutex m_aMutex;
     Qt5Frame* m_pFrame;
+    sal_Int8 mnDragAction;
+    sal_Int8 mnDropAction;
     bool m_bActive;
     sal_Int8 m_nDefaultActions;
     std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
@@ -111,6 +113,8 @@ public:
     void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
     void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
     void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
+
+    sal_Int8 proposedDragAction() const { return mnDragAction; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

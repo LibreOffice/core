@@ -197,7 +197,6 @@ void Qt5Widget::startDrag()
 
 void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
 {
-    SAL_WARN("vcl.qt5", "dragenterevent");
     if (event->source() == this)
         event->accept();
 }
@@ -205,7 +204,6 @@ void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
 void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
 {
     QPoint point = event->pos();
-    SAL_WARN("vcl.qt5", "dragmoveevent");
 
     m_pFrame->draggingStarted(point.x(), point.y());
     QWidget::dragMoveEvent(event);
@@ -214,7 +212,6 @@ void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
 void Qt5Widget::dropEvent(QDropEvent* event)
 {
     QPoint point = event->pos();
-    SAL_WARN("vcl.qt5", "dropevent");
 
     m_pFrame->dropping(point.x(), point.y());
     QWidget::dropEvent(event);

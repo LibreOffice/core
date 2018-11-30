@@ -1049,7 +1049,7 @@ void Qt5Frame::draggingStarted(const int x, const int y)
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
     aEvent.LocationX = x;
     aEvent.LocationY = y;
-    aEvent.DropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE; //FIXME
+    aEvent.DropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
     aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
@@ -1077,7 +1077,8 @@ void Qt5Frame::dropping(const int x, const int y)
     aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
     aEvent.LocationX = x;
     aEvent.LocationY = y;
-    aEvent.DropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE; //FIXME
+    aEvent.DropAction = m_pDropTarget->proposedDragAction()
+                        | css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
     aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
@@ -1089,7 +1090,7 @@ void Qt5Frame::dropping(const int x, const int y)
 
     if (m_pDragSource)
     {
-        m_pDragSource->fire_dragEnd();
+        m_pDragSource->fire_dragEnd(m_pDropTarget->proposedDragAction());
     }
 }
 
