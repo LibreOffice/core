@@ -18,26 +18,22 @@ struct Class1
 
 void func1(Class1 const& class1)
 {
-    if (1
-        == PI) // expected-error {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    // expected-error@+1 {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    if (1 == PI)
         return;
-    if (1
-        == class1
-               .PI) // expected-error {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    // expected-error@+1 {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    if (1 == class1.PI)
         return;
-    if (true
-        == class1
-               .PI) // expected-error {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    // expected-error@+1 {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    if (true == class1.PI)
         return;
     if (1 == class1.getInt()) // no warning expected
         return;
-    if (1
-        == class1
-               .E()) // expected-error {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    // expected-error@+1 {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    if (1 == class1.E())
         return;
-    if (true
-        == class1
-               .E()) // expected-error {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    // expected-error@+1 {{comparing integer to float constant, can never be true [loplugin:intvsfloat]}}
+    if (true == class1.E())
         return;
     if (1 == class1.getFloat()) // no warning expected
         return;
@@ -45,24 +41,21 @@ void func1(Class1 const& class1)
 
 void func2(Class1 const& class1)
 {
-    int i0
-        = PI; // expected-error {{assigning constant float value to int truncates data [loplugin:intvsfloat]}}
+    // expected-error@+1 {{assigning constant float value to int truncates data [loplugin:intvsfloat]}}
+    int i0 = PI;
     (void)i0;
-    int i1
-        = class1
-              .PI; // expected-error {{assigning constant float value to int truncates data [loplugin:intvsfloat]}}
+    // expected-error@+1 {{assigning constant float value to int truncates data [loplugin:intvsfloat]}}
+    int i1 = class1.PI;
     (void)i1;
-    int i2
-        = class1
-              .E(); // expected-error {{assigning constant float value to int truncates data [loplugin:intvsfloat]}}
+    // expected-error@+1 {{assigning constant float value to int truncates data [loplugin:intvsfloat]}}
+    int i2 = class1.E();
     (void)i2;
     int i3 = class1.getFloat(); // no warning expected
     (void)i3;
     int i4 = class1.getInt(); // no warning expected
     (void)i4;
-    bool b1
-        = class1
-              .E(); // expected-error {{assigning constant float value to int truncates data [loplugin:intvsfloat]}}
+    // expected-error@+1 {{assigning constant float value to int truncates data [loplugin:intvsfloat]}}
+    bool b1 = class1.E();
     (void)b1;
 }
 
