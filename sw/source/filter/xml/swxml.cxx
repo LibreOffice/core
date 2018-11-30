@@ -856,7 +856,11 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     if( !(IsOrganizerMode() || IsBlockMode() || m_bInsertMode ||
           m_aOption.IsFormatsOnly() ||
             // sw_redlinehide: disable layout cache for now
+#if 0
           !*o3tl::doAccess<bool>(xInfoSet->getPropertyValue(sShowChanges))))
+#else
+          true))
+#endif
     {
         try
         {
@@ -889,8 +893,10 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     // restore redline mode from import info property set
     RedlineFlags nRedlineFlags = RedlineFlags::ShowInsert;
     aAny = xInfoSet->getPropertyValue( sShowChanges );
+#if 0
     if ( *o3tl::doAccess<bool>(aAny) )
         nRedlineFlags |= RedlineFlags::ShowDelete;
+#endif
     aAny = xInfoSet->getPropertyValue( sRecordChanges );
     if ( *o3tl::doAccess<bool>(aAny) || (aKey.getLength() > 0) )
         nRedlineFlags |= RedlineFlags::On;
