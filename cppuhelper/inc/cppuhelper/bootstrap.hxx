@@ -29,6 +29,8 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+#include "cppuhelper/cppuhelperdllapi.h"
+
 namespace com { namespace sun { namespace star {
     namespace container { class XHierarchicalNameAccess; }
     namespace registry { class XSimpleRegistry; }
@@ -43,6 +45,7 @@ namespace cppu
     @rBootstrapPath optional bootstrap path for initial components
     @return simple registry service instance
 */
+CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
 SAL_CALL createSimpleRegistry(
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
@@ -53,6 +56,7 @@ SAL_CALL createSimpleRegistry(
     @rBootstrapPath optional bootstrap path for initial components
     @return nested registry service instance
 */
+CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
 SAL_CALL createNestedRegistry(
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
@@ -63,6 +67,7 @@ SAL_CALL createNestedRegistry(
     @param xTDMgr manager instance
     @return true, if successfully registered
 */
+CPPUHELPER_DLLPUBLIC
 sal_Bool SAL_CALL installTypeDescriptionManager(
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess > const & xTDMgr )
     SAL_THROW( () );
@@ -78,6 +83,7 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
     @param rBootstrapPath optional bootstrap path for initial components
     @return component context
 */
+CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 bootstrap_InitialComponentContext(
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry > const & xRegistry,
@@ -104,6 +110,7 @@ bootstrap_InitialComponentContext(
 
     @return component context
 */
+CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Exception) );
 
@@ -128,6 +135,7 @@ defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Ex
     @param iniFile ini filename to get bootstrap variables
     @return component context
 */
+CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile) SAL_THROW( (::com::sun::star::uno::Exception) );
 
@@ -136,7 +144,7 @@ defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile) SAL_TH
  *
  * @since UDK 3.2.0
  */
-class BootstrapException
+class CPPUHELPER_DLLPUBLIC BootstrapException
 {
 public:
     /**
@@ -189,6 +197,7 @@ private:
  *
  * @since UDK 3.2.0
  */
+CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
 SAL_CALL bootstrap();
 
@@ -211,6 +220,7 @@ SAL_CALL bootstrap();
  *
  * @since UDK 3.2.8
  */
+CPPUHELPER_DLLPUBLIC
 ::rtl::OUString
 SAL_CALL bootstrap_expandUri(::rtl::OUString const & uri);
 

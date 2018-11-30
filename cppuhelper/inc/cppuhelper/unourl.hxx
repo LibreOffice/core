@@ -26,6 +26,8 @@
 
 #include <memory>
 
+#include "cppuhelper/cppuhelperdllapi.h"
+
 namespace rtl { class OUString; }
 
 namespace cppu {
@@ -37,7 +39,7 @@ namespace cppu {
     For example, some functions take a string representing a connection or
     protocol descriptor as input, and can use this class to parse the string.
  */
-class UnoUrlDescriptor
+class CPPUHELPER_DLLPUBLIC UnoUrlDescriptor
 {
 public:
     /** @internal
@@ -134,7 +136,7 @@ private:
     invalid UTF-16 entities in the resulting output (e.g., a high surrogate not
     followed by a low surrogate) are not detected.
  */
-class UnoUrl
+class CPPUHELPER_DLLPUBLIC UnoUrl
 {
 public:
     /** Construct a UNO URL from a string representation.

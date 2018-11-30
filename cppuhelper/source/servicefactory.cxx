@@ -316,6 +316,7 @@ static void add_access_control_entries(
     context_values.push_back( entry );
 }
 
+SAL_DLLPUBLIC_EXPORT
 Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     OUString const & rBootstrapPath )
     SAL_THROW( (Exception) )
