@@ -21,11 +21,12 @@
 #include "UndoCommandDispatch.hxx"
 #include "StatusBarCommandDispatch.hxx"
 #include <DisposeHelper.hxx>
-#include <ChartController.hxx>
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 using namespace ::com::sun::star;
 

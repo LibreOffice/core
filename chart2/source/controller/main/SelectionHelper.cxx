@@ -28,7 +28,6 @@
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <o3tl/make_unique.hxx>
 
 namespace chart

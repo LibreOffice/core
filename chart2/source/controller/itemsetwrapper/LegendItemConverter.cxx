@@ -19,10 +19,8 @@
 
 #include <LegendItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include <ItemPropertyMap.hxx>
 #include <GraphicPropertyItemConverter.hxx>
 #include <CharacterPropertyItemConverter.hxx>
-#include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -31,8 +29,6 @@
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <functional>
-#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;

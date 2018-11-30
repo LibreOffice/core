@@ -23,10 +23,7 @@
 #include <ObjectNameProvider.hxx>
 #include <ObjectIdentifier.hxx>
 
-#include <rtl/math.hxx>
-#include <svx/svdpagv.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
 namespace chart

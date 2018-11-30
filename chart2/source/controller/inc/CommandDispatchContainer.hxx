@@ -35,7 +35,6 @@ namespace com { namespace sun { namespace star { namespace util { struct URL; } 
 namespace chart
 {
 
-class ChartController;
 class DrawCommandDispatch;
 class ShapeController;
 

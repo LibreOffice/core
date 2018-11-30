@@ -30,7 +30,6 @@
 #include <strings.hrc>
 #include <ObjectIdentifier.hxx>
 #include <ReferenceSizeProvider.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include "ChartTransferable.hxx"
 #include <DrawViewWrapper.hxx>
@@ -44,9 +43,7 @@
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
@@ -65,13 +62,11 @@
 #include <unotools/streamwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/unopage.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

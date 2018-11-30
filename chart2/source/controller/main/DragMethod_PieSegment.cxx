@@ -23,8 +23,6 @@
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ObjectIdentifier.hxx>
-#include <rtl/math.hxx>
-#include <svx/svdpagv.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/diagnose_ex.h>

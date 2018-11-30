@@ -21,7 +21,6 @@
 #include "ChartModelClone.hxx"
 #include "UndoActions.hxx"
 
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 

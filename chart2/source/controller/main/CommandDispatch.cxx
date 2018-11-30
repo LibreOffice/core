@@ -18,12 +18,8 @@
  */
 
 #include "CommandDispatch.hxx"
-#include <CommonFunctors.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <tools/diagnose_ex.h>
-
-#include <algorithm>
-#include <functional>
 
 using namespace ::com::sun::star;
 

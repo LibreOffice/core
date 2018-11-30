@@ -27,7 +27,6 @@
 #include <dlg_InsertTitle.hxx>
 #include <dlg_ObjectProperties.hxx>
 
-#include <ChartWindow.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
@@ -48,7 +47,6 @@
 #include <RegressionCurveItemConverter.hxx>
 #include <StatisticsHelper.hxx>
 #include <ErrorBarItemConverter.hxx>
-#include <MultipleItemConverter.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ObjectNameProvider.hxx>
 #include <LegendHelper.hxx>
@@ -59,7 +57,6 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <svx/ActionDescriptionProvider.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 

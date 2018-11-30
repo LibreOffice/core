@@ -24,10 +24,9 @@
 #include <unotools/lingucfg.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/itempool.hxx>
-#include <svx/svdpage.hxx>
+#include <svx/obj3d.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/scene3d.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svxids.hrc>

@@ -33,7 +33,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/svdview.hxx>
 

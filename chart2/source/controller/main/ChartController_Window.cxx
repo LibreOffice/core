@@ -22,7 +22,6 @@
 #include <ObjectIdentifier.hxx>
 #include <ChartWindow.hxx>
 #include <ResId.hxx>
-#include <CommonConverters.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
@@ -69,7 +68,6 @@
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/ipclient.hxx>
-#include <svx/svxids.hrc>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
@@ -77,7 +75,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
-#include <rtl/math.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
