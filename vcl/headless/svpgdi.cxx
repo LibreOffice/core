@@ -1641,12 +1641,46 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect& rTR,
 
 static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
 {
-    return (a > 0) ? (c * 255 + a / 2) / a : 0;
+    return (a == 0) ? 0 : (c * 255 + a / 2) / a;
 }
 
 static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
 {
     return (c * a + 127) / 255;
+}
+
+typedef sal_uInt8 (*lookup_table)[256];
+
+static lookup_table get_unpremultiply_table()
+{
+    static bool inited;
+    static sal_uInt8 unpremultiply_table[256][256];
+
+    if (!inited)
+    {
+        for (int a = 0; a < 256; ++a)
+            for (int c = 0; c < 256; ++c)
+                unpremultiply_table[a][c] = unpremultiply(c, a);
+        inited = true;
+    }
+
+    return unpremultiply_table;
+}
+
+static lookup_table get_premultiply_table()
+{
+    static bool inited;
+    static sal_uInt8 premultiply_table[256][256];
+
+    if (!inited)
+    {
+        for (int a = 0; a < 256; ++a)
+            for (int c = 0; c < 256; ++c)
+                premultiply_table[a][c] = premultiply(c, a);
+        inited = true;
+    }
+
+    return premultiply_table;
 }
 
 void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
@@ -1663,15 +1697,17 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     }
     sal_Int32 nStride;
     unsigned char *mask_data = aSurface.getBits(nStride);
+    lookup_table unpremultiply_table = get_unpremultiply_table();
     for (long y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
     {
         unsigned char *row = mask_data + (nStride*y);
         unsigned char *data = row + (rTR.mnSrcX * 4);
         for (long x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
         {
-            sal_uInt8 b = unpremultiply(data[SVP_CAIRO_BLUE], data[SVP_CAIRO_ALPHA]);
-            sal_uInt8 g = unpremultiply(data[SVP_CAIRO_GREEN], data[SVP_CAIRO_ALPHA]);
-            sal_uInt8 r = unpremultiply(data[SVP_CAIRO_RED], data[SVP_CAIRO_ALPHA]);
+            sal_uInt8 a = data[SVP_CAIRO_ALPHA];
+            sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
+            sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
+            sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
             if (r == 0 && g == 0 && b == 0)
             {
                 data[0] = nMaskColor.GetBlue();
@@ -1769,10 +1805,12 @@ Color SvpSalGraphics::getPixel( long nX, long nY )
     cairo_destroy(cr);
 
     cairo_surface_flush(target);
+    lookup_table unpremultiply_table = get_unpremultiply_table();
     unsigned char *data = cairo_image_surface_get_data(target);
-    sal_uInt8 b = unpremultiply(data[SVP_CAIRO_BLUE], data[SVP_CAIRO_ALPHA]);
-    sal_uInt8 g = unpremultiply(data[SVP_CAIRO_GREEN], data[SVP_CAIRO_ALPHA]);
-    sal_uInt8 r = unpremultiply(data[SVP_CAIRO_RED], data[SVP_CAIRO_ALPHA]);
+    sal_uInt8 a = data[SVP_CAIRO_ALPHA];
+    sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
+    sal_uInt8 g = unpremultiply_table[a][data[SVP_CAIRO_GREEN]];
+    sal_uInt8 r = unpremultiply_table[a][data[SVP_CAIRO_RED]];
     Color nRet = Color(r, g, b);
 
     cairo_surface_destroy(target);
@@ -2101,6 +2139,8 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         sal_Int32 nUnscaledExtentsRight = nExtentsRight * m_fScale;
         sal_Int32 nUnscaledExtentsTop = nExtentsTop * m_fScale;
         sal_Int32 nUnscaledExtentsBottom = nExtentsBottom * m_fScale;
+        lookup_table unpremultiply_table = get_unpremultiply_table();
+        lookup_table premultiply_table = get_premultiply_table();
         for (sal_Int32 y = nUnscaledExtentsTop; y < nUnscaledExtentsBottom; ++y)
         {
             unsigned char *true_row = target_surface_data + (nStride*y);
@@ -2109,15 +2149,17 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
             unsigned char *xor_data = xor_row + (nUnscaledExtentsLeft * 4);
             for (sal_Int32 x = nUnscaledExtentsLeft; x < nUnscaledExtentsRight; ++x)
             {
-                sal_uInt8 b = unpremultiply(true_data[SVP_CAIRO_BLUE], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_BLUE], xor_data[SVP_CAIRO_ALPHA]);
-                sal_uInt8 g = unpremultiply(true_data[SVP_CAIRO_GREEN], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_GREEN], xor_data[SVP_CAIRO_ALPHA]);
-                sal_uInt8 r = unpremultiply(true_data[SVP_CAIRO_RED], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_RED], xor_data[SVP_CAIRO_ALPHA]);
-                true_data[0] = premultiply(b, true_data[SVP_CAIRO_ALPHA]);
-                true_data[1] = premultiply(g, true_data[SVP_CAIRO_ALPHA]);
-                true_data[2] = premultiply(r, true_data[SVP_CAIRO_ALPHA]);
+                sal_uInt8 a = true_data[SVP_CAIRO_ALPHA];
+                sal_uInt8 xor_a = xor_data[SVP_CAIRO_ALPHA];
+                sal_uInt8 b = unpremultiply_table[a][true_data[SVP_CAIRO_BLUE]] ^
+                              unpremultiply_table[xor_a][xor_data[SVP_CAIRO_BLUE]];
+                sal_uInt8 g = unpremultiply_table[a][true_data[SVP_CAIRO_GREEN]] ^
+                              unpremultiply_table[xor_a][xor_data[SVP_CAIRO_GREEN]];
+                sal_uInt8 r = unpremultiply_table[a][true_data[SVP_CAIRO_RED]] ^
+                              unpremultiply_table[xor_a][xor_data[SVP_CAIRO_RED]];
+                true_data[SVP_CAIRO_BLUE] = premultiply_table[a][b];
+                true_data[SVP_CAIRO_GREEN] = premultiply_table[a][g];
+                true_data[SVP_CAIRO_RED] = premultiply_table[a][r];
                 true_data+=4;
                 xor_data+=4;
             }
