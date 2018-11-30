@@ -604,7 +604,7 @@ TPGalleryThemeProperties::TPGalleryThemeProperties(TabPageParent pWindow, const 
 {
     m_xLbxFound->set_size_request(m_xLbxFound->get_approximate_digit_width() * 35,
                                   m_xLbxFound->get_height_rows(15));
-    m_xLbxFound->set_selection_mode(true);
+    m_xLbxFound->set_selection_mode(SelectionMode::Multiple);
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
 }
 
