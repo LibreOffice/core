@@ -376,11 +376,10 @@ bool DocumentSignatureManager::add(
         mxStore, meSignatureMode, DocumentSignatureAlgorithm::OOo3_2);
     DocumentSignatureHelper::AppendContentTypes(mxStore, aElements);
 
-    sal_Int32 nElements = aElements.size();
-    for (sal_Int32 n = 0; n < nElements; n++)
+    for (OUString const& rUri : aElements)
     {
-        bool bBinaryMode = !isXML(aElements[n]);
-        maSignatureHelper.AddForSigning(nSecurityId, aElements[n], bBinaryMode, bAdESCompliant);
+        bool bBinaryMode = !isXML(rUri);
+        maSignatureHelper.AddForSigning(nSecurityId, rUri, bBinaryMode, bAdESCompliant);
     }
 
     maSignatureHelper.SetDateTime(nSecurityId, DateTime(DateTime::SYSTEM));
