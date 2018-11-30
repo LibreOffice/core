@@ -260,7 +260,6 @@ public:
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
-    void                SelectMacro( const OUString&, const OUString& );
 };
 
 class SvxScriptSelectorDialog : public ModalDialog

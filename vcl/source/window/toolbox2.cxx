@@ -1399,23 +1399,6 @@ void ToolBox::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
         pItem->maHelpId = rHelpId;
 }
 
-OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
-{
-    OString aRet;
-
-    ImplToolItem* pItem = ImplGetItem( nItemId );
-
-    if ( pItem )
-    {
-        if ( !pItem->maHelpId.isEmpty() )
-            aRet = pItem->maHelpId;
-        else
-            aRet = OUStringToOString( pItem->maCommandStr, RTL_TEXTENCODING_UTF8 );
-    }
-
-    return aRet;
-}
-
 void ToolBox::SetOutStyle( sal_uInt16 nNewStyle )
 {
     // always force flat looking toolbars since NWF

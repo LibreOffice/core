@@ -56,29 +56,6 @@ Size GalleryPreview::GetOptimalSize() const
     return LogicToPixel(Size(70, 88), MapMode(MapUnit::MapAppFont));
 }
 
-bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
-{
-    bool bRet = true;
-    Graphic aGraphic;
-#if HAVE_FEATURE_AVMEDIA
-    if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
-    {
-        aGraphic = BitmapEx(RID_SVXBMP_GALLERY_MEDIA);
-    }
-    else
-#endif
-    {
-        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        GalleryProgress aProgress( &rFilter );
-        if( rFilter.ImportGraphic( aGraphic, _aURL ) )
-            bRet = false;
-    }
-
-    SetGraphic( aGraphic );
-    Invalidate();
-    return bRet;
-}
-
 void GalleryPreview::InitSettings()
 {
     SetBackground( Wallpaper( GALLERY_BG_COLOR ) );

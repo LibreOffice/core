@@ -138,27 +138,6 @@ public:
         return awt::Rectangle(0,0,100,100);
     }
 
-    // TestView
-    virtual bool isClearCalled() const override
-    {
-        return false;
-    }
-
-    virtual std::vector<std::pair<basegfx::B2DVector,double> > getCreatedSprites() const override
-    {
-        return maCreatedSprites;
-    }
-
-    virtual basegfx::B1DRange getPriority() const override
-    {
-        return maPriority;
-    }
-
-    virtual bool wasClipSet() const override
-    {
-        return mbIsClipEmptied;
-    }
-
     virtual basegfx::B2DRange getBounds() const override
     {
         return maBounds;

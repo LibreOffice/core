@@ -190,7 +190,6 @@ private:
     EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(
         const ParaPortion* pParaPortion, const EditLine* pLine) const;
 
-    EDITENG_DLLPRIVATE sal_uInt16 GetOnePixelInRef() const;
     EDITENG_DLLPRIVATE InternalEditStatus& GetInternalEditStatus();
 
     EDITENG_DLLPRIVATE void HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos);

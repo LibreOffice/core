@@ -479,7 +479,6 @@ public:
     virtual void    SetPageText( sal_uInt16 nPageId, const OUString& rText );
     OUString        GetPageText( sal_uInt16 nPageId ) const;
     OUString        GetHelpText( sal_uInt16 nPageId ) const;
-    OString         GetHelpId( sal_uInt16 nPageId ) const;
 
     long            GetSplitSize() const { return mnSplitSize; }
 

@@ -1309,23 +1309,6 @@ void StatusBar::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
         mvItemList[ nPos ]->maHelpId = rHelpId;
 }
 
-OString StatusBar::GetHelpId( sal_uInt16 nItemId ) const
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-
-    OString aRet;
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-    {
-        ImplStatusItem* pItem = mvItemList[ nPos ].get();
-        if ( !pItem->maHelpId.isEmpty() )
-            aRet = pItem->maHelpId;
-        else
-            aRet = OUStringToOString( pItem->maCommand, RTL_TEXTENCODING_UTF8 );
-    }
-
-    return aRet;
-}
-
 void StatusBar::StartProgressMode( const OUString& rText )
 {
     SAL_WARN_IF( mbProgressMode, "vcl", "StatusBar::StartProgressMode(): progress mode is active" );

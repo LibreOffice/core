@@ -149,7 +149,6 @@ public:
     const OUString&     GetHelpText( sal_uInt16 nPageId ) const;
 
     void                SetHelpId( sal_uInt16 nPageId, const OString& rId ) const;
-    OString             GetHelpId( sal_uInt16 nPageId ) const;
 
     void                SetPageName( sal_uInt16 nPageId, const OString& rName ) const;
     OString             GetPageName( sal_uInt16 nPageId ) const;

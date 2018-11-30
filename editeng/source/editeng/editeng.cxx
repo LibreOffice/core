@@ -872,11 +872,6 @@ EditPaM EditEngine::CursorRight(const EditPaM& rPaM, sal_uInt16 nCharacterIterat
     return pImpEditEngine->CursorRight(rPaM, nCharacterIteratorMode);
 }
 
-sal_uInt16 EditEngine::GetOnePixelInRef() const
-{
-    return pImpEditEngine->nOnePixelInRef;
-}
-
 InternalEditStatus& EditEngine::GetInternalEditStatus()
 {
     return pImpEditEngine->GetStatus();

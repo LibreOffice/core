@@ -209,26 +209,6 @@ OutputDevice* ObjectContact::TryToGetOutputDevice() const
     return nullptr;
 }
 
-void ObjectContact::resetViewPort()
-{
-    const drawinglayer::geometry::ViewInformation2D& rCurrentVI2D = getViewInformation2D();
-
-    if(!rCurrentVI2D.getViewport().isEmpty())
-    {
-        const basegfx::B2DRange aEmptyRange;
-
-        drawinglayer::geometry::ViewInformation2D aNewVI2D(
-            rCurrentVI2D.getObjectTransformation(),
-            rCurrentVI2D.getViewTransformation(),
-            aEmptyRange,
-            rCurrentVI2D.getVisualizedPage(),
-            rCurrentVI2D.getViewTime(),
-            rCurrentVI2D.getExtendedInformationSequence());
-
-        updateViewInformation2D(aNewVI2D);
-    }
-}
-
 void ObjectContact::resetAllGridOffsets()
 {
     const sal_uInt32 nVOCCount(getViewObjectContactCount());

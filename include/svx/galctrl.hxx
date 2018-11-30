@@ -72,7 +72,6 @@ public:
         GalleryTheme* pTheme = nullptr);
 
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
-    bool                SetGraphic( const INetURLObject& );
     static void         PreviewMedia( const INetURLObject& rURL );
 };
 
@@ -83,7 +82,6 @@ private:
     tools::Rectangle aPreviewRect;
 
     SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
-    SVX_DLLPRIVATE void             InitSettings();
 
     SVX_DLLPRIVATE virtual void     Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 

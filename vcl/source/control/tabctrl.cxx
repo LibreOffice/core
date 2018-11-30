@@ -1958,16 +1958,6 @@ void TabControl::SetHelpId( sal_uInt16 nPageId, const OString& rId ) const
         pItem->maHelpId = rId;
 }
 
-OString TabControl::GetHelpId( sal_uInt16 nPageId ) const
-{
-    ImplTabItem* pItem = ImplGetItem( nPageId );
-
-    if (pItem)
-        return pItem->maHelpId;
-
-    return OString();
-}
-
 void TabControl::SetPageName( sal_uInt16 nPageId, const OString& rName ) const
 {
     ImplTabItem* pItem = ImplGetItem( nPageId );

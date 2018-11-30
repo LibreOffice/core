@@ -221,7 +221,6 @@ public:
     void            SetMode( BrowseMode nM ) { nMode = nM; }
     BrowseMode      GetMode() const { return nMode; }
 
-    SbxVariable*    FindVariable( SvTreeListEntry* pEntry );
     SvTreeListEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     SvTreeListEntry*    FindEntry( SvTreeListEntry* pParent, const OUString& rText, EntryType eType );
 
