@@ -1440,6 +1440,7 @@ static Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
 
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 {
+    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
     tools::Rectangle aRect(GetMarkedObjRect());
 
     if(GetSdrPageView())
@@ -1497,11 +1498,11 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // position
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem)) {
-        nPosDX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue()-aRect.Left();
+        nPosDX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - aRect.Left();
         bChgPos=true;
     }
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,true,&pPoolItem)){
-        nPosDY=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue()-aRect.Top();
+        nPosDY=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - aRect.Top();
         bChgPos=true;
     }
     // size
@@ -1610,7 +1611,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
         if(GetSdrPageView())
         {
-            const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
             if(bTiledRendering) {
                 // We gets the position in twips
                 if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())

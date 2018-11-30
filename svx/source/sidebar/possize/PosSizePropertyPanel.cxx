@@ -39,6 +39,7 @@
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
 #include <sal/log.hxx>
+#include <svtools/unitconv.hxx>
 
 using namespace css;
 using namespace css::uno;
