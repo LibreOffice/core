@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -10,29 +10,37 @@
 #ifndef INCLUDED_TEST_CONTAINER_XELEMENTACCESS_HXX
 #define INCLUDED_TEST_CONTAINER_XELEMENTACCESS_HXX
 
-#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Type.hxx>
 
-namespace apitest {
+#include <test/testdllapi.hxx>
 
-class XElementAccess
+namespace apitest
+{
+class OOO_DLLPUBLIC_TEST XElementAccess
 {
 public:
-    XElementAccess(css::uno::Type const & rType): maType(rType) {}
+    XElementAccess(css::uno::Type const& rType)
+        : m_aType(rType)
+    {
+    }
 
     void testGetElementType();
     void testHasElements();
 
-    virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
-    virtual ~XElementAccess() {}
+protected:
+    ~XElementAccess() {}
 
 private:
-    css::uno::Type const maType;
+    css::uno::Type const m_aType;
 };
 
-}
+} // namespace apitest
 
 #endif // INCLUDED_TEST_CONTAINER_XELEMENTACCESS_HXX
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

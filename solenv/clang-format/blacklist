@@ -7576,7 +7576,6 @@ include/test/beans/xpropertyset.hxx
 include/test/bootstrapfixture.hxx
 include/test/calc_unoapi_test.hxx
 include/test/callgrind.hxx
-include/test/container/xelementaccess.hxx
 include/test/container/xindexaccess.hxx
 include/test/container/xnamecontainer.hxx
 include/test/container/xnamed.hxx
@@ -16569,7 +16568,6 @@ test/source/beans/xpropertyset.cxx
 test/source/bootstrapfixture.cxx
 test/source/calc_unoapi_test.cxx
 test/source/callgrind.cxx
-test/source/container/xelementaccess.cxx
 test/source/container/xindexaccess.cxx
 test/source/container/xnamecontainer.cxx
 test/source/container/xnamed.cxx
