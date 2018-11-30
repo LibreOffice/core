@@ -325,8 +325,24 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
         //  Text zwischen Trennern
         nStart = nPos;
 handle_r1c1:
-        while ( nPos<nLen && !ScGlobal::UnicodeStrChr( aDelimiters.getStr(), pChar[nPos] ) )
-            ++nPos;
+        {
+            bool bSingleQuoted = false;
+            while (nPos < nLen)
+            {
+                // tdf#114113: handle addresses with quoted sheet names like "'Sheet 1'.A1"
+                // Literal single quotes in sheet names are masked by another single quote
+                if (pChar[nPos] == '\'')
+                {
+                    bSingleQuoted = !bSingleQuoted;
+                }
+                else if (!bSingleQuoted) // Get everything in single quotes, including separators
+                {
+                    if (ScGlobal::UnicodeStrChr(aDelimiters.getStr(), pChar[nPos]))
+                        break;
+                }
+                ++nPos;
+            }
+        }
 
         // for R1C1 '-' in R[-]... or C[-]... are not delimiters
         // Nothing heroic here to ensure that there are '[]' around a negative
