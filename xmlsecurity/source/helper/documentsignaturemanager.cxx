@@ -378,7 +378,12 @@ bool DocumentSignatureManager::add(
 
     for (OUString const& rUri : aElements)
     {
-        bool bBinaryMode = !isXML(rUri);
+        bool bBinaryMode = false;
+        if (rUri == "Configurations2/accelerator/current.xml")
+            bBinaryMode = true;
+        else
+            bBinaryMode = !isXML(rUri);
+
         maSignatureHelper.AddForSigning(nSecurityId, rUri, bBinaryMode, bAdESCompliant);
     }
 
