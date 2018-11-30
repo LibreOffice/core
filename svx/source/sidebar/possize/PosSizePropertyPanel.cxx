@@ -45,34 +45,13 @@
 #include <svl/intitem.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
-#include <comphelper/lok.hxx>
+
 #include <svtools/unitconv.hxx>
 
 using namespace css;
 using namespace css::uno;
 
 const char USERITEM_NAME[]      = "FitItem";
-
-namespace {
-
-bool lcl_twipsNeeded(const SdrView* pView)
-{
-    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
-    if (bTiledRendering)
-    {
-        // We gets the position in twips
-        if (OutputDevice* pOutputDevice = pView->GetFirstOutputDevice())
-        {
-            if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-} // anonymouus ns
 
 namespace svx { namespace sidebar {
 
@@ -401,11 +380,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX = long( lX * aUIScale );
 
-        if (lcl_twipsNeeded(mpView))
-        {
-            lX = OutputDevice::LogicToLogic(lX, MapUnit::Map100thMM, MapUnit::MapTwip);
-        }
-
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
 
         GetBindings()->GetDispatcher()->ExecuteList(
@@ -422,11 +396,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lY = long( lY * aUIScale );
-
-        if (lcl_twipsNeeded(mpView))
-        {
-            lY = OutputDevice::LogicToLogic(lY, MapUnit::Map100thMM, MapUnit::MapTwip);
-        }
 
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
 
@@ -485,18 +454,9 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
 
     // #i123993# Need to take UIScale into account when executing rotations
     const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    long nRotateX = basegfx::fround(mlRotX * fUIScale);
-    long nRotateY = basegfx::fround(mlRotY * fUIScale);
-
-    if (lcl_twipsNeeded(mpView))
-    {
-        nRotateX = OutputDevice::LogicToLogic(nRotateX, MapUnit::Map100thMM, MapUnit::MapTwip);
-        nRotateY = OutputDevice::LogicToLogic(nRotateY, MapUnit::Map100thMM, MapUnit::MapTwip);
-    }
-
     SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,static_cast<sal_uInt32>(nTmp));
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, nRotateX);
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, nRotateY);
+    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
+    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
             SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
@@ -509,18 +469,9 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl*, void )
 
     // #i123993# Need to take UIScale into account when executing rotations
     const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
-    long nRotateX = basegfx::fround(mlRotX * fUIScale);
-    long nRotateY = basegfx::fround(mlRotY * fUIScale);
-
-    if (lcl_twipsNeeded(mpView))
-    {
-        nRotateX = OutputDevice::LogicToLogic(nRotateX, MapUnit::Map100thMM, MapUnit::MapTwip);
-        nRotateY = OutputDevice::LogicToLogic(nRotateY, MapUnit::Map100thMM, MapUnit::MapTwip);
-    }
-
     SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,static_cast<sal_uInt32>(nTmp));
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, nRotateX);
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, nRotateY);
+    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
+    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
             SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
@@ -887,12 +838,6 @@ void PosSizePropertyPanel::executeSize()
     long lHeight = static_cast<long>(nHeight * static_cast<double>(aUIScale));
     lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
     lHeight = static_cast<long>(mpMtrWidth->Denormalize( lHeight ));
-
-    if (lcl_twipsNeeded(mpView))
-    {
-        lWidth = OutputDevice::LogicToLogic(lWidth, MapUnit::Map100thMM, MapUnit::MapTwip);
-        lHeight = OutputDevice::LogicToLogic(lHeight, MapUnit::Map100thMM, MapUnit::MapTwip);
-    }
 
     // put Width & Height to itemset
     SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, static_cast<sal_uInt32>(lWidth));

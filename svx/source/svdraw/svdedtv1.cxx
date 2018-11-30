@@ -1427,19 +1427,7 @@ static Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
 
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 {
-    bool bDealingWithTwips = false;
     const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
-    if (bTiledRendering)
-    {
-        // We gets the position in twips
-        if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
-        {
-            if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-            {
-                bDealingWithTwips = true;
-            }
-        }
-    }
 
     tools::Rectangle aRect(GetMarkedObjRect());
 
@@ -1455,14 +1443,8 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     SdrObject* pObj=nullptr;
 
     RectPoint eSizePoint=RectPoint::MM;
-    long nPosX=aRect.Left();
-    long nPosY=aRect.Top();
-    if (bDealingWithTwips)
-    {
-        nPosX = OutputDevice::LogicToLogic(nPosX, MapUnit::Map100thMM, MapUnit::MapTwip);
-        nPosY = OutputDevice::LogicToLogic(nPosY, MapUnit::Map100thMM, MapUnit::MapTwip);
-    }
-
+    long nPosDX=0;
+    long nPosDY=0;
     long nSizX=0;
     long nSizY=0;
     long nRotateAngle=0;
@@ -1504,11 +1486,11 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // position
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem)) {
-        nPosX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        nPosDX=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - aRect.Left();
         bChgPos=true;
     }
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,true,&pPoolItem)){
-        nPosY=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        nPosDY=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue() - aRect.Top();
         bChgPos=true;
     }
     // size
@@ -1597,18 +1579,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         aSetAttr.Put(makeSdrEckenradiusItem(nRadius));
         bSetAttr=true;
     }
-
-    if(bDealingWithTwips) {
-        nPosX = OutputDevice::LogicToLogic(nPosX, MapUnit::MapTwip, MapUnit::Map100thMM);
-        nPosY = OutputDevice::LogicToLogic(nPosY, MapUnit::MapTwip, MapUnit::Map100thMM);
-        nSizX = OutputDevice::LogicToLogic(nSizX, MapUnit::MapTwip, MapUnit::Map100thMM);
-        nSizY = OutputDevice::LogicToLogic(nSizY, MapUnit::MapTwip, MapUnit::Map100thMM);
-        nRotateX = OutputDevice::LogicToLogic(nRotateX, MapUnit::MapTwip, MapUnit::Map100thMM);
-        nRotateY = OutputDevice::LogicToLogic(nRotateY, MapUnit::MapTwip, MapUnit::Map100thMM);
-    }
-
-    long nPosDX = nPosX - aRect.Left();
-    long nPosDY = nPosY - aRect.Top();
 
     ForcePossibilities();
 
