@@ -159,27 +159,27 @@ inline void DbgGlobalDebugEnd()
 
 inline void DbgSetPrintMsgBox( DbgPrintLine pProc )
 {
-    DbgFunc( DBG_FUNC_SETPRINTMSGBOX, (void*)(long)pProc );
+    DbgFunc( DBG_FUNC_SETPRINTMSGBOX, (void*)(sal_IntPtr)pProc );
 }
 
 inline DbgPrintLine DbgGetPrintMsgBox()
 {
-    return (DbgPrintLine)(long)DbgFunc( DBG_FUNC_GETPRINTMSGBOX );
+    return (DbgPrintLine)(sal_IntPtr)DbgFunc( DBG_FUNC_GETPRINTMSGBOX );
 }
 
 inline void DbgSetPrintWindow( DbgPrintLine pProc )
 {
-    DbgFunc( DBG_FUNC_SETPRINTWINDOW, (void*)(long)pProc );
+    DbgFunc( DBG_FUNC_SETPRINTWINDOW, (void*)(sal_IntPtr)pProc );
 }
 
 inline void DbgSetPrintTestTool( DbgPrintLine pProc )
 {
-    DbgFunc( DBG_FUNC_SETPRINTTESTTOOL, (void*)(long)pProc );
+    DbgFunc( DBG_FUNC_SETPRINTTESTTOOL, (void*)(sal_IntPtr)pProc );
 }
 
 inline void DbgSetAbort( DbgPrintLine pProc )
 {
-    DbgFunc( DBG_FUNC_SET_ABORT, (void*)(long)pProc );
+    DbgFunc( DBG_FUNC_SET_ABORT, (void*)(sal_IntPtr)pProc );
 }
 
 typedef sal_uInt16 DbgChannelId;
@@ -203,7 +203,7 @@ TOOLS_DLLPUBLIC DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc );
 
 inline sal_Bool DbgFilterMessage( const char* pMsg )
 {
-    return (sal_Bool)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
+    return (sal_Bool)(sal_IntPtr) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
 }
 
 inline int DbgIsAllErrorOut()
@@ -311,7 +311,7 @@ inline void DbgCoreDump()
 
 inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
 {
-    DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, (void*)(long)pProc );
+    DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, (void*)(sal_IntPtr)pProc );
 }
 
 inline void DbgTestSolarMutex()
