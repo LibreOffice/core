@@ -30,6 +30,8 @@
 #include "op_spreadsheet.hxx"
 #include "op_addin.hxx"
 
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
+
 // FIXME: The idea that somebody would bother to (now and then? once a year? once a month?) manually
 // edit a source file and change the value of some #defined constant and run some ill-defined
 // "correctness test" is of course ludicrous. Either things are checked in normal unit tests, in
@@ -3758,7 +3760,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 break;
 
             default:
-                throw UnhandledToken("unhandled opcode", __FILE__, __LINE__);
+                throw UnhandledToken(OUString("unhandled opcode "
+                    + formula::FormulaCompiler().GetOpCodeMap(com::sun::star::sheet::FormulaLanguage::ENGLISH)->getSymbol(opc)
+                    + "(" + OUString::number(opc) + ")").toUtf8().getStr(), __FILE__, __LINE__);
         }
     }
 }
