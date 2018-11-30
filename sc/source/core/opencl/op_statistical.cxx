@@ -3274,11 +3274,14 @@ void OpPearson::GenSlidingWindowFunction(
     ss << ";\n";
     ss << "          fIny = "<<vSubArguments[1]->GenSlidingWindowDeclRef(true);
     ss << "  ;\n";
-    ss << " if(isnan(fInx)||isnan(fIny)){fInx=0.0;fIny=0.0;fCount = fCount-1;}\n";
+    ss << " if(!isnan(fInx)&&!isnan(fIny)){\n";
     ss << "       fSumX += fInx;\n";
     ss << "       fSumY += fIny;\n";
     ss << "       fCount = fCount + 1;\n";
+    ss << "      }\n";
     ss << "     }\n";
+    ss << " if(fCount < 1)\n";
+    ss << "   return CreateDoubleError(NoValue);\n";
     ss << "       double fMeanX = fSumX / fCount;\n";
     ss << "       double fMeanY = fSumY / fCount;\n";
     ss << "       fSumX = 0.0;\n";
@@ -3301,15 +3304,15 @@ void OpPearson::GenSlidingWindowFunction(
     ss << " ;\n";
     ss << "           fIny = "<<vSubArguments[1]->GenSlidingWindowDeclRef(true);
     ss << " ;\n";
-    ss << " if(isnan(fInx)||isnan(fIny)){fInx=0.0;fIny=0.0;}\n";
+    ss << " if(!isnan(fInx)&&!isnan(fIny)){\n";
     ss << "           fSumDeltaXDeltaY += (fInx - fMeanX) * (fIny - fMeanY);\n";
-    ss << "           fSumX += pow(fInx - fMeanX,2);\n";
-    ss << "           fSumY += pow(fIny - fMeanY,2);\n";
+    ss << "           fSumX += (fInx - fMeanX) * (fInx - fMeanX);\n";
+    ss << "           fSumY += (fIny - fMeanY) * (fIny - fMeanY);\n";
+    ss << "         }\n";
     ss << "       }\n";
-    ss << "      double tmp = ( fSumDeltaXDeltaY / ";
-    ss << "sqrt( fSumX * fSumY));\n\t";
-    ss << "      if (isnan(tmp))\n";
-    ss << "          return CreateDoubleError(NoValue);\n";
+    ss << "      if (fSumX == 0 || fSumY == 0)\n";
+    ss << "          return CreateDoubleError(DivisionByZero);\n";
+    ss << "      double tmp = ( fSumDeltaXDeltaY / sqrt( fSumX * fSumY));\n";
     ss << "      return tmp;\n";
     ss << "}\n";
 }
