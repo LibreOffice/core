@@ -80,19 +80,14 @@ enum class EditStatusFlags
     VSCROLL             = 0x0002,
     CURSOROUT           = 0x0004,
     CRSRMOVEFAIL        = 0x0008,
-    CRSRLEFTPARA        = 0x0010,
-    TEXTWIDTHCHANGED    = 0x0020,
-    TextHeightChanged   = 0x0040,
-    WRONGWORDCHANGED    = 0x0080
+    TEXTWIDTHCHANGED    = 0x0010,
+    TextHeightChanged   = 0x0020,
+    WRONGWORDCHANGED    = 0x0040
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EditStatusFlags> : is_typed_flags<EditStatusFlags, 0xff> {};
+    template<> struct typed_flags<EditStatusFlags> : is_typed_flags<EditStatusFlags, 0x7f> {};
 }
-
-/*
-    EditStatusFlags::CRSRLEFTPARA at the time cursor movement and the enter.
-*/
 
 inline void SetFlags( EVControlBits& rBits, EVControlBits nMask, bool bOn )
 {
@@ -107,10 +102,9 @@ class EditStatus
 protected:
     EditStatusFlags nStatusBits;
     EEControlBits   nControlBits;
-    sal_Int32       nPrevPara;                  // for EditStatusFlags::CRSRLEFTPARA
 
 public:
-            EditStatus()                { nStatusBits = EditStatusFlags::NONE; nControlBits = EEControlBits::NONE; nPrevPara = -1; }
+            EditStatus()                { nStatusBits = EditStatusFlags::NONE; nControlBits = EEControlBits::NONE; }
 
     void    Clear()                     { nStatusBits = EditStatusFlags::NONE; }
 
@@ -118,8 +112,6 @@ public:
     EditStatusFlags& GetStatusWord()             { return nStatusBits; }
 
     EEControlBits& GetControlWord()            { return nControlBits; }
-
-    sal_Int32&  GetPrevParagraph()          { return nPrevPara; }
 };
 
 enum class SpellCallbackCommand
