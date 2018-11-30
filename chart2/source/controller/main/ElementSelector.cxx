@@ -21,7 +21,6 @@
 #include <ObjectNameProvider.hxx>
 #include <ObjectHierarchy.hxx>
 #include <servicenames.hxx>
-#include <chartview/ExplicitValueProvider.hxx>
 #include <DrawViewWrapper.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
@@ -32,9 +31,10 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+namespace chart { class ExplicitValueProvider; }
 
 namespace chart
 {

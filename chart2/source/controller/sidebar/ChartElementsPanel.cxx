@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -25,14 +24,8 @@
 
 #include "ChartElementsPanel.hxx"
 #include <ChartController.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/toolbox.hxx>
-#include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <LegendHelper.hxx>

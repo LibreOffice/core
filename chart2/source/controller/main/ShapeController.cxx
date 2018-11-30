@@ -26,14 +26,13 @@
 #include <dlg_ShapeParagraph.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <vcl/svapp.hxx>
 #include <editeng/formatbreakitem.hxx>
-#include <svx/dialogs.hrc>
-#include <svx/drawitem.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/eeitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/orphitem.hxx>
@@ -41,8 +40,6 @@
 #include <svx/svxdlg.hxx>
 #include <editeng/widwitem.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;

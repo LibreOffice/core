@@ -32,10 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <vcl/svapp.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/property.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

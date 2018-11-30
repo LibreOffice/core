@@ -441,6 +441,9 @@ blacklist:
     chart2/source/controller/inc/RangeSelectionListener.hxx:
     # base class has to be a complete type
     - com/sun/star/sheet/XRangeSelectionListener.hpp
+    chart2/source/controller/accessibility/AccessibleBase.cxx:
+    # Needed for template
+    - com/sun/star/chart2/XChartDocument.hpp
     chart2/source/controller/accessibility/AccessibleChartShape.hxx:
     # base class has to be a complete type
     - AccessibleBase.hxx
@@ -475,6 +478,18 @@ blacklist:
     # base class has to be a complete type
     - CommandDispatch.hxx
     - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/controller/main/ChartController_EditData.cxx:
+    # Needed for member access
+    - ChartWindow.hxx
+    chart2/source/controller/main/ChartController_Position.cxx:
+    # Needed for member access
+    - ChartWindow.hxx
+    chart2/source/controller/main/ChartController_Properties.cxx:
+    # Needed for member access
+    - ChartWindow.hxx
+    chart2/source/controller/main/ChartController_Tools.cxx:
+    # Needed for template
+    - com/sun/star/graphic/XGraphic.hpp
     chart2/source/controller/main/UndoActions.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XUndoAction.hpp
@@ -594,3 +609,7 @@ blacklist:
     chart2/source/controller/chartapiwrapper/WrappedStockProperties.hxx:
     # Needed for css namespace shortcut
     - sal/types.h
+    chart2/source/controller/itemsetwrapper/MultipleChartConverters.cxx:
+    # Needed for compound type declaration
+    - com/sun/star/chart2/XAxis.hpp
+    
