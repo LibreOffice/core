@@ -1644,11 +1644,6 @@ static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
     return (a > 0) ? (c * 255 + a / 2) / a : 0;
 }
 
-static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
-{
-    return (c * a + 127) / 255;
-}
-
 void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
                                const SalBitmap& rSalBitmap,
                                Color nMaskColor )
@@ -2109,15 +2104,16 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
             unsigned char *xor_data = xor_row + (nUnscaledExtentsLeft * 4);
             for (sal_Int32 x = nUnscaledExtentsLeft; x < nUnscaledExtentsRight; ++x)
             {
-                sal_uInt8 b = unpremultiply(true_data[SVP_CAIRO_BLUE], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_BLUE], xor_data[SVP_CAIRO_ALPHA]);
-                sal_uInt8 g = unpremultiply(true_data[SVP_CAIRO_GREEN], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_GREEN], xor_data[SVP_CAIRO_ALPHA]);
-                sal_uInt8 r = unpremultiply(true_data[SVP_CAIRO_RED], true_data[SVP_CAIRO_ALPHA]) ^
-                              unpremultiply(xor_data[SVP_CAIRO_RED], xor_data[SVP_CAIRO_ALPHA]);
-                true_data[0] = premultiply(b, true_data[SVP_CAIRO_ALPHA]);
-                true_data[1] = premultiply(g, true_data[SVP_CAIRO_ALPHA]);
-                true_data[2] = premultiply(r, true_data[SVP_CAIRO_ALPHA]);
+                sal_uInt32 xorC = *reinterpret_cast<sal_uInt32*>(xor_data);
+                sal_uInt8 xorA = xorC >> 24;
+                xorA |= xorA << 16 | xorA << 8;
+                xorC &= 0xffffff;
+                sal_uInt32 destC = *reinterpret_cast<sal_uInt32*>(true_data);
+                sal_uInt8 destA = destC >> 24;
+                destA |= destA << 16 | destA << 8;
+                destC &= 0xffffff;
+                sal_uInt32 result = xorA == 0 ? 0 : ((destC ^ xorC) * destA / xorA);
+                *reinterpret_cast<sal_uInt32*>(true_data) = result;
                 true_data+=4;
                 xor_data+=4;
             }
