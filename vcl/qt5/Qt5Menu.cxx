@@ -54,7 +54,7 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
         // top-level menu
         if (mpQMenuBar)
         {
-            pQMenu = new QMenu(toQString(aText));
+            pQMenu = new QMenu(toQString(aText), nullptr);
             pSalMenuItem->mpMenu.reset(pQMenu);
 
             if ((nPos != MENU_APPEND)
@@ -78,7 +78,7 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
         if (pSalMenuItem->mpSubMenu)
         {
             // submenu
-            QMenu* pTempQMenu = new QMenu(toQString(aText));
+            QMenu* pTempQMenu = new QMenu(toQString(aText), nullptr);
             pSalMenuItem->mpMenu.reset(pTempQMenu);
 
             if ((nPos != MENU_APPEND)
@@ -103,7 +103,7 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
         {
             if (pSalMenuItem->mnType == MenuItemType::SEPARATOR)
             {
-                QAction* pAction = new QAction();
+                QAction* pAction = new QAction(nullptr);
                 pSalMenuItem->mpAction.reset(pAction);
                 pAction->setSeparator(true);
 
@@ -120,7 +120,7 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
             else
             {
                 // leaf menu
-                QAction* pAction = new QAction(toQString(aText));
+                QAction* pAction = new QAction(toQString(aText), nullptr);
                 pSalMenuItem->mpAction.reset(pAction);
 
                 if ((nPos != MENU_APPEND)
