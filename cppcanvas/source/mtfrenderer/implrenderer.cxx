@@ -1789,18 +1789,7 @@ namespace cppcanvas
                         }
                         // Handle drawing layer fills
                         else if( pAct->GetComment() == "EMF_PLUS" ) {
-                            static int count = -1, limit = 0x7fffffff;
-                            if (count == -1) {
-                                count = 0;
-                                if (char *env = getenv ("EMF_PLUS_LIMIT")) {
-                                    limit = atoi (env);
-                                    SAL_INFO ("cppcanvas.emf", "EMF+ records limit: " << limit);
-                                }
-                            }
-                            SAL_INFO ("cppcanvas.emf", "EMF+ passed to canvas mtf renderer, size: " << pAct->GetDataSize ());
-                            if (count < limit)
-                                processEMFPlus( pAct, rFactoryParms, rStates.getState(), rCanvas );
-                            count ++;
+                            SAL_WARN ("cppcanvas.emf", "EMF+ code was refactored and removed");
                         } else if( pAct->GetComment() == "EMF_PLUS_HEADER_INFO" ) {
                             SAL_INFO ("cppcanvas.emf", "EMF+ passed to canvas mtf renderer - header info, size: " << pAct->GetDataSize ());
 
