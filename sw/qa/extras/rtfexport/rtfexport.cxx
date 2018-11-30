@@ -210,7 +210,7 @@ DECLARE_RTFEXPORT_TEST(testMathEqarray, "math-eqarray.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString const aExpected(
-        "y = left lbrace stack { 0, x < 0 # 1, x = 0 # {x} ^ {2} , x > 0 } right none");
+        "y = left lbrace stack { 0 , x < 0 # 1 , x = 0 # {x} ^ {2} , x > 0 } right none");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
