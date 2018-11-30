@@ -16,6 +16,24 @@
       "revId": "cb37c789c93825232924e797ffcac7fd5edfca6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f5c4f37_ed23c1bd",
+        "filename": "vcl/qt5/Qt5Menu.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2018-11-30T08:02:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f5c4f37_0dba95dd",
+      "revId": "cb37c789c93825232924e797ffcac7fd5edfca6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
