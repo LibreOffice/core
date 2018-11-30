@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f5c4f37_6defd187",
+        "filename": "sdext/source/minimizer/optimizerdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-11-30T07:07:29Z",
+      "side": 1,
+      "message": "Can you just use the vcl MessageDialog as seen in https://opengrok.libreoffice.org/xref/core/sfx2/source/doc/templatedlg.cxx#1176-1180 ?",
+      "revId": "70f9ca8ff46668da098d0bcbfa8ca57097ebbcc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
