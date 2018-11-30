@@ -811,8 +811,12 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
 
     if (!bDone) // do not recognize e.g. NaN1.23
     {
-        // leading zeros and group separators may be safely ignored
-        while (p != pEnd && (*p == CharT('0') || *p == cGroupSeparator))
+        // Leading zeros and group separators between digits may be safely
+        // ignored. p0 < p implies that there was a leading 0 already,
+        // consecutive group separators may not happen as *(p+1) is checked for
+        // digit.
+        while (p != pEnd && (*p == CharT('0') || (*p == cGroupSeparator
+                        && p0 < p && p+1 < pEnd && rtl::isAsciiDigit(*(p+1)))))
         {
             ++p;
         }
@@ -831,6 +835,12 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             }
             else if (c != cGroupSeparator)
             {
+                break;
+            }
+            else if (p == p0 || (p+1 == pEnd) || !rtl::isAsciiDigit(*(p+1)))
+            {
+                // A leading or trailing (not followed by a digit) group
+                // separator character is not a group separator.
                 break;
             }
         }
