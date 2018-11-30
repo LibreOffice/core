@@ -48,8 +48,6 @@
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 
-#include <algorithm>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;

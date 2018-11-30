@@ -19,7 +19,6 @@
 
 #include <MultipleChartConverters.hxx>
 
-#include <chartview/ChartSfxItemIds.hxx>
 #include "SchWhichPairs.hxx"
 #include <AxisItemConverter.hxx>
 #include <StatisticsItemConverter.hxx>
@@ -30,9 +29,9 @@
 #include <TitleItemConverter.hxx>
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

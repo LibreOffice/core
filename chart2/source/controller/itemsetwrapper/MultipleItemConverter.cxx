@@ -18,9 +18,7 @@
  */
 
 #include <MultipleItemConverter.hxx>
-#include <ItemPropertyMap.hxx>
 
-#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;

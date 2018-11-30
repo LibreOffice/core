@@ -18,17 +18,12 @@
  */
 
 #include "UndoActions.hxx"
-#include <DisposeHelper.hxx>
-#include <CommonFunctors.hxx>
-#include <PropertyHelper.hxx>
 #include "ChartModelClone.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <tools/diagnose_ex.h>
 #include <svx/svdundo.hxx>
 
-#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;

@@ -31,7 +31,6 @@
 #include <ChartTypeHelper.hxx>
 #include <unonames.hxx>
 
-#include <svx/chrtitem.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -45,12 +44,9 @@
 #include <editeng/brushitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <vcl/graph.hxx>
-#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <svx/tabline.hxx>
 
-#include <functional>
-#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;

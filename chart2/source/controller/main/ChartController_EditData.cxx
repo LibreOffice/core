@@ -21,9 +21,6 @@
 #include <ChartController.hxx>
 
 #include <dlg_DataEditor.hxx>
-#include <DataSourceHelper.hxx>
-#include <DiagramHelper.hxx>
-#include <ControllerLockGuard.hxx>
 #include "UndoGuard.hxx"
 #include <ResId.hxx>
 #include <strings.hrc>
