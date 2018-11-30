@@ -845,16 +845,22 @@ void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode)
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rDeletedPrev);
     for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
     {
-        frames.push_back(pFrame);
+        if (pFrame->getRootFrame()->IsHideRedlines())
+        {
+            frames.push_back(pFrame);
+        }
     }
     {
         auto frames2(frames);
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIt(rNode);
         for (SwTextFrame* pFrame = aIt.First(); pFrame; pFrame = aIt.Next())
         {
-            auto const it(std::find(frames2.begin(), frames2.end(), pFrame));
-            assert(it != frames2.end());
-            frames2.erase(it);
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                auto const it(std::find(frames2.begin(), frames2.end(), pFrame));
+                assert(it != frames2.end());
+                frames2.erase(it);
+            }
         }
         assert(frames2.empty());
     }
