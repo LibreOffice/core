@@ -38,7 +38,6 @@
 #include <svl/rectitem.hxx>
 #include <svl/aeitem.hxx>
 #include <swpossizetabpage.hxx>
-#include <comphelper/lok.hxx>
 
 // static ----------------------------------------------------------------
 
@@ -80,28 +79,6 @@ const sal_uInt16 SvxSlantTabPage::pSlantRanges[] =
     SID_ATTR_TRANSFORM_INTERN,
     0
 };
-
-namespace {
-
-bool lcl_twipsNeeded(const SdrView* pView)
-{
-    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
-    if (bTiledRendering)
-    {
-        // We gets the position in twips
-        if (OutputDevice* pOutputDevice = pView->GetFirstOutputDevice())
-        {
-            if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-} // anonymouus ns
-
 
 /*************************************************************************
 |*
@@ -294,18 +271,9 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
         const double fTmpX((GetCoreValue(*m_pMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
         const double fTmpY((GetCoreValue(*m_pMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
-        long nRotateX = basegfx::fround(fTmpX);
-        long nRotateY = basegfx::fround(fTmpY);
-
-        if (lcl_twipsNeeded(pView))
-        {
-            nRotateX = OutputDevice::LogicToLogic(nRotateX, MapUnit::Map100thMM, MapUnit::MapTwip);
-            nRotateY = OutputDevice::LogicToLogic(nRotateY, MapUnit::Map100thMM, MapUnit::MapTwip);
-        }
-
         rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_pCtlAngle->GetRotation()));
-        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), nRotateX));
-        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), nRotateY));
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
         bModified = true;
     }
@@ -968,12 +936,6 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
             // #101581# GetTopLeftPosition(...) needs coordinates after UI scaling, in real PagePositions
             GetTopLeftPosition(fX, fY, maRange);
 
-            if (lcl_twipsNeeded(mpView))
-            {
-                fX = OutputDevice::LogicToLogic(fX, MapUnit::Map100thMM, MapUnit::MapTwip);
-                fY = OutputDevice::LogicToLogic(fY, MapUnit::Map100thMM, MapUnit::MapTwip);
-            }
-
             rOutAttrs->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_X), basegfx::fround(fX)));
             rOutAttrs->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_Y), basegfx::fround(fY)));
 
@@ -1014,12 +976,6 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         long lHeight = long(nHeight * (double)aUIScale);
         lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
         lHeight = static_cast<long>(m_pMtrHeight->Denormalize( lHeight ));
-
-        if (lcl_twipsNeeded(mpView))
-        {
-            lWidth = OutputDevice::LogicToLogic(lWidth, MapUnit::Map100thMM, MapUnit::MapTwip);
-            lHeight = OutputDevice::LogicToLogic(lHeight, MapUnit::Map100thMM, MapUnit::MapTwip);
-        }
 
         // put Width & Height to itemset
         rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), (sal_uInt32) lWidth ) );
