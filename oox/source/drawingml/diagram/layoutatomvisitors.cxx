@@ -283,7 +283,7 @@ void ShapeLayoutingVisitor::defaultVisit(LayoutAtom const & rAtom)
 void ShapeLayoutingVisitor::visit(ConstraintAtom& rAtom)
 {
     if (meLookFor == CONSTRAINT)
-        rAtom.parseConstraint(maConstraints);
+        rAtom.parseConstraint(maConstraints, /*bRequireForName=*/true);
 }
 
 void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)

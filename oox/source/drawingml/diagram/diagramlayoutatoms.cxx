@@ -314,11 +314,14 @@ void ConstraintAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints) const
+void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
+                                     bool bRequireForName) const
 {
+    if (bRequireForName && maConstraint.msForName.isEmpty())
+        return;
+
     // accepting only basic equality constraints
-    if (!maConstraint.msForName.isEmpty()
-        && (maConstraint.mnOperator == XML_none || maConstraint.mnOperator == XML_equ)
+    if ((maConstraint.mnOperator == XML_none || maConstraint.mnOperator == XML_equ)
         && maConstraint.mnType != XML_none)
     {
         rConstraints.push_back(maConstraint);
@@ -342,7 +345,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         {
             auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
             if (pConstraintAtom)
-                pConstraintAtom->parseConstraint(aMergedConstraints);
+                pConstraintAtom->parseConstraint(aMergedConstraints, /*bRequireForName=*/true);
         }
     }
     aMergedConstraints.insert(aMergedConstraints.end(), rOwnConstraints.begin(),
@@ -444,6 +447,42 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 rShape->setSubType(nType);
                 rShape->getCustomShapeProperties()->setShapePresetType(nType);
             }
+
+            // Parse constraints to adjust the size.
+            std::vector<Constraint> aDirectConstraints;
+            const LayoutNode& rLayoutNode = getLayoutNode();
+            for (const auto& pChild : rLayoutNode.getChildren())
+            {
+                auto pConstraintAtom = dynamic_cast<ConstraintAtom*>(pChild.get());
+                if (pConstraintAtom)
+                    pConstraintAtom->parseConstraint(aDirectConstraints, /*bRequireForName=*/false);
+            }
+
+            LayoutPropertyMap aProperties;
+            LayoutProperty& rParent = aProperties[""];
+            rParent[XML_w] = rShape->getSize().Width;
+            rParent[XML_h] = rShape->getSize().Height;
+            rParent[XML_l] = 0;
+            rParent[XML_t] = 0;
+            rParent[XML_r] = rShape->getSize().Width;
+            rParent[XML_b] = rShape->getSize().Height;
+            for (const auto& rConstr : aDirectConstraints)
+            {
+                const LayoutPropertyMap::const_iterator aRef
+                    = aProperties.find(rConstr.msRefForName);
+                if (aRef != aProperties.end())
+                {
+                    const LayoutProperty::const_iterator aRefType
+                        = aRef->second.find(rConstr.mnRefType);
+                    if (aRefType != aRef->second.end())
+                        aProperties[rConstr.msForName][rConstr.mnType]
+                            = aRefType->second * rConstr.mfFactor;
+                }
+            }
+            awt::Size aSize;
+            aSize.Width = rParent[XML_w];
+            aSize.Height = rParent[XML_h];
+            rShape->setSize(aSize);
             break;
         }
 
