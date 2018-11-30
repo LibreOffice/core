@@ -54,13 +54,12 @@ enum class IconChoiceFlags {
     SelectingRect                = 0x0002,
     DownCtrl                     = 0x0004,
     DownDeselect                 = 0x0008,
-    StartEditTimerInMouseUp      = 0x0010,
-    EntryListPosValid            = 0x0020,
-    ClearingSelection            = 0x0040,
-    Arranging                    = 0x0080
+    EntryListPosValid            = 0x0010,
+    ClearingSelection            = 0x0020,
+    Arranging                    = 0x0040
 };
 namespace o3tl {
-    template<> struct typed_flags<IconChoiceFlags> : is_typed_flags<IconChoiceFlags, 0x00ff> {};
+    template<> struct typed_flags<IconChoiceFlags> : is_typed_flags<IconChoiceFlags, 0x007f> {};
 }
 
 // unit = pixels
