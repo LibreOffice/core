@@ -427,6 +427,7 @@
           <object class="GtkLabel" id="Label_minimum">
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="conditionalentry|Label_minimum">Minimum</property>
+            <property name="mnemonic_widget">colscalemin</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -437,6 +438,7 @@
           <object class="GtkLabel" id="Label_maximum">
             <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="conditionalentry|Label_maximum">Maximum</property>
+            <property name="mnemonic_widget">colscalemax</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
