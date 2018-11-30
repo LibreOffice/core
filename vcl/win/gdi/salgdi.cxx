@@ -54,6 +54,24 @@ struct SysColorEntry
 static SysColorEntry* pFirstSysColor = nullptr;
 static SysColorEntry* pActSysColor = nullptr;
 
+namespace
+{
+
+void DeleteSysColorList()
+{
+    SysColorEntry* pEntry = pFirstSysColor;
+    pActSysColor = pFirstSysColor = nullptr;
+
+    while( pEntry )
+    {
+        SysColorEntry* pTmp = pEntry->pNext;
+        delete pEntry;
+        pEntry = pTmp;
+    }
+}
+
+} // namespace
+
 // Blue7
 static PALETTEENTRY aImplExtraColor1 =
 {
@@ -315,15 +333,7 @@ void ImplFreeSalGDI()
         delete[] pSalData->mpDitherHigh;
     }
 
-    // delete SysColorList
-    SysColorEntry* pEntry = pFirstSysColor;
-    while( pEntry )
-    {
-        SysColorEntry* pTmp = pEntry->pNext;
-        delete pEntry;
-        pEntry = pTmp;
-    }
-    pFirstSysColor = nullptr;
+    DeleteSysColorList();
 
     // delete icon cache
     SalIcon* pIcon = pSalData->mpFirstIcon;
@@ -409,15 +419,7 @@ static void ImplInsertSysColorEntry( int nSysIndex )
 
 void ImplUpdateSysColorEntries()
 {
-    // delete old SysColorList
-    SysColorEntry* pEntry = pFirstSysColor;
-    while( pEntry )
-    {
-        SysColorEntry* pTmp = pEntry->pNext;
-        delete pEntry;
-        pEntry = pTmp;
-    }
-    pActSysColor = pFirstSysColor = nullptr;
+    DeleteSysColorList();
 
     // create new sys color list
     ImplInsertSysColorEntry( COLOR_ACTIVEBORDER );
