@@ -26,7 +26,7 @@ ScShowTabDlg::ScShowTabDlg(weld::Window* pParent)
     , m_xFrame(m_xBuilder->weld_frame("frame"))
     , m_xLb(m_xBuilder->weld_tree_view("treeview"))
 {
-    m_xLb->set_selection_mode(true);
+    m_xLb->set_selection_mode(SelectionMode::Multiple);
     m_xLb->set_size_request(-1, m_xLb->get_height_rows(10));
     m_xLb->connect_row_activated(LINK(this, ScShowTabDlg, DblClkHdl));
 }

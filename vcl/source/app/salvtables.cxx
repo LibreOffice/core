@@ -2267,9 +2267,9 @@ public:
         m_xTreeView->SetCollapsedEntryBmp(rVclIter.iter, aImage);
     }
 
-    virtual void set_selection_mode(bool bMultiple) override
+    virtual void set_selection_mode(SelectionMode eMode) override
     {
-        m_xTreeView->SetSelectionMode(bMultiple ? SelectionMode::Multiple : SelectionMode::Single);
+        m_xTreeView->SetSelectionMode(eMode);
     }
 
     virtual int count_selected_rows() const override
