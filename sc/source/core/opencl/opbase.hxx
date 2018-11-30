@@ -140,6 +140,8 @@ public:
     virtual void DumpInlineFun( std::set<std::string>&, std::set<std::string>& ) const;
     const std::string& GetName() const;
     virtual bool NeedParallelReduction() const;
+    /// If there's actually no argument, i.e. it expands to no code.
+    virtual bool IsEmpty() const { return false; }
 
 protected:
     const ScCalcConfig& mCalcConfig;
