@@ -30,6 +30,8 @@
 #include <vcl/builderfactory.hxx>
 #include <osl/diagnose.h>
 
+#include <officecfg/Office/Common.hxx>
+
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
 ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
@@ -37,16 +39,30 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     : GenericDialogController(pParent, "modules/scalc/ui/tabcolordialog.ui", "TabColorDialog")
     , m_aTabBgColor(rDefaultColor)
     , m_aTabBgColorNoColorText(rTabBgColorNoColorText)
-    , m_xTabBgColorSet(new weld::CustomWeld(*m_xBuilder, "colorset", m_aTabBgColorSet))
+    , m_xSelectPalette(m_xBuilder->weld_combo_box("paletteselector"))
+    , m_xTabBgColorSet(new ScTabBgColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
+    , m_xTabBgColorSetWin(new weld::CustomWeld(*m_xBuilder, "colorset", *m_xTabBgColorSet))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
-    m_aTabBgColorSet.SetDialog(this);
-    m_aTabBgColorSet.SetColCount(SvxColorValueSet::getColumnCount());
+    m_xTabBgColorSet->SetDialog(this);
+    m_xTabBgColorSet->SetColCount(SvxColorValueSet::getColumnCount());
 
     m_xDialog->set_title(rTitle);
 
-    FillColorValueSets_Impl();
-    m_aTabBgColorSet.SetDoubleClickHdl(HDL(TabBgColorDblClickHdl_Impl));
+    const WinBits nBits(m_xTabBgColorSet->GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
+    m_xTabBgColorSet->SetStyle(nBits);
+    m_xTabBgColorSet->SetText(m_aTabBgColorNoColorText);
+
+    const sal_uInt32 nColCount = SvxColorValueSet::getColumnCount();
+    const sal_uInt32 nRowCount(10);
+    const sal_uInt32 nLength = SvxColorValueSet::getEntryEdgeLength();
+    Size aSize(m_xTabBgColorSet->CalcWindowSizePixel(Size(nLength, nLength), nColCount, nRowCount));
+    m_xTabBgColorSetWin->set_size_request(aSize.Width() + 8, aSize.Height() + 8);
+
+    FillPaletteLB();
+
+    m_xSelectPalette->connect_changed(LINK(this, ScTabBgColorDlg, SelectPaletteLBHdl));
+    m_xTabBgColorSet->SetDoubleClickHdl(HDL(TabBgColorDblClickHdl_Impl));
     m_xBtnOk->connect_clicked(HDL(TabBgColorOKHdl_Impl));
 }
 
@@ -59,48 +75,37 @@ void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
     rColor = m_aTabBgColor;
 }
 
-void ScTabBgColorDlg::FillColorValueSets_Impl()
+void ScTabBgColorDlg::FillPaletteLB()
 {
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SfxPoolItem* pItem = nullptr;
-    XColorListRef pColorList;
-
-    OSL_ENSURE( pDocSh, "DocShell not found!" );
-
-    if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
-        pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
-    if ( !pColorList.is() )
-        pColorList = XColorList::CreateStdColorList();
-
-    long nColorCount(0);
-
-    if ( pColorList.is() )
+    m_xSelectPalette->clear();
+    std::vector<OUString> aPaletteList = m_aPaletteManager.GetPaletteList();
+    for (auto const& palette : aPaletteList)
     {
-        nColorCount = pColorList->Count();
-        m_aTabBgColorSet.addEntriesForXColorList(*pColorList);
+        m_xSelectPalette->append_text(palette);
     }
-
-    if (nColorCount)
+    OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
+    m_xSelectPalette->set_active_text(aPaletteName);
+    if (m_xSelectPalette->get_active() != -1)
     {
-        const WinBits nBits(m_aTabBgColorSet.GetStyle() | WB_NAMEFIELD | WB_ITEMBORDER | WB_NONEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_NOPOINTERFOCUS);
-        m_aTabBgColorSet.SetText(m_aTabBgColorNoColorText);
-        m_aTabBgColorSet.SetStyle(nBits);
+        SelectPaletteLBHdl(*m_xSelectPalette);
     }
-
-    //lock down a preferred size
-    const sal_uInt32 nColCount = SvxColorValueSet::getColumnCount();
-    const sal_uInt32 nRowCount(ceil(double(nColorCount)/nColCount));
-    const sal_uInt32 nLength = SvxColorValueSet::getEntryEdgeLength();
-    Size aSize(m_aTabBgColorSet.CalcWindowSizePixel(Size(nLength, nLength), nColCount, nRowCount));
-    m_xTabBgColorSet->set_size_request(aSize.Width() + 8, aSize.Height() + 8);
-    m_aTabBgColorSet.SelectItem(0);
 }
 
-///    Handler, called when color selection is changed
+IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
+{
+    m_xTabBgColorSet->Clear();
+    sal_Int32 nPos = m_xSelectPalette->get_active();
+    m_aPaletteManager.SetPalette( nPos );
+    m_aPaletteManager.ReloadColorSet(*m_xTabBgColorSet);
+    m_xTabBgColorSet->Resize();
+    m_xTabBgColorSet->SelectItem(0);
+}
+
+//    Handler, called when color selection is changed
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, SvtValueSet*, void)
 {
-    sal_uInt16 nItemId = m_aTabBgColorSet.GetSelectedItemId();
-    Color aColor = nItemId ? ( m_aTabBgColorSet.GetItemColor( nItemId ) ) : COL_AUTO;
+    sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
+    Color aColor = nItemId ? ( m_xTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
     m_aTabBgColor = aColor;
     m_xDialog->response(RET_OK);
 }
@@ -108,14 +113,14 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, SvtValueSet*, void)
 //    Handler, called when the OK button is pushed
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, weld::Button&, void)
 {
-    sal_uInt16 nItemId = m_aTabBgColorSet.GetSelectedItemId();
-    Color aColor = nItemId ? ( m_aTabBgColorSet.GetItemColor( nItemId ) ) : COL_AUTO;
+    sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
+    Color aColor = nItemId ? ( m_xTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
     m_aTabBgColor = aColor;
     m_xDialog->response(RET_OK);
 }
 
-ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet()
-    : ColorValueSet(nullptr)
+ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
+    : ColorValueSet(std::move(pWindow))
     , m_pTabBgColorDlg(nullptr)
 {
 }

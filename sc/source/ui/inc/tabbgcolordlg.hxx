@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TABBGCOLORDLG_HXX
 
 #include <svx/SvxColorValueSet.hxx>
+#include <svx/PaletteManager.hxx>
 
 class ScTabBgColorDlg : public weld::GenericDialogController
 {
@@ -36,7 +37,7 @@ public:
     class ScTabBgColorValueSet : public ColorValueSet
     {
     public:
-        ScTabBgColorValueSet();
+        ScTabBgColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow);
         virtual ~ScTabBgColorValueSet() override;
 
         void SetDialog(ScTabBgColorDlg* pTabBgColorDlg)
@@ -50,14 +51,18 @@ public:
     };
 
 private:
+    PaletteManager          m_aPaletteManager;
     Color                   m_aTabBgColor;
     const OUString          m_aTabBgColorNoColorText;
-    ScTabBgColorValueSet    m_aTabBgColorSet;
-    std::unique_ptr<weld::CustomWeld> m_xTabBgColorSet;
+
+    std::unique_ptr<weld::ComboBox> m_xSelectPalette;
+    std::unique_ptr<ScTabBgColorValueSet> m_xTabBgColorSet;
+    std::unique_ptr<weld::CustomWeld> m_xTabBgColorSetWin;
     std::unique_ptr<weld::Button> m_xBtnOk;
 
-    void            FillColorValueSets_Impl();
+    void FillPaletteLB();
 
+    DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK(TabBgColorDblClickHdl_Impl, SvtValueSet*, void);
     DECL_LINK(TabBgColorOKHdl_Impl, weld::Button&, void);
 };
