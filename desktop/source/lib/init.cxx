@@ -103,6 +103,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 #include <svx/ruler.hxx>
+#include <svx/svdview.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/vclevent.hxx>
@@ -3049,6 +3050,37 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             OString aPayload = aStream.str().c_str();
             pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
             return;
+        }
+    }
+    else if (gImpl && aCommand == ".uno:TransformDialog")
+    {
+        bool bNeedConversion = false;
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (const SdrView* pView = pViewShell->GetDrawView())
+        {
+            if (OutputDevice* pOutputDevice = pView->GetFirstOutputDevice())
+            {
+                bNeedConversion = (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM);
+            }
+        }
+        if (bNeedConversion)
+        {
+            sal_Int32 value;
+            for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
+            {
+                if (rPropValue.Name == "TransformPosX"
+                        || rPropValue.Name == "TransformPosY"
+                        || rPropValue.Name == "TransformWidth"
+                        || rPropValue.Name == "TransformHeight"
+                        || rPropValue.Name == "TransformRotationX"
+                        || rPropValue.Name == "TransformRotationY")
+                {
+                    rPropValue.Value >>= value;
+                    value = OutputDevice::LogicToLogic(value, MapUnit::MapTwip, MapUnit::Map100thMM);
+                    rPropValue.Value <<= value;
+                }
+
+            }
         }
     }
 
