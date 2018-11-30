@@ -2598,6 +2598,13 @@ public:
         for (const auto & rSubArgument : mvSubArguments)
             rSubArgument->DumpInlineFun(decls, funs);
     }
+    virtual bool IsEmpty() const override
+    {
+        for (const auto & rSubArgument : mvSubArguments)
+            if( !rSubArgument->IsEmpty())
+                return false;
+        return true;
+    }
     virtual ~DynamicKernelSoPArguments() override
     {
         if (mpClmem2)
@@ -3887,8 +3894,12 @@ void DynamicKernel::CodeGen()
     mSyms.DumpSlidingWindowFunctions(decl);
     mKernelSignature = DK->DumpOpName();
     decl << "__kernel void DynamicKernel" << mKernelSignature;
-    decl << "(__global double *result, ";
-    DK->GenSlidingWindowDecl(decl);
+    decl << "(__global double *result";
+    if( !DK->IsEmpty())
+    {
+        decl << ", ";
+        DK->GenSlidingWindowDecl(decl);
+    }
     decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
         DK->GenSlidingWindowDeclRef() << ";\n}\n";
     mFullProgramSrc = decl.str();
