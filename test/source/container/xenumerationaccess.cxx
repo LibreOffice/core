@@ -24,9 +24,8 @@ void XEnumerationAccess::testCreateEnumeration()
 {
     uno::Reference<container::XEnumerationAccess> xEnumerationAccess(init(), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_MESSAGE("Successfully able to Create Enumeration",
-                           xEnumerationAccess->createEnumeration());
+    CPPUNIT_ASSERT_MESSAGE("Unable to create enumeration", xEnumerationAccess->createEnumeration());
 }
-}
+} // namespace apitest
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
