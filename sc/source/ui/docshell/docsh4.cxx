@@ -970,10 +970,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     break;
                 }
 
-                ScopedVclPtrInstance< ScShareDocumentDlg > aDlg( GetActiveDialogParent(), pViewData );
-                if ( aDlg->Execute() == RET_OK )
+                vcl::Window* pWin = GetActiveDialogParent();
+                ScShareDocumentDlg aDlg(pWin ? pWin->GetFrameWeld() : nullptr, pViewData);
+                if (aDlg.run() == RET_OK)
                 {
-                    bool bSetShared = aDlg->IsShareDocumentChecked();
+                    bool bSetShared = aDlg.IsShareDocumentChecked();
                     if ( bSetShared != IsDocShared() )
                     {
                         if ( bSetShared )
@@ -981,7 +982,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             bool bContinue = true;
                             if ( HasName() )
                             {
-                                vcl::Window* pWin = GetActiveDialogParent();
                                 std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                                VclMessageType::Question, VclButtonsType::YesNo,
                                                                                ScResId(STR_REIMPORT_AFTER_LOAD)));
@@ -1073,7 +1073,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         OUString aMessage( ScResId( STR_FILE_LOCKED_TRY_LATER ) );
                                         aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                        vcl::Window* pWin = GetActiveDialogParent();
                                         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                                    VclMessageType::Warning, VclButtonsType::Ok,
                                                                                    aMessage));
@@ -1081,7 +1080,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     }
                                     else
                                     {
-                                        vcl::Window* pWin = GetActiveDialogParent();
                                         std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                                    VclMessageType::Warning, VclButtonsType::YesNo,
                                                                                    ScResId(STR_DOC_DISABLESHARED)));
@@ -1119,7 +1117,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 else
                                 {
                                     xCloseable->close( true );
-                                    vcl::Window* pWin = GetActiveDialogParent();
                                     std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                                VclMessageType::Warning, VclButtonsType::Ok,
                                                                                ScResId(STR_DOC_NOLONGERSHARED)));

@@ -23,6 +23,8 @@
 #include <sal/types.h>
 #include <tools/fontenum.hxx>
 
+enum class SelectionMode { NONE, Single, Range, Multiple };
+
 enum class TimeFieldFormat : sal_Int32 { F_NONE, F_SEC, F_SEC_CS };
 
 enum class MenuItemType { DONTKNOW, STRING, IMAGE, STRINGIMAGE, SEPARATOR };

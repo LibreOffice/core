@@ -2925,6 +2925,27 @@ static GtkButtonsType VclToGtk(VclButtonsType eType)
     return eRet;
 }
 
+static GtkSelectionMode VclToGtk(SelectionMode eType)
+{
+    GtkSelectionMode eRet(GTK_SELECTION_NONE);
+    switch (eType)
+    {
+        case SelectionMode::NONE:
+            eRet = GTK_SELECTION_NONE;
+            break;
+        case SelectionMode::Single:
+            eRet = GTK_SELECTION_SINGLE;
+            break;
+        case SelectionMode::Range:
+            eRet = GTK_SELECTION_BROWSE;
+            break;
+        case SelectionMode::Multiple:
+            eRet = GTK_SELECTION_MULTIPLE;
+            break;
+    }
+    return eRet;
+}
+
 class GtkInstanceScrolledWindow : public GtkInstanceContainer, public virtual weld::ScrolledWindow
 {
 private:
@@ -5065,10 +5086,10 @@ public:
         gtk_widget_hide(m_pWidget);
     }
 
-    virtual void set_selection_mode(bool bMultiple) override
+    virtual void set_selection_mode(SelectionMode eMode) override
     {
         disable_notify_events();
-        gtk_tree_selection_set_mode(gtk_tree_view_get_selection(m_pTreeView), bMultiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_SINGLE);
+        gtk_tree_selection_set_mode(gtk_tree_view_get_selection(m_pTreeView), VclToGtk(eMode));
         enable_notify_events();
     }
 

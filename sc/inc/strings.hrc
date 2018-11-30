@@ -359,6 +359,9 @@
 #define STR_ANCHOR_TO_CELL_RESIZE                   NC_("STR_ANCHOR_TO_CELL_RESIZE", "To cell (resize with cell)")
 #define STR_ANCHOR_TO_PAGE                          NC_("STR_ANCHOR_TO_PAGE", "To page")
 
+#define STR_NO_USER_DATA_AVAILABLE                  NC_("sharedocumentdlg|nouserdata", "No user data available.")
+#define STR_EXCLUSIVE_ACCESS                        NC_("sharedocumentdlg|exclusive", "(exclusive access)")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

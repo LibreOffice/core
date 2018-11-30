@@ -33,7 +33,7 @@ FmShowColsDialog::FmShowColsDialog(weld::Window* pParent)
     , m_xOK(m_xBuilder->weld_button("ok"))
 {
     m_xList->set_size_request(m_xList->get_approximate_digit_width() * 40, m_xList->get_height_rows(8));
-    m_xList->set_selection_mode(true);
+    m_xList->set_selection_mode(SelectionMode::Multiple);
     m_xOK->connect_clicked(LINK(this, FmShowColsDialog, OnClickedOk));
 }
 

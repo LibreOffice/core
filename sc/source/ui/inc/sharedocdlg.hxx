@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SHAREDOCDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SHAREDOCDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 #include <scdllapi.h>
 
 class ScViewData;
@@ -31,25 +29,25 @@ class SvSimpleTable;
 
 // class ScShareDocumentDlg
 
-class ScShareDocumentDlg : public ModalDialog
+class ScShareDocumentDlg : public weld::GenericDialogController
 {
 private:
-    VclPtr<CheckBox>           m_pCbShare;
-    VclPtr<FixedText>          m_pFtWarning;
-    VclPtr<SvSimpleTable>      m_pLbUsers;
-
     OUString            m_aStrNoUserData;
     OUString            m_aStrUnknownUser;
     OUString            m_aStrExclusiveAccess;
 
     ScDocShell*         mpDocShell;
 
-    DECL_LINK( ToggleHandle, CheckBox&, void );
+    std::unique_ptr<weld::CheckButton> m_xCbShare;
+    std::unique_ptr<weld::Label> m_xFtWarning;
+    std::unique_ptr<weld::TreeView> m_xLbUsers;
+
+    DECL_LINK(ToggleHandle, weld::ToggleButton&, void);
+    DECL_LINK(SizeAllocated, const Size&, void);
 
 public:
-           SC_DLLPUBLIC ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData );
-                        virtual ~ScShareDocumentDlg() override;
-    virtual void        dispose() override;
+    SC_DLLPUBLIC ScShareDocumentDlg(weld::Window* pParent, ScViewData* pViewData);
+    virtual ~ScShareDocumentDlg() override;
 
     bool                IsShareDocumentChecked() const;
     void                UpdateView();
