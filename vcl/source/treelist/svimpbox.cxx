@@ -1174,7 +1174,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
     aOrigin.setX( aOrigin.X() * -1 );
     nMaxRight += aOrigin.X() - 1;
     long nVis = nMostRight - aOrigin.X();
-    if( (nWindowStyle & WB_HSCROLL) &&
+    if( (nWindowStyle & (WB_AUTOHSCROLL|WB_HSCROLL)) &&
         (nVis < nMostRight || nMaxRight < nMostRight) )
     {
         bHorBar = true;
@@ -1193,7 +1193,7 @@ void SvImpLBox::AdjustScrollBars( Size& rSize )
         nMaxRight -= nVerSBarWidth;
         if( !bHorBar )
         {
-            if( (nWindowStyle & WB_HSCROLL) &&
+            if( (nWindowStyle & (WB_AUTOHSCROLL|WB_HSCROLL)) &&
                 (nVis < nMostRight || nMaxRight < nMostRight) )
                 bHorBar = true;
         }
@@ -2115,7 +2115,6 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
     SvTreeListEntry* pNewCursor;
 
-    const WinBits nWindowStyle = pView->GetStyle();
     switch( aCode )
     {
         case KEY_UP:
@@ -2200,7 +2199,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     CallEventListeners( VclEventId::ListboxSelect, pCursor );
                 }
             }
-            else if( nWindowStyle & WB_HSCROLL )
+            else if (aHorSBar->IsVisible())
             {
                 long    nThumb = aHorSBar->GetThumbPos();
                 nThumb += aHorSBar->GetLineSize();
@@ -2231,7 +2230,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     CallEventListeners( VclEventId::ListboxSelect, pCursor );
                 }
             }
-            else if ( nWindowStyle & WB_HSCROLL )
+            else if (aHorSBar->IsVisible())
             {
                 long    nThumb = aHorSBar->GetThumbPos();
                 nThumb -= aHorSBar->GetLineSize();
