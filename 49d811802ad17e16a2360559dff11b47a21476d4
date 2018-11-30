@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f5c4f37_5b51630e",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3695,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-11-30T15:28:11Z",
+      "side": 1,
+      "message": "static is redudant inside an anonymous namespace. Additionally, you can\u0027t declare a function returning std::string (C++ type) in an \"extern C\" block. Just move this up, I guess.",
+      "revId": "49d811802ad17e16a2360559dff11b47a21476d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
