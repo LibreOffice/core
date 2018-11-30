@@ -814,7 +814,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
                 case XML_grav:
                 {
-                    if (rShape->getRotation()==90*F_PI180 || rShape->getRotation()==180*F_PI180)
+                    if (rShape->getRotation()==sal_Int32(90*F_PI180) || rShape->getRotation()==sal_Int32(180*F_PI180))
                         pTextBody->getTextProperties().moRotation = 180*F_PI180;
                 }
                 break;

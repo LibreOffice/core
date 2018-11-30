@@ -1148,7 +1148,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStateFlags flags,
     }
 }
 
-#define FALLBACK_ARROW_SIZE 11 * 0.85
+#define FALLBACK_ARROW_SIZE gint(11 * 0.85)
 
 tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(
                                                    ControlPart nPart,

@@ -16,9 +16,7 @@
 
 TODO multiplying/otherop on a combination of a float and int, and then truncating to int. like this:
     float getRotation() {}
-    int moRotation;
-    moRotation = -F_PI180 * 90 * getRotation();
-
+    int moRotation = -F_PI180 * 90 * getRotation();
 */
 namespace
 {
@@ -90,6 +88,8 @@ llvm::Optional<double> IntVsFloat::getExprValue(Expr const* expr)
     // Of the available clang Evaluate* APIs, this is the __only__ one that produces useful output
     // (as of 17 Aug 2018 checkout of clang, ie. towards clang 7)
 
+    if (expr->isValueDependent())
+        return llvm::Optional<double>();
     Expr::EvalResult evalResult;
     if (!expr->EvaluateAsRValue(evalResult, compiler.getASTContext()))
         return llvm::Optional<double>();
