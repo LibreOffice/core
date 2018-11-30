@@ -960,14 +960,14 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateFrameTabDialog(
 }
 
 VclPtr<SfxAbstractApplyTabDialog> SwAbstractDialogFactory_Impl::CreateTemplateDialog(
-                                                vcl::Window *pParent,
+                                                weld::Window *pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
                                                 const OString&      sPage,
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )
 {
-    return VclPtr<AbstractApplyTabController_Impl>::Create(o3tl::make_unique<SwTemplateDlgController>(pParent ? pParent->GetFrameWeld() : nullptr, rBase, nRegion, sPage, pActShell, bNew));
+    return VclPtr<AbstractApplyTabController_Impl>::Create(o3tl::make_unique<SwTemplateDlgController>(pParent, rBase, nRegion, sPage, pActShell, bNew));
 }
 
 VclPtr<AbstractGlossaryDlg> SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFrame* pViewFrame,
