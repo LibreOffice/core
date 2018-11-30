@@ -187,15 +187,9 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     const OUString sShowChanges("ShowChanges");
     RedlineFlags nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     bool isShowChanges;
-    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-    {   // TODO: ideally this would be stored per-view...
-        SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
-        isShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
-    }
-    else
-    {
-        isShowChanges = IDocumentRedlineAccess::IsShowChanges(nRedlineFlags);
-    }
+    // TODO: ideally this would be stored per-view...
+    SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    isShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
     xInfoSet->setPropertyValue(sShowChanges, makeAny(isShowChanges));
     // ... and hide redlines for export
     nRedlineFlags &= ~RedlineFlags::ShowMask;
@@ -418,15 +412,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
-    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-    {
-        nRedlineFlags |= RedlineFlags::ShowDelete;
-    }
-    else
-    {
-        if (*o3tl::doAccess<bool>(aAny))
-            nRedlineFlags |= RedlineFlags::ShowDelete;
-    }
+    nRedlineFlags |= RedlineFlags::ShowDelete;
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
 
     if (xStatusIndicator.is())

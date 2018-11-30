@@ -284,12 +284,7 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 uno::Reference<uno::XComponentContext> const xContext(
                         comphelper::getProcessComponentContext());
-                if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-                {
-                    rSet.Put(SfxBoolItem(nWhich, !m_pWrtShell->GetLayout()->IsHideRedlines()));
-                }
-                else
-                    rSet.Put( SfxBoolItem( nWhich, IDocumentRedlineAccess::IsShowChanges(m_pWrtShell->GetRedlineFlags()) ));
+                rSet.Put(SfxBoolItem(nWhich, !m_pWrtShell->GetLayout()->IsHideRedlines()));
             }
             break;
             case SID_AVMEDIA_PLAYER :
