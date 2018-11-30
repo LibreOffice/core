@@ -429,7 +429,7 @@ SbModule::SbModule( const OUString& rName, bool bVBACompat )
     SetFlag( SbxFlagBits::ExtSearch | SbxFlagBits::GlobalSearch );
     SetModuleType( script::ModuleType::NORMAL );
 
-    // #i92642: Set name property to intitial name
+    // #i92642: Set name property to initial name
     SbxVariable* pNameProp = pProps->Find( "Name", SbxClassType::Property );
     if( pNameProp != nullptr )
     {
@@ -2554,7 +2554,7 @@ void SbUserFormModule::Unload()
         pMeth->Get( aVals);
         if ( !bWaitForDispose )
         {
-            // we've either already got a dispose or we'er never going to get one
+            // we've either already got a dispose or we are never going to get one
             ResetApiObj();
         } // else wait for dispose
         SAL_INFO("basic", "UnloadObject completed ( we hope )");
