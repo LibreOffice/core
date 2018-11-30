@@ -322,7 +322,7 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
             ++nPos; // Separator or closing quote
         }
 
-        //  Text zwischen Trennern
+        //  text between separators
         nStart = nPos;
 handle_r1c1:
         {
