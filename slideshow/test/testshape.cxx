@@ -191,10 +191,6 @@ private:
     {
         --mnAnimated;
     }
-    virtual sal_Int32 getAnimationCount() const override
-    {
-        return mnAnimated;
-    }
 };
 
 

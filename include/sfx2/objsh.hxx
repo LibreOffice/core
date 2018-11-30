@@ -260,8 +260,6 @@ public:
 
     virtual void                Invalidate(sal_uInt16 nId = 0) override;
 
-    SfxObjectShellFlags         GetFlags( ) const;
-
     SfxModule*                  GetModule() const;
 
     virtual SfxObjectFactory&   GetFactory() const=0;

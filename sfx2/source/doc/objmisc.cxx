@@ -1419,13 +1419,6 @@ ErrCode SfxObjectShell::CallXScript( const OUString& rScriptURL,
     return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError, pCaller );
 }
 
-SfxObjectShellFlags SfxObjectShell::GetFlags() const
-{
-    if( pImpl->eFlags == SfxObjectShellFlags::UNDEFINED )
-        pImpl->eFlags = GetFactory().GetFlags();
-    return pImpl->eFlags;
-}
-
 void SfxHeaderAttributes_Impl::SetAttributes()
 {
     bAlert = true;

@@ -1259,14 +1259,6 @@ OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-OString HeaderBar::GetHelpId( sal_uInt16 nItemId ) const
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return mvItemList[ nPos ]->maHelpId;
-    return OString();
-}
-
 Size HeaderBar::CalcWindowSizePixel() const
 {
     long nMaxImageSize = 0;

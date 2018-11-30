@@ -163,7 +163,6 @@ public:
     const OUString&     GetQuickHelpText( sal_uInt16 nItemId ) const;
 
     void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
-    OString             GetHelpId( sal_uInt16 nItemId ) const;
 
     void                StartProgressMode( const OUString& rText );
     void                SetProgressValue( sal_uInt16 nPercent );

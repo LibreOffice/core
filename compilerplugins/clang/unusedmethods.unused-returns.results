@@ -1,4 +1,4 @@
-basctl/source/inc/bastype2.hxx:312
+basctl/source/inc/bastype2.hxx:309
     _Bool basctl::SbTreeListBox::get_selected(class weld::TreeIter *) const
 connectivity/source/inc/java/lang/Object.hxx:117
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
@@ -184,23 +184,23 @@ include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
-include/vcl/bitmap.hxx:186
+include/vcl/bitmap.hxx:184
     _Bool Bitmap::Dither(enum BmpDitherFlags)
 include/vcl/bitmapex.hxx:241
     _Bool BitmapEx::Rotate(long,const class Color &)
-include/vcl/fontcharmap.hxx:48
+include/vcl/fontcharmap.hxx:49
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
-include/vcl/gdimtf.hxx:186
+include/vcl/gdimtf.hxx:185
     class SvStream & GDIMetaFile::Read(class SvStream &)
-include/vcl/graphicfilter.hxx:260
+include/vcl/graphicfilter.hxx:261
     class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
-include/vcl/GraphicNativeTransform.hxx:29
+include/vcl/GraphicNativeTransform.hxx:32
     _Bool GraphicNativeTransform::rotateBitmapOnly(unsigned short)
 include/vcl/menu.hxx:389
     _Bool Menu::HandleMenuActivateEvent(class Menu *) const
 include/vcl/menu.hxx:390
     _Bool Menu::HandleMenuDeActivateEvent(class Menu *) const
-include/vcl/texteng.hxx:279
+include/vcl/texteng.hxx:280
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
@@ -226,6 +226,10 @@ sc/source/filter/inc/workbookhelper.hxx:259
     _Bool oox::xls::WorkbookHelper::importOoxFragment(const class rtl::Reference<class oox::core::FragmentHandler> &,class oox::core::FastParser &)
 sc/source/filter/xml/XMLStylesExportHelper.hxx:178
     _Bool ScFormatRangeStyles::AddStyleName(const class rtl::OUString &,int &,const _Bool)
+sc/source/ui/inc/drawview.hxx:161
+    _Bool ScDrawView::calculateGridOffsetForSdrObject(class SdrObject &,class basegfx::B2DVector &) const
+sc/source/ui/inc/drawview.hxx:164
+    _Bool ScDrawView::calculateGridOffsetForB2DRange(const class basegfx::B2DRange &,class basegfx::B2DVector &) const
 sc/source/ui/inc/select.hxx:72
     _Bool ScViewFunctionSet::SetCursorAtCell(short,int,_Bool)
 sc/source/ui/vba/vbaformat.hxx:69
@@ -320,9 +324,9 @@ vcl/inc/unx/saldisp.hxx:313
     _Bool SalDisplay::Dispatch(union _XEvent *)
 vcl/inc/WidgetDrawInterface.hxx:97
     _Bool vcl::WidgetDrawInterface::updateSettings(class AllSettings &)
-vcl/source/gdi/pdfwriter_impl.hxx:1230
+vcl/source/gdi/pdfwriter_impl.hxx:1225
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/source/gdi/pdfwriter_impl.hxx:1231
+vcl/source/gdi/pdfwriter_impl.hxx:1226
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/source/gdi/pdfwriter_impl.hxx:1232
+vcl/source/gdi/pdfwriter_impl.hxx:1227
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)

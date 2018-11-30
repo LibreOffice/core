@@ -305,7 +305,6 @@ public:
     OUString            GetItemText( sal_uInt16 nItemId ) const;
 
     OUString            GetHelpText( sal_uInt16 nItemId ) const;
-    OString             GetHelpId( sal_uInt16 nItemId ) const;
 
     Size                CalcWindowSizePixel() const;
 
