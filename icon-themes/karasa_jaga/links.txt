@@ -15,7 +15,6 @@ avmedia/res/avl02054.png cmd/lc_mediamute.png
 cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
 cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png 
 cmd/32/adddatefield.png cmd/32/datefield.png
-cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/32/adjust.png cmd/32/zoomoptimal.png
 cmd/32/advancedmode.png cmd/32/toggleobjectrotatemode.png
 cmd/32/alignframemenu.png cmd/32/objectalign.png
@@ -216,7 +215,6 @@ cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 cmd/32/open_h.png cmd/32/open.png
 cmd/32/openfromcalc.png cmd/32/open.png
 cmd/32/openfromwriter.png cmd/32/open.png
-cmd/32/openhyperlinkoncursor.png cmd/32/inserthyperlink.png
 cmd/32/ordercrit.png cmd/32/datasort.png
 cmd/32/outlinedown.png cmd/32/movedown.png
 cmd/32/outlineleft.png cmd/32/incrementlevel.png
@@ -359,7 +357,6 @@ cmd/tr/sc_underlinesimple.png cmd/tr/sc_underline.png
 cmd/lc_acceptchanges.png cmd/lc_accepttrackedchanges.png
 cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png 
 cmd/lc_adddatefield.png cmd/lc_datefield.png
-cmd/lc_addtextbox.png cmd/lc_insertfixedtext.png
 cmd/lc_adjust.png cmd/lc_zoomoptimal.png
 cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
 cmd/lc_alignframemenu.png cmd/lc_objectalign.png
@@ -548,7 +545,6 @@ cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 cmd/lc_open_h.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
 cmd/lc_openfromwriter.png cmd/lc_open.png
-cmd/lc_openhyperlinkoncursor.png cmd/lc_inserthyperlink.png
 cmd/lc_ordercrit.png cmd/lc_datasort.png
 cmd/lc_outlinedown.png cmd/lc_movedown.png
 cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
@@ -652,7 +648,6 @@ cmd/nl/sc_underlinesimple.png cmd/nl/sc_underline.png
 cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
 cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png 
 cmd/sc_adddatefield.png cmd/sc_datefield.png
-cmd/sc_addtextbox.png cmd/sc_insertfixedtext.png
 cmd/sc_adjust.png cmd/sc_zoomoptimal.png
 cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
 cmd/sc_alignframemenu.png cmd/sc_objectalign.png
@@ -841,7 +836,6 @@ cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
 cmd/sc_open_h.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
 cmd/sc_openfromwriter.png cmd/sc_open.png
-cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
 cmd/sc_ordercrit.png cmd/sc_datasort.png
 cmd/sc_outlinedown.png cmd/sc_movedown.png
 cmd/sc_outlineleft.png cmd/sc_incrementlevel.png
