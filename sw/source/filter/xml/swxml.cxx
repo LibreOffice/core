@@ -889,8 +889,10 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     // restore redline mode from import info property set
     RedlineFlags nRedlineFlags = RedlineFlags::ShowInsert;
     aAny = xInfoSet->getPropertyValue( sShowChanges );
+#if 0
     if ( *o3tl::doAccess<bool>(aAny) )
         nRedlineFlags |= RedlineFlags::ShowDelete;
+#endif
     aAny = xInfoSet->getPropertyValue( sRecordChanges );
     if ( *o3tl::doAccess<bool>(aAny) || (aKey.getLength() > 0) )
         nRedlineFlags |= RedlineFlags::On;
