@@ -822,8 +822,18 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 if ( nMask & ParserFlags::VALUE )
                 {
                     if (current == cGroupSep)
-                        nParseTokensType |= KParseTokens::GROUP_SEPARATOR_IN_NUMBER;
-                    if ((current == cDecimalSep || (bDecSepAltUsed = (cDecimalSepAlt && current == cDecimalSepAlt))) &&
+                    {
+                        if (getFlags(nextChar) & ParserFlags::VALUE_DIGIT)
+                            nParseTokensType |= KParseTokens::GROUP_SEPARATOR_IN_NUMBER;
+                        else
+                        {
+                            // Trailing group separator character is not a
+                            // group separator.
+                            eState = ssStopBack;
+                        }
+                    }
+                    else if ((current == cDecimalSep ||
+                                (bDecSepAltUsed = (cDecimalSepAlt && current == cDecimalSepAlt))) &&
                             ++nDecSeps > 1)
                     {
                         if (nCodePoints == 2)
