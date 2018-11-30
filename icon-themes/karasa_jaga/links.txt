@@ -216,7 +216,6 @@ cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 cmd/32/open_h.png cmd/32/open.png
 cmd/32/openfromcalc.png cmd/32/open.png
 cmd/32/openfromwriter.png cmd/32/open.png
-cmd/32/openhyperlinkoncursor.png cmd/32/inserthyperlink.png
 cmd/32/ordercrit.png cmd/32/datasort.png
 cmd/32/outlinedown.png cmd/32/movedown.png
 cmd/32/outlineleft.png cmd/32/incrementlevel.png
@@ -548,7 +547,6 @@ cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 cmd/lc_open_h.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
 cmd/lc_openfromwriter.png cmd/lc_open.png
-cmd/lc_openhyperlinkoncursor.png cmd/lc_inserthyperlink.png
 cmd/lc_ordercrit.png cmd/lc_datasort.png
 cmd/lc_outlinedown.png cmd/lc_movedown.png
 cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
@@ -841,7 +839,6 @@ cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
 cmd/sc_open_h.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
 cmd/sc_openfromwriter.png cmd/sc_open.png
-cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
 cmd/sc_ordercrit.png cmd/sc_datasort.png
 cmd/sc_outlinedown.png cmd/sc_movedown.png
 cmd/sc_outlineleft.png cmd/sc_incrementlevel.png
