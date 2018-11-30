@@ -101,6 +101,54 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), end);
         CPPUNIT_ASSERT_EQUAL(5.0, res);
+
+        // Leading 0 and group separator.
+        res = rtl::math::stringToDouble(
+                OUString("0,123"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), end);
+        CPPUNIT_ASSERT_EQUAL(123.0, res);
+
+        // Leading 0 and two consecutive group separators are none.
+        res = rtl::math::stringToDouble(
+                OUString("0,,1"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        // Leading 0 and group separator at end is none.
+        res = rtl::math::stringToDouble(
+                OUString("0,"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        // Leading 0 and group separator before non-digit is none.
+        res = rtl::math::stringToDouble(
+                OUString("0,x"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        // Trailing group separator is none.
+        res = rtl::math::stringToDouble(
+                OUString("1,234,"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), end);
+        CPPUNIT_ASSERT_EQUAL(1234.0, res);
+
+        // Group separator followed by non-digit is none.
+        res = rtl::math::stringToDouble(
+                OUString("1,234,x"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), end);
+        CPPUNIT_ASSERT_EQUAL(1234.0, res);
     }
 
     void test_stringToDouble_bad() {
@@ -129,6 +177,14 @@ public:
 
         res = rtl::math::stringToDouble(
                 OUString(" +,.Efoo"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        // Leading group separator is none.
+        res = rtl::math::stringToDouble(
+                OUString(",1234"),
                 '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
