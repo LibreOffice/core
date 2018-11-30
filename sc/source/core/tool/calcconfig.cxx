@@ -114,8 +114,10 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     static OpCodeSet pDefaultOpenCLSubsetOpCodes(new std::set<OpCode>({
         ocAdd,
         ocSub,
+        ocNegSub,
         ocMul,
         ocDiv,
+        ocPow,
         ocRandom,
         ocSin,
         ocCos,
@@ -239,6 +241,9 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
         }
         fromIndex = semicolon+1;
     }
+    // HACK: Both unary and binary minus have the same string but different opcodes.
+    if( result->find( ocSub ) != result->end())
+        result->insert( ocNegSub );
     return result;
 }
 
