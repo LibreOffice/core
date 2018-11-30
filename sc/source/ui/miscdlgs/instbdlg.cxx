@@ -70,7 +70,7 @@ ScInsertTableDlg::~ScInsertTableDlg()
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
-    m_xLbTables->set_selection_mode(true);
+    m_xLbTables->set_selection_mode(SelectionMode::Multiple);
     m_xBtnBrowse->connect_clicked( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
     m_xBtnNew->connect_clicked( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
     m_xBtnFromFile->connect_clicked( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );

@@ -281,7 +281,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
 
     m_xBtnOK->connect_clicked( LINK( this, SdDefineCustomShowDlg, OKHdl ) );
 
-    m_xLbPages->set_selection_mode(true);
+    m_xLbPages->set_selection_mode(SelectionMode::Multiple);
 
     // shape 'em a bit
     m_xLbPages->set_size_request(m_xLbPages->get_approximate_digit_width() * 24, m_xLbPages->get_height_rows(10));

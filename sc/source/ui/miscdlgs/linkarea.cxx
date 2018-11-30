@@ -47,7 +47,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Window* pParent)
     , m_xFtSeconds(m_xBuilder->weld_label("secondsft"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {
-    m_xLbRanges->set_selection_mode(true);
+    m_xLbRanges->set_selection_mode(SelectionMode::Multiple);
 
     m_xCbUrl->connect_entry_activate(LINK(this, ScLinkedAreaDlg, FileHdl));
     m_xBtnBrowse->connect_clicked(LINK( this, ScLinkedAreaDlg, BrowseHdl));
