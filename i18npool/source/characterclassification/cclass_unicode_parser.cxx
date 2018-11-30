@@ -441,8 +441,15 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
         cDecimalSepAlt = aItem.decimalSeparatorAlternative.toChar();
     }
 
-    if ( cGroupSep < nDefCnt )
-        pTable[cGroupSep] |= ParserFlags::VALUE;
+    if (nContTypes & KParseTokens::GROUP_SEPARATOR_IN_NUMBER)
+    {
+        if ( cGroupSep < nDefCnt )
+            pTable[cGroupSep] |= ParserFlags::VALUE;
+    }
+    else
+    {
+        cGroupSep = 0;
+    }
     if ( cDecimalSep < nDefCnt )
         pTable[cDecimalSep] |= ParserFlags::CHAR_VALUE | ParserFlags::VALUE;
     if ( cDecimalSepAlt && cDecimalSepAlt < nDefCnt )
@@ -814,6 +821,8 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 }
                 if ( nMask & ParserFlags::VALUE )
                 {
+                    if (current == cGroupSep)
+                        nParseTokensType |= KParseTokens::GROUP_SEPARATOR_IN_NUMBER;
                     if ((current == cDecimalSep || (bDecSepAltUsed = (cDecimalSepAlt && current == cDecimalSepAlt))) &&
                             ++nDecSeps > 1)
                     {
