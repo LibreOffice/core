@@ -4,25 +4,19 @@ chart2/source/view/inc/PlottingPositionHelper.hxx:206
 connectivity/source/inc/dbase/dindexnode.hxx:125
     connectivity::dbase::ONDXPage bNoDelete
     unsigned int
-cui/source/inc/cfg.hxx:249
+cui/source/inc/cfg.hxx:248
     SvxConfigEntry nId
     sal_uInt16
-editeng/source/misc/hangulhanja.cxx:78
+editeng/source/misc/hangulhanja.cxx:79
     editeng::HangulHanjaConversion_Impl m_eConvType
     class HangulHanjaConversion::ConversionType
-filter/source/graphicfilter/eps/eps.cxx:139
+filter/source/graphicfilter/eps/eps.cxx:141
     PSWriter nNextChrSetId
     sal_uInt8
 include/opencl/openclwrapper.hxx:46
     openclwrapper::GPUEnv mnIsUserCreated
     int
-include/svtools/headbar.hxx:219
-    HeaderBar mnBorderOff1
-    long
-include/svtools/headbar.hxx:220
-    HeaderBar mnBorderOff2
-    long
-include/svtools/ruler.hxx:627
+include/svtools/ruler.hxx:625
     Ruler mnBorderWidth
     long
 include/tools/ref.hxx:126
@@ -31,8 +25,14 @@ include/tools/ref.hxx:126
 include/vbahelper/vbapagesetupbase.hxx:50
     VbaPageSetupBase mnOrientPortrait
     sal_Int32
-include/vcl/dialog.hxx:50
+include/vcl/dialog.hxx:48
     Dialog mnMousePositioned
+    long
+include/vcl/headbar.hxx:216
+    HeaderBar mnBorderOff1
+    long
+include/vcl/headbar.hxx:217
+    HeaderBar mnBorderOff2
     long
 libreofficekit/source/gtk/tilebuffer.hxx:219
     LOEvent m_nSetGraphicSelectionType
@@ -76,7 +76,7 @@ sw/source/filter/ww8/docxexport.hxx:100
 sw/source/filter/ww8/ww8scan.hxx:65
     SprmInfo nVari
     unsigned int
-sw/source/uibase/inc/tautofmt.hxx:50
+sw/source/uibase/inc/tautofmt.hxx:48
     SwAutoFormatDlg m_nDfltStylePos
     sal_uInt8
 vcl/inc/canvasbitmap.hxx:57
@@ -88,7 +88,7 @@ vcl/inc/unx/i18n_ic.hxx:33
 vcl/inc/unx/salframe.h:130
     X11SalFrame mbInputFocus
     int
-vcl/workben/icontest.cxx:144
+vcl/workben/icontest.cxx:145
     IconTestApp nRet
     int
 writerfilter/source/dmapper/PageBordersHandler.hxx:54

@@ -85,8 +85,6 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         static Sequence< OUString > GetPropertyNames();
 
-        OUString const                                        m_aSecureExtensionsSetName;
-
         SvtExtendedSecurityOptions::OpenHyperlinkMode   m_eOpenHyperlinkMode;
 };
 
@@ -95,7 +93,6 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_SECURITY         )
-    , m_aSecureExtensionsSetName( SECURE_EXTENSIONS_SET )
     , m_eOpenHyperlinkMode(SvtExtendedSecurityOptions::OPEN_NEVER)
     // Init member then.
 {
@@ -127,7 +124,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
 
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys!
-    Sequence<OUString> seqNotifyNames { m_aSecureExtensionsSetName };
+    Sequence<OUString> seqNotifyNames { SECURE_EXTENSIONS_SET };
     EnableNotification( seqNotifyNames );
 }
 

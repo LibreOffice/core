@@ -56,7 +56,6 @@ class ImplTestView : public TestView,
     basegfx::B1DRange                                  maPriority;
     bool                                               mbIsClipSet;
     bool                                               mbIsClipEmptied;
-    bool                                               mbIsClearCalled;
     bool                                               mbDisposed;
 
 
@@ -69,7 +68,6 @@ public:
         maPriority(),
         mbIsClipSet(false),
         mbIsClipEmptied(false),
-        mbIsClearCalled(false),
         mbDisposed( false )
     {
     }
@@ -143,7 +141,7 @@ public:
     // TestView
     virtual bool isClearCalled() const override
     {
-        return mbIsClearCalled;
+        return false;
     }
 
     virtual std::vector<std::pair<basegfx::B2DVector,double> > getCreatedSprites() const override

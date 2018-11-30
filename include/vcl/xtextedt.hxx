@@ -32,9 +32,6 @@ namespace util {
 
 class VCL_DLLPUBLIC ExtTextEngine : public TextEngine
 {
-private:
-    OUString const      maGroupChars;
-
 public:
                         ExtTextEngine();
                         virtual ~ExtTextEngine() override;

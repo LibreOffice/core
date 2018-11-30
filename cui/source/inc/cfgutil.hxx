@@ -228,7 +228,7 @@ class CuiConfigGroupListBox
     SfxStylesInfo_Impl* m_pStylesInfo;
     std::unique_ptr<weld::TreeView> m_xTreeView;
 
-    OUString GetImage(
+    static OUString GetImage(
         const css::uno::Reference< css::script::browse::XBrowseNode >& node,
         css::uno::Reference< css::uno::XComponentContext > const & xCtx,
         bool bIsRootNode);

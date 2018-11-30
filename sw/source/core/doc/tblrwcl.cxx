@@ -97,14 +97,13 @@ struct CR_SetBoxWidth
 {
     SwShareBoxFormats aShareFormats;
     SwTableNode* pTableNd;
-    SwUndoTableNdsChg* pUndo;
     SwTwips nDiff, nSide, nMaxSize, nLowerDiff;
     TableChgMode nMode;
     bool bBigger, bLeft;
 
     CR_SetBoxWidth( TableChgWidthHeightType eType, SwTwips nDif, SwTwips nSid,
                     SwTwips nMax, SwTableNode* pTNd )
-        : pTableNd( pTNd ), pUndo( nullptr ),
+        : pTableNd( pTNd ),
         nDiff( nDif ), nSide( nSid ), nMaxSize( nMax ), nLowerDiff( 0 )
     {
         bLeft = TableChgWidthHeightType::ColLeft == extractPosition( eType ) ||
@@ -114,7 +113,6 @@ struct CR_SetBoxWidth
     }
     CR_SetBoxWidth( const CR_SetBoxWidth& rCpy )
         : pTableNd( rCpy.pTableNd ),
-        pUndo( rCpy.pUndo ),
         nDiff( rCpy.nDiff ), nSide( rCpy.nSide ),
         nMaxSize( rCpy.nMaxSize ), nLowerDiff( 0 ),
         nMode( rCpy.nMode ),
@@ -171,20 +169,19 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
 struct CR_SetLineHeight
 {
     SwTableNode* pTableNd;
-    SwUndoTableNdsChg* pUndo;
     SwTwips nMaxSpace, nMaxHeight;
     TableChgMode nMode;
     bool bBigger;
 
     CR_SetLineHeight( TableChgWidthHeightType eType, SwTableNode* pTNd )
-        : pTableNd( pTNd ), pUndo( nullptr ),
+        : pTableNd( pTNd ),
         nMaxSpace( 0 ), nMaxHeight( 0 )
     {
         bBigger = bool(eType & TableChgWidthHeightType::BiggerMode );
         nMode = pTableNd->GetTable().GetTableChgMode();
     }
     CR_SetLineHeight( const CR_SetLineHeight& rCpy )
-        : pTableNd( rCpy.pTableNd ), pUndo( rCpy.pUndo ),
+        : pTableNd( rCpy.pTableNd ),
         nMaxSpace( rCpy.nMaxSpace ), nMaxHeight( rCpy.nMaxHeight ),
         nMode( rCpy.nMode ),
         bBigger( rCpy.bBigger )
@@ -2559,7 +2556,6 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
         bRet = false,
         bLeft = TableChgWidthHeightType::ColLeft == extractPosition( eType ) ||
                 TableChgWidthHeightType::CellLeft == extractPosition( eType );
-    sal_uLong nBoxIdx = rCurrentBox.GetSttIdx();
 
     // Get the current Box's edge
     // Only needed for manipulating the width
@@ -2868,14 +2864,6 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
         // hand there is a case where sth gets deleted.  :-(
 
         xFndBox.reset();
-
-        if (ppUndo && *ppUndo && aParam.pUndo)
-        {
-            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(m_eTableChgMode), eType,
-                                            nAbsDiff, nRelDiff );
-            if( !aParam.bBigger )
-                aParam.pUndo->SaveNewBoxes( *aParam.pTableNd, aTmpLst );
-        }
     }
 
 #if defined DBG_UTIL
@@ -3011,7 +2999,6 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
         bRet = false,
         bTop = TableChgWidthHeightType::CellTop == extractPosition( eType );
     sal_uInt16 nBaseLinePos = GetTabLines().GetPos( pBaseLine );
-    sal_uLong nBoxIdx = rCurrentBox.GetSttIdx();
 
     CR_SetLineHeight aParam( eType,
                         const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode()) );
@@ -3169,14 +3156,6 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
         // TL_CHART2: it is currently unclear if sth has to be done here.
 
         xFndBox.reset();
-
-        if (ppUndo && *ppUndo && aParam.pUndo)
-        {
-            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(m_eTableChgMode), eType,
-                                            nAbsDiff, nRelDiff );
-            if( bBigger )
-                aParam.pUndo->SaveNewBoxes( *aParam.pTableNd, aTmpLst );
-        }
     }
 
     CHECKTABLELAYOUT

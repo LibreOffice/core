@@ -56,7 +56,7 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
      * has already been expanded.
      */
     for (ip = inclist; ip->i_file; ip++)
-        if ((strcmp(ip->i_incstring, include) == 0) && !ip->i_included_sym)
+        if (strcmp(ip->i_incstring, include) == 0)
         {
           found = TRUE;
           break;
@@ -284,7 +284,6 @@ struct inclist *newinclude(char const *newfile, char const *incstring)
     if (inclistp == inclist + MAXFILES - 1)
         fatalerr("out of space: increase MAXFILES\n");
     ip->i_file = copy(newfile);
-    ip->i_included_sym = FALSE;
     if (incstring == NULL)
         ip->i_incstring = ip->i_file;
     else
@@ -312,10 +311,9 @@ void included_by(struct inclist *ip, struct inclist *newfile)
         for (i=0; i<ip->i_listlen; i++)
             if (ip->i_list[ i ] == newfile) {
                 i = (int)strlen(newfile->i_file);
-                if (!ip->i_included_sym &&
-                !(i > 2 &&
-                  newfile->i_file[i-1] == 'c' &&
-                  newfile->i_file[i-2] == '.'))
+                if (!(i > 2 &&
+                      newfile->i_file[i-1] == 'c' &&
+                      newfile->i_file[i-2] == '.'))
                 {
                 /* only complain if ip has */
                 /* no #include SYMBOL lines  */

@@ -116,8 +116,6 @@ struct  inclist {
     boolean     i_notified;    /* whether we have revealed includes */
     boolean     i_marked;      /* whether it's in the makefile */
     boolean     i_searched;    /* whether we have read this */
-    boolean     i_included_sym; /* whether #include SYMBOL was found */
-                    /* Can't use i_list if TRUE */
 };
 
 struct filepointer {
