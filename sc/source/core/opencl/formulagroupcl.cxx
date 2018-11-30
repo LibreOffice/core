@@ -2735,46 +2735,67 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                                  " takeNumeric=" << (pCodeGen->takeNumeric()?"YES":"NO") <<
                                  " takeString=" << (pCodeGen->takeString()?"YES":"NO"));
 
-                        if (pDVR->GetArrays()[j].mpNumericArray ||
-                            (pDVR->GetArrays()[j].mpNumericArray == nullptr &&
-                                pDVR->GetArrays()[j].mpStringArray == nullptr))
+                        if (pDVR->GetArrays()[j].mpNumericArray &&
+                            pCodeGen->takeNumeric() &&
+                            pDVR->GetArrays()[j].mpStringArray &&
+                            pCodeGen->takeString())
                         {
-                            if (pDVR->GetArrays()[j].mpNumericArray &&
-                                pCodeGen->takeNumeric() &&
-                                pDVR->GetArrays()[j].mpStringArray &&
-                                pCodeGen->takeString())
-                            {
-                                // Function takes numbers or strings, there are both
-                                SAL_INFO("sc.opencl", "Numbers and strings and that is OK");
-                                mvSubArguments.push_back(
-                                    DynamicKernelArgumentRef(
-                                        new DynamicKernelMixedSlidingArgument(mCalcConfig,
-                                            ts, ft->Children[i], mpCodeGen, j)));
-                            }
-                            else if (!AllStringsAreNull(pDVR->GetArrays()[j].mpStringArray, pDVR->GetArrayLength()) &&
-                                     !pCodeGen->takeString())
-                            {
-                                // Can't handle
-                                SAL_INFO("sc.opencl", "Strings but can't do that.");
-                                throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
-                            }
-                            else
-                            {
-                                // Not sure I can figure out what case this exactly is;)
-                                SAL_INFO("sc.opencl", "The other case");
-                                mvSubArguments.push_back(
-                                    DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(mCalcConfig,
-                                            ts, ft->Children[i], mpCodeGen, j)));
-                            }
+                            // Function takes numbers or strings, there are both
+                            SAL_INFO("sc.opencl", "Numbers and strings");
+                            mvSubArguments.push_back(
+                                DynamicKernelArgumentRef(
+                                    new DynamicKernelMixedSlidingArgument(mCalcConfig,
+                                        ts, ft->Children[i], mpCodeGen, j)));
                         }
-                        else
+                        else if (pDVR->GetArrays()[j].mpNumericArray &&
+                            pCodeGen->takeNumeric() &&
+                                 (AllStringsAreNull(pDVR->GetArrays()[j].mpStringArray, pDVR->GetArrayLength()) || mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO))
                         {
-                            // Ditto here. This is such crack.
-                            SAL_INFO("sc.opencl", "The outer other case (can't figure out what it exactly means)");
+                            // Function takes numbers, and either there
+                            // are no strings, or there are strings but
+                            // they are to be treated as zero
+                            SAL_INFO("sc.opencl", "Numbers (no strings or strings treated as zero)");
+                            mvSubArguments.push_back(
+                                DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(mCalcConfig,
+                                        ts, ft->Children[i], mpCodeGen, j)));
+                        }
+                        else if (pDVR->GetArrays()[j].mpNumericArray == nullptr &&
+                            pCodeGen->takeNumeric() &&
+                            pDVR->GetArrays()[j].mpStringArray &&
+                            mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO)
+                        {
+                            // Function takes numbers, and there are only
+                            // strings, but they are to be treated as zero
+                            SAL_INFO("sc.opencl", "Only strings even if want numbers but should be treated as zero");
+                            mvSubArguments.push_back(
+                                DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(mCalcConfig,
+                                        ts, ft->Children[i], mpCodeGen, j)));
+                        }
+                        else if (pDVR->GetArrays()[j].mpStringArray &&
+                            pCodeGen->takeString())
+                        {
+                            // There are strings, and the function takes strings.
+                            SAL_INFO("sc.opencl", "Strings only");
                             mvSubArguments.push_back(
                                 DynamicKernelArgumentRef(VectorRefFactory
                                     <DynamicKernelStringArgument>(mCalcConfig,
                                         ts, ft->Children[i], mpCodeGen, j)));
+                        }
+                        else if (AllStringsAreNull(pDVR->GetArrays()[j].mpStringArray, pDVR->GetArrayLength()) &&
+                            pDVR->GetArrays()[j].mpNumericArray == nullptr)
+                        {
+                            // There are only empty cells. Push as an
+                            // array of NANs
+                            SAL_INFO("sc.opencl", "Only empty cells");
+                            mvSubArguments.push_back(
+                                DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(mCalcConfig,
+                                        ts, ft->Children[i], mpCodeGen, j)));
+                        }
+                        else
+                        {
+                            SAL_INFO("sc.opencl", "Unhandled case, rejecting for OpenCL");
+                            throw UnhandledToken(("Unhandled numbers/strings combination for '"
+                                + pCodeGen->BinFuncName() + "'").c_str(), __FILE__, __LINE__);
                         }
                     }
                 }
@@ -2796,7 +2817,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         pCodeGen->takeString())
                     {
                         // Function takes numbers or strings, there are both
-                        SAL_INFO("sc.opencl", "Numbers and strings and that is OK");
+                        SAL_INFO("sc.opencl", "Numbers and strings");
                         mvSubArguments.push_back(
                             DynamicKernelArgumentRef(new DynamicKernelMixedArgument(mCalcConfig,
                                     ts, ft->Children[i])));
@@ -2808,7 +2829,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         // Function takes numbers, and either there
                         // are no strings, or there are strings but
                         // they are to be treated as zero
-                        SAL_INFO("sc.opencl", "Maybe strings even if want numbers but should be treated as zero");
+                        SAL_INFO("sc.opencl", "Numbers (no strings or strings treated as zero)");
                         mvSubArguments.push_back(
                             DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
                                     ft->Children[i])));
@@ -2846,13 +2867,14 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     }
                     else
                     {
-                        SAL_INFO("sc.opencl", "Fallback case, rejecting for OpenCL");
-                        throw UnhandledToken("Got unhandled case here", __FILE__, __LINE__);
+                        SAL_INFO("sc.opencl", "Unhandled case, rejecting for OpenCL");
+                        throw UnhandledToken(("Unhandled numbers/strings combination for '"
+                            + pCodeGen->BinFuncName() + "'").c_str(), __FILE__, __LINE__);
                     }
                 }
                 else if (pChild->GetType() == formula::svDouble)
                 {
-                    SAL_INFO("sc.opencl", "Constant number (?) case");
+                    SAL_INFO("sc.opencl", "Constant number case");
                     mvSubArguments.push_back(
                         DynamicKernelArgumentRef(new DynamicKernelConstantArgument(mCalcConfig, ts,
                                 ft->Children[i])));
@@ -2860,14 +2882,14 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 else if (pChild->GetType() == formula::svString
                     && pCodeGen->takeString())
                 {
-                    SAL_INFO("sc.opencl", "Constant string (?) case");
+                    SAL_INFO("sc.opencl", "Constant string case");
                     mvSubArguments.push_back(
                         DynamicKernelArgumentRef(new ConstStringArgument(mCalcConfig, ts,
                                 ft->Children[i])));
                 }
                 else
                 {
-                    SAL_INFO("sc.opencl", "Fallback case, rejecting for OpenCL");
+                    SAL_INFO("sc.opencl", "Unhandled operand, rejecting for OpenCL");
                     throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
                 }
                 break;
