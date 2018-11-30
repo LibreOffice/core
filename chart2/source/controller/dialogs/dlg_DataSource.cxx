@@ -78,12 +78,6 @@ Reference< chart2::XChartTypeTemplate > DocumentChartTypeTemplateProvider::getCu
 
 sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
 
-enum DataSourceDialogPages
-{
-    TP_RANGECHOOSER = 1,
-    TP_DATA_SOURCE = 2
-};
-
 DataSourceDialog::DataSourceDialog(weld::Window * pParent,
     const Reference< XChartDocument > & xChartDocument,
     const Reference< uno::XComponentContext > & xContext)
