@@ -654,12 +654,9 @@ bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
         if (fd != nullptr && fd->isBitField()
             && fd->getBitWidthValue(compiler.getASTContext()) == 1)
         {
-            TypedefType const * t = fd->getType()->getAs<TypedefType>();
-            if (t != nullptr)
-            {
-                std::string sTypeName = t->getDecl()->getNameAsString();
-                bExt = (sTypeName == "guint" || sTypeName == "quint64");
-            }
+            auto const check = loplugin::TypeCheck(fd->getType());
+            bExt = check.Typedef("guint").GlobalNamespace()
+                || check.Typedef("quint64").GlobalNamespace();
         }
     }
     assert(!nested.empty());
