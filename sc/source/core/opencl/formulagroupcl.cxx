@@ -4029,7 +4029,12 @@ void DynamicKernel::CreateKernel()
                     }
                 }
 #endif
+#ifdef DBG_UTIL
+                SAL_WARN("sc.opencl", "Program failed to build, aborting.");
+                abort(); // make sure errors such as typos don't accidentally go unnoticed
+#else
                 throw OpenCLError("clBuildProgram", err, __FILE__, __LINE__);
+#endif
             }
             SAL_INFO("sc.opencl", "Built program " << mpProgram);
 
