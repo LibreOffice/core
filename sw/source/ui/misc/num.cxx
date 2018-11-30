@@ -90,7 +90,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(TabPageParent pParent, const SfxItemS
 {
     SetExchangeSupport();
 
-    m_xLevelLB->set_selection_mode(true);
+    m_xLevelLB->set_selection_mode(SelectionMode::Multiple);
 
     m_xRelativeCB->set_active(true);
     m_xAlignLB->connect_changed(LINK(this, SwNumPositionTabPage, EditModifyHdl));
@@ -410,7 +410,7 @@ void SwNumPositionTabPage::Reset( const SfxItemSet* rSet )
     if (pOutlineDlg)
     {
         pSaveNum = pOutlineDlg->GetNumRule();
-        m_xLevelLB->set_selection_mode(false);
+        m_xLevelLB->set_selection_mode(SelectionMode::Single);
     }
     else if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_ACT_NUMBER, false, &pItem))
         pSaveNum = const_cast<SwUINumRuleItem*>(static_cast<const SwUINumRuleItem*>(pItem))->GetNumRule();
