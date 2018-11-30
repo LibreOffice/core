@@ -141,7 +141,7 @@ public:
     virtual void accept( LayoutAtomVisitor& ) override;
     Constraint& getConstraint()
         { return maConstraint; }
-    void parseConstraint(std::vector<Constraint>& rConstraints) const;
+    void parseConstraint(std::vector<Constraint>& rConstraints, bool bRequireForName) const;
 private:
     Constraint maConstraint;
 };
