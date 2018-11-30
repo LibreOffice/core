@@ -165,7 +165,6 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
 
     xInfoSet->setPropertyValue( "TargetStorage", Any( xStg ) );
 
-    uno::Any aAny;
     if (m_bShowProgress)
     {
         // set progress range and start status indicator
@@ -188,15 +187,9 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     RedlineFlags const nOrigRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     RedlineFlags nRedlineFlags(nOrigRedlineFlags);
     bool isShowChanges;
-    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-    {   // TODO: ideally this would be stored per-view...
-        SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
-        isShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
-    }
-    else
-    {
-        isShowChanges = IDocumentRedlineAccess::IsShowChanges(nRedlineFlags);
-    }
+    // TODO: ideally this would be stored per-view...
+    SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    isShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
     xInfoSet->setPropertyValue(sShowChanges, makeAny(isShowChanges));
     // ... and hide redlines for export
     nRedlineFlags &= ~RedlineFlags::ShowMask;
@@ -415,19 +408,10 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     xObjectResolver = nullptr;
 
     // restore redline mode
-    aAny = xInfoSet->getPropertyValue( sShowChanges );
     nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
-    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-    {
-        nRedlineFlags |= nOrigRedlineFlags & RedlineFlags::ShowMask;
-    }
-    else
-    {
-        if (*o3tl::doAccess<bool>(aAny))
-            nRedlineFlags |= RedlineFlags::ShowDelete;
-    }
+    nRedlineFlags |= nOrigRedlineFlags & RedlineFlags::ShowMask;
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
 
     if (xStatusIndicator.is())
