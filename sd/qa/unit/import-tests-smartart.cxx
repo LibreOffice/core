@@ -503,6 +503,12 @@ void SdImportTestSmartArt::testAccentProcess()
     OUString aType = aCustomShapeGeometry["Type"].get<OUString>();
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-rightArrow"), aType);
 
+    // Make sure that height of the arrow is less than its width.
+    uno::Reference<drawing::XShape> xArrowShape(xArrow, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xArrowShape.is());
+    awt::Size aArrowSize = xArrowShape->getSize();
+    CPPUNIT_ASSERT_LESS(aArrowSize.Width, aArrowSize.Height);
+
     uno::Reference<drawing::XShapes> xSecondPair(xGroup->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xSecondPair.is());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xSecondPair->getCount());
