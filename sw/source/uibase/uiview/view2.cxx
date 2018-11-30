@@ -641,17 +641,10 @@ void SwView::Execute(SfxRequest &rReq)
                 if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
                     nMode |= RedlineFlags::ShowDelete;
 
-                uno::Reference<uno::XComponentContext> const xContext(
-                        comphelper::getProcessComponentContext());
-                if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-                {
-                    m_pWrtShell->GetLayout()->SetHideRedlines(
-                        !static_cast<const SfxBoolItem*>(pItem)->GetValue());
-                    if (m_pWrtShell->IsRedlineOn())
-                        m_pWrtShell->SetInsMode();
-                }
-                else
-                    m_pWrtShell->SetRedlineFlagsAndCheckInsMode( nMode );
+                m_pWrtShell->GetLayout()->SetHideRedlines(
+                    !static_cast<const SfxBoolItem*>(pItem)->GetValue());
+                if (m_pWrtShell->IsRedlineOn())
+                    m_pWrtShell->SetInsMode();
             }
             break;
         case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:

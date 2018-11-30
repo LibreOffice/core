@@ -2268,21 +2268,14 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                          m_nEndNdIdx = m_aEndNdIdx.GetIndex(),
                          m_pDoc->GetDocShell() );
 
-    uno::Reference<uno::XComponentContext> const xContext(
-            comphelper::getProcessComponentContext());
-    bool const isExp(officecfg::Office::Common::Misc::ExperimentalMode::get(xContext));
     RedlineFlags eRedlMode = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
     if( m_aFlags.bWithRedlining )
     {
         m_pDoc->SetAutoFormatRedline( true );
-        eRedlMode = isExp
-            ? RedlineFlags::On | (eOldMode & RedlineFlags::ShowMask)
-            : RedlineFlags::On | RedlineFlags::ShowInsert;
+        eRedlMode = RedlineFlags::On | (eOldMode & RedlineFlags::ShowMask);
     }
     else
-      eRedlMode = isExp
-          ? RedlineFlags::Ignore | (eOldMode & RedlineFlags::ShowMask)
-          : RedlineFlags::ShowInsert | RedlineFlags::Ignore;
+      eRedlMode = RedlineFlags::Ignore | (eOldMode & RedlineFlags::ShowMask);
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( eRedlMode );
 
     // save undo state (might be turned off)

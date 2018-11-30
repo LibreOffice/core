@@ -279,15 +279,8 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
     RedlineFlags nRedlineFlags = RedlineFlags::NONE;
-    if (officecfg::Office::Common::Misc::ExperimentalMode::get(getComponentContext()))
-    {
-        SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
-        m_bSavedShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
-    }
-    else
-    {
-        m_bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
-    }
+    SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    m_bSavedShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
     if( bSaveRedline )
     {
         // now save and switch redline mode

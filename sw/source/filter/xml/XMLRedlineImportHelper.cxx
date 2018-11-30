@@ -345,19 +345,12 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         aAny <<= bShowChanges;
         if ( bHandleShowChanges )
         {
-            if (officecfg::Office::Common::Misc::ExperimentalMode::get(comphelper::getProcessComponentContext()))
-            {
-                aAny <<= true;
-                xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
-                // TODO maybe we need some property for the view-setting?
-                SwDoc *const pDoc(SwImport::GetDocFromXMLImport(m_rImport));
-                assert(pDoc);
-                pDoc->GetDocumentRedlineManager().SetHideRedlines(!bShowChanges);
-            }
-            else
-            {
-                xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
-            }
+            aAny <<= true;
+            xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
+            // TODO maybe we need some property for the view-setting?
+            SwDoc *const pDoc(SwImport::GetDocFromXMLImport(m_rImport));
+            assert(pDoc);
+            pDoc->GetDocumentRedlineManager().SetHideRedlines(!bShowChanges);
         }
         else
             xImportInfoPropertySet->setPropertyValue( g_sShowChanges, aAny );

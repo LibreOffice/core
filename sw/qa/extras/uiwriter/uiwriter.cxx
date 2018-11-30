@@ -1519,8 +1519,11 @@ void SwUiWriterTest::testTdf83260()
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
 
     // enabled but not shown
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+#if 0
     CPPUNIT_ASSERT(IDocumentRedlineAccess::IsHideChanges(
             pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+#endif
     CPPUNIT_ASSERT(IDocumentRedlineAccess::IsRedlineOn(
             pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
     CPPUNIT_ASSERT(!pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty());
