@@ -654,7 +654,7 @@ public:
                                                 bool bNewFrame  = true,
                                                 const OString& sDefPage = OString()) override;
     virtual VclPtr<SfxAbstractApplyTabDialog>  CreateTemplateDialog(
-                                                vcl::Window *pParent,
+                                                weld::Window *pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
                                                 const OString&      sPage,
