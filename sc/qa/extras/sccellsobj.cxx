@@ -28,16 +28,16 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScCells : public CalcUnoApiTest, public apitest::XEnumerationAccess
+class ScCellsObj : public CalcUnoApiTest, public apitest::XEnumerationAccess
 {
 public:
-    ScCells();
+    ScCellsObj();
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    CPPUNIT_TEST_SUITE(ScCells);
+    CPPUNIT_TEST_SUITE(ScCellsObj);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -48,12 +48,12 @@ private:
     uno::Reference<lang::XComponent> m_xComponent;
 };
 
-ScCells::ScCells()
+ScCellsObj::ScCellsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference<uno::XInterface> ScCells::init()
+uno::Reference<uno::XInterface> ScCellsObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
@@ -79,20 +79,20 @@ uno::Reference<uno::XInterface> ScCells::init()
     return xSCR->getCells();
 }
 
-void ScCells::setUp()
+void ScCellsObj::setUp()
 {
     CalcUnoApiTest::setUp();
     m_xComponent = loadFromDesktop("private:factory/scalc");
     CPPUNIT_ASSERT_MESSAGE("no component", m_xComponent.is());
 }
 
-void ScCells::tearDown()
+void ScCellsObj::tearDown()
 {
     closeDocument(m_xComponent);
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScCells);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScCellsObj);
 
 } // namespace sc_apitest
 
