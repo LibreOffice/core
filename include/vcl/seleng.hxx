@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
+#include <vcl/vclenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 namespace vcl { class Window; }
@@ -33,9 +34,6 @@ class CommandEvent;
 #define SELENG_AUTOREPEAT_INTERVAL  50
 #define SELENG_AUTOREPEAT_INTERVAL_MIN 25
 #define SELENG_AUTOREPEAT_INTERVAL_MAX 300
-
-enum class SelectionMode { NONE, Single, Range, Multiple };
-
 
 class VCL_DLLPUBLIC FunctionSet
 {
