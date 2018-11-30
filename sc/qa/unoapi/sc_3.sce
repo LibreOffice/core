@@ -19,7 +19,6 @@
 -o sc.ScCellRangesObj
 -o sc.ScCellSearchObj
 -o sc.ScCellTextCursor
--o sc.ScCellsObj
 -o sc.ScChartObj
 -o sc.ScChartsObj
 -o sc.ScDDELinkObj
