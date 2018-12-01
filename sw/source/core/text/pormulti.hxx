@@ -107,7 +107,7 @@ protected:
         , nDirection(0)
     {
         SetWhichPor(POR_MULTI);
-        SetLen(TextFrameIndex(nEnd));
+        SetLen(nEnd);
     }
     void SetDouble() { bDouble = true; }
     void SetRuby() { bRuby = true; }
