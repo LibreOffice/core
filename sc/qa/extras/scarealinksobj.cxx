@@ -8,28 +8,36 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
-#include <test/sheet/xarealinks.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/sheet/xarealinks.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/sheet/XAreaLink.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-
+#include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+
 #include <com/sun/star/uno/Reference.hxx>
+
+#include <cppu/unotype.hxx>
 
 using namespace css;
 using namespace css::uno;
 
-namespace sc_apitest {
-
-class ScAreaLinksObj : public CalcUnoApiTest, public apitest::XAreaLinks,
-                                              public apitest::XEnumerationAccess
+namespace sc_apitest
+{
+class ScAreaLinksObj : public CalcUnoApiTest,
+                       public apitest::XAreaLinks,
+                       public apitest::XElementAccess,
+                       public apitest::XEnumerationAccess
 {
 public:
     ScAreaLinksObj();
 
-    virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference<uno::XInterface> init() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -39,27 +47,35 @@ public:
     CPPUNIT_TEST(testInsertAtPosition);
     CPPUNIT_TEST(testRemoveByIndex);
 
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
+
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< lang::XComponent > mxComponent;
-
+    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScAreaLinksObj::ScAreaLinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<sheet::XAreaLink>::get())
 {
 }
 
-uno::Reference< uno::XInterface > ScAreaLinksObj::init()
+uno::Reference<uno::XInterface> ScAreaLinksObj::init()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
-    uno::Reference< beans::XPropertySet > xPropSet(xDoc, uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XAreaLinks > xLinks(xPropSet->getPropertyValue("AreaLinks"), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(xDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XAreaLinks> xLinks(xPropSet->getPropertyValue("AreaLinks"),
+                                             uno::UNO_QUERY_THROW);
+
+    xLinks->insertAtPosition(table::CellAddress(1, 2, 3), "ScAreaLinksObj.ods", "A2:B5", "", "");
 
     return xLinks;
 }
@@ -67,18 +83,18 @@ uno::Reference< uno::XInterface > ScAreaLinksObj::init()
 void ScAreaLinksObj::setUp()
 {
     CalcUnoApiTest::setUp();
-    mxComponent = loadFromDesktop("private:factory/scalc");
+    m_xComponent = loadFromDesktop("private:factory/scalc");
 }
 
 void ScAreaLinksObj::tearDown()
 {
-    closeDocument(mxComponent);
+    closeDocument(m_xComponent);
     CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScAreaLinksObj);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
