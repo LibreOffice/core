@@ -4,10 +4,10 @@
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
       <!-- column-name image -->
       <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
