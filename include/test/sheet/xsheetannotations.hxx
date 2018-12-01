@@ -11,6 +11,10 @@
 #define INCLUDED_TEST_SHEET_XSHEETANNOTATIONS_HXX
 
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <test/testdllapi.hxx>
 
 namespace apitest {
@@ -19,17 +23,16 @@ class OOO_DLLPUBLIC_TEST XSheetAnnotations
 {
 public:
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
+    virtual css::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations(long nIndex) = 0;
 
     // XSheetAnnotations
-    void testGetByIndex();
+    void testIndex();
     void testInsertNew();
     void testRemoveByIndex();
     void testCount();
 
 protected:
     ~XSheetAnnotations() {}
-
-    virtual css::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations(long nIndex) = 0;
 };
 
 }

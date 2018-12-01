@@ -11,9 +11,10 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/xsheetannotations.hxx>
 
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 
 using namespace css;
@@ -39,10 +40,10 @@ public:
     CPPUNIT_TEST(testCreateEnumeration);
 
     // XSheetAnnotations
+    CPPUNIT_TEST(testCount);
+    CPPUNIT_TEST(testIndex);
     CPPUNIT_TEST(testInsertNew);
     CPPUNIT_TEST(testRemoveByIndex);
-    CPPUNIT_TEST(testCount);
-    CPPUNIT_TEST(testGetByIndex);
 
     CPPUNIT_TEST_SUITE_END();
 
