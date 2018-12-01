@@ -157,7 +157,7 @@ void XSheetAnnotations::testRemoveByIndex()
         OUString("an inserted annotation 1"), aPreviousString);
 }
 
-void XSheetAnnotations::testGetByIndex()
+void XSheetAnnotations::testIndex()
 {
 
     // testing #fdo80551 - getByIndex not on the first sheet
