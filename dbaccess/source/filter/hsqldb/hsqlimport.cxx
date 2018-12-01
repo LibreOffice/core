@@ -36,6 +36,8 @@
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <vcl/weld.hxx>
+
 #include "hsqlimport.hxx"
 #include "parseschema.hxx"
 #include "rowinputbinary.hxx"
@@ -293,7 +295,7 @@ void HsqlImporter::parseTableRows(const IndexVector& rIndexes,
     xInput->closeInput();
 }
 
-void HsqlImporter::importHsqlDatabase()
+void HsqlImporter::importHsqlDatabase(weld::Window* pParent)
 {
     assert(m_xStorage);
 
@@ -370,7 +372,8 @@ void HsqlImporter::importHsqlDatabase()
     if (pException)
     {
         SAL_WARN("dbaccess", "Error during migration");
-        dbtools::showError(dbtools::SQLExceptionInfo{ *pException }, nullptr,
+        dbtools::showError(dbtools::SQLExceptionInfo{ *pException },
+                           pParent ? pParent->GetXWindow() : nullptr,
                            ::comphelper::getProcessComponentContext());
     }
 }

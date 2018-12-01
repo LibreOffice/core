@@ -756,7 +756,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
                 m_pImpl->getDocumentSubStorageSupplier() );
         dbahsql::HsqlImporter importer(xReturn,
                 xDocSup->getDocumentSubStorage("database",ElementModes::READWRITE) );
-        importer.importHsqlDatabase();
+        importer.importHsqlDatabase(GetFrameWeld(m_pImpl->getModel_noCreate()));
     }
 #endif
 
