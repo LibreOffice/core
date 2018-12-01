@@ -25,7 +25,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
 
-class ImplRegionBand;
 class RegionBand;
 
 namespace tools {

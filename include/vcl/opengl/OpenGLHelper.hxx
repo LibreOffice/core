@@ -11,11 +11,12 @@
 #define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
 #include <epoxy/gl.h>
-#include <sal/log.hxx>
+#include <sal/detail/log.h>
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 
 #include <rtl/ustring.hxx>
+#include <sstream>
 
 /// Helper to do a SAL_INFO as well as a GL log.
 #define VCL_GL_INFO(stream) \

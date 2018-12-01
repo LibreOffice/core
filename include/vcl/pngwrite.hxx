@@ -20,12 +20,15 @@
 #ifndef INCLUDED_VCL_PNGWRITE_HXX
 #define INCLUDED_VCL_PNGWRITE_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/dllapi.h>
-#include <vcl/bitmapex.hxx>
 #include <memory>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
+
+class BitmapEx;
+class SvStream;
 
 namespace vcl
 {

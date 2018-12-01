@@ -38,6 +38,7 @@
 #include <SlideSorterViewShell.hxx>
 #include <DrawDocShell.hxx>
 
+#include <tools/multisel.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

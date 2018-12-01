@@ -22,6 +22,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/gdimtf.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>

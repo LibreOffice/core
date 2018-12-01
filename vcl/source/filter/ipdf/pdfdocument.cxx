@@ -14,6 +14,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/security/XCertificate.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>

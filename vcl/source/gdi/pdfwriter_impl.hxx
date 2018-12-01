@@ -35,6 +35,7 @@
 #include <tools/gen.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/graphictools.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/pdfwriter.hxx>

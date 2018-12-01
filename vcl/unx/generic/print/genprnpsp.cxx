@@ -38,6 +38,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
+#include <vcl/gdimtf.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/print.hxx>
 #include <vcl/pdfwriter.hxx>

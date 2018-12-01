@@ -32,6 +32,11 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/gdimtf.hxx>
+
+namespace vcl {
+    class PrintDialog;
+}
 
 namespace vcl
 {

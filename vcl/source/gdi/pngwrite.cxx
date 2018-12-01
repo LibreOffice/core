@@ -18,6 +18,9 @@
  */
 
 #include <vcl/pngwrite.hxx>
+#include <vcl/bitmapex.hxx>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <cmath>
 #include <limits>

@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_JOBSET_H
 
 #include <rtl/ustring.hxx>
+#include <i18nutil/paper.hxx>
 #include <vcl/prntypes.hxx>
 #include <unordered_map>
 

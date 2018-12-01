@@ -18,6 +18,7 @@
  */
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <o3tl/make_unique.hxx>
+#include <vcl/gdimtf.hxx>
 #include "vclpixelprocessor2d.hxx"
 #include "vclmetafileprocessor2d.hxx"
 

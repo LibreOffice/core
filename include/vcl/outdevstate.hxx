@@ -21,18 +21,18 @@
 #define INCLUDED_VCL_OUTDEVSTATE_HXX
 
 #include <vcl/mapmod.hxx>
-#include <vcl/region.hxx>
-#include <vcl/font.hxx>
 #include <vcl/vclenum.hxx>
 
-#include <tools/solar.h>
+#include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <boost/optional.hpp>
+#include <i18nlangtag/lang.h>
 
-class Color;
+namespace vcl { class Font; }
+namespace vcl { class Region; }
 
 // Flags for OutputDevice::Push() and OutDevState
 enum class PushFlags {

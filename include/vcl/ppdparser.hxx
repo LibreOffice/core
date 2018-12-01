@@ -28,14 +28,11 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 
-#include <com/sun/star/lang/Locale.hpp>
-
 #define PRINTER_PPDDIR "driver"
 
 namespace psp {
 
 class PPDCache;
-class PPDParser;
 class PPDTranslator;
 
 enum PPDValueType { eInvocation, eQuoted, eSymbol, eString, eNo };
@@ -113,9 +110,6 @@ struct PPDKeyhash
 /*
  * PPDParser - parses a PPD file and contains all available keys from it
  */
-
-class PPDContext;
-class CUPSManager;
 
 class VCL_DLLPUBLIC PPDParser
 {
