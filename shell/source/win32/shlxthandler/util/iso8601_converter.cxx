@@ -114,26 +114,23 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
     std::wstring minutes;
     std::wstring seconds;
 
-    std::wstring::const_iterator iter     = iso8601duration.begin();
-    std::wstring::const_iterator iter_end = iso8601duration.end();
-
     std::wstring num;
 
-    for (/**/; iter != iter_end; ++iter)
+    for (const auto& w_ch : iso8601duration)
     {
-        if (rtl::isAsciiDigit(*iter)) // wchar_t is unsigned under MSVC
+        if (rtl::isAsciiDigit(w_ch)) // wchar_t is unsigned under MSVC
         {
-            num += *iter;
+            num += w_ch;
         }
         else
         {
-            if (*iter == L'D' || *iter == L'd')
+            if (w_ch == L'D' || w_ch == L'd')
                 days = num;
-            else if (*iter == L'H' || *iter == L'h')
+            else if (w_ch == L'H' || w_ch == L'h')
                 hours = num;
-            else if (*iter == L'M' || *iter == L'm')
+            else if (w_ch == L'M' || w_ch == L'm')
                 minutes = num;
-            else if (*iter == L'S' || *iter == L's')
+            else if (w_ch == L'S' || w_ch == L's')
                 seconds = num;
 
             num.clear();

@@ -67,13 +67,11 @@ uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
 
         long n = 0;
 
-        for (ResourceManager::DeckContextDescriptorContainer::const_iterator
-            iDeck(aDecks.begin()), iEnd(aDecks.end());
-            iDeck!=iEnd; ++iDeck)
-            {
-                deckList[n] = iDeck->msId;
-                n++;
-            }
+        for (const auto& rDeck : aDecks)
+        {
+            deckList[n] = rDeck.msId;
+            n++;
+        }
     }
 
     return deckList;
@@ -98,13 +96,8 @@ sal_Bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
             pSidebarController->IsDocumentReadOnly(),
             xFrame->getController());
 
-        for (ResourceManager::DeckContextDescriptorContainer::const_iterator
-            iDeck(aDecks.begin()), iEnd(aDecks.end());
-            iDeck!=iEnd && !bFound; ++iDeck)
-            {
-                if (iDeck->msId == aName)
-                    bFound = true;
-            }
+        bFound = std::any_of(aDecks.begin(), aDecks.end(),
+            [&aName](const ResourceManager::DeckContextDescriptor& rDeck) { return rDeck.msId == aName; });
     }
 
     return bFound;

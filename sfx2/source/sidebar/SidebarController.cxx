@@ -229,11 +229,9 @@ void SAL_CALL SidebarController::disposing()
             IsDocumentReadOnly(),
             mxFrame->getController());
 
-    for (ResourceManager::DeckContextDescriptorContainer::const_iterator
-            iDeck(aDecks.begin()), iEnd(aDecks.end());
-            iDeck!=iEnd; ++iDeck)
+    for (const auto& rDeck : aDecks)
     {
-        std::shared_ptr<DeckDescriptor> deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
+        std::shared_ptr<DeckDescriptor> deckDesc = mpResourceManager->GetDeckDescriptor(rDeck.msId);
 
         VclPtr<Deck> aDeck = deckDesc->mpDeck;
         if (aDeck)
@@ -480,21 +478,17 @@ void SidebarController::UpdateConfigurations()
         // one.  If that is not set or not enabled, then choose the
         // first enabled deck (which is PropertyDeck).
         OUString sNewDeckId;
-        for (ResourceManager::DeckContextDescriptorContainer::const_iterator
-                 iDeck(aDecks.begin()),
-                 iEnd(aDecks.end());
-             iDeck!=iEnd;
-             ++iDeck)
+        for (const auto& rDeck : aDecks)
         {
-            if (iDeck->mbIsEnabled)
+            if (rDeck.mbIsEnabled)
             {
-                if (iDeck->msId == msCurrentDeckId)
+                if (rDeck.msId == msCurrentDeckId)
                 {
                     sNewDeckId = msCurrentDeckId;
                     break;
                 }
                 else if (sNewDeckId.getLength() == 0)
-                    sNewDeckId = iDeck->msId;
+                    sNewDeckId = rDeck.msId;
             }
         }
 
@@ -996,29 +990,26 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
     sal_Int32 nIndex (0);
-    for(::std::vector<TabBar::DeckMenuData>::const_iterator
-            iItem(rMenuData.begin()),
-            iEnd(rMenuData.end());
-        iItem!=iEnd;
-        ++iItem,++nIndex)
+    for (const auto& rItem : rMenuData)
     {
         const sal_Int32 nMenuIndex (nIndex+MID_FIRST_PANEL);
-        pMenu->InsertItem(nMenuIndex, iItem->msDisplayName, MenuItemBits::RADIOCHECK);
-        pMenu->CheckItem(nMenuIndex, iItem->mbIsCurrentDeck);
-        pMenu->EnableItem(nMenuIndex, iItem->mbIsEnabled&&iItem->mbIsActive);
+        pMenu->InsertItem(nMenuIndex, rItem.msDisplayName, MenuItemBits::RADIOCHECK);
+        pMenu->CheckItem(nMenuIndex, rItem.mbIsCurrentDeck);
+        pMenu->EnableItem(nMenuIndex, rItem.mbIsEnabled && rItem.mbIsActive);
 
         const sal_Int32 nSubMenuIndex (nIndex+MID_FIRST_HIDE);
-        if (iItem->mbIsCurrentDeck)
+        if (rItem.mbIsCurrentDeck)
         {
             // Don't allow the currently visible deck to be disabled.
-            pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MenuItemBits::RADIOCHECK);
+            pCustomizationMenu->InsertItem(nSubMenuIndex, rItem.msDisplayName, MenuItemBits::RADIOCHECK);
             pCustomizationMenu->CheckItem(nSubMenuIndex);
         }
         else
         {
-            pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MenuItemBits::CHECKABLE);
-            pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsEnabled && iItem->mbIsActive);
+            pCustomizationMenu->InsertItem(nSubMenuIndex, rItem.msDisplayName, MenuItemBits::CHECKABLE);
+            pCustomizationMenu->CheckItem(nSubMenuIndex, rItem.mbIsEnabled && rItem.mbIsActive);
         }
+        ++nIndex;
     }
 
     pMenu->InsertSeparator();
@@ -1311,23 +1302,20 @@ void SidebarController::UpdateTitleBarIcons()
 
     // Update the panel icons.
     const SharedPanelContainer& rPanels (mpCurrentDeck->GetPanels());
-    for (SharedPanelContainer::const_iterator
-             iPanel(rPanels.begin()), iEnd(rPanels.end());
-             iPanel!=iEnd;
-             ++iPanel)
+    for (const auto& rxPanel : rPanels)
     {
-        if ( ! *iPanel)
+        if ( ! rxPanel)
             continue;
-        if (!(*iPanel)->GetTitleBar())
+        if (!rxPanel->GetTitleBar())
             continue;
-        std::shared_ptr<PanelDescriptor> xPanelDescriptor = rResourceManager.GetPanelDescriptor((*iPanel)->GetId());
+        std::shared_ptr<PanelDescriptor> xPanelDescriptor = rResourceManager.GetPanelDescriptor(rxPanel->GetId());
         if (!xPanelDescriptor)
             continue;
         const OUString sIconURL (
             bIsHighContrastModeActive
                ? xPanelDescriptor->msHighContrastTitleBarIconURL
                : xPanelDescriptor->msTitleBarIconURL);
-        (*iPanel)->GetTitleBar()->SetIcon(Tools::GetImage(sIconURL, mxFrame));
+        rxPanel->GetTitleBar()->SetIcon(Tools::GetImage(sIconURL, mxFrame));
     }
 }
 

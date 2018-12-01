@@ -99,12 +99,10 @@ public:
 
     void DeleteAndDestroy(SvLinkSource_Entry_Impl const * p)
     {
-        for (auto it = mvData.begin(); it != mvData.end(); ++it)
-            if (it->get() == p)
-            {
-                mvData.erase(it);
-                break;
-            }
+        auto it = std::find_if(mvData.begin(), mvData.end(),
+            [&p](const std::unique_ptr<SvLinkSource_Entry_Impl>& rxData) { return rxData.get() == p; });
+        if (it != mvData.end())
+            mvData.erase(it);
     }
 };
 

@@ -399,17 +399,11 @@ TModelList::iterator SfxGlobalEvents_Impl::impl_searchDoc(const uno::Reference< 
     if (!xModel.is())
         return m_lModels.end();
 
-    TModelList::iterator pIt;
-    for (  pIt  = m_lModels.begin();
-           pIt != m_lModels.end()  ;
-         ++pIt                     )
-    {
-        uno::Reference< frame::XModel > xContainerDoc(*pIt, uno::UNO_QUERY);
-        if (xContainerDoc == xModel)
-            break;
-    }
-
-    return pIt;
+    return std::find_if(m_lModels.begin(), m_lModels.end(),
+        [&xModel](const TModelList::value_type& rxModel) {
+            uno::Reference< frame::XModel > xContainerDoc(rxModel, uno::UNO_QUERY);
+            return xContainerDoc == xModel;
+        });
 }
 
 struct Instance {

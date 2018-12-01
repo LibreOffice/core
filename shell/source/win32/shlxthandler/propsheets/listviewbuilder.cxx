@@ -73,19 +73,13 @@ void list_view_builder::build(statistic_group_list_t& gl)
 {
     setup_list_view();
 
-    statistic_group_list_t::iterator group_iter     = gl.begin();
-    statistic_group_list_t::iterator group_iter_end = gl.end();
-
-    for (/**/; group_iter != group_iter_end; ++group_iter)
+    for (const auto& group : gl)
     {
-        statistic_item_list_t::iterator item_iter     = group_iter->second.begin();
-        statistic_item_list_t::iterator item_iter_end = group_iter->second.end();
+        if (!group.second.empty())
+            insert_group(group.first);
 
-        if (item_iter != item_iter_end)
-            insert_group(group_iter->first);
-
-        for (/**/; item_iter != item_iter_end; ++item_iter)
-            insert_item(item_iter->title_, item_iter->value_, item_iter->editable_);
+        for (const auto& item : group.second)
+            insert_item(item.title_, item.value_, item.editable_);
     }
 }
 

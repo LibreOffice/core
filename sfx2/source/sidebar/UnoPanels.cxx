@@ -76,13 +76,11 @@ uno::Sequence< OUString > SAL_CALL SfxUnoPanels::getElementNames()
 
         long n = 0;
 
-        for (ResourceManager::PanelContextDescriptorContainer::const_iterator
-            iPanel(aPanels.begin()), iEnd(aPanels.end());
-            iPanel!=iEnd; ++iPanel)
-            {
-                panelList[n] = iPanel->msId;
-                n++;
-            }
+        for (const auto& rPanel : aPanels)
+        {
+            panelList[n] = rPanel.msId;
+            n++;
+        }
     }
 
     return panelList;
@@ -104,16 +102,13 @@ sal_Bool SAL_CALL SfxUnoPanels::hasByName( const OUString& aName )
                                                       mDeckId,
                                                       xFrame->getController());
 
-        for (ResourceManager::PanelContextDescriptorContainer::const_iterator
-            iPanel(aPanels.begin()), iEnd(aPanels.end());
-            iPanel!=iEnd; ++iPanel)
-            {
-                // Determine if the panel can be displayed.
-                if(pSidebarController->IsDocumentReadOnly() && !iPanel->mbShowForReadOnlyDocuments)
-                    continue;
-                if (iPanel->msId == aName)
-                    return true;
-            }
+        bool bIsDocumentReadOnly = pSidebarController->IsDocumentReadOnly();
+
+        return std::any_of(aPanels.begin(), aPanels.end(),
+            [&bIsDocumentReadOnly, &aName](const ResourceManager::PanelContextDescriptor& rPanel) {
+                return (!bIsDocumentReadOnly || rPanel.mbShowForReadOnlyDocuments) // Determine if the panel can be displayed.
+                    && (rPanel.msId == aName);
+            });
     }
 
     // nothing found
