@@ -72,6 +72,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #include <memory>
 

@@ -21,24 +21,22 @@
 #define INCLUDED_VCL_PRINT_HXX
 
 #include <rtl/ustring.hxx>
+#include <i18nutil/paper.hxx>
 
 #include <vcl/errcode.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/jobset.hxx>
-#include <vcl/gdimtf.hxx>
-#include <tools/multisel.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/view/PrintableState.hpp>
 
 #include <memory>
-#include <set>
 #include <unordered_map>
 
+class GDIMetaFile;
 class SalInfoPrinter;
 struct SalPrinterQueueInfo;
 class SalPrinter;
@@ -47,7 +45,6 @@ enum class SalPrinterError;
 
 namespace vcl {
     class PrinterController;
-    class PrintDialog;
     class Window;
 }
 

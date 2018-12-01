@@ -15,22 +15,16 @@
 #include <epoxy/gl.h>
 
 #include <vcl/dllapi.h>
-#include <vcl/window.hxx>
-#include <tools/gen.hxx>
 #include <vcl/syschild.hxx>
 #include <rtl/crc.h>
 #include <rtl/ref.hxx>
 
-#include <map>
 #include <memory>
-#include <set>
 #include <unordered_map>
 
 class OpenGLFramebuffer;
 class OpenGLProgram;
 class OpenGLTexture;
-class SalGraphicsImpl;
-class OpenGLTests;
 class RenderState;
 
 /// Holds the information of our new child window

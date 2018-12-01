@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_PRNTYPES_HXX
 
 #include <tools/solar.h>
-#include <i18nutil/paper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 

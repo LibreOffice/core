@@ -12,8 +12,6 @@
 
 #include <vcl/EnumContext.hxx>
 
-class NotebookBar;
-
 class NotebookbarContextControl
 {
 public:

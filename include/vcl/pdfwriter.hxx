@@ -26,23 +26,20 @@
 #include <rtl/strbuf.hxx>
 
 #include <vcl/dllapi.h>
-#include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
-#include <vcl/graphictools.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/graph.hxx>
 
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <memory>
 #include <vector>
 #include <set>
 
-namespace vcl { class Font; }
-class Point;
-class OutputDevice;
+namespace com { namespace sun { namespace star { namespace beans { class XMaterialHolder; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
+namespace com { namespace sun { namespace star { namespace security { class XCertificate; } } } }
+
 class GDIMetaFile;
 class MapMode;
 class LineInfo;
@@ -52,7 +49,6 @@ namespace tools {
 }
 class Bitmap;
 class BitmapEx;
-class Image;
 class Gradient;
 class Hatch;
 class Wallpaper;

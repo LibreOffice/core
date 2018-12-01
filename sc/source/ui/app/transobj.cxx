@@ -32,6 +32,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sot/storage.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>

@@ -42,6 +42,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/beans/XMaterialHolder.hpp>
 
 static OUString PDFFilterResId(const char* pId)
 {

@@ -31,7 +31,6 @@
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
-#include <vcl/glyphitem.hxx>
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
@@ -55,7 +54,6 @@
 
 struct ImplOutDevData;
 class LogicalFontInstance;
-class OutDevState;
 struct SystemGraphicsData;
 struct SystemFontData;
 struct SystemTextLayoutData;
@@ -68,7 +66,6 @@ class SalGraphics;
 class Gradient;
 class Hatch;
 class AllSettings;
-class Bitmap;
 class BitmapReadAccess;
 class BitmapEx;
 class Image;
@@ -86,35 +83,26 @@ class SalLayout;
 class ImplLayoutArgs;
 class VirtualDevice;
 struct SalTwoRect;
-class VirtualDevice;
 class Printer;
-class FontSelectPattern;
 class VCLXGraphics;
 class OutDevStateStack;
-struct BitmapSystemData;
+class SalLayoutGlyphs;
 
 namespace vcl
 {
-    class PDFWriterImpl;
     class ExtOutDevData;
     class ITextLayout;
     struct FontCapabilities;
     class TextLayoutCache;
     class Window;
-    class FontInfo;
     namespace font {
         struct Feature;
     }
 }
 
-namespace com { namespace sun { namespace star { namespace rendering {
-    class XCanvas;
-}}}}
-
 namespace basegfx {
     class B2DHomMatrix;
     class B2DPolygon;
-    class B2DPolyPolygon;
     class B2IVector;
     typedef B2IVector B2ISize;
 }

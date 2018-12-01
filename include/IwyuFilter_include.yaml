@@ -326,4 +326,11 @@ blacklist:
     # Needed for macros
     - com/sun/star/awt/Key.hpp
     - com/sun/star/awt/KeyGroup.hpp
-
+    include/vcl/outdevstate.hxx:
+    # Full definition needed for boost::optional
+    - vcl/mapmod.hxx
+    - tools/color.hxx
+    - tools/gen.hxx
+    include/vcl/prntypes.hxx:
+    # Needed for macro
+    - tools/solar.h
