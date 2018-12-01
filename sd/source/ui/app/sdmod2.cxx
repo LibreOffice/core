@@ -135,7 +135,7 @@ static SdPage* GetCurrentPage( sd::ViewShell const * pViewSh, EditFieldInfo cons
 
         if(pPage)
         {
-            bMasterView = pPage && pPage->IsMasterPage();
+            bMasterView = pPage->IsMasterPage();
         }
     }
 

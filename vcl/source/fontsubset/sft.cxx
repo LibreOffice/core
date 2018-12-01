@@ -1070,7 +1070,7 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     {
         k = Int16FromMOTA(subHeader2Keys[theHighByte]) / 8;
         // check if the subheader record fits into available space
-        if((k >= 0) && (reinterpret_cast<sal_uInt8 const *>(&subHeader2s[k]) - cmap >= int(nMaxCmapSize - sizeof(subHeader2))))
+        if(reinterpret_cast<sal_uInt8 const *>(&subHeader2s[k]) - cmap >= int(nMaxCmapSize - sizeof(subHeader2)))
             k = -1;
     }
 

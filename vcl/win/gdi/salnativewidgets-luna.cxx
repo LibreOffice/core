@@ -871,15 +871,15 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
         OSL_ASSERT( aValue.getType() == ControlType::TabItem );
 
-        const TabitemValue *pValue = static_cast<const TabitemValue*>(&aValue);
-        if( pValue->isBothAligned() )
+        const TabitemValue& rValue = static_cast<const TabitemValue&>(aValue);
+        if (rValue.isBothAligned())
         {
             iPart = TABP_TABITEMLEFTEDGE;
             rc.right--;
         }
-        else if( pValue->isLeftAligned() )
+        else if (rValue.isLeftAligned())
             iPart = TABP_TABITEMLEFTEDGE;
-        else if( pValue->isRightAligned() )
+        else if (rValue.isRightAligned())
             iPart = TABP_TABITEMRIGHTEDGE;
         else iPart = TABP_TABITEM;
 
@@ -890,11 +890,11 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iState = TILES_SELECTED;
             // increase the selected tab
             rc.left-=2;
-            if( pValue && !pValue->isBothAligned() )
+            if (rValue.isBothAligned())
             {
-                if( pValue->isLeftAligned() || pValue->isNotAligned() )
+                if (rValue.isLeftAligned() || rValue.isNotAligned())
                     rc.right+=2;
-                if( pValue->isRightAligned() )
+                if (rValue.isRightAligned())
                     rc.right+=1;
             }
             rc.top-=2;
@@ -1498,18 +1498,18 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
 
         if( rControlValue.getType() == ControlType::TabItem )
         {
-            const TabitemValue *pValue = static_cast<const TabitemValue*>(&rControlValue);
-            if ( pValue->isBothAligned() )
+            const TabitemValue& rValue = static_cast<const TabitemValue&>(rControlValue);
+            if (rValue.isBothAligned())
                 aControlRect.AdjustRight(-1);
 
             if ( nState & ControlState::SELECTED )
             {
                 aControlRect.AdjustLeft(-2);
-                if ( pValue && !pValue->isBothAligned() )
+                if (!rValue.isBothAligned())
                 {
-                    if ( pValue->isLeftAligned() || pValue->isNotAligned() )
+                    if (rValue.isLeftAligned() || rValue.isNotAligned())
                         aControlRect.AdjustRight(2);
-                    if ( pValue->isRightAligned() )
+                    if (rValue.isRightAligned())
                         aControlRect.AdjustRight(1);
                 }
                 aControlRect.AdjustTop(-2);

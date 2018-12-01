@@ -2339,12 +2339,12 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     {
         nSysCode = VK_F1 + (nCode - KEY_F1);
         aFBuf[0] = 'F';
-        if ( (nCode >= KEY_F1) && (nCode <= KEY_F9) )
+        if (nCode <= KEY_F9)
         {
             aFBuf[1] = sal::static_int_cast<sal_Char>('1' + (nCode - KEY_F1));
             aFBuf[2] = 0;
         }
-        else if ( (nCode >= KEY_F10) && (nCode <= KEY_F19) )
+        else if (nCode <= KEY_F19)
         {
             aFBuf[1] = '1';
             aFBuf[2] = sal::static_int_cast<sal_Char>('0' + (nCode - KEY_F10));
@@ -3600,7 +3600,6 @@ bool ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
         {
             SalKeyEvent     aKeyEvt;
             SalEvent        nEvent;
-            bool            bKeyUp = (nMsg == WM_KEYUP) || (nMsg == WM_SYSKEYUP);
 
             // convert KeyCode
             aKeyEvt.mnCode      = ImplSalGetKeyCode( wParam );
@@ -3608,7 +3607,7 @@ bool ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
 
             if ( aKeyEvt.mnCode )
             {
-                if ( bKeyUp )
+                if (nMsg == WM_KEYUP)
                     nEvent = SalEvent::KeyUp;
                 else
                     nEvent = SalEvent::KeyInput;
@@ -4080,7 +4079,7 @@ static void ImplHandleForcePalette( HWND hWnd )
         if ( pFrame && pFrame->mpLocalGraphics && pFrame->mpLocalGraphics->getHDC() )
         {
             WinSalGraphics* pGraphics = pFrame->mpLocalGraphics;
-            if ( pGraphics && pGraphics->getDefPal() )
+            if (pGraphics->getDefPal())
             {
                 SelectPalette( pGraphics->getHDC(), hPal, FALSE );
                 if ( RealizePalette( pGraphics->getHDC() ) )
