@@ -59,16 +59,16 @@ class autocorrectOptions(UITestCase):
         delabbrev = xDialog.getChild("delabbrev")
         abbrevlist = xDialog.getChild("abbrevlist")
 
-        nrRowsAbb = get_state_as_dict(abbrevlist)["EntryCount"]
+        nrRowsAbb = get_state_as_dict(abbrevlist)["Children"]
         abbrev.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         abbrev.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         abbrev.executeAction("TYPE", mkPropertyValues({"TEXT":"qqqqq"}))
         newabbrev.executeAction("CLICK", tuple())
-        nrRowsAbbNew = get_state_as_dict(abbrevlist)["EntryCount"]
+        nrRowsAbbNew = get_state_as_dict(abbrevlist)["Children"]
         nrRowsAbbDiff = int(nrRowsAbbNew) - int(nrRowsAbb)
         self.assertEqual(nrRowsAbbDiff, 1)  #we have +1 rule
         delabbrev.executeAction("CLICK", tuple())
-        self.assertEqual(get_state_as_dict(abbrevlist)["EntryCount"], nrRowsAbb)   #we have default nr of rules
+        self.assertEqual(get_state_as_dict(abbrevlist)["Children"], nrRowsAbb)   #we have default nr of rules
 
         #words with two initial capitals
         double = xDialog.getChild("double")
@@ -76,19 +76,68 @@ class autocorrectOptions(UITestCase):
         deldouble = xDialog.getChild("deldouble")
         doublelist = xDialog.getChild("doublelist")
 
-        nrRowsDouble = get_state_as_dict(doublelist)["EntryCount"]
+        nrRowsDouble = get_state_as_dict(doublelist)["Children"]
         double.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         double.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         double.executeAction("TYPE", mkPropertyValues({"TEXT":"QQqqq"}))
         newdouble.executeAction("CLICK", tuple())
-        nrRowsDoubleNew = get_state_as_dict(doublelist)["EntryCount"]
+        nrRowsDoubleNew = get_state_as_dict(doublelist)["Children"]
         nrRowsDoubleDiff = int(nrRowsDoubleNew) - int(nrRowsDouble) #convert string and
         self.assertEqual(nrRowsDoubleDiff, 1)  #we have +1 rule
         deldouble.executeAction("CLICK", tuple())
-        self.assertEqual(get_state_as_dict(doublelist)["EntryCount"], nrRowsDouble)   #we have default nr of rules
+        self.assertEqual(get_state_as_dict(doublelist)["Children"], nrRowsDouble)   #we have default nr of rules
 
-        xCancelButton = xDialog.getChild("cancel")
-        xCancelButton.executeAction("CLICK", tuple())
+        #tab Word Completion + tdf#95068
+        select_pos(xTabs, "4")
+        enablewordcomplete = xDialog.getChild("enablewordcomplete")
+        appendspace = xDialog.getChild("appendspace")
+        showastip = xDialog.getChild("showastip")
+        whenclosing = xDialog.getChild("whenclosing")
+        acceptwith = xDialog.getChild("acceptwith")
+        minwordlen = xDialog.getChild("minwordlen")
+        maxentries = xDialog.getChild("maxentries")
+
+        if (get_state_as_dict(enablewordcomplete)["Selected"]) == "false":
+            enablewordcomplete.executeAction("CLICK", tuple())
+        appendspace.executeAction("CLICK", tuple())
+        showastip.executeAction("CLICK", tuple())
+        whenclosing.executeAction("CLICK", tuple())
+        props = {"TEXT": "Right"}
+        actionProps = mkPropertyValues(props)
+        acceptwith.executeAction("SELECT", actionProps)
+        minwordlen.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        minwordlen.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        minwordlen.executeAction("TYPE", mkPropertyValues({"TEXT":"6"}))
+        maxentries.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        maxentries.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        maxentries.executeAction("TYPE", mkPropertyValues({"TEXT":"100"}))
+
+        xOKButton = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKButton)
+        #verify
+        self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "4")
+        enablewordcomplete = xDialog.getChild("enablewordcomplete")
+        appendspace = xDialog.getChild("appendspace")
+        showastip = xDialog.getChild("showastip")
+        whenclosing = xDialog.getChild("whenclosing")
+        acceptwith = xDialog.getChild("acceptwith")
+        minwordlen = xDialog.getChild("minwordlen")
+        maxentries = xDialog.getChild("maxentries")
+
+        self.assertEqual(get_state_as_dict(enablewordcomplete)["Selected"], "true")
+        self.assertEqual(get_state_as_dict(appendspace)["Selected"], "true")
+        self.assertEqual(get_state_as_dict(showastip)["Selected"], "false")
+        self.assertEqual(get_state_as_dict(whenclosing)["Selected"], "true")
+
+        self.assertEqual(get_state_as_dict(acceptwith)["SelectEntryText"], "Right")
+        self.assertEqual(get_state_as_dict(minwordlen)["Text"], "6")
+        self.assertEqual(get_state_as_dict(maxentries)["Text"], "100")
+
+        xOKButton = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKButton)
 
         self.ui_test.close_doc()
 
