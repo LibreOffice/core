@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <osl/endian.h>
 
 #include <cassert>
 #include <memory>
