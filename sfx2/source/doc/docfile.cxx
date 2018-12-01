@@ -173,10 +173,12 @@ bool IsLockingUsed()
 
 #endif
 
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 bool IsWebDAVLockingUsed()
 {
     return officecfg::Office::Common::Misc::UseWebDAVFileLocking::get();
 }
+#endif
 
 /// Gets default attributes of a file:// URL.
 sal_uInt64 GetDefaultFileAttributes(const OUString& rURL)
