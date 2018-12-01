@@ -8,49 +8,48 @@
  */
 
 #include <test/container/xindexaccess.hxx>
+
 #include <com/sun/star/container/XIndexAccess.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
 using namespace css::uno;
 
-namespace apitest {
-
-XIndexAccess::XIndexAccess(sal_Int32 nItems):
-    mnItems(nItems)
+namespace apitest
 {
-}
-
 void XIndexAccess::testGetCount()
 {
-    uno::Reference< container::XIndexAccess > xIndexAccess(init(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(mnItems, xIndexAccess->getCount());
+    uno::Reference<container::XIndexAccess> xIndexAccess(init(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(m_nItems, xIndexAccess->getCount());
 }
 
 void XIndexAccess::testGetByIndex()
 {
-    uno::Reference< container::XIndexAccess > xIndexAccess(init(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(mnItems, xIndexAccess->getCount());
+    uno::Reference<container::XIndexAccess> xIndexAccess(init(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(m_nItems, xIndexAccess->getCount());
 
-    if (mnItems > 0)
+    if (m_nItems > 0)
     {
         Any aAny = xIndexAccess->getByIndex(0);
         CPPUNIT_ASSERT(aAny.hasValue());
 
-        aAny = xIndexAccess->getByIndex(mnItems/2);
+        aAny = xIndexAccess->getByIndex(m_nItems / 2);
         CPPUNIT_ASSERT(aAny.hasValue());
 
-        aAny = xIndexAccess->getByIndex(mnItems-1);
+        aAny = xIndexAccess->getByIndex(m_nItems - 1);
         CPPUNIT_ASSERT(aAny.hasValue());
     }
 }
 
 void XIndexAccess::testGetByIndexException()
 {
-    uno::Reference< container::XIndexAccess > xIndexAccess(init(), UNO_QUERY_THROW);
-    xIndexAccess->getByIndex(mnItems);
+    uno::Reference<container::XIndexAccess> xIndexAccess(init(), UNO_QUERY_THROW);
+    xIndexAccess->getByIndex(m_nItems);
 }
 
-}
+} // namespace apitest
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
