@@ -23,7 +23,6 @@
 # FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
 # -o sc.ScAnnotationObj
 # -o sc.ScAnnotationShapeObj
--o sc.ScAnnotationsObj
 -o sc.ScAreaLinkObj
 -o sc.ScAutoFormatFieldObj
 -o sc.ScAutoFormatObj

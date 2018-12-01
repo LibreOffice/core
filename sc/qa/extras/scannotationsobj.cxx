@@ -8,25 +8,31 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/sheet/xsheetannotations.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSheetAnnotation.hpp>
+#include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
+
+#include <cppu/unotype.hxx>
 
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScAnnontationsObj : public CalcUnoApiTest, public apitest::XEnumerationAccess,
+class ScAnnontationsObj : public CalcUnoApiTest, public apitest::XElementAccess,
+                                                 public apitest::XEnumerationAccess,
                                                  public apitest::XIndexAccess,
                                                  public apitest::XSheetAnnotations
 {
@@ -40,6 +46,10 @@ public:
     virtual uno::Reference< sheet::XSheetAnnotations > getAnnotations(long nIndex) override;
 
     CPPUNIT_TEST_SUITE(ScAnnontationsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -64,6 +74,7 @@ private:
 
 ScAnnontationsObj::ScAnnontationsObj()
        : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+       , XElementAccess(cppu::UnoType<sheet::XSheetAnnotation>::get())
        , XIndexAccess(1)
 {
 }

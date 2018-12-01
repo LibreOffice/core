@@ -952,7 +952,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScAccessibleSpreadsheet \
     qadevOOo/tests/java/mod/_sc/ScAnnotationObj \
     qadevOOo/tests/java/mod/_sc/ScAnnotationShapeObj \
-    qadevOOo/tests/java/mod/_sc/ScAnnotationsObj \
     qadevOOo/tests/java/mod/_sc/ScAnnotationTextCursor \
     qadevOOo/tests/java/mod/_sc/ScAreaLinkObj \
     qadevOOo/tests/java/mod/_sc/ScAutoFormatFieldObj \
