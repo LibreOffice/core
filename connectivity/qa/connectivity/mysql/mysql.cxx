@@ -40,17 +40,34 @@ public:
     {
     }
     virtual void setUp() override;
+    virtual void tearDown() override;
     void testDBConnection();
     void testCreateAndDropTable();
     void testIntegerInsertAndQuery();
     void testDBPositionChange();
+    void testMultipleResultsets();
 
     CPPUNIT_TEST_SUITE(MysqlTestDriver);
     CPPUNIT_TEST(testDBConnection);
     CPPUNIT_TEST(testCreateAndDropTable);
     CPPUNIT_TEST(testIntegerInsertAndQuery);
+    CPPUNIT_TEST(testMultipleResultsets);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void MysqlTestDriver::tearDown()
+{
+    Reference<XConnection> xConnection = m_xDriver->connect(m_sUrl, m_infos);
+    if (!xConnection.is())
+    {
+        CPPUNIT_ASSERT_MESSAGE("cannot connect to data source!", xConnection.is());
+    }
+    uno::Reference<XStatement> xStatement = xConnection->createStatement();
+    CPPUNIT_ASSERT(xStatement.is());
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
+    xStatement->executeUpdate("DROP TABLE IF EXISTS otherTable");
+    test::BootstrapFixture::tearDown();
+}
 
 void MysqlTestDriver::setUp()
 {
@@ -234,6 +251,40 @@ void MysqlTestDriver::testDBPositionChange()
 
     nUpdateCount = xStatement->executeUpdate("DROP TABLE myTestTable");
     CPPUNIT_ASSERT_EQUAL(0, nUpdateCount); // it's a DDL statement
+}
+
+void MysqlTestDriver::testMultipleResultsets()
+{
+    Reference<XConnection> xConnection = m_xDriver->connect(m_sUrl, m_infos);
+    CPPUNIT_ASSERT(xConnection.is());
+    Reference<XStatement> xStatement = xConnection->createStatement();
+    CPPUNIT_ASSERT(xStatement.is());
+    // create two tables
+    xStatement->executeUpdate("DROP TABLE IF EXISTS myTestTable");
+    xStatement->executeUpdate("DROP TABLE IF EXISTS otherTable");
+    xStatement->executeUpdate("CREATE TABLE myTestTable (id INTEGER PRIMARY KEY)");
+    xStatement->executeUpdate("INSERT INTO myTestTable VALUES (1)");
+    xStatement->executeUpdate("CREATE TABLE otherTable (id INTEGER PRIMARY KEY)");
+    xStatement->executeUpdate("INSERT INTO otherTable VALUES (2)");
+
+    // create first result set
+    Reference<XResultSet> xResultSet = xStatement->executeQuery("SELECT id from myTestTable");
+    CPPUNIT_ASSERT_MESSAGE("result set cannot be instantiated after query", xResultSet.is());
+    // use it
+    xResultSet->next();
+    Reference<XRow> xRowFirst(xResultSet, UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(1l, xRowFirst->getLong(1));
+    // create second result set
+    Reference<XResultSet> xResultSet2 = xStatement->executeQuery("SELECT id from otherTable");
+    // use second result set
+    xResultSet2->next();
+    Reference<XRow> xRowSecond(xResultSet2, UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(2l, xRowSecond->getLong(1));
+    // now use the first result set again
+    CPPUNIT_ASSERT_EQUAL(1l, xRowFirst->getLong(1));
+
+    xStatement->executeUpdate("DROP TABLE myTestTable");
+    xStatement->executeUpdate("DROP TABLE otherTable");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MysqlTestDriver);
