@@ -76,6 +76,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/salctype.hxx>
+#include <vcl/gdimtf.hxx>
 #include <comphelper/classids.hxx>
 #include <sot/storinfo.hxx>
 #include <comphelper/fileformat.h>

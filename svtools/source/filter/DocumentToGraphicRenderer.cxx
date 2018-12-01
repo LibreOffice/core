@@ -19,6 +19,7 @@
 
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
+#include <vcl/gdimtf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>

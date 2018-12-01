@@ -25,6 +25,7 @@
 #include <vcl/font.hxx>
 #include <vcl/outdevstate.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
 
 // predefines

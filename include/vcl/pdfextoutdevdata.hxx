@@ -24,14 +24,11 @@
 
 #include <vcl/pdfwriter.hxx>
 #include <vcl/extoutdevdata.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/mapmod.hxx>
 #include <vector>
 #include <memory>
 
 class Graphic;
-
-namespace vcl { class PDFWriter; }
+class GDIMetaFile;
 
 namespace vcl
 {
