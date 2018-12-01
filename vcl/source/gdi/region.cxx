@@ -146,7 +146,7 @@ namespace
                        // this allows the lowest pixel of the band to be split off
                     && pBand->mnYBottom>=nTop
                        // do not split a band that is just one pixel high
-                    && pBand->mnYTop<pBand->mnYBottom)
+                    && pBand->mnYTop<pBand->mnYBottom-1)
                 {
                     // Split the top band.
                     pTopBand = pBand->SplitBand(nTop);
@@ -163,7 +163,7 @@ namespace
                        // prevent splitting off a band that is 0 pixel high
                     && pBand->mnYBottom>nBottom
                        // do not split a band that is just one pixel high
-                    && pBand->mnYTop<pBand->mnYBottom)
+                    && pBand->mnYTop<pBand->mnYBottom-1)
                 {
                     // Split the bottom band.
                     pBand->SplitBand(nBottom+1);
