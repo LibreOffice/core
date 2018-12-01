@@ -3208,7 +3208,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
                 if ( xRowSet.is() )
                 {
                     weld::Window* pWindow = pView ? pView->GetFrameWeld() : nullptr;
-                    uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), pView ? pWindow->GetXWindow() : nullptr), uno::UNO_QUERY_THROW );
+                    uno::Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), pWindow ? pWindow->GetXWindow() : nullptr), uno::UNO_QUERY_THROW );
                     xRowSet->executeWithCompletion(xHandler);
                 }
                 xResultSet.set(xRowSet, uno::UNO_QUERY);
