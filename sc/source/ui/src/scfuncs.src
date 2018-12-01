@@ -5624,7 +5624,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns the discreet probability of an interval." ;
+            Text [ en-US ] = "Returns the discrete probability of an interval." ;
         };
         ExtraData =
         {
