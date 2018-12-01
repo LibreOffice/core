@@ -112,7 +112,7 @@ namespace
     private:
         bool isStrokingEnabled() const
         {
-            return maRenderState.m_aPenColor.getInValue() && sal_Int32(0xFF) != 0;
+            return maRenderState.m_aPenColor.getInValue() % 0x100 != 0;
         }
 
         rendering::RenderState createStrokingRenderState() const
@@ -125,7 +125,7 @@ namespace
 
         bool isFillingEnabled() const
         {
-            return maRenderState.m_aFillColor.getInValue() && sal_Int32(0xFF) != 0;
+            return maRenderState.m_aFillColor.getInValue() % 0x100 != 0;
         }
 
         rendering::RenderState createFillingRenderState() const
