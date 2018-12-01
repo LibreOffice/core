@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9f5c4f37_969a126c",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-01T09:41:26Z",
+      "side": 1,
+      "message": "Sigh... this turns out to be the change I already commented in: https://gerrit.libreoffice.org/55359 - and author didn\u0027t do anything about that.",
+      "parentUuid": "9f5c4f37_b60196b2",
+      "range": {
+        "startLine": 817,
+        "startChar": 20,
+        "endLine": 817,
+        "endChar": 118
+      },
+      "revId": "3481bbbf6fc3562082ac1974e86f19b676da1ce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f5c4f37_1613c20f",
         "filename": "sc/source/ui/app/inputwin.cxx",
         "patchSetId": 1
