@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9f5c4f37_1688621d",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-01T09:59:23Z",
+      "side": 1,
+      "message": "according to\n     oox/source/drawingml/transform2dcontext.cxx:41:\nwhich has\n     mrShape.setRotation( rAttribs.getInteger( XML_rot, 0 ) ); // 60o000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise\n\nand\n    oox/source/drawingml/diagram/diagramlayoutatoms.cxx:432:\nwhich has\n    aCurrShape-\u003esetRotation(fAngle * PER_DEGREE);\n\nso probably this should be\n\n    auto r \u003d rShape-\u003egetRotation();\n    if (r \u003d\u003d 90 * PER_DEGREE || r \u003d\u003d 180 * PER_DEGREE)\n        pTextBody-\u003egetTextProperties().moRotation \u003d 180 * PER_DEGREE;\n\nThe XML_upr code a few lines up also looks wrong",
+      "parentUuid": "9f5c4f37_b60196b2",
+      "range": {
+        "startLine": 817,
+        "startChar": 20,
+        "endLine": 817,
+        "endChar": 118
+      },
+      "revId": "3481bbbf6fc3562082ac1974e86f19b676da1ce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f5c4f37_1613c20f",
         "filename": "sc/source/ui/app/inputwin.cxx",
         "patchSetId": 1
