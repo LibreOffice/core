@@ -205,16 +205,16 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
 
-                    // Repeating header lines are not visible in MSO, if there is no space for them.
-                    // OOXML (and ODF) standards don't specify this exception, and unfortunately,
-                    // it's easy to create tables with invisible repeating headers in MSO, resulting
-                    // OOXML files with non-standardized layout. To show the same or a similar layout
-                    // in LibreOffice (instead of a broken table with invisible content), we use a
-                    // reasonable 10-row limit to apply header repetition, as a workaround.
-                    // Later it's still possible to switch on header repetition or create a better
-                    // compatible repeating table header in Writer for (pretty unlikely) tables with
-                    // really repeating headers consisted of more than 10 table rows.
-                    if ( m_nHeaderRepeat == 10 )
+                    // FIXME: DOCX tables with more than 10 repeating header lines imported
+                    // without repeating header lines to mimic an MSO workaround for its usability bug.
+                    // Explanation: it's very hard to set and modify repeating header rows in Word,
+                    // often resulting tables with a special workaround: setting all table rows as
+                    // repeating header, because exceeding the pages by "unlimited" header rows turns off the
+                    // table headers automatically in MSO. 10-row limit is a reasonable temporary limit
+                    // to handle DOCX tables with "unlimited" repeating header, till the same "turn off
+                    // exceeding header" feature is ready (see tdf#88496).
+#define HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND 10
+                    if ( m_nHeaderRepeat == HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND )
                     {
                         m_nHeaderRepeat = -1;
                         pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny(sal_Int32(0)));
