@@ -10141,7 +10141,6 @@ sc/qa/extras/scannotationobj.cxx
 sc/qa/extras/scannotationshapeobj.cxx
 sc/qa/extras/scannotationsobj.cxx
 sc/qa/extras/scarealinkobj.cxx
-sc/qa/extras/scarealinksobj.cxx
 sc/qa/extras/sccellcursorobj.cxx
 sc/qa/extras/sccellobj.cxx
 sc/qa/extras/sccellrangeobj.cxx
