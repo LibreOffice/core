@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9f5c4f37_569ffab3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-01T03:22:10Z",
+      "side": 1,
+      "message": "By using the SVP plugin we use VCL to do bitmap software rendering, which can\u0027t use OpenGL, as it doesn\u0027t rely on any GUI; at least that\u0027s my outlined plan.\n\nFor CppunitTest we already have two macros for a test to declare they need real windows; probably for OpenGL, OpenCL, or if a test want to explicitly test \"real\" GUI functions.",
+      "parentUuid": "bf57530f_5d51570e",
+      "revId": "5bb5c087006a17aff7f179f0effd39f91cc53a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf57530f_7d4c1b76",
         "filename": "solenv/gbuild/gbuild.mk",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-11-28T08:52:33Z",
       "side": 1,
       "message": "But the solenv/gbuild/{Cppunit,Junit,Python,UI}Test.mk that use gb_TEST_ENV_VARS already handle setting the SAL_USE_VCLPLUGIN env var, if necessary and (apparently) as appropriate for each of those tests?  What would be the benefit of this change?",
+      "revId": "5bb5c087006a17aff7f179f0effd39f91cc53a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f5c4f37_16a982de",
+        "filename": "solenv/gbuild/gbuild.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-01T03:22:10Z",
+      "side": 1,
+      "message": "While hacking on the OSX backend I found that\u0027s not to be true. I removed the  VCL_HIDE_WINDOWS environment variable, which acted on Windows and OSX like an SVP plugin behaviour, without having an SVP plugin..\n\nOn OSX I\u0027m working on an additional patch to implement SVP / bitmap rendering in software using the new interface defined in the other patch, where I added you as a reviewer, which was thought more of a FYI, then a real review request.\n\nI tried running a JunitTest via SSH on OSX, which failed due to a blocked event processing function deep in some system code. This still happend after I dropped NSWindow usage. So I found that the SVP plugin wasn\u0027t set and probably I missed the place it should be set. I tested Linux, which runs JunitTest correctly with SVP and so do the other platforms AFAIK",
+      "parentUuid": "bf57530f_7d4c1b76",
       "revId": "5bb5c087006a17aff7f179f0effd39f91cc53a45",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
