@@ -26,6 +26,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
+#include <vcl/treelistbox.hxx> // For DragDropMode
 #include <vcl/vclevent.hxx>
 #include <vcl/treelistbox.hxx>
 #include <o3tl/enumarray.hxx>
@@ -36,6 +37,8 @@ class SvLBoxButton;
 class SvTreeList;
 class SvImpLBox;
 class SvTreeListEntry;
+class SvLBoxTab;
+class SvLBoxButton;
 namespace comphelper
 {
     namespace string
