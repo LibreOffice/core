@@ -17,6 +17,11 @@
 #include "hsqlbinarynode.hxx"
 #include "columndef.hxx"
 
+namespace weld
+{
+class Window;
+}
+
 namespace dbahsql
 {
 class SAL_DLLPUBLIC_EXPORT HsqlImporter
@@ -49,7 +54,7 @@ public:
     /**
      * Migrate a HSQL database to another.
      */
-    void importHsqlDatabase();
+    void importHsqlDatabase(weld::Window* pParent);
 };
 }
 
