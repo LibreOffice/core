@@ -480,15 +480,13 @@ void SdPage::RemoveEmptyPresentationObjects()
 {
     SdrObjListIter  aShapeIter( this, SdrIterMode::DeepWithGroups );
 
-    SdrObject* pShape;
-    for( pShape = aShapeIter.Next(); pShape; pShape = aShapeIter.Next() )
+    for (SdrObject* pShape = aShapeIter.Next(); pShape; pShape = aShapeIter.Next())
     {
-        if( pShape && pShape->IsEmptyPresObj() )
+        if (pShape->IsEmptyPresObj())
         {
             RemoveObject( pShape->GetOrdNum() );
             SdrObject::Free( pShape );
         }
-
     }
 }
 

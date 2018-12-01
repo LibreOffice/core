@@ -880,7 +880,7 @@ int SwWrtShell::IntelligentCut(SelectionType nSelection, bool bCut)
 
     int cWord = NO_WORD;
         // is a word selected?
-    if(!cWord && cPrev && cNext &&
+    if (cPrev && cNext &&
         CH_TXTATR_BREAKWORD != cPrev && CH_TXTATR_INWORD != cPrev &&
         CH_TXTATR_BREAKWORD != cNext && CH_TXTATR_INWORD != cNext &&
         !rCC.isLetterNumeric( ( sText = OUString(cPrev) ), 0 ) &&

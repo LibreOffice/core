@@ -613,8 +613,8 @@ static SwContentFrame* lcl_GetNextContentFrame( const SwLayoutFrame* pLay, bool 
         }
 
         bGoingUp = !( bGoingFwdOrBwd || bGoingDown );
-
-        if( !bFwd && bGoingDown && p )
+        assert(p);
+        if (!bFwd && bGoingDown)
             while ( p->GetNext() )
                 p = p->GetNext();
 
@@ -2184,7 +2184,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
             if( nGrow <= 0 )
             {
                 nGrow = 0;
-                if( nDist && !bTst )
+                if (!bTst)
                 {
                     if( bInCalcContent )
                         InvalidateSize_();

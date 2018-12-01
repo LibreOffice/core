@@ -2902,8 +2902,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                     // OutlinerParaObjects needs to be changed. The
                     // AutoGrowWidth/Height items still exist in the
                     // not changed object.
-                    if(pTextObj
-                        && pTextObj->GetOutlinerParaObject()
+                    if(pTextObj->GetOutlinerParaObject()
                         && pTextObj->GetOutlinerParaObject()->IsVertical() != bVertical)
                     {
                         ::tools::Rectangle aObjectRect = pTextObj->GetSnapRect();

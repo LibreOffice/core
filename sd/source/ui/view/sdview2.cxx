@@ -282,7 +282,7 @@ void View::DoPaste (::sd::Window* pWindow)
             if( pObj && pPage && pPage->GetPresObjKind(pObj) == PRESOBJ_TITLE )
             {
                 // remove all hard linebreaks from the title
-                if( pOutliner && pOutliner->GetParagraphCount() > 1 )
+                if (pOutliner->GetParagraphCount() > 1)
                 {
                     bool bOldUpdateMode = pOutliner->GetUpdateMode();
 
@@ -305,7 +305,7 @@ void View::DoPaste (::sd::Window* pWindow)
 
             if( !mrDoc.IsChanged() )
             {
-                if( pOutliner && pOutliner->IsModified() )
+                if (pOutliner->IsModified())
                     mrDoc.SetChanged();
             }
         }
@@ -502,7 +502,8 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 bool        bXFillExchange = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::XFA );
 
                 // check handle insert
-                if( !nRet && ( (bXFillExchange && ( SdrDragMode::Gradient == GetDragMode() )) || ( SdrDragMode::Transparence == GetDragMode() ) ) )
+                if ((bXFillExchange && (SdrDragMode::Gradient == GetDragMode()))
+                    || (SdrDragMode::Transparence == GetDragMode()))
                 {
                     const SdrHdlList& rHdlList = GetHdlList();
 
@@ -654,7 +655,9 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                 aPos = pTargetWindow->PixelToLogic( rEvt.maPosPixel );
 
             // handle insert?
-            if( (!nRet && ( SdrDragMode::Gradient == GetDragMode() )) || (( SdrDragMode::Transparence == GetDragMode() ) && aDataHelper.HasFormat( SotClipboardFormatId::XFA )) )
+            if ((SdrDragMode::Gradient == GetDragMode())
+                || ((SdrDragMode::Transparence == GetDragMode())
+                    && aDataHelper.HasFormat(SotClipboardFormatId::XFA)))
             {
                 const SdrHdlList& rHdlList = GetHdlList();
 

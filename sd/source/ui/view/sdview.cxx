@@ -1254,7 +1254,7 @@ bool View::ShouldToggleOn(
                         continue;
                     pOutliner->SetText(*(pText->GetOutlinerParaObject()));
                     sal_Int16 nStatus = pOutliner->GetBulletsNumberingStatus();
-                    bToggleOn = (bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1) || bToggleOn;
+                    bToggleOn = (bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1);
                     pOutliner->Clear();
                 }
             }
@@ -1266,7 +1266,7 @@ bool View::ShouldToggleOn(
                 continue;
             pOutliner->SetText(*pParaObj);
             sal_Int16 nStatus = pOutliner->GetBulletsNumberingStatus();
-            bToggleOn = (bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1) || bToggleOn;
+            bToggleOn = (bNormalBullet && nStatus != 0) || (!bNormalBullet && nStatus != 1);
             pOutliner->Clear();
         }
     }

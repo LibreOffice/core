@@ -595,10 +595,9 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
     const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for( auto n = rLnks.size(); n; )
     {
-        ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
-        if( pBLnk && !pBLnk->IsVisible() &&
-            dynamic_cast< const SwBaseLink *>( pBLnk ) !=  nullptr &&
-            nullptr != ( pNd = static_cast<SwBaseLink*>(pBLnk)->GetAnchor() ) )
+        sfx2::SvBaseLink& rBLnk = *rLnks[--n];
+        if (!rBLnk.IsVisible() && dynamic_cast<const SwBaseLink*>(&rBLnk) != nullptr
+            && nullptr != (pNd = static_cast<SwBaseLink&>(rBLnk).GetAnchor()))
         {
             pNd = pNd->StartOfSectionNode(); // If it's a SectionNode
             const SwSectionNode* pParent;
@@ -609,7 +608,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 
             // It's within a normal Section, so show again
             if( !pParent )
-                pBLnk->SetVisible( true );
+                rBLnk.SetVisible(true);
         }
     }
 }
@@ -1134,7 +1133,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         SwBaseLink* pBLink;
 
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
-        if( pLnk && pLnk != &rUpdLnk &&
+        if( pLnk != &rUpdLnk &&
             OBJECT_CLIENT_FILE == pLnk->GetObjType() &&
             dynamic_cast< const SwBaseLink *>( pLnk ) !=  nullptr &&
             ( pBLink = static_cast<SwBaseLink*>(pLnk) )->IsInRange( rSectNd.GetIndex(),

@@ -1200,7 +1200,7 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
     if(bNew)
     {
         OUString aDefaultName;
-        if ( ( _bSaveAs && !bNew ) || ( bNew && !m_sName.isEmpty() ) )
+        if (!m_sName.isEmpty())
             aDefaultName = m_sName;
         else
         {

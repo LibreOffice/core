@@ -647,7 +647,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     // Remark: in Visual-Basic the first 0 turns on the 0 for
                     //         all the following # (up to the decimal point),
                     //         this behaviour is simulated here with the flag.
-                    if( bGenerateThousandSeparator && ( c=='0' || nMaxDigit >= nDigitPos ) && nDigitPos > 0 && (nDigitPos % 3 == 0) )
+                    if (bGenerateThousandSeparator && c == '0' && nDigitPos > 0 && (nDigitPos % 3 == 0))
                     {
                         sReturnStrg.append(cThousandSep);
                     }
