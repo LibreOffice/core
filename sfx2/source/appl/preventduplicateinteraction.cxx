@@ -88,20 +88,15 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    InteractionList::iterator pIt;
-    for (  pIt  = m_lInteractionRules.begin();
-           pIt != m_lInteractionRules.end();
-         ++pIt                               )
+    auto pIt = std::find_if(m_lInteractionRules.begin(), m_lInteractionRules.end(),
+        [&aRequest](const InteractionInfo& rInfo) { return aRequest.isExtractableTo(rInfo.m_aInteraction); });
+    if (pIt != m_lInteractionRules.end())
     {
         InteractionInfo& rInfo = *pIt;
 
-        if (aRequest.isExtractableTo(rInfo.m_aInteraction))
-        {
-            ++rInfo.m_nCallCount;
-            rInfo.m_xRequest = xRequest;
-            bHandleIt = (rInfo.m_nCallCount <= rInfo.m_nMaxCount);
-            break;
-        }
+        ++rInfo.m_nCallCount;
+        rInfo.m_xRequest = xRequest;
+        bHandleIt = (rInfo.m_nCallCount <= rInfo.m_nMaxCount);
     }
 
     css::uno::Reference< css::task::XInteractionHandler > xHandler = m_xHandler;
@@ -138,20 +133,15 @@ sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const c
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    InteractionList::iterator pIt;
-    for (  pIt  = m_lInteractionRules.begin();
-           pIt != m_lInteractionRules.end();
-         ++pIt                               )
+    auto pIt = std::find_if(m_lInteractionRules.begin(), m_lInteractionRules.end(),
+        [&aRequest](const InteractionInfo& rInfo) { return aRequest.isExtractableTo(rInfo.m_aInteraction); });
+    if (pIt != m_lInteractionRules.end())
     {
         InteractionInfo& rInfo = *pIt;
 
-        if (aRequest.isExtractableTo(rInfo.m_aInteraction))
-        {
-            ++rInfo.m_nCallCount;
-            rInfo.m_xRequest = xRequest;
-            bHandleIt = (rInfo.m_nCallCount <= rInfo.m_nMaxCount);
-            break;
-        }
+        ++rInfo.m_nCallCount;
+        rInfo.m_xRequest = xRequest;
+        bHandleIt = (rInfo.m_nCallCount <= rInfo.m_nMaxCount);
     }
 
     css::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, css::uno::UNO_QUERY );
@@ -188,18 +178,14 @@ void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInter
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    InteractionList::iterator pIt;
-    for (  pIt  = m_lInteractionRules.begin();
-           pIt != m_lInteractionRules.end();
-         ++pIt                               )
+    auto pIt = std::find_if(m_lInteractionRules.begin(), m_lInteractionRules.end(),
+        [&aInteractionInfo](const InteractionInfo& rInfo) { return rInfo.m_aInteraction == aInteractionInfo.m_aInteraction; });
+    if (pIt != m_lInteractionRules.end())
     {
         InteractionInfo& rInfo = *pIt;
-        if (rInfo.m_aInteraction == aInteractionInfo.m_aInteraction)
-        {
-            rInfo.m_nMaxCount  = aInteractionInfo.m_nMaxCount;
-            rInfo.m_nCallCount = aInteractionInfo.m_nCallCount;
-            return;
-        }
+        rInfo.m_nMaxCount  = aInteractionInfo.m_nMaxCount;
+        rInfo.m_nCallCount = aInteractionInfo.m_nCallCount;
+        return;
     }
 
     m_lInteractionRules.push_back(aInteractionInfo);
@@ -214,17 +200,12 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    PreventDuplicateInteraction::InteractionList::const_iterator pIt;
-    for (  pIt  = m_lInteractionRules.begin();
-           pIt != m_lInteractionRules.end();
-         ++pIt                               )
+    auto pIt = std::find_if(m_lInteractionRules.begin(), m_lInteractionRules.end(),
+        [&aInteraction](const InteractionInfo& rInfo) { return rInfo.m_aInteraction == aInteraction; });
+    if (pIt != m_lInteractionRules.end())
     {
-        const PreventDuplicateInteraction::InteractionInfo& rInfo = *pIt;
-        if (rInfo.m_aInteraction == aInteraction)
-        {
-            *pReturn = rInfo;
-            return true;
-        }
+        *pReturn = *pIt;
+        return true;
     }
 
     aLock.clear();

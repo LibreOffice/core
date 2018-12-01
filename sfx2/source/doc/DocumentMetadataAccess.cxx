@@ -1079,10 +1079,8 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
         const uno::Reference<rdf::XURI>& xMetadataFile(
             getURI<rdf::URIs::PKG_METADATAFILE>(m_pImpl->m_xContext));
         const sal_Int32 len( baseURI.getLength() );
-        for (::std::vector< uno::Reference< rdf::XURI > >::const_iterator it
-                = parts.begin();
-                it != parts.end(); ++it) {
-            const OUString name((*it)->getStringValue());
+        for (const auto& rxPart : parts) {
+            const OUString name(rxPart->getStringValue());
             if (!name.match(baseURI)) {
                 SAL_WARN("sfx", "loadMetadataFromStorage: graph not in document: " << name);
                 continue;
@@ -1095,7 +1093,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
             // remove found items from StgFiles
             StgFiles.erase(relName);
             if (isContentFile(relName)) {
-                if (!isPartOfType(*m_pImpl, *it, xContentFile)) {
+                if (!isPartOfType(*m_pImpl, rxPart, xContentFile)) {
                     const uno::Reference <rdf::XURI> xName(
                         getURIForStream(*m_pImpl, relName) );
                     // add missing type statement
@@ -1104,7 +1102,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
                         xContentFile.get());
                 }
             } else if (isStylesFile(relName)) {
-                if (!isPartOfType(*m_pImpl, *it, xStylesFile)) {
+                if (!isPartOfType(*m_pImpl, rxPart, xStylesFile)) {
                     const uno::Reference <rdf::XURI> xName(
                         getURIForStream(*m_pImpl, relName) );
                     // add missing type statement
@@ -1115,7 +1113,7 @@ void SAL_CALL DocumentMetadataAccess::loadMetadataFromStorage(
             } else if (isReservedFile(relName)) {
                 SAL_WARN("sfx", "loadMetadataFromStorage: reserved file name in manifest");
             } else {
-                if (isPartOfType(*m_pImpl, *it, xMetadataFile)) {
+                if (isPartOfType(*m_pImpl, rxPart, xMetadataFile)) {
                     MfstMetadataFiles.push_back(relName);
                 }
                 // do not add statement for MetadataFile; it could be

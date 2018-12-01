@@ -350,21 +350,13 @@ void SAL_CALL Theme::disposing()
 
     const lang::EventObject aEvent (static_cast<XWeak*>(this));
 
-    for (ChangeListeners::const_iterator
-             iContainer(aListeners.begin()),
-             iContainerEnd(aListeners.end());
-         iContainer != iContainerEnd;
-         ++iContainer)
+    for (const auto& rContainer : aListeners)
     {
-        for (ChangeListenerContainer::const_iterator
-                 iListener(iContainer->second.begin()),
-                 iEnd(iContainer->second.end());
-             iListener!=iEnd;
-             ++iListener)
+        for (const auto& rxListener : rContainer.second)
         {
             try
             {
-                (*iListener)->disposing(aEvent);
+                rxListener->disposing(aEvent);
             }
             catch(const Exception&)
             {
@@ -934,13 +926,9 @@ bool Theme::DoVetoableListenersVeto (
     VetoableListenerContainer aListeners (*pListeners);
     try
     {
-        for (VetoableListenerContainer::const_iterator
-                 iListener(aListeners.begin()),
-                 iEnd(aListeners.end());
-             iListener!=iEnd;
-             ++iListener)
+        for (const auto& rxListener : aListeners)
         {
-            (*iListener)->vetoableChange(rEvent);
+            rxListener->vetoableChange(rEvent);
         }
     }
     catch(const beans::PropertyVetoException&)
@@ -964,13 +952,9 @@ void Theme::BroadcastPropertyChange (
     const ChangeListenerContainer aListeners (*pListeners);
     try
     {
-        for (ChangeListenerContainer::const_iterator
-                 iListener(aListeners.begin()),
-                 iEnd(aListeners.end());
-             iListener!=iEnd;
-             ++iListener)
+        for (const auto& rxListener : aListeners)
         {
-            (*iListener)->propertyChange(rEvent);
+            rxListener->propertyChange(rEvent);
         }
     }
     catch(const Exception&)
