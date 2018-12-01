@@ -73,7 +73,6 @@ job73=sc.ScAccessiblePreviewTable
 job74=sc.ScAccessibleSpreadsheet
 job75=sc.ScAnnotationObj
 job76=sc.ScAnnotationsObj
-job77=sc.ScAreaLinksObj
 job78=sc.ScAutoFormatFieldObj
 job79=sc.ScAutoFormatObj
 job80=sc.ScAutoFormatsObj

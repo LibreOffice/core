@@ -25,7 +25,6 @@
 # -o sc.ScAnnotationShapeObj
 -o sc.ScAnnotationsObj
 -o sc.ScAreaLinkObj
--o sc.ScAreaLinksObj
 -o sc.ScAutoFormatFieldObj
 -o sc.ScAutoFormatObj
 -o sc.ScAutoFormatsObj

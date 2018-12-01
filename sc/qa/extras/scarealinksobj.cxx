@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/sheet/xarealinks.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -32,7 +33,8 @@ namespace sc_apitest
 class ScAreaLinksObj : public CalcUnoApiTest,
                        public apitest::XAreaLinks,
                        public apitest::XElementAccess,
-                       public apitest::XEnumerationAccess
+                       public apitest::XEnumerationAccess,
+                       public apitest::XIndexAccess
 {
 public:
     ScAreaLinksObj();
@@ -54,6 +56,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -63,6 +69,7 @@ private:
 ScAreaLinksObj::ScAreaLinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XAreaLink>::get())
+    , XIndexAccess(1)
 {
 }
 
