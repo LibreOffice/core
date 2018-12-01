@@ -45,6 +45,7 @@ public:
     void testDir();
     void testMaxDepth();
     void testRotation();
+    void testTextAutoRotation();
     void testVertialBoxList();
     void testVertialBracketList();
     void testTableList();
@@ -61,6 +62,7 @@ public:
     CPPUNIT_TEST(testDir);
     CPPUNIT_TEST(testMaxDepth);
     CPPUNIT_TEST(testRotation);
+    CPPUNIT_TEST(testTextAutoRotation);
     CPPUNIT_TEST(testVertialBoxList);
     CPPUNIT_TEST(testVertialBracketList);
     CPPUNIT_TEST(testTableList);
@@ -212,6 +214,95 @@ void SdImportTestSmartArt::testRotation()
 
     uno::Reference<beans::XPropertySet> xShape2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12000), xShape2->getPropertyValue("RotateAngle").get<sal_Int32>());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTextAutoRotation()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-autoTxRot.pptx"), PPTX);
+
+    auto testText = [&](int pageNo, sal_Int32 txtNo, const OUString& expTx, sal_Int32 expShRot,
+                        sal_Int32 expTxRot) {
+        OString msgText = "Page: " + OString::number(pageNo) + " text: " + OString::number(txtNo);
+        uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, pageNo, xDocShRef),
+                                                     uno::UNO_QUERY_THROW);
+
+        uno::Reference<text::XText> xTxt(xShapeGroup->getByIndex(txtNo), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msgText.getStr(), expTx, xTxt->getString());
+        uno::Reference<beans::XPropertySet> xTxtProps(xTxt, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msgText.getStr(), expShRot,
+                                     xTxtProps->getPropertyValue("RotateAngle").get<sal_Int32>());
+
+        auto aGeomPropSeq = xTxtProps->getPropertyValue("CustomShapeGeometry")
+                                .get<uno::Sequence<beans::PropertyValue>>();
+        comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
+
+        auto it = aCustomShapeGeometry.find("TextPreRotateAngle");
+        if (it == aCustomShapeGeometry.end())
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(msgText.getStr(), sal_Int32(0), expTxRot);
+        }
+        else
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(msgText.getStr(), expTxRot, it->second.get<sal_Int32>());
+        }
+    };
+
+    // Slide 1: absent autoTxRot => defaults to "upr"
+    testText(0, 0,  "a", 0,     0);
+    testText(0, 1,  "b", 33750, 0);
+    testText(0, 2,  "c", 31500, 0);
+    testText(0, 3,  "d", 29250, 90);
+    testText(0, 4,  "e", 27000, 90);
+    testText(0, 5,  "f", 24750, 90);
+    testText(0, 6,  "g", 22500, 180);
+    testText(0, 7,  "h", 20250, 180);
+    testText(0, 8,  "i", 18000, 180);
+    testText(0, 9,  "j", 15750, 180);
+    testText(0, 10, "k", 13500, 180);
+    testText(0, 11, "l", 11250, 270);
+    testText(0, 12, "m", 9000,  270);
+    testText(0, 13, "n", 6750,  270);
+    testText(0, 14, "o", 4500,  0);
+    testText(0, 15, "p", 2250,  0);
+
+    // Slide 2: autoTxRot == "none"
+    testText(1, 0,  "a", 0,     0);
+    testText(1, 1,  "b", 33750, 0);
+    testText(1, 2,  "c", 31500, 0);
+    testText(1, 3,  "d", 29250, 0);
+    testText(1, 4,  "e", 27000, 0);
+    testText(1, 5,  "f", 24750, 0);
+    testText(1, 6,  "g", 22500, 0);
+    testText(1, 7,  "h", 20250, 0);
+    testText(1, 8,  "i", 18000, 0);
+    testText(1, 9,  "j", 15750, 0);
+    testText(1, 10, "k", 13500, 0);
+    testText(1, 11, "l", 11250, 0);
+    testText(1, 12, "m", 9000,  0);
+    testText(1, 13, "n", 6750,  0);
+    testText(1, 14, "o", 4500,  0);
+    testText(1, 15, "p", 2250,  0);
+
+    // Slide 3: autoTxRot == "grav"
+    testText(2, 0,  "a", 0,     0);
+    testText(2, 1,  "b", 33750, 0);
+    testText(2, 2,  "c", 31500, 0);
+    testText(2, 3,  "d", 29250, 0);
+    testText(2, 4,  "e", 27000, 0);
+    testText(2, 5,  "f", 24750, 180);
+    testText(2, 6,  "g", 22500, 180);
+    testText(2, 7,  "h", 20250, 180);
+    testText(2, 8,  "i", 18000, 180);
+    testText(2, 9,  "j", 15750, 180);
+    testText(2, 10, "k", 13500, 180);
+    testText(2, 11, "l", 11250, 180);
+    testText(2, 12, "m", 9000,  0);
+    testText(2, 13, "n", 6750,  0);
+    testText(2, 14, "o", 4500,  0);
+    testText(2, 15, "p", 2250,  0);
 
     xDocShRef->DoClose();
 }

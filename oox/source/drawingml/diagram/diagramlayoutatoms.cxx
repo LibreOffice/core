@@ -1007,20 +1007,34 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
             }
 
+            // ECMA-376-1:2016 21.4.7.5 ST_AutoTextRotation (Auto Text Rotation)
             const sal_Int32 nautoTxRot = maMap.count(XML_autoTxRot) ? maMap.find(XML_autoTxRot)->second : XML_upr;
+            sal_Int32 nShapeRot = rShape->getRotation();
+            while (nShapeRot < 0)
+                nShapeRot += 360 * PER_DEGREE;
+            while (nShapeRot > 360 * PER_DEGREE)
+                nShapeRot -= 360 * PER_DEGREE;
 
             switch(nautoTxRot)
             {
                 case XML_upr:
                 {
-                    if (rShape->getRotation())
-                        pTextBody->getTextProperties().moRotation = -F_PI180*90*rShape->getRotation();
+                    int n90x = 0;
+                    if (nShapeRot >= 315 * PER_DEGREE)
+                        /* keep 0 */;
+                    else if (nShapeRot > 225 * PER_DEGREE)
+                        n90x = -3;
+                    else if (nShapeRot >= 135 * PER_DEGREE)
+                        n90x = -2;
+                    else if (nShapeRot > 45 * PER_DEGREE)
+                        n90x = -1;
+                    pTextBody->getTextProperties().moRotation = n90x * 90 * PER_DEGREE;
                 }
                 break;
                 case XML_grav:
                 {
-                    if (rShape->getRotation()==90*F_PI180 || rShape->getRotation()==180*F_PI180)
-                        pTextBody->getTextProperties().moRotation = 180*F_PI180;
+                    if (nShapeRot > (90 * PER_DEGREE) && nShapeRot < (270 * PER_DEGREE))
+                        pTextBody->getTextProperties().moRotation = -180 * PER_DEGREE;
                 }
                 break;
                 case XML_none:
