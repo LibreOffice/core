@@ -166,10 +166,12 @@ bool IsLockingUsed()
 
 #endif
 
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 bool IsWebDAVLockingUsed()
 {
     return officecfg::Office::Common::Misc::UseWebDAVFileLocking::get();
 }
+#endif
 
 } // anonymous namespace
 
