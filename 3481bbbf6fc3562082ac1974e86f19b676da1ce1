@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f5c4f37_b60196b2",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-01T08:30:34Z",
+      "side": 1,
+      "message": "This looks like totally incorrect check. 90*F_PI180 \u003d pi/2 (~1.57); 180*F_PI180 is simply pi. We can\u0027t have some integer rotation units in radians. You found a bug - needs investigating.",
+      "range": {
+        "startLine": 817,
+        "startChar": 20,
+        "endLine": 817,
+        "endChar": 118
+      },
+      "revId": "3481bbbf6fc3562082ac1974e86f19b676da1ce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f5c4f37_1613c20f",
+        "filename": "sc/source/ui/app/inputwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-01T08:30:34Z",
+      "side": 1,
+      "message": "TBX_WINDOW_HEIGHT is defined as simply 22, so maybe better\n\n    long(TBX_WINDOW_HEIGHT * 0.7);",
+      "range": {
+        "startLine": 680,
+        "startChar": 32,
+        "endLine": 680,
+        "endChar": 68
+      },
+      "revId": "3481bbbf6fc3562082ac1974e86f19b676da1ce1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
