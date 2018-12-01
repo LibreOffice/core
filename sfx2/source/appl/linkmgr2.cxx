@@ -92,10 +92,9 @@ void LinkManager::InsertCachedComp(const Reference<XComponent>& xComp)
 
 void LinkManager::CloseCachedComps()
 {
-    CompVector::iterator itr = maCachedComps.begin(), itrEnd = maCachedComps.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rxCachedComp : maCachedComps)
     {
-        Reference<XCloseable> xCloseable(*itr, UNO_QUERY);
+        Reference<XCloseable> xCloseable(rxCachedComp, UNO_QUERY);
         if (!xCloseable.is())
             continue;
 

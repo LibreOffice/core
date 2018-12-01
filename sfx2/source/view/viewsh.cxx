@@ -360,14 +360,9 @@ void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient const *pIPClient )
 {
     std::vector< SfxInPlaceClient* > *pClients = pImpl->GetIPClients_Impl();
 
-    for(std::vector< SfxInPlaceClient* >::iterator it = pClients->begin(); it != pClients->end(); ++it)
-    {
-        if ( *it == pIPClient )
-        {
-            pClients->erase( it );
-            break;
-        }
-    }
+    auto it = std::find(pClients->begin(), pClients->end(), pIPClient);
+    if (it != pClients->end())
+        pClients->erase( it );
 }
 
 

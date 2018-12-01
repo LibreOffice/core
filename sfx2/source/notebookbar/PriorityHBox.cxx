@@ -124,27 +124,20 @@ void PriorityHBox::Resize()
     long nCurrentWidth = VclHBox::calculateRequisition().getWidth();
 
     // Hide lower priority controls
-    auto pChild = m_aSortedChildren.begin();
-    while (nCurrentWidth > nWidth && pChild != m_aSortedChildren.end())
+    for (vcl::IPrioritable* pPrioritable : m_aSortedChildren)
     {
-        vcl::Window* pWindow = dynamic_cast<vcl::Window*>(*pChild);
-        vcl::IPrioritable* pPrioritable = *pChild;
+        if (nCurrentWidth <= nWidth)
+            break;
 
-        if(pWindow->GetParent() != this)
-        {
-            pChild++;
-            continue;
-        }
+        vcl::Window* pWindow = dynamic_cast<vcl::Window*>(pPrioritable);
 
-        if (pWindow)
+        if (pWindow && pWindow->GetParent() == this)
         {
             nCurrentWidth -= pWindow->GetOutputWidthPixel() + get_spacing();
             pWindow->Show();
             pPrioritable->HideContent();
             nCurrentWidth += pWindow->GetOutputWidthPixel() + get_spacing();
         }
-
-        pChild++;
     }
 
     auto pChildR = m_aSortedChildren.rbegin();

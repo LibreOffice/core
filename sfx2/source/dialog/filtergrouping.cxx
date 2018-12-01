@@ -623,15 +623,11 @@ namespace sfx2
                     "sfx2::lcl_GroupAndClassify: invalid all-filters array here!" );
                     // the loop below will work on invalid objects else ...
                 ++aGroupPos;
-                auto aGlobalIter = aGlobalClassNames.begin();
-                while   (   ( aGroupPos != _rAllFilters.end() )
-                        &&  ( aGlobalIter != aGlobalClassNames.end() )
-                        &&  ( *aGlobalIter != aServiceName )
-                        )
-                {
-                    ++aGlobalIter;
-                    ++aGroupPos;
-                }
+                auto aGlobalIter = std::find(aGlobalClassNames.begin(), aGlobalClassNames.end(), aServiceName);
+                auto nGroupPosShift = std::min(
+                    std::distance(aGlobalClassNames.begin(), aGlobalIter),
+                    std::distance(aGroupPos, _rAllFilters.end()));
+                std::advance(aGroupPos, nGroupPosShift);
                 if ( aGroupPos != _rAllFilters.end() )
                     // we found a global class name which matches the doc service name -> fill the filters of this
                     // group in the respective prepared group

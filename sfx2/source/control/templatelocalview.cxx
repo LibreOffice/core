@@ -444,28 +444,24 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
         if (pRegion->mnId == nSrcItemId)
         {
             TemplateContainerItem *pItem = pRegion.get();
-            std::vector<TemplateItemProperties>::iterator pIter;
-            for (pIter = pItem->maTemplates.begin(); pIter != pItem->maTemplates.end(); ++pIter)
+            auto pIter = std::find_if(pItem->maTemplates.begin(), pItem->maTemplates.end(),
+                [nItemId](const TemplateItemProperties& rTemplate) { return rTemplate.nId == nItemId; });
+            if (pIter != pItem->maTemplates.end())
             {
-                if (pIter->nId == nItemId)
+                if (!mpDocTemplates->Delete(pItem->mnRegionId,pIter->nDocId))
+                    return false;
+
+                pIter = pItem->maTemplates.erase(pIter);
+
+                if (pRegion->mnRegionId == mnCurRegionId-1)
                 {
-                    if (!mpDocTemplates->Delete(pItem->mnRegionId,pIter->nDocId))
-                        return false;
-
-                    pIter = pItem->maTemplates.erase(pIter);
-
-                    if (pRegion->mnRegionId == mnCurRegionId-1)
-                    {
-                        RemoveItem(nItemId);
-                        Invalidate();
-                    }
-
-                    // Update Doc Idx for all templates that follow
-                    for (; pIter != pItem->maTemplates.end(); ++pIter)
-                        pIter->nDocId = pIter->nDocId - 1;
-
-                    break;
+                    RemoveItem(nItemId);
+                    Invalidate();
                 }
+
+                // Update Doc Idx for all templates that follow
+                for (; pIter != pItem->maTemplates.end(); ++pIter)
+                    pIter->nDocId = pIter->nDocId - 1;
             }
 
             CalculateItemPositions();

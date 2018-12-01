@@ -110,11 +110,8 @@ void SfxObjectFactory::RegisterViewFactory
         }
     }
 #endif
-    SfxViewFactoryArr_Impl::iterator it = pImpl->aViewFactoryArr.begin();
-    for ( ; it != pImpl->aViewFactoryArr.end() &&
-          (*it)->GetOrdinal() <= rFactory.GetOrdinal();
-          ++it )
-    /* empty loop */;
+    auto it = std::find_if(pImpl->aViewFactoryArr.begin(), pImpl->aViewFactoryArr.end(),
+        [&rFactory](SfxViewFactory* pFactory) { return pFactory->GetOrdinal() > rFactory.GetOrdinal(); });
     pImpl->aViewFactoryArr.insert(it, &rFactory);
 }
 

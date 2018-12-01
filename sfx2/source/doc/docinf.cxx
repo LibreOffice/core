@@ -149,11 +149,10 @@ ErrCode LoadOlePropertySet(
             i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
         ::std::vector< sal_Int32 > aPropIds;
         xCustomSect->GetPropertyIds( aPropIds );
-        for( ::std::vector< sal_Int32 >::const_iterator aIt = aPropIds.begin(),
-             aEnd = aPropIds.end(); aIt != aEnd; ++aIt )
+        for( const auto& rPropId : aPropIds )
         {
-            const OUString aPropName = xCustomSect->GetPropertyName( *aIt );
-            uno::Any aPropValue = xCustomSect->GetAnyValue( *aIt );
+            const OUString aPropName = xCustomSect->GetPropertyName( rPropId );
+            uno::Any aPropValue = xCustomSect->GetAnyValue( rPropId );
             if( !aPropName.isEmpty() && aPropValue.hasValue() )
             {
                 try
