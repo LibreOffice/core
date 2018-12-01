@@ -1710,7 +1710,7 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
         mpUpdateDataTimer->Start();//do not update while the user is still travelling in the control
 
     if ( mpSubEdit || !ImplHandleKeyEvent( rKEvt ) )
-        Control::KeyInput( rKEvt );
+        GetParent()->KeyInput( rKEvt );
 }
 
 void Edit::FillLayoutData() const
