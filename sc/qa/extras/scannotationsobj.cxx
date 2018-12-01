@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/sheet/xsheetannotations.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -16,6 +17,9 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -23,6 +27,7 @@ using namespace css::uno;
 namespace sc_apitest {
 
 class ScAnnontationsObj : public CalcUnoApiTest, public apitest::XEnumerationAccess,
+                                                 public apitest::XIndexAccess,
                                                  public apitest::XSheetAnnotations
 {
 public:
@@ -38,6 +43,10 @@ public:
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
+
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
 
     // XSheetAnnotations
     CPPUNIT_TEST(testCount);
@@ -55,6 +64,7 @@ private:
 
 ScAnnontationsObj::ScAnnontationsObj()
        : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+       , XIndexAccess(1)
 {
 }
 
