@@ -420,7 +420,7 @@ bool SvxFillTypeBox::EventNotify( NotifyEvent& rNEvt )
     if (isDisposed())
         return false;
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if ( !bHandled && rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         switch ( pKEvt->GetKeyCode().GetCode() )
@@ -482,7 +482,7 @@ bool SvxFillAttrBox::EventNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = ListBox::EventNotify( rNEvt );
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if ( !bHandled && rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
 
