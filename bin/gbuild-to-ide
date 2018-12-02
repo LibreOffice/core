@@ -1507,7 +1507,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                     define += '=' + value
                 defines_list.append(define)
 
-            # All datas are prepared, store them for the lib.
+            # All data are prepared, store them for the lib.
             if lib_folder in self.data_libs:
                 self.data_libs[lib_folder]['sources'] |= set(sources_list)
                 self.data_libs[lib_folder]['headers'] |= set(headers_list)
