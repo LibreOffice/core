@@ -45,7 +45,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
 
 /// replace database separator by dots for display
-static OUString lcl_DBTrennConv(const OUString& aContent)
+static OUString lcl_DBSeparatorConvert(const OUString& aContent)
 {
     return aContent.replaceAll(OUStringLiteral1(DB_DELIM), ".");
 }
@@ -209,7 +209,7 @@ void SwDBField::InitContent(const OUString& rExpansion)
 OUString SwDBField::ExpandImpl(SwRootFrame const*const) const
 {
     if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
-        return lcl_DBTrennConv(aContent);
+        return lcl_DBSeparatorConvert(aContent);
     return OUString();
 }
 
@@ -240,7 +240,7 @@ OUString SwDBField::GetFieldName() const
             + OUStringLiteral1(DB_DELIM)
             + rDBName.getToken(2, DB_DELIM);
     }
-    return lcl_DBTrennConv(sContent);
+    return lcl_DBSeparatorConvert(sContent);
 }
 
 void SwDBField::ChgValue( double d, bool bVal )
@@ -481,7 +481,7 @@ OUString SwDBNameInfField::GetFieldName() const
             + OUStringLiteral1(DB_DELIM)
             + aDBData.sCommand;
     }
-    return lcl_DBTrennConv(sStr);
+    return lcl_DBSeparatorConvert(sStr);
 }
 
 bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
