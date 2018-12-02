@@ -50,6 +50,9 @@
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <vcl/font.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/containerhelper.hxx>
@@ -926,14 +929,21 @@ void AxFontDataModel::convertFromProperties( PropertySet& rPropSet, const Contro
 
     sal_Int16 nUnderLine = awt::FontUnderline::NONE;
     if ( rPropSet.getProperty( nUnderLine, PROP_FontUnderline ) )
-        setFlag( maFontData.mnFontEffects, AxFontFlags::Underline, nUnderLine != awt::FontUnderline::NONE );
+        setFlag( maFontData.mnFontEffects, AxFontFlags::Underline, nUnderLine != awt::FontUnderline::NONE && nUnderLine != awt::FontUnderline::DONTKNOW);
     sal_Int16 nStrikeout = awt::FontStrikeout::NONE ;
     if ( rPropSet.getProperty( nStrikeout, PROP_FontStrikeout ) )
-        setFlag( maFontData.mnFontEffects, AxFontFlags::Strikeout, nStrikeout != awt::FontStrikeout::NONE );
+        setFlag( maFontData.mnFontEffects, AxFontFlags::Strikeout, nStrikeout != awt::FontStrikeout::NONE && nStrikeout != awt::FontStrikeout::DONTKNOW);
 
     float fontHeight = 0.0;
     if ( rPropSet.getProperty( fontHeight, PROP_FontHeight ) )
+    {
+        if ( fontHeight == 0 )  // tdf#118684
+        {
+            vcl::Font aDefaultVCLFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
+            fontHeight = static_cast< float >( aDefaultVCLFont.GetFontHeight() );
+        }
         maFontData.setHeightPoints( static_cast< sal_Int16 >( fontHeight ) );
+    }
 
     // TODO - handle textencoding
     sal_Int16 nAlign = 0;
