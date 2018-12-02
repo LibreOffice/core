@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
-#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu
 {
@@ -81,7 +80,6 @@ struct ContextEntry_Init
     @param xDelegate delegation to further context, if value was not found
     @return new context object
 */
-CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
 SAL_CALL createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,

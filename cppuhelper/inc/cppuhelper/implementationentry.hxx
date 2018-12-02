@@ -24,7 +24,6 @@
 #define _CPPUHELPER_IMPLEMENATIONENTRY_HXX_
 
 #include <cppuhelper/factory.hxx>
-#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu
 {
@@ -81,7 +80,7 @@ struct ImplementationEntry
                            must be marked with a 0 entry in the create-function.
     @return sal_True, if all implementations could be registered, otherwise sal_False.
  */
-CPPUHELPER_DLLPUBLIC sal_Bool component_writeInfoHelper(
+sal_Bool component_writeInfoHelper(
     void *pServiceManager, void *pRegistryKey , const struct ImplementationEntry entries[] );
 
 /** Helper function for implementation of the component_getFactory()-function,
@@ -100,7 +99,7 @@ CPPUHELPER_DLLPUBLIC sal_Bool component_writeInfoHelper(
     @return 0 if the helper failed to instantiate a factory, otherwise an acquired pointer
             to a factory.
  */
-CPPUHELPER_DLLPUBLIC void *component_getFactoryHelper(
+void *component_getFactoryHelper(
     const sal_Char * pImplName,
     void * pServiceManager,
     void * pRegistryKey,

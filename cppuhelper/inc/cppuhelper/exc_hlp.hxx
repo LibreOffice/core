@@ -26,8 +26,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-#include "cppuhelper/cppuhelperdllapi.h"
-
 namespace cppu
 {
 
@@ -38,7 +36,7 @@ namespace cppu
     @param rExc
            exception to be thrown.
 */
-CPPUHELPER_DLLPUBLIC void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
+void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 /** Use this function to get the dynamic type of a caught C++-UNO exception;
@@ -88,7 +86,7 @@ CPPUHELPER_DLLPUBLIC void SAL_CALL throwException( const ::com::sun::star::uno::
               development, because the whole OOo code base is compiled using the
               same C++ compiler (and linking against one runtime library).
 */
-CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL getCaughtException();
+::com::sun::star::uno::Any SAL_CALL getCaughtException();
 
 }
 

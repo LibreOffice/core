@@ -31,8 +31,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include "cppuhelper/cppuhelperdllapi.h"
-
 /* This header should not be used anymore.
    @deprecated
 */
@@ -57,7 +55,7 @@ struct Type_Offset
     Not for plublic use.
     @internal
 */
-struct CPPUHELPER_DLLPUBLIC ClassDataBase
+struct ClassDataBase
 {
     /** determines whether the class data has been statically initialized
     */
@@ -102,7 +100,7 @@ struct CPPUHELPER_DLLPUBLIC ClassDataBase
     Not for plublic use.
     @internal
 */
-struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
+struct ClassData : public ClassDataBase
 {
     /** type entries array
     */
@@ -146,7 +144,7 @@ struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
     Not for public use.
     @internal
 */
-CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
+::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
 }
 
 //

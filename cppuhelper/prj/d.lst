@@ -1,6 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\cppuhelper
 
-..\inc\cppuhelper\cppuhelperdllapi.h %_DEST%\inc%_EXT%\cppuhelper\cppuhelperdllapi.h
 ..\inc\cppuhelper\implbase.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase.hxx
 ..\inc\cppuhelper\implbase_ex.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase_ex.hxx
 ..\inc\cppuhelper\implbase_ex_pre.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase_ex_pre.hxx
