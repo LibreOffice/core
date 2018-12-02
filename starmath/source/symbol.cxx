@@ -147,7 +147,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
             m_aSymbols[ aSymbolName ] = rSymbol;
             bAdded = true;
         }
-        else if (pFound && !bForceChange && bSymbolConflict)
+        else if (bSymbolConflict)
         {
             // TODO: to solve this a document owned symbol manager would be required ...
                 SAL_WARN("starmath", "symbol conflict, different symbol with same name found!");
