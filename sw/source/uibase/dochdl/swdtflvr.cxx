@@ -3327,7 +3327,7 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
             if( bSmart )
             {
                 bSttWrd = rShell.IsStartWord();
-                if( bSmart && !bSttWrd && (bInWrd || bEndWrd) )
+                if (!bSttWrd && (bInWrd || bEndWrd))
                     rShell.SwEditShell::Insert(' ');
             }
     }

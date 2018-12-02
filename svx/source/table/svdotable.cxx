@@ -584,7 +584,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
         const OUString sSize( "Size" );
         if( mbHorizontal )
         {
-            if( (nEdge >= 0) && (nEdge <= getRowCount()) )
+            if (nEdge <= getRowCount())
             {
                 sal_Int32 nHeight = mpLayouter->getRowHeight( (!nEdge)?nEdge:(nEdge-1) );
                 if(nEdge==0)
@@ -606,7 +606,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
             In LTR table dragging of edge 0(for RTL table edge N) does nothing.
             */
             //Todo: Implement Dragging functionality for leftmost edge of table.
-            if( (nEdge >= 0) && (nEdge <= getColumnCount()) )
+            if (nEdge <= getColumnCount())
             {
                 const bool bRTL = mpTableObj != nullptr && (mpTableObj->GetWritingMode() == WritingMode_RL_TB);
                 sal_Int32 nWidth;
@@ -633,18 +633,14 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
                 /* To prevent the table resizing on edge dragging */
                 if( nEdge > 0 && nEdge < mxTable->getColumnCount() )
                 {
-
                     if( bRTL )
                         nEdge--;
 
-                    if( (bRTL && (nEdge >= 0)) || (!bRTL && (nEdge < mxTable->getColumnCount())) )
-                    {
-                        nWidth = mpLayouter->getColumnWidth( nEdge );
-                        nWidth = std::max( static_cast<sal_Int32>(nWidth - nOffset), sal_Int32(0) );
+                    nWidth = mpLayouter->getColumnWidth(nEdge);
+                    nWidth = std::max(static_cast<sal_Int32>(nWidth - nOffset), sal_Int32(0));
 
-                        Reference< XPropertySet > xColSet( xCols->getByIndex( nEdge ), UNO_QUERY_THROW );
-                        xColSet->setPropertyValue( sSize, Any( nWidth ) );
-                    }
+                    Reference<XPropertySet> xColSet(xCols->getByIndex(nEdge), UNO_QUERY_THROW);
+                    xColSet->setPropertyValue(sSize, Any(nWidth));
                 }
             }
         }
@@ -1999,8 +1995,8 @@ void SdrTableObj::NbcReformatText()
 
 bool SdrTableObj::IsVerticalWriting() const
 {
-    const SvxWritingModeItem* pModeItem = &GetObjectItem( SDRATTR_TEXTDIRECTION );
-    return pModeItem && pModeItem->GetValue() == css::text::WritingMode_TB_RL;
+    const SvxWritingModeItem& rModeItem = GetObjectItem( SDRATTR_TEXTDIRECTION );
+    return rModeItem.GetValue() == css::text::WritingMode_TB_RL;
 }
 
 

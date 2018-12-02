@@ -244,7 +244,7 @@ void SdrMeasureObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToPoly    =true;
     rInfo.bCanConvToPathLineToArea=false;
     rInfo.bCanConvToPolyLineToArea=false;
-    rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
+    rInfo.bCanConvToContour = LineGeometryUsageIsNecessary();
 }
 
 sal_uInt16 SdrMeasureObj::GetObjIdentifier() const

@@ -1838,7 +1838,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
             ++aCursor.GetIndex();
         }
 
-        if(nTextLen && aBreakPositions.empty())
+        if (aBreakPositions.empty())
         {
             //if all content has been overwritten the attributes may have been removed, too
             svx::SpellPortion aPortion1;

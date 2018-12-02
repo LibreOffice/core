@@ -384,7 +384,7 @@ bool SdrEditView::IsMirrorAllowed(bool b45Deg, bool b90Deg) const
     if (m_bMoveProtect) return false;
     if (b90Deg) return m_bMirror90Allowed;
     if (b45Deg) return m_bMirror45Allowed;
-    return m_bMirrorFreeAllowed && !m_bMoveProtect;
+    return m_bMirrorFreeAllowed;
 }
 
 bool SdrEditView::IsTransparenceAllowed() const

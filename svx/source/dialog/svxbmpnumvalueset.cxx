@@ -259,7 +259,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                 sal_Int32 nLevelCount = xLevel->getCount();
                 if(nLevelCount > 5)
                     nLevelCount = 5;
-                for( sal_Int32 i = 0; i < nLevelCount && i < 5; i++)
+                for( sal_Int32 i = 0; i < nLevelCount; i++)
                 {
                     long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
                     Point aLeft(nStartX + nRectWidth *  (aLinesArr[2 * i + 10])/ 100, nTop );
@@ -634,7 +634,7 @@ void NumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                 sal_Int32 nLevelCount = xLevel->getCount();
                 if(nLevelCount > 5)
                     nLevelCount = 5;
-                for( sal_Int32 i = 0; i < nLevelCount && i < 5; i++)
+                for( sal_Int32 i = 0; i < nLevelCount; i++)
                 {
                     long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
                     Point aLeft(nStartX + nRectWidth *  (aLinesArr[2 * i + 10])/ 100, nTop );

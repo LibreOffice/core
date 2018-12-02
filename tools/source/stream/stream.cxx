@@ -1872,9 +1872,6 @@ void* SvMemoryStream::SwitchBuffer()
     nResize       = 64;
     nPos          = 0;
 
-    if( nResize != 0 && nResize < 16 )
-        nResize = 16;
-
     ResetError();
 
     std::size_t nInitSize = 512;
