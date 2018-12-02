@@ -32,6 +32,7 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
+#include <numeric>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -295,9 +296,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
 
     // Paint text.
     double nY (gnVerticalBorder);
-    TextContainer::const_iterator iBlock (mpTextContainer->begin());
-    TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
-    for ( ; iBlock!=iBlockEnd; ++iBlock)
+    for (const auto& rxBlock : *mpTextContainer)
     {
         sal_Int32 LeftX1 = gnHorizontalGap;
         sal_Int32 LeftX2 = aWindowBox.Width/2 - gnHorizontalGap;
@@ -313,7 +312,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
             RightX2 = aWindowBox.Width/2 - gnHorizontalGap;
         }
         const double nLeftHeight (
-            (*iBlock)->maLeft.Paint(mxCanvas,
+            rxBlock->maLeft.Paint(mxCanvas,
                 geometry::RealRectangle2D(
                         LeftX1,
                         nY,
@@ -324,7 +323,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
                 aRenderState,
                 mpFont->mxFont));
         const double nRightHeight (
-            (*iBlock)->maRight.Paint(mxCanvas,
+            rxBlock->maRight.Paint(mxCanvas,
                 geometry::RealRectangle2D(
                         RightX1,
                         nY,
@@ -388,13 +387,12 @@ void PresenterHelpView::CheckFontSize()
     // small enough.  Restrict the number of loops.
     for (int nLoopCount=0; nLoopCount<5; ++nLoopCount)
     {
-        double nY (0.0);
-        TextContainer::iterator iBlock (mpTextContainer->begin());
-        TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
-        for ( ; iBlock!=iBlockEnd; ++iBlock)
-            nY += ::std::max(
-                (*iBlock)->maLeft.GetHeight(),
-                (*iBlock)->maRight.GetHeight());
+        double nY = std::accumulate(mpTextContainer->begin(), mpTextContainer->end(), double(0),
+            [](const double& sum, const std::shared_ptr<Block>& rxBlock) {
+                return sum + std::max(
+                    rxBlock->maLeft.GetHeight(),
+                    rxBlock->maRight.GetHeight());
+            });
 
         const double nHeightDifference (nY - (mnSeparatorY-gnVerticalBorder));
         if (nHeightDifference <= 0 && nHeightDifference > -50)
@@ -418,8 +416,8 @@ void PresenterHelpView::CheckFontSize()
         mpFont->PrepareFont(mxCanvas);
 
         // Reformat blocks.
-        for (iBlock=mpTextContainer->begin(); iBlock!=iBlockEnd; ++iBlock)
-            (*iBlock)->Update(mpFont->mxFont, mnMaximalWidth);
+        for (auto& rxBlock : *mpTextContainer)
+            rxBlock->Update(mpFont->mxFont, mnMaximalWidth);
     }
 
     if (nBestSize != mpFont->mnSize)
@@ -429,13 +427,9 @@ void PresenterHelpView::CheckFontSize()
         mpFont->PrepareFont(mxCanvas);
 
         // Reformat blocks.
-        for (TextContainer::iterator
-                 iBlock (mpTextContainer->begin()),
-                 iEnd (mpTextContainer->end());
-             iBlock!=iEnd;
-             ++iBlock)
+        for (auto& rxBlock : *mpTextContainer)
         {
-            (*iBlock)->Update(mpFont->mxFont, mnMaximalWidth);
+            rxBlock->Update(mpFont->mxFont, mnMaximalWidth);
         }
     }
 }
@@ -564,9 +558,7 @@ double LineDescriptorList::Paint(
         return 0;
 
     double nY (rBBox.Y1);
-    vector<LineDescriptor>::const_iterator iLine (mpLineDescriptors->begin());
-    vector<LineDescriptor>::const_iterator iEnd (mpLineDescriptors->end());
-    for ( ; iLine!=iEnd; ++iLine)
+    for (const auto& rLine : *mpLineDescriptors)
     {
         double nX;
         /// check whether RTL interface or not
@@ -574,18 +566,18 @@ double LineDescriptorList::Paint(
         {
             nX = rBBox.X1;
             if ( ! bFlushLeft)
-                nX = rBBox.X2 - iLine->maSize.Width;
+                nX = rBBox.X2 - rLine.maSize.Width;
         }
         else
         {
-            nX=rBBox.X2 - iLine->maSize.Width;
+            nX=rBBox.X2 - rLine.maSize.Width;
             if ( ! bFlushLeft)
                 nX = rBBox.X1;
         }
         rRenderState.AffineTransform.m02 = nX;
-        rRenderState.AffineTransform.m12 = nY + iLine->maSize.Height - iLine->mnVerticalOffset;
+        rRenderState.AffineTransform.m12 = nY + rLine.maSize.Height - rLine.mnVerticalOffset;
 
-        const rendering::StringContext aContext (iLine->msLine, 0, iLine->msLine.getLength());
+        const rendering::StringContext aContext (rLine.msLine, 0, rLine.msLine.getLength());
         Reference<rendering::XTextLayout> xLayout (
         rxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT, 0));
         rxCanvas->drawTextLayout (
@@ -593,7 +585,7 @@ double LineDescriptorList::Paint(
             rViewState,
             rRenderState);
 
-        nY += iLine->maSize.Height * 1.2;
+        nY += rLine.maSize.Height * 1.2;
     }
 
     return nY - rBBox.Y1;
@@ -601,13 +593,10 @@ double LineDescriptorList::Paint(
 
 double LineDescriptorList::GetHeight() const
 {
-    double nHeight (0);
-    vector<LineDescriptor>::const_iterator iLine (mpLineDescriptors->begin());
-    vector<LineDescriptor>::const_iterator iEnd (mpLineDescriptors->end());
-    for ( ; iLine!=iEnd; ++iLine)
-        nHeight += iLine->maSize.Height * 1.2;
-
-    return nHeight;
+    return std::accumulate(mpLineDescriptors->begin(), mpLineDescriptors->end(), double(0),
+        [](const double& nHeight, const LineDescriptor& rLine) {
+            return nHeight + rLine.maSize.Height * 1.2;
+        });
 }
 
 void LineDescriptorList::Update (

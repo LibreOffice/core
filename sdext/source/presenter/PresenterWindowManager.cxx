@@ -100,15 +100,13 @@ void SAL_CALL PresenterWindowManager::disposing()
         xComponent->dispose();
     mxPaneBorderManager = nullptr;
 
-    PresenterPaneContainer::PaneList::const_iterator iPane;
-    PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
-    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
+    for (const auto& rxPane : mpPaneContainer->maPanes)
     {
-        if ((*iPane)->mxBorderWindow.is())
+        if (rxPane->mxBorderWindow.is())
         {
-            (*iPane)->mxBorderWindow->removeWindowListener(this);
-            (*iPane)->mxBorderWindow->removeFocusListener(this);
-            (*iPane)->mxBorderWindow->removeMouseListener(this);
+            rxPane->mxBorderWindow->removeWindowListener(this);
+            rxPane->mxBorderWindow->removeFocusListener(this);
+            rxPane->mxBorderWindow->removeMouseListener(this);
         }
     }
 }
@@ -322,22 +320,20 @@ void PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 {
     // Call windowPaint on all children that lie in or touch the
     // update rectangle.
-    PresenterPaneContainer::PaneList::const_iterator iPane;
-    PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
-    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
+    for (const auto& rxPane : mpPaneContainer->maPanes)
     {
         try
         {
             // Make sure that the pane shall and can be painted.
-            if ( ! (*iPane)->mbIsActive)
+            if ( ! rxPane->mbIsActive)
                 continue;
-            if ((*iPane)->mbIsSprite)
+            if (rxPane->mbIsSprite)
                 continue;
-            if ( ! (*iPane)->mxPane.is())
+            if ( ! rxPane->mxPane.is())
                 continue;
-            if ( ! (*iPane)->mxBorderWindow.is())
+            if ( ! rxPane->mxBorderWindow.is())
                 continue;
-            Reference<awt::XWindow> xBorderWindow ((*iPane)->mxBorderWindow);
+            Reference<awt::XWindow> xBorderWindow (rxPane->mxBorderWindow);
             if ( ! xBorderWindow.is())
                 continue;
 
@@ -537,17 +533,10 @@ void PresenterWindowManager::AddLayoutListener (
 void PresenterWindowManager::RemoveLayoutListener (
     const Reference<document::XEventListener>& rxListener)
 {
-    LayoutListenerContainer::iterator iListener (maLayoutListeners.begin());
-    LayoutListenerContainer::iterator iEnd (maLayoutListeners.end());
-    for ( ; iListener!=iEnd; ++iListener)
-    {
-        if (*iListener == rxListener)
-        {
-            maLayoutListeners.erase(iListener);
-            // Assume that there are no multiple entries.
-            break;
-        }
-    }
+    // Assume that there are no multiple entries.
+    auto iListener = std::find(maLayoutListeners.begin(), maLayoutListeners.end(), rxListener);
+    if (iListener != maLayoutListeners.end())
+        maLayoutListeners.erase(iListener);
 }
 
 void PresenterWindowManager::Layout()
@@ -845,19 +834,17 @@ void PresenterWindowManager::NotifyLayoutModeChange()
     aEvent.Source = Reference<XInterface>(static_cast<XWeak*>(this));
 
     LayoutListenerContainer aContainerCopy (maLayoutListeners);
-    LayoutListenerContainer::iterator iListener (aContainerCopy.begin());
-    LayoutListenerContainer::iterator iEnd (aContainerCopy.end());
-    for ( ; iListener!=iEnd; ++iListener)
+    for (const auto& rxListener : aContainerCopy)
     {
-        if (iListener->is())
+        if (rxListener.is())
         {
             try
             {
-                (*iListener)->notifyEvent(aEvent);
+                rxListener->notifyEvent(aEvent);
             }
             catch (lang::DisposedException&)
             {
-                RemoveLayoutListener(*iListener);
+                RemoveLayoutListener(rxListener);
             }
             catch (RuntimeException&)
             {
@@ -873,15 +860,13 @@ void PresenterWindowManager::NotifyDisposing()
 
     LayoutListenerContainer aContainer;
     aContainer.swap(maLayoutListeners);
-    LayoutListenerContainer::iterator iListener (aContainer.begin());
-    LayoutListenerContainer::iterator iEnd (aContainer.end());
-    for ( ; iListener!=iEnd; ++iListener)
+    for (auto& rxListener : aContainer)
     {
-        if (iListener->is())
+        if (rxListener.is())
         {
             try
             {
-                (*iListener)->disposing(aEvent);
+                rxListener->disposing(aEvent);
             }
             catch (lang::DisposedException&)
             {
@@ -1016,10 +1001,8 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
     aRectangles.reserve(1+nPaneCount);
     aRectangles.push_back(mxParentWindow->getPosSize());
     PresenterPaneContainer::PaneList::const_iterator iPane;
-    PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
-    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
+    for (const auto& pDescriptor : mpPaneContainer->maPanes)
     {
-        PresenterPaneContainer::SharedPaneDescriptor pDescriptor (*iPane);
         if ( ! pDescriptor->mbIsActive)
             continue;
         if ( ! pDescriptor->mbIsOpaque)

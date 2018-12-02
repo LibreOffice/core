@@ -466,14 +466,8 @@ Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
 
 std::vector< OptimizerSettings >::iterator ConfigurationAccess::GetOptimizerSettingsByName( const OUString& rName )
 {
-    std::vector< OptimizerSettings >::iterator aIter( maSettings.begin() + 1 );
-    const std::vector< OptimizerSettings >::const_iterator aEnd( maSettings.end() );
-    for ( ; aIter != aEnd; ++aIter )
-    {
-        if ( aIter->maName == rName )
-            break;
-    }
-    return aIter;
+    return std::find_if(maSettings.begin() + 1, maSettings.end(),
+        [&rName](const OptimizerSettings& rSettings) { return rSettings.maName == rName; });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

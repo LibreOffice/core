@@ -240,16 +240,10 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // cancel.
     {
         ::osl::MutexGuard aGuard (maTaskContainerMutex);
-        TaskContainer::iterator iTask (maScheduledTasks.begin());
-        TaskContainer::const_iterator iEnd (maScheduledTasks.end());
-        for ( ; iTask!=iEnd; ++iTask)
-        {
-            if ((*iTask)->mnTaskId == nTaskId)
-            {
-                maScheduledTasks.erase(iTask);
-                break;
-            }
-        }
+        auto iTask = std::find_if(maScheduledTasks.begin(), maScheduledTasks.end(),
+            [nTaskId](const SharedTimerTask& rxTask) { return rxTask->mnTaskId == nTaskId; });
+        if (iTask != maScheduledTasks.end())
+            maScheduledTasks.erase(iTask);
     }
 
     // The task that is to be canceled may be currently about to be
@@ -577,14 +571,9 @@ void SAL_CALL PresenterClockTimer::notify (const css::uno::Any&)
             ::std::back_inserter(aListenerCopy));
     }
 
-    if (!aListenerCopy.empty())
+    for (const auto& rxListener : aListenerCopy)
     {
-        ListenerContainer::const_iterator iListener;
-        ListenerContainer::const_iterator iEnd (aListenerCopy.end());
-        for (iListener=aListenerCopy.begin(); iListener!=iEnd; ++iListener)
-        {
-            (*iListener)->TimeHasChanged(maDateTime);
-        }
+        rxListener->TimeHasChanged(maDateTime);
     }
 }
 

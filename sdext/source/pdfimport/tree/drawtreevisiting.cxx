@@ -500,10 +500,9 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_pt
             // adjust line height and text items
             fCurLineHeight = 0.0;
             nCurLineElements = 0;
-            for( auto it = pCurPara->Children.begin();
-                 it != pCurPara->Children.end(); ++it )
+            for( auto& rxChild : pCurPara->Children )
             {
-                TextElement* pTestText = dynamic_cast<TextElement*>(it->get());
+                TextElement* pTestText = dynamic_cast<TextElement*>(rxChild.get());
                 if( pTestText )
                 {
                     fCurLineHeight = (fCurLineHeight*double(nCurLineElements) + pTestText->h)/double(nCurLineElements+1);
@@ -985,16 +984,16 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_pt
     elem.LeftMargin = elem.w;
     elem.RightMargin = 0;
 
-    for( auto it = elem.Children.begin(); it != elem.Children.end(); ++it )
+    for( const auto& rxChild : elem.Children )
     {
-        if( (*it)->x < elem.LeftMargin )
-            elem.LeftMargin = (*it)->x;
-        if( (*it)->y < elem.TopMargin )
-            elem.TopMargin = (*it)->y;
-        if( (*it)->x + (*it)->w > elem.RightMargin )
-            elem.RightMargin = ((*it)->x + (*it)->w);
-        if( (*it)->y + (*it)->h > elem.BottomMargin )
-            elem.BottomMargin = ((*it)->y + (*it)->h);
+        if( rxChild->x < elem.LeftMargin )
+            elem.LeftMargin = rxChild->x;
+        if( rxChild->y < elem.TopMargin )
+            elem.TopMargin = rxChild->y;
+        if( rxChild->x + rxChild->w > elem.RightMargin )
+            elem.RightMargin = (rxChild->x + rxChild->w);
+        if( rxChild->y + rxChild->h > elem.BottomMargin )
+            elem.BottomMargin = (rxChild->y + rxChild->h);
     }
 
     // transform margins to mm

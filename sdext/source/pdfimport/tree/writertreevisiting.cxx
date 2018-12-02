@@ -321,9 +321,9 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< std::uniqu
     m_rEmitContext.rEmitter.beginTag( "office:body", PropertyMap() );
     m_rEmitContext.rEmitter.beginTag( "office:text", PropertyMap() );
 
-    for( auto it = elem.Children.begin(); it != elem.Children.end(); ++it )
+    for( auto& rxChild : elem.Children )
     {
-        PageElement* pPage = dynamic_cast<PageElement*>(it->get());
+        PageElement* pPage = dynamic_cast<PageElement*>(rxChild.get());
         if( pPage )
         {
             // emit only page anchored objects
@@ -512,10 +512,9 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_
             // adjust line height and text items
             fCurLineHeight = 0.0;
             nCurLineElements = 0;
-            for( auto it = pCurPara->Children.begin();
-                 it != pCurPara->Children.end(); ++it )
+            for( auto& rxChild : pCurPara->Children )
             {
-                TextElement* pTestText = dynamic_cast<TextElement*>(it->get());
+                TextElement* pTestText = dynamic_cast<TextElement*>(rxChild.get());
                 if( pTestText )
                 {
                     fCurLineHeight = (fCurLineHeight*double(nCurLineElements) + pTestText->h)/double(nCurLineElements+1);
@@ -669,60 +668,54 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
      *  - at least lineheight below the previous paragraph
      */
 
+    auto isParagraphElement = [](std::unique_ptr<Element>& rxChild) -> bool {
+        return dynamic_cast<ParagraphElement*>(rxChild.get()) != nullptr;
+    };
+
     // detect header
     // Note: the following assumes that the pages' children have been
     // sorted geometrically
-    auto it = rElem.Children.begin();
-    while( it != rElem.Children.end() )
+    auto it = std::find_if(rElem.Children.begin(), rElem.Children.end(), isParagraphElement);
+    if (it != rElem.Children.end())
     {
         ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(it->get());
-        if( pPara )
+        if( pPara->y+pPara->h < rElem.h*0.15 && pPara->isSingleLined( m_rProcessor ) )
         {
-            if( pPara->y+pPara->h < rElem.h*0.15 && pPara->isSingleLined( m_rProcessor ) )
+            auto next_it = it;
+            ParagraphElement* pNextPara = nullptr;
+            while( ++next_it != rElem.Children.end() && pNextPara == nullptr )
             {
-                auto next_it = it;
-                ParagraphElement* pNextPara = nullptr;
-                while( ++next_it != rElem.Children.end() && pNextPara == nullptr )
-                {
-                    pNextPara = dynamic_cast<ParagraphElement*>(next_it->get());
-                }
-                if( pNextPara && pNextPara->y > pPara->y+pPara->h*2 )
-                {
-                    rElem.HeaderElement = std::move(*it);
-                    pPara->Parent = nullptr;
-                    rElem.Children.erase( it );
-                }
+                pNextPara = dynamic_cast<ParagraphElement*>(next_it->get());
             }
-            break;
+            if( pNextPara && pNextPara->y > pPara->y+pPara->h*2 )
+            {
+                rElem.HeaderElement = std::move(*it);
+                pPara->Parent = nullptr;
+                rElem.Children.erase( it );
+            }
         }
-        ++it;
     }
 
     // detect footer
-    std::list< std::unique_ptr<Element> >::reverse_iterator rit = rElem.Children.rbegin();
-    while( rit != rElem.Children.rend() )
+    auto rit = std::find_if(rElem.Children.rbegin(), rElem.Children.rend(), isParagraphElement);
+    if (rit != rElem.Children.rend())
     {
         ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(rit->get());
-        if( pPara )
+        if( pPara->y > rElem.h*0.85 && pPara->isSingleLined( m_rProcessor ) )
         {
-            if( pPara->y > rElem.h*0.85 && pPara->isSingleLined( m_rProcessor ) )
+            std::list< std::unique_ptr<Element> >::reverse_iterator next_it = rit;
+            ParagraphElement* pNextPara = nullptr;
+            while( ++next_it != rElem.Children.rend() && pNextPara == nullptr )
             {
-                std::list< std::unique_ptr<Element> >::reverse_iterator next_it = rit;
-                ParagraphElement* pNextPara = nullptr;
-                while( ++next_it != rElem.Children.rend() && pNextPara == nullptr )
-                {
-                    pNextPara = dynamic_cast<ParagraphElement*>(next_it->get());
-                }
-                if( pNextPara && pNextPara->y < pPara->y-pPara->h*2 )
-                {
-                    rElem.FooterElement = std::move(*rit);
-                    pPara->Parent = nullptr;
-                    rElem.Children.erase( std::next(rit).base() );
-                }
+                pNextPara = dynamic_cast<ParagraphElement*>(next_it->get());
             }
-            break;
+            if( pNextPara && pNextPara->y < pPara->y-pPara->h*2 )
+            {
+                rElem.FooterElement = std::move(*rit);
+                pPara->Parent = nullptr;
+                rElem.Children.erase( std::next(rit).base() );
+            }
         }
-        ++rit;
     }
 }
 
@@ -1099,20 +1092,20 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_
     elem.RightMargin = 0;
     // first element should be a paragraph
     ParagraphElement* pFirstPara = nullptr;
-    for( auto it = elem.Children.begin(); it != elem.Children.end(); ++it )
+    for( auto& rxChild : elem.Children )
     {
-        if( dynamic_cast<ParagraphElement*>( it->get() ) )
+        if( dynamic_cast<ParagraphElement*>( rxChild.get() ) )
         {
-            if( (*it)->x < elem.LeftMargin )
-                elem.LeftMargin = (*it)->x;
-            if( (*it)->y < elem.TopMargin )
-                elem.TopMargin = (*it)->y;
-            if( (*it)->x + (*it)->w > elem.w - elem.RightMargin )
-                elem.RightMargin = elem.w - ((*it)->x + (*it)->w);
-            if( (*it)->y + (*it)->h > elem.h - elem.BottomMargin )
-                elem.BottomMargin = elem.h - ((*it)->y + (*it)->h);
+            if( rxChild->x < elem.LeftMargin )
+                elem.LeftMargin = rxChild->x;
+            if( rxChild->y < elem.TopMargin )
+                elem.TopMargin = rxChild->y;
+            if( rxChild->x + rxChild->w > elem.w - elem.RightMargin )
+                elem.RightMargin = elem.w - (rxChild->x + rxChild->w);
+            if( rxChild->y + rxChild->h > elem.h - elem.BottomMargin )
+                elem.BottomMargin = elem.h - (rxChild->y + rxChild->h);
             if( ! pFirstPara )
-                pFirstPara = dynamic_cast<ParagraphElement*>( it->get() );
+                pFirstPara = dynamic_cast<ParagraphElement*>( rxChild.get() );
         }
     }
     if( elem.HeaderElement && elem.HeaderElement->y < elem.TopMargin )
