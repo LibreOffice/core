@@ -398,7 +398,7 @@ SwUndoTableToText::SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh )
     : SwUndo( SwUndoId::TABLETOTEXT, rTable.GetFrameFormat()->GetDoc() ),
     sTableNm( rTable.GetFrameFormat()->GetName() ),
     nSttNd( 0 ), nEndNd( 0 ),
-    cTrenner( cCh ), nHdlnRpt( rTable.GetRowsToRepeat() )
+    cSeparator( cCh ), nHdlnRpt( rTable.GetRowsToRepeat() )
 {
     pTableSave.reset( new SaveTable( rTable ) );
     m_vBoxSaves.reserve(rTable.GetTabSortBoxes().size());
@@ -643,7 +643,7 @@ void SwUndoTableToText::RedoImpl(::sw::UndoRedoContext & rContext)
     if( auto pDDETable = dynamic_cast<const SwDDETable *>(&pTableNd->GetTable()) )
         pDDEFieldType.reset( static_cast<SwDDEFieldType*>(pDDETable->GetDDEFieldType()->Copy()) );
 
-    rDoc.TableToText( pTableNd, cTrenner );
+    rDoc.TableToText( pTableNd, cSeparator );
 
     ++aSaveIdx;
     SwContentNode* pCNd = aSaveIdx.GetNode().GetContentNode();
@@ -672,7 +672,7 @@ void SwUndoTableToText::RepeatImpl(::sw::RepeatContext & rContext)
         pPam->SetMark();
         pPam->DeleteMark();
 
-        rContext.GetDoc().TableToText( pTableNd, cTrenner );
+        rContext.GetDoc().TableToText( pTableNd, cSeparator );
     }
 }
 
@@ -692,7 +692,7 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
                                 sal_Unicode cCh, sal_uInt16 nAdj,
                                 const SwTableAutoFormat* pAFormat )
     : SwUndo( SwUndoId::TEXTTOTABLE, rRg.GetDoc() ), SwUndRng( rRg ), aInsTableOpts( rInsTableOpts ),
-      pHistory( nullptr ), cTrenner( cCh ), nAdjust( nAdj )
+      pHistory( nullptr ), cSeparator( cCh ), nAdjust( nAdj )
 {
     if( pAFormat )
         pAutoFormat.reset( new SwTableAutoFormat( *pAFormat ) );
@@ -746,7 +746,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwNodeIndex aEndIdx( *pTNd->EndOfSectionNode() );
-    rDoc.TableToText( pTNd, 0x0b == cTrenner ? 0x09 : cTrenner );
+    rDoc.TableToText( pTNd, 0x0b == cSeparator ? 0x09 : cSeparator );
 
     // join again at start?
     SwPaM aPam(rDoc.GetNodes().GetEndOfContent());
@@ -795,7 +795,7 @@ void SwUndoTextToTable::RedoImpl(::sw::UndoRedoContext & rContext)
     SetPaM(rPam);
 
     SwTable const*const pTable = rContext.GetDoc().TextToTable(
-                aInsTableOpts, rPam, cTrenner, nAdjust, pAutoFormat.get() );
+                aInsTableOpts, rPam, cSeparator, nAdjust, pAutoFormat.get() );
     static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
 }
 
@@ -805,7 +805,7 @@ void SwUndoTextToTable::RepeatImpl(::sw::RepeatContext & rContext)
     if (!rContext.GetRepeatPaM().GetNode().FindTableNode())
     {
         rContext.GetDoc().TextToTable( aInsTableOpts, rContext.GetRepeatPaM(),
-                                        cTrenner, nAdjust,
+                                        cSeparator, nAdjust,
                                         pAutoFormat.get() );
     }
 }

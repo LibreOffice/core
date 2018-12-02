@@ -78,7 +78,7 @@ class SwUndoTextToTable : public SwUndo, public SwUndRng
     std::vector<sal_uLong> mvDelBoxes;
     std::unique_ptr<SwTableAutoFormat> pAutoFormat;
     SwHistory* pHistory;
-    sal_Unicode const cTrenner;
+    sal_Unicode const cSeparator;
     sal_uInt16 const nAdjust;
     bool bSplitEnd : 1;
 
@@ -105,7 +105,7 @@ class SwUndoTableToText : public SwUndo
     SwTableToTextSaves m_vBoxSaves;
     std::unique_ptr<SwHistory> pHistory;
     sal_uLong nSttNd, nEndNd;
-    sal_Unicode const cTrenner;
+    sal_Unicode const cSeparator;
     sal_uInt16 const nHdlnRpt;
     bool bCheckNumFormat : 1;
 
