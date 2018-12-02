@@ -376,7 +376,7 @@ typedef ImplTextEncodingData const * TextEncodingFunction(rtl_TextEncoding);
 
 void thisModule() {}
 
-};
+}
 
 class FullTextEncodingData {
 public:
