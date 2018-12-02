@@ -116,12 +116,12 @@ void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
         OStringBuffer aBuf( 1024 );
         aBuf.append( '<' );
         aBuf.append( pTag );
-        for( PropertyMap::const_iterator it = rProperties.begin(); it != rProperties.end(); ++it )
+        for( const auto& rProperty : rProperties )
         {
             aBuf.append( ' ' );
-            aBuf.append( OUStringToOString( it->first, RTL_TEXTENCODING_UTF8 ) );
+            aBuf.append( OUStringToOString( rProperty.first, RTL_TEXTENCODING_UTF8 ) );
             aBuf.append( "=\"" );
-            aBuf.append( OUStringToOString( it->second, RTL_TEXTENCODING_UTF8 ) );
+            aBuf.append( OUStringToOString( rProperty.second, RTL_TEXTENCODING_UTF8 ) );
             aBuf.append( "\"" );
         }
         aBuf.append( ">\n" );

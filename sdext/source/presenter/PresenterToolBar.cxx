@@ -416,18 +416,13 @@ void SAL_CALL PresenterToolBar::disposing()
     }
 
     // Dispose tool bar elements.
-    ElementContainer::iterator iPart (maElementContainer.begin());
-    ElementContainer::const_iterator iEnd (maElementContainer.end());
-    for ( ; iPart!=iEnd; ++iPart)
+    for (const auto& rxPart : maElementContainer)
     {
-        OSL_ASSERT(*iPart != nullptr);
-        ElementContainerPart::iterator iElement ((*iPart)->begin());
-        ElementContainerPart::const_iterator iPartEnd ((*iPart)->end());
-        for ( ; iElement!=iPartEnd; ++iElement)
+        OSL_ASSERT(rxPart != nullptr);
+        for (rtl::Reference<Element>& pElement : *rxPart)
         {
-            if (iElement->get() != nullptr)
+            if (pElement.get() != nullptr)
             {
-                ::rtl::Reference<Element> pElement (*iElement);
                 Reference<lang::XComponent> xComponent (
                     static_cast<XWeak*>(pElement.get()), UNO_QUERY);
                 if (xComponent.is())
@@ -688,27 +683,24 @@ void PresenterToolBar::Layout (
     mbIsLayoutPending = false;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
-    ElementContainer::iterator iPart;
-    ElementContainer::iterator iEnd (maElementContainer.end());
-    ElementContainer::iterator iBegin (maElementContainer.begin());
     ::std::vector<geometry::RealSize2D> aPartSizes (maElementContainer.size());
     geometry::RealSize2D aTotalSize (0,0);
     bool bIsHorizontal (true);
-    sal_Int32 nIndex;
+    sal_Int32 nIndex (0);
     double nTotalHorizontalGap (0);
     sal_Int32 nGapCount (0);
-    for (iPart=maElementContainer.begin(),nIndex=0; iPart!=iEnd; ++iPart,++nIndex)
+    for (const auto& rxPart : maElementContainer)
     {
-        geometry::RealSize2D aSize (CalculatePartSize(rxCanvas, *iPart, bIsHorizontal));
+        geometry::RealSize2D aSize (CalculatePartSize(rxCanvas, rxPart, bIsHorizontal));
 
         // Remember the size of each part for later.
         aPartSizes[nIndex] = aSize;
 
         // Add gaps between elements.
-        if ((*iPart)->size()>1 && bIsHorizontal)
+        if (rxPart->size()>1 && bIsHorizontal)
         {
-            nTotalHorizontalGap += ((*iPart)->size() - 1) * gnGapSize;
-            nGapCount += (*iPart)->size()-1;
+            nTotalHorizontalGap += (rxPart->size() - 1) * gnGapSize;
+            nGapCount += rxPart->size() - 1;
         }
 
         // Orientation changes for each part.
@@ -717,6 +709,7 @@ void PresenterToolBar::Layout (
         aTotalSize.Width += aSize.Width;
         // Height is the maximum height of all parts.
         aTotalSize.Height = ::std::max(aTotalSize.Height, aSize.Height);
+        ++nIndex;
     }
     // Add gaps between parts.
     if (maElementContainer.size() > 1)
@@ -754,23 +747,27 @@ void PresenterToolBar::Layout (
     /* push front or back ? ... */
     /// check whether RTL interface or not
     if(!AllSettings::GetLayoutRTL()){
-        for (iPart=maElementContainer.begin(), nIndex=0; iPart!=iEnd; ++iPart,++nIndex)
+        nIndex = 0;
+        for (const auto& rxPart : maElementContainer)
         {
             geometry::RealRectangle2D aBoundingBox(
                 nX, nY,
                 nX+aPartSizes[nIndex].Width, nY+aTotalSize.Height);
 
             // Add space for gaps between elements.
-            if ((*iPart)->size() > 1)
+            if (rxPart->size() > 1)
                 if (bIsHorizontal)
-                    aBoundingBox.X2 += ((*iPart)->size()-1) * nGapWidth;
+                    aBoundingBox.X2 += (rxPart->size() - 1) * nGapWidth;
 
-            LayoutPart(rxCanvas, *iPart, aBoundingBox, aPartSizes[nIndex], bIsHorizontal);
+            LayoutPart(rxCanvas, rxPart, aBoundingBox, aPartSizes[nIndex], bIsHorizontal);
             bIsHorizontal = !bIsHorizontal;
             nX += aBoundingBox.X2 - aBoundingBox.X1 + nGapWidth;
+            ++nIndex;
         }
     }
     else {
+        ElementContainer::iterator iPart;
+        ElementContainer::iterator iBegin (maElementContainer.begin());
         for (iPart=maElementContainer.end()-1, nIndex=2; iPart!=iBegin-1; --iPart, --nIndex)
         {
             geometry::RealRectangle2D aBoundingBox(
@@ -805,13 +802,12 @@ geometry::RealSize2D PresenterToolBar::CalculatePartSize (
     if (mxWindow.is())
     {
         // Calculate the summed width of all elements.
-        ElementContainerPart::const_iterator iElement;
-        for (iElement=rpPart->begin(); iElement!=rpPart->end(); ++iElement)
+        for (const auto& rxElement : *rpPart)
         {
-            if (iElement->get() == nullptr)
+            if (rxElement.get() == nullptr)
                 continue;
 
-            const awt::Size aBSize ((*iElement)->GetBoundingSize(rxCanvas));
+            const awt::Size aBSize (rxElement->GetBoundingSize(rxCanvas));
             if (bIsHorizontal)
             {
                 aTotalSize.Width += aBSize.Width;
@@ -849,45 +845,45 @@ void PresenterToolBar::LayoutPart (
     double nX (rBoundingBox.X1);
     double nY (rBoundingBox.Y1);
 
-    ElementContainerPart::const_iterator iElement;
-    ElementContainerPart::const_iterator iEnd (rpPart->end());
-    ElementContainerPart::const_iterator iBegin (rpPart->begin());
-
     /// check whether RTL interface or not
     if(!AllSettings::GetLayoutRTL()){
-        for (iElement=rpPart->begin(); iElement!=iEnd; ++iElement)
+        for (auto& rxElement : *rpPart)
         {
-            if (iElement->get() == nullptr)
+            if (rxElement.get() == nullptr)
                 continue;
 
-            const awt::Size aElementSize ((*iElement)->GetBoundingSize(rxCanvas));
+            const awt::Size aElementSize (rxElement->GetBoundingSize(rxCanvas));
             if (bIsHorizontal)
             {
-                if ((*iElement)->IsFilling())
+                if (rxElement->IsFilling())
                 {
                     nY = rBoundingBox.Y1;
-                    (*iElement)->SetSize(geometry::RealSize2D(aElementSize.Width, rBoundingBox.Y2 - rBoundingBox.Y1));
+                    rxElement->SetSize(geometry::RealSize2D(aElementSize.Width, rBoundingBox.Y2 - rBoundingBox.Y1));
                 }
                 else
                     nY = rBoundingBox.Y1 + (rBoundingBox.Y2-rBoundingBox.Y1 - aElementSize.Height) / 2;
-                (*iElement)->SetLocation(awt::Point(sal_Int32(0.5 + nX), sal_Int32(0.5 + nY)));
+                rxElement->SetLocation(awt::Point(sal_Int32(0.5 + nX), sal_Int32(0.5 + nY)));
                 nX += aElementSize.Width + nGap;
             }
             else
             {
-                if ((*iElement)->IsFilling())
+                if (rxElement->IsFilling())
                 {
                     nX = rBoundingBox.X1;
-                    (*iElement)->SetSize(geometry::RealSize2D(rBoundingBox.X2 - rBoundingBox.X1, aElementSize.Height));
+                    rxElement->SetSize(geometry::RealSize2D(rBoundingBox.X2 - rBoundingBox.X1, aElementSize.Height));
                 }
                 else
                     nX = rBoundingBox.X1 + (rBoundingBox.X2-rBoundingBox.X1 - aElementSize.Width) / 2;
-                (*iElement)->SetLocation(awt::Point(sal_Int32(0.5 + nX), sal_Int32(0.5 + nY)));
+                rxElement->SetLocation(awt::Point(sal_Int32(0.5 + nX), sal_Int32(0.5 + nY)));
                 nY += aElementSize.Height + nGap;
             }
         }
     }
     else {
+        ElementContainerPart::const_iterator iElement;
+        ElementContainerPart::const_iterator iEnd (rpPart->end());
+        ElementContainerPart::const_iterator iBegin (rpPart->begin());
+
         for (iElement=rpPart->end()-1; iElement!=iBegin-1; --iElement)
         {
             if (iElement->get() == nullptr)
@@ -934,7 +930,6 @@ void PresenterToolBar::LayoutPart (
             }
         }
     }
-
 }
 
 void PresenterToolBar::Paint (
@@ -943,18 +938,14 @@ void PresenterToolBar::Paint (
 {
     OSL_ASSERT(mxCanvas.is());
 
-    ElementContainer::iterator iPart;
-    ElementContainer::const_iterator iEnd (maElementContainer.end());
-    for (iPart=maElementContainer.begin(); iPart!=iEnd; ++iPart)
+    for (const auto& rxPart : maElementContainer)
     {
-        ElementContainerPart::iterator iElement;
-        ElementContainerPart::const_iterator iPartEnd ((*iPart)->end());
-        for (iElement=(*iPart)->begin(); iElement!=iPartEnd; ++iElement)
+        for (auto& rxElement : *rxPart)
         {
-            if (iElement->get() != nullptr)
+            if (rxElement.get() != nullptr)
             {
-                if ( ! (*iElement)->IsOutside(rUpdateBox))
-                    (*iElement)->Paint(mxCanvas, rViewState);
+                if ( ! rxElement->IsOutside(rUpdateBox))
+                    rxElement->Paint(mxCanvas, rViewState);
             }
         }
     }
@@ -964,16 +955,12 @@ void PresenterToolBar::UpdateSlideNumber()
 {
     if( mxSlideShowController.is() )
     {
-        ElementContainer::iterator iPart;
-        ElementContainer::const_iterator iEnd (maElementContainer.end());
-        for (iPart=maElementContainer.begin(); iPart!=iEnd; ++iPart)
+        for (const auto& rxPart : maElementContainer)
         {
-            ElementContainerPart::iterator iElement;
-            ElementContainerPart::const_iterator iPartEnd ((*iPart)->end());
-            for (iElement=(*iPart)->begin(); iElement!=iPartEnd; ++iElement)
+            for (auto& rxElement : *rxPart)
             {
-                if (iElement->get() != nullptr)
-                    (*iElement)->CurrentSlideHasChanged();
+                if (rxElement.get() != nullptr)
+                    rxElement->CurrentSlideHasChanged();
             }
         }
     }
@@ -989,24 +976,20 @@ void PresenterToolBar::CheckMouseOver (
         awt::Rectangle aWindowBox = mxWindow->getPosSize();
         rTemp.X=aWindowBox.Width-rTemp.X;
     }
-    ElementContainer::iterator iPart;
-    ElementContainer::const_iterator iEnd (maElementContainer.end());
-    for (iPart=maElementContainer.begin(); iPart!=iEnd; ++iPart)
+    for (const auto& rxPart : maElementContainer)
     {
-        ElementContainerPart::iterator iElement;
-        ElementContainerPart::const_iterator iPartEnd ((*iPart)->end());
-        for (iElement=(*iPart)->begin(); iElement!=iPartEnd; ++iElement)
+        for (auto& rxElement : *rxPart)
         {
-            if (iElement->get() == nullptr)
+            if (rxElement.get() == nullptr)
                 continue;
 
-            awt::Rectangle aBox ((*iElement)->GetBoundingBox());
+            awt::Rectangle aBox (rxElement->GetBoundingBox());
             const bool bIsOver = bOverWindow
                 && aBox.X <= rTemp.X
                 && aBox.Width+aBox.X-1 >= rTemp.X
                 && aBox.Y <= rTemp.Y
                 && aBox.Height+aBox.Y-1 >= rTemp.Y;
-            (*iElement)->SetState(
+            rxElement->SetState(
                 bIsOver,
                 bIsOver && rTemp.Buttons!=0 && bMouseDown && rTemp.ClickCount>0);
         }

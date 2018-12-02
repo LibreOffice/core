@@ -62,24 +62,22 @@ static void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraph
 {
     if ( rGraphicSettings.mbEmbedLinkedGraphics )
     {
-        std::vector< GraphicCollector::GraphicEntity >::iterator aIter( rGraphicEntities.begin() );
-        while( aIter != rGraphicEntities.end() )
-        {
-            if ( aIter->maUser[ 0 ].mxGraphic == rUser.mxGraphic )
-            {
-                if ( rUser.maLogicalSize.Width > aIter->maLogicalSize.Width )
-                    aIter->maLogicalSize.Width = rUser.maLogicalSize.Width;
-                if ( rUser.maLogicalSize.Height > aIter->maLogicalSize.Height )
-                    aIter->maLogicalSize.Height = rUser.maLogicalSize.Height;
-                aIter->maUser.push_back( rUser );
-                break;
-            }
-            ++aIter;
-        }
+        auto aIter = std::find_if(rGraphicEntities.begin(), rGraphicEntities.end(),
+            [&rUser](const GraphicCollector::GraphicEntity& rGraphicEntity) {
+                return rGraphicEntity.maUser[ 0 ].mxGraphic == rUser.mxGraphic;
+            });
         if ( aIter == rGraphicEntities.end() )
         {
             GraphicCollector::GraphicEntity aEntity( rUser );
             rGraphicEntities.push_back( aEntity );
+        }
+        else
+        {
+            if ( rUser.maLogicalSize.Width > aIter->maLogicalSize.Width )
+                aIter->maLogicalSize.Width = rUser.maLogicalSize.Width;
+            if ( rUser.maLogicalSize.Height > aIter->maLogicalSize.Height )
+                aIter->maLogicalSize.Height = rUser.maLogicalSize.Height;
+            aIter->maUser.push_back( rUser );
         }
     }
 }
@@ -288,38 +286,35 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
             ImpCollectGraphicObjects( rxMSF, xMasterPage, rGraphicSettings, rGraphicList );
         }
 
-        std::vector< GraphicCollector::GraphicEntity >::iterator aGraphicIter( rGraphicList.begin() );
-        std::vector< GraphicCollector::GraphicEntity >::iterator aGraphicIEnd( rGraphicList.end() );
-        while( aGraphicIter != aGraphicIEnd )
+        for( auto& rGraphic : rGraphicList )
         {
             // check if it is possible to remove the crop area
-            aGraphicIter->mbRemoveCropArea = rGraphicSettings.mbRemoveCropArea;
-            if ( aGraphicIter->mbRemoveCropArea )
+            rGraphic.mbRemoveCropArea = rGraphicSettings.mbRemoveCropArea;
+            if ( rGraphic.mbRemoveCropArea )
             {
-                std::vector< GraphicCollector::GraphicUser >::iterator aGUIter( aGraphicIter->maUser.begin() );
-                while( aGraphicIter->mbRemoveCropArea && ( aGUIter != aGraphicIter->maUser.end() ) )
+                std::vector< GraphicCollector::GraphicUser >::iterator aGUIter( rGraphic.maUser.begin() );
+                while( rGraphic.mbRemoveCropArea && ( aGUIter != rGraphic.maUser.end() ) )
                 {
                     if ( aGUIter->maGraphicCropLogic.Left || aGUIter->maGraphicCropLogic.Top
                         || aGUIter->maGraphicCropLogic.Right || aGUIter->maGraphicCropLogic.Bottom )
                     {
-                        if ( aGUIter == aGraphicIter->maUser.begin() )
-                            aGraphicIter->maGraphicCropLogic = aGUIter->maGraphicCropLogic;
-                        else if ( ( aGraphicIter->maGraphicCropLogic.Left != aGUIter->maGraphicCropLogic.Left )
-                            || ( aGraphicIter->maGraphicCropLogic.Top != aGUIter->maGraphicCropLogic.Top )
-                            || ( aGraphicIter->maGraphicCropLogic.Right != aGUIter->maGraphicCropLogic.Right )
-                            || ( aGraphicIter->maGraphicCropLogic.Bottom != aGUIter->maGraphicCropLogic.Bottom ) )
+                        if ( aGUIter == rGraphic.maUser.begin() )
+                            rGraphic.maGraphicCropLogic = aGUIter->maGraphicCropLogic;
+                        else if ( ( rGraphic.maGraphicCropLogic.Left != aGUIter->maGraphicCropLogic.Left )
+                            || ( rGraphic.maGraphicCropLogic.Top != aGUIter->maGraphicCropLogic.Top )
+                            || ( rGraphic.maGraphicCropLogic.Right != aGUIter->maGraphicCropLogic.Right )
+                            || ( rGraphic.maGraphicCropLogic.Bottom != aGUIter->maGraphicCropLogic.Bottom ) )
                         {
-                            aGraphicIter->mbRemoveCropArea = false;
+                            rGraphic.mbRemoveCropArea = false;
                         }
                     }
                     else
-                        aGraphicIter->mbRemoveCropArea = false;
+                        rGraphic.mbRemoveCropArea = false;
                     ++aGUIter;
                 }
             }
-            if ( !aGraphicIter->mbRemoveCropArea )
-                aGraphicIter->maGraphicCropLogic = text::GraphicCrop( 0, 0, 0, 0 );
-            ++aGraphicIter;
+            if ( !rGraphic.mbRemoveCropArea )
+                rGraphic.maGraphicCropLogic = text::GraphicCrop( 0, 0, 0, 0 );
         }
     }
     catch ( Exception& )

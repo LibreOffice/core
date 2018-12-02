@@ -26,12 +26,10 @@ namespace pdfi
 SaxAttrList::SaxAttrList( const std::unordered_map< OUString, OUString >& rMap )
 {
     m_aAttributes.reserve(rMap.size());
-    for( std::unordered_map< OUString,
-                        OUString >::const_iterator it = rMap.begin();
-         it != rMap.end(); ++it )
+    for( const auto& rEntry : rMap )
     {
-        m_aIndexMap[ it->first ] = m_aAttributes.size();
-        m_aAttributes.emplace_back( it->first, it->second );
+        m_aIndexMap[ rEntry.first ] = m_aAttributes.size();
+        m_aAttributes.emplace_back( rEntry.first, rEntry.second );
     }
 }
 

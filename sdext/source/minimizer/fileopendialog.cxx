@@ -118,12 +118,12 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
     Reference< XNameAccess > xTypes( rxContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.document.TypeDetection", rxContext ), UNO_QUERY_THROW );
 
-    for( std::vector< FilterEntry >::const_iterator aIter(aFilterEntryList.begin()), aEnd(aFilterEntryList.end()); aIter != aEnd; ++aIter )
+    for( const auto& rFilterEntry : aFilterEntryList )
     {
         Sequence< PropertyValue > aTypeProperties;
         try
         {
-            if ( xTypes->getByName( aIter->maType ) >>= aTypeProperties )
+            if ( xTypes->getByName( rFilterEntry.maType ) >>= aTypeProperties )
             {
                 Sequence< OUString > aExtensions;
                 for ( int i = 0; i < aTypeProperties.getLength(); i++ )
@@ -139,10 +139,10 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                     // The filter title must be formed in the same way it is
                     // currently done in the internal implementation:
                     OUString aTitle(
-                        aIter->maUIName + " (." + aExtensions[0] + ")");
+                        rFilterEntry.maUIName + " (." + aExtensions[0] + ")");
                     OUString aFilter("*." + aExtensions[0]);
                     mxFilePicker->appendFilter(aTitle, aFilter);
-                    if ( aIter->maFlags & 0x100 )
+                    if ( rFilterEntry.maFlags & 0x100 )
                         mxFilePicker->setCurrentFilter(aTitle);
                 }
             }
@@ -173,14 +173,10 @@ OUString FileOpenDialog::getFilterName() const
     OUString aFilterName;
     Reference< XFilterManager > xFilterManager( mxFilePicker, UNO_QUERY_THROW );
     OUString aUIName( xFilterManager->getCurrentFilter() );
-    for( std::vector< FilterEntry >::const_iterator aIter(aFilterEntryList.begin()), aEnd(aFilterEntryList.end()); aIter != aEnd; ++aIter )
-    {
-        if ( aIter->maUIName == aUIName )
-        {
-            aFilterName = aIter->maFilterEntryName;
-            break;
-        }
-    }
+    auto aIter = std::find_if(aFilterEntryList.begin(), aFilterEntryList.end(),
+        [&aUIName](const FilterEntry& rFilterEntry) { return rFilterEntry.maUIName == aUIName; });
+    if (aIter != aFilterEntryList.end())
+        aFilterName = aIter->maFilterEntryName;
     return aFilterName;
 };
 

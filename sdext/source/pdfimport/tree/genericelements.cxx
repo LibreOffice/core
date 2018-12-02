@@ -188,15 +188,14 @@ void ParagraphElement::visitedBy( ElementTreeVisitor&                          r
 
 bool ParagraphElement::isSingleLined( PDFIProcessor const & rProc ) const
 {
-    auto it = Children.begin();
     TextElement* pText = nullptr, *pLastText = nullptr;
-    while( it != Children.end() )
+    for( auto& rxChild : Children )
     {
         // a paragraph containing subparagraphs cannot be single lined
-        if( dynamic_cast< ParagraphElement* >(it->get()) != nullptr )
+        if( dynamic_cast< ParagraphElement* >(rxChild.get()) != nullptr )
             return false;
 
-        pText = dynamic_cast< TextElement* >(it->get());
+        pText = dynamic_cast< TextElement* >(rxChild.get());
         if( pText )
         {
             const FontAttributes& rFont = rProc.getFont( pText->FontId );
@@ -211,7 +210,6 @@ bool ParagraphElement::isSingleLined( PDFIProcessor const & rProc ) const
             else
                 pLastText = pText;
         }
-        ++it;
     }
 
     // a paragraph without a single text is not considered single lined
@@ -221,9 +219,9 @@ bool ParagraphElement::isSingleLined( PDFIProcessor const & rProc ) const
 double ParagraphElement::getLineHeight( PDFIProcessor& rProc ) const
 {
     double line_h = 0;
-    for( auto it = Children.begin(); it != Children.end(); ++it )
+    for( auto& rxChild : Children )
     {
-        ParagraphElement* pPara = dynamic_cast< ParagraphElement* >(it->get());
+        ParagraphElement* pPara = dynamic_cast< ParagraphElement* >(rxChild.get());
         TextElement* pText = nullptr;
         if( pPara )
         {
@@ -231,7 +229,7 @@ double ParagraphElement::getLineHeight( PDFIProcessor& rProc ) const
             if( lh > line_h )
                 line_h = lh;
         }
-        else if( (pText = dynamic_cast< TextElement* >( it->get() )) != nullptr )
+        else if( (pText = dynamic_cast< TextElement* >( rxChild.get() )) != nullptr )
         {
             const FontAttributes& rFont = rProc.getFont( pText->FontId );
             double lh = pText->h;
@@ -247,11 +245,10 @@ double ParagraphElement::getLineHeight( PDFIProcessor& rProc ) const
 TextElement* ParagraphElement::getFirstTextChild() const
 {
     TextElement* pText = nullptr;
-    for( auto it = Children.begin();
-         it != Children.end() && ! pText; ++it )
-    {
+    auto it = std::find_if(Children.begin(), Children.end(),
+        [](const std::unique_ptr<Element>& rxElem) { return dynamic_cast<TextElement*>(rxElem.get()) != nullptr; });
+    if (it != Children.end())
         pText = dynamic_cast<TextElement*>(it->get());
-    }
     return pText;
 }
 
@@ -378,10 +375,9 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
             u_y = r_x; r_x = l_x; l_x = u_y;
         }
         u_y = aPoly.getB2DPoint(0).getY();
-        for( auto it = Children.begin();
-             it != Children.end(); ++it )
+        for( auto& rxChild : Children )
         {
-            Element* pEle = it->get();
+            Element* pEle = rxChild.get();
             if( pEle->y <= u_y && pEle->y + pEle->h*1.1 >= u_y )
             {
                 // first: is the element underlined completely ?

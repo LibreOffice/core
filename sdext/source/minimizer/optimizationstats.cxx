@@ -54,11 +54,10 @@ css::beans::PropertyValues OptimizationStats::GetStatusSequence()
 {
     int i = 0;
     uno::Sequence< PropertyValue > aStatsSequence( maStats.size() );
-    std::map< PPPOptimizerTokenEnum, uno::Any >::iterator aIter( maStats.begin() );
-    while( aIter != maStats.end() )
+    for( const auto& rEntry : maStats )
     {
-        aStatsSequence[ i ].Name = TKGet( (*aIter).first );
-        aStatsSequence[ i++ ].Value = (*aIter++).second;
+        aStatsSequence[ i ].Name = TKGet( rEntry.first );
+        aStatsSequence[ i++ ].Value = rEntry.second;
     }
     return aStatsSequence;
 }

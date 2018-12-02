@@ -71,17 +71,14 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     aElement.append(" ");
 
     std::vector<OUString>        aAttributes;
-    PropertyMap::const_iterator       aCurr(rProperties.begin());
-    const PropertyMap::const_iterator aEnd(rProperties.end());
-    while( aCurr != aEnd )
+    for( const auto& rCurr : rProperties )
     {
         OUStringBuffer aAttribute;
-        aAttribute.append(aCurr->first);
+        aAttribute.append(rCurr.first);
         aAttribute.append("=\"");
-        aAttribute.append(aCurr->second);
+        aAttribute.append(rCurr.second);
         aAttribute.append("\" ");
         aAttributes.push_back(aAttribute.makeStringAndClear());
-        ++aCurr;
     }
 
     // since the hash map's sorting is undefined (and varies across

@@ -1159,21 +1159,17 @@ void PresenterAccessible::AccessibleObject::FireAccessibleEvent (
     aEventObject.OldValue = rOldValue;
 
     ::std::vector<Reference<XAccessibleEventListener> > aListenerCopy(maListeners);
-    for (::std::vector<Reference<XAccessibleEventListener> >::const_iterator
-             iListener(aListenerCopy.begin()),
-             iEnd(aListenerCopy.end());
-         iListener!=iEnd;
-         ++iListener)
+    for (const auto& rxListener : aListenerCopy)
     {
         try
         {
-            (*iListener)->notifyEvent(aEventObject);
+            rxListener->notifyEvent(aEventObject);
         }
         catch (const lang::DisposedException&)
         {
             // Listener has been disposed and should have been removed
             // already.
-            removeAccessibleEventListener(*iListener);
+            removeAccessibleEventListener(rxListener);
         }
         catch (const Exception&)
         {
@@ -1314,25 +1310,16 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelation (sal_Int32 nIndex
 
 sal_Bool SAL_CALL AccessibleRelationSet::containsRelation (sal_Int16 nRelationType)
 {
-    for (::std::vector<AccessibleRelation>::const_iterator iRelation(maRelations.begin());
-         iRelation!=maRelations.end();
-         ++iRelation)
-    {
-        if (iRelation->RelationType == nRelationType)
-            return true;
-    }
-    return false;
+    return std::any_of(maRelations.begin(), maRelations.end(),
+        [nRelationType](const AccessibleRelation& rRelation) { return rRelation.RelationType == nRelationType; });
 }
 
 AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType (sal_Int16 nRelationType)
 {
-    for (::std::vector<AccessibleRelation>::const_iterator iRelation(maRelations.begin());
-         iRelation!=maRelations.end();
-         ++iRelation)
-    {
-        if (iRelation->RelationType == nRelationType)
-            return *iRelation;
-    }
+    auto iRelation = std::find_if(maRelations.begin(), maRelations.end(),
+        [nRelationType](const AccessibleRelation& rRelation) { return rRelation.RelationType == nRelationType; });
+    if (iRelation != maRelations.end())
+        return *iRelation;
     return AccessibleRelation();
 }
 
@@ -1727,12 +1714,9 @@ void AccessibleNotes::SetTextView (
 
         // Dispose the old children. (This will remove them from the focus
         // manager).
-        for (std::vector<rtl::Reference<AccessibleObject> >::const_iterator
-                 iChild(aChildren.begin()), iEnd(aChildren.end());
-             iChild!=iEnd;
-             ++iChild)
+        for (const auto& rxChild : aChildren)
         {
-            Reference<lang::XComponent> xComponent (static_cast<XWeak*>(iChild->get()), UNO_QUERY);
+            Reference<lang::XComponent> xComponent (static_cast<XWeak*>(rxChild.get()), UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
         }
@@ -1756,13 +1740,9 @@ void AccessibleNotes::SetWindow (
 
     // Set the windows at the children as well, so that every paragraph can
     // setup its geometry.
-    for (::std::vector<rtl::Reference<AccessibleObject> >::const_iterator
-             iChild(maChildren.begin()),
-             iEnd(maChildren.end());
-         iChild!=iEnd;
-         ++iChild)
+    for (auto& rxChild : maChildren)
     {
-        (*iChild)->SetWindow(rxContentWindow, rxBorderWindow);
+        rxChild->SetWindow(rxContentWindow, rxBorderWindow);
     }
 }
 
@@ -1853,14 +1833,10 @@ void AccessibleFocusManager::FocusObject (
     const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
 {
     // Remove the focus of any of the other focusable objects.
-    for (::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> >::const_iterator
-             iObject (maFocusableObjects.begin()),
-             iEnd (maFocusableObjects.end());
-         iObject != iEnd;
-         ++iObject)
+    for (auto& rxObject : maFocusableObjects)
     {
-        if (*iObject!=rpObject)
-            (*iObject)->SetIsFocused(false);
+        if (rxObject!=rpObject)
+            rxObject->SetIsFocused(false);
     }
 
     if (rpObject.is())

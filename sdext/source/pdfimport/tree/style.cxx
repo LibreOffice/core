@@ -210,17 +210,16 @@ void StyleContainer::emit( EmitContext&        rContext,
                            ElementTreeVisitor& rContainedElemVisitor )
 {
     std::vector< sal_Int32 > aMasterPageSection, aAutomaticStyleSection, aOfficeStyleSection;
-    for( std::unordered_map< sal_Int32, RefCountedHashedStyle >::iterator it = m_aIdToStyle.begin();
-         it != m_aIdToStyle.end(); ++it )
+    for( const auto& rEntry : m_aIdToStyle )
     {
-        if( ! it->second.style.IsSubStyle )
+        if( ! rEntry.second.style.IsSubStyle )
         {
-            if( it->second.style.Name == "style:master-page" )
-                aMasterPageSection.push_back( it->first );
-            else if( getStyleName( it->first ) == "standard" )
-                aOfficeStyleSection.push_back( it->first );
+            if( rEntry.second.style.Name == "style:master-page" )
+                aMasterPageSection.push_back( rEntry.first );
+            else if( getStyleName( rEntry.first ) == "standard" )
+                aOfficeStyleSection.push_back( rEntry.first );
             else
-                aAutomaticStyleSection.push_back( it->first );
+                aAutomaticStyleSection.push_back( rEntry.first );
         }
     }
 
