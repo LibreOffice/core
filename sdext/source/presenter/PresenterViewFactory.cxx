@@ -181,13 +181,11 @@ void SAL_CALL PresenterViewFactory::disposing()
     if (mpResourceCache != nullptr)
     {
         // Dispose all views in the cache.
-        ResourceContainer::const_iterator iView (mpResourceCache->begin());
-        ResourceContainer::const_iterator iEnd (mpResourceCache->end());
-        for ( ; iView!=iEnd; ++iView)
+        for (const auto& rView : *mpResourceCache)
         {
             try
             {
-                Reference<lang::XComponent> xComponent (iView->second.first, UNO_QUERY);
+                Reference<lang::XComponent> xComponent (rView.second.first, UNO_QUERY);
                 if (xComponent.is())
                     xComponent->dispose();
             }

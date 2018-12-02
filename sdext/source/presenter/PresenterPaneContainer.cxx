@@ -94,11 +94,9 @@ void PresenterPaneContainer::PreparePane (
 
 void SAL_CALL PresenterPaneContainer::disposing()
 {
-    PaneList::iterator iPane (maPanes.begin());
-    PaneList::const_iterator iEnd (maPanes.end());
-    for ( ; iPane!=iEnd; ++iPane)
-        if ((*iPane)->mxPaneId.is())
-            RemovePane((*iPane)->mxPaneId);
+    for (const auto& rxPane : maPanes)
+        if (rxPane->mxPaneId.is())
+            RemovePane(rxPane->mxPaneId);
 }
 
 PresenterPaneContainer::SharedPaneDescriptor
@@ -242,69 +240,53 @@ PresenterPaneContainer::SharedPaneDescriptor
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindBorderWindow (
     const Reference<awt::XWindow>& rxBorderWindow)
 {
-    PaneList::const_iterator iPane;
-    PaneList::iterator iEnd (maPanes.end());
-    for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
-    {
-        if ((*iPane)->mxBorderWindow == rxBorderWindow)
-            return *iPane;
-    }
+    auto iPane = std::find_if(maPanes.begin(), maPanes.end(),
+        [&rxBorderWindow](const SharedPaneDescriptor& rxPane) { return rxPane->mxBorderWindow == rxBorderWindow; });
+    if (iPane != maPanes.end())
+        return *iPane;
     return SharedPaneDescriptor();
 }
 
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindContentWindow (
     const Reference<awt::XWindow>& rxContentWindow)
 {
-    PaneList::const_iterator iPane;
-    PaneList::iterator iEnd (maPanes.end());
-    for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
-    {
-        if ((*iPane)->mxContentWindow == rxContentWindow)
-            return *iPane;
-    }
+    auto iPane = std::find_if(maPanes.begin(), maPanes.end(),
+        [&rxContentWindow](const SharedPaneDescriptor& rxPane) { return rxPane->mxContentWindow == rxContentWindow; });
+    if (iPane != maPanes.end())
+        return *iPane;
     return SharedPaneDescriptor();
 }
 
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindPaneURL (
     const OUString& rsPaneURL)
 {
-    PaneList::const_iterator iPane;
-    PaneList::const_iterator iEnd (maPanes.end());
-    for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
-    {
-        if ((*iPane)->mxPaneId->getResourceURL() == rsPaneURL)
-            return *iPane;
-    }
+    auto iPane = std::find_if(maPanes.begin(), maPanes.end(),
+        [&rsPaneURL](const SharedPaneDescriptor& rxPane) { return rxPane->mxPaneId->getResourceURL() == rsPaneURL; });
+    if (iPane != maPanes.end())
+        return *iPane;
     return SharedPaneDescriptor();
 }
 
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindPaneId (
     const Reference<XResourceId>& rxPaneId)
 {
-    PaneList::iterator iEnd (maPanes.end());
-
     if ( ! rxPaneId.is())
         return SharedPaneDescriptor();
 
-    PaneList::iterator iPane;
-    for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
-    {
-        if (rxPaneId->compareTo((*iPane)->mxPaneId) == 0)
-            return *iPane;
-    }
+    auto iPane = std::find_if(maPanes.begin(), maPanes.end(),
+        [&rxPaneId](const SharedPaneDescriptor& rxPane) { return rxPaneId->compareTo(rxPane->mxPaneId) == 0; });
+    if (iPane != maPanes.end())
+        return *iPane;
     return SharedPaneDescriptor();
 }
 
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindViewURL (
     const OUString& rsViewURL)
 {
-    PaneList::iterator iEnd (maPanes.end());
-    PaneList::iterator iPane;
-    for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
-    {
-        if (rsViewURL == (*iPane)->msViewURL)
-            return *iPane;
-    }
+    auto iPane = std::find_if(maPanes.begin(), maPanes.end(),
+        [&rsViewURL](const SharedPaneDescriptor& rxPane) { return rsViewURL == rxPane->msViewURL; });
+    if (iPane != maPanes.end())
+        return *iPane;
     return SharedPaneDescriptor();
 }
 
@@ -322,11 +304,9 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
     if (rpDescriptor.get() != nullptr)
     {
         // Find iterator for pDescriptor.
-        PaneList::iterator iPane;
         PaneList::iterator iEnd (maPanes.end());
-        for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
-            if (iPane->get() == rpDescriptor.get())
-                break;
+        auto iPane = std::find_if(maPanes.begin(), iEnd,
+            [&rpDescriptor](SharedPaneDescriptor& rxPane) { return rxPane.get() == rpDescriptor.get(); });
         OSL_ASSERT(iPane!=iEnd);
         if (iPane == iEnd)
             return;

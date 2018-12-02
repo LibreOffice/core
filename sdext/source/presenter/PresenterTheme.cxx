@@ -851,13 +851,10 @@ void PaneStyleContainer::ProcessPaneStyle(
     if (rValues[1] >>= sParentStyleName)
     {
         // Find parent style.
-        ::std::vector<SharedPaneStyle>::const_iterator iStyle;
-        for (iStyle=mStyles.begin(); iStyle!=mStyles.end(); ++iStyle)
-            if ((*iStyle)->msStyleName == sParentStyleName)
-            {
-                pStyle->mpParentStyle = *iStyle;
-                break;
-            }
+        auto iStyle = std::find_if(mStyles.begin(), mStyles.end(),
+            [&sParentStyleName](const SharedPaneStyle& rxStyle) { return rxStyle->msStyleName == sParentStyleName; });
+        if (iStyle != mStyles.end())
+            pStyle->mpParentStyle = *iStyle;
     }
 
     Reference<container::XHierarchicalNameAccess> xFontNode (rValues[2], UNO_QUERY);
@@ -891,10 +888,10 @@ void PaneStyleContainer::ProcessPaneStyle(
 
 SharedPaneStyle PaneStyleContainer::GetPaneStyle (const OUString& rsStyleName) const
 {
-    ::std::vector<SharedPaneStyle>::const_iterator iEnd (mStyles.end());
-    for (::std::vector<SharedPaneStyle>::const_iterator iStyle=mStyles.begin(); iStyle!=iEnd; ++iStyle)
-        if ((*iStyle)->msStyleName == rsStyleName)
-            return *iStyle;
+    auto iStyle = std::find_if(mStyles.begin(), mStyles.end(),
+        [&rsStyleName](const SharedPaneStyle& rxStyle) { return rxStyle->msStyleName == rsStyleName; });
+    if (iStyle != mStyles.end())
+        return *iStyle;
     return SharedPaneStyle();
 }
 
@@ -971,15 +968,14 @@ void ViewStyleContainer::ProcessViewStyle(
         >>= sParentStyleName)
     {
         // Find parent style.
-        ::std::vector<SharedViewStyle>::const_iterator iStyle;
-        for (iStyle=mStyles.begin(); iStyle!=mStyles.end(); ++iStyle)
-            if ((*iStyle)->msStyleName == sParentStyleName)
-            {
-                pStyle->mpParentStyle = *iStyle;
-                pStyle->mpFont = (*iStyle)->mpFont;
-                pStyle->mpBackground = (*iStyle)->mpBackground;
-                break;
-            }
+        auto iStyle = std::find_if(mStyles.begin(), mStyles.end(),
+            [&sParentStyleName](const SharedViewStyle& rxStyle) { return rxStyle->msStyleName == sParentStyleName; });
+        if (iStyle != mStyles.end())
+        {
+            pStyle->mpParentStyle = *iStyle;
+            pStyle->mpFont = (*iStyle)->mpFont;
+            pStyle->mpBackground = (*iStyle)->mpBackground;
+        }
     }
 
     const OUString sPathToFont; // empty string
@@ -1007,10 +1003,10 @@ void ViewStyleContainer::ProcessViewStyle(
 
 SharedViewStyle ViewStyleContainer::GetViewStyle (const OUString& rsStyleName) const
 {
-    ::std::vector<SharedViewStyle>::const_iterator iEnd (mStyles.end());
-    for (::std::vector<SharedViewStyle>::const_iterator iStyle=mStyles.begin(); iStyle!=iEnd; ++iStyle)
-        if ((*iStyle)->msStyleName == rsStyleName)
-            return *iStyle;
+    auto iStyle = std::find_if(mStyles.begin(), mStyles.end(),
+        [&rsStyleName](const SharedViewStyle& rxStyle) { return rxStyle->msStyleName == rsStyleName; });
+    if (iStyle != mStyles.end())
+        return *iStyle;
     return SharedViewStyle();
 }
 

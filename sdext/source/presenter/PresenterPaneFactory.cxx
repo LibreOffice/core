@@ -121,11 +121,9 @@ void SAL_CALL PresenterPaneFactory::disposing()
     // Dispose the panes in the cache.
     if (mpResourceCache != nullptr)
     {
-        ResourceContainer::const_iterator iPane (mpResourceCache->begin());
-        ResourceContainer::const_iterator iEnd (mpResourceCache->end());
-        for ( ; iPane!=iEnd; ++iPane)
+        for (const auto& rxPane : *mpResourceCache)
         {
-            Reference<lang::XComponent> xPaneComponent (iPane->second, UNO_QUERY);
+            Reference<lang::XComponent> xPaneComponent (rxPane.second, UNO_QUERY);
             if (xPaneComponent.is())
                 xPaneComponent->dispose();
         }

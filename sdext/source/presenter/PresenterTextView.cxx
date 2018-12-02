@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numeric>
 
 #include <sal/log.hxx>
 
@@ -148,13 +149,9 @@ void PresenterTextView::SetLocation (const css::geometry::RealPoint2D& rLocation
 {
     maLocation = rLocation;
 
-    for (::std::vector<SharedPresenterTextParagraph>::iterator
-             iParagraph(maParagraphs.begin()),
-             iEnd(maParagraphs.end());
-         iParagraph!=iEnd;
-         ++iParagraph)
+    for (auto& rxParagraph : maParagraphs)
     {
-        (*iParagraph)->SetOrigin(
+        rxParagraph->SetOrigin(
             maLocation.X - mnLeftOffset,
             maLocation.Y - mnTopOffset);
     }
@@ -168,8 +165,6 @@ void PresenterTextView::SetSize (const css::geometry::RealSize2D& rSize)
 
 double PresenterTextView::GetTotalTextHeight()
 {
-    double nTotalHeight (0);
-
     if (mbIsFormatPending)
     {
         if ( ! mpFont->PrepareFont(mxCanvas))
@@ -177,16 +172,10 @@ double PresenterTextView::GetTotalTextHeight()
         Format();
     }
 
-    for (::std::vector<SharedPresenterTextParagraph>::iterator
-             iParagraph(maParagraphs.begin()),
-             iEnd(maParagraphs.end());
-         iParagraph!=iEnd;
-         ++iParagraph)
-    {
-        nTotalHeight += (*iParagraph)->GetTotalTextHeight();
-    }
-
-    return nTotalHeight;
+    return std::accumulate(maParagraphs.begin(), maParagraphs.end(), double(0),
+        [](const double& nTotalHeight, const SharedPresenterTextParagraph& rxParagraph) {
+            return nTotalHeight + rxParagraph->GetTotalTextHeight();
+        });
 }
 
 void PresenterTextView::SetFont (const PresenterTheme::SharedFontDescriptor& rpFont)
@@ -337,13 +326,9 @@ void PresenterTextView::Paint (
         rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
 
-    for (::std::vector<SharedPresenterTextParagraph>::const_iterator
-             iParagraph(maParagraphs.begin()),
-             iEnd(maParagraphs.end());
-         iParagraph!=iEnd;
-         ++iParagraph)
+    for (const auto& rxParagraph : maParagraphs)
     {
-        (*iParagraph)->Paint(
+        rxParagraph->Paint(
             mxCanvas,
             maSize,
             mpFont,
@@ -421,14 +406,10 @@ void PresenterTextView::Format()
     mbIsFormatPending = false;
 
     double nY (0);
-    for (::std::vector<SharedPresenterTextParagraph>::const_iterator
-             iParagraph(maParagraphs.begin()),
-             iEnd(maParagraphs.end());
-         iParagraph!=iEnd;
-         ++iParagraph)
+    for (const auto& rxParagraph : maParagraphs)
     {
-        (*iParagraph)->Format(nY, maSize.Width, mpFont);
-        nY += (*iParagraph)->GetTotalTextHeight();
+        rxParagraph->Format(nY, maSize.Width, mpFont);
+        nY += rxParagraph->GetTotalTextHeight();
     }
 
     if (maTextChangeBroadcaster)
@@ -821,21 +802,16 @@ TextSegment PresenterTextParagraph::GetTextSegment (
 
         case AccessibleTextType::LINE:
         {
-            for (::std::vector<Line>::const_iterator
-                     iLine(maLines.begin()),
-                     iEnd(maLines.end());
-                 iLine!=iEnd;
-                 ++iLine)
+            auto iLine = std::find_if(maLines.begin(), maLines.end(),
+                [nIndex](const Line& rLine) { return nIndex < rLine.mnLineEndCharacterIndex; });
+            if (iLine != maLines.end())
             {
-                if (nIndex < iLine->mnLineEndCharacterIndex)
-                {
-                    return TextSegment(
-                        msParagraphText.copy(
-                            iLine->mnLineStartCharacterIndex,
-                            iLine->mnLineEndCharacterIndex - iLine->mnLineStartCharacterIndex),
+                return TextSegment(
+                    msParagraphText.copy(
                         iLine->mnLineStartCharacterIndex,
-                        iLine->mnLineEndCharacterIndex);
-                }
+                        iLine->mnLineEndCharacterIndex - iLine->mnLineStartCharacterIndex),
+                    iLine->mnLineStartCharacterIndex,
+                    iLine->mnLineEndCharacterIndex);
             }
         }
         break;

@@ -81,9 +81,8 @@ static void ImpExtractCustomShow( const Reference< XModel >& rxModel, const OUSt
         PageCollector::CollectNonCustomShowPages( rxModel, rCustomShowName, vNonUsedPageList );
         Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
         Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
-        vector< Reference< XDrawPage > >::iterator aIter( vNonUsedPageList.begin() );
-        while( aIter != vNonUsedPageList.end() )
-            xDrawPages->remove( *aIter++ );
+        for( const auto& rxPage : vNonUsedPageList )
+            xDrawPages->remove( rxPage );
     }
     catch( Exception& )
     {
@@ -99,12 +98,10 @@ static void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
     // now master pages that are not marked can be deleted
     Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
     Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
-    vector< PageCollector::MasterPageEntity >::iterator aIter( aMasterPageList.begin() );
-    while( aIter != aMasterPageList.end() )
+    for( const auto& rMasterPage : aMasterPageList )
     {
-        if ( !aIter->bUsed )
-            xMasterPages->remove( aIter->xMasterPage );
-        ++aIter;
+        if ( !rMasterPage.bUsed )
+            xMasterPages->remove( rMasterPage.xMasterPage );
     }
 }
 
@@ -376,65 +373,62 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
 {
     try
     {
-        std::vector< GraphicCollector::GraphicEntity >::iterator aGraphicIter( rGraphicList.begin() );
-        std::vector< GraphicCollector::GraphicEntity >::iterator aGraphicIEnd( rGraphicList.end() );
         double i = 0;
-        while( aGraphicIter != aGraphicIEnd )
+        for( auto& rGraphic : rGraphicList )
         {
             i++;
             sal_Int32 nProgress = static_cast< sal_Int32 >( 40.0 * ( i / static_cast< double >( rGraphicList.size() ) ) ) + 50;
             rOptimizer.SetStatusValue( TK_Progress, Any( nProgress ) );
             rOptimizer.DispatchStatus();
 
-            if ( !aGraphicIter->maUser.empty() )
+            if ( !rGraphic.maUser.empty() )
             {
                 GraphicSettings aGraphicSettings( rGraphicSettings );
-                aGraphicSettings.mbRemoveCropArea = aGraphicIter->mbRemoveCropArea;
+                aGraphicSettings.mbRemoveCropArea = rGraphic.mbRemoveCropArea;
 
                 Reference< XGraphic > xGraphic;
-                if ( aGraphicIter->maUser[ 0 ].mbFillBitmap && aGraphicIter->maUser[ 0 ].mxPropertySet.is() )
+                if ( rGraphic.maUser[ 0 ].mbFillBitmap && rGraphic.maUser[ 0 ].mxPropertySet.is() )
                 {
                     Reference< XBitmap > xFillBitmap;
-                    if ( aGraphicIter->maUser[ 0 ].mxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
+                    if ( rGraphic.maUser[ 0 ].mxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
                         xGraphic.set( xFillBitmap, UNO_QUERY_THROW );
                 }
-                else if ( aGraphicIter->maUser[ 0 ].mxShape.is() )
+                else if ( rGraphic.maUser[ 0 ].mxShape.is() )
                 {
-                    Reference< XPropertySet > xShapePropertySet( aGraphicIter->maUser[ 0 ].mxShape, UNO_QUERY_THROW );
+                    Reference< XPropertySet > xShapePropertySet( rGraphic.maUser[ 0 ].mxShape, UNO_QUERY_THROW );
                     xShapePropertySet->getPropertyValue( "Graphic" ) >>= xGraphic;
                 }
                 if ( xGraphic.is() )
                 {
                     Reference< XPropertySet > xNewGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
                     awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
-                    Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxContext, xGraphic, aGraphicIter->maLogicalSize, aGraphicIter->maGraphicCropLogic, aGraphicSettings ) );
+                    Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxContext, xGraphic, rGraphic.maLogicalSize, rGraphic.maGraphicCropLogic, aGraphicSettings ) );
                     if ( xNewGraphic.is() )
                     {
                         // applying graphic to each user
-                        std::vector< GraphicCollector::GraphicUser >::iterator aGraphicUserIter( aGraphicIter->maUser.begin() );
-                        while( aGraphicUserIter != aGraphicIter->maUser.end() )
+                        for( auto& rGraphicUser : rGraphic.maUser )
                         {
-                            if ( aGraphicUserIter->mxShape.is() )
+                            if ( rGraphicUser.mxShape.is() )
                             {
-                                Reference< XPropertySet > xShapePropertySet( aGraphicUserIter->mxShape, UNO_QUERY_THROW );
+                                Reference< XPropertySet > xShapePropertySet( rGraphicUser.mxShape, UNO_QUERY_THROW );
                                 xShapePropertySet->setPropertyValue( "Graphic", Any( xNewGraphic ) );
 
-                                if ( aGraphicUserIter->maGraphicCropLogic.Left || aGraphicUserIter->maGraphicCropLogic.Top
-                                || aGraphicUserIter->maGraphicCropLogic.Right || aGraphicUserIter->maGraphicCropLogic.Bottom )
+                                if ( rGraphicUser.maGraphicCropLogic.Left || rGraphicUser.maGraphicCropLogic.Top
+                                || rGraphicUser.maGraphicCropLogic.Right || rGraphicUser.maGraphicCropLogic.Bottom )
                                 {   // removing crop area was not possible or shouldn't been applied
                                     text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
                                     if ( !aGraphicSettings.mbRemoveCropArea )
                                     {
                                         awt::Size aNewSize( GraphicCollector::GetOriginalSize( rxContext, xNewGraphic ) );
-                                        aGraphicCropLogic.Left = static_cast<sal_Int32>(static_cast<double>(aGraphicUserIter->maGraphicCropLogic.Left) * (static_cast<double>(aNewSize.Width) / static_cast<double>(aSize100thMM.Width)));
-                                        aGraphicCropLogic.Top = static_cast<sal_Int32>(static_cast<double>(aGraphicUserIter->maGraphicCropLogic.Top) * (static_cast<double>(aNewSize.Height) / static_cast<double>(aSize100thMM.Height)));
-                                        aGraphicCropLogic.Right = static_cast<sal_Int32>(static_cast<double>(aGraphicUserIter->maGraphicCropLogic.Right) * (static_cast<double>(aNewSize.Width) / static_cast<double>(aSize100thMM.Width)));
-                                        aGraphicCropLogic.Bottom = static_cast<sal_Int32>(static_cast<double>(aGraphicUserIter->maGraphicCropLogic.Bottom) * (static_cast<double>(aNewSize.Height) / static_cast<double>(aSize100thMM.Height)));
+                                        aGraphicCropLogic.Left = static_cast<sal_Int32>(static_cast<double>(rGraphicUser.maGraphicCropLogic.Left) * (static_cast<double>(aNewSize.Width) / static_cast<double>(aSize100thMM.Width)));
+                                        aGraphicCropLogic.Top = static_cast<sal_Int32>(static_cast<double>(rGraphicUser.maGraphicCropLogic.Top) * (static_cast<double>(aNewSize.Height) / static_cast<double>(aSize100thMM.Height)));
+                                        aGraphicCropLogic.Right = static_cast<sal_Int32>(static_cast<double>(rGraphicUser.maGraphicCropLogic.Right) * (static_cast<double>(aNewSize.Width) / static_cast<double>(aSize100thMM.Width)));
+                                        aGraphicCropLogic.Bottom = static_cast<sal_Int32>(static_cast<double>(rGraphicUser.maGraphicCropLogic.Bottom) * (static_cast<double>(aNewSize.Height) / static_cast<double>(aSize100thMM.Height)));
                                     }
                                     xShapePropertySet->setPropertyValue( "GraphicCrop", Any( aGraphicCropLogic ) );
                                 }
                             }
-                            else if ( aGraphicUserIter->mxPropertySet.is() )
+                            else if ( rGraphicUser.mxPropertySet.is() )
                             {
                                 Reference< XBitmap > xFillBitmap( xNewGraphic, UNO_QUERY );
                                 if ( xFillBitmap.is() )
@@ -442,7 +436,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                                     awt::Size aSize;
                                     bool bLogicalSize;
 
-                                    Reference< XPropertySet >& rxPropertySet( aGraphicUserIter->mxPropertySet );
+                                    Reference< XPropertySet >& rxPropertySet( rGraphicUser.mxPropertySet );
                                     rxPropertySet->setPropertyValue( "FillBitmap", Any( xFillBitmap ) );
                                     if ( ( rxPropertySet->getPropertyValue( "FillBitmapLogicalSize" ) >>= bLogicalSize )
                                         && ( rxPropertySet->getPropertyValue( "FillBitmapSizeX" ) >>= aSize.Width )
@@ -451,20 +445,18 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
                                         if ( !aSize.Width || !aSize.Height )
                                         {
                                             rxPropertySet->setPropertyValue( "FillBitmapLogicalSize", Any( true ) );
-                                            rxPropertySet->setPropertyValue( "FillBitmapSizeX", Any( aGraphicUserIter->maLogicalSize.Width ) );
-                                            rxPropertySet->setPropertyValue( "FillBitmapSizeY", Any( aGraphicUserIter->maLogicalSize.Height ) );
+                                            rxPropertySet->setPropertyValue( "FillBitmapSizeX", Any( rGraphicUser.maLogicalSize.Width ) );
+                                            rxPropertySet->setPropertyValue( "FillBitmapSizeY", Any( rGraphicUser.maLogicalSize.Height ) );
                                         }
                                     }
-                                    if ( aGraphicUserIter->mxPagePropertySet.is() )
-                                        aGraphicUserIter->mxPagePropertySet->setPropertyValue( "Background", Any( rxPropertySet ) );
+                                    if ( rGraphicUser.mxPagePropertySet.is() )
+                                        rGraphicUser.mxPagePropertySet->setPropertyValue( "Background", Any( rxPropertySet ) );
                                 }
                             }
-                            ++aGraphicUserIter;
                         }
                     }
                 }
             }
-            ++aGraphicIter;
         }
     }
     catch ( Exception& )

@@ -21,6 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_STYLE_HXX
 
 #include <pdfihelper.hxx>
+#include <numeric>
 #include <unordered_map>
 #include <vector>
 #include <rtl/ustring.hxx>
@@ -65,13 +66,10 @@ namespace pdfi
 
             size_t hashCode() const
             {
-                size_t nRet = size_t(Name.hashCode());
-                for( PropertyMap::const_iterator it = Properties.begin();
-                     it != Properties.end(); ++it )
-                {
-                     nRet ^= size_t(it->first.hashCode());
-                     nRet ^= size_t(it->second.hashCode());
-                }
+                size_t nRet = std::accumulate(Properties.begin(), Properties.end(), size_t(Name.hashCode()),
+                    [](const size_t& sum, const PropertyMap::value_type& rEntry) {
+                        return sum ^ size_t(rEntry.first.hashCode()) ^ size_t(rEntry.second.hashCode());
+                    });
                 nRet ^= size_t(Contents.hashCode());
                 nRet ^= size_t(ContainedElement);
                 for( size_t n = 0; n < SubStyles.size(); ++n )

@@ -671,10 +671,9 @@ void OptimizerDialog::UpdateControlStatesPage4()
         {
             std::vector< Reference< XDrawPage > > vUsedPageList;
             PageCollector::CollectCustomShowPages( mxController->getModel(), aCustomShowName, vUsedPageList );
-            std::vector< Reference< XDrawPage > >::iterator aIter( vUsedPageList.begin() );
-            while( aIter != vUsedPageList.end() )
+            for( const auto& rxPage : vUsedPageList )
             {
-                Reference< XPropertySet > xPropSet( *aIter, UNO_QUERY_THROW );
+                Reference< XPropertySet > xPropSet( rxPage, UNO_QUERY_THROW );
                 bool bVisible = true;
                 const OUString sVisible( "Visible"  );
                 if ( xPropSet->getPropertyValue( sVisible ) >>= bVisible )
@@ -682,7 +681,6 @@ void OptimizerDialog::UpdateControlStatesPage4()
                     if (!bVisible )
                         nDeletedSlides++;
                 }
-                ++aIter;
             }
         }
         else
@@ -710,13 +708,8 @@ void OptimizerDialog::UpdateControlStatesPage4()
         PageCollector::CollectMasterPages( mxController->getModel(), aMasterPageList );
         Reference< XMasterPagesSupplier > xMasterPagesSupplier( mxController->getModel(), UNO_QUERY_THROW );
         Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
-        std::vector< PageCollector::MasterPageEntity >::iterator aIter( aMasterPageList.begin() );
-        while( aIter != aMasterPageList.end() )
-        {
-            if ( !aIter->bUsed )
-                nDeletedSlides++;
-            ++aIter;
-        }
+        nDeletedSlides += std::count_if(aMasterPageList.begin(), aMasterPageList.end(),
+            [](const PageCollector::MasterPageEntity& rEntity) { return !rEntity.bUsed; });
     }
     if ( nDeletedSlides > 1 )
     {
@@ -907,31 +900,23 @@ void OptimizerDialog::InitPage4()
 
 void OptimizerDialog::EnablePage( sal_Int16 nStep )
 {
-    std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );
-    std::vector< OUString >::iterator aEnd( maControlPages[ nStep ].end() );
-    while( aBeg != aEnd )
-        setControlProperty( *aBeg++, "Enabled", Any( true ) );
+    for( const auto& rItem : maControlPages[ nStep ] )
+        setControlProperty( rItem, "Enabled", Any( true ) );
 }
 void OptimizerDialog::DisablePage( sal_Int16 nStep )
 {
-    std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );
-    std::vector< OUString >::iterator aEnd( maControlPages[ nStep ].end() );
-    while( aBeg != aEnd )
-        setControlProperty( *aBeg++, "Enabled", Any( false ) );
+    for( const auto& rItem : maControlPages[ nStep ] )
+        setControlProperty( rItem, "Enabled", Any( false ) );
 }
 void OptimizerDialog::ActivatePage( sal_Int16 nStep )
 {
-    std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );
-    std::vector< OUString >::iterator aEnd( maControlPages[ nStep ].end() );
-    while( aBeg != aEnd )
-        setVisible( *aBeg++, true );
+    for( const auto& rItem : maControlPages[ nStep ] )
+        setVisible( rItem, true );
 }
 void OptimizerDialog::DeactivatePage( sal_Int16 nStep )
 {
-    std::vector< OUString >::iterator aBeg( maControlPages[ nStep ].begin() );
-    std::vector< OUString >::iterator aEnd( maControlPages[ nStep ].end() );
-    while( aBeg != aEnd )
-        setVisible( *aBeg++, false );
+    for( const auto& rItem : maControlPages[ nStep ] )
+        setVisible( rItem, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

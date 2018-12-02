@@ -361,14 +361,13 @@ void PresenterController::UpdatePaneTitles()
     }
 
     // Replace the placeholders with their current values.
-    PresenterPaneContainer::PaneList::const_iterator iPane;
-    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=mpPaneContainer->maPanes.end(); ++iPane)
+    for (auto& rxPane : mpPaneContainer->maPanes)
     {
-        OSL_ASSERT(*iPane != nullptr);
+        OSL_ASSERT(rxPane != nullptr);
 
         OUString sTemplate (IsAccessibilityActive()
-            ? (*iPane)->msAccessibleTitleTemplate
-            : (*iPane)->msTitleTemplate);
+            ? rxPane->msAccessibleTitleTemplate
+            : rxPane->msTitleTemplate);
         if (sTemplate.isEmpty())
             continue;
 
@@ -406,19 +405,18 @@ void PresenterController::UpdatePaneTitles()
             }
         }
 
-        (*iPane)->msTitle = sResult.makeStringAndClear();
-        if ((*iPane)->mxPane.is())
-            (*iPane)->mxPane->SetTitle((*iPane)->msTitle);
+        rxPane->msTitle = sResult.makeStringAndClear();
+        if (rxPane->mxPane.is())
+            rxPane->mxPane->SetTitle(rxPane->msTitle);
     }
 }
 
 void PresenterController::UpdateViews()
 {
     // Tell all views about the slides they should display.
-    PresenterPaneContainer::PaneList::const_iterator iPane;
-    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=mpPaneContainer->maPanes.end(); ++iPane)
+    for (const auto& rxPane : mpPaneContainer->maPanes)
     {
-        Reference<drawing::XDrawView> xDrawView ((*iPane)->mxView, UNO_QUERY);
+        Reference<drawing::XDrawView> xDrawView (rxPane->mxView, UNO_QUERY);
         if (xDrawView.is())
             xDrawView->setCurrentPage(mxCurrentSlide);
     }
@@ -667,12 +665,10 @@ void PresenterController::RequestViews (
     const bool bIsNotesViewActive,
     const bool bIsHelpViewActive)
 {
-    PresenterPaneContainer::PaneList::const_iterator iPane;
-    PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
-    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
+    for (const auto& rxPane : mpPaneContainer->maPanes)
     {
         bool bActivate (true);
-        const OUString sViewURL ((*iPane)->msViewURL);
+        const OUString sViewURL (rxPane->msViewURL);
         if (sViewURL == PresenterViewFactory::msNotesViewURL)
         {
             bActivate = bIsNotesViewActive && !bIsSlideSorterActive && !bIsHelpViewActive;
@@ -825,13 +821,12 @@ void SAL_CALL PresenterController::frameAction (
 void SAL_CALL PresenterController::keyPressed (const awt::KeyEvent& rEvent)
 {
     // Tell all views about the unhandled key event.
-    PresenterPaneContainer::PaneList::const_iterator iPane;
-    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=mpPaneContainer->maPanes.end(); ++iPane)
+    for (const auto& rxPane : mpPaneContainer->maPanes)
     {
-        if ( ! (*iPane)->mbIsActive)
+        if ( ! rxPane->mbIsActive)
             continue;
 
-        Reference<awt::XKeyListener> xKeyListener ((*iPane)->mxView, UNO_QUERY);
+        Reference<awt::XKeyListener> xKeyListener (rxPane->mxView, UNO_QUERY);
         if (xKeyListener.is())
             xKeyListener->keyPressed(rEvent);
     }
@@ -978,13 +973,12 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
 
         default:
             // Tell all views about the unhandled key event.
-            PresenterPaneContainer::PaneList::const_iterator iPane;
-            for (iPane=mpPaneContainer->maPanes.begin(); iPane!=mpPaneContainer->maPanes.end(); ++iPane)
+            for (const auto& rxPane : mpPaneContainer->maPanes)
             {
-                if ( ! (*iPane)->mbIsActive)
+                if ( ! rxPane->mbIsActive)
                     continue;
 
-                Reference<awt::XKeyListener> xKeyListener ((*iPane)->mxView, UNO_QUERY);
+                Reference<awt::XKeyListener> xKeyListener (rxPane->mxView, UNO_QUERY);
                 if (xKeyListener.is())
                     xKeyListener->keyReleased(rEvent);
             }
