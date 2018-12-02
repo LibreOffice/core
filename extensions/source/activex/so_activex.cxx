@@ -50,6 +50,7 @@
 #include "SOActiveX.h"
 
 #include <comphelper\documentconstants.hxx>
+#include <exception>
 
 CComModule _Module;
 
@@ -123,6 +124,51 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
 // DllRegisterServer - Adds entries to the system registry
 
+namespace
+{
+// Wraps an updatable Win32 error; keeps first incoming error.
+// Ctor defines if upd will throw std::exception on error or
+// return false.
+class Status
+{
+public:
+    explicit Status(bool bTrow)
+        : m_bThrow(bTrow)
+    {
+    }
+    // used to check success of an operation, and update the status if it's still ERROR_SUCCESS
+    bool upd(LSTATUS nNewStatus)
+    {
+        if (m_nStatus == ERROR_SUCCESS)
+            m_nStatus = nNewStatus;
+        if (m_bThrow && nNewStatus != ERROR_SUCCESS)
+            throw std::exception();
+        return nNewStatus == ERROR_SUCCESS;
+    };
+    LSTATUS get() { return m_nStatus; }
+    operator bool() { return m_nStatus == ERROR_SUCCESS; }
+
+private:
+    LSTATUS m_nStatus = ERROR_SUCCESS;
+    const bool m_bThrow;
+};
+
+class HRegKey
+{
+public:
+    ~HRegKey()
+    {
+        if (m_hkey)
+            RegCloseKey(m_hkey);
+    }
+    PHKEY operator&() { return &m_hkey; }
+    operator HKEY() { return m_hkey; }
+
+private:
+    HKEY m_hkey = nullptr;
+};
+}
+
 // for now database component and chart are always installed
 #define SUPPORTED_EXT_NUM 30
 const char* const aFileExt[] = { ".vor",
@@ -194,72 +240,58 @@ const char* const aProxyStubActApprove = "{00020424-0000-0000-C000-000000000046}
 // The following prefix is required for HKEY_LOCAL_MACHINE and HKEY_CURRENT_USER ( not for HKEY_CLASSES_ROOT )
 const char* const aLocalPrefix = "Software\\Classes\\";
 
-static BOOL createKey( HKEY hkey,
+static LSTATUS createKey( HKEY hkey,
                 const char* aKeyToCreate,
                 REGSAM nKeyAccess,
                 const char* aValue = nullptr,
                 const char* aChildName = nullptr,
                 const char* aChildValue = nullptr )
 {
-    HKEY hkey1;
-
-    return ( ERROR_SUCCESS == RegCreateKeyExA( hkey, aKeyToCreate, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr )
-           && ( !aValue || ERROR_SUCCESS == RegSetValueExA( hkey1,
-                                                           "",
-                                                           0,
-                                                           REG_SZ,
-                       reinterpret_cast<const BYTE*>(aValue),
-                       sal::static_int_cast<DWORD>(strlen(aValue))))
-           && ( !aChildName || ERROR_SUCCESS == RegSetValueExA( hkey1,
-                                                               aChildName,
-                                                               0,
-                                                               REG_SZ,
-                       reinterpret_cast<const BYTE*>(aChildValue),
-                       sal::static_int_cast<DWORD>(strlen(aChildValue))))
-           && ERROR_SUCCESS == RegCloseKey( hkey1 ) );
-
+    Status s(false); // no throw
+    HRegKey hkey1;
+    if (s.upd(RegCreateKeyExA(hkey, aKeyToCreate, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                              nullptr, &hkey1, nullptr)))
+    {
+        if (aValue)
+            s.upd(RegSetValueExA(hkey1, "", 0, REG_SZ, reinterpret_cast<const BYTE*>(aValue),
+                                 sal::static_int_cast<DWORD>(strlen(aValue))));
+        if (aChildName)
+            s.upd(RegSetValueExA(hkey1, aChildName, 0, REG_SZ,
+                                 reinterpret_cast<const BYTE*>(aChildValue),
+                                 sal::static_int_cast<DWORD>(strlen(aChildValue))));
+    }
+    return s.get();
 }
 
-static BOOL createKey( HKEY hkey,
+static LSTATUS createKey(HKEY hkey,
                 const wchar_t* aKeyToCreate,
                 REGSAM nKeyAccess,
                 const wchar_t* aValue = nullptr,
                 const wchar_t* aChildName = nullptr,
                 const wchar_t* aChildValue = nullptr )
 {
-    HKEY hkey1;
-
-    return ( ERROR_SUCCESS == RegCreateKeyExW( hkey, aKeyToCreate, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr )
-           && ( !aValue || ERROR_SUCCESS == RegSetValueExW( hkey1,
-                                                            L"",
-                                                            0,
-                                                            REG_SZ,
-                                                            reinterpret_cast<const BYTE*>(aValue),
-                                                            sal::static_int_cast<DWORD>(wcslen(aValue)*sizeof(wchar_t))))
-           && ( !aChildName || ERROR_SUCCESS == RegSetValueExW( hkey1,
-                                                                aChildName,
-                                                                0,
-                                                                REG_SZ,
-                                                                reinterpret_cast<const BYTE*>(aChildValue),
-                                                                sal::static_int_cast<DWORD>(wcslen(aChildValue)*sizeof(wchar_t))))
-           && ERROR_SUCCESS == RegCloseKey( hkey1 ) );
-
+    Status s(false); // no throw
+    HRegKey hkey1;
+    if (s.upd(RegCreateKeyExW(hkey, aKeyToCreate, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                              nullptr, &hkey1, nullptr)))
+    {
+        if (aValue)
+            s.upd(RegSetValueExW(hkey1, L"", 0, REG_SZ, reinterpret_cast<const BYTE*>(aValue),
+                                 sal::static_int_cast<DWORD>(wcslen(aValue) * sizeof(wchar_t))));
+        if (aChildName)
+            s.upd(RegSetValueExW(
+                hkey1, aChildName, 0, REG_SZ, reinterpret_cast<const BYTE*>(aChildValue),
+                sal::static_int_cast<DWORD>(wcslen(aChildValue) * sizeof(wchar_t))));
+    }
+    return s.get();
 }
 
 EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
 static HRESULT DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess, const wchar_t* pProgramPath, const wchar_t* pLibName )
 {
-    BOOL aResult = FALSE;
-
-    HKEY        hkey = nullptr;
-    HKEY        hkey1 = nullptr;
-    HKEY        hkey2 = nullptr;
-    HKEY        hkey3 = nullptr;
-    HKEY        hkey4 = nullptr;
     char        aSubKey[513];
     int         ind;
     const char* aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
-
 
     // In case SO7 is installed for this user he can have local registry entries that will prevent him from
     // using SO8 ActiveX control. The fix is just to clean up the local entries related to ActiveX control.
@@ -267,126 +299,157 @@ static HRESULT DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSA
     if ( bForAllUsers )
         DllUnregisterServerNative( nMode, false, false );
 
-    if ( pProgramPath && wcslen( pProgramPath ) < 1024 )
+    Status s(true); // throw
+    try
     {
-        wchar_t pActiveXPath[1124];
-        wchar_t pActiveXPath101[1124];
+        if (pProgramPath && wcslen(pProgramPath) < 1024)
+        {
+            wchar_t pActiveXPath[1124];
+            wchar_t pActiveXPath101[1124];
 
-        swprintf( pActiveXPath, L"%s\\%s", pProgramPath, pLibName );
-        swprintf( pActiveXPath101, L"%s\\%s, 101", pProgramPath, pLibName );
+            swprintf(pActiveXPath, L"%s\\%s", pProgramPath, pLibName);
+            swprintf(pActiveXPath101, L"%s\\%s, 101", pProgramPath, pLibName);
+
+            {
+                wsprintfA(aSubKey, "%sCLSID\\%s", aPrefix, aClassID);
+                HRegKey hkey;
+                s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                      aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                      nullptr, &hkey, nullptr));
+                s.upd(RegSetValueExA(hkey, "", 0, REG_SZ,
+                                     reinterpret_cast<const BYTE*>("SOActiveX Class"), 17));
+                s.upd(createKey(hkey, "Control", nKeyAccess));
+                s.upd(createKey(hkey, "EnableFullPage", nKeyAccess));
+                s.upd(createKey(hkey, L"InprocServer32", nKeyAccess, pActiveXPath,
+                                L"ThreadingModel", L"Apartment"));
+                s.upd(createKey(hkey, "MiscStatus", nKeyAccess, "0"));
+                s.upd(createKey(hkey, "MiscStatus\\1", nKeyAccess, "131473"));
+                s.upd(createKey(hkey, "ProgID", nKeyAccess, "so_activex.SOActiveX.1"));
+                s.upd(createKey(hkey, "Programmable", nKeyAccess));
+                s.upd(createKey(hkey, L"ToolboxBitmap32", nKeyAccess, pActiveXPath101));
+                s.upd(createKey(hkey, "TypeLib", nKeyAccess, aTypeLib));
+                s.upd(createKey(hkey, "Version", nKeyAccess, "1.0"));
+                s.upd(createKey(hkey, "VersionIndependentProgID", nKeyAccess,
+                                "so_activex.SOActiveX"));
+            }
+            {
+                HRegKey hkey;
+                s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                      aPrefix, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                      nullptr, &hkey, nullptr));
+                s.upd(createKey(hkey, "so_activex.SOActiveX", nKeyAccess, "SOActiveX Class"));
+                {
+                    HRegKey hkey1;
+                    s.upd(RegCreateKeyExA(hkey, "so_activex.SOActiveX", 0, nullptr,
+                                          REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1,
+                                          nullptr));
+                    s.upd(createKey(hkey1, "CLSID", nKeyAccess, aClassID));
+                    s.upd(createKey(hkey1, "CurVer", nKeyAccess, "so_activex.SOActiveX.1"));
+                }
+                s.upd(createKey(hkey, "so_activex.SOActiveX.1", nKeyAccess, "SOActiveX Class"));
+                {
+                    HRegKey hkey1;
+                    s.upd(RegCreateKeyExA(hkey, "so_activex.SOActiveX.1", 0, nullptr,
+                                          REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1,
+                                          nullptr));
+                    s.upd(createKey(hkey1, "CLSID", nKeyAccess, aClassID));
+                }
+                {
+                    HRegKey hkey1;
+                    s.upd(RegCreateKeyExA(hkey, "TypeLib", 0, nullptr, REG_OPTION_NON_VOLATILE,
+                                          nKeyAccess, nullptr, &hkey1, nullptr));
+                    {
+                        HRegKey hkey2;
+                        s.upd(RegCreateKeyExA(hkey1, aTypeLib, 0, nullptr, REG_OPTION_NON_VOLATILE,
+                                              nKeyAccess, nullptr, &hkey2, nullptr));
+                        s.upd(createKey(hkey2, "1.0", nKeyAccess, "wrap_activex 1.0 Type Library"));
+                        {
+                            HRegKey hkey3;
+                            s.upd(RegCreateKeyExA(hkey2, "1.0", 0, nullptr, REG_OPTION_NON_VOLATILE,
+                                                  nKeyAccess, nullptr, &hkey3, nullptr));
+                            {
+                                HRegKey hkey4;
+                                s.upd(RegCreateKeyExA(hkey3, "0", 0, nullptr,
+                                                      REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr,
+                                                      &hkey4, nullptr));
+                                s.upd(createKey(hkey4, L"win32", nKeyAccess, pActiveXPath));
+                            }
+                            s.upd(createKey(hkey3, "FLAGS", nKeyAccess, "0"));
+                            s.upd(createKey(hkey3, L"HELPDIR", nKeyAccess, pProgramPath));
+                        }
+                    }
+                }
+                {
+                    HRegKey hkey1;
+                    s.upd(RegCreateKeyExA(hkey, "Interface", 0, nullptr, REG_OPTION_NON_VOLATILE,
+                                          nKeyAccess, nullptr, &hkey1, nullptr));
+                    s.upd(createKey(hkey1, aInterIDWinPeer, nKeyAccess, "ISOComWindowPeer"));
+                    {
+                        HRegKey hkey2;
+                        s.upd(RegCreateKeyExA(hkey1, aInterIDWinPeer, 0, nullptr,
+                                              REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey2,
+                                              nullptr));
+                        s.upd(createKey(hkey2, "ProxyStubClsid", nKeyAccess, aProxyStubWinPeer));
+                        s.upd(createKey(hkey2, "ProxyStubClsid32", nKeyAccess, aProxyStubWinPeer));
+                        s.upd(createKey(hkey2, "TypeLib", nKeyAccess, aTypeLib, "Version", "1.0"));
+                    }
+                    s.upd(createKey(hkey1, aInterIDActApprove, nKeyAccess, "ISOActionsApproval"));
+                    {
+                        HRegKey hkey2;
+                        s.upd(RegCreateKeyExA(hkey1, aInterIDActApprove, 0, nullptr,
+                                              REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey2,
+                                              nullptr));
+                        s.upd(createKey(hkey2, "ProxyStubClsid", nKeyAccess, aProxyStubActApprove));
+                        s.upd(
+                            createKey(hkey2, "ProxyStubClsid32", nKeyAccess, aProxyStubActApprove));
+                        s.upd(createKey(hkey2, "TypeLib", nKeyAccess, aTypeLib, "Version", "1.0"));
+                    }
+                    s.upd(createKey(hkey1, aInterIDDispInt, nKeyAccess, "ISODispatchInterceptor"));
+                    {
+                        HRegKey hkey2;
+                        s.upd(RegCreateKeyExA(hkey1, aInterIDDispInt, 0, nullptr,
+                                              REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey2,
+                                              nullptr));
+                        s.upd(createKey(hkey2, "ProxyStubClsid", nKeyAccess, aProxyStubDispInt));
+                        s.upd(createKey(hkey2, "ProxyStubClsid32", nKeyAccess, aProxyStubDispInt));
+                        s.upd(createKey(hkey2, "TypeLib", nKeyAccess, aTypeLib, "Version", "1.0"));
+                    }
+                }
+            }
+        }
+
+        for (ind = 0; ind < SUPPORTED_EXT_NUM; ind++)
+        {
+            if (nForModes[ind] & nMode)
+            {
+                wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind]);
+                HRegKey hkey;
+                s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                      aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                      nullptr, &hkey, nullptr));
+                s.upd(RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
+                                     reinterpret_cast<const BYTE*>(aClassID),
+                                     sal::static_int_cast<DWORD>(strlen(aClassID))));
+            }
+        }
 
         {
-            wsprintfA( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
-            aResult =
-                ( ERROR_SUCCESS == RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey , nullptr )
-                    && ERROR_SUCCESS == RegSetValueExA( hkey, "", 0, REG_SZ, reinterpret_cast<const BYTE*>("SOActiveX Class"), 17 )
-                    && createKey( hkey, "Control", nKeyAccess )
-                    && createKey( hkey, "EnableFullPage", nKeyAccess )
-                    && createKey( hkey, L"InprocServer32", nKeyAccess, pActiveXPath, L"ThreadingModel", L"Apartment" )
-                    && createKey( hkey, "MiscStatus", nKeyAccess, "0" )
-                    && createKey( hkey, "MiscStatus\\1", nKeyAccess, "131473" )
-                    && createKey( hkey, "ProgID", nKeyAccess, "so_activex.SOActiveX.1" )
-                    && createKey( hkey, "Programmable", nKeyAccess )
-                    && createKey( hkey, L"ToolboxBitmap32", nKeyAccess, pActiveXPath101 )
-                    && createKey( hkey, "TypeLib", nKeyAccess, aTypeLib )
-                    && createKey( hkey, "Version", nKeyAccess, "1.0" )
-                    && createKey( hkey, "VersionIndependentProgID", nKeyAccess, "so_activex.SOActiveX" )
-                && ERROR_SUCCESS == RegCloseKey( hkey )
-                && ERROR_SUCCESS == RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aPrefix, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey , nullptr )
-                    && createKey( hkey, "so_activex.SOActiveX", nKeyAccess, "SOActiveX Class" )
-                    && ERROR_SUCCESS == RegCreateKeyExA( hkey, "so_activex.SOActiveX", 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr )
-                        && createKey( hkey1, "CLSID", nKeyAccess, aClassID )
-                        && createKey( hkey1, "CurVer", nKeyAccess, "so_activex.SOActiveX.1" )
-                    && ERROR_SUCCESS == RegCloseKey( hkey1 )
-                    && createKey( hkey, "so_activex.SOActiveX.1", nKeyAccess, "SOActiveX Class" )
-                    && ERROR_SUCCESS == RegCreateKeyExA( hkey, "so_activex.SOActiveX.1", 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr )
-                        && createKey( hkey1, "CLSID", nKeyAccess, aClassID )
-                    && ERROR_SUCCESS == RegCloseKey( hkey1 )
-                    && ERROR_SUCCESS == RegCreateKeyExA( hkey, "TypeLib", 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr )
-                        && ERROR_SUCCESS == RegCreateKeyExA( hkey1, aTypeLib, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey2 , nullptr )
-                            && createKey( hkey2, "1.0", nKeyAccess, "wrap_activex 1.0 Type Library" )
-                            && ERROR_SUCCESS == RegCreateKeyExA( hkey2, "1.0", 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey3 , nullptr )
-                                && ERROR_SUCCESS == RegCreateKeyExA( hkey3, "0", 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey4 , nullptr )
-                                    && createKey( hkey4, L"win32", nKeyAccess, pActiveXPath )
-                                && ERROR_SUCCESS == RegCloseKey( hkey4 )
-                                && createKey( hkey3, "FLAGS", nKeyAccess, "0" )
-                                && createKey( hkey3, L"HELPDIR", nKeyAccess, pProgramPath )
-                            && ERROR_SUCCESS == RegCloseKey( hkey3 )
-                        && ERROR_SUCCESS == RegCloseKey( hkey2 )
-                    && ERROR_SUCCESS == RegCloseKey( hkey1 )
-                    && ERROR_SUCCESS == RegCreateKeyExA( hkey, "Interface", 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr )
-                        && createKey( hkey1, aInterIDWinPeer, nKeyAccess, "ISOComWindowPeer" )
-                        && ERROR_SUCCESS == RegCreateKeyExA( hkey1, aInterIDWinPeer, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey2 , nullptr )
-                            && createKey( hkey2, "ProxyStubClsid", nKeyAccess, aProxyStubWinPeer )
-                            && createKey( hkey2, "ProxyStubClsid32", nKeyAccess, aProxyStubWinPeer )
-                            && createKey( hkey2, "TypeLib", nKeyAccess, aTypeLib, "Version", "1.0" )
-                        && ERROR_SUCCESS == RegCloseKey( hkey2 )
-                        && createKey( hkey1, aInterIDActApprove, nKeyAccess, "ISOActionsApproval" )
-                        && ERROR_SUCCESS == RegCreateKeyExA( hkey1, aInterIDActApprove, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey2 , nullptr )
-                            && createKey( hkey2, "ProxyStubClsid", nKeyAccess, aProxyStubActApprove )
-                            && createKey( hkey2, "ProxyStubClsid32", nKeyAccess, aProxyStubActApprove )
-                            && createKey( hkey2, "TypeLib", nKeyAccess, aTypeLib, "Version", "1.0" )
-                        && ERROR_SUCCESS == RegCloseKey( hkey2 )
-                        && createKey( hkey1, aInterIDDispInt, nKeyAccess, "ISODispatchInterceptor" )
-                        && ERROR_SUCCESS == RegCreateKeyExA( hkey1, aInterIDDispInt, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey2 , nullptr )
-                            && createKey( hkey2, "ProxyStubClsid", nKeyAccess, aProxyStubDispInt )
-                            && createKey( hkey2, "ProxyStubClsid32", nKeyAccess, aProxyStubDispInt )
-                            && createKey( hkey2, "TypeLib", nKeyAccess, aTypeLib, "Version", "1.0" )
-                        && ERROR_SUCCESS == RegCloseKey( hkey2 )
-                    && ERROR_SUCCESS == RegCloseKey( hkey1 )
-                && ERROR_SUCCESS == RegCloseKey( hkey ) );
-
-            hkey = hkey1 = hkey2 = hkey3 = hkey4 = nullptr;
-        }
-    }
-
-    for( ind = 0; ind < SUPPORTED_EXT_NUM && aResult; ind++ )
-    {
-        if( nForModes[ind] & nMode )
-        {
-            wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
-            if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey, nullptr )
-              || ERROR_SUCCESS != RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
-                    reinterpret_cast<const BYTE *>(aClassID),
-                    sal::static_int_cast<DWORD>(strlen(aClassID))) )
+            wsprintfA(aSubKey, "%sCLSID\\%s", aPrefix, aClassID);
+            HRegKey hkey;
+            s.upd(RegOpenKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0,
+                                nKeyAccess, &hkey));
+            for (ind = 0; ind < SUPPORTED_EXT_NUM; ind++)
             {
-                    aResult = FALSE;
-            }
-
-            if( hkey )
-            {
-                RegCloseKey(hkey);
-                hkey= nullptr;
+                wsprintfA(aSubKey, "EnableFullPage\\%s", aFileExt[ind]);
+                HRegKey hkey1;
+                s.upd(RegCreateKeyExA(hkey, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE,
+                                      nKeyAccess, nullptr, &hkey1, nullptr));
             }
         }
     }
+    catch (const std::exception&) {}
 
-    wsprintfA( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
-    if ( aResult && ERROR_SUCCESS == RegOpenKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nKeyAccess, &hkey) )
-    {
-           for( ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
-           {
-               wsprintfA( aSubKey, "EnableFullPage\\%s", aFileExt[ind] );
-               if ( ERROR_SUCCESS != RegCreateKeyExA( hkey, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr ) )
-                   aResult = FALSE;
-
-            if ( hkey1 )
-            {
-                RegCloseKey(hkey1);
-                hkey1= nullptr;
-            }
-         }
-    }
-    else
-        aResult = FALSE;
-
-    if ( hkey )
-    {
-        RegCloseKey(hkey);
-        hkey= nullptr;
-    }
-
-    return HRESULT(aResult);
+    return HRESULT_FROM_WIN32(s.get());
 }
 
 EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, const wchar_t* pProgramPath )
@@ -405,22 +468,15 @@ EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllRegisterServerNative( i
 // DllUnregisterServer - Removes entries from the system registry
 static HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
 {
-    HKEY hkey1 = nullptr;
-
     char pSubKeyName[256];
     // first delete the subkeys
-    while( ERROR_SUCCESS == RegOpenKeyExA( hkey, pPath, 0, nKeyAccess, &hkey1)
-        && ERROR_SUCCESS == RegEnumKeyA( hkey1, 0, pSubKeyName, 256 )
-        && ERROR_SUCCESS == DeleteKeyTree( hkey1, pSubKeyName, nKeyAccess ) )
+    while (true)
     {
-        RegCloseKey( hkey1 );
-        hkey1= nullptr;
-    }
-
-    if ( hkey1 )
-    {
-        RegCloseKey( hkey1 );
-        hkey1= nullptr;
+        HRegKey hkey1;
+        if (ERROR_SUCCESS != RegOpenKeyExA(hkey, pPath, 0, nKeyAccess, &hkey1)
+            || ERROR_SUCCESS != RegEnumKeyA(hkey1, 0, pSubKeyName, 256)
+            || ERROR_SUCCESS != DeleteKeyTree(hkey1, pSubKeyName, nKeyAccess))
+            break;
     }
 
     // delete the key itself
@@ -429,94 +485,81 @@ static HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
 
 static HRESULT DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
-    HKEY        hkey = nullptr;
-    BOOL        fErr = FALSE;
     char aSubKey[513];
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
+    Status s(false); // no throw
     for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
     {
         if( nForModes[ind] & nMode )
         {
             DWORD nSubKeys = 0, nValues = 0;
-            wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
-            if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey, nullptr ) )
-                fErr = TRUE;
-            else
+            wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind]);
+            Status s1(false); // no throw
             {
-                if ( ERROR_SUCCESS != RegDeleteValueA( hkey, "CLSID" ) )
-                    fErr = TRUE;
-
-                if ( ERROR_SUCCESS != RegQueryInfoKeyA(  hkey, nullptr, nullptr, nullptr,
-                                                    &nSubKeys, nullptr, nullptr,
-                                                    &nValues, nullptr, nullptr, nullptr, nullptr ) )
+                HRegKey hkey;
+                if (s1.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                           aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                           nullptr, &hkey, nullptr)))
                 {
-                    RegCloseKey( hkey );
-                    hkey = nullptr;
-                    fErr = TRUE;
-                }
-                else
-                {
-                    RegCloseKey( hkey );
-                    hkey = nullptr;
-                    if ( !nSubKeys && !nValues )
-                        DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
+                    s1.upd(RegDeleteValueA(hkey, "CLSID"));
+                    s1.upd(RegQueryInfoKeyA(hkey, nullptr, nullptr, nullptr, &nSubKeys, nullptr,
+                                            nullptr, &nValues, nullptr, nullptr, nullptr, nullptr));
                 }
             }
+            if (s1 && !nSubKeys && !nValues)
+                DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                              nKeyAccess);
+            s.upd(s1.get());
 
-               wsprintfA( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
-               if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey, nullptr ) )
-                fErr = TRUE;
-            else
+            wsprintfA(aSubKey, "%s%s", aPrefix, aFileExt[ind]);
+            Status s2(false); // no throw
             {
-                   if ( ERROR_SUCCESS != RegQueryInfoKeyA(  hkey, nullptr, nullptr, nullptr,
-                                                    &nSubKeys, nullptr, nullptr,
-                                                    &nValues, nullptr, nullptr, nullptr, nullptr ) )
+                HRegKey hkey;
+                if (s2.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                           aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                           nullptr, &hkey, nullptr)))
                 {
-                    RegCloseKey( hkey );
-                    hkey = nullptr;
-                    fErr = TRUE;
-                }
-                else
-                {
-                    RegCloseKey( hkey );
-                    hkey = nullptr;
-                    if ( !nSubKeys && !nValues )
-                        DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
+                    s2.upd(RegQueryInfoKeyA(hkey, nullptr, nullptr, nullptr, &nSubKeys, nullptr,
+                                            nullptr, &nValues, nullptr, nullptr, nullptr, nullptr));
                 }
             }
+            if (s2 && !nSubKeys && !nValues)
+                DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                              nKeyAccess);
+            s.upd(s2.get());
         }
     }
 
-    wsprintfA( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
-    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
-           fErr = TRUE;
+    wsprintfA(aSubKey, "%sCLSID\\%s", aPrefix, aClassID);
+    s.upd(DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                        nKeyAccess));
 
-    wsprintfA( aSubKey, "%sso_activex.SOActiveX", aPrefix );
-    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
-           fErr = TRUE;
+    wsprintfA(aSubKey, "%sso_activex.SOActiveX", aPrefix);
+    s.upd(DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                        nKeyAccess));
 
-    wsprintfA( aSubKey, "%sso_activex.SOActiveX.1", aPrefix );
-    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
-           fErr = TRUE;
+    wsprintfA(aSubKey, "%sso_activex.SOActiveX.1", aPrefix);
+    s.upd(DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                        nKeyAccess));
 
-    wsprintfA( aSubKey, "%s\\TypeLib\\%s", aPrefix, aTypeLib );
-    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
-           fErr = TRUE;
+    wsprintfA(aSubKey, "%s\\TypeLib\\%s", aPrefix, aTypeLib);
+    s.upd(DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                        nKeyAccess));
 
-    wsprintfA( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDWinPeer );
-    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
-           fErr = TRUE;
+    wsprintfA(aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDWinPeer);
+    s.upd(DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                        nKeyAccess));
 
-    wsprintfA( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDDispInt );
-    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
-           fErr = TRUE;
+    wsprintfA(aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDDispInt);
+    s.upd(DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                        nKeyAccess));
 
-    wsprintfA( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDActApprove );
-    if( ERROR_SUCCESS != DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess ) )
-           fErr = TRUE;
+    wsprintfA(aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDActApprove);
+    s.upd(DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                        nKeyAccess));
 
-    return HRESULT(!fErr);
+    return HRESULT_FROM_WIN32(s.get());
 }
 
 STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
@@ -545,10 +588,6 @@ const int nForMSModes[] = { 1, 1, 2, 2, 4, 4, 4 };
 EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
 static HRESULT DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
-    BOOL aResult = TRUE;
-
-    HKEY        hkey = nullptr;
-    HKEY        hkey1 = nullptr;
     char aSubKey[513];
     int         ind;
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
@@ -559,75 +598,60 @@ static HRESULT DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM n
     if ( bForAllUsers )
         DllUnregisterServerDoc( nMode, false, false );
 
-    for( ind = 0; ind < SUPPORTED_MSEXT_NUM && aResult; ind++ )
+    Status s(true); // throw
+    try
     {
-        if( nForMSModes[ind] & nMode )
+        for (ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++)
         {
-               wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMSMimeType[ind] );
-               if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey, nullptr )
-               || ERROR_SUCCESS != RegSetValueExA(hkey, "Extension", 0, REG_SZ,
-                        reinterpret_cast<const BYTE *>(aMSFileExt[ind]),
-                        sal::static_int_cast<DWORD>(strlen(aMSFileExt[ind])))
-               || ERROR_SUCCESS != RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
-                        reinterpret_cast<const BYTE *>(aClassID),
-                        sal::static_int_cast<DWORD>(strlen(aClassID))))
-               {
-                       aResult = FALSE;
-               }
+            if (nForMSModes[ind] & nMode)
+            {
+                {
+                    wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix,
+                              aMSMimeType[ind]);
+                    HRegKey hkey;
+                    s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                          aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                          nullptr, &hkey, nullptr));
+                    s.upd(RegSetValueExA(hkey, "Extension", 0, REG_SZ,
+                                         reinterpret_cast<const BYTE*>(aMSFileExt[ind]),
+                                         sal::static_int_cast<DWORD>(strlen(aMSFileExt[ind]))));
+                    s.upd(RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
+                                         reinterpret_cast<const BYTE*>(aClassID),
+                                         sal::static_int_cast<DWORD>(strlen(aClassID))));
+                }
+                {
+                    wsprintfA(aSubKey, "%s%s", aPrefix, aMSFileExt[ind]);
+                    HRegKey hkey;
+                    s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                          aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                          nullptr, &hkey, nullptr));
+                    s.upd(RegSetValueExA(hkey, "Content Type", 0, REG_SZ,
+                                         reinterpret_cast<const BYTE*>(aMSMimeType[ind]),
+                                         sal::static_int_cast<DWORD>(strlen(aMSMimeType[ind]))));
+                }
+            }
+        }
 
-               if( hkey )
-               {
-                   RegCloseKey(hkey);
-                   hkey= nullptr;
-               }
-
-               wsprintfA( aSubKey, "%s%s", aPrefix, aMSFileExt[ind] );
-               if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey, nullptr )
-               || ERROR_SUCCESS != RegSetValueExA(hkey, "Content Type", 0, REG_SZ,
-                        reinterpret_cast<const BYTE *>(aMSMimeType[ind]),
-                        sal::static_int_cast<DWORD>(strlen(aMSMimeType[ind]))))
-               {
-                       aResult = FALSE;
-               }
-
-               if( hkey )
-               {
-                   RegCloseKey(hkey);
-                   hkey= nullptr;
-               }
+        wsprintfA(aSubKey, "%sCLSID\\%s", aPrefix, aClassID);
+        HRegKey hkey;
+        s.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0,
+                              nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey,
+                              nullptr));
+        s.upd(createKey(hkey, "EnableFullPage", nKeyAccess));
+        for (ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++)
+        {
+            if (nForMSModes[ind] & nMode)
+            {
+                wsprintfA(aSubKey, "EnableFullPage\\%s", aMSFileExt[ind]);
+                HRegKey hkey1;
+                s.upd(RegCreateKeyExA(hkey, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE,
+                                      nKeyAccess, nullptr, &hkey1, nullptr));
+            }
         }
     }
+    catch (const std::exception&) {}
 
-    wsprintfA( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
-    if ( aResult && ERROR_SUCCESS == RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey , nullptr )
-      && createKey( hkey, "EnableFullPage", nKeyAccess ) )
-    {
-           for( ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
-           {
-            if( nForMSModes[ind] & nMode )
-            {
-                   wsprintfA( aSubKey, "EnableFullPage\\%s", aMSFileExt[ind] );
-                   if ( ERROR_SUCCESS != RegCreateKeyExA( hkey, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr ) )
-                       aResult = FALSE;
-
-                   if ( hkey1 )
-                   {
-                       RegCloseKey(hkey1);
-                       hkey1= nullptr;
-                   }
-            }
-           }
-    }
-    else
-        aResult = FALSE;
-
-    if ( hkey )
-    {
-        RegCloseKey(hkey);
-        hkey= nullptr;
-    }
-
-    return HRESULT(aResult);
+    return HRESULT_FROM_WIN32(s.get());
 }
 
 EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllRegisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
@@ -647,73 +671,55 @@ EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllRegisterServerDoc( int 
 
 static HRESULT DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
-    HKEY        hkey = nullptr;
-    BOOL        fErr = FALSE;
     char aSubKey[513];
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
-      for( int ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
-       {
-        if( nForMSModes[ind] & nMode )
+    Status s(false); // no throw
+    for (int ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++)
+    {
+        if (nForMSModes[ind] & nMode)
         {
             DWORD nSubKeys = 0, nValues = 0;
-
-               wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMSMimeType[ind] );
-               if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey, nullptr ) )
-                fErr = TRUE;
-            else
+            Status s1(false); // no throw
             {
-                   if ( ERROR_SUCCESS != RegDeleteValueA( hkey, "Extension" ) )
-                    fErr = TRUE;
-
-                   if ( ERROR_SUCCESS != RegDeleteValueA( hkey, "CLSID" ) )
-                    fErr = TRUE;
-
-                if ( ERROR_SUCCESS != RegQueryInfoKeyA(  hkey, nullptr, nullptr, nullptr,
-                                                         &nSubKeys, nullptr, nullptr,
-                                                         &nValues, nullptr, nullptr, nullptr, nullptr ) )
+                wsprintfA(aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMSMimeType[ind]);
+                HRegKey hkey;
+                if (s1.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                           aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                           nullptr, &hkey, nullptr)))
                 {
-                    RegCloseKey( hkey );
-                    hkey = nullptr;
-                    fErr = TRUE;
-                }
-                else
-                {
-                    RegCloseKey( hkey );
-                    hkey = nullptr;
-                    if ( !nSubKeys && !nValues )
-                        DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
+                    s.upd(RegDeleteValueA(hkey, "Extension"));
+                    s.upd(RegDeleteValueA(hkey, "CLSID"));
+                    s1.upd(RegQueryInfoKeyA(hkey, nullptr, nullptr, nullptr, &nSubKeys, nullptr,
+                                            nullptr, &nValues, nullptr, nullptr, nullptr, nullptr));
                 }
             }
+            if (s1 && !nSubKeys && !nValues)
+                DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                              nKeyAccess);
+            s.upd(s1.get());
 
-               wsprintfA( aSubKey, "%s%s", aPrefix, aMSFileExt[ind] );
-               if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey, nullptr ) )
-                fErr = TRUE;
-            else
+            Status s2(false); // no throw
             {
-                   if ( ERROR_SUCCESS != RegDeleteValueA( hkey, "Content Type" ) )
-                    fErr = TRUE;
-
-                if ( ERROR_SUCCESS != RegQueryInfoKeyA(  hkey, nullptr, nullptr, nullptr,
-                                                         &nSubKeys, nullptr, nullptr,
-                                                         &nValues, nullptr, nullptr, nullptr, nullptr ) )
+                wsprintfA(aSubKey, "%s%s", aPrefix, aMSFileExt[ind]);
+                HRegKey hkey;
+                if (s2.upd(RegCreateKeyExA(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
+                                           aSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess,
+                                           nullptr, &hkey, nullptr)))
                 {
-                    RegCloseKey( hkey );
-                    hkey = nullptr;
-                    fErr = TRUE;
-                }
-                else
-                {
-                    RegCloseKey( hkey );
-                    hkey = nullptr;
-                    if ( !nSubKeys && !nValues )
-                        DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
+                    s.upd(RegDeleteValueA(hkey, "Content Type"));
+                    s2.upd(RegQueryInfoKeyA(hkey, nullptr, nullptr, nullptr, &nSubKeys, nullptr,
+                                            nullptr, &nValues, nullptr, nullptr, nullptr, nullptr));
                 }
             }
+            if (s2 && !nSubKeys && !nValues)
+                DeleteKeyTree(bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey,
+                              nKeyAccess);
+            s.upd(s2.get());
         }
-       }
+    }
 
-    return HRESULT(!fErr);
+    return HRESULT_FROM_WIN32(s.get());
 }
 
 STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
