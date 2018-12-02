@@ -650,7 +650,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         if(nullptr != mpMarkedObj)
         {
             bSingleTextObjMark =
-                mpMarkedObj &&
                 dynamic_cast<const SdrTextObj*>( mpMarkedObj) !=  nullptr &&
                 static_cast<SdrTextObj*>(mpMarkedObj)->IsTextFrame();
 

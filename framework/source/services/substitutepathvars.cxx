@@ -345,7 +345,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
     // Is there something to replace ?
     bool bWorkRetrieved       = false;
     bool bWorkDirURLRetrieved = false;
-    while ( !bSubstitutionCompleted && nDepth < nMaxRecursiveDepth )
+    while (nDepth < nMaxRecursiveDepth)
     {
         while ( ( nPosition != -1 ) && ( nLength > 3 ) ) // "$(" ")"
         {

@@ -173,7 +173,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     if ( !bUpdate || bFrameInPaint )
         return SUCCESS;
 
-    if (bUpdate && pSwGrfNode)
+    if (pSwGrfNode)
     {
         if (!SetGrfFlySize(aGrfSz, pSwGrfNode, aOldSz))
         {
@@ -236,11 +236,8 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                 // the table rows
                 const SwDoc *pDoc = pGrfNd->GetDoc();
                 const SwPosition* pAPos = pFormat->GetAnchor().GetContentAnchor();
-                SwNode *pANd;
                 SwTableNode *pTableNd;
-                if( pAPos &&
-                    nullptr != (pANd = & pAPos->nNode.GetNode()) &&
-                    nullptr != (pTableNd = pANd->FindTableNode()) )
+                if (pAPos && nullptr != (pTableNd = pAPos->nNode.GetNode().FindTableNode()))
                 {
                     const bool bLastGrf = !pTableNd->GetTable().DecGrfsThatResize();
                     SwHTMLTableLayout *pLayout =

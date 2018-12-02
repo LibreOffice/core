@@ -148,7 +148,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
             {
                 // we assume that we have only SdStyleSheets
                 SdStyleSheet* pSdStyle = static_cast< SdStyleSheet* >( pStyle );
-                if( pSdStyle && pSdStyle->GetApiName() == rName)
+                if (pSdStyle->GetApiName() == rName)
                 {
                     pRet = pSdStyle;
                     break;

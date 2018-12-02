@@ -1476,7 +1476,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
             pTEObj->EndTextEdit(*pTEOutliner);
 
-            if( (pTEObj->GetRotateAngle() != 0) || (pTEObj && dynamic_cast<const SdrTextObj*>( pTEObj) !=  nullptr && pTEObj->IsFontwork())  )
+            if ((pTEObj->GetRotateAngle() != 0)
+                || (dynamic_cast<const SdrTextObj*>(pTEObj) != nullptr && pTEObj->IsFontwork()))
             {
                 pTEObj->ActionChanged();
             }
@@ -1492,7 +1493,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             // check deletion of entire TextObj
             std::unique_ptr<SdrUndoAction> pDelUndo;
             bool bDelObj=false;
-            if (pTEObj!=nullptr && bTextEditNewObj)
+            if (bTextEditNewObj)
             {
                 bDelObj=pTEObj->IsTextFrame() &&
                         !pTEObj->HasText() &&
@@ -1702,7 +1703,8 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
         if( pOLV )
         {
             vcl::Window* pWin=pOLV->GetWindow();
-            if (pText!=nullptr && pText->IsTextFrame() && pOLV!=nullptr && pWin!=nullptr) {
+            if (pText != nullptr && pText->IsTextFrame() && pWin != nullptr)
+            {
                 sal_uInt16 nPixSiz=pOLV->GetInvalidateMore();
                 tools::Rectangle aEditArea(aMinTextEditArea);
                 aEditArea.Union(pOLV->GetOutputArea());
