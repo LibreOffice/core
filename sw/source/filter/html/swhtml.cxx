@@ -2473,7 +2473,7 @@ void SwHTMLParser::AddParSpace()
             bool bIsCJK = false;
             bool bIsCTL = false;
 
-            const size_t nCntAttr = (pTextNode  && pTextNode->GetpSwpHints())
+            const size_t nCntAttr = pTextNode->GetpSwpHints()
                             ? pTextNode->GetSwpHints().Count() : 0;
 
             for(size_t i = 0; i < nCntAttr; ++i)
@@ -2893,8 +2893,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 
                 case RES_LR_SPACE:
                     if( pAttrPam->GetPoint()->nNode.GetIndex() ==
-                        pAttrPam->GetMark()->nNode.GetIndex() &&
-                        pCNd )
+                        pAttrPam->GetMark()->nNode.GetIndex())
                     {
                         // because of numbering set this attribute directly at node
                         pCNd->SetAttr( *pAttr->m_pItem );
@@ -4912,7 +4911,7 @@ void SwHTMLParser::InsertSpacer()
     case HTML_SPTYPE_VERT:
         if( nSize > 0 )
         {
-            if( nSize && Application::GetDefaultDevice() )
+            if (Application::GetDefaultDevice())
             {
                 nSize = Application::GetDefaultDevice()
                             ->PixelToLogic( Size(0,nSize),
@@ -4960,7 +4959,7 @@ void SwHTMLParser::InsertSpacer()
             // If the paragraph is still empty, set first line
             // indentation, otherwise apply letter spacing over a space.
 
-            if( nSize && Application::GetDefaultDevice() )
+            if (Application::GetDefaultDevice())
             {
                 nSize = Application::GetDefaultDevice()
                             ->PixelToLogic( Size(nSize,0),

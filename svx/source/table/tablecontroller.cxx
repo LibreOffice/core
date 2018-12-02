@@ -307,7 +307,7 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
         {
             sdr::table::SdrTableObj* pTableObj = mxTableObj.get();
 
-            if( !pWindow || !pTableObj || eHit  == TableHitKind::NONE)
+            if (!pTableObj || eHit == TableHitKind::NONE)
             {
                 mbLeftButtonDown = false;
             }
@@ -1615,7 +1615,7 @@ SvxTableController::TblAction SvxTableController::getKeyboardAction(const KeyEve
             // during text edit, check if we navigate out of the cell
             ESelection aOldSelection = pOLV->GetSelection();
             pOLV->PostKeyEvent(rKEvt);
-            bTextMove = pOLV && (aOldSelection == pOLV->GetSelection());
+            bTextMove = aOldSelection == pOLV->GetSelection();
             if( !bTextMove )
             {
                 nAction = TblAction::NONE;

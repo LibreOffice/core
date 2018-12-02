@@ -226,7 +226,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
         for( size_t n = rLnks.size(); n; )
         {
             const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
-            if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
+            if (OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
                 dynamic_cast<const SwBaseLink*>( pLnk) !=  nullptr &&
                 !static_cast<const SwBaseLink*>(pLnk)->IsNoDataFlag() &&
                 static_cast<const SwBaseLink*>(pLnk)->IsInRange( nSttNd, nEndNd ))

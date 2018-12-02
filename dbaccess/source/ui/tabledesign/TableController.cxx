@@ -296,15 +296,9 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
         // first we need a name for our query so ask the user
         if(bNew)
         {
-            OUString aDefaultName;
-            if (_bSaveAs && !bNew)
-                 aDefaultName = m_sName;
-            else
-            {
-                OUString aName = DBA_RES(STR_TBL_TITLE);
-                aDefaultName = aName.getToken(0,' ');
-                aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
-            }
+            OUString aName = DBA_RES(STR_TBL_TITLE);
+            OUString aDefaultName = aName.getToken(0,' ');
+            aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
 
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
             ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker, SADFlags::NONE );

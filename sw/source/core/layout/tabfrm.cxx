@@ -2434,7 +2434,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     }
 
                     const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || !bEmulateTableKeepFwdMoveAllowed) ) );
-                    if( !bTryToSplit && !bSplitError && nUnSplitted > 0 )
+                    if (!bTryToSplit && !bSplitError)
                     {
                         --nUnSplitted;
                     }
@@ -5197,7 +5197,7 @@ void SwCellFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         }
     }
 
-    if ( ( bAttrSetChg && pNew &&
+    if ( ( bAttrSetChg &&
            SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_PROTECT, false ) ) ||
          ( pNew && RES_PROTECT == pNew->Which()) )
     {
@@ -5206,7 +5206,7 @@ void SwCellFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             pSh->Imp()->InvalidateAccessibleEditableState( true, this );
     }
 
-    if ( bAttrSetChg && pNew &&
+    if ( bAttrSetChg &&
          SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, false, &pItem ) )
     {
         SetDerivedVert( false );
@@ -5214,7 +5214,7 @@ void SwCellFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 
     // #i29550#
-    if ( bAttrSetChg && pNew &&
+    if ( bAttrSetChg &&
          SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_BOX, false, &pItem ) )
     {
         SwFrame* pTmpUpper = GetUpper();
