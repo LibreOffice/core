@@ -438,10 +438,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             PopExternalSingleRef(pToken);
             pMat = GetNewMat( 1, 1, true);
             if (!pMat)
-            {
-                SetError( FormulaError::IllegalArgument);
                 break;
-            }
             if (nGlobalError != FormulaError::NONE)
             {
                 pMat->PutError( nGlobalError, 0, 0);
