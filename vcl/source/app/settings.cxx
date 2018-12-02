@@ -641,8 +641,8 @@ void ImplStyleData::SetStandardStyles()
     maActiveColor               = COL_BLUE;
     maActiveTextColor           = COL_WHITE;
     maActiveBorderColor         = COL_LIGHTGRAY;
-    maDeactiveColor             = COL_GRAY;
-    maDeactiveTextColor         = COL_LIGHTGRAY;
+    maDeactiveColor             = COL_BLACK;
+    maDeactiveTextColor         = COL_BLACK;
     maDeactiveBorderColor       = COL_LIGHTGRAY;
     maMenuColor                 = COL_LIGHTGRAY;
     maMenuBarColor              = COL_LIGHTGRAY;
