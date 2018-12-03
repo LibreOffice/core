@@ -179,6 +179,7 @@ public:
 
     void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);
     void            set_default_response(int nResponse);
+    int             get_default_response();
     vcl::Window*    get_widget_for_response(int nResponse);
 };
 

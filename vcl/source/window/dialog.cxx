@@ -1437,6 +1437,43 @@ vcl::Window* Dialog::get_widget_for_response(int response)
     return nullptr;
 }
 
+int Dialog::get_default_response()
+{
+    //copy explicit responses
+    std::map<VclPtr<vcl::Window>, short> aResponses(mpDialogImpl->maResponses);
+
+    //add implicit responses
+    for (vcl::Window* pChild = mpActionArea->GetWindow(GetWindowType::FirstChild); pChild;
+         pChild = pChild->GetWindow(GetWindowType::Next))
+    {
+        if (aResponses.find(pChild) != aResponses.end())
+            continue;
+        switch (pChild->GetType())
+        {
+            case WindowType::OKBUTTON:
+                aResponses[pChild] = RET_OK;
+                break;
+            case WindowType::CANCELBUTTON:
+                aResponses[pChild] = RET_CANCEL;
+                break;
+            case WindowType::HELPBUTTON:
+                aResponses[pChild] = RET_HELP;
+                break;
+            default:
+                break;
+        }
+    }
+
+    for (auto& a : aResponses)
+    {
+        if (a.first->GetStyle() & WB_DEFBUTTON)
+        {
+            return a.second;
+        }
+    }
+    return RET_CANCEL;
+}
+
 void Dialog::set_default_response(int response)
 {
     //copy explicit responses
