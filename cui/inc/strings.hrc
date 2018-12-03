@@ -352,9 +352,10 @@
 #define RID_SVXSTR_ORDINAL                          NC_("RID_SVXSTR_ORDINAL", "Format ordinal numbers suffixes (1st -> 1^st)")
 #define RID_SVXSTR_DEL_EMPTY_PARA                   NC_("RID_SVXSTR_DEL_EMPTY_PARA", "Remove blank paragraphs")
 #define RID_SVXSTR_USER_STYLE                       NC_("RID_SVXSTR_USER_STYLE", "Replace Custom Styles")
-#define RID_SVXSTR_BULLET                           NC_("RID_SVXSTR_BULLET", "Replace bullets with: ")
-#define RID_SVXSTR_RIGHT_MARGIN                     NC_("RID_SVXSTR_RIGHT_MARGIN", "Combine single line paragraphs if length greater than")
-#define RID_SVXSTR_NUM                              NC_("RID_SVXSTR_NUM", "Bulleted and numbered lists. Bullet symbol: ")
+#define RID_SVXSTR_BULLET                           NC_("RID_SVXSTR_BULLET", "Replace bullets with: %1")
+// To translators: %1 will be replaced with a percentage, e.g. "10%"
+#define RID_SVXSTR_RIGHT_MARGIN                     NC_("RID_SVXSTR_RIGHT_MARGIN", "Combine single line paragraphs if length greater than %1")
+#define RID_SVXSTR_NUM                              NC_("RID_SVXSTR_NUM", "Bulleted and numbered lists. Bullet symbol: %1")
 #define RID_SVXSTR_BORDER                           NC_("RID_SVXSTR_BORDER", "Apply border")
 #define RID_SVXSTR_CREATE_TABLE                     NC_("RID_SVXSTR_CREATE_TABLE", "Create table")
 #define RID_SVXSTR_REPLACE_TEMPLATES                NC_("RID_SVXSTR_REPLACE_TEMPLATES", "Apply Styles")

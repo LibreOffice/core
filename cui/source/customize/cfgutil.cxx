@@ -1454,7 +1454,7 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                             0, static_cast<void *>( theChild.get())));
 
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-                    m_xTreeView->insert(pParentEntry, -1, uiName, &sId, nullptr, nullptr, &aImage, bChildOnDemand);
+                    m_xTreeView->insert(pParentEntry, -1, &uiName, &sId, nullptr, nullptr, &aImage, bChildOnDemand);
                 }
             }
         }
@@ -1524,7 +1524,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                     static_cast<void *>(rootNode.get())));
             OUString aTitle(xImp->m_sDlgMacros);
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-            m_xTreeView->insert(nullptr, -1, aTitle, &sId, nullptr, nullptr, nullptr, true);
+            m_xTreeView->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, nullptr, true);
         }
         else
         {
@@ -1540,7 +1540,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
         OUString sStyle(xImp->m_aStrGroupStyles);
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-        m_xTreeView->insert(nullptr, -1, sStyle, &sId, nullptr, nullptr, nullptr, true);
+        m_xTreeView->insert(nullptr, -1, &sStyle, &sId, nullptr, nullptr, nullptr, true);
     }
 
     m_xTreeView->thaw();
@@ -1832,7 +1832,7 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, weld::TreeIter&, rIter, bool)
                     SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(lStyleFamily);
                     aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
-                    m_xTreeView->insert(&rIter, -1, pFamily->sLabel, &sId, nullptr, nullptr, nullptr, false);
+                    m_xTreeView->insert(&rIter, -1, &pFamily->sLabel, &sId, nullptr, nullptr, nullptr, false);
                 }
             }
             break;
