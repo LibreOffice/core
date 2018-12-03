@@ -28,13 +28,13 @@ $(eval $(call gb_Library_add_package_headers,cppuhelper,cppuhelper_inc))
 $(eval $(call gb_Library_add_precompiled_header,cppuhelper,$(SRCDIR)/formula/inc/pch/precompiled_cppuhelper))
 
 ifeq ($(COMNAME),msci)
-$(eval $(call gb_Library_set_versionmap,cppuhelper,$(SRCDIR)/cppuhelper/source/msvc_win32_intel.map))
+else ifeq ($(COMNAME),mscx)
 else ifeq ($(COMNAME),sunpro5)
 $(eval $(call gb_Library_set_versionmap,cppuhelper,$(SRCDIR)/cppuhelper/source/cc5_solaris_sparc.map))
 else ifeq ($(GUI)$(COMNAME),OS2gcc3)
 $(eval $(call gb_Library_set_versionmap,cppuhelper,$(SRCDIR)/cppuhelper/source/gcc3os2.map))
 else
-#$(eval $(call gb_Library_set_versionmap,cppuhelper,$(SRCDIR)/cppuhelper/source/gcc3.map))
+$(eval $(call gb_Library_set_versionmap,cppuhelper,$(SRCDIR)/cppuhelper/source/gcc3.map))
 endif
 
 
@@ -43,14 +43,6 @@ $(eval $(call gb_Library_set_include,cppuhelper,\
 	-I$(SRCDIR)/cppuhelper/inc \
 	-I$(SRCDIR)/cppuhelper/inc/pch \
 	-I$(OUTDIR)/inc \
-))
-
-#        cppuhelper/private_types \
-
-#	offapi \
-
-$(eval $(call gb_Library_add_api,cppuhelper, \
- 	udkapi \
 ))
 
 $(eval $(call gb_Library_set_private_api,cppuhelper,$(OUTDIR)/bin/types.rdb,\

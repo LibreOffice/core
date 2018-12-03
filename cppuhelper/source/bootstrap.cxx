@@ -48,7 +48,7 @@
 #include "cppuhelper/access_control.hxx"
 #include "cppuhelper/findsofficepath.h"
 
-#include <cppuhelper/com/sun/star/container/XElementAccess.hpp>
+#include "com/sun/star/container/XElementAccess.hpp"
 
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
