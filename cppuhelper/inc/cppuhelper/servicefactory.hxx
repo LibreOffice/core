@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
+#include "cppuhelper/cppuhelperdllapi.h"
 
 namespace cppu
 {
@@ -56,6 +57,7 @@ namespace cppu
     path.
     @deprecated
 */
+CPPUHELPER_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL
 createRegistryServiceFactory(
     const ::rtl::OUString & rWriteRegistryFile,
