@@ -170,7 +170,7 @@ namespace cairocanvas
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
-        // TODO(P1): Might be worthwile to track areas of background
+        // TODO(P1): Might be worthwhile to track areas of background
         // changes, too.
         if( !bUpdateAll && !io_bSurfaceDirty && !mbCompositingSurfaceDirty )
         {
