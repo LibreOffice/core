@@ -318,7 +318,8 @@ static const struct {
     { "ar_QA",  lcl_DATA_OTHERS },
     { "ar_SY",  lcl_DATA_OTHERS },
     { "ar_YE",  lcl_DATA_OTHERS },
-    { "ilo_PH", lcl_DATA_OTHERS }
+    { "ilo_PH", lcl_DATA_OTHERS },
+    { "ha_Latn_NG",  lcl_DATA_OTHERS }
 };
 
 #else
