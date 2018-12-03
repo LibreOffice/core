@@ -2232,7 +2232,7 @@ void MessageDialog::create_message_area()
         assert(pButtonBox);
 
         VclPtr<PushButton> pBtn;
-        short nDefaultResponse = RET_CANCEL;
+        short nDefaultResponse = get_default_response();
         switch (m_eButtonsType)
         {
             case VclButtonsType::NONE:
