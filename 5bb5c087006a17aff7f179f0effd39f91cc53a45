@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5f4e5783_08d04750",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-03T12:00:14Z",
+      "side": 1,
+      "message": "But how shall those CppunitTests which \"declare they need real windows\" work if SAL_USE_VCLPLUGIN\u003dsvp is now added to gb_TEST_ENV_VARS in solenv/gbuild/gbuild.mk?",
+      "parentUuid": "9f5c4f37_569ffab3",
+      "revId": "5bb5c087006a17aff7f179f0effd39f91cc53a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf57530f_7d4c1b76",
         "filename": "solenv/gbuild/gbuild.mk",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "While hacking on the OSX backend I found that\u0027s not to be true. I removed the  VCL_HIDE_WINDOWS environment variable, which acted on Windows and OSX like an SVP plugin behaviour, without having an SVP plugin..\n\nOn OSX I\u0027m working on an additional patch to implement SVP / bitmap rendering in software using the new interface defined in the other patch, where I added you as a reviewer, which was thought more of a FYI, then a real review request.\n\nI tried running a JunitTest via SSH on OSX, which failed due to a blocked event processing function deep in some system code. This still happend after I dropped NSWindow usage. So I found that the SVP plugin wasn\u0027t set and probably I missed the place it should be set. I tested Linux, which runs JunitTest correctly with SVP and so do the other platforms AFAIK",
       "parentUuid": "bf57530f_7d4c1b76",
+      "revId": "5bb5c087006a17aff7f179f0effd39f91cc53a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_e8c4cb94",
+        "filename": "solenv/gbuild/gbuild.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-03T12:00:14Z",
+      "side": 1,
+      "message": "So setting SAL_USE_VCLPLUGIN\u003dsvp individually in solenv/gbuild/{Cppunit,Junit,Python,UI}Test.mk shall be removed?  (And if yes, why doesn\u0027t this change do that?)",
+      "parentUuid": "9f5c4f37_16a982de",
       "revId": "5bb5c087006a17aff7f179f0effd39f91cc53a45",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
