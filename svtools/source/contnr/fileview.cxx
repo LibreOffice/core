@@ -394,7 +394,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
 
     long aTabPositions[] = { 20, 180, 320, 400, 600 };
     SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions, MapUnit::MapPixel);
-    SetTabJustify(2, AdjustRight); // column "Size"
+    SetTabJustify(2, SvTabJustify::AdjustRight); // column "Size"
 
     mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
     if (nFlags & FileViewFlags::SHOW_TYPE)

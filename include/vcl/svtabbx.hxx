@@ -26,7 +26,7 @@
 #include <memory>
 #include <vector>
 
-enum SvTabJustify
+enum class SvTabJustify
 {
     AdjustRight = static_cast<int>(SvLBoxTabFlags::ADJUST_RIGHT),
     AdjustLeft = static_cast<int>(SvLBoxTabFlags::ADJUST_LEFT),
