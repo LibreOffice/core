@@ -56,6 +56,8 @@ class Qt5Widget : public QWidget
     virtual void wheelEvent(QWheelEvent*) override;
     virtual void closeEvent(QCloseEvent*) override;
 
+    const QString m_InternalMimeType = "application/x-libreoffice-dnditem";
+
 public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
     Qt5Frame* m_pFrame;
