@@ -320,33 +320,8 @@ class OfaQuoteTabPage : public SfxTabPage
     using TabPage::ActivatePage;
 
 private:
-    /// For anything but writer
-    VclPtr<SvxCheckListBox> m_pCheckLB;
-
-    /// Just for writer
-    VclPtr<OfaACorrCheckListBox>   m_pSwCheckLB;
-
     OUString        sNonBrkSpace;
     OUString        sOrdinal;
-
-    std::unique_ptr<SvLBoxButtonData> m_xCheckButtonData;
-
-    VclPtr<CheckBox>   m_pSingleTypoCB;
-    VclPtr<PushButton> m_pSglStartQuotePB;
-    VclPtr<FixedText>  m_pSglStartExFT;
-    VclPtr<PushButton> m_pSglEndQuotePB;
-    VclPtr<FixedText>  m_pSglEndExFT;
-    VclPtr<PushButton> m_pSglStandardPB;
-
-    VclPtr<CheckBox>   m_pDoubleTypoCB;
-    VclPtr<PushButton> m_pDblStartQuotePB;
-    VclPtr<FixedText>  m_pDblStartExFT;
-    VclPtr<PushButton> m_pDblEndQuotePB;
-    VclPtr<FixedText>  m_pDblEndExFT;
-    VclPtr<PushButton> m_pDblStandardPB;
-
-    OUString    m_sStandard;
-
 
     sal_UCS4    cSglStartQuote;
     sal_UCS4    cSglEndQuote;
@@ -354,20 +329,39 @@ private:
     sal_UCS4    cStartQuote;
     sal_UCS4    cEndQuote;
 
-    DECL_LINK( QuoteHdl, Button*, void );
-    DECL_LINK( StdQuoteHdl, Button*, void );
+    std::unique_ptr<weld::CheckButton> m_xSingleTypoCB;
+    std::unique_ptr<weld::Button> m_xSglStartQuotePB;
+    std::unique_ptr<weld::Label> m_xSglStartExFT;
+    std::unique_ptr<weld::Button> m_xSglEndQuotePB;
+    std::unique_ptr<weld::Label> m_xSglEndExFT;
+    std::unique_ptr<weld::Button> m_xSglStandardPB;
+    std::unique_ptr<weld::CheckButton> m_xDoubleTypoCB;
+    std::unique_ptr<weld::Button> m_xDblStartQuotePB;
+    std::unique_ptr<weld::Label> m_xDblStartExFT;
+    std::unique_ptr<weld::Button> m_xDblEndQuotePB;
+    std::unique_ptr<weld::Label> m_xDblEndExFT;
+    std::unique_ptr<weld::Button> m_xDblStandardPB;
+    std::unique_ptr<weld::Label> m_xStandard;
+    /// For anything but writer
+    std::unique_ptr<weld::TreeView> m_xCheckLB;
+    /// Just for writer
+    std::unique_ptr<weld::TreeView> m_xSwCheckLB;
+
+
+    DECL_LINK(QuoteHdl, weld::Button&, void);
+    DECL_LINK(StdQuoteHdl, weld::Button&, void);
 
     OUString            ChangeStringExt_Impl( sal_UCS4 );
 
-    SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
+    static void CreateEntry(weld::TreeView& rLstBox, const OUString& rTxt,
+                            sal_uInt16 nCol, sal_uInt16 nTextCol);
 
-                        OfaQuoteTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    OfaQuoteTabPage(TabPageParent pParent, const SfxItemSet& rSet);
 public:
-                        virtual ~OfaQuoteTabPage() override;
-    virtual void        dispose() override;
+    virtual ~OfaQuoteTabPage() override;
 
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
-                                const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent,
+                                     const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
