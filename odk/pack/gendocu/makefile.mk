@@ -66,6 +66,7 @@ JAVA_BEAN_SRC_FILES=\
 
 AUTODOCPARAMS=\
         -ignoredefine CPPUHELPER_DLLPUBLIC \
+        -ignoredefine SAL_DLLPUBLIC_EXPORT \
         -lg c++ \
         -p sal $(INCOUT) -t sal -t osl -t rtl \
         -p store $(INCOUT) -t store \
