@@ -187,8 +187,9 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
 
 void Qt5Widget::startDrag()
 {
+    // internal drag source
     QMimeData* mimeData = new QMimeData;
-    mimeData->setData("application/x-libreoffice-dnditem", nullptr);
+    mimeData->setData(m_InternalMimeType, nullptr);
 
     QDrag* drag = new QDrag(this);
     drag->setMimeData(mimeData);
@@ -197,8 +198,9 @@ void Qt5Widget::startDrag()
 
 void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (event->source() == this)
+    if (event->mimeData()->hasFormat(m_InternalMimeType))
         event->accept();
+    // else FIXME: external drag source
 }
 
 void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
