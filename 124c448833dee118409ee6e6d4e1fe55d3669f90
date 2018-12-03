@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_082607b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-03T09:59:02Z",
+      "side": 1,
+      "message": "Presumably this is meant to fix tdf#98253, please mention it here",
+      "revId": "124c448833dee118409ee6e6d4e1fe55d3669f90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a83493df",
+        "filename": "vcl/source/app/settings.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-03T09:59:02Z",
+      "side": 1,
+      "message": "This isn\u0027t quite right place for a fix. It is only kde[45] frontend that behaves buggy (b/c it re-defines maDeactiveColor) so the fix has to go to vcl/qt5 or vcl/unx/kde[45] code. \n\nChanging generic vcl code like this has a potential to break things on non-unx platforms",
+      "revId": "124c448833dee118409ee6e6d4e1fe55d3669f90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
