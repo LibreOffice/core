@@ -812,18 +812,18 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
         ::SfxToSwPageDescAttr( *m_pWrtShell, aSrchSet );
     }
 
-    SfxItemSet* pReplSet = nullptr;
+    std::unique_ptr<SfxItemSet> pReplSet;
     if( bDoReplace && m_pReplList && m_pReplList->Count() )
     {
-        pReplSet = new SfxItemSet( m_pWrtShell->GetAttrPool(),
-                                        aSearchAttrRange );
+        pReplSet.reset( new SfxItemSet( m_pWrtShell->GetAttrPool(),
+                                        aSearchAttrRange ) );
         m_pReplList->Get( *pReplSet );
 
         // -- Page break with page template
         ::SfxToSwPageDescAttr( *m_pWrtShell, *pReplSet );
 
         if( !pReplSet->Count() )        // too bad, we don't know
-            DELETEZ( pReplSet );        // the attributes
+            pReplSet.reset();        // the attributes
     }
 
     // build SearchOptions to be used
@@ -843,7 +843,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
             rOptions.eEnd,
             eRanges,
             !m_pSrchItem->GetSearchString().isEmpty() ? &aSearchOpt : nullptr,
-            pReplSet );
+            pReplSet.get() );
     }
     else if( m_pSrchItem->GetPattern() )
     {
