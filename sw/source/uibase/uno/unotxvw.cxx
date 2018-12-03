@@ -1392,7 +1392,10 @@ OUString SwXTextViewCursor::getString()
     if(m_pView)
     {
         if (!IsTextSelection( false ))
-            throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
+        {
+            SAL_WARN("sw.uno", "no text selection in getString() " << static_cast<cppu::OWeakObject*>(this));
+            return uRet;
+        }
 
         ShellMode eSelMode = m_pView->GetShellMode();
         switch(eSelMode)

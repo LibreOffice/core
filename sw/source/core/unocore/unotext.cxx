@@ -906,9 +906,8 @@ OUString SAL_CALL SwXText::getString()
     const uno::Reference< text::XTextCursor > xRet = CreateCursor();
     if(!xRet.is())
     {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = cInvalidObject;
-        throw aRuntime;
+        SAL_WARN("sw.uno", "cursor was not created in getString() call. Returning empty string.");
+        return OUString();
     }
     xRet->gotoEnd(true);
     return xRet->getString();
