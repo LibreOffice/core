@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>

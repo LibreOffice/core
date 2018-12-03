@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <unotools/fontcvt.hxx>

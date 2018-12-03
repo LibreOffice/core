@@ -26,6 +26,8 @@
 #include <vcl/svapp.hxx>
 #include <sal/macros.h>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 #define DEFAULT_DRAGMODE    DragMode::SystemDep
 #define DEFAULT_SNAPMODE    SnapType::ToButton
 #if defined UNX

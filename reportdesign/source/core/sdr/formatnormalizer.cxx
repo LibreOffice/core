@@ -29,6 +29,7 @@
 #include <connectivity/statementcomposer.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
+#include <i18nlangtag/languagetag.hxx>
 
 
 namespace rptui

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_SPINFLD_HXX
 #define INCLUDED_VCL_SPINFLD_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
 #include <vcl/timer.hxx>

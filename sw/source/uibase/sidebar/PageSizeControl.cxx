@@ -26,6 +26,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
 
+#include <unotools/localedatawrapper.hxx>
 #include <rtl/character.hxx>
 #include <editeng/paperinf.hxx>
 #include <sfx2/bindings.hxx>

@@ -26,6 +26,7 @@
 #include <config_features.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/helpers.hxx>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
 #endif

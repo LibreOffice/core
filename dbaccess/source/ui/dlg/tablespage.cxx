@@ -25,6 +25,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <stringlistitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

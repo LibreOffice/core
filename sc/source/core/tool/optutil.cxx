@@ -18,11 +18,11 @@
  */
 
 #include <vcl/svapp.hxx>
-
 #include <optutil.hxx>
 #include <global.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 bool ScOptionsUtil::IsMetricSystem()
 {

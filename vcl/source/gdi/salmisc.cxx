@@ -19,10 +19,12 @@
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/salbtype.hxx>
+#include <vcl/salgtype.hxx>
 #include <bmpfast.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/helpers.hxx>
 #include <memory>
 
 #define IMPL_CASE_GET_FORMAT( Format )                          \

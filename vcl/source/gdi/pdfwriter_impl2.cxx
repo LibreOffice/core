@@ -30,6 +30,7 @@
 
 #include <unotools/streamwrap.hxx>
 
+#include <tools/helpers.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 
