@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_cbd8e980",
+        "filename": "vcl/unx/gtk3_kde5/gtk3_kde5_filepicker_ipc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-03T19:39:02Z",
+      "side": 1,
+      "message": "If I read http://man7.org/linux/man-pages/man7/pipe.7.html correctly the ::Quit is not needed. Just close the pipe and the other process will read eof(). As I understand the manpage, the reading process will instantly get eof(), but in any way the Quit() is superfluous.\n\nClosing the pipe before trying to join is definitely the way to go.",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 32
+      },
+      "revId": "e87c56f1db2118d04b605a2c5f88b464c351109d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_6bd1f557",
+        "filename": "vcl/unx/gtk3_kde5/kde5_filepicker_ipc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-03T19:39:02Z",
+      "side": 1,
+      "message": "This check should go before readCommand. AFAIK the result of the read is undefined, if the pipe is closed and the result of eof() is instantly true. But please verify this, as this is just the gist of how I understood the stackexchange and c++ reference texts.",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 27
+      },
+      "revId": "e87c56f1db2118d04b605a2c5f88b464c351109d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
