@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <vcl/svtaccessiblefactory.hxx>
+#include <vcl/accessiblefactory.hxx>
 
 #include <tools/svlibrary.h>
 

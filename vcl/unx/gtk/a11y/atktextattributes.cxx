@@ -36,6 +36,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 

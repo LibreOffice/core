@@ -28,6 +28,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace frm;
 using namespace ::com::sun::star::uno;

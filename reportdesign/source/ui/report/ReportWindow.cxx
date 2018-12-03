@@ -26,6 +26,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #include <vcl/settings.hxx>
 

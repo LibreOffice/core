@@ -37,6 +37,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #define ACCESSIBLE_ACTION_COUNT     1
 

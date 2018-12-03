@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <tools/stream.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
 

@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/wrkwin.hxx>

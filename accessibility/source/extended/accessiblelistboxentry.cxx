@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/settings.hxx>

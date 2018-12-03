@@ -24,6 +24,7 @@
 
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/character.hxx>
 

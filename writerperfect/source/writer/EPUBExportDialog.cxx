@@ -17,6 +17,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sax/tools/converter.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include "EPUBExportFilter.hxx"
 

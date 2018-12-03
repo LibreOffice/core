@@ -24,6 +24,7 @@
 
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/task.hxx>

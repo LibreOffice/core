@@ -22,6 +22,7 @@
 #include "richtextengine.hxx"
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
