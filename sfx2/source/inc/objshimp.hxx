@@ -101,7 +101,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     SfxLoadedFlags      nFlagsInProgress;
     bool                bModalMode;
     bool                bRunningMacro;
-    SfxObjectShellFlags eFlags;
     bool                bReadOnlyUI;
     tools::SvRef<SvRefBase>  xHeaderAttributes;
     ::rtl::Reference< SfxBaseModel >

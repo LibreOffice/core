@@ -77,11 +77,9 @@ SfxFilterContainer* SfxObjectFactory::GetFilterContainer() const
 SfxObjectFactory::SfxObjectFactory
 (
     const SvGlobalName&     rName,
-    SfxObjectShellFlags     nFlagsP,
     const OUString&         sName
 ) :    m_sFactoryName( sName ),
-       pImpl( new SfxObjectFactory_Impl ),
-       nFlags( nFlagsP )
+       pImpl( new SfxObjectFactory_Impl )
 {
     pImpl->pFilterContainer = new SfxFilterContainer( m_sFactoryName );
     pImpl->aClassName = rName;

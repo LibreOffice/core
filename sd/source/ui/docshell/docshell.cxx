@@ -94,7 +94,6 @@ namespace sd {
 SFX_IMPL_OBJECTFACTORY(
     DrawDocShell,
     SvGlobalName(SO3_SIMPRESS_CLASSID),
-    SfxObjectShellFlags::STD_NORMAL,
     "simpress" )
 
 void DrawDocShell::Construct( bool bClipboard )

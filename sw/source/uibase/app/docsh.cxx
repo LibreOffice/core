@@ -145,7 +145,7 @@ void SwDocShell::InitInterface_Impl()
 }
 
 
-SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SfxObjectShellFlags::STD_NORMAL|SfxObjectShellFlags::HASMENU, "swriter"  )
+SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), "swriter"  )
 
 bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
         uno::Reference<text::XTextRange> const& xInsertPosition)

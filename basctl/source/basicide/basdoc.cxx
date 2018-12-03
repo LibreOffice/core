@@ -38,7 +38,7 @@ namespace basctl
 {
 
 
-SFX_IMPL_OBJECTFACTORY( DocShell, SvGlobalName(), SfxObjectShellFlags::STD_NORMAL, "sbasic" )
+SFX_IMPL_OBJECTFACTORY( DocShell, SvGlobalName(), "sbasic" )
 
 SFX_IMPL_SUPERCLASS_INTERFACE(basctl_DocShell, SfxObjectShell)
 

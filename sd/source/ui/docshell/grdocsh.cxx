@@ -46,7 +46,7 @@ void GraphicDocShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
 }
 
-SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SfxObjectShellFlags::STD_NORMAL, "sdraw" )
+SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), "sdraw" )
 
 GraphicDocShell::GraphicDocShell(SfxObjectCreateMode eMode) :
     DrawDocShell(eMode, /*bDataObject*/true, DocumentType::Draw)
