@@ -444,7 +444,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 aSet.Put( *static_cast<const SfxBoolItem*>(pOpenSmartTagOptionsItem) );
 
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            VclPtr<SfxAbstractTabDialog> pDlg = pFact->CreateAutoCorrTabDialog(&GetView()->GetViewFrame()->GetWindow(), &aSet);
+            VclPtr<SfxAbstractTabDialog> pDlg = pFact->CreateAutoCorrTabDialog(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(), &aSet);
             pDlg->Execute();
             pDlg.disposeAndClear();
 
