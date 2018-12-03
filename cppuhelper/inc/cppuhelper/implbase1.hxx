@@ -88,7 +88,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1 >
-    class SAL_NO_VTABLE WeakImplHelper1
+    class SAL_DLLPUBLIC_EXPORT SAL_NO_VTABLE WeakImplHelper1
         : public OWeakObject
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1
