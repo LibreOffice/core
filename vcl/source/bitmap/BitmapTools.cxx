@@ -1058,34 +1058,32 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
     lookup_table get_unpremultiply_table()
     {
-        static bool inited;
-        static sal_uInt8 unpremultiply_table[256][256];
+        static lookup_table unpremultiply_table_ptr = []() {
+            static sal_uInt8 unpremultiply_table[256][256];
 
-        if (!inited)
-        {
             for (int a = 0; a < 256; ++a)
                 for (int c = 0; c < 256; ++c)
                     unpremultiply_table[a][c] = unpremultiply(c, a);
-            inited = true;
-        }
 
-        return unpremultiply_table;
+            return unpremultiply_table;
+        }();
+
+        return unpremultiply_table_ptr;
     }
 
     lookup_table get_premultiply_table()
     {
-        static bool inited;
-        static sal_uInt8 premultiply_table[256][256];
+        static lookup_table premultiply_table_ptr = []() {
+            static sal_uInt8 premultiply_table[256][256];
 
-        if (!inited)
-        {
             for (int a = 0; a < 256; ++a)
                 for (int c = 0; c < 256; ++c)
                     premultiply_table[a][c] = premultiply(c, a);
-            inited = true;
-        }
 
-        return premultiply_table;
+            return premultiply_table;
+        }();
+
+        return premultiply_table_ptr;
     }
 
 
