@@ -107,11 +107,13 @@ core_constructor_list = [
 # comphelper/util/comphelp.component
     "com_sun_star_comp_MemoryStream",
     "com_sun_star_comp_task_OfficeRestartManager",
+    "AnyCompareFactory_get_implementation",
     "IndexedPropertyValuesContainer_get_implementation",
     "NamedPropertyValuesContainer_get_implementation",
     "com_sun_star_comp_comphelper_OPropertyBag",
     "com_sun_star_comp_SequenceInputStreamService",
     "com_sun_star_comp_SequenceOutputStreamService",
+    "com_sun_star_comp_util_OfficeInstallationDirectories",
 # dbaccess/util/dba.component
     ("com_sun_star_comp_dba_ORowSet_get_implementation", "#if HAVE_FEATURE_DBCONNECTIVITY"),
 # forms/util/frm.component
