@@ -373,8 +373,8 @@ public:
 
 class SwTableField : public SwValueField, public SwTableFormula
 {
-    OUString      sExpand;
-    sal_uInt16      nSubType;
+    OUString      m_sExpand;
+    sal_uInt16      m_nSubType;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -392,7 +392,7 @@ public:
     virtual sal_uInt16  GetSubType() const override;
     virtual void        SetSubType(sal_uInt16 nType) override;
 
-    void                ChgExpStr(const OUString& rStr) { sExpand = rStr; }
+    void                ChgExpStr(const OUString& rStr) { m_sExpand = rStr; }
 
     void                CalcField( SwTableCalcPara& rCalcPara );
 
