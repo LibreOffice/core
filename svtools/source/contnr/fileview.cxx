@@ -74,6 +74,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/dialog.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>

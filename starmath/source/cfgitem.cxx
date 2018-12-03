@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <officecfg/Office/Math.hxx>
 #include "cfgitem.hxx"

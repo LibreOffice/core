@@ -26,6 +26,7 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>

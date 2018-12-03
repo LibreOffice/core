@@ -26,6 +26,7 @@
 #include <TableRow.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 #include <vcl/settings.hxx>
 #include <UITools.hxx>

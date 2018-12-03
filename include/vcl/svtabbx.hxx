@@ -115,7 +115,6 @@ inline long SvTabListBox::GetTab( sal_uInt16 nTab ) const
 
 class HeaderBar;
 namespace vcl {
-    class IAccessibleTabListBox;
     struct SvHeaderTabListBoxImpl;
 }
 

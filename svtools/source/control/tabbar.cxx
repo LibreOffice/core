@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
+#include <vcl/accessiblefactory.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
 #include <limits>

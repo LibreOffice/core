@@ -128,6 +128,7 @@
 #include <svtools/cliplistener.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #include <osl/mutex.hxx>
 #include <PropertyForward.hxx>

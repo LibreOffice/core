@@ -22,8 +22,6 @@
 
 #include <vcl/dllapi.h>
 
-namespace vcl { class Window; }
-
 
 class VCL_DLLPUBLIC Sound
 {

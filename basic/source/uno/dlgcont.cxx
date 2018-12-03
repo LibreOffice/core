@@ -46,6 +46,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace basic
 {

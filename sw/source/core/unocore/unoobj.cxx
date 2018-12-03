@@ -92,6 +92,7 @@
 #include <fmthdft.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <fmtflcnt.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/unolingu.hxx>

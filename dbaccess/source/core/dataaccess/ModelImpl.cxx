@@ -55,6 +55,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <unotools/configmgr.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <algorithm>
 
