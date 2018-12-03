@@ -410,7 +410,7 @@ protected:
     bool signal_expanding(TreeIter& rIter) { return m_aExpandingHdl.Call(rIter); }
 
 public:
-    virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rStr, const OUString* pId,
+    virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
                         const OUString* pExpanderName, bool bChildrenOnDemand)
         = 0;
@@ -420,32 +420,32 @@ public:
     void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName,
                 VirtualDevice* pImageSurface)
     {
-        insert(nullptr, pos, rStr, pId, pIconName, pImageSurface, nullptr, false);
+        insert(nullptr, pos, &rStr, pId, pIconName, pImageSurface, nullptr, false);
     }
     void insert_text(int pos, const OUString& rStr)
     {
-        insert(nullptr, pos, rStr, nullptr, nullptr, nullptr, nullptr, false);
+        insert(nullptr, pos, &rStr, nullptr, nullptr, nullptr, nullptr, false);
     }
     void append_text(const OUString& rStr)
     {
-        insert(nullptr, -1, rStr, nullptr, nullptr, nullptr, nullptr, false);
+        insert(nullptr, -1, &rStr, nullptr, nullptr, nullptr, nullptr, false);
     }
     void append(const OUString& rId, const OUString& rStr)
     {
-        insert(nullptr, -1, rStr, &rId, nullptr, nullptr, nullptr, false);
+        insert(nullptr, -1, &rStr, &rId, nullptr, nullptr, nullptr, false);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(nullptr, -1, rStr, &rId, &rImage, nullptr, nullptr, false);
+        insert(nullptr, -1, &rStr, &rId, &rImage, nullptr, nullptr, false);
     }
     void append(weld::TreeIter* pParent, const OUString& rId, const OUString& rStr,
                 const OUString& rImage)
     {
-        insert(pParent, -1, rStr, &rId, &rImage, nullptr, nullptr, false);
+        insert(pParent, -1, &rStr, &rId, &rImage, nullptr, nullptr, false);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(nullptr, -1, rStr, &rId, nullptr, &rImage, nullptr, false);
+        insert(nullptr, -1, &rStr, &rId, nullptr, &rImage, nullptr, false);
     }
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
@@ -456,6 +456,11 @@ public:
     virtual void select(int pos) = 0;
     virtual void unselect(int pos) = 0;
     virtual void remove(int pos) = 0;
+    virtual OUString get_text(int row, int col = -1) const = 0;
+    virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
+    virtual void set_id(int row, const OUString& rId) = 0;
+    virtual void set_toggle(int row, bool bOn, int col = -1) = 0;
+    virtual bool get_toggle(int row, int col = -1) const = 0;
     virtual void set_top_entry(int pos) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
@@ -463,8 +468,6 @@ public:
     virtual void set_cursor(int pos) = 0;
 
     //by text
-    virtual OUString get_text(int row, int col = -1) const = 0;
-    virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
     virtual int find_text(const OUString& rText) const = 0;
     OUString get_selected_text() const
     {

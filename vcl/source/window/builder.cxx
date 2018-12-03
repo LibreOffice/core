@@ -1111,6 +1111,18 @@ namespace
         return sTooltipText;
     }
 
+    float extractAlignment(VclBuilder::stringmap &rMap)
+    {
+        float f = 0.0;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("alignment"));
+        if (aFind != rMap.end())
+        {
+            f = aFind->second.toFloat();
+            rMap.erase(aFind);
+        }
+        return f;
+    }
+
     OUString extractTitle(VclBuilder::stringmap &rMap)
     {
         OUString sTitle;
@@ -1966,8 +1978,16 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             if (HeaderBar* pHeaderBar = pTreeView ? pTreeView->GetHeaderBar() : nullptr)
             {
                 OUString sTitle(extractTitle(rMap));
+                HeaderBarItemBits nBits = (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::CLICKABLE);
+                float fAlign = extractAlignment(rMap);
+                if (fAlign == 0.0)
+                    nBits |= HeaderBarItemBits::LEFT;
+                else if (fAlign == 1.0)
+                    nBits |= HeaderBarItemBits::RIGHT;
+                else if (fAlign == 0.5)
+                    nBits |= HeaderBarItemBits::CENTER;
                 auto nItemId = pHeaderBar->GetItemCount() + 1;
-                pHeaderBar->InsertItem(nItemId, sTitle, 100);
+                pHeaderBar->InsertItem(nItemId, sTitle, 100, nBits);
             }
         }
     }
