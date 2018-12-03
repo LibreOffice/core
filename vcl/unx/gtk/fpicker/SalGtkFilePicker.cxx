@@ -901,6 +901,10 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
 
     SetFilters();
 
+    // tdf#84431 - set the filter after the corresponding widget is created
+    if ( !m_aCurrentFilter.isEmpty() )
+        SetCurFilter(m_aCurrentFilter);
+
     mnHID_FolderChange =
         g_signal_connect( GTK_FILE_CHOOSER( m_pDialog ), "current-folder-changed",
             G_CALLBACK( folder_changed_cb ), static_cast<gpointer>(this) );
