@@ -42,6 +42,7 @@ $(eval $(call gb_Library_add_api,scui,\
 $(eval $(call gb_Library_add_linked_libs,scui,\
 	comphelper \
 	cppu \
+	cppuhelper \
 	editeng \
 	for \
 	forui \
