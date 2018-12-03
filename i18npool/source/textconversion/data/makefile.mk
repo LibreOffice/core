@@ -32,6 +32,7 @@ LIBTARGET=NO
 .IF  "$(COMEX)" != "8"
 CDEFS+=-Zm300
 .ENDIF
+SHL1STDLIBS+= $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ENDIF
 
 # --- Files --------------------------------------------------------
