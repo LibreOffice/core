@@ -30,6 +30,7 @@
 #include <tools/helpers.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <sax/tools/converter.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <memory>
 

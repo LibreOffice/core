@@ -26,6 +26,7 @@
 #include <tools/stream.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/syslocale.hxx>
 #include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/weld.hxx>

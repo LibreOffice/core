@@ -51,6 +51,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
 using namespace ::com::sun::star;

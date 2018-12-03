@@ -32,6 +32,7 @@
 #include <vcl/settings.hxx>
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <vector>
 

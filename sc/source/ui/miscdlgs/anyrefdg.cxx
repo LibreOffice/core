@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/accel.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/mnemonic.hxx>
 #include <sfx2/bindings.hxx>

@@ -37,6 +37,7 @@
 #include <svx/langbox.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/lingucfg.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <comphelper/string.hxx>
 #include <osl/file.hxx>

@@ -21,6 +21,7 @@
 #include <rptui_slotid.hrc>
 #include <connectivity/dbconversion.hxx>
 #include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <UITools.hxx>
 #include <RptDef.hxx>
 #include <strings.hxx>

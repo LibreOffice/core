@@ -19,6 +19,7 @@
 
 #include <svtools/brwbox.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/accessiblefactory.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>

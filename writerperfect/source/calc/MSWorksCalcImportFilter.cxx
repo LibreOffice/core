@@ -30,6 +30,7 @@
 #include <strings.hrc>
 
 #include <iostream>
+#include <map>
 
 using namespace ::com::sun::star;
 

@@ -31,6 +31,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graphictools.hxx>
 #include <sal/log.hxx>
+#include <tools/helpers.hxx>
 
 #include <zlib.h>
 
