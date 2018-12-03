@@ -267,7 +267,7 @@ private:
     SvTreeListEntry*        m_pDDSource;      // source for Drag'n Drop
     std::unique_ptr<SwGlblDocContents> m_pSwGlblDocContents; // array with sorted content
 
-    SwGlblDocContent*       m_pDocContent;
+    std::unique_ptr<SwGlblDocContent>       m_pDocContent;
     std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
 
     bool                m_bIsInternalDrag     :1;
