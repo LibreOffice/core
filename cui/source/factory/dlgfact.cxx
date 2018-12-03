@@ -986,10 +986,9 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(vcl::Win
 }
 
 // TabDialog outside the drawing layer
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateAutoCorrTabDialog(vcl::Window* pParent, const SfxItemSet* pAttrSet)
+VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet)
 {
-    VclPtrInstance<OfaAutoCorrDlg> pDlg(pParent, pAttrSet);
-    return VclPtr<CuiAbstractTabDialog_Impl>::Create( pDlg );
+    return VclPtr<CuiAbstractTabController_Impl>::Create(o3tl::make_unique<OfaAutoCorrDlg>(pParent, pAttrSet));
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateCustomizeTabDialog(

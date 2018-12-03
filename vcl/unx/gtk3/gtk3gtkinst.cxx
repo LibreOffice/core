@@ -5984,6 +5984,16 @@ private:
         return sRet;
     }
 
+    void set(int pos, int col, const OUString& rText)
+    {
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
+        {
+            OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+            gtk_list_store_set(GTK_LIST_STORE(m_pTreeModel), &iter, col, aStr.getStr(), -1);
+        }
+    }
+
     int find(const OUString& rStr, int col) const
     {
         GtkTreeIter iter;
@@ -6299,6 +6309,12 @@ public:
     {
         gint id_column = gtk_combo_box_get_id_column(m_pComboBox);
         return get(pos, id_column);
+    }
+
+    virtual void set_id(int pos, const OUString& rId) override
+    {
+        gint id_column = gtk_combo_box_get_id_column(m_pComboBox);
+        set(pos, id_column, rId);
     }
 
     // https://gitlab.gnome.org/GNOME/gtk/issues/94
