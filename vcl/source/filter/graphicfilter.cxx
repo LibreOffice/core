@@ -1705,10 +1705,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             else if ( (*pFilterData)[ i ].Name == "AllowPartialStreamRead" )
             {
                 (*pFilterData)[ i ].Value >>= bAllowPartialStreamRead;
-                if ( bAllowPartialStreamRead )
-                    nImportFlags |= GraphicFilterImportFlags::AllowPartialStreamRead;
-                else
-                    nImportFlags &=~GraphicFilterImportFlags::AllowPartialStreamRead;
             }
             else if ( (*pFilterData)[ i ].Name == "CreateNativeLink" )
             {
