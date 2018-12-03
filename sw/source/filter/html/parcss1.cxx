@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/color.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/htmltokn.h>
 #include <comphelper/string.hxx>

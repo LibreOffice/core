@@ -24,48 +24,42 @@
 #include <sal/types.h>
 
 #include <cassert>
-#include <stdexcept>
 #include <vector>
 
 #include <comphelper/solarmutex.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/thread.hxx>
+#include <osl/thread.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/inputtypes.hxx>
 #include <vcl/exceptiontypes.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/vclevent.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/vclenum.hxx>
-#include <unotools/localedatawrapper.hxx>
+#include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/connection/XConnection.hpp>
 
 
 class BitmapEx;
 namespace weld
 {
     class Builder;
-    class Container;
     class MessageDialog;
     class Widget;
     class Window;
 }
+class LocaleDataWrapper;
 class AllSettings;
 class DataChangedEvent;
 class Accelerator;
 class Help;
 class OutputDevice;
 namespace vcl { class Window; }
+namespace vcl { class KeyCode; }
 class WorkWindow;
-class MenuBar;
-class UnoWrapperBase;
-class Reflection;
 class NotifyEvent;
 class KeyEvent;
 class MouseEvent;

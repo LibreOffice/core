@@ -101,6 +101,7 @@
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sot/storage.hxx>

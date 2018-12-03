@@ -52,6 +52,8 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <map>
+
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::graphic;

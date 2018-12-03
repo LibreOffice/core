@@ -35,6 +35,7 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfac.hxx>
 #include <tools/gen.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/jobset.hxx>

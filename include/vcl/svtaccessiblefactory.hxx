@@ -21,7 +21,8 @@
 #define INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/accessiblefactory.hxx>
+
+namespace vcl { class IAccessibleFactory; }
 
 namespace vcl
 {

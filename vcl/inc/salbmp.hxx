@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_SALBMP_HXX
 
 #include <tools/gen.hxx>
+#include <tools/solar.h>
 #include <vcl/checksum.hxx>
 #include <vcl/salbtype.hxx>
 

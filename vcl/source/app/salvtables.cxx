@@ -33,6 +33,7 @@
 #include <messagedialog.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>
+#include <tools/helpers.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>

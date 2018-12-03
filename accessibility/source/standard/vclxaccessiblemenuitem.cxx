@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>

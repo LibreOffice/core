@@ -29,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <unotools/fontdefs.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unohelp.hxx>
 #include <editeng/eeitem.hxx>

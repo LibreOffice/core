@@ -16,6 +16,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <o3tl/clamp.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>

@@ -20,6 +20,7 @@
 #include <ColumnControlWindow.hxx>
 #include <FieldControls.hxx>
 #include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <connectivity/dbtools.hxx>
 #include <UITools.hxx>
 #include <core_resource.hxx>

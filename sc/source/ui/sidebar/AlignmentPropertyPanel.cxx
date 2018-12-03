@@ -29,6 +29,7 @@
 #include <svx/dlgutil.hxx>
 #include <vcl/toolbox.hxx>
 #include <svx/sidebar/SidebarDialControl.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 using namespace css;
 using namespace css::uno;

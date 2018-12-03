@@ -22,6 +22,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>

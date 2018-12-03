@@ -11,6 +11,7 @@
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>

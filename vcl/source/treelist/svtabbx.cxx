@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svtaccessiblefactory.hxx>
+#include <vcl/accessiblefactory.hxx>
 #include <vcl/svtabbx.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/svlbitm.hxx>

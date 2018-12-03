@@ -35,6 +35,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/pathoptions.hxx>

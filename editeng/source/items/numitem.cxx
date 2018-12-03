@@ -48,6 +48,7 @@
 #include <libxml/xmlwriter.h>
 #include <editeng/unonrule.hxx>
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #define DEF_WRITER_LSPACE   500     //Standard Indentation
 #define DEF_DRAW_LSPACE     800     //Standard Indentation

@@ -23,6 +23,7 @@
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <RtfReader.hxx>
 #include <HtmlReader.hxx>
 #include <stringconstants.hxx>

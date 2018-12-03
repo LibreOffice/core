@@ -20,6 +20,7 @@
 
 #include <svtools/ivctrl.hxx>
 #include "imivctl.hxx"
+#include <vcl/accessiblefactory.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/mnemonic.hxx>

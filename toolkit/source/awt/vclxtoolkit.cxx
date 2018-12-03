@@ -51,7 +51,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/conditn.hxx>
 #include <osl/module.h>
-#include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <rtl/process.h>

@@ -43,6 +43,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <strings.hxx>
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 

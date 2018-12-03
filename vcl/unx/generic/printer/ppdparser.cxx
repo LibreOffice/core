@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <comphelper/string.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/ppdparser.hxx>
 #include <vcl/strhelper.hxx>
 #include <vcl/svapp.hxx>

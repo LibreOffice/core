@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_SALNATIVEWIDGETS_HXX
 #define INCLUDED_VCL_SALNATIVEWIDGETS_HXX
 
-#include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>

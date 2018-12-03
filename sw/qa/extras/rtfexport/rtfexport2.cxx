@@ -45,6 +45,7 @@
 #include <vcl/settings.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <bordertest.hxx>
 

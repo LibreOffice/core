@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

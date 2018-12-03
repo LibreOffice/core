@@ -43,6 +43,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

@@ -32,6 +32,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/unohelp.hxx>
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 

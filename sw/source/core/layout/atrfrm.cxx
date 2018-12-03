@@ -28,6 +28,7 @@
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <frmfmt.hxx>
 #include <unocoll.hxx>
 #include <unosett.hxx>

@@ -35,6 +35,7 @@
 #endif
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
+#include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <bitmapwriteaccess.hxx>
 

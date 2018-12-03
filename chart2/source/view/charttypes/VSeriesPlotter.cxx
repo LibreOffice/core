@@ -72,6 +72,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
+#include <unotools/localedatawrapper.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

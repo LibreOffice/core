@@ -94,6 +94,7 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>
+#include <osl/thread.hxx>
 #include <paratr.hxx>
 #include <drawfont.hxx>
 #include <txtfrm.hxx>

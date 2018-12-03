@@ -26,6 +26,7 @@
 #include <svx/dlgutil.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #define HYPH_POS_CHAR       '='
 

@@ -30,6 +30,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <tools/color.hxx>
 #include "unobaseclass.hxx"
 
 class SwDoc;

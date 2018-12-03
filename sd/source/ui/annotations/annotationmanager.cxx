@@ -38,6 +38,7 @@
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/datetime.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/saveopt.hxx>

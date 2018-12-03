@@ -20,17 +20,14 @@
 #ifndef INCLUDED_VCL_SALBTYPE_HXX
 #define INCLUDED_VCL_SALBTYPE_HXX
 
-#include <tools/debug.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/salgtype.hxx>
-#include <tools/helpers.hxx>
 #include <tools/color.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <vector>
 #include <memory>
 
+struct SalTwoRect;
 typedef sal_uInt8*        Scanline;
 typedef const sal_uInt8*  ConstScanline;
 
@@ -84,8 +81,6 @@ d_Col = BitmapColor( static_cast<sal_uInt8>( _def_cR | ( ( _def_cR & maR.mnOr ) 
     ( static_cast<sal_uInt32>((d_rCol).GetBlue()) << d_BS ) ) & d_BM ) | \
     d_ALPHA )
 
-
-class Color;
 
 class VCL_DLLPUBLIC BitmapColor final
 {
@@ -141,8 +136,6 @@ inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, 
     return rStream << "mcBlueOrIndex: " << static_cast<int>(rColor.GetBlueOrIndex()) << ", mcGreen: "
         << static_cast<int>(rColor.GetGreen()) << ", mcRed: " << static_cast<int>(rColor.GetRed()) << ", mcAlpha: " << static_cast<int>(rColor.GetAlpha());
 }
-
-class Palette;
 
 class VCL_DLLPUBLIC BitmapPalette
 {

@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <tools/gen.hxx>
+#include <tools/color.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svl/hint.hxx>

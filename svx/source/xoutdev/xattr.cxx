@@ -60,6 +60,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <vcl/gradient.hxx>
 
 #include <libxml/xmlwriter.h>

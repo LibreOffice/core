@@ -24,6 +24,7 @@
 #include <cstdlib>
 
 
+#include <vcl/accel.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

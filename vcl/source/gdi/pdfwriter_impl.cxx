@@ -52,6 +52,7 @@
 #include <svl/urihelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
+#include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>

@@ -20,6 +20,7 @@
 #include <cassert>
 
 #include <sal/types.h>
+#include <tools/helpers.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>

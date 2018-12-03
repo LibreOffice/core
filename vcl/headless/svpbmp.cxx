@@ -29,6 +29,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 

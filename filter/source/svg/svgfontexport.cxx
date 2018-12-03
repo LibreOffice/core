@@ -26,6 +26,7 @@
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 static const sal_Int32 nFontEM = 2048;
 

@@ -27,6 +27,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/thread.hxx>
 #include <document.hxx>
 #include <attrib.hxx>
 #include <table.hxx>

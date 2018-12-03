@@ -32,6 +32,7 @@
 #include <sal/log.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <tools/helpers.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <unotools/datetime.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>

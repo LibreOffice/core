@@ -18,6 +18,7 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/builderfactory.hxx>

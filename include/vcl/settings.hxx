@@ -23,22 +23,21 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/font.hxx>
-#include <vcl/accel.hxx>
-#include <vcl/wall.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <unotools/syslocale.hxx>
+#include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
+#include <vector>
+
+class BitmapEx;
+class LanguageTag;
+class SvtSysLocale;
 
 namespace boost
 {
     template<typename T> class optional;
 }
 
-class CollatorWrapper;
 class LocaleDataWrapper;
 struct ImplMouseData;
 struct ImplMiscData;
@@ -48,9 +47,8 @@ struct ImplAllSettingsData;
 enum class ConfigurationHints;
 
 namespace vcl {
+    class Font;
     class I18nHelper;
-    class IconThemeScanner;
-    class IconThemeSelector;
     class IconThemeInfo;
 }
 

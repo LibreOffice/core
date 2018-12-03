@@ -50,6 +50,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/outdev.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <emfplushelper.hxx>
 #include <numeric>
 

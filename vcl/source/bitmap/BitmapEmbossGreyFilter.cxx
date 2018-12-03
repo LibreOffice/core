@@ -10,6 +10,7 @@
 
 #include <sal/config.h>
 
+#include <tools/helpers.hxx>
 #include <o3tl/clamp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>

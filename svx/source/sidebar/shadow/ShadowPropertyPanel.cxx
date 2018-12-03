@@ -17,6 +17,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xtable.hxx>
 #include <svtools/valueset.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/xattr.hxx>
 #include <svx/svddef.hxx>

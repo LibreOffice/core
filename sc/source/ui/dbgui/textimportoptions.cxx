@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 ScTextImportOptionsDlg::ScTextImportOptionsDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "TextImportOptionsDialog", "modules/scalc/ui/textimportoptions.ui")

@@ -26,7 +26,6 @@
 #include <vcl/vclenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace vcl { class Window; }
 class CommandEvent;
 
 // Timerticks

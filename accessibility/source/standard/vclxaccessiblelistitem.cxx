@@ -40,6 +40,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace
 {

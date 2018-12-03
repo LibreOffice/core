@@ -22,6 +22,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/xlnwtit.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/svapp.hxx>
 #include "LineWidthValueSet.hxx"

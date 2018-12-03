@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <sal/log.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/objsh.hxx>
 #include <o3tl/make_unique.hxx>

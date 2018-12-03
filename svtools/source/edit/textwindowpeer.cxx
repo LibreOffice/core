@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <vcl/svtaccessiblefactory.hxx>
+#include <vcl/accessiblefactory.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>

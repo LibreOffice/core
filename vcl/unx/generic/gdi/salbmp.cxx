@@ -31,6 +31,7 @@
 #include <osl/endian.h>
 #include <sal/log.hxx>
 
+#include <tools/helpers.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>

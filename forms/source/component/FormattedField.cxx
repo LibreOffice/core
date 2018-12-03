@@ -31,6 +31,7 @@
 #include <o3tl/any.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/numuno.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>

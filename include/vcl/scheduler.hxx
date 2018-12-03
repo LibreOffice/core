@@ -22,11 +22,7 @@
 
 #include <vcl/dllapi.h>
 
-class SchedulerGuard;
-class Task;
-struct TaskImpl;
 struct ImplSchedulerContext;
-struct ImplSchedulerData;
 
 class VCL_DLLPUBLIC Scheduler final
 {

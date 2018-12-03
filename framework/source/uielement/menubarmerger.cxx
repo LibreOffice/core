@@ -19,6 +19,7 @@
 
 #include <uielement/menubarmerger.hxx>
 #include <framework/addonsoptions.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 using namespace ::com::sun::star;
 

@@ -24,6 +24,7 @@
 */
 
 #include <vcl/treelistbox.hxx>
+#include <vcl/accessiblefactory.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>

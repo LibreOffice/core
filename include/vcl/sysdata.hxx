@@ -23,7 +23,6 @@
 #include <sal/types.h>
 
 #include <vector>
-#include <cstddef>
 
 #include <config_cairo_canvas.h>
 

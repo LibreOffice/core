@@ -18,6 +18,7 @@
  */
 
 #include <tools/poly.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/alpha.hxx>

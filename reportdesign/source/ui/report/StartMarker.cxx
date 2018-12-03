@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 
 #include <unotools/syslocale.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #define CORNER_SPACE     5
 

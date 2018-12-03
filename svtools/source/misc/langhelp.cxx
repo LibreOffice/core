@@ -8,6 +8,7 @@
  */
 
 #include <comphelper/sequence.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>

@@ -28,6 +28,7 @@
 #include <vcl/timer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <sal/log.hxx>
+#include <tools/helpers.hxx>
 #include <map>
 
 #if defined _MSC_VER

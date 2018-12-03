@@ -24,7 +24,9 @@
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
 #include <tools/helpers.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <sdmod.hxx>
 #include <optsitem.hxx>

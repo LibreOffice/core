@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <viewsh.hxx>

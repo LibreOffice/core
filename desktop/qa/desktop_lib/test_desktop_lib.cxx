@@ -31,6 +31,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <osl/conditn.hxx>
+#include <osl/thread.hxx>
 #include <svl/srchitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/tempfile.hxx>

@@ -32,6 +32,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/fontoptions.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #include <svtools/borderline.hxx>
 #include <svtools/sampletext.hxx>

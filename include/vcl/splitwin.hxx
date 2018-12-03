@@ -24,7 +24,6 @@
 #include <vcl/dockwin.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class Wallpaper;
 class ImplSplitSet;
 
 enum class SplitWindowItemFlags

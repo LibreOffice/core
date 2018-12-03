@@ -28,6 +28,7 @@
 #include <vcl/menu.hxx>
 
 #include <svl/undo.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/languageoptions.hxx>
 

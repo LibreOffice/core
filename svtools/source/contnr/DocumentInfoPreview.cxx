@@ -39,6 +39,7 @@
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #include <templwin.hrc>
 #include "templwin.hxx"

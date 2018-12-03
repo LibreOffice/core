@@ -13,6 +13,7 @@
 #include <sfx2/sidebar/TabBar.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/accel.hxx>
 
 using namespace sfx2::sidebar;
 

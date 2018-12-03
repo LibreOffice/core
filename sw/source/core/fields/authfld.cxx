@@ -22,6 +22,7 @@
 #include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
 #include <swtypes.hxx>

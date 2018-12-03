@@ -35,6 +35,7 @@
 #include <vcl/status.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

@@ -35,6 +35,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/langhelp.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
