@@ -20,6 +20,7 @@
  *************************************************************/
 package com.sun.star.comp.sdbc;
 
+import com.sun.star.comp.sdbc.classloading.ClassMap;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -31,7 +32,7 @@ import org.apache.openoffice.comp.sdbc.dbtools.util.StandardSQLState;
 
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.comp.sdbc.ClassMap.ClassLoaderAndClass;
+import com.sun.star.comp.sdbc.classloading.ClassLoaderAndClass;
 import com.sun.star.comp.sdbc.ConnectionLog.ObjectType;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IllegalArgumentException;
