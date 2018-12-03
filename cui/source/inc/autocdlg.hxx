@@ -421,9 +421,9 @@ class OfaSmartTagOptionsTabPage : public SfxTabPage
 private:
 
     // controls
-    VclPtr<CheckBox>               m_pMainCB;
-    VclPtr<SvxCheckListBox>        m_pSmartTagTypesLB;
-    VclPtr<PushButton>             m_pPropertiesPB;
+    std::unique_ptr<weld::CheckButton> m_xMainCB;
+    std::unique_ptr<weld::TreeView> m_xSmartTagTypesLB;
+    std::unique_ptr<weld::Button> m_xPropertiesPB;
 
     /** Inserts items into m_aSmartTagTypesLB
 
@@ -441,27 +441,26 @@ private:
         Enables/disables all controls in the tab page (except from the
         check box.
     */
-    DECL_LINK(CheckHdl, CheckBox&, void);
+    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
 
     /** Handler for the push button
 
         Calls the displayPropertyPage function of the smart tag recognizer
         associated with the currently selected smart tag type.
     */
-    DECL_LINK(ClickHdl, Button*, void);
+    DECL_LINK(ClickHdl, weld::Button&, void);
 
     /** Handler for the list box
 
         Enables/disables the properties push button if selection in the
         smart tag types list box changes.
     */
-    DECL_LINK(SelectHdl, SvTreeListBox*, void);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
 
 public:
     /// construction via Create()
-    OfaSmartTagOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    OfaSmartTagOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaSmartTagOptionsTabPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rAttrSet);
 

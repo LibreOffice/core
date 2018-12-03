@@ -2227,25 +2227,24 @@ IMPL_LINK(OfaAutoCompleteTabPage, KeyReleaseHdl, const KeyEvent&, rEvent, bool)
 
 // class OfaSmartTagOptionsTabPage ---------------------------------------------
 
-OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( vcl::Window* pParent,
-                                                      const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "SmartTagOptionsPage", "cui/ui/smarttagoptionspage.ui", &rSet)
+OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage(TabPageParent pParent,
+                                                     const SfxItemSet& rSet )
+    : SfxTabPage(pParent, "cui/ui/smarttagoptionspage.ui", "SmartTagOptionsPage", &rSet)
+    , m_xMainCB(m_xBuilder->weld_check_button("main"))
+    , m_xSmartTagTypesLB(m_xBuilder->weld_tree_view("list"))
+    , m_xPropertiesPB(m_xBuilder->weld_button("properties"))
 {
-    get(m_pMainCB, "main");
-    get(m_pSmartTagTypesLB, "list");
-    get(m_pPropertiesPB, "properties");
+    m_xSmartTagTypesLB->set_size_request(m_xSmartTagTypesLB->get_approximate_digit_width() * 50,
+                                         m_xSmartTagTypesLB->get_height_rows(6));
 
-    // some options for the list box:
-    m_pSmartTagTypesLB->SetStyle( m_pSmartTagTypesLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
-    m_pSmartTagTypesLB->SetHighlightRange();
-    Size aControlSize(LogicToPixel(Size(172, 154), MapMode(MapUnit::MapAppFont)));
-    m_pSmartTagTypesLB->set_width_request(aControlSize.Width());
-    m_pSmartTagTypesLB->set_height_request(aControlSize.Height());
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xSmartTagTypesLB->get_approximate_digit_width() * 3 + 6);
+    m_xSmartTagTypesLB->set_column_fixed_widths(aWidths);
 
     // set the handlers:
-    m_pMainCB->SetToggleHdl(LINK(this, OfaSmartTagOptionsTabPage, CheckHdl));
-    m_pPropertiesPB->SetClickHdl(LINK(this, OfaSmartTagOptionsTabPage, ClickHdl));
-    m_pSmartTagTypesLB->SetSelectHdl(LINK(this, OfaSmartTagOptionsTabPage, SelectHdl));
+    m_xMainCB->connect_toggled(LINK(this, OfaSmartTagOptionsTabPage, CheckHdl));
+    m_xPropertiesPB->connect_clicked(LINK(this, OfaSmartTagOptionsTabPage, ClickHdl));
+    m_xSmartTagTypesLB->connect_changed(LINK(this, OfaSmartTagOptionsTabPage, SelectHdl));
 }
 
 OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
@@ -2253,17 +2252,9 @@ OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
     disposeOnce();
 }
 
-void OfaSmartTagOptionsTabPage::dispose()
+VclPtr<SfxTabPage> OfaSmartTagOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    m_pMainCB.clear();
-    m_pSmartTagTypesLB.clear();
-    m_pPropertiesPB.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> OfaSmartTagOptionsTabPage::Create( TabPageParent pParent, const SfxItemSet* rSet)
-{
-    return VclPtr<OfaSmartTagOptionsTabPage>::Create( pParent.pParent, *rSet );
+    return VclPtr<OfaSmartTagOptionsTabPage>::Create(pParent, *rSet);
 }
 
 /** This struct is used to associate list box entries with smart tag data
@@ -2282,22 +2273,21 @@ struct ImplSmartTagLBUserData
         mnSmartTagIdx( nSmartTagIdx ) {}
 };
 
-/** Clears m_pSmartTagTypesLB
+/** Clears m_xSmartTagTypesLB
 */
 void OfaSmartTagOptionsTabPage::ClearListBox()
 {
-    const sal_uLong nCount = m_pSmartTagTypesLB->GetEntryCount();
-    for ( sal_uLong i = 0; i < nCount; ++i )
+    const int nCount = m_xSmartTagTypesLB->n_children();
+    for (int i = 0; i < nCount; ++i)
     {
-        const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(i);
-        const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
+        const ImplSmartTagLBUserData* pUserData = reinterpret_cast<ImplSmartTagLBUserData*>(m_xSmartTagTypesLB->get_id(i).toInt64());
         delete pUserData;
     }
 
-    m_pSmartTagTypesLB->Clear();
+    m_xSmartTagTypesLB->clear();
 }
 
-/** Inserts items into m_pSmartTagTypesLB
+/** Inserts items into m_xSmartTagTypesLB
 */
 void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 {
@@ -2325,24 +2315,23 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 
             const OUString aLBEntry = aSmartTagCaption + " (" + aName + ")";
 
-            SvTreeListEntry* pEntry = m_pSmartTagTypesLB->SvTreeListBox::InsertEntry( aLBEntry );
-            if ( pEntry )
-            {
-                const bool bCheck = rSmartTagMgr.IsSmartTagTypeEnabled( aSmartTagType );
-                m_pSmartTagTypesLB->SetCheckButtonState( pEntry, bCheck ? SvButtonState::Checked : SvButtonState::Unchecked );
-                pEntry->SetUserData(static_cast<void*>(new ImplSmartTagLBUserData( aSmartTagType, xRec, j ) ) );
-            }
+            m_xSmartTagTypesLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
+                                       nullptr, nullptr, false);
+            const int nRow = m_xSmartTagTypesLB->n_children() - 1;
+            const bool bCheck = rSmartTagMgr.IsSmartTagTypeEnabled( aSmartTagType );
+            m_xSmartTagTypesLB->set_toggle(nRow, bCheck);
+            m_xSmartTagTypesLB->set_text(nRow, aLBEntry, 1);
+            m_xSmartTagTypesLB->set_id(nRow, OUString::number(reinterpret_cast<sal_Int64>(new ImplSmartTagLBUserData(aSmartTagType, xRec, j))));
         }
     }
 }
 
 /** Handler for the push button
 */
-IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl, weld::Button&, void)
 {
-    const sal_uLong nPos = m_pSmartTagTypesLB->GetSelectedEntryPos();
-    const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(nPos);
-    const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
+    const int nPos = m_xSmartTagTypesLB->get_selected_index();
+    const ImplSmartTagLBUserData* pUserData = reinterpret_cast<ImplSmartTagLBUserData*>(m_xSmartTagTypesLB->get_id(nPos).toInt64());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
 
@@ -2353,39 +2342,36 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl, Button*, void)
 
 /** Handler for the check box
 */
-IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl, CheckBox&, void)
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl, weld::ToggleButton&, void)
 {
-    const bool bEnable = m_pMainCB->IsChecked();
-    m_pSmartTagTypesLB->Enable( bEnable );
-    m_pSmartTagTypesLB->Invalidate();
-    m_pPropertiesPB->Enable( false );
+    const bool bEnable = m_xMainCB->get_active();
+    m_xSmartTagTypesLB->set_sensitive(bEnable);
+    m_xPropertiesPB->set_sensitive(false);
 
     // if the controls are currently enabled, we still have to check
     // if the properties button should be disabled because the currently
     // selected smart tag type does not have a properties dialog.
     // We do this by calling SelectHdl:
-    if ( bEnable )
-        SelectHdl(m_pSmartTagTypesLB);
+    if (bEnable)
+        SelectHdl(*m_xSmartTagTypesLB);
 }
 
 /** Handler for the list box
 */
-IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl, weld::TreeView&, void)
 {
-    if ( m_pSmartTagTypesLB->GetEntryCount() < 1 )
+    const int nPos = m_xSmartTagTypesLB->get_selected_index();
+    if (nPos == -1)
         return;
-
-    const sal_uLong nPos = m_pSmartTagTypesLB->GetSelectedEntryPos();
-    const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(nPos);
-    const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
+    const ImplSmartTagLBUserData* pUserData = reinterpret_cast<ImplSmartTagLBUserData*>(m_xSmartTagTypesLB->get_id(nPos).toInt64());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
 
     const lang::Locale aLocale( LanguageTag::convertToLocale( eLastDialogLanguage ) );
     if ( xRec->hasPropertyPage( nSmartTagIdx, aLocale ) )
-        m_pPropertiesPB->Enable();
+        m_xPropertiesPB->set_sensitive(true);
     else
-        m_pPropertiesPB->Enable( false );
+        m_xPropertiesPB->set_sensitive(false);
 }
 
 /** Propagates the current settings to the smart tag manager.
@@ -2403,13 +2389,12 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
     bool bModifiedSmartTagTypes = false;
     std::vector< OUString > aDisabledSmartTagTypes;
 
-    const sal_uLong nCount = m_pSmartTagTypesLB->GetEntryCount();
+    const int nCount = m_xSmartTagTypesLB->n_children();
 
-    for ( sal_uLong i = 0; i < nCount; ++i )
+    for (int i = 0; i < nCount; ++i)
     {
-        const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(i);
-        const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
-        const bool bChecked = m_pSmartTagTypesLB->IsChecked(i);
+        const ImplSmartTagLBUserData* pUserData = reinterpret_cast<ImplSmartTagLBUserData*>(m_xSmartTagTypesLB->get_id(i).toInt64());
+        const bool bChecked = m_xSmartTagTypesLB->get_toggle(i);
         const bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
 
         bModifiedSmartTagTypes = bModifiedSmartTagTypes || ( !bChecked != !bIsCurrentlyEnabled );
@@ -2420,10 +2405,10 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
         delete pUserData;
     }
 
-    const bool bModifiedRecognize = ( !m_pMainCB->IsChecked() != !pSmartTagMgr->IsLabelTextWithSmartTags() );
+    const bool bModifiedRecognize = ( !m_xMainCB->get_active() != !pSmartTagMgr->IsLabelTextWithSmartTags() );
     if ( bModifiedSmartTagTypes || bModifiedRecognize )
     {
-        bool bLabelTextWithSmartTags = m_pMainCB->IsChecked();
+        bool bLabelTextWithSmartTags = m_xMainCB->get_active();
         pSmartTagMgr->WriteConfiguration( bModifiedRecognize     ? &bLabelTextWithSmartTags : nullptr,
                                           bModifiedSmartTagTypes ? &aDisabledSmartTagTypes : nullptr );
     }
@@ -2443,10 +2428,10 @@ void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet*  )
     if ( !pSmartTagMgr )
         return;
 
-    FillListBox( *pSmartTagMgr );
-    m_pSmartTagTypesLB->SelectEntryPos( 0 );
-    m_pMainCB->Check( pSmartTagMgr->IsLabelTextWithSmartTags() );
-    CheckHdl(*m_pMainCB);
+    FillListBox(*pSmartTagMgr);
+    m_xSmartTagTypesLB->select(0);
+    m_xMainCB->set_active(pSmartTagMgr->IsLabelTextWithSmartTags());
+    CheckHdl(*m_xMainCB);
 }
 
 void OfaSmartTagOptionsTabPage::ActivatePage( const SfxItemSet& )
