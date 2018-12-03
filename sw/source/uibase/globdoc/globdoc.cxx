@@ -32,7 +32,7 @@
 // Description: Register all filters
 
 
-SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), SfxObjectShellFlags::STD_NORMAL|SfxObjectShellFlags::HASMENU, "swriter/GlobalDocument" )
+SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), "swriter/GlobalDocument" )
 
 SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :
         SwDocShell(eMode)

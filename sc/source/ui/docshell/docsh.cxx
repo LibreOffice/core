@@ -186,7 +186,7 @@ void ScDocShell::InitInterface_Impl()
 }
 
 //  GlobalName of the current version:
-SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), SfxObjectShellFlags::STD_NORMAL, "scalc" )
+SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), "scalc" )
 
 
 void ScDocShell::FillClass( SvGlobalName* pClassName,
