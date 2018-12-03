@@ -33,6 +33,8 @@ $(eval $(call gb_GoogleTest_add_api,sfx2_metadatable, \
 ))
 
 $(eval $(call gb_GoogleTest_add_linked_libs,sfx2_metadatable, \
+    cppu \
+    cppuhelper \
     sal \
     sfx \
     stl \
