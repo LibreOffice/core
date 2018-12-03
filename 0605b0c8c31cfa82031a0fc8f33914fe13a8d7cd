@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_054a727f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "of BasicIDE",
+      "range": {
+        "startLine": 7,
+        "startChar": 38,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_25456e71",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "Format",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_852ae28d",
+        "filename": "basctl/source/basicide/basicbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "Parameter",
+      "range": {
+        "startLine": 97,
+        "startChar": 26,
+        "endLine": 97,
+        "endChar": 34
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_e55e3644",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "this item\u0027s unique id in ToolBox",
+      "range": {
+        "startLine": 49,
+        "startChar": 21,
+        "endLine": 49,
+        "endChar": 55
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_c55b3a52",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "contains",
+      "range": {
+        "startLine": 50,
+        "startChar": 40,
+        "endLine": 50,
+        "endChar": 47
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a5583e56",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "contains ConboBox state",
+      "range": {
+        "startLine": 58,
+        "startChar": 41,
+        "endLine": 58,
+        "endChar": 48
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_85554220",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "Why moving this? I suppose simply removing redundant private: below would be enough? Personally I treat (virtual) methods as interface, even private, so I like seeing them above data members",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 37
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_65300609",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "U*p*date selecti*o*n in C**omboBox",
+      "range": {
+        "startLine": 118,
+        "startChar": 26,
+        "endLine": 118,
+        "endChar": 35
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_45350af7",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "represents mouse event\n\nIs it only a number?",
+      "range": {
+        "startLine": 131,
+        "startChar": 36,
+        "endLine": 131,
+        "endChar": 64
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_253a0ee7",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "If true, ...",
+      "range": {
+        "startLine": 140,
+        "startChar": 25,
+        "endLine": 140,
+        "endChar": 40
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_053f12d7",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "in specified position",
+      "range": {
+        "startLine": 145,
+        "startChar": 27,
+        "endLine": 145,
+        "endChar": 53
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_e523d6bd",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 179,
+        "startChar": 21,
+        "endLine": 179,
+        "endChar": 44
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_c520dab3",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 180,
+        "startChar": 40,
+        "endLine": 180,
+        "endChar": 47
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a52ddea9",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T08:32:08Z",
+      "side": 1,
+      "message": "if event was handled,",
+      "range": {
+        "startLine": 233,
+        "startChar": 34,
+        "endLine": 233,
+        "endChar": 55
+      },
+      "revId": "0605b0c8c31cfa82031a0fc8f33914fe13a8d7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
