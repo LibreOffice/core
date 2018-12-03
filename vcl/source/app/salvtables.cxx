@@ -1878,6 +1878,26 @@ public:
         return OUString();
     }
 
+    virtual void show() override
+    {
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        {
+            pHeaderBar->Show();
+        }
+        SalInstanceContainer::show();
+    }
+
+    virtual void hide() override
+    {
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        {
+            pHeaderBar->Hide();
+        }
+        SalInstanceContainer::hide();
+    }
+
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface, const OUString* pExpanderName,
                         bool bChildrenOnDemand) override
