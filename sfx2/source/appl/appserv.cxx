@@ -1619,7 +1619,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 aSet.Put( *pItem );
 
             const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog(pViewFrame? &pViewFrame->GetWindow(): nullptr, &aSet));
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog(pViewFrame ? pViewFrame->GetWindow().GetFrameWeld() : nullptr, &aSet));
             pDlg->Execute();
 
             break;

@@ -38,6 +38,7 @@
               <object class="GtkButton" id="edit">
                 <property name="label" translatable="yes" context="applyautofmtpage|edit">_Edit...</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="valign">center</property>
@@ -141,7 +142,7 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderer3"/>
                           <attributes>
-                            <attribute name="text">0</attribute>
+                            <attribute name="text">2</attribute>
                           </attributes>
                         </child>
                       </object>
