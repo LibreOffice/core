@@ -1012,6 +1012,9 @@ void Qt5Frame::SetApplicationID(const OUString&)
 }
 
 // Drag'n'drop foo
+
+Qt5DragSource* Qt5DragSource::m_ActiveDragSource;
+
 void Qt5Frame::registerDragSource(Qt5DragSource* pDragSource)
 {
     assert(!m_pDragSource);
@@ -1051,7 +1054,7 @@ void Qt5Frame::draggingStarted(const int x, const int y)
     aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    xTransferable = m_pDragSource->GetTransferable();
+    xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
 
     if (!m_bInDrag && xTransferable.is())
     {
@@ -1080,7 +1083,7 @@ void Qt5Frame::dropping(const int x, const int y)
     aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    xTransferable = m_pDragSource->GetTransferable();
+    xTransferable = Qt5DragSource::m_ActiveDragSource->GetTransferable();
     aEvent.Transferable = xTransferable;
 
     m_pDropTarget->fire_drop(aEvent);
