@@ -117,7 +117,7 @@ bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
         if ( pView->GetViewShell()->KeyInput( *rNEvt.GetKeyEvent() ) )
             return true;
     }
-    else if ( rNEvt.GetType() == MouseNotifyEvent::EXECUTEDIALOG /*|| rNEvt.GetType() == MouseNotifyEvent::INPUTDISABLE*/ )
+    else if ( rNEvt.GetType() == MouseNotifyEvent::EXECUTEDIALOG )
     {
         pView->SetModalMode( true );
         return true;
