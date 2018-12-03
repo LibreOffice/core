@@ -22,6 +22,30 @@
       "revId": "9bd760455f090f6cd2aaaded569113bb3a0c8206",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_25d0cec9",
+        "filename": "vcl/source/bitmap/BitmapTools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-03T06:53:26Z",
+      "side": 1,
+      "message": "but doesn\u0027t hurt to be explicit, no?  better not rely on the \"implementation details\" of some include file is my opinion here",
+      "parentUuid": "5f4e5783_65892625",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "9bd760455f090f6cd2aaaded569113bb3a0c8206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
