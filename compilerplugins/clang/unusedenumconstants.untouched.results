@@ -1,7 +1,3 @@
-chart2/source/controller/dialogs/dlg_DataSource.cxx:83
-    enum chart::DataSourceDialogPages TP_RANGECHOOSER
-chart2/source/controller/dialogs/dlg_DataSource.cxx:84
-    enum chart::DataSourceDialogPages TP_DATA_SOURCE
 drawinglayer/source/tools/emfpimage.hxx:31
     emfplushelper::ImageDataType ImageDataTypeUnknown
 include/connectivity/dbtools.hxx:822
@@ -14,8 +10,6 @@ include/desktop/exithelper.h:27
     int EXITHELPER_FATAL_ERROR
 include/editeng/borderline.hxx:128
     enum SvxBorderLineStyle BORDER_LINE_STYLE_MAX
-include/editeng/editstat.hxx:83
-    enum EditStatusFlags CRSRLEFTPARA
 include/i18nutil/transliteration.hxx:45
     enum TransliterationFlags NumToTextLower_zh_CN
 include/i18nutil/transliteration.hxx:47
@@ -49,13 +43,13 @@ include/unotools/sharedunocomponent.hxx:149
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::sdbc::XPreparedStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
+    enum utl::SharedUNOComponent<class com::sun::star::sdb::XSingleSelectQueryComposer, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
+include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::sdbc::XStatement, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::uno::XInterface, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent::AssignmentMode NoTakeOwnership
-include/unotools/sharedunocomponent.hxx:149
-    enum utl::SharedUNOComponent<class com::sun::star::sdb::XSingleSelectQueryComposer, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/unotools/sharedunocomponent.hxx:149
     enum utl::SharedUNOComponent<class com::sun::star::embed::XStorage, class utl::DisposableComponent>::AssignmentMode NoTakeOwnership
 include/vcl/keycod.hxx:29
@@ -73,25 +67,25 @@ include/vcl/keycod.hxx:30
 include/vcl/keycod.hxx:32
     enum KeyFuncType FIND
 include/vcl/keycod.hxx:33
-    enum KeyFuncType PROPERTIES
-include/vcl/keycod.hxx:33
     enum KeyFuncType FINDBACKWARD
+include/vcl/keycod.hxx:33
+    enum KeyFuncType PROPERTIES
 include/vcl/syswin.hxx:54
     enum WindowStateState FullScreen
 include/vcl/window.hxx:118
     enum TrackingEventFlags Focus
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
-    enum (anonymous at /media/noel/disk2/libo4/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
+    enum (anonymous at /home/noel/libo2/libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:59:1) PROP_0
 libreofficekit/source/gtk/lokdocview.cxx:287
-    enum (anonymous at /media/noel/disk2/libo4/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
+    enum (anonymous at /home/noel/libo2/libreofficekit/source/gtk/lokdocview.cxx:285:1) PROP_0
 sc/source/filter/excel/xiescher.cxx:460
-    enum (anonymous at /media/noel/disk2/libo4/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
+    enum (anonymous at /home/noel/libo2/sc/source/filter/excel/xiescher.cxx:460:17) eCreateFromOffice
 sc/source/filter/inc/decl.h:24
     enum WKTYP eWK4
 sc/source/ui/inc/anyrefdg.hxx:192
-    enum ScRefHdlrImpl::(anonymous at /media/noel/disk2/libo4/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
+    enum ScRefHdlrImpl<class ScValidationDlg, class SfxTabDialog, false>::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
 sc/source/ui/inc/anyrefdg.hxx:192
-    enum ScRefHdlrImpl<class ScValidationDlg, class SfxTabDialog, false>::(anonymous at /media/noel/disk2/libo4/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
+    enum ScRefHdlrImpl::(anonymous at /home/noel/libo2/sc/source/ui/inc/anyrefdg.hxx:192:5) SLOTID
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:105
     enum (anonymous namespace)::ScRegType LINEAR
 svx/inc/sxmkitm.hxx:25
@@ -150,10 +144,10 @@ vcl/inc/unx/saldisp.hxx:65
     srv_vendor_t vendor_none
 vcl/source/gdi/CommonSalLayout.cxx:129
     enum (anonymous namespace)::VerticalOrientation Rotated
-vcl/unx/gtk3/gtk3gtkinst.cxx:2645
-    enum (anonymous at /media/noel/disk2/libo4/vcl/unx/gtk3/gtk3gtkinst.cxx:2643:1) PROP_0
-vcl/unx/gtk3/gtk3gtkinst.cxx:2650
-    enum (anonymous at /media/noel/disk2/libo4/vcl/unx/gtk3/gtk3gtkinst.cxx:2643:1) PROP_SHADOW_TYPE
+vcl/unx/gtk3/gtk3gtkinst.cxx:2717
+    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:2715:1) PROP_0
+vcl/unx/gtk3/gtk3gtkinst.cxx:2722
+    enum (anonymous at /home/noel/libo2/vcl/unx/gtk3/gtk3gtkinst.cxx:2715:1) PROP_SHADOW_TYPE
 writerfilter/source/ooxml/OOXMLFactory.hxx:36
     enum writerfilter::ooxml::ResourceType NoResource
 writerfilter/source/ooxml/OOXMLFactory.hxx:37

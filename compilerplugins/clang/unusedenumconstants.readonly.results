@@ -5,7 +5,7 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:78
 bridges/source/cpp_uno/gcc3_linux_x86-64/abi.cxx:79
     enum x86_64_reg_class X86_64_X87UP_CLASS
 chart2/source/inc/CharacterProperties.hxx:121
-    enum chart::CharacterProperties::(anonymous at /media/noel/disk2/libo4/chart2/source/inc/CharacterProperties.hxx:42:5) FAST_PROPERTY_ID_END_CHAR_PROP
+    enum chart::CharacterProperties::(anonymous at /home/noel/libo2/chart2/source/inc/CharacterProperties.hxx:42:5) FAST_PROPERTY_ID_END_CHAR_PROP
 chart2/source/inc/TitleHelper.hxx:48
     enum chart::TitleHelper::eTitleType NORMAL_TITLE_END
 chart2/source/view/inc/ShapeFactory.hxx:50
@@ -39,15 +39,15 @@ chart2/source/view/inc/ShapeFactory.hxx:63
 chart2/source/view/inc/ShapeFactory.hxx:64
     enum chart::SymbolEnum Symbol_VerticalBar
 configmgr/source/access.hxx:455
-    enum configmgr::Access::(anonymous at /media/noel/disk2/libo4/configmgr/source/access.hxx:453:5) IS_SET_MEMBER
+    enum configmgr::Access::(anonymous at /home/noel/libo2/configmgr/source/access.hxx:453:5) IS_GROUP_MEMBER
 configmgr/source/access.hxx:455
-    enum configmgr::Access::(anonymous at /media/noel/disk2/libo4/configmgr/source/access.hxx:453:5) IS_GROUP_MEMBER
+    enum configmgr::Access::(anonymous at /home/noel/libo2/configmgr/source/access.hxx:453:5) IS_SET_MEMBER
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /media/noel/disk2/libo4/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_OOR
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XS
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /media/noel/disk2/libo4/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XSI
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_OOR
 configmgr/source/parsemanager.hxx:47
-    enum configmgr::ParseManager::(anonymous at /media/noel/disk2/libo4/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XS
+    enum configmgr::ParseManager::(anonymous at /home/noel/libo2/configmgr/source/parsemanager.hxx:47:5) NAMESPACE_XSI
 connectivity/source/drivers/evoab2/NConnection.hxx:41
     connectivity::evoab::SDBCAddress::sdbc_address_type Unknown
 cppcanvas/source/mtfrenderer/emfppen.cxx:53
@@ -432,11 +432,7 @@ include/vcl/graphictools.hxx:227
     enum SvtGraphicFill::FillType fillSolid
 include/vcl/headbar.hxx:185
     enum HeaderBarItemBits RIGHT
-include/vcl/headbar.hxx:186
-    enum HeaderBarItemBits TOP
-include/vcl/headbar.hxx:188
-    enum HeaderBarItemBits BOTTOM
-include/vcl/headbar.hxx:190
+include/vcl/headbar.hxx:187
     enum HeaderBarItemBits RIGHTIMAGE
 include/vcl/help.hxx:41
     enum QuickHelpFlags NoAutoPos
@@ -448,11 +444,11 @@ include/vcl/keycodes.hxx:173
     enum ModKeyFlags Mod1Msk
 include/vcl/keycodes.hxx:174
     enum ModKeyFlags Mod2Msk
-include/vcl/menu.hxx:75
+include/vcl/menu.hxx:74
     enum PopupMenuFlags ExecuteUp
-include/vcl/menu.hxx:76
+include/vcl/menu.hxx:75
     enum PopupMenuFlags ExecuteLeft
-include/vcl/menu.hxx:84
+include/vcl/menu.hxx:83
     enum PopupMenuFlags NoHorzPlacement
 include/vcl/outdev.hxx:173
     enum DrawTextFlags NewsEllipsis
@@ -513,9 +509,9 @@ include/vcl/pdfwriter.hxx:177
 include/vcl/pdfwriter.hxx:177
     enum vcl::PDFWriter::StructAttributeValue Square
 include/vcl/pdfwriter.hxx:177
-    enum vcl::PDFWriter::StructAttributeValue LowerRoman
-include/vcl/pdfwriter.hxx:177
     enum vcl::PDFWriter::StructAttributeValue UpperAlpha
+include/vcl/pdfwriter.hxx:177
+    enum vcl::PDFWriter::StructAttributeValue LowerRoman
 include/vcl/pdfwriter.hxx:177
     enum vcl::PDFWriter::StructAttributeValue UpperRoman
 include/vcl/prntypes.hxx:38
@@ -590,11 +586,11 @@ include/vcl/ptrstyle.hxx:78
     enum PointerStyle CopyFiles
 include/vcl/ptrstyle.hxx:92
     enum PointerStyle Chart
-include/vcl/vclenum.hxx:37
+include/vcl/vclenum.hxx:39
     enum MenuItemBits POPUPSELECT
-include/vcl/vclenum.hxx:143
+include/vcl/vclenum.hxx:145
     enum TimeFormat Hour12
-include/vcl/vclenum.hxx:148
+include/vcl/vclenum.hxx:150
     enum ExtTimeFieldFormat Short24H
 include/vcl/wall.hxx:36
     enum WallpaperStyle Center
@@ -642,9 +638,9 @@ sc/inc/token.hxx:214
     enum ScTableRefToken::Item DATA_TOTALS
 sc/inc/types.hxx:38
     enum ScMatValType NonvalueMask
-sc/source/ui/inc/viewdata.hxx:43
+sc/source/ui/inc/viewdata.hxx:44
     enum ScSplitMode SC_SPLIT_MODE_MAX_ENUM
-sc/source/ui/inc/viewdata.hxx:45
+sc/source/ui/inc/viewdata.hxx:46
     enum ScSplitPos SC_SPLIT_POS_MAX_ENUM
 sc/source/ui/StatisticsDialogs/RegressionDialog.cxx:106
     enum (anonymous namespace)::ScRegType LOGARITHMIC
@@ -675,11 +671,11 @@ scaddins/source/pricing/pricing.hxx:55
 sd/source/ui/slidesorter/cache/SlsRequestPriorityClass.hxx:40
     enum sd::slidesorter::cache::RequestPriorityClass MAX_CLASS
 slideshow/source/engine/shapes/viewshape.hxx:279
-    enum slideshow::internal::ViewShape::(anonymous at /media/noel/disk2/libo4/slideshow/source/engine/shapes/viewshape.hxx:279:13) MAX_RENDER_CACHE_ENTRIES
+    enum slideshow::internal::ViewShape::(anonymous at /home/noel/libo2/slideshow/source/engine/shapes/viewshape.hxx:279:13) MAX_RENDER_CACHE_ENTRIES
 slideshow/source/engine/slideview.cxx:249
-    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(anonymous at /media/noel/disk2/libo4/slideshow/source/engine/slideview.cxx:249:5) SPRITE_ULLAGE
+    enum slideshow::internal::(anonymous namespace)::LayerSpriteContainer::(anonymous at /home/noel/libo2/slideshow/source/engine/slideview.cxx:249:5) SPRITE_ULLAGE
 slideshow/source/engine/slideview.cxx:729
-    enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at /media/noel/disk2/libo4/slideshow/source/engine/slideview.cxx:729:5) LAYER_ULLAGE
+    enum slideshow::internal::(anonymous namespace)::SlideView::(anonymous at /home/noel/libo2/slideshow/source/engine/slideview.cxx:729:5) LAYER_ULLAGE
 soltools/cpp/cpp.h:42
     int WS
 svgio/inc/svgstyleattributes.hxx:62
@@ -738,8 +734,6 @@ svl/source/numbers/zformat.cxx:385
     enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM18
 svl/source/numbers/zformat.cxx:386
     enum BracketFormatSymbolType BRACKET_SYMBOLTYPE_NATNUM19
-svtools/source/contnr/imivctl.hxx:57
-    enum IconChoiceFlags StartEditTimerInMouseUp
 svx/source/inc/docrecovery.hxx:85
     enum EDocStates TryLoadBackup
 svx/source/inc/docrecovery.hxx:86
@@ -793,13 +787,13 @@ sw/source/core/inc/SwXMLBlockImport.hxx:108
 sw/source/core/text/pormulti.hxx:50
     enum RubyPosition RIGHT
 sw/source/core/unocore/unosett.cxx:1578
-    enum (anonymous at /media/noel/disk2/libo4/sw/source/core/unocore/unosett.cxx:1577:5) NotInChapterFirst
+    enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) NotInChapterFirst
 sw/source/core/unocore/unosett.cxx:1579
-    enum (anonymous at /media/noel/disk2/libo4/sw/source/core/unocore/unosett.cxx:1577:5) NotInChapterLast
+    enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) NotInChapterLast
 sw/source/core/unocore/unosett.cxx:1580
-    enum (anonymous at /media/noel/disk2/libo4/sw/source/core/unocore/unosett.cxx:1577:5) InChapterFirst
+    enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) InChapterFirst
 sw/source/core/unocore/unosett.cxx:1581
-    enum (anonymous at /media/noel/disk2/libo4/sw/source/core/unocore/unosett.cxx:1577:5) InChapterLast
+    enum (anonymous at /home/noel/libo2/sw/source/core/unocore/unosett.cxx:1577:5) InChapterLast
 sw/source/filter/html/css1atr.cxx:116
     enum Css1FrameSize AnyHeight
 sw/source/filter/ww8/ww8scan.hxx:604
@@ -813,7 +807,7 @@ sw/source/uibase/inc/envimg.hxx:33
 sw/source/uibase/inc/envimg.hxx:34
     enum SwEnvAlign ENV_VER_CNTR
 tools/source/generic/poly.cxx:1110
-    enum (anonymous at /media/noel/disk2/libo4/tools/source/generic/poly.cxx:1110:5) maxRecursionDepth
+    enum (anonymous at /home/noel/libo2/tools/source/generic/poly.cxx:1110:5) maxRecursionDepth
 ucbhelper/source/client/proxydecider.cxx:119
     enum ucbhelper::proxydecider_impl::InternetProxyDecider_Impl::ProxyType Automatic
 vcl/inc/fontsubset.hxx:41
@@ -828,6 +822,8 @@ vcl/source/gdi/pdfwriter_impl.hxx:73
     enum GraphicsStateUpdateFlags MapMode
 vcl/source/gdi/pdfwriter_impl.hxx:78
     enum GraphicsStateUpdateFlags TransparentPercent
+vcl/source/window/printdlg.cxx:62
+    enum (anonymous at /home/noel/libo2/vcl/source/window/printdlg.cxx:59:1) ORIENTATION_PORTRAIT
 writerfilter/source/ooxml/OOXMLFactory.hxx:39
     enum writerfilter::ooxml::ResourceType List
 writerfilter/source/ooxml/OOXMLFactory.hxx:40
