@@ -1342,7 +1342,9 @@ OUString SAL_CALL SwXParagraph::getString()
     }
     else
     {
-        throw uno::RuntimeException();
+        // Seems object is being disposed or some other problem occurs.
+        // Anyway from user point of view object still exist, so on that level this is not an error
+        SAL_WARN("sw.uno", "getString() for invalid paragraph called. Returning empty string.");
     }
     return aRet;
 }
