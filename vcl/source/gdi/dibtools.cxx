@@ -28,6 +28,7 @@
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/outdev.hxx>

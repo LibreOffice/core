@@ -25,6 +25,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/extract.hxx>
 #include <osl/diagnose.h>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/mapunit.hxx>
 #include <svl/itempool.hxx>

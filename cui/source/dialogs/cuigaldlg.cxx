@@ -36,6 +36,7 @@
 #include <svx/galtheme.hxx>
 #include <cuigaldlg.hxx>
 #include <bitmaps.hlst>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>

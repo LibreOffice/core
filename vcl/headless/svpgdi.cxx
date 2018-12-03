@@ -28,6 +28,7 @@
 #include <saldatabasic.hxx>
 
 #include <sal/log.hxx>
+#include <tools/helpers.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/sysdata.hxx>

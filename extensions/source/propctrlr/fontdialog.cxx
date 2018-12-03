@@ -23,6 +23,7 @@
 #include "modulepcr.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>

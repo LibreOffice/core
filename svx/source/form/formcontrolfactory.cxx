@@ -45,6 +45,7 @@
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
 #include <connectivity/dbtools.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <set>
 
