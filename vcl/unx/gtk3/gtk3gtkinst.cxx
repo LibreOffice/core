@@ -4360,6 +4360,7 @@ private:
     GtkTreeStore* m_pTreeStore;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     gint m_nTextCol;
+    gint m_nToggleCol;
     gint m_nImageCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
@@ -4388,11 +4389,11 @@ private:
         pThis->signal_row_activated();
     }
 
-    void insert_row(GtkTreeIter& iter, GtkTreeIter* parent, int pos, const OUString* pId, const OUString& rText,
+    void insert_row(GtkTreeIter& iter, GtkTreeIter* parent, int pos, const OUString* pId, const OUString* pText,
                     const OUString* pIconName, VirtualDevice* pDevice, const OUString* pExpanderName)
     {
         gtk_tree_store_insert_with_values(m_pTreeStore, &iter, parent, pos,
-                                          m_nTextCol, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                          m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
                                           m_nIdCol, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
                                           -1);
         if (pIconName)
@@ -4445,6 +4446,18 @@ private:
         return sRet;
     }
 
+    bool get_bool(int pos, int col) const
+    {
+        gboolean bRet(false);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            gtk_tree_model_get(pModel, &iter, col, &bRet, -1);
+        }
+        return bRet;
+    }
+
     void set(int pos, int col, const OUString& rText)
     {
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
@@ -4453,6 +4466,16 @@ private:
         {
             OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
             gtk_tree_store_set(m_pTreeStore, &iter, col, aStr.getStr(), -1);
+        }
+    }
+
+    void set(int pos, int col, bool bOn)
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            gtk_tree_store_set(m_pTreeStore, &iter, col, bOn, -1);
         }
     }
 
@@ -4488,7 +4511,8 @@ private:
         if (!bRet && bPlaceHolder)
         {
             GtkTreeIter subiter;
-            insert_row(subiter, &iter, -1, nullptr, "<dummy>", nullptr, nullptr, nullptr);
+            OUString sDummy("<dummy>");
+            insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
         }
 
         return bRet;
@@ -4500,6 +4524,7 @@ public:
         , m_pTreeView(pTreeView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
         , m_nTextCol(-1)
+        , m_nToggleCol(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
@@ -4518,6 +4543,8 @@ public:
                 GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
                 if (m_nTextCol == -1 && GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                     m_nTextCol = nIndex;
+                else if (m_nToggleCol == -1 && GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
+                    m_nToggleCol = nIndex;
                 else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
                 {
                     const bool bExpander = g_list_next(pRenderer) != nullptr;
@@ -4559,17 +4586,18 @@ public:
         return sRet;
     }
 
-    virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rText, const OUString* pId, const OUString* pIconName,
+    virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pText, const OUString* pId, const OUString* pIconName,
                         VirtualDevice* pImageSurface, const OUString* pExpanderName, bool bChildrenOnDemand) override
     {
         disable_notify_events();
         GtkTreeIter iter;
         GtkInstanceTreeIter* pGtkIter = static_cast<GtkInstanceTreeIter*>(pParent);
-        insert_row(iter, pGtkIter ? &pGtkIter->iter : nullptr, pos, pId, rText, pIconName, pImageSurface, pExpanderName);
+        insert_row(iter, pGtkIter ? &pGtkIter->iter : nullptr, pos, pId, pText, pIconName, pImageSurface, pExpanderName);
         if (bChildrenOnDemand)
         {
             GtkTreeIter subiter;
-            insert_row(subiter, &iter, -1, nullptr, "<dummy>", nullptr, nullptr, nullptr);
+            OUString sDummy("<dummy>");
+            insert_row(subiter, &iter, -1, nullptr, &sDummy, nullptr, nullptr, nullptr);
         }
         enable_notify_events();
     }
@@ -4734,9 +4762,28 @@ public:
         return set(pos, col, rText);
     }
 
+    virtual bool get_toggle(int pos, int col) const override
+    {
+        if (col == -1)
+            return get_bool(pos, m_nToggleCol);
+        return get_bool(pos, col);
+    }
+
+    virtual void set_toggle(int pos, bool bOn, int col) override
+    {
+        if (col == -1)
+            return set(pos, m_nToggleCol, bOn);
+        return set(pos, col, bOn);
+    }
+
     virtual OUString get_id(int pos) const override
     {
         return get(pos, m_nIdCol);
+    }
+
+    virtual void set_id(int pos, const OUString& rId) override
+    {
+        return set(pos, m_nIdCol, rId);
     }
 
     virtual int get_selected_index() const override

@@ -75,7 +75,7 @@ HeaderBarItemBits::UPARROW         An arrow pointing upwards is displayed behind
                     a corresponding list is sorted in ascending order.
                     The status of the arrow can be set/reset with SetItemBits().
 HeaderBarItemBits::USERDRAW        For this item, the UserDraw handler is called as well.
-HeaderBarItemBits::STDSTYLE        (HeaderBarItemBits::LEFT | HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE)
+HeaderBarItemBits::STDSTYLE        (HeaderBarItemBits::LEFT | HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::CLICKABLE)
 
 --------------------------------------------------------------------------
 
