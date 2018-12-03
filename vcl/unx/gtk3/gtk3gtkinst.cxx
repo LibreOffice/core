@@ -4518,6 +4518,29 @@ private:
         return bRet;
     }
 
+    static void signalToggled(GtkCellRendererToggle* pCell, const gchar *path, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        void* pData = g_object_get_data(G_OBJECT(pCell), "g-lo-CellIndex");
+        pThis->signal_toggled(path, reinterpret_cast<sal_IntPtr>(pData));
+    }
+
+    void signal_toggled(const gchar *path, int nIndex)
+    {
+        GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
+
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        gtk_tree_model_get_iter(pModel, &iter, tree_path);
+
+        gboolean bRet(false);
+        gtk_tree_model_get(pModel, &iter, nIndex, &bRet, -1);
+        bRet = !bRet;
+        gtk_tree_store_set(m_pTreeStore, &iter, nIndex, bRet, -1);
+
+        gtk_tree_path_free(tree_path);
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), bTakeOwnership)
@@ -4543,8 +4566,13 @@ public:
                 GtkCellRenderer* pCellRenderer = GTK_CELL_RENDERER(pRenderer->data);
                 if (m_nTextCol == -1 && GTK_IS_CELL_RENDERER_TEXT(pCellRenderer))
                     m_nTextCol = nIndex;
-                else if (m_nToggleCol == -1 && GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
-                    m_nToggleCol = nIndex;
+                else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
+                {
+                    if (m_nToggleCol == -1)
+                        m_nToggleCol = nIndex;
+                    g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
+                    g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalToggled), this);
+                }
                 else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
                 {
                     const bool bExpander = g_list_next(pRenderer) != nullptr;
@@ -5984,6 +6012,16 @@ private:
         return sRet;
     }
 
+    void set(int pos, int col, const OUString& rText)
+    {
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
+        {
+            OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+            gtk_list_store_set(GTK_LIST_STORE(m_pTreeModel), &iter, col, aStr.getStr(), -1);
+        }
+    }
+
     int find(const OUString& rStr, int col) const
     {
         GtkTreeIter iter;
@@ -6299,6 +6337,12 @@ public:
     {
         gint id_column = gtk_combo_box_get_id_column(m_pComboBox);
         return get(pos, id_column);
+    }
+
+    virtual void set_id(int pos, const OUString& rId) override
+    {
+        gint id_column = gtk_combo_box_get_id_column(m_pComboBox);
+        set(pos, id_column, rId);
     }
 
     // https://gitlab.gnome.org/GNOME/gtk/issues/94

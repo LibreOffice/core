@@ -467,6 +467,16 @@ LanguageType LanguageBox::get_active_id() const
         return LANGUAGE_DONTKNOW;
 }
 
+int LanguageBox::find_id(const LanguageType eLangType) const
+{
+    return m_xControl->find_id(OUString::number(static_cast<sal_uInt16>(eLangType)));
+}
+
+void LanguageBox::set_id(int pos, const LanguageType eLangType)
+{
+    m_xControl->set_id(pos, OUString::number(static_cast<sal_uInt16>(eLangType)));
+}
+
 void LanguageBox::remove_id(const LanguageType eLangType)
 {
     m_xControl->remove_id(OUString::number(static_cast<sal_uInt16>(eLangType)));
