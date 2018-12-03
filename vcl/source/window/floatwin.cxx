@@ -507,9 +507,10 @@ tools::Rectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, co
     return aFloatRect;
 }
 
-FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, HitTest& rHitTest )
+FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, bool& rbHitTestInsideRect )
 {
     FloatingWindow* pWin = this;
+    rbHitTestInsideRect = false;
 
     Point aAbsolute(FloatingWindow::ImplConvertToAbsPos(pReference, rPos));
 
@@ -524,7 +525,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
         tools::Rectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( tools::Rectangle( Point(), pBorderWin->GetSizePixel()) ) ) ;
         if ( devRect.IsInside( aAbsolute ) )
         {
-            rHitTest = HITTEST_WINDOW;
+            // inside the window
             return pWin;
         }
 
@@ -534,7 +535,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
         //       is already in absolute device coordinates
         if ( pWin->maFloatRect.IsInside( aAbsolute ) )
         {
-            rHitTest = HITTEST_RECT;
+            rbHitTestInsideRect = true;
             return pWin;
         }
 
@@ -542,7 +543,6 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
     }
     while ( pWin );
 
-    rHitTest = HITTEST_OUTSIDE;
     return nullptr;
 }
 

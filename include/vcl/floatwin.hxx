@@ -72,14 +72,6 @@ enum class FloatWinTitleType
     NONE                     = 4,
 };
 
-enum HitTest
-{
-    HITTEST_OUTSIDE,
-    HITTEST_WINDOW,
-    HITTEST_RECT
-};
-
-
 class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
 {
     class   ImplData;
@@ -116,7 +108,7 @@ protected:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 public:
-    SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, HitTest& rHitTest );
+    SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, bool& rbHitTestInsideRect );
     SAL_DLLPRIVATE FloatingWindow*  ImplFindLastLevelFloat();
     SAL_DLLPRIVATE bool             ImplIsFloatPopupModeWindow( const vcl::Window* pWindow );
     SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = true; }
