@@ -362,6 +362,7 @@ public:
     virtual OUString get_active_id() const = 0;
     virtual void set_active_id(const OUString& rStr) = 0;
     virtual OUString get_id(int pos) const = 0;
+    virtual void set_id(int row, const OUString& rId) = 0;
     virtual int find_id(const OUString& rId) const = 0;
     void remove_id(const OUString& rId) { remove(find_id(rId)); }
 
@@ -886,6 +887,7 @@ public:
         m_xEntry->set_text(m_xTreeView->get_selected_text());
     }
     virtual OUString get_id(int pos) const override { return m_xTreeView->get_id(pos); }
+    virtual void set_id(int pos, const OUString& rId) override { m_xTreeView->set_id(pos, rId); }
     virtual int find_id(const OUString& rId) const override { return m_xTreeView->find_id(rId); }
 
     //entry related

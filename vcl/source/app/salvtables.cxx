@@ -2999,6 +2999,12 @@ public:
         return *pRet;
     }
 
+    virtual void set_id(int row, const OUString& rId) override
+    {
+        m_aUserData.emplace_back(o3tl::make_unique<OUString>(rId));
+        m_xComboBox->SetEntryData(row, m_aUserData.back().get());
+    }
+
     virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
     {
         freeze();

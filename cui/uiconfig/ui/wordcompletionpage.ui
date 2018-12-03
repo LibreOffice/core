@@ -2,6 +2,14 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">50</property>
     <property name="upper">65535</property>
@@ -64,6 +72,7 @@
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <property name="model">liststore2</property>
                     <property name="headers_visible">False</property>
                     <property name="search_column">0</property>
                     <property name="show_expanders">False</property>
@@ -366,13 +375,5 @@
       <widget name="maxentries"/>
       <widget name="minwordlen"/>
     </widgets>
-  </object>
-  <object class="GtkTreeStore" id="liststore1">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>

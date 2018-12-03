@@ -40,20 +40,16 @@ namespace editeng { class SortedAutoCompleteStrings; }
 
 // class OfaAutoCorrDlg --------------------------------------------------
 
-class OfaAutoCorrDlg : public SfxTabDialog
+class OfaAutoCorrDlg : public SfxTabDialogController
 {
-    VclPtr<VclContainer> m_pLanguageBox;
-    VclPtr<SvxLanguageBox>  m_pLanguageLB;
+    std::unique_ptr<weld::Widget> m_xLanguageBox;
+    std::unique_ptr<LanguageBox>  m_xLanguageLB;
 
-    sal_uInt16 m_nReplacePageId;
-    sal_uInt16 m_nExceptionsPageId;
-
-    DECL_LINK(SelectLanguageHdl, ListBox&, void);
+    DECL_LINK(SelectLanguageHdl, weld::ComboBox&, void);
 public:
 
-    OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet *pSet);
+    OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet *pSet);
     virtual ~OfaAutoCorrDlg() override;
-    virtual void dispose() override;
 
     void EnableLanguage(bool bEnable);
 };
