@@ -139,12 +139,14 @@ Gtk3KDE5FilePickerIpc::~Gtk3KDE5FilePickerIpc()
         return;
 
     sendCommand(Commands::Quit);
+    // nothing left to send to child process
+    if (m_inputWrite)
+        osl_closeFile(m_inputWrite);
+
     TimeValue timeValue(std::chrono::milliseconds(100));
     if (osl_joinProcessWithTimeout(m_process, &timeValue) != osl_Process_E_None)
         osl_terminateProcess(m_process);
 
-    if (m_inputWrite)
-        osl_closeFile(m_inputWrite);
     if (m_outputRead)
         osl_closeFile(m_outputRead);
     osl_freeProcessHandle(m_process);

@@ -181,7 +181,7 @@ static void readCommandArgs(Commands command, QList<QVariant>& args)
 
 static void readCommands(FilePickerIpc* ipc)
 {
-    while (!std::cin.eof())
+    while (true)
     {
         uint64_t messageId = 0;
         Commands command;
@@ -190,6 +190,12 @@ static void readCommands(FilePickerIpc* ipc)
         // retrieve additional command-specific arguments
         QList<QVariant> args;
         readCommandArgs(command, args);
+
+        // stop processing once stdin has been closed
+        if (std::cin.eof())
+        {
+            return;
+        }
 
         emit ipc->commandReceived(messageId, command, args);
     }
@@ -211,7 +217,11 @@ FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
     m_ipcReaderThread = std::unique_ptr<std::thread>{ new std::thread(readCommands, this) };
 }
 
-FilePickerIpc::~FilePickerIpc() = default;
+FilePickerIpc::~FilePickerIpc()
+{
+    // join thread that reads commands (finishes after EOF was sent)
+    m_ipcReaderThread->join();
+};
 
 bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QVariant> args)
 {
