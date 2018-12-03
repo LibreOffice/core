@@ -51,6 +51,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109053, "tdf109053.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf121664, "tdf121664.docx")
+{
+    uno::Reference<text::XLineNumberingProperties> xLineNumbering(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xLineNumbering.is());
+    // Without the accompanying fix in place, numbering did not restart on the
+    // second page.
+    CPPUNIT_ASSERT(
+        getProperty<bool>(xLineNumbering->getLineNumberingProperties(), "RestartAtEachPage"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
 {
     // sectPr element that is child element of body must be the last child. However, Word accepts it
