@@ -24,6 +24,7 @@
 #include <numpages.hxx>
 #include <dialmgr.hxx>
 #include <tools/mapunit.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>

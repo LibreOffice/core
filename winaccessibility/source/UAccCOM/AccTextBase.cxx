@@ -24,6 +24,7 @@
 
 #include "AccTextBase.h"
 
+#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 

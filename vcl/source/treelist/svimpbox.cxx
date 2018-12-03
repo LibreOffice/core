@@ -35,6 +35,7 @@
 #include <bitmaps.hlst>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>

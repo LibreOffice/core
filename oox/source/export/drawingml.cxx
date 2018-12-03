@@ -34,6 +34,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <svtools/unitconv.hxx>
 #include <sax/fastattribs.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <cstdio>
 #include <com/sun/star/awt/CharSet.hpp>

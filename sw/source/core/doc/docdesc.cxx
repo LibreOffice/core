@@ -28,6 +28,7 @@
 #include <sfx2/printer.hxx>
 #include <tools/globname.hxx>
 #include <sal/log.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>

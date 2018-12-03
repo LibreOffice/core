@@ -48,6 +48,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <editeng/editeng.hxx>
 #include <editeng/unoprnms.hxx>
