@@ -129,7 +129,7 @@ protected:
        @descr See <code>cppu::PropertySetMixinImpl::prepareSet</code> for
        further details.
     */
-    class BoundListeners {
+    class CPPUHELPER_DLLPUBLIC BoundListeners {
     public:
         /**
            @short The constructor.
