@@ -395,12 +395,6 @@ void Window::dispose()
     // hide window in order to trigger the Paint-Handling
     Hide();
 
-    // announce the window is to be destroyed
-    {
-        NotifyEvent aNEvt( MouseNotifyEvent::DESTROY, this );
-        CompatNotify( aNEvt );
-    }
-
     // EndExtTextInputMode
     if ( pSVData->maWinData.mpExtTextInputWin == this )
     {
@@ -2534,9 +2528,9 @@ void Window::EnableInput( bool bEnable, bool bChild )
         ImplGenerateMouseMove();
 
     // #104827# notify parent
-    if ( bNotify )
+    if ( bNotify && bEnable )
     {
-        NotifyEvent aNEvt( bEnable ? MouseNotifyEvent::INPUTENABLE : MouseNotifyEvent::INPUTDISABLE, this );
+        NotifyEvent aNEvt( MouseNotifyEvent::INPUTENABLE, this );
         CompatNotify( aNEvt );
     }
 }

@@ -276,9 +276,7 @@ enum class MouseNotifyEvent
     GETFOCUS         = 6,
     LOSEFOCUS        = 7,
     COMMAND          = 8,
-    DESTROY          = 9,
     INPUTENABLE      = 10,
-    INPUTDISABLE     = 11,
     EXECUTEDIALOG    = 100,
     ENDEXECUTEDIALOG = 101
 };
