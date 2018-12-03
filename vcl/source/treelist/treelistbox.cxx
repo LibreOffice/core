@@ -1457,8 +1457,7 @@ void SvTreeListBox::Resize()
 #define TABFLAGS_CONTEXTBMP (SvLBoxTabFlags::DYNAMIC | SvLBoxTabFlags::ADJUST_CENTER)
 
 #define TABFLAGS_CHECKBTN (SvLBoxTabFlags::DYNAMIC |        \
-                           SvLBoxTabFlags::ADJUST_CENTER |  \
-                           SvLBoxTabFlags::PUSHABLE)
+                           SvLBoxTabFlags::ADJUST_CENTER)
 
 #define TAB_STARTPOS    2
 

@@ -78,21 +78,18 @@ enum class SvLBoxTabFlags
     ADJUST_RIGHT     = 0x0002, // Item's right margin at the tabulator
     ADJUST_LEFT      = 0x0004, // Left margin
     ADJUST_CENTER    = 0x0008, // Center the item at the tabulator
-    ADJUST_NUMERIC   = 0x0010, // Decimal point at the tabulator (strings)
 
-    SHOW_SELECTION   = 0x0040, // Visualize selection state
+    SHOW_SELECTION   = 0x0010, // Visualize selection state
                                            // Item needs to be able to return the surrounding polygon (D'n'D cursor)
-    EDITABLE         = 0x0100, // Item editable at the tabulator
-    PUSHABLE         = 0x0200, // Item acts like a Button
-    INV_ALWAYS       = 0x0400, // Always delete the background
-    FORCE            = 0x0800, // Switch off the default calculation of the first tabulator
+    EDITABLE         = 0x0020, // Item editable at the tabulator
+    FORCE            = 0x0040, // Switch off the default calculation of the first tabulator
                                // (on which Abo Tabpage/Extras/Option/Customize, etc. rely on)
                                // The first tab's position corresponds precisely to the Flags set
                                // and column widths
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvLBoxTabFlags> : is_typed_flags<SvLBoxTabFlags, 0x0f5f> {};
+    template<> struct typed_flags<SvLBoxTabFlags> : is_typed_flags<SvLBoxTabFlags, 0x007f> {};
 }
 
 #define SV_TAB_BORDER 8
