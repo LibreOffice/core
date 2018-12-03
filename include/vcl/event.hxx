@@ -332,8 +332,7 @@ enum class DataChangedEventType {
     DISPLAY            = 2,
     FONTS              = 4,
     PRINTER            = 5,
-    FONTSUBSTITUTION   = 6,
-    USER               = 10000
+    FONTSUBSTITUTION   = 6
 };
 
 class VCL_DLLPUBLIC DataChangedEvent
