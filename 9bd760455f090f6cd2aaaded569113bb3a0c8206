@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_65892625",
+        "filename": "vcl/source/bitmap/BitmapTools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-03T01:13:17Z",
+      "side": 1,
+      "message": "vcl/BitmapTools.hxx already has this include",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "9bd760455f090f6cd2aaaded569113bb3a0c8206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
