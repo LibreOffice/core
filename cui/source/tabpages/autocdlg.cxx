@@ -756,19 +756,19 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
 void OfaACorrCheckListBox::SetTabs()
 {
     SvSimpleTable::SetTabs();
-    SvLBoxTabFlags nAdjust = SvLBoxTabFlags::ADJUST_RIGHT|SvLBoxTabFlags::ADJUST_LEFT|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::ADJUST_NUMERIC|SvLBoxTabFlags::FORCE;
+    SvLBoxTabFlags nAdjust = SvLBoxTabFlags::ADJUST_RIGHT|SvLBoxTabFlags::ADJUST_LEFT|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
 
     if( aTabs.size() > 1 )
     {
         SvLBoxTab* pTab = aTabs[1].get();
         pTab->nFlags &= ~nAdjust;
-        pTab->nFlags |= SvLBoxTabFlags::PUSHABLE|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
+        pTab->nFlags |= SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
     }
     if( aTabs.size() > 2 )
     {
         SvLBoxTab* pTab = aTabs[2].get();
         pTab->nFlags &= ~nAdjust;
-        pTab->nFlags |= SvLBoxTabFlags::PUSHABLE|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
+        pTab->nFlags |= SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
     }
 }
 

@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 static constexpr SvLBoxTabFlags MYTABMASK =
-    SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER | SvLBoxTabFlags::ADJUST_NUMERIC;
+    SvLBoxTabFlags::ADJUST_RIGHT | SvLBoxTabFlags::ADJUST_LEFT | SvLBoxTabFlags::ADJUST_CENTER;
 
 // SvTreeListBox callback
 
@@ -123,7 +123,7 @@ void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         long nNewTab = aSize.Width();
         mvTabList[nIdx].SetPos( nNewTab );
-        mvTabList[nIdx].nFlags=(SvLBoxTabFlags::ADJUST_LEFT| SvLBoxTabFlags::INV_ALWAYS);
+        mvTabList[nIdx].nFlags = SvLBoxTabFlags::ADJUST_LEFT;
     }
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;
     if( IsUpdateMode() )
