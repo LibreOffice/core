@@ -844,7 +844,7 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     }
 
     if(!aGrfNames.empty() &&
-        (pActNum && (lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset)))
+        (pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset)))
     {
         m_xExamplesVS->SelectItem(1);
         NumSelectHdl_Impl(m_xExamplesVS.get());
