@@ -67,6 +67,7 @@ void Qt5DragSource::startDrag(
     if (m_pFrame)
     {
         Qt5Widget* qw = static_cast<Qt5Widget*>(m_pFrame->GetQWidget());
+        m_ActiveDragSource = this;
         qw->startDrag();
     }
     else
@@ -97,6 +98,7 @@ void Qt5DragSource::fire_dragEnd(sal_Int8 nAction)
         m_xListener.clear();
         xListener->dragDropEnd(aEv);
     }
+    m_ActiveDragSource = nullptr;
 }
 
 OUString SAL_CALL Qt5DragSource::getImplementationName()
