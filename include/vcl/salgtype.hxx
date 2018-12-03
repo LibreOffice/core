@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_SALGTYPE_HXX
 #define INCLUDED_VCL_SALGTYPE_HXX
 
-#include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>

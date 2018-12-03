@@ -34,6 +34,7 @@
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <cppuhelper/weakref.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/commandevent.hxx>

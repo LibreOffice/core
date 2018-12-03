@@ -36,6 +36,7 @@
 #include <i18nutil/searchopt.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>

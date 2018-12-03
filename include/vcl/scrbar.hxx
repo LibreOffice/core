@@ -20,12 +20,9 @@
 #ifndef INCLUDED_VCL_SCRBAR_HXX
 #define INCLUDED_VCL_SCRBAR_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <memory>
-
-class AutoTimer;
 
 
 enum class ScrollType

@@ -68,6 +68,7 @@
 #include <desktop/crashreport.hxx>
 #include <vcl/scheduler.hxx>
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <vcl/errinf.hxx>
 #include <unotools/configmgr.hxx>

@@ -44,6 +44,7 @@
 #include <tools/bigint.hxx>
 #include <tools/stream.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

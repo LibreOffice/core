@@ -22,10 +22,12 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/builderfactory.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace svx {
 

@@ -9,6 +9,7 @@
  */
 
 #include <tools/color.hxx>
+#include <tools/helpers.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
 #include <vcl/bitmapaccess.hxx>

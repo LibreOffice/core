@@ -54,6 +54,7 @@
 #include <o3tl/functional.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #include <algorithm>
 #include <iterator>
