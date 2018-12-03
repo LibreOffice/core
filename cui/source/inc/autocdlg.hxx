@@ -95,8 +95,6 @@ class OfaAutocorrOptionsPage : public SfxTabPage
     using TabPage::ActivatePage;
 
 private:
-    VclPtr<SvxCheckListBox> m_pCheckLB;
-
     OUString m_sInput;
     OUString m_sDoubleCaps;
     OUString m_sStartCap;
@@ -106,10 +104,13 @@ private:
     OUString m_sDash;
     OUString m_sAccidentalCaps;
 
+    std::unique_ptr<weld::TreeView> m_xCheckLB;
+
+    void InsertEntry(const OUString& rTxt);
+
 public:
-    OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    OfaAutocorrOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaAutocorrOptionsPage() override;
-    virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent,
                                 const SfxItemSet* rAttrSet);
