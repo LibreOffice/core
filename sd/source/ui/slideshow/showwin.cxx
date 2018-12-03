@@ -21,6 +21,7 @@
 
 #include "showwindow.hxx"
 
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
 

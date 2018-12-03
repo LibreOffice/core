@@ -48,6 +48,7 @@
 
 #include <xmlscript/xmldlg_imexp.hxx>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <unotools/collatorwrapper.hxx>

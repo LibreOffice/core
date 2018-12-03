@@ -22,6 +22,7 @@
 #include <memory>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>

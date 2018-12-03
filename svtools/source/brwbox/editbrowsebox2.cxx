@@ -24,6 +24,7 @@
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
+#include <vcl/accessiblefactory.hxx>
 #include <osl/diagnose.h>
 
 namespace svt

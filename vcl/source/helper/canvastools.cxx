@@ -49,6 +49,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <sal/log.hxx>
+#include <tools/helpers.hxx>
 #include <tools/poly.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/uuid.h>

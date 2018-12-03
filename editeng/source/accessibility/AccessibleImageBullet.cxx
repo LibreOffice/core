@@ -32,6 +32,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 #include <editeng/AccessibleImageBullet.hxx>

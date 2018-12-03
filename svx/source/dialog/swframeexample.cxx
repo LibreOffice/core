@@ -24,6 +24,7 @@
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/swframeexample.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>

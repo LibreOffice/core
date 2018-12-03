@@ -43,6 +43,7 @@
 #include "AccHypertext.h"
 #include "AccHyperLink.h"
 
+#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <comphelper/AccessibleImplementationHelper.hxx>
