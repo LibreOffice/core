@@ -188,8 +188,8 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox&, rBox, void)
     }
 }
 
-OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "AutocorrectOptionsPage", "cui/ui/acoroptionspage.ui", &rSet)
+OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/acoroptionspage.ui", "AutocorrectOptionsPage", &rSet)
     , m_sInput(CuiResId(RID_SVXSTR_USE_REPLACE))
     , m_sDoubleCaps(CuiResId(RID_SVXSTR_CPTL_STT_WORD))
     , m_sStartCap(CuiResId(RID_SVXSTR_CPTL_STT_SENT))
@@ -198,8 +198,11 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxIt
     , m_sNoDblSpaces(CuiResId(RID_SVXSTR_NO_DBL_SPACES))
     , m_sDash(CuiResId(RID_SVXSTR_DASH))
     , m_sAccidentalCaps(CuiResId(RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
+    , m_xCheckLB(m_xBuilder->weld_tree_view("checklist"))
 {
-    get(m_pCheckLB, "checklist");
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xCheckLB->get_approximate_digit_width() * 3 + 6);
+    m_xCheckLB->set_column_fixed_widths(aWidths);
 }
 
 OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
@@ -207,16 +210,10 @@ OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
     disposeOnce();
 }
 
-void OfaAutocorrOptionsPage::dispose()
+VclPtr<SfxTabPage> OfaAutocorrOptionsPage::Create(TabPageParent pParent,
+                                                  const SfxItemSet* rSet)
 {
-    m_pCheckLB.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> OfaAutocorrOptionsPage::Create( TabPageParent pParent,
-                                                   const SfxItemSet* rSet)
-{
-    return VclPtr<OfaAutocorrOptionsPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<OfaAutocorrOptionsPage>::Create(pParent, *rSet);
 }
 
 bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
@@ -224,15 +221,15 @@ bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     ACFlags nFlags = pAutoCorrect->GetFlags();
 
-    sal_uLong nPos = 0;
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,          m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,     m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_pCheckLB->IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_pCheckLB->IsChecked(nPos++));
+    int nPos = 0;
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,          m_xCheckLB->get_toggle(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,     m_xCheckLB->get_toggle(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_xCheckLB->get_toggle(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_xCheckLB->get_toggle(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_xCheckLB->get_toggle(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_xCheckLB->get_toggle(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_xCheckLB->get_toggle(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_xCheckLB->get_toggle(nPos++));
 
     bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
@@ -249,34 +246,43 @@ void    OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
     static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(false);
 }
 
+void OfaAutocorrOptionsPage::InsertEntry(const OUString& rTxt)
+{
+    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
+                       nullptr, nullptr, false);
+    const int nRow = m_xCheckLB->n_children() - 1;
+    m_xCheckLB->set_toggle(nRow, false, 0);
+    m_xCheckLB->set_text(nRow, rTxt, 1);
+}
+
 void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const ACFlags nFlags = pAutoCorrect->GetFlags();
 
-    m_pCheckLB->SetUpdateMode(false);
-    m_pCheckLB->Clear();
+    m_xCheckLB->freeze();
+    m_xCheckLB->clear();
 
-    m_pCheckLB->InsertEntry(m_sInput);
-    m_pCheckLB->InsertEntry(m_sDoubleCaps);
-    m_pCheckLB->InsertEntry(m_sStartCap);
-    m_pCheckLB->InsertEntry(m_sBoldUnderline);
-    m_pCheckLB->InsertEntry(m_sURL);
-    m_pCheckLB->InsertEntry(m_sDash);
-    m_pCheckLB->InsertEntry(m_sNoDblSpaces);
-    m_pCheckLB->InsertEntry(m_sAccidentalCaps);
+    InsertEntry(m_sInput);
+    InsertEntry(m_sDoubleCaps);
+    InsertEntry(m_sStartCap);
+    InsertEntry(m_sBoldUnderline);
+    InsertEntry(m_sURL);
+    InsertEntry(m_sDash);
+    InsertEntry(m_sNoDblSpaces);
+    InsertEntry(m_sAccidentalCaps);
 
-    sal_uLong nPos = 0;
-    m_pCheckLB->CheckEntryPos( nPos++, bool(nFlags & ACFlags::Autocorrect) );
-    m_pCheckLB->CheckEntryPos( nPos++, bool(nFlags & ACFlags::CapitalStartWord) );
-    m_pCheckLB->CheckEntryPos( nPos++, bool(nFlags & ACFlags::CapitalStartSentence) );
-    m_pCheckLB->CheckEntryPos( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl) );
-    m_pCheckLB->CheckEntryPos( nPos++, bool(nFlags & ACFlags::SetINetAttr) );
-    m_pCheckLB->CheckEntryPos( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash) );
-    m_pCheckLB->CheckEntryPos( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace) );
-    m_pCheckLB->CheckEntryPos( nPos++, bool(nFlags & ACFlags::CorrectCapsLock) );
+    int nPos = 0;
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::Autocorrect) );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartWord) );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartSentence) );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl) );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetINetAttr) );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash) );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace) );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CorrectCapsLock) );
 
-    m_pCheckLB->SetUpdateMode(true);
+    m_xCheckLB->thaw();
 }
 
 /*********************************************************************/
