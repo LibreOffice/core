@@ -82,7 +82,7 @@ void SwAccessibleFrameBase::GetStates(
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        assert(m_bIsSelected && "bSelected out of sync");
+        SAL_WARN_IF(!m_bIsSelected, "sw.a11y", "bSelected out of sync");
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
