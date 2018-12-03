@@ -127,9 +127,6 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     friend class VclPtr<OfaSwAutoFmtOptionsPage>;
     using TabPage::ActivatePage;
 
-    VclPtr<OfaACorrCheckListBox>   m_pCheckLB;
-    VclPtr<PushButton>     m_pEditPB;
-
     OUString        sDeleteEmptyPara;
     OUString        sUseReplaceTbl;
     OUString        sCapitalStartWord;
@@ -157,16 +154,16 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     vcl::Font        aByInputBulletFont;
     sal_uInt16       nPercent;
 
-    std::unique_ptr<SvLBoxButtonData> m_xCheckButtonData;
+    std::unique_ptr<weld::TreeView> m_xCheckLB;
+    std::unique_ptr<weld::Button> m_xEditPB;
 
-    DECL_LINK(SelectHdl, SvTreeListBox*, void);
-    DECL_LINK(EditHdl, Button*, void);
-    DECL_LINK(DoubleClickEditHdl, SvTreeListBox*, bool);
-    SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
+    DECL_LINK(SelectHdl, weld::TreeView&, void);
+    DECL_LINK(EditHdl, weld::Button&, void);
+    DECL_LINK(DoubleClickEditHdl, weld::TreeView&, void);
 
+    void CreateEntry(const OUString& rTxt, sal_uInt16 nCol);
 
-    OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
-                        const SfxItemSet& rSet );
+    OfaSwAutoFmtOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~OfaSwAutoFmtOptionsPage() override;
     virtual void dispose() override;
 

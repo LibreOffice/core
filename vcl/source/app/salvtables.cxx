@@ -1823,6 +1823,7 @@ private:
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<SvTabListBox> m_xTreeView;
+    SvLBoxButtonData m_aCheckButtonData;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
@@ -1833,6 +1834,7 @@ public:
     SalInstanceTreeView(SvTabListBox* pTreeView, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, bTakeOwnership)
         , m_xTreeView(pTreeView)
+        , m_aCheckButtonData(pTreeView)
     {
         m_xTreeView->SetNodeDefaultImages();
         m_xTreeView->SetSelectHdl(LINK(this, SalInstanceTreeView, SelectHdl));
@@ -1876,7 +1878,7 @@ public:
         return OUString();
     }
 
-    virtual void insert(weld::TreeIter* pParent, int pos, const OUString& rStr, const OUString* pId,
+    virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface, const OUString* pExpanderName,
                         bool bChildrenOnDemand) override
     {
@@ -1892,15 +1894,25 @@ public:
         else
             pUserData = nullptr;
 
+        bool bSimple = !pIconName && !pImageSurface && pStr;
         SvTreeListEntry* pResult;
-        if (!pIconName && !pImageSurface)
-            pResult = m_xTreeView->InsertEntry(rStr, iter, false, nInsertPos, pUserData);
+        if (bSimple)
+            pResult = m_xTreeView->InsertEntry(*pStr, iter, false, nInsertPos, pUserData);
         else
         {
             SvTreeListEntry* pEntry = new SvTreeListEntry;
-            Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
-            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
-            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rStr));
+            if (pIconName || pImageSurface)
+            {
+                Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
+                pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+            }
+            else
+            {
+                Image aDummy;
+                pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+            }
+            if (pStr)
+                pEntry->AddItem(o3tl::make_unique<SvLBoxString>(*pStr));
             pEntry->SetUserData(pUserData);
             m_xTreeView->Insert(pEntry, iter, nInsertPos);
             pResult = pEntry;
@@ -2059,9 +2071,15 @@ public:
 
         ++col; //skip dummy/expander column
 
+        // blank out missing entries
+        for (int i = pEntry->ItemCount(); i < col ; ++i)
+            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
+
         if (static_cast<size_t>(col) == pEntry->ItemCount())
         {
             pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rText));
+            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
+            m_xTreeView->InitViewData(pViewData, pEntry);
         }
         else
         {
@@ -2070,6 +2088,57 @@ public:
             assert(dynamic_cast<SvLBoxString*>(&rItem));
             static_cast<SvLBoxString&>(rItem).SetText(rText);
         }
+        m_xTreeView->ModelHasEntryInvalidated(pEntry);
+    }
+
+    virtual bool get_toggle(int pos, int col) const override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        if (col == -1)
+            return m_xTreeView->GetCheckButtonState(pEntry) == SvButtonState::Checked;
+
+        ++col; //skip dummy/expander column
+
+        if (static_cast<size_t>(col) == pEntry->ItemCount())
+            return false;
+
+        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        SvLBoxItem& rItem = pEntry->GetItem(col);
+        assert(dynamic_cast<SvLBoxButton*>(&rItem));
+        return static_cast<SvLBoxButton&>(rItem).IsStateChecked();
+    }
+
+    virtual void set_toggle(int pos, bool bOn, int col) override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        if (col == -1)
+        {
+            m_xTreeView->SetCheckButtonState(pEntry, bOn ? SvButtonState::Checked : SvButtonState::Unchecked);
+            return;
+        }
+
+        ++col; //skip dummy/expander column
+
+        // blank out missing entries
+        for (int i = pEntry->ItemCount(); i < col ; ++i)
+            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
+
+        if (static_cast<size_t>(col) == pEntry->ItemCount())
+        {
+            pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox,
+                                                            &m_aCheckButtonData));
+            SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
+            m_xTreeView->InitViewData(pViewData, pEntry);
+        }
+
+        assert(col >= 0 && static_cast<size_t>(col) < pEntry->ItemCount());
+        SvLBoxItem& rItem = pEntry->GetItem(col);
+        assert(dynamic_cast<SvLBoxButton*>(&rItem));
+        if (bOn)
+            static_cast<SvLBoxButton&>(rItem).SetStateChecked();
+        else
+            static_cast<SvLBoxButton&>(rItem).SetStateUnchecked();
+
         m_xTreeView->ModelHasEntryInvalidated(pEntry);
     }
 
@@ -2085,6 +2154,13 @@ public:
         if (!pRet)
             return OUString();
         return *pRet;
+    }
+
+    virtual void set_id(int pos, const OUString& rId) override
+    {
+        SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        m_aUserData.emplace_back(o3tl::make_unique<OUString>(rId));
+        pEntry->SetUserData(m_aUserData.back().get());
     }
 
     virtual int get_selected_index() const override
