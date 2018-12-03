@@ -179,7 +179,7 @@ walk_up:
             // Ignore a common pattern that does not introduce any new information, merely removes
             // information:     foo &= ~Enum6::Top
             bool found = false;
-            if (auto innerOperatorCall = dyn_cast<CXXOperatorCallExpr>(operatorCall->getArg(1)))
+            if (auto innerOperatorCall = dyn_cast<CXXOperatorCallExpr>(operatorCall->getArg(1)->IgnoreImplicit()->IgnoreParens()->IgnoreImplicit()))
             {
                 found = innerOperatorCall->getOperator() == OO_Tilde;
             }
