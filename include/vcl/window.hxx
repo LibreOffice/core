@@ -331,7 +331,6 @@ enum class StateChangedType : sal_uInt16
     ControlForeground  = 14,
     ControlBackground  = 15,
     ReadOnly           = 16,
-    ExtendedStyle      = 17,
     Mirroring          = 18,
     Layout             = 19,
     ControlFocus       = 20

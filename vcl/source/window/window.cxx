@@ -1948,7 +1948,6 @@ void Window::SetExtendedStyle( WindowExtendedStyle nExtendedStyle )
             pWindow->ImplGetFrame()->SetExtendedFrameStyle( nExt );
         }
         mpWindowImpl->mnExtendedStyle = nExtendedStyle;
-        CompatStateChanged( StateChangedType::ExtendedStyle );
     }
 }
 
