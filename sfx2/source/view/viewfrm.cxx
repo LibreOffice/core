@@ -616,11 +616,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 DELETEZ( xOldObj->Get_Impl()->pReloadTimer );
 
-                SfxItemSet* pNewSet = nullptr;
+                std::unique_ptr<SfxItemSet> pNewSet;
                 std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
                 if( pURLItem )
                 {
-                    pNewSet = new SfxAllItemSet( pApp->GetPool() );
+                    pNewSet.reset(new SfxAllItemSet( pApp->GetPool() ));
                     pNewSet->Put( *pURLItem );
 
                     // Filter Detection
@@ -637,7 +637,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
                 else
                 {
-                    pNewSet = new SfxAllItemSet( *pMedium->GetItemSet() );
+                    pNewSet.reset(new SfxAllItemSet( *pMedium->GetItemSet() ));
                     pNewSet->ClearItem( SID_VIEW_ID );
                     pNewSet->ClearItem( SID_STREAM );
                     pNewSet->ClearItem( SID_INPUTSTREAM );
@@ -657,7 +657,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 // If a salvaged file is present, do not enclose the OrigURL
                 // again, since the Template is invalid after reload.
-                const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pNewSet, SID_DOC_SALVAGE, false);
+                const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pNewSet.get(), SID_DOC_SALVAGE, false);
                 if( pSalvageItem )
                 {
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
@@ -680,9 +680,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( pSilentItem && pSilentItem->GetValue() )
                     pNewSet->Put( SfxBoolItem( SID_SILENT, true ) );
 
-                const SfxUnoAnyItem* pInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pNewSet, SID_INTERACTIONHANDLER, false);
-                const SfxUInt16Item* pMacroExecItem = SfxItemSet::GetItem<SfxUInt16Item>(pNewSet, SID_MACROEXECMODE, false);
-                const SfxUInt16Item* pDocTemplateItem = SfxItemSet::GetItem<SfxUInt16Item>(pNewSet, SID_UPDATEDOCMODE, false);
+                const SfxUnoAnyItem* pInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pNewSet.get(), SID_INTERACTIONHANDLER, false);
+                const SfxUInt16Item* pMacroExecItem = SfxItemSet::GetItem<SfxUInt16Item>(pNewSet.get(), SID_MACROEXECMODE, false);
+                const SfxUInt16Item* pDocTemplateItem = SfxItemSet::GetItem<SfxUInt16Item>(pNewSet.get(), SID_UPDATEDOCMODE, false);
 
                 if (!pInteractionItem)
                 {
@@ -734,7 +734,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     xNewObj = nullptr;
                 }
 
-                DELETEZ( pNewSet );
+                pNewSet.reset();
 
                 if( !xNewObj.Is() )
                 {
