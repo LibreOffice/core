@@ -868,36 +868,36 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if (rHint.GetId() == SfxHintId::Deinitializing)
         {
-            DELETEZ(m_pWebUsrPref);
-            DELETEZ(m_pUsrPref);
-            DELETEZ(m_pModuleConfig);
-            DELETEZ(m_pPrintOptions);
-            DELETEZ(m_pWebPrintOptions);
-            DELETEZ(m_pChapterNumRules);
-            DELETEZ(m_pStdFontConfig);
-            DELETEZ(m_pNavigationConfig);
-            DELETEZ(m_pToolbarConfig);
-            DELETEZ(m_pWebToolbarConfig);
-            DELETEZ(m_pDBConfig);
+            m_pWebUsrPref.reset();
+            m_pUsrPref.reset();
+            m_pModuleConfig.reset();
+            m_pPrintOptions.reset();
+            m_pWebPrintOptions.reset();
+            m_pChapterNumRules.reset();
+            m_pStdFontConfig.reset();
+            m_pNavigationConfig.reset();
+            m_pToolbarConfig.reset();
+            m_pWebToolbarConfig.reset();
+            m_pDBConfig.reset();
             if( m_pColorConfig )
             {
                 m_pColorConfig->RemoveListener(this);
-                DELETEZ(m_pColorConfig);
+                m_pColorConfig.reset();
             }
             if( m_pAccessibilityOptions )
             {
                 m_pAccessibilityOptions->RemoveListener(this);
-                DELETEZ(m_pAccessibilityOptions);
+                m_pAccessibilityOptions.reset();
             }
             if( m_pCTLOptions )
             {
                 m_pCTLOptions->RemoveListener(this);
-                DELETEZ(m_pCTLOptions);
+                m_pCTLOptions.reset();
             }
             if( m_pUserOptions )
             {
                 m_pUserOptions->RemoveListener(this);
-                DELETEZ(m_pUserOptions);
+                m_pUserOptions.reset();
             }
         }
     }
@@ -905,14 +905,14 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, ConfigurationHints )
 {
-    if( pBrdCst == m_pUserOptions )
+    if( pBrdCst == m_pUserOptions.get() )
     {
         m_bAuthorInitialised = false;
     }
-    else if ( pBrdCst == m_pColorConfig || pBrdCst == m_pAccessibilityOptions )
+    else if ( pBrdCst == m_pColorConfig.get() || pBrdCst == m_pAccessibilityOptions.get() )
     {
         bool bAccessibility = false;
-        if( pBrdCst == m_pColorConfig )
+        if( pBrdCst == m_pColorConfig.get() )
             SwViewOption::ApplyColorConfigValues(*m_pColorConfig);
         else
             bAccessibility = true;
@@ -940,7 +940,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }
     }
-    else if( pBrdCst == m_pCTLOptions )
+    else if( pBrdCst == m_pCTLOptions.get() )
     {
         const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while( pObjSh )
@@ -961,15 +961,15 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
 SwDBConfig* SwModule::GetDBConfig()
 {
     if(!m_pDBConfig)
-        m_pDBConfig = new SwDBConfig;
-    return m_pDBConfig;
+        m_pDBConfig.reset(new SwDBConfig);
+    return m_pDBConfig.get();
 }
 
 svtools::ColorConfig& SwModule::GetColorConfig()
 {
     if(!m_pColorConfig)
     {
-        m_pColorConfig = new svtools::ColorConfig;
+        m_pColorConfig.reset(new svtools::ColorConfig);
         SwViewOption::ApplyColorConfigValues(*m_pColorConfig);
         m_pColorConfig->AddListener(this);
     }
@@ -980,7 +980,7 @@ SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
 {
     if(!m_pAccessibilityOptions)
     {
-        m_pAccessibilityOptions = new SvtAccessibilityOptions;
+        m_pAccessibilityOptions.reset(new SvtAccessibilityOptions);
         m_pAccessibilityOptions->AddListener(this);
     }
     return *m_pAccessibilityOptions;
@@ -990,7 +990,7 @@ SvtCTLOptions& SwModule::GetCTLOptions()
 {
     if(!m_pCTLOptions)
     {
-        m_pCTLOptions = new SvtCTLOptions;
+        m_pCTLOptions.reset(new SvtCTLOptions);
         m_pCTLOptions->AddListener(this);
     }
     return *m_pCTLOptions;
@@ -1000,7 +1000,7 @@ SvtUserOptions& SwModule::GetUserOptions()
 {
     if(!m_pUserOptions)
     {
-        m_pUserOptions = new SvtUserOptions;
+        m_pUserOptions.reset(new SvtUserOptions);
         m_pUserOptions->AddListener(this);
     }
     return *m_pUserOptions;
@@ -1013,13 +1013,13 @@ const SwMasterUsrPref *SwModule::GetUsrPref(bool bWeb) const
     {
         // The SpellChecker is needed in SwMasterUsrPref's Load, but it must not
         // be created there #58256#
-        pNonConstModule->m_pWebUsrPref = new SwMasterUsrPref(true);
+        pNonConstModule->m_pWebUsrPref.reset(new SwMasterUsrPref(true));
     }
     else if(!bWeb && !m_pUsrPref)
     {
-        pNonConstModule->m_pUsrPref = new SwMasterUsrPref(false);
+        pNonConstModule->m_pUsrPref.reset(new SwMasterUsrPref(false));
     }
-    return  bWeb ? m_pWebUsrPref : m_pUsrPref;
+    return  bWeb ? m_pWebUsrPref.get() : m_pUsrPref.get();
 }
 
 void NewXForms( SfxRequest& rReq )

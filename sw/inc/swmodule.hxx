@@ -75,21 +75,21 @@ class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public
     OUString            m_sActAuthor;
 
     // ConfigItems
-    SwModuleOptions*    m_pModuleConfig;
-    SwMasterUsrPref*    m_pUsrPref;
-    SwMasterUsrPref*    m_pWebUsrPref;
-    SwPrintOptions*     m_pPrintOptions;
-    SwPrintOptions*     m_pWebPrintOptions;
-    SwChapterNumRules*  m_pChapterNumRules;
-    SwStdFontConfig*    m_pStdFontConfig;
-    SwNavigationConfig* m_pNavigationConfig;
-    SwToolbarConfigItem*m_pToolbarConfig;     //For stacked toolbars. Which one was visible?
-    SwToolbarConfigItem*m_pWebToolbarConfig;
-    SwDBConfig*         m_pDBConfig;
-    svtools::ColorConfig*   m_pColorConfig;
-    SvtAccessibilityOptions* m_pAccessibilityOptions;
-    SvtCTLOptions*      m_pCTLOptions;
-    SvtUserOptions*     m_pUserOptions;
+    std::unique_ptr<SwModuleOptions>     m_pModuleConfig;
+    std::unique_ptr<SwMasterUsrPref>     m_pUsrPref;
+    std::unique_ptr<SwMasterUsrPref>     m_pWebUsrPref;
+    std::unique_ptr<SwPrintOptions>      m_pPrintOptions;
+    std::unique_ptr<SwPrintOptions>      m_pWebPrintOptions;
+    std::unique_ptr<SwChapterNumRules>   m_pChapterNumRules;
+    std::unique_ptr<SwStdFontConfig>     m_pStdFontConfig;
+    std::unique_ptr<SwNavigationConfig>  m_pNavigationConfig;
+    std::unique_ptr<SwToolbarConfigItem> m_pToolbarConfig;     //For stacked toolbars. Which one was visible?
+    std::unique_ptr<SwToolbarConfigItem> m_pWebToolbarConfig;
+    std::unique_ptr<SwDBConfig>          m_pDBConfig;
+    std::unique_ptr<svtools::ColorConfig>   m_pColorConfig;
+    std::unique_ptr<SvtAccessibilityOptions> m_pAccessibilityOptions;
+    std::unique_ptr<SvtCTLOptions>       m_pCTLOptions;
+    std::unique_ptr<SvtUserOptions>      m_pUserOptions;
 
     std::unique_ptr<SfxErrorHandler> m_pErrorHandler;
 
@@ -165,13 +165,13 @@ public:
     void ApplyUserCharUnit(bool bApplyChar, bool bWeb);  // apply_char_unit
 
     // Create ConfigItems.
-    SwModuleOptions*    GetModuleConfig()       { return m_pModuleConfig;}
+    SwModuleOptions*    GetModuleConfig()       { return m_pModuleConfig.get();}
     SwPrintOptions*     GetPrtOptions(bool bWeb);
     SwChapterNumRules*  GetChapterNumRules();
-    SwStdFontConfig*    GetStdFontConfig()      { return m_pStdFontConfig; }
+    SwStdFontConfig*    GetStdFontConfig()      { return m_pStdFontConfig.get(); }
     SwNavigationConfig* GetNavigationConfig();
-    SwToolbarConfigItem*GetToolbarConfig()      { return m_pToolbarConfig;    }
-    SwToolbarConfigItem*GetWebToolbarConfig()   { return m_pWebToolbarConfig; }
+    SwToolbarConfigItem*GetToolbarConfig()      { return m_pToolbarConfig.get();    }
+    SwToolbarConfigItem*GetWebToolbarConfig()   { return m_pWebToolbarConfig.get(); }
     SwDBConfig*         GetDBConfig();
     svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions&    GetAccessibilityOptions();
