@@ -1278,6 +1278,10 @@ void OpSqrt::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0=";
             ss << tmpCur->GetDouble() << ";\n";
         }
+        else
+        {
+            throw Unhandled( __FILE__, __LINE__ );
+        }
     }
     else
     {
@@ -1285,6 +1289,8 @@ void OpSqrt::GenSlidingWindowFunction(std::stringstream &ss,
         ss << vSubArguments[0]->GenSlidingWindowDeclRef();
         ss << ";\n";
     }
+    ss << "    if( arg0 < 0 )\n";
+    ss << "        return CreateDoubleError(IllegalArgument);\n";
     ss << "    return sqrt(arg0);\n";
     ss << "}";
 }
