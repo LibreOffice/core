@@ -34,22 +34,22 @@ struct SwFindParaFormatColl : public SwFindParas
         : pFormatColl( &rFormatColl ), pReplColl( pRpColl )
     {}
     virtual ~SwFindParaFormatColl() {}
-    virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
     virtual bool IsReplaceMode() const override;
 };
 
-int SwFindParaFormatColl::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, const SwPaM* pRegion,
-                             bool bInReadOnly )
+int SwFindParaFormatColl::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
+        const SwPaM & rRegion, bool bInReadOnly)
 {
     int nRet = FIND_FOUND;
     if( bInReadOnly && pReplColl )
         bInReadOnly = false;
 
-    if( !pCursor->Find( *pFormatColl, fnMove, pRegion, bInReadOnly ) )
+    if (!sw::FindFormatImpl(rCursor, *pFormatColl, fnMove, rRegion, bInReadOnly))
         nRet = FIND_NOT_FOUND;
     else if( pReplColl )
     {
-        pCursor->GetDoc()->SetTextFormatColl( *pCursor, const_cast<SwTextFormatColl*>(pReplColl) );
+        rCursor.GetDoc()->SetTextFormatColl(rCursor, const_cast<SwTextFormatColl*>(pReplColl));
         nRet = FIND_NO_RING;
     }
     return nRet;
@@ -61,7 +61,7 @@ bool SwFindParaFormatColl::IsReplaceMode() const
 }
 
 /// search for Format-Collections
-sal_uLong SwCursor::Find( const SwTextFormatColl& rFormatColl, SwDocPositions nStart,
+sal_uLong SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositions nStart,
                           SwDocPositions nEnd, bool& bCancel,
                           FindRanges eFndRngs, const SwTextFormatColl* pReplFormatColl )
 {
