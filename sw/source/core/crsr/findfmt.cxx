@@ -22,12 +22,15 @@
 #include <pam.hxx>
 #include <memory>
 
-bool SwPaM::Find( const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
-                  const SwPaM *pRegion, bool bInReadOnly  )
+namespace sw {
+
+bool FindFormatImpl(SwPaM & rSearchPam,
+        const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
+        const SwPaM &rRegion, bool bInReadOnly)
 {
     bool bFound = false;
     const bool bSrchForward = &fnMove == &fnMoveForward;
-    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
+    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, rRegion ));
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
@@ -53,20 +56,22 @@ bool SwPaM::Find( const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
             // FORWARD:  SPoint at the end, GetMark at the beginning of the node
             // BACKWARD: SPoint at the beginning, GetMark at the end of the node
             // always: incl. start and incl. end
-            *GetPoint() = *pPam->GetPoint();
-            SetMark();
-            pNode->MakeEndIndex( &GetPoint()->nContent );
-            GetMark()->nContent = 0;
+            *rSearchPam.GetPoint() = *pPam->GetPoint();
+            rSearchPam.SetMark();
+            pNode->MakeEndIndex( &rSearchPam.GetPoint()->nContent );
+            rSearchPam.GetMark()->nContent = 0;
 
             // if backward search, switch point and mark
             if( !bSrchForward )
-                Exchange();
+                rSearchPam.Exchange();
 
             bFound = true;
             break;
         }
     }
     return bFound;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

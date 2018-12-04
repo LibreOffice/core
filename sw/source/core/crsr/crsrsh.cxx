@@ -3305,7 +3305,7 @@ bool SwCursorShell::SelectHiddenRange()
     return bRet;
 }
 
-sal_uLong SwCursorShell::Find( const i18nutil::SearchOptions2& rSearchOpt,
+sal_uLong SwCursorShell::Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
                              bool bSearchInNotes,
                              SwDocPositions eStart, SwDocPositions eEnd,
                              bool& bCancel,
@@ -3317,14 +3317,14 @@ sal_uLong SwCursorShell::Find( const i18nutil::SearchOptions2& rSearchOpt,
     delete m_pTableCursor;
     m_pTableCursor = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-    sal_uLong nRet = m_pCurrentCursor->Find( rSearchOpt, bSearchInNotes, eStart, eEnd,
+    sal_uLong nRet = m_pCurrentCursor->Find_Text(rSearchOpt, bSearchInNotes, eStart, eEnd,
                                      bCancel, eRng, bReplace );
     if( nRet || bCancel )
         UpdateCursor();
     return nRet;
 }
 
-sal_uLong SwCursorShell::Find( const SwTextFormatColl& rFormatColl,
+sal_uLong SwCursorShell::FindFormat( const SwTextFormatColl& rFormatColl,
                              SwDocPositions eStart, SwDocPositions eEnd,
                              bool& bCancel,
                              FindRanges eRng,
@@ -3335,14 +3335,14 @@ sal_uLong SwCursorShell::Find( const SwTextFormatColl& rFormatColl,
     delete m_pTableCursor;
     m_pTableCursor = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-    sal_uLong nRet = m_pCurrentCursor->Find( rFormatColl, eStart, eEnd, bCancel, eRng,
+    sal_uLong nRet = m_pCurrentCursor->FindFormat(rFormatColl, eStart, eEnd, bCancel, eRng,
                                      pReplFormat );
     if( nRet )
         UpdateCursor();
     return nRet;
 }
 
-sal_uLong SwCursorShell::Find( const SfxItemSet& rSet,
+sal_uLong SwCursorShell::FindAttrs( const SfxItemSet& rSet,
                              bool bNoCollections,
                              SwDocPositions eStart, SwDocPositions eEnd,
                              bool& bCancel,
@@ -3355,7 +3355,7 @@ sal_uLong SwCursorShell::Find( const SfxItemSet& rSet,
     delete m_pTableCursor;
     m_pTableCursor = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-    sal_uLong nRet = m_pCurrentCursor->Find( rSet, bNoCollections, eStart, eEnd,
+    sal_uLong nRet = m_pCurrentCursor->FindAttrs(rSet, bNoCollections, eStart, eEnd,
                                      bCancel, eRng, pSearchOpt, rReplSet );
     if( nRet )
         UpdateCursor();

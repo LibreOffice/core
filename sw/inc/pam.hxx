@@ -28,18 +28,9 @@
 
 #include <iostream>
 
-class SwFormat;
-class SfxPoolItem;
-class SfxItemSet;
 class SwDoc;
 class SwPaM;
 class Point;
-namespace i18nutil {
-    struct SearchOptions2;
-}
-namespace utl {
-    class TextSearch;
-}
 
 /// Marks a position in the document model.
 struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
@@ -151,8 +142,6 @@ class SAL_WARN_UNUSED SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
     SwPosition * m_pMark;  ///< points at either m_Bound1 or m_Bound2
     bool m_bIsInFrontOfLabel;
 
-    std::unique_ptr<SwPaM> MakeRegion( SwMoveFnCollection const & fnMove, const SwPaM * pOrigRg );
-
     SwPaM(SwPaM const& rPaM) = delete;
 
 public:
@@ -179,26 +168,6 @@ public:
     /// Movement of cursor.
     bool Move( SwMoveFnCollection const & fnMove = fnMoveForward,
                 SwGoInDoc fnGo = GoInContent );
-
-    /// Search.
-    bool Find(  const i18nutil::SearchOptions2& rSearchOpt,
-                bool bSearchInNotes,
-                utl::TextSearch& rSText,
-                SwMoveFnCollection const & fnMove,
-                const SwPaM *pPam, bool bInReadOnly = false);
-    bool Find(  const SwFormat& rFormat,
-                SwMoveFnCollection const & fnMove,
-                const SwPaM *pPam, bool bInReadOnly = false);
-    bool Find(  const SfxPoolItem& rAttr, bool bValue,
-                SwMoveFnCollection const & fnMove,
-                const SwPaM *pPam, bool bInReadOnly = false );
-    bool Find(  const SfxItemSet& rAttr, bool bNoColls,
-                SwMoveFnCollection const & fnMove,
-                const SwPaM *pPam, bool bInReadOnly, bool bMoveFirst );
-
-    bool DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
-                   SwMoveFnCollection const & fnMove, bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
-                   sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen, SwNode* pNode, SwPaM* pPam);
 
     bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
     void SetInFrontOfLabel_( bool bNew ) { m_bIsInFrontOfLabel = bNew; }

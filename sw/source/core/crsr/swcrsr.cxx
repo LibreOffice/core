@@ -776,8 +776,8 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
 
         // as long as found and not at same position
         while(  *pSttPos <= *pEndPos &&
-                0 != ( nFndRet = rParas.Find( pCurrentCursor, fnMove,
-                                            &aRegion, bInReadOnly )) &&
+                0 != ( nFndRet = rParas.DoFind(*pCurrentCursor, fnMove,
+                                            aRegion, bInReadOnly)) &&
                 ( !pFndRing ||
                     *pFndRing->GetPoint() != *pCurrentCursor->GetPoint() ||
                     *pFndRing->GetMark() != *pCurrentCursor->GetMark() ))
@@ -1065,9 +1065,8 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         SwPosition aMarkPos( *GetMark() );
         const bool bMarkPos = HasMark() && (eFndRngs == FindRanges::InBody);
 
-        if( 0 != (nFound = rParas.Find( this, fnMove,
-                                        &aRegion, bInReadOnly ) ? 1 : 0)
-            && bMarkPos )
+        nFound = rParas.DoFind(*this, fnMove, aRegion, bInReadOnly) ? 1 : 0;
+        if (0 != nFound && bMarkPos)
             *GetMark() = aMarkPos;
     }
 

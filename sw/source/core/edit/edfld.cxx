@@ -28,6 +28,7 @@
 #include <docary.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
+#include <pamtyp.hxx>
 #include <edimp.hxx>
 #include <dbfld.hxx>
 #include <expfld.hxx>
@@ -260,9 +261,9 @@ void SwEditShell::UpdateFields( SwField &rField )
                 // Search for SwTextField ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
-                     && ( aPam.Find( aFieldHint, false, fnMoveForward, &aCurPam, true )
-                          || aPam.Find( aAnnotationFieldHint, false, fnMoveForward, &aCurPam )
-                          || aPam.Find( aInputFieldHint, false, fnMoveForward, &aCurPam ) ) )
+                     && (sw::FindAttrImpl(aPam, aFieldHint, false, fnMoveForward, aCurPam, true)
+                          || sw::FindAttrImpl(aPam, aAnnotationFieldHint, false, fnMoveForward, aCurPam)
+                          || sw::FindAttrImpl(aPam, aInputFieldHint, false, fnMoveForward, aCurPam)))
                 {
                     // if only one PaM has more than one field  ...
                     if( aPam.Start()->nContent != pCurStt->nContent )

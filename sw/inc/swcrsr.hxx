@@ -23,6 +23,7 @@
 #include "tblsel.hxx"
 #include "cshtyp.hxx"
 
+class SfxItemSet;
 struct SwCursor_SavePos;
 namespace i18nutil {
     struct SearchOptions2;
@@ -36,7 +37,7 @@ const int FIND_NO_RING      = 2;
 
 struct SwFindParas
 {
-    virtual int Find( SwPaM*, SwMoveFnCollection const &, const SwPaM*, bool ) = 0;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM&, bool) = 0;
     virtual bool IsReplaceMode() const = 0;
 
 protected:
@@ -75,8 +76,6 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
 
     sal_uLong FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, bool& bCancel );
 
-    using SwPaM::Find;
-
     SwCursor(SwCursor const& rPaM) = delete;
 
 protected:
@@ -110,18 +109,19 @@ public:
     SwMoveFnCollection const & MakeFindRange( SwDocPositions, SwDocPositions,
                                         SwPaM* ) const;
 
-    sal_uLong Find( const i18nutil::SearchOptions2& rSearchOpt,
+    // note: DO NOT call it FindText because windows.h
+    sal_uLong Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
                 bool bReplace = false );
-    sal_uLong Find( const SwTextFormatColl& rFormatColl,
+    sal_uLong FindFormat( const SwTextFormatColl& rFormatColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
                 const SwTextFormatColl* pReplFormat );
-    sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
+    sal_uLong FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,

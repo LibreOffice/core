@@ -227,14 +227,25 @@ size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
     return aIndex;
 }
 
-bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::TextSearch& rSText,
-                  SwMoveFnCollection const & fnMove, const SwPaM * pRegion,
-                  bool bInReadOnly )
+static bool DoSearch(SwPaM & rSearchPam,
+    const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
+    SwMoveFnCollection const & fnMove,
+    bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
+    sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen, SwNode* pNode,
+    SwPaM* pPam);
+
+namespace sw {
+
+bool FindTextImpl(SwPaM & rSearchPam,
+        const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
+        utl::TextSearch& rSText,
+        SwMoveFnCollection const & fnMove, const SwPaM & rRegion,
+        bool bInReadOnly)
 {
     if( rSearchOpt.searchString.isEmpty() )
         return false;
 
-    std::unique_ptr<SwPaM> pPam = MakeRegion( fnMove, pRegion );
+    std::unique_ptr<SwPaM> pPam = sw::MakeRegion(fnMove, rRegion);
     const bool bSrchForward = &fnMove == &fnMoveForward;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rContentIdx = pPam->GetPoint()->nContent;
@@ -374,9 +385,9 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                                 if (pPosition)
                                 {
                                     // Set search position to the shape's anchor point.
-                                    *GetPoint() = *pPosition;
-                                    GetPoint()->nContent.Assign(pPosition->nNode.GetNode().GetContentNode(), 0);
-                                    SetMark();
+                                    *rSearchPam.GetPoint() = *pPosition;
+                                    rSearchPam.GetPoint()->nContent.Assign(pPosition->nNode.GetNode().GetContentNode(), 0);
+                                    rSearchPam.SetMark();
                                     bFound = true;
                                     break;
                                 }
@@ -434,7 +445,8 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                         nTextLen = nStartInside - nEndInside;
                     }
                     // search inside the text between a note
-                    bFound = DoSearch( rSearchOpt, rSText, fnMove, bSrchForward,
+                    bFound = DoSearch( rSearchPam,
+                                       rSearchOpt, rSText, fnMove, bSrchForward,
                                        bRegSearch, bChkEmptyPara, bChkParaEnd,
                                        nStartInside, nEndInside, nTextLen, pNode,
                                        pPam.get() );
@@ -463,7 +475,8 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
             {
                 // if there is no SwPostItField inside or searching inside notes
                 // is disabled, we search the whole length just like before
-                bFound = DoSearch( rSearchOpt, rSText, fnMove, bSrchForward,
+                bFound = DoSearch( rSearchPam,
+                                   rSearchOpt, rSText, fnMove, bSrchForward,
                                    bRegSearch, bChkEmptyPara, bChkParaEnd,
                                    nStart, nEnd, nTextLen, pNode, pPam.get() );
             }
@@ -474,7 +487,10 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
     return bFound;
 }
 
-bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
+} // namespace sw
+
+bool DoSearch(SwPaM & rSearchPam,
+        const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
                       SwMoveFnCollection const & fnMove, bool bSrchForward, bool bRegSearch,
                       bool bChkEmptyPara, bool bChkParaEnd,
                       sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen,
@@ -565,8 +581,8 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
             nStart = nProxyStart;
             nEnd = nProxyEnd;
             // set section correctly
-            *GetPoint() = *pPam->GetPoint();
-            SetMark();
+            *rSearchPam.GetPoint() = *pPam->GetPoint();
+            rSearchPam.SetMark();
 
             // adjust start and end
             if( !aFltArr.empty() )
@@ -591,12 +607,12 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
                 // if backward search, switch positions temporarily
                 if( !bSrchForward ) { std::swap(nStart, nEnd); }
             }
-            GetMark()->nContent = nStart;
-            GetPoint()->nContent = nEnd;
+            rSearchPam.GetMark()->nContent = nStart;
+            rSearchPam.GetPoint()->nContent = nEnd;
 
             // if backward search, switch point and mark
             if( !bSrchForward )
-                Exchange();
+                rSearchPam.Exchange();
             bFound = true;
             break;
         }
@@ -613,21 +629,21 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
         return true;
     else if( ( bChkEmptyPara && !nStart && !nTextLen ) || bChkParaEnd)
     {
-        *GetPoint() = *pPam->GetPoint();
-        GetPoint()->nContent = bChkParaEnd ? nTextLen : 0;
-        SetMark();
+        *rSearchPam.GetPoint() = *pPam->GetPoint();
+        rSearchPam.GetPoint()->nContent = bChkParaEnd ? nTextLen : 0;
+        rSearchPam.SetMark();
         /* FIXME: this condition does not work for !bSrchForward backward
          * search, it probably never did. (pSttNd != &rNdIdx.GetNode())
          * is never true in this case. */
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
-            Move( fnMoveForward, GoInContent ) &&
-            (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
-            1 == std::abs( static_cast<int>( GetPoint()->nNode.GetIndex() -
-                             GetMark()->nNode.GetIndex()) ) )
+            rSearchPam.Move(fnMoveForward, GoInContent) &&
+            (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->nNode.GetNode()) &&
+            1 == std::abs(static_cast<int>(rSearchPam.GetPoint()->nNode.GetIndex() -
+                             rSearchPam.GetMark()->nNode.GetIndex())))
         {
             // if backward search, switch point and mark
             if( !bSrchForward )
-                Exchange();
+                rSearchPam.Exchange();
             return true;
         }
     }
@@ -647,7 +663,7 @@ struct SwFindParaText : public SwFindParas
         : m_rSearchOpt( rOpt ), m_rCursor( rCursor ), m_aSText( utl::TextSearch::UpgradeToSearchOptions2( rOpt) ),
         m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
     {}
-    virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
     virtual bool IsReplaceMode() const override;
     virtual ~SwFindParaText();
 };
@@ -656,57 +672,55 @@ SwFindParaText::~SwFindParaText()
 {
 }
 
-int SwFindParaText::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove,
-                          const SwPaM* pRegion, bool bInReadOnly )
+int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
+                          const SwPaM & rRegion, bool bInReadOnly)
 {
     if( bInReadOnly && m_bReplace )
         bInReadOnly = false;
 
-    const bool bFnd = pCursor->Find( m_rSearchOpt, m_bSearchInNotes, m_aSText, fnMove, pRegion, bInReadOnly );
+    const bool bFnd = sw::FindTextImpl(rCursor, m_rSearchOpt, m_bSearchInNotes, m_aSText, fnMove, rRegion, bInReadOnly);
 
     if( bFnd && m_bReplace ) // replace string
     {
         // use replace method in SwDoc
         const bool bRegExp(SearchAlgorithms2::REGEXP == m_rSearchOpt.AlgorithmType2);
-        SwIndex& rSttCntIdx = pCursor->Start()->nContent;
+        SwIndex& rSttCntIdx = rCursor.Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
         // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrev(nullptr);
         if( bRegExp )
         {
-            pPrev = const_cast<SwPaM*>(pRegion)->GetPrev();
-            const_cast<SwPaM*>(pRegion)->GetRingContainer().merge( m_rCursor.GetRingContainer() );
+            pPrev = const_cast<SwPaM&>(rRegion).GetPrev();
+            const_cast<SwPaM&>(rRegion).GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
         std::unique_ptr<OUString> pRepl( bRegExp
-                ? ReplaceBackReferences( m_rSearchOpt, pCursor ) : nullptr );
+                ? ReplaceBackReferences(m_rSearchOpt, &rCursor) : nullptr );
         bool const bReplaced =
             m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
-                *pCursor,
-                (pRepl.get()) ? *pRepl : m_rSearchOpt.replaceString,
-                bRegExp );
-        m_rCursor.SaveTableBoxContent( pCursor->GetPoint() );
+                rCursor, pRepl ? *pRepl : m_rSearchOpt.replaceString, bRegExp);
+        m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );
 
         if( bRegExp )
         {
             // and remove region again
             SwPaM* p;
-            SwPaM* pNext(const_cast<SwPaM*>(pRegion));
+            SwPaM* pNext(const_cast<SwPaM*>(&rRegion));
             do {
                 p = pNext;
                 pNext = p->GetNext();
-                p->MoveTo( const_cast<SwPaM*>(pRegion) );
+                p->MoveTo(const_cast<SwPaM*>(&rRegion));
             } while( p != pPrev );
         }
         if (bRegExp && !bReplaced)
         {   // fdo#80715 avoid infinite loop if join failed
             bool bRet = ((&fnMoveForward == &fnMove) ? &GoNextPara : &GoPrevPara)
-                (*pCursor, fnMove);
+                (rCursor, fnMove);
             (void) bRet;
             assert(bRet); // if join failed, next node must be SwTextNode
         }
         else
-            pCursor->Start()->nContent = nSttCnt;
+            rCursor.Start()->nContent = nSttCnt;
         return FIND_NO_RING;
     }
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;
@@ -717,7 +731,7 @@ bool SwFindParaText::IsReplaceMode() const
     return m_bReplace;
 }
 
-sal_uLong SwCursor::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
+sal_uLong SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
                           SwDocPositions nStart, SwDocPositions nEnd,
                           bool& bCancel, FindRanges eFndRngs, bool bReplace )
 {

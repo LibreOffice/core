@@ -885,14 +885,17 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
     return true; // found
 }
 
-bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFnCollection const & fnMove,
-                  const SwPaM *pRegion, bool bInReadOnly )
+namespace sw {
+
+bool FindAttrImpl(SwPaM & rSearchPam,
+        const SfxPoolItem& rAttr, bool bValue, SwMoveFnCollection const & fnMove,
+        const SwPaM & rRegion, bool bInReadOnly)
 {
     // determine which attribute is searched:
     const sal_uInt16 nWhich = rAttr.Which();
     bool bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
 
-    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
+    std::unique_ptr<SwPaM> pPam(sw::MakeRegion(fnMove, rRegion));
 
     bool bFound = false;
     bool bFirst = true;
@@ -925,9 +928,9 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFnCollection cons
                 lcl_Search( *pNode->GetTextNode(), *pPam, rAttr, fnMove,  bValue ))
             {
                 // set to the values of the attribute
-                SetMark();
-                *GetPoint() = *pPam->GetPoint();
-                *GetMark() = *pPam->GetMark();
+                rSearchPam.SetMark();
+                *rSearchPam.GetPoint() = *pPam->GetPoint();
+                *rSearchPam.GetMark() = *pPam->GetMark();
                 bFound = true;
                 break;
             }
@@ -950,9 +953,9 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFnCollection cons
             // FORWARD:  SPoint at the end, GetMark at the beginning of the node
             // BACKWARD: SPoint at the beginning, GetMark at the end of the node
             // always: incl. start and incl. end
-            *GetPoint() = *pPam->GetPoint();
-            SetMark();
-            pNode->MakeEndIndex( &GetPoint()->nContent );
+            *rSearchPam.GetPoint() = *pPam->GetPoint();
+            rSearchPam.SetMark();
+            pNode->MakeEndIndex( &rSearchPam.GetPoint()->nContent );
             bFound = true;
             break;
         }
@@ -960,17 +963,20 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFnCollection cons
 
     // if backward search, switch point and mark
     if( bFound && !bSrchForward )
-        Exchange();
+        rSearchPam.Exchange();
 
     return bFound;
 }
 
+} // namespace sw
+
 typedef bool (*FnSearchAttr)( const SwTextNode&, SwAttrCheckArr&, SwPaM& );
 
-bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection const & fnMove,
-                  const SwPaM *pRegion, bool bInReadOnly, bool bMoveFirst )
+static bool FindAttrsImpl(SwPaM & rSearchPam,
+        const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection const & fnMove,
+        const SwPaM & rRegion, bool bInReadOnly, bool bMoveFirst)
 {
-    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
+    std::unique_ptr<SwPaM> pPam(sw::MakeRegion(fnMove, rRegion));
 
     bool bFound = false;
     bool bFirst = true;
@@ -980,7 +986,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection cons
 
     // check which text/char attributes are searched
     SwAttrCheckArr aCmpArr( rSet, bSrchForward, bNoColls );
-    SfxItemSet aOtherSet( GetDoc()->GetAttrPool(),
+    SfxItemSet aOtherSet( rSearchPam.GetDoc()->GetAttrPool(),
                             svl::Items<RES_PARATR_BEGIN, RES_GRFATR_END-1>{} );
     aOtherSet.Put( rSet, false );   // got all invalid items
 
@@ -1014,9 +1020,9 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection cons
                 (*fnSearch)( *pNode->GetTextNode(), aCmpArr, *pPam ))
             {
                 // set to the values of the attribute
-                SetMark();
-                *GetPoint() = *pPam->GetPoint();
-                *GetMark() = *pPam->GetMark();
+                rSearchPam.SetMark();
+                *rSearchPam.GetPoint() = *pPam->GetPoint();
+                *rSearchPam.GetMark() = *pPam->GetMark();
                 bFound = true;
                 break;
             }
@@ -1040,9 +1046,9 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection cons
             // FORWARD:  SPoint at the end, GetMark at the beginning of the node
             // BACKWARD: SPoint at the beginning, GetMark at the end of the node
             // always: incl. start and incl. end
-            *GetPoint() = *pPam->GetPoint();
-            SetMark();
-            pNode->MakeEndIndex( &GetPoint()->nContent );
+            *rSearchPam.GetPoint() = *pPam->GetPoint();
+            rSearchPam.SetMark();
+            pNode->MakeEndIndex( &rSearchPam.GetPoint()->nContent );
             bFound = true;
             break;
         }
@@ -1050,7 +1056,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection cons
 
     // if backward search, switch point and mark
     if( bFound && !bSrchForward )
-        Exchange();
+        rSearchPam.Exchange();
 
     return bFound;
 }
@@ -1072,12 +1078,12 @@ struct SwFindParaAttr : public SwFindParas
 
     virtual ~SwFindParaAttr()   {}
 
-    virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
     virtual bool IsReplaceMode() const override;
 };
 
-int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, const SwPaM* pRegion,
-                          bool bInReadOnly )
+int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
+        const SwPaM & rRegion, bool bInReadOnly)
 {
     // replace string (only if text given and search is not parameterized)?
     bool bReplaceText = pSearchOpt && ( !pSearchOpt->replaceString.isEmpty() ||
@@ -1089,16 +1095,16 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, con
 
     // We search for attributes, should we search for text as well?
     {
-        SwPaM aRegion( *pRegion->GetMark(), *pRegion->GetPoint() );
+        SwPaM aRegion( *rRegion.GetMark(), *rRegion.GetPoint() );
         SwPaM* pTextRegion = &aRegion;
-        SwPaM aSrchPam( *pCursor->GetPoint() );
+        SwPaM aSrchPam( *rCursor.GetPoint() );
 
         while( true )
         {
             if( pSet->Count() ) // any attributes?
             {
                 // first attributes
-                if( !aSrchPam.Find( *pSet, bValue, fnMove, &aRegion, bInReadOnly, bMoveFirst ) )
+                if (!FindAttrsImpl(aSrchPam, *pSet, bValue, fnMove, aRegion, bInReadOnly, bMoveFirst))
                     return FIND_NOT_FOUND;
                 bMoveFirst = true;
 
@@ -1127,7 +1133,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, con
             // TODO: searching for attributes in Outliner text?!
 
             // continue search in correct section (pTextRegion)
-            if( aSrchPam.Find( *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, pTextRegion, bInReadOnly ) &&
+            if (sw::FindTextImpl(aSrchPam, *pSearchOpt, false/*bSearchInNotes*/, *pSText, fnMove, *pTextRegion, bInReadOnly) &&
                 *aSrchPam.GetMark() != *aSrchPam.GetPoint() )
                 break; // found
             else if( !pSet->Count() )
@@ -1136,42 +1142,41 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, con
             *aRegion.GetMark() = *aSrchPam.GetPoint();
         }
 
-        *pCursor->GetPoint() = *aSrchPam.GetPoint();
-        pCursor->SetMark();
-        *pCursor->GetMark() = *aSrchPam.GetMark();
+        *rCursor.GetPoint() = *aSrchPam.GetPoint();
+        rCursor.SetMark();
+        *rCursor.GetMark() = *aSrchPam.GetMark();
     }
 
     if( bReplaceText )
     {
         const bool bRegExp(
                 SearchAlgorithms2::REGEXP == pSearchOpt->AlgorithmType2);
-        SwIndex& rSttCntIdx = pCursor->Start()->nContent;
+        SwIndex& rSttCntIdx = rCursor.Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
 
         // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrevRing(nullptr);
         if( bRegExp )
         {
-            pPrevRing = const_cast< SwPaM* >(pRegion)->GetPrev();
-            const_cast< SwPaM* >(pRegion)->GetRingContainer().merge( m_rCursor.GetRingContainer() );
+            pPrevRing = const_cast<SwPaM &>(rRegion).GetPrev();
+            const_cast<SwPaM &>(rRegion).GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
         std::unique_ptr<OUString> pRepl( bRegExp ?
-                ReplaceBackReferences( *pSearchOpt, pCursor ) : nullptr );
-        m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange( *pCursor,
-            (pRepl.get()) ? *pRepl : pSearchOpt->replaceString,
-            bRegExp );
-        m_rCursor.SaveTableBoxContent( pCursor->GetPoint() );
+                ReplaceBackReferences(*pSearchOpt, &rCursor) : nullptr );
+        m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
+            rCursor, pRepl ? *pRepl : pSearchOpt->replaceString, bRegExp);
+        m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );
 
         if( bRegExp )
         {
             // and remove region again
             SwPaM* p;
-            SwPaM* pNext = const_cast<SwPaM*>(pRegion);
+            SwPaM* pNext = const_cast<SwPaM*>(&rRegion);
             do {
                 p = pNext;
                 pNext = p->GetNext();
-                p->MoveTo( const_cast<SwPaM*>(pRegion) );
+                p->MoveTo(const_cast<SwPaM*>(&rRegion));
             } while( p != pPrevRing );
         }
         rSttCntIdx = nSttCnt;
@@ -1184,7 +1189,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, con
         // they are not in ReplaceSet
         if( !pSet->Count() )
         {
-            pCursor->GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCursor, *pReplSet );
+            rCursor.GetDoc()->getIDocumentContentOperations().InsertItemSet(rCursor, *pReplSet);
         }
         else
         {
@@ -1205,7 +1210,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, con
                 pItem = aIter.NextItem();
             }
             aSet.Put( *pReplSet );
-            pCursor->GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCursor, aSet );
+            rCursor.GetDoc()->getIDocumentContentOperations().InsertItemSet(rCursor, aSet);
         }
 
         return FIND_NO_RING;
@@ -1221,7 +1226,7 @@ bool SwFindParaAttr::IsReplaceMode() const
 }
 
 /// search for attributes
-sal_uLong SwCursor::Find( const SfxItemSet& rSet, bool bNoCollections,
+sal_uLong SwCursor::FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                           SwDocPositions nStart, SwDocPositions nEnd,
                           bool& bCancel, FindRanges eFndRngs,
                           const i18nutil::SearchOptions2* pSearchOpt,
