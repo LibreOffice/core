@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -38,6 +40,7 @@ public:
     void testTdf119571();
     void testTdf119019();
     void testTdf119824();
+    void testTdf105413();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
@@ -48,11 +51,29 @@ public:
     CPPUNIT_TEST(testTdf119571);
     CPPUNIT_TEST(testTdf119019);
     CPPUNIT_TEST(testTdf119824);
+    CPPUNIT_TEST(testTdf105413);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     SwDoc* createDoc(const char* pName = nullptr);
 };
+
+static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
+                                const OUString& rCommand,
+                                const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController
+        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
 
 SwDoc* SwUiWriterTest2::createDoc(const char* pName)
 {
@@ -371,6 +392,54 @@ void SwUiWriterTest2::testTdf119824()
     CPPUNIT_ASSERT_EQUAL(OUString("orci."), getRun(getParagraph(3), 7)->getString());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getRun(getParagraph(3), 6)->getString());
     CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(3), 6), "RedlineType"));
+}
+
+void SwUiWriterTest2::testTdf105413()
+{
+    load(DATA_DIRECTORY, "tdf105413.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // all paragraphs have got Standard paragraph style
+    for (int i = 1; i < 4; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                             getProperty<OUString>(getParagraph(i), "ParaStyleName"));
+    }
+
+    // turn on red-lining and show changes
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // Set Heading 1 paragraph style in the 3th paragraph.
+    // Because of the tracked deleted region between them,
+    // this sets also the same style in the first paragraph automatically
+    // to keep the changed paragraph style at hiding tracked changes or saving the document
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/false);
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::makeAny(OUString("Heading 1")) },
+        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+    });
+    lcl_dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    // first paragraph gets the same heading style
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);
