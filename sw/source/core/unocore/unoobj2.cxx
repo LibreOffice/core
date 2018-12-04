@@ -631,6 +631,14 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         (rUnoCursor.MovePara(GoNextPara, fnParaStart) &&
             lcl_CursorIsInSection( &rUnoCursor, m_pOwnStartNode ))))
     {
+        if (m_eCursorType == CursorType::Selection || m_eCursorType == CursorType::SelectionInTable)
+        {
+            // This is a selection, check if the cursor would go past the end
+            // of the selection.
+            if (rUnoCursor.Start()->nNode.GetIndex() > m_nEndIndex)
+                return nullptr;
+        }
+
         SwPosition* pStart = rUnoCursor.Start();
         const sal_Int32 nFirstContent =
             (m_bFirstParagraph) ? m_nFirstParaStart : -1;
