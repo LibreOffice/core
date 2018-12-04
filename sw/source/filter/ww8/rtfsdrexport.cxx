@@ -574,12 +574,12 @@ sal_Int32 RtfSdrExport::StartShape()
     for (auto it = m_aShapeProps.rbegin(); it != m_aShapeProps.rend(); ++it)
         lcl_AppendSP(m_rAttrOutput.RunText(), (*it).first.getStr(), (*it).second);
 
-    lcl_AppendSP(
-        m_rAttrOutput.RunText(), "wzDescription",
-        msfilter::rtfutil::OutString(m_pSdrObject->GetDescription(), m_rExport.m_eCurrentEncoding));
+    lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription",
+                 msfilter::rtfutil::OutString(m_pSdrObject->GetDescription(),
+                                              m_rExport.GetCurrentEncoding()));
     lcl_AppendSP(
         m_rAttrOutput.RunText(), "wzName",
-        msfilter::rtfutil::OutString(m_pSdrObject->GetName(), m_rExport.m_eCurrentEncoding));
+        msfilter::rtfutil::OutString(m_pSdrObject->GetName(), m_rExport.GetCurrentEncoding()));
 
     // now check if we have some text
     const SwFrameFormat* pShape = FindFrameFormat(m_pSdrObject);
@@ -638,7 +638,7 @@ sal_Int32 RtfSdrExport::StartShape()
 
                 lcl_AppendSP(m_rAttrOutput.RunText(), "gtextUNICODE",
                              msfilter::rtfutil::OutString(rEditObj.GetText(0),
-                                                          m_rExport.m_eCurrentEncoding));
+                                                          m_rExport.GetCurrentEncoding()));
 
                 auto pFontFamily
                     = static_cast<const SvxFontItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONT));
@@ -646,7 +646,7 @@ sal_Int32 RtfSdrExport::StartShape()
                 {
                     lcl_AppendSP(m_rAttrOutput.RunText(), "gtextFont",
                                  msfilter::rtfutil::OutString(pFontFamily->GetFamilyName(),
-                                                              m_rExport.m_eCurrentEncoding));
+                                                              m_rExport.GetCurrentEncoding()));
                 }
 
                 auto pFontHeight = static_cast<const SvxFontHeightItem*>(
@@ -658,7 +658,7 @@ sal_Int32 RtfSdrExport::StartShape()
                     lcl_AppendSP(
                         m_rAttrOutput.RunText(), "gtextSize",
                         msfilter::rtfutil::OutString(OUString::number(nFontHeight * RTF_MULTIPLIER),
-                                                     m_rExport.m_eCurrentEncoding));
+                                                     m_rExport.GetCurrentEncoding()));
                 }
 
                 // RTF angle: 0-360 * 2^16  clockwise
@@ -667,7 +667,7 @@ sal_Int32 RtfSdrExport::StartShape()
                     = -1 * pTextObj->GetGeoStat().nRotationAngle * RTF_MULTIPLIER / 100;
                 lcl_AppendSP(m_rAttrOutput.RunText(), "rotation",
                              msfilter::rtfutil::OutString(OUString::number(nRotation),
-                                                          m_rExport.m_eCurrentEncoding));
+                                                          m_rExport.GetCurrentEncoding()));
             }
         }
     }

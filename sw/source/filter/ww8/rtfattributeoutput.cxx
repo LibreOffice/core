@@ -304,8 +304,8 @@ void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTex
     {
         // We're ending a paragraph that is the last paragraph of a footnote or endnote, or of clipboard.
         bLastPara
-            = m_rExport.m_nCurrentNodeIndex
-              && m_rExport.m_nCurrentNodeIndex == m_rExport.m_pCurPam->End()->nNode.GetIndex();
+            = m_rExport.GetCurrentNodeIndex()
+              && m_rExport.GetCurrentNodeIndex() == m_rExport.m_pCurPam->End()->nNode.GetIndex();
     }
 
     FinishTableRowCell(pTextNodeInfoInner);
@@ -392,7 +392,7 @@ void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
 void RtfAttributeOutput::StartParagraphProperties()
 {
     OStringBuffer aPar;
-    if (!m_rExport.m_bRTFFlySyntax)
+    if (!m_rExport.GetRTFFlySyntax())
     {
         aPar.append(OOO_STRING_SVTOOLS_RTF_PARD);
         aPar.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
@@ -452,7 +452,7 @@ void RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
 void RtfAttributeOutput::RunText(const OUString& rText, rtl_TextEncoding /*eCharSet*/)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rText: " << rText);
-    RawText(rText, m_rExport.m_eCurrentEncoding);
+    RawText(rText, m_rExport.GetCurrentEncoding());
 }
 
 OStringBuffer& RtfAttributeOutput::RunText() { return m_aRunText.getLastBuffer(); }
@@ -513,13 +513,13 @@ bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
         m_aRun->append(" HYPERLINK ");
 
         m_aRun->append("\"");
-        m_aRun->append(msfilter::rtfutil::OutString(rUrl, m_rExport.m_eCurrentEncoding));
+        m_aRun->append(msfilter::rtfutil::OutString(rUrl, m_rExport.GetCurrentEncoding()));
         m_aRun->append("\" ");
 
         if (!rTarget.isEmpty())
         {
             m_aRun->append("\\\\t \"");
-            m_aRun->append(msfilter::rtfutil::OutString(rTarget, m_rExport.m_eCurrentEncoding));
+            m_aRun->append(msfilter::rtfutil::OutString(rTarget, m_rExport.GetCurrentEncoding()));
             m_aRun->append("\" ");
         }
 
@@ -1133,7 +1133,8 @@ void RtfAttributeOutput::EndStyle()
     m_rExport.InsStyle(m_nStyleId, aStyles);
     m_aStylesheet.append(aStyles);
     m_aStylesheet.append(' ');
-    m_aStylesheet.append(msfilter::rtfutil::OutString(m_rStyleName, m_rExport.m_eCurrentEncoding));
+    m_aStylesheet.append(
+        msfilter::rtfutil::OutString(m_rStyleName, m_rExport.GetCurrentEncoding()));
     m_aStylesheet.append(";}");
     m_aStylesheet.append(SAL_NEWLINE_STRING);
 }
@@ -1494,7 +1495,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         m_rExport.Strm().WriteCharPtr("\\'").WriteCharPtr(
             msfilter::rtfutil::OutHex(rNumberingString.getLength(), 2).getStr());
         m_rExport.Strm().WriteCharPtr(msfilter::rtfutil::OutString(rNumberingString,
-                                                                   m_rExport.m_eDefaultEncoding,
+                                                                   m_rExport.GetDefaultEncoding(),
                                                                    /*bUnicode =*/false)
                                           .getStr());
     }
@@ -1544,12 +1545,12 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST
                                " ");
             m_aRunText->append(
-                msfilter::rtfutil::OutString(rFieldCmd, m_rExport.m_eCurrentEncoding));
+                msfilter::rtfutil::OutString(rFieldCmd, m_rExport.GetCurrentEncoding()));
             m_aRunText->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
         }
         if (pField)
             m_aRunText->append(msfilter::rtfutil::OutString(pField->ExpandField(true, nullptr),
-                                                            m_rExport.m_eDefaultEncoding));
+                                                            m_rExport.GetDefaultEncoding()));
         if (bHasInstructions)
             m_aRunText->append("}}");
     }
@@ -1563,7 +1564,7 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType
         }
         if (bHasInstructions)
             m_aRunText->append(
-                msfilter::rtfutil::OutString(rFieldCmd, m_rExport.m_eCurrentEncoding));
+                msfilter::rtfutil::OutString(rFieldCmd, m_rExport.GetCurrentEncoding()));
         if (FieldFlags::End & nMode)
         {
             m_aRunText->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
@@ -1578,7 +1579,7 @@ void RtfAttributeOutput::WriteBookmarks_Impl(std::vector<OUString>& rStarts,
     for (const auto& rStart : rStarts)
     {
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKSTART " ");
-        m_aRun->append(msfilter::rtfutil::OutString(rStart, m_rExport.m_eCurrentEncoding));
+        m_aRun->append(msfilter::rtfutil::OutString(rStart, m_rExport.GetCurrentEncoding()));
         m_aRun->append('}');
     }
     rStarts.clear();
@@ -1586,7 +1587,7 @@ void RtfAttributeOutput::WriteBookmarks_Impl(std::vector<OUString>& rStarts,
     for (const auto& rEnd : rEnds)
     {
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKEND " ");
-        m_aRun->append(msfilter::rtfutil::OutString(rEnd, m_rExport.m_eCurrentEncoding));
+        m_aRun->append(msfilter::rtfutil::OutString(rEnd, m_rExport.GetCurrentEncoding()));
         m_aRun->append('}');
     }
     rEnds.clear();
@@ -1784,7 +1785,7 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
         m_bInRun = false;
         bool bSingleEmptyRunOrig = m_bSingleEmptyRun;
         m_bSingleEmptyRun = false;
-        m_rExport.m_bRTFFlySyntax = true;
+        m_rExport.SetRTFFlySyntax(true);
 
         const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
         const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
@@ -1796,7 +1797,7 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
         m_rExport.RestoreData();
 
         m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PARD);
-        m_rExport.m_bRTFFlySyntax = false;
+        m_rExport.SetRTFFlySyntax(false);
         m_aRun->append(aSave);
         m_aRunText.clear();
         m_bInRun = bInRunOrig;
@@ -1849,7 +1850,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             const Size aSize = rFrame.GetSize();
             m_pFlyFrameSize = &aSize;
 
-            m_rExport.m_bOutFlyFrameAttrs = m_rExport.m_bRTFFlySyntax = true;
+            m_rExport.m_bOutFlyFrameAttrs = true;
+            m_rExport.SetRTFFlySyntax(true);
             m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
 
             // Write ZOrder.
@@ -1861,7 +1863,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
             m_rExport.Strm().WriteCharPtr(m_aRunText.makeStringAndClear().getStr());
             m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
-            m_rExport.m_bOutFlyFrameAttrs = m_rExport.m_bRTFFlySyntax = false;
+            m_rExport.m_bOutFlyFrameAttrs = false;
+            m_rExport.SetRTFFlySyntax(false);
             m_pFlyFrameSize = nullptr;
 
             const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
@@ -1891,9 +1894,9 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             if (!rFrame.IsInline())
             {
                 m_rExport.m_pParentFrame = &rFrame;
-                m_rExport.m_bRTFFlySyntax = true;
+                m_rExport.SetRTFFlySyntax(true);
                 m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
-                m_rExport.m_bRTFFlySyntax = false;
+                m_rExport.SetRTFFlySyntax(false);
                 m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE);
                 m_rExport.OutputFormat(rFrame.GetFrameFormat(), false, false, true);
                 m_aRunText->append('}');
@@ -1947,7 +1950,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                         if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
                         {
                             m_aRun->append(OUStringToOString(FieldString(ww::eFORMCHECKBOX),
-                                                             m_rExport.m_eCurrentEncoding));
+                                                             m_rExport.GetCurrentEncoding()));
                             m_aRun->append(
                                 "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD
                                 "{");
@@ -1964,7 +1967,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                     "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME
                                     " ");
                                 m_aRun->append(
-                                    OUStringToOString(aStr, m_rExport.m_eCurrentEncoding));
+                                    OUStringToOString(aStr, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -1976,7 +1979,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
                                 m_aRun->append(
-                                    OUStringToOString(aStr, m_rExport.m_eCurrentEncoding));
+                                    OUStringToOString(aStr, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -1988,7 +1991,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
                                 m_aRun->append(
-                                    OUStringToOString(aStr, m_rExport.m_eCurrentEncoding));
+                                    OUStringToOString(aStr, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -2013,19 +2016,19 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             const sal_Char* pStr;
 
                             m_aRun->append(OUStringToOString(FieldString(ww::eFORMTEXT),
-                                                             m_rExport.m_eCurrentEncoding));
+                                                             m_rExport.GetCurrentEncoding()));
                             m_aRun->append(
                                 "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_DATAFIELD
                                 " ");
                             for (int i = 0; i < 8; i++)
                                 aBuf.append(sal_Char(0x00));
                             xPropSet->getPropertyValue("Name") >>= aTmp;
-                            aStr = OUStringToOString(aTmp, m_rExport.m_eCurrentEncoding);
+                            aStr = OUStringToOString(aTmp, m_rExport.GetCurrentEncoding());
                             aBuf.append(static_cast<sal_Char>(aStr.getLength()));
                             aBuf.append(aStr);
                             aBuf.append(sal_Char(0x00));
                             xPropSet->getPropertyValue("DefaultText") >>= aTmp;
-                            aStr = OUStringToOString(aTmp, m_rExport.m_eCurrentEncoding);
+                            aStr = OUStringToOString(aTmp, m_rExport.GetCurrentEncoding());
                             aBuf.append(static_cast<sal_Char>(aStr.getLength()));
                             aBuf.append(aStr);
                             for (int i = 0; i < 11; i++)
@@ -2037,7 +2040,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             m_aRun->append('}');
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
                             xPropSet->getPropertyValue("Text") >>= aTmp;
-                            m_aRun->append(OUStringToOString(aTmp, m_rExport.m_eCurrentEncoding));
+                            m_aRun->append(OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
                             m_aRun->append('}');
                             m_aRun->append(
                                 "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD
@@ -2050,7 +2053,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
                                 m_aRun->append(
-                                    OUStringToOString(aTmp, m_rExport.m_eCurrentEncoding));
+                                    OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -2062,7 +2065,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
                                 m_aRun->append(
-                                    OUStringToOString(aTmp, m_rExport.m_eCurrentEncoding));
+                                    OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
                             m_aRun->append("}");
@@ -2074,7 +2077,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             uno::Sequence<OUString> aStrSeq;
 
                             m_aRun->append(OUStringToOString(FieldString(ww::eFORMDROPDOWN),
-                                                             m_rExport.m_eCurrentEncoding));
+                                                             m_rExport.GetCurrentEncoding()));
                             m_aRun->append(
                                 "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD
                                 "{");
@@ -2105,7 +2108,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                     "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME
                                     " ");
                                 m_aRun->append(
-                                    OUStringToOString(aStr, m_rExport.m_eCurrentEncoding));
+                                    OUStringToOString(aStr, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -2117,7 +2120,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
                                 m_aRun->append(
-                                    OUStringToOString(aStr, m_rExport.m_eCurrentEncoding));
+                                    OUStringToOString(aStr, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -2129,7 +2132,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
                                 m_aRun->append(
-                                    OUStringToOString(aStr, m_rExport.m_eCurrentEncoding));
+                                    OUStringToOString(aStr, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -2140,8 +2143,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                     ->append(
                                         "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL
                                         " ")
-                                    .append(
-                                        OUStringToOString(aStrSeq[i], m_rExport.m_eCurrentEncoding))
+                                    .append(OUStringToOString(aStrSeq[i],
+                                                              m_rExport.GetCurrentEncoding()))
                                     .append('}');
 
                             m_aRun->append("}}");
@@ -2310,9 +2313,9 @@ void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
     sw::util::FontMapExport aTmp(rFont.GetFamilyName());
     sal_uInt8 nWindowsCharset = sw::ms::rtl_TextEncodingToWinCharsetRTF(
         aTmp.msPrimary, aTmp.msSecondary, rFont.GetCharSet());
-    m_rExport.m_eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(nWindowsCharset);
-    if (m_rExport.m_eCurrentEncoding == RTL_TEXTENCODING_DONTKNOW)
-        m_rExport.m_eCurrentEncoding = m_rExport.m_eDefaultEncoding;
+    m_rExport.SetCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(nWindowsCharset));
+    if (m_rExport.GetCurrentEncoding() == RTL_TEXTENCODING_DONTKNOW)
+        m_rExport.SetCurrentEncoding(m_rExport.GetDefaultEncoding());
 }
 
 void RtfAttributeOutput::CharFontSize(const SvxFontHeightItem& rFontSize)
@@ -2675,7 +2678,7 @@ void RtfAttributeOutput::WriteTextFootnoteNumStr(const SwFormatFootnote& rFootno
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_CHFTN);
     else
         m_aRun->append(
-            msfilter::rtfutil::OutString(rFootnote.GetNumStr(), m_rExport.m_eCurrentEncoding));
+            msfilter::rtfutil::OutString(rFootnote.GetNumStr(), m_rExport.GetCurrentEncoding()));
 }
 
 void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
@@ -2880,7 +2883,7 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
         if (!sText.isEmpty())
         {
             m_aStyles.append(' ');
-            m_aStyles.append(msfilter::rtfutil::OutString(sText, m_rExport.m_eDefaultEncoding));
+            m_aStyles.append(msfilter::rtfutil::OutString(sText, m_rExport.GetDefaultEncoding()));
         }
 
         if (OUTLINE_RULE != pRule->GetRuleType())
@@ -3007,7 +3010,7 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
             m_aStyles.append(static_cast<sal_Int32>(rLRSpace.GetTextFirstLineOfst()));
         }
     }
-    else if (m_rExport.m_bRTFFlySyntax)
+    else if (m_rExport.GetRTFFlySyntax())
     {
         // Wrap: top and bottom spacing, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
@@ -3099,7 +3102,7 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
                 m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CONTEXTUALSPACE);
         }
     }
-    else if (m_rExport.m_bRTFFlySyntax)
+    else if (m_rExport.GetRTFFlySyntax())
     {
         // Wrap: top and bottom spacing, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
@@ -3111,7 +3114,7 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
 
 void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
 {
-    if (m_rExport.m_bOutFlyFrameAttrs && !m_rExport.m_bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrameAttrs && !m_rExport.GetRTFFlySyntax())
     {
         css::text::WrapTextMode eSurround = rSurround.GetSurround();
         bool bGold = css::text::WrapTextMode_DYNAMIC == eSurround;
@@ -3121,7 +3124,7 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
         m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYMAINCNT);
         m_aRunText->append(static_cast<sal_Int32>(aMC.GetValue()));
     }
-    else if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.m_bRTFFlySyntax)
+    else if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.GetRTFFlySyntax())
     {
         // See DocxSdrExport::startDMLAnchorInline() for SwFormatSurround -> WR / WRK mappings.
         sal_Int32 nWr = -1;
@@ -3160,7 +3163,7 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
 
 void RtfAttributeOutput::FormatVertOrientation(const SwFormatVertOrient& rFlyVert)
 {
-    if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.m_bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.GetRTFFlySyntax())
     {
         switch (rFlyVert.GetRelationOrient())
         {
@@ -3210,7 +3213,7 @@ void RtfAttributeOutput::FormatVertOrientation(const SwFormatVertOrient& rFlyVer
 
 void RtfAttributeOutput::FormatHorizOrientation(const SwFormatHoriOrient& rFlyHori)
 {
-    if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.m_bRTFFlySyntax)
+    if (m_rExport.m_bOutFlyFrameAttrs && m_rExport.GetRTFFlySyntax())
     {
         switch (rFlyHori.GetRelationOrient())
         {
@@ -3257,7 +3260,7 @@ void RtfAttributeOutput::FormatHorizOrientation(const SwFormatHoriOrient& rFlyHo
 
 void RtfAttributeOutput::FormatAnchor(const SwFormatAnchor& rAnchor)
 {
-    if (!m_rExport.m_bRTFFlySyntax)
+    if (!m_rExport.GetRTFFlySyntax())
     {
         RndStdIds eId = rAnchor.GetAnchorId();
         m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYANCHOR);
@@ -3280,7 +3283,7 @@ void RtfAttributeOutput::FormatAnchor(const SwFormatAnchor& rAnchor)
 
 void RtfAttributeOutput::FormatBackground(const SvxBrushItem& rBrush)
 {
-    if (m_rExport.m_bRTFFlySyntax)
+    if (m_rExport.GetRTFFlySyntax())
     {
         const Color& rColor = rBrush.GetColor();
         // We in fact need RGB to BGR, but the transformation is symmetric.
@@ -3347,7 +3350,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
 
     sal_uInt16 const nDist = rBox.GetSmallestDistance();
 
-    if (m_rExport.m_bRTFFlySyntax)
+    if (m_rExport.GetRTFFlySyntax())
     {
         // Borders: spacing to contents, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
@@ -3550,10 +3553,10 @@ void RtfAttributeOutput::PostitField(const SwField* pField)
     }
 
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNID " ");
-    m_aRunText->append(OUStringToOString(rPField.GetInitials(), m_rExport.m_eCurrentEncoding));
+    m_aRunText->append(OUStringToOString(rPField.GetInitials(), m_rExport.GetCurrentEncoding()));
     m_aRunText->append("}");
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNAUTHOR " ");
-    m_aRunText->append(OUStringToOString(rPField.GetPar1(), m_rExport.m_eCurrentEncoding));
+    m_aRunText->append(OUStringToOString(rPField.GetPar1(), m_rExport.GetCurrentEncoding()));
     m_aRunText->append("}");
     m_aRunText->append(OOO_STRING_SVTOOLS_RTF_CHATN);
 
@@ -3627,14 +3630,14 @@ void RtfAttributeOutput::StartFont(const OUString& rFamilyName) const
     // write the font name hex-encoded, but without Unicode - Word at least
     // cannot read *both* Unicode and fallback as written by OutString
     m_rExport.Strm().WriteCharPtr(
-        msfilter::rtfutil::OutString(rFamilyName, m_rExport.m_eCurrentEncoding, false).getStr());
+        msfilter::rtfutil::OutString(rFamilyName, m_rExport.GetCurrentEncoding(), false).getStr());
 }
 
 /// End the font.
 void RtfAttributeOutput::EndFont() const
 {
     m_rExport.Strm().WriteCharPtr(";}");
-    m_rExport.m_eCurrentEncoding = m_rExport.m_eDefaultEncoding;
+    m_rExport.SetCurrentEncoding(m_rExport.GetDefaultEncoding());
 }
 
 /// Alternate name for the font.
@@ -3649,7 +3652,7 @@ void RtfAttributeOutput::FontAlternateName(const OUString& rName) const
     // cannot read *both* Unicode and fallback as written by OutString
     m_rExport.Strm()
         .WriteCharPtr(
-            msfilter::rtfutil::OutString(rName, m_rExport.m_eCurrentEncoding, false).getStr())
+            msfilter::rtfutil::OutString(rName, m_rExport.GetCurrentEncoding(), false).getStr())
         .WriteChar('}');
 }
 
@@ -3659,7 +3662,7 @@ void RtfAttributeOutput::FontCharset(sal_uInt8 nCharSet) const
     m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FCHARSET);
     m_rExport.OutULong(nCharSet);
     m_rExport.Strm().WriteChar(' ');
-    m_rExport.m_eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(nCharSet);
+    m_rExport.SetCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(nCharSet));
 }
 
 /// Font family.
@@ -3719,7 +3722,7 @@ static void lcl_AppendSP(OStringBuffer& rBuffer, const char cName[], const OUStr
     rBuffer.append(cName); //"PropName"
     rBuffer.append("}{" OOO_STRING_SVTOOLS_RTF_SV " ");
     // "}{ \sv "
-    rBuffer.append(msfilter::rtfutil::OutString(rValue, rExport.m_eCurrentEncoding));
+    rBuffer.append(msfilter::rtfutil::OutString(rValue, rExport.GetCurrentEncoding()));
     rBuffer.append("}}");
 }
 
@@ -3869,7 +3872,7 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
     assert(pBase != nullptr);
     OStringBuffer aBuf;
     if (pBase)
-        pBase->writeFormulaRtf(aBuf, m_rExport.m_eCurrentEncoding);
+        pBase->writeFormulaRtf(aBuf, m_rExport.GetCurrentEncoding());
     m_aRunText->append(aBuf.makeStringAndClear());
     // Replacement graphic.
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATHPICT " ");
@@ -4006,9 +4009,11 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
             "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
         m_pFlyFrameSize = &aRendered;
         m_rExport.m_pParentFrame = pFrame;
-        m_rExport.m_bOutFlyFrameAttrs = m_rExport.m_bRTFFlySyntax = true;
+        m_rExport.m_bOutFlyFrameAttrs = true;
+        m_rExport.SetRTFFlySyntax(true);
         m_rExport.OutputFormat(pFrame->GetFrameFormat(), false, false, true);
-        m_rExport.m_bOutFlyFrameAttrs = m_rExport.m_bRTFFlySyntax = false;
+        m_rExport.m_bOutFlyFrameAttrs = false;
+        m_rExport.SetRTFFlySyntax(false);
         m_rExport.m_pParentFrame = nullptr;
         m_pFlyFrameSize = nullptr;
 
@@ -4017,10 +4022,10 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
             "shapeType", OString::number(ESCHER_ShpInst_PictureFrame)));
         aFlyProperties.push_back(std::make_pair<OString, OString>(
             "wzDescription", msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjDescription(),
-                                                          m_rExport.m_eCurrentEncoding)));
+                                                          m_rExport.GetCurrentEncoding())));
         aFlyProperties.push_back(std::make_pair<OString, OString>(
             "wzName", msfilter::rtfutil::OutString(pFlyFrameFormat->GetObjTitle(),
-                                                   m_rExport.m_eCurrentEncoding)));
+                                                   m_rExport.GetCurrentEncoding())));
 
         // If we have a wrap polygon, then handle that here.
         if (pFlyFrameFormat->GetSurround().IsContour())
