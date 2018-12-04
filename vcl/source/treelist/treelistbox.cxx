@@ -853,12 +853,12 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable )
         }
         else
         {
-            pSelEntry->nEntryFlags &= (~SvTLEntryFlags::DISABLE_DROP);
+            pSelEntry->nEntryFlags &= ~SvTLEntryFlags::DISABLE_DROP;
             nRefDepth = pModel->GetDepth( pSelEntry );
             pTemp = Next( pSelEntry );
             while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
             {
-                pTemp->nEntryFlags &= (~SvTLEntryFlags::DISABLE_DROP);
+                pTemp->nEntryFlags &= ~SvTLEntryFlags::DISABLE_DROP;
                 pTemp = Next( pTemp );
             }
         }
@@ -899,7 +899,7 @@ IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl, SvInplaceEdit2&, void)
     // that we don't call the selection handler in the GetFocus of the listbox
     // with the old entry text.
     pEdCtrl->Hide();
-    nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
+    nImpFlags &= ~SvTreeListBoxFlags::IN_EDT;
     GrabFocus();
 }
 
@@ -907,14 +907,14 @@ void SvTreeListBox::CancelTextEditing()
 {
     if ( pEdCtrl )
         pEdCtrl->StopEditing( true );
-    nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
+    nImpFlags &= ~SvTreeListBoxFlags::IN_EDT;
 }
 
 void SvTreeListBox::EndEditing( bool bCancel )
 {
     if( pEdCtrl )
         pEdCtrl->StopEditing( bCancel );
-    nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
+    nImpFlags &= ~SvTreeListBoxFlags::IN_EDT;
 }
 
 
@@ -1466,7 +1466,7 @@ void SvTreeListBox::SetTabs()
 {
     if( IsEditingActive() )
         EndEditing( true );
-    nTreeFlags &= (~SvTreeFlags::RECALCTABS);
+    nTreeFlags &= ~SvTreeFlags::RECALCTABS;
     nFocusWidth = -1;
     const WinBits nStyle( GetStyle() );
     bool bHasButtons = (nStyle & WB_HASBUTTONS)!=0;
@@ -1633,7 +1633,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     aPrevInsertedExpBmp = rDefExpBmp;
     aPrevInsertedColBmp = rDefColBmp;
 
-    nTreeFlags &= (~SvTreeFlags::MANINS);
+    nTreeFlags &= ~SvTreeFlags::MANINS;
 
     return pEntry;
 }
@@ -1662,7 +1662,7 @@ SvTreeListEntry* SvTreeListBox::InsertEntry( const OUString& rText,
     aPrevInsertedExpBmp = aExpEntryBmp;
     aPrevInsertedColBmp = aCollEntryBmp;
 
-    nTreeFlags &= (~SvTreeFlags::MANINS);
+    nTreeFlags &= ~SvTreeFlags::MANINS;
 
     return pEntry;
 }
@@ -1894,7 +1894,7 @@ void SvTreeListBox::EnableCheckButton( SvLBoxButtonData* pData )
 {
     DBG_ASSERT(!GetEntryCount(),"EnableCheckButton: Entry count != 0");
     if( !pData )
-        nTreeFlags &= (~SvTreeFlags::CHKBTN);
+        nTreeFlags &= ~SvTreeFlags::CHKBTN;
     else
     {
         SetCheckButtonData( pData );

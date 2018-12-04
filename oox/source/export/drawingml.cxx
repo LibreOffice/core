@@ -460,7 +460,7 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
         if( sSchemeClr.isEmpty() )
         {
             // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
-            sal_Int32 nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
+            sal_Int32 nAlpha = MAX_PERCENT - ( PER_PERCENT * nTransparency );
             WriteColor( nRgbClr, nAlpha );
         }
         else

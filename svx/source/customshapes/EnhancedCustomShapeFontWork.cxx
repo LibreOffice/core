@@ -719,7 +719,7 @@ static void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2
                                 GetPoint( rOutlinePoly, vDistances, fM1, fx1, fy1 );
                                 GetPoint( rOutlinePoly, vDistances, fM2, fx2, fy2 );
 
-                                double fvx = ( fy2 - fy1 );
+                                double fvx = fy2 - fy1;
                                 double fvy = - ( fx2 - fx1 );
                                 fx1 = fx1 + ( ( fx2 - fx1 ) * 0.5 );
                                 fy1 = fy1 + ( ( fy2 - fy1 ) * 0.5 );

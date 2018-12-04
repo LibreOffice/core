@@ -1284,8 +1284,8 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 }
                 const double fDX = fPos1 - fXRef;
                 fAngle = -basegfx::rad2deg(atan2(-fPos2 + fYRef, (fDX == 0.0) ? 0.000000001 : fDX));
-                double fX = ( fPos1 - fXRef );
-                double fY = ( fPos2 - fYRef );
+                double fX = fPos1 - fXRef;
+                double fY = fPos2 - fYRef;
                 double fRadius = sqrt( fX * fX + fY * fY );
                 if ( aHandle.nFlags & HandleFlags::RADIUS_RANGE_MINIMUM )
                 {

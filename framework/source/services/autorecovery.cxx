@@ -4039,7 +4039,7 @@ bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
         nFreeSpace = aInfo.getFreeSpace();
     }
 
-    sal_uInt64 nFreeMB = (nFreeSpace/1048576);
+    sal_uInt64 nFreeMB = nFreeSpace/1048576;
     return (nFreeMB >= static_cast<sal_uInt64>(nRequiredSpace));
 #endif // SIMULATE_FULL_DISC
 }

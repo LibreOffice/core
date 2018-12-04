@@ -5708,7 +5708,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                                 }
                             }
                             pAcc.reset();
-                            sal_uInt32 nC = ( aSize.Width() * aSize.Height() );
+                            sal_uInt32 nC = aSize.Width() * aSize.Height();
                             nRt /= nC;
                             nGn /= nC;
                             nBl /= nC;

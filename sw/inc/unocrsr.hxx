@@ -55,9 +55,9 @@ public:
     // Does a selection of content exist in table?
     // Return value indicates if the cursor remains at its old position.
     virtual bool IsSelOvr( SwCursorSelOverFlags eFlags =
-                                ( SwCursorSelOverFlags::CheckNodeSection |
-                                  SwCursorSelOverFlags::Toggle |
-                                  SwCursorSelOverFlags::ChangePos )) override;
+                                 SwCursorSelOverFlags::CheckNodeSection |
+                                 SwCursorSelOverFlags::Toggle |
+                                 SwCursorSelOverFlags::ChangePos ) override;
 
     virtual bool IsReadOnlyAvailable() const override;
 
@@ -91,9 +91,9 @@ public:
     // Does a selection of content exist in table?
     // Return value indicates if the cursor remains at its old position.
     virtual bool IsSelOvr( SwCursorSelOverFlags eFlags =
-                                ( SwCursorSelOverFlags::CheckNodeSection |
-                                  SwCursorSelOverFlags::Toggle |
-                                  SwCursorSelOverFlags::ChangePos )) override;
+                                 SwCursorSelOverFlags::CheckNodeSection |
+                                 SwCursorSelOverFlags::Toggle |
+                                 SwCursorSelOverFlags::ChangePos ) override;
 
     void MakeBoxSels();
 

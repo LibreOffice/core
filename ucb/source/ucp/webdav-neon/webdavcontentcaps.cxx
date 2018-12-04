@@ -266,7 +266,7 @@ void ContentProvider::getProperty(
     const PropertyMap::const_iterator it = m_pProps->find( aProp );
     if ( it != m_pProps->end() )
     {
-        rProp = (*it);
+        rProp = *it;
     }
     else
     {

@@ -818,7 +818,7 @@ sal_Int32 SAL_CALL
 ScVbaWindow::PointsToScreenPixelsX(sal_Int32 _points)
 {
     sal_Int32 nHundredthsofOneMillimeters = Millimeter::getInHundredthsOfOneMillimeter( _points );
-    double fConvertFactor = (getDevice()->getInfo().PixelPerMeterX/100000);
+    double fConvertFactor = getDevice()->getInfo().PixelPerMeterX/100000;
     return static_cast<sal_Int32>(fConvertFactor * nHundredthsofOneMillimeters );
 }
 
@@ -826,7 +826,7 @@ sal_Int32 SAL_CALL
 ScVbaWindow::PointsToScreenPixelsY(sal_Int32 _points)
 {
     sal_Int32 nHundredthsofOneMillimeters = Millimeter::getInHundredthsOfOneMillimeter( _points );
-    double fConvertFactor = (getDevice()->getInfo().PixelPerMeterY/100000);
+    double fConvertFactor = getDevice()->getInfo().PixelPerMeterY/100000;
     return static_cast<sal_Int32>(fConvertFactor * nHundredthsofOneMillimeters );
 }
 

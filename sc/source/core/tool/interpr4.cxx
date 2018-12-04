@@ -439,7 +439,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         *p++ = nLen;
                         memcpy( p, aTmp.getStr(), nStrLen + 1);
                         nPos += 10 + nStrLen + 1;
-                        sal_uInt8* q = ( pCellArr + nPos );
+                        sal_uInt8* q = pCellArr + nPos;
                         if( (nStrLen & 1) == 0 )
                         {
                             *q++ = 0;
@@ -556,7 +556,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             *p++ = nLen;
                             memcpy( p, aTmp.getStr(), nStrLen + 1);
                             nPos += 2 + nStrLen + 1;
-                            sal_uInt8* q = ( pCellArr + nPos );
+                            sal_uInt8* q = pCellArr + nPos;
                             if( (nStrLen & 1) == 0 )
                             {
                                 *q++ = 0;

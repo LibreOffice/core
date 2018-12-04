@@ -415,7 +415,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     const sal_Int32 nTimeSecs =
         static_cast<sal_Int32>(maElapsedTime.getElapsedTime());
     OUStringBuffer buf;
-    sal_Int32 n = (nTimeSecs / 3600);
+    sal_Int32 n = nTimeSecs / 3600;
     if (n < 10)
         buf.append( '0' );
     buf.append( n );

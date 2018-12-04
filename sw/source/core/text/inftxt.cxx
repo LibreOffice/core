@@ -1215,7 +1215,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     nIdx = GetIdx();
 
                     nLen = pPos->GetLen();
-                    for (TextFrameIndex i = (nIdx + nLen - TextFrameIndex(1));
+                    for (TextFrameIndex i = nIdx + nLen - TextFrameIndex(1);
                             i >= nIdx; --i)
                     {
                         if (i < TextFrameIndex(GetText().getLength())

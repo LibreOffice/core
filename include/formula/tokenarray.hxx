@@ -389,7 +389,7 @@ public:
     ScRecalcMode    GetRecalcMode() const { return nMode; }
 
     void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
-                                { nMode |= (nBits & ~ScRecalcMode::EMask); }
+                                { nMode |= nBits & ~ScRecalcMode::EMask; }
     ScRecalcMode    GetCombinedBitsRecalcMode() const
                                 { return nMode & ~ScRecalcMode::EMask; }
 

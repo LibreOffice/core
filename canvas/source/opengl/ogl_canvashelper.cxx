@@ -709,7 +709,7 @@ namespace oglcanvas
                 {
                     const Size aSize = pVDev->GetFontMetric( aFont ).GetFontSize();
                     const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
-                    double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
+                    double fStretch = rFontMatrix.m00 + rFontMatrix.m01;
 
                     if( !::basegfx::fTools::equalZero( fDividend) )
                         fStretch /= fDividend;

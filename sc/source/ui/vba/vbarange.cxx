@@ -2078,8 +2078,8 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
     ScRange aRange( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCROW >( thisAddress.StartRow ), static_cast< SCTAB >( thisAddress.Sheet ), static_cast< SCCOL >( thisAddress.EndColumn ), static_cast< SCROW >( thisAddress.EndRow ), static_cast< SCTAB >( thisAddress.Sheet ) );
-    ScRefFlags const ROW_ABS = ( ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS );
-    ScRefFlags const COL_ABS = ( ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS );
+    ScRefFlags const ROW_ABS = ScRefFlags::ROW_ABS | ScRefFlags::ROW2_ABS;
+    ScRefFlags const COL_ABS = ScRefFlags::COL_ABS | ScRefFlags::COL2_ABS;
 
     if ( RowAbsolute.hasValue() )
     {
@@ -5387,7 +5387,7 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
                 // need to process each area, gather the results and
                 // create a new range from those
                 std::vector< table::CellRangeAddress > rangeResults;
-                sal_Int32 nItems = ( m_Areas->getCount() + 1 );
+                sal_Int32 nItems = m_Areas->getCount() + 1;
                 for ( sal_Int32 index=1; index <= nItems; ++index )
                 {
                     uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny(index), uno::Any() ), uno::UNO_QUERY_THROW );
@@ -5395,7 +5395,7 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
                     ScVbaRange* pRange = getImplementation( xRange );
                     if ( xRange.is() && pRange )
                     {
-                        sal_Int32 nElems = ( pRange->m_Areas->getCount() + 1 );
+                        sal_Int32 nElems = pRange->m_Areas->getCount() + 1;
                         for ( sal_Int32 nArea = 1; nArea < nElems; ++nArea )
                         {
                             uno::Reference< excel::XRange > xTmpRange( m_Areas->Item( uno::makeAny( nArea ), uno::Any() ), uno::UNO_QUERY_THROW );

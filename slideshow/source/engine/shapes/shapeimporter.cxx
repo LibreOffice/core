@@ -172,8 +172,8 @@ bool ShapeOfGroup::isContentChanged() const
 basegfx::B2DRectangle ShapeOfGroup::getBounds() const
 {
     basegfx::B2DRectangle const groupPosSize( mpGroupShape->getBounds() );
-    double const posX = (groupPosSize.getMinX() + maPosOffset.getX());
-    double const posY = (groupPosSize.getMinY() + maPosOffset.getY());
+    double const posX = groupPosSize.getMinX() + maPosOffset.getX();
+    double const posY = groupPosSize.getMinY() + maPosOffset.getY();
     return basegfx::B2DRectangle( posX, posY, posX + mnWidth, posY + mnHeight );
 }
 

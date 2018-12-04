@@ -27,7 +27,7 @@ namespace internal {
 
 ::basegfx::B2DPolyPolygon CheckerBoardWipe::operator () ( double t )
 {
-    const double d = (1.0 / m_unitsPerEdge);
+    const double d = 1.0 / m_unitsPerEdge;
     ::basegfx::B2DHomMatrix aTransform;
     aTransform.scale( ::basegfx::pruneScaleValue( d * 2.0 * t ),
                       ::basegfx::pruneScaleValue( d ) );

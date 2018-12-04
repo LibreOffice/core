@@ -728,12 +728,12 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
                         SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aPropsHM.getUnpackedValueOrDefault( "Flags", sal_Int32(0) ));
 
                         // that should be import, export, own filter and not a template filter ( TemplatePath flag )
-                        SfxFilterFlags const nRequired = (SfxFilterFlags::OWN
+                        SfxFilterFlags const nRequired = SfxFilterFlags::OWN
                             // fdo#78159 for OOoXML, there is code to convert
                             // to ODF in OCommonEmbeddedObject::store*
                             // so accept it even though there's no export
                             | (SOFFICE_FILEFORMAT_60 == nVersion ? SfxFilterFlags::NONE : SfxFilterFlags::EXPORT)
-                            | SfxFilterFlags::IMPORT );
+                            | SfxFilterFlags::IMPORT;
                         if ( ( ( nFlags & nRequired ) == nRequired ) && !( nFlags & SfxFilterFlags::TEMPLATEPATH ) )
                         {
                             // if there are more than one filter the preferred one should be used

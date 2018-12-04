@@ -89,7 +89,7 @@ class SvxIconChoiceCtrlEntry
     sal_uInt16                      nX,nY;      // for keyboard control
     SvxIconViewFlags                nFlags;
 
-    void                    ClearFlags( SvxIconViewFlags nMask ) { nFlags &= (~nMask); }
+    void                    ClearFlags( SvxIconViewFlags nMask ) { nFlags &= ~nMask; }
     void                    SetFlags( SvxIconViewFlags nMask ) { nFlags |= nMask; }
     void                    AssignFlags( SvxIconViewFlags _nFlags ) { nFlags = _nFlags; }
 

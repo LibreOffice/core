@@ -355,7 +355,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
     TreeNodeVector::iterator aIter( maChildren.begin() );
     std::advance(aIter, nChildIndex);
 
-    xImpl = (*aIter);
+    xImpl = *aIter;
     maChildren.erase( aIter );
 
     if( !xImpl.is() )

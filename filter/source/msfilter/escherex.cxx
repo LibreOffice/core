@@ -1319,7 +1319,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<drawi
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "VisibleArea" ) )
             {
                 pVisArea.reset(new awt::Rectangle);
-                aAny >>= (*pVisArea);
+                aAny >>= *pVisArea;
             }
             sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, rGraphicObj, pVisArea.get() );
             if ( nBlibId )

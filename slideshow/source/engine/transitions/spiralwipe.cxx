@@ -40,9 +40,9 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
 
 ::basegfx::B2DPolyPolygon SpiralWipe::calcNegSpiral( double t ) const
 {
-    const double area = (t * m_elements);
-    const double e = (sqrt(area) / 2.0);
-    const sal_Int32 edge = (static_cast<sal_Int32>(e) * 2);
+    const double area = t * m_elements;
+    const double e = sqrt(area) / 2.0;
+    const sal_Int32 edge = static_cast<sal_Int32>(e) * 2;
 
     basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(-0.5, -0.5));
     const double edge_ = ::basegfx::pruneScaleValue(
@@ -54,7 +54,7 @@ SpiralWipe::SpiralWipe( sal_Int32 nElements, bool flipOnYAxis )
     ::basegfx::B2DPolyPolygon res(poly);
 
     if (! ::basegfx::fTools::equalZero( 1.0 - t )) {
-        const sal_Int32 edge1 = (edge + 1);
+        const sal_Int32 edge1 = edge + 1;
         sal_Int32 len = static_cast<sal_Int32>( (e - (edge /2)) * edge1 * 4 );
         double w = M_PI_2;
         while (len > 0) {

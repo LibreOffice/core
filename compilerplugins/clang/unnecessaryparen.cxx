@@ -386,7 +386,6 @@ bool UnnecessaryParen::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callE
         Opc != OO_AmpEqual && Opc != OO_CaretEqual &&
         Opc != OO_PipeEqual)
         return true;
-
     auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(callExpr->getArg(1)));
     if (!parenExpr)
         return true;
@@ -395,9 +394,18 @@ bool UnnecessaryParen::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callE
     // Sometimes parentheses make the RHS of an assignment easier to read by
     // visually disambiguating the = from a call to ==
     auto sub = parenExpr->getSubExpr();
-    if (isa<BinaryOperator>(sub)
-        || isa<CXXOperatorCallExpr>(sub)
-        || isa<ConditionalOperator>(sub))
+    if (auto subBinOp = dyn_cast<BinaryOperator>(sub))
+    {
+        if (!(subBinOp->isMultiplicativeOp() || subBinOp->isAdditiveOp() || subBinOp->isPtrMemOp()))
+            return true;
+    }
+    if (auto subOperatorCall = dyn_cast<CXXOperatorCallExpr>(sub))
+    {
+        auto op = subOperatorCall->getOperator();
+        if (!((op >= OO_Plus && op <= OO_Exclaim) || (op >= OO_ArrowStar && op <= OO_Subscript)))
+            return true;
+    }
+    if (isa<ConditionalOperator>(sub))
         return true;
 
     report(
@@ -420,12 +428,26 @@ bool UnnecessaryParen::VisitVarDecl(const VarDecl* varDecl)
         return true;
     if (compat::getBeginLoc(parenExpr).isMacroID())
         return true;
+
+    // Sometimes parentheses make the RHS of an assignment easier to read by
+    // visually disambiguating the = from a call to ==
     auto sub = parenExpr->getSubExpr();
-    if (isa<BinaryOperator>(sub)
-        || isa<CXXOperatorCallExpr>(sub)
-        || isa<ConditionalOperator>(sub)
-            // these two are for "parentheses were disambiguated as a function declaration [-Werror,-Wvexing-parse]"
-        || isa<CXXBindTemporaryExpr>(sub)
+    if (auto subBinOp = dyn_cast<BinaryOperator>(sub))
+    {
+        if (!(subBinOp->isMultiplicativeOp() || subBinOp->isAdditiveOp() || subBinOp->isPtrMemOp()))
+            return true;
+    }
+    if (auto subOperatorCall = dyn_cast<CXXOperatorCallExpr>(sub))
+    {
+        auto op = subOperatorCall->getOperator();
+        if (!((op >= OO_Plus && op <= OO_Exclaim) || (op >= OO_ArrowStar && op <= OO_Subscript)))
+            return true;
+    }
+    if (isa<ConditionalOperator>(sub))
+        return true;
+
+    // these two are for "parentheses were disambiguated as a function declaration [-Werror,-Wvexing-parse]"
+    if (isa<CXXBindTemporaryExpr>(sub)
         || isa<CXXFunctionalCastExpr>(sub))
         return true;
 

@@ -929,7 +929,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 
     for( std::vector< PropertyValue >::iterator i = aProps.begin(); i != aProps.end(); ++i )
     {
-        *pParams++ = (*i);
+        *pParams++ = *i;
     }
 }
 

@@ -637,7 +637,7 @@ bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
     ScMyRowFormatRangesList::iterator aItr(aRowFormatRanges.begin());
     if (aItr != aRowFormatRanges.end())
     {
-        aFormatRange = (*aItr);
+        aFormatRange = *aItr;
         aRowFormatRanges.erase(aItr);
         --nSize;
         return true;

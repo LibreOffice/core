@@ -2939,7 +2939,7 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
     {
         for( int i = 0; i < 6; i++ )
         {
-            int nOffset = (nSubsetID % 26);
+            int nOffset = nSubsetID % 26;
             nSubsetID /= 26;
             rBuffer.append( static_cast<sal_Char>('A'+nOffset) );
         }
@@ -6328,7 +6328,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
             fSkewA = -fSkewB;
             fSkewB = 0.0;
         }
-        aDeltaPos += (PixelToLogic( Point( static_cast<int>(static_cast<double>(nXOffset)/fXScale), 0 ) ) - PixelToLogic( Point() ) );
+        aDeltaPos += PixelToLogic( Point( static_cast<int>(static_cast<double>(nXOffset)/fXScale), 0 ) ) - PixelToLogic( Point() );
         if( i < rGlyphs.size()-1 )
         // #i120627# the text on the Y axis is reversed when export ppt file to PDF format
         {

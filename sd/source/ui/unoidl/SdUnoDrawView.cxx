@@ -228,7 +228,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
             const ::std::vector<SdrObject*>::iterator aEnd( aObjects.end() );
             while( aIter != aEnd )
             {
-                SdrObject* pObj = (*aIter++);
+                SdrObject* pObj = *aIter++;
                 mrView.MarkObj( pObj, pPV );
             }
         }

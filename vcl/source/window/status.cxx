@@ -1394,7 +1394,7 @@ Size StatusBar::CalcWindowSizePixel() const
     size_t  i = 0;
     size_t  nCount = mvItemList.size();
     long    nOffset = 0;
-    long    nCalcWidth = (STATUSBAR_OFFSET_X*2);
+    long    nCalcWidth = STATUSBAR_OFFSET_X*2;
     long    nCalcHeight;
 
     while ( i < nCount )

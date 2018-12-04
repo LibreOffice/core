@@ -41,8 +41,8 @@ public:
     sal_Int32 mnRightBorder;
     sal_Int32 mnTopBorder;
     sal_Int32 mnBottomBorder;
-    static const sal_Int32 gnVerticalGap = (10 - 2*Theme_FocusIndicatorWidth);
-    static const sal_Int32 gnHorizontalGap = (10 - 2*Theme_FocusIndicatorWidth);
+    static const sal_Int32 gnVerticalGap = 10 - 2*Theme_FocusIndicatorWidth;
+    static const sal_Int32 gnHorizontalGap = 10 - 2*Theme_FocusIndicatorWidth;
     Size const maMinimalSize;
     Size const maPreferredSize;
     Size const maMaximalSize;

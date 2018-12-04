@@ -34,11 +34,11 @@ WaterfallWipe::WaterfallWipe( sal_Int32 nElements, bool flipOnYAxis )
 {
     const sal_Int32 sqrtElements = static_cast<sal_Int32>(
         sqrt( static_cast<double>(nElements) ) );
-    const double elementEdge = (1.0 / sqrtElements);
+    const double elementEdge = 1.0 / sqrtElements;
     m_waterfall.append( ::basegfx::B2DPoint( 0.0, -1.0 ) );
     for ( sal_Int32 pos = sqrtElements; pos--; )
     {
-        const sal_Int32 xPos = (sqrtElements - pos - 1);
+        const sal_Int32 xPos = sqrtElements - pos - 1;
         const double yPos = ::basegfx::pruneScaleValue( ((pos + 1) * elementEdge) - 1.0 );
         m_waterfall.append( ::basegfx::B2DPoint(
                                 ::basegfx::pruneScaleValue( xPos * elementEdge ),

@@ -946,7 +946,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
     // calc visible area
     long const nScrollOffset = m_pScrollWindow->GetScrollOffset();
     long nThumbPos = m_pVScroll->GetThumbPos();
-    long const nWinTop = (nThumbPos * nScrollOffset);
+    long const nWinTop = nThumbPos * nScrollOffset;
     long const nWinBottom = nWinTop + nWinHeight;
 
     long const nCtrlPosY = rCtrl.GetPosPixel().Y();

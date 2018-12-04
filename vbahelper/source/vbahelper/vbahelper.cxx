@@ -363,7 +363,7 @@ void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, cons
     if ( nFrom || nTo )
     {
         if ( nFrom )
-            sRange = ( OUString::number( nFrom ) + sRange );
+            sRange = OUString::number( nFrom ) + sRange;
         if ( nTo )
             sRange += OUString::number( nTo );
     }

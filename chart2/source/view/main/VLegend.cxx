@@ -202,7 +202,7 @@ void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal
     {
         for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
         {
-            sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
+            sal_Int32 nEntry = nColumn + nRow * nNumberOfColumns;
             if( nEntry < nNumberOfEntries )
             {
                 awt::Size aTextSize( rTextShapes[ nEntry ]->getSize() );
@@ -228,7 +228,7 @@ void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int3
         sal_Int32 nCurrentRowHeight = 0;
         for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn)
         {
-            sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
+            sal_Int32 nEntry = nColumn + nRow * nNumberOfColumns;
             if( nEntry < nNumberOfEntries )
             {
                 awt::Size aTextSize( rTextShapes[ nEntry ]->getSize() );
@@ -397,7 +397,7 @@ awt::Size lcl_placeLegendEntries(
             {
                 for (sal_Int32 nColumn = nNumberOfColumns; nColumn--; )
                 {
-                    sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
+                    sal_Int32 nEntry = nColumn + nRow * nNumberOfColumns;
                     if( nEntry < static_cast<sal_Int32>(aTextShapes.size()) )
                     {
                         DrawModelWrapper::removeShape( aTextShapes[nEntry] );
@@ -526,7 +526,7 @@ awt::Size lcl_placeLegendEntries(
         sal_Int32 nCurrentYPos = nYPadding + nYStartPosition;
         for (sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow)
         {
-            sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
+            sal_Int32 nEntry = nColumn + nRow * nNumberOfColumns;
             if( nEntry >= nNumberOfEntries )
                 break;
 
@@ -625,8 +625,8 @@ chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt:
         case LegendPosition_LINE_START:
             {
                 // #i109336# Improve auto positioning in chart
-                const double fDefaultDistance = ( static_cast< double >( lcl_getLegendLeftRightMargin() ) /
-                    static_cast< double >( rPageSize.Width ) );
+                const double fDefaultDistance = static_cast< double >( lcl_getLegendLeftRightMargin() ) /
+                    static_cast< double >( rPageSize.Width );
                 aResult = chart2::RelativePosition(
                     fDefaultDistance, 0.5, drawing::Alignment_LEFT );
             }
@@ -634,8 +634,8 @@ chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt:
         case LegendPosition_LINE_END:
             {
                 // #i109336# Improve auto positioning in chart
-                const double fDefaultDistance = ( static_cast< double >( lcl_getLegendLeftRightMargin() ) /
-                    static_cast< double >( rPageSize.Width ) );
+                const double fDefaultDistance = static_cast< double >( lcl_getLegendLeftRightMargin() ) /
+                    static_cast< double >( rPageSize.Width );
                 aResult = chart2::RelativePosition(
                     1.0 - fDefaultDistance, 0.5, drawing::Alignment_RIGHT );
             }
@@ -643,8 +643,8 @@ chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt:
         case LegendPosition_PAGE_START:
             {
                 // #i109336# Improve auto positioning in chart
-                const double fDefaultDistance = ( static_cast< double >( lcl_getLegendTopBottomMargin() ) /
-                    static_cast< double >( rPageSize.Height ) );
+                const double fDefaultDistance = static_cast< double >( lcl_getLegendTopBottomMargin() ) /
+                    static_cast< double >( rPageSize.Height );
                 double fDistance = (static_cast<double>(rOutAvailableSpace.Y)/static_cast<double>(rPageSize.Height)) + fDefaultDistance;
                 aResult = chart2::RelativePosition(
                     0.5, fDistance, drawing::Alignment_TOP );
@@ -653,8 +653,8 @@ chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt:
         case LegendPosition_PAGE_END:
             {
                 // #i109336# Improve auto positioning in chart
-                const double fDefaultDistance = ( static_cast< double >( lcl_getLegendTopBottomMargin() ) /
-                    static_cast< double >( rPageSize.Height ) );
+                const double fDefaultDistance = static_cast< double >( lcl_getLegendTopBottomMargin() ) /
+                    static_cast< double >( rPageSize.Height );
 
                 double fDistance = double(rPageSize.Height - (rOutAvailableSpace.Y + rOutAvailableSpace.Height));
                 fDistance += fDefaultDistance;

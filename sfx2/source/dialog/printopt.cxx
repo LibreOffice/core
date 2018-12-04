@@ -226,7 +226,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
         m_pReduceBitmapsResolutionLB->SelectEntryPos( 0 );
     else
     {
-        for( long i = ( DPI_COUNT - 1 ); i >= 0; i-- )
+        for( long i = DPI_COUNT - 1; i >= 0; i-- )
         {
             if( nDPI >= aDPIArray[ i ] )
             {

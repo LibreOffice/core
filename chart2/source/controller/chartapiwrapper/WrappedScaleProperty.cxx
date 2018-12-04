@@ -420,7 +420,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                         (rSubIncrements[ 0 ].IntervalCount >>= nIntervalCount) &&
                         nIntervalCount > 0 )
                     {
-                        aRet <<= ( fStepMain / static_cast< double >( nIntervalCount ) );
+                        aRet <<= fStepMain / static_cast< double >( nIntervalCount );
                         bNeedToCalculateExplicitValues = false;
                     }
                 }
@@ -448,9 +448,9 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                         }
                     }
                     else
-                        aRet <<= ( aExplicitIncrement.Distance /
+                        aRet <<= aExplicitIncrement.Distance /
                                 static_cast< double >(
-                                    aExplicitIncrement.SubIncrements[ 0 ].IntervalCount ));
+                                    aExplicitIncrement.SubIncrements[ 0 ].IntervalCount );
                 }
                 else
                 {

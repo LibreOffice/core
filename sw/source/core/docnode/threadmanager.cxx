@@ -123,7 +123,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
 
     if ( aIter != maStartedThreads.end() )
     {
-        tThreadData aTmpThreadData( (*aIter) );
+        tThreadData aTmpThreadData( *aIter );
 
         maStartedThreads.erase( aIter );
 

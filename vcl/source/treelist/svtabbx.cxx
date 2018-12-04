@@ -452,7 +452,7 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
         return;
     SvLBoxTab& rTab = mvTabList[ nTab ];
     SvLBoxTabFlags nFlags = rTab.nFlags;
-    nFlags &= (~MYTABMASK);
+    nFlags &= ~MYTABMASK;
     nFlags |= static_cast<SvLBoxTabFlags>(eJustify);
     rTab.nFlags = nFlags;
     SvTreeListBox::nTreeFlags |= SvTreeFlags::RECALCTABS;

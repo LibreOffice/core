@@ -2037,7 +2037,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
             if( nFrameOpts & HtmlFrmOpts::SWidth )
                 nMode |= Css1FrameSize::Width;
             if( nFrameOpts & HtmlFrmOpts::SHeight )
-                nMode |= (Css1FrameSize::MinHeight|Css1FrameSize::FixHeight);
+                nMode |= Css1FrameSize::MinHeight|Css1FrameSize::FixHeight;
             if( nFrameOpts & HtmlFrmOpts::SPixSize )
                 nMode |= Css1FrameSize::Pixel;
 

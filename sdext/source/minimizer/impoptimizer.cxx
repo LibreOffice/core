@@ -313,8 +313,8 @@ static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentCont
                                 aDestSizePixel = aSourceSizePixel;
                             if ( rGraphicSettings.mnImageResolution && aLogicalSize.Width && aLogicalSize.Height )
                             {
-                                const double fSourceDPIX = (static_cast<double>(aSourceSizePixel.Width) / (static_cast<double>(aLogicalSize.Width) / 2540.0 ));
-                                const double fSourceDPIY = (static_cast<double>(aSourceSizePixel.Height)/ (static_cast<double>(aLogicalSize.Height)/ 2540.0 ));
+                                const double fSourceDPIX = static_cast<double>(aSourceSizePixel.Width) / (static_cast<double>(aLogicalSize.Width) / 2540.0 );
+                                const double fSourceDPIY = static_cast<double>(aSourceSizePixel.Height)/ (static_cast<double>(aLogicalSize.Height)/ 2540.0 );
 
                                 // check, if the bitmap DPI exceeds the maximum DPI
                                 if( ( fSourceDPIX > rGraphicSettings.mnImageResolution ) || ( fSourceDPIY > rGraphicSettings.mnImageResolution ) )

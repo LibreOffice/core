@@ -34,8 +34,8 @@
 
 #include <limits.h>
 
-const sal_uInt16 XML_NAMESPACE_XMLNS         = (USHRT_MAX-2);
-const sal_uInt16 XML_NAMESPACE_NONE          = (USHRT_MAX-1);
+const sal_uInt16 XML_NAMESPACE_XMLNS         = USHRT_MAX-2;
+const sal_uInt16 XML_NAMESPACE_NONE          = USHRT_MAX-1;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN       = USHRT_MAX;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN_FLAG  = 0x8000;
 

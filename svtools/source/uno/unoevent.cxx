@@ -434,7 +434,7 @@ void SvDetachedEventDescriptor::getByName(
         throw NoSuchElementException();
 
     if( aMacros[nIndex] )
-        rMacro = (*aMacros[nIndex]);
+        rMacro = *aMacros[nIndex];
 }
 
 bool SvDetachedEventDescriptor::hasById(

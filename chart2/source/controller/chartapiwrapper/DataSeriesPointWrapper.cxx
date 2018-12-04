@@ -335,7 +335,7 @@ Any WrappedSegmentOffsetProperty::convertOuterToInnerValue( const Any& rOuterVal
     Any aResult( rOuterValue );
 
     if( rOuterValue >>= nOffset )
-        aResult <<= (static_cast< double >( nOffset ) / 100.0);
+        aResult <<= static_cast< double >( nOffset ) / 100.0;
 
     return aResult;
 }

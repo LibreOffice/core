@@ -226,7 +226,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
         std::vector< Graphic >::iterator aGraphIter( aGraphics.begin() );
         while( aGraphIter != aGraphics.end() )
         {
-            Graphic aGraphic( (*aGraphIter++) );
+            Graphic aGraphic( *aGraphIter++ );
 
             aGraphic.Draw( pDev, aPos );
 

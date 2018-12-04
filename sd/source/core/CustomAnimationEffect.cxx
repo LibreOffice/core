@@ -1619,7 +1619,7 @@ void EffectSequenceHelper::reset()
     EffectSequence::iterator aEnd( maEffects.end() );
     if( aIter != aEnd )
     {
-        CustomAnimationEffectPtr pEffect = (*aIter++);
+        CustomAnimationEffectPtr pEffect = *aIter++;
         pEffect->setEffectSequence(nullptr);
     }
     maEffects.clear();
@@ -1839,7 +1839,7 @@ void EffectSequenceHelper::implRebuild()
         {
             std::vector< sd::AfterEffectNode > aAfterEffects;
 
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
 
             bool bFirst = true;
             do
@@ -1900,7 +1900,7 @@ void EffectSequenceHelper::implRebuild()
                             fDuration = fTemp;
 
                         if( aIter != aEnd )
-                            pEffect = (*aIter++);
+                            pEffect = *aIter++;
                         else
                             pEffect.reset();
                     }
@@ -2084,7 +2084,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const css::uno::Refer
     {
         if( (*aIter)->getNode() == xNode )
         {
-            pEffect = (*aIter);
+            pEffect = *aIter;
             break;
         }
     }
@@ -2114,7 +2114,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::getEffectFromOffset( sal_Int32 nO
 
     CustomAnimationEffectPtr pEffect;
     if( aIter != maEffects.end() )
-        pEffect = (*aIter);
+        pEffect = *aIter;
 
     return pEffect;
 }
@@ -2317,7 +2317,7 @@ void EffectSequenceHelper::updateTextGroups()
     const EffectSequence::iterator aEnd( maEffects.end() );
     while( aIter != aEnd )
     {
-        CustomAnimationEffectPtr pEffect( (*aIter++) );
+        CustomAnimationEffectPtr pEffect( *aIter++ );
 
         const sal_Int32 nGroupId = pEffect->getGroupId();
 
@@ -2523,7 +2523,7 @@ void EffectSequenceHelper::setTextGrouping( const CustomAnimationTextGroupPtr& p
         const EffectSequence::iterator aEnd( aEffects.end() );
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect( (*aIter++) );
+            CustomAnimationEffectPtr pEffect( *aIter++ );
 
             if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
                 remove( pEffect );
@@ -2544,7 +2544,7 @@ void EffectSequenceHelper::setTextGrouping( const CustomAnimationTextGroupPtr& p
         const EffectSequence::iterator aEnd( aEffects.end() );
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect( (*aIter++) );
+            CustomAnimationEffectPtr pEffect( *aIter++ );
 
             if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
             {
@@ -2605,7 +2605,7 @@ void EffectSequenceHelper::setAnimateForm( const CustomAnimationTextGroupPtr& pT
             {
                 // special case, only one effect and that targets whole text,
                 // convert this to target whole shape
-                pEffect = (*aIter++);
+                pEffect = *aIter++;
                 pEffect->setTargetSubItem( ShapeAnimationSubType::AS_WHOLE );
             }
             else
@@ -2621,7 +2621,7 @@ void EffectSequenceHelper::setAnimateForm( const CustomAnimationTextGroupPtr& pT
 
         if( !bAnimateForm && (aEffects.size() == 1) )
         {
-            CustomAnimationEffectPtr pEffect( (*aIter) );
+            CustomAnimationEffectPtr pEffect( *aIter );
             pEffect->setTarget( makeAny( (*aIter)->getTargetShape() ) );
             pEffect->setTargetSubItem( ShapeAnimationSubType::ONLY_TEXT );
             pTextGroup->addEffect( pEffect );
@@ -2631,7 +2631,7 @@ void EffectSequenceHelper::setAnimateForm( const CustomAnimationTextGroupPtr& pT
             // read the rest to the group again
             while( aIter != aEnd )
             {
-                CustomAnimationEffectPtr pEffect( (*aIter++) );
+                CustomAnimationEffectPtr pEffect( *aIter++ );
 
                 if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
                 {
@@ -2659,7 +2659,7 @@ void EffectSequenceHelper::setTextGroupingAuto( const CustomAnimationTextGroupPt
     const EffectSequence::iterator aEnd( aEffects.end() );
     while( aIter != aEnd )
     {
-        CustomAnimationEffectPtr pEffect( (*aIter++) );
+        CustomAnimationEffectPtr pEffect( *aIter++ );
 
         if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
         {
@@ -2749,7 +2749,7 @@ void EffectSequenceHelper::setTextReverse( const CustomAnimationTextGroupPtr& pT
             EffectSequence::iterator aInsertIter( find( *aIter++ ) );
             while( aIter != aEnd )
             {
-                CustomAnimationEffectPtr pEffect( (*aIter++) );
+                CustomAnimationEffectPtr pEffect( *aIter++ );
                 maEffects.erase( find( pEffect ) );
                 aInsertIter = maEffects.insert( ++aInsertIter, pEffect );
                 pTextGroup->addEffect( pEffect );
@@ -2896,7 +2896,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
             stl_CustomAnimationEffect_search_node_predict aSearchPredict( xMaster );
             EffectSequence::iterator aIter( std::find_if( maEffects.begin(), maEffects.end(), aSearchPredict ) );
             if( aIter != maEffects.end() )
-                pMasterEffect = (*aIter );
+                pMasterEffect = *aIter;
 
             if( pMasterEffect.get() )
             {
@@ -3289,7 +3289,7 @@ void MainSequence::implRebuild()
     auto aIter( maInteractiveSequenceVector.begin() );
     while( aIter != maInteractiveSequenceVector.end() )
     {
-        InteractiveSequencePtr pIS( (*aIter) );
+        InteractiveSequencePtr pIS( *aIter );
         if( pIS->maEffects.empty() )
         {
             // remove empty interactive sequences

@@ -347,7 +347,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
     uno::Sequence< uno::Any > aArgs( nArg );
 
     const uno::Any** pArg = aArgsPtrArray;
-    const uno::Any** pArgEnd = ( aArgsPtrArray + nArg );
+    const uno::Any** pArgEnd = aArgsPtrArray + nArg;
 
     sal_Int32 nArgProcessed = 0;
 

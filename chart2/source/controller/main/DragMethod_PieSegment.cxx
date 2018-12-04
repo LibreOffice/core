@@ -87,7 +87,7 @@ void DragMethod_PieSegment::MoveSdrDrag(const Point& rPnt)
     if( DragStat().CheckMinMoved(rPnt) )
     {
         //calculate new offset
-        B2DVector aShiftVector(( B2DVector( rPnt.X(), rPnt.Y() ) - m_aStartVector ));
+        B2DVector aShiftVector( B2DVector( rPnt.X(), rPnt.Y() ) - m_aStartVector );
         m_fAdditionalOffset = m_aDragDirection.scalar( aShiftVector )/m_fDragRange; // projection
 
         if( m_fAdditionalOffset < -m_fInitialOffset )
