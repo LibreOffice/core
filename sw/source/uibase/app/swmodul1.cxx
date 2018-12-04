@@ -214,13 +214,13 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
         {
             if(!m_pWebUsrPref)
                 GetUsrPref(true);
-            pPref = m_pWebUsrPref;
+            pPref = m_pWebUsrPref.get();
         }
         else
         {
             if(!m_pUsrPref)
                 GetUsrPref(false);
-            pPref = m_pUsrPref;
+            pPref = m_pUsrPref.get();
         }
         FieldUnit eOldMetric = pPref->GetMetric();
         if(eOldMetric != eMetric)
@@ -250,13 +250,13 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb 
     {
         if(!m_pWebUsrPref)
             GetUsrPref(true);
-        pPref = m_pWebUsrPref;
+        pPref = m_pWebUsrPref.get();
     }
     else
     {
         if(!m_pUsrPref)
             GetUsrPref(false);
-        pPref = m_pUsrPref;
+        pPref = m_pUsrPref.get();
     }
     if( bHorizontal )
         pPref->SetHScrollMetric(eMetric);
@@ -286,13 +286,13 @@ void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
     {
         if(!m_pWebUsrPref)
             GetUsrPref(true);
-        pPref = m_pWebUsrPref;
+        pPref = m_pWebUsrPref.get();
     }
     else
     {
         if(!m_pUsrPref)
             GetUsrPref(false);
-        pPref = m_pUsrPref;
+        pPref = m_pUsrPref.get();
     }
     bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
     bool bHasChanged = false;
@@ -342,30 +342,30 @@ SwNavigationConfig*  SwModule::GetNavigationConfig()
 {
     if(!m_pNavigationConfig)
     {
-        m_pNavigationConfig = new SwNavigationConfig;
+        m_pNavigationConfig.reset( new SwNavigationConfig );
     }
-    return m_pNavigationConfig;
+    return m_pNavigationConfig.get();
 }
 
 SwPrintOptions*     SwModule::GetPrtOptions(bool bWeb)
 {
     if(bWeb && !m_pWebPrintOptions)
     {
-        m_pWebPrintOptions = new SwPrintOptions(true);
+        m_pWebPrintOptions.reset(new SwPrintOptions(true));
     }
     else if(!bWeb && !m_pPrintOptions)
     {
-        m_pPrintOptions = new SwPrintOptions(false);
+        m_pPrintOptions.reset(new SwPrintOptions(false));
     }
 
-    return bWeb ? m_pWebPrintOptions : m_pPrintOptions;
+    return bWeb ? m_pWebPrintOptions.get() : m_pPrintOptions.get();
 }
 
 SwChapterNumRules*  SwModule::GetChapterNumRules()
 {
     if(!m_pChapterNumRules)
-        m_pChapterNumRules = new SwChapterNumRules;
-    return m_pChapterNumRules;
+        m_pChapterNumRules.reset(new SwChapterNumRules);
+    return m_pChapterNumRules.get();
 }
 
 void SwModule::ShowDBObj(SwView const & rView, const SwDBData& rData)
@@ -595,13 +595,13 @@ FieldUnit SwModule::GetMetric( bool bWeb ) const
     {
         if(!m_pWebUsrPref)
             GetUsrPref(true);
-        pPref = m_pWebUsrPref;
+        pPref = m_pWebUsrPref.get();
     }
     else
     {
         if(!m_pUsrPref)
             GetUsrPref(false);
-        pPref = m_pUsrPref;
+        pPref = m_pUsrPref.get();
     }
     return pPref->GetMetric();
 }

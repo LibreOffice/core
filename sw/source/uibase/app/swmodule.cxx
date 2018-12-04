@@ -25,6 +25,8 @@
 #include <vcl/graph.hxx>
 #include <svtools/ehdl.hxx>
 #include <unotools/resmgr.hxx>
+#include <unotools/useroptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/TextCharacterSpacingPopup.hxx>
 #include <svx/TextUnderlinePopup.hxx>
@@ -140,6 +142,8 @@ bool     g_bNoInterrupt     = false;
 #include <unomid.h>
 
 #include "swdllimpl.hxx"
+#include <dbconfig.hxx>
+#include <navicfg.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -148,21 +152,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
     : SfxModule("sw", {pWebFact, pFact, pGlobalFact}),
-    m_pModuleConfig(nullptr),
-    m_pUsrPref(nullptr),
-    m_pWebUsrPref(nullptr),
-    m_pPrintOptions(nullptr),
-    m_pWebPrintOptions(nullptr),
-    m_pChapterNumRules(nullptr),
-    m_pStdFontConfig(nullptr),
-    m_pNavigationConfig(nullptr),
-    m_pToolbarConfig(nullptr),
-    m_pWebToolbarConfig(nullptr),
-    m_pDBConfig(nullptr),
-    m_pColorConfig(nullptr),
-    m_pAccessibilityOptions(nullptr),
-    m_pCTLOptions(nullptr),
-    m_pUserOptions(nullptr),
     m_pAttrPool(nullptr),
     m_pView(nullptr),
     m_bAuthorInitialised(false),
@@ -177,13 +166,13 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
                                      ErrCodeArea::Sw,
                                      GetResLocale() ) );
 
-    m_pModuleConfig = new SwModuleOptions;
+    m_pModuleConfig.reset(new SwModuleOptions);
 
     // We need them anyways
-    m_pToolbarConfig = new SwToolbarConfigItem( false );
-    m_pWebToolbarConfig = new SwToolbarConfigItem( true );
+    m_pToolbarConfig.reset(new SwToolbarConfigItem( false ));
+    m_pWebToolbarConfig.reset(new SwToolbarConfigItem( true ));
 
-    m_pStdFontConfig = new SwStdFontConfig;
+    m_pStdFontConfig.reset(new SwStdFontConfig);
 
     StartListening( *SfxGetpApp() );
 

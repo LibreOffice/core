@@ -79,7 +79,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
 
     // the options for the Web- and Textdialog are put together here
         SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
-        SwMasterUsrPref* pPref = bTextDialog ? m_pUsrPref : m_pWebUsrPref;
+        SwMasterUsrPref* pPref = bTextDialog ? m_pUsrPref.get() : m_pWebUsrPref.get();
         // no MakeUsrPref, because only options from textdoks can be used here
         SwView* pAppView = GetView();
         if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
@@ -251,7 +251,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     }
 
     SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
-    SwMasterUsrPref* pPref = bTextDialog ? m_pUsrPref : m_pWebUsrPref;
+    SwMasterUsrPref* pPref = bTextDialog ? m_pUsrPref.get() : m_pWebUsrPref.get();
 
     const SfxPoolItem* pItem;
     SfxBindings *pBindings = pAppView ? &pAppView->GetViewFrame()->GetBindings()
