@@ -451,8 +451,7 @@ void SvxIconChoiceCtrl_Impl::InitPredecessors()
         SvxIconChoiceCtrlEntry* pPrev = aEntries[ 0 ];
         for( size_t nCur = 1; nCur <= nCount; nCur++ )
         {
-            pPrev->ClearFlags( SvxIconViewFlags::POS_LOCKED | SvxIconViewFlags::POS_MOVED |
-                                SvxIconViewFlags::PRED_SET);
+            pPrev->ClearFlags( SvxIconViewFlags::POS_LOCKED | SvxIconViewFlags::POS_MOVED );
 
             SvxIconChoiceCtrlEntry* pNext;
             if( nCur == nCount )
@@ -479,7 +478,6 @@ void SvxIconChoiceCtrl_Impl::ClearPredecessors()
             SvxIconChoiceCtrlEntry* pCur = aEntries[ nCur ];
             pCur->pflink = nullptr;
             pCur->pblink = nullptr;
-            pCur->ClearFlags( SvxIconViewFlags::PRED_SET );
         }
         pHead = nullptr;
     }
@@ -2849,7 +2847,6 @@ void SvxIconChoiceCtrl_Impl::SetEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry
     }
     if( bSetHead )
         pHead = pEntry;
-    pEntry->SetFlags( SvxIconViewFlags::PRED_SET );
     aAutoArrangeIdle.Start();
 }
 

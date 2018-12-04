@@ -41,11 +41,10 @@ enum class SvxIconViewFlags
     SELECTED       = 0x0002,
     FOCUSED        = 0x0004,
     POS_MOVED      = 0x0008, // Moved by Drag and Drop, but not logged
-    PRED_SET       = 0x0010, // Predecessor moved
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxIconViewFlags> : is_typed_flags<SvxIconViewFlags, 0x001f> {};
+    template<> struct typed_flags<SvxIconViewFlags> : is_typed_flags<SvxIconViewFlags, 0x000f> {};
 }
 
 enum class SvxIconChoiceCtrlTextMode
