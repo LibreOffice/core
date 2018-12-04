@@ -57,7 +57,7 @@
       <FormatCode>D.M.YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNN DD. MMMM YYYY</FormatCode>
+      <FormatCode>NNNNDD. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>D.M.YYYY</FormatCode>
