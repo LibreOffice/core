@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5f4e5783_ce791730",
+        "filename": "vcl/unx/gtk3_kde5/gtk3_kde5_filepicker_ipc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-04T12:22:18Z",
+      "side": 1,
+      "message": "I just wasn\u0027t sure you could still read the ::Quit from the pipe after the close.\n\nMy idea was just to handle eof() like a ::Quit, so it\u0027s implicit. AFAIK it doesn\u0027t make sense to expect any communication after the ::Quit.",
+      "parentUuid": "5f4e5783_2be9bd7f",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 32
+      },
+      "revId": "e87c56f1db2118d04b605a2c5f88b464c351109d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4e5783_6bd1f557",
         "filename": "vcl/unx/gtk3_kde5/kde5_filepicker_ipc.cxx",
         "patchSetId": 3
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "https://en.cppreference.com/w/cpp/io/basic_istream/operator_gtgt says: \"If extraction fails, zero is written to value and failbit is set. If extraction results in the value too large or too small to fit in value, std::numeric_limits\u003cT\u003e::max() or std::numeric_limits\u003cT\u003e::min() is written and failbit flag is set.\" I\u0027m not totally sure whether \"extraction fails\" applies here, but at least I observe that both values are 0 when I look at them.\n\nThe check can for sure be moved above the \u0027readCommandArgs\u0027, but I think that moving it in front of \u0027readIpcArg\u0027 (or at the beginning of that function) has the problem that eof() will return \u0027false\u0027 when the pipe has not been closed yet, so the read will be done nonetheless (blocking until EOF is received when the pipe is finally closed), so the check here (or right after the \u0027readIpcArgs\u0027 call would still be needed.",
       "parentUuid": "5f4e5783_6bd1f557",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 27
+      },
+      "revId": "e87c56f1db2118d04b605a2c5f88b464c351109d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_ee7cd321",
+        "filename": "vcl/unx/gtk3_kde5/kde5_filepicker_ipc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-04T12:22:18Z",
+      "side": 1,
+      "message": "I just meant to check directly after readIpcArgs.",
+      "parentUuid": "5f4e5783_4bf4f95b",
       "range": {
         "startLine": 195,
         "startChar": 0,
