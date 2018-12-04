@@ -245,7 +245,7 @@ static OUString CreateMD5FromString( const OUString& aMsg )
     if ( handle )
     {
         const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(aMsg.getStr());
-        sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
+        sal_uInt32       nSize = aMsg.getLength() * sizeof( sal_Unicode );
         sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
         std::unique_ptr<sal_uInt8[]> pMD5KeyBuffer(new sal_uInt8[ nMD5KeyLen ]);
 

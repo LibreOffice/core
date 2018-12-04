@@ -544,7 +544,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
     for (reverse_iterator it = aLineRects.rbegin(); it != aLineRects.rend();
          ++it)
     {
-        SwLineRect &rLRect = (*it);
+        SwLineRect &rLRect = *it;
         // Test for the orientation, color, table
         if ( rLRect.GetTab() == pTab &&
              !rLRect.IsPainted() && rLRect.GetSubColor() == nSCol &&
@@ -596,7 +596,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
         // Collect all lines to possibly link with i1
         for (iterator it2 = aLineRects.begin(); it2 != aLineRects.end(); ++it2)
         {
-            SwLineRect &rL2 = (*it2);
+            SwLineRect &rL2 = *it2;
             if ( rL2.GetTab() != rL1.GetTab() ||
                  rL2.IsPainted()              ||
                  rL2.IsLocked()               ||

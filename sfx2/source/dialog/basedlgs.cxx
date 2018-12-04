@@ -258,7 +258,7 @@ IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl, Timer *, void)
             aSize = GetSizePixel();
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if ( GetStyle() & WB_SIZEABLE )
-            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
+            nMask |= WindowStateMask::Width | WindowStateMask::Height;
         pImpl->aWinState = GetWindowState( nMask );
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImpl->pMgr->GetType() );
     }
@@ -429,7 +429,7 @@ void SfxModelessDialogController::DeInit()
     {
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if (m_xDialog->get_resizable())
-            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
+            nMask |= WindowStateMask::Width | WindowStateMask::Height;
         m_xImpl->aWinState = m_xDialog->get_window_state(nMask);
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, m_xImpl->pMgr->GetType() );
     }
@@ -652,7 +652,7 @@ IMPL_LINK_NOARG(SfxFloatingWindow, TimerHdl, Timer *, void)
             aSize = GetSizePixel();
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if ( GetStyle() & WB_SIZEABLE )
-            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
+            nMask |= WindowStateMask::Width | WindowStateMask::Height;
         pImpl->aWinState = GetWindowState( nMask );
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImpl->pMgr->GetType() );
     }

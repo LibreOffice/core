@@ -144,7 +144,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                 SfxSlot *pLastSlot = pIter;
                 for ( sal_uInt16 n = nIter; n < Count(); ++n )
                 {
-                    SfxSlot *pCurSlot = (pSlots+n);
+                    SfxSlot *pCurSlot = pSlots+n;
                     if ( pCurSlot->GetStateFnc() == pIter->GetStateFnc() )
                     {
                         pLastSlot->pNextSlot = pCurSlot;

@@ -147,7 +147,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
                 bFirst = false;
             }
             else
-                rFuncStr += ("; " + aStr);
+                rFuncStr += "; " + aStr;
         }
     }
 

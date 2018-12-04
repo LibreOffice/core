@@ -575,7 +575,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, long nMin, long nM
                 n = aPixSize.Height();
 
             // Tick4 - Output (Text)
-            double aStep = (nTick / nTick4);
+            double aStep = nTick / nTick4;
             double aRest = std::abs(aStep - std::floor(aStep));
             double nAcceptanceDelta = 0.0001;
 

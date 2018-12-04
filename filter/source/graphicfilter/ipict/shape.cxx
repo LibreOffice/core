@@ -84,11 +84,11 @@ namespace PictReaderShape {
                { dest.X()+pSize.Width(), dest.Y()+pSize.Height() },
                { dest.X(), dest.Y()+pSize.Height() }};
       for (int w = origAvoid+1; w < origAvoid+4; w++) {
-    int wh = (w%4);
+    int wh = w%4;
     poly.append(B2DPoint(origPt[wh][0], origPt[wh][1]));
       }
       for (int w = origAvoid+3; w < origAvoid+6; w++) {
-    int wh = (w%4);
+    int wh = w%4;
     poly.append(B2DPoint(destPt[wh][0], destPt[wh][1]));
       }
       int wh = (origAvoid+1)%4;

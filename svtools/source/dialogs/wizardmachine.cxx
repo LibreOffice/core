@@ -223,7 +223,7 @@ namespace svt
         TabPage* pCurrentPage = GetPage(getCurrentState());
         if ( pCurrentPage && !pCurrentPage->GetText().isEmpty() )
         {
-            sCompleteTitle += (" - " + pCurrentPage->GetText());
+            sCompleteTitle += " - " + pCurrentPage->GetText();
         }
 
         SetText(sCompleteTitle);

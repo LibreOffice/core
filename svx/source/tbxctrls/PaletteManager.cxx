@@ -354,7 +354,7 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
     if (aColorDlg.Execute(pParent) == RET_OK)
     {
         Color aLastColor = aColorDlg.GetColor();
-        OUString sColorName = ("#" + aLastColor.AsRGBHexString().toAsciiUpperCase());
+        OUString sColorName = "#" + aLastColor.AsRGBHexString().toAsciiUpperCase();
         NamedColor aNamedColor = std::make_pair(aLastColor, sColorName);
         if (mpBtnUpdater)
             mpBtnUpdater->Update(aNamedColor);

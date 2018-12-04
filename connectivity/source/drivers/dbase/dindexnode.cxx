@@ -439,7 +439,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
     ONDXNode aResultNode;
     if (IsLeaf())
     {
-        for (sal_uInt16 i = (nCount - (nCount / 2)), j = 0 ; i < nCount; i++)
+        for (sal_uInt16 i = nCount - (nCount / 2), j = 0 ; i < nCount; i++)
             rPage.Insert(j++,(*this)[i]);
 
         // this node contains a key that already exists in the tree and must be replaced

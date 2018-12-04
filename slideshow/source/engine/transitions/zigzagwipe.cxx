@@ -32,11 +32,11 @@ namespace internal {
 ZigZagWipe::ZigZagWipe( sal_Int32 nZigs ) : m_zigEdge( 1.0 / nZigs )
 {
     const double d = m_zigEdge;
-    const double d2 = (d / 2.0);
+    const double d2 = d / 2.0;
     m_stdZigZag.append( ::basegfx::B2DPoint( -1.0 - d, -d ) );
     m_stdZigZag.append( ::basegfx::B2DPoint( -1.0 - d, 1.0 + d ) );
     m_stdZigZag.append( ::basegfx::B2DPoint( -d, 1.0 + d ) );
-    for ( sal_Int32 pos = (nZigs + 2); pos--; ) {
+    for ( sal_Int32 pos = nZigs + 2; pos--; ) {
         m_stdZigZag.append( ::basegfx::B2DPoint( 0.0, ((pos - 1) * d) + d2 ) );
         m_stdZigZag.append( ::basegfx::B2DPoint( -d, (pos - 1) * d ) );
     }

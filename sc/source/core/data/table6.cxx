@@ -812,8 +812,8 @@ bool ScTable::SearchAndReplace(
             //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
             if ( !rSearchItem.IsUseAsianOptions() )
                 aSearchOptions.transliterateFlags &=
-                    ( TransliterationFlags::IGNORE_CASE |
-                      TransliterationFlags::IGNORE_WIDTH );
+                    TransliterationFlags::IGNORE_CASE |
+                      TransliterationFlags::IGNORE_WIDTH;
 
             pSearchText.reset( new utl::TextSearch( aSearchOptions ) );
 

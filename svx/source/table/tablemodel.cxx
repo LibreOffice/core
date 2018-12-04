@@ -124,11 +124,11 @@ TableModel::TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTabl
 
         sal_Int32 nRows = nRowCount;
         while( nRows-- )
-            (*maRows[nRows]) = (*xSourceTable->maRows[nRows]);
+            (*maRows[nRows]) = *xSourceTable->maRows[nRows];
 
         sal_Int32 nColumns = nColCount;
         while( nColumns-- )
-            (*maColumns[nColumns]) = (*xSourceTable->maColumns[nColumns]);
+            (*maColumns[nColumns]) = *xSourceTable->maColumns[nColumns];
 
         // copy cells
         for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )

@@ -36,7 +36,7 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     ::basegfx::B2DHomMatrix aTransform;
     if (randomBars)
     {
-        double edge = (1.0 / nElements);
+        double edge = 1.0 / nElements;
         for ( sal_Int32 pos = nElements; pos--; )
             m_positions[ pos ].setY( ::basegfx::pruneScaleValue( pos * edge ) );
         aTransform.scale( 1.0, ::basegfx::pruneScaleValue(edge) );
@@ -45,7 +45,7 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     {
         sal_Int32 sqrtElements = static_cast<sal_Int32>(
             sqrt( static_cast<double>(nElements) ) );
-        double edge = (1.0 / sqrtElements);
+        double edge = 1.0 / sqrtElements;
         for ( sal_Int32 pos = nElements; pos--; ) {
             m_positions[ pos ] = ::basegfx::B2DPoint(
                 ::basegfx::pruneScaleValue( (pos % sqrtElements) * edge ),

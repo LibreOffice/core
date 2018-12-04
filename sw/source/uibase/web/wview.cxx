@@ -104,8 +104,8 @@ void SwWebView::SelectShell()
     }
     SetLastTableFrameFormat(pCurTableFormat);
     //SEL_TBL and SEL_TBL_CELLS can be ored!
-    SelectionType nNewSelectionType = (GetWrtShell().GetSelectionType()
-                                & ~SelectionType::TableCell);
+    SelectionType nNewSelectionType = GetWrtShell().GetSelectionType()
+                                & ~SelectionType::TableCell;
 
     SelectionType _nSelectionType = GetSelectionType();
     if ( nNewSelectionType == _nSelectionType )

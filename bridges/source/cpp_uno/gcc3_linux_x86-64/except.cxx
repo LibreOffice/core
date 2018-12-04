@@ -56,7 +56,7 @@ static OUString toUNOname( char const * p )
     while (*p != 'E')
     {
         // read chars count
-        int n = (*p++ - '0');
+        int n = *p++ - '0';
         while ('0' <= *p && '9' >= *p)
         {
             n *= 10;
@@ -81,7 +81,7 @@ static OUString toUNOname( char const * p )
 extern "C" {
 static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 {
-    __cxxabiv1::__cxa_exception const * header = (static_cast<__cxxabiv1::__cxa_exception const *>(pExc) - 1);
+    __cxxabiv1::__cxa_exception const * header = static_cast<__cxxabiv1::__cxa_exception const *>(pExc) - 1;
     typelib_TypeDescription * pTD = nullptr;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
     ::typelib_typedescription_getByName( &pTD, unoName.pData );

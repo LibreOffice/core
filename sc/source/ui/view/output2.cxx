@@ -585,7 +585,7 @@ void ScDrawStringsVars::RepeatToFill( long nColWidth )
         nTextWidth = pOutput->mpRefDevice->PixelToLogic(Size(nTextWidth,0)).Width();
     }
 
-    long nSpaceToFill = ( nColWidth - nTextWidth );
+    long nSpaceToFill = nColWidth - nTextWidth;
     if ( nSpaceToFill <= nCharWidth )
         return;
 

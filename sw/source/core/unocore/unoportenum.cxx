@@ -615,7 +615,7 @@ static void lcl_ExportBookmark(
 {
     for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end(); aIter != aEnd; )
     {
-        const SwXBookmarkPortion_ImplSharedPtr& pPtr = (*aIter);
+        const SwXBookmarkPortion_ImplSharedPtr& pPtr = *aIter;
         if ( nIndex > pPtr->getIndex() )
         {
             if (bOnlyFrameStarts)
@@ -1124,7 +1124,7 @@ static void lcl_ExportRedline(
     for ( SwXRedlinePortion_ImplList::iterator aIter = rRedlineArr.begin(), aEnd = rRedlineArr.end();
           aIter != aEnd; )
     {
-        SwXRedlinePortion_ImplSharedPtr pPtr = (*aIter );
+        SwXRedlinePortion_ImplSharedPtr pPtr = *aIter;
         sal_Int32 nRealIndex = pPtr->getRealIndex();
         // If there are elements before nIndex, remove them
         if ( nIndex > nRealIndex )
@@ -1179,7 +1179,7 @@ static void lcl_ExportAnnotationStarts(
     for ( SwAnnotationStartPortion_ImplList::iterator aIter = rAnnotationStartArr.begin(), aEnd = rAnnotationStartArr.end();
           aIter != aEnd; )
     {
-        SwAnnotationStartPortion_ImplSharedPtr pPtr = (*aIter);
+        SwAnnotationStartPortion_ImplSharedPtr pPtr = *aIter;
         if ( nIndex > pPtr->getIndex() )
         {
             aIter = rAnnotationStartArr.erase(aIter);
@@ -1269,12 +1269,12 @@ static sal_Int32 lcl_GetNextIndex(
     sal_Int32 nRet = -1;
     if(!rBkmArr.empty())
     {
-        SwXBookmarkPortion_ImplSharedPtr pPtr = (*rBkmArr.begin());
+        SwXBookmarkPortion_ImplSharedPtr pPtr = *rBkmArr.begin();
         nRet = pPtr->getIndex();
     }
     if(!rRedlineArr.empty())
     {
-        SwXRedlinePortion_ImplSharedPtr pPtr = (*rRedlineArr.begin());
+        SwXRedlinePortion_ImplSharedPtr pPtr = *rRedlineArr.begin();
         sal_Int32 nTmp = pPtr->getRealIndex();
         if(nRet < 0 || nTmp < nRet)
             nRet = nTmp;

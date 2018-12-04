@@ -734,7 +734,7 @@ void CustomAnimationPane::updateControls()
             const EffectSequence::iterator aRebuildEnd( maListSelection.end() );
             while( aRebuildIter != aRebuildEnd )
             {
-                CustomAnimationEffectPtr pEffect = (*aRebuildIter++);
+                CustomAnimationEffectPtr pEffect = *aRebuildIter++;
 
                 if( pEffect.get() )
                 {
@@ -770,7 +770,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
     bool bChanges = false;
     while( aIter != aEnd )
     {
-        CustomAnimationEffectPtr pEffect( (*aIter++) );
+        CustomAnimationEffectPtr pEffect( *aIter++ );
         if( pEffect.get() && pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH )
         {
             rtl::Reference< MotionPathTag > xMotionPathTag;
@@ -778,7 +778,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
             MotionPathTagVector::iterator aMIter( rOldTags.begin() );
             for( ; aMIter != rOldTags.end(); ++aMIter )
             {
-                rtl::Reference< MotionPathTag > xTag( (*aMIter) );
+                rtl::Reference< MotionPathTag > xTag( *aMIter );
                 if( xTag->getEffect() == pEffect )
                 {
                     if( !xTag->isDisposed() )
@@ -838,7 +838,7 @@ void CustomAnimationPane::updateMotionPathTags()
         MotionPathTagVector::iterator aIter( aTags.begin() );
         while( aIter != aTags.end() )
         {
-            rtl::Reference< MotionPathTag > xTag( (*aIter++) );
+            rtl::Reference< MotionPathTag > xTag( *aIter++ );
             xTag->Dispose();
         }
     }
@@ -1132,7 +1132,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
     const CustomAnimationPresets& rPresets (getPresets());
     while( aIter != aEnd )
     {
-        CustomAnimationEffectPtr pEffect = (*aIter++);
+        CustomAnimationEffectPtr pEffect = *aIter++;
 
         EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
         if( !pEffectSequence )
@@ -1249,7 +1249,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
     const EffectSequence::iterator aEnd( maListSelection.end() );
     while( aIter != aEnd )
     {
-        CustomAnimationEffectPtr pEffect = (*aIter++);
+        CustomAnimationEffectPtr pEffect = *aIter++;
 
         DBG_ASSERT( pEffect->getEffectSequence(), "sd::CustomAnimationPane::changeSelection(), dead effect in selection!" );
         if( !pEffect->getEffectSequence() )
@@ -1520,7 +1520,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
         const EffectSequence::const_iterator iEnd( aSelectedEffects.end() );
         while( iter != iEnd )
         {
-            CustomAnimationEffectPtr const& pEffect = (*iter++);
+            CustomAnimationEffectPtr const& pEffect = *iter++;
 
             EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
             if( !pEffectSequence )
@@ -1897,7 +1897,7 @@ void CustomAnimationPane::onRemove()
         const EffectSequence::iterator aEnd( aList.end() );
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
             if( pEffect->getEffectSequence() )
                 pEffect->getEffectSequence()->remove( pEffect );
         }
@@ -1947,7 +1947,7 @@ void CustomAnimationPane::onChangeStart( sal_Int16 nNodeType )
     const EffectSequence::iterator aEnd( maListSelection.end() );
     while( aIter != aEnd )
     {
-        CustomAnimationEffectPtr pEffect = (*aIter++);
+        CustomAnimationEffectPtr pEffect = *aIter++;
         if( pEffect->getNodeType() != nNodeType )
         {
             pEffect->setNodeType( nNodeType );
@@ -1980,7 +1980,7 @@ void CustomAnimationPane::onChangeSpeed()
         const EffectSequence::iterator aEnd( maListSelection.end() );
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
             pEffect->setDuration( fDuration );
         }
 
@@ -2077,7 +2077,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
         const EffectSequence::iterator aEnd( maListSelection.end() );
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
 
             if( setProperty1Value( mnPropertyType, pEffect, aValue ) )
                 bNeedUpdate = true;
@@ -2111,7 +2111,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, DelayLoseFocusHdl, Control&, void)
     const EffectSequence::iterator aEnd( maListSelection.end() );
     while( aIter != aEnd )
     {
-        CustomAnimationEffectPtr pEffect = (*aIter++);
+        CustomAnimationEffectPtr pEffect = *aIter++;
         pEffect->setBegin( fBegin/10.0 );
     }
 
@@ -2145,7 +2145,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
             while( aIter != aEnd )
             {
                 aTargets.push_back( (*aIter)->getTarget() );
-                CustomAnimationEffectPtr pEffect = (*aIter++);
+                CustomAnimationEffectPtr pEffect = *aIter++;
 
                 EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
                 if( !pEffectSequence )
@@ -2169,7 +2169,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
         // get selected effect
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
 
             // Dispose the deprecated motion path tag. It will be rebuilt later.
             if (pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH)
@@ -2256,7 +2256,7 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
             const std::vector< CustomAnimationPresetPtr >::const_iterator aEnd( aSortedVector.end() );
             while( aIter != aEnd )
             {
-                CustomAnimationPresetPtr pDescriptor = (*aIter++);
+                CustomAnimationPresetPtr pDescriptor = *aIter++;
                 // ( !isTextOnly || ( isTextOnly && bHasText ) ) <=> !isTextOnly || bHasText
                 if( pDescriptor.get() && ( !pDescriptor->isTextOnly() || bHasText ) )
                 {
@@ -2339,7 +2339,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
 
             EffectSequence::iterator aUpEffectPos( pSequence->find( pEffect ) );
             // coverity[copy_paste_error : FALSE] - this is correct, checking if it exists
@@ -2370,7 +2370,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
 
             EffectSequence::iterator aDownEffectPos( pSequence->find( pEffect ) );
             // coverity[copy_paste_error : FALSE] - this is correct, checking if it exists
@@ -2421,7 +2421,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
         {
             if( (*aIter)->isSelected() )
             {
-                xMotionPathTag = (*aIter);
+                xMotionPathTag = *aIter;
                 break;
             }
         }
@@ -2450,7 +2450,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
             pSequence->append( pEffect->clone() );
         }
 
@@ -2497,7 +2497,7 @@ void CustomAnimationPane::onSelect()
             const EffectSequence::iterator aEnd( maListSelection.end() );
             while( aIter != aEnd )
             {
-                CustomAnimationEffectPtr pEffect = (*aIter++);
+                CustomAnimationEffectPtr pEffect = *aIter++;
 
                 Reference< XShape > xShape( pEffect->getTargetShape() );
                 SdrObject* pObj = GetSdrObjectFromXShape( xShape );
@@ -2524,7 +2524,7 @@ void CustomAnimationPane::onDragNDropComplete(CustomAnimationEffectPtr pEffectDr
 
         while( aIter != aEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr pEffect = *aIter++;
 
             // Update model with new location (function triggers a rebuild)
             // target may be null, which will insert at the end.

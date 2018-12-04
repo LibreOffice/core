@@ -409,7 +409,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /*   */     t[32] |=   ScCharFlags::Word;
 /* ! */     t[33] |=   ScCharFlags::Ident | ScCharFlags::Word;
 /* " */     t[34] |=   ScCharFlags::Word;
-/* # */     t[35] &= (~ScCharFlags::WordSep);
+/* # */     t[35] &=  ~ScCharFlags::WordSep;
 /* # */     t[35] |=   ScCharFlags::Word;
 /* % */     t[37] |=   ScCharFlags::Word;
 /* ' */     t[39] |=   ScCharFlags::Word;

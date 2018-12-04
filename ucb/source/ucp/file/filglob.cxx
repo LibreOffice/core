@@ -178,9 +178,7 @@ namespace fileaccess {
     {
         sal_Int32 srcL = aOldPrefix.getLength();
 
-        OUString new_Name = old_Name.copy( srcL );
-        new_Name = ( aNewPrefix + new_Name );
-        return new_Name;
+        return aNewPrefix + old_Name.copy( srcL );
     }
 
 

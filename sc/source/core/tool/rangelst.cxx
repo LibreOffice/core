@@ -154,8 +154,8 @@ ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument* pDoc,
             aRange.aStart.SetTab( nTab );   // default tab if not specified
             ScRefFlags nRes = aRange.ParseAny( aOne, pDoc, eConv );
             ScRefFlags nEndRangeBits = ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID;
-            ScRefFlags nTmp1 = ( nRes & ScRefFlags::BITS );
-            ScRefFlags nTmp2 = ( nRes & nEndRangeBits );
+            ScRefFlags nTmp1 = nRes & ScRefFlags::BITS;
+            ScRefFlags nTmp2 = nRes & nEndRangeBits;
             // If we have a valid single range with
             // any of the address bits we are interested in
             // set - set the equiv end range bits

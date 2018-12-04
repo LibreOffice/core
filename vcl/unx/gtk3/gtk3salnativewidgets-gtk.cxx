@@ -1072,8 +1072,8 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
                           buttonRect.Left(), buttonRect.Top(),
                           buttonRect.GetWidth(), buttonRect.GetHeight() );
 
-    gint iconWidth = (buttonRect.GetWidth() - padding.left - padding.right - border.left - border.right);
-    gint iconHeight = (buttonRect.GetHeight() - padding.top - padding.bottom - border.top - border.bottom);
+    gint iconWidth = buttonRect.GetWidth() - padding.left - padding.right - border.left - border.right;
+    gint iconHeight = buttonRect.GetHeight() - padding.top - padding.bottom - border.top - border.bottom;
 
     const char* icon = (nPart == ControlPart::ButtonUp) ? "list-add-symbolic" : "list-remove-symbolic";
     GtkIconTheme *pIconTheme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(mpWindow));

@@ -224,7 +224,7 @@ storeError OStoreBTreeNodeObject::remove (
     OStorePageBIOS &   rBIOS)
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page & rPage = (*xImpl);
+    page & rPage = *xImpl;
 
     // Check depth.
     storeError eErrCode = store_E_None;
@@ -397,7 +397,7 @@ storeError OStoreBTreeRootObject::find_lookup (
     for (; xPage->depth() > 0; xPage = rNode.makeHolder< page >())
     {
         // Find next page.
-        page const & rPage = (*xPage);
+        page const & rPage = *xPage;
         sal_uInt16 const i = rPage.find(entry);
         sal_uInt16 const n = rPage.usageCount();
         if (i >= n)
@@ -421,7 +421,7 @@ storeError OStoreBTreeRootObject::find_lookup (
     }
 
     // Find index.
-    page const & rPage = (*xPage);
+    page const & rPage = *xPage;
     rIndex = rPage.find(entry);
     if (rIndex >= rPage.usageCount())
         return store_E_NotExists;
@@ -482,7 +482,7 @@ storeError OStoreBTreeRootObject::find_insert (
     for (; xPage->depth() > 0; xPage = rNode.makeHolder< page >())
     {
         // Find next page.
-        page const & rPage = (*xPage);
+        page const & rPage = *xPage;
         sal_uInt16 const i = rPage.find (entry);
         sal_uInt16 const n = rPage.usageCount();
         if (i >= n)
@@ -524,7 +524,7 @@ storeError OStoreBTreeRootObject::find_insert (
     }
 
     // Find index.
-    page const & rPage = (*xPage);
+    page const & rPage = *xPage;
     rIndex = rPage.find(entry);
     if (rIndex < rPage.usageCount())
     {

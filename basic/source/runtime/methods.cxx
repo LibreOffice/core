@@ -3626,7 +3626,7 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
             pParamList.reset( new rtl_uString*[nParamCount]);
             for(int iVector = 0; iter != aTokenVector.end(); ++iVector, ++iter)
             {
-                const OUString& rParamStr = (*iter);
+                const OUString& rParamStr = *iter;
                 pParamList[iVector] = nullptr;
                 rtl_uString_assign(&(pParamList[iVector]), rParamStr.pData);
             }
@@ -4636,7 +4636,7 @@ void SbRtl_Partition(StarBASIC *, SbxArray & rPar, bool)
     if( nLen > nLen1 )
     {
         // appending the leading spaces for the lowervalue
-        for ( sal_Int32 i= (nLen - nLen1) ; i > 0; --i )
+        for ( sal_Int32 i= nLen - nLen1; i > 0; --i )
         {
             aRetStr.append(" ");
         }
@@ -4645,7 +4645,7 @@ void SbRtl_Partition(StarBASIC *, SbxArray & rPar, bool)
     if( nLen > nLen2 )
     {
         // appending the leading spaces for the uppervalue
-        for ( sal_Int32 i= (nLen - nLen2) ; i > 0; --i )
+        for ( sal_Int32 i= nLen - nLen2; i > 0; --i )
         {
             aRetStr.append(" ");
         }

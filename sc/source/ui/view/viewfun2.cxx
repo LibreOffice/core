@@ -1454,8 +1454,8 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
         }
 
         typedef const std::vector<editeng::MisspellRanges>* MisspellRangesType;
-        SCROW nRowRepeatSize = (nEndRow - nStartRow + 1);
-        SCCOL nColRepeatSize = (nEndCol - nStartCol + 1);
+        SCROW nRowRepeatSize = nEndRow - nStartRow + 1;
+        SCCOL nColRepeatSize = nEndCol - nStartCol + 1;
         SCROW nTillRow = 0;
         SCCOL nTillCol = 0;
         std::vector<std::vector<MisspellRangesType>> aSourceSpellRanges(nRowRepeatSize, std::vector<MisspellRangesType>(nColRepeatSize));
@@ -1472,7 +1472,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 {
                     for ( SCROW nRowItr = nEndRow + 1; nRowItr <= nTillRow; ++nRowItr )
                     {
-                        size_t nSourceRowIdx = ( ( nRowItr - nEndRow - 1 ) % nRowRepeatSize );
+                        size_t nSourceRowIdx = ( nRowItr - nEndRow - 1 ) % nRowRepeatSize;
                         MisspellRangesType pRanges = aSourceSpellRanges[nSourceRowIdx][nColItr - nStartCol];
                         if ( !pRanges )
                             continue;
@@ -1500,7 +1500,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 nTillCol = nEndCol + nCount;
                 for ( SCCOL nColItr = nEndCol + 1; nColItr <= nTillCol; ++nColItr )
                 {
-                    size_t nSourceColIdx = ( ( nColItr - nEndCol - 1 ) % nColRepeatSize );
+                    size_t nSourceColIdx = ( nColItr - nEndCol - 1 ) % nColRepeatSize;
                     for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
                     {
                         MisspellRangesType pRanges = aSourceSpellRanges[nRowItr - nStartRow][nSourceColIdx];

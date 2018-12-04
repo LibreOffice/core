@@ -214,7 +214,7 @@ storeError OStoreIndirectionPageObject::read (
     OStorePageBIOS        &rBIOS) const
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page const & rPage = (*xImpl);
+    page const & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
@@ -240,7 +240,7 @@ storeError OStoreIndirectionPageObject::read (
     OStorePageBIOS        &rBIOS) const
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page const & rPage = (*xImpl);
+    page const & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
@@ -273,7 +273,7 @@ storeError OStoreIndirectionPageObject::read (
     OStorePageBIOS        &rBIOS) const
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page const & rPage = (*xImpl);
+    page const & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
@@ -304,7 +304,7 @@ storeError OStoreIndirectionPageObject::write (
     OStorePageBIOS        &rBIOS)
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page & rPage = (*xImpl);
+    page & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
@@ -343,7 +343,7 @@ storeError OStoreIndirectionPageObject::write (
     OStorePageBIOS        &rBIOS)
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page & rPage = (*xImpl);
+    page & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
@@ -379,7 +379,7 @@ storeError OStoreIndirectionPageObject::write (
     OStorePageBIOS        &rBIOS)
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page & rPage = (*xImpl);
+    page & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
@@ -412,7 +412,7 @@ storeError OStoreIndirectionPageObject::truncate (
     OStorePageBIOS & rBIOS)
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page & rPage = (*xImpl);
+    page & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
@@ -458,7 +458,7 @@ storeError OStoreIndirectionPageObject::truncate (
     OStorePageBIOS        &rBIOS)
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page & rPage = (*xImpl);
+    page & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
@@ -513,7 +513,7 @@ storeError OStoreIndirectionPageObject::truncate (
     OStorePageBIOS        &rBIOS)
 {
     PageHolderObject< page > xImpl (m_xPage);
-    page & rPage = (*xImpl);
+    page & rPage = *xImpl;
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();

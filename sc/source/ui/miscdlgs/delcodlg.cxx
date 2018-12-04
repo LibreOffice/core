@@ -22,9 +22,9 @@
 #include <delcodlg.hxx>
 
 bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
-InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = (InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING  |
+InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING  |
                                                  InsertDeleteFlags::NOTE     | InsertDeleteFlags::FORMULA |
-                                                 InsertDeleteFlags::VALUE);
+                                                 InsertDeleteFlags::VALUE;
 
 ScDeleteContentsDlg::ScDeleteContentsDlg(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/deletecontents.ui", "DeleteContentsDialog")

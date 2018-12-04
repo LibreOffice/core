@@ -108,7 +108,7 @@ void GetOptimalHeightsInColumn(
     const SCROW nMinStart = nPos;
 
     sal_uLong nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
-    const SCCOL maxCol = (rCol.size() - 1); // last col done already above
+    const SCCOL maxCol = rCol.size() - 1; // last col done already above
     const SCCOL progressUpdateStep = rCol.size() / 10;
     for (SCCOL nCol=0; nCol<maxCol; nCol++)
     {

@@ -232,7 +232,7 @@ TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
     configData.replaceName( Title );
     if( tvDom->isLeaf() )
     {
-        TargetURL = ( tvDom->getTargetURL() + configData.appendix );
+        TargetURL = tvDom->getTargetURL() + configData.appendix;
         if( !tvDom->anchor.isEmpty() )
             TargetURL += "#" + tvDom->anchor;
     }

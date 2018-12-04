@@ -2456,7 +2456,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             {
                 if ( isHorizontalDockingArea( nDockingArea ))
                 {
-                    sal_Int32 nMaxReducation = ( rWinRect.Width - aMinSize.Width() );
+                    sal_Int32 nMaxReducation = rWinRect.Width - aMinSize.Width();
                     if ( nMaxReducation >= -nDiff )
                     {
                         rWinRect.Width = rWinRect.Width + nDiff;
@@ -2474,7 +2474,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
                 }
                 else
                 {
-                    sal_Int32 nMaxReducation = ( rWinRect.Height - aMinSize.Height() );
+                    sal_Int32 nMaxReducation = rWinRect.Height - aMinSize.Height();
                     if ( nMaxReducation >= -nDiff )
                     {
                         rWinRect.Height = rWinRect.Height + nDiff;

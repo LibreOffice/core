@@ -1136,7 +1136,7 @@ void DAVResourceAccess::resetUri()
     {
         std::vector< NeonUri >::const_iterator it  = m_aRedirectURIs.begin();
 
-        NeonUri aUri( (*it) );
+        NeonUri aUri( *it );
         m_aRedirectURIs.clear();
         setURL ( aUri.GetURI() );
         initialize();

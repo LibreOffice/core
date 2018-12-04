@@ -977,7 +977,7 @@ void ScETSForecastCalculation::GetETSPredictionIntervals( const ScMatrixRef& rTM
         fMaxTarget = convertXtoMonths( fMaxTarget ) - maRange[ mnCount - 1 ].X;
     else
         fMaxTarget -= maRange[ mnCount - 1 ].X;
-    SCSIZE nSize = ( fMaxTarget / mfStepSize );
+    SCSIZE nSize = fMaxTarget / mfStepSize;
     if ( fmod( fMaxTarget, mfStepSize ) != 0.0 )
         nSize++;
 
@@ -1106,7 +1106,7 @@ void ScETSForecastCalculation::GetEDSPredictionIntervals( const ScMatrixRef& rTM
         fMaxTarget = convertXtoMonths( fMaxTarget ) - maRange[ mnCount - 1 ].X;
     else
         fMaxTarget -= maRange[ mnCount - 1 ].X;
-    SCSIZE nSize = ( fMaxTarget / mfStepSize );
+    SCSIZE nSize = fMaxTarget / mfStepSize;
     if ( fmod( fMaxTarget, mfStepSize ) != 0.0 )
         nSize++;
 

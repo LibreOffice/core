@@ -66,9 +66,9 @@ void UndoCommandDispatch::fireStatusEvent(
         const bool bFireAll = rURL.isEmpty();
         uno::Any aUndoState, aRedoState;
         if( m_xUndoManager->isUndoPossible())
-            aUndoState <<= ( SvtResId( STR_UNDO ) + m_xUndoManager->getCurrentUndoActionTitle());
+            aUndoState <<= SvtResId( STR_UNDO ) + m_xUndoManager->getCurrentUndoActionTitle();
         if( m_xUndoManager->isRedoPossible())
-            aRedoState <<= ( SvtResId( STR_REDO ) + m_xUndoManager->getCurrentRedoActionTitle());
+            aRedoState <<= SvtResId( STR_REDO ) + m_xUndoManager->getCurrentRedoActionTitle();
 
         if( bFireAll || rURL == ".uno:Undo" )
             fireStatusEventForURL( ".uno:Undo", aUndoState, m_xUndoManager->isUndoPossible(), xSingleListener );

@@ -2696,7 +2696,7 @@ void ScInterpreter::ScTTest()
             return;
         }
         double fSumD = fSum1 - fSum2;
-        double fDivider = (fCount*fSumSqrD - fSumD*fSumD);
+        double fDivider = fCount*fSumSqrD - fSumD*fSumD;
         if ( fDivider == 0.0 )
         {
             PushError(FormulaError::DivisionByZero);

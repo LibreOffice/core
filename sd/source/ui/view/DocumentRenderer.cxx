@@ -962,7 +962,7 @@ namespace {
                 if (*iPageIndex >= rDocument.GetSdPageCount(PageKind::Standard))
                     continue;
 
-                SdrPageObj* pPageObj = (*aPageObjIter++);
+                SdrPageObj* pPageObj = *aPageObjIter++;
                 pPageObj->SetReferencedPage(rDocument.GetSdPage(*iPageIndex, PageKind::Standard));
             }
 
@@ -1509,7 +1509,7 @@ private:
 
             if( bDrawLines && (iter != aAreas.end())  )
             {
-                ::tools::Rectangle aRect( (*iter++) );
+                ::tools::Rectangle aRect( *iter++ );
 
                 basegfx::B2DPolygon aPoly;
                 aPoly.insert(0, basegfx::B2DPoint( aRect.Left(), aRect.Top() ) );

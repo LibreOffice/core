@@ -9,6 +9,7 @@
 
 #include <string>
 #include <rtl/ustring.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #define MACRO (1)
 
@@ -17,6 +18,20 @@ bool foo(int);
 enum class EFoo { Bar };
 
 struct S { operator bool(); };
+
+enum class BrowseMode
+{
+    Modules = 0x01,
+    Top = 0x02,
+    Bottom = 0x04,
+    Left = 0x04,
+};
+namespace o3tl
+{
+template <> struct typed_flags<BrowseMode> : is_typed_flags<BrowseMode, 0xf>
+{
+};
+}
 
 int main()
 {
@@ -94,15 +109,9 @@ int main()
 
     char *p = nullptr;
     delete (p); // expected-error {{parentheses immediately inside delete expr [loplugin:unnecessaryparen]}}
-};
 
-struct S2 {
-    S2& GetText();
-    void toChar();
-};
-void func2(S2 *p)
-{
-    (p->GetText()).toChar(); // expected-error {{unnecessary parentheses around member expr [loplugin:unnecessaryparen]}}
+    BrowseMode nBits = ( BrowseMode::Modules | BrowseMode::Top ); // expected-error {{parentheses immediately inside vardecl statement [loplugin:unnecessaryparen]}}
+    (void)nBits;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

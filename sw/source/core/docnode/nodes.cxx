@@ -1739,8 +1739,8 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                     < aInsPos.GetIndex() )
             {
                 const long nDistance =
-                    ( pCurrentNode->EndOfSectionIndex() -
-                        aRg.aStart.GetIndex() );
+                    pCurrentNode->EndOfSectionIndex() -
+                        aRg.aStart.GetIndex();
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
                 else
@@ -2208,7 +2208,7 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
 #endif
     for (sal_uLong nCnt = 0; nCnt < nSz; nCnt++)
     {
-        SwNode* pNode = ((*this)[ nDelPos + nCnt ]);
+        SwNode* pNode = (*this)[ nDelPos + nCnt ];
         SwTextNode * pTextNd = pNode->GetTextNode();
 
         if (pTextNd)

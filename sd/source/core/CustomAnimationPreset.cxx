@@ -333,7 +333,7 @@ void CustomAnimationPresets::importEffects()
 
                 while( aIter != aEnd )
                 {
-                    CustomAnimationEffectPtr pEffect = (*aIter);
+                    CustomAnimationEffectPtr pEffect = *aIter;
 
                     const OUString aPresetId( pEffect->getPresetId() );
                     CustomAnimationPresetPtr pDescriptor = getEffectDescriptor( aPresetId );

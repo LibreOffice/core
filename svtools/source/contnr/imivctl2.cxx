@@ -334,7 +334,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
         const long nPos = static_cast<long>(pView->GetEntryListPos( pStart ));
-        long nEntriesInView = (pView->aOutputSize.Height() / pView->nGridDY);
+        long nEntriesInView = pView->aOutputSize.Height() / pView->nGridDY;
         nEntriesInView *=
             ((pView->aOutputSize.Width()+(pView->nGridDX/2)) / pView->nGridDX );
         long nNewPos = nPos;

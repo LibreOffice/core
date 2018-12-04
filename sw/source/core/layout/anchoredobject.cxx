@@ -858,7 +858,7 @@ Point SwAnchoredObject::GetRelPosToPageFrame( const bool _bFollowTextFlow,
     }
     if ( pFrame->IsCellFrame() )
     {
-        aRelPos -= ( pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos() );
+        aRelPos -= pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos();
         _obRelToTableCell = true;
     }
     else

@@ -74,7 +74,7 @@ void process_headers( ne_request * req,
 
             if ( it != rHeaderNames.end() )
             {
-                aHeaderName = (*it);
+                aHeaderName = *it;
                 bIncludeIt = true;
             }
         }

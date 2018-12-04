@@ -417,7 +417,7 @@ void EditUndoMoveParagraphs::Undo()
     Range aTmpRange( nParagraphs );
     long nTmpDest = aTmpRange.Min();
 
-    long nDiff = ( nDest - aTmpRange.Min() );
+    long nDiff = nDest - aTmpRange.Min();
     aTmpRange.Min() += nDiff;
     aTmpRange.Max() += nDiff;
 

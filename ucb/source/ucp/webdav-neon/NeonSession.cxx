@@ -2044,7 +2044,7 @@ void runResponseHeaderHandler( void * userdata,
 
             if ( it != pCtx->pHeaderNames->end() )
             {
-                aHeaderName = (*it);
+                aHeaderName = *it;
                 bIncludeIt = true;
             }
         }

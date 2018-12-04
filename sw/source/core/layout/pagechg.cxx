@@ -2000,7 +2000,7 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
                 continue;
 
             const Point& aCurrAnchorPos = pAnchoredDrawObj->GetDrawObj()->GetAnchorPos();
-            const Point aNewAnchorPos( ( aCurrAnchorPos + rOffset ) );
+            const Point aNewAnchorPos( aCurrAnchorPos + rOffset );
             pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
 
