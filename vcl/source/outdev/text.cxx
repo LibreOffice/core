@@ -1236,6 +1236,12 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
          vcl::TextLayoutCache const* pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
 {
+    if (pGlyphs && !pGlyphs->IsValid())
+    {
+        SAL_WARN("vcl", "Trying to setup invalid cached glyphs - falling back to relayout!");
+        pGlyphs = nullptr;
+    }
+
     if (!InitFont())
         return nullptr;
 
