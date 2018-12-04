@@ -82,21 +82,11 @@ ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( const ScShapeObj* pShape, bool b
         return nullptr;
 }
 
-namespace
-{
-    void lcl_initializeNotifier( SdrObject& _rSdrObj, ::cppu::OWeakObject& _rShape )
-    {
-        std::shared_ptr<svx::IPropertyValueProvider> pProvider( new svx::PropertyValueProvider( _rShape, "Anchor" ) );
-        _rSdrObj.getShapePropertyChangeNotifier().registerProvider( svx::ShapeProperty::CalcDocAnchor, pProvider );
-    }
-}
-
 ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
       pShapePropertySet(nullptr),
       pShapePropertyState(nullptr),
       bIsTextShape(false),
-      bIsNoteCaption(false),
-      bInitializedNotifier(false)
+      bIsNoteCaption(false)
 {
     osl_atomic_increment( &m_refCount );
 
@@ -121,8 +111,6 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
         if ( pObj )
         {
             bIsNoteCaption = ScDrawLayer::IsNoteCaption( pObj );
-            lcl_initializeNotifier( *pObj, *this );
-            bInitializedNotifier = true;
         }
     }
 
@@ -839,18 +827,6 @@ void SAL_CALL ScShapeObj::addPropertyChangeListener( const OUString& aPropertyNa
     GetShapePropertySet();
     if (pShapePropertySet)
         pShapePropertySet->addPropertyChangeListener( aPropertyName, aListener );
-
-    if ( !bInitializedNotifier )
-    {
-        // here's the latest chance to initialize the property notification at the SdrObject
-        // (in the ctor, where we also attempt to do this, we do not necessarily have
-        // and SdrObject, yet)
-        SdrObject* pObj = GetSdrObject();
-        OSL_ENSURE( pObj, "ScShapeObj::addPropertyChangeListener: no SdrObject -> no property change notification!" );
-        if ( pObj )
-            lcl_initializeNotifier( *pObj, *this );
-        bInitializedNotifier = true;
-    }
 }
 
 void SAL_CALL ScShapeObj::removePropertyChangeListener( const OUString& aPropertyName,

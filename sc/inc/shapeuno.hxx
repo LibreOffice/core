@@ -70,7 +70,6 @@ private:
     css::uno::Reference< css::beans::XPropertySetInfo >        mxPropSetInfo;
     bool                                                       bIsTextShape;
     bool                                                       bIsNoteCaption;
-    bool                                                       bInitializedNotifier;
 
     SdrObject* GetSdrObject() const throw();
 
