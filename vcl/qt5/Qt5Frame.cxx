@@ -826,8 +826,8 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     QPalette pal = QApplication::palette();
 
     style.SetToolbarIconSize(ToolbarIconSize::Large);
-
     style.SetActiveColor(toColor(pal.color(QPalette::Active, QPalette::Window)));
+    pal.setColor(QPalette::Inactive, QPalette::Window, QColor(0x66, 0x66, 0x66));
     style.SetDeactiveColor(toColor(pal.color(QPalette::Inactive, QPalette::Window)));
 
     style.SetActiveTextColor(toColor(pal.color(QPalette::Active, QPalette::WindowText)));
