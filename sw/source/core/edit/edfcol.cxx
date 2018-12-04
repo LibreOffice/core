@@ -93,6 +93,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <tools/diagnose_ex.h>
+#include <IDocumentRedlineAccess.hxx>
 
 #define WATERMARK_NAME "PowerPlusWaterMarkObject"
 #define WATERMARK_AUTO_SIZE sal_uInt32(1)
@@ -2173,6 +2174,8 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     SwTextFormatColl *pLocal = pFormat? pFormat: (*GetDoc()->GetTextFormatColls())[0];
     StartAllAction();
 
+    RedlineFlags eRedlMode = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
+
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, pLocal->GetName());
 
@@ -2182,6 +2185,17 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
 
         if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
         {
+            // tdf#105413 turn off ShowChanges mode for the next loops to apply styles permanently with redlining,
+            // ie. in all directly preceding deleted paragraphs at the actual cursor positions
+            if ( IDocumentRedlineAccess::IsShowChanges(eRedlMode) &&
+               // is there redlining at beginning of the position (possible redline block before the modified node)
+               GetDoc()->getIDocumentRedlineAccess().GetRedlinePos( (*rPaM.Start()).nNode.GetNode(), USHRT_MAX ) <
+                   GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size() )
+            {
+                eRedlMode = RedlineFlags::ShowInsert | RedlineFlags::Ignore;
+                GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eRedlMode );
+            }
+
             // Change the paragraph style to pLocal and remove all direct paragraph formatting.
             GetDoc()->SetTextFormatColl(rPaM, pLocal, true, bResetListAttrs, GetLayout());
 
@@ -2198,6 +2212,8 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     }
     GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::SETFMTCOLL, &aRewriter);
     EndAllAction();
+
+    GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOldMode );
 }
 
 SwTextFormatColl* SwEditShell::MakeTextFormatColl(const OUString& rFormatCollName,
