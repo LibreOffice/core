@@ -9,15 +9,28 @@
 
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <wrtsh.hxx>
+#include <ndtxt.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::text;
+
+namespace
+{
+char const DATA_DIRECTORY[] = "/sw/qa/extras/unowriter/data/";
+}
 
 /// Test to assert UNO API call results of Writer.
 class SwUnoWriter : public SwModelTestBase
 {
 public:
     void testDefaultCharStyle();
+    void testSelectionInTableEnum();
 
     CPPUNIT_TEST_SUITE(SwUnoWriter);
     CPPUNIT_TEST(testDefaultCharStyle);
+    CPPUNIT_TEST(testSelectionInTableEnum);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -45,6 +58,41 @@ void SwUnoWriter::testDefaultCharStyle()
     xCursorProps->setPropertyValue("CharStyleName", uno::makeAny(OUString("Standard")));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
                          getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
+}
+
+void SwUnoWriter::testSelectionInTableEnum()
+{
+    load(DATA_DIRECTORY, "selection-in-table-enum.odt");
+
+    // Select the A1 cell's text.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"),
+                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+
+    // Access the selection.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<container::XIndexAccess> xSelections(xModel->getCurrentSelection(),
+                                                        uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelections.is());
+    uno::Reference<text::XTextRange> xSelection(xSelections->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelection.is());
+
+    // Enumerate paragraphs in the selection.
+    uno::Reference<container::XEnumerationAccess> xCursor(
+        xSelection->getText()->createTextCursorByRange(xSelection), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCursor.is());
+    uno::Reference<container::XEnumeration> xEnum = xCursor->createEnumeration();
+    xEnum->nextElement();
+    // Without the accompanying fix in place, this test would have failed: i.e.
+    // the enumeration contained a second paragraph, even if the cell has only
+    // one paragraph.
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUnoWriter);
