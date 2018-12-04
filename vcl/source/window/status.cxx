@@ -874,13 +874,11 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
 
 void StatusBar::Click()
 {
-    CallEventListeners( VclEventId::StatusbarClick );
     maClickHdl.Call( this );
 }
 
 void StatusBar::DoubleClick()
 {
-    CallEventListeners( VclEventId::StatusbarDoubleClick );
     maDoubleClickHdl.Call( this );
 }
 

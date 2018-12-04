@@ -946,7 +946,6 @@ void ListBox::SetNoSelection()
         mpImplWin->SetImage( aImage );
         mpImplWin->Invalidate();
     }
-    CallEventListeners(VclEventId::ListboxStateUpdate);
 }
 
 sal_Int32 ListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
@@ -1066,11 +1065,9 @@ void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
 
     if ( 0 <= nPos && nPos < mpImplLB->GetEntryList()->GetEntryCount() )
     {
-        sal_Int32 oldSelectCount = GetSelectedEntryCount(), newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
+        sal_Int32 newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
         mpImplLB->SelectEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), bSelect );
         newSelectCount = GetSelectedEntryCount();
-        if (oldSelectCount == 0 && newSelectCount > 0)
-            CallEventListeners(VclEventId::ListboxStateUpdate);
         //Only when bSelect == true, send both Selection & Focus events
         if (nCurrentPos != nPos && bSelect)
         {
