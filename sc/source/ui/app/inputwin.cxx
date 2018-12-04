@@ -1808,7 +1808,7 @@ ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
     Size aSize( GetTextWidth( "GW99999:GW99999" ),
                 GetTextHeight() );
     aSize.AdjustWidth(25 );    // FIXME: ??
-    aSize.setHeight( CalcWindowSizePixel(11) ); // Functions: 10 MRU + "others..."
+    aSize.setHeight( CalcWindowSizePixel(21) ); // Functions: 20 MRU + "others..."
     SetSizePixel( aSize );
 
     FillRangeNames();
