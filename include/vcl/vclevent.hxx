@@ -69,7 +69,6 @@ enum class VclEventId
     ListboxItemRemoved,      // pData = itempos, -1=All
     ListboxScrolled,
     ListboxSelect,
-    ListboxStateUpdate,
     ListboxTreeFocus,
     ListboxTreeSelect,
     MenuActivate,
@@ -102,8 +101,6 @@ enum class VclEventId
     SpinfieldLast,
     SpinfieldUp,
     StatusbarAllItemsRemoved,
-    StatusbarClick,
-    StatusbarDoubleClick,
     StatusbarDrawItem,      // pData = itemid
     StatusbarHideItem,      // pData = itemid
     StatusbarItemAdded,     // pData = itemid
@@ -143,7 +140,6 @@ enum class VclEventId
     ToolboxItemWindowChanged,
     ToolboxSelect,
     WindowActivate,
-    WindowChildCreated,     // pData = vcl::Window*
     WindowChildDestroyed,   // pData = vcl::Window*
     WindowClose,
     WindowCommand,          // pData = CommandEvent*
