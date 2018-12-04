@@ -175,6 +175,84 @@ bool AllStringsAreNull(const rtl_uString* const* pStringArray, size_t nLength)
     return true;
 }
 
+OUString LimitedString( const OUString& str )
+{
+    if( str.getLength() < 20 )
+        return "\"" + str + "\"";
+    else
+        return "\"" + str.copy( 0, 20 ) + "\"...";
+}
+
+// Returns formatted contents of the data (possibly shortened), to be used in debug output.
+OUString DebugPeekData(const FormulaToken* ref, int doubleRefIndex = 0)
+{
+    if (ref->GetType() == formula::svSingleVectorRef)
+    {
+        const formula::SingleVectorRefToken* pSVR =
+            static_cast<const formula::SingleVectorRefToken*>(ref);
+        OUStringBuffer buf = "SingleRef {";
+        for( size_t i = 0; i < std::min< size_t >( 4, pSVR->GetArrayLength()); ++i )
+        {
+            if( i != 0 )
+                buf.append( "," );
+            if( pSVR->GetArray().mpNumericArray != nullptr )
+                buf.append( pSVR->GetArray().mpNumericArray[ i ] );
+            else if( pSVR->GetArray().mpStringArray != nullptr )
+                buf.append( LimitedString( OUString( pSVR->GetArray().mpStringArray[ i ] )));
+        }
+        if( pSVR->GetArrayLength() > 4 )
+            buf.append( ",..." );
+        buf.append( "}" );
+        return buf.makeStringAndClear();
+    }
+    else if (ref->GetType() == formula::svDoubleVectorRef)
+    {
+        const formula::DoubleVectorRefToken* pDVR =
+            static_cast<const formula::DoubleVectorRefToken*>(ref);
+        OUStringBuffer buf = "DoubleRef {";
+        for( size_t i = 0; i < std::min< size_t >( 4, pDVR->GetArrayLength()); ++i )
+        {
+            if( i != 0 )
+                buf.append( "," );
+            if( pDVR->GetArrays()[doubleRefIndex].mpNumericArray != nullptr )
+                buf.append( pDVR->GetArrays()[doubleRefIndex].mpNumericArray[ i ] );
+            else if( pDVR->GetArrays()[doubleRefIndex].mpStringArray != nullptr )
+                buf.append( LimitedString( OUString( pDVR->GetArrays()[doubleRefIndex].mpStringArray[ i ] )));
+        }
+        if( pDVR->GetArrayLength() > 4 )
+            buf.append( ",..." );
+        buf.append( "}" );
+        return buf.makeStringAndClear();
+    }
+    else if (ref->GetType() == formula::svString)
+    {
+        return "String " + LimitedString( ref->GetString().getString());
+    }
+    else if (ref->GetType() == formula::svDouble)
+    {
+        return OUString::number(ref->GetDouble());
+    }
+    else
+    {
+        return "?";
+    }
+}
+
+// Returns formatted contents of a doubles buffer, to be used in debug output.
+OUString DebugPeekDoubles(const double* data, int size)
+{
+    OUStringBuffer buf = "{";
+    for( int i = 0; i < std::min( 4, size ); ++i )
+    {
+        if( i != 0 )
+            buf.append( "," );
+        buf.append( data[ i ] );
+    }
+    if( size > 4 )
+        buf.append( ",..." );
+    buf.append( "}" );
+    return buf.makeStringAndClear();
+}
 
 } // anonymous namespace
 
@@ -250,7 +328,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << openclwrapper::errorString(err));
     }
 
-    SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem);
+    SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem << " (" << DebugPeekData(ref, mnIndex) << ")");
     err = clSetKernelArg(k, argno, sizeof(cl_mem), static_cast<void*>(&mpClmem));
     if (CL_SUCCESS != err)
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
@@ -313,7 +391,7 @@ public:
         hashCode = s.hashCode();
 
         // Pass the scalar result back to the rest of the formula kernel
-        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_uint: " << hashCode);
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_uint: " << hashCode << "(" << DebugPeekData(ref) << ")" );
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), static_cast<void*>(&hashCode));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
@@ -403,7 +481,7 @@ public:
     {
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
-        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp);
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp << " (PI)");
         cl_int err = clSetKernelArg(k, argno, sizeof(double), static_cast<void*>(&tmp));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
@@ -768,7 +846,7 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
     {
         cl_int seed = comphelper::rng::uniform_int_distribution(0, SAL_MAX_INT32);
         // Pass the scalar result back to the rest of the formula kernel
-        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_int: " << seed);
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_int: " << seed << "(RANDOM)");
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_int), static_cast<void*>(&seed));
         if (CL_SUCCESS != err)
             throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
@@ -879,7 +957,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
     if (CL_SUCCESS != err)
         throw OpenCLError("clEnqueueUnmapMemObject", err, __FILE__, __LINE__);
 
-    SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem);
+    SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem << " (" << DebugPeekData(ref,mnIndex) << ")");
     err = clSetKernelArg(k, argno, sizeof(cl_mem), static_cast<void*>(&mpClmem));
     if (CL_SUCCESS != err)
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
@@ -3946,7 +4024,7 @@ void DynamicKernel::Launch( size_t nr )
         throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
     SAL_INFO("sc.opencl", "Created buffer " << mpResClmem << " size " << nr << "*" << sizeof(double) << "=" << (nr*sizeof(double)));
 
-    SAL_INFO("sc.opencl", "Kernel " << mpKernel << " arg " << 0 << ": cl_mem: " << mpResClmem);
+    SAL_INFO("sc.opencl", "Kernel " << mpKernel << " arg " << 0 << ": cl_mem: " << mpResClmem << " (result)");
     err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), static_cast<void*>(&mpResClmem));
     if (CL_SUCCESS != err)
         throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
@@ -4137,6 +4215,7 @@ public:
             mpResBuf = nullptr;
             return;
         }
+        SAL_INFO("sc.opencl", "Kernel results: cl_mem: " << mpResBuf << " (" << DebugPeekDoubles(mpResBuf, mnGroupLength) << ")");
     }
 
     bool pushResultToDocument( ScDocument& rDoc, const ScAddress& rTopPos )
