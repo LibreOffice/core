@@ -84,13 +84,12 @@ enum class SalROPColor {
 
 enum class SalInvert {
     NONE       = 0x00,
-    Highlight  = 0x01,
-    N50        = 0x02,
-    TrackFrame = 0x04
+    N50        = 0x01,
+    TrackFrame = 0x02
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SalInvert> : is_typed_flags<SalInvert, 0x07> {};
+    template<> struct typed_flags<SalInvert> : is_typed_flags<SalInvert, 0x03> {};
 }
 
 #endif // INCLUDED_VCL_SALGTYPE_HXX
