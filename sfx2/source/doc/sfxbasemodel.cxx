@@ -1515,7 +1515,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             }
         }
 
-        SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+        std::unique_ptr<SfxAllItemSet> pParams(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
         TransformParameters( nSlotId, aArgs, *pParams );
 
         SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDoc, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOC), m_pData->m_pObjectShell.get() ) );
@@ -1537,18 +1537,18 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             }
             else
             {
-                bRet = m_pData->m_pObjectShell->Save_Impl( pParams );
+                bRet = m_pData->m_pObjectShell->Save_Impl( pParams.get() );
             }
         }
         else
         {
             // Tell the SfxMedium if we are in checkin instead of normal save
             m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
-            bRet = m_pData->m_pObjectShell->Save_Impl( pParams );
+            bRet = m_pData->m_pObjectShell->Save_Impl( pParams.get() );
             m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
         }
 
-        DELETEZ( pParams );
+        pParams.reset();
 
         ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
                                                                : ERRCODE_IO_CANTWRITE;
