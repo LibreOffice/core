@@ -3135,6 +3135,15 @@ private:
 
     bool signal_scroll(GdkEventScroll* event)
     {
+        GtkWidget* pEventWidget = gtk_get_event_widget(reinterpret_cast<GdkEvent*>(event));
+        if (!pEventWidget)
+            return false;
+
+        /* ignore page content scroll events */
+        GtkWidget* pPage = gtk_notebook_get_nth_page(m_pNotebook, gtk_notebook_get_current_page(m_pNotebook));
+        if (gtk_widget_is_ancestor(pEventWidget, pPage) || pPage == pEventWidget)
+            return false;
+
         bool bNext(false), bPrev(false);
         switch (event->direction)
         {
