@@ -45,7 +45,6 @@ OLESimpleStorage::OLESimpleStorage(
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Sequence<css::uno::Any> const &aArguments)
 : m_bDisposed( false )
-, m_pStorage( nullptr )
 , m_pListenersContainer( nullptr )
 , m_xContext( xContext )
 , m_bNoTemporaryCopy( false )
@@ -135,7 +134,7 @@ OLESimpleStorage::OLESimpleStorage(
     if ( !m_pStream || m_pStream->GetError() )
         throw io::IOException(); // TODO
 
-    m_pStorage = new Storage( *m_pStream, false );
+    m_pStorage.reset(new Storage( *m_pStream, false ));
 }
 
 OLESimpleStorage::~OLESimpleStorage()
@@ -187,11 +186,10 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, c
     if ( pStorage->IsContained( aName ) )
         throw container::ElementExistException(); // TODO:
 
-    BaseStorageStream* pNewStream = pStorage->OpenStream( aName );
+    std::unique_ptr<BaseStorageStream> pNewStream(pStorage->OpenStream( aName ));
     if ( !pNewStream || pNewStream->GetError() || pStorage->GetError() )
     {
-        if ( pNewStream )
-            DELETEZ( pNewStream );
+        pNewStream.reset();
         pStorage->ResetError();
         throw io::IOException(); // TODO
     }
@@ -211,13 +209,11 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, c
     }
     catch( uno::Exception& )
     {
-        DELETEZ( pNewStream );
+        pNewStream.reset();
         pStorage->Remove( aName );
 
         throw;
     }
-
-    DELETEZ( pNewStream );
 }
 
 
@@ -229,11 +225,10 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
     if ( pStorage->IsContained( aName ) )
         throw container::ElementExistException(); // TODO:
 
-    BaseStorage* pNewStorage = pStorage->OpenStorage( aName );
+    std::unique_ptr<BaseStorage> pNewStorage(pStorage->OpenStorage( aName ));
     if ( !pNewStorage || pNewStorage->GetError() || pStorage->GetError() )
     {
-        if ( pNewStorage )
-            DELETEZ( pNewStorage );
+        pNewStorage.reset();
         pStorage->ResetError();
         throw io::IOException(); // TODO
     }
@@ -247,20 +242,18 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
             uno::Reference< container::XNameAccess > xSubNameAccess;
             uno::Any aAny = xNameAccess->getByName( aElements[nInd] );
             if ( aAny >>= xInputStream )
-                InsertInputStreamToStorage_Impl( pNewStorage, aElements[nInd], xInputStream );
+                InsertInputStreamToStorage_Impl( pNewStorage.get(), aElements[nInd], xInputStream );
             else if ( aAny >>= xSubNameAccess )
-                InsertNameAccessToStorage_Impl( pNewStorage, aElements[nInd], xSubNameAccess );
+                InsertNameAccessToStorage_Impl( pNewStorage.get(), aElements[nInd], xSubNameAccess );
         }
     }
     catch( uno::Exception& )
     {
-        DELETEZ( pNewStorage );
+        pNewStorage.reset();
         pStorage->Remove( aName );
 
         throw;
     }
-
-    DELETEZ( pNewStorage );
 }
 
 
@@ -292,9 +285,9 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::
             throw lang::IllegalArgumentException(); // TODO:
 
         if ( xInputStream.is() )
-            InsertInputStreamToStorage_Impl( m_pStorage, aName, xInputStream );
+            InsertInputStreamToStorage_Impl( m_pStorage.get(), aName, xInputStream );
         else if ( xNameAccess.is() )
-            InsertNameAccessToStorage_Impl( m_pStorage, aName, xNameAccess );
+            InsertNameAccessToStorage_Impl( m_pStorage.get(), aName, xNameAccess );
         else
             throw uno::RuntimeException();
     }
@@ -391,7 +384,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 
     if ( m_pStorage->IsStorage( aName ) )
     {
-        BaseStorage* pStrg = m_pStorage->OpenStorage( aName );
+        std::unique_ptr<BaseStorage> pStrg(m_pStorage->OpenStorage( aName ));
         m_pStorage->ResetError();
         if ( !pStrg )
             throw lang::WrappedTargetException(); // io::IOException(); // TODO
@@ -400,12 +393,12 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         if ( !pStream )
             throw uno::RuntimeException();
 
-        BaseStorage* pNewStor = new Storage( *pStream, false );
-        bool bSuccess = ( pStrg->CopyTo( pNewStor ) && pNewStor->Commit() &&
+        std::unique_ptr<BaseStorage> pNewStor(new Storage( *pStream, false ));
+        bool bSuccess = ( pStrg->CopyTo( pNewStor.get() ) && pNewStor->Commit() &&
                           !pNewStor->GetError() && !pStrg->GetError() );
 
-        DELETEZ( pNewStor );
-        DELETEZ( pStrg );
+        pNewStor.reset();
+        pStrg.reset();
         pStream.reset();
 
         if ( !bSuccess )
@@ -419,13 +412,12 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
     }
     else
     {
-        BaseStorageStream* pStream = m_pStorage->OpenStream( aName, StreamMode::READ | StreamMode::SHARE_DENYALL | StreamMode::NOCREATE );
+        std::unique_ptr<BaseStorageStream> pStream(m_pStorage->OpenStream( aName, StreamMode::READ | StreamMode::SHARE_DENYALL | StreamMode::NOCREATE ));
         try
         {
             if ( !pStream || pStream->GetError() || m_pStorage->GetError() )
             {
                 m_pStorage->ResetError();
-                DELETEZ( pStream );
                 throw io::IOException(); // TODO
             }
 
@@ -451,18 +443,16 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         }
         catch (const uno::RuntimeException&)
         {
-            DELETEZ( pStream );
             throw;
         }
         catch (const uno::Exception& ex)
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            DELETEZ( pStream );
             throw css::lang::WrappedTargetException( ex.Message,
                     nullptr, anyEx );
         }
 
-        DELETEZ( pStream );
+        pStream.reset();
 
         aResult <<= xInputStream;
     }
@@ -570,7 +560,7 @@ void SAL_CALL OLESimpleStorage::dispose()
         m_pListenersContainer->disposeAndClear( aSource );
     }
 
-    DELETEZ( m_pStorage );
+    m_pStorage.reset();
     m_pStream.reset();
 
     m_xStream.clear();
