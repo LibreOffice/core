@@ -1610,6 +1610,7 @@ void OpLn::GenSlidingWindowFunction(
 void OpRound::GenSlidingWindowFunction(std::stringstream &ss,
              const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 1, 2 );
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (size_t i = 0; i < vSubArguments.size(); i++)
@@ -1627,12 +1628,16 @@ void OpRound::GenSlidingWindowFunction(std::stringstream &ss,
     {
         ss << "    for(int i=0;i<tmp1;i++)\n";
         ss << "        tmp0 = tmp0 * 10;\n";
+        ss << "    for(int i=0;i>tmp1;i--)\n";
+        ss << "        tmp0 = tmp0 / 10;\n";
     }
     ss << "    double tmp=round(tmp0);\n";
     if(vSubArguments.size() ==2)
     {
         ss << "    for(int i=0;i<tmp1;i++)\n";
         ss << "        tmp = tmp / 10;\n";
+        ss << "    for(int i=0;i>tmp1;i--)\n";
+        ss << "        tmp = tmp * 10;\n";
     }
     ss << "    return tmp;\n";
     ss << "}";
