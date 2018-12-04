@@ -71,7 +71,7 @@ sal_Int64 SAL_CALL OInputStreamHelper::getLength(  )
 
     ::osl::MutexGuard aGuard( m_aMutex );
     SvLockBytesStat aStat;
-    m_xLockBytes->Stat( &aStat, SVSTATFLAG_DEFAULT );
+    m_xLockBytes->Stat( &aStat );
     return aStat.nSize;
 }
 

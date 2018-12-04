@@ -48,7 +48,7 @@ public:
     virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, std::size_t nCount, std::size_t * pWritten ) override;
     virtual ErrCode     Flush() const override;
     virtual ErrCode     SetSize( sal_uInt64 nSize ) override;
-    virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const override;
+    virtual ErrCode     Stat( SvLockBytesStat* ) const override;
 };
 
 
@@ -144,10 +144,10 @@ ErrCode ImgProdLockBytes::SetSize(sal_uInt64 const nSize)
 }
 
 
-ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFlag ) const
+ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat ) const
 {
     if( GetStream() )
-        return SvLockBytes::Stat( pStat, eFlag );
+        return SvLockBytes::Stat( pStat );
     else
     {
         DBG_ASSERT( xStmRef.is(), "ImgProdLockBytes::Stat: xInputStream has no reference..." );
