@@ -802,8 +802,6 @@ void SvxRuler::UpdateColumns()
         if( !bProtectColumns )
             nStyleFlags |= RulerBorderStyle::Moveable;
 
-        if( mxColumnItem->IsTable() )
-            nStyleFlags |= RulerBorderStyle::Table;
         else if ( !bProtectColumns )
             nStyleFlags |= RulerBorderStyle::Sizeable;
 

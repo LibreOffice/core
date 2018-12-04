@@ -502,11 +502,10 @@ enum class RulerBorderStyle {
     Sizeable   = 0x0001,
     Moveable   = 0x0002,
     Variable   = 0x0004,
-    Table      = 0x0008,
-    Invisible  = 0x0040
+    Invisible  = 0x0008
 };
 namespace o3tl {
-    template<> struct typed_flags<RulerBorderStyle> : is_typed_flags<RulerBorderStyle, 0x004f> {};
+    template<> struct typed_flags<RulerBorderStyle> : is_typed_flags<RulerBorderStyle, 0x000f> {};
 }
 
 struct RulerBorder
