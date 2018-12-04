@@ -67,7 +67,7 @@ struct ImplTileInfo
 bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev,
                                         int nNumTilesX, int nNumTilesY,
                                         const Size& rTileSizePixel,
-                                        const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags )
+                                        const GraphicAttr* pAttr )
 {
     // how many tiles to generate per recursion step
     const int nExponent = 2;
@@ -93,7 +93,7 @@ bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev,
     rVDev.EnableMapMode( false );
 
     bool bRet( ImplRenderTileRecursive( rVDev, nExponent, nMSBFactor, nNumTilesX, nNumTilesY,
-                                        nNumTilesX, nNumTilesY, rTileSizePixel, pAttr, nFlags, aTileInfo ) );
+                                        nNumTilesX, nNumTilesY, rTileSizePixel, pAttr, aTileInfo ) );
 
     rVDev.EnableMapMode( bOldMap );
 
@@ -111,7 +111,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
                                              int nNumOrigTilesX, int nNumOrigTilesY,
                                              int nRemainderTilesX, int nRemainderTilesY,
                                              const Size& rTileSizePixel, const GraphicAttr* pAttr,
-                                             GraphicManagerDrawFlags nFlags, ImplTileInfo& rTileInfo )
+                                             ImplTileInfo& rTileInfo )
 {
     // gets loaded with our tile bitmap
     std::unique_ptr<GraphicObject> xTmpGraphic;
@@ -145,7 +145,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     else if( ImplRenderTileRecursive( rVDev, nExponent, nMSBFactor/nExponent,
                                       nNumOrigTilesX, nNumOrigTilesY,
                                       nNewRemainderX, nNewRemainderY,
-                                      rTileSizePixel, pAttr, nFlags, aTileInfo ) )
+                                      rTileSizePixel, pAttr, aTileInfo ) )
     {
         // extract generated tile -> see comment on the first loop below
         BitmapEx aTileBitmap( rVDev.GetBitmap( aTileInfo.aTileTopLeft, aTileInfo.aTileSizePixel ) );
@@ -282,7 +282,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
 }
 
 bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea, const Size& rSizePixel,
-                                   const Size& rOffset, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
+                                   const Size& rOffset, const GraphicAttr* pAttr, int nTileCacheSize1D )
 {
     const MapMode   aOutMapMode( pOut->GetMapMode() );
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
@@ -307,7 +307,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
 
         // draw bitmap content
         if( ImplRenderTempTile( *aVDev.get(), nNumTilesInCacheX,
-                                nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
+                                nNumTilesInCacheY, rSizePixel, pAttr ) )
         {
             BitmapEx aTileBitmap( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) );
 
@@ -322,7 +322,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
                     aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
 
                 if( aAlphaGraphic.ImplRenderTempTile( *aVDev.get(), nNumTilesInCacheX,
-                                                      nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
+                                                      nNumTilesInCacheY, rSizePixel, pAttr ) )
                 {
                     // Combine bitmap and alpha/mask
                     if( GetGraphic().IsAlpha() )
@@ -338,7 +338,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
             GraphicObject aTmpGraphic( aTileBitmap );
             bRet = aTmpGraphic.ImplDrawTiled( pOut, rArea,
                                               aTileBitmap.GetSizePixel(),
-                                              rOffset, pAttr, nFlags, nTileCacheSize1D );
+                                              rOffset, pAttr, nTileCacheSize1D );
         }
     }
     else

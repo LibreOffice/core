@@ -27,17 +27,6 @@
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
 namespace o3tl { template <typename T> struct typed_flags; }
 
-enum class GraphicManagerDrawFlags
-{
-    CACHED                  = 0x01,
-    SMOOTHSCALE             = 0x02,
-    STANDARD                = CACHED | SMOOTHSCALE,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<GraphicManagerDrawFlags> : is_typed_flags<GraphicManagerDrawFlags, 0x02> {};
-}
-
 // Adjustment defines
 enum class GraphicAdjustmentFlags
 {
@@ -214,8 +203,7 @@ private:
                                 int nNumTilesX,
                                 int nNumTilesY,
                                 const Size& rTileSizePixel,
-                                const GraphicAttr* pAttr,
-                                GraphicManagerDrawFlags nFlags
+                                const GraphicAttr* pAttr
                             );
 
     /// internally called by ImplRenderTempTile()
@@ -229,7 +217,6 @@ private:
                                 int nRemainderTilesY,
                                 const Size& rTileSizePixel,
                                 const GraphicAttr* pAttr,
-                                GraphicManagerDrawFlags nFlags,
                                 ImplTileInfo& rTileInfo
                             );
 
@@ -239,7 +226,6 @@ private:
                                 const Size& rSizePixel,
                                 const Size& rOffset,
                                 const GraphicAttr* pAttr,
-                                GraphicManagerDrawFlags nFlags,
                                 int nTileCacheSize1D
                             );
 
@@ -365,7 +351,6 @@ public:
                                 const tools::Rectangle& rArea,
                                 const Size& rSize,
                                 const Size& rOffset,
-                                GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD,
                                 int nTileCacheSize1D=128
                             );
 
