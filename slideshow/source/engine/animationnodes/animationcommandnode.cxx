@@ -109,6 +109,25 @@ void AnimationCommandNode::activate_st()
                    "AnimationCommandNode::deactivate" ) );
 }
 
+void AnimationCommandNode::deactivate_st( NodeState /*eDestState*/ )
+{
+    switch( mxCommandNode->getCommand() ) {
+    // the command toggles the pause status on a media object
+    case EffectCommands::TOGGLEPAUSE:
+    {
+        if( mpShape )
+        {
+            if( mpShape->isPlaying() )
+                mpShape->pause();
+            else
+                mpShape->play();
+        }
+        break;
+    }
+
+    }
+}
+
 bool AnimationCommandNode::hasPendingAnimation() const
 {
     return mxCommandNode->getCommand() == EffectCommands::STOPAUDIO || mpShape;
