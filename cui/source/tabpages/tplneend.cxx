@@ -610,7 +610,6 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
 
         if( pLineEndList->Save() )
         {
-            *pnLineEndListState |= ChangeType::SAVED;
             *pnLineEndListState &= ~ChangeType::MODIFIED;
         }
         else

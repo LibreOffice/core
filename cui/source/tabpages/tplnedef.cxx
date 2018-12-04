@@ -773,7 +773,6 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
 
         if( pDashList->Save() )
         {
-            *pnDashListState |= ChangeType::SAVED;
             *pnDashListState &= ~ChangeType::MODIFIED;
         }
         else

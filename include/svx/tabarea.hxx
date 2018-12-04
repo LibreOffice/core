@@ -25,12 +25,11 @@ enum class ChangeType
 {
     NONE                 = 0x00,
     MODIFIED             = 0x01,
-    CHANGED              = 0x02,
-    SAVED                = 0x04,
+    CHANGED              = 0x02
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ChangeType> : is_typed_flags<ChangeType, 0x07> {};
+    template<> struct typed_flags<ChangeType> : is_typed_flags<ChangeType, 0x03> {};
 }
 
 #endif // INCLUDED_SVX_TABAREA_HXX
