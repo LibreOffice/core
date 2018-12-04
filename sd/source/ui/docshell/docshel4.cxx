@@ -635,10 +635,6 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
         if (xFilter)
         {
-            const SdrSwapGraphicsMode nOldSwapMode = mpDoc->GetSwapGraphicsMode();
-
-            mpDoc->SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
-
             if ( mpViewShell )
             {
                 ::sd::View* pView = mpViewShell->GetView();
@@ -647,8 +643,6 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
             }
 
             bRet = xFilter->Export();
-            if( !bRet )
-                mpDoc->SetSwapGraphicsMode( nOldSwapMode );
         }
     }
 

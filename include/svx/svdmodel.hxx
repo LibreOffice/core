@@ -97,18 +97,6 @@ namespace sfx2
 }
 
 
-enum class SdrSwapGraphicsMode
-{
-    TEMP       = 0x0001,
-    PURGE      = 0x0100,
-    DEFAULT    = TEMP | PURGE,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<SdrSwapGraphicsMode> : is_typed_flags<SdrSwapGraphicsMode, 0x0101> {};
-}
-
-
 enum class SdrHintKind
 {
     LayerChange,          // changed layer definition
@@ -231,7 +219,6 @@ protected:
 
 public:
     std::shared_ptr<SvxForbiddenCharactersTable> mpForbiddenCharactersTable;
-    SdrSwapGraphicsMode nSwapGraphicsMode;
 
     std::unique_ptr<SdrOutlinerCache> mpOutlinerCache;
     //get a vector of all the SdrOutliner belonging to the model
@@ -446,8 +433,6 @@ public:
     // Default=FALSE. Flag is not persistent.
     bool            IsSwapGraphics() const { return bSwapGraphics; }
     void            SetSwapGraphics();
-    void            SetSwapGraphicsMode(SdrSwapGraphicsMode nMode) { nSwapGraphicsMode = nMode; }
-    SdrSwapGraphicsMode GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
 
     // Text frames without filling can be select with a mouse click by default (sal_False).
     // With this flag set to true you can hit them only in the area in which text is to be

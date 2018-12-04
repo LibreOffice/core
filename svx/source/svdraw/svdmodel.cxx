@@ -133,7 +133,6 @@ void SdrModel::ImpCtor(
     bMPgNumsDirty=false;
     bTransportContainer = false;
     bSwapGraphics=false;
-    nSwapGraphicsMode=SdrSwapGraphicsMode::DEFAULT;
     bPasteResize=false;
     bReadOnly=false;
     nDefaultTabulator=0;
