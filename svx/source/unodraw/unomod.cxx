@@ -146,7 +146,6 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
             pObj = pSdrHint->GetObject();
             break;
 //                SdrHintKind::DefaultTabChange,   // default tab width changed
-//                SdrHintKind::DefaultFontHeightChange,   // default FontHeight changed
 //                SdrHintKind::SwitchToPage,    // #94278# UNDO/REDO at an object evtl. on another page
 //                HINT_OBJLISTCLEAR     // Is called before an SdrObjList will be cleared
         default:

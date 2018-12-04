@@ -108,7 +108,6 @@ enum class SdrHintKind
     ModelCleared,         // deleted the whole model (no pages exist anymore). not impl.
     RefDeviceChange,      // RefDevice changed
     DefaultTabChange,     // Default tabulator width changed
-    DefaultFontHeightChange,   // Default FontHeight changed
     SwitchToPage,          // #94278# UNDO/REDO at an object evtl. on another page
     BeginEdit,             // Is called after the object has entered text edit mode
     EndEdit                // Is called after the object has left text edit mode

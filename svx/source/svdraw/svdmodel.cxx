@@ -855,7 +855,6 @@ void SdrModel::SetDefaultFontHeight(sal_Int32 nVal)
 {
     if (nVal!=mnDefTextHgt) {
         mnDefTextHgt=nVal;
-        Broadcast(SdrHint(SdrHintKind::DefaultFontHeightChange));
         ImpReformatAllTextObjects();
     }
 }
