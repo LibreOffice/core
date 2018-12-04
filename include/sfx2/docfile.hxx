@@ -289,7 +289,8 @@ public:
 
 private:
     enum class ShowLockResult { NoLock, Succeeded, Try };
-    ShowLockResult      ShowLockedDocumentDialog(const LockFileEntry& aData, bool bIsLoading, bool bOwnLock, bool bHandleSysLocked);
+    ShowLockResult ShowLockedDocumentDialog(const OUString& aDocURL, const LockFileEntry& aData,
+                                            bool bIsLoading, bool bOwnLock, bool bHandleSysLocked);
     enum class MessageDlg { LockFileIgnore, LockFileCorrupt };
     bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
 
