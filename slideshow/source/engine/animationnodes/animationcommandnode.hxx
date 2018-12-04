@@ -46,6 +46,7 @@ protected:
 
 private:
     virtual void activate_st() override;
+    virtual void deactivate_st( NodeState eDestState ) override;
     virtual bool hasPendingAnimation() const override;
 
 private:
