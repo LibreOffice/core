@@ -1511,7 +1511,14 @@ void CustomPropertiesWindow::dispose()
 {
     m_aEditLoseFocusIdle.Stop();
     m_aBoxLoseFocusIdle.Stop();
-    ClearAllLines();
+
+    for (CustomPropertyLine* pLine : m_aCustomPropertiesLines)
+    {
+        delete pLine;
+    }
+    m_pCurrentLine = nullptr;
+    m_aCustomPropertiesLines.clear();
+
     m_pHeaderBar.clear();
     m_pScrollBar.clear();
     m_pHeaderAccName.clear();
@@ -1746,16 +1753,12 @@ bool CustomPropertiesWindow::AreAllLinesValid() const
 
 void CustomPropertiesWindow::ClearAllLines()
 {
-    std::vector< CustomPropertyLine* >::iterator pIter;
-    for ( pIter = m_aCustomPropertiesLines.begin();
-          pIter != m_aCustomPropertiesLines.end(); ++pIter )
+    for (CustomPropertyLine* pLine : m_aCustomPropertiesLines)
     {
-        CustomPropertyLine* pLine = *pIter;
-        delete pLine;
+        pLine->Clear();
     }
     m_pCurrentLine = nullptr;
     m_aCustomProperties.clear();
-    m_aCustomPropertiesLines.clear();
     m_nScrollPos = 0;
 }
 
