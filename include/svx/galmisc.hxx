@@ -168,8 +168,7 @@ enum class GalleryHintType
     THEME_RENAMED,
     THEME_CREATED,
     THEME_UPDATEVIEW,
-    CLOSE_OBJECT,
-    OBJECT_REMOVED,
+    CLOSE_OBJECT
 };
 
 class GalleryHint : public SfxHint

@@ -82,7 +82,6 @@ GalleryTheme::~GalleryTheme()
     for (auto & pEntry : aObjectList)
     {
         Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), pEntry.get() ) );
-        Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), pEntry.get() ) );
         pEntry.reset();
     }
     aObjectList.clear();
@@ -445,7 +444,6 @@ void GalleryTheme::RemoveObject(sal_uInt32 nPos)
         aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
     Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), pEntry.get() ) );
-    Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), pEntry.get() ) );
     pEntry.reset();
 
     ImplSetModified( true );
@@ -562,7 +560,6 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         if( (*it)->mbDelete )
         {
             Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), it->get() ) );
-            Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), it->get() ) );
             it = aObjectList.erase( it );
         }
         else
@@ -1350,7 +1347,6 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         {
             GalleryObject* pObj = i.get();
             Broadcast( GalleryHint( GalleryHintType::CLOSE_OBJECT, GetName(), pObj ) );
-            Broadcast( GalleryHint( GalleryHintType::OBJECT_REMOVED, GetName(), pObj ) );
             i.reset();
         }
         aObjectList.clear();
