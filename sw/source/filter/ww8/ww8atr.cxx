@@ -1711,25 +1711,25 @@ WW8_WrPlcField* WW8Export::CurrentFieldPlc() const
     switch (m_nTextTyp)
     {
         case TXT_MAINTEXT:
-            pFieldP = m_pFieldMain;
+            pFieldP = m_pFieldMain.get();
             break;
         case TXT_HDFT:
-            pFieldP = m_pFieldHdFt;
+            pFieldP = m_pFieldHdFt.get();
             break;
         case TXT_FTN:
-            pFieldP = m_pFieldFootnote;
+            pFieldP = m_pFieldFootnote.get();
             break;
         case TXT_EDN:
-            pFieldP = m_pFieldEdn;
+            pFieldP = m_pFieldEdn.get();
             break;
         case TXT_ATN:
-            pFieldP = m_pFieldAtn;
+            pFieldP = m_pFieldAtn.get();
             break;
         case TXT_TXTBOX:
-            pFieldP = m_pFieldTextBxs;
+            pFieldP = m_pFieldTextBxs.get();
             break;
         case TXT_HFTXTBOX:
-            pFieldP = m_pFieldHFTextBxs;
+            pFieldP = m_pFieldHFTextBxs.get();
             break;
         default:
             OSL_ENSURE( false, "what type of SubDoc is that?" );
@@ -3884,7 +3884,7 @@ void WW8AttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* /*pSecti
 
 sal_uInt32 AttributeOutputBase::GridCharacterPitch( const SwTextGridItem& rGrid ) const
 {
-    MSWordStyles * pStyles = GetExport().m_pStyles;
+    MSWordStyles * pStyles = GetExport().m_pStyles.get();
     const SwFormat * pSwFormat = pStyles->GetSwFormat(0);
 
     sal_uInt32 nPageCharSize = 0;
