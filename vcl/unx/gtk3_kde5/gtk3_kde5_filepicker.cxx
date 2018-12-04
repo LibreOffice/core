@@ -94,6 +94,7 @@ void SAL_CALL Gtk3KDE5FilePicker::setTitle(const OUString& title) throw (::css::
 
 sal_Int16 SAL_CALL Gtk3KDE5FilePicker::execute() throw (::css::uno::RuntimeException, ::std::exception)
 {
+    SolarMutexGuard g;
     return m_ipc.execute();
 }
 
