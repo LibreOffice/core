@@ -486,10 +486,10 @@ public:
     const SwPageDesc *m_pCurrentPageDesc;
     bool m_bPrevTextNodeIsEmpty;
     bool m_bFirstTOCNodeWithSection;
-    WW8_WrPlcPn* m_pPapPlc;
-    WW8_WrPlcPn* m_pChpPlc;
+    std::unique_ptr<WW8_WrPlcPn> m_pPapPlc;
+    std::unique_ptr<WW8_WrPlcPn> m_pChpPlc;
     MSWordAttrIter* m_pChpIter;
-    MSWordStyles* m_pStyles;
+    std::unique_ptr<MSWordStyles> m_pStyles;
     WW8_WrPlcAnnotations* m_pAtn;
     std::unique_ptr<WW8_WrtFactoids> m_pFactoids;
     WW8_WrPlcTextBoxes *m_pTextBxs, *m_pHFTextBxs;
@@ -512,18 +512,18 @@ public:
     Point* m_pFlyOffset;              // for adjusting of character-bound Fly in the Writer,
     RndStdIds m_eNewAnchorType;       // that is paragraph-bound in the WW.
 
-    WW8_WrPlcField* m_pFieldMain;         // fields in MainText
-    WW8_WrPlcField* m_pFieldHdFt;         // fields in Header/Footer
-    WW8_WrPlcField* m_pFieldFootnote;          // fields in FootNotes
-    WW8_WrPlcField* m_pFieldEdn;          // fields in EndNotes
-    WW8_WrPlcField* m_pFieldAtn;          // fields in Annotations
-    WW8_WrPlcField* m_pFieldTextBxs;       // fields in textboxes
-    WW8_WrPlcField* m_pFieldHFTextBxs;     // fields in header/footer textboxes
-    WW8_WrMagicTable *m_pMagicTable;  // keeps track of table cell positions, and
+    std::unique_ptr<WW8_WrPlcField> m_pFieldMain;         // fields in MainText
+    std::unique_ptr<WW8_WrPlcField> m_pFieldHdFt;         // fields in Header/Footer
+    std::unique_ptr<WW8_WrPlcField> m_pFieldFootnote;          // fields in FootNotes
+    std::unique_ptr<WW8_WrPlcField> m_pFieldEdn;          // fields in EndNotes
+    std::unique_ptr<WW8_WrPlcField> m_pFieldAtn;          // fields in Annotations
+    std::unique_ptr<WW8_WrPlcField> m_pFieldTextBxs;       // fields in textboxes
+    std::unique_ptr<WW8_WrPlcField> m_pFieldHFTextBxs;     // fields in header/footer textboxes
+    std::unique_ptr<WW8_WrMagicTable> m_pMagicTable;  // keeps track of table cell positions, and
                                     // marks those that contain graphics,
                                     // which is required to make word display
                                     // graphics inside tables
-    SwWW8WrGrf* m_pGrf;
+    std::unique_ptr<SwWW8WrGrf> m_pGrf;
     const SwAttrSet* m_pStyAttr;      // StyleAttr for Tabs
     const SwModify* m_pOutFormatNode;    // write Format or Node
     const SwFormat *m_pCurrentStyle;     // iff bStyDef=true, then this store the current style
@@ -960,7 +960,7 @@ private:
 class WW8Export : public MSWordExportBase
 {
 public:
-    ww::bytes* pO;                      ///< Buffer
+    ww::bytes *pO;                      ///< Buffer
 
     SvStream *pTableStrm, *pDataStrm;   ///< Streams for WW97 Export
 

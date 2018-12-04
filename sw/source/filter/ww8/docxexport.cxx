@@ -534,8 +534,7 @@ ErrCode DocxExport::ExportDocument_Impl()
     WriteVBA();
 
     m_aLinkedTextboxesHelper.clear();   //final cleanup
-    delete m_pStyles;
-    m_pStyles = nullptr;
+    m_pStyles.reset();
     m_pSections.reset();
 
     return ERRCODE_NONE;
@@ -639,7 +638,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
 
 void DocxExport::InitStyles()
 {
-    m_pStyles = new MSWordStyles( *this, /*bListStyles =*/ true );
+    m_pStyles.reset(new MSWordStyles( *this, /*bListStyles =*/ true ));
 
     // setup word/styles.xml and the relations + content type
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),

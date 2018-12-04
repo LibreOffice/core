@@ -3333,21 +3333,21 @@ ErrCode WW8Export::ExportDocument_Impl()
     m_pBkmks = new WW8_WrtBookmarks;                          // Bookmarks
     GetWriter().CreateBookmarkTable();
 
-    m_pPapPlc = new WW8_WrPlcPn( *this, PAP, pFib->m_fcMin );
-    m_pChpPlc = new WW8_WrPlcPn( *this, CHP, pFib->m_fcMin );
+    m_pPapPlc.reset(new WW8_WrPlcPn( *this, PAP, pFib->m_fcMin ));
+    m_pChpPlc.reset(new WW8_WrPlcPn( *this, CHP, pFib->m_fcMin ));
     pO = new ww::bytes;
-    m_pStyles = new MSWordStyles( *this );
-    m_pFieldMain = new WW8_WrPlcField( 2, TXT_MAINTEXT );
-    m_pFieldHdFt = new WW8_WrPlcField( 2, TXT_HDFT );
-    m_pFieldFootnote = new WW8_WrPlcField( 2, TXT_FTN );
-    m_pFieldEdn = new WW8_WrPlcField( 2, TXT_EDN );
-    m_pFieldAtn = new WW8_WrPlcField( 2, TXT_ATN );
-    m_pFieldTextBxs = new WW8_WrPlcField( 2, TXT_TXTBOX );
-    m_pFieldHFTextBxs = new WW8_WrPlcField( 2, TXT_HFTXTBOX );
+    m_pStyles.reset(new MSWordStyles( *this ));
+    m_pFieldMain.reset(new WW8_WrPlcField( 2, TXT_MAINTEXT ));
+    m_pFieldHdFt.reset(new WW8_WrPlcField( 2, TXT_HDFT ));
+    m_pFieldFootnote.reset(new WW8_WrPlcField( 2, TXT_FTN ));
+    m_pFieldEdn.reset(new WW8_WrPlcField( 2, TXT_EDN ));
+    m_pFieldAtn.reset(new WW8_WrPlcField( 2, TXT_ATN ));
+    m_pFieldTextBxs.reset(new WW8_WrPlcField( 2, TXT_TXTBOX ));
+    m_pFieldHFTextBxs.reset(new WW8_WrPlcField( 2, TXT_HFTXTBOX ));
 
-    m_pMagicTable = new WW8_WrMagicTable;
+    m_pMagicTable.reset(new WW8_WrMagicTable);
 
-    m_pGrf = new SwWW8WrGrf( *this );
+    m_pGrf.reset(new SwWW8WrGrf( *this ));
     m_pPiece = new WW8_WrPct( pFib->m_fcMin );
     pDop.reset(new WW8Dop);
 
@@ -3419,19 +3419,19 @@ ErrCode WW8Export::ExportDocument_Impl()
     done:;
     }
 
-    DELETEZ( m_pGrf );
-    DELETEZ( m_pMagicTable );
-    DELETEZ( m_pFieldFootnote );
-    DELETEZ( m_pFieldTextBxs );
-    DELETEZ( m_pFieldHFTextBxs );
-    DELETEZ( m_pFieldAtn );
-    DELETEZ( m_pFieldEdn );
-    DELETEZ( m_pFieldHdFt );
-    DELETEZ( m_pFieldMain );
-    DELETEZ( m_pStyles );
+    m_pGrf.reset();
+    m_pMagicTable.reset();;
+    m_pFieldFootnote.reset();;
+    m_pFieldTextBxs.reset();;
+    m_pFieldHFTextBxs.reset();;
+    m_pFieldAtn.reset();;
+    m_pFieldEdn.reset();;
+    m_pFieldHdFt.reset();;
+    m_pFieldMain.reset();;
+    m_pStyles.reset();;
     DELETEZ( pO );
-    DELETEZ( m_pChpPlc );
-    DELETEZ( m_pPapPlc );
+    m_pChpPlc.reset();;
+    m_pPapPlc.reset();;
     pSepx.reset();
 
     delete m_pRedlAuthors;
@@ -3583,25 +3583,13 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_pCurrentPageDesc(nullptr)
     , m_bPrevTextNodeIsEmpty(false)
     , m_bFirstTOCNodeWithSection(false)
-    , m_pPapPlc(nullptr)
-    , m_pChpPlc(nullptr)
     , m_pChpIter(nullptr)
-    , m_pStyles(nullptr)
     , m_pAtn(nullptr)
     , m_pTextBxs(nullptr)
     , m_pHFTextBxs(nullptr)
     , m_pParentFrame(nullptr)
     , m_pFlyOffset(nullptr)
     , m_eNewAnchorType(RndStdIds::FLY_AS_CHAR)
-    , m_pFieldMain(nullptr)
-    , m_pFieldHdFt(nullptr)
-    , m_pFieldFootnote(nullptr)
-    , m_pFieldEdn(nullptr)
-    , m_pFieldAtn(nullptr)
-    , m_pFieldTextBxs(nullptr)
-    , m_pFieldHFTextBxs(nullptr)
-    , m_pMagicTable(nullptr)
-    , m_pGrf(nullptr)
     , m_pStyAttr(nullptr)
     , m_pOutFormatNode(nullptr)
     , m_pCurrentStyle(nullptr)

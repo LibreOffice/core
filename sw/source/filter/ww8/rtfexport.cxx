@@ -692,7 +692,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     // Font table
     WriteFonts();
 
-    m_pStyles = new MSWordStyles(*this);
+    m_pStyles.reset(new MSWordStyles(*this));
     // Color and stylesheet table
     WriteStyles();
 
