@@ -158,7 +158,7 @@ namespace dxcanvas
         // clear area that needs to be blitted to screen beforehand
         maUpdateRect.reset();
 
-        // TODO(P1): Might be worthwile to track areas of background
+        // TODO(P1): Might be worthwhile to track areas of background
         // changes, too.
 
         // TODO(P2): Might be worthwhile to use page-flipping only if
