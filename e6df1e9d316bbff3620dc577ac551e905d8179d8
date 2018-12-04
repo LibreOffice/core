@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_6ea0e3a6",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-04T11:35:56Z",
+      "side": 1,
+      "message": "Uhm, how\u0027s this bit related to the rest of the code?",
+      "revId": "e6df1e9d316bbff3620dc577ac551e905d8179d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
