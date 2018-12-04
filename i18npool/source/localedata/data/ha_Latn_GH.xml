@@ -109,7 +109,7 @@
       <FormatCode>M/D/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNN, MMMM DD, YYYY</FormatCode>
+      <FormatCode>NNNNMMMM DD, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>MM/DD/YY</FormatCode>
@@ -142,7 +142,7 @@
       <FormatCode>NN, MMMM D, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNN, MMMM D, YYYY</FormatCode>
+      <FormatCode>NNNNMMMM D, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM/DD</FormatCode>
