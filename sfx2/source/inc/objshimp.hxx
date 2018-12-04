@@ -96,7 +96,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     ErrCode             lErr;
     SfxEventHintId      nEventId;           // If Open/Create as to be sent
                                             // before Activate
-    AutoReloadTimer_Impl *pReloadTimer;
+    std::unique_ptr<AutoReloadTimer_Impl> pReloadTimer;
     SfxLoadedFlags      nLoadedFlags;
     SfxLoadedFlags      nFlagsInProgress;
     bool                bModalMode;
