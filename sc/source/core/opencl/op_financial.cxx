@@ -750,8 +750,11 @@ void OpMDuration::GenSlidingWindowFunction(std::stringstream& ss,
 void Fvschedule::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    CHECK_PARAMETER_COUNT( 2, 2 );
     FormulaToken* pCur = vSubArguments[1]->GetFormulaToken();
     assert(pCur);
+    if(vSubArguments[0]->GetFormulaToken()->GetType() != formula::svDoubleVectorRef)
+        throw Unhandled( __FILE__, __LINE__ );
     const formula::DoubleVectorRefToken* pCurDVR =
         static_cast<const formula::DoubleVectorRefToken *>(pCur);
     size_t nCurWindowSize = pCurDVR->GetRefRowSize();
