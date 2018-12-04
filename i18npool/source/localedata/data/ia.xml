@@ -78,7 +78,7 @@
       <FormatCode>DD/MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNN D MMMM YYYY</FormatCode>
+      <FormatCode>NNNND MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
       <FormatCode>D MMM YY</FormatCode>
@@ -96,7 +96,7 @@
       <FormatCode>NN "le" D "de" MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNN "le" D "de" MMMM YYYY</FormatCode>
+      <FormatCode>NNNN"le" D "de" MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
       <FormatCode>D. MMM. YYYY</FormatCode>
