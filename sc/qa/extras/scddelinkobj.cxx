@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/sheet/xddelink.hxx>
+#include <test/util/xrefreshable.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -30,7 +31,10 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScDDELinkObj : public CalcUnoApiTest, public apitest::XDDELink, public apitest::XNamed
+class ScDDELinkObj : public CalcUnoApiTest,
+                     public apitest::XDDELink,
+                     public apitest::XNamed,
+                     public apitest::XRefreshable
 {
 public:
     ScDDELinkObj();
@@ -49,6 +53,11 @@ public:
     // XNamed
     CPPUNIT_TEST(testGetName);
     CPPUNIT_TEST(testSetNameThrowsException);
+
+    // XRefreshable
+    CPPUNIT_TEST(testAddRefreshListener);
+    CPPUNIT_TEST(testRefresh);
+    CPPUNIT_TEST(testRemoveRefreshListener);
 
     CPPUNIT_TEST_SUITE_END();
 
