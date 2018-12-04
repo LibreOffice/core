@@ -22,8 +22,10 @@
  * Implementation of the I/O interfaces based on stream and URI binding
  */
 #include <xmlsec/xmlstreamio.hxx>
+#include <xmlsec/errorcallback.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <libxml/uri.h>
 #include <xmlsec-wrapper.h>
@@ -150,6 +152,10 @@ XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks()
         //Cleanup the older callbacks.
         //Notes: all none default callbacks will lose.
         xmlSecIOCleanupCallbacks() ;
+
+        // Make sure that errors are reported via SAL_WARN().
+        setErrorRecorder();
+        comphelper::ScopeGuard g([] { clearErrorRecorder(); });
 
         // Newer xmlsec wants the callback order in the opposite direction.
         if (xmlSecCheckVersionExt(1, 2, 26, xmlSecCheckVersionABICompatible))
