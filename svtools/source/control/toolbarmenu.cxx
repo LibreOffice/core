@@ -1199,7 +1199,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
 
             if( aPos.Y() >= 0 )
             {
-                long nTextOffsetY = ((pEntry->maSize.Height() - nFontHeight) / 2);
+                long nTextOffsetY = (pEntry->maSize.Height() - nFontHeight) / 2;
 
                 DrawTextFlags   nTextStyle   = DrawTextFlags::NONE;
                 DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;

@@ -217,7 +217,7 @@ ScRefFinder::~ScRefFinder()
 
 static ScRefFlags lcl_NextFlags( ScRefFlags nOld )
 {
-    const ScRefFlags Mask_ABS = (ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS | ScRefFlags::TAB_ABS);
+    const ScRefFlags Mask_ABS = ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS | ScRefFlags::TAB_ABS;
     ScRefFlags nNew = nOld & Mask_ABS;
     nNew = ScRefFlags( static_cast<std::underlying_type<ScRefFlags>::type>(nNew) - 1 ) & Mask_ABS; // weiterzaehlen
 

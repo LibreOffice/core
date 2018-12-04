@@ -1615,7 +1615,7 @@ HtmlTokenId HTMLParser::FilterPRE( HtmlTokenId nToken )
 
     case HtmlTokenId::TABCHAR:
         {
-            sal_Int32 nSpaces = (8 - (nPre_LinePos % 8));
+            sal_Int32 nSpaces = 8 - (nPre_LinePos % 8);
             DBG_ASSERT( aToken.isEmpty(), "Why is the token not empty?" );
             if (aToken.getLength() < nSpaces)
             {

@@ -215,7 +215,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
     if ( (eTextLine == LINESTYLE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
 
-    long nLineWidth = (mnDPIX / 300);
+    long nLineWidth = mnDPIX / 300;
     if ( !nLineWidth )
         nLineWidth = 1;
 

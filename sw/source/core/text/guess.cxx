@@ -93,7 +93,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             if ( rAdjust == SvxAdjust::Right || rAdjust == SvxAdjust::Center )
             {
                 TextFrameIndex nSpaceCnt(0);
-                for (sal_Int32 i = (rInf.GetText().getLength() - 1);
+                for (sal_Int32 i = rInf.GetText().getLength() - 1;
                      sal_Int32(rInf.GetIdx()) <= i; --i)
                 {
                     sal_Unicode cChar = rInf.GetText()[i];

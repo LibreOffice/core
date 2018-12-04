@@ -583,11 +583,11 @@ namespace basegfx
                     // to bring 't' into the [0<=x<=1] interval.
                     ::basegfx::B2DPoint dir((*next)-(*curr));
 
-                    double denominator = ( pPlane->nx*dir.getX() +
-                                        pPlane->ny*dir.getY() );
-                    double numerator = ( pPlane->nx*curr->getX() +
+                    double denominator = pPlane->nx*dir.getX() +
+                                         pPlane->ny*dir.getY();
+                    double numerator =  pPlane->nx*curr->getX() +
                                         pPlane->ny*curr->getY() +
-                                        pPlane->d );
+                                        pPlane->d;
                     double t = -numerator/denominator;
 
                     // calculate the actual point of intersection
@@ -602,11 +602,11 @@ namespace basegfx
                     // to bring 't' into the [0<=x<=1] interval.
                     ::basegfx::B2DPoint dir((*next)-(*curr));
 
-                    double denominator = ( pPlane->nx*dir.getX() +
-                                        pPlane->ny*dir.getY() );
-                    double numerator = ( pPlane->nx*curr->getX() +
+                    double denominator = pPlane->nx*dir.getX() +
+                                         pPlane->ny*dir.getY();
+                    double numerator =  pPlane->nx*curr->getX() +
                                         pPlane->ny*curr->getY() +
-                                        pPlane->d );
+                                        pPlane->d;
                     double t = -numerator/denominator;
 
                     // calculate the actual point of intersection

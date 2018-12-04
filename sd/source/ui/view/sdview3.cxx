@@ -656,7 +656,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             maDropPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
 
             // delete pages, that are not of any interest for us
-            for( long i = ( pWorkModel->GetPageCount() - 1 ); i >= 0; i-- )
+            for( long i = pWorkModel->GetPageCount() - 1; i >= 0; i-- )
             {
                 SdPage* pP = static_cast< SdPage* >( pWorkModel->GetPage( static_cast<sal_uInt16>(i) ) );
 
@@ -903,7 +903,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     }
 
                     // delete pages, that are not of any interest for us
-                    for( long i = ( pModel->GetPageCount() - 1 ); i >= 0; i-- )
+                    for( long i = pModel->GetPageCount() - 1; i >= 0; i-- )
                     {
                         SdPage* pP = static_cast< SdPage* >( pModel->GetPage( static_cast<sal_uInt16>(i) ) );
 

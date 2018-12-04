@@ -574,7 +574,7 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
     }
 
     Size Differenz;
-    Point DiffPoint = (NewCenter - Center);
+    Point DiffPoint = NewCenter - Center;
     Differenz.setWidth( DiffPoint.X() );
     Differenz.setHeight( -DiffPoint.Y() );  // Note that the Y-axis is counted ad positive downward.
     NbcMove (Differenz);  // Actually executes the coordinate transformation.

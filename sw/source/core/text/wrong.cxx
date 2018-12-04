@@ -689,7 +689,7 @@ bool WrongListIterator::Check(TextFrameIndex & rStart, TextFrameIndex & rLen)
             }
             else if (rStart < m_CurrentIndex)
             {
-                rLen -= (m_CurrentIndex - rStart);
+                rLen -= m_CurrentIndex - rStart;
                 assert(0 < sal_Int32(rLen));
                 rStart = m_CurrentIndex;
             }

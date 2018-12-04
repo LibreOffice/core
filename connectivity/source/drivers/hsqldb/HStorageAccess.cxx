@@ -318,7 +318,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
                             "One byte is < 0");
             return -1;
         }
-        jint nRet = ((ch[0] << 24) + (ch[1] << 16) + (ch[2] << 8) + (ch[3] << 0));
+        jint nRet = (ch[0] << 24) + (ch[1] << 16) + (ch[2] << 8) + (ch[3] << 0);
 #ifdef HSQLDB_DBG
         DataLogFile aDataLog( env, name, "data" );
         aDataLog.write( nRet );

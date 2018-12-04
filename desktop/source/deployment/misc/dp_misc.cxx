@@ -106,7 +106,7 @@ const OUString OfficePipeId::operator () ()
 
     sal_uInt8 const * data =
         reinterpret_cast<sal_uInt8 const *>(userPath.getStr());
-    std::size_t size = (userPath.getLength() * sizeof (sal_Unicode));
+    std::size_t size = userPath.getLength() * sizeof (sal_Unicode);
     sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
     std::unique_ptr<sal_uInt8[]> md5_buf( new sal_uInt8 [ md5_key_len ] );
 

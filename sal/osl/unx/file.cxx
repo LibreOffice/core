@@ -399,7 +399,7 @@ oslFileError FileHandle_Impl::readFileAt(
     for (*pBytesRead = 0; nBytesRequested > 0; )
     {
         off_t  const bufptr = (nOffset / m_bufsiz) * m_bufsiz;
-        size_t const bufpos = (nOffset % m_bufsiz);
+        size_t const bufpos = nOffset % m_bufsiz;
 
         if (bufptr != m_bufptr)
         {
@@ -479,7 +479,7 @@ oslFileError FileHandle_Impl::writeFileAt(
     for (*pBytesWritten = 0; nBytesToWrite > 0;)
     {
         off_t const bufptr = (nOffset / m_bufsiz) * m_bufsiz;
-        size_t const bufpos = (nOffset % m_bufsiz);
+        size_t const bufpos = nOffset % m_bufsiz;
         if (bufptr != m_bufptr)
         {
             // flush current buffer

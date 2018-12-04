@@ -132,8 +132,8 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
             }
             else
             {
-                double          fQ1 = ( static_cast<double>(aPrefSize.Width()) / static_cast<double>(aPrefSize.Height()) );
-                double          fQ2 = ( static_cast<double>(rGraphicSize.Width()) / static_cast<double>(rGraphicSize.Height()) );
+                double          fQ1 = static_cast<double>(aPrefSize.Width()) / static_cast<double>(aPrefSize.Height());
+                double          fQ2 = static_cast<double>(rGraphicSize.Width()) / static_cast<double>(rGraphicSize.Height());
                 double          fXScale = 1;
                 double          fYScale = 1;
 

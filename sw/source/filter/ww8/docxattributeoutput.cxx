@@ -8289,7 +8289,7 @@ static boost::optional<sal_Int32> lcl_getDmlAlpha(const SvxBrushItem& rBrush)
 
         // Calculate alpha value
         // Consider oox/source/drawingml/color.cxx : getTransparency() function.
-        sal_Int32 nAlpha = (::oox::drawingml::MAX_PERCENT - ( ::oox::drawingml::PER_PERCENT * nTransparencyPercent ) );
+        sal_Int32 nAlpha = ::oox::drawingml::MAX_PERCENT - ( ::oox::drawingml::PER_PERCENT * nTransparencyPercent );
         oRet = nAlpha;
     }
     return oRet;

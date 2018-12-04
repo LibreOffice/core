@@ -1360,8 +1360,8 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         pSearchItem->SetUseAsianOptions(GetCheckBoxValue(m_pJapOptionsCB));
         TransliterationFlags nFlags = GetTransliterationFlags();
         if( !pSearchItem->IsUseAsianOptions())
-            nFlags &= (TransliterationFlags::IGNORE_CASE |
-                       TransliterationFlags::IGNORE_WIDTH );
+            nFlags &= TransliterationFlags::IGNORE_CASE |
+                      TransliterationFlags::IGNORE_WIDTH;
         if (GetNegatedCheckBoxValue(m_pIncludeDiacritics))
             nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
         if (GetNegatedCheckBoxValue(m_pIncludeKashida))
@@ -2337,8 +2337,8 @@ void SvxSearchDialog::SaveToModule_Impl()
 
     TransliterationFlags nFlags = GetTransliterationFlags();
     if( !pSearchItem->IsUseAsianOptions())
-        nFlags &= (TransliterationFlags::IGNORE_CASE |
-                   TransliterationFlags::IGNORE_WIDTH );
+        nFlags &= TransliterationFlags::IGNORE_CASE |
+                   TransliterationFlags::IGNORE_WIDTH;
     if (GetNegatedCheckBoxValue(m_pIncludeDiacritics))
         nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
     if (GetNegatedCheckBoxValue(m_pIncludeKashida))

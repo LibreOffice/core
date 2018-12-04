@@ -827,7 +827,7 @@ public:
         uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
         uno::Sequence< OUString > aNames( aProps.getLength() );
         OUString* pString = aNames.getArray();
-        OUString* pEnd = ( pString + aNames.getLength() );
+        OUString* pEnd = pString + aNames.getLength();
         beans::Property* pProp = aProps.getArray();
         for ( ; pString != pEnd; ++pString, ++pProp )
             *pString = pProp->Name;

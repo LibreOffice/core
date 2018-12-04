@@ -145,12 +145,12 @@ void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover
     aMark.GetMarkArea( aRangeResult );
     CPPUNIT_ASSERT_EQUAL( rRange, aRangeResult );
 
-    SCROW nMidRow = ( ( rRange.aStart.Row() + rRange.aEnd.Row() ) / 2 );
-    SCCOL nMidCol = ( ( rRange.aStart.Col() + rRange.aEnd.Col() ) / 2 );
-    SCROW nOutRow1 = ( rRange.aEnd.Row() + 1 );
-    SCCOL nOutCol1 = ( rRange.aEnd.Col() + 1 );
-    SCROW nOutRow2 = ( rRange.aStart.Row() - 1 );
-    SCCOL nOutCol2 = ( rRange.aStart.Col() - 1 );
+    SCROW nMidRow = ( rRange.aStart.Row() + rRange.aEnd.Row() ) / 2;
+    SCCOL nMidCol = ( rRange.aStart.Col() + rRange.aEnd.Col() ) / 2;
+    SCROW nOutRow1 = rRange.aEnd.Row() + 1;
+    SCCOL nOutCol1 = rRange.aEnd.Col() + 1;
+    SCROW nOutRow2 = rRange.aStart.Row() - 1;
+    SCCOL nOutCol2 = rRange.aStart.Col() - 1;
 
     CPPUNIT_ASSERT( aMark.IsCellMarked( nMidCol, nMidRow ) );
     if ( ValidCol( nOutCol1 ) && ValidRow( nOutRow1 ) )

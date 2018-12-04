@@ -1857,7 +1857,7 @@ void SvxColorWindow::SelectEntry(const NamedColor& rNamedColor)
 
 void SvxColorWindow::SelectEntry(const Color& rColor)
 {
-    OUString sColorName = ("#" + rColor.AsRGBHexString().toAsciiUpperCase());
+    OUString sColorName = "#" + rColor.AsRGBHexString().toAsciiUpperCase();
     SvxColorWindow::SelectEntry(std::make_pair(rColor, sColorName));
 }
 
@@ -1898,7 +1898,7 @@ void ColorWindow::SelectEntry(const NamedColor& rNamedColor)
 
 void ColorWindow::SelectEntry(const Color& rColor)
 {
-    OUString sColorName = ("#" + rColor.AsRGBHexString().toAsciiUpperCase());
+    OUString sColorName = "#" + rColor.AsRGBHexString().toAsciiUpperCase();
     ColorWindow::SelectEntry(std::make_pair(rColor, sColorName));
 }
 
@@ -3183,7 +3183,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     dispatchCommand( aCommand, aArgs );
 
     EnsurePaletteManager();
-    OUString sColorName = ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
+    OUString sColorName = "#" + aColor.AsRGBHexString().toAsciiUpperCase();
     m_xPaletteManager->AddRecentColor(aColor, sColorName);
 }
 

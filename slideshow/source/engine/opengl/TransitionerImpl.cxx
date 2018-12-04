@@ -1068,7 +1068,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime )
 
     SAL_INFO("slideshow.opengl", "update time: " << nTime);
     SAL_INFO("slideshow.opengl", "update took: " << std::chrono::duration_cast<std::chrono::milliseconds>(m_UpdateEndTime - m_UpdateStartTime).count());
-    m_TotalUpdateDuration += (m_UpdateEndTime - m_UpdateStartTime);
+    m_TotalUpdateDuration += m_UpdateEndTime - m_UpdateStartTime;
 #endif
 }
 

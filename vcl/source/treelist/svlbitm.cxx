@@ -105,9 +105,9 @@ void SvLBoxButtonData::StoreButtonState( SvTreeListEntry* pActEntry )
 
 SvButtonState SvLBoxButtonData::ConvertToButtonState( SvItemStateFlags nItemFlags )
 {
-    nItemFlags &= (SvItemStateFlags::UNCHECKED |
-                   SvItemStateFlags::CHECKED |
-                   SvItemStateFlags::TRISTATE);
+    nItemFlags &= SvItemStateFlags::UNCHECKED |
+                  SvItemStateFlags::CHECKED |
+                  SvItemStateFlags::TRISTATE;
     switch( nItemFlags )
     {
         case SvItemStateFlags::UNCHECKED:

@@ -57,7 +57,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
     get(m_pOptionsLB, "options");
     get(m_pDefaultPB, "default");
 
-    for ( int i = (static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
+    for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1; i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
     {
         int nCoptIdx = i - 2; /* Do not consider "Name" & "Module" indexes */
 

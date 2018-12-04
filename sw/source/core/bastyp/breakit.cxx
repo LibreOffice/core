@@ -127,9 +127,9 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rText, sal_Int32 nPos
 
 SvtScriptType SwBreakIt::GetAllScriptsOfText( const OUString& rText ) const
 {
-    const SvtScriptType coAllScripts = ( SvtScriptType::LATIN |
-                                      SvtScriptType::ASIAN |
-                                      SvtScriptType::COMPLEX );
+    const SvtScriptType coAllScripts = SvtScriptType::LATIN |
+                                       SvtScriptType::ASIAN |
+                                       SvtScriptType::COMPLEX;
     SvtScriptType nRet = SvtScriptType::NONE;
     sal_uInt16 nScript = 0;
     if (!rText.isEmpty())

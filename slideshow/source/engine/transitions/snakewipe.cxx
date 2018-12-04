@@ -46,8 +46,8 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
 ::basegfx::B2DPolyPolygon SnakeWipe::calcSnake( double t ) const
 {
     ::basegfx::B2DPolyPolygon res;
-    const double area = (t * m_sqrtElements * m_sqrtElements);
-    const sal_Int32 line_ = (static_cast<sal_Int32>(area) / m_sqrtElements);
+    const double area = t * m_sqrtElements * m_sqrtElements;
+    const sal_Int32 line_ = static_cast<sal_Int32>(area) / m_sqrtElements;
     const double line = ::basegfx::pruneScaleValue(
         static_cast<double>(line_) / m_sqrtElements );
     const double col = ::basegfx::pruneScaleValue(
@@ -102,9 +102,9 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
             poly.setClosed(true);
             res.append(poly);
         }
-        const double a = (M_SQRT1_2 / m_sqrtElements);
+        const double a = M_SQRT1_2 / m_sqrtElements;
         const double d = std::modf(sqrtArea2, &o3tl::temporary(double()));
-        const double len = (t * M_SQRT2 * d);
+        const double len = t * M_SQRT2 * d;
         const double height = ::basegfx::pruneScaleValue( M_SQRT1_2 / m_sqrtElements );
         poly.clear();
         poly.append( ::basegfx::B2DPoint( 0.0, 0.0 ) );
@@ -146,9 +146,9 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
             poly.setClosed(true);
             res.append(poly);
         }
-        const double a = (M_SQRT1_2 / m_sqrtElements);
+        const double a = M_SQRT1_2 / m_sqrtElements;
         const double d = std::modf(sqrtArea2, &o3tl::temporary(double()));
-        const double len = ((1.0 - t) * M_SQRT2 * d);
+        const double len = (1.0 - t) * M_SQRT2 * d;
         const double height = ::basegfx::pruneScaleValue( M_SQRT1_2 / m_sqrtElements );
         poly.clear();
         poly.append( ::basegfx::B2DPoint( 0.0, 0.0 ) );

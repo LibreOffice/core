@@ -77,7 +77,7 @@ void SlideShowViewListeners::notify( const lang::EventObject& _rEvent )
     ViewListenerVector::iterator aIter( maListeners.begin() );
     while( aIter != maListeners.end() )
     {
-        Reference< util::XModifyListener > xListener( (*aIter) );
+        Reference< util::XModifyListener > xListener( *aIter );
         if( xListener.is() )
         {
             xListener->modified( _rEvent );
@@ -97,7 +97,7 @@ void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
     ViewListenerVector::iterator aIter( maListeners.begin() );
     while( aIter != maListeners.end() )
     {
-        Reference< util::XModifyListener > xListener( (*aIter++) );
+        Reference< util::XModifyListener > xListener( *aIter++ );
         if( xListener.is() )
             xListener->disposing( _rEventSource );
     }

@@ -286,7 +286,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         size_t nIdx = 0;
         while( nIdx < nCount && (*pTmp)[ nIdx ] < nXPos )
             ++nIdx;
-        bool bOdd = (nIdx % 2);
+        bool bOdd = nIdx % 2;
         bool bSet = true;
         if( bOdd )
             --nIdx; // within interval

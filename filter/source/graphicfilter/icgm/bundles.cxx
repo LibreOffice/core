@@ -128,7 +128,7 @@ void CGMFList::InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize )
     if ( pFound )
     {
         pFontEntry->nFontType |= 1;
-        sal_uInt32 nPrev = ( pFound - pBuf.get() );
+        sal_uInt32 nPrev = pFound - pBuf.get();
         sal_uInt32 nToCopyOfs = 6;
         if ( nPrev && ( pFound[ -1 ] == '-' || pFound[ -1 ] == ' ' ) )
         {
@@ -148,7 +148,7 @@ void CGMFList::InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize )
     {
         pFontEntry->nFontType |= 2;
 
-        sal_uInt32 nPrev = ( pFound - pBuf.get() );
+        sal_uInt32 nPrev = pFound - pBuf.get();
         sal_uInt32 nToCopyOfs = 4;
         if ( nPrev && ( pFound[ -1 ] == '-' || pFound[ -1 ] == ' ' ) )
         {

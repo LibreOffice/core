@@ -1237,7 +1237,7 @@ else
                 // frames, otherwise the drawing layer gets confused.
                 if ( pTargetShell )
                     pTargetShell->SttEndDoc( false );
-                aDelIdx -= (iDelNodes - 1);
+                aDelIdx -= iDelNodes - 1;
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "iDelNodes: " << iDelNodes
                               << "  Idx: " << aDelIdx.GetNode().GetIndex()

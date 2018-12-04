@@ -100,7 +100,7 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
         }
         else
         {
-            int partial = (p - file);
+            int partial = p - file;
             size_t inc_len = strlen(include);
             if(inc_len + partial >= BUFSIZ )
             {

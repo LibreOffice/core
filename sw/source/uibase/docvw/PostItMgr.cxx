@@ -247,7 +247,7 @@ void SwPostItMgr::CheckForRemovedPostIts()
         auto it = currentIt++;
         if ( !(*it)->UseElement() )
         {
-            SwSidebarItem* p = (*it);
+            SwSidebarItem* p = *it;
             currentIt = mvPostItFields.erase(std::remove(mvPostItFields.begin(), mvPostItFields.end(), *it), mvPostItFields.end());
             if (GetActiveSidebarWin() == p->pPostIt)
                 SetActiveSidebarWin(nullptr);
@@ -303,7 +303,7 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
         [&pBroadcast](const SwSidebarItem* pField) { return pField->GetBroadCaster() == pBroadcast; });
     if (i != mvPostItFields.end())
     {
-        SwSidebarItem* p = (*i);
+        SwSidebarItem* p = *i;
         if (GetActiveSidebarWin() == p->pPostIt)
             SetActiveSidebarWin(nullptr);
         // tdf#120487 remove from list before dispose, so comment window

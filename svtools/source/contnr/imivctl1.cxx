@@ -1023,7 +1023,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             if( rKEvt.GetKeyCode().IsShift() )
             {
                 if( nFlags & IconChoiceFlags::AddMode )
-                    nFlags &= (~IconChoiceFlags::AddMode);
+                    nFlags &= ~IconChoiceFlags::AddMode;
                 else
                     nFlags |= IconChoiceFlags::AddMode;
             }
@@ -2151,7 +2151,7 @@ void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry const * pThi
             SelectEntry( pEntry, false, true );
     }
     pAnchor = nullptr;
-    nFlags &= (~IconChoiceFlags::AddMode);
+    nFlags &= ~IconChoiceFlags::AddMode;
 }
 
 Size SvxIconChoiceCtrl_Impl::GetMinGrid() const
@@ -2692,7 +2692,7 @@ void SvxIconChoiceCtrl_Impl::SelectAll()
         SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
         SelectEntry( pEntry, true/*bSelect*/, true );
     }
-    nFlags &= (~IconChoiceFlags::AddMode);
+    nFlags &= ~IconChoiceFlags::AddMode;
     pAnchor = nullptr;
 }
 

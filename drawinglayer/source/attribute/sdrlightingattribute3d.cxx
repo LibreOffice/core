@@ -139,7 +139,7 @@ namespace drawinglayer
 
                     if(basegfx::fTools::more(fCosFac, 0.0))
                     {
-                        aRetval += ((rLight.getColor() * rColor) * fCosFac);
+                        aRetval += (rLight.getColor() * rColor) * fCosFac;
 
                         if(rLight.getSpecular())
                         {
@@ -151,7 +151,7 @@ namespace drawinglayer
                             if(basegfx::fTools::more(fCosFac2, 0.0))
                             {
                                 fCosFac2 = pow(fCosFac2, static_cast<double>(nSpecularIntensity));
-                                aRetval += (rSpecular * fCosFac2);
+                                aRetval += rSpecular * fCosFac2;
                             }
                         }
                     }

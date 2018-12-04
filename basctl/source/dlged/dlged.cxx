@@ -1172,8 +1172,8 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     double nPaperSzHeight = aPaperSz.Height();
     double nBmpSzWidth = aBmpSz.Width();
     double nBmpSzHeight = aBmpSz.Height();
-    double nScaleX = (nPaperSzWidth / nBmpSzWidth );
-    double nScaleY = (nPaperSzHeight / nBmpSzHeight );
+    double nScaleX = nPaperSzWidth / nBmpSzWidth;
+    double nScaleY = nPaperSzHeight / nBmpSzHeight;
 
     Size aOutputSz;
     if( nBmpSzHeight * nScaleX <= nPaperSzHeight )

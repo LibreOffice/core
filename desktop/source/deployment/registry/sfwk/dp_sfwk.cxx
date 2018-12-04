@@ -143,7 +143,7 @@ BackendImpl::PackageImpl::PackageImpl(
     sal_Int32 segmEnd = url.getLength();
     if ( url.endsWith("/") )
         --segmEnd;
-    sal_Int32 segmStart = (url.lastIndexOf( '/', segmEnd ) + 1);
+    sal_Int32 segmStart = url.lastIndexOf( '/', segmEnd ) + 1;
     if (segmStart < 0)
         segmStart = 0;
     // name and display name default the same:

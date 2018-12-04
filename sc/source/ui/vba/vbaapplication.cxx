@@ -1285,7 +1285,7 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Union(
 double
 ScVbaApplication::InchesToPoints( double Inches )
 {
-   double result = ( Inches * 72.0 );
+   double result = Inches * 72.0;
    return result;
 }
 

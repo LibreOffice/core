@@ -1556,7 +1556,7 @@ void OResultSet::clearInsertRow()
     const OValueRefVector::Vector::const_iterator aEnd = m_aInsertRow->get().end();
     for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
     {
-        ORowSetValueDecoratorRef& rValue = (*aIter);
+        ORowSetValueDecoratorRef& rValue = *aIter;
         if ( rValue->isBound() )
         {
             (m_aRow->get())[nPos]->setValue( (*aIter)->getValue() );

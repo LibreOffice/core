@@ -401,7 +401,7 @@ my_SEC_StringToOID(SECItem *to, const char *from, PRUint32 len)
     SECStatus rv;
     PRUint8 result[1024];
 
-    static const PRUint32 max_decimal = (0xffffffff / 10);
+    static const PRUint32 max_decimal = 0xffffffff / 10;
     static const char OIDstring[] = {"OID."};
 
     if (!from || !to) {
@@ -423,7 +423,7 @@ bad_data:
     do {
     PRUint32 decimal = 0;
         while (len > 0 && rtl::isAsciiDigit(static_cast<unsigned char>(*from))) {
-        PRUint32 addend = (*from++ - '0');
+        PRUint32 addend = *from++ - '0';
         --len;
         if (decimal > max_decimal)  /* overflow */
             goto bad_data;
@@ -1766,7 +1766,7 @@ SECStatus StringToOID(SECItem* to, const char* from, PRUint32 len)
     SECStatus rv;
     PRUint8 result[1024];
 
-    static const PRUint32 max_decimal = (0xffffffff / 10);
+    static const PRUint32 max_decimal = 0xffffffff / 10;
     static const char OIDstring[] = {"OID."};
 
     if (!from || !to)
@@ -1794,7 +1794,7 @@ bad_data:
         PRUint32 decimal = 0;
         while (len > 0 && rtl::isAsciiDigit(static_cast<unsigned char>(*from)))
         {
-            PRUint32 addend = (*from++ - '0');
+            PRUint32 addend = *from++ - '0';
             --len;
             if (decimal > max_decimal)  /* overflow */
                 goto bad_data;

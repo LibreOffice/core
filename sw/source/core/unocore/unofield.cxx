@@ -2247,7 +2247,7 @@ SwXTextField::setPropertyValue(
         case FIELD_PROP_DATE_TIME :
             if (!m_pImpl->m_pProps->pDateTime)
                 m_pImpl->m_pProps->pDateTime.reset( new util::DateTime );
-            rValue >>= (*m_pImpl->m_pProps->pDateTime);
+            rValue >>= *m_pImpl->m_pProps->pDateTime;
             break;
         case FIELD_PROP_PROP_SEQ:
             rValue >>= m_pImpl->m_pProps->aPropSeq;
@@ -2433,7 +2433,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 break;
             case FIELD_PROP_DATE_TIME :
                 if (m_pImpl->m_pProps->pDateTime)
-                    aRet <<= (*m_pImpl->m_pProps->pDateTime);
+                    aRet <<= *m_pImpl->m_pProps->pDateTime;
                 break;
             case FIELD_PROP_PROP_SEQ:
                 aRet <<= m_pImpl->m_pProps->aPropSeq;

@@ -59,7 +59,7 @@ Any WrappedTextRotationProperty::convertOuterToInnerValue( const Any& rOuterValu
     sal_Int32 nVal = 0;
     if( rOuterValue >>= nVal )
     {
-        double fDoubleDegrees = ( static_cast< double >( nVal ) / 100.0 );
+        double fDoubleDegrees = static_cast< double >( nVal ) / 100.0;
         aRet <<= fDoubleDegrees;
     }
     return aRet;

@@ -1218,12 +1218,12 @@ namespace
 
         if ( _bHideScrollbars )
         {
-            _rMode |= ( BrowserMode::NO_HSCROLL | BrowserMode::NO_VSCROLL );
+            _rMode |= BrowserMode::NO_HSCROLL | BrowserMode::NO_VSCROLL;
             _rMode &= ~BrowserMode( BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL );
         }
         else
         {
-            _rMode |= ( BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL );
+            _rMode |= BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL;
             _rMode &= ~BrowserMode( BrowserMode::NO_HSCROLL | BrowserMode::NO_VSCROLL );
         }
 

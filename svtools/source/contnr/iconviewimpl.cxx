@@ -39,7 +39,7 @@ void IconViewImpl::CursorUp()
     if( !pPrevFirstToDraw )
         return;
 
-    nFlags &= (~LBoxFlags::Filling);
+    nFlags &= ~LBoxFlags::Filling;
     long nEntryHeight = pView->GetEntryHeight();
     ShowCursor( false );
     pView->Update();
@@ -64,7 +64,7 @@ void IconViewImpl::CursorDown()
 
     if( pNextFirstToDraw )
     {
-        nFlags &= (~LBoxFlags::Filling);
+        nFlags &= ~LBoxFlags::Filling;
         ShowCursor( false );
         pView->Update();
         pStartEntry = pNextFirstToDraw;
@@ -92,7 +92,7 @@ void IconViewImpl::PageDown( sal_uInt16 nDelta )
 
     ShowCursor( false );
 
-    nFlags &= (~LBoxFlags::Filling);
+    nFlags &= ~LBoxFlags::Filling;
     pView->Update();
     pStartEntry = pNext;
 
@@ -128,7 +128,7 @@ void IconViewImpl::PageUp( sal_uInt16 nDelta )
     if( pPrev == pStartEntry )
         return;
 
-    nFlags &= (~LBoxFlags::Filling);
+    nFlags &= ~LBoxFlags::Filling;
     ShowCursor( false );
 
     pView->Update();
@@ -167,7 +167,7 @@ void IconViewImpl::KeyDown( bool bPageDown )
     if( nDelta <= 0 )
         return;
 
-    nFlags &= (~LBoxFlags::Filling);
+    nFlags &= ~LBoxFlags::Filling;
     BeginScroll();
 
     aVerSBar->SetThumbPos( nThumbPos+nDelta );
@@ -198,7 +198,7 @@ void IconViewImpl::KeyUp( bool bPageUp )
     if( nDelta < 0 )
         return;
 
-    nFlags &= (~LBoxFlags::Filling);
+    nFlags &= ~LBoxFlags::Filling;
     BeginScroll();
 
     aVerSBar->SetThumbPos( nThumbPos - nDelta );
@@ -433,9 +433,9 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         pEntry = pView->NextVisible(pEntry);
     }
 
-    nFlags &= (~LBoxFlags::DeselectAll);
+    nFlags &= ~LBoxFlags::DeselectAll;
     rRenderContext.SetClipRegion();
-    nFlags &= (~LBoxFlags::InPaint);
+    nFlags &= ~LBoxFlags::InPaint;
 }
 
 void IconViewImpl::InvalidateEntry( long nId ) const
@@ -462,7 +462,7 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
     if( rKeyCode.IsMod2() )
         return false; // don't evaluate Alt key
 
-    nFlags &= (~LBoxFlags::Filling);
+    nFlags &= ~LBoxFlags::Filling;
 
     if( !pCursor )
         pCursor = pStartEntry;

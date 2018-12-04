@@ -1788,7 +1788,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
 
             if (aPos.Y() >= 0)
             {
-                long nTextOffsetY = ((pData->aSz.Height() - nFontHeight) / 2);
+                long nTextOffsetY = (pData->aSz.Height() - nFontHeight) / 2;
                 if (IsMenuBar())
                     nTextOffsetY += (aOutSz.Height()-pData->aSz.Height()) / 2;
                 DrawTextFlags   nTextStyle   = DrawTextFlags::NONE;

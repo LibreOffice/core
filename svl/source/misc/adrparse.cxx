@@ -629,7 +629,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                         aTheAddrSpec = reparse(m_pAddrSpec->m_pBegin, m_pAddrSpec->m_pEnd, true);
                     else
                     {
-                        sal_Int32 nLen = ( m_pAddrSpec->m_pEnd - m_pAddrSpec->m_pBegin);
+                        sal_Int32 nLen = m_pAddrSpec->m_pEnd - m_pAddrSpec->m_pBegin;
                         if (nLen == rInput.getLength())
                             aTheAddrSpec = rInput;
                         else
@@ -656,7 +656,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                         aTheRealName = reparse(m_pRealNameBegin, m_pRealNameEnd, false);
                     else
                     {
-                        sal_Int32 nLen = (m_pRealNameContentEnd - m_pRealNameContentBegin);
+                        sal_Int32 nLen = m_pRealNameContentEnd - m_pRealNameContentBegin;
                         if (nLen == rInput.getLength())
                             aTheRealName = rInput;
                         else

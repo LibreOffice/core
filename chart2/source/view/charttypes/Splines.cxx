@@ -158,7 +158,7 @@ void lcl_SplineCalculation::Calculate()
     else
     {
         m_aSecDerivY[ 0 ] = -0.5;
-        double xDiff = ( m_aPoints[ 1 ].first - m_aPoints[ 0 ].first );
+        double xDiff = m_aPoints[ 1 ].first - m_aPoints[ 0 ].first;
         u[ 0 ] = ( 3.0 / xDiff ) *
             ((( m_aPoints[ 1 ].second - m_aPoints[ 0 ].second ) / xDiff ) - m_fYp1 );
     }
@@ -193,7 +193,7 @@ void lcl_SplineCalculation::Calculate()
     if( ! ::rtl::math::isInf( m_fYpN ) )
     {
         qn = 0.5;
-        double xDiff = ( m_aPoints[ n ].first - m_aPoints[ n - 1 ].first );
+        double xDiff = m_aPoints[ n ].first - m_aPoints[ n - 1 ].first;
         un = ( 3.0 / xDiff ) *
             ( m_fYpN - ( m_aPoints[ n ].second - m_aPoints[ n - 1 ].second ) / xDiff );
     }

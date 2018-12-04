@@ -1856,7 +1856,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
                 for ( WeakComponentVector::iterator pCompIter = m_pData->m_aOpenSubComponentsVector.begin();
                       pCompIter != m_pData->m_aOpenSubComponentsVector.end(); ++pCompIter )
                 {
-                    uno::Reference< lang::XComponent > xTmp = (*pCompIter);
+                    uno::Reference< lang::XComponent > xTmp = *pCompIter;
                     if ( xTmp.is() )
                     {
                         xTmp->removeEventListener( uno::Reference< lang::XEventListener >(
@@ -1907,7 +1907,7 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
     for ( WeakComponentVector::iterator pCompIter = m_pData->m_aOpenSubComponentsVector.begin();
           pCompIter != m_pData->m_aOpenSubComponentsVector.end(); )
     {
-        uno::Reference< lang::XComponent > xTmp = (*pCompIter);
+        uno::Reference< lang::XComponent > xTmp = *pCompIter;
         if ( !xTmp.is() || xTmp == xChild )
         {
             pCompIter = m_pData->m_aOpenSubComponentsVector.erase(pCompIter);
@@ -2408,7 +2408,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                     for ( SotElementVector_Impl::iterator pElementIter = pElement->m_xStorage->m_aChildrenVector.begin();
                            pElementIter != pElement->m_xStorage->m_aChildrenVector.end(); )
                     {
-                        SotElement_Impl* pElementToDel = (*pElementIter);
+                        SotElement_Impl* pElementToDel = *pElementIter;
                         ++pElementIter;
 
                         m_pImpl->RemoveElement( pElementToDel );

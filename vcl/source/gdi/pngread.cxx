@@ -814,7 +814,7 @@ void PNGReaderImpl::ImplGetGamma()
         return;
 
     sal_uInt32  nGammaValue = ImplReadsal_uInt32();
-    double      fGamma = ( ( VIEWING_GAMMA / DISPLAY_GAMMA ) * ( static_cast<double>(nGammaValue) / 100000 ) );
+    double      fGamma = ( VIEWING_GAMMA / DISPLAY_GAMMA ) * ( static_cast<double>(nGammaValue) / 100000 );
     double      fInvGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
 
     if ( fInvGamma != 1.0 )
@@ -883,7 +883,7 @@ void PNGReaderImpl::ImplGetBackground()
 //                2 and 6 (RGB)       the return value is always the 8 bit color component
 sal_uInt8 PNGReaderImpl::ImplScaleColor()
 {
-    sal_uInt32 nMask = ( ( 1 << mnPngDepth ) - 1 );
+    sal_uInt32 nMask = ( 1 << mnPngDepth ) - 1;
     sal_uInt16 nCol = ( *maDataIter++ << 8 );
 
     nCol += *maDataIter++ & static_cast<sal_uInt16>(nMask);

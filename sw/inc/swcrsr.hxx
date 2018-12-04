@@ -184,9 +184,9 @@ public:
     // Is there a selection of content in table?
     // Return value indicates if cursor remains at its old position.
     virtual bool IsSelOvr( SwCursorSelOverFlags eFlags =
-                                ( SwCursorSelOverFlags::CheckNodeSection |
-                                  SwCursorSelOverFlags::Toggle |
-                                  SwCursorSelOverFlags::ChangePos ));
+                                SwCursorSelOverFlags::CheckNodeSection |
+                                SwCursorSelOverFlags::Toggle |
+                                SwCursorSelOverFlags::ChangePos );
     bool IsInProtectTable( bool bMove = false,
                                    bool bChgCursor = true );
     bool IsNoContent() const;

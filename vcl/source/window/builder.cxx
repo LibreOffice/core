@@ -1978,7 +1978,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             if (HeaderBar* pHeaderBar = pTreeView ? pTreeView->GetHeaderBar() : nullptr)
             {
                 OUString sTitle(extractTitle(rMap));
-                HeaderBarItemBits nBits = (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::CLICKABLE);
+                HeaderBarItemBits nBits = HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::CLICKABLE;
                 float fAlign = extractAlignment(rMap);
                 if (fAlign == 0.0)
                     nBits |= HeaderBarItemBits::LEFT;

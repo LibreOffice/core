@@ -354,7 +354,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     auto aIter = m_vTableConnection.rbegin();
     while(aIter != m_vTableConnection.rend() && bRemove)
     {
-        VclPtr<OTableConnection>& rTabConn = (*aIter);
+        VclPtr<OTableConnection>& rTabConn = *aIter;
         if (
              (pData == rTabConn->GetData()->getReferencingTable()) ||
              (pData == rTabConn->GetData()->getReferencedTable())

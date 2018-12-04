@@ -200,7 +200,7 @@ void SbiParser::Open()
             if( Peek() == WRITE )
             {
                 Next();
-                nMode |= (StreamMode::READ | StreamMode::WRITE);
+                nMode |= StreamMode::READ | StreamMode::WRITE;
             }
             else
                 nMode |= StreamMode::READ;

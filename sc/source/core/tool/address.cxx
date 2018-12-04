@@ -2002,7 +2002,7 @@ template<typename T > static void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
                                   const ScAddress::Details& rDetails)
 {
     if( nFlags & ScRefFlags::VALID )
-        nFlags |= ( ScRefFlags::ROW_VALID | ScRefFlags::COL_VALID | ScRefFlags::TAB_VALID );
+        nFlags |= ScRefFlags::ROW_VALID | ScRefFlags::COL_VALID | ScRefFlags::TAB_VALID;
     if( pDoc && (nFlags & ScRefFlags::TAB_VALID ) )
     {
         if ( nTab < 0 || nTab >= pDoc->GetTableCount() )

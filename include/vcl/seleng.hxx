@@ -173,7 +173,7 @@ inline void SelectionEngine::SetAddMode( bool bNewMode )
     if ( bNewMode )
         nFlags |= SelectionEngineFlags::IN_ADD;
     else
-        nFlags &= (~SelectionEngineFlags::IN_ADD);
+        nFlags &= ~SelectionEngineFlags::IN_ADD;
 }
 
 inline void SelectionEngine::EnableDrag( bool bOn )
@@ -181,7 +181,7 @@ inline void SelectionEngine::EnableDrag( bool bOn )
     if ( bOn )
         nFlags |= SelectionEngineFlags::DRG_ENAB;
     else
-        nFlags &= (~SelectionEngineFlags::DRG_ENAB);
+        nFlags &= ~SelectionEngineFlags::DRG_ENAB;
 }
 
 inline void SelectionEngine::AddAlways( bool bOn )
@@ -189,7 +189,7 @@ inline void SelectionEngine::AddAlways( bool bOn )
     if( bOn )
         nFlags |= SelectionEngineFlags::ADD_ALW;
     else
-        nFlags &= (~SelectionEngineFlags::ADD_ALW);
+        nFlags &= ~SelectionEngineFlags::ADD_ALW;
 }
 
 inline bool SelectionEngine::IsAlwaysAdding() const
@@ -221,7 +221,7 @@ inline void SelectionEngine::SetAnchor( bool bAnchor )
     if ( bAnchor )
         nFlags |= SelectionEngineFlags::HAS_ANCH;
     else
-        nFlags &= (~SelectionEngineFlags::HAS_ANCH);
+        nFlags &= ~SelectionEngineFlags::HAS_ANCH;
 }
 
 #endif // INCLUDED_VCL_SELENG_HXX

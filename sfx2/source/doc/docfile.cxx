@@ -737,7 +737,7 @@ bool SfxMedium::Commit()
         GetInitFileDate( true );
 
     // remove truncation mode from the flags
-    pImpl->m_nStorOpenMode &= (~StreamMode::TRUNC);
+    pImpl->m_nStorOpenMode &= ~StreamMode::TRUNC;
     return bResult;
 }
 

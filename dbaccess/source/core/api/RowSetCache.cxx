@@ -393,12 +393,12 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
             if ( !aCacheIter->second.pRowSet->isInsertRow()
                 /*&& aCacheIter->second.aIterator != m_pMatrix->end()*/ && !m_bModified )
             {
-                ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                ptrdiff_t nDist = aCacheIter->second.aIterator - m_pMatrix->begin();
                 aPositions.push_back(nDist);
                 aCacheIterToChange[aCacheIter->first] = true;
             }
         }
-        sal_Int32 nKeyPos = (m_aMatrixIter - m_pMatrix->begin());
+        sal_Int32 nKeyPos = m_aMatrixIter - m_pMatrix->begin();
         m_pMatrix->resize(_nSize);
 
         if ( nKeyPos < _nSize )
@@ -919,7 +919,7 @@ void ORowSetCache::moveWindow()
                         if ( !aCacheIter->second.pRowSet->isInsertRow()
                             && aCacheIter->second.aIterator != m_pMatrix->end() )
                         {
-                            const ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                            const ptrdiff_t nDist = aCacheIter->second.aIterator - m_pMatrix->begin();
                             if ( nDist >= nOverlapSize )
                             {
                                 // That's from outside the overlap area; invalidate iterator.
@@ -1458,7 +1458,7 @@ void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
             if ( !aCacheIter->second.pRowSet->isInsertRow()
                 && aCacheIter->second.aIterator != m_pMatrix->end())
             {
-                ptrdiff_t nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                ptrdiff_t nDist = aCacheIter->second.aIterator - m_pMatrix->begin();
                 if(nDist < _nDist)
                 {
                     aCacheIter->second.aIterator = m_pMatrix->end();
@@ -1497,7 +1497,7 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
     if(!m_aInsertRow->is())
         *m_aInsertRow = new ORowSetValueVector(m_xMetaData->getColumnCount());
 
-    (*(*m_aInsertRow)) = (*(*_rOriginalRow));
+    (*(*m_aInsertRow)) = *(*_rOriginalRow);
     // we don't unbound the bookmark column
     ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin();
     ORowSetValueVector::Vector::const_iterator aEnd = (*m_aInsertRow)->get().end();
