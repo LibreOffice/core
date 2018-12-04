@@ -32,9 +32,7 @@ namespace svx
         Position,
         Size,
         // text doc shape properties
-        TextDocAnchor,
-        // spreadsheet doc shape properties
-        CalcDocAnchor
+        TextDocAnchor
     };
 
 }
