@@ -1989,7 +1989,7 @@ AC_ARG_WITH(jvm-path,
 
 AC_ARG_WITH(ant-home,
     AS_HELP_STRING([--with-ant-home=<absolute path to Ant home>],
-        [If you have installed Jakarta Ant on your system, please supply the path here.
+        [If you have installed Apache Ant on your system, please supply the path here.
          Note that this is not the location of the Ant binary but the location
          of the entire distribution.]),
 ,)
@@ -11758,7 +11758,7 @@ if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE"; then
         fi
     fi
     if test -z "$with_ant_home"; then
-        AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd])
+        AC_PATH_PROGS(ANT, [ant ant.sh ant.bat ant.cmd])
     else
         if test "$_os" = "WINNT"; then
             # AC_PATH_PROGS needs unix path
@@ -11766,7 +11766,7 @@ if test "$ENABLE_JAVA" != "" -a "$NEED_ANT" = "TRUE"; then
         fi
         AbsolutePath "$with_ant_home"
         with_ant_home=$absolute_path
-        AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd],,$with_ant_home/bin:$PATH)
+        AC_PATH_PROGS(ANT, [ant ant.sh ant.bat ant.cmd],,$with_ant_home/bin:$PATH)
         WITH_ANT_HOME=$with_ant_home
         ANT_HOME=$with_ant_home
     fi
