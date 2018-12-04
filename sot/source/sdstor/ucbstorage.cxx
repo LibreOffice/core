@@ -455,8 +455,8 @@ public:
     OUString                    m_aURL;         // the full path name to create the content
     OUString                    m_aContentType;
     OUString                    m_aOriginalContentType;
-    ::ucbhelper::Content*       m_pContent;     // the content that provides the storage elements
-    ::utl::TempFile*            m_pTempFile;    // temporary file, only for storages on stream
+    std::unique_ptr<::ucbhelper::Content> m_pContent;     // the content that provides the storage elements
+    std::unique_ptr<::utl::TempFile>      m_pTempFile;    // temporary file, only for storages on stream
     SvStream*                   m_pSource;      // original stream, only for storages on a stream
     ErrCode                     m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
@@ -496,7 +496,7 @@ public:
                                 {
                                     if ( !m_pContent )
                                         CreateContent();
-                                    return m_pContent;
+                                    return m_pContent.get();
                                 }
     UCBStorageElementList_Impl& GetChildrenList()
                                 {
@@ -1442,7 +1442,6 @@ UCBStorage::~UCBStorage()
 UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OUString& rName, StreamMode nMode, UCBStorage* pStorage, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > const & xProgressHandler  )
     : m_pAntiImpl( pStorage )
     , m_pContent( new ::ucbhelper::Content( rContent ) )
-    , m_pTempFile( nullptr )
     , m_pSource( nullptr )
     //, m_pStream( NULL )
     , m_nError( ERRCODE_NONE )
@@ -1462,7 +1461,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
     {
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
-        m_pTempFile = new ::utl::TempFile;
+        m_pTempFile.reset(new ::utl::TempFile);
         m_pTempFile->EnableKillingFile();
         m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
     }
@@ -1472,8 +1471,6 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
 
 UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBStorage* pStorage, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > const & xProgressHandler )
     : m_pAntiImpl( pStorage )
-    , m_pContent( nullptr )
-    , m_pTempFile( nullptr )
     , m_pSource( nullptr )
     //, m_pStream( NULL )
     , m_nError( ERRCODE_NONE )
@@ -1493,7 +1490,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     {
         // no name given = use temporary name!
         DBG_ASSERT( m_bIsRoot, "SubStorage must have a name!" );
-        m_pTempFile = new ::utl::TempFile;
+        m_pTempFile.reset(new ::utl::TempFile);
         m_pTempFile->EnableKillingFile();
         m_aName = m_aOriginalName = aName = m_pTempFile->GetURL();
     }
@@ -1522,7 +1519,6 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
 
 UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool bDirect )
     : m_pAntiImpl( pStorage )
-    , m_pContent( nullptr )
     , m_pTempFile( new ::utl::TempFile )
     , m_pSource( &rStream )
     , m_nError( ERRCODE_NONE )
@@ -1669,7 +1665,7 @@ void UCBStorage_Impl::CreateContent()
             aTemp += "?repairpackage";
         }
 
-        m_pContent = new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() );
+        m_pContent.reset(new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() ));
     }
     catch (const ContentCreationException&)
     {
@@ -1940,8 +1936,8 @@ UCBStorage_Impl::~UCBStorage_Impl()
 {
     m_aChildrenList.clear();
 
-    delete m_pContent;
-    delete m_pTempFile;
+    m_pContent.reset();
+    m_pTempFile.reset();
 }
 
 bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
@@ -1980,8 +1976,7 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                     continue;
 
                 // remove old content, create an "empty" new one and initialize it with the new inserted
-                DELETEZ( m_pContent );
-                m_pContent = new ::ucbhelper::Content( aNewFolder );
+                m_pContent.reset(new ::ucbhelper::Content( aNewFolder ));
                 bRet = true;
             }
         }
@@ -2058,7 +2053,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         //  - if storage is already inserted, and changed
                         //  - storage is not in a package
                         //  - it's a new storage, try to insert and commit if successful inserted
-                        if ( !pElement->m_bIsInserted || m_bIsLinked || pElement->m_xStorage->Insert( m_pContent ) )
+                        if ( !pElement->m_bIsInserted || m_bIsLinked || pElement->m_xStorage->Insert( m_pContent.get() ) )
                         {
                             nLocalRet = pElement->m_xStorage->Commit();
                             pContent = pElement->GetContent();
@@ -2733,7 +2728,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
             aFolderObj.removeSegment();
 
             Content aFolder( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            pImp->m_pContent = new Content;
+            pImp->m_pContent.reset(new Content);
             bool bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, pImp->m_aName, *pImp->m_pContent );
             if ( !bRet )
             {
