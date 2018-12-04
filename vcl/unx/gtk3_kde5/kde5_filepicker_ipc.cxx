@@ -192,6 +192,12 @@ void readCommands(FilePickerIpc* ipc)
         readCommandArgs(command, args);
 
         emit ipc->commandReceived(messageId, command, args);
+
+        // stop processing once 'Quit' command has been sent
+        if (command == Commands::Quit)
+        {
+            return;
+        }
     }
 }
 
@@ -211,7 +217,11 @@ FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* _parent)
     m_ipcReaderThread = std::unique_ptr<std::thread>{ new std::thread(readCommands, this) };
 }
 
-FilePickerIpc::~FilePickerIpc() = default;
+FilePickerIpc::~FilePickerIpc()
+{
+    // join thread that reads commands
+    m_ipcReaderThread->join();
+};
 
 bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QVariant> args)
 {
