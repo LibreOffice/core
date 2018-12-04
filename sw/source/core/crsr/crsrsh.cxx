@@ -3318,7 +3318,7 @@ sal_uLong SwCursorShell::Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
     m_pTableCursor = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     sal_uLong nRet = m_pCurrentCursor->Find_Text(rSearchOpt, bSearchInNotes, eStart, eEnd,
-                                     bCancel, eRng, bReplace );
+                                     bCancel, eRng, bReplace, GetLayout());
     if( nRet || bCancel )
         UpdateCursor();
     return nRet;

@@ -29,6 +29,7 @@ class SwPaM;
 class SwTextAttr;
 class SwFormat;
 class SfxPoolItem;
+class SwRootFrame;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -75,7 +76,8 @@ struct SwMoveFnCollection
 };
 
 // function prototype for searching
-SwContentNode* GetNode( SwPaM&, bool&, SwMoveFnCollection const &, bool bInReadOnly = false );
+SwContentNode* GetNode(SwPaM&, bool&, SwMoveFnCollection const &,
+        bool bInReadOnly = false, SwRootFrame const* pLayout = nullptr);
 
 namespace sw {
 
@@ -88,7 +90,8 @@ namespace sw {
                 bool bSearchInNotes,
                 utl::TextSearch& rSText,
                 SwMoveFnCollection const & fnMove,
-                const SwPaM & rRegion, bool bInReadOnly = false);
+                const SwPaM & rRegion, bool bInReadOnly,
+                SwRootFrame const* pLayout);
     bool FindFormatImpl(SwPaM & rSearchPam,
                 const SwFormat& rFormat,
                 SwMoveFnCollection const & fnMove,

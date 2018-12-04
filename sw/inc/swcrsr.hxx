@@ -115,7 +115,8 @@ public:
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
-                bool bReplace = false );
+                bool bReplace = false,
+                SwRootFrame const*const pLayout = nullptr);
     sal_uLong FindFormat( const SwTextFormatColl& rFormatColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,

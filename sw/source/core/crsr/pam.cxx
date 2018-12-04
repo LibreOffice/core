@@ -735,24 +735,26 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
 /// @param rbFirst If <true> than first time request. If so than the position of
 ///        the PaM must not be changed!
 SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & fnMove,
-                      bool bInReadOnly )
+        bool const bInReadOnly, SwRootFrame const*const i_pLayout)
 {
+    SwRootFrame const*const pLayout(i_pLayout ? i_pLayout :
+        rPam.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
     SwContentNode * pNd = nullptr;
     if( ((*rPam.GetPoint()).*fnMove.fnCmpOp)( *rPam.GetMark() ) ||
         ( *rPam.GetPoint() == *rPam.GetMark() && rbFirst ) )
     {
-        SwContentFrame* pFrame;
         if( rbFirst )
         {
             rbFirst = false;
             pNd = rPam.GetContentNode();
             if( pNd )
             {
+                SwContentFrame const*const pFrame(pNd->getLayoutFrame(pLayout));
                 if(
                     (
-                        nullptr == ( pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
+                        nullptr == pFrame ||
                         ( !bInReadOnly && pFrame->IsProtected() ) ||
-                        (pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsHiddenNow())
+                        (pFrame->IsTextFrame() && static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow())
                     ) ||
                     ( !bInReadOnly && pNd->FindSectionNode() &&
                         pNd->FindSectionNode()->GetSection().IsProtect()
@@ -773,6 +775,12 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
             // go to next/previous ContentNode
             while( true )
             {
+                if (i_pLayout && aPos.nNode.GetNode().IsTextNode())
+                {
+                    auto const fal(sw::GetFirstAndLastNode(*pLayout, aPos.nNode));
+                    aPos.nNode = bSrchForward ? *fal.second : *fal.first;
+                }
+
                 pNd = bSrchForward
                         ? rNodes.GoNextSection( &aPos.nNode, true, !bInReadOnly )
                         : SwNodes::GoPrevSection( &aPos.nNode, true, !bInReadOnly );
@@ -783,10 +791,11 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
                     if( (aPos.*fnMove.fnCmpOp)( *rPam.GetMark() ) )
                     {
                         // only in AutoTextSection can be nodes that are hidden
-                        if( nullptr == ( pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
+                        SwContentFrame const*const pFrame(pNd->getLayoutFrame(pLayout));
+                        if (nullptr == pFrame ||
                             ( !bInReadOnly && pFrame->IsProtected() ) ||
                             ( pFrame->IsTextFrame() &&
-                                static_cast<SwTextFrame*>(pFrame)->IsHiddenNow() ) )
+                                static_cast<SwTextFrame const*>(pFrame)->IsHiddenNow()))
                         {
                             pNd = nullptr;
                             continue;
