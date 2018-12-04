@@ -710,7 +710,7 @@ oslFileError SAL_CALL osl_openFile(
         dwShare  |= FILE_SHARE_WRITE;
 
     if (uFlags & osl_File_OpenFlag_NoLock)
-        dwShare  |= FILE_SHARE_WRITE;
+        dwShare  |= FILE_SHARE_WRITE | FILE_SHARE_DELETE;
 
     if (uFlags & osl_File_OpenFlag_Create)
         dwCreation |= CREATE_NEW;
