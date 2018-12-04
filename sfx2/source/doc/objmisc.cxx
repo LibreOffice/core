@@ -985,13 +985,12 @@ void SfxObjectShell::CheckForBrokenDocSignatures_Impl()
 void SfxObjectShell::SetAutoLoad(
     const INetURLObject& rUrl, sal_uInt32 nTime, bool bReload )
 {
-    if ( pImpl->pReloadTimer )
-        DELETEZ(pImpl->pReloadTimer);
+    pImpl->pReloadTimer.reset();
     if ( bReload )
     {
-        pImpl->pReloadTimer = new AutoReloadTimer_Impl(
+        pImpl->pReloadTimer.reset(new AutoReloadTimer_Impl(
                                 rUrl.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ),
-                                nTime, this );
+                                nTime, this ));
         pImpl->pReloadTimer->Start();
     }
 }

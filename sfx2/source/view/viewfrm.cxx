@@ -614,7 +614,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pView = GetNext( *pView, xOldObj );
                 }
 
-                DELETEZ( xOldObj->Get_Impl()->pReloadTimer );
+                xOldObj->Get_Impl()->pReloadTimer.reset();
 
                 std::unique_ptr<SfxItemSet> pNewSet;
                 std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();

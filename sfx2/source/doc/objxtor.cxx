@@ -233,7 +233,6 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bConfigOptionsChecked( false )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( SfxEventHintId::NONE )
-    ,pReloadTimer ( nullptr)
     ,nLoadedFlags ( SfxLoadedFlags::ALL )
     ,nFlagsInProgress( SfxLoadedFlags::NONE )
     ,bModalMode( false )
@@ -310,7 +309,7 @@ SfxObjectShell::~SfxObjectShell()
     SfxObjectShell::CloseInternal();
     pImpl->pBaseModel.set( nullptr );
 
-    DELETEZ( pImpl->pReloadTimer );
+    pImpl->pReloadTimer.reset();
 
     SfxApplication *pSfxApp = SfxGetpApp();
     if ( USHRT_MAX != pImpl->nVisualDocumentNumber && pSfxApp )
