@@ -801,7 +801,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         // Transfer ownership of stream to a lockbytes object
                         SvLockBytes aLockBytes( pStrm, true );
                         SvLockBytesStat aStat;
-                        if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
+                        if ( aLockBytes.Stat( &aStat ) == ERRCODE_NONE )
                         {
                             sal_uInt32 nLen = aStat.nSize;
                             std::size_t nRead = 0;
@@ -866,7 +866,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         // Transfer ownership of stream to a lockbytes object
                         SvLockBytes aLockBytes( pStrm, true );
                         SvLockBytesStat aStat;
-                        if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
+                        if ( aLockBytes.Stat( &aStat ) == ERRCODE_NONE )
                         {
                             sal_uInt32 nLen = aStat.nSize;
                             std::size_t nRead = 0;

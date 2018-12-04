@@ -241,7 +241,7 @@ ErrCode SvLockBytes::SetSize(sal_uInt64 const nSize)
     return m_pStream->GetErrorCode();
 }
 
-ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const
+ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat) const
 {
     if (!m_pStream)
     {
@@ -294,7 +294,7 @@ sal_uInt64 SvStream::SeekPos(sal_uInt64 const nPos)
     {
         DBG_ASSERT( m_xLockBytes.is(), "pure virtual function" );
         SvLockBytesStat aStat;
-        m_xLockBytes->Stat( &aStat, SVSTATFLAG_DEFAULT );
+        m_xLockBytes->Stat( &aStat );
         m_nActPos = aStat.nSize;
     }
     else

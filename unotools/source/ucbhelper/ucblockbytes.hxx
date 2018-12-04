@@ -106,7 +106,7 @@ public:
     virtual ErrCode         WriteAt(sal_uInt64, const void*, std::size_t, std::size_t *pWritten) override;
     virtual ErrCode         Flush() const override;
     virtual ErrCode         SetSize(sal_uInt64) override;
-    virtual ErrCode         Stat ( SvLockBytesStat *pStat, SvLockBytesStatFlag) const override;
+    virtual ErrCode         Stat ( SvLockBytesStat *pStat ) const override;
 
     void                    SetError( ErrCode nError )
                             { m_nError = nError; }

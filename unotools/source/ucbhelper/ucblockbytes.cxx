@@ -1220,7 +1220,7 @@ ErrCode UcbLockBytes::Flush() const
 ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
 {
     SvLockBytesStat aStat;
-    Stat( &aStat, SvLockBytesStatFlag(0) );
+    Stat( &aStat );
     std::size_t nSize = aStat.nSize;
 
     if ( nSize > nNewSize )
@@ -1249,7 +1249,7 @@ ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
     return ERRCODE_NONE;
 }
 
-ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
+ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat ) const
 {
     if ( IsSynchronMode() )
     {
