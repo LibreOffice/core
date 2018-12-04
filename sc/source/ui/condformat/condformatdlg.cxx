@@ -655,7 +655,13 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
         OUString aRefStr(rRef.Format(nFlags, mpViewData->GetDocument(),
             ScAddress::Details(mpViewData->GetDocument()->GetAddressConvention(), 0, 0)));
         if (pEdit != mpEdRange)
+        {
+            Selection sel = pEdit->GetSelection();
+            sel.Justify();            // in case of RtL selection
+            sel.Max() = sel.Min() + aRefStr.getLength();
             pEdit->ReplaceSelected(aRefStr);
+            pEdit->SetSelection(sel); // to replace it again with next drag event
+        }
         else
             pEdit->SetRefString( aRefStr );
         updateTitle();
