@@ -837,7 +837,7 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.SetToolbarIconSize(ToolbarIconSize::Large);
 
     style.SetActiveColor(toColor(pal.color(QPalette::Active, QPalette::Window)));
-    style.SetDeactiveColor(toColor(pal.color(QPalette::Inactive, QPalette::Window)));
+    // rely on VCL for style.SetDeactiveColor
 
     style.SetActiveTextColor(toColor(pal.color(QPalette::Active, QPalette::WindowText)));
     style.SetDeactiveTextColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
