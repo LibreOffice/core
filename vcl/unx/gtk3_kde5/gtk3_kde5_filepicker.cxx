@@ -94,7 +94,11 @@ void SAL_CALL Gtk3KDE5FilePicker::setTitle(const OUString& title)
     m_ipc.sendCommand(Commands::SetTitle, title);
 }
 
-sal_Int16 SAL_CALL Gtk3KDE5FilePicker::execute() { return m_ipc.execute(); }
+sal_Int16 SAL_CALL Gtk3KDE5FilePicker::execute()
+{
+    SolarMutexGuard g;
+    return m_ipc.execute();
+}
 
 void SAL_CALL Gtk3KDE5FilePicker::setMultiSelectionMode(sal_Bool multiSelect)
 {
