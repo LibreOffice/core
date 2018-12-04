@@ -529,7 +529,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 }
 
 void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea, const Size& rSize,
-                               const Size& rOffset, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
+                               const Size& rOffset, int nTileCacheSize1D )
 {
     if( pOut == nullptr || rSize.Width() == 0 || rSize.Height() == 0 )
         return;
@@ -547,7 +547,7 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea
     while ((static_cast<sal_Int64>(rSize.Height()) * nTileCacheSize1D) > SAL_MAX_UINT16)
         nTileCacheSize1D /= 2;
 
-    ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, nullptr, nFlags, nTileCacheSize1D );
+    ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, nullptr, nTileCacheSize1D );
 }
 
 bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
