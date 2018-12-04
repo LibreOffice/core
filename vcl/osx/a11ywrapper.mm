@@ -995,7 +995,7 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
             bool bSafeToIterate = true;
             sal_Int32 nCount = rxAccessibleContext -> getAccessibleChildCount();
 
-            if ( nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */ )
+            if (nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */)
                 bSafeToIterate = false;
             else { // manages descendants is an horror from the a11y standards guys.
                 Reference< XAccessibleStateSet > xStateSet;
