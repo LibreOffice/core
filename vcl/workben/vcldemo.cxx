@@ -767,7 +767,6 @@ public:
                 auto aRegions = partition(rCtx, 2, 2);
                 doInvert(rDev, aRegions[0], InvertFlags::NONE);
                 doInvert(rDev, aRegions[1], InvertFlags::N50);
-                doInvert(rDev, aRegions[2], InvertFlags::Highlight);
                 doInvert(rDev, aRegions[3], InvertFlags::TrackFrame);
             }
         }

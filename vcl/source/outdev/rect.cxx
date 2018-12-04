@@ -149,8 +149,6 @@ void OutputDevice::Invert( const tools::Rectangle& rRect, InvertFlags nFlags )
         return;
 
     SalInvert nSalFlags = SalInvert::NONE;
-    if ( nFlags & InvertFlags::Highlight )
-        nSalFlags |= SalInvert::Highlight;
     if ( nFlags & InvertFlags::N50 )
         nSalFlags |= SalInvert::N50;
     if ( nFlags & InvertFlags::TrackFrame )
@@ -182,8 +180,6 @@ void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
         return;
 
     SalInvert nSalFlags = SalInvert::NONE;
-    if ( nFlags & InvertFlags::Highlight )
-        nSalFlags |= SalInvert::Highlight;
     if ( nFlags & InvertFlags::N50 )
         nSalFlags |= SalInvert::N50;
     if ( nFlags & InvertFlags::TrackFrame )
