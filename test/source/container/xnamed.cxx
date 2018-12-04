@@ -7,8 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/container/XNamed.hpp>
 #include <test/container/xnamed.hxx>
+
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
@@ -19,7 +24,7 @@ namespace apitest {
 void XNamed::testGetName()
 {
     uno::Reference< container::XNamed > xNamed(init(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(maTestName, xNamed->getName());
+    CPPUNIT_ASSERT_EQUAL(m_aTestName, xNamed->getName());
 }
 
 void XNamed::testSetName()
@@ -31,14 +36,17 @@ void XNamed::testSetName()
     CPPUNIT_ASSERT_EQUAL(aTestName, xNamed->getName());
 
     // restore old name
-    xNamed->setName(maTestName);
-    CPPUNIT_ASSERT_EQUAL(maTestName, xNamed->getName());
+    xNamed->setName(m_aTestName);
+    CPPUNIT_ASSERT_EQUAL(m_aTestName, xNamed->getName());
 }
 
-XNamed::~XNamed()
+void XNamed::testSetNameThrowsException()
 {
-}
+    uno::Reference<container::XNamed> xNamed(init(), uno::UNO_QUERY_THROW);
+    OUString aTestName("NewName");
 
+    CPPUNIT_ASSERT_THROW(xNamed->setName(aTestName), uno::RuntimeException);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

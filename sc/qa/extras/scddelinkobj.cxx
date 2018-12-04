@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xnamed.hxx>
 #include <test/sheet/xddelink.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -29,7 +30,7 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScDDELinkObj : public CalcUnoApiTest, public apitest::XDDELink
+class ScDDELinkObj : public CalcUnoApiTest, public apitest::XDDELink, public apitest::XNamed
 {
 public:
     ScDDELinkObj();
@@ -45,6 +46,10 @@ public:
     CPPUNIT_TEST(testGetItem);
     CPPUNIT_TEST(testGetTopic);
 
+    // XNamed
+    CPPUNIT_TEST(testGetName);
+    CPPUNIT_TEST(testSetNameThrowsException);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -53,6 +58,7 @@ private:
 
 ScDDELinkObj::ScDDELinkObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XNamed("soffice|ScDDELinksObj.ods!Sheet.A1")
 {
 }
 
