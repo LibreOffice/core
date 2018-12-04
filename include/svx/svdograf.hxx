@@ -47,14 +47,13 @@ namespace sdr
 enum class SdrGrafObjTransformsAttrs
 {
     NONE       = 0x00,
-    COLOR      = 0x01,
-    MIRROR     = 0x02,
-    ROTATE     = 0x04,
-    ALL        = 0x07,
+    MIRROR     = 0x01,
+    ROTATE     = 0x02,
+    ALL        = 0x03,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SdrGrafObjTransformsAttrs> : is_typed_flags<SdrGrafObjTransformsAttrs, 7> {};
+    template<> struct typed_flags<SdrGrafObjTransformsAttrs> : is_typed_flags<SdrGrafObjTransformsAttrs, 0x03> {};
 }
 
 class SdrGrafObjGeoData : public SdrTextObjGeoData
