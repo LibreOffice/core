@@ -1999,7 +1999,7 @@ namespace
     GDIMetaFile GetMetaFile(SdrGrafObj const * pGraf)
     {
         if (pGraf->HasGDIMetaFile())
-            return pGraf->GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
+            return pGraf->GetTransformedGraphic(SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
         assert(pGraf->isEmbeddedVectorGraphicData());
         return pGraf->getMetafileFromEmbeddedVectorGraphicData();
     }

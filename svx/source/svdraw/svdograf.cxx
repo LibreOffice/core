@@ -880,7 +880,7 @@ GDIMetaFile SdrGrafObj::GetMetaFile(GraphicType &rGraphicType) const
     }
     else if (GraphicType::GdiMetafile == rGraphicType)
     {
-        return GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
+        return GetTransformedGraphic(SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
     }
     return GDIMetaFile();
 }
