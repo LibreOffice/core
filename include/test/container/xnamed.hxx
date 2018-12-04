@@ -11,7 +11,11 @@
 #define INCLUDED_TEST_CONTAINER_XNAMED_HXX
 
 #include <rtl/ustring.hxx>
+
+#include <com/sun/star/uno/XInterface.hpp>
+
 #include <com/sun/star/uno/Reference.hxx>
+
 #include <test/testdllapi.hxx>
 
 namespace apitest {
@@ -19,16 +23,22 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XNamed
 {
 public:
-    XNamed(const OUString& rName): maTestName(rName) {}
-    virtual ~XNamed();
+    XNamed(const OUString& rTestName)
+      : m_aTestName(rTestName)
+    {
+    }
 
     void testGetName();
     void testSetName();
+    void testSetNameThrowsException();
 
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
-private:
-    OUString const maTestName;
 
+protected:
+    ~XNamed() {}
+
+private:
+    OUString const m_aTestName;
 };
 
 }
