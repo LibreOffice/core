@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_aef25b99",
+        "filename": "oox/source/ole/axcontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-12-04T14:01:21Z",
+      "side": 1,
+      "message": "Here use the C++ like static_cast(float) instead of C like cast. That is the preferred method for cast. That\u0027s why Jenkins failed.",
+      "range": {
+        "startLine": 939,
+        "startChar": 26,
+        "endLine": 939,
+        "endChar": 31
+      },
+      "revId": "4db50713b0c4d597f2a1265e3abeb87ebdb31512",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
