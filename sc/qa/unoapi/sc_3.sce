@@ -21,5 +21,4 @@
 -o sc.ScCellTextCursor
 -o sc.ScChartObj
 -o sc.ScChartsObj
--o sc.ScDDELinkObj
 -o sc.ScDDELinksObj
