@@ -427,7 +427,7 @@ void PropertySetMixinImpl::BoundListeners::notify() const {
     }
 }
 
-class PropertySetMixinImpl::Impl: public Data {
+class SAL_DLLPRIVATE PropertySetMixinImpl::Impl: public Data {
 public:
     Impl(
         css::uno::Reference< css::uno::XComponentContext > const & context,
