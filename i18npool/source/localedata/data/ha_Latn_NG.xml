@@ -38,8 +38,8 @@
       <Time100SecSeparator>.</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>, </LongDateDaySeparator>
-      <LongDateMonthSeparator> </LongDateMonthSeparator>
+      <LongDateDaySeparator> </LongDateDaySeparator>
+      <LongDateMonthSeparator>, </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
@@ -109,7 +109,7 @@
       <FormatCode>D/M/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNN, MMMM DD, YYYY</FormatCode>
+      <FormatCode>NNNNDD MMMM, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>DD/MM/YY</FormatCode>
@@ -124,13 +124,13 @@
       <FormatCode>D MMM, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey21" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>D, MMM YYYY</FormatCode>
+      <FormatCode>D MMM, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>MMMM D, YYYY</FormatCode>
+      <FormatCode>MMMM, D YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>D, MMMM YYYY</FormatCode>
+      <FormatCode>MMMM, D YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
       <FormatCode>NN, DD/MMM/YY</FormatCode>
@@ -142,7 +142,7 @@
       <FormatCode>NN, D MMMM, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNN, D MMMM, YYYY</FormatCode>
+      <FormatCode>NNNND MMMM, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>DD/MM</FormatCode>
