@@ -4051,6 +4051,8 @@ void OpNormdist::GenSlidingWindowFunction(
     ss << "mue = tmp1;\n";
     ss << "sigma = tmp2;\n";
     ss << "c = tmp3;\n";
+    ss << "if(sigma <= 0)\n";
+    ss << "    return CreateDoubleError(IllegalArgument);\n";
     ss << "double mid,tmp;\n";
     ss << "mid = (x - mue)/sigma;\n";
     ss << "if(c)\n";
