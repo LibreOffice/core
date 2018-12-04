@@ -1482,7 +1482,10 @@ void CustomPropertiesWindow::dispose()
 {
     m_aEditLoseFocusIdle.Stop();
     m_aBoxLoseFocusIdle.Stop();
-    ClearAllLines();
+
+    m_aCustomPropertiesLines.clear();
+    m_pCurrentLine = nullptr;
+
     m_pHeaderBar.clear();
     m_pScrollBar.clear();
     m_pHeaderAccName.clear();
@@ -1714,7 +1717,10 @@ bool CustomPropertiesWindow::AreAllLinesValid() const
 
 void CustomPropertiesWindow::ClearAllLines()
 {
-    m_aCustomPropertiesLines.clear();
+    for (auto& pLine : m_aCustomPropertiesLines)
+    {
+        pLine->Clear();
+    }
     m_pCurrentLine = nullptr;
     m_aCustomProperties.clear();
     m_nScrollPos = 0;
