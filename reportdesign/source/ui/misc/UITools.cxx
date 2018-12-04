@@ -108,46 +108,65 @@
 #include <ReportDefinition.hxx>
 #include <RptModel.hxx>
 
-#define ITEMID_FONT                     10
-#define ITEMID_FONTHEIGHT               11
-#define ITEMID_LANGUAGE                 12
+#include <svx/xflbckit.hxx>
+#include <svx/xflbmpit.hxx>
+#include <svx/xflbmsli.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbtoxy.hxx>
 
-#define ITEMID_POSTURE                  13
-#define ITEMID_WEIGHT                   14
-#define ITEMID_SHADOWED                 15
-#define ITEMID_WORDLINEMODE             16
-#define ITEMID_CONTOUR                  17
-#define ITEMID_CROSSEDOUT               18
-#define ITEMID_UNDERLINE                19
+#include <svx/xbtmpit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xgrscit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xsflclit.hxx>
 
-#define ITEMID_COLOR                    20
-#define ITEMID_KERNING                  21
-#define ITEMID_CASEMAP                  22
+#define ITEMID_FONT                     XATTR_FILL_LAST + 1
+#define ITEMID_FONTHEIGHT               XATTR_FILL_LAST + 2
+#define ITEMID_LANGUAGE                 XATTR_FILL_LAST + 3
 
-#define ITEMID_ESCAPEMENT               23
-#define ITEMID_FONTLIST                 24
-#define ITEMID_AUTOKERN                 25
-#define ITEMID_COLOR_TABLE              26
-#define ITEMID_BLINK                    27
-#define ITEMID_EMPHASISMARK             28
-#define ITEMID_TWOLINES                 29
-#define ITEMID_CHARROTATE               30
-#define ITEMID_CHARSCALE_W              31
-#define ITEMID_CHARRELIEF               32
-#define ITEMID_CHARHIDDEN               33
-#define ITEMID_BRUSH                    34
-#define ITEMID_HORJUSTIFY               35
-#define ITEMID_VERJUSTIFY               36
-#define ITEMID_FONT_ASIAN               37
-#define ITEMID_FONTHEIGHT_ASIAN         38
-#define ITEMID_LANGUAGE_ASIAN           39
-#define ITEMID_POSTURE_ASIAN            40
-#define ITEMID_WEIGHT_ASIAN             41
-#define ITEMID_FONT_COMPLEX             42
-#define ITEMID_FONTHEIGHT_COMPLEX       43
-#define ITEMID_LANGUAGE_COMPLEX         44
-#define ITEMID_POSTURE_COMPLEX          45
-#define ITEMID_WEIGHT_COMPLEX           46
+#define ITEMID_POSTURE                  XATTR_FILL_LAST + 4
+#define ITEMID_WEIGHT                   XATTR_FILL_LAST + 5
+#define ITEMID_SHADOWED                 XATTR_FILL_LAST + 6
+#define ITEMID_WORDLINEMODE             XATTR_FILL_LAST + 7
+#define ITEMID_CONTOUR                  XATTR_FILL_LAST + 8
+#define ITEMID_CROSSEDOUT               XATTR_FILL_LAST + 9
+#define ITEMID_UNDERLINE                XATTR_FILL_LAST + 10
+
+#define ITEMID_COLOR                    XATTR_FILL_LAST + 11
+#define ITEMID_KERNING                  XATTR_FILL_LAST + 12
+#define ITEMID_CASEMAP                  XATTR_FILL_LAST + 13
+
+#define ITEMID_ESCAPEMENT               XATTR_FILL_LAST + 14
+#define ITEMID_FONTLIST                 XATTR_FILL_LAST + 15
+#define ITEMID_AUTOKERN                 XATTR_FILL_LAST + 16
+#define ITEMID_COLOR_TABLE              XATTR_FILL_LAST + 17
+#define ITEMID_BLINK                    XATTR_FILL_LAST + 18
+#define ITEMID_EMPHASISMARK             XATTR_FILL_LAST + 19
+#define ITEMID_TWOLINES                 XATTR_FILL_LAST + 20
+#define ITEMID_CHARROTATE               XATTR_FILL_LAST + 21
+#define ITEMID_CHARSCALE_W              XATTR_FILL_LAST + 22
+#define ITEMID_CHARRELIEF               XATTR_FILL_LAST + 23
+#define ITEMID_CHARHIDDEN               XATTR_FILL_LAST + 24
+#define ITEMID_BRUSH                    XATTR_FILL_LAST + 25
+#define ITEMID_HORJUSTIFY               XATTR_FILL_LAST + 26
+#define ITEMID_VERJUSTIFY               XATTR_FILL_LAST + 27
+#define ITEMID_FONT_ASIAN               XATTR_FILL_LAST + 28
+#define ITEMID_FONTHEIGHT_ASIAN         XATTR_FILL_LAST + 29
+#define ITEMID_LANGUAGE_ASIAN           XATTR_FILL_LAST + 30
+#define ITEMID_POSTURE_ASIAN            XATTR_FILL_LAST + 31
+#define ITEMID_WEIGHT_ASIAN             XATTR_FILL_LAST + 32
+#define ITEMID_FONT_COMPLEX             XATTR_FILL_LAST + 33
+#define ITEMID_FONTHEIGHT_COMPLEX       XATTR_FILL_LAST + 34
+#define ITEMID_LANGUAGE_COMPLEX         XATTR_FILL_LAST + 35
+#define ITEMID_POSTURE_COMPLEX          XATTR_FILL_LAST + 36
+#define ITEMID_WEIGHT_COMPLEX           XATTR_FILL_LAST + 37
 
 #define WESTERN 0
 #define ASIAN   1
@@ -597,6 +616,27 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
+        { XATTR_FILLSTYLE,      true },
+        { XATTR_FILLCOLOR,      true },
+        { XATTR_FILLGRADIENT,       true },
+        { XATTR_FILLHATCH,      true },
+        { XATTR_FILLBITMAP,     true },
+        { XATTR_FILLTRANSPARENCE,       true },
+        { XATTR_GRADIENTSTEPCOUNT,      true },
+        { XATTR_FILLBMP_TILE,       true },
+        { XATTR_FILLBMP_POS,        true },
+        { XATTR_FILLBMP_SIZEX,      true },
+        { XATTR_FILLBMP_SIZEY,      true },
+        { XATTR_FILLFLOATTRANSPARENCE,  true },
+        { XATTR_SECONDARYFILLCOLOR,     true },
+        { XATTR_FILLBMP_SIZELOG,        true },
+        { XATTR_FILLBMP_TILEOFFSETX,    true },
+        { XATTR_FILLBMP_TILEOFFSETY,    true },
+        { XATTR_FILLBMP_STRETCH,        true },
+        { XATTR_FILLBMP_POSOFFSETX,     true },
+        { XATTR_FILLBMP_POSOFFSETY,     true },
+        { XATTR_FILLBACKGROUND,     true },
+
         { SID_ATTR_CHAR_FONT, true },
         { SID_ATTR_CHAR_FONTHEIGHT, true },
         { SID_ATTR_CHAR_LANGUAGE, true },
@@ -621,7 +661,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_SCALEWIDTH, true },
         { SID_ATTR_CHAR_RELIEF, true },
         { SID_ATTR_CHAR_HIDDEN, true },
-        { SID_ATTR_BRUSH_CHAR, true },
+        { SID_ATTR_BRUSH, true },
         { SID_ATTR_ALIGN_HOR_JUSTIFY, true },
         { SID_ATTR_ALIGN_VER_JUSTIFY, true },
 
@@ -640,8 +680,34 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     };
     ::std::unique_ptr<FontList> pFontList(new FontList(Application::GetDefaultDevice()));
     XColorListRef pColorList( XColorList::CreateStdColorList() );
+    const Graphic aNullGraphic;
+    const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
+    const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
+    const XGradient aNullGrad(COL_BLACK, COL_WHITE);
+    const XHatch aNullHatch(aNullLineCol);
     std::vector<SfxPoolItem*> pDefaults
     {
+        new XFillStyleItem,
+        new XFillColorItem("", aNullFillCol),
+        new XFillGradientItem(aNullGrad),
+        new XFillHatchItem(aNullHatch),
+        new XFillBitmapItem(aNullGraphic),
+        new XFillTransparenceItem,
+        new XGradientStepCountItem,
+        new XFillBmpTileItem,
+        new XFillBmpPosItem,
+        new XFillBmpSizeXItem,
+        new XFillBmpSizeYItem,
+        new XFillFloatTransparenceItem(aNullGrad, false),
+        new XSecondaryFillColorItem("", aNullFillCol),
+        new XFillBmpSizeLogItem,
+        new XFillBmpTileOffsetXItem,
+        new XFillBmpTileOffsetYItem,
+        new XFillBmpStretchItem,
+        new XFillBmpPosOffsetXItem,
+        new XFillBmpPosOffsetYItem,
+        new XFillBackgroundItem,
+
         new SvxFontItem(ITEMID_FONT),
         new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT),
         new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE),
@@ -690,11 +756,11 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     static const sal_uInt16 pRanges[] =
     {
-        ITEMID_FONT,ITEMID_WEIGHT_COMPLEX,
+        XATTR_FILL_FIRST, ITEMID_WEIGHT_COMPLEX,
         0
     };
 
-    SfxItemPool* pPool( new SfxItemPool("ReportCharProperties", ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults) );
+    SfxItemPool* pPool( new SfxItemPool("ReportCharProperties", XATTR_FILL_FIRST,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults) );
     // not needed for font height pPool->SetDefaultMetric( MapUnit::Map100thMM );  // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
     bool bSuccess = false;

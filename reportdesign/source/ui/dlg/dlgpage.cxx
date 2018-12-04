@@ -46,12 +46,12 @@ ORptPageDialog::ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, c
 
     if (rDialog == "BackgroundDialog")
     {
-        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
     }
     else if (rDialog == "PageDialog")
     {
         AddTabPage("page", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), nullptr );
-        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
     }
     else if (rDialog == "CharDialog")
     {
@@ -59,7 +59,7 @@ ORptPageDialog::ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, c
         AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
         AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
         AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
-        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
         AddTabPage("alignment", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), nullptr );
     }
     else
@@ -75,7 +75,6 @@ void ORptPageDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (rId == "background")
     {
-        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));
         rPage.PageCreated(aSet);
     }
 }
