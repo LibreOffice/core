@@ -14,6 +14,8 @@
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
+#include <wrtsh.hxx>
+#include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -343,6 +345,39 @@ DECLARE_UNOAPI_TEST(testSetPagePrintSettings)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), aMap.getValue("PageColumns").get<short>());
     CPPUNIT_ASSERT_EQUAL(true, aMap.getValue("IsLandscape").get<bool>());
+}
+
+DECLARE_UNOAPI_TEST_FILE(testSelectionInTableEnum, "selection-in-table-enum.odt")
+{
+    // Select the A1 cell's text.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"),
+                         pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText());
+
+    // Access the selection.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<container::XIndexAccess> xSelections(xModel->getCurrentSelection(),
+                                                        uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelections.is());
+    uno::Reference<text::XTextRange> xSelection(xSelections->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelection.is());
+
+    // Enumerate paragraphs in the selection.
+    uno::Reference<container::XEnumerationAccess> xCursor(
+        xSelection->getText()->createTextCursorByRange(xSelection), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCursor.is());
+    uno::Reference<container::XEnumeration> xEnum = xCursor->createEnumeration();
+    xEnum->nextElement();
+    // Without the accompanying fix in place, this test would have failed: i.e.
+    // the enumeration contained a second paragraph, even if the cell has only
+    // one paragraph.
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
