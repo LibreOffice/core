@@ -148,8 +148,6 @@ bool SdPPTFilter::Export()
             if ( rFilterOptions.IsEnablePPTPreview() )
                 nCnvrtFlags |= 0x8000;
 
-            mrDocument.SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
-
             CreateStatusIndicator();
 
             //OUString sBaseURI( "BaseURI");

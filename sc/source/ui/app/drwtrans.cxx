@@ -362,18 +362,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
 
         if( m_aOleData.GetTransferable().is() && m_aOleData.HasFormat( rFlavor ) )
         {
-            SdrSwapGraphicsMode nOldSwapMode(SdrSwapGraphicsMode::DEFAULT);
-
-            if( m_pModel )
-            {
-                nOldSwapMode = m_pModel->GetSwapGraphicsMode();
-                m_pModel->SetSwapGraphicsMode( SdrSwapGraphicsMode::PURGE );
-            }
-
             bOK = SetAny( m_aOleData.GetAny(rFlavor, rDestDoc) );
-
-            if( m_pModel )
-                m_pModel->SetSwapGraphicsMode( nOldSwapMode );
 
             return bOK;
         }

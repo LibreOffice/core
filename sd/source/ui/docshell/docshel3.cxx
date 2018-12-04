@@ -231,11 +231,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_VERSION:
         {
-            const SdrSwapGraphicsMode nOldSwapMode = mpDoc->GetSwapGraphicsMode();
-
-            mpDoc->SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
             ExecuteSlot( rReq, SfxObjectShell::GetStaticInterface() );
-            mpDoc->SetSwapGraphicsMode( nOldSwapMode );
         }
         break;
 
