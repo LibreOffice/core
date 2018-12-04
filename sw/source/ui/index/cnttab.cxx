@@ -2239,7 +2239,7 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, EditStyleHdl, Button*, void)
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Char));
         static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell().
         GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
-                SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
+                SfxCallMode::SYNCHRON,
                 { &aStyle, &aFamily });
     }
 }
@@ -3717,7 +3717,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EditStyleHdl, weld::Button&, void)
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, sal_uInt16(SfxStyleFamily::Para));
         SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
         rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
-                SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
+                SfxCallMode::SYNCHRON,
                 { &aStyle, &aFamily });
     }
 }

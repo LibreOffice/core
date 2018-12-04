@@ -1556,7 +1556,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     DeletionWatcher aDeleted(*this);
     sal_uInt16 nModi = pModifier ? *pModifier : 0;
     const SfxPoolItem* pItem = rDispatcher.Execute(
-        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
+        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
         pItems, nModi );
 
     // Dialog can be destroyed while in Execute() because started

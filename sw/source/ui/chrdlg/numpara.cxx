@@ -328,7 +328,7 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
     pItems[ nCount++ ] = nullptr;
 
     const SfxPoolItem* pItem = rDispatcher.Execute(
-        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
+        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
         pItems );
 
     return pItem != nullptr;
