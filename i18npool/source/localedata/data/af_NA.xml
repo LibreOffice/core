@@ -28,7 +28,7 @@
       <DefaultName>Namibia</DefaultName>
     </Country>
   </LC_INFO>
-  <LC_CTYPE ref="af_ZA"/>
+  <LC_CTYPE ref="en_NA"/>
   <LC_FORMAT ref="en_NA" replaceTo="[$$-8036]"/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
