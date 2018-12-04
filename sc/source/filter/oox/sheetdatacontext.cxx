@@ -275,7 +275,7 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
         mnRow = nRow-1; // to 0-based row index.
     }
     else
-        aModel.mnRow = ++mnRow;
+        aModel.mnRow = (++mnRow + 1);   // increment 0-based row index, to 1-based model row
     mrAddressConv.checkRow( mnRow, true);
     mnCol = -1;
 
