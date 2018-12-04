@@ -131,9 +131,8 @@ public:
       New string containing no characters.
     */
     OUString()
+        : OUString(getInternalEmpty())
     {
-        pData = NULL;
-        rtl_uString_new( &pData );
     }
 
     /**
@@ -3558,6 +3557,18 @@ private:
         rtl_uString_assign(&pData, pNewData);
         rtl_uString_release(pNewData);
         return *this;
+    }
+
+    // This would create separate static instances in every module; but still it should be an
+    // improvement vs memory allocation at every empty string creation
+    static rtl_uString* getInternalEmpty()
+    {
+        static rtl_uString* const pEmpty = []() {
+            rtl_uString* p = nullptr;
+            rtl_uString_new(&p);
+            return p;
+        }();
+        return pEmpty;
     }
 
 };

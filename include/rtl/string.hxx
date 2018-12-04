@@ -100,9 +100,8 @@ public:
       New string containing no characters.
     */
     OString()
+        : OString(getInternalEmpty())
     {
-        pData = NULL;
-        rtl_string_new( &pData );
     }
 
     /**
@@ -1787,6 +1786,17 @@ public:
         return number(d);
     }
 
+    // This would create separate static instances in every module; but still it should be an
+    // improvement vs memory allocation at every empty string creation
+    static rtl_String* getInternalEmpty()
+    {
+        static rtl_String* const pEmpty = []() {
+            rtl_String* p = nullptr;
+            rtl_string_new(&p);
+            return p;
+        }();
+        return pEmpty;
+    }
 };
 
 /* ======================================================================= */
