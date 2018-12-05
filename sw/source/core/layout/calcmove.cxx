@@ -1294,8 +1294,13 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                  pFootnoteBossOfFootnote != pFootnoteBossOfRef &&
                  pFootnoteBossOfFootnote->IsBefore( pFootnoteBossOfRef ) )
             {
-                bMovedFwd = true;
-                MoveFwd( bMakePage, false );
+                // don't make the effort to move fwd if its known
+                // conditions that are known not to work
+                if (!ForbiddenForFootnoteCntFwd())
+                {
+                    bMovedFwd = true;
+                    MoveFwd(bMakePage, false);
+                }
             }
         }
     }
