@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_dfff8332",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3364,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-05T17:09:36Z",
+      "side": 1,
+      "message": "that\u0027s version-independent - move above/below the case..esac?",
+      "range": {
+        "startLine": 3364,
+        "startChar": 12,
+        "endLine": 3364,
+        "endChar": 67
+      },
+      "revId": "c4126226231eefaabae5358ec25a75d95c012ee5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
