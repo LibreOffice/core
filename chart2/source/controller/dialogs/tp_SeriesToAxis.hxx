@@ -70,6 +70,7 @@ private: //member
     std::unique_ptr<weld::RadioButton> m_xRB_AssumeZero;
     std::unique_ptr<weld::RadioButton> m_xRB_ContinueLine;
     std::unique_ptr<weld::CheckButton> m_xCBIncludeHiddenCells;
+    std::unique_ptr<weld::CheckButton> m_xCBHideLegendEntry;
 };
 
 } //namespace chart

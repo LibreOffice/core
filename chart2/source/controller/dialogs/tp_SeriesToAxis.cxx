@@ -53,6 +53,7 @@ SchOptionTabPage::SchOptionTabPage(TabPageParent pWindow,const SfxItemSet& rInAt
     , m_xRB_AssumeZero(m_xBuilder->weld_radio_button("RB_ASSUME_ZERO"))
     , m_xRB_ContinueLine(m_xBuilder->weld_radio_button("RB_CONTINUE_LINE"))
     , m_xCBIncludeHiddenCells(m_xBuilder->weld_check_button("CB_INCLUDE_HIDDEN_CELLS"))
+    , m_xCBHideLegendEntry(m_xBuilder->weld_check_button("CB_LEGEND_ENTRY_HIDDEN"))
 {
     m_xRbtAxis1->connect_toggled(LINK(this, SchOptionTabPage, EnableHdl));
     m_xRbtAxis2->connect_toggled(LINK(this, SchOptionTabPage, EnableHdl));
@@ -107,6 +108,9 @@ bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
     if (m_xCBIncludeHiddenCells->get_visible())
         rOutAttrs->Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_xCBIncludeHiddenCells->get_active()));
+
+    if(m_xCBHideLegendEntry->get_visible())
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_HIDE_LEGEND_ENTRY, m_xCBHideLegendEntry->get_active()));
 
     return true;
 }
@@ -213,6 +217,12 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
         // as well hide the whole frame
         if(!m_xGridPlotOptions->get_visible())
             m_xGrpPlotOptions->show(false);
+    }
+
+    if (rInAttrs->GetItemState(SCHATTR_HIDE_LEGEND_ENTRY, true, &pPoolItem) == SfxItemState::SET)
+    {
+        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        m_xCBHideLegendEntry->set_active(bVal);
     }
 
     AdaptControlPositionsAndVisibility();
