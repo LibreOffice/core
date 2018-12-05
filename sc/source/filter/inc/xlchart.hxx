@@ -89,6 +89,7 @@ class XclRoot;
 #define EXC_CHPROP_LABELPLACEMENT           "LabelPlacement"
 #define EXC_CHPROP_LABELPOSITION            "LabelPosition"
 #define EXC_CHPROP_LABELSEPARATOR           "LabelSeparator"
+#define EXC_CHPROP_SHOWLEGENDENTRY          "ShowLegendEntry"
 #define EXC_CHPROP_MAJORTICKS               "MajorTickmarks"
 #define EXC_CHPROP_MARKPOSITION             "MarkPosition"
 #define EXC_CHPROP_MINORTICKS               "MinorTickmarks"
@@ -582,6 +583,13 @@ const sal_uInt16 EXC_ID_CHAXESSET               = 0x1041;
 const sal_uInt16 EXC_CHAXESSET_PRIMARY          = 0;
 const sal_uInt16 EXC_CHAXESSET_SECONDARY        = 1;
 const sal_uInt16 EXC_CHAXESSET_NONE             = 0xFFFF;   /// For internal use.
+
+// (0x1043) LEGENDEXCEPTION
+
+const sal_uInt16 EXC_ID_CHLEGENDEXCEPTION       = 0x1043;
+
+const sal_uInt16 EXC_CHLEGENDEXCEPTION_DELETED  = 0x0001;
+const sal_uInt16 EXC_CHLEGENDEXCEPTION_LABEL    = 0x0002;
 
 // (0x1044) CHPROPERTIES ------------------------------------------------------
 
