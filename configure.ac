@@ -3673,16 +3673,15 @@ if test "$COM_IS_CLANG" = TRUE; then
             my_args="-E -P"
         fi
         clang_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CC_PLAIN $my_args -`
-        CLANG_FULL_VERSION=`echo __clang_version__ | $CC_PLAIN $my_args -`
         CLANGVER=`echo $clang_version \
             | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
         if test "$CLANGVER" -ge 50002; then
             AC_MSG_RESULT([yes ($clang_version)])
         else
+            CLANG_FULL_VERSION=`echo __clang_version__ | $CC_PLAIN $my_args -`
             AC_MSG_ERROR(["$CLANG_FULL_VERSION" is too old or unrecognized, must be at least Clang 5.0.2])
         fi
         AC_DEFINE_UNQUOTED(CLANG_VERSION,$CLANGVER)
-        AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
     fi
 fi
 
