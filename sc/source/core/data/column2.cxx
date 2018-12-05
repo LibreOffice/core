@@ -1405,6 +1405,52 @@ bool ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
     return true;
 }
 
+bool ScColumn::TrimEmptyBlocks(SCROW& rRowStart, SCROW& rRowEnd) const
+{
+    assert(rRowStart <= rRowEnd);
+    SCROW nRowStartNew = rRowStart, nRowEndNew = rRowEnd;
+
+    // Trim down rRowStart first
+    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(rRowStart);
+    sc::CellStoreType::const_iterator it = aPos.first;
+    if (it == maCells.end())
+        return false;
+
+    if (it->type == sc::element_type_empty)
+    {
+        // This block is empty. Skip ahead to the next block (if exists).
+        nRowStartNew += it->size - aPos.second;
+        if (nRowStartNew > rRowEnd)
+            return false;
+        ++it;
+        if (it == maCells.end())
+            // No more next block.
+            return false;
+    }
+
+    // Trim up rRowEnd next
+    aPos = maCells.position(rRowEnd);
+    it = aPos.first;
+    if (it == maCells.end())
+    {
+        rRowStart = nRowStartNew;
+        return true; // Because trimming of rRowStart is ok
+    }
+
+    if (it->type == sc::element_type_empty)
+    {
+        // rRowEnd cannot be in the first block which is empty !
+        assert(it != maCells.begin());
+        // This block is empty. Skip to the previous block (it exists).
+        nRowEndNew -= aPos.second + 1; // Last row position of the previous block.
+        assert(nRowStartNew <= nRowEndNew);
+    }
+
+    rRowStart = nRowStartNew;
+    rRowEnd = nRowEndNew;
+    return true;
+}
+
 SCROW ScColumn::FindNextVisibleRow(SCROW nRow, bool bForward) const
 {
     if(bForward)

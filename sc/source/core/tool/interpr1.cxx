@@ -5842,6 +5842,55 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     // with a single InterpretTail() call it results in evaluation of all the cells in the
     // matrix formula.
     vConditions.clear();
+
+    SCCOL nStartColDiff = 0;
+    SCCOL nEndColDiff = 0;
+    SCROW nStartRowDiff = 0;
+    SCROW nEndRowDiff = 0;
+    bool bRangeReduce = false;
+
+    // Range-reduce optimization
+    if (nParamCount % 2) // Not COUNTIFS
+    {
+        bool bHasDoubleRefCriteriaRanges = true;
+        // Do not attempt main-range reduce if any of the criteria-ranges are not double-refs.
+        for (sal_uInt16 nParamIdx = 2; nParamIdx < nParamCount; nParamIdx += 2 )
+        {
+            const formula::FormulaToken* pCriteriaRangeToken = pStack[ sp-nParamIdx ];
+            if (pCriteriaRangeToken->GetType() != svDoubleRef )
+            {
+                bHasDoubleRefCriteriaRanges = false;
+                break;
+            }
+        }
+
+        // Probe the main range token, and try if we can shrink the range without altering results.
+        const formula::FormulaToken* pMainRangeToken = pStack[ sp-nParamCount ];
+        if (pMainRangeToken->GetType() == svDoubleRef && bHasDoubleRefCriteriaRanges)
+        {
+            const ScComplexRefData* pRefData = pMainRangeToken->GetDoubleRef();
+            if (!pRefData->IsDeleted())
+            {
+                ScRange aMainRange, aSubRange;
+                DoubleRefToRange( *pRefData, aMainRange);
+
+                if (aMainRange.aStart.Tab() == aMainRange.aEnd.Tab())
+                {
+                    // Shrink the range to actual data content.
+                    aSubRange = aMainRange;
+                    pDok->GetDataAreaSubrange(aSubRange);
+
+                    nStartColDiff = aSubRange.aStart.Col() - aMainRange.aStart.Col();
+                    nStartRowDiff = aSubRange.aStart.Row() - aMainRange.aStart.Row();
+
+                    nEndColDiff = aSubRange.aEnd.Col() - aMainRange.aEnd.Col();
+                    nEndRowDiff = aSubRange.aEnd.Row() - aMainRange.aEnd.Row();
+                    bRangeReduce = nStartColDiff || nStartRowDiff || nEndColDiff || nEndRowDiff;
+                }
+            }
+        }
+    }
+
     double fVal = 0.0;
     SCCOL nDimensionCols = 0;
     SCROW nDimensionRows = 0;
@@ -6022,6 +6071,15 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             {
                 PushError( FormulaError::IllegalArgument);
                 return;
+            }
+
+            if (bRangeReduce)
+            {
+                nCol1 += nStartColDiff;
+                nRow1 += nStartRowDiff;
+
+                nCol2 += nEndColDiff;
+                nRow2 += nEndRowDiff;
             }
 
             // All reference ranges must be of same dimension and size.
@@ -6260,6 +6318,15 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             {
                 PushError( FormulaError::IllegalArgument);
                 return;
+            }
+
+            if (bRangeReduce)
+            {
+                nMainCol1 += nStartColDiff;
+                nMainRow1 += nStartRowDiff;
+
+                nMainCol2 += nEndColDiff;
+                nMainRow2 += nEndRowDiff;
             }
 
             // All reference ranges must be of same dimension and size.

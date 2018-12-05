@@ -904,6 +904,47 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     }
 }
 
+bool ScTable::GetDataAreaSubrange( ScRange& rRange ) const
+{
+    SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
+
+    if ( nCol1 >= aCol.size() )
+        return false;
+
+    nCol2 = std::min<SCCOL>( nCol2, aCol.size()-1 );
+
+    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+
+    SCCOL nFirstNonEmptyCol = -1, nLastNonEmptyCol = -1;
+    SCROW nRowStart = nRow2, nRowEnd = nRow1;
+
+    for ( SCCOL nCol = nCol1; nCol <= nCol2; ++nCol )
+    {
+        SCROW nRowStartThis = nRow1, nRowEndThis = nRow2;
+        bool bTrimmed = aCol[nCol].TrimEmptyBlocks(nRowStartThis, nRowEndThis);
+        if ( bTrimmed )
+        {
+            if ( nFirstNonEmptyCol == -1 )
+                nFirstNonEmptyCol = nCol;
+            nLastNonEmptyCol = nCol;
+
+            nRowStart = std::min<SCROW>(nRowStart, nRowStartThis);
+            nRowEnd = std::max<SCROW>(nRowEnd, nRowEndThis);
+        }
+    }
+
+    if ( nFirstNonEmptyCol == -1 )
+        return false;
+
+    assert(nFirstNonEmptyCol <= nLastNonEmptyCol);
+    assert(nRowStart <= nRowEnd);
+
+    rRange.aStart.Set(nFirstNonEmptyCol, nRowStart, rRange.aStart.Tab());
+    rRange.aEnd.Set(nLastNonEmptyCol, nRowEnd, rRange.aEnd.Tab());
+
+    return true;
+}
+
 bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
         SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol,
         bool bConsiderCellNotes, bool bConsiderCellDrawObjects ) const
