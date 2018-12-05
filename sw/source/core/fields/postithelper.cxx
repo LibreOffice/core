@@ -31,6 +31,7 @@
 #include <txtfrm.hxx>
 #include <tabfrm.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentFieldsAccess.hxx>
 #include <redline.hxx>
 #include <scriptinfo.hxx>
 #include <editeng/charhiddenitem.hxx>
@@ -141,9 +142,12 @@ SwPosition SwAnnotationItem::GetAnchorPosition() const
     return aPos;
 }
 
-bool SwAnnotationItem::UseElement()
+bool SwAnnotationItem::UseElement(SwRootFrame const& rLayout,
+        IDocumentRedlineAccess const& rIDRA)
 {
-    return mrFormatField.IsFieldInDoc();
+    return mrFormatField.IsFieldInDoc()
+        && (!rLayout.IsHideRedlines()
+            || !sw::IsFieldDeletedInModel(rIDRA, *mrFormatField.GetTextField()));
 }
 
 VclPtr<sw::annotation::SwAnnotationWin> SwAnnotationItem::GetSidebarWindow(

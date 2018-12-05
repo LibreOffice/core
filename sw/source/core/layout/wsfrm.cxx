@@ -4529,6 +4529,13 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     rIDFA.UpdateExpFields(nullptr, false);
     rIDFA.UpdateRefFields();
 
+    // update SwPostItMgr / notes in the margin
+    // note: as long as all shells share layout, broadcast to all shells!
+    rDoc.GetDocShell()->Broadcast( SwFormatFieldHint(nullptr, bHideRedlines
+            ? SwFormatFieldHintWhich::REMOVED
+            : SwFormatFieldHintWhich::INSERTED) );
+
+
 //    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?  this is the big hammer
 }
 

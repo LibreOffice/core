@@ -30,6 +30,7 @@ class SwRootFrame;
 class SwPostItMgr;
 class SwEditWin;
 class SwFrame;
+class IDocumentRedlineAccess;
 namespace sw { namespace annotation {
     class SwAnnotationWin;
 } }
@@ -109,7 +110,7 @@ public:
     }
 
     virtual SwPosition GetAnchorPosition() const = 0;
-    virtual bool UseElement() = 0;
+    virtual bool UseElement(SwRootFrame const&, IDocumentRedlineAccess const&) = 0;
     virtual const SwFormatField& GetFormatField() const = 0;
     virtual const SfxBroadcaster* GetBroadCaster() const = 0;
     virtual VclPtr<sw::annotation::SwAnnotationWin> GetSidebarWindow( SwEditWin& rEditWin,
@@ -128,7 +129,7 @@ public:
     }
 
     virtual SwPosition GetAnchorPosition() const override;
-    virtual bool UseElement() override;
+    virtual bool UseElement(SwRootFrame const&, IDocumentRedlineAccess const&) override;
     virtual const SwFormatField& GetFormatField() const override
     {
         return mrFormatField;
