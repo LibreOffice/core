@@ -37,7 +37,6 @@
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ustring.hxx>
-#include <map>
 
 namespace fpicker{
 namespace win32{
@@ -306,7 +305,6 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
         /// @todo document me
         CFilterContainer m_lFilters;
-        std::map<OUString, std::pair<OUString, OUString>> m_mapRealFilter;
 
 
         /** help us to handle dialog events and provide them to interested office
