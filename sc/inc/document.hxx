@@ -1385,6 +1385,15 @@ public:
                                              SCCOL& rEndCol, SCROW& rEndRow,
                                              bool bIncludeOld, bool bOnlyDown ) const;
 
+    /**
+     * Returns true if there is a non-empty subrange in the range given as input.
+     * In that case it also modifies rRange to largest subrange that does not
+     * have empty col/row inrange-segments in the beginning/end.
+     * It returns false if rRange is completely empty and in this case rRange is
+     * left unmodified.
+    */
+    bool                        GetDataAreaSubrange(ScRange& rRange) const;
+
     SC_DLLPUBLIC bool           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
