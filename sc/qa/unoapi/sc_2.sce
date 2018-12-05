@@ -30,5 +30,4 @@
 -o sc.ScCellCursorObj
 # ported to cppunit -o sc.ScCellFieldObj
 -o sc.ScCellFieldsObj
--o sc.ScCellFormatsObj
 -o sc.ScCellObj
