@@ -43,6 +43,7 @@
 class SfxItemSet;
 class SfxPoolItem;
 class SwContentFrame;
+class SwUnoCursor;
 class SwFormatField;
 class SwTextFormatColl;
 class SwTextINetFormat;
@@ -125,8 +126,19 @@ struct SwContentAtPos
 const int CRSR_POSOLD = 0x01,   // cursor stays at old position
           CRSR_POSCHG = 0x02;   // position changed by the layout
 
+namespace sw {
+
+bool ReplaceImpl(SwPaM & rCursor, OUString const& rReplacement,
+        bool const bRegExp, SwDoc & rDoc, SwRootFrame const*const pLayout);
+
 /// Helperfunction to resolve backward references in regular expressions
-OUString *ReplaceBackReferences( const i18nutil::SearchOptions2& rSearchOpt, SwPaM* pPam );
+OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
+        SwPaM* pPam, SwRootFrame const* pLayout );
+
+bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
+        SwDoc & rDoc, SwPaM const& rDelPam);
+
+} // namespace sw
 
 class SW_DLLPUBLIC SwCursorShell
     : public SwViewShell
@@ -358,18 +370,19 @@ public:
     void MoveColumn( SwWhichColumn, SwPosColumn );
     bool MoveRegion( SwWhichRegion, SwMoveFnCollection const & );
 
-    sal_uLong Find( const i18nutil::SearchOptions2& rSearchOpt,
+    // note: DO NOT call it FindText because windows.h
+    sal_uLong Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng, bool bReplace = false );
 
-    sal_uLong Find( const SwTextFormatColl& rFormatColl,
+    sal_uLong FindFormat( const SwTextFormatColl& rFormatColl,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng, const SwTextFormatColl* pReplFormat );
 
-    sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
+    sal_uLong FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng,

@@ -20,14 +20,19 @@
 #include <doc.hxx>
 #include <pamtyp.hxx>
 #include <pam.hxx>
+#include <txtfrm.hxx>
 #include <memory>
 
-bool SwPaM::Find( const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
-                  const SwPaM *pRegion, bool bInReadOnly  )
+namespace sw {
+
+bool FindFormatImpl(SwPaM & rSearchPam,
+        const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
+        const SwPaM &rRegion, bool bInReadOnly,
+        SwRootFrame const*const pLayout)
 {
     bool bFound = false;
     const bool bSrchForward = &fnMove == &fnMoveForward;
-    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, pRegion ));
+    std::unique_ptr<SwPaM> pPam(MakeRegion( fnMove, rRegion ));
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
@@ -44,29 +49,49 @@ bool SwPaM::Find( const SwFormat& rFormat, SwMoveFnCollection const & fnMove,
 
     bool bFirst = true;
     SwContentNode* pNode;
-    while( nullptr != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
+    while (nullptr != (pNode = ::GetNode(*pPam, bFirst, fnMove, bInReadOnly, pLayout)))
     {
-        if ( pNode->GetFormatColl() == &rFormat )
+        SwTextFrame const*const pFrame(pLayout && pNode->IsTextNode()
+            ? static_cast<SwTextFrame const*>(pNode->getLayoutFrame(pLayout))
+            : nullptr);
+        assert(!pLayout || !pNode->IsTextNode() || pFrame);
+        SwContentNode const& rPropsNode(*(pFrame
+            ? pFrame->GetTextNodeForParaProps()
+            : pNode));
+
+        if (rPropsNode.GetFormatColl() == &rFormat)
         {
             // if a FormatCollection is found then it is definitely a SwContentNode
 
             // FORWARD:  SPoint at the end, GetMark at the beginning of the node
             // BACKWARD: SPoint at the beginning, GetMark at the end of the node
             // always: incl. start and incl. end
-            *GetPoint() = *pPam->GetPoint();
-            SetMark();
-            pNode->MakeEndIndex( &GetPoint()->nContent );
-            GetMark()->nContent = 0;
+            if (pFrame)
+            {
+                *rSearchPam.GetPoint() = *pPam->GetPoint();
+                rSearchPam.SetMark();
+                *rSearchPam.GetMark() = pFrame->MapViewToModelPos(
+                    TextFrameIndex(bSrchForward ? pFrame->GetText().getLength() : 0));
+            }
+            else
+            {
+                *rSearchPam.GetPoint() = *pPam->GetPoint();
+                rSearchPam.SetMark();
+                pNode->MakeEndIndex( &rSearchPam.GetPoint()->nContent );
+                rSearchPam.GetMark()->nContent = 0;
+            }
 
             // if backward search, switch point and mark
             if( !bSrchForward )
-                Exchange();
+                rSearchPam.Exchange();
 
             bFound = true;
             break;
         }
     }
     return bFound;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

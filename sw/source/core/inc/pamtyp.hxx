@@ -27,6 +27,16 @@ class SwpHints;
 struct SwPosition;
 class SwPaM;
 class SwTextAttr;
+class SwFormat;
+class SfxPoolItem;
+class SwRootFrame;
+
+namespace i18nutil {
+    struct SearchOptions2;
+}
+namespace utl {
+    class TextSearch;
+}
 
 // function prototypes for the move/find methods of SwPaM
 
@@ -66,7 +76,34 @@ struct SwMoveFnCollection
 };
 
 // function prototype for searching
-SwContentNode* GetNode( SwPaM&, bool&, SwMoveFnCollection const &, bool bInReadOnly = false );
+SwContentNode* GetNode(SwPaM&, bool&, SwMoveFnCollection const &,
+        bool bInReadOnly = false, SwRootFrame const* pLayout = nullptr);
+
+namespace sw {
+
+    std::unique_ptr<SwPaM> MakeRegion(SwMoveFnCollection const & fnMove,
+            const SwPaM & rOrigRg);
+
+    /// Search.
+    bool FindTextImpl(SwPaM & rSearchPam,
+                const i18nutil::SearchOptions2& rSearchOpt,
+                bool bSearchInNotes,
+                utl::TextSearch& rSText,
+                SwMoveFnCollection const & fnMove,
+                const SwPaM & rRegion, bool bInReadOnly,
+                SwRootFrame const* pLayout);
+    bool FindFormatImpl(SwPaM & rSearchPam,
+                const SwFormat& rFormat,
+                SwMoveFnCollection const & fnMove,
+                const SwPaM & rRegion, bool bInReadOnly,
+                SwRootFrame const* pLayout);
+    bool FindAttrImpl(SwPaM & rSearchPam,
+                const SfxPoolItem& rAttr,
+                SwMoveFnCollection const & fnMove,
+                const SwPaM & rPam, bool bInReadOnly,
+                SwRootFrame const* pLayout);
+
+} // namespace sw
 
 #endif
 
