@@ -21,11 +21,11 @@
 
 #include <svl/svldllapi.h>
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
 #include <memory>
-namespace o3tl { template <typename T> struct typed_flags; }
 
 // class SvtLanguageOptions ----------------------------------------------------
 

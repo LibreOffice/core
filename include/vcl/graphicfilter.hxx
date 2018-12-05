@@ -24,12 +24,12 @@
 #include <vcl/dllapi.h>
 #include <vcl/graph.hxx>
 #include <vcl/errcode.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
 
 namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
-namespace o3tl { template <typename T> struct typed_flags; }
 
 class INetURLObject;
 

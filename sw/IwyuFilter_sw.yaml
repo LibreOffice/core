@@ -22,20 +22,7 @@ blacklist:
     sw/inc/docfac.hxx:
     # Complete type is needed by rtl::Reference<SwDoc>.
     - doc.hxx
-    sw/inc/accmap.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/crsrsh.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/cshtyp.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/fesh.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/modcfg.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/ndtyp.hxx:
-    - o3tl/typed_flags_set.hxx
     sw/inc/swtypes.hxx:
-    - o3tl/typed_flags_set.hxx
     # Needed for macro #define
     - com/sun/star/i18n/CollatorOptions.hpp
     sw/inc/doc.hxx:
@@ -54,16 +41,6 @@ blacklist:
     - utility
     sw/inc/shellid.hxx:
     - sfx2/shell.hxx
-    sw/inc/swurl.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/tblenum.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/tox.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/undobj.hxx:
-    - o3tl/typed_flags_set.hxx
-    sw/inc/itabenum.hxx:
-    - o3tl/typed_flags_set.hxx
     sw/inc/unosett.hxx:
     # sw::UnoImplPtr typedef
     - unobaseclass.hxx
@@ -265,4 +242,3 @@ blacklist:
     - vector
     sw/inc/shellio.hxx:
     - o3tl/deleter.hxx
-    - o3tl/typed_flags_set.hxx

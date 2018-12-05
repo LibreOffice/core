@@ -23,9 +23,9 @@
 #include <memory>
 #include <vcl/graph.hxx>
 #include <vcl/dllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
-namespace o3tl { template <typename T> struct typed_flags; }
 
 // Adjustment defines
 enum class GraphicAdjustmentFlags

@@ -24,12 +24,11 @@
 #include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclenum.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace tools { class Rectangle; }
 class Point;
 class Color;
-
-namespace o3tl { template <typename T> struct typed_flags; }
 
 // Flags for DrawSymbol()
 enum class DrawSymbolFlags

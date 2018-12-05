@@ -24,8 +24,7 @@
 #include "xeroot.hxx"
 #include <externalrefmgr.hxx>
 #include <memory>
-
-namespace o3tl { template <typename T> struct typed_flags; }
+#include <o3tl/typed_flags_set.hxx>
 
 struct ScSingleRefData;
 struct ScComplexRefData;

@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com{ namespace sun{ namespace star{
     namespace uno{
@@ -48,8 +49,6 @@ enum class ConfigItemMode
     AllLocales         = 0x02,
     ReleaseTree        = 0x04,
 };
-
-namespace o3tl { template <typename T> struct typed_flags; }
 
 namespace o3tl
 {
