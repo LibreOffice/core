@@ -74,8 +74,6 @@ protected:
 
 public:
 
-    static rtl_TextEncoding nActualTextEncoding;
-
                         IMapObject();
                         IMapObject( const OUString& rURL,
                                     const OUString& rAltText,
