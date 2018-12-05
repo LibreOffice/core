@@ -74,6 +74,8 @@ private:
 
     bool m_bSupportingPlottingOfHiddenCells;
     bool m_bIncludeHiddenCells;
+
+    bool m_bHideLegendEntry;
 };
 
 } //  namespace wrapper

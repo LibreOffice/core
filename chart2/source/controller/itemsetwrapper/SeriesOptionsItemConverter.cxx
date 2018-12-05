@@ -74,6 +74,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_nMissingValueTreatment(0)
         , m_bSupportingPlottingOfHiddenCells(false)
         , m_bIncludeHiddenCells(true)
+        , m_bHideLegendEntry(false)
 {
     try
     {
@@ -156,6 +157,8 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             {
             }
         }
+
+        m_bHideLegendEntry = !xPropertySet->getPropertyValue("ShowLegendEntry").get<bool>();
     }
     catch( const uno::Exception & )
     {
@@ -351,6 +354,15 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             }
         }
         break;
+        case SCHATTR_HIDE_LEGEND_ENTRY:
+        {
+            bool bHideLegendEntry = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
+            if (bHideLegendEntry != m_bHideLegendEntry)
+            {
+                GetPropertySet()->setPropertyValue("ShowLegendEntry", css::uno::makeAny(!bHideLegendEntry));
+            }
+        }
+        break;
     }
     return bChanged;
 }
@@ -420,6 +432,11 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         {
             if( m_bSupportingPlottingOfHiddenCells )
                 rOutItemSet.Put( SfxBoolItem(nWhichId, m_bIncludeHiddenCells) );
+            break;
+        }
+        case SCHATTR_HIDE_LEGEND_ENTRY:
+        {
+            rOutItemSet.Put(SfxBoolItem(nWhichId, m_bHideLegendEntry));
             break;
         }
         default:
