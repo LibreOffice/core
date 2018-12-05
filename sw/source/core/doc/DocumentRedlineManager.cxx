@@ -21,6 +21,8 @@
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
 #include <doc.hxx>
+#include <docsh.hxx>
+#include <fmtfld.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
@@ -166,6 +168,10 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     }
     // fields last - SwGetRefField::UpdateField requires up-to-date frames
     UpdateFieldsForRedline(rDoc.getIDocumentFieldsAccess()); // after footnotes
+
+    // update SwPostItMgr / notes in the margin
+    rDoc.GetDocShell()->Broadcast(
+            SwFormatFieldHint(nullptr, SwFormatFieldHintWhich::REMOVED) );
 }
 
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
@@ -225,6 +231,10 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     }
     // fields last - SwGetRefField::UpdateField requires up-to-date frames
     UpdateFieldsForRedline(rDoc.getIDocumentFieldsAccess()); // after footnotes
+
+    // update SwPostItMgr / notes in the margin
+    rDoc.GetDocShell()->Broadcast(
+            SwFormatFieldHint(nullptr, SwFormatFieldHintWhich::INSERTED) );
 }
 
 } // namespace sw
