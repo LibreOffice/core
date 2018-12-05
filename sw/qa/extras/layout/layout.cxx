@@ -19,11 +19,13 @@ public:
     void testTdf116830();
     void testTdf116925();
     void testTdf117028();
+    void testForcepoint76();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
+    CPPUNIT_TEST(testForcepoint76);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -107,6 +109,9 @@ void SwLayoutWriter::testTdf117028()
     // Make sure the text is still rendered.
     assertXPathContent(pXmlDoc, "//textarray/text", "Hello");
 }
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testForcepoint76() { createDoc("forcepoint76-1.rtf"); }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
 CPPUNIT_PLUGIN_IMPLEMENT();
