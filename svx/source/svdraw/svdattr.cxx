@@ -2031,6 +2031,29 @@ SfxPoolItem* SdrLayerIdItem::Clone(SfxItemPool* /*pPool*/) const
     return new SdrLayerIdItem(*this);
 }
 
+bool SdrLayerIdItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+{
+    // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
+    // where we still want this to be a sal_Int16
+    sal_Int16 nValue = sal_Int16();
+    if (rVal >>= nValue)
+    {
+        SetValue( static_cast<sal_uInt16>(nValue) );
+        return true;
+    }
+
+    SAL_WARN("editeng.items", "SvxCharScaleWidthItem::PutValue - Wrong type!" );
+    return false;
+}
+
+bool SdrLayerIdItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+{
+    // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
+    // where we still want this to be a sal_Int16
+    rVal <<= static_cast<sal_Int16>(SfxUInt16Item::GetValue());
+    return true;
+}
+
 SfxPoolItem* SdrLayerNameItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SdrLayerNameItem(*this);
