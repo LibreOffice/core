@@ -219,7 +219,7 @@ sal_uLong SwWrtShell::SearchPattern( const i18nutil::SearchOptions2& rSearchOpt,
     if(!(eFlags & FindRanges::InSel))
         ClearMark();
     bool bCancel = false;
-    sal_uLong nRet = Find( rSearchOpt, bSearchInNotes, eStt, eEnd, bCancel, eFlags, bReplace );
+    sal_uLong nRet = FindText(rSearchOpt, bSearchInNotes, eStt, eEnd, bCancel, eFlags, bReplace);
     if(bCancel)
     {
         Undo();
@@ -243,7 +243,7 @@ sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
         pReplaceColl = GetParaStyle(*pReplTempl, SwWrtShell::GETSTYLE_CREATESOME );
 
     bool bCancel = false;
-    sal_uLong nRet = Find(pColl? *pColl: GetDfltTextFormatColl(),
+    sal_uLong nRet = FindFormat(pColl ? *pColl : GetDfltTextFormatColl(),
                                eStt,eEnd, bCancel, eFlags, pReplaceColl);
     if(bCancel)
     {
@@ -266,7 +266,7 @@ sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
 
     // Searching
     bool bCancel = false;
-    sal_uLong nRet = Find( rFindSet, bNoColls, eStart, eEnd, bCancel, eFlags, pSearchOpt, pReplaceSet);
+    sal_uLong nRet = FindAttrs(rFindSet, bNoColls, eStart, eEnd, bCancel, eFlags, pSearchOpt, pReplaceSet);
 
     if(bCancel)
     {

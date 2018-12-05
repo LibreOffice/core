@@ -854,7 +854,11 @@ bool SwCursorShell::MoveFieldType(
 bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
 {
     bool bRet = false;
-    if( rField.GetTextField() )
+    SwTextField const*const pTextField(rField.GetTextField());
+    if (pTextField
+        && (!GetLayout()->IsHideRedlines()
+             || !sw::IsFieldDeletedInModel(
+                 GetDoc()->getIDocumentRedlineAccess(), *pTextField)))
     {
         SET_CURR_SHELL( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -862,9 +866,9 @@ bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
         SwCursor* pCursor = getShellCursor( true );
         SwCursorSaveState aSaveState( *pCursor );
 
-        SwTextNode* pTNd = rField.GetTextField()->GetpTextNode();
+        SwTextNode* pTNd = pTextField->GetpTextNode();
         pCursor->GetPoint()->nNode = *pTNd;
-        pCursor->GetPoint()->nContent.Assign( pTNd, rField.GetTextField()->GetStart() );
+        pCursor->GetPoint()->nContent.Assign( pTNd, pTextField->GetStart() );
 
         bRet = !pCursor->IsSelOvr();
         if( bRet )
@@ -1230,7 +1234,7 @@ bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
 
     sal_Int32 nPos = -1;
     SwTextNode* pTextNd = SwGetRefFieldType::FindAnchor( GetDoc(), rRefMark,
-                                                    nSubType, nSeqNo, &nPos );
+                                nSubType, nSeqNo, &nPos, nullptr, GetLayout());
     if( pTextNd && pTextNd->GetNodes().IsDocNodes() )
     {
         m_pCurrentCursor->GetPoint()->nNode = *pTextNd;
