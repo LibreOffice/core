@@ -244,15 +244,6 @@
           <object class="GtkComboBoxText" id="marginLB">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <items>
-              <item translatable="yes" context="sidebarslidebackground|marginLB">None</item>
-              <item translatable="yes" context="sidebarslidebackground|marginLB">Narrow</item>
-              <item translatable="yes" context="sidebarslidebackground|marginLB">Moderate</item>
-              <item translatable="yes" context="sidebarslidebackground|marginLB">Normal 0.75"</item>
-              <item translatable="yes" context="sidebarslidebackground|marginLB">Normal 1"</item>
-              <item translatable="yes" context="sidebarslidebackground|marginLB">Normal 1.25"</item>
-              <item translatable="yes" context="sidebarslidebackground|marginLB">Wide</item>
-            </items>
           </object>
           <packing>
             <property name="left_attach">1</property>
