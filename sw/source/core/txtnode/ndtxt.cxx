@@ -911,6 +911,7 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
                 frames.push_back(pFrame);
             }
         }
+        auto eMode(sw::FrameMode::Existing);
         for (SwTextFrame * pFrame : frames)
         {
             SwTextNode & rFirstNode(pFrame->GetMergedPara()
@@ -918,10 +919,11 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
                 : *pMergeNode);
             assert(rFirstNode.GetIndex() <= rNode.GetIndex());
             pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
-                        *pFrame, rFirstNode, sw::FrameMode::Existing));
+                        *pFrame, rFirstNode, eMode));
             assert(pFrame->GetMergedPara());
             assert(pFrame->GetMergedPara()->listener.IsListeningTo(&rNode));
             assert(rNode.GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
+            eMode = sw::FrameMode::New; // Existing is not idempotent!
         }
     }
     else if (rNode.GetRedlineMergeFlag() != SwNode::Merge::None)
@@ -4291,8 +4293,7 @@ void SwTextNode::AddToList()
         {
             if (pFrame->getRootFrame()->IsHideRedlines())
             {
-                sw::MergedPara const*const pMerged = pFrame->GetMergedPara();
-                if (!pMerged || this == pMerged->pParaPropsNode)
+                if (pFrame->GetTextNodeForParaProps() == this)
                 {
                     AddToListRLHidden();
                 }

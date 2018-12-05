@@ -28,6 +28,7 @@
 #include <docary.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
+#include <pamtyp.hxx>
 #include <edimp.hxx>
 #include <dbfld.hxx>
 #include <expfld.hxx>
@@ -205,7 +206,7 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
     return pTField;
 }
 
-void SwEditShell::UpdateFields( SwField &rField )
+void SwEditShell::UpdateOneField(SwField &rField)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -260,9 +261,9 @@ void SwEditShell::UpdateFields( SwField &rField )
                 // Search for SwTextField ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
-                     && ( aPam.Find( aFieldHint, false, fnMoveForward, &aCurPam, true )
-                          || aPam.Find( aAnnotationFieldHint, false, fnMoveForward, &aCurPam )
-                          || aPam.Find( aInputFieldHint, false, fnMoveForward, &aCurPam ) ) )
+                     && (sw::FindAttrImpl(aPam, aFieldHint, fnMoveForward, aCurPam, true, GetLayout())
+                          || sw::FindAttrImpl(aPam, aAnnotationFieldHint, fnMoveForward, aCurPam, false, GetLayout())
+                          || sw::FindAttrImpl(aPam, aInputFieldHint, fnMoveForward, aCurPam, false, GetLayout())))
                 {
                     // if only one PaM has more than one field  ...
                     if( aPam.Start()->nContent != pCurStt->nContent )

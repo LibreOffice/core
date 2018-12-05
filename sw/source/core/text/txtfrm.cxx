@@ -738,7 +738,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
 namespace sw {
 
 void RemoveFootnotesForNode(
-        SwTextFrame const& rTextFrame, SwTextNode const& rTextNode,
+        SwRootFrame const& rLayout, SwTextNode const& rTextNode,
         std::vector<std::pair<sal_Int32, sal_Int32>> const*const pExtents)
 {
     if (pExtents && pExtents->empty())
@@ -777,7 +777,7 @@ void RemoveFootnotesForNode(
                 continue;
             }
         }
-        pTextFootnote->DelFrames( &rTextFrame );
+        pTextFootnote->DelFrames(&rLayout);
     }
 }
 
@@ -802,7 +802,7 @@ void SwTextFrame::DestroyImpl()
                     // sw_redlinehide: not sure if it's necessary to check
                     // if the nodes are still alive here, which would require
                     // accessing WriterMultiListener::m_vDepends
-                    sw::RemoveFootnotesForNode(*this, *pNode, nullptr);
+                    sw::RemoveFootnotesForNode(*getRootFrame(), *pNode, nullptr);
                 }
             }
         }
@@ -811,7 +811,7 @@ void SwTextFrame::DestroyImpl()
             SwTextNode *const pNode(static_cast<SwTextNode*>(GetDep()));
             if (pNode)
             {
-                sw::RemoveFootnotesForNode(*this, *pNode, nullptr);
+                sw::RemoveFootnotesForNode(*getRootFrame(), *pNode, nullptr);
             }
         }
     }
@@ -840,7 +840,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         return TextFrameIndex(0);
     }
     OUStringBuffer text(rMerged.mergedText);
-    sal_Int32 nTFIndex(0);
+    sal_Int32 nTFIndex(0); // index used for insertion at the end
     sal_Int32 nInserted(0);
     bool bInserted(false);
     bool bFoundNode(false);
@@ -922,10 +922,16 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         }
         else if (rNode.GetIndex() < it->pNode->GetIndex() || bFoundNode)
         {
-            itInsert = it;
+            if (itInsert == rMerged.extents.end())
+            {
+                itInsert = it;
+            }
             break;
         }
-        nTFIndex += it->nEnd - it->nStart;
+        if (itInsert == rMerged.extents.end())
+        {
+            nTFIndex += it->nEnd - it->nStart;
+        }
     }
 //    assert((bFoundNode || rMerged.extents.empty()) && "text node not found - why is it sending hints to us");
     if (!bInserted)
@@ -1061,6 +1067,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
     // pFirstNode is never updated
     if (nErased && nErased == nFoundNode)
     {   // all visible text from node was erased
+#if 0
         if (rMerged.pParaPropsNode == &rNode)
         {
             rMerged.pParaPropsNode->RemoveFromListRLHidden();
@@ -1069,6 +1076,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                 : rMerged.extents.front().pNode;
             rMerged.pParaPropsNode->AddToListRLHidden();
         }
+#endif
 // NOPE must listen on all non-hidden nodes; particularly on pLastNode        rMerged.listener.EndListening(&const_cast<SwTextNode&>(rNode));
     }
     rMerged.mergedText = text.makeStringAndClear();
@@ -1219,7 +1227,21 @@ SwTextNode const* SwTextFrame::GetTextNodeForParaProps() const
 //nope    assert(GetPara());
     sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
+    {
+        assert(pMerged->pFirstNode == pMerged->pParaPropsNode); // surprising news!
         return pMerged->pParaPropsNode;
+    }
+    else
+        return static_cast<SwTextNode const*>(SwFrame::GetDep());
+}
+
+SwTextNode const* SwTextFrame::GetTextNodeForFirstText() const
+{
+    sw::MergedPara const*const pMerged(GetMergedPara());
+    if (pMerged)
+        return pMerged->extents.empty()
+            ? pMerged->pFirstNode
+            : pMerged->extents.front().pNode;
     else
         return static_cast<SwTextNode const*>(SwFrame::GetDep());
 }

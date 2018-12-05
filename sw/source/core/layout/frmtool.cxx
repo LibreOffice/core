@@ -59,6 +59,7 @@
 #include <laycache.hxx>
 #include <rootfrm.hxx>
 #include <paratr.hxx>
+#include <redline.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <calbck.hxx>
@@ -1169,10 +1170,6 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
                     {
                         AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
                     }
-                    else
-                    {
-                        assert(nIndex == iter->pNode->GetIndex()); // first iteration
-                    }
                     pNode = iter->pNode;
                     iterFirst = iter;
                 }
@@ -1446,9 +1443,35 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         else if ( pNd->IsTableNode() )
         {   //Should we have encountered a table?
             SwTableNode *pTableNode = static_cast<SwTableNode*>(pNd);
+            if (pLayout->IsHideRedlines())
+            {
+                // in the problematic case, there can be only 1 redline...
+                SwPosition const tmp(*pNd);
+                SwRangeRedline const*const pRedline(
+                    pDoc->getIDocumentRedlineAccess().GetRedline(tmp, nullptr));
+                // pathology: redline that starts on a TableNode; cannot
+                // be created in UI but by import filters...
+                if (pRedline
+                    && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+                    && &pRedline->Start()->nNode.GetNode() == pNd)
+                {
+                    SAL_WARN("sw.pageframe", "skipping table frame creation on bizarre redline");
+                    while (true)
+                    {
+                        pTableNode->GetNodes()[nIndex]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+                        if (nIndex == pTableNode->EndOfSectionIndex())
+                        {
+                            break;
+                        }
+                        ++nIndex;
+                    }
+                    continue;
+                }
+            }
             if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                nIndex = pTableNode->EndOfSectionIndex();
                 continue; // skip it
             }
 
@@ -1674,6 +1697,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                assert(false); // actually a fly-section can't be deleted?
                 continue; // skip it
             }
             if ( !pTable->empty() && bObjsDirect && !bDontCreateObjects )
@@ -1684,8 +1708,12 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             }
         }
         else
+        {
+            assert(!pLayout->IsHideRedlines()
+                || pNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden);
             // Neither Content nor table nor section, so we are done.
             break;
+        }
     }
 
     if ( pActualSection )

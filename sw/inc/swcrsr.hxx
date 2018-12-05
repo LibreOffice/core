@@ -23,6 +23,7 @@
 #include "tblsel.hxx"
 #include "cshtyp.hxx"
 
+class SfxItemSet;
 struct SwCursor_SavePos;
 namespace i18nutil {
     struct SearchOptions2;
@@ -36,7 +37,7 @@ const int FIND_NO_RING      = 2;
 
 struct SwFindParas
 {
-    virtual int Find( SwPaM*, SwMoveFnCollection const &, const SwPaM*, bool ) = 0;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM&, bool) = 0;
     virtual bool IsReplaceMode() const = 0;
 
 protected:
@@ -75,8 +76,6 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
 
     sal_uLong FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, bool& bCancel );
 
-    using SwPaM::Find;
-
     SwCursor(SwCursor const& rPaM) = delete;
 
 protected:
@@ -112,23 +111,26 @@ public:
     SwMoveFnCollection const & MakeFindRange( SwDocPositions, SwDocPositions,
                                         SwPaM* ) const;
 
-    sal_uLong Find( const i18nutil::SearchOptions2& rSearchOpt,
+    sal_uLong FindText( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
-                bool bReplace = false );
-    sal_uLong Find( const SwTextFormatColl& rFormatColl,
+                bool bReplace = false,
+                SwRootFrame const*const pLayout = nullptr);
+    sal_uLong FindFormat( const SwTextFormatColl& rFormatColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
-                const SwTextFormatColl* pReplFormat );
-    sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
+                const SwTextFormatColl* pReplFormat,
+                SwRootFrame const*const pLayout = nullptr);
+    sal_uLong FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
                 const i18nutil::SearchOptions2* pSearchOpt,
-                const SfxItemSet* rReplSet = nullptr );
+                const SfxItemSet* rReplSet = nullptr,
+                SwRootFrame const*const pLayout = nullptr);
 
     // UI versions
     bool IsStartEndSentence(bool bEnd, SwRootFrame const* pLayout) const;

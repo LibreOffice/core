@@ -1654,7 +1654,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     }
     sal_Int32 nStride;
     unsigned char *mask_data = aSurface.getBits(nStride);
-    vcl::bitmap::lookup_table const & unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+    vcl::bitmap::lookup_table unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
     for (long y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
     {
         unsigned char *row = mask_data + (nStride*y);
@@ -1762,7 +1762,7 @@ Color SvpSalGraphics::getPixel( long nX, long nY )
     cairo_destroy(cr);
 
     cairo_surface_flush(target);
-    vcl::bitmap::lookup_table const & unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+    vcl::bitmap::lookup_table unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
     unsigned char *data = cairo_image_surface_get_data(target);
     sal_uInt8 a = data[SVP_CAIRO_ALPHA];
     sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
@@ -2096,9 +2096,8 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         sal_Int32 nUnscaledExtentsRight = nExtentsRight * m_fScale;
         sal_Int32 nUnscaledExtentsTop = nExtentsTop * m_fScale;
         sal_Int32 nUnscaledExtentsBottom = nExtentsBottom * m_fScale;
-        vcl::bitmap::lookup_table const & unpremultiply_table
-            = vcl::bitmap::get_unpremultiply_table();
-        vcl::bitmap::lookup_table const & premultiply_table = vcl::bitmap::get_premultiply_table();
+        vcl::bitmap::lookup_table unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+        vcl::bitmap::lookup_table premultiply_table = vcl::bitmap::get_premultiply_table();
         for (sal_Int32 y = nUnscaledExtentsTop; y < nUnscaledExtentsBottom; ++y)
         {
             unsigned char *true_row = target_surface_data + (nStride*y);

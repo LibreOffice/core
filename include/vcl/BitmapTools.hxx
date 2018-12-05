@@ -28,10 +28,10 @@ namespace com { namespace sun { namespace star { namespace geometry { struct Int
 namespace vcl {
 namespace bitmap {
 
-typedef std::array<std::array<sal_uInt8, 256>, 256> lookup_table;
+typedef sal_uInt8 (*lookup_table)[256];
 
-VCL_DLLPUBLIC lookup_table const & get_premultiply_table();
-VCL_DLLPUBLIC lookup_table const & get_unpremultiply_table();
+lookup_table VCL_DLLPUBLIC get_premultiply_table();
+lookup_table VCL_DLLPUBLIC get_unpremultiply_table();
 
 /**
  * Intended to be used to feed into CreateFromData to create a BitmapEx. RGB data format.

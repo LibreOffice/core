@@ -8,11 +8,6 @@
  *
  */
 
-#include <sal/config.h>
-
-#include <array>
-#include <utility>
-
 #include <vcl/BitmapTools.hxx>
 
 #include <sal/log.hxx>
@@ -273,7 +268,7 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
     cairo_surface_flush(pPixels);
     unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
     unsigned int nStride = cairo_image_surface_get_stride( pPixels );
-    vcl::bitmap::lookup_table const & unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
+    vcl::bitmap::lookup_table unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
     for( unsigned long y = 0; y < static_cast<unsigned long>(aSize.Height()); y++ )
     {
         sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
@@ -732,7 +727,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
     ::Color aColor;
     unsigned int nAlpha = 255;
 
-    vcl::bitmap::lookup_table const & premultiply_table = vcl::bitmap::get_premultiply_table();
+    vcl::bitmap::lookup_table premultiply_table = vcl::bitmap::get_premultiply_table();
     for( nY = 0; nY < nHeight; nY++ )
     {
         ::Scanline pReadScan;
@@ -1051,51 +1046,45 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         return bRet;
     }
 
-    static constexpr sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
+    static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
     {
         return (a == 0) ? 0 : (c * 255 + a / 2) / a;
     }
 
-    static constexpr sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
+    static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
     {
         return (c * a + 127) / 255;
     }
 
-    template<int... Is> static constexpr std::array<sal_uInt8, 256> make_unpremultiply_table_row_(
-        int a, std::integer_sequence<int, Is...>)
+    lookup_table get_unpremultiply_table()
     {
-        return {unpremultiply(Is, a)...};
-    }
+        static bool inited;
+        static sal_uInt8 unpremultiply_table[256][256];
 
-    template<int... Is> static constexpr lookup_table make_unpremultiply_table_(
-        std::integer_sequence<int, Is...>)
-    {
-        return {make_unpremultiply_table_row_(Is, std::make_integer_sequence<int, 256>{})...};
-    }
+        if (!inited)
+        {
+            for (int a = 0; a < 256; ++a)
+                for (int c = 0; c < 256; ++c)
+                    unpremultiply_table[a][c] = unpremultiply(c, a);
+            inited = true;
+        }
 
-    lookup_table const & get_unpremultiply_table()
-    {
-        static constexpr auto unpremultiply_table = make_unpremultiply_table_(
-            std::make_integer_sequence<int, 256>{});
         return unpremultiply_table;
     }
 
-    template<int... Is> static constexpr std::array<sal_uInt8, 256> make_premultiply_table_row_(
-        int a, std::integer_sequence<int, Is...>)
+    lookup_table get_premultiply_table()
     {
-        return {premultiply(Is, a)...};
-    }
+        static bool inited;
+        static sal_uInt8 premultiply_table[256][256];
 
-    template<int... Is> static constexpr lookup_table make_premultiply_table_(
-        std::integer_sequence<int, Is...>)
-    {
-        return {make_premultiply_table_row_(Is, std::make_integer_sequence<int, 256>{})...};
-    }
+        if (!inited)
+        {
+            for (int a = 0; a < 256; ++a)
+                for (int c = 0; c < 256; ++c)
+                    premultiply_table[a][c] = premultiply(c, a);
+            inited = true;
+        }
 
-    lookup_table const & get_premultiply_table()
-    {
-        static constexpr auto premultiply_table = make_premultiply_table_(
-            std::make_integer_sequence<int, 256>{});
         return premultiply_table;
     }
 
