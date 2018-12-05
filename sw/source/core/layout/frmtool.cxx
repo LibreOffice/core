@@ -1170,7 +1170,7 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
                     }
                     else
                     {
-                        assert(nIndex == iter->pNode->GetIndex()); // first iteration
+                        assert(pMerged->pParaPropsNode == iter->pNode); // first iteration
                     }
                     pNode = iter->pNode;
                     iterFirst = iter;
