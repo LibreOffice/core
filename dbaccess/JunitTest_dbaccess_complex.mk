@@ -13,6 +13,7 @@ $(eval $(call gb_JunitTest_use_unoapi_jars,dbaccess_complex))
 
 $(eval $(call gb_JunitTest_use_jars,dbaccess_complex,\
     ConnectivityTools \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_set_defs,dbaccess_complex,\
