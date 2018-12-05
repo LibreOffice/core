@@ -229,6 +229,8 @@ public:
     void SetFlyLock( bool bNew ){ m_bFlyLock = bNew; }
     bool IsFlyLock() const {    return m_bFlyLock; }
 
+    bool ForbiddenForFootnoteCntFwd() const;
+
     // Casting of a Frame into a FlowFrame (if it is one, otherwise 0)
     // These methods need to be customized in subclasses!
     static       SwFlowFrame *CastFlowFrame( SwFrame *pFrame );
