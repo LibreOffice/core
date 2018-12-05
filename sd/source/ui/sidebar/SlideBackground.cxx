@@ -29,8 +29,11 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <filedlg.hxx>
+#include <sdmod.hxx>
+#include <optsitem.hxx>
 #include "PageMarginUtils.hxx"
 #include <strings.hrc>
+#include <pageformatpanel.hrc>
 #include "DocumentHelper.hxx"
 #include "MasterPagesSelector.hxx"
 #include <DrawViewShell.hxx>
@@ -151,6 +154,24 @@ SlideBackground::SlideBackground(
     get(mpEditMaster, "masterslidebutton");
     get(mpMasterLabel, "masterlabel");
     get(mpMarginSelectBox, "marginLB");
+
+    ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
+    SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+    if (pOptions)
+    {
+        FieldUnit eMetric = static_cast<FieldUnit>(pOptions->GetMetric());
+        if (IsInch(eMetric))
+        {
+            for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
+                mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
+            }
+        else
+        {
+            for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
+                mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
+        }
+    }
 
     maCustomEntry = get<FixedText>("customlabel")->GetText();
 
