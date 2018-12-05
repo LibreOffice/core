@@ -27,6 +27,7 @@ public:
     void testTdf117245();
     void testTdf109077();
     void testTdf109137();
+    void testForcepoint76();
     void testTdf118058();
     void testTdf117188();
     void testTdf119875();
@@ -43,6 +44,7 @@ public:
     CPPUNIT_TEST(testTdf117245);
     CPPUNIT_TEST(testTdf109077);
     CPPUNIT_TEST(testTdf109137);
+    CPPUNIT_TEST(testForcepoint76);
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
@@ -235,6 +237,9 @@ void SwLayoutWriter::testTdf109137()
     assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly/notxt",
                 /*nNumberOfNodes=*/1);
 }
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testForcepoint76() { createDoc("forcepoint76-1.rtf"); }
 
 void SwLayoutWriter::testTdf118058()
 {
