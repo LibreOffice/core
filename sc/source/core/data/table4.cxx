@@ -250,6 +250,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         const SvNumFormatType nFormatType = pDocument->GetFormatTable()->GetType(nFormat);
         bool bDate = (nFormatType  == SvNumFormatType::DATE );
         bool bBooleanCell = (!bDate && nFormatType == SvNumFormatType::LOGICAL);
+        bool bPercent = (nFormatType  == SvNumFormatType::PERCENT );
         if (bDate)
         {
             if (nCount > 1)
@@ -366,6 +367,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 if (bVal)
                     rCmd = FILL_LINEAR;
+            }
+            else if(bPercent)
+            {
+                rInc = 0.01; // tdf#89998 increment by 1% at a time
             }
         }
     }
@@ -948,7 +953,14 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                         double nVal = aCell.mfValue;
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
-                            if (nVal == 0.0 || nVal == 1.0)
+                            bool bPercentCell = (pDocument->GetFormatTable()->GetType( nNumFmt) ==
+                                        SvNumFormatType::PERCENT);
+                            if (bPercentCell)
+                            {
+                                // tdf#89998 increment by 1% at a time
+                                nVal += static_cast<double>(nDelta) * 0.01;
+                            }
+                            else if (nVal == 0.0 || nVal == 1.0)
                             {
                                 bool bBooleanCell = (pDocument->GetFormatTable()->GetType( nNumFmt) ==
                                         SvNumFormatType::LOGICAL);
@@ -1347,6 +1359,7 @@ void ScTable::FillAutoSimple(
     sal_uLong nFormulaCounter = nActFormCnt;
     bool bGetCell = true;
     bool bBooleanCell = false;
+    bool bPercentCell = false;
     sal_uInt16 nCellDigits = 0;
     short nHeadNoneTail = 0;
     sal_Int32 nStringValue = 0;
@@ -1380,6 +1393,8 @@ void ScTable::FillAutoSimple(
                     }
                     bBooleanCell = (pDocument->GetFormatTable()->GetType(
                                 aCol[rCol].GetNumberFormat( pDocument->GetNonThreadedContext(), nSource)) == SvNumFormatType::LOGICAL);
+                    bPercentCell = (pDocument->GetFormatTable()->GetType(
+                                aCol[rCol].GetNumberFormat( pDocument->GetNonThreadedContext(), nSource)) == SvNumFormatType::PERCENT);
 
                 }
                 else                // rInner&:=nCol, rOuter&:=nRow
@@ -1387,6 +1402,8 @@ void ScTable::FillAutoSimple(
                     aSrcCell = aCol[nSource].GetCellValue(rRow);
                     bBooleanCell = (pDocument->GetFormatTable()->GetType(
                                 aCol[nSource].GetNumberFormat( pDocument->GetNonThreadedContext(), rRow)) == SvNumFormatType::LOGICAL);
+                    bPercentCell = (pDocument->GetFormatTable()->GetType(
+                                aCol[nSource].GetNumberFormat( pDocument->GetNonThreadedContext(), rRow)) == SvNumFormatType::PERCENT);
                 }
 
                 bGetCell = false;
@@ -1425,6 +1442,8 @@ void ScTable::FillAutoSimple(
                         double fVal;
                         if (bBooleanCell && ((fVal = aSrcCell.mfValue) == 0.0 || fVal == 1.0))
                             aCol[rCol].SetValue(rRow, aSrcCell.mfValue);
+                        else if(bPercentCell)
+                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta * 0.01); // tdf#89998 increment by 1% at a time
                         else
                             aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta);
                     }
