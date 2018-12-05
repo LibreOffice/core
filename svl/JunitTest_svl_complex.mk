@@ -28,6 +28,7 @@ $(eval $(call gb_JunitTest_use_unoapi_jars,svl_complex))
 
 $(eval $(call gb_JunitTest_use_jars,svl_complex,\
     ConnectivityTools \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,svl_complex,\
