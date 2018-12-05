@@ -222,6 +222,7 @@ public:
                                 bool bConsiderCellDrawObjects=false ) const;
     bool        GetPrevDataPos(SCROW& rRow) const;
     bool        GetNextDataPos(SCROW& rRow) const;
+    bool        TrimEmptyBlocks(SCROW& rRowStart, SCROW& rRowEnd) const;
     void        FindDataAreaPos(SCROW& rRow, bool bDown) const; // (without Broadcaster)
     void        FindUsed( SCROW nStartRow, SCROW nEndRow, mdds::flat_segment_tree<SCROW, bool>& rUsed ) const;
 

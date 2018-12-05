@@ -576,6 +576,8 @@ public:
     void        GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
                              bool bIncludeOld, bool bOnlyDown ) const;
 
+    bool        GetDataAreaSubrange( ScRange& rRange ) const;
+
     bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
                                       SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
                                       bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes,
