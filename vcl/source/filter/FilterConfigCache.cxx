@@ -54,16 +54,6 @@ const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameLi
     "epp", "ira", "era", "itg", "iti", "eti", "exp", nullptr
 };
 
-bool FilterConfigCache::bInitialized = false;
-sal_Int32 FilterConfigCache::nIndType = -1;
-sal_Int32 FilterConfigCache::nIndUIName = -1;
-sal_Int32 FilterConfigCache::nIndDocumentService = -1;
-sal_Int32 FilterConfigCache::nIndFilterService = -1;
-sal_Int32 FilterConfigCache::nIndFlags = -1;
-sal_Int32 FilterConfigCache::nIndUserData = -1;
-sal_Int32 FilterConfigCache::nIndFileFormatVersion = -1;
-sal_Int32 FilterConfigCache::nIndTemplateName = -1;
-
 void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
     bIsPixelFormat = bIsInternalFilter = false;

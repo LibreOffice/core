@@ -59,16 +59,6 @@ class FilterConfigCache
     std::vector< FilterConfigCacheEntry >         aImport;
     std::vector< FilterConfigCacheEntry >         aExport;
 
-    static bool   bInitialized;
-    static sal_Int32  nIndType;
-    static sal_Int32  nIndUIName;
-    static sal_Int32  nIndDocumentService;
-    static sal_Int32  nIndFilterService;
-    static sal_Int32  nIndFlags;
-    static sal_Int32  nIndUserData;
-    static sal_Int32  nIndFileFormatVersion;
-    static sal_Int32  nIndTemplateName;
-
     static const char*  InternalFilterListForSvxLight[];
 
     void             ImplInit();
