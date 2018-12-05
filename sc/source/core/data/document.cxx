@@ -1098,6 +1098,18 @@ void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
         maTabs[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
 }
 
+bool ScDocument::GetDataAreaSubrange(ScRange& rRange) const
+{
+    SCTAB nTab = rRange.aStart.Tab();
+    if (nTab != rRange.aEnd.Tab())
+        return true;
+
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetDataAreaSubrange(rRange);
+
+    return true;
+}
+
 void ScDocument::LimitChartArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                     SCCOL& rEndCol, SCROW& rEndRow )
 {
