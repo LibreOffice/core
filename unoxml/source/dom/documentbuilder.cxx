@@ -101,15 +101,15 @@ namespace DOM
         return static_cast< XDocumentBuilder* >(new CDocumentBuilder);
     }
 
-    const char* CDocumentBuilder::aImplementationName = "com.sun.star.comp.xml.dom.DocumentBuilder";
-    const char* CDocumentBuilder::aSupportedServiceNames[] = {
+    static const char aImplementationName[] = "com.sun.star.comp.xml.dom.DocumentBuilder";
+    static const char* aSupportedServiceNames[] = {
         "com.sun.star.xml.dom.DocumentBuilder",
         nullptr
     };
 
     OUString CDocumentBuilder::_getImplementationName()
     {
-        return OUString::createFromAscii(aImplementationName);
+        return OUString(aImplementationName);
     }
     Sequence<OUString> CDocumentBuilder::_getSupportedServiceNames()
     {

@@ -70,8 +70,6 @@ namespace XPath
                 rSMgr);
 
         // static helpers for service info and component management
-        static const char* aImplementationName;
-        static const char* aSupportedServiceNames[];
         static OUString _getImplementationName();
         static css::uno::Sequence< OUString > _getSupportedServiceNames();
         static css::uno::Reference< XInterface > _getInstance(

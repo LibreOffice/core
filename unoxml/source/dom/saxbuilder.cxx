@@ -38,8 +38,8 @@ namespace DOM
         return static_cast< XSAXDocumentBuilder* >(new CSAXDocumentBuilder(rSMgr));
     }
 
-    const char* CSAXDocumentBuilder::aImplementationName = "com.sun.star.comp.xml.dom.SAXDocumentBuilder";
-    const char* CSAXDocumentBuilder::aSupportedServiceNames[] = {
+    static const char aImplementationName[] = "com.sun.star.comp.xml.dom.SAXDocumentBuilder";
+    static const char* aSupportedServiceNames[] = {
         "com.sun.star.xml.dom.SAXDocumentBuilder",
         nullptr
     };
@@ -51,7 +51,7 @@ namespace DOM
 
     OUString CSAXDocumentBuilder::_getImplementationName()
     {
-        return OUString::createFromAscii(aImplementationName);
+        return OUString(aImplementationName);
     }
     Sequence<OUString> CSAXDocumentBuilder::_getSupportedServiceNames()
     {
