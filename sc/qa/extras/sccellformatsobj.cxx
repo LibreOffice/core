@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
+#include <test/container/xenumerationaccess.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -28,7 +29,9 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScCellFormatsObj : public CalcUnoApiTest, public apitest::XElementAccess
+class ScCellFormatsObj : public CalcUnoApiTest,
+                         public apitest::XElementAccess,
+                         public apitest::XEnumerationAccess
 {
 public:
     ScCellFormatsObj();
@@ -42,6 +45,9 @@ public:
     // XElementAccess
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     CPPUNIT_TEST_SUITE_END();
 
