@@ -33,6 +33,7 @@ namespace com { namespace sun { namespace star { namespace chart2 { class XChart
 
 namespace chart { class ExplicitCategoriesProvider; }
 namespace chart { struct ExplicitScaleData; }
+namespace chart { class ChartModel; }
 
 namespace com { namespace sun { namespace star {
     namespace util {
@@ -197,7 +198,8 @@ public:
             const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
             const css::uno::Reference< css::drawing::XShapes >& xTarget,
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory,
-            const css::uno::Reference< css::uno::XComponentContext >& xContext
+            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            ChartModel& rModel
                 ) override;
 
     virtual LegendSymbolStyle getLegendSymbolStyle();
