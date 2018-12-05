@@ -51,6 +51,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <vcl/font.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <oox/helper/attributelist.hxx>
