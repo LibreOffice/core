@@ -43,9 +43,6 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/configurationlistener.hxx>
 
-#ifdef DBG_UTIL
-bool SwViewOption::s_bTest9 = false;        //DrawingLayerNotLoading
-#endif
 Color SwViewOption::s_aDocBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::s_aObjectBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::s_aDocColor(COL_LIGHTGRAY);
