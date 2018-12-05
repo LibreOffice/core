@@ -21,6 +21,7 @@ public:
     void testTdf117028();
     void testTdf118058();
     void testTdf119875();
+    void testForcepoint76();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -28,6 +29,7 @@ public:
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf119875);
+    CPPUNIT_TEST(testForcepoint76);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -131,6 +133,9 @@ void SwLayoutWriter::testTdf119875()
     // overlapped.
     CPPUNIT_ASSERT_LESS(nSecondTop, nFirstTop);
 }
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testForcepoint76() { createDoc("forcepoint76-1.rtf"); }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
 CPPUNIT_PLUGIN_IMPLEMENT();
