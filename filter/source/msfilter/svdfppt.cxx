@@ -2704,6 +2704,7 @@ static void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, Sd
 
             case PPT_PST_CommentAtom10 :
             {
+                sal_uInt16 millisec = 0;
                 rStCtrl.ReadInt32( nIndex )
                        .ReadInt16( aDateTime.Year )
                        .ReadUInt16( aDateTime.Month )
@@ -2712,11 +2713,11 @@ static void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, Sd
                        .ReadUInt16( aDateTime.Hours )
                        .ReadUInt16( aDateTime.Minutes )
                        .ReadUInt16( aDateTime.Seconds )
-                       .ReadUInt32( aDateTime.NanoSeconds )
+                       .ReadUInt16( millisec )
                        .ReadInt32( nPosX )
                        .ReadInt32( nPosY );
 
-                aDateTime.NanoSeconds *= ::tools::Time::nanoPerMilli;
+                aDateTime.NanoSeconds = millisec * ::tools::Time::nanoPerMilli;
             }
             break;
         }
