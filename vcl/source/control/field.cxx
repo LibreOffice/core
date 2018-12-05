@@ -58,7 +58,7 @@ sal_Int64 ImplPower10( sal_uInt16 n )
 
 bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
                                  bool bStrictFormat, bool bThousandSep,
-                                 const LocaleDataWrapper& rLocaleDataWrappper )
+                                 const LocaleDataWrapper& rLocaleDataWrapper )
 {
     if ( !bStrictFormat )
         return false;
@@ -71,15 +71,15 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
                  (nGroup == KEYGROUP_CURSOR) ||
                  (nGroup == KEYGROUP_MISC) ||
                  ((cChar >= '0') && (cChar <= '9')) ||
-                 string::equals(rLocaleDataWrappper.getNumDecimalSep(), cChar) ||
-                 (bThousandSep && string::equals(rLocaleDataWrappper.getNumThousandSep(), cChar)) ||
-                 string::equals(rLocaleDataWrappper.getNumDecimalSepAlt(), cChar) ||
+                 string::equals(rLocaleDataWrapper.getNumDecimalSep(), cChar) ||
+                 (bThousandSep && string::equals(rLocaleDataWrapper.getNumThousandSep(), cChar)) ||
+                 string::equals(rLocaleDataWrapper.getNumDecimalSepAlt(), cChar) ||
                  (cChar == '-'));
     }
 }
 
 bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
-                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
+                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                  bool bCurrency = false )
 {
     OUString            aStr = rStr;
@@ -98,9 +98,9 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
 
 
     // find position of decimal point
-    nDecPos = aStr.indexOf( rLocaleDataWrappper.getNumDecimalSep() );
-    if (nDecPos < 0 && !rLocaleDataWrappper.getNumDecimalSepAlt().isEmpty())
-        nDecPos = aStr.indexOf( rLocaleDataWrappper.getNumDecimalSepAlt() );
+    nDecPos = aStr.indexOf( rLocaleDataWrapper.getNumDecimalSep() );
+    if (nDecPos < 0 && !rLocaleDataWrapper.getNumDecimalSepAlt().isEmpty())
+        nDecPos = aStr.indexOf( rLocaleDataWrapper.getNumDecimalSepAlt() );
     // find position of fraction
     nFracDivPos = aStr.indexOf( '/' );
 
@@ -154,7 +154,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         }
         if (!bNegative && !aStr.isEmpty())
         {
-            sal_uInt16 nFormat = rLocaleDataWrappper.getCurrNegativeFormat();
+            sal_uInt16 nFormat = rLocaleDataWrapper.getCurrNegativeFormat();
             if ( (nFormat == 3) || (nFormat == 6)  || // $1- || 1-$
                  (nFormat == 7) || (nFormat == 10) )  // 1$- || 1 $-
             {

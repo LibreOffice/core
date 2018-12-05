@@ -395,8 +395,8 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
         }
         else
         {
-            SvTreeListEntry* pDropppedOn = GetEntry(aDropPos);
-            if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
+            SvTreeListEntry* pDroppedOn = GetEntry(aDropPos);
+            if (pDroppedOn && (GetChildCount(pDroppedOn) > 0) && !IsExpanded(pDroppedOn))
             {
                 m_aDropActionType = DA_EXPANDNODE;
                 bNeedTrigger = true;

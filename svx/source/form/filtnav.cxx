@@ -1228,8 +1228,8 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
             }
             else
             {   // is it an entry with children, and not yet expanded?
-                SvTreeListEntry* pDropppedOn = GetEntry(aDropPos);
-                if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
+                SvTreeListEntry* pDroppedOn = GetEntry(aDropPos);
+                if (pDroppedOn && (GetChildCount(pDroppedOn) > 0) && !IsExpanded(pDroppedOn))
                 {
                     // -> expand
                     m_aDropActionType = DA_EXPANDNODE;
