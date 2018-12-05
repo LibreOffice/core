@@ -1259,7 +1259,12 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
              IsMoveable() )
         {
             bMovedFwd = true;
-            MoveFwd( bMakePage, false );
+            // don't make the effort to move fwd if its known
+            // conditions that are known not to work
+            if (IsInFootnote() && ForbiddenForFootnoteCntFwd())
+                bMakePage = false;
+            else
+                MoveFwd( bMakePage, false );
         }
     }
 
@@ -1274,7 +1279,13 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         {
             lcl_Prev( this )->InvalidatePrt();
         }
-        MoveFwd( bMakePage, false );
+
+        // don't make the effort to move fwd if its known
+        // conditions that are known not to work
+        if (IsInFootnote() && ForbiddenForFootnoteCntFwd())
+            bMakePage = false;
+        else
+            MoveFwd( bMakePage, false );
     }
 
     // Check footnote content for forward move.
@@ -1294,8 +1305,15 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                  pFootnoteBossOfFootnote != pFootnoteBossOfRef &&
                  pFootnoteBossOfFootnote->IsBefore( pFootnoteBossOfRef ) )
             {
-                bMovedFwd = true;
-                MoveFwd( bMakePage, false );
+                // don't make the effort to move fwd if its known
+                // conditions that are known not to work
+                if (!ForbiddenForFootnoteCntFwd())
+                {
+                    bMovedFwd = true;
+                    MoveFwd(bMakePage, false);
+                }
+                else
+                    bMakePage = false;
             }
         }
     }
@@ -1762,8 +1780,16 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         const bool bCheckForGrownBody = pOldUp->IsBodyFrame();
         const long nOldBodyHeight = aRectFnSet.GetHeight(pOldUp->getFrameArea());
 
-        if ( !bMovedFwd && !MoveFwd( bMakePage, false ) )
-            bMakePage = false;
+        if (!bMovedFwd)
+        {
+            // don't make the effort to move fwd if its known
+            // conditions that are known not to work
+            if (IsInFootnote() && ForbiddenForFootnoteCntFwd())
+                bMakePage = false;
+            else if (!MoveFwd(bMakePage, false))
+                bMakePage = false;
+        }
+
         aRectFnSet.Refresh(this);
         if (!bMovedFwd && bFootnote && GetIndPrev() != pPre)
         {   // SwFlowFrame::CutTree() could have formatted and deleted pPre
