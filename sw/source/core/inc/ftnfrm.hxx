@@ -75,6 +75,7 @@ protected:
 public:
     SwFootnoteFrame( SwFrameFormat*, SwFrame*, SwContentFrame*, SwTextFootnote* );
 
+    virtual bool IsDeleteForbidden() const override;
     virtual void Cut() override;
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 

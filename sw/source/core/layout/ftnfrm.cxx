@@ -484,6 +484,27 @@ SwTwips SwFootnoteFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 }
 #endif
 
+bool SwFootnoteFrame::IsDeleteForbidden() const
+{
+    if (SwLayoutFrame::IsDeleteForbidden())
+        return true;
+    // needs to be in sync with the ::Cut logic
+    const SwLayoutFrame *pUp = GetUpper();
+    if (pUp)
+    {
+        if (GetPrev())
+            return false;
+
+        // The last footnote takes its container along if it
+        // is deleted. Cut would put pUp->Lower() to the value
+        // of GetNext(), so if there is no GetNext then
+        // Cut would delete pUp. If that condition is true
+        // here then check if the container is delete-forbidden
+        return !GetNext() && pUp->IsDeleteForbidden();
+    }
+    return false;
+}
+
 void SwFootnoteFrame::Cut()
 {
     if ( GetNext() )
@@ -509,7 +530,7 @@ void SwFootnoteFrame::Cut()
     if ( pUp )
     {
         // The last footnote takes its container along
-        if ( !pUp->Lower() )
+        if (!pUp->Lower())
         {
             SwPageFrame *pPage = pUp->FindPageFrame();
             if ( pPage )
@@ -1599,7 +1620,8 @@ void SwFootnoteBossFrame::AppendFootnote( SwContentFrame *pRef, SwTextFootnote *
             pNew->Calc(getRootFrame()->GetCurrShell()->GetOut());
             // #i57914# - adjust fix #i49383#
             if ( !bOldFootnoteFrameLocked && !pNew->GetLower() &&
-                 !pNew->IsColLocked() && !pNew->IsBackMoveLocked() )
+                 !pNew->IsColLocked() && !pNew->IsBackMoveLocked() &&
+                 !pNew->IsDeleteForbidden() )
             {
                 pNew->Cut();
                 SwFrame::DestroyFrame(pNew);
@@ -2182,7 +2204,8 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                         if ( !bLock && bUnlockLastFootnoteFrame &&
                              !pLastFootnoteFrame->GetLower() &&
                              !pLastFootnoteFrame->IsColLocked() &&
-                             !pLastFootnoteFrame->IsBackMoveLocked() )
+                             !pLastFootnoteFrame->IsBackMoveLocked() &&
+                             !pLastFootnoteFrame->IsDeleteForbidden() )
                         {
                             pLastFootnoteFrame->Cut();
                             SwFrame::DestroyFrame(pLastFootnoteFrame);
