@@ -430,7 +430,8 @@ static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
     size_t nEndIndex(rEndIndex);
     SwPosition const*const pRLStart(rRedline.Start());
     SwPosition const*const pRLEnd(rRedline.End());
-    if (pRLEnd->nContent == pRLEnd->nNode.GetNode().GetTextNode()->Len())
+    if (!pRLEnd->nNode.GetNode().IsTextNode() // if fully deleted...
+        || pRLEnd->nContent == pRLEnd->nNode.GetNode().GetTextNode()->Len())
     {
         // shortcut: nothing follows redline
         // current state is end state
