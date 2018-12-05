@@ -384,8 +384,14 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
         pObj->GetViewContact().flushViewObjectContacts();
 
         DBG_ASSERT(pObj->IsInserted(),"The object does not have the status Inserted.");
-        pObj->InsertedStateChange(); // calls UserCall, among other
+
+        // tdf#121022 Do first remove from SdrObjList - InsertedStateChange
+        // relies now on IsInserted which uses getParentSdrObjListFromSdrObject
         SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
+
+        // calls UserCall, among other
+        pObj->InsertedStateChange();
+
         if (!mbObjOrdNumsDirty)
         {
             // optimizing for the case that the last object has to be removed
@@ -426,8 +432,12 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
 
         pObj->getSdrModelFromSdrObject().SetChanged();
 
-        pObj->InsertedStateChange(); // calls, among other things, the UserCall
+        // tdf#121022 Do first remove from SdrObjList - InsertedStateChange
+        // relies now on IsInserted which uses getParentSdrObjListFromSdrObject
         SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
+
+        // calls, among other things, the UserCall
+        pObj->InsertedStateChange();
 
         if (!mbObjOrdNumsDirty)
         {
@@ -475,18 +485,28 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
             pObj->getSdrModelFromSdrObject().Broadcast(aHint);
         }
 
-        pObj->InsertedStateChange();
+        // Change parent and replace in SdrObjList
         SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
-        // flushViewObjectContacts() clears the VOC's and those invalidate
+        // tdf#121022 InsertedStateChange uses the parent
+        // to detect if pObj is inserted or not, so have to call
+        // it *after* changing these settings, else a obviously wrong
+        // 'SdrUserCallType::Inserted' would be sent
+        pObj->InsertedStateChange();
+
+        // flushViewObjectContacts() clears the VOC's and those
+        // trigger the evtl. needed invalidate(s)
         pObj->GetViewContact().flushViewObjectContacts();
 
+        // Setup data at new SdrObject - it already *is* inserted to
+        // the SdrObjList due to 'ReplaceObjectInContainer' above
         pNewObj->SetOrdNum(nObjNum);
         SetParentAtSdrObjectFromSdrObjList(*pNewObj, this);
 
         // Inform the parent about change to allow invalidations at
-        // evtl. existing parent visualisations
+        // evtl. existing parent visualisations, but also react on
+        // newly inserted SdrObjects (as e.g. GraphCtrlUserCall does)
         impChildInserted(*pNewObj);
 
         pNewObj->InsertedStateChange();
