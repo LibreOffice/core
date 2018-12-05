@@ -2208,6 +2208,11 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                     if (!pSeries)
                         continue;
 
+                    if (!pSeries->getPropertiesOfSeries()->getPropertyValue("ShowLegendEntry").get<sal_Bool>())
+                    {
+                        continue;
+                    }
+
                     std::vector<ViewLegendEntry> aSeriesEntries(
                             createLegendEntriesForSeries(
                                         rEntryKeyAspectRatio, *pSeries, xTextProperties,
