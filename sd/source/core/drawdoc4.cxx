@@ -1249,7 +1249,7 @@ void SdDrawDocument::SetTextDefaults() const
     aNumberFormat.SetStart(1);
     aNumberFormat.SetNumAdjust(SvxAdjust::Left);
 
-    SvxNumRule aNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR | SvxNumRuleFlags::CHAR_TEXT_DISTANCE, SVX_MAX_NUM, false);
+    SvxNumRule aNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR, SVX_MAX_NUM, false);
 
     //aNumberFormat.SetAbsLSpace( 0 );
     //aNumberFormat.SetFirstLineOffset( 0 );

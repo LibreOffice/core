@@ -4380,8 +4380,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 eNumRuleType = SvxNumRuleType::NUMBERING;
             break;
         }
-        SvxNumRule aRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR |
-                        SvxNumRuleFlags::CHAR_TEXT_DISTANCE,
+        SvxNumRule aRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR,
                         nLevels, false, eNumRuleType );
         for ( sal_uInt16 nCount = 0; nDepth < nLevels; nCount++ )
         {

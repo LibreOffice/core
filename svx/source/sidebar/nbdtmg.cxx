@@ -228,8 +228,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
         xOStm->WriteUInt32( nVersion );
         for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ ) {
             if (IsCustomized(nItem)) {
-                SvxNumRule aDefNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::BULLET_COLOR |
-                    SvxNumRuleFlags::CHAR_TEXT_DISTANCE,
+                SvxNumRule aDefNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::BULLET_COLOR,
                     10, false,
                     SvxNumRuleType::NUMBERING, SvxNumberFormat::LABEL_ALIGNMENT);
                 xOStm->WriteInt32( nItem );
@@ -593,8 +592,7 @@ void OutlineTypeMgr::Init()
     {
         aOutlineAccess = xDefNum->getDefaultOutlineNumberings( aLocale );
 
-        SvxNumRule aDefNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::BULLET_COLOR |
-            SvxNumRuleFlags::CHAR_TEXT_DISTANCE,
+        SvxNumRule aDefNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::BULLET_COLOR,
             10, false,
             SvxNumRuleType::NUMBERING, SvxNumberFormat::LABEL_ALIGNMENT);
 

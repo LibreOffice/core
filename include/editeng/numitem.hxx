@@ -221,7 +221,6 @@ enum class SvxNumRuleFlags
 {
     NONE                = 0x0000,
     CONTINUOUS          = 0x0001, // consecutive numbers possible?
-    CHAR_TEXT_DISTANCE  = 0x0002, // Distance Symbol<->Text?
     CHAR_STYLE          = 0x0004, // Character styles?
     BULLET_REL_SIZE     = 0x0008, // relative bullet size?
     BULLET_COLOR        = 0x0010, // Bullet color
@@ -231,7 +230,7 @@ enum class SvxNumRuleFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxNumRuleFlags> : is_typed_flags<SvxNumRuleFlags, 0x03df> {};
+    template<> struct typed_flags<SvxNumRuleFlags> : is_typed_flags<SvxNumRuleFlags, 0x03dd> {};
 }
 
 enum class SvxNumRuleType
