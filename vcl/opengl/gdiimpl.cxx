@@ -472,7 +472,7 @@ void OpenGLSalGraphicsImpl::SetFillColor( Color nColor )
 }
 
 // enable/disable XOR drawing
-void OpenGLSalGraphicsImpl::SetXORMode( bool bSet )
+void OpenGLSalGraphicsImpl::SetXORMode( bool bSet, bool )
 {
     if (mbXORMode != bSet)
     {
