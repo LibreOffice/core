@@ -99,8 +99,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 
-bool SvxFontItem::bEnableStoreUnicodeNames = false;
-
 SfxPoolItem* SvxFontItem::CreateDefault() {return new SvxFontItem(0);}
 SfxPoolItem* SvxPostureItem::CreateDefault() { return new SvxPostureItem(ITALIC_NONE, 0);}
 SfxPoolItem* SvxWeightItem::CreateDefault() {return new SvxWeightItem(WEIGHT_NORMAL, 0);}
@@ -344,14 +342,6 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
         aStoreFamilyName = "StarBats";
     rStrm.WriteUniOrByteString(aStoreFamilyName, rStrm.GetStreamCharSet());
     rStrm.WriteUniOrByteString(GetStyleName(), rStrm.GetStreamCharSet());
-
-    // catch for EditEngine, only set while creating clipboard stream.
-    if ( bEnableStoreUnicodeNames )
-    {
-        rStrm.WriteUInt32( STORE_UNICODE_MAGIC_MARKER );
-        rStrm.WriteUniOrByteString( aStoreFamilyName, RTL_TEXTENCODING_UNICODE );
-        rStrm.WriteUniOrByteString( GetStyleName(), RTL_TEXTENCODING_UNICODE );
-    }
 
     return rStrm;
 }

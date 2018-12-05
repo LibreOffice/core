@@ -154,8 +154,6 @@ void EditSpellWrapper::CheckSpellTo()
     }
 }
 
-size_t WrongList::Valid = std::numeric_limits<size_t>::max();
-
 WrongList::WrongList() : mnInvalidStart(0), mnInvalidEnd(Valid) {}
 
 void WrongList::SetRanges( const std::vector<editeng::MisspellRange>& rRanges )

@@ -62,7 +62,7 @@ public:
  */
 class WrongList
 {
-    static size_t Valid;
+    static constexpr size_t Valid = std::numeric_limits<size_t>::max();
 
     std::vector<editeng::MisspellRange> maRanges;
     size_t mnInvalidStart;
