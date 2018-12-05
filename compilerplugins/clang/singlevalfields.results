@@ -40,7 +40,7 @@ bridges/source/jni_uno/jni_bridge.h:53
 bridges/source/jni_uno/jni_uno2java.cxx:389
     jni_uno::UNO_proxy m_ref
     1
-chart2/source/controller/inc/ChartController.hxx:377
+chart2/source/controller/inc/ChartController.hxx:378
     chart::ChartController m_aLifeTimeManager
     0
 chart2/source/controller/inc/TitleDialogData.hxx:34
@@ -91,18 +91,6 @@ connectivity/source/inc/OColumn.hxx:48
 connectivity/source/inc/writer/WTable.hxx:69
     connectivity::writer::OWriterTable m_nStartCol
     0
-cui/source/customize/cfgutil.cxx:445
-    CuiConfigGroupBoxResource_Impl m_hdImage
-    res/harddisk_16.png
-cui/source/customize/cfgutil.cxx:446
-    CuiConfigGroupBoxResource_Impl m_libImage
-    res/im30820.png
-cui/source/customize/cfgutil.cxx:447
-    CuiConfigGroupBoxResource_Impl m_macImage
-    res/im30821.png
-cui/source/customize/cfgutil.cxx:448
-    CuiConfigGroupBoxResource_Impl m_docImage
-    res/im30826.png
 cui/source/inc/cfgutil.hxx:228
     CuiConfigGroupListBox m_pStylesInfo
     0
@@ -121,18 +109,12 @@ cui/source/options/optjava.hxx:78
 cui/source/options/treeopt.cxx:456
     OptionsPageInfo m_pPage
     0
-dbaccess/source/filter/xml/xmlStyleImport.hxx:74
-    dbaxml::OTableStylesContext sTableStyleServiceName
-    table
-dbaccess/source/filter/xml/xmlStyleImport.hxx:75
-    dbaxml::OTableStylesContext sColumnStyleServiceName
-    table-column
-dbaccess/source/filter/xml/xmlStyleImport.hxx:76
-    dbaxml::OTableStylesContext sCellStyleServiceName
-    table-cell
 desktop/source/app/cmdlineargs.hxx:137
     desktop::CommandLineArgs m_quickstart
     0
+editeng/inc/edtspell.hxx:65
+    WrongList Valid
+    18446744073709551615
 editeng/source/editeng/impedit.hxx:472
     ImpEditEngine nBigTextObjectStart
     20
@@ -173,16 +155,19 @@ include/canvas/rendering/irendermodule.hxx:40
     canvas::Vertex g
     1
 include/canvas/rendering/irendermodule.hxx:40
-    canvas::Vertex b
+    canvas::Vertex r
     1
 include/canvas/rendering/irendermodule.hxx:40
-    canvas::Vertex r
+    canvas::Vertex b
     1
 include/canvas/rendering/irendermodule.hxx:42
     canvas::Vertex z
     0
 include/connectivity/sqlparse.hxx:139
     connectivity::OSQLParser m_pParseTree
+    0
+include/editeng/fontitem.hxx:39
+    SvxFontItem bEnableStoreUnicodeNames
     0
 include/editeng/swafopt.hxx:58
     editeng::SortedAutoCompleteStrings owning_
@@ -226,6 +211,9 @@ include/sfx2/msg.hxx:200
 include/sfx2/msg.hxx:201
     SfxSlot nArgDefCount
     0
+include/svl/documentlockfile.hxx:35
+    svt::DocumentLockFile m_bAllowInteraction
+    1
 include/svtools/filechangedchecker.hxx:29
     FileChangedChecker mIdle
     SVTools FileChangedChecker Idle
@@ -307,24 +295,33 @@ include/svx/svdmrkv.hxx:111
 include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet maPropsToTest
     1
-include/vcl/ITiledRenderable.hxx:91
+include/vcl/imapobj.hxx:77
+    IMapObject nActualTextEncoding
+    0
+include/vcl/ITiledRenderable.hxx:88
     vcl::ITiledRenderable mnTilePixelWidth
     256
-include/vcl/ITiledRenderable.hxx:91
+include/vcl/ITiledRenderable.hxx:88
     vcl::ITiledRenderable mnTilePixelHeight
     256
-include/vcl/opengl/OpenGLContext.hxx:57
+include/vcl/opengl/OpenGLContext.hxx:51
     OpenGLCapabilitySwitch mbLimitedShaderRegisters
     0
 include/vcl/slider.hxx:39
     Slider mnChannelPixOffset
     0
-include/vcl/xtextedt.hxx:36
-    ExtTextEngine maGroupChars
-    (){}[]
 libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading
     0
+lotuswordpro/inc/xfilter/xfglobal.hxx:138
+    XFGlobal s_nGraphID
+    1
+lotuswordpro/inc/xfilter/xfglobal.hxx:139
+    XFGlobal s_nTableID
+    1
+lotuswordpro/inc/xfilter/xfglobal.hxx:143
+    XFGlobal s_nObjID
+    1
 oox/source/core/contexthandler2.cxx:36
     oox::core::ElementInfo maChars
     0
@@ -370,12 +367,21 @@ sc/inc/compiler.hxx:111
 sc/inc/dpfilteredcache.hxx:93
     ScDPFilteredCache::Criterion mpFilter
     0
+sc/inc/global.hxx:554
+    ScGlobal cListDelimiter
+    44
 sc/inc/listenercontext.hxx:46
     sc::EndListeningContext maSet
     0
 sc/inc/markmulti.hxx:79
     ScMultiSelIter aMarkArrayIter
     0
+sc/inc/progress.hxx:47
+    ScProgress pOldInterpretProgress
+    0
+sc/inc/progress.hxx:49
+    ScProgress bAllowInterpretProgress
+    1
 sc/inc/refdata.hxx:37
     ScSingleRefData::(anonymous) mnFlagValue
     0
@@ -430,7 +436,7 @@ sc/source/ui/inc/conflictsdlg.hxx:134
 sc/source/ui/inc/retypepassdlg.hxx:91
     ScRetypePassDlg mpDocItem
     0
-sc/source/ui/inc/viewdata.hxx:288
+sc/source/ui/inc/viewdata.hxx:289
     ScViewData aLogicMode
     0
 sd/inc/sdpptwrp.hxx:42
@@ -493,9 +499,6 @@ sfx2/source/control/itemdel.cxx:31
 slideshow/source/engine/slideshowimpl.cxx:479
     (anonymous namespace)::SlideShowImpl maFrameSynchronization
     0.02
-slideshow/test/testview.cxx:59
-    ImplTestView mbIsClearCalled
-    0
 soltools/cpp/cpp.h:120
     includelist deleted
     1
@@ -505,9 +508,6 @@ soltools/mkdepend/def.h:116
 soltools/mkdepend/def.h:118
     inclist i_searched
     1
-soltools/mkdepend/def.h:119
-    inclist i_included_sym
-    0
 starmath/inc/edit.hxx:54
     SmEditWindow aModifyIdle
     SmEditWindow ModifyIdle
@@ -529,21 +529,18 @@ stoc/source/security/lru_cache.h:54
 svl/source/crypto/cryptosign.cxx:152
     (anonymous namespace)::(anonymous) extensions
     0
-svtools/source/contnr/imivctl.hxx:159
+svtools/source/contnr/imivctl.hxx:158
     SvxIconChoiceCtrl_Impl aAutoArrangeIdle
     svtools contnr SvxIconChoiceCtrl_Impl AutoArrange
-svtools/source/contnr/imivctl.hxx:160
+svtools/source/contnr/imivctl.hxx:159
     SvxIconChoiceCtrl_Impl aDocRectChangedIdle
     svtools contnr SvxIconChoiceCtrl_Impl DocRectChanged
-svtools/source/contnr/imivctl.hxx:161
+svtools/source/contnr/imivctl.hxx:160
     SvxIconChoiceCtrl_Impl aVisRectChangedIdle
     svtools contnr SvxIconChoiceCtrl_Impl VisRectChanged
-svtools/source/contnr/imivctl.hxx:162
+svtools/source/contnr/imivctl.hxx:161
     SvxIconChoiceCtrl_Impl aCallSelectHdlIdle
     svtools contnr SvxIconChoiceCtrl_Impl CallSelectHdl
-svtools/source/contnr/imivctl.hxx:192
-    SvxIconChoiceCtrl_Impl pCurEditedEntry
-    0
 svtools/source/dialogs/roadmapwizard.cxx:55
     svt::RoadmapWizardImpl pRoadmap
     0
@@ -586,21 +583,24 @@ sw/inc/view.hxx:189
 sw/inc/view.hxx:190
     SwView m_pVScrollbar
     0
+sw/inc/viewopt.hxx:188
+    SwViewOption s_bTest9
+    0
 sw/inc/viewopt.hxx:189
     SwViewOption m_bTest10
     0
 sw/source/core/bastyp/calc.cxx:95
     CalcOp eOp
     0
-sw/source/core/doc/tblrwcl.cxx:100
-    CR_SetBoxWidth pUndo
-    0
-sw/source/core/doc/tblrwcl.cxx:174
-    CR_SetLineHeight pUndo
-    0
 sw/source/core/docnode/threadmanager.hxx:125
     ThreadManager maStartNewThreadIdle
     SW ThreadManager StartNewThreadIdle
+sw/source/core/inc/DocumentTimerManager.hxx:77
+    sw::DocumentTimerManager m_aFireIdleJobsTimer
+    sw::DocumentTimerManager m_aFireIdleJobsTimer
+sw/source/core/inc/txtfrm.hxx:156
+    SwTextFrame nMinPrtLine
+    0
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nID
     4294967295
@@ -661,22 +661,28 @@ sw/source/uibase/inc/srcedtw.hxx:87
 sw/source/uibase/inc/unotools.hxx:63
     SwOneExampleFrame m_aLoadedIdle
     sw uibase SwOneExampleFrame Loaded
-unotools/source/config/extendedsecurityoptions.cxx:88
-    SvtExtendedSecurityOptions_Impl m_aSecureExtensionsSetName
-    SecureExtensions
 unotools/source/config/saveopt.cxx:77
     SvtSaveOptions_Impl bROUserAutoSave
     0
+unoxml/source/dom/documentbuilder.hxx:63
+    DOM::CDocumentBuilder aImplementationName
+    com.sun.star.comp.xml.dom.DocumentBuilder
+unoxml/source/dom/saxbuilder.hxx:64
+    DOM::CSAXDocumentBuilder aImplementationName
+    com.sun.star.comp.xml.dom.SAXDocumentBuilder
+unoxml/source/xpath/xpathapi.hxx:73
+    XPath::CXPathAPI aImplementationName
+    com.sun.star.comp.xml.xpath.XPathAPI
 vcl/inc/graphic/Manager.hxx:42
     vcl::graphic::Manager maSwapOutTimer
     graphic::Manager maSwapOutTimer
 vcl/inc/impfontcache.hxx:77
     ImplFontCache m_aBoundRectCache
     3000
-vcl/inc/salprn.hxx:42
+vcl/inc/salprn.hxx:43
     SalPrinterQueueInfo mnStatus
     0
-vcl/inc/salprn.hxx:43
+vcl/inc/salprn.hxx:44
     SalPrinterQueueInfo mnJobs
     4294967295
 vcl/inc/salwtype.hxx:154
@@ -700,6 +706,33 @@ vcl/inc/svdata.hxx:292
 vcl/inc/svdata.hxx:301
     ImplSVNWFData mbRolloverMenubar
     0
+vcl/source/filter/FilterConfigCache.hxx:62
+    FilterConfigCache bInitialized
+    0
+vcl/source/filter/FilterConfigCache.hxx:63
+    FilterConfigCache nIndType
+    -1
+vcl/source/filter/FilterConfigCache.hxx:64
+    FilterConfigCache nIndUIName
+    -1
+vcl/source/filter/FilterConfigCache.hxx:65
+    FilterConfigCache nIndDocumentService
+    -1
+vcl/source/filter/FilterConfigCache.hxx:66
+    FilterConfigCache nIndFilterService
+    -1
+vcl/source/filter/FilterConfigCache.hxx:67
+    FilterConfigCache nIndFlags
+    -1
+vcl/source/filter/FilterConfigCache.hxx:68
+    FilterConfigCache nIndUserData
+    -1
+vcl/source/filter/FilterConfigCache.hxx:69
+    FilterConfigCache nIndFileFormatVersion
+    -1
+vcl/source/filter/FilterConfigCache.hxx:70
+    FilterConfigCache nIndTemplateName
+    -1
 vcl/source/filter/jpeg/transupp.h:128
     (anonymous) perfect
     0
@@ -760,7 +793,7 @@ vcl/source/gdi/dibtools.cxx:117
 vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5Reserved
     0
-vcl/source/gdi/pdfwriter_impl.hxx:740
+vcl/source/gdi/pdfwriter_impl.hxx:741
     vcl::PDFWriterImpl m_DocDigest
     0
 writerfilter/source/dmapper/SettingsTable.cxx:239
@@ -775,3 +808,9 @@ writerfilter/source/rtftok/rtfdocumentimpl.hxx:620
 writerfilter/source/rtftok/rtfdocumentimpl.hxx:623
     writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
+writerfilter/source/rtftok/rtftokenizer.hxx:71
+    writerfilter::rtftok::RTFTokenizer s_bControlWordsSorted
+    1
+writerfilter/source/rtftok/rtftokenizer.hxx:74
+    writerfilter::rtftok::RTFTokenizer s_bMathControlWordsSorted
+    1

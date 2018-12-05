@@ -28,10 +28,10 @@ include/vbahelper/vbapagesetupbase.hxx:50
 include/vcl/dialog.hxx:48
     Dialog mnMousePositioned
     long
-include/vcl/headbar.hxx:216
+include/vcl/headbar.hxx:213
     HeaderBar mnBorderOff1
     long
-include/vcl/headbar.hxx:217
+include/vcl/headbar.hxx:214
     HeaderBar mnBorderOff2
     long
 libreofficekit/source/gtk/tilebuffer.hxx:219
@@ -55,7 +55,7 @@ sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1100
 sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1102
     ScPagePreviewCountData nFooters
     long
-sc/source/ui/vba/vbahyperlink.hxx:82
+sc/source/ui/vba/vbahyperlink.hxx:83
     ScVbaHyperlink mnType
     long
 sd/qa/unit/tiledrendering/tiledrendering.cxx:968
