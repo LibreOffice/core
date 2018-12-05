@@ -141,7 +141,7 @@ public:
     virtual void SetFillColor( Color nColor ) override;
 
     // enable/disable XOR drawing
-    virtual void SetXORMode( bool bSet ) override;
+    virtual void SetXORMode( bool bSet, bool bInvertOnly ) override;
 
     // set line color for raster operations
     virtual void SetROPLineColor( SalROPColor nROPColor ) override;

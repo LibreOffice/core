@@ -739,9 +739,9 @@ void WinSalGraphics::SetFillColor( Color nColor )
     mpImpl->SetFillColor( nColor );
 }
 
-void WinSalGraphics::SetXORMode( bool bSet)
+void WinSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
 {
-    mpImpl->SetXORMode( bSet);
+    mpImpl->SetXORMode( bSet, bInvertOnly );
 }
 
 void WinSalGraphics::SetROPLineColor( SalROPColor nROPColor )
