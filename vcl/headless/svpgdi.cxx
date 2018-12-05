@@ -668,7 +668,7 @@ void SvpSalGraphics::SetFillColor( Color nColor )
     m_aFillColor = nColor;
 }
 
-void SvpSalGraphics::SetXORMode(bool bSet )
+void SvpSalGraphics::SetXORMode(bool bSet, bool )
 {
     m_ePaintMode = bSet ? PaintMode::Xor : PaintMode::Over;
 }
