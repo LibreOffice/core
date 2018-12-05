@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_ff547f56",
+        "filename": "solenv/gbuild/CppunitTest.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-05T16:46:29Z",
+      "side": 1,
+      "message": "but gb_TEST_ENV_VARS is a make variable; what is the purpose of setting gb_TEST_ENV_VARS as an env var in this recipe command line?",
+      "revId": "43d98008e01e3cbba3c7d15c31360354f36f42fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
