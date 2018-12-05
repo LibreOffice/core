@@ -411,9 +411,9 @@ void X11SalGraphics::SetROPFillColor( SalROPColor nROPColor )
     mxImpl->SetROPFillColor( nROPColor );
 }
 
-void X11SalGraphics::SetXORMode( bool bSet )
+void X11SalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
 {
-    mxImpl->SetXORMode( bSet );
+    mxImpl->SetXORMode( bSet, bInvertOnly );
 }
 
 void X11SalGraphics::drawPixel( long nX, long nY )
