@@ -903,8 +903,6 @@ EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, Edit
     {
         CursorMoved( aOldPaM.GetNode() );
     }
-    else
-        aStatus.GetStatusWord() = aStatus.GetStatusWord() | EditStatusFlags::CRSRMOVEFAIL;
 
     // May cause, an CreateAnchor or deselection all
     aSelEngine.SetCurView( pEditView );
