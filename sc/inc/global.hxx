@@ -551,7 +551,7 @@ public:
     static ::utl::TransliterationWrapper* GetCaseTransliteration();
 
     SC_DLLPUBLIC static LanguageType            eLnge;
-    static sal_Unicode          cListDelimiter;
+    static constexpr sal_Unicode cListDelimiter = ',';
 
     static const OUString&      GetClipDocName();
     static void                 SetClipDocName( const OUString& rNew );
