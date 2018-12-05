@@ -853,8 +853,8 @@ namespace svxform
                     bNeedTrigger = true;
                 } else
                 {   // on an entry with children, not swang open
-                    SvTreeListEntry* pDropppedOn = GetEntry(aDropPos);
-                    if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
+                    SvTreeListEntry* pDroppedOn = GetEntry(aDropPos);
+                    if (pDroppedOn && (GetChildCount(pDroppedOn) > 0) && !IsExpanded(pDroppedOn))
                     {
                         // -> swing open
                         m_aDropActionType = DA_EXPANDNODE;
