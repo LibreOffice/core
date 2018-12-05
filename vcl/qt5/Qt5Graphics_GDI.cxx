@@ -657,7 +657,7 @@ void Qt5Graphics::SetFillColor() { m_aFillColor = SALCOLOR_NONE; }
 
 void Qt5Graphics::SetFillColor(Color nColor) { m_aFillColor = nColor; }
 
-void Qt5Graphics::SetXORMode(bool bSet)
+void Qt5Graphics::SetXORMode(bool bSet, bool)
 {
     if (bSet)
         m_eCompositionMode = QPainter::CompositionMode_Xor;
