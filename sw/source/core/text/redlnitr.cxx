@@ -82,6 +82,11 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
             continue;
         }
+        if (pStart->nNode.GetNode().IsTableNode())
+        {
+            assert(&pEnd->nNode.GetNode() == &rTextNode && pEnd->nContent.GetIndex() == 0);
+            continue; // known pathology, ignore it
+        }
         bHaveRedlines = true;
         assert(pNode != &rTextNode || &pStart->nNode.GetNode() == &rTextNode); // detect calls with wrong start node
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
@@ -124,12 +129,32 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
                 }
                 pTmp->SetRedlineMergeFlag(SwNode::Merge::Hidden);
             }
-            pNode = pEnd->nNode.GetNode().GetTextNode();
-            assert(pNode);
-            nodes.push_back(pNode);
-            pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
+            // note: in DelLastPara() case, the end node is not actually merged
+            // and is likely a SwTableNode!
+            if (!pEnd->nNode.GetNode().IsTextNode())
+            {
+                assert(pEnd->nNode != pStart->nNode);
+                // must set pNode too because it will mark the last node
+                pNode = nodes.back();
+                assert(pNode == pNode->GetNodes()[pEnd->nNode.GetIndex() - 1]);
+                if (pNode != &rTextNode)
+                {   // something might depend on last merged one being NonFirst?
+                    pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
+                }
+                nLastEnd = pNode->Len();
+            }
+            else
+            {
+                pNode = pEnd->nNode.GetNode().GetTextNode();
+                nodes.push_back(pNode);
+                pNode->SetRedlineMergeFlag(SwNode::Merge::NonFirst);
+                nLastEnd = pEnd->nContent.GetIndex();
+            }
         }
-        nLastEnd = pEnd->nContent.GetIndex();
+        else
+        {
+            nLastEnd = pEnd->nContent.GetIndex();
+        }
     }
     if (pNode == &rTextNode)
     {
@@ -193,13 +218,14 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     if (extents.empty()) // there was no text anywhere
     {
         assert(mergedText.isEmpty());
-        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
+//        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
     }
     else
     {
         assert(!mergedText.isEmpty());
-        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
+//        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
     }
+    pParaPropsNode = &rTextNode; // well, actually...
     // keep lists up to date with visible nodes
     if (pParaPropsNode->IsInList() && !pParaPropsNode->GetNum(rFrame.getRootFrame()))
     {
@@ -243,7 +269,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             {
                 hidden.emplace_back(nLast, pTextNode->Len());
             }
-            sw::RemoveFootnotesForNode(rFrame, *pTextNode, &hidden);
+            sw::RemoveFootnotesForNode(*rFrame.getRootFrame(), *pTextNode, &hidden);
         }
         // unfortunately DelFrames() must be done before StartListening too,
         // otherwise footnotes cannot be deleted by SwTextFootnote::DelFrames!
@@ -274,12 +300,14 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
 
 } // namespace sw
 
-void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
+void SwAttrIter::InitFontAndAttrHandler(
+        SwTextNode const& rPropsNode,
+        SwTextNode const& rTextNode,
         OUString const& rText,
         bool const*const pbVertLayout)
 {
     // Build a font matching the default paragraph style:
-    SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), m_pViewShell );
+    SwFontAccess aFontAccess( &rPropsNode.GetAnyFormatColl(), m_pViewShell );
     // It is possible that Init is called more than once, e.g., in a
     // SwTextFrame::FormatOnceMore situation or (since sw_redlinehide)
     // from SwAttrIter::Seek(); in the latter case SwTextSizeInfo::m_pFnt
@@ -370,7 +398,9 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     if (m_pScriptInfo->GetInvalidityA() != TextFrameIndex(COMPLETE_STRING))
          m_pScriptInfo->InitScriptInfo(rTextNode, m_pMergedPara, bRTL);
 
-    InitFontAndAttrHandler(rTextNode,
+    InitFontAndAttrHandler(
+            m_pMergedPara ? *m_pMergedPara->pParaPropsNode : rTextNode,
+            rTextNode,
             m_pMergedPara ? m_pMergedPara->mergedText : rTextNode.GetText(),
             & bVertLayout);
 
@@ -723,11 +753,11 @@ SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode,
                 {
                     SwRangeRedline const*const pNext =
                         m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct + nSkipped];
-                    if (pRedline->End() < pNext->Start())
+                    if (*pRedline->End() < *pNext->Start())
                     {
                         break; // done for now
                     }
-                    else if (pNext->Start() == pRedline->End() &&
+                    else if (*pNext->Start() == *pRedline->End() &&
                             pNext->GetType() == nsRedlineType_t::REDLINE_DELETE)
                     {
                         // consecutive delete - continue
