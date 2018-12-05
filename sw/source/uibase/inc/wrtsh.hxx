@@ -404,7 +404,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     // jump to bookmark and set the "selections-flags" correctly again
     void GotoMark( const ::sw::mark::IMark* const pMark );
-    void GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect );
+    bool GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect );
     void GotoMark( const OUString& rName );
     bool GoNextBookmark(); // true when there still was one
     bool GoPrevBookmark();

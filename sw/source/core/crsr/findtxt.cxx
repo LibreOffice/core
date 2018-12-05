@@ -34,11 +34,15 @@
 #include <fmtfld.hxx>
 #include <txtatr.hxx>
 #include <txtfld.hxx>
+#include <txtfrm.hxx>
+#include <rootfrm.hxx>
 #include <swcrsr.hxx>
+#include <redline.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <dcontact.hxx>
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
@@ -53,59 +57,182 @@
 using namespace ::com::sun::star;
 using namespace util;
 
-static OUString
-lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
-             std::vector<sal_Int32> &rArr, bool const bRemoveSoftHyphen, bool const bRemoveCommentAnchors)
+/// because the Find may be called on the View or the Model, we need an index
+/// afflicted by multiple personality disorder
+struct AmbiguousIndex
 {
-    OUStringBuffer buf(rNd.GetText());
+private:
+    sal_Int32 m_value;
+
+#ifndef NDEBUG
+    enum class tags : char { Any, Frame, Model };
+    tags m_tag;
+#endif
+
+public:
+    AmbiguousIndex() : m_value(-1), m_tag(tags::Any) {}
+    explicit AmbiguousIndex(sal_Int32 const value, tags const tag) : m_value(value), m_tag(tag) {}
+
+    sal_Int32 & GetAnyIndex() { return m_value; } ///< for arithmetic
+    sal_Int32 const& GetAnyIndex() const { return m_value; } ///< for arithmetic
+    TextFrameIndex GetFrameIndex() const
+    {
+        assert(m_tag != tags::Model);
+        return TextFrameIndex(m_value);
+    }
+    sal_Int32 GetModelIndex() const
+    {
+        assert(m_tag != tags::Frame);
+        return m_value;
+    }
+    void SetFrameIndex(TextFrameIndex const value)
+    {
+#ifndef NDEBUG
+        m_tag = tags::Frame;
+#endif
+        m_value = sal_Int32(value);
+    }
+    void SetModelIndex(sal_Int32 const value)
+    {
+#ifndef NDEBUG
+        m_tag = tags::Model;
+#endif
+        m_value = value;
+    }
+
+    bool operator ==(AmbiguousIndex const& rOther) const
+    {
+        assert(m_tag == tags::Any || rOther.m_tag == tags::Any || m_tag == rOther.m_tag);
+        return m_value == rOther.m_value;
+    }
+    bool operator <=(AmbiguousIndex const& rOther) const
+    {
+        assert(m_tag == tags::Any || rOther.m_tag == tags::Any || m_tag == rOther.m_tag);
+        return m_value <= rOther.m_value;
+    }
+    bool operator < (AmbiguousIndex const& rOther) const
+    {
+        assert(m_tag == tags::Any || rOther.m_tag == tags::Any || m_tag == rOther.m_tag);
+        return m_value <  rOther.m_value;
+    }
+    AmbiguousIndex operator - (AmbiguousIndex const& rOther) const
+    {
+        assert(m_tag == tags::Any || rOther.m_tag == tags::Any || m_tag == rOther.m_tag);
+        return AmbiguousIndex(m_value - rOther.m_value, std::max(m_tag, rOther.m_tag));
+    }
+};
+
+class MaybeMergedIter
+{
+    boost::optional<sw::MergedAttrIter> m_oMergedIter;
+    SwTextNode const*const m_pNode;
+    size_t m_HintIndex;
+
+public:
+    MaybeMergedIter(SwTextFrame const*const pFrame, SwTextNode const*const pNode)
+        : m_pNode(pNode)
+        , m_HintIndex(0)
+    {
+        if (pFrame)
+        {
+            m_oMergedIter.emplace(*pFrame);
+        }
+    }
+
+    SwTextAttr const* NextAttr(SwTextNode const*& rpNode)
+    {
+        if (m_oMergedIter)
+        {
+            return m_oMergedIter->NextAttr(&rpNode);
+        }
+        if (SwpHints const*const pHints = m_pNode->GetpSwpHints())
+        {
+            if (m_HintIndex < pHints->Count())
+            {
+                rpNode = m_pNode;
+                return pHints->Get(m_HintIndex++);
+            }
+        }
+        return nullptr;
+    }
+};
+
+static OUString
+lcl_CleanStr(const SwTextNode& rNd,
+             SwTextFrame const*const pFrame,
+             SwRootFrame const*const pLayout,
+             AmbiguousIndex const nStart, AmbiguousIndex & rEnd,
+             std::vector<AmbiguousIndex> &rArr,
+             bool const bRemoveSoftHyphen, bool const bRemoveCommentAnchors)
+{
+    OUStringBuffer buf(pLayout ? pFrame->GetText() : rNd.GetText());
     rArr.clear();
 
-    const SwpHints *pHts = rNd.GetpSwpHints();
+    MaybeMergedIter iter(pLayout ? pFrame : nullptr, pLayout ? nullptr : &rNd);
 
-    size_t n = 0;
-    sal_Int32 nSoftHyphen = nStart;
-    sal_Int32 nHintStart = -1;
+    AmbiguousIndex nSoftHyphen = nStart;
+    AmbiguousIndex nHintStart;
     bool bNewHint       = true;
     bool bNewSoftHyphen = true;
-    const sal_Int32 nEnd = rEnd;
-    std::vector<sal_Int32> aReplaced;
+    const AmbiguousIndex nEnd = rEnd;
+    std::vector<AmbiguousIndex> aReplaced;
+    SwTextNode const* pNextHintNode(nullptr);
+    SwTextAttr const* pNextHint(iter.NextAttr(pNextHintNode));
 
     do
     {
         if ( bNewHint )
-            nHintStart = pHts && n < pHts->Count() ?
-                         pHts->Get(n)->GetStart() :
-                         -1;
+        {
+            if (pLayout)
+            {
+                nHintStart.SetFrameIndex(pNextHint
+                        ? pFrame->MapModelToView(pNextHintNode, pNextHint->GetStart())
+                        : TextFrameIndex(-1));
+            }
+            else
+            {
+                nHintStart.SetModelIndex(pNextHint ? pNextHint->GetStart() : -1);
+            }
+        }
 
         if ( bNewSoftHyphen )
         {
-            nSoftHyphen = bRemoveSoftHyphen
-                    ?  rNd.GetText().indexOf(CHAR_SOFTHYPHEN, nSoftHyphen)
-                    : -1;
+            if (pLayout)
+            {
+                nSoftHyphen.SetFrameIndex(TextFrameIndex(bRemoveSoftHyphen
+                    ? pFrame->GetText().indexOf(CHAR_SOFTHYPHEN, nSoftHyphen.GetAnyIndex())
+                    : -1));
+            }
+            else
+            {
+                nSoftHyphen.SetModelIndex(bRemoveSoftHyphen
+                    ? rNd.GetText().indexOf(CHAR_SOFTHYPHEN, nSoftHyphen.GetAnyIndex())
+                    : -1);
+            }
         }
 
         bNewHint       = false;
         bNewSoftHyphen = false;
-        sal_Int32 nStt = 0;
+        AmbiguousIndex nStt;
 
         // Check if next stop is a hint.
-        if ( nHintStart>=0
-            && (-1 == nSoftHyphen || nHintStart < nSoftHyphen)
+        if (0 <= nHintStart.GetAnyIndex()
+            && (-1 == nSoftHyphen.GetAnyIndex() || nHintStart < nSoftHyphen)
             && nHintStart < nEnd )
         {
             nStt = nHintStart;
             bNewHint = true;
         }
         // Check if next stop is a soft hyphen.
-        else if (   -1 != nSoftHyphen
-                 && (-1 == nHintStart || nSoftHyphen < nHintStart)
+        else if (   -1 != nSoftHyphen.GetAnyIndex()
+                 && (-1 == nHintStart.GetAnyIndex() || nSoftHyphen < nHintStart)
                  && nSoftHyphen < nEnd)
         {
             nStt = nSoftHyphen;
             bNewSoftHyphen = true;
         }
         // If nSoftHyphen == nHintStart, the current hint *must* be a hint with an end.
-        else if (-1 != nSoftHyphen && nSoftHyphen == nHintStart)
+        else if (-1 != nSoftHyphen.GetAnyIndex() && nSoftHyphen == nHintStart)
         {
             nStt = nSoftHyphen;
             bNewHint = true;
@@ -114,14 +241,14 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
         else
             break;
 
-        const sal_Int32 nCurrent = nStt - rArr.size();
+        AmbiguousIndex nCurrent(nStt);
+        nCurrent.GetAnyIndex() -= rArr.size();
 
         if ( bNewHint )
         {
-            const SwTextAttr* pHt = pHts->Get(n);
-            if ( pHt->HasDummyChar() && (nStt >= nStart) )
+            if (pNextHint->HasDummyChar() && (nStart <= nStt))
             {
-                switch( pHt->Which() )
+                switch (pNextHint->Which())
                 {
                 case RES_TXTATR_FLYCNT:
                 case RES_TXTATR_FTN:
@@ -138,19 +265,19 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                         // simply removed if first. If at the end, we keep the
                         // replacement and remove afterwards all at a string's
                         // end (might be normal 0x7f).
-                        const bool bEmpty = pHt->Which() != RES_TXTATR_FIELD
-                            || (static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true, nullptr).isEmpty());
+                        const bool bEmpty = pNextHint->Which() != RES_TXTATR_FIELD
+                            || (static_txtattr_cast<SwTextField const*>(pNextHint)->GetFormatField().GetField()->ExpandField(true, pLayout).isEmpty());
                         if ( bEmpty && nStart == nCurrent )
                         {
                             rArr.push_back( nCurrent );
-                            --rEnd;
-                            buf.remove(nCurrent, 1);
+                            --rEnd.GetAnyIndex();
+                            buf.remove(nCurrent.GetAnyIndex(), 1);
                         }
                         else
                         {
                             if ( bEmpty )
                                 aReplaced.push_back( nCurrent );
-                            buf[nCurrent] = '\x7f';
+                            buf[nCurrent.GetAnyIndex()] = '\x7f';
                         }
                     }
                     break;
@@ -159,8 +286,8 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                         if( bRemoveCommentAnchors )
                         {
                             rArr.push_back( nCurrent );
-                            --rEnd;
-                            buf.remove( nCurrent, 1 );
+                            --rEnd.GetAnyIndex();
+                            buf.remove( nCurrent.GetAnyIndex(), 1 );
                         }
                     }
                     break;
@@ -169,71 +296,53 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                     break;
                 }
             }
-            ++n;
+            pNextHint = iter.NextAttr(pNextHintNode);
         }
 
         if ( bNewSoftHyphen )
         {
             rArr.push_back( nCurrent );
-            --rEnd;
-            buf.remove(nCurrent, 1);
-            ++nSoftHyphen;
+            --rEnd.GetAnyIndex();
+            buf.remove(nCurrent.GetAnyIndex(), 1);
+            ++nSoftHyphen.GetAnyIndex();
         }
     }
     while ( true );
 
-    for( std::vector<sal_Int32>::size_type i = aReplaced.size(); i; )
+    for (auto i = aReplaced.size(); i; )
     {
-        const sal_Int32 nTmp = aReplaced[ --i ];
-        if (nTmp == buf.getLength() - 1)
+        const AmbiguousIndex nTmp = aReplaced[ --i ];
+        if (nTmp.GetAnyIndex() == buf.getLength() - 1)
         {
-            buf.truncate(nTmp);
+            buf.truncate(nTmp.GetAnyIndex());
             rArr.push_back( nTmp );
-            --rEnd;
+            --rEnd.GetAnyIndex();
         }
     }
 
     return buf.makeStringAndClear();
 }
 
-// skip all non SwPostIts inside the array
-static size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
-{
-    size_t aIndex = 0;
-    while (aCount)
-    {
-        for (size_t i = 0; i < pHts->Count(); ++i )
-        {
-            aIndex++;
-            const SwTextAttr* pTextAttr = pHts->Get(i);
-            if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION )
-            {
-                aCount--;
-                if (!aCount)
-                    break;
-            }
-        }
-    }
-    // throw away all following non postits
-    for( size_t i = aIndex; i < pHts->Count(); ++i )
-    {
-        const SwTextAttr* pTextAttr = pHts->Get(i);
-        if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION )
-            break;
-        else
-            aIndex++;
-    }
-    return aIndex;
-}
+static bool DoSearch(SwPaM & rSearchPam,
+    const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
+    SwMoveFnCollection const & fnMove,
+    bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
+    AmbiguousIndex & nStart, AmbiguousIndex & nEnd, AmbiguousIndex nTextLen,
+    SwTextNode const* pNode, SwTextFrame const* pTextFrame,
+    SwRootFrame const* pLayout, SwPaM* pPam);
 
-bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::TextSearch& rSText,
-                  SwMoveFnCollection const & fnMove, const SwPaM * pRegion,
-                  bool bInReadOnly )
+namespace sw {
+
+bool FindTextImpl(SwPaM & rSearchPam,
+        const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
+        utl::TextSearch& rSText,
+        SwMoveFnCollection const & fnMove, const SwPaM & rRegion,
+        bool bInReadOnly, SwRootFrame const*const pLayout)
 {
     if( rSearchOpt.searchString.isEmpty() )
         return false;
 
-    std::unique_ptr<SwPaM> pPam = MakeRegion( fnMove, pRegion );
+    std::unique_ptr<SwPaM> pPam = sw::MakeRegion(fnMove, rRegion);
     const bool bSrchForward = &fnMove == &fnMoveForward;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rContentIdx = pPam->GetPoint()->nContent;
@@ -255,47 +364,95 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
     aSearchItem.SetBackward(!bSrchForward);
 
     // LanguageType eLastLang = 0;
-    while( nullptr != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
+    while (nullptr != (pNode = ::GetNode(*pPam, bFirst, fnMove, bInReadOnly, pLayout)))
     {
         if( pNode->IsTextNode() )
         {
             SwTextNode& rTextNode = *pNode->GetTextNode();
-            sal_Int32 nTextLen = rTextNode.GetText().getLength();
-            sal_Int32 nEnd;
-            if( rNdIdx == pPam->GetMark()->nNode )
-                nEnd = pPam->GetMark()->nContent.GetIndex();
+            SwTextFrame const*const pFrame(pLayout
+                ? static_cast<SwTextFrame const*>(rTextNode.getLayoutFrame(pLayout))
+                : nullptr);
+            assert(!pLayout || pFrame);
+            AmbiguousIndex nTextLen;
+            if (pLayout)
+            {
+                nTextLen.SetFrameIndex(TextFrameIndex(pFrame->GetText().getLength()));
+            }
             else
-                nEnd = bSrchForward ? nTextLen : 0;
-            sal_Int32 nStart = rContentIdx.GetIndex();
+            {
+                nTextLen.SetModelIndex(rTextNode.GetText().getLength());
+            }
+            AmbiguousIndex nEnd;
+            if (pLayout
+                    ? FrameContainsNode(*pFrame, pPam->GetMark()->nNode.GetIndex())
+                    : rNdIdx == pPam->GetMark()->nNode)
+            {
+                if (pLayout)
+                {
+                    nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->GetMark()));
+                }
+                else
+                {
+                    nEnd.SetModelIndex(pPam->GetMark()->nContent.GetIndex());
+                }
+            }
+            else
+            {
+                if (bSrchForward)
+                {
+                    nEnd = nTextLen;
+                }
+                else
+                {
+                    if (pLayout)
+                    {
+                        nEnd.SetFrameIndex(TextFrameIndex(0));
+                    }
+                    else
+                    {
+                        nEnd.SetModelIndex(0);
+                    }
+                }
+            }
+            AmbiguousIndex nStart;
+            if (pLayout)
+            {
+                nStart.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->GetPoint()));
+            }
+            else
+            {
+                nStart.SetModelIndex(rContentIdx.GetIndex());
+            }
 
             /* #i80135# */
             // if there are SwPostItFields inside our current node text, we
             // split the text into separate pieces and search for text inside
             // the pieces as well as inside the fields
-            const SwpHints *pHts = rTextNode.GetpSwpHints();
+            MaybeMergedIter iter(pLayout ? pFrame : nullptr, pLayout ? nullptr : &rTextNode);
 
             // count PostItFields by looping over all fields
-            sal_Int32 aNumberPostits = 0;
-            sal_Int32 aIgnore = 0;
-            if (pHts && bSearchInNotes)
+            std::vector<std::pair<SwTextAttr const*, AmbiguousIndex>> postits;
+            if (bSearchInNotes)
             {
                 if (!bSrchForward)
                 {
                     std::swap(nStart, nEnd);
                 }
 
-                for( size_t i = 0; i < pHts->Count(); ++i )
+                SwTextNode const* pTemp(nullptr);
+                while (SwTextAttr const*const pTextAttr = iter.NextAttr(pTemp))
                 {
-                    const SwTextAttr* pTextAttr = pHts->Get(i);
                     if ( pTextAttr->Which()==RES_TXTATR_ANNOTATION )
                     {
-                        const sal_Int32 aPos = pTextAttr->GetStart();
-                        if ( (aPos >= nStart) && (aPos <= nEnd) )
-                            aNumberPostits++;
-                        else
+                        AmbiguousIndex aPos;
+                        aPos.SetModelIndex(pTextAttr->GetStart());
+                        if (pLayout)
                         {
-                            if (bSrchForward)
-                                aIgnore++;
+                            aPos.SetFrameIndex(pFrame->MapModelToView(pTemp, aPos.GetModelIndex()));
+                        }
+                        if ((nStart <= aPos) && (aPos <= nEnd))
+                        {
+                            postits.emplace_back(pTextAttr, aPos);
                         }
                     }
                 }
@@ -323,7 +480,9 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                     if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
                     {
                         const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
-                        if (!pPosition || pPosition->nNode.GetIndex() != pNode->GetIndex())
+                        if (!pPosition || (pLayout
+                                ? !FrameContainsNode(*pFrame, pPosition->nNode.GetIndex())
+                                : pPosition->nNode.GetIndex() != pNode->GetIndex()))
                             pObject = nullptr;
                     }
                 }
@@ -358,10 +517,29 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                 {
                     // If there are any shapes anchored to this node, search there.
                     SwPaM aPaM(pNode->GetDoc()->GetNodes().GetEndOfContent());
-                    aPaM.GetPoint()->nNode = rTextNode;
-                    aPaM.GetPoint()->nContent.Assign(aPaM.GetPoint()->nNode.GetNode().GetTextNode(), nStart);
+                    if (pLayout)
+                    {
+                        *aPaM.GetPoint() = pFrame->MapViewToModelPos(nStart.GetFrameIndex());
+                    }
+                    else
+                    {
+                        aPaM.GetPoint()->nNode = rTextNode;
+                        aPaM.GetPoint()->nContent.Assign(
+                            aPaM.GetPoint()->nNode.GetNode().GetTextNode(),
+                            nStart.GetModelIndex());
+                    }
                     aPaM.SetMark();
-                    aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
+                    if (pLayout)
+                    {
+                        aPaM.GetMark()->nNode = (pFrame->GetMergedPara()
+                                ? *pFrame->GetMergedPara()->pLastNode
+                                : rTextNode)
+                            .GetIndex() + 1;
+                    }
+                    else
+                    {
+                        aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
+                    }
                     aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTextNode(), 0);
                     if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, aSearchItem) && pSdrView)
                     {
@@ -373,9 +551,9 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                                 if (pPosition)
                                 {
                                     // Set search position to the shape's anchor point.
-                                    *GetPoint() = *pPosition;
-                                    GetPoint()->nContent.Assign(pPosition->nNode.GetNode().GetContentNode(), 0);
-                                    SetMark();
+                                    *rSearchPam.GetPoint() = *pPosition;
+                                    rSearchPam.GetPoint()->nContent.Assign(pPosition->nNode.GetNode().GetContentNode(), 0);
+                                    rSearchPam.SetMark();
                                     bFound = true;
                                     break;
                                 }
@@ -385,18 +563,21 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                 }
             }
 
-            sal_Int32 aStart = 0;
             // do we need to finish a note?
             if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
             {
                 if (bSearchInNotes)
                 {
-                    if (bSrchForward)
-                        aStart++;
-                    else
+                    if (!postits.empty())
                     {
-                        if (aNumberPostits)
-                            --aNumberPostits;
+                        if (bSrchForward)
+                        {
+                            postits.erase(postits.begin());
+                        }
+                        else
+                        {
+                            postits.pop_back(); // hope that's the right one?
+                        }
                     }
                     //search inside, finish and put focus back into the doc
                     if (pPostItMgr->FinishSearchReplace(rSearchOpt,bSrchForward))
@@ -411,42 +592,72 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
                 }
             }
 
-            if (aNumberPostits)
+            if (!postits.empty())
             {
                 // now we have to split
-                sal_Int32 nStartInside = 0;
-                sal_Int32 nEndInside = 0;
-                sal_Int32 aLoop= bSrchForward ? aStart : aNumberPostits;
+                AmbiguousIndex nStartInside;
+                AmbiguousIndex nEndInside;
+                sal_Int32 aLoop = bSrchForward ? 0 : postits.size();
 
-                while ( (aLoop>=0) && (aLoop<=aNumberPostits))
+                while ((0 <= aLoop) && (static_cast<size_t>(aLoop) <= postits.size()))
                 {
                     if (bSrchForward)
                     {
-                        nStartInside = aLoop==0 ? nStart : pHts->Get(GetPostIt(aLoop+aIgnore-1,pHts))->GetStart()+1;
-                        nEndInside = aLoop==aNumberPostits ? nEnd : pHts->Get(GetPostIt(aLoop+aIgnore,pHts))->GetStart();
+                        if (aLoop == 0)
+                        {
+                            nStartInside = nStart;
+                        }
+                        else if (pLayout)
+                        {
+                            nStartInside.SetFrameIndex(postits[aLoop - 1].second.GetFrameIndex() + TextFrameIndex(1));
+                        }
+                        else
+                        {
+                            nStartInside.SetModelIndex(postits[aLoop - 1].second.GetModelIndex() + 1);
+                        }
+                        nEndInside = static_cast<size_t>(aLoop) == postits.size()
+                            ? nEnd
+                            : postits[aLoop].second;
                         nTextLen = nEndInside - nStartInside;
                     }
                     else
                     {
-                        nStartInside =  aLoop==aNumberPostits ? nStart : pHts->Get(GetPostIt(aLoop+aIgnore,pHts))->GetStart();
-                        nEndInside = aLoop==0 ? nEnd : pHts->Get(GetPostIt(aLoop+aIgnore-1,pHts))->GetStart()+1;
+                        nStartInside = static_cast<size_t>(aLoop) == postits.size()
+                            ? nStart
+                            : nStartInside = postits[aLoop].second;
+                        if (aLoop == 0)
+                        {
+                            nEndInside = nEnd;
+                        }
+                        else if (pLayout)
+                        {
+                            nEndInside.SetFrameIndex(postits[aLoop - 1].second.GetFrameIndex() + TextFrameIndex(1));
+                        }
+                        else
+                        {
+                            nEndInside.SetModelIndex(postits[aLoop - 1].second.GetModelIndex() + 1);
+                        }
                         nTextLen = nStartInside - nEndInside;
                     }
                     // search inside the text between a note
-                    bFound = DoSearch( rSearchOpt, rSText, fnMove, bSrchForward,
+                    bFound = DoSearch( rSearchPam,
+                                       rSearchOpt, rSText, fnMove, bSrchForward,
                                        bRegSearch, bChkEmptyPara, bChkParaEnd,
-                                       nStartInside, nEndInside, nTextLen, pNode,
+                                       nStartInside, nEndInside, nTextLen,
+                                       pNode->GetTextNode(), pFrame, pLayout,
                                        pPam.get() );
                     if ( bFound )
                         break;
                     else
                     {
                         // we should now be right in front of a note, search inside
-                        if ( (bSrchForward && (GetPostIt(aLoop + aIgnore,pHts) < pHts->Count()) ) || ( !bSrchForward && (aLoop!=0) ))
+                        if (bSrchForward
+                            ? (static_cast<size_t>(aLoop) != postits.size())
+                            : (aLoop != 0))
                         {
-                            const SwTextAttr* pTextAttr = bSrchForward
-                                    ? pHts->Get(GetPostIt(aLoop+aIgnore,pHts))
-                                    : pHts->Get(GetPostIt(aLoop+aIgnore-1,pHts));
+                            const SwTextAttr *const pTextAttr = bSrchForward
+                                ? postits[aLoop].first
+                                : postits[aLoop - 1].first;
                             if (pPostItMgr && pPostItMgr->SearchReplace(
                                     static_txtattr_cast<SwTextField const*>(pTextAttr)->GetFormatField(),rSearchOpt,bSrchForward))
                             {
@@ -462,9 +673,12 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
             {
                 // if there is no SwPostItField inside or searching inside notes
                 // is disabled, we search the whole length just like before
-                bFound = DoSearch( rSearchOpt, rSText, fnMove, bSrchForward,
+                bFound = DoSearch( rSearchPam,
+                                   rSearchOpt, rSText, fnMove, bSrchForward,
                                    bRegSearch, bChkEmptyPara, bChkParaEnd,
-                                   nStart, nEnd, nTextLen, pNode, pPam.get() );
+                                   nStart, nEnd, nTextLen,
+                                   pNode->GetTextNode(), pFrame, pLayout,
+                                   pPam.get() );
             }
             if (bFound)
                 break;
@@ -473,17 +687,20 @@ bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNote
     return bFound;
 }
 
-bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
+} // namespace sw
+
+bool DoSearch(SwPaM & rSearchPam,
+        const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
                       SwMoveFnCollection const & fnMove, bool bSrchForward, bool bRegSearch,
                       bool bChkEmptyPara, bool bChkParaEnd,
-                      sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen,
-                      SwNode* pNode, SwPaM* pPam)
+        AmbiguousIndex & nStart, AmbiguousIndex & nEnd, AmbiguousIndex const nTextLen,
+        SwTextNode const*const pNode, SwTextFrame const*const pFrame,
+        SwRootFrame const*const pLayout, SwPaM* pPam)
 {
     bool bFound = false;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
-    const SwNode* pSttNd = &rNdIdx.GetNode();
     OUString sCleanStr;
-    std::vector<sal_Int32> aFltArr;
+    std::vector<AmbiguousIndex> aFltArr;
     LanguageType eLastLang = LANGUAGE_SYSTEM;
     // if the search string contains a soft hyphen,
     // we don't strip them from the text:
@@ -510,10 +727,10 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
     }
 
     if( bSrchForward )
-        sCleanStr = lcl_CleanStr(*pNode->GetTextNode(), nStart, nEnd,
+        sCleanStr = lcl_CleanStr(*pNode, pFrame, pLayout, nStart, nEnd,
                         aFltArr, bRemoveSoftHyphens, bRemoveCommentAnchors);
     else
-        sCleanStr = lcl_CleanStr(*pNode->GetTextNode(), nEnd, nStart,
+        sCleanStr = lcl_CleanStr(*pNode, pFrame, pLayout, nEnd, nStart,
                         aFltArr, bRemoveSoftHyphens, bRemoveCommentAnchors);
 
     std::unique_ptr<SwScriptIterator> pScriptIter;
@@ -522,28 +739,32 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
 
     if (SearchAlgorithms2::APPROXIMATE == rSearchOpt.AlgorithmType2)
     {
-        pScriptIter.reset(new SwScriptIterator( sCleanStr, nStart, bSrchForward ));
+        pScriptIter.reset(new SwScriptIterator(sCleanStr, nStart.GetAnyIndex(), bSrchForward));
         nSearchScript = g_pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
     }
 
-    const sal_Int32 nStringEnd = nEnd;
+    const AmbiguousIndex nStringEnd = nEnd;
     bool bZeroMatch = false;    // zero-length match, i.e. only $ anchor as regex
     while ( ((bSrchForward && nStart < nStringEnd) ||
-            (! bSrchForward && nStart > nStringEnd)) && !bZeroMatch )
+            (!bSrchForward && nStringEnd < nStart)) && !bZeroMatch )
     {
         // SearchAlgorithms_APPROXIMATE works on a per word base so we have to
         // provide the text searcher with the correct locale, because it uses
         // the break-iterator
         if ( pScriptIter )
         {
-            nEnd = pScriptIter->GetScriptChgPos();
+            nEnd.GetAnyIndex() = pScriptIter->GetScriptChgPos();
             nCurrScript = pScriptIter->GetCurrScript();
             if ( nSearchScript == nCurrScript )
             {
-                const LanguageType eCurrLang =
-                        pNode->GetTextNode()->GetLang( bSrchForward ?
-                                                      nStart :
-                                                      nEnd );
+                const LanguageType eCurrLang = pLayout
+                        ? pFrame->GetLangOfChar(bSrchForward
+                                ? nStart.GetFrameIndex()
+                                : nEnd.GetFrameIndex(),
+                            0, true)
+                        : pNode->GetLang(bSrchForward
+                                ? nStart.GetModelIndex()
+                                : nEnd.GetModelIndex());
 
                 if ( eCurrLang != eLastLang )
                 {
@@ -555,47 +776,55 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
             }
             pScriptIter->Next();
         }
-        sal_Int32 nProxyStart = nStart;
-        sal_Int32 nProxyEnd = nEnd;
+        AmbiguousIndex nProxyStart = nStart;
+        AmbiguousIndex nProxyEnd = nEnd;
         if( nSearchScript == nCurrScript &&
-                (rSText.*fnMove.fnSearch)( sCleanStr, &nProxyStart, &nProxyEnd, nullptr ) &&
+                (rSText.*fnMove.fnSearch)( sCleanStr, &nProxyStart.GetAnyIndex(), &nProxyEnd.GetAnyIndex(), nullptr) &&
                 !(bZeroMatch = (nProxyStart == nProxyEnd)))
         {
             nStart = nProxyStart;
             nEnd = nProxyEnd;
             // set section correctly
-            *GetPoint() = *pPam->GetPoint();
-            SetMark();
+            *rSearchPam.GetPoint() = *pPam->GetPoint();
+            rSearchPam.SetMark();
 
             // adjust start and end
             if( !aFltArr.empty() )
             {
                 // if backward search, switch positions temporarily
-                if( !bSrchForward ) { std::swap(nStart, nEnd); }
+                if (!bSrchForward) { std::swap(nStart, nEnd); }
 
-                sal_Int32 nNew = nStart;
+                AmbiguousIndex nNew = nStart;
                 for (size_t n = 0; n < aFltArr.size() && aFltArr[ n ] <= nStart; ++n )
                 {
-                    ++nNew;
+                    ++nNew.GetAnyIndex();
                 }
 
                 nStart = nNew;
                 nNew = nEnd;
                 for( size_t n = 0; n < aFltArr.size() && aFltArr[ n ] < nEnd; ++n )
                 {
-                    ++nNew;
+                    ++nNew.GetAnyIndex();
                 }
 
                 nEnd = nNew;
                 // if backward search, switch positions temporarily
                 if( !bSrchForward ) { std::swap(nStart, nEnd); }
             }
-            GetMark()->nContent = nStart;
-            GetPoint()->nContent = nEnd;
+            if (pLayout)
+            {
+                *rSearchPam.GetMark() = pFrame->MapViewToModelPos(nStart.GetFrameIndex());
+                *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(nEnd.GetFrameIndex());
+            }
+            else
+            {
+                rSearchPam.GetMark()->nContent = nStart.GetModelIndex();
+                rSearchPam.GetPoint()->nContent = nEnd.GetModelIndex();
+            }
 
             // if backward search, switch point and mark
             if( !bSrchForward )
-                Exchange();
+                rSearchPam.Exchange();
             bFound = true;
             break;
         }
@@ -610,23 +839,35 @@ bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearc
 
     if ( bFound )
         return true;
-    else if( ( bChkEmptyPara && !nStart && !nTextLen ) || bChkParaEnd)
+    else if ((bChkEmptyPara && !nStart.GetAnyIndex() && !nTextLen.GetAnyIndex())
+             || bChkParaEnd)
     {
-        *GetPoint() = *pPam->GetPoint();
-        GetPoint()->nContent = bChkParaEnd ? nTextLen : 0;
-        SetMark();
+        *rSearchPam.GetPoint() = *pPam->GetPoint();
+        if (pLayout)
+        {
+            *rSearchPam.GetPoint() = pFrame->MapViewToModelPos(
+                bChkParaEnd ? nTextLen.GetFrameIndex() : TextFrameIndex(0));
+        }
+        else
+        {
+            rSearchPam.GetPoint()->nContent = bChkParaEnd ? nTextLen.GetModelIndex() : 0;
+        }
+        rSearchPam.SetMark();
+        const SwNode *const pSttNd = bSrchForward
+            ? &rSearchPam.GetPoint()->nNode.GetNode() // end of the frame
+            : &rNdIdx.GetNode(); // keep the bug as-is for now...
         /* FIXME: this condition does not work for !bSrchForward backward
          * search, it probably never did. (pSttNd != &rNdIdx.GetNode())
          * is never true in this case. */
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
-            Move( fnMoveForward, GoInContent ) &&
-            (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
-            1 == std::abs( static_cast<int>( GetPoint()->nNode.GetIndex() -
-                             GetMark()->nNode.GetIndex()) ) )
+            rSearchPam.Move(fnMoveForward, GoInContent) &&
+            (!bSrchForward || pSttNd != &rSearchPam.GetPoint()->nNode.GetNode()) &&
+            1 == std::abs(static_cast<int>(rSearchPam.GetPoint()->nNode.GetIndex() -
+                             rSearchPam.GetMark()->nNode.GetIndex())))
         {
             // if backward search, switch point and mark
             if( !bSrchForward )
-                Exchange();
+                rSearchPam.Exchange();
             return true;
         }
     }
@@ -638,15 +879,21 @@ struct SwFindParaText : public SwFindParas
 {
     const i18nutil::SearchOptions2& m_rSearchOpt;
     SwCursor& m_rCursor;
+    SwRootFrame const* m_pLayout;
     utl::TextSearch m_aSText;
     bool const m_bReplace;
     bool const m_bSearchInNotes;
 
-    SwFindParaText( const i18nutil::SearchOptions2& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCursor )
-        : m_rSearchOpt( rOpt ), m_rCursor( rCursor ), m_aSText( utl::TextSearch::UpgradeToSearchOptions2( rOpt) ),
-        m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
+    SwFindParaText(const i18nutil::SearchOptions2& rOpt, bool bSearchInNotes,
+            bool bRepl, SwCursor& rCursor, SwRootFrame const*const pLayout)
+        : m_rSearchOpt( rOpt )
+        , m_rCursor( rCursor )
+        , m_pLayout(pLayout)
+        , m_aSText( utl::TextSearch::UpgradeToSearchOptions2(rOpt) )
+        , m_bReplace( bRepl )
+        , m_bSearchInNotes( bSearchInNotes )
     {}
-    virtual int Find( SwPaM* , SwMoveFnCollection const & , const SwPaM*, bool bInReadOnly ) override;
+    virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
     virtual bool IsReplaceMode() const override;
     virtual ~SwFindParaText();
 };
@@ -655,54 +902,58 @@ SwFindParaText::~SwFindParaText()
 {
 }
 
-int SwFindParaText::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove,
-                          const SwPaM* pRegion, bool bInReadOnly )
+int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
+                          const SwPaM & rRegion, bool bInReadOnly)
 {
     if( bInReadOnly && m_bReplace )
         bInReadOnly = false;
 
-    const bool bFnd = pCursor->Find( m_rSearchOpt, m_bSearchInNotes, m_aSText, fnMove, pRegion, bInReadOnly );
+    const bool bFnd = sw::FindTextImpl(rCursor, m_rSearchOpt, m_bSearchInNotes,
+            m_aSText, fnMove, rRegion, bInReadOnly, m_pLayout);
 
     if( bFnd && m_bReplace ) // replace string
     {
         // use replace method in SwDoc
         const bool bRegExp(SearchAlgorithms2::REGEXP == m_rSearchOpt.AlgorithmType2);
-        SwIndex& rSttCntIdx = pCursor->Start()->nContent;
+        SwIndex& rSttCntIdx = rCursor.Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
         // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrev(nullptr);
         if( bRegExp )
         {
-            pPrev = const_cast<SwPaM*>(pRegion)->GetPrev();
-            const_cast<SwPaM*>(pRegion)->GetRingContainer().merge( m_rCursor.GetRingContainer() );
+            pPrev = const_cast<SwPaM&>(rRegion).GetPrev();
+            const_cast<SwPaM&>(rRegion).GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
         std::unique_ptr<OUString> pRepl( bRegExp
-                ? ReplaceBackReferences( m_rSearchOpt, pCursor ) : nullptr );
-        bool const bReplaced = m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
-            *pCursor, pRepl ? *pRepl : m_rSearchOpt.replaceString, bRegExp);
-        m_rCursor.SaveTableBoxContent( pCursor->GetPoint() );
+                ? sw::ReplaceBackReferences(m_rSearchOpt, &rCursor, m_pLayout)
+                : nullptr );
+        bool const bReplaced = sw::ReplaceImpl(rCursor,
+                pRepl ? *pRepl : m_rSearchOpt.replaceString,
+                bRegExp, *m_rCursor.GetDoc(), m_pLayout);
+
+        m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );
 
         if( bRegExp )
         {
             // and remove region again
             SwPaM* p;
-            SwPaM* pNext(const_cast<SwPaM*>(pRegion));
+            SwPaM* pNext(const_cast<SwPaM*>(&rRegion));
             do {
                 p = pNext;
                 pNext = p->GetNext();
-                p->MoveTo( const_cast<SwPaM*>(pRegion) );
+                p->MoveTo(const_cast<SwPaM*>(&rRegion));
             } while( p != pPrev );
         }
         if (bRegExp && !bReplaced)
         {   // fdo#80715 avoid infinite loop if join failed
             bool bRet = ((&fnMoveForward == &fnMove) ? &GoNextPara : &GoPrevPara)
-                (*pCursor, fnMove);
+                (rCursor, fnMove);
             (void) bRet;
             assert(bRet); // if join failed, next node must be SwTextNode
         }
         else
-            pCursor->Start()->nContent = nSttCnt;
+            rCursor.Start()->nContent = nSttCnt;
         return FIND_NO_RING;
     }
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;
@@ -713,9 +964,10 @@ bool SwFindParaText::IsReplaceMode() const
     return m_bReplace;
 }
 
-sal_uLong SwCursor::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
+sal_uLong SwCursor::FindText( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
                           SwDocPositions nStart, SwDocPositions nEnd,
-                          bool& bCancel, FindRanges eFndRngs, bool bReplace )
+                          bool& bCancel, FindRanges eFndRngs, bool bReplace,
+                          SwRootFrame const*const pLayout)
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
@@ -731,7 +983,7 @@ sal_uLong SwCursor::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSear
     bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
         eFndRngs = static_cast<FindRanges>(eFndRngs | FindRanges::InSel);
-    SwFindParaText aSwFindParaText( rSearchOpt, bSearchInNotes, bReplace, *this );
+    SwFindParaText aSwFindParaText(rSearchOpt, bSearchInNotes, bReplace, *this, pLayout);
     sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
@@ -746,22 +998,115 @@ sal_uLong SwCursor::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSear
     return nRet;
 }
 
-OUString *ReplaceBackReferences( const i18nutil::SearchOptions2& rSearchOpt, SwPaM* pPam )
+namespace sw {
+
+bool ReplaceImpl(
+        SwPaM & rCursor,
+        OUString const& rReplacement,
+        bool const bRegExp,
+        SwDoc & rDoc,
+        SwRootFrame const*const pLayout)
+{
+    bool bReplaced(true);
+    IDocumentContentOperations & rIDCO(rDoc.getIDocumentContentOperations());
+#if 0
+    // FIXME there's some problem with multiple redlines here on Undo
+    std::vector<std::shared_ptr<SwUnoCursor>> ranges;
+    if (rDoc.getIDocumentRedlineAccess().IsRedlineOn()
+        || !pLayout
+        || !pLayout->IsHideRedlines()
+        || sw::GetRanges(ranges, rDoc, rCursor))
+    {
+        bReplaced = rIDCO.ReplaceRange(rCursor, rReplacement, bRegExp);
+    }
+    else
+    {
+        assert(!ranges.empty());
+        assert(ranges.front()->GetPoint()->nNode == ranges.front()->GetMark()->nNode);
+        bReplaced = rIDCO.ReplaceRange(*ranges.front(), rReplacement, bRegExp);
+        for (auto it = ranges.begin() + 1; it != ranges.end(); ++it)
+        {
+            bReplaced &= rIDCO.DeleteAndJoin(**it);
+        }
+    }
+#else
+    IDocumentRedlineAccess const& rIDRA(rDoc.getIDocumentRedlineAccess());
+    if (pLayout && pLayout->IsHideRedlines()
+        && !rIDRA.IsRedlineOn() // otherwise: ReplaceRange will handle it
+        && (rIDRA.GetRedlineFlags() & RedlineFlags::ShowDelete)) // otherwise: ReplaceRange will DeleteRedline()
+    {
+        SwRedlineTable::size_type tmp;
+        rIDRA.GetRedline(*rCursor.Start(), &tmp);
+        while (tmp < rIDRA.GetRedlineTable().size())
+        {
+            SwRangeRedline const*const pRedline(rIDRA.GetRedlineTable()[tmp]);
+            if (*rCursor.End() <= *pRedline->Start())
+            {
+                break;
+            }
+            if (*pRedline->End() <= *rCursor.Start())
+            {
+                ++tmp;
+                continue;
+            }
+            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            {
+                assert(*pRedline->Start() != *pRedline->End());
+                // search in hidden layout can't overlap redlines
+                assert(*rCursor.Start() <= *pRedline->Start() && *pRedline->End() <= *rCursor.End());
+                SwPaM pam(*pRedline, nullptr);
+                bReplaced &= rIDCO.DeleteAndJoin(pam);
+            }
+            else
+            {
+                ++tmp;
+            }
+        }
+    }
+    bReplaced &= rIDCO.ReplaceRange(rCursor, rReplacement, bRegExp);
+#endif
+    return bReplaced;
+}
+
+OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
+        SwPaM *const pPam, SwRootFrame const*const pLayout)
 {
     OUString *pRet = nullptr;
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2 )
     {
         const SwContentNode* pTextNode = pPam->GetContentNode();
+        if (!pTextNode || !pTextNode->IsTextNode())
+        {
+            return pRet;
+        }
+        SwTextFrame const*const pFrame(pLayout
+            ? static_cast<SwTextFrame const*>(pTextNode->getLayoutFrame(pLayout))
+            : nullptr);
         const bool bParaEnd = rSearchOpt.searchString == "$" || rSearchOpt.searchString == "^$" || rSearchOpt.searchString == "$^";
-        if ( pTextNode && pTextNode->IsTextNode() && (bParaEnd || pTextNode == pPam->GetContentNode( false )) )
+        if (bParaEnd || (pLayout
+                ? sw::FrameContainsNode(*pFrame, pPam->GetMark()->nNode.GetIndex())
+                : pTextNode == pPam->GetContentNode(false)))
         {
             utl::TextSearch aSText( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt) );
-            OUString rStr = pTextNode->GetTextNode()->GetText();
-            sal_Int32 nStart = pPam->Start()->nContent.GetIndex();
-            sal_Int32 nEnd = pPam->End()->nContent.GetIndex();
+            OUString rStr = pLayout
+                ? pFrame->GetText()
+                : pTextNode->GetTextNode()->GetText();
+            AmbiguousIndex nStart;
+            AmbiguousIndex nEnd;
+            if (pLayout)
+            {
+                nStart.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->Start()));
+                nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->End()));
+            }
+            else
+            {
+                nStart.SetModelIndex(pPam->Start()->nContent.GetIndex());
+                nEnd.SetModelIndex(pPam->End()->nContent.GetIndex());
+            }
             SearchResult aResult;
-            if ( bParaEnd || aSText.SearchForward( rStr, &nStart, &nEnd, &aResult ) )
+            if (bParaEnd ||
+                aSText.SearchForward(rStr, &nStart.GetAnyIndex(), &nEnd.GetAnyIndex(), &aResult))
             {
                 if ( bParaEnd )
                 {
@@ -780,5 +1125,7 @@ OUString *ReplaceBackReferences( const i18nutil::SearchOptions2& rSearchOpt, SwP
     }
     return pRet;
 }
+
+} // namespace sw
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

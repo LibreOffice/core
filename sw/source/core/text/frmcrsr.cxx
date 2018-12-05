@@ -267,6 +267,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
         bool bGoOn = true;
         TextFrameIndex const nOffset = MapModelToViewPos(rPos);
+        assert(nOffset != TextFrameIndex(COMPLETE_STRING)); // not going to end well
         TextFrameIndex nNextOfst;
 
         do

@@ -554,7 +554,7 @@ void SwMacrosTest::testFindReplace()
             '\\');
 
     // find newline on 1st paragraph
-    bool bFound = pPaM->Find(
+    bool bFound = pPaM->FindText(
             opts, false, SwDocPositions::Curr, SwDocPositions::End, bCancel, FindRanges::InBody);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());
@@ -562,7 +562,7 @@ void SwMacrosTest::testFindReplace()
 
     // now do another Find, inside the selection from the first Find
 //    opts.searchFlags = 71680;
-    bFound = pPaM->Find(
+    bFound = pPaM->FindText(
             opts, false, SwDocPositions::Curr, SwDocPositions::End, bCancel, FindRanges::InSel);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());

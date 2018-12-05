@@ -4256,6 +4256,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 }
             }
             // this messes with pRegisteredIn so do it outside SwIterator
+            auto eMode(sw::FrameMode::Existing);
             for (SwTextFrame * pFrame : frames)
             {
                 if (rLayout.IsHideRedlines())
@@ -4266,7 +4267,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                     {
                         {
                             auto pMerged(CheckParaRedlineMerge(*pFrame,
-                                    rTextNode, sw::FrameMode::Existing));
+                                    rTextNode, eMode));
                             pFrame->SetMergedPara(std::move(pMerged));
                         }
                         auto const pMerged(pFrame->GetMergedPara());
@@ -4285,6 +4286,8 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                             }
                         }
                         sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, rTextNode, pSkipped);
+                        // only *first* frame of node gets Existing because it
+                        eMode = sw::FrameMode::New; // is not idempotent!
                     }
                 }
                 else
@@ -4324,7 +4327,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                                 }
                                 else if (pNode->IsTextNode())
                                 {
-                                    sw::RemoveFootnotesForNode(*pFrame, *pNode->GetTextNode(), nullptr);
+                                    sw::RemoveFootnotesForNode(rLayout, *pNode->GetTextNode(), nullptr);
                                     // similarly, remove the anchored flys
                                     if (auto const pFlys = pNode->GetAnchoredFlys())
                                     {
@@ -4347,6 +4350,24 @@ static void UnHideRedlines(SwRootFrame & rLayout,
             if (rTextNode.IsNumbered(nullptr)) // a preceding merged one...
             {   // notify frames so they reformat numbering portions
                 rTextNode.NumRuleChgd();
+            }
+        }
+        else if (rNode.IsTableNode() && rLayout.IsHideRedlines())
+        {
+            SwPosition const tmp(rNode);
+            SwRangeRedline const*const pRedline(
+                rLayout.GetFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedline(tmp, nullptr));
+            // pathology: redline that starts on a TableNode; cannot
+            // be created in UI but by import filters...
+            if (pRedline
+                && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+                && &pRedline->Start()->nNode.GetNode() == &rNode)
+            {
+                for (sal_uLong j = rNode.GetIndex(); j <= rNode.EndOfSectionIndex(); ++j)
+                {
+                    rNode.GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+                }
+                rNode.GetTableNode()->DelFrames(&rLayout);
             }
         }
         if (!rNode.IsCreateFrameWhenHidingRedlines())
@@ -4437,11 +4458,17 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     }
     mbHideRedlines = bHideRedlines;
     SwDoc & rDoc(*GetFormat()->GetDoc());
-    if (!bHideRedlines // Show->Hide must init hidden number trees
+    // don't do early return if there are no redlines:
+    // Show->Hide must init hidden number trees
+    // Hide->Show may be called after all redlines have been deleted but there
+    //            may still be MergedParas because those aren't deleted yet...
+#if 0
+    if (!bHideRedlines
         && rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
         return;
     }
+#endif
     // Hide->Show: clear MergedPara, create frames
     // Show->Hide: call CheckParaRedlineMerge, delete frames
     // Traverse the document via the nodes-array; traversing via the layout
@@ -4517,6 +4544,13 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     rIDFA.GetSysFieldType(SwFieldIds::Chapter)->UpdateFields();
     rIDFA.UpdateExpFields(nullptr, false);
     rIDFA.UpdateRefFields();
+
+    // update SwPostItMgr / notes in the margin
+    // note: as long as all shells share layout, broadcast to all shells!
+    rDoc.GetDocShell()->Broadcast( SwFormatFieldHint(nullptr, bHideRedlines
+            ? SwFormatFieldHintWhich::REMOVED
+            : SwFormatFieldHintWhich::INSERTED) );
+
 
 //    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?  this is the big hammer
 }
