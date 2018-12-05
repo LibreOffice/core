@@ -119,7 +119,7 @@ static OUString toUNOname( char const * p )
     while ('E' != *p)
     {
         // read chars count
-        long n = (*p++ - '0');
+        long n = *p++ - '0';
         while ('0' <= *p && '9' >= *p)
         {
             n *= 10;
