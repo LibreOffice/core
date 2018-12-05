@@ -39,7 +39,6 @@
 #include <dbg_lay.hxx>
 
 SwCache *SwTextFrame::s_pTextCache = nullptr;
-long SwTextFrame::nMinPrtLine = 0;
 SwContourCache *pContourCache = nullptr;
 SwDropCapCache *pDropCapCache = nullptr;
 

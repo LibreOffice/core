@@ -153,7 +153,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     /// will still be set; GetFormatted() is the function that forces
     /// recreation of the SwLineLayout by Format() if necessary.
     static SwCache *s_pTextCache;
-    static long nMinPrtLine;    // This Line must not be underrun when printing
+    static constexpr long nMinPrtLine = 0;    // This Line must not be underrun when printing
                                 // Hack for table cells stretching multiple pages
 
     sal_uLong  mnAllLines        :24; // Line count for the Paint (including nThisLines)

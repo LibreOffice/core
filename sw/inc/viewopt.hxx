@@ -185,7 +185,6 @@ protected:
     bool  m_bTest6        :1;     // Test-flag  "No screen adj"
     bool  m_bTest7        :1;     // Test-flag  "win format"
     bool  m_bTest8        :1;     // Test-flag  ""
-    static bool  s_bTest9;    // Test-Flag  "DrawingLayerNotLoading"
     bool  m_bTest10       :1;     // Test-Flag  "Format by Input"
 #endif
 
