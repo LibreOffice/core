@@ -54,9 +54,6 @@ using namespace ::com::sun::star;
 
 namespace svt {
 
-bool DocumentLockFile::m_bAllowInteraction = true;
-
-
 DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
 : LockFileCommon( aOrigURL, ".~lock." )
 {
