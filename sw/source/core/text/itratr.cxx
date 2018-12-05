@@ -720,6 +720,8 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
             if (redline.second.first)
             {
                 assert(m_pMergedPara);
+                assert(redline.second.first->End()->nNode.GetIndex() <= m_pMergedPara->pLastNode->GetIndex()
+                    || !redline.second.first->End()->nNode.GetNode().IsTextNode());
                 if (CanSkipOverRedline(*redline.second.first,
                         nStartIndex, nEndIndex, m_nPosition == redline.first))
                 {   // if current position is start of the redline, must skip!
