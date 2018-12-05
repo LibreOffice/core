@@ -44,9 +44,7 @@ private:
     static  sal_uLong        nGlobalRange;
     static  sal_uLong       nGlobalPercent;
     static  ScProgress*     pInterpretProgress;
-    static  ScProgress*     pOldInterpretProgress;
     static  sal_uLong       nInterpretProgress;
-    static  bool            bAllowInterpretProgress;
     static  ScDocument*     pInterpretDoc;
     static  bool            bIdleWasEnabled;
             bool            bEnabled;

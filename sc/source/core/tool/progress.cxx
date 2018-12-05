@@ -40,9 +40,7 @@ SfxProgress*    ScProgress::pGlobalProgress = nullptr;
 sal_uLong       ScProgress::nGlobalRange = 0;
 sal_uLong       ScProgress::nGlobalPercent = 0;
 ScProgress*     ScProgress::pInterpretProgress = &theDummyInterpretProgress;
-ScProgress*     ScProgress::pOldInterpretProgress = nullptr;
 sal_uLong       ScProgress::nInterpretProgress = 0;
-bool            ScProgress::bAllowInterpretProgress = true;
 ScDocument*     ScProgress::pInterpretDoc;
 bool            ScProgress::bIdleWasEnabled = false;
 
@@ -134,30 +132,27 @@ ScProgress::~ScProgress()
 
 void ScProgress::CreateInterpretProgress( ScDocument* pDoc, bool bWait )
 {
-    if ( bAllowInterpretProgress )
+    if ( nInterpretProgress )
+        nInterpretProgress++;
+    else if ( pDoc->GetAutoCalc() )
     {
-        if ( nInterpretProgress )
-            nInterpretProgress++;
-        else if ( pDoc->GetAutoCalc() )
-        {
-            nInterpretProgress = 1;
-            bIdleWasEnabled = pDoc->IsIdleEnabled();
-            pDoc->EnableIdle(false);
-            // Interpreter may be called in many circumstances, also if another
-            // progress bar is active, for example while adapting row heights.
-            // Keep the dummy interpret progress.
-            if ( !pGlobalProgress )
-                pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
-                    ScResId( STR_PROGRESS_CALCULATING ),
-                    pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, bWait );
-            pInterpretDoc = pDoc;
-        }
+        nInterpretProgress = 1;
+        bIdleWasEnabled = pDoc->IsIdleEnabled();
+        pDoc->EnableIdle(false);
+        // Interpreter may be called in many circumstances, also if another
+        // progress bar is active, for example while adapting row heights.
+        // Keep the dummy interpret progress.
+        if ( !pGlobalProgress )
+            pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
+                ScResId( STR_PROGRESS_CALCULATING ),
+                pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, bWait );
+        pInterpretDoc = pDoc;
     }
 }
 
 void ScProgress::DeleteInterpretProgress()
 {
-    if ( bAllowInterpretProgress && nInterpretProgress )
+    if ( nInterpretProgress )
     {
         /*  Do not decrement 'nInterpretProgress', before 'pInterpretProgress'
             is deleted. In rare cases, deletion of 'pInterpretProgress' causes
