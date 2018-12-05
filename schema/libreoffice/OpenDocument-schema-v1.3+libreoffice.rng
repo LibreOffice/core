@@ -2313,6 +2313,16 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal; see 7a5d79f2297a43d0a854e304b0792164272edfe0 -->
+  <!-- FIXME this is almost certainly incomplete: need to figure out which elements can have this and which named pattern can be extended with it to get exactly these elements -->
+  <rng:define name="form-checkbox-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="form:input-required">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- just a test-case for user-defined attributes, move along, nothing to see here... -->
   <rng:define name="style-table-cell-properties-attlist" combine="interleave">
     <rng:optional>
