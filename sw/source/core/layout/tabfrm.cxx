@@ -1935,7 +1935,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         SwFrame *pPre = GetPrev();
         if ( pPre && pPre->IsTabFrame() && static_cast<SwTabFrame*>(pPre)->GetFollow() == this)
         {
-            if ( !MoveFwd( bMakePage, false ) )
+            // don't make the effort to move fwd if its known
+            // conditions that are known not to work
+            if (IsInFootnote() && ForbiddenForFootnoteCntFwd())
+                bMakePage = false;
+            else if (!MoveFwd(bMakePage, false))
                 bMakePage = false;
             bMovedFwd = true;
         }
@@ -2560,8 +2564,15 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         const SwFrame* pOldUpper = GetUpper();
 
         //Let's see if we find some place anywhere...
-        if ( !bMovedFwd && !MoveFwd( bMakePage, false ) )
-            bMakePage = false;
+        if (!bMovedFwd)
+        {
+            // don't make the effort to move fwd if its known
+            // conditions that are known not to work
+            if (IsInFootnote() && ForbiddenForFootnoteCntFwd())
+                bMakePage = false;
+            else if (!MoveFwd(bMakePage, false))
+                bMakePage = false;
+        }
 
         // #i29771# Reset bSplitError flag on change of upper
         if ( GetUpper() != pOldUpper )
