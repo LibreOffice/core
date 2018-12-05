@@ -1387,7 +1387,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
 
     OUString aName = GetEnglishSearchFontName( rOrgName );
 
-    if ( nFlags & FontToSubsFontFlags::IMPORT )
+    if ( nFlags == FontToSubsFontFlags::IMPORT )
     {
         const int nEntries = 2; // only StarMath+StarBats
         for( int i = 0; i < nEntries; ++i )
