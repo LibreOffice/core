@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
 #include <test/sheet/xviewpane.hxx>
+#include <test/view/xcontrolaccess.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -26,12 +27,14 @@ namespace sc_apitest {
 
 class ScViewPaneObj : public CalcUnoApiTest,
                       public apitest::XCellRangeReferrer,
+                      public apitest::XControlAccess,
                       public apitest::XViewPane
 {
 public:
     ScViewPaneObj();
 
     virtual uno::Reference< uno::XInterface > init() override;
+    virtual uno::Reference< uno::XInterface > getXComponent() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -39,6 +42,9 @@ public:
 
     // XCellRangeReferrer
     CPPUNIT_TEST(testGetReferredCells);
+
+    // XControlAccess
+    CPPUNIT_TEST(testGetControl);
 
     // XViewPane
     CPPUNIT_TEST(testFirstVisibleColumn);
@@ -54,6 +60,11 @@ private:
 ScViewPaneObj::ScViewPaneObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
+}
+
+uno::Reference<uno::XInterface> ScViewPaneObj::getXComponent()
+{
+    return mxComponent;
 }
 
 uno::Reference< uno::XInterface > ScViewPaneObj::init()
