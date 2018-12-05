@@ -43,10 +43,6 @@
 
 /******************************************************************************/
 
-sal_uInt16 IMapObject::nActualTextEncoding = sal_uInt16(RTL_TEXTENCODING_DONTKNOW);
-
-/******************************************************************************/
-
 
 IMapObject::IMapObject()
     : bActive( false )
