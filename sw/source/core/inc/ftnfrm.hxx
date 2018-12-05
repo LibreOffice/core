@@ -80,6 +80,7 @@ class SwFootnoteFrame: public SwLayoutFrame
 public:
     SwFootnoteFrame( SwFrameFormat*, SwFrame*, SwContentFrame*, SwTextFootnote* );
 
+    virtual bool IsDeleteForbidden() const override;
     virtual void Cut() override;
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
 
