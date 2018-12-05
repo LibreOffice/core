@@ -135,12 +135,9 @@ public:
 public:
     static int  s_nSectionID;
     static int  s_nFrameID;
-    static int  s_nGraphID;
-    static int  s_nTableID;
     static int  s_nNoteID;
     static int  s_nStrokeDashID;
     static int  s_nAreaID;
-    static int s_nObjID;
     static int s_nImageID;
 };
 
