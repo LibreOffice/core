@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <vector>
 
+namespace chart { class ChartModel; }
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace chart2 { class XFormattedString2; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
@@ -75,7 +76,8 @@ public:
             const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
             const css::uno::Reference< css::drawing::XShapes >& xTarget,
             const css::uno::Reference< css::lang::XMultiServiceFactory >& xShapeFactory,
-            const css::uno::Reference< css::uno::XComponentContext >& xContext
+            const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            ChartModel& rModel
                 ) = 0;
 
 protected:
