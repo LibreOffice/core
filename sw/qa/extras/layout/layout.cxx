@@ -55,6 +55,7 @@ public:
     void testUserFieldTypeLanguage();
     void testTdf109137();
     void testForcepoint72();
+    void testForcepoint75();
     void testForcepoint76();
     void testTdf118058();
     void testTdf117188();
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testUserFieldTypeLanguage);
     CPPUNIT_TEST(testTdf109137);
     CPPUNIT_TEST(testForcepoint72);
+    CPPUNIT_TEST(testForcepoint75);
     CPPUNIT_TEST(testForcepoint76);
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
@@ -2547,8 +2549,20 @@ void SwLayoutWriter::testTdf109137()
                 /*nNumberOfNodes=*/1);
 }
 
-//just care it doesn't crash
+//just care it doesn't crash/assert
 void SwLayoutWriter::testForcepoint72() { createDoc("forcepoint72-1.rtf"); }
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testForcepoint75()
+{
+    try
+    {
+        createDoc("forcepoint75-1.rtf");
+    }
+    catch (...)
+    {
+    }
+}
 
 //just care it doesn't crash/assert
 void SwLayoutWriter::testForcepoint76() { createDoc("forcepoint76-1.rtf"); }
