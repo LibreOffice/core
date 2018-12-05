@@ -131,9 +131,6 @@ blacklist:
     - com/sun/star/sheet/XSpreadsheets2.hpp
     - com/sun/star/table/XTableColumns.hpp
     - com/sun/star/table/XTableRows.hpp
-    sc/inc/dpglobal.hxx:
-    # base class has to be a complete type
-    - o3tl/typed_flags_set.hxx
     sc/inc/dptabsrc.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
@@ -168,9 +165,6 @@ blacklist:
     - com/sun/star/text/XTextField.hpp
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
-    sc/inc/fillinfo.hxx:
-    # base class has to be a complete type
-    - o3tl/typed_flags_set.hxx
     sc/inc/filtuno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyAccess.hpp
@@ -363,9 +357,6 @@ blacklist:
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XFormulaParser.hpp
-    sc/inc/types.hxx:
-    # base class has to be a complete type
-    - o3tl/typed_flags_set.hxx
     sc/inc/unitconv.hxx:
     # base class has to be a complete type
     - map
@@ -404,9 +395,6 @@ blacklist:
     sc/source/filter/inc/xistream.hxx:
     # Needed for implicit dtor
     - com/sun/star/beans/NamedValue.hpp
-    sc/source/filter/inc/xlstring.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     sc/source/ui/inc/AccessibleContextBase.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleComponent.hpp
@@ -487,9 +475,6 @@ blacklist:
     sc/source/ui/inc/RandomNumberGeneratorDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
-    sc/source/ui/inc/scui_def.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     sc/source/ui/inc/StatisticsInputOutputDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx

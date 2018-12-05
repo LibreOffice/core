@@ -40,12 +40,6 @@ blacklist:
     include/rtl/math.hxx:
     # TODO MSVC does not compile basegfx/numeric/ftools.hxx when this is replaced
     - math.h
-    include/registry/regtype.h:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
-    include/registry/types.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/sfx2/toolbarids.hxx:
     # needed for enum definition
     - sal/types.h
@@ -103,9 +97,6 @@ blacklist:
     - cppuhelper/typeprovider.hxx
     - cppuhelper/supportsservice.hxx
     - cppuhelper/factory.hxx
-    include/ucbhelper/simpleinteractionrequest.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/comphelper/accessiblekeybindinghelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleKeyBinding.hpp
@@ -138,13 +129,8 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/lang/XSingleServiceFactory.hpp
     include/comphelper/configurationhelper.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     # Needed for implicit destructor
     - com/sun/star/uno/Any.hxx
-    include/comphelper/documentconstants.hxx:
-   # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/comphelper/docpasswordrequest.hxx:
     # base class has to be a complete type
     - com/sun/star/task/XInteractionRequest.hpp
@@ -201,17 +187,12 @@ blacklist:
     include/comphelper/uno3.hxx:
     # Needed for macro
     - comphelper/sequence.hxx
-    include/basegfx/polygon/b2dpolygontools.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/basegfx/utils/unopolypolygon.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/rendering/XBezierPolyPolygon2D.hpp
     - com/sun/star/rendering/XLinePolyPolygon2D.hpp
     include/sot/exchange.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp
     include/tools/debug.hxx:
@@ -222,21 +203,9 @@ blacklist:
     - com/sun/star/lang/IllegalArgumentException.hpp
     - com/sun/star/uno/RuntimeException.hpp
     - rtl/ustring.hxx
-    include/tools/fontenum.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/tools/svlibrary.h:
     # Used behind #ifndef
     - osl/module.h
-    include/tools/poly.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
-    include/tools/stream.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
-    include/tools/urlobj.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/unotools/accessiblestatesethelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleStateSet.hpp
@@ -250,18 +219,6 @@ blacklist:
     include/unotools/fontcfg.hxx:
     # Needed for a sal_uLong enum
     - tools/solar.h
-    include/unotools/fontcvt.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
-    include/unotools/fontdefs.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
-    include/unotools/options.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
-    include/unotools/readwritemutexguard.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/unotools/streamwrap.hxx:
     # base class has to be a complete type
     - com/sun/star/io/XOutputStream.hpp
@@ -278,25 +235,13 @@ blacklist:
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
-    include/i18nutil/casefolding.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
-    include/i18nutil/transliteration.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/svl/numuno.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/util/XNumberFormatsSupplier.hpp
-    include/svl/srchdefs.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/svl/urihelper.hxx:
     # base class has to be a complete type
     - tools/link.hxx
-    include/vcl/bitmap.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/vcl/builderfactory.hxx:
     # Needed for macros
     - vcl/builder.hxx
@@ -304,21 +249,12 @@ blacklist:
     include/vcl/devicecoordinate.hxx:
     # Needed for #if configure switch
     - basegfx/point/b2ipoint.hxx
-    include/vcl/errinf.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/vcl/edit.hxx:
     # Needed for template
     - o3tl/deleter.hxx
     include/vcl/event.hxx:
     # Needed for enum type 
     - vcl/window.hxx
-    include/vcl/fntstyle.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
-    include/vcl/help.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     include/vcl/imap.hxx:
     # Needed for implicit dtor
     - vcl/imapobj.hxx

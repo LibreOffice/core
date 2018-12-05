@@ -25,13 +25,12 @@
 #include <address.hxx>
 #include "csvsplits.hxx"
 #include <com/sun/star/uno/Reference.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class ScAccessibleCsvControl;
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
 } } } }
-
-namespace o3tl { template <typename T> struct typed_flags; }
 
 /** Minimum character count for a column in separators mode. */
 const sal_Int32 CSV_MINCOLWIDTH         = 8;

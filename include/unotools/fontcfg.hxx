@@ -23,12 +23,12 @@
 #include <tools/solar.h>
 #include <tools/fontenum.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
-namespace o3tl { template <typename T> struct typed_flags; }
 namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 

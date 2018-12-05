@@ -23,8 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <memory>
-
-namespace o3tl { template <typename T> struct typed_flags; }
+#include <o3tl/typed_flags_set.hxx>
 
 class ToolBox;
 

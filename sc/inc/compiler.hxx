@@ -35,10 +35,9 @@
 #include <memory>
 #include <set>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <formula/FormulaCompiler.hxx>
-
-namespace o3tl { template <typename T> struct typed_flags; }
 
 // constants and data types also for external modules (ScInterpreter et al)
 

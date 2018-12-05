@@ -177,9 +177,6 @@ blacklist:
     - com/sun/star/drawing/framework/XView.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
-    sd/source/ui/inc/tools/IdleDetection.hxx:
-    # Needed for template
-    - o3tl/typed_flags_set.hxx
     sd/source/ui/inc/tools/PropertySet.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp

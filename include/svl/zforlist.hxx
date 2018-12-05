@@ -22,6 +22,7 @@
 #include <svl/svldllapi.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <unotools/localedatawrapper.hxx>
@@ -36,7 +37,6 @@
 namespace com { namespace sun { namespace star { namespace i18n { class XNumberFormatCode; } } } }
 namespace com { namespace sun { namespace star { namespace i18n { struct Currency; } } } }
 namespace com { namespace sun { namespace star { namespace i18n { struct NumberFormatCode; } } } }
-namespace o3tl { template <typename T> struct typed_flags; }
 
 class Date;
 class Color;
