@@ -359,7 +359,7 @@ void GenPspGraphics::SetROPFillColor( SalROPColor )
     SAL_WARN( "vcl", "Error: PrinterGfx::SetROPFillColor() not implemented" );
 }
 
-void GenPspGraphics::SetXORMode( bool bSet )
+void GenPspGraphics::SetXORMode( bool bSet, bool )
 {
     SAL_WARN_IF( bSet, "vcl", "Error: PrinterGfx::SetXORMode() not implemented" );
 }
