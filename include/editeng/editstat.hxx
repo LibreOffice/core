@@ -79,14 +79,13 @@ enum class EditStatusFlags
     HSCROLL             = 0x0001,
     VSCROLL             = 0x0002,
     CURSOROUT           = 0x0004,
-    CRSRMOVEFAIL        = 0x0008,
     TEXTWIDTHCHANGED    = 0x0010,
     TextHeightChanged   = 0x0020,
     WRONGWORDCHANGED    = 0x0040
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EditStatusFlags> : is_typed_flags<EditStatusFlags, 0x7f> {};
+    template<> struct typed_flags<EditStatusFlags> : is_typed_flags<EditStatusFlags, 0x77> {};
 }
 
 inline void SetFlags( EVControlBits& rBits, EVControlBits nMask, bool bOn )
