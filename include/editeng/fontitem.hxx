@@ -36,8 +36,6 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
     FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
-    static bool bEnableStoreUnicodeNames;
-
 public:
     static SfxPoolItem* CreateDefault();
 
