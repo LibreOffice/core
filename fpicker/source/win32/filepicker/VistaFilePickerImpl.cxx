@@ -119,8 +119,16 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
     return sURL;
 }
 
+// Vista file picker shows the filter mask next to filter name in the list; so we need to remove the
+// mask from the filter name to avoid duplicating masks
+static OUString lcl_AdjustFilterName(const OUString& sName)
+{
+    const sal_Int32 idx = sName.indexOf("(.");
+    return (idx > 0) ? sName.copy(0, idx).trim() : sName;
+}
 
-::std::vector< COMDLG_FILTERSPEC > lcl_buildFilterList(CFilterContainer& rContainer)
+::std::vector< COMDLG_FILTERSPEC > lcl_buildFilterList(CFilterContainer& rContainer,
+                                                            std::vector<OUString>& rvStrings)
 {
           ::std::vector< COMDLG_FILTERSPEC > lList  ;
           CFilterContainer::FILTER_ENTRY_T   aFilter;
@@ -130,7 +138,8 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
     {
         COMDLG_FILTERSPEC aSpec;
 
-        aSpec.pszName = o3tl::toW(aFilter.first.getStr()) ;
+        rvStrings.push_back(lcl_AdjustFilterName(aFilter.first)); // to avoid dangling pointer
+        aSpec.pszName = o3tl::toW(rvStrings.back().getStr()) ;
         aSpec.pszSpec = o3tl::toW(aFilter.second.getStr());
 
         lList.push_back(aSpec);
@@ -781,7 +790,9 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     // SYNCHRONIZED->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-    ::std::vector< COMDLG_FILTERSPEC > lFilters       = lcl_buildFilterList(m_lFilters);
+    std::vector<OUString> vStrings; // to hold the adjusted filter names, pointers to which will be
+                                    // stored in lFilters
+    ::std::vector< COMDLG_FILTERSPEC > lFilters       = lcl_buildFilterList(m_lFilters, vStrings);
     OUString                    sCurrentFilter = m_lFilters.getCurrentFilter();
     sal_Int32                          nCurrentFilter = m_lFilters.getFilterPos(sCurrentFilter);
     TFileDialog                        iDialog        = impl_getBaseDialogInterface();
@@ -937,7 +948,9 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                     {
                         // COM dialog base on 1 ... filter container on 0 .-)
                         ::size_t nRealIndex = (nFileType-1);
-                        ::std::vector< COMDLG_FILTERSPEC > lFilters = lcl_buildFilterList(m_lFilters);
+                        std::vector<OUString> vStrings;
+                        ::std::vector<COMDLG_FILTERSPEC> lFilters
+                            = lcl_buildFilterList(m_lFilters, vStrings);
                         if ( nRealIndex < lFilters.size() )
                         {
                             PCWSTR lpFilterExt = lFilters[nRealIndex].pszSpec;
