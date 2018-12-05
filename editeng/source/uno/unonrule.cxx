@@ -487,7 +487,7 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxN
     }
     else
     {
-        SvxNumRule aDefaultRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR | SvxNumRuleFlags::CHAR_TEXT_DISTANCE, SVX_MAX_NUM, false);
+        SvxNumRule aDefaultRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR, SVX_MAX_NUM, false);
         return new SvxUnoNumberingRules( aDefaultRule );
     }
 }
