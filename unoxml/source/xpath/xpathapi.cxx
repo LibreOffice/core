@@ -58,15 +58,15 @@ namespace XPath
     {
     }
 
-    const char* CXPathAPI::aImplementationName = "com.sun.star.comp.xml.xpath.XPathAPI";
-    const char* CXPathAPI::aSupportedServiceNames[] = {
+    static const char aImplementationName[] = "com.sun.star.comp.xml.xpath.XPathAPI";
+    static const char* aSupportedServiceNames[] = {
         "com.sun.star.xml.xpath.XPathAPI",
         nullptr
     };
 
     OUString CXPathAPI::_getImplementationName()
     {
-        return OUString::createFromAscii(aImplementationName);
+        return OUString(aImplementationName);
     }
 
     Sequence<OUString> CXPathAPI::_getSupportedServiceNames()
