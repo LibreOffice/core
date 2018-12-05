@@ -228,7 +228,7 @@ namespace vclcanvas
             pTargetWindow->ExpandPaintClipRegion(aFullWindowRegion);
         }
 
-        // TODO(P1): Might be worthwile to track areas of background
+        // TODO(P1): Might be worthwhile to track areas of background
         // changes, too.
         if( !bUpdateAll && !io_bSurfaceDirty )
         {
