@@ -800,10 +800,7 @@ void SvxRuler::UpdateColumns()
                     mxRulerImpl->aProtectItem.IsPosProtected();
 
         if( !bProtectColumns )
-            nStyleFlags |= RulerBorderStyle::Moveable;
-
-        else if ( !bProtectColumns )
-            nStyleFlags |= RulerBorderStyle::Sizeable;
+            nStyleFlags |= RulerBorderStyle::Moveable | RulerBorderStyle::Sizeable;
 
         sal_uInt16 nBorders = mxColumnItem->Count();
 
