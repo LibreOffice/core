@@ -979,10 +979,10 @@ void SwFrame::RemoveFromLayout()
 {
     OSL_ENSURE( mpUpper, "Remove without upper?" );
 
-    if( mpPrev )
+    if (mpPrev)
         // one out of the middle is removed
         mpPrev->mpNext = mpNext;
-    else
+    else if (mpUpper)
     {   // the first in a list is removed //TODO
         OSL_ENSURE( mpUpper->m_pLower == this, "Layout is inconsistent." );
         mpUpper->m_pLower = mpNext;
