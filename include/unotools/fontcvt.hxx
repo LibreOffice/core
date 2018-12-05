@@ -28,12 +28,8 @@
 enum class FontToSubsFontFlags
 {
     IMPORT                   = 0x01,
-    EXPORT                   = 0x02,
+    EXPORT                   = 0x02
 };
-namespace o3tl
-{
-    template<> struct typed_flags<FontToSubsFontFlags> : is_typed_flags<FontToSubsFontFlags, 0x03> {};
-}
 
 typedef void* FontToSubsFontConverter;
 UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const OUString& rFontName, FontToSubsFontFlags nFlags );
