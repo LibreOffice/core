@@ -43,6 +43,7 @@
 #include <DateHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <defines.hxx>
+#include <ChartModel.hxx>
 
 //only for creation: @todo remove if all plotter are uno components and instantiated via servicefactory
 #include "BarChart.hxx"
@@ -69,6 +70,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -2200,12 +2202,26 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
             , const Reference< drawing::XShapes >& xTarget
             , const Reference< lang::XMultiServiceFactory >& xShapeFactory
             , const Reference< uno::XComponentContext >& xContext
+            , ChartModel& rModel
             )
 {
     std::vector< ViewLegendEntry > aResult;
 
     if( xTarget.is() )
     {
+        uno::Reference< XCoordinateSystemContainer > xCooSysCnt( rModel.getFirstDiagram(), uno::UNO_QUERY );
+        Reference< chart2::XCoordinateSystem > xCooSys(xCooSysCnt->getCoordinateSystems()[0]);
+        Reference< beans::XPropertySet > xProp( xCooSys, uno::UNO_QUERY );
+        bool bSwapXAndY = false;
+
+        if( xProp.is()) try
+        {
+            xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndY;
+        }
+        catch( const uno::Exception& )
+        {
+        }
+
         //iterate through all series
         bool bBreak = false;
         bool bFirstSeries = true;
@@ -2241,7 +2257,10 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                         StackingDirection eStackingDirection( pSeries->getStackingDirection() );
                         bReverse = ( eStackingDirection == StackingDirection_Y_STACKING );
 
-                        //todo: respect direction of axis in future
+                        if( bSwapXAndY )
+                        {
+                            bReverse = !bReverse;
+                        }
                     }
 
                     if (bReverse)
