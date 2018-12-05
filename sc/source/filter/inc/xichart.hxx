@@ -822,6 +822,7 @@ private:
     /** Reads a CHSERERRORBAR record containing error bar settings. */
     void                ReadChSerErrorBar( XclImpStream& rStrm );
 
+    void                ReadChLegendException( XclImpStream& rStrm );
     /** Creates a new CHDATAFORMAT group with the specified point index. */
     XclImpChDataFormatRef CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx );
 
@@ -849,6 +850,7 @@ private:
     sal_uInt16          mnGroupIdx;         /// Chart type group (CHTYPEGROUP group) this series is assigned to.
     sal_uInt16          mnSeriesIdx;        /// 0-based series index.
     sal_uInt16          mnParentIdx;        /// 0-based index of parent series (trend lines and error bars).
+    bool                mbLabelDeleted;     /// Legend label deleted
 };
 
 typedef std::shared_ptr< XclImpChSeries > XclImpChSeriesRef;
