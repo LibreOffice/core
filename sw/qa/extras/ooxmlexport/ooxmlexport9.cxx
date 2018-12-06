@@ -1206,10 +1206,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107111, "tdf107111.docx")
         return;
 
     // Ensure that hyperlink and its properties are in place.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:hyperlink/w:r/w:rPr", 1);
 
     // Ensure that hyperlink properties do not contain <w:webHidden/>.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr/w:webHidden", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:hyperlink/w:r/w:rPr/w:webHidden", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
