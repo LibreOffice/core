@@ -73,6 +73,7 @@
 #include "pivotsource.hxx"
 #include <unonames.hxx>
 #include <numformat.hxx>
+#include <sizedev.hxx>
 
 #include <comphelper/extract.hxx>
 
@@ -3257,6 +3258,26 @@ void SAL_CALL ScXMLImport::endDocument()
                     pDoc->SetStreamValid( nTab, true );
             }
         }
+
+        // There are rows with optimal height which need to be updated
+        if (!maRecalcRowRanges.empty())
+        {
+            bool bLockHeight = !pDoc->IsAdjustHeightEnabled();
+            if (bLockHeight)
+            {
+                pDoc->EnableAdjustHeight(true);
+            }
+
+            ScSizeDeviceProvider aProv(static_cast<ScDocShell*>(pDoc->GetDocumentShell()));
+            ScDocRowHeightUpdater aUpdater(*pDoc, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), &maRecalcRowRanges);
+            aUpdater.update();
+
+            if (bLockHeight)
+            {
+                pDoc->EnableAdjustHeight(false);
+            }
+        }
+
         aTables.FixupOLEs();
     }
     if (GetModel().is())
