@@ -1000,7 +1000,6 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
     ::std::vector<awt::Rectangle> aRectangles;
     aRectangles.reserve(1+nPaneCount);
     aRectangles.push_back(mxParentWindow->getPosSize());
-    PresenterPaneContainer::PaneList::const_iterator iPane;
     for (const auto& pDescriptor : mpPaneContainer->maPanes)
     {
         if ( ! pDescriptor->mbIsActive)
