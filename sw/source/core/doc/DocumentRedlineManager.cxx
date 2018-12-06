@@ -25,6 +25,7 @@
 #include <fmtfld.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
 #include <redline.hxx>
 #include <UndoRedline.hxx>
@@ -143,28 +144,47 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     // the AppendFootnote/RemoveFootnote will do it by itself!
     rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
     SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
-    std::vector<SwTextFrame*> frames;
-    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
-    for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+    if (!pStartNode)
     {
-        if (pFrame->getRootFrame()->IsHideRedlines())
+        SwTableNode *const pTableNode(rPam.Start()->nNode.GetNode().GetTableNode());
+        assert(pTableNode); // known pathology
+        for (sal_uLong j = pTableNode->GetIndex(); j <= pTableNode->EndOfSectionIndex(); ++j)
         {
-            frames.push_back(pFrame);
+            pTableNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+        }
+        for (SwRootFrame const*const pLayout : rDoc.GetAllLayouts())
+        {
+            if (pLayout->IsHideRedlines())
+            {
+                pTableNode->DelFrames(pLayout);
+            }
         }
     }
-    for (SwTextFrame * pFrame : frames)
+    else
     {
-        SwTextNode & rFirstNode(pFrame->GetMergedPara()
-            ? *pFrame->GetMergedPara()->pFirstNode
-            : *pStartNode);
-        assert(rFirstNode.GetIndex() <= pStartNode->GetIndex());
-        // clear old one first to avoid DelFrames confusing updates & asserts...
-        pFrame->SetMergedPara(nullptr);
-        pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
-            *pFrame, rFirstNode, sw::FrameMode::Existing));
-        // the first node of the new redline is not necessarily the first
-        // node of the merged frame, there could be another redline nearby
-        sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, *pStartNode, nullptr);
+        std::vector<SwTextFrame*> frames;
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
+        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+        {
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                frames.push_back(pFrame);
+            }
+        }
+        for (SwTextFrame * pFrame : frames)
+        {
+            SwTextNode & rFirstNode(pFrame->GetMergedPara()
+                ? *pFrame->GetMergedPara()->pFirstNode
+                : *pStartNode);
+            assert(rFirstNode.GetIndex() <= pStartNode->GetIndex());
+            // clear old one first to avoid DelFrames confusing updates & asserts...
+            pFrame->SetMergedPara(nullptr);
+            pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                *pFrame, rFirstNode, sw::FrameMode::Existing));
+            // the first node of the new redline is not necessarily the first
+            // node of the merged frame, there could be another redline nearby
+            sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, *pStartNode, nullptr);
+        }
     }
     // fields last - SwGetRefField::UpdateField requires up-to-date frames
     UpdateFieldsForRedline(rDoc.getIDocumentFieldsAccess()); // after footnotes
@@ -178,55 +198,73 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 {
     rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
     SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
-    std::vector<SwTextFrame*> frames;
-    std::set<SwRootFrame*> layouts;
-    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
-    for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+    if (!pStartNode)
     {
-        if (pFrame->getRootFrame()->IsHideRedlines())
+        SwTableNode const*const pTableNode(rPam.Start()->nNode.GetNode().GetTableNode());
+        assert(pTableNode); // known pathology
+        for (sal_uLong j = pTableNode->GetIndex(); j <= pTableNode->EndOfSectionIndex(); ++j)
         {
-            frames.push_back(pFrame);
-            layouts.insert(pFrame->getRootFrame());
+            pTableNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::None);
         }
-    }
-    if (frames.empty())
-    {
-        return;
-    }
-    if (rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
-    {
-        // first, call CheckParaRedlineMerge on the first paragraph,
-        // to init flag on new merge range (if any) + 1st node post the merge
-        for (SwTextFrame * pFrame : frames)
+        if (rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines())
         {
-            if (auto const pMergedPara = pFrame->GetMergedPara())
-            {
-                assert(pMergedPara->pFirstNode->GetIndex() <= pStartNode->GetIndex());
-                // clear old one first to avoid DelFrames confusing updates & asserts...
-                SwTextNode & rFirstNode(*pMergedPara->pFirstNode);
-                pFrame->SetMergedPara(nullptr);
-                pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
-                    *pFrame, rFirstNode, sw::FrameMode::Existing));
-            }
+            // note: this will also create frames for all currently hidden flys
+            // because it calls AppendAllObjs
+            ::MakeFrames(&rDoc, rPam.Start()->nNode, rPam.End()->nNode);
         }
-        // now start node until end of merge + 1 has proper flags; MakeFrames
-        // should pick up from the next node in need of frames by checking flags
-        SwNodeIndex const start(*pStartNode, +1);
-        SwNodeIndex const end(rPam.End()->nNode, +1); // end is exclusive
-        // note: this will also create frames for all currently hidden flys
-        // both on first and non-first nodes because it calls AppendAllObjs
-        ::MakeFrames(&rDoc, start, end);
-        // re-use this to move flys that are now on the wrong frame, with end
-        // of redline as "second" node; the nodes between start and end should
-        // be complete with MakeFrames already
-        sw::MoveMergedFlysAndFootnotes(frames, *pStartNode,
-                *rPam.End()->nNode.GetNode().GetTextNode(), false);
     }
     else
-    {   // recreate flys in the one node the hard way...
-        for (auto const& pLayout : layouts)
+    {
+        std::vector<SwTextFrame*> frames;
+        std::set<SwRootFrame*> layouts;
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
+        for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
         {
-            AppendAllObjs(rDoc.GetSpzFrameFormats(), pLayout);
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                frames.push_back(pFrame);
+                layouts.insert(pFrame->getRootFrame());
+            }
+        }
+        if (frames.empty())
+        {
+            return;
+        }
+        if (rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
+        {
+            // first, call CheckParaRedlineMerge on the first paragraph,
+            // to init flag on new merge range (if any) + 1st node post the merge
+            for (SwTextFrame * pFrame : frames)
+            {
+                if (auto const pMergedPara = pFrame->GetMergedPara())
+                {
+                    assert(pMergedPara->pFirstNode->GetIndex() <= pStartNode->GetIndex());
+                    // clear old one first to avoid DelFrames confusing updates & asserts...
+                    SwTextNode & rFirstNode(*pMergedPara->pFirstNode);
+                    pFrame->SetMergedPara(nullptr);
+                    pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                        *pFrame, rFirstNode, sw::FrameMode::Existing));
+                }
+            }
+            // now start node until end of merge + 1 has proper flags; MakeFrames
+            // should pick up from the next node in need of frames by checking flags
+            SwNodeIndex const start(*pStartNode, +1);
+            SwNodeIndex const end(rPam.End()->nNode, +1); // end is exclusive
+            // note: this will also create frames for all currently hidden flys
+            // both on first and non-first nodes because it calls AppendAllObjs
+            ::MakeFrames(&rDoc, start, end);
+            // re-use this to move flys that are now on the wrong frame, with end
+            // of redline as "second" node; the nodes between start and end should
+            // be complete with MakeFrames already
+            sw::MoveMergedFlysAndFootnotes(frames, *pStartNode,
+                    *rPam.End()->nNode.GetNode().GetTextNode(), false);
+        }
+        else
+        {   // recreate flys in the one node the hard way...
+            for (auto const& pLayout : layouts)
+            {
+                AppendAllObjs(rDoc.GetSpzFrameFormats(), pLayout);
+            }
         }
     }
     // fields last - SwGetRefField::UpdateField requires up-to-date frames
