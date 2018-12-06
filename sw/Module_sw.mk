@@ -146,6 +146,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_chapterNumbering \
 	UITest_librelogo \
 	UITest_options \
+	UITest_fields \
 ))
 endif
 
