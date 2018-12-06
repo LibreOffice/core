@@ -156,7 +156,8 @@ void SwModule::StateOther(SfxItemSet &rSet)
                     xConfigItem = pView->GetMailMergeConfigItem();
                 if (!xConfigItem)
                     rSet.DisableItem(nWhich);
-                else
+                else if (xConfigItem->GetConnection().is()
+                         && !xConfigItem->GetConnection()->isClosed())
                 {
                     bool bFirst, bLast;
                     bool bValid = xConfigItem->IsResultSetFirstLast(bFirst, bLast);
@@ -209,6 +210,8 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 // #i51949# hide e-Mail option if e-Mail is not supported
                 // #i63267# printing might be disabled
                 if (!xConfigItem ||
+                    !xConfigItem->GetConnection().is() ||
+                    xConfigItem->GetConnection()->isClosed() ||
                     !xConfigItem->GetResultSet().is() ||
                     xConfigItem->GetCurrentDBData().sDataSource.isEmpty() ||
                     xConfigItem->GetCurrentDBData().sCommand.isEmpty() ||
@@ -729,6 +732,9 @@ void SwModule::ExecOther(SfxRequest& rReq)
             if (!xConfigItem)
                 return;
 
+            const bool bHadConnection
+                = xConfigItem->GetConnection().is() && !xConfigItem->GetConnection()->isClosed();
+
             sal_Int32 nPos = xConfigItem->GetResultSetPosition();
             switch (nWhich)
             {
@@ -766,6 +772,15 @@ void SwModule::ExecOther(SfxRequest& rReq)
             rBindings.Invalidate(FN_MAILMERGE_LAST_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_CURRENT_ENTRY);
             rBindings.Invalidate(FN_MAILMERGE_EXCLUDE_ENTRY);
+            if (!bHadConnection && xConfigItem->GetConnection().is()
+                && !xConfigItem->GetConnection()->isClosed())
+            {
+                // The connection has been activated. Update controls that were disabled
+                rBindings.Invalidate(FN_MAILMERGE_CREATE_DOCUMENTS);
+                rBindings.Invalidate(FN_MAILMERGE_SAVE_DOCUMENTS);
+                rBindings.Invalidate(FN_MAILMERGE_PRINT_DOCUMENTS);
+                rBindings.Invalidate(FN_MAILMERGE_EMAIL_DOCUMENTS);
+            }
             rBindings.Update();
         }
         break;
