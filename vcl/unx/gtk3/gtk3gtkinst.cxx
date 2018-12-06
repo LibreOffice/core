@@ -41,6 +41,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/weld.hxx>
 #include <window.h>
+#include <numeric>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -3105,9 +3106,16 @@ class GtkInstanceNotebook : public GtkInstanceContainer, public virtual weld::No
 {
 private:
     GtkNotebook* m_pNotebook;
+    GtkBox* m_pOverFlowBox;
+    GtkNotebook* m_pOverFlowNotebook;
     gulong m_nSwitchPageSignalId;
+    gulong m_nOverFlowSwitchPageSignalId;
     gulong m_nSizeAllocateSignalId;
     gulong m_nScrollSignalId;
+    bool m_bOverFlowBoxActive;
+    bool m_bOverFlowBoxIsStart;
+    int m_nStartTabCount;
+    int m_nEndTabCount;
     mutable std::vector<std::unique_ptr<GtkInstanceContainer>> m_aPages;
 
     static void signalSwitchPage(GtkNotebook*, GtkWidget*, guint nNewPage, gpointer widget)
@@ -3117,7 +3125,18 @@ private:
         pThis->signal_switch_page(nNewPage);
     }
 
-    void signal_switch_page(guint nNewPage)
+    static gboolean launch_overflow_switch_page(GtkInstanceNotebook* pThis)
+    {
+        pThis->signal_overflow_switch_page();
+        return false;
+    }
+
+    static void signalOverFlowSwitchPage(GtkNotebook*, GtkWidget*, guint, gpointer widget)
+    {
+        g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(launch_overflow_switch_page), widget, nullptr);
+    }
+
+    void signal_switch_page(int nNewPage)
     {
         bool bAllow = !m_aLeavePageHdl.IsSet() || m_aLeavePageHdl.Call(get_current_page_ident());
         if (!bAllow)
@@ -3125,8 +3144,66 @@ private:
             g_signal_stop_emission_by_name(m_pNotebook, "switch-page");
             return;
         }
+        if (m_bOverFlowBoxActive)
+            gtk_notebook_set_current_page(m_pOverFlowNotebook, gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1);
         OString sNewIdent(get_page_ident(nNewPage));
         m_aEnterPageHdl.Call(sNewIdent);
+    }
+
+    void unsplit_notebooks()
+    {
+        int nOverFlowPages = gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1;
+        int nMainPages = gtk_notebook_get_n_pages(m_pNotebook);
+        int nPageIndex = 0;
+        if (!m_bOverFlowBoxIsStart)
+            nPageIndex += nMainPages;
+
+        // take the overflow pages, and put them back at the end of the normal one
+        int i = nMainPages;
+        while (nOverFlowPages)
+        {
+            OString sIdent(get_page_ident(m_pOverFlowNotebook, 0));
+            OUString sLabel(get_tab_label_text(m_pOverFlowNotebook, 0));
+            remove_page(m_pOverFlowNotebook, sIdent);
+
+            GtkWidget* pPage = m_aPages[nPageIndex]->getWidget();
+            append_page(m_pNotebook, sIdent, sLabel, pPage);
+
+            GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook,
+                                                               gtk_notebook_get_nth_page(m_pNotebook, i));
+            gtk_widget_set_hexpand(pTabWidget, true);
+            --nOverFlowPages;
+            ++i;
+            ++nPageIndex;
+        }
+
+        // remove the dangling placeholder tab page
+        remove_page(m_pOverFlowNotebook, "useless");
+    }
+
+    // a tab has been selected on the overflow notebook
+    void signal_overflow_switch_page()
+    {
+        int nNewPage = gtk_notebook_get_current_page(m_pOverFlowNotebook);
+        int nOverFlowPages = gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1;
+        if (nNewPage == nOverFlowPages)
+        {
+            // the useless tab which is there because there has to be an active tab
+            return;
+        }
+
+        disable_notify_events();
+
+        // take the overflow pages, and put them back at the end of the normal one
+        unsplit_notebooks();
+
+        // now redo the split, the pages will be split the other way around this time
+        std::swap(m_nStartTabCount, m_nEndTabCount);
+        split_notebooks();
+
+        gtk_notebook_set_current_page(m_pNotebook, nNewPage);
+
+        enable_notify_events();
     }
 
     static gboolean signalScroll(GtkWidget*, GdkEventScroll* event, gpointer widget)
@@ -3182,19 +3259,39 @@ private:
         return true;
     }
 
-    OString get_page_ident(guint nPage) const
+    static OString get_page_ident(GtkNotebook *pNotebook, guint nPage)
     {
-        const GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook, gtk_notebook_get_nth_page(m_pNotebook, nPage));
+        const GtkWidget* pTabWidget = gtk_notebook_get_tab_label(pNotebook, gtk_notebook_get_nth_page(pNotebook, nPage));
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pTabWidget));
         return OString(pStr, pStr ? strlen(pStr) : 0);
     }
 
-    gint get_page_number(const OString& rIdent) const
+    OString get_page_ident(int nPage) const
     {
-        gint nPages = gtk_notebook_get_n_pages(m_pNotebook);
+        auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
+        auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
+        if (m_bOverFlowBoxIsStart)
+        {
+            if (nPage < nOverFlowLen)
+                return get_page_ident(m_pOverFlowNotebook, nPage);
+            nPage -= nOverFlowLen;
+            return get_page_ident(m_pNotebook, nPage);
+        }
+        else
+        {
+            if (nPage < nMainLen)
+                return get_page_ident(m_pNotebook, nPage);
+            nPage -= nMainLen;
+            return get_page_ident(m_pOverFlowNotebook, nPage);
+        }
+    }
+
+    static gint get_page_number(GtkNotebook *pNotebook, const OString& rIdent)
+    {
+        gint nPages = gtk_notebook_get_n_pages(pNotebook);
         for (gint i = 0; i < nPages; ++i)
         {
-            const GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook, gtk_notebook_get_nth_page(m_pNotebook, i));
+            const GtkWidget* pTabWidget = gtk_notebook_get_tab_label(pNotebook, gtk_notebook_get_nth_page(pNotebook, i));
             const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pTabWidget));
             if (strcmp(pStr, rIdent.getStr()) == 0)
                 return i;
@@ -3202,23 +3299,203 @@ private:
         return -1;
     }
 
-    // tdf#120371
-    // https://developer.gnome.org/hig-book/unstable/controls-notebooks.html.en#controls-too-many-tabs
-    // If you have more than about six tabs in a notebook ... place the list
-    // control on the left-hand side of the window
-
-    // if number of pages drops to 6 or less, definitely place tabs on top
-    void update_tab_pos()
+    void remove_page(GtkNotebook *pNotebook, const OString& rIdent)
     {
-        if (get_n_pages() <= 6)
-            gtk_notebook_set_tab_pos(m_pNotebook, GTK_POS_TOP);
+        disable_notify_events();
+        gtk_notebook_remove_page(pNotebook, get_page_number(pNotebook, rIdent));
+        enable_notify_events();
     }
 
-    // if > 6, but only if the notebook would auto-scroll, then flip tabs
-    // to left which allows themes like Ambience under Ubuntu 16.04 to keep
-    // tabs on top when they would fit
+    static OUString get_tab_label_text(GtkNotebook *pNotebook, guint nPage)
+    {
+        const gchar* pStr = gtk_notebook_get_tab_label_text(pNotebook, gtk_notebook_get_nth_page(pNotebook, nPage));
+        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+    }
+
+    void append_useless_page(GtkNotebook *pNotebook)
+    {
+        disable_notify_events();
+
+        GtkWidget *pTabWidget = gtk_image_new_from_icon_name("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+        gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), "useless");
+
+        GtkWidget *pChild = gtk_grid_new();
+        gtk_notebook_append_page(pNotebook, pChild, pTabWidget);
+        gtk_widget_show(pChild);
+        gtk_widget_show(pTabWidget);
+
+        enable_notify_events();
+    }
+
+    void append_page(GtkNotebook *pNotebook, const OString& rIdent, const OUString& rLabel, GtkWidget *pChild)
+    {
+        disable_notify_events();
+
+        GtkWidget *pTabWidget = gtk_label_new(MapToGtkAccelerator(rLabel).getStr());
+        gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), rIdent.getStr());
+
+        gtk_notebook_append_page(pNotebook, pChild, pTabWidget);
+        gtk_widget_show(pChild);
+        gtk_widget_show(pTabWidget);
+
+        enable_notify_events();
+    }
+
+    gint get_page_number(const OString& rIdent) const
+    {
+        auto nMainIndex = get_page_number(m_pNotebook, rIdent);
+        auto nOverFlowIndex = get_page_number(m_pOverFlowNotebook, rIdent);
+
+        if (nMainIndex == -1 && nOverFlowIndex == -1)
+            return -1;
+
+        if (m_bOverFlowBoxIsStart)
+        {
+            if (nOverFlowIndex != -1)
+                return nOverFlowIndex;
+            else
+            {
+                auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
+                return nMainIndex + nOverFlowLen;
+            }
+        }
+        else
+        {
+            if (nMainIndex != -1)
+                return nMainIndex;
+            else
+            {
+                auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
+                return nOverFlowIndex + nMainLen;;
+            }
+        }
+    }
+
+    void make_overflow_boxes()
+    {
+        m_pOverFlowBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
+        GtkWidget* pParent = gtk_widget_get_parent(GTK_WIDGET(m_pNotebook));
+        gtk_container_add(GTK_CONTAINER(pParent), GTK_WIDGET(m_pOverFlowBox));
+        gtk_box_pack_start(m_pOverFlowBox, GTK_WIDGET(m_pOverFlowNotebook), false, false, 0);
+        g_object_ref(m_pNotebook);
+        gtk_container_remove(GTK_CONTAINER(pParent), GTK_WIDGET(m_pNotebook));
+        gtk_box_pack_start(m_pOverFlowBox, GTK_WIDGET(m_pNotebook), true, true, 0);
+        g_object_unref(m_pNotebook);
+        gtk_widget_show(GTK_WIDGET(m_pOverFlowBox));
+    }
+
+    void split_notebooks()
+    {
+        // get the original preferred size for the notebook, the sane width
+        // expected here depends on the notebooks all initially having
+        // scrollable tabs enabled
+        GtkAllocation alloc;
+        gtk_widget_get_allocation(GTK_WIDGET(m_pNotebook), &alloc);
+
+        // toggle the direction of the split since the last time
+        m_bOverFlowBoxIsStart = !m_bOverFlowBoxIsStart;
+        if (!m_pOverFlowBox)
+             make_overflow_boxes();
+
+        // don't scroll the tabs anymore
+        gtk_notebook_set_scrollable(m_pNotebook, false);
+
+        gtk_widget_freeze_child_notify(GTK_WIDGET(m_pNotebook));
+        gtk_widget_freeze_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
+
+        gtk_widget_show(GTK_WIDGET(m_pOverFlowNotebook));
+
+        gint nPages;
+
+        GtkRequisition size1, size2;
+
+        if (!m_nStartTabCount && !m_nEndTabCount)
+        {
+            nPages = gtk_notebook_get_n_pages(m_pNotebook);
+
+            std::vector<int> aLabelWidths;
+            //move tabs to the overflow notebook
+            for (int i = 0; i < nPages; ++i)
+            {
+                OUString sLabel(get_tab_label_text(m_pNotebook, i));
+                aLabelWidths.push_back(get_pixel_size(sLabel).Width());
+            }
+            int row_width = std::accumulate(aLabelWidths.begin(), aLabelWidths.end(), 0) / 2;
+            int count = 0;
+            for (int i = 0; i < nPages; ++i)
+            {
+                count += aLabelWidths[i];
+                if (count >= row_width)
+                {
+                    m_nStartTabCount = i;
+                    break;
+                }
+            }
+
+            m_nEndTabCount = nPages - m_nStartTabCount;
+        }
+
+        //move the tabs to the overflow notebook
+        int i = 0;
+        int nOverFlowPages = m_nStartTabCount;
+        while (nOverFlowPages)
+        {
+            OString sIdent(get_page_ident(m_pNotebook, 0));
+            OUString sLabel(get_tab_label_text(m_pNotebook, 0));
+            remove_page(m_pNotebook, sIdent);
+            append_page(m_pOverFlowNotebook, sIdent, sLabel, gtk_grid_new());
+            GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pOverFlowNotebook,
+                                                               gtk_notebook_get_nth_page(m_pOverFlowNotebook, i));
+            gtk_widget_set_hexpand(pTabWidget, true);
+
+            --nOverFlowPages;
+            ++i;
+        }
+
+        // have to have some tab as the active tab of the overflow notebook
+        append_useless_page(m_pOverFlowNotebook);
+        gtk_notebook_set_current_page(m_pOverFlowNotebook, gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1);
+        if (gtk_widget_has_focus(GTK_WIDGET(m_pOverFlowNotebook)))
+            gtk_widget_grab_focus(GTK_WIDGET(m_pNotebook));
+
+        // add this temporarily to the normal notebook to measure how wide
+        // the row would be if switched to the other notebook
+        append_useless_page(m_pNotebook);
+
+        gtk_widget_get_preferred_size(GTK_WIDGET(m_pNotebook), nullptr, &size1);
+        gtk_widget_get_preferred_size(GTK_WIDGET(m_pOverFlowNotebook), nullptr, &size2);
+
+        auto nWidth = std::max(size1.width, size2.width);
+        gtk_widget_set_size_request(GTK_WIDGET(m_pNotebook), nWidth, alloc.height);
+        gtk_widget_set_size_request(GTK_WIDGET(m_pOverFlowNotebook), nWidth, -1);
+
+        // remove it once we've measured it
+        remove_page(m_pNotebook, "useless");
+
+        gtk_widget_thaw_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
+        gtk_widget_thaw_child_notify(GTK_WIDGET(m_pNotebook));
+
+        m_bOverFlowBoxActive = true;
+    }
+
+    static gboolean launch_split_notebooks(GtkInstanceNotebook* pThis)
+    {
+        int nCurrentPage = pThis->get_current_page();
+        pThis->split_notebooks();
+        pThis->set_current_page(nCurrentPage);
+        return false;
+    }
+
+    // tdf#120371
+    // https://developer.gnome.org/hig-book/unstable/controls-notebooks.html.en#controls-too-many-tabs
+    // if no of tabs > 6, but only if the notebook would auto-scroll, then split the tabs over
+    // two notebooks. Checking for the auto-scroll allows themes like Ambience under Ubuntu 16.04 to keep
+    // tabs in a single row when they would fit
     void signal_notebook_size_allocate()
     {
+        if (m_bOverFlowBoxActive)
+            return;
+        disable_notify_events();
         gint nPages = gtk_notebook_get_n_pages(m_pNotebook);
         if (nPages > 6 && gtk_notebook_get_tab_pos(m_pNotebook) == GTK_POS_TOP)
         {
@@ -3227,11 +3504,12 @@ private:
                 GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook, gtk_notebook_get_nth_page(m_pNotebook, i));
                 if (!gtk_widget_get_child_visible(pTabWidget))
                 {
-                    gtk_notebook_set_tab_pos(m_pNotebook, GTK_POS_LEFT);
+                    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(launch_split_notebooks), this, nullptr);
                     break;
                 }
             }
         }
+        enable_notify_events();
     }
 
     static void signalSizeAllocate(GtkWidget*, GdkRectangle*, gpointer widget)
@@ -3244,19 +3522,36 @@ public:
     GtkInstanceNotebook(GtkNotebook* pNotebook, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pNotebook), bTakeOwnership)
         , m_pNotebook(pNotebook)
+        , m_pOverFlowBox(nullptr)
+        , m_pOverFlowNotebook(GTK_NOTEBOOK(gtk_notebook_new()))
         , m_nSwitchPageSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
+        , m_nOverFlowSwitchPageSignalId(g_signal_connect(m_pOverFlowNotebook, "switch-page", G_CALLBACK(signalOverFlowSwitchPage), this))
+        , m_bOverFlowBoxActive(false)
+        , m_bOverFlowBoxIsStart(false)
+        , m_nStartTabCount(0)
+        , m_nEndTabCount(0)
     {
         gtk_widget_add_events(GTK_WIDGET(pNotebook), GDK_SCROLL_MASK);
         m_nScrollSignalId = g_signal_connect(pNotebook, "scroll-event", G_CALLBACK(signalScroll), this);
         if (get_n_pages() > 6)
-            m_nSizeAllocateSignalId = g_signal_connect(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
+            m_nSizeAllocateSignalId = g_signal_connect_after(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
         else
             m_nSizeAllocateSignalId = 0;
+        gtk_notebook_set_show_border(m_pOverFlowNotebook, false);
     }
 
     virtual int get_current_page() const override
     {
-        return gtk_notebook_get_current_page(m_pNotebook);
+        int nPage = gtk_notebook_get_current_page(m_pNotebook);
+        if (nPage == -1)
+            return nPage;
+        if (m_bOverFlowBoxIsStart)
+        {
+            auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
+            // add count of overflow pages, minus the extra tab
+            nPage += nOverFlowLen;
+        }
+        return nPage;
     }
 
     virtual OString get_current_page_ident() const override
@@ -3269,7 +3564,31 @@ public:
         int nPage = get_page_number(rIdent);
         if (nPage < 0)
             return nullptr;
-        GtkContainer* pChild = GTK_CONTAINER(gtk_notebook_get_nth_page(m_pNotebook, nPage));
+
+        GtkContainer* pChild;
+        if (m_bOverFlowBoxIsStart)
+        {
+            auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
+            if (nPage < nOverFlowLen)
+                pChild = GTK_CONTAINER(gtk_notebook_get_nth_page(m_pOverFlowNotebook, nPage));
+            else
+            {
+                nPage -= nOverFlowLen;
+                pChild = GTK_CONTAINER(gtk_notebook_get_nth_page(m_pNotebook, nPage));
+            }
+        }
+        else
+        {
+            auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
+            if (nPage < nMainLen)
+                pChild = GTK_CONTAINER(gtk_notebook_get_nth_page(m_pNotebook, nPage));
+            else
+            {
+                nPage -= nMainLen;
+                pChild = GTK_CONTAINER(gtk_notebook_get_nth_page(m_pOverFlowNotebook, nPage));
+            }
+        }
+
         unsigned int nPageIndex = static_cast<unsigned int>(nPage);
         if (m_aPages.size() < nPageIndex + 1)
             m_aPages.resize(nPageIndex + 1);
@@ -3280,7 +3599,28 @@ public:
 
     virtual void set_current_page(int nPage) override
     {
-        gtk_notebook_set_current_page(m_pNotebook, nPage);
+        if (m_bOverFlowBoxIsStart)
+        {
+            auto nOverFlowLen = m_bOverFlowBoxActive ? gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1 : 0;
+            if (nPage < nOverFlowLen)
+                gtk_notebook_set_current_page(m_pOverFlowNotebook, nPage);
+            else
+            {
+                nPage -= nOverFlowLen;
+                gtk_notebook_set_current_page(m_pNotebook, nPage);
+            }
+        }
+        else
+        {
+            auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
+            if (nPage < nMainLen)
+                gtk_notebook_set_current_page(m_pNotebook, nPage);
+            else
+            {
+                nPage -= nMainLen;
+                gtk_notebook_set_current_page(m_pOverFlowNotebook, nPage);
+            }
+        }
     }
 
     virtual void set_current_page(const OString& rIdent) override
@@ -3291,50 +3631,71 @@ public:
 
     virtual int get_n_pages() const override
     {
-        return gtk_notebook_get_n_pages(m_pNotebook);
+        int nLen = gtk_notebook_get_n_pages(m_pNotebook);
+        if (m_bOverFlowBoxActive)
+            nLen += gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1;
+        return nLen;
     }
 
     virtual OUString get_tab_label_text(const OString& rIdent) const override
     {
-        gint nPage = get_page_number(rIdent);
-        const gchar* pStr = gtk_notebook_get_tab_label_text(m_pNotebook, gtk_notebook_get_nth_page(m_pNotebook, nPage));
-        return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        gint nPageNum = get_page_number(m_pNotebook, rIdent);
+        if (nPageNum != -1)
+            return get_tab_label_text(m_pNotebook, nPageNum);
+        nPageNum = get_page_number(m_pOverFlowNotebook, rIdent);
+        if (nPageNum != -1)
+            return get_tab_label_text(m_pOverFlowNotebook, nPageNum);
+        return OUString();
     }
 
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pNotebook, m_nSwitchPageSignalId);
+        g_signal_handler_block(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
+        gtk_widget_freeze_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
         GtkInstanceContainer::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceContainer::enable_notify_events();
+        gtk_widget_thaw_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
+        g_signal_handler_unblock(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
         g_signal_handler_unblock(m_pNotebook, m_nSwitchPageSignalId);
+    }
+
+    void reset_split_data()
+    {
+        // reset overflow and allow it to be recalculated if necessary
+        gtk_widget_hide(GTK_WIDGET(m_pOverFlowNotebook));
+        m_bOverFlowBoxActive = false;
+        m_nStartTabCount = 0;
+        m_nEndTabCount = 0;
     }
 
     virtual void remove_page(const OString& rIdent) override
     {
-        disable_notify_events();
-        gtk_notebook_remove_page(m_pNotebook, get_page_number(rIdent));
-        update_tab_pos();
-        enable_notify_events();
+        if (m_bOverFlowBoxActive)
+        {
+            unsplit_notebooks();
+            reset_split_data();
+        }
+        remove_page(m_pNotebook, rIdent);
     }
 
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override
     {
-        disable_notify_events();
+        if (m_bOverFlowBoxActive)
+        {
+            unsplit_notebooks();
+            reset_split_data();
+        }
 
-        GtkWidget *pTabWidget = gtk_label_new(MapToGtkAccelerator(rLabel).getStr());
-        gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), rIdent.getStr());
+        // reset overflow and allow it to be recalculated if necessary
+        gtk_widget_hide(GTK_WIDGET(m_pOverFlowNotebook));
+        m_bOverFlowBoxActive = false;
 
-        GtkWidget *pChild = gtk_grid_new();
-        gtk_notebook_append_page(m_pNotebook, pChild, pTabWidget);
-        gtk_widget_show_all(pChild);
-        gtk_widget_show_all(pTabWidget);
-
-        update_tab_pos();
-        enable_notify_events();
+        append_page(m_pNotebook, rIdent, rLabel, gtk_grid_new());
     }
 
     virtual ~GtkInstanceNotebook() override
@@ -3343,6 +3704,10 @@ public:
             g_signal_handler_disconnect(m_pNotebook, m_nSizeAllocateSignalId);
         g_signal_handler_disconnect(m_pNotebook, m_nScrollSignalId);
         g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
+        g_signal_handler_disconnect(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
+        gtk_widget_destroy(GTK_WIDGET(m_pOverFlowNotebook));
+        if (m_pOverFlowBox)
+            gtk_widget_destroy(GTK_WIDGET(m_pOverFlowBox));
     }
 };
 
@@ -3722,7 +4087,7 @@ public:
         gtk_label_set_mnemonic_widget(m_pLabel, GTK_WIDGET(m_pMenuButton));
         gtk_box_pack_start(m_pBox, GTK_WIDGET(m_pLabel), false, false, 0);
 
-        gtk_box_pack_end(m_pBox, gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
+        gtk_box_pack_end(m_pBox, gtk_image_new_from_icon_name("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
         gtk_container_add(GTK_CONTAINER(m_pMenuButton), GTK_WIDGET(m_pBox));
         gtk_widget_show_all(GTK_WIDGET(m_pBox));
     }
