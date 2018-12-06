@@ -202,7 +202,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, rInf.GetCachedVclData().get() );
 
 #if OSL_DEBUG_LEVEL > 1
-        if ( COMPLETE_STRING != nCutPos )
+        if ( TextFrameIndex(COMPLETE_STRING) != nCutPos )
         {
             sal_uInt16 nMinSize;
             rInf.GetTextSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
