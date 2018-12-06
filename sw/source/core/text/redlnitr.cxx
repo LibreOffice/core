@@ -83,6 +83,11 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             assert(IDocumentRedlineAccess::IsHideChanges(rIDRA.GetRedlineFlags()));
             continue;
         }
+        if (pStart->nNode.GetNode().IsTableNode())
+        {
+            assert(&pEnd->nNode.GetNode() == &rTextNode && pEnd->nContent.GetIndex() == 0);
+            continue; // known pathology, ignore it
+        }
         bHaveRedlines = true;
         assert(pNode != &rTextNode || &pStart->nNode.GetNode() == &rTextNode); // detect calls with wrong start node
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
