@@ -1533,7 +1533,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(HARFBUZZ_CFLAGS) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(HARFBUZZ_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(ICU_LIBS) $(HARFBUZZ_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),harfbuzz)
 
 endef
