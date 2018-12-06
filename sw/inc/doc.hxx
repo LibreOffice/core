@@ -910,7 +910,13 @@ public:
     SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = nullptr,
-                                            bool bExpand = false );
+                                            bool bExpand = false,
+                                    SwRootFrame const* pLayout = nullptr);
+    SwTOXBaseSection* InsertTableOf( const SwPaM& aPam,
+                                            const SwTOXBase& rTOX,
+                                            const SfxItemSet* pSet = nullptr,
+                                            bool bExpand = false,
+                                    SwRootFrame const* pLayout = nullptr );
     void              InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet );
