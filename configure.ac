@@ -6205,12 +6205,12 @@ dnl ===================================================================
 dnl C++11
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether $CXX supports C++17, C++14, or C++11])
+AC_MSG_CHECKING([whether $CXX supports C++17])
 CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
     CXXFLAGS_CXX11=-std:c++17
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-    my_flags='-std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z -std=gnu++14 -std=gnu++1y -std=c++14 -std=c++1y -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x'
+    my_flags='-std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z'
     for flag in $my_flags; do
         if test "$COM" = MSC; then
             flag="-Xclang $flag"
