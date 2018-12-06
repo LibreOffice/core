@@ -340,10 +340,18 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SfxItemSet* pSet,
                                                 bool bExpand )
 {
+    SwPaM aPam( rPos );
+    return InsertTableOf( aPam, rTOX, pSet, bExpand );
+}
+
+SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
+                                                const SwTOXBase& rTOX,
+                                                const SfxItemSet* pSet,
+                                                bool bExpand )
+{
     GetIDocumentUndoRedo().StartUndo( SwUndoId::INSTOX, nullptr );
 
     OUString sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
-    SwPaM aPam( rPos );
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
     SwTOXBaseSection *const pNewSection = dynamic_cast<SwTOXBaseSection *>(
         InsertSwSection( aPam, aSectionData, & rTOX, pSet, false ));

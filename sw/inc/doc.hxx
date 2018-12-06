@@ -916,6 +916,10 @@ public:
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = nullptr,
                                             bool bExpand = false );
+    SwTOXBaseSection* InsertTableOf( const SwPaM& aPam,
+                                            const SwTOXBase& rTOX,
+                                            const SfxItemSet* pSet = nullptr,
+                                            bool bExpand = false );
     void              InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet );
