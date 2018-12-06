@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-/*! Macro for implementation two metods for LibBoxControl Class
+/*! Macro for implementation two methods for LibBoxControl Class
  *
  * @code
  * SfxToolBoxControl* LibBoxControl::CreateImpl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
@@ -312,7 +312,7 @@ void LibBox::ClearBox()
 
 // class LanguageBoxControl ----------------------------------------------
 
-/*! Macro for implementation two metods for LanguageBoxControl Class
+/*! Macro for implementation two methods for LanguageBoxControl Class
  *
  * @code
  * SfxToolBoxControl* LanguageBoxControl::CreateImpl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
