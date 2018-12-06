@@ -263,7 +263,7 @@ int ImplIsPaletteEntry(BYTE nRed, BYTE nGreen, BYTE nBlue)
            IsExtraColor(nRed, nGreen, nBlue);
 }
 
-}
+} // namespace
 
 WinSalGraphicsImpl::WinSalGraphicsImpl(WinSalGraphics& rParent):
     mrParent(rParent),
@@ -290,7 +290,6 @@ WinSalGraphicsImpl::~WinSalGraphicsImpl()
         if ( !mbStockBrush )
             DeleteBrush( mhBrush );
     }
-
 }
 
 void WinSalGraphicsImpl::Init()
@@ -683,7 +682,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
     }
 }
 
-}
+} // namespace
 
 void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
