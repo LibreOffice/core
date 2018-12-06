@@ -802,60 +802,57 @@ void ScExportTest::testOutlineExportXLSX()
     // We expected that exactly 13 unique Nodes will be produced
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col", 13);
 
-    // We need to save all 30 rows, as it provides information about outLineLevel
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "r", "1");
+    // First row is empty and default so it is not written into XML file
+    // so we need to save 29 rows, as it provides information about outLineLevel
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "r", "2");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "hidden", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "outlineLevel", "0");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "outlineLevel", "1");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "r", "2");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "r", "3");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "hidden", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "outlineLevel", "1");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "outlineLevel", "2");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "r", "3");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "r", "4");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "hidden", "false");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "outlineLevel", "2");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "r", "4");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "r", "5");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "hidden", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "outlineLevel", "2");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "outlineLevel", "3");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]", "r", "5");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]", "r", "6");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]", "hidden", "false");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]", "outlineLevel", "3");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[5]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]", "r", "6");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]", "hidden", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]", "outlineLevel", "3");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]", "r", "7");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]", "hidden", "true");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]", "outlineLevel", "4");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[6]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]", "r", "7");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]", "r", "8");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]", "hidden", "true");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]", "outlineLevel", "4");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[7]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]", "r", "8");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]", "r", "9");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]", "hidden", "true");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]", "outlineLevel", "4");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[8]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[9]", "r", "9");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[9]", "hidden", "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[9]", "outlineLevel", "4");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[9]", "collapsed", "false");
     // Next rows are the same as the previous one but it needs to bre preserved,
     // as they contain information about outlineLevel
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]", "r", "21");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]", "hidden", "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]", "outlineLevel", "4");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]", "collapsed", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]", "r", "22");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]", "r", "21");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]", "hidden", "true");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]", "outlineLevel", "4");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[20]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]", "r", "22");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]", "hidden", "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]", "outlineLevel", "3");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[21]", "collapsed", "true");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]", "r", "23");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]", "hidden", "false");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]", "outlineLevel", "3");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]", "collapsed", "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[23]", "r", "23");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[23]", "hidden", "false");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[23]", "outlineLevel", "3");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[23]", "collapsed", "false");
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[22]", "collapsed", "false");
 
-    // We expected that exactly 30 Row Nodes will be produced
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 30);
+    // We expected that exactly 29 Row Nodes will be produced
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 29);
 }
 
 
