@@ -1371,7 +1371,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 // Check that ScriptChangeInfos are in increasing order of
                 // position and that we don't have "empty" changes.
                 sal_uInt8 nLastTyp = i18n::ScriptType::WEAK;
-                sal_Int32 nLastPos = 0;
+                TextFrameIndex nLastPos = TextFrameIndex(0);
                 for (const auto& rScriptChange : m_ScriptChanges)
                 {
                     SAL_WARN_IF( nLastTyp == rScriptChange.type ||
