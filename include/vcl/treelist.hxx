@@ -65,18 +65,14 @@ struct SvSortData
 
 class VCL_DLLPUBLIC SvTreeList final
 {
-    typedef std::vector<SvListView*> ListViewsType;
-
     friend class        SvListView;
 
-    ListViewsType       aViewList;
+    SvListView* const   mpOwnerListView;
     sal_uLong           nEntryCount;
 
     Link<SvTreeListEntry*, SvTreeListEntry*>  aCloneLink;
     Link<const SvSortData&, sal_Int32>        aCompareLink;
     SvSortMode          eSortMode;
-
-    sal_uInt16          nRefCount;
 
     bool                bAbsPositionsValid;
 
@@ -134,11 +130,9 @@ class VCL_DLLPUBLIC SvTreeList final
 
 public:
 
-                        SvTreeList();
+                        SvTreeList() = delete;
+                        SvTreeList(SvListView*);
                         ~SvTreeList();
-
-    void                InsertView( SvListView* );
-    void                RemoveView( SvListView const * );
 
     void                Broadcast(
                             SvListAction nActionId,
@@ -213,9 +207,6 @@ public:
 
     SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // Calls the Clone Link
 
-    sal_uInt16          GetRefCount() const { return nRefCount; }
-    void                SetRefCount( sal_uInt16 nRef ) { nRefCount = nRef; }
-
     void                SetSortMode( SvSortMode eMode ) { eSortMode = eMode; }
     SvSortMode          GetSortMode() const { return eSortMode; }
     sal_Int32           Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const;
@@ -232,7 +223,7 @@ class VCL_DLLPUBLIC SvListView
     std::unique_ptr<Impl> m_pImpl;
 
 protected:
-    SvTreeList* pModel;
+    std::unique_ptr<SvTreeList> pModel;
 
     void                ExpandListEntry( SvTreeListEntry* pParent );
     void                CollapseListEntry( SvTreeListEntry* pParent );
@@ -240,9 +231,9 @@ protected:
 
 public:
                         SvListView();   // Sets the Model to 0
+    void                dispose();
     virtual             ~SvListView();
     void                Clear();
-    virtual void        SetModel( SvTreeList* );
     virtual void        ModelNotification(
                             SvListAction nActionId,
                             SvTreeListEntry* pEntry1,
