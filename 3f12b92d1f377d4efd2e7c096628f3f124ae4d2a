@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_ee460e22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-06T11:28:16Z",
+      "side": 1,
+      "message": "If you could go into slightly more details here, *how* the bug was resolved (\u0027Fix low contrast of deactive background and font colour\u0027 for example)",
+      "revId": "3f12b92d1f377d4efd2e7c096628f3f124ae4d2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_2e5e66e6",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-06T11:28:16Z",
+      "side": 1,
+      "message": "If you remove the line you\u0027ve just added ...",
+      "revId": "3f12b92d1f377d4efd2e7c096628f3f124ae4d2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_8e043ac8",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-06T11:28:16Z",
+      "side": 1,
+      "message": "... and remove this line *as well*, you\u0027ll achieve the same effect. \n\nWithout this line i.e. without overriding DeactiveColor in qt5 frontend, DeactiveColor from generic vcl stylesheet will apply (vcl/source/app/settings.cxx, as defined in ImplStyleData::SetStandardStyles). This colour happens to be COL_GRAY, so just a shade different than what you\u0027ve defined\n\nTry it :)",
+      "revId": "3f12b92d1f377d4efd2e7c096628f3f124ae4d2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
