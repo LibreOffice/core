@@ -1340,10 +1340,6 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
 
     UnoActionContext aAction(pDoc);
-    if (aPam.HasMark())
-    {
-        pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
-    }
 
     SwTOXBase & rTOXBase = m_pImpl->m_pProps->GetTOXBase();
     SwTOXType const*const pTOXType = rTOXBase.GetTOXType();
@@ -1354,7 +1350,7 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
     //TODO: apply Section attributes (columns and background)
     SwTOXBaseSection *const pTOX =
-        pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase, nullptr, false,
+        pDoc->InsertTableOf( aPam, rTOXBase, nullptr, false,
                 m_pImpl->m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
 
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());

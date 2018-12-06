@@ -347,15 +347,24 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 }
 
 SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
-                                                const SwTOXBase& rTOX,
-                                                const SfxItemSet* pSet,
-                                                bool bExpand,
+                                        const SwTOXBase& rTOX,
+                                        const SfxItemSet* pSet,
+                                        bool bExpand,
                                         SwRootFrame const*const pLayout)
+{
+    SwPaM aPam( rPos );
+    return InsertTableOf( aPam, rTOX, pSet, bExpand, pLayout );
+}
+
+SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
+                                        const SwTOXBase& rTOX,
+                                        const SfxItemSet* pSet,
+                                        bool bExpand,
+                                        SwRootFrame const*const pLayout )
 {
     GetIDocumentUndoRedo().StartUndo( SwUndoId::INSTOX, nullptr );
 
     OUString sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
-    SwPaM aPam( rPos );
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
     SwTOXBaseSection *const pNewSection = dynamic_cast<SwTOXBaseSection *>(
         InsertSwSection( aPam, aSectionData, & rTOX, pSet, false ));
