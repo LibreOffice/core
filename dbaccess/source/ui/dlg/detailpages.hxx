@@ -245,10 +245,11 @@ namespace dbaui
 
         OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 
-        OTextConnectionHelper m_aTextConnectionHelper;
+        std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
 
     protected:
         virtual ~OTextDetailsPage() override;
+        virtual void dispose() override;
         virtual bool prepareLeave() override;
 
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;

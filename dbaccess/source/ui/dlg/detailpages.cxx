@@ -668,13 +668,19 @@ namespace dbaui
     // OTextDetailsPage
     OTextDetailsPage::OTextDetailsPage(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
         : OCommonBehaviourTabPage(pParent, "dbaccess/ui/emptypage.ui", "EmptyPage", rCoreAttrs, OCommonBehaviourTabPageFlags::NONE)
-        , m_aTextConnectionHelper(m_xContainer.get(), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET)
+        , m_xTextConnectionHelper(new OTextConnectionHelper(m_xContainer.get(), TC_EXTENSION | TC_HEADER | TC_SEPARATORS | TC_CHARSET))
     {
     }
 
     OTextDetailsPage::~OTextDetailsPage()
     {
         disposeOnce();
+    }
+
+    void OTextDetailsPage::dispose()
+    {
+        m_xTextConnectionHelper.reset();
+        OCommonBehaviourTabPage::dispose();
     }
 
     VclPtr<SfxTabPage> ODriversSettings::CreateText(TabPageParent pParent,  const SfxItemSet* pAttrSet)
@@ -685,13 +691,13 @@ namespace dbaui
     void OTextDetailsPage::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
-        m_aTextConnectionHelper.fillControls(_rControlList);
+        m_xTextConnectionHelper->fillControls(_rControlList);
 
     }
     void OTextDetailsPage::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
-        m_aTextConnectionHelper.fillWindows(_rControlList);
+        m_xTextConnectionHelper->fillWindows(_rControlList);
 
     }
     void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -700,20 +706,20 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_aTextConnectionHelper.implInitControls(_rSet, bValid);
+        m_xTextConnectionHelper->implInitControls(_rSet, bValid);
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     bool OTextDetailsPage::FillItemSet( SfxItemSet* rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
-        bChangedSomething = m_aTextConnectionHelper.FillItemSet(*rSet, bChangedSomething);
+        bChangedSomething = m_xTextConnectionHelper->FillItemSet(*rSet, bChangedSomething);
         return bChangedSomething;
     }
 
     bool OTextDetailsPage::prepareLeave()
     {
-        return m_aTextConnectionHelper.prepareLeave();
+        return m_xTextConnectionHelper->prepareLeave();
     }
 
     VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)

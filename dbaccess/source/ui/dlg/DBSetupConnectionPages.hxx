@@ -56,11 +56,12 @@ namespace dbaui
     {
     public:
         std::unique_ptr<weld::Widget> m_xSubContainer;
-        OTextConnectionHelper  m_aTextConnectionHelper;
+        std::unique_ptr<OTextConnectionHelper> m_xTextConnectionHelper;
 
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateTextTabPage(TabPageParent pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
+        virtual void dispose() override;
         virtual ~OTextConnectionPageSetup() override;
     protected:
         virtual bool prepareLeave() override;
