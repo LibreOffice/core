@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_2e4ae67f",
+        "filename": "sc/inc/listenerquery.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-06T14:40:19Z",
+      "side": 1,
+      "message": "just declare it inline?",
+      "revId": "5d1ee271c97aefe73094d56313b3bd1b24ad78e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
