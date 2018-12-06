@@ -50,6 +50,24 @@
       "revId": "3f12b92d1f377d4efd2e7c096628f3f124ae4d2a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_0e3e0a29",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1001943
+      },
+      "writtenOn": "2018-12-06T13:14:59Z",
+      "side": 1,
+      "message": "Yes,It is doing the same thing but don\u0027t you think it is better to fix the bug with Qt5 frontend and overriding the vcl.",
+      "parentUuid": "5f4e5783_8e043ac8",
+      "revId": "3f12b92d1f377d4efd2e7c096628f3f124ae4d2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
