@@ -68,14 +68,9 @@ const RefQueryFormulaGroup::TabsType& RefQueryFormulaGroup::getAllPositions() co
     return maTabs;
 }
 
-struct QueryRange::Impl
-{
-    ScRangeList maRanges;
-};
-
 QueryRange::QueryRange() :
     SvtListener::QueryBase(SC_LISTENER_QUERY_FORMULA_GROUP_RANGE),
-    mpImpl(new Impl) {}
+    mpRanges(new ScRangeList) {}
 
 QueryRange::~QueryRange()
 {
@@ -83,12 +78,12 @@ QueryRange::~QueryRange()
 
 void QueryRange::add( const ScRange& rRange )
 {
-    mpImpl->maRanges.Join(rRange);
+    mpRanges->Join(rRange);
 }
 
 void QueryRange::swapRanges( ScRangeList& rRanges )
 {
-    mpImpl->maRanges.swap(rRanges);
+    mpRanges->swap(rRanges);
 }
 
 }

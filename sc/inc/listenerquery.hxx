@@ -51,8 +51,7 @@ private:
 
 class QueryRange : public SvtListener::QueryBase
 {
-    struct Impl;
-    std::unique_ptr<Impl> mpImpl;
+    std::unique_ptr<ScRangeList> mpRanges;
 
     QueryRange( const QueryRange& ) = delete;
     QueryRange& operator= ( const QueryRange& ) = delete;
