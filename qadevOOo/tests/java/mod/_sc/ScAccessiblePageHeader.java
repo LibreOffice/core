@@ -106,35 +106,6 @@ public class ScAccessiblePageHeader extends TestCase {
             e.printStackTrace(log);
         }
 
-        XStyleFamiliesSupplier StyleFam = UnoRuntime.queryInterface(
-            XStyleFamiliesSupplier.class,
-            xSpreadsheetDoc );
-        XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
-        XStyle StdStyle = null;
-
-        XNameAccess PageStyles = (XNameAccess) AnyConverter.toObject(
-                        new Type(XNameAccess.class),
-                                    StyleFamNames.getByName("PageStyles"));
-        StdStyle = (XStyle) AnyConverter.toObject(
-            new Type(XStyle.class), PageStyles.getByName("Default"));
-
-        //get the property-set
-        final XPropertySet PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
-
-        // tdf#99296 - Disable headers/footers by default
-        try {
-            PropSet.setPropertyValue("HeaderIsOn", Boolean.TRUE);
-            PropSet.setPropertyValue("FooterIsOn", Boolean.TRUE);
-        } catch (com.sun.star.beans.UnknownPropertyException upe) {
-            log.println("Don't know the Property 'HeaderIsOn' or 'FooterIsOn'");
-        } catch (com.sun.star.lang.WrappedTargetException wte) {
-            log.println("WrappedTargetException while setting Property 'HeaderIsOn' or 'FooterIsOn'");
-        } catch (com.sun.star.lang.IllegalArgumentException iae) {
-            log.println("IllegalArgumentException while setting Property 'HeaderIsOn' or 'FooterIsOn'");
-        } catch (com.sun.star.beans.PropertyVetoException pve) {
-            log.println("PropertyVetoException while setting Property 'HeaderIsOn' or 'FooterIsOn'");
-        }
-
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XController xController = aModel.getCurrentController();
@@ -179,6 +150,21 @@ public class ScAccessiblePageHeader extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        XStyleFamiliesSupplier StyleFam = UnoRuntime.queryInterface(
+            XStyleFamiliesSupplier.class,
+            xSpreadsheetDoc );
+        XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
+        XStyle StdStyle = null;
+
+        XNameAccess PageStyles = (XNameAccess) AnyConverter.toObject(
+                        new Type(XNameAccess.class),
+                                    StyleFamNames.getByName("PageStyles"));
+        StdStyle = (XStyle) AnyConverter.toObject(
+            new Type(XStyle.class), PageStyles.getByName("Default"));
+
+        //get the property-set
+        final XPropertySet PropSet = UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
 
         XHeaderFooterContent RPHC = null;
         // creation of testobject here
