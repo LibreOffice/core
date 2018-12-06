@@ -24,7 +24,6 @@
 # -o sc.ScTableRowObj
 -o sc.ScTableRowsObj
 # -o sc.ScTableSheetObj
--o sc.ScUniqueCellFormatsObj
 # -o sc.ScTableSheetsObj
 -o sc.ScTableValidationObj
 #-o sc.ScViewPaneObj
