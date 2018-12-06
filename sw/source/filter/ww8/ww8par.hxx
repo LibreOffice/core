@@ -253,6 +253,7 @@ public:
                                  //for L of the LR space independently
     bool m_bParaAutoBefore;   // For Auto spacing before a paragraph
     bool m_bParaAutoAfter;    // For Auto Spacing after a paragraph
+    sal_Int16 m_nRelativeJustify;
 
     SwWW8StyInf() :
         m_sWWStyleName( OUString() ),
@@ -279,7 +280,8 @@ public:
         m_bHasBrokenWW6List(false),
         m_bListReleventIndentSet(false),
         m_bParaAutoBefore(false),
-        m_bParaAutoAfter(false)
+        m_bParaAutoAfter(false),
+        m_nRelativeJustify(-1)
 
     {}
 
@@ -1747,7 +1749,12 @@ public:     // really private, but can only be done public
     void Read_ParaAutoAfter(sal_uInt16 , const sal_uInt8 *pData, short nLen);
     void Read_ParaContextualSpacing( sal_uInt16 nId, const sal_uInt8* pData, short nLen );
     void Read_LineSpace(        sal_uInt16, const sal_uInt8*, short nLen );
+
+    void SetRelativeJustify( bool bRel );
+    bool IsRelativeJustify();
+    bool IsRelativeJustify( sal_uInt16 nColl );
     void Read_Justify(sal_uInt16, const sal_uInt8*, short nLen);
+
     void Read_IdctHint(sal_uInt16, const sal_uInt8*, short nLen);
     bool IsRightToLeft();
     void Read_RTLJustify(sal_uInt16, const sal_uInt8*, short nLen);
