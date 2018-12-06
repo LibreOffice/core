@@ -32,18 +32,6 @@
             ]
         },
         {
-            "name": "gst-libav",
-            "config-opts": [ "--disable-gtk-doc", "--with-system-libav" ],
-            "cleanup": [ "*.la", "/share/gtk-doc" ],
-            "sources": [
-                {
-                    "type" : "archive",
-                    "url" : "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.10.5.tar.xz",
-                    "sha256" : "e4d2f315f478d47281fbfdfbd590a63d23704ca37911d7142d5992616f4b28d3"
-                }
-            ]
-        },
-        {
             "name": "gvfs",
             "cleanup": [ "/libexec/*", "/share/dbus-1/services/*", "/share/gvfs/mounts" ],
             "config-opts": [ "--disable-hal", "--disable-gdu", "--disable-gcr", "--disable-obexftp",
