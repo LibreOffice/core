@@ -66,7 +66,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/accessibility/accessibledialogcontrolshape \
 	basctl/source/accessibility/accessibledialogwindow \
 	basctl/source/basicide/basdoc \
-	basctl/source/basicide/basicbox \
+	basctl/source/basicide/IDEComboBox \
 	basctl/source/basicide/basicrenderable \
 	basctl/source/basicide/baside2b \
 	basctl/source/basicide/baside2 \

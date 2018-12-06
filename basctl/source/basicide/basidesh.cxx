@@ -26,7 +26,7 @@
 #include "baside2.hxx"
 #include <baside3.hxx>
 #include "basdoc.hxx"
-#include "basicbox.hxx"
+#include <IDEComboBox.hxx>
 #include <editeng/sizeitem.hxx>
 #include "iderdll2.hxx"
 #include <basidectrlr.hxx>
