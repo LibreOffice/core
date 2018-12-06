@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_ce58f257",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-06T14:46:37Z",
+      "side": 1,
+      "message": "As bubli mentioned: the first line should summerize the solution like \"Qt5 change default deactivated color\", which now would be \"Qt5 rely on VCL deactivated color.\"",
+      "revId": "334cb6c3971c7613e04c20ea32a6f2c126edf568",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_ee5bae51",
+        "filename": "vcl/qt5/Qt5Frame.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-06T14:46:37Z",
+      "side": 1,
+      "message": "Please don\u0027t move the lines around. The first pair is the default color, while the 2nd pair is the de-/active text color.\n\nAs you can see Qt5 provides different palettes for different contexts. Maybe it\u0027s generally a better idea to use QPalette::Base instead of QPalette::Window for the base colors. I don\u0027t think there will be a perfect match.\n\nWhat happens if you change the default from \"Breeze\" to \"Breeze Dark\"?",
+      "revId": "334cb6c3971c7613e04c20ea32a6f2c126edf568",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
