@@ -69,9 +69,15 @@ using namespace ::com::sun::star;
         : OConnectionTabPageSetup(pParent, "dbaccess/ui/dbwiztextpage.ui", "DBWizTextPage",
                                   rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
         , m_xSubContainer(m_xBuilder->weld_widget("TextPageContainer"))
-        , m_aTextConnectionHelper(m_xSubContainer.get(), TC_EXTENSION | TC_SEPARATORS)
+        , m_xTextConnectionHelper(new OTextConnectionHelper(m_xSubContainer.get(), TC_EXTENSION | TC_SEPARATORS))
     {
-        m_aTextConnectionHelper.SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
+        m_xTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
+    }
+
+    void OTextConnectionPageSetup::dispose()
+    {
+        m_xTextConnectionHelper.reset();
+        OConnectionTabPageSetup::dispose();
     }
 
     OTextConnectionPageSetup::~OTextConnectionPageSetup()
@@ -81,27 +87,27 @@ using namespace ::com::sun::star;
 
     IMPL_LINK_NOARG(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, void)
     {
-        SetRoadmapStateValue(!m_aTextConnectionHelper.GetExtension().isEmpty() && OConnectionTabPageSetup::checkTestConnection());
+        SetRoadmapStateValue(!m_xTextConnectionHelper->GetExtension().isEmpty() && OConnectionTabPageSetup::checkTestConnection());
         callModifiedHdl();
     }
 
     bool OTextConnectionPageSetup::checkTestConnection()
     {
         bool bDoEnable = OConnectionTabPageSetup::checkTestConnection();
-        bDoEnable = !m_aTextConnectionHelper.GetExtension().isEmpty() && bDoEnable;
+        bDoEnable = !m_xTextConnectionHelper->GetExtension().isEmpty() && bDoEnable;
         return bDoEnable;
     }
 
     void OTextConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OConnectionTabPageSetup::fillControls(_rControlList);
-        m_aTextConnectionHelper.fillControls(_rControlList);
+        m_xTextConnectionHelper->fillControls(_rControlList);
     }
 
     void OTextConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
     {
         OConnectionTabPageSetup::fillWindows(_rControlList);
-        m_aTextConnectionHelper.fillWindows(_rControlList);
+        m_xTextConnectionHelper->fillWindows(_rControlList);
     }
 
     void OTextConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -110,18 +116,19 @@ using namespace ::com::sun::star;
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
         OConnectionTabPageSetup::implInitControls( _rSet, _bSaveValue);
-        m_aTextConnectionHelper.implInitControls(_rSet, bValid);
+        m_xTextConnectionHelper->implInitControls(_rSet, bValid);
     }
 
     bool OTextConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
-        bChangedSomething = m_aTextConnectionHelper.FillItemSet(*_rSet, bChangedSomething);
+        bChangedSomething = m_xTextConnectionHelper->FillItemSet(*_rSet, bChangedSomething);
         return bChangedSomething;
     }
 
-    bool OTextConnectionPageSetup::prepareLeave(){
-        return m_aTextConnectionHelper.prepareLeave();
+    bool OTextConnectionPageSetup::prepareLeave()
+    {
+        return m_xTextConnectionHelper->prepareLeave();
     }
 
     VclPtr<OGenericAdministrationPage> OLDAPConnectionPageSetup::CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
