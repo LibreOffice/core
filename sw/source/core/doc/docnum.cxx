@@ -1451,11 +1451,23 @@ namespace sw {
 void
 GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
 {
-   if (pLayout && pLayout->IsHideRedlines()
-       && rIndex.GetNode().IsTextNode()
-       && rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
+    if (pLayout && pLayout->IsHideRedlines())
     {
-        rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pFirstNode;
+        if (rIndex.GetNode().IsTextNode())
+        {
+            if (rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
+            {
+                rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pFirstNode;
+            }
+        }
+        else if (rIndex.GetNode().IsEndNode())
+        {
+            if (rIndex.GetNode().GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+            {
+                rIndex = *rIndex.GetNode().StartOfSectionNode();
+                assert(rIndex.GetNode().IsTableNode());
+            }
+        }
     }
     --rIndex;
     if (pLayout && rIndex.GetNode().IsTextNode())
@@ -1467,11 +1479,22 @@ GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
 void
 GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
 {
-   if (pLayout && pLayout->IsHideRedlines()
-       && rIndex.GetNode().IsTextNode()
-       && rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
+    if (pLayout && pLayout->IsHideRedlines())
     {
-        rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pLastNode;
+        if (rIndex.GetNode().IsTextNode())
+        {
+            if (rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
+            {
+                rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pLastNode;
+            }
+        }
+        else if (rIndex.GetNode().IsTableNode())
+        {
+            if (rIndex.GetNode().GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+            {
+                rIndex = *rIndex.GetNode().EndOfSectionNode();
+            }
+        }
     }
     ++rIndex;
     if (pLayout && rIndex.GetNode().IsTextNode())

@@ -4360,6 +4360,24 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 rTextNode.NumRuleChgd();
             }
         }
+        else if (rNode.IsTableNode() && rLayout.IsHideRedlines())
+        {
+            SwPosition const tmp(rNode);
+            SwRangeRedline const*const pRedline(
+                rLayout.GetFormat()->GetDoc()->getIDocumentRedlineAccess().GetRedline(tmp, nullptr));
+            // pathology: redline that starts on a TableNode; cannot
+            // be created in UI but by import filters...
+            if (pRedline
+                && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+                && &pRedline->Start()->nNode.GetNode() == &rNode)
+            {
+                for (sal_uLong j = rNode.GetIndex(); j <= rNode.EndOfSectionIndex(); ++j)
+                {
+                    rNode.GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
+                }
+                rNode.GetTableNode()->DelFrames(&rLayout);
+            }
+        }
         if (!rNode.IsCreateFrameWhenHidingRedlines())
         {
             if (rLayout.IsHideRedlines())
