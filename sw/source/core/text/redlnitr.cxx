@@ -749,11 +749,11 @@ SwRedlineItr::GetNextRedln(sal_Int32 nNext, SwTextNode const*const pNode,
                 {
                     SwRangeRedline const*const pNext =
                         m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[rAct + nSkipped];
-                    if (pRedline->End() < pNext->Start())
+                    if (*pRedline->End() < *pNext->Start())
                     {
                         break; // done for now
                     }
-                    else if (pNext->Start() == pRedline->End() &&
+                    else if (*pNext->Start() == *pRedline->End() &&
                             pNext->GetType() == nsRedlineType_t::REDLINE_DELETE)
                     {
                         // consecutive delete - continue
