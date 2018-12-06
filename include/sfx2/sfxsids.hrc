@@ -134,6 +134,7 @@ class SfxDocumentInfoItem;
 #define SID_DIRECTEXPORTDOCASPDF            (SID_SFX_START + 1674)
 #define SID_EXPORTDOCASEPUB                 (SID_SFX_START + 1677)
 #define SID_DIRECTEXPORTDOCASEPUB           (SID_SFX_START + 1678)
+#define SID_REDACTDOC                       (SID_SFX_START + 1732)
 #define SID_UPDATEDOCMODE                   (SID_SFX_START + 1668)
 #define SID_CHECKOUT                        (SID_SFX_START + 512)
 #define SID_CANCELCHECKOUT                  (SID_SFX_START + 513)
@@ -256,7 +257,7 @@ class SfxDocumentInfoItem;
 // not required for preview, but interferes with not-yet-saved embedded data source for main document.
 #define SID_NO_EMBEDDED_DS                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 1731)
 
-//      SID_SFX_free_START                  (SID_SFX_START + 1732)
+//      SID_SFX_free_START                  (SID_SFX_START + 1733)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
