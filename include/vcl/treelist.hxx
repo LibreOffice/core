@@ -234,14 +234,9 @@ class VCL_DLLPUBLIC SvListView
 protected:
     SvTreeList* pModel;
 
-    void                ExpandListEntry( SvTreeListEntry* pParent )
-    { SvTreeList::Expand(this,pParent); }
-
-    void                CollapseListEntry( SvTreeListEntry* pParent )
-    { SvTreeList::Collapse(this,pParent); }
-
-    bool                SelectListEntry( SvTreeListEntry* pEntry, bool bSelect )
-    { return SvTreeList::Select(this,pEntry,bSelect); }
+    void                ExpandListEntry( SvTreeListEntry* pParent );
+    void                CollapseListEntry( SvTreeListEntry* pParent );
+    bool                SelectListEntry( SvTreeListEntry* pEntry, bool bSelect );
 
 public:
                         SvListView();   // Sets the Model to 0
