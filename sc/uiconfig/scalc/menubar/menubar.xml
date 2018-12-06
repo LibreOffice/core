@@ -133,6 +133,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
@@ -275,7 +276,6 @@
                     <menu:menuitem menu:id=".uno:InsertFieldDocTitle"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:InsertFormMenu">
                 <menu:menupopup>
