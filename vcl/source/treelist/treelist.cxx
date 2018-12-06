@@ -893,48 +893,48 @@ void SvTreeList::SetAbsolutePositions()
     bAbsPositionsValid = true;
 }
 
-void SvTreeList::Expand( SvListView* pView, SvTreeListEntry* pEntry )
+void SvListView::ExpandListEntry( SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT(pEntry&&pView,"Expand:View/Entry?");
-    if ( pView->IsExpanded(pEntry) )
+    DBG_ASSERT(pEntry,"Expand:View/Entry?");
+    if ( IsExpanded(pEntry) )
         return;
 
     DBG_ASSERT(!pEntry->m_Children.empty(), "SvTreeList::Expand: We expected to have child entries.");
 
-    SvViewDataEntry* pViewData = pView->GetViewData(pEntry);
+    SvViewDataEntry* pViewData = GetViewData(pEntry);
     pViewData->SetExpanded(true);
     SvTreeListEntry* pParent = pEntry->pParent;
     // if parent is visible, invalidate status data
-    if ( pView->IsExpanded( pParent ) )
+    if ( IsExpanded( pParent ) )
     {
-        pView->m_pImpl->m_bVisPositionsValid = false;
-        pView->m_pImpl->m_nVisibleCount = 0;
+        m_pImpl->m_bVisPositionsValid = false;
+        m_pImpl->m_nVisibleCount = 0;
     }
 }
 
-void SvTreeList::Collapse( SvListView* pView, SvTreeListEntry* pEntry )
+void SvListView::CollapseListEntry( SvTreeListEntry* pEntry )
 {
-    DBG_ASSERT(pView&&pEntry,"Collapse:View/Entry?");
-    if ( !pView->IsExpanded(pEntry) )
+    DBG_ASSERT(pEntry,"Collapse:View/Entry?");
+    if ( !IsExpanded(pEntry) )
         return;
 
     DBG_ASSERT(!pEntry->m_Children.empty(), "SvTreeList::Collapse: We expected to have child entries.");
 
-    SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
+    SvViewDataEntry* pViewData = GetViewData( pEntry );
     pViewData->SetExpanded(false);
 
     SvTreeListEntry* pParent = pEntry->pParent;
-    if ( pView->IsExpanded(pParent) )
+    if ( IsExpanded(pParent) )
     {
-        pView->m_pImpl->m_nVisibleCount = 0;
-        pView->m_pImpl->m_bVisPositionsValid = false;
+        m_pImpl->m_nVisibleCount = 0;
+        m_pImpl->m_bVisPositionsValid = false;
     }
 }
 
-bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, bool bSelect )
+bool SvListView::SelectListEntry( SvTreeListEntry* pEntry, bool bSelect )
 {
-    DBG_ASSERT(pView&&pEntry,"Select:View/Entry?");
-    SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
+    DBG_ASSERT(pEntry,"Select:View/Entry?");
+    SvViewDataEntry* pViewData = GetViewData( pEntry );
     if ( bSelect )
     {
         if ( pViewData->IsSelected() || !pViewData->IsSelectable() )
@@ -942,7 +942,7 @@ bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, bool bSelec
         else
         {
             pViewData->SetSelected(true);
-            pView->m_pImpl->m_nSelectionCount++;
+            m_pImpl->m_nSelectionCount++;
         }
     }
     else
@@ -952,7 +952,7 @@ bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, bool bSelec
         else
         {
             pViewData->SetSelected(false);
-            pView->m_pImpl->m_nSelectionCount--;
+            m_pImpl->m_nSelectionCount--;
         }
     }
     return true;
