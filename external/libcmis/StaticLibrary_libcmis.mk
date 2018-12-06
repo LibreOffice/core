@@ -13,13 +13,10 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,libcmis))
 
 ifeq ($(COM_IS_CLANG),TRUE)
 # Avoid narrowing conversion error (even though the option is technically a warning)
-# caused by boost.
-# Also avoid -Wdynamic-exception-spec errors in C++17 mode.
+# caused by boost, and avoid -Wdynamic-exception-spec errors.
 $(eval $(call gb_StaticLibrary_add_cxxflags,libcmis,\
     -Wno-error=c++11-narrowing \
-    $(if $(filter -std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
-            $(CXXFLAGS_CXX11)), \
-        -Wno-error=dynamic-exception-spec) \
+    -Wno-error=dynamic-exception-spec \
 ))
 endif
 
