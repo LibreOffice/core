@@ -68,9 +68,7 @@ public:
         IdxType n = static_cast<IdxType>( map_.size() - 1);
         if( n >= size_) { // cache full => replace the LRU entry
             // find the least recently used element in the map
-            typename LruItMap::iterator lru = map_.find( --list_.end());
-            n = lru->second;
-            map_.erase( lru); // remove it from the map
+            n = map_.extract(--list_.end()).mapped(); // remove the lru from the map
             list_.pop_back(); // remove from the list
         }
         it->second = n;
