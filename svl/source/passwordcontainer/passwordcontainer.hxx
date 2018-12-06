@@ -185,7 +185,7 @@ private:
 
 public:
     StorageItem( PasswordContainer* point, const OUString& path ) :
-        ConfigItem( path, ConfigItemMode::ImmediateUpdate ),
+        ConfigItem( path, ConfigItemMode::NONE ),
         mainCont( point ),
         hasEncoded( false )
     {

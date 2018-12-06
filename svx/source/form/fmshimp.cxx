@@ -616,7 +616,7 @@ FmXFormShell_Base_Disambiguation::FmXFormShell_Base_Disambiguation( ::osl::Mutex
 
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
-        ,FmXFormShell_CFGBASE("Office.Common/Misc", ConfigItemMode::DelayedUpdate)
+        ,FmXFormShell_CFGBASE("Office.Common/Misc", ConfigItemMode::NONE)
         ,m_eNavigate( NavigationBarMode_NONE )
         ,m_nInvalidationEvent( nullptr )
         ,m_nActivationEvent( nullptr )

@@ -44,8 +44,7 @@ namespace com{ namespace sun{ namespace star{
 
 enum class ConfigItemMode
 {
-    ImmediateUpdate    = 0x00,
-    DelayedUpdate      = 0x01,
+    NONE               = 0x00,
     AllLocales         = 0x02,
     ReleaseTree        = 0x04,
 };
@@ -111,7 +110,7 @@ namespace utl
 
         protected:
             explicit ConfigItem(const OUString &rSubTree,
-                        ConfigItemMode nMode = ConfigItemMode::DelayedUpdate);
+                        ConfigItemMode nMode = ConfigItemMode::NONE);
 
             void                    SetModified  (); // mark item as modified
             void                    ClearModified(); // reset state after commit!
