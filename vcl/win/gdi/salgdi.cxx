@@ -45,17 +45,17 @@
 #define DITHER_MAX_SYSCOLOR             16
 #define DITHER_EXTRA_COLORS             1
 
+namespace
+{
+
 struct SysColorEntry
 {
     DWORD           nRGB;
     SysColorEntry*  pNext;
 };
 
-static SysColorEntry* pFirstSysColor = nullptr;
-static SysColorEntry* pActSysColor = nullptr;
-
-namespace
-{
+SysColorEntry* pFirstSysColor = nullptr;
+SysColorEntry* pActSysColor = nullptr;
 
 void DeleteSysColorList()
 {
