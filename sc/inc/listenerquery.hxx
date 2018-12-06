@@ -11,13 +11,11 @@
 #define SC_LISTENERQUERY_HXX
 
 #include "address.hxx"
+#include "rangelst.hxx"
 #include <svl/listener.hxx>
 
 #include <unordered_map>
 #include <vector>
-#include <memory>
-
-class ScRangeList;
 
 namespace sc {
 
@@ -51,8 +49,7 @@ private:
 
 class QueryRange : public SvtListener::QueryBase
 {
-    struct Impl;
-    std::unique_ptr<Impl> mpImpl;
+    ScRangeList maRanges;
 
     QueryRange( const QueryRange& ) = delete;
     QueryRange& operator= ( const QueryRange& ) = delete;
