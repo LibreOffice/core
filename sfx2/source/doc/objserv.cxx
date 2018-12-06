@@ -62,8 +62,11 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/asynclink.hxx>
+#include <svtools/DocumentToGraphicRenderer.hxx>
+#include <vcl/gdimtf.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <tools/link.hxx>
 
@@ -99,6 +102,8 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <guisaveas.hxx>
 #include <saveastemplatedlg.hxx>
@@ -516,6 +521,73 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 pDlg->StartExecuteAsync(aCtx);
                 rReq.Ignore();
             }
+
+            return;
+        }
+
+        case SID_REDACTDOC:
+        {
+            // Create the meta file(s)
+            css::uno::Reference<css::frame::XModel> xModel = GetModel();
+            if(!xModel.is())
+                return;
+
+            uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+                        xModel->getCurrentController(), uno::UNO_QUERY);
+            if(!xTextViewCursorSupplier.is())
+                return;
+
+            uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                                      uno::UNO_QUERY);
+            if(!xCursor.is())
+                return;
+
+            uno::Reference< lang::XComponent > xSourceDoc( xModel );
+
+            DocumentToGraphicRenderer aRenderer(xSourceDoc, /*bSelectionOnly=*/false);
+            sal_Int16 nPage = 1;
+
+            ::Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
+            ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage);
+            // Get the CSS pixel size of the page (mm100 -> pixel using 96 DPI, independent from system DPI).
+            ::Size aCss(static_cast<double>(aLogic.getWidth()) / 26.4583,
+                        static_cast<double>(aLogic.getHeight()) / 26.4583);
+            Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aCss, COL_WHITE,
+                                                         /*bExtOutDevData=*/true);
+            auto& rGDIMetaFile = const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile());
+
+            // Set preferred map unit and size on the metafile, so the SVG size
+            // will be correct in MM.
+            MapMode aMapMode;
+            aMapMode.SetMapUnit(MapUnit::Map100thMM);
+            rGDIMetaFile.SetPrefMapMode(aMapMode);
+            rGDIMetaFile.SetPrefSize(aLogic);
+
+            SvMemoryStream aMemoryStream;
+            rGDIMetaFile.Write(aMemoryStream);
+            uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aMemoryStream.GetData()),
+                                              aMemoryStream.Tell());
+
+            /// Contains info about a fixed-layout page.
+            struct FixedLayoutPage
+            {
+                css::uno::Sequence<sal_Int8> aMetafile;
+                ::Size aCssPixels;
+                std::vector<OUString> aChapterNames;
+            };
+
+            FixedLayoutPage aPage;
+            aPage.aMetafile = aSequence;
+            aPage.aCssPixels = aCss;
+            aPage.aChapterNames = aRenderer.getChapterNames();
+            //rPageMetafiles.push_back(aPage);
+
+
+            // Create an empty Draw component.
+            uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+            uno::Reference<frame::XComponentLoader> xComponentLoader(xDesktop, uno::UNO_QUERY);
+            uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
+
 
             return;
         }
@@ -1002,6 +1074,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_DIRECTEXPORTDOCASPDF:
             case SID_EXPORTDOCASEPUB:
             case SID_DIRECTEXPORTDOCASEPUB:
+            case SID_REDACTDOC:
             {
                 break;
             }
