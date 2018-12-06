@@ -38,6 +38,7 @@ AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimatio
                                              ::std::shared_ptr<BaseContainerNode> const& pParent,
                                              NodeContext const& rContext ) :
     BaseNode( xNode, pParent, rContext ),
+    mbToggled(false),
     mpShape(),
     mxCommandNode( xNode, css::uno::UNO_QUERY_THROW )
 {
@@ -80,12 +81,13 @@ void AnimationCommandNode::activate_st()
         // the command toggles the pause status on a media object
     case EffectCommands::TOGGLEPAUSE:
     {
-        if( mpShape )
+        if (mpShape)
         {
             if( mpShape->isPlaying() )
                 mpShape->pause();
             else
                 mpShape->play();
+            mbToggled = true;
         }
         break;
     }
@@ -115,12 +117,13 @@ void AnimationCommandNode::deactivate_st( NodeState /*eDestState*/ )
     // the command toggles the pause status on a media object
     case EffectCommands::TOGGLEPAUSE:
     {
-        if( mpShape )
+        if (mpShape && mbToggled)
         {
             if( mpShape->isPlaying() )
                 mpShape->pause();
             else
                 mpShape->play();
+            mbToggled = false;
         }
         break;
     }

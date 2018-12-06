@@ -50,6 +50,7 @@ private:
     virtual bool hasPendingAnimation() const override;
 
 private:
+    bool mbToggled;
     IExternalMediaShapeBaseSharedPtr mpShape;
     css::uno::Reference<css::animations::XCommand > mxCommandNode;
 };
