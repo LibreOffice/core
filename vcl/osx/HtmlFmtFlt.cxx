@@ -149,7 +149,7 @@ Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
    can improve this
 */
 const char HtmlFormatStart[] = "Version:";
-int const HtmlFormatStartLen = (sizeof(HtmlFormatStart) - 1);
+int const HtmlFormatStartLen = sizeof(HtmlFormatStart) - 1;
 
 bool isHTMLFormat(const Sequence<sal_Int8>& aHtmlSequence)
 {

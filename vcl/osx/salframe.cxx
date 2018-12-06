@@ -321,7 +321,7 @@ void AquaSalFrame::SetTitle(const OUString& rTitle)
     [mpNSWindow setTitle: pTitle];
 
     // create an entry in the dock menu
-    const SalFrameStyleFlags nAppWindowStyle = (SalFrameStyleFlags::CLOSEABLE | SalFrameStyleFlags::MOVEABLE);
+    const SalFrameStyleFlags nAppWindowStyle = SalFrameStyleFlags::CLOSEABLE | SalFrameStyleFlags::MOVEABLE;
     if( mpParent == nullptr &&
         (mnStyle & nAppWindowStyle) == nAppWindowStyle )
     {
