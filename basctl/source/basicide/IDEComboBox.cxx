@@ -19,10 +19,8 @@
 
 #include <strings.hrc>
 #include <basidesh.hxx>
-
-#include "basicbox.hxx"
+#include <IDEComboBox.hxx>
 #include <iderdll.hxx>
-
 #include <localizationmgr.hxx>
 #include <managelang.hxx>
 
