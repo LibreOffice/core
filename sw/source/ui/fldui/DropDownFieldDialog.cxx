@@ -134,6 +134,9 @@ IMPL_LINK_NOARG(sw::DropDownFieldDialog, NextHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(sw::DropDownFieldDialog, DoubleClickHdl, weld::TreeView&, void)
 {
+    // tdf#114144, when next is available make double-click accept and go to next field
+    if (m_xNextPB->get_visible() && m_xNextPB->get_sensitive())
+        m_pPressedButton = m_xNextPB.get();
     m_xDialog->response(RET_OK);
 }
 
