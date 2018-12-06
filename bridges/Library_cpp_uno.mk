@@ -162,6 +162,10 @@ $(eval $(call gb_Library_add_exception_objects,$(COMNAME)_uno,\
         bridges/source/cpp_uno/gcc3_linux_alpha/uno2cpp \
 ))
 
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
+))
+
 ######################################################
 else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),LINUX-ARM-gcc3)
 ######################################################
@@ -183,6 +187,10 @@ $(eval $(call gb_Library_add_asmobjects,$(COMNAME)_uno,\
 	bridges/source/cpp_uno/gcc3_linux_arm/armhelper \
 ))
 
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
+))
+
 #######################################################
 else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),LINUX-HPPA-gcc3)
 #######################################################
@@ -200,6 +208,10 @@ $(eval $(call gb_LinkTarget_set_cxx_optimization, \
 	bridges/source/cpp_uno/gcc3_linux_hppa/cpp2uno \
 	bridges/source/cpp_uno/gcc3_linux_hppa/uno2cpp \
 , $(gb_COMPILERNOOPTFLAGS) \
+))
+
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
 ))
 
 #######################################################
@@ -222,6 +234,10 @@ $(eval $(call gb_Library_add_asmobjects,$(COMNAME)_uno,\
 	bridges/source/cpp_uno/gcc3_linux_ia64/call \
 ))
 
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
+))
+
 ########################################################
 else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),LINUX-INTEL-gcc3)
 ########################################################
@@ -238,6 +254,10 @@ $(eval $(call gb_Library_add_asmobjects,$(COMNAME)_uno,\
 ))
 
 
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
+))
+
 #######################################################
 else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),LINUX-M68K-gcc3)
 #######################################################
@@ -253,6 +273,11 @@ $(eval $(call gb_LinkTarget_set_cxx_optimization, \
 	bridges/source/cpp_uno/gcc3_linux_m68k/cpp2uno \
 	bridges/source/cpp_uno/gcc3_linux_m68k/uno2cpp \
 , $(gb_COMPILERNOOPTFLAGS) \
+))
+
+
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
 ))
 
 #########################################################
@@ -272,6 +297,11 @@ $(eval $(call gb_LinkTarget_set_cxx_optimization, \
 , $(gb_COMPILERNOOPTFLAGS) \
 ))
 
+
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
+))
+
 ##########################################################
 else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),LINUX-POWERPC-gcc3)
 ##########################################################
@@ -285,6 +315,11 @@ $(eval $(call gb_Library_add_exception_objects,$(COMNAME)_uno,\
 $(eval $(call gb_LinkTarget_set_cxx_optimization, \
 	bridges/source/cpp_uno/gcc3_linux_powerpc/uno2cpp \
 , $(gb_COMPILERNOOPTFLAGS) \
+))
+
+
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
 ))
 
 ############################################################
@@ -303,6 +338,11 @@ $(eval $(call gb_LinkTarget_set_cxx_optimization, \
 , $(gb_COMPILERNOOPTFLAGS) \
 ))
 
+
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
+))
+
 #######################################################
 else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),LINUX-S390-gcc3)
 #######################################################
@@ -313,6 +353,11 @@ $(eval $(call gb_Library_add_exception_objects,$(COMNAME)_uno,\
 	bridges/source/cpp_uno/gcc3_linux_s390/uno2cpp \
 ))
 
+
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
+))
+
 ########################################################
 else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),LINUX-S390X-gcc3)
 ########################################################
@@ -321,6 +366,11 @@ $(eval $(call gb_Library_add_exception_objects,$(COMNAME)_uno,\
 	bridges/source/cpp_uno/gcc3_linux_s390x/except \
 	bridges/source/cpp_uno/gcc3_linux_s390x/cpp2uno \
 	bridges/source/cpp_uno/gcc3_linux_s390x/uno2cpp \
+))
+
+
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
 ))
 
 ########################################################
@@ -343,6 +393,10 @@ $(eval $(call gb_Library_add_asmobjects,$(COMNAME)_uno,\
 	bridges/source/cpp_uno/gcc3_linux_sparc/call \
 ))
 
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
+))
+
 #########################################################
 else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),LINUX-X86_64-gcc3)
 #########################################################
@@ -356,6 +410,10 @@ $(eval $(call gb_Library_add_exception_objects,$(COMNAME)_uno,\
 
 $(eval $(call gb_Library_add_asmobjects,$(COMNAME)_uno,\
 	bridges/source/cpp_uno/gcc3_linux_x86-64/call \
+))
+
+$(eval $(call gb_Library_add_libs,$(COMNAME)_uno,\
+	-ldl \
 ))
 
 #########################################################
