@@ -903,6 +903,7 @@ struct WW8PLCFxDesc
     long nCpOfs;          // for Offset Header .. Footnote
     bool bFirstSprm;      // for recognizing the first Sprm of a group
     bool bRealLineEnd;    // false for Pap-Piece-end
+    sal_Int16 nRelativeJustify;
     void Save( WW8PLCFxSave1& rSave ) const;
     void Restore( const WW8PLCFxSave1& rSave );
     //With nStartPos set to WW8_CP_MAX then in the case of a pap or chp
@@ -922,6 +923,7 @@ struct WW8PLCFxDesc
         , nCpOfs(0)
         , bFirstSprm(false)
         , bRealLineEnd(false)
+        , nRelativeJustify(-1)
     {
     }
     void ReduceByOffset();
