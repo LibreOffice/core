@@ -61,8 +61,6 @@
 #define SAL_POLYPOLYCOUNT_STACKBUF          8
 #define SAL_POLYPOLYPOINTS_STACKBUF         64
 
-#define DITHER_PAL_DELTA                51
-#define DITHER_MAX_SYSCOLOR             16
 #define DMAP( _def_nVal, _def_nThres )  ((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
 
 #define SAL_POLY_STACKBUF       32
@@ -168,31 +166,6 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
 }
 
 
-static PALETTEENTRY aImplSalSysPalEntryAry[ DITHER_MAX_SYSCOLOR ] =
-{
-{    0,    0,    0, 0 },
-{    0,    0, 0x80, 0 },
-{    0, 0x80,    0, 0 },
-{    0, 0x80, 0x80, 0 },
-{ 0x80,    0,    0, 0 },
-{ 0x80,    0, 0x80, 0 },
-{ 0x80, 0x80,    0, 0 },
-{ 0x80, 0x80, 0x80, 0 },
-{ 0xC0, 0xC0, 0xC0, 0 },
-{    0,    0, 0xFF, 0 },
-{    0, 0xFF,    0, 0 },
-{    0, 0xFF, 0xFF, 0 },
-{ 0xFF,    0,    0, 0 },
-{ 0xFF,    0, 0xFF, 0 },
-{ 0xFF, 0xFF,    0, 0 },
-{ 0xFF, 0xFF, 0xFF, 0 }
-};
-
-static PALETTEENTRY aImplExtraColor1 =
-{
-    0, 184, 255, 0
-};
-
 static BYTE aOrdDither8Bit[8][8] =
 {
    {  0, 38,  9, 48,  2, 40, 12, 50 },
@@ -227,33 +200,70 @@ Color ImplGetROPColor( SalROPColor nROPColor )
     return nColor;
 }
 
-int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
+bool IsDitherColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
 {
-    // dither color?
-    if ( !(nRed % DITHER_PAL_DELTA) && !(nGreen % DITHER_PAL_DELTA) && !(nBlue % DITHER_PAL_DELTA) )
-        return TRUE;
+    constexpr sal_uInt8 DITHER_PAL_DELTA = 51;
 
-    PALETTEENTRY* pPalEntry = aImplSalSysPalEntryAry;
-
-    // standard palette color?
-    for ( sal_uInt16 i = 0; i < DITHER_MAX_SYSCOLOR; i++, pPalEntry++ )
-    {
-        if( pPalEntry->peRed == nRed && pPalEntry->peGreen == nGreen && pPalEntry->peBlue == nBlue )
-            return TRUE;
-    }
-
-    // extra color?
-    if ( aImplExtraColor1.peRed == nRed &&
-         aImplExtraColor1.peGreen == nGreen &&
-         aImplExtraColor1.peBlue == nBlue )
-    {
-        return TRUE;
-    }
-
-    return FALSE;
+    return !(nRed % DITHER_PAL_DELTA) &&
+           !(nGreen % DITHER_PAL_DELTA) &&
+           !(nBlue % DITHER_PAL_DELTA);
 }
 
+bool IsPaletteColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
+{
+    static PALETTEENTRY aImplSalSysPalEntryAry[] =
+    {
+    {    0,    0,    0, 0 },
+    {    0,    0, 0x80, 0 },
+    {    0, 0x80,    0, 0 },
+    {    0, 0x80, 0x80, 0 },
+    { 0x80,    0,    0, 0 },
+    { 0x80,    0, 0x80, 0 },
+    { 0x80, 0x80,    0, 0 },
+    { 0x80, 0x80, 0x80, 0 },
+    { 0xC0, 0xC0, 0xC0, 0 },
+    {    0,    0, 0xFF, 0 },
+    {    0, 0xFF,    0, 0 },
+    {    0, 0xFF, 0xFF, 0 },
+    { 0xFF,    0,    0, 0 },
+    { 0xFF,    0, 0xFF, 0 },
+    { 0xFF, 0xFF,    0, 0 },
+    { 0xFF, 0xFF, 0xFF, 0 }
+    };
+
+    for (auto& rPalEntry : aImplSalSysPalEntryAry)
+    {
+        if(rPalEntry.peRed == nRed &&
+           rPalEntry.peGreen == nGreen &&
+           rPalEntry.peBlue == nBlue)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
+
+bool IsExtraColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
+{
+    static PALETTEENTRY aImplExtraColor1 =
+    {
+        0, 184, 255, 0
+    };
+
+    return aImplExtraColor1.peRed == nRed &&
+           aImplExtraColor1.peGreen == nGreen &&
+           aImplExtraColor1.peBlue == nBlue;
+}
+
+bool ImplIsPaletteEntry(BYTE nRed, BYTE nGreen, BYTE nBlue)
+{
+    return IsDitherColor(nRed, nGreen, nBlue) ||
+           IsPaletteColor(nRed, nGreen, nBlue) ||
+           IsExtraColor(nRed, nGreen, nBlue);
+}
+
+} // namespace
 
 WinSalGraphicsImpl::WinSalGraphicsImpl(WinSalGraphics& rParent):
     mrParent(rParent),
@@ -280,7 +290,6 @@ WinSalGraphicsImpl::~WinSalGraphicsImpl()
         if ( !mbStockBrush )
             DeleteBrush( mhBrush );
     }
-
 }
 
 void WinSalGraphicsImpl::Init()
@@ -673,7 +682,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
     }
 }
 
-}
+} // namespace
 
 void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
