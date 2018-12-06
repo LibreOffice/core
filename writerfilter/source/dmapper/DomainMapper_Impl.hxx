@@ -542,6 +542,7 @@ private:
     SmartTagHandler m_aSmartTagHandler;
 
     css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
+    css::uno::Reference<css::text::XTextRange> m_xStdEntryStart;
 
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
@@ -794,6 +795,10 @@ public:
     void SetFieldFFData( const FFDataHandler::Pointer_t& pFFDataHandler );
     /// The end of field is reached (cFieldEnd appeared) - the command might still be open.
     void PopFieldContext();
+
+    /// Returns title of the TOC placed in paragraph(s) before TOC field inside STD-frame
+    OUString extractTocTitle();
+    css::uno::Reference<css::beans::XPropertySet> createSectionForRange(css::uno::Reference< css::text::XTextRange > xStart, css::uno::Reference< css::text::XTextRange > xEnd, const OUString & sObjectType, bool stepLeft);
 
     void SetBookmarkName( const OUString& rBookmarkName );
     void StartOrEndBookmark( const OUString& rId );
