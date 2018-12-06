@@ -64,6 +64,7 @@
 #include <svtools/asynclink.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <tools/link.hxx>
 
@@ -516,6 +517,17 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 pDlg->StartExecuteAsync(aCtx);
                 rReq.Ignore();
             }
+
+            return;
+        }
+
+        case SID_REDACTDOC:
+        {
+            // Create an empty Draw component.
+            uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+            uno::Reference<frame::XComponentLoader> xComponentLoader(xDesktop, uno::UNO_QUERY);
+            uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, {});
+
 
             return;
         }
@@ -1002,6 +1014,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_DIRECTEXPORTDOCASPDF:
             case SID_EXPORTDOCASEPUB:
             case SID_DIRECTEXPORTDOCASEPUB:
+            case SID_REDACTDOC:
             {
                 break;
             }
