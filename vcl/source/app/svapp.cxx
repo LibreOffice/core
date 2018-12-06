@@ -1438,9 +1438,11 @@ const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()
 
 void Application::EnableHeadlessMode( bool dialogsAreFatal )
 {
-    assert(GetDialogCancelMode() == DialogCancelMode::Off);
-    SetDialogCancelMode(
-        dialogsAreFatal ? DialogCancelMode::Fatal : DialogCancelMode::Silent );
+    DialogCancelMode eNewMode = dialogsAreFatal ? DialogCancelMode::Fatal : DialogCancelMode::Silent;
+    DialogCancelMode eOldMode = GetDialogCancelMode();
+    assert(eOldMode == DialogCancelMode::Off || GetDialogCancelMode() == eNewMode);
+    if (eOldMode != eNewMode)
+        SetDialogCancelMode( eNewMode );
 }
 
 bool Application::IsHeadlessModeEnabled()
