@@ -99,33 +99,36 @@ void CFilterContainer::empty()
 // Precondition: the container is not empty
 //               there is a filter identified by the name
 
-bool CFilterContainer::getFilter( const OUString& aName, OUString& theFilter ) const
+bool CFilterContainer::getFilterByName(const OUString& aName, OUString& theFilter) const
 {
     OSL_PRECOND( !m_vFilters.empty() , "Empty filter container" );
-
-    sal_Int32 pos = getFilterTagPos( aName );
-
-    try
-    {
-        if ( pos > -1 )
-            theFilter = m_vFilters.at( pos ).second;
-    }
-    catch( std::out_of_range& )
-    {
-        OSL_FAIL( "Filter not in filter container" );
-        pos = -1;
-    }
-
-    return pos > -1;
+    return getFilterByIndex(getFilterTagPos(aName), theFilter);
 }
 
-bool CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFilter ) const
+bool CFilterContainer::getFilterByIndex(sal_Int32 aIndex, OUString& theFilter) const
 {
     bool bRet = true;
 
     try
     {
-        theFilter = m_vFilters.at( aIndex ).first;
+        theFilter = m_vFilters.at(aIndex).second;
+    }
+    catch (std::out_of_range&)
+    {
+        OSL_FAIL("Filter index out of range");
+        bRet = false;
+    }
+
+    return bRet;
+}
+
+bool CFilterContainer::getFilterNameByIndex(sal_Int32 aIndex, OUString& theName) const
+{
+    bool bRet = true;
+
+    try
+    {
+        theName = m_vFilters.at(aIndex).first;
     }
     catch( std::out_of_range& )
     {

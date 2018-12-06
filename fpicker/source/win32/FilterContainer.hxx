@@ -58,11 +58,12 @@ public:
     // clear all entries
     void empty( );
 
-    // retrieve a filter from the container both methods
+    // retrieve a filter from the container. These methods
     // return true on success and false if the specified
     // filter was not found
-    bool getFilter( const OUString& aName, OUString& theFilter ) const;
-    bool getFilter( sal_Int32 aIndex, OUString& theFilter ) const;
+    bool getFilterByName(const OUString& aName, OUString& theFilter) const;
+    bool getFilterByIndex(sal_Int32 aIndex, OUString& theFilter) const;
+    bool getFilterNameByIndex(sal_Int32 aIndex, OUString& theName) const;
 
     // returns the position of the specified filter or -1
     // if the filter was not found
