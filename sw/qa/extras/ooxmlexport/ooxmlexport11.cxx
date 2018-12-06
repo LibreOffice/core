@@ -24,6 +24,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 
 
 #include <sfx2/docfile.hxx>
@@ -142,6 +143,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffset.odt")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p/w:r/w:instrText", " TOC \\f \\o \"1-9\" \\h");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Table of Contents");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf121561_tocTitleDocx, "tdf121456_tabsOffset.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes(xIndexSupplier->getDocumentIndexes( ), uno::UNO_QUERY);
+    uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Inhaltsverzeichnis"), getProperty<OUString>(xTOCIndex, "Title"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf106174_rtlParaAlign, "tdf106174_rtlParaAlign.docx")
