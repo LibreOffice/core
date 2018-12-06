@@ -234,8 +234,7 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
 }
 
 SwRevisionConfig::SwRevisionConfig() :
-    ConfigItem("Office.Writer/Revision",
-        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
+    ConfigItem("Office.Writer/Revision", ConfigItemMode::ReleaseTree)
 {
     m_aInsertAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;
     m_aInsertAttr.m_nAttr = LINESTYLE_SINGLE;
@@ -561,7 +560,7 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 
 SwInsertConfig::SwInsertConfig(bool bWeb) :
     ConfigItem(bWeb ? OUString("Office.WriterWeb/Insert") : OUString("Office.Writer/Insert"),
-        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
+        ConfigItemMode::ReleaseTree),
     m_bInsWithCaption( false ),
     m_bCaptionOrderNumberingFirst( false ),
     m_aInsTableOpts(SwInsertTableFlags::NONE,0),
@@ -1082,7 +1081,7 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
 
 SwTableConfig::SwTableConfig(bool bWeb)
     : ConfigItem(bWeb ? OUString("Office.WriterWeb/Table") : OUString("Office.Writer/Table"),
-        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
+        ConfigItemMode::ReleaseTree)
     , m_nTableHMove(0)
     , m_nTableVMove(0)
     , m_nTableHInsert(0)
@@ -1151,8 +1150,7 @@ void SwTableConfig::Load()
 }
 
 SwMiscConfig::SwMiscConfig() :
-    ConfigItem("Office.Writer",
-        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree),
+    ConfigItem("Office.Writer", ConfigItemMode::ReleaseTree),
     m_bDefaultFontsInCurrDocOnly(false),
     m_bShowIndexPreview(false),
     m_bGrfToGalleryAsLnk(true),
@@ -1267,8 +1265,7 @@ const Sequence<OUString>& SwCompareConfig::GetPropertyNames()
 }
 
 SwCompareConfig::SwCompareConfig() :
-    ConfigItem("Office.Writer/Comparison",
-        ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
+    ConfigItem("Office.Writer/Comparison", ConfigItemMode::ReleaseTree)
     ,m_bStoreRsid(true)
 {
     m_eCmpMode = SwCompareMode::Auto;

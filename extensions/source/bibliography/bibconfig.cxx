@@ -55,7 +55,7 @@ Sequence<OUString> const & BibConfig::GetPropertyNames()
 }
 
 BibConfig::BibConfig()
-    : ConfigItem("Office.DataAccess/Bibliography", ConfigItemMode::DelayedUpdate)
+    : ConfigItem("Office.DataAccess/Bibliography", ConfigItemMode::NONE)
     , nTblOrQuery(0)
     , nBeamerSize(0)
     , nViewSize(0)

@@ -187,8 +187,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         const SwDBData& rData )
     : SfxModalDialog(rView.GetWindow(), "InsertDbColumnsDialog",
         "modules/swriter/ui/insertdbcolumnsdialog.ui")
-    , ConfigItem("Office.Writer/InsertData/DataSet",
-        ConfigItemMode::DelayedUpdate)
+    , ConfigItem("Office.Writer/InsertData/DataSet", ConfigItemMode::NONE)
     , aDBData(rData)
     , sNoTmpl(SwResId(SW_STR_NONE))
     , pView(&rView)
