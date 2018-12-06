@@ -46,7 +46,7 @@ namespace
         if(basegfx::fTools::equalZero(aFontScale.getY()))
         {
             // no font height; choose one and adapt scale to get back to original scaling
-            static double fDefaultFontScale(100.0);
+            static const double fDefaultFontScale(100.0);
             rScale.setY(1.0 / fDefaultFontScale);
             aFontScale.setY(fDefaultFontScale);
         }

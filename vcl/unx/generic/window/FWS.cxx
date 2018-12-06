@@ -45,11 +45,6 @@ static Atom FWS_NORMAL_STATE;
 static Atom WM_PROTOCOLS;
 static Atom WM_CHANGE_STATE;
 
-static Bool fwsStackUnder;
-static Bool fwsParkIcons;
-static Bool fwsPassesInput;
-static Bool fwsHandlesFocus;
-
 static Window fwsCommWindow;
 
 // Initialize our atoms and determine if the current window manager is
@@ -131,7 +126,6 @@ WMSupportsFWS (Display *display, int screen)
         protocol = reinterpret_cast<Atom *>(propData)[i];
         if (protocol == FWS_STACK_UNDER)
         {
-            fwsStackUnder = True;
             #if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Using fwsStackUnder.\n");
             #endif
@@ -139,7 +133,6 @@ WMSupportsFWS (Display *display, int screen)
         else
         if (protocol == FWS_PARK_ICONS)
         {
-            fwsParkIcons = True;
             #if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Using fwsParkIcons.\n");
             #endif
@@ -147,7 +140,6 @@ WMSupportsFWS (Display *display, int screen)
         else
         if (protocol == FWS_PASSES_INPUT)
         {
-            fwsPassesInput = True;
             #if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Using fwsPassesInput.\n");
             #endif
@@ -155,7 +147,6 @@ WMSupportsFWS (Display *display, int screen)
         else
         if (protocol == FWS_HANDLES_FOCUS)
         {
-            fwsHandlesFocus = True;
             #if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Using fwsHandlesFocus.\n");
             #endif

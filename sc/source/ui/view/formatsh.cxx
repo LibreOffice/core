@@ -2545,7 +2545,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                             bThousand = nIntegerDigits > 0 && ((nIntegerDigits % 3) == 0);
                         }
                         OUString aFormat;
-                        static OUString sBreak = ",";
+                        static const OUString sBreak = ",";
                         const OUString sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
                         const OUString sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
                         const OUString sPrecision = OUString::number(nPrecision);

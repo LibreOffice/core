@@ -37,7 +37,7 @@ namespace sdr
         {
             const basegfx::B2DRange aHatchRange(getBasePosition(), maSecondPosition);
             basegfx::BColor aColor(getBaseColor().getBColor());
-            static double fChange(0.1); // just small optical change, do not make it annoying
+            static const double fChange(0.1); // just small optical change, do not make it annoying
 
             if(mbOverlayState)
             {

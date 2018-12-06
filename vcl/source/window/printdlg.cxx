@@ -346,7 +346,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     // what may look awkward and pixelated (again). This means
     // to use a percentage value - if we have at least
     // that value of required pixels, we are good.
-    static double fPreventAwkwardFactor(1.35); // 35%
+    static const double fPreventAwkwardFactor(1.35); // 35%
     if(nCurrentSquarePixels >= static_cast<sal_uInt32>(nRequiredSquarePixels * fPreventAwkwardFactor))
     {
         // at this place we also could add a mechanism to let the preview
@@ -366,7 +366,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 
     // Calculate nPlannedSquarePixels which is the required size
     // expanded by a percentage (with max value of MaxSquarePixels)
-    static double fExtraSpaceFactor(1.65); // 65%
+    static const double fExtraSpaceFactor(1.65); // 65%
     const sal_uInt32 nPlannedSquarePixels(
         std::min(
             nMaxSquarePixels,

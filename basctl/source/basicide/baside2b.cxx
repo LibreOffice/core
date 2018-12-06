@@ -66,7 +66,7 @@ long const nBasePad = 2;
 long const nCursorPad = 5;
 
 long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
-long nHeaderBarHeight;
+static const long nHeaderBarHeight = 16;
 
 // Returns pBase converted to SbxVariable if valid and is not an SbxMethod.
 SbxVariable* IsSbxVariable (SbxBase* pBase)
@@ -1580,8 +1580,6 @@ WatchWindow::WatchWindow (Layout* pParent)
 
     if ( nRWBtnSize > nVirtToolBoxHeight )
         nVirtToolBoxHeight = nRWBtnSize;
-
-    nHeaderBarHeight = 16;
 
     aTreeListBox->SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
     aTreeListBox->EnableInplaceEditing(true);

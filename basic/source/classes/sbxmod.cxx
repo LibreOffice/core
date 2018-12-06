@@ -973,7 +973,6 @@ static void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
 {
     // #67781 Delete return values of the Uno-methods
     clearUnoMethods();
-    clearUnoServiceCtors();
 
     ClearUnoObjectsInRTL_Impl_Rek( pBasic );
 

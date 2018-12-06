@@ -1531,7 +1531,7 @@ const OUString& Application::GetDesktopEnvironment()
 {
     if (IsHeadlessModeEnabled())
     {
-        static OUString aNone("none");
+        static const OUString aNone("none");
         return aNone;
     }
     else

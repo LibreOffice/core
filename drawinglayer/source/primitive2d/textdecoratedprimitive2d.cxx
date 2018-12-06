@@ -228,7 +228,7 @@ namespace drawinglayer
                         // is constant, relative to font size, rotated with the text and has a
                         // constant color.
                         // shadow parameter values
-                        static double fFactor(1.0 / 24.0);
+                        static const double fFactor(1.0 / 24.0);
                         const double fTextShadowOffset(aDecTrans.getScale().getY() * fFactor);
                         static basegfx::BColor aShadowColor(0.3, 0.3, 0.3);
 

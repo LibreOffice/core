@@ -47,43 +47,43 @@ namespace
 
 const OUString& PROP_BACNAME()
 {
-    static OUString sProp("BusinessAuthorizationCategory:Name");
+    static const OUString sProp("BusinessAuthorizationCategory:Name");
     return sProp;
 }
 
 const OUString& PROP_STARTVALIDITY()
 {
-    static OUString sProp("Authorization:StartValidity");
+    static const OUString sProp("Authorization:StartValidity");
     return sProp;
 }
 
 const OUString& PROP_NONE()
 {
-    static OUString sProp("None");
+    static const OUString sProp("None");
     return sProp;
 }
 
 const OUString& PROP_IMPACTSCALE()
 {
-    static OUString sProp("Impact:Scale");
+    static const OUString sProp("Impact:Scale");
     return sProp;
 }
 
 const OUString& PROP_IMPACTLEVEL()
 {
-    static OUString sProp("Impact:Level:Confidentiality");
+    static const OUString sProp("Impact:Level:Confidentiality");
     return sProp;
 }
 
 const OUString& PROP_PREFIX_EXPORTCONTROL()
 {
-    static OUString sProp("urn:bails:ExportControl:");
+    static const OUString sProp("urn:bails:ExportControl:");
     return sProp;
 }
 
 const OUString& PROP_PREFIX_NATIONALSECURITY()
 {
-    static OUString sProp("urn:bails:NationalSecurity:");
+    static const OUString sProp("urn:bails:NationalSecurity:");
     return sProp;
 }
 
@@ -919,25 +919,25 @@ const OUString& SfxClassificationHelper::policyTypeToString(SfxClassificationPol
 
 const OUString& SfxClassificationHelper::PROP_DOCHEADER()
 {
-    static OUString sProp("Marking:document-header");
+    static const OUString sProp("Marking:document-header");
     return sProp;
 }
 
 const OUString& SfxClassificationHelper::PROP_DOCFOOTER()
 {
-    static OUString sProp("Marking:document-footer");
+    static const OUString sProp("Marking:document-footer");
     return sProp;
 }
 
 const OUString& SfxClassificationHelper::PROP_DOCWATERMARK()
 {
-    static OUString sProp("Marking:document-watermark");
+    static const OUString sProp("Marking:document-watermark");
     return sProp;
 }
 
 const OUString& SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY()
 {
-    static OUString sProp("urn:bails:IntellectualProperty:");
+    static const OUString sProp("urn:bails:IntellectualProperty:");
     return sProp;
 }
 

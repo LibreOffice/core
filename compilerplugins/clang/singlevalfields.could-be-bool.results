@@ -7,9 +7,15 @@ connectivity/source/inc/dbase/dindexnode.hxx:125
 cui/source/inc/cfg.hxx:248
     SvxConfigEntry nId
     sal_uInt16
+desktop/source/app/main.c:29
+    /media/noel/disk2/libo5/desktop/source/app/main.c g_Exiting
+    int
 editeng/source/misc/hangulhanja.cxx:79
     editeng::HangulHanjaConversion_Impl m_eConvType
     class HangulHanjaConversion::ConversionType
+editeng/source/misc/svxacorr.cxx:229
+    GetIgnoreTranslWrapper bIsInit
+    int
 filter/source/graphicfilter/eps/eps.cxx:141
     PSWriter nNextChrSetId
     sal_uInt8
@@ -34,6 +40,9 @@ include/vcl/headbar.hxx:213
 include/vcl/headbar.hxx:214
     HeaderBar mnBorderOff2
     long
+jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:190
+    (anonymous) g_bInGetJavaVM
+    sig_atomic_t
 libreofficekit/source/gtk/tilebuffer.hxx:219
     LOEvent m_nSetGraphicSelectionType
     int
@@ -60,6 +69,12 @@ sc/source/ui/vba/vbahyperlink.hxx:83
     long
 sd/qa/unit/tiledrendering/tiledrendering.cxx:968
     ViewCallback m_nPart
+    int
+soltools/cpp/_tokens.c:34
+    /media/noel/disk2/libo5/soltools/cpp/_tokens.c EBCDIC_ExternTokenDetected
+    int
+soltools/cpp/_tokens.c:35
+    /media/noel/disk2/libo5/soltools/cpp/_tokens.c EBCDIC_StartTokenDetected
     int
 soltools/cpp/cpp.h:121
     includelist always
@@ -88,8 +103,23 @@ vcl/inc/unx/i18n_ic.hxx:33
 vcl/inc/unx/salframe.h:130
     X11SalFrame mbInputFocus
     int
+vcl/unx/generic/app/saldata.cxx:466
+    EmitFontpathWarning bOnce
+    int
+vcl/unx/generic/app/saldata.cxx:519
+    X11SalData::XError bOnce
+    int
+vcl/unx/generic/app/sm.cxx:186
+    /media/noel/disk2/libo5/vcl/unx/generic/app/sm.cxx nSmDel
+    int
+vcl/unx/generic/window/FWS.cxx:174
+    extern badWindowFound
+    int
 vcl/workben/icontest.cxx:145
     IconTestApp nRet
+    int
+workdir/LexTarget/l10ntools/source/cfglex.cxx:2301
+    /media/noel/disk2/libo5/workdir/LexTarget/l10ntools/source/cfglex.cxx bText
     int
 writerfilter/source/dmapper/PageBordersHandler.hxx:54
     writerfilter::dmapper::PageBordersHandler m_eOffsetFrom

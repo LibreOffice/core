@@ -2508,10 +2508,10 @@ void SbRtl_IsMissing(StarBASIC *, SbxArray & rPar, bool)
 // Function looks for wildcards, removes them and always returns the pure path
 static OUString implSetupWildcard(const OUString& rFileParam, SbiRTLData& rRTLData)
 {
-    static sal_Char cDelim1 = '/';
-    static sal_Char cDelim2 = '\\';
-    static sal_Char cWild1 = '*';
-    static sal_Char cWild2 = '?';
+    static const sal_Char cDelim1 = '/';
+    static const sal_Char cDelim2 = '\\';
+    static const sal_Char cWild1 = '*';
+    static const sal_Char cWild2 = '?';
 
     rRTLData.pWildCard.reset();
     rRTLData.sFullNameToBeChecked.clear();

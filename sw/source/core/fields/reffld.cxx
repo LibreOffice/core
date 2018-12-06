@@ -277,7 +277,7 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
         // ASCII 1-letter numbering
         // az a), e), f) ... x)
         // az i., v. (but, a x.)
-        static OUString sLettersStartingWithVowels = "aefilmnorsuxyAEFILMNORSUXY";
+        static const OUString sLettersStartingWithVowels = "aefilmnorsuxyAEFILMNORSUXY";
         if (sLettersStartingWithVowels.indexOf(sNumbering[0]) != -1)
         {
             // x),  X) are letters, but x. and X. etc. are Roman numbers

@@ -438,14 +438,14 @@ void ScreenshotAnnotationDlg_Impl::PaintControlDataEntry(
 
         // grow in pixels to be a little bit 'outside'. This also
         // ensures that getWidth()/getHeight() ain't 0.0 (see division below)
-        static double fGrowTopLeft(1.5);
-        static double fGrowBottomRight(0.5);
+        static const double fGrowTopLeft(1.5);
+        static const double fGrowBottomRight(0.5);
         aB2DRange.expand(aB2DRange.getMinimum() - basegfx::B2DPoint(fGrowTopLeft, fGrowTopLeft));
         aB2DRange.expand(aB2DRange.getMaximum() + basegfx::B2DPoint(fGrowBottomRight, fGrowBottomRight));
 
         // edge rounding in pixel. Need to convert, value for
         // createPolygonFromRect is relative [0.0 .. 1.0]
-        static double fEdgeRoundPixel(8.0);
+        static const double fEdgeRoundPixel(8.0);
         const basegfx::B2DPolygon aPolygon(
             basegfx::utils::createPolygonFromRect(
             aB2DRange,
@@ -510,14 +510,14 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
         // paint selected entries
         for (auto&& rCandidate : maSelected)
         {
-            static double fLineWidthEntries(5.0);
+            static const double fLineWidthEntries(5.0);
             PaintControlDataEntry(*rCandidate, COL_LIGHTRED, fLineWidthEntries, fTransparence * 0.2);
         }
 
         // paint hilighted entry
         if (mpHilighted && bPaintHilight)
         {
-            static double fLineWidthHilight(7.0);
+            static const double fLineWidthHilight(7.0);
             PaintControlDataEntry(*mpHilighted, aHilightColor, fLineWidthHilight, fTransparence);
         }
 

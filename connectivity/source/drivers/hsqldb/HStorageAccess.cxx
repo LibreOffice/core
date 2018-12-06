@@ -360,7 +360,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
         ::sal_Int64 nLen = xSeek->getLength();
         if ( nLen < position)
         {
-            static ::sal_Int64 BUFFER_SIZE = 9192;
+            static const ::sal_Int64 BUFFER_SIZE = 9192;
         #ifdef HSQLDB_DBG
             aDataLog.seek( nLen );
         #endif

@@ -3657,15 +3657,6 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-static SbUnoServiceCtor* pFirstCtor = nullptr;
-
-void clearUnoServiceCtors()
-{
-    SbUnoServiceCtor* pCtor = pFirstCtor;
-    if( pCtor )
-        pCtor->SbxValue::Clear();
-}
-
 SbUnoServiceCtor::SbUnoServiceCtor( const OUString& aName_, Reference< XServiceConstructorDescription > const & xServiceCtorDesc )
     : SbxMethod( aName_, SbxOBJECT )
     , m_xServiceCtorDesc( xServiceCtorDesc )
