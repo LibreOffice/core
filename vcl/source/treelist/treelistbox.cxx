@@ -347,17 +347,14 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     nImpFlags = SvTreeListBoxFlags::NONE;
     pTargetEntry = nullptr;
     nDragDropMode = DragDropMode::NONE;
-    SvTreeList* pTempModel = new SvTreeList;
-    pTempModel->SetRefCount( 0 );
-    SetBaseModel(pTempModel);
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
-    pModel->InsertView( this );
     pHdlEntry = nullptr;
     eSelMode = SelectionMode::Single;
     nDragDropMode = DragDropMode::NONE;
     SetType(WindowType::TREELISTBOX);
 
     InitTreeView();
+    pImpl->SetModel( pModel.get() );
 
     SetSublistOpenWithLeftRight();
 }
@@ -1353,16 +1350,7 @@ void SvTreeListBox::dispose()
 
         pEdCtrl.reset();
 
-        if( pModel )
-        {
-            pModel->RemoveView( this );
-            if ( pModel->GetRefCount() == 0 )
-            {
-                pModel->Clear();
-                delete pModel;
-                pModel = nullptr;
-            }
-        }
+        SvListView::dispose();
 
         SvTreeListBox::RemoveBoxFromDDList_Impl( *this );
 
@@ -1381,25 +1369,6 @@ void SvTreeListBox::dispose()
 void SvTreeListBox::SetNoAutoCurEntry( bool b )
 {
     pImpl->SetNoAutoCurEntry( b );
-}
-
-void SvTreeListBox::SetModel( SvTreeList* pNewModel )
-{
-    pImpl->SetModel( pNewModel );
-    SetBaseModel(pNewModel);
-}
-
-void SvTreeListBox::SetBaseModel( SvTreeList* pNewModel )
-{
-    // does the CleanUp
-    SvListView::SetModel( pNewModel );
-    pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
-    SvTreeListEntry* pEntry = First();
-    while( pEntry )
-    {
-        ModelHasInserted( pEntry );
-        pEntry = Next( pEntry );
-    }
 }
 
 void SvTreeListBox::SetSublistOpenWithReturn()

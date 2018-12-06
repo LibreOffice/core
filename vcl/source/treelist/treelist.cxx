@@ -58,19 +58,18 @@ struct SvListView::Impl
 };
 
 
-SvTreeList::SvTreeList() :
+SvTreeList::SvTreeList(SvListView* listView) :
+    mpOwnerListView(listView),
     mbEnableInvalidate(true)
 {
     nEntryCount = 0;
     bAbsPositionsValid = false;
-    nRefCount = 1;
     pRootItem.reset(new SvTreeListEntry);
     eSortMode = SortNone;
 }
 
 SvTreeList::~SvTreeList()
 {
-    Clear();
 }
 
 void SvTreeList::Broadcast(
@@ -78,33 +77,10 @@ void SvTreeList::Broadcast(
     SvTreeListEntry* pEntry1,
     SvTreeListEntry* pEntry2,
     sal_uLong nPos
-) {
-    for (auto const& view : aViewList)
-    {
-        if(view)
-            view->ModelNotification(nActionId, pEntry1, pEntry2, nPos);
-    }
-}
-
-void SvTreeList::InsertView( SvListView* pView )
+)
 {
-    if (std::find(aViewList.begin(), aViewList.end(), pView) != aViewList.end())
-        return;
-
-    aViewList.push_back( pView );
-    nRefCount++;
+    mpOwnerListView->ModelNotification(nActionId, pEntry1, pEntry2, nPos);
 }
-
-void SvTreeList::RemoveView( SvListView const * pView )
-{
-    auto viewFound = std::find(aViewList.begin(), aViewList.end(), pView);
-    if (viewFound != aViewList.end())
-    {
-        aViewList.erase( viewFound );
-        --nRefCount;
-    }
-}
-
 
 // an entry is visible if all parents are expanded
 bool SvTreeList::IsEntryVisible( const SvListView* pView, SvTreeListEntry* pEntry ) const
@@ -1098,8 +1074,14 @@ std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator>
 
 SvListView::SvListView()
     : m_pImpl(new Impl(*this))
-    , pModel(nullptr)
 {
+    pModel.reset(new SvTreeList(this));
+    m_pImpl->InitTable();
+}
+
+void SvListView::dispose()
+{
+    pModel.reset();
 }
 
 SvListView::~SvListView()
@@ -1168,25 +1150,6 @@ void SvListView::Clear()
         m_pImpl->m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
     }
 }
-
-void SvListView::SetModel( SvTreeList* pNewModel )
-{
-    bool bBroadcastCleared = false;
-    if ( pModel )
-    {
-        pModel->RemoveView( this );
-        bBroadcastCleared = true;
-        ModelNotification( SvListAction::CLEARING,nullptr,nullptr,0 );
-        if ( pModel->GetRefCount() == 0 )
-            delete pModel;
-    }
-    pModel = pNewModel;
-    m_pImpl->InitTable();
-    pNewModel->InsertView( this );
-    if( bBroadcastCleared )
-        ModelNotification( SvListAction::CLEARED,nullptr,nullptr,0 );
-}
-
 
 void SvListView::ModelHasCleared()
 {

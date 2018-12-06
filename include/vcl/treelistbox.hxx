@@ -257,8 +257,6 @@ protected:
     sal_uInt16              nCurEntrySelPos;
 
 private:
-    void SetBaseModel(SvTreeList* pNewModel);
-
     DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData *, void );
     DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, SvInplaceEdit2&, void );
     // Handler that is called by TreeList to clone an Entry
@@ -335,12 +333,8 @@ public:
 
     SvTreeList* GetModel() const
     {
-        return pModel;
+        return pModel.get();
     }
-
-    using SvListView::SetModel;
-
-    void SetModel(SvTreeList* pNewModel) override;
 
     sal_uLong GetEntryCount() const
     {
