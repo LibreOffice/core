@@ -274,7 +274,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorOverlayObject::createOverl
 {
     implEnsureGeometry();
 
-    static double aDiscreteLineWidth(1.6);
+    static const double aDiscreteLineWidth(1.6);
     const drawinglayer::primitive2d::Primitive2DReference aReference(
         new AnchorPrimitive( maTriangle,
                              maLine,

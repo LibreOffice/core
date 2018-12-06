@@ -259,12 +259,9 @@ public:
 SbUnoService* findUnoService( const OUString& rName );
 
 
-void clearUnoServiceCtors();
-
 class SbUnoServiceCtor : public SbxMethod
 {
     friend class SbUnoService;
-    friend void clearUnoServiceCtors();
 
     css::uno::Reference< css::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
 

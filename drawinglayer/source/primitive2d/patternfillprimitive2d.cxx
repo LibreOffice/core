@@ -69,20 +69,20 @@ namespace drawinglayer
             if(fSquare > 0.0)
             {
                 // check if less than a maximum square pixels is used
-                static sal_uInt32 fMaximumSquare(MAXIMUM_SQUARE_LENGTH * MAXIMUM_SQUARE_LENGTH);
+                static const sal_uInt32 fMaximumSquare(MAXIMUM_SQUARE_LENGTH * MAXIMUM_SQUARE_LENGTH);
 
                 if(fSquare < fMaximumSquare)
                 {
                     // calculate needed number of tiles and check if used more than a minimum count
                     const texture::GeoTexSvxTiled aTiling(getReferenceRange());
                     const sal_uInt32 nTiles(aTiling.getNumberOfTiles());
-                    static sal_uInt32 nMinimumTiles(MINIMUM_TILES_LENGTH * MINIMUM_TILES_LENGTH);
+                    static const sal_uInt32 nMinimumTiles(MINIMUM_TILES_LENGTH * MINIMUM_TILES_LENGTH);
 
                     if(nTiles >= nMinimumTiles)
                     {
                         rWidth = basegfx::fround(ceil(fW));
                         rHeight = basegfx::fround(ceil(fH));
-                        static sal_uInt32 fMinimumSquare(MINIMUM_SQUARE_LENGTH * MINIMUM_SQUARE_LENGTH);
+                        static const sal_uInt32 fMinimumSquare(MINIMUM_SQUARE_LENGTH * MINIMUM_SQUARE_LENGTH);
 
                         if(fSquare < fMinimumSquare)
                         {

@@ -154,7 +154,7 @@ namespace fileaccess {
     bool isChild( const OUString& srcUnqPath,
                       const OUString& dstUnqPath )
     {
-        static sal_Unicode slash = '/';
+        static const sal_Unicode slash = '/';
         // Simple lexical comparison
         sal_Int32 srcL = srcUnqPath.getLength();
         sal_Int32 dstL = dstUnqPath.getLength();

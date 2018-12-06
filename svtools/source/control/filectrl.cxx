@@ -145,7 +145,7 @@ void FileControl::StateChanged( StateChangedType nType )
 
 void FileControl::Resize()
 {
-    static long ButtonBorder = 10;
+    static const long ButtonBorder = 10;
 
     if( mnInternalFlags & FileControlMode_Internal::INRESIZE )
         return;

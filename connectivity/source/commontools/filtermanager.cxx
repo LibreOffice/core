@@ -75,7 +75,7 @@ namespace dbtools
         }
         assert(false);
 
-        static OUString sErr("#FilterManager::getFilterComponent unknown component#");
+        static const OUString sErr("#FilterManager::getFilterComponent unknown component#");
         return sErr;
     }
 

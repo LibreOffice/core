@@ -714,7 +714,7 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
 
 void LoadEnv::impl_detectTypeAndFilter()
 {
-    static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
+    static const sal_Int32 FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
     osl::ClearableMutexGuard aReadLock(m_mutex);

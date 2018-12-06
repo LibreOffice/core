@@ -406,7 +406,7 @@ namespace dbtools
     css::util::Date DBTypeConversion::toDate(const OUString& _sSQLString)
     {
         // get the token out of a string
-        static sal_Unicode sDateSep = '-';
+        static const sal_Unicode sDateSep = '-';
 
         sal_Int32 nIndex    = 0;
         sal_uInt16  nYear   = 0,

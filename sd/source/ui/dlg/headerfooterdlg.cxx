@@ -763,7 +763,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
     if (bDotted)
     {
         std::vector<double> aPattern;
-        static double fFactor(1.0);
+        static const double fFactor(1.0);
         aPattern.push_back(3.0 * fFactor);
         aPattern.push_back(1.0 * fFactor);
 

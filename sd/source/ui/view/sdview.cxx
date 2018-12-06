@@ -368,7 +368,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
 
                             // use a text size factor to get more reliable text sizes from the text layouter
                             // (and from vcl), tipp from HDU
-                            static sal_uInt32 nTextSizeFactor(100);
+                            static const sal_uInt32 nTextSizeFactor(100);
 
                             // use a factor to get more linear text size calculations
                             aScaledVclFont.SetFontHeight( 500 * nTextSizeFactor );

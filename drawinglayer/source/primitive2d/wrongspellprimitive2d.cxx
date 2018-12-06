@@ -47,7 +47,7 @@ namespace drawinglayer
             getTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
             // calculate distances based on a static default (to allow testing in debugger)
-            static double fDefaultDistance(0.03);
+            static const double fDefaultDistance(0.03);
             const double fFontHeight(aScale.getY());
             const double fUnderlineDistance(fFontHeight * fDefaultDistance);
             const double fWaveWidth(2.0 * fUnderlineDistance);

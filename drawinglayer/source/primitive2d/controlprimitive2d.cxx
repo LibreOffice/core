@@ -174,7 +174,7 @@ namespace drawinglayer
                                     basegfx::B2DVector aScreenZoom(
                                         basegfx::fTools::equalZero(aScale.getX()) ? 1.0 : aDiscreteSize.getX() / aScale.getX(),
                                         basegfx::fTools::equalZero(aScale.getY()) ? 1.0 : aDiscreteSize.getY() / aScale.getY());
-                                    static double fZoomScale(28.0); // do not ask for this constant factor, but it gets the zoom right
+                                    static const double fZoomScale(28.0); // do not ask for this constant factor, but it gets the zoom right
                                     aScreenZoom *= fZoomScale;
 
                                     // set zoom at control view for text scaling

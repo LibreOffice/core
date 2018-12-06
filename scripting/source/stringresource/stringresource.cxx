@@ -1984,7 +1984,7 @@ static void implWriteCharToBuffer( OUStringBuffer& aBuf, sal_Unicode cu, bool bK
 static void implWriteStringWithEncoding( const OUString& aStr,
     Reference< io::XTextOutputStream2 > const & xTextOutputStream, bool bKey )
 {
-    static sal_Unicode cLineFeed = 0xa;
+    static const sal_Unicode cLineFeed = 0xa;
 
     OUStringBuffer aBuf;
     sal_Int32 nLen = aStr.getLength();

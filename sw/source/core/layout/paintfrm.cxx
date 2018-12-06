@@ -1714,8 +1714,8 @@ bool DrawFillAttributes(
                 // is not full opacity but 0.75 opacity) we need some overlap here to avoid paint
                 // artifacts. Checked experimentally - a little bit more in Y is needed, probably
                 // due to still existing integer alignment and crunching in writer.
-                static double fExpandX = 0.55;
-                static double fExpandY = 0.70;
+                static const double fExpandX = 0.55;
+                static const double fExpandY = 0.70;
                 const basegfx::B2DVector aSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(fExpandX, fExpandY));
 
                 aPaintRange.expand(aPaintRange.getMinimum() - aSingleUnit);

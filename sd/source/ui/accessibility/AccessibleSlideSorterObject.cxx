@@ -155,10 +155,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole()
 {
     ThrowIfDisposed();
-    //set Role = Shape
-    //static sal_Int16 nRole = AccessibleRole::LIST_ITEM;
-    static sal_Int16 nRole = AccessibleRole::SHAPE;
-    return nRole;
+    return AccessibleRole::SHAPE;
 }
 
 OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription()

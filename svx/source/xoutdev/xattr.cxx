@@ -405,7 +405,7 @@ bool XDash::operator==(const XDash& rDash) const
 // XDash is translated into an array of doubles which describe the lengths of the
 // dashes, dots and empty passages. It returns the complete length of the full DashDot
 // sequence and fills the given vetor of doubles accordingly (also resizing, so deleting it).
-static double SMALLEST_DASH_WIDTH(26.95);
+static const double SMALLEST_DASH_WIDTH(26.95);
 
 double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double fLineWidth) const
 {

@@ -280,7 +280,7 @@ namespace drawinglayer
                 }
 
                 // determine the oversample value
-                static sal_uInt16 nDefaultOversampleValue(3);
+                static const sal_uInt16 nDefaultOversampleValue(3);
                 const sal_uInt16 nOversampleValue(aDrawinglayerOpt.IsAntiAliasing() ? nDefaultOversampleValue : 0);
 
                 geometry::ViewInformation3D aViewInformation3D(getViewInformation3D());

@@ -548,7 +548,7 @@ namespace drawinglayer
                 if(basegfx::fTools::more(getRadius(), 0.0))
                 {
                     const attribute::MaterialAttribute3D aMaterial(getBColor());
-                    static sal_uInt32 nSegments(8); // default for 3d line segments, for more quality just raise this value (in even steps)
+                    static const sal_uInt32 nSegments(8); // default for 3d line segments, for more quality just raise this value (in even steps)
                     const bool bClosed(getB3DPolygon().isClosed());
                     const bool bNoLineJoin(basegfx::B2DLineJoin::NONE == getLineJoin());
                     const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1);

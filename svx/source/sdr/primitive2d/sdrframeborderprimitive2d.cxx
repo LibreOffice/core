@@ -598,7 +598,7 @@ namespace
             }
         }
 
-        static double fPatScFact(10.0); // 10.0 multiply, see old code
+        static const double fPatScFact(10.0); // 10.0 multiply, see old code
         const std::vector<double> aDashing(svtools::GetLineDashing(rBorder.Type(), rBorder.PatternScale() * fPatScFact));
         const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashing);
         const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * aCombination.getRefModeOffset()));

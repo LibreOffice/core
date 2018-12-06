@@ -131,7 +131,25 @@ void SingleValFields::niceName(const DeclaratorDecl* fieldOrVarDecl, MyFieldInfo
     if (fieldDecl)
         aInfo.parentClass = fieldDecl->getParent()->getQualifiedNameAsString();
     else
-        aInfo.parentClass = dyn_cast<CXXRecordDecl>(varDecl->getDeclContext())->getQualifiedNameAsString();
+    {
+        if (auto parentRecordDecl = dyn_cast<CXXRecordDecl>(varDecl->getDeclContext()))
+            aInfo.parentClass = parentRecordDecl->getQualifiedNameAsString();
+        else if (auto parentMethodDecl = dyn_cast<CXXMethodDecl>(varDecl->getDeclContext()))
+            aInfo.parentClass = parentMethodDecl->getQualifiedNameAsString();
+        else if (auto parentFunctionDecl = dyn_cast<FunctionDecl>(varDecl->getDeclContext()))
+            aInfo.parentClass = parentFunctionDecl->getQualifiedNameAsString();
+        else if (isa<TranslationUnitDecl>(varDecl->getDeclContext()))
+            aInfo.parentClass = handler.getMainFileName();
+        else if (auto parentNamespaceDecl = dyn_cast<NamespaceDecl>(varDecl->getDeclContext()))
+            aInfo.parentClass = parentNamespaceDecl->getQualifiedNameAsString();
+        else if (isa<LinkageSpecDecl>(varDecl->getDeclContext()))
+            aInfo.parentClass = "extern"; // what to do here?
+        else
+        {
+            std::cout << "what is this? " << varDecl->getDeclContext()->getDeclKindName() << std::endl;
+            exit(1);
+        }
+    }
     aInfo.fieldName = fieldOrVarDecl->getNameAsString();
     aInfo.fieldType = fieldOrVarDecl->getType().getAsString();
 
@@ -166,12 +184,16 @@ bool SingleValFields::VisitFieldDecl( const FieldDecl* fieldDecl )
 
 bool SingleValFields::VisitVarDecl( const VarDecl* varDecl )
 {
-    if (!varDecl->isStaticDataMember())
+    if (isa<ParmVarDecl>(varDecl))
         return true;
     if (varDecl->getType().isConstQualified())
         return true;
+    if (!(varDecl->isStaticLocal() || varDecl->isStaticDataMember() || varDecl->hasGlobalStorage()))
+        return true;
 
     auto canonicalDecl = varDecl->getCanonicalDecl();
+    if (!canonicalDecl->getLocation().isValid())
+        return true;
 
     if( ignoreLocation( canonicalDecl )
         || isInUnoIncludeFile( compiler.getSourceManager().getSpellingLoc(canonicalDecl->getLocation())) )
@@ -238,9 +260,11 @@ bool SingleValFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     const VarDecl* varDecl = dyn_cast_or_null<VarDecl>(declRefExpr->getDecl());
     if (!varDecl)
         return true;
-    if (!varDecl->isStaticDataMember())
+    if (isa<ParmVarDecl>(varDecl))
         return true;
     if (varDecl->getType().isConstQualified())
+        return true;
+    if (!(varDecl->isStaticLocal() || varDecl->isStaticDataMember() || varDecl->hasGlobalStorage()))
         return true;
     if (ignoreLocation(declRefExpr))
         return true;
@@ -379,11 +403,14 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
                 || isa<MaterializeTemporaryExpr>(parent)  //???
                 || isa<InitListExpr>(parent)
                 || isa<CXXUnresolvedConstructExpr>(parent)
+                || isa<LambdaExpr>(parent)
+                || isa<PackExpansionExpr>(parent)
+                || isa<CXXPseudoDestructorExpr>(parent)
                 )
         {
             break;
         }
-        else if ( isa<ArrayInitLoopExpr>(parent) )
+        else if ( isa<ArrayInitLoopExpr>(parent) || isa<GCCAsmStmt>(parent) || isa<VAArgExpr>(parent))
         {
             bPotentiallyAssignedTo = true;
             break;
@@ -493,7 +520,11 @@ std::string SingleValFields::getExprValue(const Expr* arg)
         return "?";
     // for stuff like: OUString foo = "xxx";
     if (auto stringLiteral = dyn_cast<clang::StringLiteral>(arg))
-        return stringLiteral->getString();
+    {
+        if (stringLiteral->getCharByteWidth() == 1)
+            return stringLiteral->getString();
+        return "?";
+    }
     // ParenListExpr containing a CXXNullPtrLiteralExpr and has a NULL type pointer
     if (auto parenListExpr = dyn_cast<ParenListExpr>(arg))
     {
@@ -506,7 +537,10 @@ std::string SingleValFields::getExprValue(const Expr* arg)
         if (constructExpr->getNumArgs() >= 1
             && isa<clang::StringLiteral>(constructExpr->getArg(0)))
         {
-            return dyn_cast<clang::StringLiteral>(constructExpr->getArg(0))->getString();
+            auto stringLiteral = dyn_cast<clang::StringLiteral>(constructExpr->getArg(0));
+            if (stringLiteral->getCharByteWidth() == 1)
+                return stringLiteral->getString();
+            return "?";
         }
     }
     if (arg->getType()->isFloatingType())
