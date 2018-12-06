@@ -428,7 +428,7 @@ void VistaFilePickerImpl::impl_sta_getCurrentFilter(const RequestRef& rRequest)
     ::sal_Int32     nRealIndex = (nIndex-1); // COM dialog base on 1 ... filter container on 0 .-)
     if (
         (nRealIndex >= 0                         ) &&
-        (m_lFilters.getFilter(nRealIndex, sTitle))
+        (m_lFilters.getFilterNameByIndex(nRealIndex, sTitle))
        )
         rRequest->setArgument(PROP_FILTER_TITLE, sTitle);
     else if ( nRealIndex == -1 ) // Dialog not visible yet
@@ -1003,16 +1003,12 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                     {
                         // COM dialog base on 1 ... filter container on 0 .-)
                         ::size_t nRealIndex = (nFileType-1);
-                        std::vector<OUString> vStrings;
-                        ::std::vector<COMDLG_FILTERSPEC> lFilters
-                            = lcl_buildFilterList(m_lFilters, vStrings);
-                        if ( nRealIndex < lFilters.size() )
+                        OUString sFilter;
+                        if (m_lFilters.getFilterByIndex(nRealIndex, sFilter))
                         {
-                            PCWSTR lpFilterExt = lFilters[nRealIndex].pszSpec;
-
-                            lpFilterExt = wcsrchr( lpFilterExt, '.' );
-                            if ( lpFilterExt )
-                                aFileURL += o3tl::toU(lpFilterExt);
+                            const sal_Int32 idx = sFilter.indexOf('.');
+                            if (idx >= 0)
+                                aFileURL += sFilter.copy(idx);
                         }
                     }
                 }
@@ -1285,7 +1281,7 @@ void VistaFilePickerImpl::impl_SetDefaultExtension( const OUString& currentFilte
    if (currentFilter.getLength())
    {
         OUString FilterExt;
-        m_lFilters.getFilter(currentFilter, FilterExt);
+        m_lFilters.getFilterByName(currentFilter, FilterExt);
 
         sal_Int32 posOfPoint = FilterExt.indexOf(L'.');
         const sal_Unicode* pFirstExtStart = FilterExt.getStr() + posOfPoint + 1;
@@ -1306,7 +1302,7 @@ void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
 
     const OUString sFilter = m_lFilters.getCurrentFilter ();
           OUString sExt    ;
-    if ( !m_lFilters.getFilter (sFilter, sExt))
+    if (!m_lFilters.getFilterByName(sFilter, sExt))
         return;
 
     TFileDialog iDialog = impl_getBaseDialogInterface();
