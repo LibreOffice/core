@@ -192,12 +192,12 @@ static void SAL_CALL environmentDisposing( uno_Environment * ) SAL_THROW( () )
         &bridges::cpp_uno::shared::g_moduleCount.modCnt );
 }
 
-sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SAL_THROW_EXTERN_C() {
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SAL_THROW_EXTERN_C() {
     return bridges::cpp_uno::shared::g_moduleCount.canUnload(
         &bridges::cpp_uno::shared::g_moduleCount, pTime);
 }
 
-void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );
@@ -215,7 +215,7 @@ void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
     pCppEnv->environmentDisposing = environmentDisposing;
 }
 
-void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo)
     SAL_THROW_EXTERN_C()
 {

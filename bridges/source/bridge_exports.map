@@ -23,6 +23,24 @@ UDK_3_0_0 {
         component_canUnload;
         uno_initEnvironment;
         uno_ext_getMapping;
+
+
+        ###############################################
+        # C++ RTTI for exception handling:
+        ###############################################
+
+        # typeinfo for com::sun::star::uno::RuntimeException
+        _ZTIN3com3sun4star3uno16RuntimeExceptionE;
+
+        # typeinfo for com::sun::star::uno::Exception
+        _ZTIN3com3sun4star3uno9ExceptionE;
+
+        # typeinfo name for com::sun::star::uno::RuntimeException
+        _ZTSN3com3sun4star3uno16RuntimeExceptionE;
+
+        # typeinfo name for com::sun::star::uno::Exception
+        _ZTSN3com3sun4star3uno9ExceptionE;
+
     local:
     *;
 };

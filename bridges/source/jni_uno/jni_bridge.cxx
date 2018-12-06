@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_bridges.hxx"
+#include "precompiled_bridges_java_uno.hxx"
 
 #include "jni_bridge.h"
 
@@ -452,7 +452,7 @@ void SAL_CALL java_env_disposing( uno_Environment * java_env )
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
+JNIEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
     java_env->environmentDisposing = java_env_disposing;
@@ -466,7 +466,7 @@ void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL uno_ext_getMapping(
+JNIEXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
 {
@@ -557,7 +557,7 @@ void SAL_CALL uno_ext_getMapping(
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
+JNIEXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
     SAL_THROW_EXTERN_C()
 {
     return (*g_moduleCount.canUnload)( &g_moduleCount, pTime );

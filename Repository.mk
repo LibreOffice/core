@@ -194,9 +194,15 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    gcc3_uno \
+    java_uno \
     jpipe \
     jpipx \
+    msci_uno \
+    mscx_uno \
+    s5abi_uno \
     sunjavaplugin \
+    sunpro5_uno \
     xmlreader \
 ))
 
