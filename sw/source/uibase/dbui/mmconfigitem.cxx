@@ -179,7 +179,7 @@ public:
 };
 
 SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
-    ConfigItem("Office.Writer/MailMergeWizard", ConfigItemMode::ImmediateUpdate),
+    ConfigItem("Office.Writer/MailMergeWizard", ConfigItemMode::NONE),
         m_nResultSetCursorPos(-1),
         m_nCurrentAddressBlock(0),
         m_bIsAddressBlock(true),
