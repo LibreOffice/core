@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_dac79145",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-06T07:07:44Z",
+      "side": 1,
+      "message": "return !(nRed % DITHER_PAL_DELTA) \u0026\u0026 !(nGreen % DITHER_PAL_DELTA) \u0026\u0026 !(nBlue % DITHER_PAL_DELTA);",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 220,
+        "endChar": 16
+      },
+      "revId": "b85f8997d847b00ec867724e63c7e70a539c9b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_bac4d541",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-06T07:07:44Z",
+      "side": 1,
+      "message": "No need",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 225,
+        "endChar": 49
+      },
+      "revId": "b85f8997d847b00ec867724e63c7e70a539c9b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_9ac11932",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-06T07:07:44Z",
+      "side": 1,
+      "message": "simply []",
+      "range": {
+        "startLine": 227,
+        "startChar": 46,
+        "endLine": 227,
+        "endChar": 67
+      },
+      "revId": "b85f8997d847b00ec867724e63c7e70a539c9b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_7adc1d18",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-06T07:07:44Z",
+      "side": 1,
+      "message": "for (auto\u0026 rPalEntry : aImplSalSysPalEntryAry)",
+      "range": {
+        "startLine": 249,
+        "startChar": 4,
+        "endLine": 249,
+        "endChar": 69
+      },
+      "revId": "b85f8997d847b00ec867724e63c7e70a539c9b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_5ae161d0",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-06T07:07:44Z",
+      "side": 1,
+      "message": "return IsDitherColor(nRed, nGreen, nBlue) || IsPaletteColor(nRed, nGreen, nBlue) || IsExtraColor(nRed, nGreen, nBlue);",
+      "range": {
+        "startLine": 276,
+        "startChar": 4,
+        "endLine": 289,
+        "endChar": 17
+      },
+      "revId": "b85f8997d847b00ec867724e63c7e70a539c9b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
