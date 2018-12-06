@@ -831,10 +831,10 @@ double EnhancedCustomShape2d::GetEnumFunc( const ExpressionFunct eFunc ) const
     switch( eFunc )
     {
         case ExpressionFunct::EnumPi :         fRet = F_PI; break;
-        case ExpressionFunct::EnumLeft :       fRet = 0.0; break;
-        case ExpressionFunct::EnumTop :        fRet = 0.0; break;
-        case ExpressionFunct::EnumRight :      fRet = static_cast<double>(nCoordWidth) * fXRatio;   break;
-        case ExpressionFunct::EnumBottom :     fRet = static_cast<double>(nCoordHeight) * fYRatio; break;
+        case ExpressionFunct::EnumLeft :       fRet = static_cast<double>(nCoordLeft); break;
+        case ExpressionFunct::EnumTop :        fRet = static_cast<double>(nCoordTop); break;
+        case ExpressionFunct::EnumRight :      fRet = static_cast<double>(nCoordLeft + nCoordWidth) * fXRatio; break;
+        case ExpressionFunct::EnumBottom :     fRet = static_cast<double>(nCoordTop + nCoordHeight) * fYRatio; break;
         case ExpressionFunct::EnumXStretch :   fRet = nXRef; break;
         case ExpressionFunct::EnumYStretch :   fRet = nYRef; break;
         case ExpressionFunct::EnumHasStroke :  fRet = bStroked ? 1.0 : 0.0; break;
