@@ -892,7 +892,7 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
 
 bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     Point& rPos, int& nStart,
-                                    const PhysicalFontFace**, int* const) const
+                                    const PhysicalFontFace**, int* const pFallbackLevel) const
 {
     std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.Impl()->begin();
     std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.Impl()->end();
@@ -915,6 +915,8 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
 
     // update return data with glyph info
     *pGlyph = &(*pGlyphIter);
+    if (pFallbackLevel)
+        *pFallbackLevel = 0;
     ++nStart;
 
     // calculate absolute position in pixel units
