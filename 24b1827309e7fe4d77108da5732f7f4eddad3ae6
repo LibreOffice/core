@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_31eb6bb1",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5857,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-06T22:18:16Z",
+      "side": 1,
+      "message": "This could result in an endless loop if nParamCount\u003d255, the last value of nParamIdx would be 254 and +2 could loop to 0.\nDeclare as sal_uInt16 instead.",
+      "range": {
+        "startLine": 5857,
+        "startChar": 13,
+        "endLine": 5857,
+        "endChar": 22
+      },
+      "revId": "24b1827309e7fe4d77108da5732f7f4eddad3ae6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
