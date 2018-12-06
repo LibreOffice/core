@@ -3170,7 +3170,7 @@ ifneq ($(SYSTEM_PYTHON),)
 
 define gb_LinkTarget__use_python_headers
 $(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(PYHTON_CFLAGS)))) \
+	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(PYTHON_CFLAGS)))) \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
