@@ -8263,6 +8263,9 @@ fully-internal)
     ;;
 system)
     AC_MSG_RESULT([system])
+    if test "$_os" = Darwin; then
+        AC_MSG_ERROR([--enable-python=system doesn't work on macOS: /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/unicodeobject.h is known to contain uses of "register", which is removed from C++17])
+    fi
     ;;
 *)
     AC_MSG_ERROR([Incorrect --enable-python option])
@@ -8274,17 +8277,6 @@ if test $enable_python != no; then
 fi
 
 if test $enable_python = system; then
-    if test -z "$PYTHON_CFLAGS" -a $_os = Darwin; then
-        python_version=2.7
-        PYTHON=python$python_version
-        if test -d "$FRAMEWORKSHOME/Python.framework/Versions/${python_version}/include/python${python_version}"; then
-            PYTHON_CFLAGS="-I$FRAMEWORKSHOME/Python.framework/Versions/${python_version}/include/python${python_version}"
-            PYTHON_LIBS="-framework Python"
-        else
-            PYTHON_CFLAGS="`$PYTHON-config --includes`"
-            PYTHON_LIBS="`$PYTHON-config --libs`"
-        fi
-    fi
     if test -n "$PYTHON_CFLAGS" -a -n "$PYTHON_LIBS"; then
         # Fallback: Accept these in the environment, or as set above
         # for MacOSX.
