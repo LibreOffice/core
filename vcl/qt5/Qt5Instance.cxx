@@ -244,10 +244,14 @@ Qt5Instance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
                                                   css::uno::Reference<css::uno::XInterface>(), -1);
     }
 
-    css::uno::Reference<css::uno::XInterface> xClipboard(
-        static_cast<cppu::OWeakObject*>(new VclQt5Clipboard()));
+    if (!m_xClipboard.is())
+    {
+        css::uno::Reference<css::uno::XInterface> xClipboard(
+            static_cast<cppu::OWeakObject*>(new VclQt5Clipboard()));
+        m_xClipboard = xClipboard;
+    }
 
-    return xClipboard;
+    return m_xClipboard;
 }
 
 Reference<XInterface> Qt5Instance::CreateDragSource()
