@@ -141,18 +141,6 @@
                     "dest-filename": "external/tarballs/e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/7a15edea7d415ac5150ea403e27401fd-open-sans-font-ttf-1.10.tar.gz",
-                    "sha256": "cc80fd415e57ecec067339beadd0eef9eaa45e65d3c51a922ba5f9172779bfb8",
-                    "type": "file",
-                    "dest-filename": "external/tarballs/7a15edea7d415ac5150ea403e27401fd-open-sans-font-ttf-1.10.tar.gz"
-                },
-                {
-                    "url": "https://dev-www.libreoffice.org/src/c3c1a8ba7452950636e871d25020ce0d-pt-serif-font-1.0000W.tar.gz",
-                    "sha256": "6757feb23f889a82df59679d02b8ee1f907df0a0ac1c49cdb48ed737b60e5dfa",
-                    "type": "file",
-                    "dest-filename": "external/tarballs/c3c1a8ba7452950636e871d25020ce0d-pt-serif-font-1.0000W.tar.gz"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/907d6e99f241876695c19ff3db0b8923-source-code-pro-2.030R-ro-1.050R-it.tar.gz",
                     "sha256": "09466dce87653333f189acd8358c60c6736dcd95f042dee0b644bdcf65b6ae2f",
                     "type": "file",
