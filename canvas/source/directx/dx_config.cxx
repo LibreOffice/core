@@ -36,7 +36,7 @@ namespace dxcanvas
     DXCanvasItem::DXCanvasItem() :
         ConfigItem(
             "Office.Canvas/DXCanvas",
-            ConfigItemMode::ImmediateUpdate ),
+            ConfigItemMode::NONE ),
         maValues(),
         maMaxTextureSize(),
         mbBlacklistCurrentDevice(false),

@@ -45,7 +45,7 @@ SettingsConfigItem* SettingsConfigItem::get()
 }
 
 SettingsConfigItem::SettingsConfigItem()
- :  ConfigItem( SETTINGS_CONFIGNODE, ConfigItemMode::DelayedUpdate ),
+ :  ConfigItem( SETTINGS_CONFIGNODE, ConfigItemMode::NONE ),
     m_aSettings( 0 )
 {
     getValues();
