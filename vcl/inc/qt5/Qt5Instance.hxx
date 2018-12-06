@@ -40,6 +40,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Instance : public QObject,
     osl::Condition m_aWaitingYieldCond;
     int m_postUserEventId;
     const bool m_bUseCairo;
+    css::uno::Reference<css::uno::XInterface> m_xClipboard;
 
 public:
     std::unique_ptr<QApplication> m_pQApplication;
