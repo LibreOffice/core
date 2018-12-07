@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_842d3b48",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-07T08:05:37Z",
+      "side": 1,
+      "message": "I\u0027d follow the ImplCalcOutSideRgn\u0027s param order: it would make it look consistent. :-)",
+      "range": {
+        "startLine": 350,
+        "startChar": 23,
+        "endLine": 352,
+        "endChar": 67
+      },
+      "revId": "77a1234d2aa67f49339f6dd116ae7cf13626b975",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
