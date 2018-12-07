@@ -855,7 +855,7 @@ void ObjectPage::NewDialog()
                         {
                             pEntry = m_pBasicBox->AddEntry(
                                 aDlgName,
-                                Image(BitmapEx(RID_BMP_DIALOG)),
+                                Image(StockImage::Yes, RID_BMP_DIALOG),
                                 pLibEntry, false,
                                 o3tl::make_unique<Entry>(OBJ_TYPE_DIALOG));
                             DBG_ASSERT( pEntry, "Insert entry failed!" );
@@ -1026,7 +1026,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     {
                         pEntry = rBasicBox.AddEntry(
                             aModName,
-                            Image(BitmapEx(RID_BMP_MODULE)),
+                            Image(StockImage::Yes, RID_BMP_MODULE),
                             pSubRootEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
                         DBG_ASSERT( pEntry, "Insert entry failed!" );

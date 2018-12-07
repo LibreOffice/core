@@ -91,7 +91,7 @@ Image GetMenuBarIcon( MenuBar const * pMBar )
     else
         sResID = RID_UPDATE_AVAILABLE_16;
 
-    return Image(BitmapEx(sResID));
+    return Image(StockImage::Yes, sResID);
 }
 
 class BubbleWindow : public FloatingWindow

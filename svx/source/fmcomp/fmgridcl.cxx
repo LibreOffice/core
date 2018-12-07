@@ -99,8 +99,7 @@ struct FmGridHeaderData
 
 void SetMenuItem(const OUString& rImgID, const OString &rID, Menu& rMenu, bool bDesignMode)
 {
-    BitmapEx aBitmap(rImgID);
-    Image aImage(aBitmap);
+    Image aImage(StockImage::Yes, rImgID);
     sal_uInt16 nID = rMenu.GetItemId(rID);
     rMenu.SetItemImage(nID, aImage);
     rMenu.EnableItem(nID, bDesignMode);

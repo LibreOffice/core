@@ -77,11 +77,11 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     aEdit->SetSizePixel(aEdit->CalcMinimumSize());
     aPos->SetSizePixel(aPos->LogicToPixel(Size(45, 11), MapMode(MapUnit::MapAppFont)));
 
-    InsertItem(FN_FORMULA_CALC, Image(BitmapEx(RID_BMP_FORMULA_CALC)),
+    InsertItem(FN_FORMULA_CALC, Image(StockImage::Yes, RID_BMP_FORMULA_CALC),
                SwResId(STR_FORMULA_CALC));
-    InsertItem(FN_FORMULA_CANCEL, Image(BitmapEx(RID_BMP_FORMULA_CANCEL)),
+    InsertItem(FN_FORMULA_CANCEL, Image(StockImage::Yes, RID_BMP_FORMULA_CANCEL),
                SwResId(STR_FORMULA_CANCEL));
-    InsertItem(FN_FORMULA_APPLY, Image(BitmapEx(RID_BMP_FORMULA_APPLY)),
+    InsertItem(FN_FORMULA_APPLY, Image(StockImage::Yes, RID_BMP_FORMULA_APPLY),
                SwResId(STR_FORMULA_APPLY));
 
     SetHelpId(FN_FORMULA_CALC, HID_TBX_FORMULA_CALC);
