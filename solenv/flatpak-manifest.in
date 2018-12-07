@@ -343,12 +343,6 @@
                     "dest-filename": "external/tarballs/mdds-1.4.3.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/a8c2c5b8f09e7ede322d5c602ff6a4b6-mythes-1.2.4.tar.gz",
-                    "sha256": "1e81f395d8c851c3e4e75b568e20fa2fa549354e75ab397f9de4b0e0790a305f",
-                    "type": "file",
-                    "dest-filename": "external/tarballs/a8c2c5b8f09e7ede322d5c602ff6a4b6-mythes-1.2.4.tar.gz"
-                },
-                {
                     "url": "https://dev-www.libreoffice.org/src/neon-0.30.2.tar.gz",
                     "sha256": "db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca",
                     "type": "file",
