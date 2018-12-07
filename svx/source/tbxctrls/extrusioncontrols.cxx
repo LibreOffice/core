@@ -126,12 +126,12 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 )
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgPerspective(BitmapEx(RID_SVXBMP_PERSPECTIVE))
-    , maImgParallel(BitmapEx(RID_SVXBMP_PARALLEL))
+    , maImgPerspective(RID_SVXBMP_PERSPECTIVE)
+    , maImgParallel(RID_SVXBMP_PARALLEL)
 {
     for (sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; ++i)
     {
-        maImgDirection[i] = Image(BitmapEx(aDirectionBmps[i]));
+        maImgDirection[i] = Image(aDirectionBmps[i]);
     }
 
     SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectToolbarMenuHdl ) );
@@ -373,12 +373,12 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
 {
     SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
-    Image aImgDepth0(BitmapEx(RID_SVXBMP_DEPTH_0));
-    Image aImgDepth1(BitmapEx(RID_SVXBMP_DEPTH_1));
-    Image aImgDepth2(BitmapEx(RID_SVXBMP_DEPTH_2));
-    Image aImgDepth3(BitmapEx(RID_SVXBMP_DEPTH_3));
-    Image aImgDepth4(BitmapEx(RID_SVXBMP_DEPTH_4));
-    Image aImgDepthInfinity(BitmapEx(RID_SVXBMP_DEPTH_INFINITY));
+    Image aImgDepth0(RID_SVXBMP_DEPTH_0);
+    Image aImgDepth1(RID_SVXBMP_DEPTH_1);
+    Image aImgDepth2(RID_SVXBMP_DEPTH_2);
+    Image aImgDepth3(RID_SVXBMP_DEPTH_3);
+    Image aImgDepth4(RID_SVXBMP_DEPTH_4);
+    Image aImgDepthInfinity(RID_SVXBMP_DEPTH_INFINITY);
 
     appendEntry(0, "", aImgDepth0);
     appendEntry(1, "", aImgDepth1);
@@ -585,9 +585,9 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
                                                  vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgBright(BitmapEx(RID_SVXBMP_LIGHTING_BRIGHT))
-    , maImgNormal(BitmapEx(RID_SVXBMP_LIGHTING_NORMAL))
-    , maImgDim(BitmapEx(RID_SVXBMP_LIGHTING_DIM))
+    , maImgBright(RID_SVXBMP_LIGHTING_BRIGHT)
+    , maImgNormal(RID_SVXBMP_LIGHTING_NORMAL)
+    , maImgDim(RID_SVXBMP_LIGHTING_DIM)
     , mnDirection(FROM_FRONT)
     , mbDirectionEnabled(false)
 {
@@ -595,10 +595,10 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
     {
         if( i != FROM_FRONT )
         {
-            maImgLightingOff[i] = Image(BitmapEx(aLightOffBmps[i]));
-            maImgLightingOn[i] = Image(BitmapEx(aLightOnBmps[i]));
+            maImgLightingOff[i] = Image(aLightOffBmps[i]);
+            maImgLightingOn[i] = Image(aLightOnBmps[i]);
         }
-        maImgLightingPreview[i] = Image(BitmapEx(aLightPreviewBmps[i]));
+        maImgLightingPreview[i] = Image(aLightPreviewBmps[i]);
     }
 
     SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectToolbarMenuHdl ) );
@@ -839,10 +839,10 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
 {
     SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
 
-    Image aImgSurface1(BitmapEx(RID_SVXBMP_WIRE_FRAME));
-    Image aImgSurface2(BitmapEx(RID_SVXBMP_MATTE));
-    Image aImgSurface3(BitmapEx(RID_SVXBMP_PLASTIC));
-    Image aImgSurface4(BitmapEx(RID_SVXBMP_METAL));
+    Image aImgSurface1(RID_SVXBMP_WIRE_FRAME);
+    Image aImgSurface2(RID_SVXBMP_MATTE);
+    Image aImgSurface3(RID_SVXBMP_PLASTIC);
+    Image aImgSurface4(RID_SVXBMP_METAL);
 
     appendEntry(0, SvxResId(RID_SVXSTR_WIREFRAME), aImgSurface1);
     appendEntry(1, SvxResId(RID_SVXSTR_MATTE), aImgSurface2);

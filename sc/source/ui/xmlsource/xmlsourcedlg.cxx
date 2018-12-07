@@ -90,9 +90,9 @@ ScXMLSourceDlg::ScXMLSourceDlg(
 
     mpActiveEdit = mpRefEdit;
 
-    maXMLParam.maImgElementDefault = Image(BitmapEx(RID_BMP_ELEMENT_DEFAULT));
-    maXMLParam.maImgElementRepeat = Image(BitmapEx(RID_BMP_ELEMENT_REPEAT));
-    maXMLParam.maImgAttribute = Image(BitmapEx(RID_BMP_ELEMENT_ATTRIBUTE));
+    maXMLParam.maImgElementDefault = Image(RID_BMP_ELEMENT_DEFAULT);
+    maXMLParam.maImgElementRepeat = Image(RID_BMP_ELEMENT_REPEAT);
+    maXMLParam.maImgAttribute = Image(RID_BMP_ELEMENT_ATTRIBUTE);
 
     Link<Button*,void> aBtnHdl = LINK(this, ScXMLSourceDlg, BtnPressedHdl);
     mpBtnSelectSource->SetClickHdl(aBtnHdl);

@@ -184,10 +184,10 @@ ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
     m_nActive( 0 ),
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
-    m_aSharedImage(BitmapEx(RID_BMP_SHARED)),
-    m_aLockedImage(BitmapEx(RID_BMP_LOCKED)),
-    m_aWarningImage(BitmapEx(RID_BMP_WARNING)),
-    m_aDefaultImage(BitmapEx(RID_BMP_EXTENSION)),
+    m_aSharedImage(RID_BMP_SHARED),
+    m_aLockedImage(RID_BMP_LOCKED),
+    m_aWarningImage(RID_BMP_WARNING),
+    m_aDefaultImage(RID_BMP_EXTENSION),
     m_pScrollBar( nullptr ),
     m_pManager( nullptr )
 {

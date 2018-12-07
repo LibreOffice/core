@@ -54,7 +54,7 @@ Image IconCache::Implementation::GetIcon(const OUString& rResourceId)
     iImage = maContainer.find(rResourceId);
     if (iImage == maContainer.end())
     {
-        aResult = Image(BitmapEx(rResourceId));
+        aResult = Image(rResourceId);
         maContainer[rResourceId] = aResult;
     }
     else

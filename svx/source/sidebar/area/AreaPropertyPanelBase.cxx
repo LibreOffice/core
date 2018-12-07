@@ -82,12 +82,12 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mpFillGradientItem(),
       mpHatchItem(),
       mpBitmapItem(),
-      maImgAxial(BitmapEx(BMP_AXIAL)),
-      maImgElli(BitmapEx(BMP_ELLI)),
-      maImgQuad(BitmapEx(BMP_QUAD)),
-      maImgRadial(BitmapEx(BMP_RADIAL)),
-      maImgSquare(BitmapEx(BMP_SQUARE)),
-      maImgLinear(BitmapEx(BMP_LINEAR)),
+      maImgAxial(BMP_AXIAL),
+      maImgElli(BMP_ELLI),
+      maImgQuad(BMP_QUAD),
+      maImgRadial(BMP_RADIAL),
+      maImgSquare(BMP_SQUARE),
+      maImgLinear(BMP_LINEAR),
       mpFloatTransparenceItem(),
       mpTransparanceItem()
 {

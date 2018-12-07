@@ -776,9 +776,9 @@ void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::Re
 
 RecovDocList::RecovDocList(SvSimpleTableContainer& rParent)
     : SvSimpleTable      ( rParent )
-    , m_aGreenCheckImg    (BitmapEx(RID_SVXBMP_GREENCHECK))
-    , m_aYellowCheckImg   (BitmapEx(RID_SVXBMP_YELLOWCHECK))
-    , m_aRedCrossImg      (BitmapEx(RID_SVXBMP_REDCROSS))
+    , m_aGreenCheckImg    (RID_SVXBMP_GREENCHECK)
+    , m_aYellowCheckImg   (RID_SVXBMP_YELLOWCHECK)
+    , m_aRedCrossImg      (RID_SVXBMP_REDCROSS)
     , m_aSuccessRecovStr  (SvxResId(RID_SVXSTR_SUCCESSRECOV))
     , m_aOrigDocRecovStr  (SvxResId(RID_SVXSTR_ORIGDOCRECOV))
     , m_aRecovFailedStr   (SvxResId(RID_SVXSTR_RECOVFAILED))

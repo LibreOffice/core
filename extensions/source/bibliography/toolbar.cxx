@@ -572,9 +572,9 @@ void BibToolBar::RebuildToolbar()
 
 void BibToolBar::ApplyImageList()
 {
-    SetItemImage(nTBC_BT_AUTOFILTER, Image(BitmapEx(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_AUTOFILTER_SC) : OUStringLiteral(RID_EXTBMP_AUTOFILTER_LC))));
-    SetItemImage(nTBC_BT_FILTERCRIT, Image(BitmapEx(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_FILTERCRIT_SC) : OUStringLiteral(RID_EXTBMP_FILTERCRIT_LC))));
-    SetItemImage(nTBC_BT_REMOVEFILTER, Image(BitmapEx(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_REMOVE_FILTER_SORT_SC) : OUStringLiteral(RID_EXTBMP_REMOVE_FILTER_SORT_LC))));
+    SetItemImage(nTBC_BT_AUTOFILTER, Image(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_AUTOFILTER_SC) : OUStringLiteral(RID_EXTBMP_AUTOFILTER_LC)));
+    SetItemImage(nTBC_BT_FILTERCRIT, Image(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_FILTERCRIT_SC) : OUStringLiteral(RID_EXTBMP_FILTERCRIT_LC)));
+    SetItemImage(nTBC_BT_REMOVEFILTER, Image(nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ? OUStringLiteral(RID_EXTBMP_REMOVE_FILTER_SORT_SC) : OUStringLiteral(RID_EXTBMP_REMOVE_FILTER_SORT_LC)));
     AdjustToolBox();
 }
 
