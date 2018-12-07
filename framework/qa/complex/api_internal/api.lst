@@ -76,7 +76,6 @@ job78=sc.ScAutoFormatFieldObj
 job79=sc.ScAutoFormatObj
 job80=sc.ScAutoFormatsObj
 job81=sc.ScCellFieldObj
-job82=sc.ScCellFieldsObj
 job85=sc.ScCellSearchObj
 job88=sc.ScDatabaseRangeObj
 job89=sc.ScDatabaseRangesObj

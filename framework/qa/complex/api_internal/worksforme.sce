@@ -18,7 +18,6 @@
 job=cmdmail.SimpleCommandMail
 job=fileacc.SimpleFileAccess
 job=sc.ScCellFieldObj
-job=sc.ScCellFieldsObj
 job=sc.XMLImporter
 job=sc.XMLMetaExporter
 job=sd.SdDocLinkTargets
