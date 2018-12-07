@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_677da1e6",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-07T21:55:01Z",
+      "side": 1,
+      "message": "Can we *please* have such thing formatted like\n\n void ScTable::EndListeningFormulaCells(\n         sc::EndListeningContext\u0026 rEndCxt,\n         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )\n {\n     if (nCol2 \u003e\u003d aCol.size())\n         nCol2 \u003d aCol.size() - 1;\n     if (nCol2 \u003e MAXCOL)\n         nCol2 \u003d MAXCOL;\n     if (nRow2 \u003e MAXROW)\n         nRow2 \u003d MAXROW;\n     if (ValidColRow(nCol1, nRow1) \u0026\u0026 ValidColRow(nCol2, nRow2))\n     {\n         for (SCCOL i \u003d nCol1; i \u003c\u003d nCol2; i++)\n             aCol[i].EndListeningFormulaCells(rEndCxt, nRow1, nRow2, nullptr, nullptr);\n     }\n }\n\nThanks.",
+      "range": {
+        "startLine": 1117,
+        "startChar": 0,
+        "endLine": 1127,
+        "endChar": 1
+      },
+      "revId": "4103b919a32e67efca52b410187111aad879581f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
