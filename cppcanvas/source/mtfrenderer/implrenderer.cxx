@@ -1273,7 +1273,6 @@ namespace cppcanvas
                         break;
 
                     case MetaActionType::TEXTLANGUAGE:
-                        // FALLTHROUGH intended
                     case MetaActionType::REFPOINT:
                         // handled via pCurrAct->Execute( &rVDev )
                         break;

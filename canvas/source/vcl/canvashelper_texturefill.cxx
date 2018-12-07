@@ -418,7 +418,6 @@ namespace vclcanvas
                     break;
 
                 case ::canvas::ParametricPolyPolygon::GradientType::Elliptical:
-                    // FALLTHROUGH intended
                 case ::canvas::ParametricPolyPolygon::GradientType::Rectangular:
                     fillPolygonalGradient( rOutDev,
                                            rTextureTransform,

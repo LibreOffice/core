@@ -188,19 +188,12 @@ namespace internal
                     break;
 
                     case animations::AnimationNodeType::CUSTOM:
-                        // FALLTHROUGH intended
                     case animations::AnimationNodeType::ANIMATE:
-                        // FALLTHROUGH intended
                     case animations::AnimationNodeType::ANIMATEMOTION:
-                        // FALLTHROUGH intended
                     case animations::AnimationNodeType::ANIMATECOLOR:
-                        // FALLTHROUGH intended
                     case animations::AnimationNodeType::ANIMATETRANSFORM:
-                        // FALLTHROUGH intended
                     case animations::AnimationNodeType::TRANSITIONFILTER:
-                        // FALLTHROUGH intended
                     case animations::AnimationNodeType::AUDIO:
-                        // FALLTHROUGH intended
                     /*default:
                         // ignore this node, no valuable content for now.
                         break;*/

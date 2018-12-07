@@ -401,7 +401,6 @@ void Parser::readLineCap()
     switch( readInt32() )
     {
         default:
-            // FALLTHROUGH intended
         case 0: nCap = rendering::PathCapType::BUTT; break;
         case 1: nCap = rendering::PathCapType::ROUND; break;
         case 2: nCap = rendering::PathCapType::SQUARE; break;
@@ -434,7 +433,6 @@ void Parser::readLineJoin()
     switch( readInt32() )
     {
         default:
-            // FALLTHROUGH intended
         case 0: nJoin = rendering::PathJoinType::MITER; break;
         case 1: nJoin = rendering::PathJoinType::ROUND; break;
         case 2: nJoin = rendering::PathJoinType::BEVEL; break;

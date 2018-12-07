@@ -732,18 +732,13 @@ namespace slideshow
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
                 case AttributeType::Invalid:
                     return CLASS_UNKNOWN_PROPERTY;
 
                 case AttributeType::CharColor:
-                    // FALLTHROUGH intended
                 case AttributeType::Color:
-                    // FALLTHROUGH intended
                 case AttributeType::DimColor:
-                    // FALLTHROUGH intended
                 case AttributeType::FillColor:
-                    // FALLTHROUGH intended
                 case AttributeType::LineColor:
                     return CLASS_COLOR_PROPERTY;
 
@@ -754,32 +749,20 @@ namespace slideshow
                     return CLASS_BOOL_PROPERTY;
 
                 case AttributeType::CharHeight:
-                    // FALLTHROUGH intended
                 case AttributeType::CharWeight:
-                    // FALLTHROUGH intended
                 case AttributeType::Height:
-                    // FALLTHROUGH intended
                 case AttributeType::Opacity:
-                    // FALLTHROUGH intended
                 case AttributeType::Rotate:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewX:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewY:
-                    // FALLTHROUGH intended
                 case AttributeType::Width:
-                    // FALLTHROUGH intended
                 case AttributeType::PosX:
-                    // FALLTHROUGH intended
                 case AttributeType::PosY:
                     return CLASS_NUMBER_PROPERTY;
 
                 case AttributeType::CharUnderline:
-                    // FALLTHROUGH intended
                 case AttributeType::FillStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::LineStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::CharPosture:
                     return CLASS_ENUM_PROPERTY;
             }
@@ -796,32 +779,21 @@ namespace slideshow
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
                 case AttributeType::Invalid:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createNumberPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case AttributeType::CharColor:
-                    // FALLTHROUGH intended
                 case AttributeType::CharFontName:
-                    // FALLTHROUGH intended
                 case AttributeType::CharPosture:
-                    // FALLTHROUGH intended
                 case AttributeType::CharUnderline:
-                    // FALLTHROUGH intended
                 case AttributeType::Color:
-                    // FALLTHROUGH intended
                 case AttributeType::DimColor:
-                    // FALLTHROUGH intended
                 case AttributeType::FillColor:
-                    // FALLTHROUGH intended
                 case AttributeType::FillStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::LineColor:
-                    // FALLTHROUGH intended
                 case AttributeType::LineStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::Visibility:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createNumberPropertyAnimation(): Attribute type mismatch" );
@@ -952,44 +924,27 @@ namespace slideshow
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
                 case AttributeType::Invalid:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createEnumPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case AttributeType::CharColor:
-                    // FALLTHROUGH intended
                 case AttributeType::CharFontName:
-                    // FALLTHROUGH intended
                 case AttributeType::Color:
-                    // FALLTHROUGH intended
                 case AttributeType::DimColor:
-                    // FALLTHROUGH intended
                 case AttributeType::FillColor:
-                    // FALLTHROUGH intended
                 case AttributeType::LineColor:
-                    // FALLTHROUGH intended
                 case AttributeType::Visibility:
-                    // FALLTHROUGH intended
                 case AttributeType::CharHeight:
-                    // FALLTHROUGH intended
                 case AttributeType::CharWeight:
-                    // FALLTHROUGH intended
                 case AttributeType::Height:
-                    // FALLTHROUGH intended
                 case AttributeType::Opacity:
-                    // FALLTHROUGH intended
                 case AttributeType::Rotate:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewX:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewY:
-                    // FALLTHROUGH intended
                 case AttributeType::Width:
-                    // FALLTHROUGH intended
                 case AttributeType::PosX:
-                    // FALLTHROUGH intended
                 case AttributeType::PosY:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createEnumPropertyAnimation(): Attribute type mismatch" );
@@ -1046,42 +1001,26 @@ namespace slideshow
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
                 case AttributeType::Invalid:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createColorPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case AttributeType::CharFontName:
-                    // FALLTHROUGH intended
                 case AttributeType::CharHeight:
-                    // FALLTHROUGH intended
                 case AttributeType::CharPosture:
-                    // FALLTHROUGH intended
                 case AttributeType::CharUnderline:
-                    // FALLTHROUGH intended
                 case AttributeType::CharWeight:
-                    // FALLTHROUGH intended
                 case AttributeType::FillStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::Height:
-                    // FALLTHROUGH intended
                 case AttributeType::LineStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::Opacity:
-                    // FALLTHROUGH intended
                 case AttributeType::Rotate:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewX:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewY:
-                    // FALLTHROUGH intended
                 case AttributeType::Visibility:
-                    // FALLTHROUGH intended
                 case AttributeType::Width:
-                    // FALLTHROUGH intended
                 case AttributeType::PosX:
-                    // FALLTHROUGH intended
                 case AttributeType::PosY:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createColorPropertyAnimation(): Attribute type mismatch" );
@@ -1196,50 +1135,30 @@ namespace slideshow
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
                 case AttributeType::Invalid:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createStringPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case AttributeType::CharColor:
-                    // FALLTHROUGH intended
                 case AttributeType::CharHeight:
-                    // FALLTHROUGH intended
                 case AttributeType::CharUnderline:
-                    // FALLTHROUGH intended
                 case AttributeType::Color:
-                    // FALLTHROUGH intended
                 case AttributeType::DimColor:
-                    // FALLTHROUGH intended
                 case AttributeType::FillColor:
-                    // FALLTHROUGH intended
                 case AttributeType::Height:
-                    // FALLTHROUGH intended
                 case AttributeType::LineColor:
-                    // FALLTHROUGH intended
                 case AttributeType::Opacity:
-                    // FALLTHROUGH intended
                 case AttributeType::Rotate:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewX:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewY:
-                    // FALLTHROUGH intended
                 case AttributeType::Visibility:
-                    // FALLTHROUGH intended
                 case AttributeType::Width:
-                    // FALLTHROUGH intended
                 case AttributeType::PosX:
-                    // FALLTHROUGH intended
                 case AttributeType::PosY:
-                    // FALLTHROUGH intended
                 case AttributeType::CharPosture:
-                    // FALLTHROUGH intended
                 case AttributeType::CharWeight:
-                    // FALLTHROUGH intended
                 case AttributeType::FillStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::LineStyle:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createStringPropertyAnimation(): Attribute type mismatch" );
@@ -1268,50 +1187,30 @@ namespace slideshow
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
                 case AttributeType::Invalid:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createBoolPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case AttributeType::CharColor:
-                    // FALLTHROUGH intended
                 case AttributeType::CharFontName:
-                    // FALLTHROUGH intended
                 case AttributeType::CharHeight:
-                    // FALLTHROUGH intended
                 case AttributeType::CharPosture:
-                    // FALLTHROUGH intended
                 case AttributeType::CharWeight:
-                    // FALLTHROUGH intended
                 case AttributeType::Color:
-                    // FALLTHROUGH intended
                 case AttributeType::DimColor:
-                    // FALLTHROUGH intended
                 case AttributeType::FillColor:
-                    // FALLTHROUGH intended
                 case AttributeType::FillStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::Height:
-                    // FALLTHROUGH intended
                 case AttributeType::LineColor:
-                    // FALLTHROUGH intended
                 case AttributeType::LineStyle:
-                    // FALLTHROUGH intended
                 case AttributeType::Opacity:
-                    // FALLTHROUGH intended
                 case AttributeType::Rotate:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewX:
-                    // FALLTHROUGH intended
                 case AttributeType::SkewY:
-                    // FALLTHROUGH intended
                 case AttributeType::Width:
-                    // FALLTHROUGH intended
                 case AttributeType::PosX:
-                    // FALLTHROUGH intended
                 case AttributeType::PosY:
-                    // FALLTHROUGH intended
                 case AttributeType::CharUnderline:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createBoolPropertyAnimation(): Attribute type mismatch" );
