@@ -58,13 +58,13 @@ ParaWin::ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg):
     m_pFtArgDesc->SetText("");
 
     get(m_pBtnFx1, "FX1");
-    m_pBtnFx1->SetModeImage(Image(BitmapEx(BMP_FX)));
+    m_pBtnFx1->SetModeImage(Image(StockImage::Yes, BMP_FX));
     get(m_pBtnFx2, "FX2");
-    m_pBtnFx2->SetModeImage(Image(BitmapEx(BMP_FX)));
+    m_pBtnFx2->SetModeImage(Image(StockImage::Yes, BMP_FX));
     get(m_pBtnFx3, "FX3");
-    m_pBtnFx3->SetModeImage(Image(BitmapEx(BMP_FX)));
+    m_pBtnFx3->SetModeImage(Image(StockImage::Yes, BMP_FX));
     get(m_pBtnFx4, "FX4");
-    m_pBtnFx4->SetModeImage(Image(BitmapEx(BMP_FX)));
+    m_pBtnFx4->SetModeImage(Image(StockImage::Yes, BMP_FX));
 
     get(m_pFtArg1, "FT_ARG1");
     get(m_pFtArg2, "FT_ARG2");

@@ -79,7 +79,7 @@ SbxVariable* IsSbxVariable (SbxBase* pBase)
 
 Image GetImage(const OUString& rId)
 {
-    return Image(BitmapEx(rId));
+    return Image(StockImage::Yes, rId);
 }
 
 int const nScrollLine = 12;
@@ -1567,7 +1567,7 @@ WatchWindow::WatchWindow (Layout* pParent)
     aRemoveWatchButton->SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton->SetPosPixel( Point( nTextLen + aXEdit->GetSizePixel().Width() + 4, 2 ) );
     aRemoveWatchButton->SetHelpId(HID_BASICIDE_REMOVEWATCH);
-    aRemoveWatchButton->SetModeImage(Image(BitmapEx(RID_BMP_REMOVEWATCH)));
+    aRemoveWatchButton->SetModeImage(Image(StockImage::Yes, RID_BMP_REMOVEWATCH));
     aRemoveWatchButton->SetQuickHelpText(IDEResId(RID_STR_REMOVEWATCHTIP));
     Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
     aSz.AdjustWidth(6 );

@@ -250,8 +250,7 @@ void ScContentTree::InitRoot( ScContentId nType )
         return;
     }
 
-    BitmapEx aBitmap(aContentBmps[static_cast<int>(nType) - 1]);
-    Image aImage(aBitmap);
+    Image aImage(StockImage::Yes, aContentBmps[static_cast<int>(nType) - 1]);
     OUString aName(ScResId(SCSTR_CONTENT_ARY[static_cast<int>(nType)]));
     // back to the correct position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;

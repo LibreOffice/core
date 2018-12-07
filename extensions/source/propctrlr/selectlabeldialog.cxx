@@ -66,8 +66,8 @@ namespace pcr
         m_pControlTree->EnableInplaceEditing( false );
         m_pControlTree->SetStyle(m_pControlTree->GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
-        m_pControlTree->SetNodeBitmaps(Image(BitmapEx(RID_EXTBMP_COLLAPSEDNODE)),
-                                       Image(BitmapEx(RID_EXTBMP_EXPANDEDNODE)));
+        m_pControlTree->SetNodeBitmaps(Image(StockImage::Yes, RID_EXTBMP_COLLAPSEDNODE),
+                                       Image(StockImage::Yes, RID_EXTBMP_EXPANDEDNODE));
         m_pControlTree->SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
         m_pControlTree->SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
 
@@ -101,7 +101,7 @@ namespace pcr
             sal_Int16 nClassId = 0;
             try { nClassId = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID)); } catch(...) { }
             m_sRequiredService = (FormComponentType::RADIOBUTTON == nClassId) ? OUString(SERVICE_COMPONENT_GROUPBOX) : OUString(SERVICE_COMPONENT_FIXEDTEXT);
-            m_aRequiredControlImage = Image(BitmapEx(FormComponentType::RADIOBUTTON == nClassId ? OUStringLiteral(RID_EXTBMP_GROUPBOX) : OUStringLiteral(RID_EXTBMP_FIXEDTEXT)));
+            m_aRequiredControlImage = Image(StockImage::Yes, FormComponentType::RADIOBUTTON == nClassId ? OUStringLiteral(RID_EXTBMP_GROUPBOX) : OUStringLiteral(RID_EXTBMP_FIXEDTEXT));
 
             // calc the currently set label control (so InsertEntries can calc m_pInitialSelection)
             Any aCurrentLabelControl( m_xControlModel->getPropertyValue(PROPERTY_CONTROLLABEL) );
@@ -112,7 +112,7 @@ namespace pcr
                 aCurrentLabelControl >>= m_xInitialLabelControl;
 
             // insert the root
-            Image aRootImage(BitmapEx(RID_EXTBMP_FORMS));
+            Image aRootImage(StockImage::Yes, RID_EXTBMP_FORMS);
             SvTreeListEntry* pRoot = m_pControlTree->InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
 
             // build the tree
@@ -200,7 +200,7 @@ namespace pcr
                 Reference< XIndexAccess >  xCont(xAsSet, UNO_QUERY);
                 if (xCont.is() && xCont->getCount())
                 {   // yes -> step down
-                    Image aFormImage(BitmapEx(RID_EXTBMP_FORM));
+                    Image aFormImage(StockImage::Yes, RID_EXTBMP_FORM);
                     SvTreeListEntry* pCont = m_pControlTree->InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
                     sal_Int32 nContChildren = InsertEntries(xCont, pCont);
                     if (nContChildren)

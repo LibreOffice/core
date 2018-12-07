@@ -274,11 +274,11 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
     sal_Int16 nNodeType = mpEffect->getNodeType();
     if (nNodeType == EffectNodeType::ON_CLICK )
     {
-        rRenderContext.DrawImage(aPos, Image(BitmapEx(BMP_CUSTOMANIMATION_ON_CLICK)));
+        rRenderContext.DrawImage(aPos, Image(StockImage::Yes, BMP_CUSTOMANIMATION_ON_CLICK));
     }
     else if (nNodeType == EffectNodeType::AFTER_PREVIOUS)
     {
-        rRenderContext.DrawImage(aPos, Image(BitmapEx(BMP_CUSTOMANIMATION_AFTER_PREVIOUS)));
+        rRenderContext.DrawImage(aPos, Image(StockImage::Yes, BMP_CUSTOMANIMATION_AFTER_PREVIOUS));
     }
     else if (nNodeType == EffectNodeType::WITH_PREVIOUS)
     {
@@ -323,8 +323,7 @@ void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev,
 
     if (!sImage.isEmpty())
     {
-        BitmapEx aBitmap(sImage);
-        Image aImage(aBitmap);
+        Image aImage(StockImage::Yes, sImage);
         Point aImagePos(aPos);
         aImagePos.AdjustY((aSize.Height()/2 - aImage.GetSizePixel().Height()) >> 1 );
         rRenderContext.DrawImage(aImagePos, aImage);

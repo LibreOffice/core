@@ -561,13 +561,13 @@ namespace
         {
             assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
             if (rImage == "dialog-warning")
-                return Image(BitmapEx(IMG_WARN));
+                return Image(StockImage::Yes, IMG_WARN);
             else if (rImage == "dialog-error")
-                return Image(BitmapEx(IMG_ERROR));
+                return Image(StockImage::Yes, IMG_ERROR);
             else if (rImage == "dialog-information")
-                return Image(BitmapEx(IMG_INFO));
+                return Image(StockImage::Yes, IMG_INFO);
         }
-        return Image(BitmapEx(rImage));
+        return Image(StockImage::Yes, rImage);
     }
 
     Image createImage(VirtualDevice& rDevice)
@@ -1236,7 +1236,7 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        m_xButton->SetModeImage(::Image(BitmapEx(rIconName)));
+        m_xButton->SetModeImage(::Image(StockImage::Yes, rIconName));
     }
 
     virtual void set_label_line_wrap(bool wrap) override
@@ -1407,7 +1407,7 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        m_xRadioButton->SetModeRadioImage(::Image(BitmapEx(rIconName)));
+        m_xRadioButton->SetModeRadioImage(::Image(StockImage::Yes, rIconName));
     }
 
     virtual void set_inconsistent(bool /*inconsistent*/) override
@@ -1620,7 +1620,7 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        m_xImage->SetImage(::Image(BitmapEx(rIconName)));
+        m_xImage->SetImage(::Image(StockImage::Yes, rIconName));
     }
 };
 

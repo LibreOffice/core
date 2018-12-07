@@ -535,8 +535,6 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
 , maNoPreviewStr( VclResId( SV_PRINT_NOPREVIEW ) )
 , mnCurPage( 0 )
 , mnCachedPages( 0 )
-, maCollateBmp(SV_PRINT_COLLATE_BMP)
-, maNoCollateBmp(SV_PRINT_NOCOLLATE_BMP)
 , mbCollateAlwaysOff(false)
 , mbShowLayoutFrame( true )
 , mbSingleJobs( false )
@@ -1079,7 +1077,7 @@ void PrintDialog::checkControlDependencies()
     else
         mpCollateBox->Enable( false );
 
-    Image aImg(mpCollateBox->IsChecked() ? maCollateBmp : maNoCollateBmp);
+    Image aImg(StockImage::Yes, mpCollateBox->IsChecked() ? OUString(SV_PRINT_COLLATE_BMP) : OUString(SV_PRINT_NOCOLLATE_BMP));
 
     Size aImgSize( aImg.GetSizePixel() );
 

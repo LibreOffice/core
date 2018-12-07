@@ -690,7 +690,7 @@ static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
 {
     OUString sImageName(GetImageNameFromList_Impl(nImageId, bBig));
     if (!sImageName.isEmpty())
-        return Image(BitmapEx(sImageName));
+        return Image(StockImage::Yes, sImageName);
     return Image();
 }
 

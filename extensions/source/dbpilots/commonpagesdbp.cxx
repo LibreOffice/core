@@ -361,8 +361,8 @@ namespace dbp
             return;
         }
 
-        Image aTableImage(BitmapEx(BMP_TABLE));
-        Image aQueryImage(BitmapEx(BMP_QUERY));
+        Image aTableImage(StockImage::Yes, BMP_TABLE);
+        Image aQueryImage(StockImage::Yes, BMP_QUERY);
 
         lcl_fillEntries( *m_pTable, aTableNames, aTableImage, CommandType::TABLE );
         lcl_fillEntries( *m_pTable, aQueryNames, aQueryImage, CommandType::QUERY );

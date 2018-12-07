@@ -93,8 +93,8 @@ StructPage::StructPage(vcl::Window* pParent):
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
 
     m_pTlbStruct->SetNodeDefaultImages();
-    m_pTlbStruct->SetDefaultExpandedEntryBmp(Image(BitmapEx(BMP_STR_OPEN)));
-    m_pTlbStruct->SetDefaultCollapsedEntryBmp(Image(BitmapEx(BMP_STR_CLOSE)));
+    m_pTlbStruct->SetDefaultExpandedEntryBmp(Image(StockImage::Yes, BMP_STR_OPEN));
+    m_pTlbStruct->SetDefaultCollapsedEntryBmp(Image(StockImage::Yes, BMP_STR_CLOSE));
 
 
     m_pTlbStruct->SetSelectHdl(LINK( this, StructPage, SelectHdl ) );
