@@ -1009,7 +1009,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         aProp[i].Value >>= nStyle;
                 }
 
-                if (vcl::CommandInfoProvider::IsExperimental(aCommandURL, m_aModuleIdentifier) &&
+                if (!aCommandURL.isEmpty() && vcl::CommandInfoProvider::IsExperimental(aCommandURL, m_aModuleIdentifier) &&
                     !SvtMiscOptions().IsExperimentalMode())
                 {
                     continue;

@@ -194,7 +194,7 @@ static Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCom
         {
             Reference<container::XNameAccess> xNameAccess(GetCommandDescription());
             Reference<container::XNameAccess> xUICommandLabels;
-            if (xNameAccess->getByName(rsModuleName) >>= xUICommandLabels)
+            if ((xNameAccess->getByName(rsModuleName) >>= xUICommandLabels) && xUICommandLabels->hasByName(rsCommandName))
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
         }
     }
