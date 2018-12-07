@@ -1,29 +1,13 @@
 {
     "id": "org.libreoffice.LibreOffice",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "1.6",
+    "runtime-version": "18.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
-        "org.freedesktop.Sdk.Extension.gcc7",
         "org.freedesktop.Sdk.Extension.openjdk10"
     ],
-    "build-options": {
-        "append-ld-library-path": "/usr/lib/sdk/gcc7/lib",
-        "env": {
-            "CC": "/usr/lib/sdk/gcc7/bin/gcc",
-            "CXX": "/usr/lib/sdk/gcc7/bin/g++"
-        }
-    },
     "command": "/app/libreoffice/program/soffice",
     "modules": [
-        {
-            "name": "gcc7",
-            "buildsystem": "simple",
-            "build-commands": [
-                "mkdir -p /app/lib",
-                "cp -d /usr/lib/sdk/gcc7/lib/lib{gcc_s.so.1,stdc++.so.6*} /app/lib"
-            ]
-        },
         {
             "name": "openjdk",
             "buildsystem": "simple",
