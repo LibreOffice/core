@@ -513,6 +513,26 @@ void ScDocument::StartAllListeners( const ScRange& rRange )
     }
 }
 
+void ScDocument::EndAllListeners( const ScRange& rRange )
+{
+    if (IsClipOrUndo() || GetNoListening())
+        return;
+
+    std::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*this));
+    sc::EndListeningContext aEndCxt(*this, pPosSet);
+
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->EndListeningFormulaCells(
+            aEndCxt,
+            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+    }
+}
+
 void ScDocument::finalizeOutlineImport()
 {
     TableContainer::iterator it = maTabs.begin(), itEnd = maTabs.end();

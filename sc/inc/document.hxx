@@ -2227,6 +2227,7 @@ public:
     void                StartNeededListeners();
     void                StartNeededListeners( const std::shared_ptr<const sc::ColumnSet>& rpColSet );
     void                StartAllListeners( const ScRange& rRange );
+    void                EndAllListeners( const ScRange& rRange );
 
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }
     sal_uLong           GetFormulaCodeInTree() const { return nFormulaCodeInTree; }

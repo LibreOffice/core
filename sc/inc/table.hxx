@@ -514,6 +514,9 @@ public:
     void StartListeningFormulaCells(
         sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+    void EndListeningFormulaCells(
+        sc::EndListeningContext& rEndCxt,
+        SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void SetDirtyFromClip(
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );

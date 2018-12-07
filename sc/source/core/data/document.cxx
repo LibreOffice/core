@@ -2113,6 +2113,7 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
 
     sc::CopyToDocContext aCxt(rDestDoc);
     aCxt.setStartListening(false);
+    rDestDoc.EndAllListeners(aNewRange);
 
     SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), rDestDoc.maTabs.size()));
     for (SCTAB i = aNewRange.aStart.Tab(); i <= aNewRange.aEnd.Tab() && i < nMinSizeBothTabs; i++)
