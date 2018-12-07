@@ -6447,7 +6447,8 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
-AC_MSG_CHECKING([[whether $CXX supports [[nodiscard]]]])
+dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
+AC_MSG_CHECKING([[that $CXX supports [[nodiscard]]]])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6467,10 +6468,8 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
         #else
         [[nodiscard]] int f();
         #endif
-    ]])], [
-        AC_DEFINE([HAVE_CPP_ATTRIBUTE_NODISCARD],[1])
-        AC_MSG_RESULT([yes])
-    ], [AC_MSG_RESULT([no])])
+    ]])],
+    AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks required [[nodiscard]] support]))
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
