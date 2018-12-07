@@ -335,21 +335,6 @@ public:
     static constexpr OUStringLiteral gsIsAnimation = "IsAnimation";
 };
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral AnimImpImpl::gsDimColor;
-constexpr OUStringLiteral AnimImpImpl::gsDimHide;
-constexpr OUStringLiteral AnimImpImpl::gsDimPrev;
-constexpr OUStringLiteral AnimImpImpl::gsEffect;
-constexpr OUStringLiteral AnimImpImpl::gsPlayFull;
-constexpr OUStringLiteral AnimImpImpl::gsSound;
-constexpr OUStringLiteral AnimImpImpl::gsSoundOn;
-constexpr OUStringLiteral AnimImpImpl::gsSpeed;
-constexpr OUStringLiteral AnimImpImpl::gsTextEffect;
-constexpr OUStringLiteral AnimImpImpl::gsPresShapeService;
-constexpr OUStringLiteral AnimImpImpl::gsAnimPath;
-constexpr OUStringLiteral AnimImpImpl::gsIsAnimation;
-#endif
-
 enum XMLActionKind
 {
     XMLE_SHOW,

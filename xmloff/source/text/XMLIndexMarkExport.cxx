@@ -37,23 +37,6 @@ using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral XMLIndexMarkExport::gsLevel;
-constexpr OUStringLiteral XMLIndexMarkExport::gsUserIndexName;
-constexpr OUStringLiteral XMLIndexMarkExport::gsPrimaryKey;
-constexpr OUStringLiteral XMLIndexMarkExport::gsSecondaryKey;
-constexpr OUStringLiteral XMLIndexMarkExport::gsDocumentIndexMark;
-constexpr OUStringLiteral XMLIndexMarkExport::gsIsStart;
-constexpr OUStringLiteral XMLIndexMarkExport::gsIsCollapsed;
-constexpr OUStringLiteral XMLIndexMarkExport::gsAlternativeText;
-constexpr OUStringLiteral XMLIndexMarkExport::gsTextReading;
-constexpr OUStringLiteral XMLIndexMarkExport::gsPrimaryKeyReading;
-constexpr OUStringLiteral XMLIndexMarkExport::gsSecondaryKeyReading;
-constexpr OUStringLiteral XMLIndexMarkExport::gsMainEntry;
-#endif
-
-
 XMLIndexMarkExport::XMLIndexMarkExport(
     SvXMLExport& rExp)
 :   rExport(rExp)

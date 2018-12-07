@@ -20,7 +20,6 @@
 #include <memory>
 #include <stdlib.h>
 
-#include <config_global.h>
 #include <svx/svxids.hrc>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/ctrltool.hxx>
@@ -358,10 +357,6 @@ void SvxCSS1BorderInfo::SetBorderLine( SvxBoxItemLine nLine, SvxBoxItem &rBoxIte
 
     rBoxItem.SetLine( &aBorderLine, nLine );
 }
-
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr sal_uInt16 SvxCSS1PropertyInfo::UNSET_BORDER_DISTANCE;
-#endif
 
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo()
 {

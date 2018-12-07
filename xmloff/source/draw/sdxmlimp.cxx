@@ -288,11 +288,6 @@ SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", 
 SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", false, SvXMLImportFlags::SETTINGS )
 SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", true, SvXMLImportFlags::SETTINGS )
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral SdXMLImport::gsPageLayouts;
-constexpr OUStringLiteral SdXMLImport::gsPreview;
-#endif
-
 SdXMLImport::SdXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,

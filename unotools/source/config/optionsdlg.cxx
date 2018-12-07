@@ -74,11 +74,6 @@ namespace
     class theOptionsDlgOptions_ImplMutex : public rtl::Static<osl::Mutex, theOptionsDlgOptions_ImplMutex>{};
 }
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral SvtOptionsDlgOptions_Impl::g_sPathDelimiter;
-#endif
-
-
 ::osl::Mutex & SvtOptionsDlgOptions_Impl::getInitMutex()
 {
     return theOptionsDlgOptions_ImplMutex::get();

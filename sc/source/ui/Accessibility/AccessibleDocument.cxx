@@ -192,11 +192,6 @@ struct ScShapeDataLess
     }
 };
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral ScShapeDataLess::gsLayerId;
-constexpr OUStringLiteral ScShapeDataLess::gsZOrder;
-#endif
-
 struct DeselectShape
 {
     void operator() (const ScAccessibleShapeData* pAccShapeData) const

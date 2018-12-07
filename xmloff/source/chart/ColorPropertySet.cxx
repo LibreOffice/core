@@ -49,10 +49,6 @@ private:
     Property m_aColorProp;
 };
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral lcl_ColorPropertySetInfo::g_aColorPropName;
-#endif
-
 lcl_ColorPropertySetInfo::lcl_ColorPropertySetInfo() :
         m_aColorProp( g_aColorPropName, -1,
                       cppu::UnoType<sal_Int32>::get(), 0)
@@ -82,10 +78,6 @@ namespace xmloff
 {
 namespace chart
 {
-
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral ColorPropertySet::g_aColorPropName;
-#endif
 
 ColorPropertySet::ColorPropertySet( sal_Int32 nColor ) :
         m_nColor( nColor ),
