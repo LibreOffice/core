@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_a49a776b",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-07T09:22:41Z",
+      "side": 1,
+      "message": "Chances are, this is going to crash once pDoc is nullptr",
+      "revId": "27953a8e2591803609edeea9e93e9f44e615938c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
