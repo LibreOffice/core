@@ -250,7 +250,7 @@
                         <property name="use_stock">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="newdouble-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|newdouble-atkobject">New words with two initial capitals</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|newdouble-atkobject">New words with two initial capitals or small initial</property>
                           </object>
                         </child>
                       </object>
@@ -286,7 +286,7 @@
                         <property name="use_stock">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="deldouble-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|deldouble-atkobject">Delete words with two initial capitals</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|deldouble-atkobject">Delete words with two initial capitals or small initial</property>
                           </object>
                         </child>
                       </object>
@@ -334,7 +334,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="acorexceptpage|label2">Words With TWo INitial CApitals</property>
+            <property name="label" translatable="yes" context="acorexceptpage|label2">Words With TWo INitial CApitals or sMALL iNITIAL</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
