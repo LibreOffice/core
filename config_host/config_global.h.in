@@ -27,10 +27,6 @@ Any change in this header will cause a rebuild of almost everything.
 /* Guaranteed copy elision (C++17), __cpp_guaranteed_copy_elision (C++2a): */
 #define HAVE_CPP_GUARANTEED_COPY_ELISION 0
 
-/* Fix for <http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#1579> "Return by converting
-   move constructor": */
-#define HAVE_CXX_CWG1579_FIX 0
-
 /* GCC bug <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150> "move ctor wrongly chosen in return
    stmt (derived vs. base)": */
 #define HAVE_GCC_BUG_87150 0

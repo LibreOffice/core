@@ -6499,7 +6499,8 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
-AC_MSG_CHECKING([whether $CXX has a fix for CWG1579])
+dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
+AC_MSG_CHECKING([that $CXX has a fix for CWG1579])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6511,10 +6512,8 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             std::unique_ptr<S2> s2(new S2);
             return s2;
         }
-    ])], [
-        AC_DEFINE([HAVE_CXX_CWG1579_FIX],[1])
-        AC_MSG_RESULT([yes])
-    ], [AC_MSG_RESULT([no])])
+    ])],
+    AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks a required fix for CWG1579]))
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
