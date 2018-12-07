@@ -35,7 +35,7 @@ class LibBoxControl : public SfxToolBoxControl
 {
 public:
     /*!
-     * Macro for registring two metods
+     * Macro for registering two methods
      *
      * @code
      * static SfxToolBoxControl* CreateImpl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
@@ -164,7 +164,7 @@ private:
 class LanguageBoxControl : public SfxToolBoxControl
 {
 public:
-    /*! Macro for registring two metods
+    /*! Macro for registering two methods
      *
      * @code
      * static SfxToolBoxControl* CreateImpl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
@@ -235,9 +235,9 @@ protected:
     virtual bool PreNotify(NotifyEvent& rNEvt) override;
 
 private:
-    /// Delete all langiages form ComboBox
+    /// Delete all languages from ComboBox
     void ClearBox();
-    /// Swich inferface of dialog to selected language
+    /// Switch inferface of dialog to selected language
     void SetLanguage();
 
     /// Fill up the language combobox
