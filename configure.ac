@@ -12504,13 +12504,9 @@ if test "$build_os" = cygwin; then
 fi
 AC_LANG_POP([C++])
 
-dnl We should be able to drop the below check when bumping the GCC baseline to
-dnl 4.9, as <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54577>
-dnl "deque<T>::erase() still takes iterator instead of const_iterator" should be
-dnl fixed there with <https://gcc.gnu.org/git/?p=gcc.git;a=commit;
-dnl h=6b0e18ca48bb4b4c01e7b5be2b98849943fdcf91>:
+dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
 AC_MSG_CHECKING(
-    [whether C++11 use of const_iterator in standard containers is broken])
+    [that C++11 use of const_iterator in standard containers is not broken])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
 AC_LANG_PUSH([C++])
@@ -12520,14 +12516,10 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
         std::list<int> l;
         l.erase(l.cbegin());
     ]])],
-    [broken=no], [broken=yes])
+    AC_MSG_RESULT([yes]),
+    AC_MSG_ERROR([C++11 use of const_iterator in standard containers must not broken]))
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
-AC_MSG_RESULT([$broken])
-if test "$broken" = yes; then
-    AC_DEFINE([HAVE_BROKEN_CONST_ITERATORS])
-fi
-
 
 # ===================================================================
 # Creating bigger shared library to link against
