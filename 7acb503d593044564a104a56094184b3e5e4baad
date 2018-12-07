@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_110d0f3e",
+        "filename": "sw/source/filter/ww8/ww8scan.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-07T05:41:41Z",
+      "side": 1,
+      "message": "m_pPap seemed like the most appropriate place to store per-paragraph settings. Surprisingly, I didn\u0027t see any clear start/end paragraph functions in m_xPlcxMan etc.",
+      "range": {
+        "startLine": 906,
+        "startChar": 4,
+        "endLine": 906,
+        "endChar": 30
+      },
+      "revId": "7acb503d593044564a104a56094184b3e5e4baad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
