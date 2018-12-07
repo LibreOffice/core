@@ -1063,9 +1063,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
 
                                 // TODO(F1): Implement toColor/fromColor fades
                             case animations::TransitionSubType::FADETOCOLOR:
-                                // FALLTHROUGH intended
                             case animations::TransitionSubType::FADEFROMCOLOR:
-                                // FALLTHROUGH intended
                             case animations::TransitionSubType::FADEOVERCOLOR:
                                 if (pLeavingSlide) {
                                     // only generate, if fade

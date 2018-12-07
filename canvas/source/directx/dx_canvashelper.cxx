@@ -664,7 +664,6 @@ namespace dxcanvas
         switch( nMode )
         {
             case rendering::CompositeOperation::OVER:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::CLEAR:
                 aRet = Gdiplus::CompositingModeSourceOver;
                 break;
@@ -674,25 +673,15 @@ namespace dxcanvas
                 break;
 
             case rendering::CompositeOperation::DESTINATION:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::UNDER:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::INSIDE:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::INSIDE_REVERSE:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::OUTSIDE:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::OUTSIDE_REVERSE:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::ATOP:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::ATOP_REVERSE:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::XOR:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::ADD:
-                // FALLTHROUGH intended
             case rendering::CompositeOperation::SATURATE:
                 // TODO(F2): Problem, because GDI+ only knows about two compositing modes
                 aRet = Gdiplus::CompositingModeSourceOver;

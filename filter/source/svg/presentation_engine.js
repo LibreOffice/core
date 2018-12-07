@@ -14802,9 +14802,7 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
                 log( 'createActivity: unexpected calculation mode: ' + eCalcMode );
                 // FALLTHROUGH intended
             case CALC_MODE_PACED :
-                // FALLTHROUGH intended
             case CALC_MODE_SPLINE :
-                // FALLTHROUGH intended
             case CALC_MODE_LINEAR:
                 return createValueListActivity( aActivityParamSet,
                                                 aAnimationNode,
@@ -14837,9 +14835,7 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
                 log( 'createActivity: unexpected calculation mode: ' + eCalcMode );
                 // FALLTHROUGH intended
             case CALC_MODE_PACED :
-                // FALLTHROUGH intended
             case CALC_MODE_SPLINE :
-                // FALLTHROUGH intended
             case CALC_MODE_LINEAR:
                 return createFromToByActivity(  aActivityParamSet,
                                                 aAnimationNode,

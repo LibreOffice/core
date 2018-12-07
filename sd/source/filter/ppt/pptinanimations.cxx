@@ -1294,9 +1294,7 @@ sal_Int16 AnimationImporter::implGetColorSpace( sal_Int32 nMode, sal_Int32 /*nA*
     switch( nMode )
     {
     case 2: // index
-        // FALLTHROUGH intended
     default:
-        // FALLTHROUGH intended
     case 0: // rgb
         return AnimationColorSpace::RGB;
 

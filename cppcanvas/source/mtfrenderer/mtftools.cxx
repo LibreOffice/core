@@ -416,16 +416,12 @@ namespace cppcanvas
                 switch( rTextLineInfo.mnOverlineStyle )
                 {
                     case LINESTYLE_NONE:          // nothing to do
-                        // FALLTHROUGH intended
                     case LINESTYLE_DONTKNOW:
                         break;
 
                     case LINESTYLE_DOUBLEWAVE:
-                        // FALLTHROUGH intended
                     case LINESTYLE_SMALLWAVE:
-                        // FALLTHROUGH intended
                     case LINESTYLE_BOLDWAVE:
-                        // FALLTHROUGH intended
                     case LINESTYLE_WAVE:
                         appendWaveline(
                             rTextLinesPolyPoly,
@@ -498,16 +494,12 @@ namespace cppcanvas
                 switch( rTextLineInfo.mnUnderlineStyle )
                 {
                     case LINESTYLE_NONE:          // nothing to do
-                        // FALLTHROUGH intended
                     case LINESTYLE_DONTKNOW:
                         break;
 
                     case LINESTYLE_DOUBLEWAVE:
-                        // FALLTHROUGH intended
                     case LINESTYLE_SMALLWAVE:
-                        // FALLTHROUGH intended
                     case LINESTYLE_BOLDWAVE:
-                        // FALLTHROUGH intended
                     case LINESTYLE_WAVE:
                         appendWaveline(
                             rTextLinesPolyPoly,
@@ -579,12 +571,10 @@ namespace cppcanvas
                 switch( rTextLineInfo.mnStrikeoutStyle )
                 {
                     case STRIKEOUT_NONE:    // nothing to do
-                        // FALLTHROUGH intended
                     case STRIKEOUT_DONTKNOW:
                         break;
 
                     case STRIKEOUT_SLASH:   // TODO(Q1): we should handle this in the text layer
-                        // FALLTHROUGH intended
                     case STRIKEOUT_X:
                         break;
 

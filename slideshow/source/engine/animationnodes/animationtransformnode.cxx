@@ -51,7 +51,6 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
             "Unknown transform type" );
 
     case animations::AnimationTransformType::TRANSLATE:
-        // FALLTHROUGH intended
     case animations::AnimationTransformType::SCALE:
         return ActivitiesFactory::createAnimateActivity(
             aParms,

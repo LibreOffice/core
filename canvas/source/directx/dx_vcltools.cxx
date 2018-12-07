@@ -252,11 +252,8 @@ namespace dxcanvas
                             // to hand-formulate the following
                             // formats, too.
                             case ScanlineFormat::N1BitMsbPal:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N4BitMsnPal:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N16BitTcLsbMask:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcMask:
                             {
                                 Scanline pAScan = pAlphaReadAccess->GetScanline( y );
@@ -281,23 +278,14 @@ namespace dxcanvas
                             break;
 
                             case ScanlineFormat::N1BitLsbPal:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N4BitLsnPal:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N8BitTcMask:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N24BitTcRgb:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N16BitTcMsbMask:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcAbgr:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcArgb:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcBgra:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcRgba:
-                                // FALLTHROUGH intended
                             default:
                                 ENSURE_OR_THROW( false,
                                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
@@ -403,11 +391,8 @@ namespace dxcanvas
                             // to hand-formulate the following
                             // formats, too.
                             case ScanlineFormat::N1BitMsbPal:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N4BitMsnPal:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N16BitTcLsbMask:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcMask:
                             {
                                 Scanline pMScan = pMaskReadAccess->GetScanline( y );
@@ -431,23 +416,14 @@ namespace dxcanvas
                             break;
 
                             case ScanlineFormat::N1BitLsbPal:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N4BitLsnPal:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N8BitTcMask:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N24BitTcRgb:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N16BitTcMsbMask:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcAbgr:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcArgb:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcBgra:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcRgba:
-                                // FALLTHROUGH intended
                             default:
                                 ENSURE_OR_THROW( false,
                                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "

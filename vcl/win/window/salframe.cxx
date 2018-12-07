@@ -5512,7 +5512,6 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
             break;
 
         case WM_MOUSEWHEEL:
-            // FALLTHROUGH intended
         case WM_MOUSEHWHEEL:
             // protect against recursion, in case the message is returned
             // by IE or the external window

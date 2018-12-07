@@ -875,7 +875,6 @@ namespace oglcanvas
                 o_action.meDstBlendMode=GL_ZERO;
                 break;
             case rendering::CompositeOperation::UNDER:
-                // FALLTHROUGH intended - but correct?!
             case rendering::CompositeOperation::DESTINATION:
                 o_action.meSrcBlendMode=GL_ZERO;
                 o_action.meDstBlendMode=GL_ONE;

@@ -248,7 +248,6 @@ namespace cairocanvas
             switch( textDirection )
             {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
-                    // FALLTHROUGH intended
                 case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
                     nLayoutMode |= ComplexTextLayoutFlags::BiDiStrong;
                     nLayoutMode |= ComplexTextLayoutFlags::TextOriginLeft;
