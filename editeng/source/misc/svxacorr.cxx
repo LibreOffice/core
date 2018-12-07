@@ -902,6 +902,10 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
             return false; // no valid separator -> no replacement
     }
 
+    // No replacement for words in TWo INitial CApitals or sMALL iNITIAL list
+    if (FindInWrdSttExceptList(eLang, OUString(pWordStt, pDelim - pWordStt)))
+        return;
+
     if( bAtStart )  // at the beginning of a paragraph?
     {
         // Check out the previous paragraph, if it exists.
@@ -1118,6 +1122,10 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
     OUString aConverted;
     aConverted += rCC.uppercase(OUString(rTxt[nSttPos]));
     aConverted += rCC.lowercase(OUString(rTxt[nSttPos+1]));
+
+    // No replacement for words in TWo INitial CApitals or sMALL iNITIAL list
+    if (FindInWrdSttExceptList(eLang, rTxt.copy(nSttPos, nEndPos - nSttPos)))
+        return false;
 
     for( sal_Int32 i = nSttPos+2; i < nEndPos; ++i )
     {
