@@ -374,6 +374,34 @@ void ScDocument::RegroupFormulaCells( SCTAB nTab, SCCOL nCol )
     pTab->RegroupFormulaCells(nCol);
 }
 
+void ScDocument::RegroupFormulaCells( const ScRange& rRange )
+{
+    for( SCTAB tab = rRange.aStart.Tab(); tab <= rRange.aEnd.Tab(); ++tab )
+        for( SCCOL col = rRange.aStart.Col(); col <= rRange.aEnd.Col(); ++col )
+            RegroupFormulaCells( tab, col );
+}
+
+void ScDocument::DelayFormulaGrouping( bool delay )
+{
+    if( delay )
+    {
+        if( pDelayedFormulaGrouping.get() == nullptr )
+            pDelayedFormulaGrouping.reset( new ScRange( ScAddress::INITIALIZE_INVALID ));
+    }
+    else
+    {
+        if( pDelayedFormulaGrouping.get() != nullptr && pDelayedFormulaGrouping->IsValid())
+            RegroupFormulaCells( *pDelayedFormulaGrouping );
+        pDelayedFormulaGrouping.reset();
+    }
+}
+
+void ScDocument::AddDelayedFormulaGroupingCell( ScFormulaCell* cell )
+{
+    if( !pDelayedFormulaGrouping->In( cell->aPos ))
+        pDelayedFormulaGrouping->ExtendTo( cell->aPos );
+}
+
 void ScDocument::CollectAllAreaListeners(
     std::vector<SvtListener*>& rListener, const ScRange& rRange, sc::AreaOverlapType eType )
 {

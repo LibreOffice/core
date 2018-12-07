@@ -133,6 +133,13 @@ void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
 bool SharedFormulaUtil::joinFormulaCells(
     const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2 )
 {
+    if( rCell1.GetDocument()->IsDelayedFormulaGrouping())
+    {
+        rCell1.GetDocument()->AddDelayedFormulaGroupingCell( &rCell1 );
+        rCell1.GetDocument()->AddDelayedFormulaGroupingCell( &rCell2 );
+        return false;
+    }
+
     ScFormulaCell::CompareState eState = rCell1.CompareByTokenArray(rCell2);
     if (eState == ScFormulaCell::NotEqual)
         return false;
