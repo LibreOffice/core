@@ -324,11 +324,21 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
 
         // calc position and size
-        tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
-        Point aPagePos = aVisArea.Center();
-        aPagePos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
-        aPagePos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
-        tools::Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+        bool bLOKIsActive = comphelper::LibreOfficeKit::isActive();
+        Point aInsertPos;
+        if(!bLOKIsActive)
+        {
+            tools::Rectangle aVisArea = pWin->PixelToLogic(tools::Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+            aInsertPos = aVisArea.Center();
+            aInsertPos.AdjustX( -sal_Int32(nDefaultObjectSizeWidth / 2) );
+            aInsertPos.AdjustY( -sal_Int32(nDefaultObjectSizeHeight / 2) );
+        }
+        else
+        {
+            aInsertPos = GetInsertPos();
+        }
+
+        tools::Rectangle aNewObjectRectangle(aInsertPos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
 
         ScDrawView* pDrView = GetScDrawView();
 
