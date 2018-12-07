@@ -269,11 +269,11 @@ private:
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
     : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
-    , maImgAlgin1(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_LEFT))
-    , maImgAlgin2(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_CENTER))
-    , maImgAlgin3(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_RIGHT))
-    , maImgAlgin4(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_WORD))
-    , maImgAlgin5(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_STRETCH))
+    , maImgAlgin1(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_LEFT)
+    , maImgAlgin2(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_CENTER)
+    , maImgAlgin3(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_RIGHT)
+    , maImgAlgin4(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_WORD)
+    , maImgAlgin5(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_STRETCH)
     , msFontworkAlignment(".uno:FontworkAlignment")
 {
     SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );

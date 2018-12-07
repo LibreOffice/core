@@ -1452,7 +1452,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mnSuspendSelectCallback    ( 0 )
     ,mbIsFirstResort            ( true )
     ,aIntlWrapper               ( Application::GetSettings().GetLanguageTag() )
-    ,maFolderImage              (BitmapEx(RID_BMP_FOLDER))
+    ,maFolderImage              (StockImage::Yes, RID_BMP_FOLDER)
     ,mxCmdEnv ( xEnv )
 
 {

@@ -147,9 +147,6 @@ namespace vcl
             VclPtr<FixedImage>                      mpCollateImage;
             VclPtr<CheckBox>                        mpReverseOrderBox;
 
-            BitmapEx                                maCollateBmp;
-            BitmapEx                                maNoCollateBmp;
-
             long                                    mnCollateUIMode;
 
             JobTabPage( VclBuilder* );

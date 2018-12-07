@@ -192,7 +192,7 @@ bool OTableWindow::FillListBox()
     }
 
     // mark all primary keys with special image
-    Image aPrimKeyImage = Image(BitmapEx(BMP_PRIMARY_KEY));
+    Image aPrimKeyImage = Image(StockImage::Yes, BMP_PRIMARY_KEY);
 
     if (GetData()->IsShowAll())
     {

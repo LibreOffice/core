@@ -2209,12 +2209,10 @@ NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Any)
 {
-    BitmapEx aBitmap(SV_RESID_BITMAP_NOTEBOOKBAR);
-
     m_pOpenMenu = VclPtr<PushButton>::Create(this);
     m_pOpenMenu->SetSizePixel(Size(HAMBURGER_DIM, HAMBURGER_DIM));
     m_pOpenMenu->SetClickHdl(LINK(this, NotebookbarTabControlBase, OpenMenu));
-    m_pOpenMenu->SetModeImage(Image(aBitmap));
+    m_pOpenMenu->SetModeImage(Image(StockImage::Yes, SV_RESID_BITMAP_NOTEBOOKBAR));
     m_pOpenMenu->Show();
 }
 

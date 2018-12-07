@@ -3806,9 +3806,9 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
 
     ImplSVCtrlData& rCtrlData(ImplGetSVData()->maCtrlData);
     if (!rCtrlData.mpDisclosurePlus)
-        rCtrlData.mpDisclosurePlus = new Image(BitmapEx(SV_DISCLOSURE_PLUS));
+        rCtrlData.mpDisclosurePlus = new Image(StockImage::Yes, SV_DISCLOSURE_PLUS);
     if (!rCtrlData.mpDisclosureMinus)
-        rCtrlData.mpDisclosureMinus = new Image(BitmapEx(SV_DISCLOSURE_MINUS));
+        rCtrlData.mpDisclosureMinus = new Image(StockImage::Yes, SV_DISCLOSURE_MINUS);
 
     Image* pImg = nullptr;
     pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;

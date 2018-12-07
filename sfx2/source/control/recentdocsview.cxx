@@ -61,7 +61,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
-    , maWelcomeImage(BitmapEx(BMP_WELCOME))
+    , maWelcomeImage(StockImage::Yes, BMP_WELCOME)
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
     , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
 {

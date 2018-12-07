@@ -532,7 +532,7 @@ namespace
 {
     Image GetImage(const OUString& rId)
     {
-        return Image(BitmapEx(rId));
+        return Image(StockImage::Yes, rId);
     }
 }
 

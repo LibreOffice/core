@@ -474,9 +474,7 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
 }
 
 PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
-    : maCollateBmp(SV_PRINT_COLLATE_BMP)
-    , maNoCollateBmp(SV_PRINT_NOCOLLATE_BMP)
-    , mnCollateUIMode(0)
+    : mnCollateUIMode(0)
 {
     pUIBuilder->get(mpPrinters, "printers");
     pUIBuilder->get(mpStatusTxt, "status");
@@ -1205,7 +1203,7 @@ void PrintDialog::checkControlDependencies()
     else
         maJobPage.mpCollateBox->Enable( false );
 
-    Image aImg(maJobPage.mpCollateBox->IsChecked() ? maJobPage.maCollateBmp : maJobPage.maNoCollateBmp);
+    Image aImg(StockImage::Yes, maJobPage.mpCollateBox->IsChecked() ? OUString(SV_PRINT_COLLATE_BMP) : OUString(SV_PRINT_NOCOLLATE_BMP));
 
     Size aImgSize( aImg.GetSizePixel() );
 
