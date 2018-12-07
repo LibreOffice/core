@@ -80,15 +80,6 @@ using namespace ::svx;
 namespace svxform
 {
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral ReplaceString::m_sDoc_API;
-constexpr OUStringLiteral ReplaceString::m_sInstance_API;
-constexpr OUStringLiteral ReplaceString::m_sNone_API;
-constexpr OUStringLiteral MethodString::m_sPost_API;
-constexpr OUStringLiteral MethodString::m_sPut_API;
-constexpr OUStringLiteral MethodString::m_sGet_API;
-#endif
-
     // properties of instance
     #define PN_INSTANCE_MODEL       "Instance"
     #define PN_INSTANCE_ID          "ID"

@@ -399,10 +399,6 @@ public:
     }
 };
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr sal_Int32 GraphicImport_Impl::nFillColor;
-#endif
-
 GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> const& xComponentContext,
                              uno::Reference<lang::XMultiServiceFactory> const& xTextFactory,
                              DomainMapper& rDMapper,

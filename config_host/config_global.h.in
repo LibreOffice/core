@@ -27,9 +27,6 @@ Any change in this header will cause a rebuild of almost everything.
 /* Guaranteed copy elision (C++17), __cpp_guaranteed_copy_elision (C++2a): */
 #define HAVE_CPP_GUARANTEED_COPY_ELISION 0
 
-/* Inline variables (C++17), __cpp_inline_variables (C++2a): */
-#define HAVE_CPP_INLINE_VARIABLES 0
-
 /* Fix for <http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#1579> "Return by converting
    move constructor": */
 #define HAVE_CXX_CWG1579_FIX 0

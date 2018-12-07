@@ -241,21 +241,6 @@ public:
     static constexpr OUStringLiteral gsAnimPath = "AnimationPath";
 };
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral AnimExpImpl::gsDimColor;
-constexpr OUStringLiteral AnimExpImpl::gsDimHide;
-constexpr OUStringLiteral AnimExpImpl::gsDimPrev;
-constexpr OUStringLiteral AnimExpImpl::gsEffect;
-constexpr OUStringLiteral AnimExpImpl::gsPlayFull;
-constexpr OUStringLiteral AnimExpImpl::gsPresOrder;
-constexpr OUStringLiteral AnimExpImpl::gsSound;
-constexpr OUStringLiteral AnimExpImpl::gsSoundOn;
-constexpr OUStringLiteral AnimExpImpl::gsSpeed;
-constexpr OUStringLiteral AnimExpImpl::gsTextEffect;
-constexpr OUStringLiteral AnimExpImpl::gsIsAnimation;
-constexpr OUStringLiteral AnimExpImpl::gsAnimPath;
-#endif
-
 XMLAnimationsExporter::XMLAnimationsExporter( XMLShapeExport* pShapeExp )
     : mpImpl( new AnimExpImpl )
 {

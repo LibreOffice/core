@@ -41,7 +41,6 @@
 #include "reflcnst.hxx"
 #include "keyimpl.hxx"
 
-#include <config_global.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
@@ -420,10 +419,6 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
 }
 
 }
-
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral ORegistry::ROOT;
-#endif
 
 ORegistry::ORegistry()
     : m_refCount(1)

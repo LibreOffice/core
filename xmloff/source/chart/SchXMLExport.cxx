@@ -271,10 +271,6 @@ public:
     OUString maCategoriesRange;
 };
 
-#if !HAVE_CPP_INLINE_VARIABLES
-constexpr OUStringLiteral SchXMLExportHelper_Impl::gsTableName;
-#endif
-
 namespace
 {
 

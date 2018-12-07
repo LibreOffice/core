@@ -12474,7 +12474,8 @@ if test "$build_os" = "cygwin"; then
     AC_SUBST(ILIB)
 fi
 
-AC_MSG_CHECKING([whether $CXX supports inline variables])
+dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
+AC_MSG_CHECKING([that $CXX supports inline variables])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -12490,10 +12491,8 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[
         struct T { static constexpr S s{}; };
         S const * f() { return &T::s; }
         #endif
-    ]])], [
-        AC_DEFINE([HAVE_CPP_INLINE_VARIABLES],[1])
-        AC_MSG_RESULT([yes])
-    ], [AC_MSG_RESULT([no])])
+    ]])],
+    AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks required inline variable support]))
 CXXFLAGS=$save_CXXFLAGS
 if test "$build_os" = cygwin; then
     LIB=$save_LIB
