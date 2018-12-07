@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_e7519164",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-07T22:34:42Z",
+      "side": 1,
+      "message": "The message is not erroneous, it\u0027s just not as complete as someone thinks it should be.",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "62351e2c8ea8eb68b2d45a13224de0beb983d0fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_c74e95c0",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-07T22:34:42Z",
+      "side": 1,
+      "message": "\"must not be an empty\" is wrong, should be \"must not be empty\" instead.",
+      "range": {
+        "startLine": 185,
+        "startChar": 123,
+        "endLine": 185,
+        "endChar": 125
+      },
+      "revId": "62351e2c8ea8eb68b2d45a13224de0beb983d0fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
