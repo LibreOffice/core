@@ -19,7 +19,6 @@
 
 #include <memory>
 
-#include <config_global.h>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <o3tl/make_unique.hxx>
@@ -192,11 +191,7 @@ namespace drawinglayer
                 pNew->append(*i);
             }
 
-#if HAVE_CXX_CWG1579_FIX
             return pNew;
-#else
-            return std::move(pNew);
-#endif
         }
 
         bool AnimationEntryList::operator==(const AnimationEntry& rCandidate) const
@@ -289,11 +284,7 @@ namespace drawinglayer
                 pNew->append(*i);
             }
 
-#if HAVE_CXX_CWG1579_FIX
             return pNew;
-#else
-            return std::move(pNew);
-#endif
         }
 
         bool AnimationEntryLoop::operator==(const AnimationEntry& rCandidate) const

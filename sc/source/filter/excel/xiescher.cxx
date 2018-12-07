@@ -47,7 +47,6 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/wmf.hxx>
 #include <comphelper/classids.hxx>
-#include <config_global.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -1022,11 +1021,7 @@ SdrObjectUniquePtr XclImpGroupObj::DoCreateSdrObj( XclImpDffConverter& rDffConv,
     for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
         rDffConv.ProcessObject( rObjList, **aIt );
     rDffConv.Progress();
-#if HAVE_CXX_CWG1579_FIX
     return xSdrObj;
-#else
-    return std::move(xSdrObj);
-#endif
 }
 
 XclImpLineObj::XclImpLineObj( const XclImpRoot& rRoot ) :
@@ -1461,11 +1456,7 @@ SdrObjectUniquePtr XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, 
     xSdrObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( bAutoSize ) );
     xSdrObj->SetMergedItem( makeSdrTextWordWrapItem( true ) );
     rDffConv.Progress();
-#if HAVE_CXX_CWG1579_FIX
     return xSdrObj;
-#else
-    return std::move(xSdrObj);
-#endif
 }
 
 void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
