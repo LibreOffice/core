@@ -2751,7 +2751,7 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl, Splitter*, void )
 
 Image SvtFileDialog::GetButtonImage(const OUString& rButtonId)
 {
-    return Image(BitmapEx(rButtonId));
+    return Image(StockImage::Yes, rButtonId);
 }
 
 QueryFolderNameDialog::QueryFolderNameDialog(weld::Window* _pParent,

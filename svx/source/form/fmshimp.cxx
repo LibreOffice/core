@@ -1038,7 +1038,7 @@ VclBuilder* FmXFormShell::GetConversionMenu_Lock()
     for (size_t i = 0; i < SAL_N_ELEMENTS(aConvertSlots); ++i)
     {
         // the corresponding image at it
-        pNewMenu->SetItemImage(pNewMenu->GetItemId(aConvertSlots[i]), Image(BitmapEx(aImgIds[i])));
+        pNewMenu->SetItemImage(pNewMenu->GetItemId(aConvertSlots[i]), Image(StockImage::Yes, aImgIds[i]));
     }
     return pBuilder;
 }

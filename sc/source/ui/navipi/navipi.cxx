@@ -428,7 +428,7 @@ void ScNavigatorDlg::UpdateButtons()
             sImageId = RID_BMP_DROP_COPY;
             break;
     }
-    aTbxCmd->SetItemImage(nDragModeId, Image(BitmapEx(sImageId)));
+    aTbxCmd->SetItemImage(nDragModeId, Image(StockImage::Yes, sImageId));
 }
 
 ScNavigatorSettings::ScNavigatorSettings()

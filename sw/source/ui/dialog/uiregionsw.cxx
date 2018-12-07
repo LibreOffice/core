@@ -70,8 +70,8 @@ namespace {
 Image BuildBitmap(bool bProtect, bool bHidden)
 {
     if (bProtect)
-        return Image(BitmapEx(bHidden ? OUString(RID_BMP_PROT_HIDE) : OUString(RID_BMP_PROT_NO_HIDE)));
-    return Image(BitmapEx(bHidden ? OUString(RID_BMP_HIDE) : OUString(RID_BMP_NO_HIDE)));
+        return Image(StockImage::Yes, bHidden ? OUString(RID_BMP_PROT_HIDE) : OUString(RID_BMP_PROT_NO_HIDE));
+    return Image(StockImage::Yes, bHidden ? OUString(RID_BMP_HIDE) : OUString(RID_BMP_NO_HIDE));
 }
 
 }

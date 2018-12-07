@@ -389,7 +389,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
     SvTreeListEntry* pEntry = nullptr;
     if ( _bReadOnly )
     {
-        Image aLocked(BitmapEx(RID_SVXBMP_LOCK));
+        Image aLocked(StockImage::Yes, RID_SVXBMP_LOCK);
         pEntry = m_pPathBox->InsertEntry( aStr, aLocked, aLocked );
     }
     else

@@ -171,7 +171,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpActionMenu = VclPtr<PopupMenu>::Create();
     mpActionMenu->InsertItem(MNI_ACTION_NEW_FOLDER,
         SfxResId(STR_CATEGORY_NEW),
-        Image(BitmapEx(BMP_ACTION_REFRESH)));
+        Image(StockImage::Yes, BMP_ACTION_REFRESH));
     mpActionMenu->InsertItem(MNI_ACTION_RENAME_FOLDER,
         SfxResId(STR_CATEGORY_RENAME));
     mpActionMenu->InsertItem(MNI_ACTION_DELETE_FOLDER,
@@ -179,7 +179,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpActionMenu->InsertSeparator();
     mpActionMenu->InsertItem(MNI_ACTION_REFRESH,
         SfxResId(STR_ACTION_REFRESH),
-        Image(BitmapEx(BMP_ACTION_REFRESH)));
+        Image(StockImage::Yes, BMP_ACTION_REFRESH));
     mpActionMenu->InsertItem(MNI_ACTION_DEFAULT,SfxResId(STR_ACTION_DEFAULT));
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 

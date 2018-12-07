@@ -2140,13 +2140,13 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     , m_aActionTbL(VclPtrInstance<DropToolBox_Impl>(pDlgWindow, this))
     , m_aActionTbR(VclPtrInstance<ToolBox>(pDlgWindow))
 {
-    m_aActionTbR->InsertItem(SID_STYLE_WATERCAN, Image(BitmapEx(RID_SFXBMP_WATERCAN)), SfxResId(STR_STYLE_FILL_FORMAT_MODE));
+    m_aActionTbR->InsertItem(SID_STYLE_WATERCAN, Image(StockImage::Yes, RID_SFXBMP_WATERCAN), SfxResId(STR_STYLE_FILL_FORMAT_MODE));
     m_aActionTbR->SetHelpId(SID_STYLE_WATERCAN, HID_TEMPLDLG_WATERCAN);
 
-    m_aActionTbR->InsertItem(SID_STYLE_NEW_BY_EXAMPLE, Image(BitmapEx(RID_SFXBMP_NEW_BY_EXAMPLE)), SfxResId(STR_STYLE_NEW_STYLE_FROM_SELECTION));
+    m_aActionTbR->InsertItem(SID_STYLE_NEW_BY_EXAMPLE, Image(StockImage::Yes, RID_SFXBMP_NEW_BY_EXAMPLE), SfxResId(STR_STYLE_NEW_STYLE_FROM_SELECTION));
     m_aActionTbR->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-    m_aActionTbR->InsertItem(SID_STYLE_UPDATE_BY_EXAMPLE, Image(BitmapEx(RID_SFXBMP_UPDATE_BY_EXAMPLE)), SfxResId(STR_STYLE_UPDATE_STYLE));
+    m_aActionTbR->InsertItem(SID_STYLE_UPDATE_BY_EXAMPLE, Image(StockImage::Yes, RID_SFXBMP_UPDATE_BY_EXAMPLE), SfxResId(STR_STYLE_UPDATE_STYLE));
     m_aActionTbR->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
     Initialize();

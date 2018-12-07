@@ -332,7 +332,7 @@ Image MediaControlBase::GetImage(sal_Int32 nImageId)
         }
     }
 
-    return Image(BitmapEx(sImageId));
+    return Image(StockImage::Yes, sImageId);
 }
 
 }
