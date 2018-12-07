@@ -135,7 +135,7 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layo
     for( ; pInfo->mpStrResId; pInfo++ )
     {
         OUString aText(SdResId(pInfo->mpStrResId));
-        Image aImg("private:graphicrepository/" + OUString::createFromAscii(pInfo->msBmpResId));
+        Image aImg(StockImage::Yes, OUString::createFromAscii(pInfo->msBmpResId));
         pValue->InsertItem(static_cast<sal_uInt16>(pInfo->maAutoLayout)+1, aImg, aText);
 
         aLayoutItemSize.Width()  = std::max( aLayoutItemSize.Width(),  aImg.GetSizePixel().Width()  );
