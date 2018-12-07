@@ -70,6 +70,11 @@ Image::Image(const OUString & rFileUrl)
     }
 }
 
+Image::Image(StockImage, const OUString & rFileUrl)
+    : mpImplData(new ImplImage(rFileUrl))
+{
+}
+
 void Image::ImplInit(const BitmapEx& rBitmapEx)
 {
     if (!rBitmapEx.IsEmpty())
