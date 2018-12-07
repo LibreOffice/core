@@ -25,7 +25,6 @@
 
 #include <sal/log.hxx>
 
-#include <boost/config.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <cppuhelper/typeprovider.hxx>
@@ -444,11 +443,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 parameterIndex, co
                 break;
             }
 
-#if defined __GNUC__ && !defined __clang__
             [[fallthrough]];
-#else
-            BOOST_FALLTHROUGH;
-#endif
         }
 
             // TODO other types
