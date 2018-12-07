@@ -16,10 +16,6 @@
 
 #include "sal/types.h"
 
-#if defined LIBO_INTERNAL_ONLY
-#include "config_global.h"
-#endif
-
 // The unittest uses slightly different code to help check that the proper
 // calls are made. The class is put into a different namespace to make
 // sure the compiler generates a different (if generating also non-inline)
@@ -157,7 +153,7 @@ struct ConstCharArrayDetector< const char[ N ], T >
     typedef T Type;
     static const std::size_t length = N - 1;
     static const bool ok = true;
-#if defined LIBO_INTERNAL_ONLY && HAVE_CXX14_CONSTEXPR
+#if defined LIBO_INTERNAL_ONLY
     constexpr
 #endif
     static bool isValid(char const (& literal)[N]) {
@@ -183,7 +179,7 @@ struct ConstCharArrayDetector< const char[ 1 ], T >
     typedef T Type;
     static const std::size_t length = 0;
     static const bool ok = true;
-#if defined LIBO_INTERNAL_ONLY && HAVE_CXX14_CONSTEXPR
+#if defined LIBO_INTERNAL_ONLY
     constexpr
 #endif
     static bool isValid(char const (& literal)[1]) {
@@ -202,10 +198,7 @@ struct ConstCharArrayDetector<char8_t const [N], T> {
     using Type = T;
     static constexpr bool const ok = true;
     static constexpr std::size_t const length = N - 1;
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    static bool isValid(char8_t const (& literal)[N]) {
+    static constexpr bool isValid(char8_t const (& literal)[N]) {
         for (std::size_t i = 0; i != N - 1; ++i) {
             if (literal[i] == u8'\0') {
                 return false;
