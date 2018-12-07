@@ -410,15 +410,7 @@ namespace css = ::com::sun::star;
 #endif
 
 #if defined LIBO_INTERNAL_ONLY
-#if HAVE_CPP_ATTRIBUTE_FALLTHROUGH
 #define SAL_FALLTHROUGH [[fallthrough]]
-#elif defined __clang__
-    /* before Clang 3.9, according to
-       <https://en.cppreference.com/w/cpp/compiler_support#C.2B.2B17_features> */
-#define SAL_FALLTHROUGH [[clang::fallthrough]]
-#else
-#define SAL_FALLTHROUGH
-#endif
 #endif
 
 #endif /* __cplusplus */

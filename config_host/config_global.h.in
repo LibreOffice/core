@@ -21,9 +21,6 @@ Any change in this header will cause a rebuild of almost everything.
 /* Compiler supports __attribute__((warn_unused)). */
 #define HAVE_GCC_ATTRIBUTE_WARN_UNUSED 0
 
-/* [[fallthrough]] (C++17), __has_cpp_attribute(fallthrough) (C++2a): */
-#define HAVE_CPP_ATTRIBUTE_FALLTHROUGH 0
-
 /* [[nodiscard]] (C++17), __has_cpp_attribute(nodiscard) (C++2a): */
 #define HAVE_CPP_ATTRIBUTE_NODISCARD 0
 
