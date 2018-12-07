@@ -2669,6 +2669,19 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     // #i75297# allow empty series, export empty range to have all ranges on import
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, OUString());
 
+                                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                                {
+                                    if (xPropSet.is())
+                                    {
+                                        Any aAny = xPropSet->getPropertyValue("ShowLegendEntry");
+                                        if (!aAny.get<bool>())
+                                        {
+                                            mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDE_LEGEND, OUString::boolean(true));
+                                        }
+                                    }
+                                }
+
                                 if (xLabelSeq.is())
                                 {
                                     // Check if the label is direct string value rather than a reference.
