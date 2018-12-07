@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_a469578c",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-07T07:58:08Z",
+      "side": 1,
+      "message": "by the way, please add const also here",
+      "range": {
+        "startLine": 214,
+        "startChar": 11,
+        "endLine": 214,
+        "endChar": 23
+      },
+      "revId": "b69cf61ab0ee535926af1037271d842ec955c88c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
