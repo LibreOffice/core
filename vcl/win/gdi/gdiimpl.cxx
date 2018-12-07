@@ -231,7 +231,7 @@ bool IsPaletteColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
     { 0xFF, 0xFF, 0xFF, 0 }
     };
 
-    for (auto& rPalEntry : aImplSalSysPalEntryAry)
+    for (const auto& rPalEntry : aImplSalSysPalEntryAry)
     {
         if(rPalEntry.peRed == nRed &&
            rPalEntry.peGreen == nGreen &&
