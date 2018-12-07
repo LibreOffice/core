@@ -35,6 +35,7 @@
 #include <column.hxx>
 #include <sortparam.hxx>
 #include <columnspanset.hxx>
+#include <scopetools.hxx>
 
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
