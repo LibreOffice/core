@@ -6208,7 +6208,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether $CXX supports C++17])
 CXXFLAGS_CXX11=
 if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
-    CXXFLAGS_CXX11=-std:c++17
+    CXXFLAGS_CXX11='-std:c++17 -Zc:__cplusplus'
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     my_flags='-std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z'
     for flag in $my_flags; do

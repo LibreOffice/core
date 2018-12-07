@@ -15,10 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libebook,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libebook))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libebook, \
-	external/libebook/libebook-msvc.patch.1 \
-))
-
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libebook, \
