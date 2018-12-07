@@ -15,8 +15,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include <config_global.h>
-
 // C++17 std::clamp
 
 namespace o3tl
@@ -29,9 +27,7 @@ using std::clamp;
 
 template <typename T> constexpr const T& clamp(const T& v, const T& lo, const T& hi)
 {
-#if HAVE_CXX14_CONSTEXPR
     assert(!(hi < lo));
-#endif
     return v < lo ? lo : (hi < v ? hi : v);
 }
 

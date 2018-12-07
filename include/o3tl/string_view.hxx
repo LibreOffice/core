@@ -22,7 +22,6 @@
 #include <type_traits>
 #include <utility>
 
-#include <config_global.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -174,10 +173,7 @@ public:
 
     constexpr basic_string_view(basic_string_view const &) noexcept = default;
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    basic_string_view & operator =(basic_string_view const & other) noexcept = default;
+    constexpr basic_string_view & operator =(basic_string_view const & other) noexcept = default;
 
     // The various character types are handled below in the "LO specifics, to
     // make up for traits::length not necessarily being constexpr yet for
@@ -217,29 +213,19 @@ public:
 
     constexpr size_type length() const noexcept { return size(); }
 
-#if !defined __clang__ || HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    size_type max_size() const noexcept {
-#if defined __clang__ // avoid constexpr issues with other, older compilers
-        (void) this; // loplugin:staticmethods
-#endif
+    constexpr size_type max_size() const noexcept {
+        (void) this; // silence loplugin:staticmethods
         return npos - 1;
     }
 
     constexpr bool empty() const noexcept { return size_ == 0; }
 
     constexpr const_reference operator [](size_type pos) const {
-#if HAVE_CXX14_CONSTEXPR
         assert(pos < size());
-#endif
         return data_[pos];
     }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    const_reference at(size_type pos) const {
+    constexpr const_reference at(size_type pos) const {
         if (pos >= size()) {
             throw std::out_of_range("o3tl::basic_string_view::at");
         }
@@ -247,42 +233,29 @@ public:
     }
 
     constexpr const_reference front() const {
-#if HAVE_CXX14_CONSTEXPR
         assert(!empty());
-#endif
         return operator [](0);
     }
 
     constexpr const_reference back() const {
-#if HAVE_CXX14_CONSTEXPR
         assert(!empty());
-#endif
         return operator [](size() - 1);
     }
 
     constexpr const_pointer data() const noexcept { return data_; }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    void remove_prefix(size_type n) {
+    constexpr void remove_prefix(size_type n) {
         assert(n <= size());
         data_ += n;
         size_ -= n;
     }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    void remove_suffix(size_type n) {
+    constexpr void remove_suffix(size_type n) {
         assert(n <= size());
         size_ -= n;
     }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    void swap(basic_string_view & s) noexcept {
+    constexpr void swap(basic_string_view & s) noexcept {
         std::swap(data_, s.data_);
         std::swap(size_, s.size_);
     }
@@ -296,10 +269,7 @@ public:
         return rlen;
     }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    basic_string_view substr(size_type pos = 0, size_type n = npos) const {
+    constexpr basic_string_view substr(size_type pos = 0, size_type n = npos) const {
         if (pos > size()) {
             throw std::out_of_range("o3tl::basic_string_view::copy");
         }
@@ -307,10 +277,7 @@ public:
             data() + pos, std::min(n, size_type(size() - pos)));
     }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    int compare(basic_string_view s) const noexcept {
+    constexpr int compare(basic_string_view s) const noexcept {
         auto n = traits::compare(data(), s.data(), std::min(size(), s.size()));
         return n == 0
             ? (size() < s.size() ? -1 : size() == s.size() ? 0 : 1) : n;
@@ -335,10 +302,7 @@ public:
         size_type pos1, size_type n1, charT const * s, size_type n2) const
     { return substr(pos1, n1).compare(basic_string_view(s, n2)); }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    size_type find(basic_string_view s, size_type pos = 0) const noexcept {
+    constexpr size_type find(basic_string_view s, size_type pos = 0) const noexcept {
         if (s.size() <= size()) {
             for (auto xpos = pos; xpos <= size() - s.size(); ++xpos) {
                 bool match = true;
@@ -365,10 +329,7 @@ public:
     constexpr size_type find(charT const * s, size_type pos = 0) const
     { return find(basic_string_view(s), pos); }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    size_type rfind(basic_string_view s, size_type pos = npos) const noexcept {
+    constexpr size_type rfind(basic_string_view s, size_type pos = npos) const noexcept {
         if (s.size() <= size()) {
             for (auto xpos = std::min<size_type>(size() - s.size(), pos);;
                  --xpos)
@@ -400,10 +361,7 @@ public:
     constexpr size_type rfind(charT const * s, size_type pos = npos) const
     { return rfind(basic_string_view(s), pos); }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    size_type find_first_of(basic_string_view s, size_type pos = 0) const
+    constexpr size_type find_first_of(basic_string_view s, size_type pos = 0) const
         noexcept
     {
         for (auto xpos = pos; xpos < size(); ++xpos) {
@@ -426,10 +384,7 @@ public:
     constexpr size_type find_first_of(charT const * s, size_type pos = 0) const
     { return find_first_of(basic_string_view(s), pos); }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    size_type find_last_of(basic_string_view s, size_type pos = npos) const
+    constexpr size_type find_last_of(basic_string_view s, size_type pos = npos) const
         noexcept
     {
         if (!empty()) {
@@ -459,10 +414,7 @@ public:
         const
     { return find_last_of(basic_string_view(s), pos); }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    size_type find_first_not_of(basic_string_view s, size_type pos = 0) const
+    constexpr size_type find_first_not_of(basic_string_view s, size_type pos = 0) const
         noexcept
     {
         for (auto xpos = pos; xpos < size(); ++xpos) {
@@ -492,10 +444,7 @@ public:
         const
     { return find_first_not_of(basic_string_view(s), pos); }
 
-#if HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    size_type find_last_not_of(basic_string_view s, size_type pos = npos) const
+    constexpr size_type find_last_not_of(basic_string_view s, size_type pos = npos) const
         noexcept
     {
         if (!empty()) {

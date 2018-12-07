@@ -25,12 +25,10 @@
 #include <cassert>
 #include <type_traits>
 
-#include <config_global.h>
-
 namespace o3tl
 {
 
-#if HAVE_CXX14_CONSTEXPR
+#if !defined __COVERITY__
 
 namespace detail {
 
@@ -90,7 +88,7 @@ public:
         typename std::enable_if<std::is_integral<T>::value, int>::type = 0):
         m_value(value)
     {
-#if !defined __COVERITY__ && HAVE_CXX14_CONSTEXPR
+#if !defined __COVERITY__
         // catch attempts to pass in out-of-range values early
         assert(detail::isInRange<UNDERLYING_TYPE>(value)
                && "out of range");

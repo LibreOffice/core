@@ -25,7 +25,6 @@
 #include <cassert>
 #include <type_traits>
 
-#include <config_global.h>
 #include <sal/types.h>
 
 namespace o3tl {
@@ -76,14 +75,12 @@ struct is_typed_flags {
         explicit constexpr Wrap(typename std::underlying_type<E>::type value):
             value_(value)
         {
-#if HAVE_CXX14_CONSTEXPR
             assert(detail::isNonNegative(value));
             assert(
                 static_cast<typename std::underlying_type<E>::type>(~0) == M
                     // avoid "operands don't affect result" warnings when M
                     // covers all bits of the underlying type
                 || (value & ~M) == 0);
-#endif
         }
 
         constexpr operator E() const { return static_cast<E>(value_); }
@@ -105,11 +102,9 @@ struct is_typed_flags {
 
 template<typename E>
 constexpr typename o3tl::typed_flags<E>::Wrap operator ~(E rhs) {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(rhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         o3tl::typed_flags<E>::mask
         & ~static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -126,14 +121,12 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ~(
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
     E lhs, E rhs)
 {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(lhs)));
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(rhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         ^ static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -142,11 +135,9 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(lhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         ^ static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -155,11 +146,9 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(rhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         ^ static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -180,14 +169,12 @@ typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator ^(
 
 template<typename E>
 constexpr typename o3tl::typed_flags<E>::Wrap operator &(E lhs, E rhs) {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(lhs)));
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(rhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         & static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -196,11 +183,9 @@ constexpr typename o3tl::typed_flags<E>::Wrap operator &(E lhs, E rhs) {
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(lhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         & static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -209,11 +194,9 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(rhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         & static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -234,14 +217,12 @@ typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator &(
 
 template<typename E>
 constexpr typename o3tl::typed_flags<E>::Wrap operator |(E lhs, E rhs) {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(lhs)));
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(rhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         | static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -250,11 +231,9 @@ constexpr typename o3tl::typed_flags<E>::Wrap operator |(E lhs, E rhs) {
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(lhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         | static_cast<typename std::underlying_type<E>::type>(rhs));
@@ -263,11 +242,9 @@ template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
 template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
-#if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
             static_cast<typename std::underlying_type<E>::type>(rhs)));
-#endif
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
         static_cast<typename std::underlying_type<E>::type>(lhs)
         | static_cast<typename std::underlying_type<E>::type>(rhs));

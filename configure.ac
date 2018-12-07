@@ -6347,7 +6347,8 @@ return !(i != 0 && j != 0);
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
 
-AC_MSG_CHECKING([whether $CXX supports C++14 constexpr])
+dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
+AC_MSG_CHECKING([that $CXX supports C++14 constexpr])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
 AC_LANG_PUSH([C++])
@@ -6375,13 +6376,9 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
         }
     };
     constexpr auto v2 = S{10}.f();
-    ]])], [cxx14_constexpr=yes], [cxx14_constexpr=no])
+    ]])], AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks required C++14 constexpr support]))
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
-AC_MSG_RESULT([$cxx14_constexpr])
-if test "$cxx14_constexpr" = yes; then
-    AC_DEFINE([HAVE_CXX14_CONSTEXPR])
-fi
 
 dnl _Pragma support (may require C++11)
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then

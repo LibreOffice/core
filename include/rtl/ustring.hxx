@@ -33,7 +33,6 @@
 #include "rtl/textenc.h"
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
-#include "config_global.h"
 #include "rtl/stringconcat.hxx"
 #endif
 
@@ -79,10 +78,8 @@ struct SAL_WARN_UNUSED OUStringLiteral
         data(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal))
     {
-#if HAVE_CXX14_CONSTEXPR
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-#endif
     }
 
     int size;

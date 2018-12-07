@@ -22,16 +22,9 @@
 #include <type_traits>
 #include <utility>
 
-#include <config_global.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-
-#if HAVE_CXX14_CONSTEXPR
-#define CONSTEXPR constexpr
-#else
-#define CONSTEXPR
-#endif
 
 namespace o3tl {
 
@@ -64,15 +57,13 @@ public:
     constexpr array_view() noexcept : data_(nullptr), size_(0) {}
 
     template<size_type N>
-    CONSTEXPR array_view (T (&a)[N]) noexcept : data_(a), size_(N) {}
+    constexpr array_view (T (&a)[N]) noexcept : data_(a), size_(N) {}
 
-    CONSTEXPR array_view (T *a, size_type len) noexcept
+    constexpr array_view (T *a, size_type len) noexcept
         : data_(a), size_(len)
     {
-#if HAVE_CXX14_CONSTEXPR
         // not terribly sure about this, might need to relax it
         assert((a == nullptr && len == 0) || (a != nullptr && len > 0));
-#endif
     }
 
     /// Allow for assigning array_view<T> to array_view<T const> i.e.
@@ -106,25 +97,17 @@ public:
     constexpr size_type size() const noexcept { return size_; }
     constexpr size_type length() const noexcept { return size(); }
 
-#if !defined __clang__ || HAVE_CXX14_CONSTEXPR
-    constexpr
-#endif
-    size_type max_size() const noexcept {
-#if defined __clang__ // avoid constexpr issues with other, older compilers
-        (void) this; // loplugin:staticmethods
-#endif
+    constexpr size_type max_size() const noexcept {
+        (void) this; // silence loplugin:staticmethods
         return npos - 1;
     }
 
     constexpr reference operator [](size_type pos) const {
-#if HAVE_CXX14_CONSTEXPR
         assert(pos < size());
-#endif
         return data_[pos];
     }
 
-    CONSTEXPR
-    reference at(size_type pos) const {
+    constexpr reference at(size_type pos) const {
         if (pos >= size()) {
             throw std::out_of_range("o3tl::array_view::at");
         }
@@ -132,22 +115,18 @@ public:
     }
 
     constexpr reference front() const {
-#if HAVE_CXX14_CONSTEXPR
         assert(!empty());
-#endif
         return operator [](0);
     }
 
     constexpr reference back() const {
-#if HAVE_CXX14_CONSTEXPR
         assert(!empty());
-#endif
         return operator [](size() - 1);
     }
 
     constexpr pointer data() const noexcept { return data_; }
 
-    CONSTEXPR void swap(array_view & s) noexcept {
+    constexpr void swap(array_view & s) noexcept {
         std::swap(data_, s.data_);
         std::swap(size_, s.size_);
     }
@@ -178,9 +157,6 @@ struct hash<o3tl::array_view<T>> {
 };
 
 } // namespace std
-
-
-#undef CONSTEXPR
 
 #endif
 

@@ -27,7 +27,6 @@
 #include <type_traits>
 #include <memory>
 
-#include <config_global.h>
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <svl/typedwhich.hxx>
@@ -57,9 +56,7 @@ constexpr bool validRanges() {
 // std::size_t is no smaller than sal_uInt16:
 
 constexpr std::size_t rangeSize(sal_uInt16 wid1, sal_uInt16 wid2) {
-#if HAVE_CXX14_CONSTEXPR
     assert(validRange(wid1, wid2));
-#endif
     return wid2 - wid1 + 1;
 }
 
