@@ -1284,14 +1284,14 @@ void AutoReloadTimer_Impl::Invoke()
                 SfxStringItem(SID_REFERER, pObjSh->GetMedium()->GetName()));
         }
         SfxRequest aReq( SID_RELOAD, SfxCallMode::SLOT, aSet );
-        pObjSh->Get_Impl()->pReloadTimer = nullptr;
-        delete this;
+        // this will delete this
+        pObjSh->Get_Impl()->pReloadTimer.reset();
         pFrame->ExecReload_Impl( aReq );
         return;
     }
 
-    pObjSh->Get_Impl()->pReloadTimer = nullptr;
-    delete this;
+    // this will delete this
+    pObjSh->Get_Impl()->pReloadTimer.reset();
 }
 
 SfxModule* SfxObjectShell::GetModule() const
