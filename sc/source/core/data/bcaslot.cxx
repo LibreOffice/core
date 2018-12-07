@@ -157,6 +157,7 @@ bool ScBroadcastAreaSlot::StartListeningArea(
 {
     bool bNewArea = false;
     OSL_ENSURE(pListener, "StartListeningArea: pListener Null");
+    assert(!pDoc->IsDelayedFormulaGrouping()); // otherwise the group size might be incorrect
     if (CheckHardRecalcStateCondition() == ScDocument::HardRecalcState::ETERNAL)
         return false;
     if ( !rpArea )

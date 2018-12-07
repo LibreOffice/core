@@ -502,6 +502,9 @@ private:
     bool                bExpandRefs;
     // for detective update, is set for each change of a formula
     bool                bDetectiveDirty;
+    // If the pointer is set, formula cells will not be automatically grouped into shared formula groups,
+    // instead the range will be extended to contain all such cells.
+    std::unique_ptr< ScRange > pDelayedFormulaGrouping;
 
     bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde and ocWebservice
 
@@ -1317,6 +1320,12 @@ public:
     bool            IsForcedFormulaPending() const { return bForcedFormulaPending; }
                     // if CalcFormulaTree() is currently running
     bool            IsCalculatingFormulaTree() { return bCalculatingFormulaTree; }
+    /// If set, joining cells into shared formula groups will be delayed until reset again
+    /// (RegroupFormulaCells() will be called as needed).
+    void            DelayFormulaGrouping( bool delay );
+    bool            IsDelayedFormulaGrouping() const { return pDelayedFormulaGrouping.get() != nullptr; }
+    /// To be used only by SharedFormulaUtil::joinFormulaCells().
+    void            AddDelayedFormulaGroupingCell( ScFormulaCell* cell );
 
     FormulaError    GetErrCode( const ScAddress& ) const;
 
@@ -2399,6 +2408,7 @@ public:
      */
     void UnshareFormulaCells( SCTAB nTab, SCCOL nCol, std::vector<SCROW>& rRows );
     void RegroupFormulaCells( SCTAB nTab, SCCOL nCol );
+    void RegroupFormulaCells( const ScRange& range );
 
     ScFormulaVectorState GetFormulaVectorState( const ScAddress& rPos ) const;
 
