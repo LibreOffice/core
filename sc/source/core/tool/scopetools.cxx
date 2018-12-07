@@ -70,6 +70,17 @@ WaitPointerSwitch::~WaitPointerSwitch()
         mpFrameWin->LeaveWait();
 }
 
+DelayFormulaGroupingSwitch::DelayFormulaGroupingSwitch(ScDocument& rDoc, bool delay) :
+    mrDoc(rDoc), mbOldValue(rDoc.IsDelayedFormulaGrouping())
+{
+    mrDoc.DelayFormulaGrouping(delay);
+}
+
+DelayFormulaGroupingSwitch::~DelayFormulaGroupingSwitch()
+{
+    mrDoc.DelayFormulaGrouping(mbOldValue);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

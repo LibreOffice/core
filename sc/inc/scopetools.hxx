@@ -65,6 +65,16 @@ public:
     ~WaitPointerSwitch();
 };
 
+/// Wrapper for ScDocument::DelayFormulaGrouping()
+class SC_DLLPUBLIC DelayFormulaGroupingSwitch
+{
+    ScDocument& mrDoc;
+    bool const mbOldValue;
+public:
+    DelayFormulaGroupingSwitch(ScDocument& rDoc, bool delay);
+    ~DelayFormulaGroupingSwitch();
+};
+
 }
 
 #endif

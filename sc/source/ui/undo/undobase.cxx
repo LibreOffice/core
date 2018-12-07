@@ -35,6 +35,7 @@
 #include <column.hxx>
 #include <sortparam.hxx>
 #include <columnspanset.hxx>
+#include <scopetools.hxx>
 
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
@@ -429,6 +430,10 @@ void ScMoveUndo::UndoRef()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     ScRange aRange(0,0,0, MAXCOL,MAXROW,pRefUndoDoc->GetTableCount()-1);
+    // tdf#102364 - in some pathological cases the CopyToDocument() replacing cells with new cells
+    // can lead to repetitive splitting and rejoining of the same formula group, which can get
+    // quadratically expensive with large groups. So do the grouping just once at the end.
+    sc::DelayFormulaGroupingSwitch delayGrouping( rDoc, true );
     pRefUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::FORMULA, false, rDoc, nullptr, false);
     if (pRefUndoData)
         pRefUndoData->DoUndo( &rDoc, false );
