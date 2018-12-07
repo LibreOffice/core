@@ -1071,7 +1071,7 @@ void DAVResourceAccess::resetUri()
     {
         std::vector< SerfUri >::const_iterator it  = m_aRedirectURIs.begin();
 
-        SerfUri aUri( (*it) );
+        SerfUri aUri( *it );
         m_aRedirectURIs.clear();
         setURL ( aUri.GetURI() );
         initialize();
