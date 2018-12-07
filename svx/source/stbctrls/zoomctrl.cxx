@@ -182,7 +182,7 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxZoomPageStatusBarControl,SfxVoidItem);
 SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
     sal_uInt16 _nId, StatusBar& rStb)
     : SfxStatusBarControl(_nSlotId, _nId, rStb)
-    , maImage(BitmapEx(RID_SVXBMP_ZOOM_PAGE))
+    , maImage(StockImage::Yes, RID_SVXBMP_ZOOM_PAGE)
 {
     GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_FIT_SLIDE));
 }

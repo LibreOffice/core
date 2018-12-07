@@ -768,7 +768,7 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
 void SdNavigatorWin::SetDragImage()
 {
     const sal_uInt16 nDragTypeId = maToolbox->GetItemId("dragmode");
-    maToolbox->SetItemImage(nDragTypeId, Image(BitmapEx(GetDragTypeSdBmpId(meDragType))));
+    maToolbox->SetItemImage(nDragTypeId, Image(StockImage::Yes, GetDragTypeSdBmpId(meDragType)));
 }
 
 /**

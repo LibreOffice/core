@@ -169,9 +169,6 @@ namespace vcl
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
-        BitmapEx const                          maCollateBmp;
-        BitmapEx const                          maNoCollateBmp;
-
         bool                                    mbCollateAlwaysOff;
 
         VclPtr<RadioButton>                     mpPagesBtn;

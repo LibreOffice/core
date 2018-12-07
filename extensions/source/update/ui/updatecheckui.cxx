@@ -90,7 +90,7 @@ Image GetMenuBarIcon( MenuBar const * pMBar )
     else
         sResID = RID_UPDATE_AVAILABLE_16;
 
-    return Image(BitmapEx(sResID));
+    return Image(StockImage::Yes, sResID);
 }
 
 class BubbleWindow : public FloatingWindow
@@ -268,7 +268,7 @@ Image UpdateCheckUI::GetBubbleImage( OUString const &rURL )
     }
 
     if ( aImage.GetSizePixel().Width() == 0 )
-        aImage = Image(BitmapEx(SV_RESID_BITMAP_INFOBOX));
+        aImage = Image(StockImage::Yes, SV_RESID_BITMAP_INFOBOX);
 
     return aImage;
 }

@@ -60,8 +60,7 @@ void DecoToolBox::calcMinSize()
     ScopedVclPtrInstance<ToolBox> aTbx( GetParent() );
     if( GetItemCount() == 0 )
     {
-        BitmapEx aBitmap(SV_RESID_BITMAP_CLOSEDOC);
-        aTbx->InsertItem(IID_DOCUMENTCLOSE, Image(aBitmap));
+        aTbx->InsertItem(IID_DOCUMENTCLOSE, Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC));
     }
     else
     {
@@ -127,8 +126,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     SetMBWHideAccel(true);
     SetMBWMenuKey(false);
 
-    BitmapEx aBitmap(SV_RESID_BITMAP_CLOSEDOC);
-    aCloseBtn->maImage = Image(aBitmap);
+    aCloseBtn->maImage = Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC);
 
     aCloseBtn->SetOutStyle(TOOLBOX_STYLE_FLAT);
     aCloseBtn->SetBackground();

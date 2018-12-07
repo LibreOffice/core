@@ -279,7 +279,7 @@ namespace dbaui
 
     void DbaIndexDialog::fillIndexList()
     {
-        Image aPKeyIcon(BitmapEx(BMP_PKEYICON));
+        Image aPKeyIcon(StockImage::Yes, BMP_PKEYICON);
         // fill the list with the index names
         m_pIndexList->Clear();
         sal_Int32 nPos = 0;

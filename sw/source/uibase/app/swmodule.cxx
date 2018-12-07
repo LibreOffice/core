@@ -396,32 +396,32 @@ std::unique_ptr<SfxStyleFamilies> SwModule::CreateStyleFamilies()
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     SwResId(STR_PARAGRAPHSTYLEFAMILY),
-                                                    Image(BitmapEx(BMP_STYLES_FAMILY_PARA)),
+                                                    Image(StockImage::Yes, BMP_STYLES_FAMILY_PARA),
                                                     RID_PARAGRAPHSTYLEFAMILY, GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Char,
                                                     SwResId(STR_CHARACTERSTYLEFAMILY),
-                                                    Image(BitmapEx(BMP_STYLES_FAMILY_CHAR)),
+                                                    Image(StockImage::Yes, BMP_STYLES_FAMILY_CHAR),
                                                     RID_CHARACTERSTYLEFAMILY, GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Frame,
                                                     SwResId(STR_FRAMESTYLEFAMILY),
-                                                    Image(BitmapEx(BMP_STYLES_FAMILY_FRAME)),
+                                                    Image(StockImage::Yes, BMP_STYLES_FAMILY_FRAME),
                                                     RID_FRAMESTYLEFAMILY, GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
                                                     SwResId(STR_PAGESTYLEFAMILY),
-                                                    Image(BitmapEx(BMP_STYLES_FAMILY_PAGE)),
+                                                    Image(StockImage::Yes, BMP_STYLES_FAMILY_PAGE),
                                                     RID_PAGESTYLEFAMILY, GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
                                                     SwResId(STR_LISTSTYLEFAMILY),
-                                                    Image(BitmapEx(BMP_STYLES_FAMILY_LIST)),
+                                                    Image(StockImage::Yes, BMP_STYLES_FAMILY_LIST),
                                                     RID_LISTSTYLEFAMILY, GetResLocale()));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Table,
                                                     SwResId(STR_TABLESTYLEFAMILY),
-                                                    Image(BitmapEx(BMP_STYLES_FAMILY_TABLE)),
+                                                    Image(StockImage::Yes, BMP_STYLES_FAMILY_TABLE),
                                                     RID_TABLESTYLEFAMILY, GetResLocale()));
 
     return pStyleFamilies;

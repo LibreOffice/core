@@ -339,11 +339,11 @@ namespace svxform
         m_pItemList->SetToolBoxItemIds(m_nAddId, m_nAddElementId, m_nAddAttributeId, m_nEditId, m_nRemoveId);
 
         m_pToolBox->InsertSeparator(4,5);
-        m_pToolBox->SetItemImage(m_nAddId, Image(BitmapEx(RID_SVXBMP_ADD)));
-        m_pToolBox->SetItemImage(m_nAddElementId, Image(BitmapEx(RID_SVXBMP_ADD_ELEMENT)));
-        m_pToolBox->SetItemImage(m_nAddAttributeId, Image(BitmapEx(RID_SVXBMP_ADD_ATTRIBUTE)));
-        m_pToolBox->SetItemImage(m_nEditId, Image(BitmapEx(RID_SVXBMP_EDIT)));
-        m_pToolBox->SetItemImage(m_nRemoveId, Image(BitmapEx(RID_SVXBMP_REMOVE)));
+        m_pToolBox->SetItemImage(m_nAddId, Image(StockImage::Yes, RID_SVXBMP_ADD));
+        m_pToolBox->SetItemImage(m_nAddElementId, Image(StockImage::Yes, RID_SVXBMP_ADD_ELEMENT));
+        m_pToolBox->SetItemImage(m_nAddAttributeId, Image(StockImage::Yes, RID_SVXBMP_ADD_ATTRIBUTE));
+        m_pToolBox->SetItemImage(m_nEditId, Image(StockImage::Yes, RID_SVXBMP_EDIT));
+        m_pToolBox->SetItemImage(m_nRemoveId, Image(StockImage::Yes, RID_SVXBMP_REMOVE));
 
         if ( DGTInstance == m_eGroup )
             m_pToolBox->RemoveItem( m_pToolBox->GetItemPos( m_nAddId ) );
@@ -427,16 +427,16 @@ namespace svxform
                     switch ( eChildType )
                     {
                         case css::xml::dom::NodeType_ATTRIBUTE_NODE:
-                            aExpImg = aCollImg = Image(BitmapEx(RID_SVXBMP_ATTRIBUTE));
+                            aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_ATTRIBUTE);
                             break;
                         case css::xml::dom::NodeType_ELEMENT_NODE:
-                            aExpImg = aCollImg = Image(BitmapEx(RID_SVXBMP_ELEMENT));
+                            aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_ELEMENT);
                             break;
                         case css::xml::dom::NodeType_TEXT_NODE:
-                            aExpImg = aCollImg = Image(BitmapEx(RID_SVXBMP_TEXT));
+                            aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_TEXT);
                             break;
                         default:
-                            aExpImg = aCollImg = Image(BitmapEx(RID_SVXBMP_OTHER));
+                            aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_OTHER);
                     }
 
                     OUString sName = m_xUIHelper->getNodeDisplayName( xChild, bShowDetails );
@@ -450,7 +450,7 @@ namespace svxform
                             Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
                             if ( xMap.is() )
                             {
-                                aExpImg = aCollImg = Image(BitmapEx(RID_SVXBMP_ATTRIBUTE));
+                                aExpImg = aCollImg = Image(StockImage::Yes, RID_SVXBMP_ATTRIBUTE);
                                 sal_Int32 j, nMapLen = xMap->getLength();
                                 for ( j = 0; j < nMapLen; ++j )
                                 {
@@ -790,7 +790,7 @@ namespace svxform
     SvTreeListEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
     {
         SvTreeListEntry* pParent = m_pItemList->FirstSelected();
-        Image aImage(BitmapEx(_bIsElement ? OUString(RID_SVXBMP_ELEMENT) : OUString(RID_SVXBMP_ATTRIBUTE)));
+        Image aImage(StockImage::Yes, _bIsElement ? OUString(RID_SVXBMP_ELEMENT) : OUString(RID_SVXBMP_ATTRIBUTE));
         OUString sName;
         try
         {
@@ -808,7 +808,7 @@ namespace svxform
     SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvTreeListEntry* pEntry = nullptr;
-        Image aImage(BitmapEx(RID_SVXBMP_ELEMENT));
+        Image aImage(StockImage::Yes, RID_SVXBMP_ELEMENT);
 
         ItemNode* pNode = new ItemNode( _rEntry );
         OUString sTemp;
@@ -1159,7 +1159,7 @@ namespace svxform
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                         if ( xNum.is() && xNum->hasMoreElements() )
                         {
-                            Image aImage(BitmapEx(RID_SVXBMP_ELEMENT));
+                            Image aImage(StockImage::Yes, RID_SVXBMP_ELEMENT);
                             while ( xNum->hasMoreElements() )
                             {
                                 Reference< XPropertySet > xPropSet;

@@ -183,7 +183,7 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     long nWidth = pParent->GetSizePixel().getWidth();
     SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * fScaleFactor));
 
-    m_pImage->SetImage(Image(BitmapEx(GetInfoBarIconName(ibType))));
+    m_pImage->SetImage(Image(StockImage::Yes, GetInfoBarIconName(ibType)));
     m_pImage->SetPaintTransparent(true);
     m_pImage->Show();
 
@@ -305,7 +305,7 @@ void SfxInfoBarWindow::Update( const OUString &sNewMessage, InfoBarType eType )
     {
         m_eType = eType;
         SetForeAndBackgroundColors(m_eType);
-        m_pImage->SetImage(Image(BitmapEx(GetInfoBarIconName(eType))));
+        m_pImage->SetImage(Image(StockImage::Yes, GetInfoBarIconName(eType)));
     }
 
     m_pMessage->SetText( sNewMessage );

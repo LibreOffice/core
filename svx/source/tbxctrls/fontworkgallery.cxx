@@ -285,11 +285,11 @@ FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rContro
 {
     SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );
 
-    Image aImgAlgin1(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_LEFT));
-    Image aImgAlgin2(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_CENTER));
-    Image aImgAlgin3(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_RIGHT));
-    Image aImgAlgin4(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_WORD));
-    Image aImgAlgin5(BitmapEx(RID_SVXBMP_FONTWORK_ALIGN_STRETCH));
+    Image aImgAlgin1(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_LEFT);
+    Image aImgAlgin2(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_CENTER);
+    Image aImgAlgin3(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_RIGHT);
+    Image aImgAlgin4(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_WORD);
+    Image aImgAlgin5(StockImage::Yes, RID_SVXBMP_FONTWORK_ALIGN_STRETCH);
 
     appendEntry(0, SvxResId(RID_SVXSTR_ALIGN_LEFT), aImgAlgin1);
     appendEntry(1, SvxResId(RID_SVXSTR_ALIGN_CENTER), aImgAlgin2);
