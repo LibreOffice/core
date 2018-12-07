@@ -1633,6 +1633,15 @@ public:
                 sc::formula_block::const_iterator itEnd = it;
                 std::advance(itEnd, nDataSize);
 
+                if(nDataSize > 1024 && (mnCopyFlags & InsertDeleteFlags::FORMULA) != InsertDeleteFlags::NONE)
+                {
+                    // If the column to be replaced contains a long formula group (tdf#102364), there can
+                    // be so many listeners in a single vector that the quadratic cost of repeatedly removing
+                    // the first element becomes very high. Optimize this by removing them in one go.
+                    sc::EndListeningContext context(*mrDestCol.GetDoc());
+                    mrDestCol.EndListeningFormulaCells( context, nRow, nRow + nDataSize - 1, nullptr, nullptr );
+                }
+
                 for (; it != itEnd; ++it, ++nRow)
                     cloneFormulaCell(nRow, **it);
             }
