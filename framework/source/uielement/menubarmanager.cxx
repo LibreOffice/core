@@ -1453,7 +1453,7 @@ void MenuBarManager::FillMenu(
                         aProp[i].Value >>= bEnabled;
                 }
 
-                if (vcl::CommandInfoProvider::IsExperimental(aCommandURL, rModuleIdentifier) &&
+                if (!aCommandURL.isEmpty() && vcl::CommandInfoProvider::IsExperimental(aCommandURL, rModuleIdentifier) &&
                     !SvtMiscOptions().IsExperimentalMode())
                 {
                     continue;
