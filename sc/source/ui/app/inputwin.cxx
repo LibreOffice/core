@@ -189,11 +189,11 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     // Position window, 3 buttons, input window
     InsertWindow    (1, aWndPos.get(), ToolBoxItemBits::NONE, 0);
     InsertSeparator (1);
-    InsertItem      (SID_INPUT_FUNCTION, Image(BitmapEx(RID_BMP_INPUT_FUNCTION)), ToolBoxItemBits::NONE, 2);
-    InsertItem      (SID_INPUT_SUM,      Image(BitmapEx(RID_BMP_INPUT_SUM)), ToolBoxItemBits::NONE, 3);
-    InsertItem      (SID_INPUT_EQUAL,    Image(BitmapEx(RID_BMP_INPUT_EQUAL)), ToolBoxItemBits::NONE, 4);
-    InsertItem      (SID_INPUT_CANCEL,   Image(BitmapEx(RID_BMP_INPUT_CANCEL)), ToolBoxItemBits::NONE, 5);
-    InsertItem      (SID_INPUT_OK,       Image(BitmapEx(RID_BMP_INPUT_OK)), ToolBoxItemBits::NONE, 6);
+    InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
+    InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::NONE, 3);
+    InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
+    InsertItem      (SID_INPUT_CANCEL,   Image(StockImage::Yes, RID_BMP_INPUT_CANCEL), ToolBoxItemBits::NONE, 5);
+    InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
     InsertSeparator (7);
     InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 8);
 
@@ -642,16 +642,16 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         //  update item images
-        SetItemImage(SID_INPUT_FUNCTION, Image(BitmapEx(RID_BMP_INPUT_FUNCTION)));
+        SetItemImage(SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION));
         if ( bIsOkCancelMode )
         {
-            SetItemImage(SID_INPUT_CANCEL, Image(BitmapEx(RID_BMP_INPUT_CANCEL)));
-            SetItemImage(SID_INPUT_OK,     Image(BitmapEx(RID_BMP_INPUT_OK)));
+            SetItemImage(SID_INPUT_CANCEL, Image(StockImage::Yes, RID_BMP_INPUT_CANCEL));
+            SetItemImage(SID_INPUT_OK,     Image(StockImage::Yes, RID_BMP_INPUT_OK));
         }
         else
         {
-            SetItemImage(SID_INPUT_SUM,   Image(BitmapEx(RID_BMP_INPUT_SUM)));
-            SetItemImage(SID_INPUT_EQUAL, Image(BitmapEx(RID_BMP_INPUT_EQUAL)));
+            SetItemImage(SID_INPUT_SUM,   Image(StockImage::Yes, RID_BMP_INPUT_SUM));
+            SetItemImage(SID_INPUT_EQUAL, Image(StockImage::Yes, RID_BMP_INPUT_EQUAL));
         }
     }
 

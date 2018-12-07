@@ -3322,8 +3322,8 @@ void SvImpLBox::implInitDefaultNodeImages()
         // assume that all or nothing is initialized
         return;
 
-    s_pDefCollapsed = new Image(BitmapEx(RID_BMP_TREENODE_COLLAPSED));
-    s_pDefExpanded = new Image(BitmapEx(RID_BMP_TREENODE_EXPANDED));
+    s_pDefCollapsed = new Image(StockImage::Yes, RID_BMP_TREENODE_COLLAPSED);
+    s_pDefExpanded = new Image(StockImage::Yes, RID_BMP_TREENODE_EXPANDED);
 }
 
 

@@ -198,8 +198,8 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 ,   mpBookmarkDoc       ( nullptr )
 ,   mpMedium            ( nullptr )
 ,   mpOwnMedium         ( nullptr )
-,   maImgOle            ( BitmapEx(BMP_OLE) )
-,   maImgGraphic        ( BitmapEx(BMP_GRAPHIC) )
+,   maImgOle            ( StockImage::Yes, BMP_OLE )
+,   maImgGraphic        ( StockImage::Yes, BMP_GRAPHIC )
 ,   mbLinkableSelected  ( false )
 ,   mbSaveTreeItemState ( false )
 ,   mbShowAllShapes     ( false )
@@ -213,7 +213,7 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
                            WB_HSCROLL |
                            WB_HASBUTTONSATROOT );
     SetQuickSearch(true); /* i31275 */;
-    SetNodeBitmaps(Image(BitmapEx(BMP_EXPAND)), Image(BitmapEx(BMP_COLLAPSE)));
+    SetNodeBitmaps(Image(StockImage::Yes, BMP_EXPAND), Image(StockImage::Yes, BMP_COLLAPSE));
 
     SetDragDropMode(
          DragDropMode::CTRL_MOVE | DragDropMode::CTRL_COPY |
@@ -488,8 +488,8 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     mpMedium = pInMedium;
     maDocName = rDocName;
 
-    Image aImgDocOpen=Image(BitmapEx(BMP_DOC_OPEN));
-    Image aImgDocClosed=Image(BitmapEx(BMP_DOC_CLOSED));
+    Image aImgDocOpen(StockImage::Yes, BMP_DOC_OPEN);
+    Image aImgDocClosed(StockImage::Yes, BMP_DOC_CLOSED);
 
     // insert document name
     InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, nullptr, true, TREELIST_APPEND,
@@ -750,9 +750,9 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
             SdrObject*   pObj = nullptr;
             SvTreeListEntry* pPageEntry = nullptr;
 
-            Image aImgPage     = Image(BitmapEx(BMP_PAGE));
-            Image aImgPageObjs = Image(BitmapEx(BMP_PAGEOBJS));
-            Image aImgObjects  = Image(BitmapEx(BMP_OBJECTS));
+            Image aImgPage(StockImage::Yes, BMP_PAGE);
+            Image aImgPageObjs(StockImage::Yes, BMP_PAGEOBJS);
+            Image aImgObjects(StockImage::Yes, BMP_OBJECTS);
 
             // document name already inserted
 
@@ -1422,12 +1422,12 @@ void SdPageObjsTLB::AddShapeToTransferable (
 //===== IconProvider ==========================================================
 
 SdPageObjsTLB::IconProvider::IconProvider()
-    : maImgPage(BitmapEx(BMP_PAGE)),
-      maImgPageExcl(BitmapEx(BMP_PAGE_EXCLUDED)),
-      maImgPageObjsExcl(BitmapEx(BMP_PAGEOBJS_EXCLUDED)),
-      maImgPageObjs(BitmapEx(BMP_PAGEOBJS)),
-      maImgObjects(BitmapEx(BMP_OBJECTS)),
-      maImgGroup(BitmapEx(BMP_GROUP))
+    : maImgPage(StockImage::Yes, BMP_PAGE),
+      maImgPageExcl(StockImage::Yes, BMP_PAGE_EXCLUDED),
+      maImgPageObjsExcl(StockImage::Yes, BMP_PAGEOBJS_EXCLUDED),
+      maImgPageObjs(StockImage::Yes, BMP_PAGEOBJS),
+      maImgObjects(StockImage::Yes, BMP_OBJECTS),
+      maImgGroup(StockImage::Yes, BMP_GROUP)
 {
 }
 

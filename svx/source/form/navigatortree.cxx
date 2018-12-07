@@ -134,8 +134,8 @@ namespace svxform
         SetHelpId( HID_FORM_NAVIGATOR );
 
         SetNodeBitmaps(
-            Image(BitmapEx(RID_SVXBMP_COLLAPSEDNODE)),
-            Image(BitmapEx(RID_SVXBMP_EXPANDEDNODE))
+            Image(StockImage::Yes, RID_SVXBMP_COLLAPSEDNODE),
+            Image(StockImage::Yes, RID_SVXBMP_EXPANDEDNODE)
         );
 
         SetDragDropMode(DragDropMode::ALL);
@@ -363,12 +363,12 @@ namespace svxform
                     // 'New'\'Form' under the same terms
                     const sal_uInt16 nFormId = pSubMenuNew->GetItemId("form");
                     pSubMenuNew->EnableItem(nFormId, bSingleSelection && (m_nFormsSelected || m_bRootSelected));
-                    pSubMenuNew->SetItemImage(nFormId, Image(BitmapEx(RID_SVXBMP_FORM)));
+                    pSubMenuNew->SetItemImage(nFormId, Image(StockImage::Yes, RID_SVXBMP_FORM));
 
                     // 'New'\'hidden...', if exactly one form is selected
                     const sal_uInt16 nHiddenId = pSubMenuNew->GetItemId("hidden");
                     pSubMenuNew->EnableItem(nHiddenId, bSingleSelection && m_nFormsSelected);
-                    pSubMenuNew->SetItemImage(nHiddenId, Image(BitmapEx(RID_SVXBMP_HIDDEN)));
+                    pSubMenuNew->SetItemImage(nHiddenId, Image(StockImage::Yes, RID_SVXBMP_HIDDEN));
 
                     // 'Delete': everything which is not root can be removed
                     aContextMenu->EnableItem(aContextMenu->GetItemId("delete"), !m_bRootSelected);
@@ -576,7 +576,7 @@ namespace svxform
             SvTreeListBox::Clear();
 
             // default-entry "Forms"
-            Image aRootImage(BitmapEx(RID_SVXBMP_FORMS));
+            Image aRootImage(StockImage::Yes, RID_SVXBMP_FORMS);
             m_pRootEntry = InsertEntry( SvxResId(RID_STR_FORMS), aRootImage, aRootImage,
                 nullptr, false, 0 );
         }

@@ -472,7 +472,7 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 
     // dummy list box of slide transitions for startup.
     mpVS_TRANSITION_ICONS->InsertItem(
-        0, Image( BitmapEx( "sd/cmd/transition-none.png" ) ),
+        0, Image( StockImage::Yes, "sd/cmd/transition-none.png" ),
         SdResId( STR_SLIDETRANSITION_NONE ),
         VALUESET_APPEND, /* show legend */ true );
     mpVS_TRANSITION_ICONS->RecalculateItemSizes();

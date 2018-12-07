@@ -1139,7 +1139,7 @@ void SwNavigationPI::SetRegionDropMode(RegionMode nNewMode)
             sImageId = RID_BMP_DROP_COPY;
             break;
     }
-    m_aContentToolBox->SetItemImage(m_aContentToolBox->GetItemId("dragmode"), Image(BitmapEx(sImageId)));
+    m_aContentToolBox->SetItemImage(m_aContentToolBox->GetItemId("dragmode"), Image(StockImage::Yes, sImageId));
 }
 
 void SwNavigationPI::ToggleTree()

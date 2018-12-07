@@ -50,7 +50,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
     {
         SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
             DBA_RES(aCategorie.pLabelResId) ,
-            Image(BitmapEx(OUString::createFromAscii(aCategorie.aImageResId))));
+            Image(StockImage::Yes, OUString::createFromAscii(aCategorie.aImageResId)));
         if ( pEntry )
             pEntry->SetUserData( new ElementType( aCategorie.eType ) );
     }

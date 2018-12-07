@@ -437,7 +437,7 @@ void  SwSendMailDialog::IterateMails()
     {
         if(!SwMailMergeHelper::CheckMailAddress( pCurrentMailDescriptor->sEMail ))
         {
-            Image aInsertImg(BitmapEx(RID_BMP_FORMULA_CANCEL));
+            Image aInsertImg(StockImage::Yes, RID_BMP_FORMULA_CANCEL);
 
             OUString sMessage = m_sSendingTo;
             OUString sTmp(pCurrentMailDescriptor->sEMail);
@@ -523,7 +523,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
         Application::PostUserEvent( LINK( this, SwSendMailDialog,
                                           StopSendMails ), this, true );
     }
-    Image aInsertImg(BitmapEx(bResult ? OUString(RID_BMP_FORMULA_APPLY) : OUString(RID_BMP_FORMULA_CANCEL)));
+    Image aInsertImg(StockImage::Yes, bResult ? OUString(RID_BMP_FORMULA_APPLY) : OUString(RID_BMP_FORMULA_CANCEL));
 
     OUString sMessage = m_sSendingTo;
     OUString sTmp(xMessage->getRecipients()[0]);

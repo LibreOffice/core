@@ -323,7 +323,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
         ToolBoxItemBits nTbxBits = ToolBoxItemBits::NONE;
         if ((NID_PREV != nNaviId) && (NID_NEXT != nNaviId))
             nTbxBits = ToolBoxItemBits::CHECKABLE;
-        m_pToolBox->InsertItem(nNaviId, Image(BitmapEx(aNavigationImgIds[i])),
+        m_pToolBox->InsertItem(nNaviId, Image(StockImage::Yes, aNavigationImgIds[i]),
                               SwResId(aNavigationStrIds[i]), nTbxBits);
         m_pToolBox->SetHelpId(nNaviId, aNavigationHelpIds[i]);
     }
@@ -727,7 +727,7 @@ NavElementBox_Impl::NavElementBox_Impl(
     {
         sal_uInt16 nNaviId = aNavigationInsertIds[i];
         if ( ( NID_PREV != nNaviId ) && ( NID_NEXT != nNaviId ) )
-            InsertEntry( SwResId( aNavigationStrIds[i] ), Image( BitmapEx( aNavigationImgIds[i] ) ) );
+            InsertEntry( SwResId( aNavigationStrIds[i] ), Image( StockImage::Yes, aNavigationImgIds[i] ) );
     }
 }
 

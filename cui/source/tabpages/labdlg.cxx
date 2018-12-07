@@ -112,9 +112,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(TabPageParent pParent, const SfxItemSet& rI
         aLineTypes.push_back(m_xLineTypes->get_text(i));
 
     static_assert(CAPTYPE_BITMAPS_COUNT == 3, "unexpected");
-    m_aBmpCapTypes[0] = Image(BitmapEx(RID_SVXBMP_LEGTYP1));
-    m_aBmpCapTypes[1] = Image(BitmapEx(RID_SVXBMP_LEGTYP2));
-    m_aBmpCapTypes[2] = Image(BitmapEx(RID_SVXBMP_LEGTYP3));
+    m_aBmpCapTypes[0] = Image(StockImage::Yes, RID_SVXBMP_LEGTYP1);
+    m_aBmpCapTypes[1] = Image(StockImage::Yes, RID_SVXBMP_LEGTYP2);
+    m_aBmpCapTypes[2] = Image(StockImage::Yes, RID_SVXBMP_LEGTYP3);
 
     //------------install ValueSet--------------------------
     m_xCT_CAPTTYPE->SetStyle( m_xCT_CAPTTYPE->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );

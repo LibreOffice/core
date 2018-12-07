@@ -801,13 +801,13 @@ void SvxFontWorkDialog::ApplyImageList()
 {
     if (nLastShadowTbxId == nShadowSlantId)
     {
-        m_pFbShadowX->SetImage(Image(BitmapEx(RID_SVXBMP_SHADOW_ANGLE)));
-        m_pFbShadowY->SetImage(Image(BitmapEx(RID_SVXBMP_SHADOW_SIZE)));
+        m_pFbShadowX->SetImage(Image(StockImage::Yes, RID_SVXBMP_SHADOW_ANGLE));
+        m_pFbShadowY->SetImage(Image(StockImage::Yes, RID_SVXBMP_SHADOW_SIZE));
     }
     else
     {
-        m_pFbShadowX->SetImage(Image(BitmapEx(RID_SVXBMP_SHADOW_XDIST)));
-        m_pFbShadowY->SetImage(Image(BitmapEx(RID_SVXBMP_SHADOW_YDIST)));
+        m_pFbShadowX->SetImage(Image(StockImage::Yes, RID_SVXBMP_SHADOW_XDIST));
+        m_pFbShadowY->SetImage(Image(StockImage::Yes, RID_SVXBMP_SHADOW_YDIST));
     }
 }
 

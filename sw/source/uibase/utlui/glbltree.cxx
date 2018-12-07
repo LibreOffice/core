@@ -696,14 +696,14 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
                 {
                     const SwTOXBase* pBase = pCont->GetTOX();
                     sEntry = pBase->GetTitle();
-                    aImage = Image(BitmapEx(RID_BMP_NAVI_INDEX));
+                    aImage = Image(StockImage::Yes, RID_BMP_NAVI_INDEX);
                 }
                 break;
                 case GLBLDOC_SECTION:
                 {
                     const SwSection* pSect = pCont->GetSection();
                     sEntry = pSect->GetSectionName();
-                    aImage = Image(BitmapEx(RID_BMP_DROP_REGION));
+                    aImage = Image(StockImage::Yes, RID_BMP_DROP_REGION);
                 }
                 break;
             }
