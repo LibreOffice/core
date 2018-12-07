@@ -211,7 +211,7 @@ bool IsDitherColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
 
 bool IsPaletteColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
 {
-    static PALETTEENTRY aImplSalSysPalEntryAry[] =
+    static const PALETTEENTRY aImplSalSysPalEntryAry[] =
     {
     {    0,    0,    0, 0 },
     {    0,    0, 0x80, 0 },
@@ -231,7 +231,7 @@ bool IsPaletteColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
     { 0xFF, 0xFF, 0xFF, 0 }
     };
 
-    for (auto& rPalEntry : aImplSalSysPalEntryAry)
+    for (const auto& rPalEntry : aImplSalSysPalEntryAry)
     {
         if(rPalEntry.peRed == nRed &&
            rPalEntry.peGreen == nGreen &&
