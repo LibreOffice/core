@@ -344,46 +344,47 @@ void WinSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcG
     }
 }
 
-static void ImplCalcOutSideRgn( const RECT& rSrcRect,
+namespace
+{
+
+void MakeInvisibleArea(const RECT& rSrcRect,
+                       HRGN& rhInvalidateRgn,
+                       int nLeft, int nTop, int nRight, int nBottom)
+{
+    if (!rhInvalidateRgn)
+    {
+        rhInvalidateRgn = CreateRectRgnIndirect(&rSrcRect);
+    }
+
+    HRGN hTempRgn = CreateRectRgn(nLeft, nTop, nRight, nBottom);
+    CombineRgn(rhInvalidateRgn, rhInvalidateRgn, hTempRgn, RGN_DIFF);
+    DeleteRegion(hTempRgn);
+}
+
+void ImplCalcOutSideRgn( const RECT& rSrcRect,
                          int nLeft, int nTop, int nRight, int nBottom,
                          HRGN& rhInvalidateRgn )
 {
-    HRGN hTempRgn;
-
     // calculate area outside the visible region
-    if ( rSrcRect.left < nLeft )
+    if (rSrcRect.left < nLeft)
     {
-        if ( !rhInvalidateRgn )
-            rhInvalidateRgn = CreateRectRgnIndirect( &rSrcRect );
-        hTempRgn = CreateRectRgn( -31999, 0, nLeft, 31999 );
-        CombineRgn( rhInvalidateRgn, rhInvalidateRgn, hTempRgn, RGN_DIFF );
-        DeleteRegion( hTempRgn );
+        MakeInvisibleArea(rSrcRect, rhInvalidateRgn, -31999, 0, nLeft, 31999);
     }
-    if ( rSrcRect.top < nTop )
+    if (rSrcRect.top < nTop)
     {
-        if ( !rhInvalidateRgn )
-            rhInvalidateRgn = CreateRectRgnIndirect( &rSrcRect );
-        hTempRgn = CreateRectRgn( 0, -31999, 31999, nTop );
-        CombineRgn( rhInvalidateRgn, rhInvalidateRgn, hTempRgn, RGN_DIFF );
-        DeleteRegion( hTempRgn );
+        MakeInvisibleArea(rSrcRect, rhInvalidateRgn, 0, -31999, 31999, nTop);
     }
-    if ( rSrcRect.right > nRight )
+    if (rSrcRect.right > nRight)
     {
-        if ( !rhInvalidateRgn )
-            rhInvalidateRgn = CreateRectRgnIndirect( &rSrcRect );
-        hTempRgn = CreateRectRgn( nRight, 0, 31999, 31999 );
-        CombineRgn( rhInvalidateRgn, rhInvalidateRgn, hTempRgn, RGN_DIFF );
-        DeleteRegion( hTempRgn );
+        MakeInvisibleArea(rSrcRect, rhInvalidateRgn, nRight, 0, 31999, 31999);
     }
-    if ( rSrcRect.bottom > nBottom )
+    if (rSrcRect.bottom > nBottom)
     {
-        if ( !rhInvalidateRgn )
-            rhInvalidateRgn = CreateRectRgnIndirect( &rSrcRect );
-        hTempRgn = CreateRectRgn( 0, nBottom, 31999, 31999 );
-        CombineRgn( rhInvalidateRgn, rhInvalidateRgn, hTempRgn, RGN_DIFF );
-        DeleteRegion( hTempRgn );
+        MakeInvisibleArea(rSrcRect, rhInvalidateRgn, 0, nBottom, 31999, 31999);
     }
 }
+
+} // namespace
 
 void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
