@@ -58,8 +58,8 @@ struct SvListView::Impl
 };
 
 
-SvTreeList::SvTreeList(SvListView* listView) :
-    mpOwnerListView(listView),
+SvTreeList::SvTreeList(SvListView& listView) :
+    mrOwnerListView(listView),
     mbEnableInvalidate(true)
 {
     nEntryCount = 0;
@@ -79,7 +79,7 @@ void SvTreeList::Broadcast(
     sal_uLong nPos
 )
 {
-    mpOwnerListView->ModelNotification(nActionId, pEntry1, pEntry2, nPos);
+    mrOwnerListView.ModelNotification(nActionId, pEntry1, pEntry2, nPos);
 }
 
 // an entry is visible if all parents are expanded
@@ -1075,7 +1075,7 @@ std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator>
 SvListView::SvListView()
     : m_pImpl(new Impl(*this))
 {
-    pModel.reset(new SvTreeList(this));
+    pModel.reset(new SvTreeList(*this));
     m_pImpl->InitTable();
 }
 

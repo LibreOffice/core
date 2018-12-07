@@ -67,7 +67,7 @@ class VCL_DLLPUBLIC SvTreeList final
 {
     friend class        SvListView;
 
-    SvListView* const   mpOwnerListView;
+    SvListView&         mrOwnerListView;
     sal_uLong           nEntryCount;
 
     Link<SvTreeListEntry*, SvTreeListEntry*>  aCloneLink;
@@ -131,7 +131,7 @@ class VCL_DLLPUBLIC SvTreeList final
 public:
 
                         SvTreeList() = delete;
-                        SvTreeList(SvListView*);
+                        SvTreeList(SvListView&);
                         ~SvTreeList();
 
     void                Broadcast(
