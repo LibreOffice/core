@@ -21,8 +21,8 @@ FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
                 InteractionHandler::createWithParent(xContext, VCLUnoHelper::GetInterface(GetParentDialog())), UNO_QUERY_THROW );
     m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
-    Image aFolderImage(BitmapEx(RID_BMP_FOLDER));
-    Image aFolderExpandedImage(BitmapEx(RID_BMP_FOLDER_OPEN));
+    Image aFolderImage(StockImage::Yes, RID_BMP_FOLDER);
+    Image aFolderExpandedImage(StockImage::Yes, RID_BMP_FOLDER_OPEN);
     SetDefaultCollapsedEntryBmp( aFolderImage );
     SetDefaultExpandedEntryBmp( aFolderExpandedImage );
 }

@@ -57,9 +57,9 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
 {
     mpImpl->mnState = SignatureState::UNKNOWN;
 
-    mpImpl->maImage             = Image(BitmapEx(RID_SVXBMP_SIGNET));
-    mpImpl->maImageBroken       = Image(BitmapEx(RID_SVXBMP_SIGNET_BROKEN));
-    mpImpl->maImageNotValidated = Image(BitmapEx(RID_SVXBMP_SIGNET_NOTVALIDATED));
+    mpImpl->maImage             = Image(StockImage::Yes, RID_SVXBMP_SIGNET);
+    mpImpl->maImageBroken       = Image(StockImage::Yes, RID_SVXBMP_SIGNET_BROKEN);
+    mpImpl->maImageNotValidated = Image(StockImage::Yes, RID_SVXBMP_SIGNET_NOTVALIDATED);
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()

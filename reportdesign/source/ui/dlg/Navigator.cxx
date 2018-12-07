@@ -230,8 +230,8 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
     SetHelpId( HID_REPORT_NAVIGATOR_TREE );
 
     SetNodeBitmaps(
-        Image(BitmapEx(RID_SVXBMP_COLLAPSEDNODE)),
-        Image(BitmapEx(RID_SVXBMP_EXPANDEDNODE))
+        Image(StockImage::Yes, RID_SVXBMP_COLLAPSEDNODE),
+        Image(StockImage::Yes, RID_SVXBMP_EXPANDEDNODE)
     );
 
     SetDragDropMode(DragDropMode::ALL);
@@ -522,8 +522,7 @@ SvTreeListEntry* NavigatorTree::insertEntry(const OUString& _sName,SvTreeListEnt
     SvTreeListEntry* pEntry = nullptr;
     if (!rImageId.isEmpty())
     {
-        BitmapEx aBitmap(rImageId);
-        const Image aImage(aBitmap);
+        const Image aImage(StockImage::Yes, rImageId);
         pEntry = InsertEntry(_sName,aImage,aImage,_pParent,false,_nPosition,_pData);
     }
     else
