@@ -6413,7 +6413,8 @@ if test "$GCC" = yes; then
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 
-AC_MSG_CHECKING([[whether $CXX supports [[fallthrough]]]])
+dnl This check can eventually be removed completely (e.g., after libreoffice-6-3 branch off):
+AC_MSG_CHECKING([[that $CXX supports [[fallthrough]]]])
 AC_LANG_PUSH([C++])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
@@ -6441,10 +6442,8 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
             }
         }
         #endif
-    ]])], [
-        AC_DEFINE([HAVE_CPP_ATTRIBUTE_FALLTHROUGH],[1])
-        AC_MSG_RESULT([yes])
-    ], [AC_MSG_RESULT([no])])
+    ]])],
+    AC_MSG_RESULT([yes]), AC_MSG_ERROR([$CXX lacks required [[fallthrough]] support]))
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
 
