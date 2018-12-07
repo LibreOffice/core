@@ -969,6 +969,7 @@ namespace xmloff { namespace token {
         TOKEN( "hidden-paragraph",                XML_HIDDEN_PARAGRAPH ),
         TOKEN( "hidden-text",                     XML_HIDDEN_TEXT ),
         TOKEN( "hide",                            XML_HIDE ),
+        TOKEN( "hide-legend",                     XML_HIDE_LEGEND ),
         TOKEN( "hide-shape",                      XML_HIDE_SHAPE ),
         TOKEN( "hide-text",                       XML_HIDE_TEXT ),
         TOKEN( "highlighted-range",               XML_HIGHLIGHTED_RANGE ),

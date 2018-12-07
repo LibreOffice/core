@@ -297,6 +297,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     bool bHasRange = false;
     OUString aSeriesLabelRange;
     OUString aSeriesLabelString;
+    bool bHideLegend = false;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -346,6 +347,9 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                         maSeriesChartTypeName = aClassName;
                 }
                 break;
+            case XML_TOK_SERIES_HIDE_LEGEND:
+                bHideLegend = aValue.toBoolean();
+                break;
         }
     }
 
@@ -390,21 +394,25 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             SchXMLImportHelper::GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
         Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( SchXMLTools::GetNewLabeledDataSequence(), uno::UNO_QUERY_THROW );
 
-        if( bIsCandleStick )
+        Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
+        if (xSeriesProp.is())
         {
-            // set default color for range-line to black (before applying styles)
-            Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
-            if( xSeriesProp.is())
+            if (bHideLegend)
+                xSeriesProp->setPropertyValue("ShowLegendEntry", uno::makeAny(false));
+
+            if( bIsCandleStick )
+            {
+                // set default color for range-line to black (before applying styles)
                 xSeriesProp->setPropertyValue("Color",
-                                               uno::makeAny( sal_Int32( 0x000000 ))); // black
-        }
-        else if ( maSeriesChartTypeName == "com.sun.star.chart2.PieChartType" )
-        {
-            //@todo: this property should be saved
-            Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
-            if( xSeriesProp.is())
+                        uno::makeAny( sal_Int32( 0x000000 ))); // black
+            }
+            else if ( maSeriesChartTypeName == "com.sun.star.chart2.PieChartType" )
+            {
+                //@todo: this property should be saved
                 xSeriesProp->setPropertyValue("VaryColorsByPoint",
-                                               uno::makeAny( true ));
+                        uno::makeAny( true ));
+            }
+
         }
 
         Reference<chart2::data::XDataProvider> xDataProvider(mxNewDoc->getDataProvider());

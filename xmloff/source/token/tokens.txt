@@ -892,6 +892,7 @@ hidden-and-protected
 hidden-paragraph
 hidden-text
 hide
+hide-legend
 hide-shape
 hide-text
 highlighted-range
