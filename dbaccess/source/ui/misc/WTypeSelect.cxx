@@ -232,7 +232,7 @@ OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
 
     m_pColumnNames->SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    m_imgPKey = Image(BitmapEx(BMP_PRIMARY_KEY));
+    m_imgPKey = Image(StockImage::Yes, BMP_PRIMARY_KEY);
 
     m_pTypeControl->Show();
     m_pTypeControl->Init();

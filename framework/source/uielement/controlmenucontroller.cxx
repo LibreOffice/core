@@ -182,7 +182,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
         OString sIdent = OString(aCommands[i]).copy(5);
         sal_uInt16 nId = pPopupMenu->GetItemId(sIdent);
         if (m_bShowMenuImages)
-            pPopupMenu->SetItemImage(nId, Image(BitmapEx(aImgIds[i])));
+            pPopupMenu->SetItemImage(nId, Image(StockImage::Yes, aImgIds[i]));
         else
             pPopupMenu->SetItemImage(nId, Image());
     }

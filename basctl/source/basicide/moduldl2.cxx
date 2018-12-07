@@ -1425,7 +1425,7 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
 
     if (bProtected)
     {
-        Image aImage(BitmapEx(RID_BMP_LOCKED));
+        Image aImage(StockImage::Yes, RID_BMP_LOCKED);
         m_pLibBox->SetExpandedEntryBmp(pNewEntry, aImage);
         m_pLibBox->SetCollapsedEntryBmp(pNewEntry, aImage);
     }
@@ -1527,7 +1527,7 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     const OUString sId = bDlgMode ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_MODLIB);
                     SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
-                        Image(BitmapEx(sId)),
+                        Image(StockImage::Yes, sId),
                         pRootEntry, false,
                         o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
                     DBG_ASSERT( pNewLibEntry, "Insert entry failed!" );
@@ -1536,7 +1536,7 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     {
                         SvTreeListEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
-                            Image(BitmapEx(RID_BMP_MODULE)),
+                            Image(StockImage::Yes, RID_BMP_MODULE),
                             pNewLibEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
                         DBG_ASSERT( pEntry_, "Insert entry failed!" );
