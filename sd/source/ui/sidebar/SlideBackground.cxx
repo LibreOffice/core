@@ -157,19 +157,22 @@ SlideBackground::SlideBackground(
 
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
-    if (pOptions)
+    if (pDoc)
     {
-        FieldUnit eMetric = static_cast<FieldUnit>(pOptions->GetMetric());
-        if (IsInch(eMetric))
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+        if (pOptions)
         {
-            for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
-                mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
+            FieldUnit eMetric = static_cast<FieldUnit>(pOptions->GetMetric());
+            if (IsInch(eMetric))
+            {
+                for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_INCH); ++i)
+                    mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_INCH[i]));
+                }
+            else
+            {
+                for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
+                    mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
             }
-        else
-        {
-            for (size_t i = 0; i < SAL_N_ELEMENTS(RID_PAGEFORMATPANEL_MARGINS_CM); ++i)
-                mpMarginSelectBox->InsertEntry(SdResId(RID_PAGEFORMATPANEL_MARGINS_CM[i]));
         }
     }
 
