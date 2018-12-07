@@ -45,6 +45,8 @@ namespace vcl
 
 #define IMAGELIST_IMAGE_NOTFOUND    (sal_uInt16(0xFFFF))
 
+enum class StockImage { Yes };
+
 class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
 {
     friend class ::OutputDevice;
@@ -54,6 +56,7 @@ public:
                     explicit Image( const BitmapEx& rBitmapEx );
                     explicit Image( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
                     explicit Image( const OUString &rPNGFileUrl );
+                    explicit Image( StockImage, const OUString &rPNGFilePath );
 
     Size            GetSizePixel() const;
 

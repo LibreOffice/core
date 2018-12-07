@@ -951,7 +951,7 @@ void FixedImage::SetModeImage( const Image& rImage )
 
 Image FixedImage::loadThemeImage(const OUString &rFileName)
 {
-    return Image("private:graphicrepository/" + rFileName);
+    return Image(StockImage::Yes, rFileName);
 }
 
 bool FixedImage::set_property(const OString &rKey, const OUString &rValue)
