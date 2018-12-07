@@ -67,7 +67,7 @@ enum class ACFlags : sal_uInt32 {
     Autocorrect          = 0x00000080,   // Call AutoCorrect
     ChgQuotes            = 0x00000100,   // replace double quotes
     SaveWordCplSttLst    = 0x00000200,   // Save Auto correction of Capital letter at beginning of sentence.
-    SaveWordWrdSttLst    = 0x00000400,   // Save Auto correction of 2 Capital letter at beginning of word.
+    SaveWordWrdSttLst    = 0x00000400,   // Save Auto correction of TWo INitial CApitals or sMALL iNITIAL.
     IgnoreDoubleSpace    = 0x00000800,   // Ignore 2 Spaces
     ChgSglQuotes         = 0x00001000,   // Replace simple quotes
     CorrectCapsLock      = 0x00002000,   // Correct accidental use of cAPS LOCK key
@@ -209,8 +209,7 @@ public:
     SvStringsISortDtor* GetCplSttExceptList();
     bool AddToCplSttExceptList(const OUString& rNew);
 
-    // Load, Set, Get the exception list for 2 Capital letters at the
-    // beginning of a word.
+    // Load, Set, Get the exception list for TWo INitial CApitals or sMALL iNITIAL
     SvStringsISortDtor* LoadWrdSttExceptList();
     void SaveWrdSttExceptList();
     SvStringsISortDtor* GetWrdSttExceptList();
@@ -363,8 +362,7 @@ public:
     // Adds a single word. The list will be immediately written to the file!
     bool AddCplSttException( const OUString& rNew, LanguageType eLang );
 
-    // Load, Set, Get the exception list for 2 Capital letters at the
-    // beginning of a word.
+    // Load, Set, Get the exception list for TWo INitial CApitals or sMALL iNITIAL
     void SaveWrdSttExceptList( LanguageType eLang );
     SvStringsISortDtor* LoadWrdSttExceptList( LanguageType eLang )
         {   return GetLanguageList_( eLang ).LoadWrdSttExceptList(); }
