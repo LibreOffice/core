@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/util/xrefreshable.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -19,17 +20,22 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
+
+#include <cppu/unotype.hxx>
 
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScCellFieldsObj : public CalcUnoApiTest, public apitest::XRefreshable
+class ScCellFieldsObj : public CalcUnoApiTest,
+                        public apitest::XElementAccess,
+                        public apitest::XRefreshable
 {
 public:
     ScCellFieldsObj();
@@ -39,6 +45,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScCellFieldsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XRefreshable
     CPPUNIT_TEST(testAddRefreshListener);
@@ -53,6 +63,7 @@ private:
 
 ScCellFieldsObj::ScCellFieldsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<text::XTextField>::get())
 {
 }
 
