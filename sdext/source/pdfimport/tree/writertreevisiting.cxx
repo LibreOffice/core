@@ -28,7 +28,6 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <config_global.h>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -411,14 +410,7 @@ void WriterXmlOptimizer::visit( PolyPolyElement& elem, const std::list< std::uni
         elem.Action |= pNext->Action;
 
         elem.Children.splice( elem.Children.end(), pNext->Children );
-        // workaround older compilers that do not have std::list::erase(const_iterator)
-#if HAVE_BROKEN_CONST_ITERATORS
-        auto tmpIt = elem.Parent->Children.begin();
-        std::advance(tmpIt, std::distance(elem.Parent->Children.cbegin(), next_it));
-        elem.Parent->Children.erase(tmpIt);
-#else
         elem.Parent->Children.erase(next_it);
-#endif
     }
 }
 
