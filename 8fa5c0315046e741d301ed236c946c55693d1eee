@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_47dce545",
+        "filename": "configure.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-12-07T18:32:50Z",
+      "side": 1,
+      "message": "What is the purpose of this file?",
+      "revId": "8fa5c0315046e741d301ed236c946c55693d1eee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
