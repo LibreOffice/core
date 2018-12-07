@@ -64,7 +64,7 @@ const long SetINetAttr      = 0x00000040;   // Set INetAttribut
 const long Autocorrect      = 0x00000080;   // Call AutoCorrect
 const long ChgQuotes        = 0x00000100;   // replace double quotes
 const long SaveWordCplSttLst= 0x00000200;   // Save Auto correction of Capital letter at beginning of sentence.
-const long SaveWordWrdSttLst= 0x00000400;   // Save Auto correction of 2 Capital letter at beginning of word.
+const long SaveWordWrdSttLst= 0x00000400;   // Save Auto correction of TWo INitial CApitals or sMALL iNITIAL.
 const long IgnoreDoubleSpace= 0x00000800;   // Ignore 2 Spaces
 const long ChgSglQuotes     = 0x00001000;   // Replace simple quotes
 const long CorrectCapsLock  = 0x00002000;   // Correct accidental use of cAPS LOCK key
@@ -204,8 +204,7 @@ public:
     SvStringsISortDtor* GetCplSttExceptList();
     bool AddToCplSttExceptList(const OUString& rNew);
 
-    // Load, Set, Get the exception list for 2 Capital letters at the
-    // beginning of a word.
+    // Load, Set, Get the exception list for TWo INitial CApitals or sMALL iNITIAL
     SvStringsISortDtor* LoadWrdSttExceptList();
     void SaveWrdSttExceptList();
     void SetWrdSttExceptList( SvStringsISortDtor* pList );
@@ -360,8 +359,7 @@ public:
     // Adds a single word. The list will be immediately written to the file!
     bool AddCplSttException( const OUString& rNew, LanguageType eLang );
 
-    // Load, Set, Get the exception list for 2 Capital letters at the
-    // beginning of a word.
+    // Load, Set, Get the exception list for TWo INitial CApitals or sMALL iNITIAL
     void SaveWrdSttExceptList( LanguageType eLang );
     SvStringsISortDtor* LoadWrdSttExceptList( LanguageType eLang )
         {   return GetLanguageList_( eLang ).LoadWrdSttExceptList(); }

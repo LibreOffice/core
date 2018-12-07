@@ -1418,12 +1418,13 @@
           <!-- OldPath: AutoCorrect/Options/All -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions - Words with
-               2 initial capitals -->
+               2 initial capitals or small initial -->
           <info>
             <desc>Specifies if defined words with two initial capital letters
-            should not be included in the AutoCorrect replacement.</desc>
-            <label>Words with two initial capital letters - Add
-            automatically</label>
+            or a small initial letter should not be included in the AutoCorrect
+            replacement.</desc>
+            <label>Words with two initial capital letters or a small initial -
+            Add automatically</label>
           </info>
           <value>true</value>
         </prop>
