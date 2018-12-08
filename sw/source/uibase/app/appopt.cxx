@@ -101,6 +101,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
         GetPool(),
         svl::Items<
             RES_BACKGROUND, RES_BACKGROUND,
+            XATTR_FILL_FIRST, XATTR_FILL_LAST,
             SID_PRINTPREVIEW, SID_PRINTPREVIEW,
             SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
             SID_HTML_MODE, SID_HTML_MODE,
@@ -506,8 +507,9 @@ VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParen
         case  RID_SW_TP_BACKGROUND:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
+            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG );
             pRet = (*fnCreatePage)( pParent, &rSet );
+            pRet->PageCreated( rSet );
             break;
         }
         case RID_SW_TP_OPTCAPTION_PAGE:
