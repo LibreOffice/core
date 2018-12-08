@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_02913b53",
+        "filename": "svx/source/svdraw/svdglue.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-08T15:49:01Z",
+      "side": 1,
+      "message": "Why Buf? There is no buffer involved. Rather bMapMode.",
+      "range": {
+        "startLine": 255,
+        "startChar": 9,
+        "endLine": 255,
+        "endChar": 16
+      },
+      "revId": "7e6a09fc9468b9a76b84f8759ec0a5700eb6dce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
