@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <!--***********************************************************
- * 
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -9,16 +9,16 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
+ *
  ***********************************************************-->
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="HtmlAutoPilotBasic" script:language="StarBasic">&apos; Variables must be declared
 Option Explicit
@@ -174,10 +174,10 @@ Dim OldWebPageIndex as Integer
 		CurrentHome$ = GraphicsDir + Style(CurWebPageIndex, 4)
 		CurrentTop$ = GraphicsDir + Style(CurWebPageIndex, 5)
 		With oBaseDocument.DocumentProperties.UserDefinedProperties
-            .AutoPilotName1 = ExtractGraphicNames(CurWebPageIndex,2)
-            .AutoPilotName2 = ExtractGraphicNames(CurWebPageIndex, 4)
-            .AutoPilotBullet = Style(CurWebPageIndex, 6)
-            .AutoPilotBackground =  Style(CurWebPageIndex, 7)
+			.AutoPilotName1 = ExtractGraphicNames(CurWebPageIndex,2)
+			.AutoPilotName2 = ExtractGraphicNames(CurWebPageIndex, 4)
+			.AutoPilotBullet = Style(CurWebPageIndex, 6)
+			.AutoPilotBackground = Style(CurWebPageIndex, 7)
 		End With
 		SetBulletAndGraphics()
 		CheckControls(oBaseDocument.DrawPage)
@@ -191,7 +191,7 @@ End Sub
 Function ExtractGraphicNames(CurIndex as Integer, i as Integer) as String
 Dim FieldValue as String
 	FieldValue = GetFileNameWithoutExtension(Style(CurIndex, i))
-	FieldValue = FieldValue &amp; &quot; &quot; &amp;	GetFileNameWithoutExtension(Style(CurIndex, i+1))
+	FieldValue = FieldValue &amp; &quot; &quot; &amp; GetFileNameWithoutExtension(Style(CurIndex, i+1))
 	ExtractGraphicNames = FieldValue
 End Function
 
@@ -257,7 +257,7 @@ Dim oGraphic as Object
 Dim i as Integer
 Dim udProps as Object
 Dim SavePath as String
-    BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	GetWebWizardPaths()
 	oBaseDocument = ThisComponent
@@ -276,11 +276,11 @@ Dim SavePath as String
 
 	BulletUrlsToSavePath(SavePath)
 
-    udProps = oBaseDocument.DocumentProperties.UserDefinedProperties
-    udProps.addProperty(&quot;AutoPilotName1&quot;, 0, &quot;&quot;)
-    udProps.addProperty(&quot;AutoPilotName2&quot;, 0, &quot;&quot;)
-    udProps.addProperty(&quot;AutoPilotBullet&quot;, 0, &quot;&quot;)
-    udProps.addProperty(&quot;AutoPilotBackground&quot;, 0, &quot;&quot;)
+	udProps = oBaseDocument.DocumentProperties.UserDefinedProperties
+	udProps.addProperty(&quot;AutoPilotName1&quot;, 0, &quot;&quot;)
+	udProps.addProperty(&quot;AutoPilotName2&quot;, 0, &quot;&quot;)
+	udProps.addProperty(&quot;AutoPilotBullet&quot;, 0, &quot;&quot;)
+	udProps.addProperty(&quot;AutoPilotBackground&quot;, 0, &quot;&quot;)
 
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveDone&quot;, &quot;&quot;)
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveAsDone&quot;, &quot;&quot;)
@@ -370,9 +370,9 @@ Dim sExtension as String
 					sFieldList() = ArrayoutofString(sField, &quot; &quot;, MaxIndex)
 					For s = 0 To MaxIndex
 						If m &lt; 6 Then
-					        List(a,m) = sFieldList(s) &amp; &quot;.gif&quot;
+							List(a,m) = sFieldList(s) &amp; &quot;.gif&quot;
 						Else
-					        List(a,m) = sFieldList(s)
+							List(a,m) = sFieldList(s)
 						End If
 						m = m + 1
 					Next s
@@ -437,7 +437,7 @@ End Sub
 Sub RepaintHeaderPreview()
 Dim Bitmap As Object
 Dim sBitmapPath as String
-	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
+	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.png&quot;
 	WebWzrd.ImagePreview.ImageURL = sBitmapPath
 End Sub
 
