@@ -58,7 +58,7 @@ void SbiCodeGen::Statement()
     nCol  = pParser->GetCol1();
 
     // #29955 Store the information of the for-loop-layer
-    // in the uppper Byte of the column
+    // in the upper Byte of the column
     nCol = (nCol & 0xff) + 0x100 * nForLevel;
 }
 
