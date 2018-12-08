@@ -15085,6 +15085,7 @@ sw/qa/extras/ooxmlexport/ooxmlencryption.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport10.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport11.cxx
+sw/qa/extras/ooxmlexport/ooxmlexport13.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport2.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport3.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport4.cxx
