@@ -430,18 +430,17 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         if (pPageSelection->empty())
             break;
 
-        ::std::vector<SdPage*>::iterator iPage;
-        for (iPage=pPageSelection->begin(); iPage!=pPageSelection->end(); ++iPage)
-            {
-                if ((*iPage) == nullptr)
-                    continue;
+        for (const auto& rpPage : *pPageSelection)
+        {
+            if (rpPage == nullptr)
+                continue;
 
-                // Call the SID_ASSIGN_LAYOUT slot with all the necessary parameters.
-                SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
-                aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNum()-1)/2));
-                aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-                pMainViewShell->ExecuteSlot (aRequest, false);
-            }
+            // Call the SID_ASSIGN_LAYOUT slot with all the necessary parameters.
+            SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
+            aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, (rpPage->GetPageNum()-1)/2));
+            aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
+            pMainViewShell->ExecuteSlot (aRequest, false);
+        }
     }
     while(false);
 }

@@ -249,10 +249,9 @@ void BitmapCache::InvalidateCache()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    CacheBitmapContainer::iterator iEntry;
-    for (iEntry=mpBitmapContainer->begin(); iEntry!=mpBitmapContainer->end(); ++iEntry)
+    for (auto& rEntry : *mpBitmapContainer)
     {
-        iEntry->second.Invalidate();
+        rEntry.second.Invalidate();
     }
     ReCalculateTotalCacheSize();
 }
@@ -330,13 +329,12 @@ void BitmapCache::ReCalculateTotalCacheSize()
 
     mnNormalCacheSize = 0;
     mnPreciousCacheSize = 0;
-    CacheBitmapContainer::iterator iEntry;
-    for (iEntry=mpBitmapContainer->begin(); iEntry!=mpBitmapContainer->end();  ++iEntry)
+    for (const auto& rEntry : *mpBitmapContainer)
     {
-        if (iEntry->second.IsPrecious())
-            mnPreciousCacheSize += iEntry->second.GetMemorySize();
+        if (rEntry.second.IsPrecious())
+            mnPreciousCacheSize += rEntry.second.GetMemorySize();
         else
-            mnNormalCacheSize += iEntry->second.GetMemorySize();
+            mnNormalCacheSize += rEntry.second.GetMemorySize();
     }
     mbIsFull = (mnNormalCacheSize  >= mnMaximalNormalCacheSize);
 
@@ -347,16 +345,13 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    CacheBitmapContainer::const_iterator iOtherEntry;
-    for (iOtherEntry=rCache.mpBitmapContainer->begin();
-         iOtherEntry!=rCache.mpBitmapContainer->end();
-         ++iOtherEntry)
+    for (const auto& rOtherEntry : *rCache.mpBitmapContainer)
     {
-        CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(iOtherEntry->first));
+        CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rOtherEntry.first));
         if (iEntry == mpBitmapContainer->end())
         {
             iEntry = mpBitmapContainer->emplace(
-                iOtherEntry->first,
+                rOtherEntry.first,
                 CacheEntry(mnCurrentAccessTime++, true)
                 ).first;
             UpdateCacheSize(iEntry->second, ADD);
@@ -364,7 +359,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
         if (iEntry != mpBitmapContainer->end())
         {
             UpdateCacheSize(iEntry->second, REMOVE);
-            iEntry->second.Recycle(iOtherEntry->second);
+            iEntry->second.Recycle(rOtherEntry.second);
             UpdateCacheSize(iEntry->second, ADD);
         }
     }
@@ -379,16 +374,15 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
     aSortedContainer.reserve(mpBitmapContainer->size());
 
     // Copy the relevant entries.
-    CacheBitmapContainer::iterator iEntry;
-    for (iEntry=mpBitmapContainer->begin(); iEntry!=mpBitmapContainer->end(); ++iEntry)
+    for (const auto& rEntry : *mpBitmapContainer)
     {
-        if ( iEntry->second.IsPrecious())
+        if ( rEntry.second.IsPrecious())
             continue;
 
-        if ( ! iEntry->second.HasPreview())
+        if ( ! rEntry.second.HasPreview())
             continue;
 
-        aSortedContainer.emplace_back(iEntry->first,iEntry->second);
+        aSortedContainer.emplace_back(rEntry.first, rEntry.second);
     }
 
     // Sort the remaining entries.
@@ -396,10 +390,9 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
 
     // Return a list with the keys of the sorted entries.
     ::std::unique_ptr<CacheIndex> pIndex(new CacheIndex);
-    SortableBitmapContainer::iterator iIndexEntry;
     pIndex->reserve(aSortedContainer.size());
-    for (iIndexEntry=aSortedContainer.begin(); iIndexEntry!=aSortedContainer.end(); ++iIndexEntry)
-        pIndex->push_back(iIndexEntry->first);
+    for (const auto& rIndexEntry : aSortedContainer)
+        pIndex->push_back(rIndexEntry.first);
     return pIndex;
 }
 

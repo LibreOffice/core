@@ -565,20 +565,20 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
     int nHeight (3);
 
     // Search for the first entry with an existing master page.
-    MasterPageContainerType::const_iterator iDescriptor;
-    MasterPageContainerType::const_iterator iContainerEnd(maContainer.end());
-    for (iDescriptor=maContainer.begin(); iDescriptor!=iContainerEnd; ++iDescriptor)
-        if (*iDescriptor!=nullptr && (*iDescriptor)->mpMasterPage != nullptr)
-        {
-            Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
-            OSL_ASSERT(aPageSize.Width() > 0 && aPageSize.Height() > 0);
-            if (aPageSize.Width() > 0)
-                nWidth = aPageSize.Width();
-            if (aPageSize.Height() > 0)
-                nHeight = aPageSize.Height();
-            mbFirstPageObjectSeen = true;
-            break;
-        }
+    auto iDescriptor = std::find_if(maContainer.begin(), maContainer.end(),
+        [](const SharedMasterPageDescriptor& rxDescriptor) {
+            return rxDescriptor != nullptr && rxDescriptor->mpMasterPage != nullptr;
+        });
+    if (iDescriptor != maContainer.end())
+    {
+        Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
+        OSL_ASSERT(aPageSize.Width() > 0 && aPageSize.Height() > 0);
+        if (aPageSize.Width() > 0)
+            nWidth = aPageSize.Width();
+        if (aPageSize.Height() > 0)
+            nHeight = aPageSize.Height();
+        mbFirstPageObjectSeen = true;
+    }
 
     maSmallPreviewSizePixel.setWidth( SMALL_PREVIEW_WIDTH );
     maLargePreviewSizePixel.setWidth( LARGE_PREVIEW_WIDTH );
@@ -667,10 +667,9 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             // appropriate events to the listeners.
             UpdateDescriptor(*aEntry,false,false, true);
 
-            std::vector<MasterPageContainerChangeEvent::EventType>::const_iterator iEventType;
-            for (iEventType=pEventTypes->begin(); iEventType!=pEventTypes->end(); ++iEventType)
+            for (auto& rEventType : *pEventTypes)
             {
-                FireContainerChange( *iEventType,(*aEntry)->maToken);
+                FireContainerChange(rEventType, (*aEntry)->maToken);
             }
         }
     }
@@ -915,12 +914,11 @@ void MasterPageContainer::Implementation::FireContainerChange (
     Token aToken)
 {
     ::std::vector<Link<MasterPageContainerChangeEvent&,void>> aCopy(maChangeListeners.begin(),maChangeListeners.end());
-    ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener;
     MasterPageContainerChangeEvent aEvent;
     aEvent.meEventType = eType;
     aEvent.maChildToken = aToken;
-    for (iListener=aCopy.begin(); iListener!=aCopy.end(); ++iListener)
-        iListener->Call(aEvent);
+    for (auto& rListener : aCopy)
+        rListener.Call(aEvent);
 }
 
 bool MasterPageContainer::Implementation::UpdateDescriptor (

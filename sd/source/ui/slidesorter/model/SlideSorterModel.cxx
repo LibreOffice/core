@@ -318,22 +318,20 @@ void SlideSorterModel::ClearDescriptorList()
         aDescriptors.swap(maPageDescriptors);
     }
 
-    for (::std::vector<SharedPageDescriptor>::iterator iDescriptor=aDescriptors.begin(), iEnd=aDescriptors.end();
-         iDescriptor!=iEnd;
-         ++iDescriptor)
+    for (auto& rxDescriptor : aDescriptors)
     {
-        if (*iDescriptor != nullptr)
+        if (rxDescriptor != nullptr)
         {
-            if (iDescriptor->use_count() > 1)
+            if (rxDescriptor.use_count() > 1)
             {
                 SAL_INFO(
                     "sd.sls",
                     "trying to delete page descriptor that is still used with"
-                        " count " << iDescriptor->use_count());
+                        " count " << rxDescriptor.use_count());
                 // No assertion here because that can hang the office when
                 // opening a dialog from here.
             }
-            iDescriptor->reset();
+            rxDescriptor.reset();
         }
     }
 }

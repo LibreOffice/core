@@ -514,19 +514,20 @@ void ViewTabBar::UpdateActiveButton()
 
 void ViewTabBar::UpdateTabBarButtons()
 {
-    TabBarButtonList::const_iterator iTab;
     sal_uInt16 nPageCount (mpTabControl->GetPageCount());
-    sal_uInt16 nIndex;
-    for (iTab=maTabBarButtons.begin(),nIndex=1; iTab!=maTabBarButtons.end(); ++iTab,++nIndex)
+    sal_uInt16 nIndex = 1;
+    for (const auto& rTab : maTabBarButtons)
     {
         // Create a new tab when there are not enough.
         if (nPageCount < nIndex)
-            mpTabControl->InsertPage(nIndex, iTab->ButtonLabel);
+            mpTabControl->InsertPage(nIndex, rTab.ButtonLabel);
 
         // Update the tab.
-        mpTabControl->SetPageText(nIndex, iTab->ButtonLabel);
-        mpTabControl->SetHelpText(nIndex, iTab->HelpText);
+        mpTabControl->SetPageText(nIndex, rTab.ButtonLabel);
+        mpTabControl->SetHelpText(nIndex, rTab.HelpText);
         mpTabControl->SetTabPage(nIndex, mpTabPage.get());
+
+        ++nIndex;
     }
 
     // Delete tabs that are no longer used.

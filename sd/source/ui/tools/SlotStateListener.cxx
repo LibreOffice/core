@@ -125,17 +125,12 @@ void SlotStateListener::statusChanged (
 
 void SlotStateListener::ReleaseListeners()
 {
-    if ( ! maRegisteredURLList.empty())
+    for (const auto& rURL : maRegisteredURLList)
     {
-        RegisteredURLList::iterator iURL (maRegisteredURLList.begin());
-        RegisteredURLList::iterator iEnd (maRegisteredURLList.end());
-        for (; iURL!=iEnd; ++iURL)
+        uno::Reference<frame::XDispatch> xDispatch (GetDispatch(rURL));
+        if (xDispatch.is())
         {
-            uno::Reference<frame::XDispatch> xDispatch (GetDispatch(*iURL));
-            if (xDispatch.is())
-            {
-                xDispatch->removeStatusListener(this,*iURL);
-            }
+            xDispatch->removeStatusListener(this,rURL);
         }
     }
 }

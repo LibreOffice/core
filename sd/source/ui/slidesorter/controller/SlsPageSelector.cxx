@@ -278,9 +278,8 @@ void PageSelector::SetPageSelection (
     const std::shared_ptr<PageSelection>& rpSelection,
     const bool bUpdateCurrentPage)
 {
-    PageSelection::const_iterator iPage;
-    for (iPage=rpSelection->begin(); iPage!=rpSelection->end(); ++iPage)
-        SelectPage(*iPage);
+    for (const auto& rpPage : *rpSelection)
+        SelectPage(rpPage);
     if (bUpdateCurrentPage)
         UpdateCurrentPage();
 }

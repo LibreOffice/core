@@ -737,15 +737,10 @@ void ViewShellManager::Implementation::UpdateShellStack()
 #endif
 
     // 4. Find the lowest shell in which the two stacks differ.
-    ShellStack::iterator iSfxShell (aSfxShellStack.begin());
-    ShellStack::iterator iTargetShell (aTargetStack.begin());
-    while (iSfxShell != aSfxShellStack.end()
-        && iTargetShell!=aTargetStack.end()
-        && (*iSfxShell)==(*iTargetShell))
-    {
-        ++iSfxShell;
-        ++iTargetShell;
-    }
+    auto mismatchIters = std::mismatch(aSfxShellStack.begin(), aSfxShellStack.end(),
+        aTargetStack.begin(), aTargetStack.end());
+    ShellStack::iterator iSfxShell (mismatchIters.first);
+    ShellStack::iterator iTargetShell (mismatchIters.second);
 
     // 5. Remove all shells above and including the differing shell from the
     // SFX stack starting with the shell on top of the stack.

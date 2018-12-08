@@ -1326,28 +1326,11 @@ ToolBarShellList::ToolBarShellList()
 
 void ToolBarShellList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
 {
-    // In every loop we erase the first member of the specified group.
-    // Because that invalidates the iterator another loop is started after
-    // that.  The loop is left only when no member of the group is found and
-    // no element is erased
-    bool bLoop;
-    do
-    {
-        bLoop = false;
-
-        GroupedShellList::iterator iDescriptor;
-        for (iDescriptor=maNewList.begin(); iDescriptor!=maNewList.end(); ++iDescriptor)
-            if (iDescriptor->meGroup == eGroup)
-            {
-                maNewList.erase(iDescriptor);
-                // Erasing the descriptor invalidated the iterator so we
-                // have to exit the for loop and start anew to search for
-                // further elements of the group.
-                bLoop = true;
-                break;
-            }
-    }
-    while (bLoop);
+    for (GroupedShellList::iterator iDescriptor = maNewList.begin(); iDescriptor != maNewList.end(); )
+        if (iDescriptor->meGroup == eGroup)
+            iDescriptor = maNewList.erase(iDescriptor);
+        else
+            ++iDescriptor;
 }
 
 void ToolBarShellList::AddShellId (sd::ToolBarManager::ToolBarGroup eGroup, sd::ShellId nId)
@@ -1377,10 +1360,9 @@ void ToolBarShellList::ReleaseAllShells (ToolBarRules& rRules)
 {
     // Release the currently active tool bars.
     GroupedShellList aList (maCurrentList);
-    GroupedShellList::iterator iDescriptor;
-    for (iDescriptor=aList.begin(); iDescriptor!=aList.end(); ++iDescriptor)
+    for (const auto& rDescriptor : aList)
     {
-        rRules.SubShellRemoved(iDescriptor->meGroup, iDescriptor->mnId);
+        rRules.SubShellRemoved(rDescriptor.meGroup, rDescriptor.mnId);
     }
 
     // Clear the list of requested tool bars.
@@ -1400,10 +1382,10 @@ void ToolBarShellList::UpdateShells (
         ::std::set_difference(maCurrentList.begin(), maCurrentList.end(),
             maNewList.begin(), maNewList.end(),
             std::insert_iterator<GroupedShellList>(aList,aList.begin()));
-        for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
+        for (const auto& rShell : aList)
         {
-            SAL_INFO("sd.view", OSL_THIS_FUNC << ": deactivating tool bar shell " << static_cast<sal_uInt32>(iShell->mnId));
-            rpManager->DeactivateSubShell(*rpMainViewShell, iShell->mnId);
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ": deactivating tool bar shell " << static_cast<sal_uInt32>(rShell.mnId));
+            rpManager->DeactivateSubShell(*rpMainViewShell, rShell.mnId);
         }
 
         // Activate shells that are in maNewList, but not in
@@ -1412,10 +1394,10 @@ void ToolBarShellList::UpdateShells (
         ::std::set_difference(maNewList.begin(), maNewList.end(),
             maCurrentList.begin(), maCurrentList.end(),
             std::insert_iterator<GroupedShellList>(aList,aList.begin()));
-        for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
+        for (const auto& rShell : aList)
         {
-            SAL_INFO("sd.view", OSL_THIS_FUNC << ": activating tool bar shell " << static_cast<sal_uInt32>(iShell->mnId));
-            rpManager->ActivateSubShell(*rpMainViewShell, iShell->mnId);
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ": activating tool bar shell " << static_cast<sal_uInt32>(rShell.mnId));
+            rpManager->ActivateSubShell(*rpMainViewShell, rShell.mnId);
         }
 
         // The maNewList now reflects the current state and thus is made

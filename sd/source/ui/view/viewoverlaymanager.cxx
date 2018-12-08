@@ -471,11 +471,11 @@ bool ViewOverlayManager::CreateTags()
     {
         const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
-        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); ++iter )
+        for( SdrObject* pShape : rShapes )
         {
-            if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
+            if( pShape->IsEmptyPresObj() && (pShape->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != pShape) )
             {
-                rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *mrBase.GetMainViewShell()->GetView(), *(*iter) ) );
+                rtl::Reference< SmartTag > xTag( new ChangePlaceholderTag( *mrBase.GetMainViewShell()->GetView(), *pShape ) );
                 maTagVector.push_back(xTag);
                 bChanges = true;
             }
@@ -492,12 +492,8 @@ bool ViewOverlayManager::DisposeTags()
         ViewTagVector vec;
         vec.swap( maTagVector );
 
-        ViewTagVector::iterator iter = vec.begin();
-        do
-        {
-            (*iter++)->Dispose();
-        }
-        while( iter != vec.end() );
+        for (auto& rxViewTag : vec)
+            rxViewTag->Dispose();
         return true;
     }
 

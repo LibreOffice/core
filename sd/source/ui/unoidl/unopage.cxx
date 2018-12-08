@@ -2088,9 +2088,8 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes()
         // Join those types in a sequence.
         maTypeSequence.realloc(aTypes.size() + nBaseTypes);
         uno::Type* pTypes = maTypeSequence.getArray();
-        ::std::vector<uno::Type>::const_iterator iType;
-        for (iType=aTypes.begin(); iType!=aTypes.end(); ++iType)
-            *pTypes++ = *iType;
+        for (const auto& rType : aTypes)
+            *pTypes++ = rType;
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
             *pTypes++ = *pBaseTypes++;
     }
@@ -2714,9 +2713,8 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes()
         // Join those types in a sequence.
         maTypeSequence.realloc(aTypes.size() + nBaseTypes);
         uno::Type* pTypes = maTypeSequence.getArray();
-        ::std::vector<uno::Type>::const_iterator iType;
-        for (iType=aTypes.begin(); iType!=aTypes.end(); ++iType)
-            *pTypes++ = *iType;
+        for (const auto& rType : aTypes)
+            *pTypes++ = rType;
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
             *pTypes++ = *pBaseTypes++;
     }
@@ -2814,18 +2812,15 @@ void SdMasterPage::setBackground( const Any& rValue )
             Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
 
             PropertyEntryVector_t aBackgroundProperties = ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries();
-            PropertyEntryVector_t::const_iterator aIt = aBackgroundProperties.begin();
-            while( aIt != aBackgroundProperties.end() )
+            for( const auto& rProp : aBackgroundProperties )
             {
-                if( xSetInfo->hasPropertyByName( aIt->sName ) )
+                if( xSetInfo->hasPropertyByName( rProp.sName ) )
                 {
-                    if( !xSetStates.is() || xSetStates->getPropertyState( aIt->sName ) == beans::PropertyState_DIRECT_VALUE )
-                        xStyleSet->setPropertyValue( aIt->sName,    xInputSet->getPropertyValue( aIt->sName ) );
+                    if( !xSetStates.is() || xSetStates->getPropertyState( rProp.sName ) == beans::PropertyState_DIRECT_VALUE )
+                        xStyleSet->setPropertyValue( rProp.sName,    xInputSet->getPropertyValue( rProp.sName ) );
                     else
-                        xSetStates->setPropertyToDefault( aIt->sName );
+                        xSetStates->setPropertyToDefault( rProp.sName );
                 }
-
-                ++aIt;
             }
         }
         else

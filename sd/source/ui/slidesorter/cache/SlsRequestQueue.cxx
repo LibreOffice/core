@@ -255,9 +255,9 @@ void RequestQueue::Clear()
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    for (Container::iterator aI = mpRequestQueue->begin(), aEnd = mpRequestQueue->end(); aI != aEnd; ++aI)
+    for (const auto& rItem : *mpRequestQueue)
     {
-        SdrPage *pPage = const_cast<SdrPage*>(aI->maKey);
+        SdrPage *pPage = const_cast<SdrPage*>(rItem.maKey);
         pPage->RemovePageUser(*this);
     }
 

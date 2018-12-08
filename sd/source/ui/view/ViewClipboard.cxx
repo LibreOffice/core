@@ -80,10 +80,8 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             if (pDocument == nullptr)
                 break;
 
-            std::vector<OUString>::const_iterator pIter;
-            for ( pIter = rBookmarks.begin(); pIter != rBookmarks.end(); ++pIter )
+            for (const OUString& sName : rBookmarks)
             {
-                OUString sName (*pIter);
                 bool bIsMasterPage;
 
                 // SdPage* GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);

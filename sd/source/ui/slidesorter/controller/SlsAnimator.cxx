@@ -84,9 +84,8 @@ void Animator::Dispose()
     mbIsDisposed = true;
 
     AnimationList aCopy (maAnimations);
-    AnimationList::const_iterator iAnimation;
-    for (iAnimation=aCopy.begin(); iAnimation!=aCopy.end(); ++iAnimation)
-        (*iAnimation)->Expire();
+    for (const auto& rxAnimation : aCopy)
+        rxAnimation->Expire();
 
     maIdle.Stop();
     if (mpDrawLock)
@@ -171,10 +170,9 @@ bool Animator::ProcessAnimations (const double nTime)
         return bExpired;
 
     AnimationList aCopy (maAnimations);
-    AnimationList::const_iterator iAnimation;
-    for (iAnimation=aCopy.begin(); iAnimation!=aCopy.end(); ++iAnimation)
+    for (const auto& rxAnimation : aCopy)
     {
-        bExpired |= (*iAnimation)->Run(nTime);
+        bExpired |= rxAnimation->Run(nTime);
     }
 
     return bExpired;
@@ -188,11 +186,10 @@ void Animator::CleanUpAnimationList()
 
     AnimationList aActiveAnimations;
 
-    AnimationList::const_iterator iAnimation;
-    for (iAnimation=maAnimations.begin(); iAnimation!=maAnimations.end(); ++iAnimation)
+    for (const auto& rxAnimation : maAnimations)
     {
-        if ( ! (*iAnimation)->IsExpired())
-            aActiveAnimations.push_back(*iAnimation);
+        if ( ! rxAnimation->IsExpired())
+            aActiveAnimations.push_back(rxAnimation);
     }
 
     maAnimations.swap(aActiveAnimations);

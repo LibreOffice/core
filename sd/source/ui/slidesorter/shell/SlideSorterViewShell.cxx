@@ -706,15 +706,15 @@ std::pair<sal_uInt16, sal_uInt16> SlideSorterViewShell::SyncPageSelectionToDocum
     sal_uInt16 lastSelectedPageNo = 0;
 
     GetDoc()->UnselectAllPages();
-    for (auto it = rpSelection->begin(); it != rpSelection->end(); ++it)
+    for (auto& rpPage : *rpSelection)
     {
         // Check page number
-        sal_uInt16 pageNo = (*it)->GetPageNum();
+        sal_uInt16 pageNo = rpPage->GetPageNum();
         if (pageNo > lastSelectedPageNo)
             lastSelectedPageNo = pageNo;
         if (pageNo < firstSelectedPageNo)
             firstSelectedPageNo = pageNo;
-        GetDoc()->SetSelected(*it, true);
+        GetDoc()->SetSelected(rpPage, true);
     }
 
     return std::make_pair(firstSelectedPageNo, lastSelectedPageNo);
@@ -879,12 +879,9 @@ void SlideSorterViewShell::PostMoveSlidesActions(const std::shared_ptr<SlideSort
     }
 
     mpSlideSorter->GetController().GetPageSelector().DeselectAllPages();
-    ::std::vector<SdPage*>::iterator iPage;
-    for (iPage=rpSelection->begin();
-        iPage!=rpSelection->end();
-        ++iPage)
+    for (const auto& rpPage : *rpSelection)
     {
-        mpSlideSorter->GetController().GetPageSelector().SelectPage(*iPage);
+        mpSlideSorter->GetController().GetPageSelector().SelectPage(rpPage);
     }
 
     // Refresh toolbar icons

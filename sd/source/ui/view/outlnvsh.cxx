@@ -798,18 +798,12 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (!aSelList.empty())
     {
-        std::vector<Paragraph*>::const_iterator iter = aSelList.begin();
-        Paragraph* pPara = *iter;
+        sal_Int16 nTmpDepth = rOutl.GetDepth( rOutl.GetAbsPos( aSelList.front() ) );
+        bool bPage = ::Outliner::HasParaFlag( aSelList.front(), ParaFlag::ISPAGE );
 
-        sal_Int16 nDepth;
-        sal_Int16 nTmpDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
-        bool bPage = ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE );
-
-        while (iter != aSelList.begin())
+        for (const Paragraph* pPara : aSelList)
         {
-            pPara = *iter;
-
-            nDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
+            sal_Int16 nDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
 
             if( nDepth != nTmpDepth || bPage != ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ))
                 bUnique = false;
@@ -821,8 +815,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
                 else
                     bDisableCollapse = false;
             }
-
-            ++iter;
         }
     }
 

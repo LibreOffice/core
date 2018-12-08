@@ -303,14 +303,9 @@ void EventMultiplexer::Implementation::AddEventListener (
 void EventMultiplexer::Implementation::RemoveEventListener (
     const Link<EventMultiplexerEvent&,void>& rCallback)
 {
-    ListenerList::iterator iListener (maListeners.begin());
-    ListenerList::const_iterator iEnd (maListeners.end());
-    for (;iListener!=iEnd; ++iListener)
-        if (*iListener == rCallback)
-        {
-            maListeners.erase(iListener);
-            break;
-        }
+    auto iListener = std::find(maListeners.begin(), maListeners.end(), rCallback);
+    if (iListener != maListeners.end())
+        maListeners.erase(iListener);
 }
 
 void EventMultiplexer::Implementation::ConnectToController()
@@ -641,11 +636,9 @@ void EventMultiplexer::Implementation::CallListeners (
 void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEvent)
 {
     ListenerList aCopyListeners( maListeners );
-    ListenerList::iterator iListener (aCopyListeners.begin());
-    ListenerList::const_iterator iListenerEnd (aCopyListeners.end());
-    for (; iListener!=iListenerEnd; ++iListener)
+    for (auto& rListener : aCopyListeners)
     {
-        iListener->Call(rEvent);
+        rListener.Call(rEvent);
     }
 }
 

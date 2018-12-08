@@ -104,26 +104,25 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
         if( mpPropSet->AreThereOwnUsrAnys() )
         {
             PropertyEntryVector_t aProperties = mpPropSet->getPropertyMap().getPropertyEntries();
-            PropertyEntryVector_t::const_iterator aIt = aProperties.begin();
 
-            while( aIt != aProperties.end() )
+            for( const auto& rProp : aProperties )
             {
-                uno::Any* pAny = mpPropSet->GetUsrAnyForID( aIt->nWID );
+                uno::Any* pAny = mpPropSet->GetUsrAnyForID( rProp.nWID );
                 if( pAny )
                 {
-                    OUString aPropertyName( aIt->sName );
-                    switch( aIt->nWID )
+                    OUString aPropertyName( rProp.sName );
+                    switch( rProp.nWID )
                     {
                         case XATTR_FILLFLOATTRANSPARENCE :
                         case XATTR_FILLGRADIENT :
                         {
                             if ( ( pAny->getValueType() == ::cppu::UnoType< css::awt::Gradient>::get() )
-                                && ( aIt->nMemberId == MID_FILLGRADIENT ) )
+                                && ( rProp.nMemberId == MID_FILLGRADIENT ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
                             else if ( ( pAny->getValueType() == ::cppu::UnoType<OUString>::get() ) &&
-                                        ( aIt->nMemberId == MID_NAME ) )
+                                        ( rProp.nMemberId == MID_NAME ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
@@ -132,12 +131,12 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         case XATTR_FILLHATCH :
                         {
                             if ( ( pAny->getValueType() == ::cppu::UnoType< css::drawing::Hatch>::get() )
-                                && ( aIt->nMemberId == MID_FILLHATCH ) )
+                                && ( rProp.nMemberId == MID_FILLHATCH ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
                             else if ( ( pAny->getValueType() == ::cppu::UnoType<OUString>::get() ) &&
-                                        ( aIt->nMemberId == MID_NAME ) )
+                                        ( rProp.nMemberId == MID_NAME ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
@@ -145,13 +144,13 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         break;
                         case XATTR_FILLBITMAP :
                         {
-                            if (aIt->nMemberId == MID_BITMAP &&
+                            if (rProp.nMemberId == MID_BITMAP &&
                                 (pAny->getValueType() == cppu::UnoType<css::awt::XBitmap>::get() ||
                                  pAny->getValueType() == cppu::UnoType<css::graphic::XGraphic>::get()))
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
-                            else if (pAny->getValueType() == ::cppu::UnoType<OUString>::get() && aIt->nMemberId == MID_NAME)
+                            else if (pAny->getValueType() == ::cppu::UnoType<OUString>::get() && rProp.nMemberId == MID_NAME)
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
@@ -162,7 +161,6 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                             setPropertyValue( aPropertyName, *pAny );
                     }
                 }
-                ++aIt;
             }
         }
     }

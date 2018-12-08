@@ -85,9 +85,9 @@ void ForAllRectangles (const vcl::Region& rRegion, const std::function<void (con
     }
     else
     {
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        for(const auto& rRect : aRectangles)
         {
-            aFunction(*aRectIter);
+            aFunction(rRect);
         }
 
         //Region aMutableRegionCopy (rRegion);
@@ -424,13 +424,9 @@ void Layer::ValidateRectangle (const ::tools::Rectangle& rBox)
     const vcl::Region aSavedClipRegion (mpLayerDevice->GetClipRegion());
     mpLayerDevice->IntersectClipRegion(rBox);
 
-    for (::std::vector<SharedILayerPainter>::const_iterator
-             iPainter(maPainters.begin()),
-             iEnd(maPainters.end());
-         iPainter!=iEnd;
-         ++iPainter)
+    for (const auto& rxPainter : maPainters)
     {
-        (*iPainter)->Paint(*mpLayerDevice, rBox);
+        rxPainter->Paint(*mpLayerDevice, rBox);
     }
 
     mpLayerDevice->SetClipRegion(aSavedClipRegion);

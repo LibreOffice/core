@@ -224,11 +224,8 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
             // first deselect all
             mrView.UnmarkAllObj( pPV );
 
-            ::std::vector<SdrObject*>::iterator aIter( aObjects.begin() );
-            const ::std::vector<SdrObject*>::iterator aEnd( aObjects.end() );
-            while( aIter != aEnd )
+            for( SdrObject* pObj : aObjects )
             {
-                SdrObject* pObj = *aIter++;
                 mrView.MarkObj( pObj, pPV );
             }
         }

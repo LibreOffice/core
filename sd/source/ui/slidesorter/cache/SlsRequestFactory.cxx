@@ -40,20 +40,16 @@ void RequestFactory::operator()(
     aKeys = rpCacheContext->GetEntryList(true);
     if (aKeys != nullptr)
     {
-        std::vector<CacheKey>::const_iterator iKey;
-        std::vector<CacheKey>::const_iterator iEnd (aKeys->end());
-        for (iKey=aKeys->begin(); iKey!=iEnd; ++iKey)
-            rRequestQueue.AddRequest(*iKey, VISIBLE_NO_PREVIEW);
+        for (const auto& rKey : *aKeys)
+            rRequestQueue.AddRequest(rKey, VISIBLE_NO_PREVIEW);
     }
 
     // Add the requests for the non-visible pages.
     aKeys = rpCacheContext->GetEntryList(false);
     if (aKeys != nullptr)
     {
-        std::vector<CacheKey>::const_iterator iKey;
-        std::vector<CacheKey>::const_iterator iEnd (aKeys->end());
-        for (iKey=aKeys->begin(); iKey!=iEnd; ++iKey)
-            rRequestQueue.AddRequest(*iKey, NOT_VISIBLE);
+        for (const auto& rKey : *aKeys)
+            rRequestQueue.AddRequest(rKey, NOT_VISIBLE);
     }
 }
 

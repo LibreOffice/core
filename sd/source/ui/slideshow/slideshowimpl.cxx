@@ -1183,13 +1183,10 @@ void SlideshowImpl::removeShapeEvents()
 {
     if( mxShow.is() && mxListenerProxy.is() ) try
     {
-        WrappedShapeEventImplMap::iterator aIter;
-        const WrappedShapeEventImplMap::iterator aEnd( maShapeEventMap.end() );
-
-        for( aIter = maShapeEventMap.begin(); aIter != aEnd; ++aIter )
+        for( const auto& rEntry : maShapeEventMap )
         {
-            mxListenerProxy->removeShapeEventListener( (*aIter).first );
-            mxShow->setShapeCursor( (*aIter).first, awt::SystemPointer::ARROW );
+            mxListenerProxy->removeShapeEventListener( rEntry.first );
+            mxShow->setShapeCursor( rEntry.first, awt::SystemPointer::ARROW );
         }
 
         maShapeEventMap.clear();
@@ -2283,11 +2280,9 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
                     mpSlideController->insertSlideNumber( static_cast<sal_uInt16>(nSlide) );
             }
 
-            sal_Int32 nSlideIndex = 0;
-            for( SdCustomShow::PageVec::iterator it = pCustomShow->PagesVector().begin();
-                 it != pCustomShow->PagesVector().end(); ++it, nSlideIndex++ )
+            for( const auto& rpPage : pCustomShow->PagesVector() )
             {
-                const sal_uInt16 nSdSlide = ( (*it)->GetPageNum() - 1 ) / 2;
+                const sal_uInt16 nSdSlide = ( rpPage->GetPageNum() - 1 ) / 2;
 
                 if( ! mpDoc->GetSdPage( nSdSlide, PageKind::Standard )->IsExcluded())
                     mpSlideController->insertSlideNumber( nSdSlide );

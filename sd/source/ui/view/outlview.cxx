@@ -544,15 +544,11 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
             std::vector<Paragraph*> aSelList;
             pOlView->CreateSelectionList(aSelList);
 
-            Paragraph *pParagraph = nullptr;
-            for (std::vector<Paragraph*>::const_iterator iter = aSelList.begin(); iter != aSelList.end(); ++iter)
-            {
-                pParagraph = *iter;
-
-                if( !::Outliner::HasParaFlag( pParagraph, ParaFlag::ISPAGE ) &&
-                    (pOutliner->GetDepth( pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
-                    mnPagesToProcess++;
-            }
+            mnPagesToProcess = std::count_if(aSelList.begin(), aSelList.end(),
+                [&pOutliner](const Paragraph *pParagraph) {
+                    return !Outliner::HasParaFlag(pParagraph, ParaFlag::ISPAGE) &&
+                        (pOutliner->GetDepth(pOutliner->GetAbsPos(pParagraph)) <= 0);
+                });
 
             mnPagesToProcess++; // the paragraph being in level 0 already
                                 // should be included
@@ -773,13 +769,9 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
     // list of selected title paragraphs
     mpOutlinerViews[0]->CreateSelectionList(maSelectedParas);
 
-    for (std::vector<Paragraph*>::iterator it = maSelectedParas.begin(); it != maSelectedParas.end();)
-    {
-        if (!::Outliner::HasParaFlag(*it, ParaFlag::ISPAGE))
-            it = maSelectedParas.erase(it);
-        else
-            ++it;
-    }
+    maSelectedParas.erase(std::remove_if(maSelectedParas.begin(), maSelectedParas.end(),
+        [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); }),
+        maSelectedParas.end());
 
     // select the pages belonging to the paragraphs on level 0 to select
     sal_uInt16 nPos = 0;
@@ -1250,13 +1242,9 @@ void OutlineView::SetSelectedPages()
     std::vector<Paragraph*> aSelParas;
     mpOutlinerViews[0]->CreateSelectionList(aSelParas);
 
-    for (std::vector<Paragraph*>::iterator it = aSelParas.begin(); it != aSelParas.end();)
-    {
-        if (!::Outliner::HasParaFlag(*it, ParaFlag::ISPAGE))
-            it = aSelParas.erase(it);
-        else
-            ++it;
-    }
+    aSelParas.erase(std::remove_if(aSelParas.begin(), aSelParas.end(),
+        [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); }),
+        aSelParas.end());
 
     // select the pages belonging to the paragraphs on level 0 to select
     sal_uInt16 nPos = 0;

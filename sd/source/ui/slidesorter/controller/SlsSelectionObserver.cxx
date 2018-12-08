@@ -119,13 +119,9 @@ void SelectionObserver::EndObservation()
     if ( ! maInsertedPages.empty())
     {
         // Select the inserted pages.
-        for (::std::vector<const SdPage*>::const_iterator
-                 iPage(maInsertedPages.begin()),
-                 iEnd(maInsertedPages.end());
-             iPage!=iEnd;
-             ++iPage)
+        for (const auto& rpPage : maInsertedPages)
         {
-            rSelector.SelectPage(*iPage);
+            rSelector.SelectPage(rpPage);
         }
         maInsertedPages.clear();
     }

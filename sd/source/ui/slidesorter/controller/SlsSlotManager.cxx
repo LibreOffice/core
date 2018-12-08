@@ -1098,15 +1098,12 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
         mrSlideSorter.GetView().BegUndo(SdResId(STR_INSERTPAGE));
 
     ::std::vector<SdPage*> aPagesToSelect;
-    for(::std::vector<SdPage*>::const_iterator
-            iPage(aPagesToDuplicate.begin()),
-            iEnd(aPagesToDuplicate.end());
-        iPage!=iEnd;
-        ++iPage, nInsertPosition+=2)
+    for(const auto& rpPage : aPagesToDuplicate)
     {
         aPagesToSelect.push_back(
             mrSlideSorter.GetViewShell()->CreateOrDuplicatePage(
-                rRequest, PageKind::Standard, *iPage, nInsertPosition));
+                rRequest, PageKind::Standard, rpPage, nInsertPosition));
+        nInsertPosition += 2;
     }
     aPagesToDuplicate.clear();
 

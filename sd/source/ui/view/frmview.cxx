@@ -457,11 +457,11 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
 
     PropertyValue* pValue = &(rValues.getArray()[nOldLength]);
 
-    std::vector< std::pair< OUString, Any > >::iterator aIter( aUserData.begin() );
-    for( ; aIter != aUserData.end(); ++aIter, ++pValue )
+    for( const auto& rItem : aUserData )
     {
-        pValue->Name = (*aIter).first;
-        pValue->Value = (*aIter).second;
+        pValue->Name = rItem.first;
+        pValue->Value = rItem.second;
+        ++pValue;
     }
 }
 #undef addValue
