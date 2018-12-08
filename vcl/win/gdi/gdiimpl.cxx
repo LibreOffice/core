@@ -1382,6 +1382,23 @@ void WinSalGraphicsImpl::UpdatePen(HPEN hNewPen)
     }
 }
 
+void WinSalGraphicsImpl::UpdateBrush(HBRUSH hNewBrush)
+{
+    HBRUSH hOldBrush = SelectBrush(mrParent.getHDC(), hNewBrush);
+
+    if (mhBrush)
+    {
+        if (!mbStockBrush)
+        {
+            DeleteBrush(mhBrush);
+        }
+    }
+    else
+    {
+        mrParent.mhDefBrush = hOldBrush;
+    }
+}
+
 void WinSalGraphicsImpl::SetLineColor( Color nColor )
 {
     maLineColor = nColor;
@@ -1433,16 +1450,8 @@ void WinSalGraphicsImpl::SetFillColor()
 {
     // create and select new brush
     HBRUSH hNewBrush = GetStockBrush( NULL_BRUSH );
-    HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), hNewBrush );
 
-    // destroy or save old brush
-    if ( mhBrush )
-    {
-        if ( !mbStockBrush )
-            DeleteBrush( mhBrush );
-    }
-    else
-        mrParent.mhDefBrush = hOldBrush;
+    UpdateBrush(hNewBrush);
 
     // set new data
     mhBrush     = hNewBrush;
@@ -1534,17 +1543,7 @@ void WinSalGraphicsImpl::SetFillColor( Color nColor )
         bStockBrush = FALSE;
     }
 
-    // select new brush
-    HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), hNewBrush );
-
-    // destroy or save old brush
-    if ( mhBrush )
-    {
-        if ( !mbStockBrush )
-            DeleteBrush( mhBrush );
-    }
-    else
-        mrParent.mhDefBrush = hOldBrush;
+    UpdateBrush(hNewBrush);
 
     // set new data
     mnBrushColor = nBrushColor;
