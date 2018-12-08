@@ -1265,7 +1265,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
                 case OBJ_CCUT:
                 case OBJ_SECT:
                     eNewKind=OBJ_CARC;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case OBJ_RECT:
                 case OBJ_LINE:
                 case OBJ_PLIN:

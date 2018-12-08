@@ -200,10 +200,10 @@ struct FileHandle
         {
         case storeAccessMode::Create:
             nFlags |= osl_File_OpenFlag_Create;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case storeAccessMode::ReadWrite:
             nFlags |= osl_File_OpenFlag_Write;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case storeAccessMode::ReadOnly:
             nFlags |= osl_File_OpenFlag_Read;
             break;

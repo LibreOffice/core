@@ -63,7 +63,7 @@ void  AccContainerEventListener::notifyEvent( const css::accessibility::Accessib
         break;
     case AccessibleEventId::TEXT_CHANGED:
         HandleTextChangedEvent(aEvent.OldValue, aEvent.NewValue);
-        SAL_FALLTHROUGH; //TODO ???
+        [[fallthrough]]; //TODO ???
     case AccessibleEventId::VISIBLE_DATA_CHANGED:
         HandleVisibleDataChangedEvent();
         break;

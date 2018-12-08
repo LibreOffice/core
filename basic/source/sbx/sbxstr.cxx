@@ -40,7 +40,7 @@ OUString ImpGetString( const SbxValues* p )
     {
         case SbxNULL:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SbxEMPTY:
             break;
         case SbxCHAR:

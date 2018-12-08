@@ -975,7 +975,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                 aPropertyValue <<= COL_TRANSPARENT;
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case PROPERTY_ID_KEEPTOGETHER:
             if ( uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
@@ -983,7 +983,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                 aPropertyValue = getConstantValue(false,RID_STR_KEEPTOGETHER_CONST,_rControlValue,"com.sun.star.report.KeepTogether",PropertyName);
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case PROPERTY_ID_VISIBLE:
         case PROPERTY_ID_CANGROW:
@@ -1167,7 +1167,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
                 aControlValue = getConstantValue(true,RID_STR_KEEPTOGETHER_CONST,aPropertyValue,"com.sun.star.report.KeepTogether",PropertyName);
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case PROPERTY_ID_VISIBLE:
         case PROPERTY_ID_CANGROW:
         case PROPERTY_ID_CANSHRINK:
@@ -1267,7 +1267,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
                 if ( (aPropertyValue >>= nColor) && COL_TRANSPARENT == nColor )
                     aPropertyValue.clear();
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             aControlValue = m_xFormComponentHandler->convertToControlValue(PropertyName, aPropertyValue, _rControlValueType);
     }

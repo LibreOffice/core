@@ -280,7 +280,7 @@ sal_uInt16 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
                             nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case SvxParaVertAlignItem::Align::Baseline :
                 // base line
                 nOfst = nOfst + rLine.GetAscent();

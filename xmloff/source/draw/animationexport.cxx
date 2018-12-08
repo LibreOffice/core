@@ -690,7 +690,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
         {
             Reference< XIterateContainer > xIter( xNode, UNO_QUERY_THROW );
             prepareValue( xIter->getTarget() );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case AnimationNodeType::PAR:
         case AnimationNodeType::SEQ:

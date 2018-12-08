@@ -77,7 +77,7 @@ namespace connectivity
                         break;
                     // WARNING/TODO: in certain circumstances it will run into
                     // the next 'case'!
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case CHAR_WILD:
                     while ( *pWild == CHAR_WILD )
                         pWild++;

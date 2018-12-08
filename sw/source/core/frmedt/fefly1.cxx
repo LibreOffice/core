@@ -195,7 +195,7 @@ static bool lcl_FindAnchorPos(
 
         nNew = RndStdIds::FLY_AT_PAGE;
         aNewAnch.SetType( nNew );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case RndStdIds::FLY_AT_PAGE:
         pNewAnch = rFrame.FindPageFrame();

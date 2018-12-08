@@ -483,7 +483,7 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_FRAMEHEIGHT_MIN_REL:
 //      case CTF_SYNCHEIGHT_MIN:
                                         bHasAnyMinHeight = true;
-                                        SAL_FALLTHROUGH;
+                                        [[fallthrough]];
         case CTF_FRAMEHEIGHT_ABS:
         case CTF_FRAMEHEIGHT_REL:
 //      case CTF_SYNCHEIGHT:
@@ -491,7 +491,7 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_FRAMEWIDTH_MIN_ABS:
         case CTF_FRAMEWIDTH_MIN_REL:
                                         bHasAnyMinWidth = true;
-                                        SAL_FALLTHROUGH;
+                                        [[fallthrough]];
         case CTF_FRAMEWIDTH_ABS:
         case CTF_FRAMEWIDTH_REL:
                                         bHasAnyWidth = true; break;

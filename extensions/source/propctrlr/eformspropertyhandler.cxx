@@ -575,7 +575,7 @@ namespace pcr
             bool bBoundToSomeModel = !sDataModelName.isEmpty();
             _rxInspectorUI->rebuildPropertyUI( PROPERTY_BINDING_NAME );
             _rxInspectorUI->enablePropertyUI( PROPERTY_BINDING_NAME, bBoundToSomeModel );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
 
         case PROPERTY_ID_BINDING_NAME:

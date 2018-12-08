@@ -358,7 +358,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     bReturn = true;
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
             {
                 bReturn = m_rView.KeyInput(_rEvent, m_pParent);

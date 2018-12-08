@@ -2599,13 +2599,13 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
         pS->WriteUChar( CHAR );
         pS->WriteUChar( 0x86 );
         pS->WriteUInt16( 0x222B );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case TIINT:
     case TLLINT:
         pS->WriteUChar( CHAR );
         pS->WriteUChar( 0x86 );
         pS->WriteUInt16( 0x222B );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case TINT:
     case TINTD:
     case TLINT:

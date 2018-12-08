@@ -695,7 +695,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
 
         case 92:
             nCurrentBoundaryPathIndex++;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
         {
             bool bExecutingGroupCode = false;

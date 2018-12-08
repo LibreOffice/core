@@ -1843,7 +1843,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_ATTR_ZOOM:
             rSet.Put(SvxZoomItem( SvxZoomType::PERCENT, mpGraphic->GetZoom()));
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SID_ZOOMIN:
         case SID_ZOOMOUT:
         case SID_ZOOM_OPTIMAL:

@@ -278,7 +278,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         }
                         break;
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
                 case text::VertOrientation::TOP:
                 {

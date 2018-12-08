@@ -1085,7 +1085,7 @@ void EscherPropertyContainer::CreateLineProperties(
                         AddOpt( ESCHER_Prop_lineDashing, eDash );
                     }
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
                 case drawing::LineStyle_SOLID :
                 default:
                 {

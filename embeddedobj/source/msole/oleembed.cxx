@@ -395,7 +395,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                     throw css::lang::WrappedTargetRuntimeException( ex.Message,
                                     nullptr, anyEx ); // the repairing is not possible
                 }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
             case 2:
                 try
                 {
@@ -412,7 +412,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                     throw css::lang::WrappedTargetRuntimeException( ex.Message,
                                     nullptr, anyEx ); // the repairing is not possible
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
 
             case 1:
             case 0:

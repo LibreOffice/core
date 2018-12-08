@@ -646,7 +646,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
                 case ocGetDiffDate360:
                     if (rStr == mpTable[eOp])
                         return;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 // These OpCodes are known to be added to an existing mapping,
                 // but only for the OOXML external API mapping. This is *not*
                 // FormulaLanguage::OOXML. Keep the first
@@ -664,7 +664,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
                         // Both bPutOp and bRemoveFromMap stay false.
                         break;
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 default:
                     SAL_WARN("formula.core",
                             "OpCodeMap::putOpCode: reusing OpCode " << static_cast<sal_uInt16>(eOp)

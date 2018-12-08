@@ -126,7 +126,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                 break;
             }
             bEnumAsInt = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case TypeClass_ENUM:
         {
             sal_uInt16 nEnumValue(0);

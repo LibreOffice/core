@@ -453,7 +453,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
                     WorkingDocType::SOURCE, rMergeDesc.rSh, nullptr,
                     &pWorkDocOrigDBManager, nullptr, &pWorkShell, &pWorkDoc );
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
 
         default:

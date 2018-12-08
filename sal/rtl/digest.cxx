@@ -613,11 +613,11 @@ static void endMD5(DigestContextMD5 *ctx)
     switch (ctx->m_nDatLen & 0x03)
     {
         case 0: X[i]  = static_cast<sal_uInt32>(*(p++)) <<  0;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 1: X[i] |= static_cast<sal_uInt32>(*(p++)) <<  8;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 2: X[i] |= static_cast<sal_uInt32>(*(p++)) << 16;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 3: X[i] |= static_cast<sal_uInt32>(*p) << 24;
     }
 
@@ -1034,11 +1034,11 @@ static void endSHA(DigestContextSHA *ctx)
     switch (ctx->m_nDatLen & 0x03)
     {
         case 0: X[i]  = static_cast<sal_uInt32>(*(p++)) <<  0;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 1: X[i] |= static_cast<sal_uInt32>(*(p++)) <<  8;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 2: X[i] |= static_cast<sal_uInt32>(*(p++)) << 16;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 3: X[i] |= static_cast<sal_uInt32>(*(p++)) << 24;
     }
 

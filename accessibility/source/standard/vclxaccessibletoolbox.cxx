@@ -629,7 +629,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             }
             m_aAccessibleChildren.clear();
 
-            SAL_FALLTHROUGH; // call base class
+            [[fallthrough]]; // call base class
         }
 
         default:

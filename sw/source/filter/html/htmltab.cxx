@@ -3424,7 +3424,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         break;
                     case SvxAdjust::Left:
                         eSurround = css::text::WrapTextMode_RIGHT;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     default:
                         eHori = text::HoriOrientation::LEFT;
                         break;
@@ -3604,7 +3604,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         case HtmlTokenId::TBODY_OFF:
         case HtmlTokenId::TABLE_OFF:
             SkipToken();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlTokenId::TABLEHEADER_OFF:
         case HtmlTokenId::TABLEDATA_OFF:
             bDone = true;
@@ -3753,7 +3753,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             if( !xSaveStruct->IsInSection() && 1==aToken.getLength() &&
                 ' '==aToken[0] )
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             if( !xSaveStruct->IsInSection() )
             {
@@ -4008,7 +4008,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         case HtmlTokenId::TFOOT_OFF:
         case HtmlTokenId::TABLE_OFF:
             SkipToken();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlTokenId::TABLEROW_OFF:
             bDone = true;
             break;
@@ -4056,7 +4056,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             pCurTable->MakeParentContents();
             NextToken( nToken );
@@ -4176,7 +4176,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         case HtmlTokenId::TBODY_ON:
         case HtmlTokenId::TABLE_OFF:
             SkipToken();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlTokenId::THEAD_OFF:
         case HtmlTokenId::TBODY_OFF:
         case HtmlTokenId::TFOOT_OFF:
@@ -4215,7 +4215,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' ' == aToken[0] )
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             pCurTable->MakeParentContents();
             NextToken( nToken );
@@ -4375,7 +4375,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         case HtmlTokenId::TABLEROW_ON:
         case HtmlTokenId::TABLE_OFF:
             SkipToken();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlTokenId::COLGROUP_OFF:
             bDone = true;
             break;
@@ -4436,7 +4436,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             pCurTable->MakeParentContents();
             NextToken( nToken );
@@ -5105,7 +5105,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
                  !xCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             xCurTable->MakeParentContents();
             NextToken( nToken );

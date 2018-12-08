@@ -1868,7 +1868,7 @@ bool SwSectionFootnoteEndTabPage::FillItemSet( SfxItemSet* rSet )
         aFootnote.SetNumType( m_xFootnoteNumViewBox->GetSelectedNumberingType() );
         aFootnote.SetPrefix( m_xFootnotePrefixED->get_text().replaceAll("\\t", "\t") ); // fdo#65666
         aFootnote.SetSuffix( m_xFootnoteSuffixED->get_text().replaceAll("\\t", "\t") );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         aFootnote.SetOffset( static_cast< sal_uInt16 >( m_xFootnoteOffsetField->get_value()-1 ) );
@@ -1890,7 +1890,7 @@ bool SwSectionFootnoteEndTabPage::FillItemSet( SfxItemSet* rSet )
         aEnd.SetNumType( m_xEndNumViewBox->GetSelectedNumberingType() );
         aEnd.SetPrefix( m_xEndPrefixED->get_text().replaceAll("\\t", "\t") );
         aEnd.SetSuffix( m_xEndSuffixED->get_text().replaceAll("\\t", "\t") );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         aEnd.SetOffset( static_cast< sal_uInt16 >( m_xEndOffsetField->get_value()-1 ) );
@@ -1946,11 +1946,11 @@ void SwSectionFootnoteEndTabPage::ResetState( bool bFootnote,
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
         pNtNumFormatCB->set_state( TRISTATE_TRUE );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         pNtNumCB->set_state( TRISTATE_TRUE );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case FTNEND_ATTXTEND:
         pNtAtTextEndCB->set_state( TRISTATE_TRUE );
@@ -1966,13 +1966,13 @@ void SwSectionFootnoteEndTabPage::ResetState( bool bFootnote,
     {
     case FTNEND_ATPGORDOCEND:
         pNtNumCB->set_sensitive( false );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case FTNEND_ATTXTEND:
         pNtNumFormatCB->set_sensitive( false );
         pOffsetField->set_sensitive( false );
         pOffsetText->set_sensitive( false );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         pNumViewBox->Enable( false );

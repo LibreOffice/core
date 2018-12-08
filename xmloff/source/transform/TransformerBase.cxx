@@ -513,7 +513,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_RENAME_IN2INCH:
                     bRename = true;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case XML_ATACTION_IN2INCH:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -530,7 +530,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_RENAME_INCH2IN:
                     bRename = true;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case XML_ATACTION_INCH2IN:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -578,7 +578,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_RENAME_DECODE_STYLE_NAME_REF:
                     bRename = true;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case XML_ATACTION_DECODE_STYLE_NAME:
                 case XML_ATACTION_DECODE_STYLE_NAME_REF:
                     {
@@ -605,7 +605,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_RENAME_ENCODE_STYLE_NAME_REF:
                     bRename = true;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case XML_ATACTION_ENCODE_STYLE_NAME_REF:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -615,7 +615,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_RENAME_NEG_PERCENT:
                     bRename = true;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case XML_ATACTION_NEG_PERCENT:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -625,7 +625,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_RENAME_ADD_NAMESPACE_PREFIX:
                     bRename = true;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case XML_ATACTION_ADD_NAMESPACE_PREFIX:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -652,7 +652,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_RENAME_REMOVE_NAMESPACE_PREFIX:
                     bRename = true;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case XML_ATACTION_REMOVE_NAMESPACE_PREFIX:
                     {
                         OUString aAttrValue( rAttrValue );

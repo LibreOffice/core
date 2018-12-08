@@ -619,7 +619,7 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 rInvFlags |= 0x10;
             CheckDirChange();
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case RES_FRM_SIZE:
         {

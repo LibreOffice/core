@@ -774,11 +774,11 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                             switch ( aPlaceholderAtom.nPlaceholderId )
                             {
                                 case PptPlaceholder::MASTERSLIDENUMBER :    nHeaderFooterInstance++;
-                                    SAL_FALLTHROUGH;
+                                    [[fallthrough]];
                                 case PptPlaceholder::MASTERFOOTER :         nHeaderFooterInstance++;
-                                    SAL_FALLTHROUGH;
+                                    [[fallthrough]];
                                 case PptPlaceholder::MASTERHEADER :         nHeaderFooterInstance++;
-                                    SAL_FALLTHROUGH;
+                                    [[fallthrough]];
                                 case PptPlaceholder::MASTERDATE :           nHeaderFooterInstance++; break;
                                 default: break;
 
@@ -6426,13 +6426,13 @@ void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateForm
         break;
         case 7:
             eDateFormat = SvxDateFormat::A;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 9:
             eTimeFormat = SvxTimeFormat::HH24_MM;
         break;
         case 8:
             eDateFormat = SvxDateFormat::A;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 11:
             eTimeFormat = SvxTimeFormat::HH12_MM;
         break;
@@ -6539,7 +6539,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                 {
                     case PPT_NOTEPAGE :
                         nInstance++;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case PPT_MASTERPAGE :
                         nInstance++;
                         break;

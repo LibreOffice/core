@@ -2231,7 +2231,7 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
             case i18n::KNumberFormatType::LONG :
                 if ( nMedium == -1 )
                     nDef = nElem;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
                 if ( nDef == -1 )
                     nDef = nElem;

@@ -670,7 +670,7 @@ static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
 
         case VclEventId::ObjectDying:
             g_aWindowList.list.erase( static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow() );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case VclEventId::ToolboxHighlightOff:
             handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;

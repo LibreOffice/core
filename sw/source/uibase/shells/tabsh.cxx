@@ -744,7 +744,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 {
                     case TableMergeErr::Ok:
                          bCallDone = true;
-                         SAL_FALLTHROUGH;
+                         [[fallthrough]];
                     case TableMergeErr::NoSelection:
                         break;
                     case TableMergeErr::TooComplex:
@@ -937,7 +937,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             nSlot = bColumn ? FN_TABLE_INSERT_COL_DLG : FN_TABLE_INSERT_ROW_DLG;
 
-            SAL_FALLTHROUGH; // on Count = 0 appears the dialog
+            [[fallthrough]]; // on Count = 0 appears the dialog
         }
         case FN_TABLE_INSERT_COL_DLG:
         case FN_TABLE_INSERT_ROW_DLG:

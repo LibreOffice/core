@@ -666,7 +666,7 @@ OUString SdStyleSheet::GetFamilyString( SfxStyleFamily eFamily )
         return OUString( "cell" );
     default:
         OSL_FAIL( "SdStyleSheet::GetFamilyString(), illegal family!" );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case SfxStyleFamily::Para:
         return OUString( "graphics" );
     }

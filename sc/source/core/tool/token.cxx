@@ -1093,7 +1093,7 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
                 xUpperLeft = new FormulaDoubleToken( f);
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             {
                 OSL_FAIL("ScMatrixFormulaCellToken::SetUpperLeftDouble: not modifying unhandled token type");
@@ -2044,7 +2044,7 @@ FormulaToken* ScTokenArray::MergeArray( )
 
             case ocArrayOpen :
                 nStart = i; // stop iteration
-                SAL_FALLTHROUGH; // to ArrayRowSep
+                [[fallthrough]]; // to ArrayRowSep
 
             case ocArrayRowSep :
                 if( checkArraySep( bPrevWasSep, true ) )
@@ -2418,7 +2418,7 @@ bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const S
                     if (rRef.IsColRel() || rRef.IsRowRel())
                         return true;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case svSingleRef:
                 {
                     ScSingleRefData& rRef = *pToken->GetSingleRef();
@@ -4486,7 +4486,7 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
             {
                 case svExternalSingleRef:
                     bAdjust = true;     // always
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
@@ -4499,7 +4499,7 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
                     break;
                 case svExternalDoubleRef:
                     bAdjust = true;     // always
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();

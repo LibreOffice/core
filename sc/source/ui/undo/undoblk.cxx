@@ -246,7 +246,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
         case INS_INSCOLS_BEFORE:
         case INS_INSCOLS_AFTER:
             nPaint |= PaintPartFlags::Top;                // top bar
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case INS_CELLSRIGHT:
             for( i=0; i<nCount; i++ )
             {
@@ -504,7 +504,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
             break;
         case DelCellCmd::Cols:
             nPaint |= PaintPartFlags::Top;                // top bar
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case DelCellCmd::CellsLeft:
             for( i=0; i<nCount; i++ )
             {

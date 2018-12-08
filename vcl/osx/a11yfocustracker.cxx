@@ -57,7 +57,7 @@ void AquaA11yFocusTracker::WindowEventHandler(void * pThis, VclSimpleEvent& rEve
         break;
     case VclEventId::ObjectDying:
         pFocusTracker->m_aDocumentWindowList.erase( getWindow(&rEvent) );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case VclEventId::ToolboxHighlightOff:
         pFocusTracker->toolbox_highlight_off( getWindow(&rEvent) );
         break;

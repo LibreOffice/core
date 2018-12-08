@@ -1173,7 +1173,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     }
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SdrUserCallType::MoveOnly:
         case SdrUserCallType::Resize:

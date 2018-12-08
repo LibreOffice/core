@@ -154,7 +154,7 @@ namespace slideshow
                         SAL_INFO("slideshow.verbose", "Shape text \"" <<
                                  (static_cast<MetaTextAction*>(pCurrAct))->GetText() <<
                                  "\" at action #" << nActionIndex );
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     default:
                         // comment action and all actions not
                         // explicitly handled here:
@@ -519,7 +519,7 @@ namespace slideshow
                             }
 
                             ++nCurrShapeCount;
-                            SAL_FALLTHROUGH; // shape end also ends lines
+                            [[fallthrough]]; // shape end also ends lines
                         case DrawShapeSubsetting::CLASS_PARAGRAPH_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_PARAGRAPH_END,
                                               nCurrParaCount,
@@ -531,7 +531,7 @@ namespace slideshow
 
                             ++nCurrParaCount;
                             aLastParaStart = aNext;
-                            SAL_FALLTHROUGH; // para end also ends line
+                            [[fallthrough]]; // para end also ends line
                         case DrawShapeSubsetting::CLASS_LINE_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_LINE_END,
                                               nCurrLineCount,
@@ -558,7 +558,7 @@ namespace slideshow
                                 // character cell, OTOH?
                                 break;
                             }
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
                         case DrawShapeSubsetting::CLASS_SENTENCE_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_SENTENCE_END,
                                               nCurrSentenceCount,
@@ -570,7 +570,7 @@ namespace slideshow
 
                             ++nCurrSentenceCount;
                             aLastSentenceStart = aNext;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
                         case DrawShapeSubsetting::CLASS_WORD_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_WORD_END,
                                               nCurrWordCount,
@@ -582,7 +582,7 @@ namespace slideshow
 
                             ++nCurrWordCount;
                             aLastWordStart = aNext;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
                         case DrawShapeSubsetting::CLASS_CHARACTER_CELL_END:
                             if( !io_rFunctor( DrawShapeSubsetting::CLASS_CHARACTER_CELL_END,
                                               nCurrCharCount,

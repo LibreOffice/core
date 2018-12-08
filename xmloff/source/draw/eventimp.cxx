@@ -399,7 +399,7 @@ void SdXMLEventContext::EndElement()
                 case ClickAction_BOOKMARK:
                     msBookmark = msBookmark.copy(1);
 
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
 
                 case ClickAction_DOCUMENT:
                 case ClickAction_PROGRAM:
@@ -422,7 +422,7 @@ void SdXMLEventContext::EndElement()
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
 
                 case ClickAction_SOUND:
                     pProperties->Name = "SoundURL";

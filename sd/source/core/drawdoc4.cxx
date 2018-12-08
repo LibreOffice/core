@@ -1081,7 +1081,7 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
             break;
         case css::style::NumberingType::ROMAN_UPPER:
             bUpper = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case css::style::NumberingType::ROMAN_LOWER:
             aPageNumValue += SvxNumberFormat::CreateRomanString(nNum, bUpper);
             break;

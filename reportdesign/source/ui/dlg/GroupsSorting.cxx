@@ -717,7 +717,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                     m_nDeleteEvent = Application::PostUserEvent( LINK(this, OFieldExpressionControl, DelayedDelete), nullptr, true );
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         default:
             EditBrowseBox::Command(rEvt);

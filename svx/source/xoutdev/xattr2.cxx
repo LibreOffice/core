@@ -60,7 +60,7 @@ bool XLineTransparenceItem::GetPresentation
     {
         case SfxItemPresentation::Complete:
             rText = SvxResId(RID_SVXSTR_TRANSPARENCE) + ": ";
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SfxItemPresentation::Nameless:
             rText += unicode::formatPercent(GetValue(),
                 Application::GetSettings().GetUILanguageTag());
@@ -348,7 +348,7 @@ bool XFillTransparenceItem::GetPresentation
     {
         case SfxItemPresentation::Complete:
             rText = SvxResId(RID_SVXSTR_TRANSPARENCE) + ": ";
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SfxItemPresentation::Nameless:
             rText += unicode::formatPercent(GetValue(),
                 Application::GetSettings().GetUILanguageTag());

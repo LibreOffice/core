@@ -5656,7 +5656,7 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
 
         case WM_KILLFOCUS:
             DestroyCaret();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case WM_SETFOCUS:
         case SAL_MSG_POSTFOCUS:
             ImplHandleFocusMsg( hWnd );

@@ -364,7 +364,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
         {
             default: ; //prevent warning
                 OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case TRISTATE_FALSE: eFTS = drawing::TextFitToSizeType_AUTOFIT; break;
             case TRISTATE_TRUE: eFTS = drawing::TextFitToSizeType_PROPORTIONAL; break;
         }

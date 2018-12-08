@@ -960,7 +960,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     case text::HoriOrientation::LEFT_AND_WIDTH:
         eTabHoriOri = text::HoriOrientation::LEFT;
         bCheckDefList = true;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     default:
         // In all other case it's possible to use directly an absolute
         // or relative width.

@@ -2902,7 +2902,7 @@ void Content::transfer(
                                 task::InteractionClassification_ERROR,
                                 aTargetURI ) ),
                         Environment );
-                    SAL_FALLTHROUGH; // Unreachable
+                    [[fallthrough]]; // Unreachable
                 }
 
                 case ucb::NameClash::OVERWRITE:

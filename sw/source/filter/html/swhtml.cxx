@@ -1256,7 +1256,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             case HtmlTokenId::UNKNOWNCONTROL_OFF:
                 if( m_aUnknownToken != sSaveToken )
                     return;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case HtmlTokenId::FRAMESET_ON:
             case HtmlTokenId::HEAD_OFF:
             case HtmlTokenId::BODY_ON:
@@ -1447,7 +1447,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         else
             bGetIDOption = true;
             // <BR>s in <PRE> resemble true LFs, hence no break
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case HtmlTokenId::NEWPARA:
         // CR in PRE/LISTING/XMP
@@ -2069,7 +2069,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             !sSaveToken.isEmpty() && '!' != sSaveToken[0] &&
             '%' != sSaveToken[0] )
             m_aUnknownToken = sSaveToken;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     default:
         bInsertUnknown = m_bKeepUnknown;
@@ -2901,7 +2901,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     }
                     OSL_ENSURE( false,
                             "LRSpace set over multiple paragraphs!" );
-                    SAL_FALLTHROUGH; // (shouldn't reach this point anyway)
+                    [[fallthrough]]; // (shouldn't reach this point anyway)
 
                 // tdf#94088 expand RES_BACKGROUND to the new fill attribute
                 // definitions in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST].
@@ -4167,7 +4167,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         // a CLASS exists we will delete it so that we don't get the CLASS of
         // the PRE style.
         aClass = aEmptyOUStr;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case HtmlTokenId::BLOCKQUOTE_ON:
     case HtmlTokenId::BLOCKQUOTE30_ON:
     case HtmlTokenId::PREFORMTXT_ON:

@@ -524,7 +524,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_EXPORTDOCASPDF:
         case SID_DIRECTEXPORTDOCASPDF:
             bIsPDFExport = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SID_EXPORTDOCASEPUB:
         case SID_DIRECTEXPORTDOCASEPUB:
         case SID_EXPORTDOC:

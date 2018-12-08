@@ -642,7 +642,7 @@ void XcuParser::handleUnknownGroupProp(
             recordModification(false);
             break;
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     default:
         SAL_WARN(
             "configmgr",

@@ -1502,7 +1502,7 @@ bool XclExpCellAlign::FillFromItemSet(
             SetScFrameDir( rItemSet.Get( ATTR_WRITINGDIR ).GetValue() );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_WRITINGDIR, bStyle );
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
 
         case EXC_BIFF5: // attributes new in BIFF5
@@ -1528,7 +1528,7 @@ bool XclExpCellAlign::FillFromItemSet(
             }
             mnOrient = XclTools::GetXclOrientFromRot( mnRotation );
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
 
         case EXC_BIFF3: // attributes new in BIFF3
@@ -1537,7 +1537,7 @@ bool XclExpCellAlign::FillFromItemSet(
             mbLineBreak = bForceLineBreak || rItemSet.Get( ATTR_LINEBREAK ).GetValue();
             bUsed |= bForceLineBreak || ScfTools::CheckItem( rItemSet, ATTR_LINEBREAK, bStyle );
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
 
         case EXC_BIFF2: // attributes new in BIFF2
@@ -1769,7 +1769,7 @@ bool XclExpCellBorder::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_BORDER_TLBR, bStyle ) ||
                      ScfTools::CheckItem( rItemSet, ATTR_BORDER_BLTR, bStyle );
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
 
         case EXC_BIFF5:

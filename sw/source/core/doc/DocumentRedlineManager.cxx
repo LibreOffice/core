@@ -1378,7 +1378,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             bCompress = true;
                             mpRedlineTable->DeleteAndDestroy( n );
                             bDec = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
 
                         case SwComparePosition::Inside:
                             if( bCallDelete )

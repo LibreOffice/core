@@ -1347,7 +1347,7 @@ void globalTransfer_(
                                 rContext.xProcessor,
                                 rContext.aArg.NameClash ) ),
                         rContext.xOrigEnv );
-                    SAL_FALLTHROUGH; // Unreachable
+                    [[fallthrough]]; // Unreachable
                 }
 
                 case ucb::NameClash::ERROR:
@@ -1381,7 +1381,7 @@ void globalTransfer_(
                             case NOT_HANDLED:
                                 // Not handled.
                                 cppu::throwException( aExc );
-                                SAL_FALLTHROUGH; // break;
+                                [[fallthrough]]; // break;
 
                             case UNKNOWN:
                                 // Handled, but not clear, how...
@@ -1743,7 +1743,7 @@ void UniversalContentBroker::globalTransfer(
                             case NOT_HANDLED:
                                 // Not handled.
                                 cppu::throwException( aExc );
-                                SAL_FALLTHROUGH; // break;
+                                [[fallthrough]]; // break;
 
                             case UNKNOWN:
                                 // Handled, but not clear, how...

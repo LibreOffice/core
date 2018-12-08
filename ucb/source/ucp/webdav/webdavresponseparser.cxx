@@ -710,7 +710,7 @@ namespace
                                 maLock.Scope = maLockScope;
                                 maResult_Lock.push_back(maLock);
                             }
-                            SAL_FALLTHROUGH; // I hope intentional?
+                            [[fallthrough]]; // I hope intentional?
                             case WebDAVName_propstat:
                             {
                                 // propstat end, check status

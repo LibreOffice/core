@@ -584,7 +584,7 @@ void SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         break;
 
     case SvxSearchCmd::REPLACE_ALL: bAll = true;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case SvxSearchCmd::REPLACE:
         nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
         break;

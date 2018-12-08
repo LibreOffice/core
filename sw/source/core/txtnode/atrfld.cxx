@@ -280,7 +280,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         case SwFieldIds::HiddenPara:
             if( !pOld || RES_HIDDENPARA_PRINT != pOld->Which() )
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SwFieldIds::DbSetNumber:
         case SwFieldIds::DbNumSet:
         case SwFieldIds::DbNextSet:

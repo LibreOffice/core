@@ -1251,7 +1251,7 @@ case 23:
 YY_RULE_SETUP
 { token_debug(" ==>Ignore[\\rm]\n"); }
     //YY_BREAK
-SAL_FALLTHROUGH;
+[[fallthrough]];
 case 24:
 YY_RULE_SETUP
 { yylval.str = yytext+1; token_debug("  ==>General_Iden[%s]\n",yytext+1); return GENERAL_IDEN; }
@@ -1296,12 +1296,12 @@ case 34:
 YY_RULE_SETUP
 { yylval.str = yytext+1; token_debug("  ==>Space_Symbol[%s]\n",yytext+1); /*return SPACE_SYMBOL;*/ }
     //YY_BREAK
-SAL_FALLTHROUGH;
+[[fallthrough]];
 case 35:
 YY_RULE_SETUP
 { yylval.str = strdup("quad"); token_debug("    ==>Space_Symbol[quad]\n"); /* return SPACE_SYMBOL;*/ }
     //YY_BREAK
-SAL_FALLTHROUGH;
+[[fallthrough]];
 case 36:
 YY_RULE_SETUP
 { yylval.dval = yytext;  token_debug("  ==>Digit[%s]\n",yytext); return DIGIT; }

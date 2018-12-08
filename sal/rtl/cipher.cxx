@@ -51,19 +51,19 @@
     switch ((n)) \
     { \
         case 8: (xr)  = (static_cast<sal_uInt32>(*(--(c)))); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 7: (xr) |= (static_cast<sal_uInt32>(*(--(c)))) <<  8; \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 6: (xr) |= (static_cast<sal_uInt32>(*(--(c)))) << 16; \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 5: (xr) |= (static_cast<sal_uInt32>(*(--(c)))) << 24; \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 4: (xl)  = (static_cast<sal_uInt32>(*(--(c)))); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 3: (xl) |= (static_cast<sal_uInt32>(*(--(c)))) <<  8; \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 2: (xl) |= (static_cast<sal_uInt32>(*(--(c)))) << 16; \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 1: (xl) |= (static_cast<sal_uInt32>(*(--(c)))) << 24; \
     } \
 }
@@ -74,19 +74,19 @@
     switch ((n)) \
     { \
         case 8: *(--(c)) = static_cast<sal_uInt8>(((xr)       ) & 0xff); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 7: *(--(c)) = static_cast<sal_uInt8>(((xr) >>  8) & 0xff); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 6: *(--(c)) = static_cast<sal_uInt8>(((xr) >> 16) & 0xff); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 5: *(--(c)) = static_cast<sal_uInt8>(((xr) >> 24) & 0xff); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 4: *(--(c)) = static_cast<sal_uInt8>(((xl)       ) & 0xff); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 3: *(--(c)) = static_cast<sal_uInt8>(((xl) >>  8) & 0xff); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 2: *(--(c)) = static_cast<sal_uInt8>(((xl) >> 16) & 0xff); \
-            SAL_FALLTHROUGH; \
+            [[fallthrough]]; \
         case 1: *(--(c)) = static_cast<sal_uInt8>(((xl) >> 24) & 0xff); \
     } \
 }

@@ -105,7 +105,7 @@ SvxNumberFormatShell::SvxNumberFormatShell(SvNumberFormatter* pNumFormatter, sal
             {
                 nValNum = GetDefaultValNum(pFormatter->GetType(nCurFormatKey));
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SvxNumberValueType::Undefined:
         default:
             aValStr.clear();

@@ -469,7 +469,7 @@ static EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
             break;
         }
         (void)rReadParam.SkipToNextToken();
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case -2:
         {
             if ( rReadParam.GetResult().startsWithIgnoreAsciiCase("(") )

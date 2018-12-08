@@ -169,7 +169,7 @@ namespace internal
                                 return;
                             }
                         }
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     }
                     case animations::AnimationNodeType::PAR:
                     case animations::AnimationNodeType::SEQ:

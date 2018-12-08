@@ -2063,7 +2063,7 @@ template<typename T > static void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
                     r.append("!");
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case formula::FormulaGrammar::CONV_XL_A1:
             case formula::FormulaGrammar::CONV_XL_R1C1:
                 if (!aDocName.isEmpty())
@@ -2165,7 +2165,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
                     }
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
                 if (!aDocName.isEmpty())
                 {

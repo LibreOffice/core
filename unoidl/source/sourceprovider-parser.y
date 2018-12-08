@@ -334,7 +334,7 @@ Found findEntity(
                     break;
                 }
                 assert(e->entity.is());
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
                 if (e->entity->getSort() == unoidl::Entity::SORT_TYPEDEF) {
                     if (typedefed != nullptr) {
@@ -449,7 +449,7 @@ Found findEntity(
                                                 return FOUND_ERROR;
                                             }
                                             assert(e->entity.is());
-                                            SAL_FALLTHROUGH;
+                                            [[fallthrough]];
                                         case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
                                             switch (e->entity->getSort()) {
                                             case unoidl::Entity::SORT_ENUM_TYPE:
@@ -679,7 +679,7 @@ Found findEntity(
                             break;
                         }
                         assert(e->entity.is());
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
                         switch (e->entity->getSort()) {
                         case unoidl::Entity::SORT_ENUM_TYPE:
@@ -745,7 +745,7 @@ Found findEntity(
                         return FOUND_ERROR;
                     }
                     assert(e->entity.is());
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
                     if (e->entity->getSort()
                         == unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE)
@@ -776,7 +776,7 @@ Found findEntity(
                         t = unoidl::detail::SourceProviderType(n, e, args);
                         break;
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
                 case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                     error(
@@ -1911,7 +1911,7 @@ typedefDefn:
                   break;
               case unoidl::detail::SourceProviderEntity::KIND_MODULE:
                   assert(false && "this cannot happen");
-                  SAL_FALLTHROUGH;
+                  [[fallthrough]];
               default:
                   assert(t.entity->entity.is() || t.entity->pad.is());
                   unpub
@@ -1931,7 +1931,7 @@ typedefDefn:
           break;
       case unoidl::detail::SourceProviderType::TYPE_PARAMETER:
           assert(false && "this cannot happen");
-          SAL_FALLTHROUGH;
+          [[fallthrough]];
       default:
           break;
       }
@@ -3796,7 +3796,7 @@ type:
                       break;
                   }
                   assert(ent->entity.is());
-                  SAL_FALLTHROUGH;
+                  [[fallthrough]];
               case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
                   if (data->publishedContext
                       && ent->entity->getSort() != unoidl::Entity::SORT_MODULE
@@ -3843,7 +3843,7 @@ type:
                       break;
                   case unoidl::Entity::SORT_TYPEDEF:
                       assert(false && "this cannot happen");
-                      SAL_FALLTHROUGH;
+                      [[fallthrough]];
                   default:
                       break;
                   }
@@ -3856,7 +3856,7 @@ type:
                            + " used in published context"));
                       YYERROR;
                   }
-                  SAL_FALLTHROUGH;
+                  [[fallthrough]];
               case unoidl::detail::SourceProviderEntity::KIND_PUBLISHED_INTERFACE_DECL:
                   $$ = new unoidl::detail::SourceProviderType(
                       unoidl::detail::SourceProviderType::TYPE_INTERFACE, name,
@@ -3908,7 +3908,7 @@ type:
               break;
           }
           assert(ent->entity.is());
-          SAL_FALLTHROUGH;
+          [[fallthrough]];
       case unoidl::detail::SourceProviderEntity::KIND_EXTERNAL:
           if (ent->entity->getSort()
               == unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE)
@@ -4428,7 +4428,7 @@ bool parse(OUString const & uri, SourceProviderScannerData * data) {
             break;
         default:
             assert(false);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 1:
             throw FileFormatException(
                 uri,

@@ -266,7 +266,7 @@ SvXMLImportContextRef XMLTextListBlockContext::CreateChildContext(
     {
     case XML_TOK_TEXT_LIST_HEADER:
         bHeader = true;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case XML_TOK_TEXT_LIST_ITEM:
         pContext = new XMLTextListItemContext( GetImport(), mrTxtImport,
                                                 nPrefix, rLocalName,

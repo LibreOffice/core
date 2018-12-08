@@ -307,7 +307,7 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
         case RES_FMT_CHG:
         case RES_ATTRSET_CHG:
             SetInSwFntCache( false );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case RES_UL_SPACE:
         case RES_LR_SPACE:
         case RES_BOX:

@@ -350,7 +350,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
                     break;
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case EventMultiplexerEventId::MainViewRemoved:
             mxView = nullptr;
             mxCurrentPage = nullptr;

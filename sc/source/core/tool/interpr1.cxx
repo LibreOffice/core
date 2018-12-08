@@ -2745,7 +2745,7 @@ void ScInterpreter::ScIsFormula()
                 PushMatrix( pResMat);
                 return;
             }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
         case svSingleRef :
         {
             ScAddress aAdr;
@@ -2815,7 +2815,7 @@ void ScInterpreter::ScFormula()
                 PushMatrix( pResMat);
                 return;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case svSingleRef :
         {
             ScAddress aAdr;
@@ -3325,7 +3325,7 @@ void ScInterpreter::ScValue()
                 {
                     case ScMatValType::Empty:
                         fVal = 0.0;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case ScMatValType::Value:
                     case ScMatValType::Boolean:
                         PushDouble( fVal);
@@ -3676,7 +3676,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                     nRefArrayPos = nRefInList;
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
             case svDoubleRef :
             {
                 FormulaError nErr = FormulaError::NONE;
@@ -3834,7 +3834,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                     nRefArrayPos = nRefInList;
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
             case svDoubleRef :
             {
                 FormulaError nErr = FormulaError::NONE;
@@ -4035,7 +4035,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                     break;
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
             case svDoubleRef :
             {
                 FormulaError nErr = FormulaError::NONE;
@@ -5708,7 +5708,7 @@ void ScInterpreter::ScCountIf()
             {
                 case svRefList :
                     nRefListArrayPos = nRefInList;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case svDoubleRef :
                     {
                         ScRange aRange;
@@ -6786,7 +6786,7 @@ void ScInterpreter::ScLookup()
                     break;
                 case svDoubleRef:
                     aResAdr.Set( nResCol1, nResRow1, nResTab);
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case svSingleRef:
                     PushCellResultToken( true, aResAdr, nullptr, nullptr);
                     break;

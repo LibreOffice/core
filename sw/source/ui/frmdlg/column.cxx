@@ -840,7 +840,7 @@ void SwColumnPage::UpdateCols()
         switch(m_nCols)
         {
             case 3: bEnable3 = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case 2: bEnable12= true; break;
             default: /* do nothing */;
         }

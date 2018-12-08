@@ -2012,7 +2012,7 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, WidowHdl_Impl, weld::ToggleButton&, void
         case TRISTATE_FALSE:
             if (m_xOrphanBox->get_state() == TRISTATE_FALSE)
                 m_xKeepTogetherBox->set_sensitive(true);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case TRISTATE_INDET:
             m_xWidowRowNo->set_sensitive(false);
             m_xWidowRowLabel->set_sensitive(false);
@@ -2033,7 +2033,7 @@ IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl, weld::ToggleButton&, voi
         case TRISTATE_FALSE:
             if (m_xWidowBox->get_state() == TRISTATE_FALSE)
                 m_xKeepTogetherBox->set_sensitive(true);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case TRISTATE_INDET:
             m_xOrphanRowNo->set_sensitive(false);
             m_xOrphanRowLabel->set_sensitive(false);

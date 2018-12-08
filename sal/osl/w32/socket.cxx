@@ -338,7 +338,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr(oslSocketAddr Addr1, oslSocketAddr Addr2
                     (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
                     (pInetAddr1->sin_port == pInetAddr2->sin_port))
                     return true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
 
             default:

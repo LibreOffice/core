@@ -446,7 +446,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
                     break;
                 default:
                     SAL_WARN("writerfilter", "unknown LN_CT_Style_type " << nType);
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case 0: // explicit unknown set by tokenizer
                     break;
 

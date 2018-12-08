@@ -1253,7 +1253,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
 
         case TOX_USER:
             sText += "\" \\f \"" + OUString(static_cast<sal_Char>( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case TOX_CONTENT:
             {
                 eType = ww::eTC;

@@ -1177,14 +1177,14 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case SID_DB_FORM_NEW_PILOT:
                         case SID_FORM_CREATE_REPWIZ_PRE_SEL:
                             bAutoPilot = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
                         case SID_APP_NEW_FORM:
                             eType = E_FORM;
                             break;
                         case ID_DOCUMENT_CREATE_REPWIZ:
                         case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
                             bAutoPilot = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
                         case SID_APP_NEW_REPORT:
                         case SID_APP_NEW_REPORT_PRE_SEL:
                             eType = E_REPORT;
@@ -1195,13 +1195,13 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             break;
                         case ID_NEW_QUERY_DESIGN:
                             aCreationArgs.put( OUString(PROPERTY_GRAPHICAL_DESIGN), true );
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
                         case ID_NEW_QUERY_SQL:
                             eType = E_QUERY;
                             break;
                          case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
                              bAutoPilot = true;
-                             SAL_FALLTHROUGH;
+                             [[fallthrough]];
                         case ID_NEW_TABLE_DESIGN:
                             break;
                         default:
@@ -1776,7 +1776,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             // component, but standalone documents.
             isStandaloneDocument = true;
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case E_FORM:
     {
         if ( isStandaloneDocument || !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
@@ -2057,7 +2057,7 @@ void OApplicationController::renameEntry()
                     ensureConnection();
                     if ( !getConnection().is() )
                         break;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case E_QUERY:
                     if ( xContainer->hasByName(*aList.begin()) )
                     {

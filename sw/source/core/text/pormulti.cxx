@@ -659,10 +659,10 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
     switch ( nAdjustment )
     {
         case css::text::RubyAdjust_CENTER: nRight = static_cast<sal_uInt16>(nLineDiff / 2);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case css::text::RubyAdjust_RIGHT: nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight); break;
         case css::text::RubyAdjust_BLOCK: nSub   = TextFrameIndex(1);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case css::text::RubyAdjust_INDENT_BLOCK:
         {
             TextFrameIndex nCharCnt(0);

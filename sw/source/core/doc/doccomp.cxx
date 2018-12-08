@@ -1982,7 +1982,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
                 case SwComparePosition::Equal:
                     delete pDestRedl;
                     pDestRedl = nullptr;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
 
                 case SwComparePosition::CollideEnd:
                 case SwComparePosition::Before:

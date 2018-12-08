@@ -703,7 +703,7 @@ SwCalcOper SwCalc::GetToken()
                         m_eCurrOper = m_eCurrListOper;
                         break;
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case '\n':
                     m_eCurrOper = CALC_PRINT;
                     break;

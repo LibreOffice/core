@@ -1489,7 +1489,7 @@ bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
                 _rxUpdatedObject->updateBinaryStream(_nColumnIndex, *xStream, (*xStream)->available());
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             bSuccessfullyReRouted = false;
     }
@@ -1594,7 +1594,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
                 _rxParameters->setBinaryStream(_nColumnIndex, xStream, xStream->available());
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             bSuccessfullyReRouted = false;
 

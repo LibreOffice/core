@@ -75,7 +75,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     //! cannot always be switched ????
                     if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
                         pTabViewShell->SetDontSwitch(true);         // do not switch off EditShell
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
 
             case FID_CELL_FORMAT:
             case SID_ENABLE_HYPHENATION:

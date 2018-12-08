@@ -132,7 +132,7 @@ SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
         case FieldUnit::M:
         case FieldUnit::KM:
             eFUnit = FieldUnit::MM;
-            SAL_FALLTHROUGH; // we now have mm
+            [[fallthrough]]; // we now have mm
         case FieldUnit::MM:
             m_xMtrLineWidth->set_increments(50, 500, FieldUnit::NONE);
             m_xMtrStartWidth->set_increments(50, 500, FieldUnit::NONE);

@@ -333,7 +333,7 @@ SbxVariable* SbTreeListBox::FindVariable(weld::TreeIter* pEntry)
                 break;
             case OBJ_TYPE_DOCUMENT_OBJECTS:
                 bDocumentObjects = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case OBJ_TYPE_USERFORMS:
             case OBJ_TYPE_NORMAL_MODULES:
             case OBJ_TYPE_CLASS_MODULES:

@@ -1378,7 +1378,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                     size_t nUnusedBytes = nAlignedWidth - nWidth * 3;
                     memset(aBuf.data() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
                 // #i59239# fallback to 24 bit format, if bitcount is non-default
                 default:
                 {

@@ -262,7 +262,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                     SdrTextHorzAdjust eHorzAdjust;
                     switch ( nValue )
                     {
-                        case 4 : eFTS = drawing::TextFitToSizeType_ALLLINES; SAL_FALLTHROUGH;
+                        case 4 : eFTS = drawing::TextFitToSizeType_ALLLINES; [[fallthrough]];
                         case 3 : eHorzAdjust = SDRTEXTHORZADJUST_BLOCK; break;
                         default: eHorzAdjust = SDRTEXTHORZADJUST_LEFT; break;
                         case 1 : eHorzAdjust = SDRTEXTHORZADJUST_CENTER; break;
@@ -491,19 +491,19 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindin
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_ALIGNMENT;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_FONTWORK_CHARACTER_SPACING:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_FONTWORK_KERN_CHARACTER_PAIRS:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         {

@@ -532,7 +532,7 @@ bool ScViewObjectModeItem::GetPresentation
 
                 default: break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SfxItemPresentation::Nameless:
             if (GetValue() == VOBJ_MODE_SHOW)
                 rText += ScResId(STR_VOBJ_MODE_SHOW);

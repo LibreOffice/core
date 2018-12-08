@@ -440,7 +440,7 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     if( pos != *aAnch.GetContentAnchor())
                         aAnch.SetAnchor( &pos );
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
             case RndStdIds::FLY_AT_PARA:
             {

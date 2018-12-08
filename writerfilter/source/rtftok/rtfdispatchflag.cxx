@@ -1069,7 +1069,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_PageOrientation_landscape);
             putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz,
                                NS_ooxml::LN_CT_PageSz_orient, pValue);
-            SAL_FALLTHROUGH; // set the default + current value
+            [[fallthrough]]; // set the default + current value
         }
         case RTF_LNDSCPSXN:
         {

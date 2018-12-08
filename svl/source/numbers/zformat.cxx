@@ -698,7 +698,7 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
                     nLang = maLocale.meLanguage = nReferenceLanguage;
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 0x1E : // simple Asian numerals, Chinese-PRC
         case 0x1F : // financial Asian numerals, Chinese-PRC
         case 0x20 : // Arabic fullwidth numerals, Chinese-PRC
@@ -2591,7 +2591,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         {
         case '-' :
             nExpSign = -1;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case '+' :
             ++nExpStart;
             break;
@@ -4469,7 +4469,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
         {
         case NF_SYMBOLTYPE_DECSEP:
             aGrouping.reset();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
         case NF_SYMBOLTYPE_PERCENT:

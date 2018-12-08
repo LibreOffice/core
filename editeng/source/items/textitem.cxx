@@ -2925,7 +2925,7 @@ void SvxScriptSetItem::GetSlotIds( sal_uInt16 nSlotId, sal_uInt16& rLatin,
     {
     default:
         SAL_WARN( "editeng.items", "wrong SlotId for class SvxScriptSetItem" );
-        SAL_FALLTHROUGH; // default to font - Id Range !!
+        [[fallthrough]]; // default to font - Id Range !!
 
     case SID_ATTR_CHAR_FONT:
         rLatin = SID_ATTR_CHAR_FONT;

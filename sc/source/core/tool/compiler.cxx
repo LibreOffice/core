@@ -2455,7 +2455,7 @@ Label_MaskStateMachine:
                     SetError( FormulaError::StringOverflow);
                     eState = ssSkipReference;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case ssSkipReference:
                 // ODF reference: ['External'#$'Sheet'.A1:.B2] with dots being
                 // mandatory also if no sheet name. 'External'# is optional,
@@ -2580,7 +2580,7 @@ Label_MaskStateMachine:
                                     case SC_COMPILER_FILE_TAB_SEP:
                                         // sheet name should follow
                                         nRefInName |= kFileSep;
-                                        SAL_FALLTHROUGH;
+                                        [[fallthrough]];
                                     default:
                                         // quote not followed by quote => close
                                         nRefInName |= kClose;
@@ -3302,7 +3302,7 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
                 // operator as it is within a quoted name.
                 if (rName[0] != '\'')
                     return false;   // Document name has to be single quoted.
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case FormulaGrammar::CONV_XL_R1C1:
                 // C2 or C[1] are valid entire column references.
                 if (IsDoubleReference( rName, pErrRef))
@@ -5552,7 +5552,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasHeader())
                         aRange.aStart.IncRow();
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case ScTableRefToken::HEADERS_DATA:
                 {
                     if (pDBData->HasTotals())

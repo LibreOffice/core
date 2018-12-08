@@ -1202,7 +1202,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 return;
             }
             nVStep *= mnVisLines;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case KEY_UP:
             if (nCurPos != VALUESET_ITEM_NONEITEM)
             {
@@ -1239,7 +1239,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 return;
             }
             nVStep *= mnVisLines;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case KEY_DOWN:
             if (nCurPos != nLastItem)
             {
@@ -1264,7 +1264,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 Select();
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             Control::KeyInput( rKeyEvent );
             return;
@@ -2478,7 +2478,7 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 return CustomWidgetController::KeyInput(rKeyEvent);
             }
             nVStep *= mnVisLines;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case KEY_UP:
             if (nCurPos != VALUESET_ITEM_NONEITEM)
             {
@@ -2514,7 +2514,7 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 return CustomWidgetController::KeyInput(rKeyEvent);
             }
             nVStep *= mnVisLines;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case KEY_DOWN:
             if (nCurPos != nLastItem)
             {
@@ -2539,7 +2539,7 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 Select();
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             return CustomWidgetController::KeyInput(rKeyEvent);
     }

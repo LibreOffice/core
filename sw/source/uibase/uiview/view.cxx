@@ -1643,7 +1643,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     m_pVRuler->SetActive( !bModal );
                 }
 
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
 
             case SfxHintId::TitleChanged:
                 if ( GetDocShell()->IsReadOnly() != GetWrtShell().GetViewOptions()->IsReadonly() )

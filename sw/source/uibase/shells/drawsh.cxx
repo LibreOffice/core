@@ -270,7 +270,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 
         case SID_FLIP_VERTICAL:
             bMirror = false;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SID_FLIP_HORIZONTAL:
             rSh.MirrorSelection( bMirror );
             break;

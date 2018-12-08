@@ -2579,7 +2579,7 @@ void AttributeOutputBase::GetNumberPara( OUString& rStr, const SwField& rField )
         default:
             OSL_ENSURE(rField.GetFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default of Arabic");
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SVX_NUM_ARABIC:
             rStr += "\\* ARABIC ";
             break;
@@ -3821,7 +3821,7 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
 
             case SvxBreak::ColumnBefore:                       // ColumnBreak
                 bBefore = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case SvxBreak::ColumnAfter:
             case SvxBreak::ColumnBoth:
                 if ( GetExport().Sections().CurrentNumberOfColumns( *GetExport().m_pDoc ) > 1 || GetExport().SupportsOneColumnBreak() )
@@ -3841,7 +3841,7 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
                         PageBreakBefore(true);
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case SvxBreak::PageAfter:
             case SvxBreak::PageBoth:
                 nC = msword::PageBreak;
@@ -3922,7 +3922,7 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         {
             default:
                 OSL_FAIL("Unknown grid type");
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case GRID_NONE:
                 nGridType = 0;
                 break;
@@ -4811,7 +4811,7 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
         default:
             //Can't get an unknown type here
             OSL_FAIL("Unknown frame direction");
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SvxFrameDirection::Horizontal_LR_TB:
             nTextFlow = 0;
             break;

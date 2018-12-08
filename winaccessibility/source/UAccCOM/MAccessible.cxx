@@ -2988,7 +2988,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
                         }
                     }
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
         case TypeClass_SERVICE:
         case TypeClass_MODULE:

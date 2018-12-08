@@ -676,7 +676,7 @@ void SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
                 rView.AttrChangedNotify(&rShell);
                 break;
             }
-            SAL_FALLTHROUGH; // to deselect the object
+            [[fallthrough]]; // to deselect the object
         case ShellMode::Graphic:
         case ShellMode::Object:
         {

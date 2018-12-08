@@ -3111,7 +3111,7 @@ static SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
     {
         default:
             OSL_ENSURE(eDir == SvxFrameDirection::Environment, "unknown direction code, maybe it's a bitfield");
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 3:
             eDir = bIsBiDi ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB; // #i38158# - Consider RTL tables
             break;

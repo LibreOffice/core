@@ -538,7 +538,7 @@ void OSQLMessageBox::Construct(weld::Window* pParent, MessBoxStyle _nStyle, Mess
     {
         default:
             OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case Info:
             eMessageType = VclMessageType::Info;
             break;

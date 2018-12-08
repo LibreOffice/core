@@ -268,7 +268,7 @@ void Dependencies::insert(OUString const & name, Kind kind) {
         {
             insert(b2u(arg), KIND_NORMAL);
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case UnoType::Sort::Sequence:
     case UnoType::Sort::Enum:
     case UnoType::Sort::PlainStruct:

@@ -241,7 +241,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 break;
             case -1:
                 bKnowCaseSensivity = false;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case 0:
                 bCaseSensitiveDir = false;
             }

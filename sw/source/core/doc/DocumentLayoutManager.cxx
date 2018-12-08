@@ -122,7 +122,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
     case RndStdIds::HEADERR:
         {
             bHeader = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
     case RndStdIds::FOOTER:
         {

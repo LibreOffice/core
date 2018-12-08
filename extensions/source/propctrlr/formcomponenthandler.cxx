@@ -1483,7 +1483,7 @@ namespace pcr
 
             // Command also depends on DataSource
             aDependentProperties.push_back( PROPERTY_ID_COMMAND );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         // ----- Command -----
         case PROPERTY_ID_COMMAND:
@@ -1501,7 +1501,7 @@ namespace pcr
             aDependentProperties.push_back( PROPERTY_ID_STRINGITEMLIST );
             aDependentProperties.push_back( PROPERTY_ID_TYPEDITEMLIST );
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         // ----- StringItemList -----
         case PROPERTY_ID_STRINGITEMLIST:
@@ -1608,7 +1608,7 @@ namespace pcr
             FormButtonType eButtonType( FormButtonType_PUSH );
             OSL_VERIFY( _rNewValue >>= eButtonType );
             _rxInspectorUI->enablePropertyUI( PROPERTY_TARGET_URL, FormButtonType_URL == eButtonType );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
 
         // ----- TargetURL -----

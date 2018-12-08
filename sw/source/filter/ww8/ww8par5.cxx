@@ -3503,7 +3503,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
             case 'h':
             case 'm':
                 OSL_ENSURE( false, "Analysis still missing - unknown data" );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case 's':   //worthless fake anchor option
                 bOptions = true;
                 break;

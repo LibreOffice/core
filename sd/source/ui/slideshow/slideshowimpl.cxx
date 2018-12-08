@@ -1742,7 +1742,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                     gotoNextSlide();
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case KEY_SPACE:
             case KEY_RIGHT:
             case KEY_DOWN:
@@ -1788,7 +1788,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                     gotoPreviousSlide();
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case KEY_LEFT:
             case KEY_UP:
             case KEY_P:

@@ -2620,7 +2620,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
             case PREP_BOSS_CHGD:
                 SetInvalidVert( true ); // Test
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return bParaPossiblyInvalid;
@@ -2692,7 +2692,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
             InvalidatePrt_();
             InvalidateSize_();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case PREP_ADJUST_FRM :
             pPara->SetPrepAdjust();
             if( IsFootnoteNumFrame() != pPara->IsFootnoteNum() ||
@@ -2705,7 +2705,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
             break;
         case PREP_MUST_FIT :
             pPara->SetPrepMustFit(true);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case PREP_WIDOWS_ORPHANS :
             pPara->SetPrepAdjust();
             break;
@@ -2949,7 +2949,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 InvalidateRange(SwCharRange(nWhere, TextFrameIndex(1)));
                 return bParaPossiblyInvalid;
             }
-            SAL_FALLTHROUGH; // else: continue with default case block
+            [[fallthrough]]; // else: continue with default case block
         }
         case PREP_CLEAR:
         default:

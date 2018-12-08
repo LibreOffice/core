@@ -188,7 +188,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_PREV:
             OSL_FAIL( "event trigger ON_PREV not yet implemented, "
                         "mapped to ON_NEXT!" );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case animations::EventTrigger::ON_NEXT:
             pEvent = makeDelay( rFunctor,
                                 nDelay2 + nAdditionalDelay,

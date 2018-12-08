@@ -982,7 +982,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                                     aItemPresentation = SwResId(STR_WESTERN_FONT) + aItemPresentation;
                                     bHasWesternFontPrefix = true;
                                 }
-                                SAL_FALLTHROUGH;
+                                [[fallthrough]];
                                 default:
                                     bIsDefault = true;
                             }

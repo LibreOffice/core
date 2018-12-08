@@ -473,7 +473,7 @@ static hchar lineCharConv(hchar ch)
         case 0x3060 + '\'' - 31:
         case 0x3060 + '\"' - 31:
             ch--;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 0x3060 + '\'' - 32:
         case 0x3060 + '\"' - 32:
         case 0x3060 + '{' - 32:

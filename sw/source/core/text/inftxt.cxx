@@ -1593,7 +1593,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
         case CH_TXTATR_INWORD:
             if( !HasHint( i ))
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case CHAR_SOFTHYPHEN:
         case CHAR_HARDHYPHEN:

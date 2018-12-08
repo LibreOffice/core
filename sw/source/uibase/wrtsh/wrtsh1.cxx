@@ -362,7 +362,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 {
                     aServerList.FillInsertObjects();
                     aServerList.Remove( SwDocShell::Factory().GetClassId() );
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
 
                 // TODO/LATER: recording! Convert properties to items

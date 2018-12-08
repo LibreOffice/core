@@ -879,7 +879,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                 nLeftStart += nCharWidth;
                 nRightEnd -= nCharWidth;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case RubyAdjust_BLOCK:
         {
@@ -896,7 +896,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                 }
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case RubyAdjust_CENTER:
             rRenderContext.DrawText(Point(nCenter - nOutTextWidth / 2 , nYOutput),  sOutputText);

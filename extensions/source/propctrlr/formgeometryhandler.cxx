@@ -452,7 +452,7 @@ namespace pcr
             case PROPERTY_ID_WIDTH:
             case PROPERTY_ID_HEIGHT:
                 bIsSize = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case PROPERTY_ID_POSITIONX:
             case PROPERTY_ID_POSITIONY:
             {

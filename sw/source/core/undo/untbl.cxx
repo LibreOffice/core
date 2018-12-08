@@ -2841,7 +2841,7 @@ SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,
     {
     case SplitTable_HeadlineOption::BoxAttrAllCopy:
             pHistory.reset(new SwHistory);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
     case SplitTable_HeadlineOption::BorderCopy:
     case SplitTable_HeadlineOption::BoxAttrCopy:
         pSavTable.reset(new SaveTable( rTableNd.GetTable(), 1, false ));
@@ -2893,7 +2893,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
     case SplitTable_HeadlineOption::BoxAttrAllCopy:
         if( pHistory )
             pHistory->TmpRollback( pDoc, nFormulaEnd );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case SplitTable_HeadlineOption::BoxAttrCopy:
     case SplitTable_HeadlineOption::BorderCopy:
         {

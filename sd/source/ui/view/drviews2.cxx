@@ -1639,7 +1639,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CAPTUREPOINT:
             // negative value to signal call from menu
             maMousePos = Point(-1,-1);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SID_SET_SNAPITEM:
         {
             SetCurrentFunction( FuSnapLine::Create(this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq) );

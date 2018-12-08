@@ -589,7 +589,7 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
         case TYP_AUTHORFLD:
             nFormat = nSubType;
             nSubType = 0;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case TYP_EXTUSERFLD:
             nFormat |= m_pFixedCB->IsChecked() ? AF_FIXED : 0;
             break;

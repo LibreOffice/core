@@ -461,7 +461,7 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     break;
                 default:
                     SAL_WARN("sc",  "ScTokenConversion::ConvertToTokenSequence: unhandled token type " << StackVarEnumToString(rToken.GetType()));
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case svJump:    // occurs with ocIf, ocChoose
                 case svError:   // seems to be fairly common, and probably not exceptional and not worth a warning?
                 case svMissing: // occurs with ocMissing

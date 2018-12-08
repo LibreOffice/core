@@ -700,7 +700,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                 break;
             }
             // Reduce sequence of CR/LF/BLANK/TAB to a single blank
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case '\t':
             if( '\t'==nNextCh && bReadPRE && '>'!=cBreak )
             {
@@ -708,7 +708,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                 bContinue = false;
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case '\x0b':
             if( '\x0b'==nNextCh && (bReadPRE || bReadXMP ||bReadListing) &&
                 '>'!=cBreak )
@@ -716,7 +716,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                 break;
             }
             nNextCh = ' ';
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case ' ':
             sTmpBuffer.appendUtf32( nNextCh );
             if( '>'!=cBreak && (!bReadListing && !bReadXMP &&
@@ -987,7 +987,7 @@ HtmlTokenId HTMLParser::GetNextRawToken()
                 }
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             // all remaining characters are appended to the buffer
             sTmpBuffer.appendUtf32( nNextCh );
@@ -1355,16 +1355,16 @@ HtmlTokenId HTMLParser::GetNextToken_()
                 nRet = HtmlTokenId::NEWPARA;
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case '\t':
             if( bReadPRE )
             {
                 nRet = HtmlTokenId::TABCHAR;
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case ' ':
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
 
 scan_text:
@@ -1605,7 +1605,7 @@ HtmlTokenId HTMLParser::FilterPRE( HtmlTokenId nToken )
     // in Netscape they only have impact in not empty paragraphs
     case HtmlTokenId::PARABREAK_ON:
         nToken = HtmlTokenId::LINEBREAK;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case HtmlTokenId::LINEBREAK:
     case HtmlTokenId::NEWPARA:
         nPre_LinePos = 0;
@@ -1786,7 +1786,7 @@ HtmlTokenId HTMLParser::FilterXMP( HtmlTokenId nToken )
     case HtmlTokenId::NEWPARA:
         if( bPre_IgnoreNewPara )
             nToken = HtmlTokenId::NONE;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case HtmlTokenId::TEXTTOKEN:
     case HtmlTokenId::NONBREAKSPACE:
     case HtmlTokenId::SOFTHYPH:
@@ -1827,7 +1827,7 @@ HtmlTokenId HTMLParser::FilterListing( HtmlTokenId nToken )
     case HtmlTokenId::NEWPARA:
         if( bPre_IgnoreNewPara )
             nToken = HtmlTokenId::NONE;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case HtmlTokenId::TEXTTOKEN:
     case HtmlTokenId::NONBREAKSPACE:
     case HtmlTokenId::SOFTHYPH:

@@ -199,7 +199,7 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 
     case SID_DRAW_CAPTION_VERTICAL:
         bCapVertical = true;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case SID_DRAW_CAPTION:
         m_pWin->SetSdrDrawMode(OBJ_CAPTION);
         break;

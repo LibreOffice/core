@@ -1033,7 +1033,7 @@ bool ORowSetValue::getBool()    const
                         break;
                     }
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case DataType::DECIMAL:
             case DataType::NUMERIC:
 
@@ -1931,7 +1931,7 @@ css::util::Date ORowSetValue::getDate() const
             case DataType::OBJECT:
             default:
                 OSL_ENSURE( false, "ORowSetValue::getDate: cannot retrieve the data!" );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
 
             case DataType::BINARY:
             case DataType::VARBINARY:

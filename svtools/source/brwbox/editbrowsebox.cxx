@@ -416,7 +416,7 @@ namespace svt
                         Control::KeyInput(rEvt);
                     return;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
                 BrowseBox::KeyInput(rEvt);
         }

@@ -155,7 +155,7 @@ Type getDynamicType(css::uno::Any const & value) {
                 return TYPE_HEXBINARY_LIST;
             }
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     default:
         return TYPE_ERROR;
     }

@@ -295,7 +295,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
             default:
                 SAL_WARN("sc.ui","unhandled current date/time request");
                 nReqFmt = SvNumFormatType::DATETIME;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case SvNumFormatType::DATETIME:
                 {
                     DateTime aActDateTime( DateTime::SYSTEM );
@@ -391,7 +391,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
             default:
                 SAL_WARN("sc.ui","unhandled current date/time request");
                 nReqFmt = SvNumFormatType::DATETIME;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case SvNumFormatType::DATETIME:
                 break;
         }

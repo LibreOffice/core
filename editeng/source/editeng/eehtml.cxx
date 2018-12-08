@@ -287,7 +287,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::TABLEHEADER_ON:
     case HtmlTokenId::TABLEDATA_ON:
         nInCell++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case HtmlTokenId::BLOCKQUOTE_ON:
     case HtmlTokenId::BLOCKQUOTE_OFF:
     case HtmlTokenId::BLOCKQUOTE30_ON:
@@ -311,7 +311,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     {
         if ( nInCell )
             nInCell--;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     }
     case HtmlTokenId::LISTHEADER_OFF:
     case HtmlTokenId::LI_OFF:

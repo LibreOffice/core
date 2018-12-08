@@ -158,7 +158,7 @@ bool XcsParser::startElement(
                 state_ = STATE_TEMPLATES;
                 return true;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case STATE_TEMPLATES_DONE:
             if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
                 name.equals("component"))
@@ -188,7 +188,7 @@ bool XcsParser::startElement(
                 }
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case STATE_COMPONENT:
             assert(!elements_.empty());
             switch (elements_.top().node->kind()) {

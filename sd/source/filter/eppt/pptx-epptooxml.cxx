@@ -610,7 +610,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
                 break;
             case animations::TransitionSubType::CORNERSIN: // Inside turning cube
                 pInverted = "true";
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case animations::TransitionSubType::CORNERSOUT: // Outside turning cube
                 nTransition = XML_fade;
                 nTransition14 = XML_prism;

@@ -1071,7 +1071,7 @@ void Shell::GetState(SfxItemSet &rSet)
                     }
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
             case SID_BASICIDE_NEWMODULE:
             case SID_BASICIDE_NEWDIALOG:

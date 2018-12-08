@@ -104,7 +104,7 @@ void Includes::add(OString const & entityName) {
         {
             add(arg);
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case codemaker::UnoType::Sort::Sequence:
     case codemaker::UnoType::Sort::Enum:
     case codemaker::UnoType::Sort::PlainStruct:

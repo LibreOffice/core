@@ -1444,7 +1444,7 @@ namespace xmloff
             case FormComponentType::DATEFIELD:
                 m_eType = DATE;
                 knownType = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case FormComponentType::TIMEFIELD:
                 if ( !knownType )
                 {
@@ -1452,7 +1452,7 @@ namespace xmloff
                     knownType = true;
                 }
                 m_nIncludeSpecial |= SCAFlags::Validation;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
             case FormComponentType::PATTERNFIELD:
@@ -1461,7 +1461,7 @@ namespace xmloff
                     m_eType = FORMATTED_TEXT;
                     knownType = true;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case FormComponentType::TEXTFIELD:
             {   // it's some kind of edit. To know which type we need further investigation
 
@@ -1615,7 +1615,7 @@ namespace xmloff
                 m_eType = BUTTON;
                 m_nIncludeCommon |= CCAFlags::TabStop | CCAFlags::Label;
                 m_nIncludeSpecial = SCAFlags::DefaultButton | SCAFlags::Toggle | SCAFlags::FocusOnClick | SCAFlags::ImagePosition | SCAFlags::RepeatDelay;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case FormComponentType::IMAGEBUTTON:
                 if (BUTTON != m_eType)
                 {
@@ -1632,7 +1632,7 @@ namespace xmloff
             case FormComponentType::CHECKBOX:
                 m_eType = CHECKBOX;
                 m_nIncludeSpecial = SCAFlags::CurrentState | SCAFlags::IsTristate | SCAFlags::State;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case FormComponentType::RADIOBUTTON:
                 m_nIncludeCommon =
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::Disabled | CCAFlags::Label | CCAFlags::Printable |
@@ -1697,7 +1697,7 @@ namespace xmloff
 
             default:
                 OSL_FAIL("OControlExport::examineControl: unknown control type (class id)!");
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
 
             case FormComponentType::NAVIGATIONBAR:
                 // TODO: should we have an own file format for this?

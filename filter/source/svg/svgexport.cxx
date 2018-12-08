@@ -2246,7 +2246,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                                     aDate.SetDay( i );
                                     sDate.append( SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang ) );
                                 }
-                                SAL_FALLTHROUGH; // We need months too!
+                                [[fallthrough]]; // We need months too!
                             case SvxDateFormat::C:       // 13.Feb 1996
                             case SvxDateFormat::D:       // 13.February 1996
                                 for( sal_uInt16 i = 1; i <= 12; ++i ) // we get all months in a year

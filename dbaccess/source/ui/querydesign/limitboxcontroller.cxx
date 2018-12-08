@@ -66,7 +66,7 @@ bool LimitBoxImpl::EventNotify( NotifyEvent& rNEvt )
             {
                 case KEY_ESCAPE:
                     Undo();
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case KEY_RETURN:
                     GrabFocusToDocument();
                     bHandled = true;

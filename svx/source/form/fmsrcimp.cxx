@@ -490,7 +490,7 @@ FmSearchEngine::SearchResult FmSearchEngine::SearchRegularApprox(const OUString&
                         bFound = false;
                         break;
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case MATCHING_BEGINNING :
                     if (nStart != 0)
                         bFound = false;

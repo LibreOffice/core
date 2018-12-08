@@ -169,7 +169,7 @@ bool IncomingRequest::execute_throw(
             }
             break;
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     default:
         {
             assert(object_.is());

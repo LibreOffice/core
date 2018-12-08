@@ -355,7 +355,7 @@ sal_Int32 cclass_Unicode::getParseTokensType(sal_uInt32 const c, bool const isFi
             case U_OTHER_LETTER :
                 // Non_Spacing_Mark could not be as leading character
                 if (isFirst) break;
-                SAL_FALLTHROUGH; // treat it as Other_Letter.
+                [[fallthrough]]; // treat it as Other_Letter.
             case U_NON_SPACING_MARK :
                 return KParseTokens::UNI_OTHER_LETTER;
             case U_DECIMAL_DIGIT_NUMBER :
@@ -630,7 +630,7 @@ ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c)
             // nor can a spacing combining mark.
             if (bStart)
                 return ParserFlags::ILLEGAL;
-            SAL_FALLTHROUGH; // treat it as Other_Letter.
+            [[fallthrough]]; // treat it as Other_Letter.
         case U_OTHER_LETTER :
             return (nTypes & KParseTokens::UNI_OTHER_LETTER) ?
                 (bStart ? ParserFlags::CHAR_WORD : ParserFlags::WORD) :
@@ -891,7 +891,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             break;
             case ssGetWordFirstChar :
                 eState = ssGetWord;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case ssGetWord :
             {
                 if ( nMask & ParserFlags::WORD )

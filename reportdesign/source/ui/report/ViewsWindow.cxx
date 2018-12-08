@@ -867,7 +867,7 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
                         else if ( _nControlModification == ControlModification::WIDTH_GREATEST )
                             nYMov = aObjRect.getHeight();
                         lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification);
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case ControlModification::WIDTH_SMALLEST:
                     case ControlModification::HEIGHT_SMALLEST:
                         pView->AddUndo( pView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));

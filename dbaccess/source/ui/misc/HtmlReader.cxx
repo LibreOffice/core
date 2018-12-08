@@ -136,7 +136,7 @@ void OHTMLReader::NextToken( HtmlTokenId nToken )
                         }
                     }
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case HtmlTokenId::THEAD_ON:
             case HtmlTokenId::TBODY_ON:
                 {
