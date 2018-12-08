@@ -128,7 +128,7 @@ protected:
 
     void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, bool bRepeat = false) const;
 
-    SAL_WARN_UNUSED_RESULT static OUString GetDescriptionStringForObject( const SdrObject& _rForObject, const char* pStrCacheID, bool bRepeat = false );
+    [[nodiscard]] static OUString GetDescriptionStringForObject( const SdrObject& _rForObject, const char* pStrCacheID, bool bRepeat = false );
 
     // #94278# new method for evtl. PageChange at UNDO/REDO
     void ImpShowPageOfThisObject();

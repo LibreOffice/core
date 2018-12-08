@@ -363,17 +363,17 @@ public:
 
     sal_uInt16          PeekRecId( std::size_t nPos );
 
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_uInt8           ReaduInt8();
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_Int16           ReadInt16();
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_uInt16          ReaduInt16();
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_Int32           ReadInt32();
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_uInt32          ReaduInt32();
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     double              ReadDouble();
 
     /** Reads nBytes bytes to the existing(!) buffer pData.

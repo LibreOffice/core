@@ -2413,7 +2413,7 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     /** @overload @since LibreOffice 5.3 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString>::TypeUtf16
     replaceFirst(T & from, OUString const & to, sal_Int32 * index = nullptr)
@@ -2433,7 +2433,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString>::TypeUtf16
     replaceFirst(OUString const & from, T & to, sal_Int32 * index = nullptr)
@@ -2453,7 +2453,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T1, typename T2> SAL_WARN_UNUSED_RESULT
+    template<typename T1, typename T2> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<
             T1,
@@ -2477,7 +2477,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T1, typename T2> SAL_WARN_UNUSED_RESULT
+    template<typename T1, typename T2> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<
             T1,
@@ -2501,7 +2501,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T1, typename T2> SAL_WARN_UNUSED_RESULT
+    template<typename T1, typename T2> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<
             T1,
@@ -2526,7 +2526,7 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    SAL_WARN_UNUSED_RESULT OUString replaceFirst(
+    [[nodiscard]] OUString replaceFirst(
         OUStringLiteral const & from, OUString const & to,
         sal_Int32 * index = nullptr) const
     {
@@ -2538,7 +2538,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    SAL_WARN_UNUSED_RESULT OUString replaceFirst(
+    [[nodiscard]] OUString replaceFirst(
         OUString const & from, OUStringLiteral const & to,
         sal_Int32 * index = nullptr) const
     {
@@ -2550,7 +2550,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    SAL_WARN_UNUSED_RESULT OUString replaceFirst(
+    [[nodiscard]] OUString replaceFirst(
         OUStringLiteral const & from, OUStringLiteral const & to,
         sal_Int32 * index = nullptr) const
     {
@@ -2562,7 +2562,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename libreoffice_internal::ConstCharArrayDetector<T, OUString >::Type
     replaceFirst(
         OUStringLiteral const & from, T & to, sal_Int32 * index = nullptr) const
@@ -2578,7 +2578,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename libreoffice_internal::ConstCharArrayDetector<T, OUString >::Type
     replaceFirst(
         T & from, OUStringLiteral const & to, sal_Int32 * index = nullptr) const
@@ -2594,7 +2594,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString >::TypeUtf16
     replaceFirst(
@@ -2611,7 +2611,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString >::TypeUtf16
     replaceFirst(
@@ -2733,7 +2733,7 @@ public:
 
 #if defined LIBO_INTERNAL_ONLY
     /** @overload @since LibreOffice 5.3 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString>::TypeUtf16
     replaceAll(T & from, OUString const & to) const {
@@ -2750,7 +2750,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString>::TypeUtf16
     replaceAll(OUString const & from, T & to) const {
@@ -2766,7 +2766,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T1, typename T2> SAL_WARN_UNUSED_RESULT
+    template<typename T1, typename T2> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<
             T1,
@@ -2788,7 +2788,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T1, typename T2> SAL_WARN_UNUSED_RESULT
+    template<typename T1, typename T2> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<
             T1,
@@ -2810,7 +2810,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.3 */
-    template<typename T1, typename T2> SAL_WARN_UNUSED_RESULT
+    template<typename T1, typename T2> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<
             T1,
@@ -2833,7 +2833,7 @@ public:
     }
 
     /** @overload @since LibreOffice 5.4 */
-    SAL_WARN_UNUSED_RESULT OUString replaceAll(
+    [[nodiscard]] OUString replaceAll(
         OUStringLiteral const & from, OUString const & to) const
     {
         rtl_uString * s = nullptr;
@@ -2842,7 +2842,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    SAL_WARN_UNUSED_RESULT OUString replaceAll(
+    [[nodiscard]] OUString replaceAll(
         OUString const & from, OUStringLiteral const & to) const
     {
         rtl_uString * s = nullptr;
@@ -2851,7 +2851,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    SAL_WARN_UNUSED_RESULT OUString replaceAll(
+    [[nodiscard]] OUString replaceAll(
         OUStringLiteral const & from, OUStringLiteral const & to) const
     {
         rtl_uString * s = nullptr;
@@ -2860,7 +2860,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename libreoffice_internal::ConstCharArrayDetector<T, OUString >::Type
     replaceAll(OUStringLiteral const & from, T & to) const {
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(to));
@@ -2872,7 +2872,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename libreoffice_internal::ConstCharArrayDetector<T, OUString >::Type
     replaceAll(T & from, OUStringLiteral const & to) const {
         assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(from));
@@ -2885,7 +2885,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString >::TypeUtf16
     replaceAll(OUStringLiteral const & from, T & to) const {
@@ -2898,7 +2898,7 @@ public:
         return OUString(s, SAL_NO_ACQUIRE);
     }
     /** @overload @since LibreOffice 5.4 */
-    template<typename T> SAL_WARN_UNUSED_RESULT
+    template<typename T> [[nodiscard]]
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString >::TypeUtf16
     replaceAll(T & from, OUStringLiteral const & to) const {

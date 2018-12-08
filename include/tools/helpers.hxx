@@ -78,7 +78,7 @@ inline long FRound( double fVal )
 
 //valid range:  (-180,180]
 template <typename T>
-SAL_WARN_UNUSED_RESULT inline typename std::enable_if<std::is_signed<T>::value, T>::type
+[[nodiscard]] inline typename std::enable_if<std::is_signed<T>::value, T>::type
 NormAngle180(T angle)
 {
     while (angle <= -180)
@@ -89,7 +89,7 @@ NormAngle180(T angle)
 }
 
 //valid range:  [0,360)
-template <typename T> SAL_WARN_UNUSED_RESULT inline T NormAngle360(T angle)
+template <typename T> [[nodiscard]] inline T NormAngle360(T angle)
 {
     while (angle < 0)
         angle += 360;

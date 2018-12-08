@@ -156,7 +156,7 @@ public:
 
     virtual void            SetWindowState( const SalFrameState* pState ) = 0;
     // if this returns false the structure is uninitialised
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     virtual bool            GetWindowState( SalFrameState* pState ) = 0;
     virtual void            ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) = 0;
     virtual void            PositionByToolkit( const tools::Rectangle&, FloatWinPopupFlags ) {};

@@ -73,19 +73,19 @@ public:
     void                        Reset( const D& rValue );
     void                        SetValue( A nPos, const D& rValue );
     void                        SetValue( A nStart, A nEnd, const D& rValue );
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     const D&                    GetValue( A nPos ) const;
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     A                           GetLastPos() const { return pData[nCount-1].nEnd; }
 
     /** Get value for a row, and it's region end row */
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     const D&                    GetValue( A nPos, size_t& nIndex, A& nEnd ) const;
 
     /** Get next value and it's region end row. If nIndex<nCount, nIndex is
         incremented first. If the resulting nIndex>=nCount, the value of the
         last entry is returned again. */
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     const D&                    GetNextValue( size_t& nIndex, A& nEnd ) const;
 
     /** Insert rows before nStart and copy value for inserted rows from

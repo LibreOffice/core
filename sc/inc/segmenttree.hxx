@@ -41,7 +41,7 @@ public:
     public:
         explicit ForwardIterator(ScFlatBoolRowSegments& rSegs);
 
-        SAL_WARN_UNUSED_RESULT
+        [[nodiscard]]
         bool getValue(SCROW nPos, bool& rVal);
         SCROW getLastPos() const { return mnLastPos;}
 

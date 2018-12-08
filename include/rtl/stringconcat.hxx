@@ -221,7 +221,7 @@ struct ToStringHelper< OUStringConcat< T1, T2 > >
     };
 
 template< typename T1, typename T2 >
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 inline
 typename libreoffice_internal::Enable< OStringConcat< T1, T2 >, ToStringHelper< T1 >::allowOStringConcat && ToStringHelper< T2 >::allowOStringConcat >::Type operator+( const T1& left, const T2& right )
     {
@@ -230,7 +230,7 @@ typename libreoffice_internal::Enable< OStringConcat< T1, T2 >, ToStringHelper< 
 
 // char[N] and const char[N] need to be done explicitly, otherwise the compiler likes to treat them the same way for some reason
 template< typename T, int N >
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 inline
 typename libreoffice_internal::Enable< OStringConcat< T, const char[ N ] >, ToStringHelper< T >::allowOStringConcat >::Type operator+( const T& left, const char (&right)[ N ] )
     {
@@ -238,7 +238,7 @@ typename libreoffice_internal::Enable< OStringConcat< T, const char[ N ] >, ToSt
     }
 
 template< typename T, int N >
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 inline
 typename libreoffice_internal::Enable< OStringConcat< const char[ N ], T >, ToStringHelper< T >::allowOStringConcat >::Type operator+( const char (&left)[ N ], const T& right )
     {
@@ -246,7 +246,7 @@ typename libreoffice_internal::Enable< OStringConcat< const char[ N ], T >, ToSt
     }
 
 template< typename T, int N >
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 inline
 typename libreoffice_internal::Enable< OStringConcat< T, char[ N ] >, ToStringHelper< T >::allowOStringConcat >::Type operator+( const T& left, char (&right)[ N ] )
     {
@@ -254,7 +254,7 @@ typename libreoffice_internal::Enable< OStringConcat< T, char[ N ] >, ToStringHe
     }
 
 template< typename T, int N >
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 inline
 typename libreoffice_internal::Enable< OStringConcat< char[ N ], T >, ToStringHelper< T >::allowOStringConcat >::Type operator+( char (&left)[ N ], const T& right )
     {
@@ -262,7 +262,7 @@ typename libreoffice_internal::Enable< OStringConcat< char[ N ], T >, ToStringHe
     }
 
 template< typename T1, typename T2 >
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 inline
 typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat >::Type operator+( const T1& left, const T2& right )
     {
@@ -270,7 +270,7 @@ typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper<
     }
 
 template< typename T1, typename T2 >
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 inline
 typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat && libreoffice_internal::ConstCharArrayDetector< T1, void >::ok >::Type operator+( T1& left, const T2& right )
     {
@@ -278,7 +278,7 @@ typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper<
     }
 
 template< typename T1, typename T2 >
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 inline
 typename libreoffice_internal::Enable< OUStringConcat< T1, T2 >, ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat && libreoffice_internal::ConstCharArrayDetector< T2, void >::ok >::Type operator+( const T1& left, T2& right )
     {

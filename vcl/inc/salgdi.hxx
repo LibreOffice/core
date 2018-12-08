@@ -203,7 +203,7 @@ public:
 
     void                        mirror( long& nX, const OutputDevice *pOutDev ) const;
     // only called mirror2 to avoid ambiguity
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     long                        mirror2( long nX, const OutputDevice *pOutDev ) const;
     void                        mirror( long& nX, long nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
     bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const;
