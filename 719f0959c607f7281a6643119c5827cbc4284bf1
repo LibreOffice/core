@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_6240ef08",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-08T13:14:46Z",
+      "side": 1,
+      "message": "ResetPen(GetStockPen(NULL_PEN));\n\nIn any case, the empty line between creation of the pen and resetting to it (the two directly related actions) seems odd. :-)",
+      "range": {
+        "startLine": 1360,
+        "startChar": 4,
+        "endLine": 1360,
+        "endChar": 22
+      },
+      "revId": "719f0959c607f7281a6643119c5827cbc4284bf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
