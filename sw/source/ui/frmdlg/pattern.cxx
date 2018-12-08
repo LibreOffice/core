@@ -29,11 +29,14 @@ SwBackgroundDlg::SwBackgroundDlg(weld::Window* pParent, const SfxItemSet& rSet)
 {
     m_xDialog->set_title(SwResId(STR_FRMUI_PATTERN));
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG );
     if ( fnCreatePage )
     {
         TabPageParent pPageParent(get_content_area(), this);
-        SetTabPage((*fnCreatePage)(pPageParent, &rSet));
+        VclPtr<SfxTabPage> xTabPage = (*fnCreatePage)(pPageParent, &rSet);
+        xTabPage->PageCreated(rSet);
+        SetTabPage(xTabPage);
+        xTabPage->ActivatePage(rSet);
     }
 }
 

@@ -1407,6 +1407,7 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
 {
     switch ( nId )
     {
+        case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BKG :
             return SvxBkgTabPage::Create;
         case RID_SVXPAGE_TEXTANIMATION :
@@ -1451,7 +1452,6 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
             return SvxTextAttrPage::Create;
         case RID_SVXPAGE_ALIGNMENT :
             return svx::AlignmentTabPage::Create;
-        case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BACKGROUND :
             return SvxBackgroundTabPage::Create;
         case RID_SVXPAGE_BORDER :

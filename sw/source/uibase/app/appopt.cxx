@@ -506,7 +506,7 @@ VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, TabPageParent pParen
         case  RID_SW_TP_BACKGROUND:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
+            ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG );
             pRet = (*fnCreatePage)( pParent, &rSet );
             break;
         }
