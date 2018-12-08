@@ -1841,68 +1841,112 @@ void EnhancedCustomShape2d::CreateSubPath(
                 case ELLIPTICALQUADRANTX :
                 case ELLIPTICALQUADRANTY :
                 {
-                    bool bFirstDirection(true);
-                    basegfx::B2DPoint aControlPointA;
-                    basegfx::B2DPoint aControlPointB;
-
-                    for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
+                    // If there are several points, then the direction changes with every point.
+                    bool bIsXDirection(nCommand == ELLIPTICALQUADRANTX);
+                    // The arc starts at the current point and ends at the point given in the parameter.
+                    double fStartX;
+                    double fStartY;
+                    sal_uInt16 i=0;
+                    if (rSrcPt == 0)
                     {
-                        sal_uInt32 nModT = ( nCommand == ELLIPTICALQUADRANTX ) ? 1 : 0;
-                        Point aCurrent( GetPoint( seqCoordinates[ rSrcPt ], true, true ) );
+                        // The path is ill-structured, there exists no current point.
+                        // But we want to show as much as possible. Thus make a moveTo to the point
+                        // given as parameter and continue from there.
+                        GetParameter ( fStartX, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt) ].First, false , false);
+                        fStartX -= nCoordLeft;
+                        fStartX *= fXScale;
+                        GetParameter ( fStartY, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt) ].Second, false, false );
+                        fStartY -= nCoordTop;
+                        fStartY *= fYScale;
+                        aNewB2DPolygon.append(basegfx::B2DPoint(fStartX, fStartY));
+                        bIsXDirection = !bIsXDirection;
+                        rSrcPt++;
+                        i++;
+                    }
+                    else
+                    {
+                        GetParameter ( fStartX, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt - 1) ].First, false, false );
+                        fStartX -= nCoordLeft;
+                        fStartX *= fXScale;
+                        GetParameter ( fStartY, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt - 1) ].Second, false, false );
+                        fStartY -= nCoordTop;
+                        fStartY *= fYScale;
+                    }
 
-                        if ( rSrcPt )   // we need a previous point
+                    for (; (i < nPntCount) && (rSrcPt < nCoordSize ); i++ )
+                    {
+                        double fEndX;
+                        double fEndY;
+                        GetParameter ( fEndX, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt) ].First, false, false );
+                        fEndX -= nCoordLeft;
+                        fEndX *= fXScale;
+                        GetParameter ( fEndY, seqCoordinates[ static_cast<sal_uInt16>(rSrcPt) ].Second, false, false );
+                        fEndY -= nCoordTop;
+                        fEndY *= fYScale;
+                        basegfx::B2DPoint aCenter;
+                        if (bIsXDirection)
                         {
-                            Point aPrev( GetPoint( seqCoordinates[ rSrcPt - 1 ], true, true ) );
-                            sal_Int32 nX, nY;
-                            nX = aCurrent.X() - aPrev.X();
-                            nY = aCurrent.Y() - aPrev.Y();
-                            if ( ( nY ^ nX ) & 0x80000000 )
-                            {
-                                if ( !i )
-                                    bFirstDirection = true;
-                                else if ( !bFirstDirection )
-                                    nModT ^= 1;
-                            }
-                            else
-                            {
-                                if ( !i )
-                                    bFirstDirection = false;
-                                else if ( bFirstDirection )
-                                    nModT ^= 1;
-                            }
-                            if ( nModT )            // get the right corner
-                            {
-                                nX = aCurrent.X();
-                                nY = aPrev.Y();
-                            }
-                            else
-                            {
-                                nX = aPrev.X();
-                                nY = aCurrent.Y();
-                            }
-                            sal_Int32 nXVec = ( nX - aPrev.X() ) >> 1;
-                            sal_Int32 nYVec = ( nY - aPrev.Y() ) >> 1;
-                            Point aControl1( aPrev.X() + nXVec, aPrev.Y() + nYVec );
-
-                            aControlPointA = basegfx::B2DPoint(aControl1.X(), aControl1.Y());
-
-                            nXVec = ( nX - aCurrent.X() ) >> 1;
-                            nYVec = ( nY - aCurrent.Y() ) >> 1;
-                            Point aControl2( aCurrent.X() + nXVec, aCurrent.Y() + nYVec );
-
-                            aControlPointB = basegfx::B2DPoint(aControl2.X(), aControl2.Y());
-
-                            aNewB2DPolygon.appendBezierSegment(
-                                aControlPointA,
-                                aControlPointB,
-                                basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
+                            aCenter.setX(fStartX);
+                            aCenter.setY(fEndY);
                         }
                         else
                         {
-                            aNewB2DPolygon.append(basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
+                            aCenter.setX(fEndX);
+                            aCenter.setY(fStartY);
                         }
-
+                        double fRadiusX = fabs(fEndX - fStartX);
+                        double fRadiusY = fabs(fEndY - fStartY);
+                        // Some cases need a counter-clockwise arc. Because the method from basegfx only
+                        // provides a clockwise arc, we mirror values in those cases.
+                        basegfx::B2DHomMatrix aMirrorMatrix(1.0, 0.0, 0.0, 0.0, -1.0, 0.0);
+                        basegfx::B2DPolygon aArc;
+                        if (bIsXDirection)
+                        {
+                            if ( (fEndX < fStartX) && (fEndY < fStartY )) // left, up
+                            {
+                                aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI2, F_PI);
+                            }
+                            else if ( (fEndX < fStartX) && (fEndY >= fStartY) ) // left, down
+                            {
+                                aArc = basegfx::utils::createPolygonFromEllipseSegment(aMirrorMatrix*aCenter, fRadiusX, fRadiusY, F_PI2, F_PI);
+                                aArc.transform(aMirrorMatrix);
+                            }
+                            else if ( (fEndX >= fStartX) && (fEndY < fStartY) ) // right, up
+                            {
+                                aArc = basegfx::utils::createPolygonFromEllipseSegment(aMirrorMatrix*aCenter, fRadiusX, fRadiusY, 1.5*F_PI, F_2PI);
+                                aArc.transform(aMirrorMatrix);
+                            }
+                            else // (fEndX >= fStartX) && (fEndY >= fStartY) right, down
+                            {
+                                aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*F_PI, F_2PI);
+                            }
+                        }
+                        else
+                        {
+                            if ( (fEndX < fStartX) && (fEndY < fStartY )) // up, left
+                            {
+                                aArc = basegfx::utils::createPolygonFromEllipseSegment(aMirrorMatrix*aCenter, fRadiusX, fRadiusY, 0.0, F_PI2);
+                                aArc.transform(aMirrorMatrix);
+                            }
+                            else if ( (fEndX < fStartX) && (fEndY >= fStartY) ) // down, left
+                            {
+                                aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 0.0, F_PI2);
+                            }
+                            else if ( (fEndX >= fStartX) && (fEndY < fStartY) ) // up, right
+                            {
+                                aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI, 1.5*F_PI);
+                            }
+                            else // (fEndX >= fStartX) && (fEndY >= fStartY) down, right
+                            {
+                                aArc = basegfx::utils::createPolygonFromEllipseSegment(aMirrorMatrix*aCenter, fRadiusX, fRadiusY, F_PI, 1.5*F_PI);
+                                aArc.transform(aMirrorMatrix);
+                            }
+                        }
+                        aNewB2DPolygon.append(aArc);
+                        fStartX = fEndX;
+                        fStartY = fEndY;
                         rSrcPt++;
+                        bIsXDirection = !bIsXDirection;
                     }
                 }
                 break;
