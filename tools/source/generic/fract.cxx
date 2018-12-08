@@ -186,8 +186,13 @@ namespace
         T den = r.denominator();
 
         // Avoid overflow and preserve normalization
+#if BOOST_VERSION >= 106700
+        T gcd1 = boost::integer::gcd(i.numerator(), den);
+        T gcd2 = boost::integer::gcd(num, i.denominator());
+#else
         T gcd1 = boost::math::gcd(i.numerator(), den);
         T gcd2 = boost::math::gcd(num, i.denominator());
+#endif
 
         bool fail = false;
         fail |= o3tl::checked_multiply(i.numerator() / gcd1, num / gcd2, num);
