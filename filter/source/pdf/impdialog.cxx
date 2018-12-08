@@ -503,8 +503,9 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxRbAll->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleAllHdl ) );
     TogglePagesHdl();
 
-    mxRbSelection->set_sensitive( pParent->mbSelectionPresent );
-    if ( pParent->mbSelectionPresent )
+    const bool bSelectionPresent = pParent->mbSelectionPresent;
+    mxRbSelection->set_sensitive( bSelectionPresent );
+    if ( bSelectionPresent )
         mxRbSelection->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleSelectionHdl ) );
     mbIsPresentation = pParent->mbIsPresentation;
     mbIsWriter = pParent->mbIsWriter;
@@ -611,7 +612,12 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     }
 
     mxCbExportPlaceholders->set_visible(mbIsWriter);
-    if( !mbIsWriter )
+    if( mbIsWriter )
+    {
+        // tdf#54908 Make selection active if there is a selection in Writer's version
+        mxRbSelection->set_active( bSelectionPresent );
+    }
+    else
     {
         mxCbExportPlaceholders->set_active(false);
     }
