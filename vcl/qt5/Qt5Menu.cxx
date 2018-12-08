@@ -287,7 +287,11 @@ void Qt5Menu::SetItemText(unsigned, SalMenuItem* pItem, const OUString& rText)
     Qt5MenuItem* pSalMenuItem = static_cast<Qt5MenuItem*>(pItem);
     QAction* pAction = pSalMenuItem->getAction();
     if (pAction)
-        pAction->setText(toQString(rText));
+    {
+        OUString aText(rText);
+        NativeItemText(aText);
+        pAction->setText(toQString(aText));
+    }
 }
 
 void Qt5Menu::SetItemImage(unsigned, SalMenuItem* pItem, const Image& rImage)
