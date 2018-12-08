@@ -30,7 +30,11 @@
 #include <algorithm>
 #include <cmath>
 
+#if BOOST_VERSION >= 106700
+#include <boost/integer/common_factor_rt.hpp>
+#else
 #include <boost/math/common_factor_rt.hpp>
+#endif
 #include <boost/rational.hpp>
 
 static boost::rational<sal_Int32> rational_FromDouble(double dVal);
