@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_82a52bb8",
+        "filename": "svx/source/svdraw/svdotxtr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-08T15:48:24Z",
+      "side": 1,
+      "message": "Why Buf? There is no buffer involved. Rather bNotSheared.",
+      "range": {
+        "startLine": 105,
+        "startChar": 9,
+        "endLine": 105,
+        "endChar": 20
+      },
+      "revId": "5f3fb47361950e08072a34f65e64cc3c3ed193b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_62aa2f86",
+        "filename": "svx/source/svdraw/svdotxtr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-08T15:48:24Z",
+      "side": 1,
+      "message": "Why Buf? There is no buffer involved. Rather bRotate90.",
+      "range": {
+        "startLine": 106,
+        "startChar": 9,
+        "endLine": 106,
+        "endChar": 19
+      },
+      "revId": "5f3fb47361950e08072a34f65e64cc3c3ed193b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_42af3394",
+        "filename": "svx/source/svdraw/svdotxtr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-08T15:48:24Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "5f3fb47361950e08072a34f65e64cc3c3ed193b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
