@@ -166,6 +166,16 @@ bool IsWow64Process()
 #endif
 }
 
+// An exception class to differentiate a non-fatal exception
+class nonfatal_exception : public std::exception
+{
+public:
+    nonfatal_exception(const std::exception& e)
+        : std::exception(e)
+    {
+    }
+};
+
 // Checks if Windows Update service is disabled, and if it is, enables it temporarily.
 class WUServiceEnabler
 {
@@ -195,27 +205,37 @@ public:
 private:
     static CloseServiceHandleGuard EnableWUService(MSIHANDLE hInstall)
     {
-        auto hSCM = Guard(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
-        if (!hSCM)
-            ThrowLastError("OpenSCManagerW");
-        WriteLog(hInstall, "Opened service control manager");
-
-        auto hService = Guard(OpenServiceW(hSCM.get(), L"wuauserv",
-                                           SERVICE_QUERY_CONFIG | SERVICE_CHANGE_CONFIG
-                                               | SERVICE_QUERY_STATUS | SERVICE_STOP));
-        if (!hService)
-            ThrowLastError("OpenServiceW");
-        WriteLog(hInstall, "Obtained WU service handle");
-
-        if (ServiceStatus(hInstall, hService.get()) == SERVICE_RUNNING
-            || !EnsureServiceEnabled(hInstall, hService.get(), true))
+        try
         {
-            // No need to restore anything back, since we didn't change config
-            hService.reset();
-            WriteLog(hInstall, "Service configuration is unchanged");
-        }
+            auto hSCM = Guard(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+            if (!hSCM)
+                ThrowLastError("OpenSCManagerW");
+            WriteLog(hInstall, "Opened service control manager");
 
-        return hService;
+            auto hService = Guard(OpenServiceW(hSCM.get(), L"wuauserv",
+                                               SERVICE_QUERY_CONFIG | SERVICE_CHANGE_CONFIG
+                                                   | SERVICE_QUERY_STATUS | SERVICE_STOP));
+            if (!hService)
+                ThrowLastError("OpenServiceW");
+            WriteLog(hInstall, "Obtained WU service handle");
+
+            if (ServiceStatus(hInstall, hService.get()) == SERVICE_RUNNING
+                || !EnsureServiceEnabled(hInstall, hService.get(), true))
+            {
+                // No need to restore anything back, since we didn't change config
+                hService.reset();
+                WriteLog(hInstall, "Service configuration is unchanged");
+            }
+
+            return hService;
+        }
+        catch (const std::exception& e)
+        {
+            // Allow errors opening service to be logged, but not interrupt installation.
+            // They are likely to happen in situations where people hard-disable WU service,
+            // and for these cases, let people deal with install logs instead of failing.
+            throw nonfatal_exception(e);
+        }
     }
 
     // Returns if the service configuration was actually changed
@@ -475,6 +495,14 @@ extern "C" UINT __stdcall InstallMSU(MSIHANDLE hInstall)
             default:
                 ThrowWin32Error("Execution of wusa.exe", nExitCode);
         }
+    }
+    catch (nonfatal_exception& e)
+    {
+        // An error that should not interrupt installation
+        WriteLog(hInstall, e.what());
+        WriteLog(hInstall, "Installation of MSU package failed, but installation of product will "
+                           "continue. You may need to install the required update manually");
+        return ERROR_SUCCESS;
     }
     catch (std::exception& e)
     {
