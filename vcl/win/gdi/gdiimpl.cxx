@@ -1428,21 +1428,9 @@ void WinSalGraphicsImpl::ResetPen(HPEN hNewPen)
 
 void WinSalGraphicsImpl::SetFillColor()
 {
-    // create and select new brush
-    HBRUSH hNewBrush = GetStockBrush( NULL_BRUSH );
-    HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), hNewBrush );
-
-    // destroy or save old brush
-    if ( mhBrush )
-    {
-        if ( !mbStockBrush )
-            DeleteBrush( mhBrush );
-    }
-    else
-        mrParent.mhDefBrush = hOldBrush;
+    ResetBrush(GetStockBrush(NULL_BRUSH));
 
     // set new data
-    mhBrush     = hNewBrush;
     mbBrush     = FALSE;
     mbStockBrush = TRUE;
 }
@@ -1531,23 +1519,31 @@ void WinSalGraphicsImpl::SetFillColor( Color nColor )
         bStockBrush = FALSE;
     }
 
-    // select new brush
-    HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), hNewBrush );
-
-    // destroy or save old brush
-    if ( mhBrush )
-    {
-        if ( !mbStockBrush )
-            DeleteBrush( mhBrush );
-    }
-    else
-        mrParent.mhDefBrush = hOldBrush;
+    ResetBrush(hNewBrush);
 
     // set new data
     mnBrushColor = nBrushColor;
-    mhBrush     = hNewBrush;
     mbBrush     = TRUE;
     mbStockBrush = bStockBrush;
+}
+
+void WinSalGraphicsImpl::ResetBrush(HBRUSH hNewBrush)
+{
+    HBRUSH hOldBrush = SelectBrush(mrParent.getHDC(), hNewBrush);
+
+    if (mhBrush)
+    {
+        if (!mbStockBrush)
+        {
+            DeleteBrush(mhBrush);
+        }
+    }
+    else
+    {
+        mrParent.mhDefBrush = hOldBrush;
+    }
+
+    mhBrush = hNewBrush;
 }
 
 void WinSalGraphicsImpl::SetXORMode( bool bSet, bool )
