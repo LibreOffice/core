@@ -334,7 +334,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
 
         // Sum of Squares
         aTemplate.setTemplate("=DEVSQ(%RANGE_LIST%)");
-        aTemplate.applyRangeList("%RANGE_LIST%", aRangeList);
+        aTemplate.applyRangeList("%RANGE_LIST%", aRangeList, ';');
         output.writeFormula(aTemplate.getTemplate());
         output.nextColumn();
 
