@@ -74,7 +74,7 @@ static const long nTabs[] =
 
 // IDs for items in HeaderBar of EventLB
 #define    ITEMID_EVENT        1
-#define    ITMEID_ASSMACRO        2
+#define    ITEMID_ASSMACRO        2
 
 
 #define LB_MACROS_ITEMPOS    2
@@ -710,7 +710,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
     Size aSize( nTabs[ 1 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );
     aSize.setWidth( 1764 );        // don't know what, so 42^2 is best to use...
-    rHeaderBar.InsertItem( ITMEID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );
+    rHeaderBar.InsertItem( ITEMID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MapUnit::MapAppFont ) ).Width() );
     rListBox.SetSpaceBetweenEntries( 0 );
 
     mpImpl->pEventLB->Show();
