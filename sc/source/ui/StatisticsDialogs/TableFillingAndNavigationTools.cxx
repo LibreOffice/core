@@ -69,10 +69,10 @@ void FormulaTemplate::applyRange(const OUString& aVariable, const ScRange& aRang
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList)
+void FormulaTemplate::applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList, sal_Unicode cDelimiter)
 {
     OUString aString;
-    aRangeList.Format(aString, ScRefFlags::RANGE_ABS_3D, mpDoc, mpDoc->GetAddressConvention());
+    aRangeList.Format(aString, ScRefFlags::RANGE_ABS_3D, mpDoc, mpDoc->GetAddressConvention(), cDelimiter);
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
