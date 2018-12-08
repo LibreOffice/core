@@ -769,9 +769,8 @@ void Bridge::handleCommitChangeRequest(
     BinaryAny ret;
     assert(inArguments.size() == 1);
     css::uno::Sequence< css::bridge::ProtocolProperty > s;
-    bool ok = (mapBinaryToCppAny(inArguments[0]) >>= s);
+    [[maybe_unused]] bool ok = (mapBinaryToCppAny(inArguments[0]) >>= s);
     assert(ok);
-    (void) ok; // avoid warnings
     for (sal_Int32 i = 0; i != s.getLength(); ++i) {
         if (s[i].Name == "CurrentContext") {
             bCcMode = true;
