@@ -444,7 +444,6 @@ struct CuiConfigGroupBoxResource_Impl
 {
     OUString m_sMyMacros;
     OUString m_sProdMacros;
-    OUString m_sMacros;
     OUString m_sDlgMacros;
     OUString m_aStrGroupStyles;
 
@@ -454,7 +453,6 @@ struct CuiConfigGroupBoxResource_Impl
 CuiConfigGroupBoxResource_Impl::CuiConfigGroupBoxResource_Impl() :
     m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS)),
     m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
-    m_sMacros(CuiResId(RID_SVXSTR_BASICMACROS)),
     m_sDlgMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
     m_aStrGroupStyles(CuiResId(RID_SVXSTR_GROUP_STYLES))
 {

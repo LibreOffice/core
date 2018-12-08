@@ -19,7 +19,7 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:114
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:115
     __cxxabiv1::__cxa_exception exceptionDestructor void (*)(void *)
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:116
-    __cxxabiv1::__cxa_exception unexpectedHandler std::unexpected_handler
+    __cxxabiv1::__cxa_exception unexpectedHandler void (*)(void)
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:117
     __cxxabiv1::__cxa_exception terminateHandler std::terminate_handler
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:118
@@ -160,7 +160,7 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/options/optcolor.cxx:255
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
-cui/source/options/optpath.cxx:79
+cui/source/options/optpath.cxx:80
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
 cui/source/options/personalization.hxx:38
     SvxPersonalizationTabPage m_vDefaultPersonaImages VclPtr<class PushButton> [6]
@@ -262,9 +262,9 @@ filter/source/graphicfilter/idxf/dxf2mtf.hxx:50
     DXF2GDIMetaFile aDefaultLineInfo const class LineInfo
 filter/source/graphicfilter/idxf/dxfreprd.hxx:76
     DXFRepresentation aPalette class DXFPalette
-filter/source/graphicfilter/iras/iras.cxx:52
+filter/source/graphicfilter/iras/iras.cxx:53
     RASReader mnRepCount sal_uInt8
-filter/source/graphicfilter/itga/itga.cxx:51
+filter/source/graphicfilter/itga/itga.cxx:52
     TGAFileFooter nSignature sal_uInt32 [4]
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:143
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
@@ -376,35 +376,35 @@ include/test/sheet/xnamedranges.hxx:38
     apitest::XNamedRanges xSheet css::uno::Reference<css::sheet::XSpreadsheet>
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
+include/unoidl/unoidl.hxx:443
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo4/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo4/include/unoidl/unoidl.hxx:444:5)
-include/unoidl/unoidl.hxx:445
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
-include/unoidl/unoidl.hxx:446
+include/unoidl/unoidl.hxx:445
     unoidl::ConstantValue::(anonymous) byteValue sal_Int8
-include/unoidl/unoidl.hxx:447
+include/unoidl/unoidl.hxx:446
     unoidl::ConstantValue::(anonymous) shortValue sal_Int16
-include/unoidl/unoidl.hxx:448
+include/unoidl/unoidl.hxx:447
     unoidl::ConstantValue::(anonymous) unsignedShortValue sal_uInt16
-include/unoidl/unoidl.hxx:449
+include/unoidl/unoidl.hxx:448
     unoidl::ConstantValue::(anonymous) longValue sal_Int32
-include/unoidl/unoidl.hxx:450
+include/unoidl/unoidl.hxx:449
     unoidl::ConstantValue::(anonymous) unsignedLongValue sal_uInt32
-include/unoidl/unoidl.hxx:451
+include/unoidl/unoidl.hxx:450
     unoidl::ConstantValue::(anonymous) hyperValue sal_Int64
-include/unoidl/unoidl.hxx:452
+include/unoidl/unoidl.hxx:451
     unoidl::ConstantValue::(anonymous) unsignedHyperValue sal_uInt64
-include/unoidl/unoidl.hxx:453
+include/unoidl/unoidl.hxx:452
     unoidl::ConstantValue::(anonymous) floatValue float
-include/unoidl/unoidl.hxx:454
+include/unoidl/unoidl.hxx:453
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:52
     test::BootstrapFixtureBase m_directories class test::Directories
-include/vcl/opengl/OpenGLContext.hxx:57
+include/vcl/opengl/OpenGLContext.hxx:51
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
-include/vcl/opengl/OpenGLContext.hxx:176
+include/vcl/opengl/OpenGLContext.hxx:170
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
-include/vcl/ppdparser.hxx:134
+include/vcl/ppdparser.hxx:128
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
 include/xmloff/nmspmap.hxx:70
     SvXMLNamespaceMap sEmpty const class rtl::OUString
@@ -432,7 +432,7 @@ oox/qa/unit/vba_compression.cxx:71
     TestVbaCompression m_directories const test::Directories
 oox/source/drawingml/chart/objectformatter.cxx:711
     oox::drawingml::chart::ObjectFormatterData maFromLocale const struct com::sun::star::lang::Locale
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:221
+oox/source/drawingml/diagram/diagramlayoutatoms.hxx:228
     oox::drawingml::ChooseAtom maEmptyChildren const std::vector<LayoutAtomPtr>
 registry/source/reflwrit.cxx:141
     writeDouble(sal_uInt8 *, double)::(anonymous union)::(anonymous) b1 sal_uInt32
@@ -512,15 +512,15 @@ sc/source/ui/inc/csvruler.hxx:36
     ScCsvRuler maRulerDev ScopedVclPtrInstance<class VirtualDevice>
 sc/source/ui/inc/tabcont.hxx:38
     ScTabControl bErrorShown _Bool
-sc/source/ui/vba/vbaformatconditions.hxx:35
-    ScVbaFormatConditions mxSheetConditionalEntries css::uno::Reference<css::sheet::XSheetConditionalEntries>
-sc/source/ui/vba/vbaformatconditions.hxx:36
-    ScVbaFormatConditions mxStyles css::uno::Reference<ov::excel::XStyles>
 sc/source/ui/vba/vbaformatconditions.hxx:37
-    ScVbaFormatConditions mxRangeParent css::uno::Reference<ov::excel::XRange>
+    ScVbaFormatConditions mxSheetConditionalEntries css::uno::Reference<css::sheet::XSheetConditionalEntries>
 sc/source/ui/vba/vbaformatconditions.hxx:38
+    ScVbaFormatConditions mxStyles css::uno::Reference<ov::excel::XStyles>
+sc/source/ui/vba/vbaformatconditions.hxx:39
+    ScVbaFormatConditions mxRangeParent css::uno::Reference<ov::excel::XRange>
+sc/source/ui/vba/vbaformatconditions.hxx:40
     ScVbaFormatConditions mxParentRangePropertySet css::uno::Reference<css::beans::XPropertySet>
-sc/source/ui/vba/vbaworksheet.hxx:54
+sc/source/ui/vba/vbaworksheet.hxx:50
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase> [2]
 sd/inc/Outliner.hxx:273
     SdOutliner mpFirstObj class SdrObject *
@@ -550,7 +550,7 @@ sd/source/ui/table/TableDesignPane.hxx:94
     sd::TableDesignWidget m_aCheckBoxes VclPtr<class CheckBox> [6]
 sdext/source/pdfimport/inc/pdfihelper.hxx:101
     pdfi::GraphicsContext BlendMode sal_Int8
-sdext/source/pdfimport/tree/style.hxx:42
+sdext/source/pdfimport/tree/style.hxx:43
     pdfi::StyleContainer::Style Contents const class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:96
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
@@ -558,8 +558,6 @@ sfx2/source/inc/versdlg.hxx:85
     SfxCmisVersionsDialog m_xVersionBox std::unique_ptr<weld::TreeView>
 slideshow/source/engine/slideshowimpl.cxx:153
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
-slideshow/test/testview.cxx:59
-    ImplTestView mbIsClearCalled _Bool
 sot/source/sdstor/ucbstorage.cxx:403
     UCBStorageStream_Impl m_aKey const class rtl::OString
 starmath/source/view.cxx:861
@@ -718,17 +716,17 @@ vcl/inc/salwtype.hxx:202
     SalSurroundingTextSelectionChangeEvent mnEnd const sal_uLong
 vcl/inc/salwtype.hxx:208
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:273
+vcl/inc/svdata.hxx:274
     ImplSVNWFData mnStatusBarLowerRightOffset int
-vcl/inc/svdata.hxx:279
+vcl/inc/svdata.hxx:280
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
-vcl/inc/svdata.hxx:289
-    ImplSVNWFData mbCenteredTabs _Bool
 vcl/inc/svdata.hxx:290
+    ImplSVNWFData mbCenteredTabs _Bool
+vcl/inc/svdata.hxx:291
     ImplSVNWFData mbNoActiveTabTextRaise _Bool
-vcl/inc/svdata.hxx:292
+vcl/inc/svdata.hxx:293
     ImplSVNWFData mbProgressNeedsErase _Bool
-vcl/inc/svdata.hxx:301
+vcl/inc/svdata.hxx:302
     ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
@@ -940,7 +938,7 @@ vcl/source/gdi/dibtools.cxx:117
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:279
+vcl/source/gdi/pdfwriter_impl.hxx:280
     vcl::PDFWriterImpl::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:38
     ImplHeadItem maHelpId const class rtl::OString
