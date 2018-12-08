@@ -609,12 +609,9 @@ IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData, void)
         // Remove the pages that have been moved to another place (possibly
         // in the same document.)
         rSelector.DeselectAllPages();
-        PageList::iterator aDraggedPage;
-        for (aDraggedPage=maPagesToRemove.begin();
-             aDraggedPage!=maPagesToRemove.end();
-             ++aDraggedPage)
+        for (const auto& rpDraggedPage : maPagesToRemove)
         {
-            rSelector.SelectPage(*aDraggedPage);
+            rSelector.SelectPage(rpDraggedPage);
         }
         mrController.GetSelectionManager()->DeleteSelectedPages();
     }

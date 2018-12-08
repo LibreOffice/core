@@ -301,17 +301,16 @@ void DocumentHelper::AssignMasterPageToPageList (
 
     // Create a second list that contains only the valid pointers to
     // pages for which an assignment is necessary.
-    ::std::vector<SdPage*>::const_iterator iPage;
     ::std::vector<SdPage*> aCleanedList;
-    for (iPage=rpPageList->begin(); iPage!=rpPageList->end(); ++iPage)
+    for (const auto& rpPage : *rpPageList)
     {
-        OSL_ASSERT(*iPage!=nullptr && &(*iPage)->getSdrModelFromSdrPage() == &rTargetDocument);
-        if (*iPage != nullptr && (*iPage)->GetLayoutName() != sFullLayoutName)
+        OSL_ASSERT(rpPage!=nullptr && &rpPage->getSdrModelFromSdrPage() == &rTargetDocument);
+        if (rpPage != nullptr && rpPage->GetLayoutName() != sFullLayoutName)
         {
-            aCleanedList.push_back(*iPage);
+            aCleanedList.push_back(rpPage);
         }
     }
-        if (aCleanedList.empty() )
+    if (aCleanedList.empty() )
         return;
 
     SfxUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
@@ -323,14 +322,12 @@ void DocumentHelper::AssignMasterPageToPageList (
         return;
 
     // Assign the master pages to the given list of pages.
-    for (iPage=aCleanedList.begin();
-            iPage!=aCleanedList.end();
-            ++iPage)
+    for (const auto& rpPage : aCleanedList)
     {
         AssignMasterPageToPage (
             pMasterPageInDocument,
             sBaseLayoutName,
-            *iPage);
+            rpPage);
     }
 
     if( pUndoMgr )

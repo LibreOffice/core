@@ -191,14 +191,11 @@ void MasterPageObserver::Implementation::AddEventListener (
 
         // Tell the new listener about all the master pages that are
         // currently in use.
-        MasterPageContainer::iterator aDocumentIterator;
-        for (aDocumentIterator=maUsedMasterPages.begin();
-             aDocumentIterator!=maUsedMasterPages.end();
-             ++aDocumentIterator)
+        for (const auto& rDocument : maUsedMasterPages)
         {
             ::std::set<OUString>::reverse_iterator aNameIterator;
-            for (aNameIterator=aDocumentIterator->second.rbegin();
-                 aNameIterator!=aDocumentIterator->second.rend();
+            for (aNameIterator=rDocument.second.rbegin();
+                 aNameIterator!=rDocument.second.rend();
                  ++aNameIterator)
             {
               MasterPageObserverEvent aEvent (

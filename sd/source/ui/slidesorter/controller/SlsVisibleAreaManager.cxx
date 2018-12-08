@@ -143,21 +143,17 @@ void VisibleAreaManager::MakeVisible()
     const sal_Int32 nVisibleHeight (aVisibleArea.GetHeight());
 
     // Find the longest run of boxes whose union fits into the visible area.
-    for (::std::vector<::tools::Rectangle>::const_iterator
-             iBox(maVisibleRequests.begin()),
-             iEnd(maVisibleRequests.end());
-         iBox!=iEnd;
-         ++iBox)
+    for (const auto& rBox : maVisibleRequests)
     {
-        if (nVisibleTop+nVisibleHeight <= iBox->Bottom())
-            nVisibleTop = iBox->Bottom()-nVisibleHeight;
-        if (nVisibleTop > iBox->Top())
-            nVisibleTop = iBox->Top();
+        if (nVisibleTop+nVisibleHeight <= rBox.Bottom())
+            nVisibleTop = rBox.Bottom()-nVisibleHeight;
+        if (nVisibleTop > rBox.Top())
+            nVisibleTop = rBox.Top();
 
-        if (nVisibleLeft+nVisibleWidth <= iBox->Right())
-            nVisibleLeft = iBox->Right()-nVisibleWidth;
-        if (nVisibleLeft > iBox->Left())
-            nVisibleLeft = iBox->Left();
+        if (nVisibleLeft+nVisibleWidth <= rBox.Right())
+            nVisibleLeft = rBox.Right()-nVisibleWidth;
+        if (nVisibleLeft > rBox.Left())
+            nVisibleLeft = rBox.Left();
 
         // Make sure the visible area does not move outside the model area.
         if (nVisibleTop + nVisibleHeight > aModelArea.Bottom())

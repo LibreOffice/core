@@ -117,18 +117,16 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints )
 {
     // Set the current state at all registered output devices.
-    tWindowList::iterator aWindowIterator (maWindowList.begin());
-    while (aWindowIterator != maWindowList.end())
-        Update (*aWindowIterator++);
+    for (auto& rxWindow : maWindowList)
+        Update (rxWindow);
 
     // Reformat the document for the modified state to take effect.
     if (mpDocument != nullptr)
         mpDocument->ReformatAllTextObjects();
 
     // Invalidate the windows to make the modified state visible.
-    aWindowIterator = maWindowList.begin();
-    while (aWindowIterator != maWindowList.end())
-        (*aWindowIterator++)->Invalidate();
+    for (auto& rxWindow : maWindowList)
+        rxWindow->Invalidate();
 }
 
 } // end of namespace sd

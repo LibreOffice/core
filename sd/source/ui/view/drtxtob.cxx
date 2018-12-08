@@ -302,9 +302,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                             }
                         }
 
-                        for (std::vector<Paragraph*>::const_iterator iter = aSelList.begin(); iter != aSelList.end(); ++iter)
+                        for (const auto& rpItem : aSelList)
                         {
-                            pPara = *iter;
+                            pPara = rpItem;
 
                             sal_Int16 nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
 

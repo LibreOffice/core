@@ -101,14 +101,10 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
         {
             const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
-            for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); ++iter )
-            {
-                if( (*iter)->IsEmptyPresObj() && implIsMultiPresObj(pPage->GetPresObjKind(*iter)) )
-                {
-                    pEmptyObj = (*iter);
-                    break;
-                }
-            }
+            auto iter = std::find_if(rShapes.begin(), rShapes.end(),
+                [&pPage](SdrObject* pShape) { return pShape->IsEmptyPresObj() && implIsMultiPresObj(pPage->GetPresObjKind(pShape)); });
+            if (iter != rShapes.end())
+                pEmptyObj = (*iter);
         }
     }
 

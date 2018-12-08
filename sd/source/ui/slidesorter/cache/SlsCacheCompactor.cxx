@@ -172,13 +172,12 @@ void CacheCompactionByCompression::Run()
 
         ::std::unique_ptr< ::sd::slidesorter::cache::BitmapCache::CacheIndex> pIndex (
             mrCache.GetCacheIndex());
-        ::sd::slidesorter::cache::BitmapCache::CacheIndex::iterator iIndex;
-        for (iIndex=pIndex->begin(); iIndex!=pIndex->end(); ++iIndex)
+        for (const auto& rpIndex : *pIndex)
         {
-            if (*iIndex == nullptr)
+            if (rpIndex == nullptr)
                 continue;
 
-            mrCache.Compress(*iIndex, mpCompressor);
+            mrCache.Compress(rpIndex, mpCompressor);
             if (mrCache.GetSize() < mnMaximalCacheSize)
                 break;
         }

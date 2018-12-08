@@ -139,18 +139,15 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
     // deletion and re-creation of MasterPageDescriptor objects.
 
     // Lock the master pages in the given list.
-    ItemList::const_iterator iItem;
-    for (iItem=rItemList.begin(); iItem!=rItemList.end(); ++iItem)
+    for (const auto& rItem : rItemList)
     {
-        mpContainer->AcquireToken(*iItem);
-        aNewLockList.push_back(*iItem);
+        mpContainer->AcquireToken(rItem);
+        aNewLockList.push_back(rItem);
     }
 
     // Release the previously locked master pages.
-    ItemList::const_iterator iPage;
-    ItemList::const_iterator iEnd (maLockedMasterPages.end());
-    for (iPage=maLockedMasterPages.begin(); iPage!=iEnd; ++iPage)
-        mpContainer->ReleaseToken(*iPage);
+    for (const auto& rPage : maLockedMasterPages)
+        mpContainer->ReleaseToken(rPage);
 
     maLockedMasterPages.swap(aNewLockList);
 }
@@ -622,15 +619,9 @@ void MasterPagesSelector::InvalidateItem (MasterPageContainer::Token aToken)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    ItemList::iterator iItem;
-    for (iItem=maCurrentItemList.begin(); iItem!=maCurrentItemList.end(); ++iItem)
-    {
-        if (*iItem == aToken)
-        {
-            *iItem = MasterPageContainer::NIL_TOKEN;
-            break;
-        }
-    }
+    auto iItem = std::find(maCurrentItemList.begin(), maCurrentItemList.end(), aToken);
+    if (iItem != maCurrentItemList.end())
+        *iItem = MasterPageContainer::NIL_TOKEN;
 }
 
 void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewItemList)

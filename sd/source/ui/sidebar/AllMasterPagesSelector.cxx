@@ -174,10 +174,8 @@ void AllMasterPagesSelector::AddItem (MasterPageContainer::Token aToken)
 
 void AllMasterPagesSelector::UpdatePageSet (ItemList& rItemList)
 {
-    SortedMasterPageDescriptorList::const_iterator iDescriptor;
-    SortedMasterPageDescriptorList::const_iterator iEnd (mpSortedMasterPages->end());
-    for (iDescriptor=mpSortedMasterPages->begin(); iDescriptor!=iEnd; ++iDescriptor)
-        rItemList.push_back((*iDescriptor)->maToken);
+    for (const auto& rxDescriptor : *mpSortedMasterPages)
+        rItemList.push_back(rxDescriptor->maToken);
 }
 
 } } // end of namespace sd::sidebar

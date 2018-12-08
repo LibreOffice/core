@@ -205,11 +205,8 @@ void RecentlyUsedMasterPages::SavePersistentValues()
             xSet, UNO_QUERY);
         if ( ! xChildFactory.is())
             return;
-        MasterPageList::const_iterator iDescriptor;
         sal_Int32 nIndex(0);
-        for (iDescriptor=mvMasterPages.begin();
-                iDescriptor!=mvMasterPages.end();
-                ++iDescriptor,++nIndex)
+        for (const auto& rDescriptor : mvMasterPages)
         {
             // Create new child.
             OUString sKey ("index_");
@@ -220,12 +217,13 @@ void RecentlyUsedMasterPages::SavePersistentValues()
             {
                 xSet->insertByName (sKey, makeAny(xChild));
 
-                aValue <<= iDescriptor->msURL;
+                aValue <<= rDescriptor.msURL;
                 xChild->replaceByName (sURLMemberName, aValue);
 
-                aValue <<= iDescriptor->msName;
+                aValue <<= rDescriptor.msName;
                 xChild->replaceByName (sNameMemberName, aValue);
             }
+            ++nIndex;
         }
 
         // Write the data back to disk.
@@ -356,21 +354,20 @@ void RecentlyUsedMasterPages::ResolveList()
 {
     bool bNotify (false);
 
-    MasterPageList::iterator iDescriptor;
-    for (iDescriptor=mvMasterPages.begin(); iDescriptor!=mvMasterPages.end(); ++iDescriptor)
+    for (auto& rDescriptor : mvMasterPages)
     {
-        if (iDescriptor->maToken == MasterPageContainer::NIL_TOKEN)
+        if (rDescriptor.maToken == MasterPageContainer::NIL_TOKEN)
         {
-            MasterPageContainer::Token aToken (mpContainer->GetTokenForURL(iDescriptor->msURL));
-            iDescriptor->maToken = aToken;
+            MasterPageContainer::Token aToken (mpContainer->GetTokenForURL(rDescriptor.msURL));
+            rDescriptor.maToken = aToken;
             if (aToken != MasterPageContainer::NIL_TOKEN)
                 bNotify = true;
         }
         else
         {
-            if ( ! mpContainer->HasToken(iDescriptor->maToken))
+            if ( ! mpContainer->HasToken(rDescriptor.maToken))
             {
-                iDescriptor->maToken = MasterPageContainer::NIL_TOKEN;
+                rDescriptor.maToken = MasterPageContainer::NIL_TOKEN;
                 bNotify = true;
             }
         }

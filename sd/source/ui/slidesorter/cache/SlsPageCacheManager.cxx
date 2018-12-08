@@ -228,30 +228,27 @@ void PageCacheManager::Recycle (
     BestFittingPageCaches aCaches;
 
     // Add bitmap caches from active caches.
-    PageCacheContainer::iterator iActiveCache;
-    for (iActiveCache=mpPageCaches->begin(); iActiveCache!=mpPageCaches->end(); ++iActiveCache)
+    for (auto& rActiveCache : *mpPageCaches)
     {
-        if (iActiveCache->first.mpDocument == pDocument)
+        if (rActiveCache.first.mpDocument == pDocument)
             aCaches.emplace_back(
-                iActiveCache->first.maPreviewSize, iActiveCache->second);
+                rActiveCache.first.maPreviewSize, rActiveCache.second);
     }
 
     // Add bitmap caches from recently used caches.
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue != mpRecentlyUsedPageCaches->end())
     {
-        RecentlyUsedQueue::const_iterator iRecentCache;
-        for (iRecentCache=iQueue->second.begin();iRecentCache!=iQueue->second.end();++iRecentCache)
+        for (const auto& rRecentCache : iQueue->second)
             aCaches.emplace_back(
-                iRecentCache->maPreviewSize, iRecentCache->mpCache);
+                rRecentCache.maPreviewSize, rRecentCache.mpCache);
     }
 
     ::std::sort(aCaches.begin(), aCaches.end(), BestFittingCacheComparer(rPreviewSize));
 
-    BestFittingPageCaches::const_iterator iBestCache;
-    for (iBestCache=aCaches.begin(); iBestCache!=aCaches.end(); ++iBestCache)
+    for (const auto& rBestCache : aCaches)
     {
-        rpCache->Recycle(*iBestCache->second);
+        rpCache->Recycle(*rBestCache.second);
     }
 }
 
@@ -322,18 +319,17 @@ bool PageCacheManager::InvalidatePreviewBitmap (
         // Iterate over all caches that are currently in use and invalidate
         // the previews in those that belong to the document.
         PageCacheContainer::iterator iCache;
-        for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
-            if (iCache->first.mpDocument == pDocument)
-                bHasChanged |= iCache->second->InvalidateBitmap(pKey);
+        for (auto& rCache : *mpPageCaches)
+            if (rCache.first.mpDocument == pDocument)
+                bHasChanged |= rCache.second->InvalidateBitmap(pKey);
 
         // Invalidate the previews in the recently used caches belonging to
         // the given document.
         RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
         if (iQueue != mpRecentlyUsedPageCaches->end())
         {
-            RecentlyUsedQueue::const_iterator iCache2;
-            for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
-                bHasChanged |= iCache2->mpCache->InvalidateBitmap(pKey);
+            for (const auto& rCache2 : iQueue->second)
+                bHasChanged |= rCache2.mpCache->InvalidateBitmap(pKey);
         }
     }
 
@@ -347,19 +343,17 @@ void PageCacheManager::InvalidateAllPreviewBitmaps (const DocumentKey& pDocument
 
     // Iterate over all caches that are currently in use and invalidate the
     // previews in those that belong to the document.
-    PageCacheContainer::iterator iCache;
-    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
-        if (iCache->first.mpDocument == pDocument)
-            iCache->second->InvalidateCache();
+    for (auto& rCache : *mpPageCaches)
+        if (rCache.first.mpDocument == pDocument)
+            rCache.second->InvalidateCache();
 
     // Invalidate the previews in the recently used caches belonging to the
     // given document.
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue != mpRecentlyUsedPageCaches->end())
     {
-        RecentlyUsedQueue::const_iterator iCache2;
-        for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
-            iCache2->mpCache->InvalidateCache();
+        for (const auto& rCache2 : iQueue->second)
+            rCache2.mpCache->InvalidateCache();
     }
 }
 
@@ -367,9 +361,8 @@ void PageCacheManager::InvalidateAllCaches()
 {
     // Iterate over all caches that are currently in use and invalidate
     // them.
-    PageCacheContainer::iterator iCache;
-    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
-        iCache->second->InvalidateCache();
+    for (auto& rCache : *mpPageCaches)
+        rCache.second->InvalidateCache();
 
     // Remove all recently used caches, there is not much sense in storing
     // invalidated and unused caches.
@@ -378,9 +371,8 @@ void PageCacheManager::InvalidateAllCaches()
 
 void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
 {
-    PageCacheContainer::iterator iCache;
-    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end(); ++iCache)
-        iCache->second->ReleaseBitmap(pPage);
+    for (auto& rCache : *mpPageCaches)
+        rCache.second->ReleaseBitmap(pPage);
 }
 
 std::shared_ptr<BitmapCache> PageCacheManager::GetRecentlyUsedCache (
@@ -393,14 +385,13 @@ std::shared_ptr<BitmapCache> PageCacheManager::GetRecentlyUsedCache (
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
     if (iQueue != mpRecentlyUsedPageCaches->end())
     {
-        RecentlyUsedQueue::iterator iCache;
-        for (iCache=iQueue->second.begin(); iCache!= iQueue->second.end(); ++iCache)
-            if (iCache->maPreviewSize == rPreviewSize)
-            {
-                pCache = iCache->mpCache;
-                iQueue->second.erase(iCache);
-                break;
-            }
+        RecentlyUsedQueue::iterator iCache = std::find_if(iQueue->second.begin(), iQueue->second.end(),
+            [&rPreviewSize](const RecentlyUsedCacheDescriptor& rCache) { return rCache.maPreviewSize == rPreviewSize; });
+        if (iCache != iQueue->second.end())
+        {
+            pCache = iCache->mpCache;
+            iQueue->second.erase(iCache);
+        }
     }
 
     return pCache;

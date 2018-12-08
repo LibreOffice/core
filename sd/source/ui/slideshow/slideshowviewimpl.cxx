@@ -94,10 +94,9 @@ void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
 {
     ::osl::MutexGuard aGuard( mrMutex );
 
-    ViewListenerVector::iterator aIter( maListeners.begin() );
-    while( aIter != maListeners.end() )
+    for( const auto& rxListener : maListeners )
     {
-        Reference< util::XModifyListener > xListener( *aIter++ );
+        Reference< util::XModifyListener > xListener( rxListener );
         if( xListener.is() )
             xListener->disposing( _rEventSource );
     }

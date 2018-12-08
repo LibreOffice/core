@@ -859,10 +859,9 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
     bool bListIdentical = true; ///< Bookmark list and exchange list are identical
     bool bNameOK = true;        ///< name is unique
 
-    std::vector<OUString>::const_iterator pIter;
-    for ( pIter = rBookmarkList.begin(); bNameOK && pIter != rBookmarkList.end(); ++pIter )
+    for ( const auto& rBookmark : rBookmarkList )
     {
-        OUString aNewName = *pIter;
+        OUString aNewName = rBookmark;
 
         if( nType == 0  || nType == 2 )
             bNameOK = mpDocSh->CheckPageName(mpViewSh->GetFrameWeld(), aNewName);
@@ -892,9 +891,12 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
             }
         }
 
-        bListIdentical = *pIter == aNewName;
+        bListIdentical = rBookmark == aNewName;
 
         rExchangeList.push_back(aNewName);
+
+        if (!bNameOK)
+            break;
     }
 
     // Exchange list is identical to bookmark list
