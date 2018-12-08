@@ -105,8 +105,6 @@ public:
     void            ClearHeader();
 
     void            ShowTable();
-    void            HideTable();
-    bool            IsVisible() const;
 
     void            EnableTable();
     void            DisableTable();

@@ -92,18 +92,6 @@ public:
     const sc::ImportPostProcessData& GetImportPostProcessData() const { return maPostProcessData;}
 };
 
-class ScXMLChartExportWrapper
-{
-public:
-    ScXMLChartExportWrapper( css::uno::Reference< css::frame::XModel > const & xModel, SfxMedium& rMed );
-    void Export();
-
-private:
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::embed::XStorage > mxStorage;
-    SfxMedium& mrMedium;
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1362,11 +1362,6 @@ void PrinterController::setReversePrint( bool i_bReverse )
     mpImplData->mbReversePageOrder = i_bReverse;
 }
 
-bool PrinterController::getReversePrint() const
-{
-    return mpImplData->mbReversePageOrder;
-}
-
 void PrinterController::setPapersizeFromSetup( bool i_bPapersizeFromSetup )
 {
     mpImplData->mbPapersizeFromSetup = i_bPapersizeFromSetup;

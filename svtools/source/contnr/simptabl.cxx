@@ -250,16 +250,6 @@ void SvSimpleTable::ShowTable()
     m_rParentTableContainer.Show();
 }
 
-void SvSimpleTable::HideTable()
-{
-    m_rParentTableContainer.Hide();
-}
-
-bool SvSimpleTable::IsVisible() const
-{
-    return m_rParentTableContainer.IsVisible();
-}
-
 void SvSimpleTable::EnableTable()
 {
     m_rParentTableContainer.Enable();

@@ -56,33 +56,6 @@ public:
 
 // class OfaACorrCheckListBox ------------------------------------------
 
-class OfaACorrCheckListBox : public SvSimpleTable
-{
-    using SvSimpleTable::SetTabs;
-    using SvTreeListBox::GetCheckButtonState;
-    using SvTreeListBox::SetCheckButtonState;
-
-    protected:
-        virtual void    SetTabs() override;
-        virtual void    HBarClick() override;
-        virtual void    KeyInput( const KeyEvent& rKEvt ) override;
-
-    public:
-        OfaACorrCheckListBox(SvSimpleTableContainer& rParent)
-            : SvSimpleTable(rParent, WB_BORDER)
-        {
-        }
-
-        void *GetUserData(sal_uLong nPos) { return GetEntry(nPos)->GetUserData(); }
-        void SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
-        sal_uLong GetSelectedEntryPos() { return GetModel()->GetAbsPos(FirstSelected()); }
-
-        bool            IsChecked(sal_uLong nPos, sal_uInt16 nCol = 0);
-        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, bool bChecked);
-        static SvButtonState GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol );
-        void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
-};
-
 // class OfaAutocorrOptionsPage ------------------------------------------
 
 
