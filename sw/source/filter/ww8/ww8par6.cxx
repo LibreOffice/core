@@ -169,7 +169,7 @@ void wwSection::SetDirection()
     {
         default:
             OSL_ENSURE(false, "Unknown layout type");
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 0:
             meDir=SvxFrameDirection::Horizontal_LR_TB;
             break;
@@ -242,7 +242,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
             break;
         default:
             OSL_ENSURE(false, "Unknown grid type");
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 3:
             eType = GRID_LINES_CHARS;
             aGrid.SetSnapToChars(true);
@@ -3407,7 +3407,7 @@ void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short 
         switch( *pData )
         {
             case 2: bWordLine = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case 1: eUnderline = LINESTYLE_SINGLE;       break;
             case 3: eUnderline = LINESTYLE_DOUBLE;       break;
             case 4: eUnderline = LINESTYLE_DOTTED;       break;

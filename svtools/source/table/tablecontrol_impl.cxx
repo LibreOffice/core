@@ -2240,7 +2240,7 @@ namespace svt { namespace table
                 m_aSelectedRows[0] = i_rowIndex;
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case SelectionMode::Multiple:
             m_aSelectedRows.push_back( i_rowIndex );

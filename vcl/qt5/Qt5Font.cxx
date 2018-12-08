@@ -34,9 +34,9 @@ static QFont::Weight GetQFontWeight(FontWeight eWeight)
         case WEIGHT_LIGHT:
             return QFont::Light;
         case WEIGHT_SEMILIGHT:
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case WEIGHT_DONTKNOW:
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case WEIGHT_NORMAL:
             return QFont::Normal;
         case WEIGHT_MEDIUM:

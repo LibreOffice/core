@@ -180,13 +180,13 @@ RegexpMapConstIter< Val > & RegexpMapConstIter< Val >::operator ++()
         case Regexp::KIND_DOMAIN:
             if (m_aIndex == m_pMap->m_aList[m_nList].end())
                 return *this;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             ++m_aIndex;
             if (m_nList == Regexp::KIND_DOMAIN
                 || m_aIndex != m_pMap->m_aList[m_nList].end())
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case -1:
             do
             {

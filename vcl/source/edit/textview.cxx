@@ -1167,49 +1167,49 @@ TextSelection const & TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
                             break;
         case css::awt::Key::SELECT_WORD_FORWARD:
                             bSelect = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case css::awt::Key::MOVE_WORD_FORWARD:
                             aPaM = CursorWordRight( aPaM );
                             break;
         case css::awt::Key::SELECT_WORD_BACKWARD:
                             bSelect = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case css::awt::Key::MOVE_WORD_BACKWARD:
                             aPaM = CursorWordLeft( aPaM );
                             break;
         case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
                             bSelect = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
                             aPaM = CursorStartOfLine( aPaM );
                             break;
         case css::awt::Key::SELECT_TO_END_OF_LINE:
                             bSelect = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case css::awt::Key::MOVE_TO_END_OF_LINE:
                             aPaM = CursorEndOfLine( aPaM );
                             break;
         case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
                             bSelect = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
                             aPaM = CursorStartOfParagraph( aPaM );
                             break;
         case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
                             bSelect = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
                             aPaM = CursorEndOfParagraph( aPaM );
                             break;
         case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
                             bSelect = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
                             aPaM = CursorStartOfDoc();
                             break;
         case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
                             bSelect = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
                             aPaM = CursorEndOfDoc();
                             break;

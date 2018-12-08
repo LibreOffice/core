@@ -96,7 +96,7 @@ namespace pcr
 
         default:
             OSL_FAIL( "PropertyHandlerHelper::describePropertyLine: don't know how to represent this at the UI!" );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case TypeClass_STRING:
             nControlType = PropertyControlType::TextField;

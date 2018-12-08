@@ -434,7 +434,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
         {
         default:
             SAL_WARN("dbaccess",  "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case FILTER_MODE_MIX_ALL:
             _rFilter.realloc( 3 );
             _rFilter[0] = sView;

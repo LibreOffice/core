@@ -1574,7 +1574,7 @@ void EnhancedCustomShape2d::CreateSubPath(
                         }
                         aNewB2DPolygon.clear();
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
                 case ANGLEELLIPSETO :
                 {
@@ -1756,7 +1756,7 @@ void EnhancedCustomShape2d::CreateSubPath(
 
                     aNewB2DPolygon.clear();
 
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
                 case ARCTO :
                 case CLOCKWISEARCTO :
@@ -2059,7 +2059,7 @@ static void CorrectCalloutArrows(
         case mso_sptAccentCallout2 :
         case mso_sptAccentBorderCallout2 :
             bAccent = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case mso_sptCallout2 :
         case mso_sptBorderCallout2 :
         {

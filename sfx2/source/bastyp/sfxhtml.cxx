@@ -144,14 +144,14 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
 
         case HtmlOptionId::ONMOUSEOVER:
             eScrpType = JAVASCRIPT;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::SDONMOUSEOVER:
             nEvent = nEventMouseOver;
             goto IMAPOBJ_SETEVENT;
 
         case HtmlOptionId::ONMOUSEOUT:
             eScrpType = JAVASCRIPT;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::SDONMOUSEOUT:
             nEvent = nEventMouseOut;
             goto IMAPOBJ_SETEVENT;

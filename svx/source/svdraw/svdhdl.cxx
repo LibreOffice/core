@@ -130,7 +130,7 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
         default:
         {
             OSL_FAIL( "Unknown kind of marker." );
-            SAL_FALLTHROUGH; // return Rect_9x9 as default
+            [[fallthrough]]; // return Rect_9x9 as default
         }
         case BitmapMarkerKind::Rect_9x9:
         {

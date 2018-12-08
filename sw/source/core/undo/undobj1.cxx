@@ -642,7 +642,7 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             case RndStdIds::FLY_AS_CHAR:
             case RndStdIds::FLY_AT_CHAR:
                 nOldContent = pAnchor->GetContentAnchor()->nContent.GetIndex();
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AT_FLY:
                 nOldNode = pAnchor->GetContentAnchor()->nNode.GetIndex();
@@ -659,7 +659,7 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             case RndStdIds::FLY_AS_CHAR:
             case RndStdIds::FLY_AT_CHAR:
                 nNewContent = pAnchor->GetContentAnchor()->nContent.GetIndex();
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AT_FLY:
                 nNewNode = pAnchor->GetContentAnchor()->nNode.GetIndex();

@@ -270,7 +270,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
             case TOX_SAME_PRV:
                 if( pTOXMark->GetText() != rCurTOXMark.GetText() )
                     break;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case TOX_PRV:
                 if ( (aAbsNew < aAbsIdx && aAbsNew > aPrevPos) ||
                      (aAbsIdx == aAbsNew &&
@@ -292,7 +292,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
             case TOX_SAME_NXT:
                 if( pTOXMark->GetText() != rCurTOXMark.GetText() )
                     break;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case TOX_NXT:
                 if ( (aAbsNew > aAbsIdx && aAbsNew < aNextPos) ||
                      (aAbsIdx == aAbsNew &&

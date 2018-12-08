@@ -1642,7 +1642,7 @@ bool BrowseBox::ProcessKey( const KeyEvent& rEvt )
             case KEY_TAB:
                 if ( !bColumnCursor )
                     break;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case KEY_RIGHT:         nId = BROWSER_CURSORRIGHT; break;
             case KEY_LEFT:          nId = BROWSER_CURSORLEFT; break;
             case KEY_SPACE:         nId = BROWSER_SELECT; break;
@@ -1777,7 +1777,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 nNewId != HandleColumnId && GoToColumnId( nNewId );
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case BROWSER_CURSORENDOFFILE:
             GoToRow( nRowCount - 1, false );
             break;
@@ -1817,7 +1817,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 }
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case BROWSER_CURSORTOPOFFILE:
             GoToRow( 0, false );
             break;

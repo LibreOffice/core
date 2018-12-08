@@ -122,7 +122,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( UINT nCode, UINT nCbType,
                     nRet = reinterpret_cast<HDDEDATA>(DDE_FACK);
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
 
             case XTYP_REQUEST:
                 DdeData d;

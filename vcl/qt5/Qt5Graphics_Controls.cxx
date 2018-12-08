@@ -194,7 +194,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                 m_image->fill(Qt::transparent);
                 break;
             }
-            SAL_FALLTHROUGH; // QPalette::Window
+            [[fallthrough]]; // QPalette::Window
         case ControlType::Menubar:
         case ControlType::WindowBackground:
             m_image->fill(QApplication::palette().color(QPalette::Window).rgb());
@@ -209,7 +209,7 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
                 m_image->fill(QApplication::palette().color(QPalette::Window).rgb());
                 break;
             }
-            SAL_FALLTHROUGH; // Qt::transparent
+            [[fallthrough]]; // Qt::transparent
         default:
             m_image->fill(Qt::transparent);
             break;

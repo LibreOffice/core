@@ -83,7 +83,7 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     {
         case Z_STREAM_END:
             bFinished = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case Z_OK:
             nOffset += nLength - pStream->avail_in;
             nLength = pStream->avail_in;

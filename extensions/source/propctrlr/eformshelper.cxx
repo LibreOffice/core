@@ -164,7 +164,7 @@ namespace pcr
                         break;
                     }
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
             case FormComponentType::LISTBOX:
             case FormComponentType::COMBOBOX:

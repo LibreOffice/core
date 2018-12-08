@@ -153,7 +153,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
                 // delete snap object
                 if ( !bCreateNew )
                     pPV->DeleteHelpLine(nHelpLine);
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
                 return;
         }

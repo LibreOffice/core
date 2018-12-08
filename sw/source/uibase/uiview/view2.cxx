@@ -1157,7 +1157,7 @@ void SwView::Execute(SfxRequest &rReq)
                 xDictionary->clear();
             // put cursor to the start of the document
             m_pWrtShell->StartOfSection();
-            SAL_FALLTHROUGH; // call spell/grammar dialog
+            [[fallthrough]]; // call spell/grammar dialog
         }
         case FN_SPELL_GRAMMAR_DIALOG:
         {

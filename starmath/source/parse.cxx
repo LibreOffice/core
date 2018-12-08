@@ -2124,7 +2124,7 @@ std::unique_ptr<SmTextNode> SmParser::DoFunction()
     {
         case TFUNC:
             NextToken();    // skip "FUNC"-statement
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case TSIN :
         case TCOS :

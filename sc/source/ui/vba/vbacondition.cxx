@@ -132,7 +132,7 @@ ScVbaCondition< Ifc... >::Operator(bool _bIncludeFormulaValue)
                 retvalue = ISFORMULA;
                 break;
             }
-            SAL_FALLTHROUGH; //TODO ???
+            [[fallthrough]]; //TODO ???
         case sheet::ConditionOperator_NONE:
         default:
             DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, "Operator not supported");

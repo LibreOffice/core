@@ -750,7 +750,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         if (GetNode()->GetNodeType() != SwNodeType::Grf) {
             break;
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case RES_FMT_CHG:
         ClearCache();
         break;

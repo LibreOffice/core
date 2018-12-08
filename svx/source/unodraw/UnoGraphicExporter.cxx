@@ -346,7 +346,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
                         break;
                     case css::style::NumberingType::ROMAN_UPPER:
                         bUpper = true;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case css::style::NumberingType::ROMAN_LOWER:
                         aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
                         break;

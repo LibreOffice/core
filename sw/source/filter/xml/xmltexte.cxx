@@ -371,7 +371,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                         }
                         if( '\'' == c || '\\' == c )
                             aBuffer.append( '\\' );
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     default:
                         if( !aBuffer.isEmpty() )
                             aBuffer.append( c );

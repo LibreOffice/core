@@ -1680,7 +1680,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
                 break;
             }
         }
-        SAL_FALLTHROUGH; // because then test if we get a stream
+        [[fallthrough]]; // because then test if we get a stream
 
     default:
         if( rData.GetSotStorageStream( nFormat, xStrm ) )

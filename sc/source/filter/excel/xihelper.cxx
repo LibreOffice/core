@@ -407,7 +407,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                 {
                     case '\"':
                         --pChar;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case ',':
                         eState = xlPSFontStyle;
                     break;
@@ -685,7 +685,7 @@ void XclImpUrlHelper::DecodeUrl(
                             lclAppendUrlChar( rUrl, cCurrDrive );
                             rUrl += ":";
                         }
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case EXC_URL_SUBDIR:
                         if( bEncoded )
                             rUrl += "\\";

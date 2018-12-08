@@ -837,7 +837,7 @@ sal_Bool SAL_CALL NativeNumberSupplierService::isValidNatNum( const Locale& rLoc
         case NativeNumberMode::NATNUM2:     // Char, Upper
             if (langnum == 4) // Hebrew numbering
                 return true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case NativeNumberMode::NATNUM4:     // Text, Lower, Long
         case NativeNumberMode::NATNUM5:     // Text, Upper, Long
         case NativeNumberMode::NATNUM6:     // Text, FullWidth

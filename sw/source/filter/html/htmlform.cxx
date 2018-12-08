@@ -1257,7 +1257,7 @@ void SwHTMLParser::NewForm( bool bAppend )
 
         case HtmlOptionId::SDONSUBMIT:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONSUBMIT:
             nEvent = SvMacroItemId::HtmlOnSubmitForm;
             bSetEvent = true;
@@ -1265,7 +1265,7 @@ void SwHTMLParser::NewForm( bool bAppend )
 
         case HtmlOptionId::SDONRESET:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONRESET:
             nEvent = SvMacroItemId::HtmlOnResetForm;
             bSetEvent = true;
@@ -1467,7 +1467,7 @@ void SwHTMLParser::InsertInput()
 
         case HtmlOptionId::SDONFOCUS:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONFOCUS:
             nEvent = SvMacroItemId::HtmlOnGetFocus;
             bSetEvent = true;
@@ -1475,7 +1475,7 @@ void SwHTMLParser::InsertInput()
 
         case HtmlOptionId::SDONBLUR:               // actually only EDIT
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONBLUR:
             nEvent = SvMacroItemId::HtmlOnLoseFocus;
             bSetEvent = true;
@@ -1483,7 +1483,7 @@ void SwHTMLParser::InsertInput()
 
         case HtmlOptionId::SDONCLICK:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONCLICK:
             nEvent = SvMacroItemId::HtmlOnClick;
             bSetEvent = true;
@@ -1491,7 +1491,7 @@ void SwHTMLParser::InsertInput()
 
         case HtmlOptionId::SDONCHANGE:             // actually only EDIT
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONCHANGE:
             nEvent = SvMacroItemId::HtmlOnChange;
             bSetEvent = true;
@@ -1499,7 +1499,7 @@ void SwHTMLParser::InsertInput()
 
         case HtmlOptionId::SDONSELECT:             // actually only EDIT
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONSELECT:
             nEvent = SvMacroItemId::HtmlOnSelect;
             bSetEvent = true;
@@ -1561,7 +1561,7 @@ void SwHTMLParser::InsertInput()
 
     case HTMLInputType::Button:
         bKeepCRLFInValue = true;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case HTMLInputType::Submit:
     case HTMLInputType::Reset:
         pType = "CommandButton";
@@ -1915,7 +1915,7 @@ void SwHTMLParser::NewTextArea()
 
         case HtmlOptionId::SDONFOCUS:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONFOCUS:
             nEvent = SvMacroItemId::HtmlOnGetFocus;
             bSetEvent = true;
@@ -1923,7 +1923,7 @@ void SwHTMLParser::NewTextArea()
 
         case HtmlOptionId::SDONBLUR:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONBLUR:
             nEvent = SvMacroItemId::HtmlOnLoseFocus;
             bSetEvent = true;
@@ -1931,7 +1931,7 @@ void SwHTMLParser::NewTextArea()
 
         case HtmlOptionId::SDONCLICK:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONCLICK:
             nEvent = SvMacroItemId::HtmlOnClick;
             bSetEvent = true;
@@ -1939,7 +1939,7 @@ void SwHTMLParser::NewTextArea()
 
         case HtmlOptionId::SDONCHANGE:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONCHANGE:
             nEvent = SvMacroItemId::HtmlOnChange;
             bSetEvent = true;
@@ -1947,7 +1947,7 @@ void SwHTMLParser::NewTextArea()
 
         case HtmlOptionId::SDONSELECT:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONSELECT:
             nEvent = SvMacroItemId::HtmlOnSelect;
             bSetEvent = true;
@@ -2190,7 +2190,7 @@ void SwHTMLParser::NewSelect()
 
         case HtmlOptionId::SDONFOCUS:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONFOCUS:
             nEvent = SvMacroItemId::HtmlOnGetFocus;
             bSetEvent = true;
@@ -2198,7 +2198,7 @@ void SwHTMLParser::NewSelect()
 
         case HtmlOptionId::SDONBLUR:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONBLUR:
             nEvent = SvMacroItemId::HtmlOnLoseFocus;
             bSetEvent = true;
@@ -2206,7 +2206,7 @@ void SwHTMLParser::NewSelect()
 
         case HtmlOptionId::SDONCLICK:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONCLICK:
             nEvent = SvMacroItemId::HtmlOnClick;
             bSetEvent = true;
@@ -2214,7 +2214,7 @@ void SwHTMLParser::NewSelect()
 
         case HtmlOptionId::SDONCHANGE:
             eScriptType2 = STARBASIC;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case HtmlOptionId::ONCHANGE:
             nEvent = SvMacroItemId::HtmlOnChange;
             bSetEvent = true;

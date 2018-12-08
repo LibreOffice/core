@@ -107,7 +107,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             static_cast<long*>(pRegisterReturn)[1] = edx;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_CHAR:

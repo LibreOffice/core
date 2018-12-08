@@ -106,14 +106,14 @@ namespace dbtools
                 {
                 case FilterComponent::PublicFilter:
                     propagate = propagate && m_bApplyPublicFilter;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case FilterComponent::LinkFilter:
                     if (propagate)
                         m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FILTER), makeAny( getComposedFilter() ) );
                     break;
                 case FilterComponent::PublicHaving:
                     propagate = propagate && m_bApplyPublicFilter;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case FilterComponent::LinkHaving:
                     if (propagate)
                         m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HAVINGCLAUSE), makeAny( getComposedHaving() ) );

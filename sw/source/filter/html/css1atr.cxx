@@ -371,7 +371,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     {
     case FieldUnit::MM_100TH:
         OSL_ENSURE( FieldUnit::MM == eUnit, "Measuring unit not supported" );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FieldUnit::MM:
         // 0.01mm = 0.57twip
         nMul = 25400;   // 25.4 * 1000
@@ -383,7 +383,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     case FieldUnit::M:
     case FieldUnit::KM:
         OSL_ENSURE( FieldUnit::CM == eUnit, "Measuring unit not supported" );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FieldUnit::CM:
         // 0.01cm = 5.7twip (not exact, but the UI is also not exact)
         nMul = 2540;    // 2.54 * 1000
@@ -394,7 +394,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
 
     case FieldUnit::TWIP:
         OSL_ENSURE( FieldUnit::POINT == eUnit, "Measuring unit not supported" );
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FieldUnit::POINT:
         // 0.1pt = 2.0twip (not exact, but the UI is also not exact)
         nMul = 100;
@@ -1916,7 +1916,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                 }
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case RndStdIds::FLY_AT_PAGE:
         case RndStdIds::FLY_AT_FLY:

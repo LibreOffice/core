@@ -1287,12 +1287,12 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             case NF_KEY_H:                          // H
             case NF_KEY_HH:                         // HH
                 bIsTimeDetected = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case NF_KEY_S:                          // S
             case NF_KEY_SS:                         // SS
                 if ( !bHaveMinute )
                     bIsTimeDetected = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case NF_KEY_AMPM:                       // AM,A,PM,P
             case NF_KEY_AP:
                 eNewType = SvNumFormatType::TIME;
@@ -2483,7 +2483,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             case NF_KEY_THAI_T :
                 bThaiT = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case NF_KEY_M:                          // M
             case NF_KEY_MM:                         // MM
             case NF_KEY_MMM:                        // MMM
@@ -2669,7 +2669,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             case NF_KEY_THAI_T :
                 bThaiT = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case NF_KEY_MI:                         // M
             case NF_KEY_MMI:                        // MM
             case NF_KEY_H:                          // H

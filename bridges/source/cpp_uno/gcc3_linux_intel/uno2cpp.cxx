@@ -361,7 +361,7 @@ void unoInterfaceProxyDispatch(
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
             }
-            SAL_FALLTHROUGH; // else perform queryInterface()
+            [[fallthrough]]; // else perform queryInterface()
         }
         default:
             // dependent dispatch

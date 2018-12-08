@@ -185,7 +185,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
                 }
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case codemaker::UnoType::Sort::Void:
         case codemaker::UnoType::Sort::Boolean:
         case codemaker::UnoType::Sort::Byte:

@@ -230,7 +230,7 @@ OUString NormalizeOoxList(const OUString& aList)
                     aResult.append("\",\"");
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
                 aResult.append(ch);
                 break;

@@ -776,7 +776,7 @@ void OApplicationController::getSupportedFormats(ElementType _eType,std::vector<
             _rFormatIds.push_back(SotClipboardFormatId::DBACCESS_TABLE);
             _rFormatIds.push_back(SotClipboardFormatId::RTF);
             _rFormatIds.push_back(SotClipboardFormatId::HTML);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case E_QUERY:
             _rFormatIds.push_back(SotClipboardFormatId::DBACCESS_QUERY);
             break;

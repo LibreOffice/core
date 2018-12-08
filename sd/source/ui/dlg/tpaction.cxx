@@ -729,7 +729,7 @@ void SdTPAction::SetEditText( OUString const & rStr )
             if( comphelper::string::getTokenCount(rStr, DOCUMENT_TOKEN) == 2 )
                 aText = rStr.getToken( 0, DOCUMENT_TOKEN );
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case presentation::ClickAction_SOUND:
         case presentation::ClickAction_PROGRAM:
             {

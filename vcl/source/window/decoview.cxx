@@ -293,7 +293,7 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
                             Point( nRect.Right(), nRect.Bottom() ) );
             pDev->DrawLine( Point( nRect.Left(), nRect.Bottom() ),
                             Point( nRect.Right(), nRect.Bottom() ) );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SymbolType::ROLLUP:
             pDev->DrawRect( tools::Rectangle( nRect.Left(), nRect.Top(),
                                        nRect.Right(), nRect.Top()+n8 ) );

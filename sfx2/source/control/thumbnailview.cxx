@@ -593,7 +593,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
                 if ( bFoundLast )
                     OnItemDblClicked( mFilteredItemList[nLastPos] );
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             Control::KeyInput( rKEvt );
     }

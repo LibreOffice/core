@@ -765,7 +765,7 @@ AnimationActivitySharedPtr createActivity(
 
             default:
                 OSL_FAIL( "createActivity(): unexpected case" );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case animations::AnimationCalcMode::PACED:
             case animations::AnimationCalcMode::SPLINE:
             case animations::AnimationCalcMode::LINEAR:
@@ -831,7 +831,7 @@ AnimationActivitySharedPtr createActivity(
 
             default:
                 OSL_FAIL( "createActivity(): unexpected case" );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case animations::AnimationCalcMode::PACED:
             case animations::AnimationCalcMode::SPLINE:
             case animations::AnimationCalcMode::LINEAR:

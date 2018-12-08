@@ -74,7 +74,7 @@ bool SvxRotateModeItem::GetPresentation(
     {
         case SfxItemPresentation::Complete:
             rText += "...: ";
-            SAL_FALLTHROUGH; // break; // FALL THROUGH!!!
+            [[fallthrough]]; // break; // FALL THROUGH!!!
 
         case SfxItemPresentation::Nameless:
             rText += OUStringLiteral1( GetValue() );

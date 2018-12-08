@@ -1564,7 +1564,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                 case EXC_OBJ_ORIENT_STACKED:
                 {
                     // sj: STACKED is not supported, maybe it can be optimized here a bit
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
                 case EXC_OBJ_ORIENT_90CW:
                 {

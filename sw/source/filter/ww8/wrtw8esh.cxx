@@ -2871,7 +2871,7 @@ sal_Int32 SwEscherEx::WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId
     {
         default:
             OSL_ENSURE(false, "unknown direction type");
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SvxFrameDirection::Horizontal_LR_TB:
             nFlow=mso_txflHorzN;
         break;

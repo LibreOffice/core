@@ -976,14 +976,14 @@ namespace emfio
                                         aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
                                         break;
                                     }
-                                    SAL_FALLTHROUGH;
+                                    [[fallthrough]];
                                 case PS_ENDCAP_SQUARE :
                                     if ( aSize.Width() )
                                     {
                                         aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
                                         break;
                                     }
-                                    SAL_FALLTHROUGH;
+                                    [[fallthrough]];
                                 case PS_ENDCAP_FLAT :
                                 default :
                                     aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
@@ -1066,14 +1066,14 @@ namespace emfio
                                         aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
                                         break;
                                     }
-                                    SAL_FALLTHROUGH;
+                                    [[fallthrough]];
                                 case PS_ENDCAP_SQUARE :
                                     if ( aLineInfo.GetWidth() )
                                     {
                                         aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
                                         break;
                                     }
-                                    SAL_FALLTHROUGH;
+                                    [[fallthrough]];
                                 case PS_ENDCAP_FLAT :
                                 default :
                                     aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
@@ -1194,7 +1194,7 @@ namespace emfio
 
                     case EMR_ABORTPATH :
                         ClearPath();
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case EMR_ENDPATH :
                         mbRecordPath = false;
                     break;
@@ -1573,7 +1573,7 @@ namespace emfio
 
                     case EMR_EXTTEXTOUTA :
                         bFlag = true;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case EMR_EXTTEXTOUTW :
                     {
                         sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;

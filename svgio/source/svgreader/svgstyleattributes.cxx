@@ -2568,7 +2568,7 @@ namespace svgio
                         const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
                         return SvgNumber(aParentNumber.getNumber() / 1.2, aParentNumber.getUnit());
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
                 case FontSize_medium:
                 case FontSize_initial:
@@ -2587,7 +2587,7 @@ namespace svgio
                         const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSizeNumber();
                         return SvgNumber(aParentNumber.getNumber() * 1.2, aParentNumber.getUnit());
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
                 case FontSize_x_large:
                 {

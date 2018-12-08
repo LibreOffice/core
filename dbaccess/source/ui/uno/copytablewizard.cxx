@@ -1248,7 +1248,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                             aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
                             break;
                         }
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case DataType::BOOLEAN:
                         aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
                         break;
@@ -1332,7 +1332,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                 if( CopyTableOperation::CopyDefinitionOnly == rWizard.getOperation() )
                     break;
 
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
 
             case CopyTableOperation::AppendData:

@@ -187,7 +187,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
                 aTmp = *pNd->StartOfSectionNode();
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             if( rWhere == aTmp )
                 aTmp -= 2;

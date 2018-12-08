@@ -1252,7 +1252,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                     break;
                 case DataType::LONGVARBINARY:
                     bBinary = true;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case DataType::LONGVARCHAR:
                     cTyp = 'M';
                     break;
@@ -1730,7 +1730,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
             case DataType::DOUBLE:
             case DataType::TIMESTAMP:
                 bSetZero = true;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case DataType::LONGVARBINARY:
             case DataType::DATE:
             case DataType::BIT:

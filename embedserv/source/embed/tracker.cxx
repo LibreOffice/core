@@ -444,7 +444,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
         case WM_KEYDOWN:
             if (msg.wParam != VK_ESCAPE)
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case WM_RBUTTONDOWN:
             if (bMoved)
             {

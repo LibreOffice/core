@@ -1219,7 +1219,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
                 _rxParameters->setBinaryStream(_nColumnIndex, xStream, xStream->available());
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         default:
             bSuccessfullyReRouted = false;

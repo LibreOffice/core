@@ -65,7 +65,7 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
             aItem.AddEvent( SwResId(STR_EVENT_IMAGE_LOAD), OUString(),
                                 SvMacroItemId::OnImageLoadDone);
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case MACASSGN_FRMURL:           // Frame - URL-Attributes
         {
             if( !bHtmlMode &&
@@ -81,14 +81,14 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                                 SvMacroItemId::SwFrmMove );
             }
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case MACASSGN_OLE:              // OLE
         {
             if( !bHtmlMode )
                 aItem.AddEvent( SwResId(STR_EVENT_OBJECT_SELECT), OUString(),
                                 SvMacroItemId::SwObjectSelect );
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case MACASSGN_INETFMT:          // INetFormat-Attributes
         {
             aItem.AddEvent( SwResId(STR_EVENT_MOUSEOVER_OBJECT), OUString(),

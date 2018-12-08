@@ -728,7 +728,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                       VclMessageType::Warning, VclButtonsType::Ok, CuiResId(pErrorId)));
             xBox->run();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case FmSearchProgress::State::Canceled:
             EnableSearchUI(true);

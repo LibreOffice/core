@@ -358,7 +358,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 }
             }
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case SID_STYLE_EDIT:
         case SID_STYLE_DELETE:

@@ -350,7 +350,7 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
                                                                              aMsg));
                     xBox->run();
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
             case view::PrintableState_JOB_ABORTED :
             {

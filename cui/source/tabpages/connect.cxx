@@ -206,12 +206,12 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
             m_xFtLine1->set_sensitive(false);
             m_xMtrFldLine1->set_sensitive(false);
             m_xMtrFldLine1->set_text("");
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 1:
             m_xFtLine2->set_sensitive(false);
             m_xMtrFldLine2->set_sensitive(false);
             m_xMtrFldLine2->set_text("");
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 2:
             m_xFtLine3->set_sensitive(false);
             m_xMtrFldLine3->set_sensitive(false);

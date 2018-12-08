@@ -409,10 +409,6 @@ namespace css = ::com::sun::star;
 #define SAL_OVERRIDE
 #endif
 
-#if defined LIBO_INTERNAL_ONLY
-#define SAL_FALLTHROUGH [[fallthrough]]
-#endif
-
 #endif /* __cplusplus */
 
 #ifdef __cplusplus

@@ -2619,7 +2619,7 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
                     case SvxCellHorJustify::Repeat:            // repeat is not yet implemented
                     case SvxCellHorJustify::Standard:
                         SAL_WARN("sc.ui","meHorJustResult does not match getAlignmentFromContext()");
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case SvxCellHorJustify::Left:
                         eSvxAdjust = SvxAdjust::Left;
                         break;

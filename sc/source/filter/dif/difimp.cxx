@@ -372,7 +372,7 @@ TOPIC DifParser::GetNextTopic()
             case S_UNKNOWN:
                 // skip 2 lines
                 ReadNextLine( aLine );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case S_ERROR_L2:                // error happened in line 2
                 // skip 1 line
                 ReadNextLine( aLine );

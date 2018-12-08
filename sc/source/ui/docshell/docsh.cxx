@@ -1009,7 +1009,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             SetError(ERRCODE_IO_ABORT); // this error code will produce no error message, but will break the further saving process
                         }
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
             case SfxEventHintId::SaveToDoc:
                 // #i108978# If no event is sent before saving, there will also be no "...DONE" event,
@@ -1023,7 +1023,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     // new positions are used after "save" and "save as", but not "save to"
                     UseSheetSaveEntries();      // use positions from saved file for next saving
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
             case SfxEventHintId::SaveToDocDone:
                 // only reset the flag, don't use the new positions

@@ -1348,17 +1348,17 @@ static void SetBorderLine( int nBorderTyp, SvxBoxItem& rItem,
         rItem.SetLine( &rBorder, SvxBoxItemLine::TOP );
         if( RTF_BOX != nBorderTyp )
             return;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case RTF_BRDRB:
         rItem.SetLine( &rBorder, SvxBoxItemLine::BOTTOM );
         if( RTF_BOX != nBorderTyp )
             return;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case RTF_BRDRL:
         rItem.SetLine( &rBorder, SvxBoxItemLine::LEFT );
         if( RTF_BOX != nBorderTyp )
             return;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case RTF_BRDRR:
         rItem.SetLine( &rBorder, SvxBoxItemLine::RIGHT );
         if( RTF_BOX != nBorderTyp )
@@ -1799,7 +1799,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
     {
     case RTF_ADEFF:
         bIsLeftToRightDef = false;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case RTF_DEFF:
         {
             if( -1 == nValue )
@@ -1815,7 +1815,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
 
     case RTF_ADEFLANG:
         bIsLeftToRightDef = false;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case RTF_DEFLANG:
         // store default Language
         if( -1 != nValue )

@@ -778,7 +778,7 @@ void SwSectionFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     case RES_FTN_AT_TXTEND:
     case RES_END_AT_TXTEND : bClients = true;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case RES_SECTION_HIDDEN:
     case RES_SECTION_NOT_HIDDEN:
         {

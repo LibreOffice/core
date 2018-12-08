@@ -347,7 +347,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
                         }
                         TYPELIB_DANGER_RELEASE( pTD2 );
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 }
                 default:
                 {

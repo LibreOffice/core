@@ -87,7 +87,7 @@ static bool hasUnsupportedActions( const GDIMetaFile& rMtf )
                 {
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case MetaActionType::MOVECLIPREGION:
             case MetaActionType::REFPOINT:
             case MetaActionType::WALLPAPER:

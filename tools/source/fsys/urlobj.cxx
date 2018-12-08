@@ -1185,7 +1185,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         break;
                     }
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
             {
                 // For INetProtocol::File, allow an empty authority ("//") to be
@@ -4632,7 +4632,7 @@ void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
         {
             default:
                 OSL_FAIL("INetURLObject::appendUCS4(): Unsupported charset");
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case RTL_TEXTENCODING_ASCII_US:
             case RTL_TEXTENCODING_ISO_8859_1:
                 appendEscape(rTheText, nUCS4);
@@ -4676,7 +4676,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                     default:
                         OSL_FAIL(
                             "INetURLObject::getUTF32(): Unsupported charset");
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case RTL_TEXTENCODING_ASCII_US:
                         rEscapeType = rtl::isAscii(nUTF32) ?
                                           EscapeType::Utf32 : EscapeType::Octet;

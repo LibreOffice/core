@@ -812,7 +812,7 @@ namespace basegfx
                     }
                     else
                     {
-                        SAL_FALLTHROUGH; // wanted fall-through to default
+                        [[fallthrough]]; // wanted fall-through to default
                     }
                 }
                 default: // B2DLineJoin::Bevel

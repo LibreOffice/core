@@ -331,7 +331,7 @@ bool SwDocShell::Save()
         case SfxObjectCreateMode::EMBEDDED:
             // Suppress SfxProgress, if we are Embedded
             SW_MOD()->SetEmbeddedLoadSave( true );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case SfxObjectCreateMode::STANDARD:
         default:
@@ -1060,7 +1060,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 if ( !aMOpt.IsImpress() )
                     rSet.DisableItem( nWhich );
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case FN_ABSTRACT_NEWDOC:
         case FN_OUTLINE_TO_CLIPBOARD:
             {

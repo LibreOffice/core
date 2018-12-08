@@ -302,7 +302,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         case MeasureUnit::MM_100TH:
         case MeasureUnit::MM_10TH:
             OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,"output unit not supported for twip values" );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case MeasureUnit::MM:
             // 0.01mm = 0.57twip (exactly)
             nMul = 25400;   // 25.4 * 1000
@@ -359,7 +359,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
             case MeasureUnit::MM_10TH:
                 OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,
                             "output unit not supported for 1/100mm values" );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case MeasureUnit::MM:
                 // 0.01mm = 1 mm/100 (exactly)
                 nMul = 10;

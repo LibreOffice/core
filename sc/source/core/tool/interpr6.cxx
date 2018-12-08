@@ -784,7 +784,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     nCount = 0;
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
             case svDoubleRef :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);

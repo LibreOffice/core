@@ -2841,7 +2841,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 return;
             }
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         default:
             EditBrowseBox::Command(rEvt);
@@ -3253,7 +3253,7 @@ bool DbGridControl::PreNotify(NotifyEvent& rEvt)
                 }
             }
 
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         default:
             return EditBrowseBox::PreNotify(rEvt);

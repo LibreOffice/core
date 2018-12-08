@@ -551,7 +551,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
             case SvxChartIndicate::NONE :
                 // no longer used, use both as default
                 m_eIndicate = SvxChartIndicate::Both;
-                SAL_FALLTHROUGH; // to BOTH
+                [[fallthrough]]; // to BOTH
             case SvxChartIndicate::Both :
                 m_xRbBoth->set_active(true); break;
             case SvxChartIndicate::Up :

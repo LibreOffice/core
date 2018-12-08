@@ -116,7 +116,7 @@ bool XcdParser::startElement(
             return true;
         }
         state_ = STATE_COMPONENTS;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case STATE_COMPONENTS:
         if (nsId == ParseManager::NAMESPACE_OOR &&
             name.equals("component-schema"))

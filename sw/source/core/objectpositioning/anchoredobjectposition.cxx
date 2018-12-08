@@ -674,7 +674,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
                             aRectFnSet.GetLeft(ToCharOrientFrame()->getFrameArea()) );
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case text::RelOrientation::PAGE_PRINT_AREA:
         {

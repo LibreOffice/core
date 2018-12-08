@@ -482,7 +482,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
             eErrCode = Bootstrap::INVALID_VERSION_FILE_ENTRY;
             break;
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
 
     case Bootstrap::DATA_MISSING:
         switch (_rData.aVersionINI_.status)
@@ -509,7 +509,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
                     eErrCode = Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY;
                 break;
 
-            case Bootstrap::DATA_INVALID: OSL_ASSERT(false); SAL_FALLTHROUGH;
+            case Bootstrap::DATA_INVALID: OSL_ASSERT(false); [[fallthrough]];
             case Bootstrap::PATH_VALID:
                 addFileError(_rBuf, _rData.aBootstrapINI_.path, IS_MISSING);
                 eErrCode = Bootstrap::MISSING_BOOTSTRAP_FILE;

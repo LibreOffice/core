@@ -462,67 +462,67 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_TILT_DOWN:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_DOWN;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_TILT_UP:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_UP;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_TILT_LEFT:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_LEFT;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_TILT_RIGHT:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_RIGHT;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_DIRECTION:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ORIENTATION;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_PROJECTION:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_PROJECTION;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_DEPTH:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_DEPTH;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_3D_COLOR:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_SURFACE:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_LIGHTING_INTENSITY:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_BRIGHTNESS;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case SID_EXTRUSION_LIGHTING_DIRECTION:
         {

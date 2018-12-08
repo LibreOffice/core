@@ -82,7 +82,7 @@ static bool IsValidFilePathComponent(
                             break;
                         }
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case 0:
                 case ' ':
                     if ( dwFlags & VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD )
@@ -577,7 +577,7 @@ static void osl_encodeURL_( rtl_uString *strURL, rtl_String **pstrEncodedURL )
                 pURLDest += 3;
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case '!':
         case '\'':
         case '(':

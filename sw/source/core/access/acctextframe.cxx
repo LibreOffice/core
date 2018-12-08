@@ -103,7 +103,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
             {
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case RES_DESCRIPTION_CHANGED:
         {

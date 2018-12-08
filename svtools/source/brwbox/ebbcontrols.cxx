@@ -103,13 +103,13 @@ namespace svt
                 // drop down the list box
                 else if (rEvt.GetKeyCode().IsMod2() && rEvt.GetKeyCode().GetCode() == KEY_DOWN)
                     return false;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
             case KEY_RETURN:
                 if (rBox.IsInDropDown())
                     return false;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
                 return true;
         }
@@ -184,12 +184,12 @@ namespace svt
                 else
                     if (rEvt.GetKeyCode().IsMod2() && rEvt.GetKeyCode().GetCode() == KEY_DOWN)
                         return false;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
                 if (rBox.IsTravelSelect())
                     return false;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
                 return true;
         }

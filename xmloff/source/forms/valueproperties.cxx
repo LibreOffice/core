@@ -61,7 +61,7 @@ namespace xmloff
             case FormComponentType::FILECONTROL:
             case FormComponentType::COMBOBOX:
                 _rpValuePropertyName = PROPERTY_DEFAULT_TEXT;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case FormComponentType::COMMANDBUTTON:
                 _rpCurrentValuePropertyName = PROPERTY_TEXT;
                 break;

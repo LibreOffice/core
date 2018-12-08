@@ -638,7 +638,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                                 lcl_Flags( aOut, pFrame );
                             break;
         case PROT::MoveFwd: bTmp = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case PROT::MoveBack:
                             if (nFunction == (bTmp ? PROT::Init : PROT::FileInit))
                                 aOut.append("SwFlowFrame::MoveFwd");
@@ -661,7 +661,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                             break;
         case PROT::AdjustN :
         case PROT::Shrink:   bTmp = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case PROT::Grow:
                             if (!bTmp)
                                 aOut.append("SwFrame::Grow");
@@ -702,7 +702,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
         case PROT::Section:  SectFunc(aOut, nAct, pParam);
                             break;
         case PROT::Cut:      bTmp = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
         case PROT::Paste:
                             if (bTmp)
                                 aOut.append("PROT::Cut from ");
@@ -808,7 +808,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void const * 
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame const *>(pParam))));
                                 break;
         case DbgAction::CreateMaster: bTmp = true;
-                                SAL_FALLTHROUGH;
+                                [[fallthrough]];
         case DbgAction::CreateFollow: rOut.append("Create Section ");
                                 if (bTmp)
                                     rOut.append("Master to ");
@@ -817,7 +817,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void const * 
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame const *>(pParam))));
                                 break;
         case DbgAction::DelMaster:    bTmp = true;
-                                SAL_FALLTHROUGH;
+                                [[fallthrough]];
         case DbgAction::DelFollow:    rOut.append("Delete Section ");
                                 if (bTmp)
                                     rOut.append("Master to ");

@@ -525,8 +525,8 @@ OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
         }
         switch( nNumber )
         {
-        case 3:     { sRet.append(*cRomanArr); SAL_FALLTHROUGH; }
-        case 2:     { sRet.append(*cRomanArr); SAL_FALLTHROUGH; }
+        case 3:     { sRet.append(*cRomanArr); [[fallthrough]]; }
+        case 2:     { sRet.append(*cRomanArr); [[fallthrough]]; }
         case 1:     { sRet.append(*cRomanArr); }
                     break;
 

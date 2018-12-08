@@ -323,7 +323,7 @@ extern "C" void cpp_vtable_call(
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
             }
-            SAL_FALLTHROUGH; // else perform queryInterface()
+            [[fallthrough]]; // else perform queryInterface()
         }
         default:
             cpp2uno_call(

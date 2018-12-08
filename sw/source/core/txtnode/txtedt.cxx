@@ -1387,7 +1387,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                                 break;
                             case SwWrongList::FreshState::CURSOR:
                                 bPending = true;
-                                SAL_FALLTHROUGH; // to mark as invalid
+                                [[fallthrough]]; // to mark as invalid
                             case SwWrongList::FreshState::NOTHING:
                                 nInvStart = nBegin;
                                 nInvEnd = nBegin + nLen;

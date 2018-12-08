@@ -445,7 +445,7 @@ namespace frm
                 {
                     case RET_NO:
                         shouldCommit = false;
-                        SAL_FALLTHROUGH; // don't ask again!
+                        [[fallthrough]]; // don't ask again!
                     case RET_YES:
                         needConfirmation = false;
                         return true;

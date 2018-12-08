@@ -913,7 +913,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                             nParaFlags |= 0x90; // we define the font and charset
                         }
 
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     }
                     case SVX_NUM_CHARS_UPPER_LETTER :       // count from a-z, aa - az, ba - bz, ...
                     case SVX_NUM_CHARS_LOWER_LETTER :

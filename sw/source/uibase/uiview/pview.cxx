@@ -864,7 +864,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         case FN_START_OF_LINE:
         case FN_START_OF_DOCUMENT:
             eMvMode = SwPagePreviewWin::MV_DOC_STT;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case FN_END_OF_LINE:
         case FN_END_OF_DOCUMENT:
             m_pViewWin->SetSelectedPage(eMvMode == SwPagePreviewWin::MV_DOC_STT ? 1 : mnPageCount);

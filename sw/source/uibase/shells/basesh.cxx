@@ -229,7 +229,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 break;
             }
 
-            SAL_FALLTHROUGH; // otherwise call DelLeft
+            [[fallthrough]]; // otherwise call DelLeft
         case FN_SHIFT_BACKSPACE:
             rSh.DelLeft();
             break;
@@ -426,7 +426,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                 rSet.DisableItem( nWhich );
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SID_COPY:
             if( !bCopy )
                 rSet.DisableItem( nWhich );
@@ -1880,7 +1880,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
         case FN_FRAME_WRAPTHRU_TOGGLE:
             if (aWrap.IsContour())
                 aWrap.SetContour(false);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case FN_FRAME_WRAPTHRU:
             nSurround = css::text::WrapTextMode_THROUGH;
             break;
@@ -2011,7 +2011,7 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
                     if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
                         nScripts = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
             case SID_ATTR_CHAR_POSTURE:
             case SID_ATTR_CHAR_WEIGHT:

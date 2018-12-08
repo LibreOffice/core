@@ -108,7 +108,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
         {
             rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
             bWasSetTypeAttribute = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
     case util::NumberFormat::PERCENT:
         {
@@ -117,7 +117,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_PERCENTAGE);
                 bWasSetTypeAttribute = true;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
     case util::NumberFormat::CURRENCY:
         {
@@ -374,7 +374,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
         {
             pExport->AddAttribute(sAttrValType, XML_FLOAT);
             bWasSetTypeAttribute = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
     case util::NumberFormat::PERCENT:
         {
@@ -383,7 +383,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                 pExport->AddAttribute(sAttrValType, XML_PERCENTAGE);
                 bWasSetTypeAttribute = true;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
     case util::NumberFormat::CURRENCY:
         {

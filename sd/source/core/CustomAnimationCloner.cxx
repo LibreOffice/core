@@ -143,7 +143,7 @@ namespace sd
             {
                 Reference< XIterateContainer > xIter( xNode, UNO_QUERY_THROW );
                 xIter->setTarget( transformValue( xIter->getTarget() ) );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
             case AnimationNodeType::PAR:
             case AnimationNodeType::SEQ:

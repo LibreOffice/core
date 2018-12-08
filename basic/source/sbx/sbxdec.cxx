@@ -413,7 +413,7 @@ start:
     {
         case SbxNULL:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SbxEMPTY:
             pnDecRes->setShort( 0 ); break;
         case SbxCHAR:

@@ -1283,7 +1283,7 @@ SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDe
                 case DataType::TIMESTAMP:
                     bDateNTimeField = true;
                     sLabelPostfix = SvxResId(RID_STR_POSTFIX_DATE);
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case DataType::DATE:
                     nOBJID = OBJ_FM_DATEFIELD;
                     break;

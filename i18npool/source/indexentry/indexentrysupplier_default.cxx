@@ -213,7 +213,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                 break;
             case u'{':
                 close = '}';
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case u'(': {
                     if (key_count <= 0)
                         throw RuntimeException();

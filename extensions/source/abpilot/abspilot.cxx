@@ -248,7 +248,7 @@ namespace abp
             implCreateDataSource();
             if ( needAdminInvokationPage() )
                 break;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
 
         case STATE_INVOKE_ADMIN_DIALOG:
             if ( !connectToDataSource( false ) )

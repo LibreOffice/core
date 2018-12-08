@@ -690,7 +690,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 --aIdx;
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SwNodeType::Table:
         case SwNodeType::Start:
             {

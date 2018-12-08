@@ -194,7 +194,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         {
             case 1 :        // automatic
                 mnDiaMode++;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case 2 :        // semi-automatic
                 mnDiaMode++;
                 break;
@@ -1211,7 +1211,7 @@ void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertyS
                 nFillColor = EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(mAny) );
                 nFillBackColor = nFillColor ^ 0xffffff;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         }
         case css::drawing::FillStyle_NONE :
         default:

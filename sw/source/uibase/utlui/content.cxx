@@ -1892,14 +1892,14 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         break;
         case ContentTypeId::URLFIELD:
             sUrl = static_cast<SwURLFieldContent*>(pCnt)->GetURL();
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case ContentTypeId::OLE:
         case ContentTypeId::GRAPHIC:
             if(GetParentWindow()->GetRegionDropMode() != RegionMode::NONE)
                 break;
             else
                 rDragMode &= ~( DND_ACTION_MOVE | DND_ACTION_LINK );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             sEntry = GetEntryText(pEntry);
     }

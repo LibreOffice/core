@@ -1420,16 +1420,16 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
     {
         case css::presentation::ClickAction_STOPPRESENTATION :
             nJump += 2;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case css::presentation::ClickAction_LASTPAGE :
             nJump++;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case css::presentation::ClickAction_FIRSTPAGE :
             nJump++;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case css::presentation::ClickAction_PREVPAGE :
             nJump++;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case css::presentation::ClickAction_NEXTPAGE :
         {
             nJump++;
@@ -2749,7 +2749,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             {
                                 if ( nPlaceHolderAtom < 19 )
                                     break;
-                                SAL_FALLTHROUGH;
+                                [[fallthrough]];
                             }
                             case EPP_PLACEHOLDER_NOTESBODY :
                             case EPP_PLACEHOLDER_MASTERDATE :

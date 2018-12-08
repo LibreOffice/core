@@ -1920,7 +1920,7 @@ void NeonSession::HandleError( int nError,
                     default:
                         // set 400 error, if not one of others
                         code = SC_BAD_REQUEST;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case SC_FORBIDDEN:
                     case SC_NOT_FOUND:
                     case SC_METHOD_NOT_ALLOWED:
@@ -1948,7 +1948,7 @@ void NeonSession::HandleError( int nError,
                         // set 500 error, if not one of others
                         // expand the error code
                         code = SC_INTERNAL_SERVER_ERROR;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case SC_INTERNAL_SERVER_ERROR:
                     case SC_NOT_IMPLEMENTED:
                         throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );

@@ -704,7 +704,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
 
     case rtl_UriDecodeToIuri:
         eCharset = RTL_TEXTENCODING_UTF8;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     default: // rtl_UriDecodeWithCharset, rtl_UriDecodeStrict
         {
             sal_Unicode const * p = pText->buffer;
@@ -724,7 +724,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
                         writeEscapeOctet(pResult, &nCapacity, nUtf32);
                         break;
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
 
                 case EscapeNo:
                     writeUcs4(pResult, &nCapacity, nUtf32);

@@ -116,7 +116,7 @@ bool Options::checkCommandFile(std::vector< std::string > & rArgs, char const * 
                 }
                 break;
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         default:
             buffer.push_back(sal::static_int_cast<char>(c));
             break;

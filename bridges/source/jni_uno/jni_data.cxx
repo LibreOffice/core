@@ -1738,7 +1738,7 @@ void Bridge::map_to_java(
                     jni.ensure_no_exception();
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
             default:
             {

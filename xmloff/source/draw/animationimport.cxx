@@ -870,7 +870,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                     xAudio->setSource( makeAny(lcl_GetMediaReference(GetImport(), rValue)) );
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             }
             case ANA_Target:
             {

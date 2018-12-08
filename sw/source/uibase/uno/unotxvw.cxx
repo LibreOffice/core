@@ -366,7 +366,7 @@ uno::Any SwXTextView::getSelection()
                     aRef.set(xCursor, uno::UNO_QUERY);
                     break;
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
                     // without a table selection the text will be delivered
             }
             case ShellMode::ListText       :

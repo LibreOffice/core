@@ -248,10 +248,10 @@ sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
             {
             case i18n::ScriptType::COMPLEX:
                 ++pM;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case i18n::ScriptType::ASIAN:
                 ++pM;
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             default:
                 nRet = *pM;
             }

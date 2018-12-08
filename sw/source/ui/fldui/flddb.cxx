@@ -362,7 +362,7 @@ void SwFieldDBPage::TypeHdl( ListBox const * pBox )
 
         case TYP_DBNUMSETFLD:
             bSetNo = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case TYP_DBNEXTSETFLD:
             bCond = true;
             if (IsFieldEdit())

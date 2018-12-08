@@ -1534,7 +1534,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
                     case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
                         bSelect = true;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
                     case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
                     case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
@@ -1543,7 +1543,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
                     case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
                         bSelect = true;
-                        SAL_FALLTHROUGH;
+                        [[fallthrough]];
                     case css::awt::Key::MOVE_TO_END_OF_LINE:
                     case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
                     case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:

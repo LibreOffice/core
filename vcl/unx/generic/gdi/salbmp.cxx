@@ -180,7 +180,7 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
 #endif
         default:
             nBitCount = 24;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case 24:
             pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr;
         break;

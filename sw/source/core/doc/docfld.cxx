@@ -472,7 +472,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
             case SwFieldIds::DbNextSet:
                 AddUsedDBToList( rDBNameList,
                                 lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pField)->GetRealDBData() ));
-                SAL_FALLTHROUGH; // JP: is that right like that?
+                [[fallthrough]]; // JP: is that right like that?
 
             case SwFieldIds::HiddenText:
             case SwFieldIds::HiddenPara:
@@ -653,7 +653,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
                 {
                     static_cast<SwDBNameInfField*>(pField)->SetDBData(aNewDBData);
                 }
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case SwFieldIds::HiddenText:
             case SwFieldIds::HiddenPara:
                 pField->SetPar1( ReplaceUsedDBs(rOldNames, rNewName, pField->GetPar1()) );

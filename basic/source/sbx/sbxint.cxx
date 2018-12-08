@@ -33,7 +33,7 @@ start:
     {
         case SbxNULL:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SbxEMPTY:
             nRes = 0; break;
         case SbxCHAR:
@@ -389,7 +389,7 @@ start:
     {
         case SbxNULL:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SbxEMPTY:
             nRes = 0; break;
         case SbxCHAR:
@@ -649,7 +649,7 @@ start:
     {
         case SbxNULL:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case SbxEMPTY:
             nRes = 0; break;
         case SbxCHAR:

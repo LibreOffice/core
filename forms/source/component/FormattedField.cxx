@@ -913,7 +913,7 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
             aExternalValue <<= sString;
             break;
         }
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     }
     case TypeClass_BOOLEAN:
     {

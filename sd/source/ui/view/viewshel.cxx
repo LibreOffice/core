@@ -749,7 +749,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                     break;
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case CommandEventId::StartAutoScroll:
         case CommandEventId::AutoScroll:
         {

@@ -885,7 +885,7 @@ int ImpSvNumberInputScan::GetSign( const OUString& rString, sal_Int32& nPos )
             return 1;
         case '(': // '(' similar to '-' ?!?
             bNegCheck = true;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case '-':
             nPos++;
             return -1;

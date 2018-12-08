@@ -854,39 +854,39 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
 
     case FadeEffect_HORIZONTAL_STRIPES :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_VERTICAL_STRIPES :
         nPPTTransitionType = PPT_TRANSITION_TYPE_BLINDS;
         break;
 
     case FadeEffect_VERTICAL_CHECKERBOARD :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_HORIZONTAL_CHECKERBOARD :
         nPPTTransitionType = PPT_TRANSITION_TYPE_CHECKER;
         break;
 
     case FadeEffect_MOVE_FROM_UPPERLEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_MOVE_FROM_UPPERRIGHT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_MOVE_FROM_LOWERLEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_MOVE_FROM_LOWERRIGHT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_MOVE_FROM_TOP :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_MOVE_FROM_LEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_MOVE_FROM_BOTTOM :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_MOVE_FROM_RIGHT :
         nPPTTransitionType = PPT_TRANSITION_TYPE_COVER;
         break;
@@ -897,33 +897,33 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
 
     case FadeEffect_VERTICAL_LINES :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_HORIZONTAL_LINES :
         nPPTTransitionType = PPT_TRANSITION_TYPE_RANDOM_BARS;
         break;
 
     case FadeEffect_CLOSE_HORIZONTAL :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_OPEN_HORIZONTAL :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_CLOSE_VERTICAL :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_OPEN_VERTICAL :
         nPPTTransitionType = PPT_TRANSITION_TYPE_SPLIT;
         break;
 
     case FadeEffect_FADE_FROM_UPPERLEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_FADE_FROM_UPPERRIGHT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_FADE_FROM_LOWERLEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_FADE_FROM_LOWERRIGHT :
         nDirection += 4;
         nPPTTransitionType = PPT_TRANSITION_TYPE_STRIPS;
@@ -931,58 +931,58 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
 
     case FadeEffect_UNCOVER_TO_LOWERRIGHT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_UNCOVER_TO_LOWERLEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_UNCOVER_TO_UPPERRIGHT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_UNCOVER_TO_UPPERLEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_UNCOVER_TO_BOTTOM :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_UNCOVER_TO_RIGHT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_UNCOVER_TO_TOP :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_UNCOVER_TO_LEFT :
         nPPTTransitionType = PPT_TRANSITION_TYPE_PULL;
         break;
 
     case FadeEffect_FADE_FROM_TOP :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_FADE_FROM_LEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_FADE_FROM_BOTTOM :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_FADE_FROM_RIGHT :
         nPPTTransitionType = PPT_TRANSITION_TYPE_WIPE;
         break;
 
     case FadeEffect_ROLL_FROM_TOP :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_ROLL_FROM_LEFT :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_ROLL_FROM_BOTTOM :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_ROLL_FROM_RIGHT :
         nPPTTransitionType = PPT_TRANSITION_TYPE_WIPE;
         break;
 
     case FadeEffect_FADE_TO_CENTER :
         nDirection++;
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case FadeEffect_FADE_FROM_CENTER :
         nPPTTransitionType = PPT_TRANSITION_TYPE_ZOOM;
         break;

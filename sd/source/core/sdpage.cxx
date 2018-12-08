@@ -2966,7 +2966,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
                     break;
 
                 default:
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case 6:
                     pOffsets = aOffsets[ bLandscape ? 3 : 1 ];
                     break;

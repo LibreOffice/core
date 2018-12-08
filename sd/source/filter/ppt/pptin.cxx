@@ -1255,7 +1255,7 @@ bool ImplSdPPTImport::Import()
                 break;
                 case PptViewTypeEnum::TitleMaster:
                     nSelectedPage = 1;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case PptViewTypeEnum::SlideMaster:
                 {
                     ePageKind = PageKind::Standard;
@@ -1264,7 +1264,7 @@ bool ImplSdPPTImport::Import()
                 break;
                 case PptViewTypeEnum::NotesMaster:
                     eEditMode = EditMode::MasterPage;
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case PptViewTypeEnum::Notes:
                     ePageKind = PageKind::Notes;
                 break;
@@ -2372,11 +2372,11 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         case PptPlaceholder::NOTESBODY :            ePresObjKind = PRESOBJ_NOTES;   break;
                         case PptPlaceholder::VERTICALTEXTTITLE :
                             bVertical = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
                         case PptPlaceholder::TITLE :                ePresObjKind = PRESOBJ_TITLE;   break;
                         case PptPlaceholder::VERTICALTEXTBODY :
                             bVertical = true;
-                            SAL_FALLTHROUGH;
+                            [[fallthrough]];
                         case PptPlaceholder::BODY :                 ePresObjKind = PRESOBJ_OUTLINE; break;
                         case PptPlaceholder::CENTEREDTITLE :        ePresObjKind = PRESOBJ_TITLE;   break;
                         case PptPlaceholder::SUBTITLE :             ePresObjKind = PRESOBJ_TEXT;    break;      // PRESOBJ_OUTLINE

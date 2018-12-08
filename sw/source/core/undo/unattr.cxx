@@ -255,7 +255,7 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
                     }
                 }
             }
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
             if (pDoc->GetSpzFrameFormats()->IsAlive(static_cast<const SwFrameFormat *>(m_pFormat))
@@ -381,7 +381,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( bool bSvDrwPt )
     case RndStdIds::FLY_AS_CHAR:
     case RndStdIds::FLY_AT_CHAR:
         nContent = rAnchor.GetContentAnchor()->nContent.GetIndex();
-        SAL_FALLTHROUGH;
+        [[fallthrough]];
     case RndStdIds::FLY_AT_PARA:
     case RndStdIds::FLY_AT_FLY:
         m_nNodeIndex = rAnchor.GetContentAnchor()->nNode.GetIndex();

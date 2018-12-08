@@ -731,11 +731,11 @@ void OS2METReader::SetPen( const Color& rColor, sal_uInt16 nLineWidth, PenStyle 
         break;
         case PEN_DASHDOT :
             nDashCount++;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case PEN_DOT :
             nDotCount++;
             nDashCount--;
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case PEN_DASH :
             nDashCount++;
             aLineInfo.SetDotCount( nDotCount );
@@ -1706,7 +1706,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdStkPop: PopAttr(); break;
 
         case GOrdPIvAtr: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSIvAtr: {
             sal_uInt8 nA, nP, nFlags, nMix;
             Color aCol;
@@ -1781,7 +1781,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPIxCol: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSIxCol: {
             sal_uInt8 nFlags;
             Color aCol;
@@ -1808,7 +1808,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
 
         case GOrdPColor:
         case GOrdPXtCol: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSColor:
         case GOrdSXtCol: {
             sal_uInt8 nbyte;
@@ -1837,7 +1837,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
 
         case GOrdPBgCol: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSBgCol: {
             sal_uInt16 nVal;
             Color aCol;
@@ -1860,7 +1860,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPBxCol: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSBxCol: {
             sal_uInt8 nFlags;
             Color aCol;
@@ -1886,7 +1886,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
 
         case GOrdPMixMd: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSMixMd: {
             sal_uInt8 nMix;
             pOS2MET->ReadUChar( nMix );
@@ -1904,7 +1904,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPBgMix: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSBgMix: {
             sal_uInt8 nMix;
             pOS2MET->ReadUChar( nMix );
@@ -1922,12 +1922,12 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPPtSet: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSPtSet: SAL_INFO("filter.os2met","GOrdSPtSet");
             break;
 
         case GOrdPPtSym: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSPtSym: {
             sal_uInt8 nPatt;
             pOS2MET->ReadUChar( nPatt );
@@ -1936,22 +1936,22 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
 
         case GOrdPPtRef: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSPtRef: SAL_INFO("filter.os2met","GOrdSPtRef");
             break;
 
         case GOrdPLnEnd: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSLnEnd:
             break;
 
         case GOrdPLnJoi: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSLnJoi:
             break;
 
         case GOrdPLnTyp: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSLnTyp: {
             sal_uInt8 nType;
             pOS2MET->ReadUChar( nType );
@@ -1966,7 +1966,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPLnWdt: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSLnWdt: {
             sal_uInt8 nbyte;
             pOS2MET->ReadUChar( nbyte );
@@ -1975,12 +1975,12 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPFrLWd: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSFrLWd:
             break;
 
         case GOrdPStLWd: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSStLWd :
         {
             sal_uInt8 nFlags;
@@ -1999,24 +1999,24 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPChDir: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSChDir:
             break;
 
         case GOrdPChPrc: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSChPrc:
             break;
 
         case GOrdPChSet: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSChSet: {
             sal_uInt8 nbyte; pOS2MET->ReadUChar( nbyte );
             aAttr.nChrSet=static_cast<sal_uInt32>(nbyte)&0xff;
             break;
         }
         case GOrdPChAng: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSChAng: {
             sal_Int32 nX = ReadCoord(bCoord32);
             sal_Int32 nY = ReadCoord(bCoord32);
@@ -2029,12 +2029,12 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPChBrx: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSChBrx:
             break;
 
         case GOrdPChCel: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSChCel: {
             sal_uInt8 nbyte;
             sal_uInt16 nLen=nOrderLen;
@@ -2056,22 +2056,22 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
         }
         case GOrdPChXtr: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSChXtr:
             break;
 
         case GOrdPChShr: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSChShr:
             break;
 
         case GOrdPTxAlg: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSTxAlg: SAL_INFO("filter.os2met","GOrdSTxAlg");
             break;
 
         case GOrdPMkPrc: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSMkPrc: {
             sal_uInt8 nbyte;
             pOS2MET->ReadUChar( nbyte );
@@ -2081,7 +2081,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
 
         case GOrdPMkSet: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSMkSet: {
             sal_uInt8 nbyte;
             pOS2MET->ReadUChar( nbyte );
@@ -2091,7 +2091,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
 
         case GOrdPMkSym: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSMkSym: {
             sal_uInt8 nbyte;
             pOS2MET->ReadUChar( nbyte );
@@ -2101,7 +2101,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
 
         case GOrdPMkCel: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSMkCel: {
             sal_uInt8 nbyte;
             sal_uInt16 nLen=nOrderLen;
@@ -2117,7 +2117,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         }
 
         case GOrdPArcPa: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSArcPa:
             aAttr.nArcP=ReadCoord(bCoord32);
             aAttr.nArcQ=ReadCoord(bCoord32);
@@ -2126,18 +2126,18 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
 
         case GOrdPCrPos: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSCrPos:
             aAttr.aCurPos=ReadPoint();
             break;
 
         case GOrdPMdTrn: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSMdTrn: SAL_INFO("filter.os2met","GOrdSMdTrn");
             break;
 
         case GOrdPPkIdn: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSPkIdn: SAL_INFO("filter.os2met","GOrdSPkIdn");
             break;
 
@@ -2145,7 +2145,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             break;
 
         case GOrdPVwWin: PushAttr(nOrderID);
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
         case GOrdSVwWin: SAL_INFO("filter.os2met","GOrdSVwWin");
             break;
         default: SAL_INFO("filter.os2met","Unknown order: " << nOrderID);

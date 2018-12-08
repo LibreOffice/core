@@ -2710,7 +2710,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
     {
     case SdrUserCallType::Resize:
         notifyShapePropertyChange( svx::ShapeProperty::Size );
-        SAL_FALLTHROUGH; // RESIZE might also imply a change of the position
+        [[fallthrough]]; // RESIZE might also imply a change of the position
     case SdrUserCallType::MoveOnly:
         notifyShapePropertyChange( svx::ShapeProperty::Position );
         break;

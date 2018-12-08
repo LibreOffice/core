@@ -16,7 +16,7 @@ int main() {
     {
         case 1: { break; }
         case 2: {
-            SAL_FALLTHROUGH;
+            [[fallthrough]];
             {
                 case 3: // expected-error {{case statement not directly under switch [loplugin:dodgyswitch]}}
                 break;

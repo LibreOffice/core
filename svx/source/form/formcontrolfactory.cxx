@@ -400,7 +400,7 @@ namespace svxform
             {
                 case FormComponentType::SCROLLBAR:
                     _rxControlModel->setPropertyValue("LiveScroll", makeAny( true ) );
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case FormComponentType::SPINBUTTON:
                 {
                     sal_Int32 eOrientation = ScrollBarOrientation::HORIZONTAL;

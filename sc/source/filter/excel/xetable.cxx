@@ -2582,7 +2582,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
             default:
                 OSL_FAIL( "XclExpCellTable::XclExpCellTable - unknown cell type" );
-                SAL_FALLTHROUGH;
+                [[fallthrough]];
             case CELLTYPE_NONE:
             {
                 xCell.reset( new XclExpBlankCell(

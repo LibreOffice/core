@@ -1796,7 +1796,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                 {
                 default: ;//prevent warning
                     OSL_FAIL("svx::SvxRuler::DragBorders(), unknown drag type!" );
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 case RulerType::Border:
                     if(mxRulerImpl->bIsTableRows)
                     {

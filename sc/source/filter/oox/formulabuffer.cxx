@@ -173,7 +173,7 @@ void applySharedFormulas(
                         pCell->SetChanged(false);
                         break;
                     }
-                    SAL_FALLTHROUGH;
+                    [[fallthrough]];
                 default:
                     // Mark it for re-calculation.
                     pCell->SetDirty();
