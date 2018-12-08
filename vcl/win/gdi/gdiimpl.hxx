@@ -53,6 +53,7 @@ private:
     void drawPixelImpl( long nX, long nY, COLORREF crColor );
 
     void UpdatePen(HPEN hNewPen);
+    void UpdateBrush(HBRUSH hNewBrush);
 public:
 
     explicit WinSalGraphicsImpl(WinSalGraphics& rParent);
