@@ -63,6 +63,13 @@ const sal_uInt16 SvxBackgroundTabPage::pPageRanges[] =
     0
 };
 
+const sal_uInt16 SvxBkgTabPage::pPageRanges[] =
+{
+    SID_ATTR_BRUSH, SID_ATTR_BRUSH,
+    SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
+    0
+};
+
 /// Returns the fill style of the currently selected entry.
 static drawing::FillStyle lcl_getFillStyle(const weld::ComboBox& rLbSelect)
 {
