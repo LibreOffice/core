@@ -1454,15 +1454,6 @@ OUString Printer::GetPaperName( Paper ePaper )
     return (it != pSVData->maPaperNames.end()) ? it->second : OUString();
 }
 
-OUString Printer::GetPaperName() const
-{
-    Size  aPageSize = PixelToLogic( GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
-    Paper ePaper    = ImplGetPaperFormat( aPageSize.Width(), aPageSize.Height() );
-    if( ePaper == PAPER_USER )
-        ePaper = ImplGetPaperFormat( aPageSize.Height(), aPageSize.Width() );
-    return (ePaper != PAPER_USER) ? GetPaperName( ePaper ) : OUString();
-}
-
 const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
 {
     if( ! mpInfoPrinter )

@@ -96,11 +96,7 @@ class VCL_DLLPUBLIC SvTreeList final
     SvTreeListEntry*        PrevSelected( const SvListView*,SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*        LastSelected( const SvListView*) const;
 
-    static bool         Select( SvListView*,SvTreeListEntry* pEntry, bool bSelect );
     sal_uLong           GetChildSelectionCount( const SvListView*,SvTreeListEntry* pParent ) const;
-
-    static void         Expand( SvListView*,SvTreeListEntry* pParent );
-    static void         Collapse( SvListView*,SvTreeListEntry* pParent );
 
     VCL_DLLPRIVATE void SetAbsolutePositions();
 
