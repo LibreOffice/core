@@ -65,8 +65,7 @@ namespace accessibility
     {
         if ( isAlive() )
         {
-            VclEventId nEventId = rVclWindowEvent.GetId();
-            switch ( nEventId )
+            switch ( VclEventId nEventId = rVclWindowEvent.GetId(); nEventId )
             {
                 case  VclEventId::ObjectDying :
                 {
