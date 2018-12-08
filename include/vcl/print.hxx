@@ -312,9 +312,6 @@ public:
     Paper                       GetPaper() const;
     static OUString             GetPaperName( Paper ePaper );
 
-    /** @return A UI string for the current paper; an empty string for PAPER_USER */
-    OUString                    GetPaperName() const;
-
     /** @return Number of available paper formats */
     int                         GetPaperInfoCount() const;
 
@@ -541,7 +538,6 @@ public:
                                         getMultipage() const;
                       void              setLastPage( bool i_bLastPage );
     VCL_DLLPRIVATE    void              setReversePrint( bool i_bReverse );
-    VCL_DLLPRIVATE    bool              getReversePrint() const;
     VCL_DLLPRIVATE    void              setPapersizeFromSetup( bool i_bPapersizeFromSetup );
     VCL_DLLPRIVATE    bool              getPapersizeFromSetup() const;
     VCL_DLLPRIVATE    Size&             getPaperSizeSetup() const;

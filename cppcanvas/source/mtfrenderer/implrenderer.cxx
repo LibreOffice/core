@@ -2852,11 +2852,6 @@ namespace cppcanvas
                                     const Parameters&       rParams )
             : CanvasGraphicHelper(rCanvas)
             , maActions()
-            , fPageScale(0.0)
-            , nOriginX(0)
-            , nOriginY(0)
-            , nHDPI(0)
-            , nVDPI(0)
             , nFrameLeft(0)
             , nFrameTop(0)
             , nFrameRight(0)
@@ -2865,8 +2860,6 @@ namespace cppcanvas
             , nPixY(0)
             , nMmX(0)
             , nMmY(0)
-            , mbMultipart(false)
-            , mMFlags(0)
         {
             memset (aObjects, 0, sizeof (aObjects));
 

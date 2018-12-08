@@ -205,15 +205,6 @@ public:
     void SaveSection( SwStartNode* pSttNd );
     void ReNewBoxes( const SwSelBoxes& rBoxes );
 
-    void SetColWidthParam( sal_uLong nBoxIdx, sal_uInt16 nMode, TableChgWidthHeightType nType,
-                            SwTwips nAbsDif, SwTwips nRelDif )
-    {
-        m_nCurrBox = nBoxIdx;
-        m_nCount = nMode;
-        m_nSetColType = nType;
-        m_nAbsDiff = static_cast<sal_uInt16>(nAbsDif);
-        m_nRelDiff = static_cast<sal_uInt16>(nRelDif);
-    }
 };
 
 class SwUndoMove;
