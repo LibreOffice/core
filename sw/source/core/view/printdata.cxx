@@ -295,7 +295,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         aHelpIds,
                                                         aPrintRangeName,
                                                         aChoices,
-                                                        0 /* always default to 'All pages' */ );
+                                                        bHasSelection? 4 : 0);
 
     // show an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
