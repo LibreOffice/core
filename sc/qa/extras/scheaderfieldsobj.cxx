@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/util/xrefreshable.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -33,7 +34,9 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScCellFieldsObj : public CalcUnoApiTest, public apitest::XRefreshable
+class ScCellFieldsObj : public CalcUnoApiTest,
+                        public apitest::XEnumerationAccess,
+                        public apitest::XRefreshable
 {
 public:
     ScCellFieldsObj();
@@ -43,6 +46,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScCellFieldsObj);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XRefreshable
     CPPUNIT_TEST(testRefreshListener);
