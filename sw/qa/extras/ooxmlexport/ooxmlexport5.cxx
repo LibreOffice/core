@@ -1035,7 +1035,8 @@ DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
     {
-        assertXPath(pXmlDoc, "//w:headerReference", 1);
+        // this test must not be zero
+        assertXPath(pXmlDoc, "//w:headerReference", 2);
     }
 }
 
