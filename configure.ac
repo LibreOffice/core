@@ -4561,6 +4561,9 @@ if test "$cross_compiling" = "yes"; then
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
         --disable-cups \
+        --disable-gstreamer-1-0 \
+        --disable-gstreamer-0-10 \
+        --disable-gtk \
         --disable-gtk3 \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
