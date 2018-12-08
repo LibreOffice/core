@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <boost/version.hpp>
 #if BOOST_VERSION >= 106700
 #include <boost/integer/common_factor_rt.hpp>
 #else
