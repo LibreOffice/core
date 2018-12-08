@@ -1606,6 +1606,8 @@ public:
     {
         if (m_nKeyPressSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nKeyPressSignalId);
+        if (m_nKeyReleaseSignalId)
+            g_signal_handler_disconnect(m_pWidget, m_nKeyReleaseSignalId);
         if (m_nFocusInSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nFocusInSignalId);
         if (m_nFocusOutSignalId)
