@@ -574,7 +574,7 @@ public:
                                            sal_uInt32 nMaxLen,
                                            bool bUniCode);
 
-    SAL_WARN_UNUSED_RESULT static bool ReadCommonRecordHeader( SvStream& rSt,
+    [[nodiscard]] static bool ReadCommonRecordHeader( SvStream& rSt,
                                         sal_uInt8& rVer,
                                         sal_uInt16& rInst,
                                         sal_uInt16& rFbt,

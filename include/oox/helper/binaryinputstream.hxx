@@ -86,28 +86,28 @@ public:
         All data types supported by the ByteOrderConverter class can be used.
      */
     template< typename Type >
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     Type                 readValue();
 
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_Int8             readInt8()   { return readValue<sal_Int8>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_uInt8            readuInt8()  { return readValue<sal_uInt8>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_Int16            readInt16()  { return readValue<sal_Int16>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_uInt16           readuInt16() { return readValue<sal_uInt16>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_Int32            readInt32()  { return readValue<sal_Int32>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_uInt32           readuInt32() { return readValue<sal_uInt32>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     sal_Int64            readInt64()  { return readValue<sal_Int64>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     float                readFloat()  { return readValue<float>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     double               readDouble() { return readValue<double>(); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     unsigned char        readuChar()  { return readValue<unsigned char>(); }
 
     /** Reads a (preallocated!) C array of values from the stream.

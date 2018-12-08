@@ -564,7 +564,7 @@ inline std::size_t write_uInt16_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
     return write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, OUStringToOString(rStr, eEnc));
 }
 
-SAL_WARN_UNUSED_RESULT TOOLS_DLLPUBLIC bool checkSeek(SvStream &rSt, sal_uInt64 nOffset);
+[[nodiscard]] TOOLS_DLLPUBLIC bool checkSeek(SvStream &rSt, sal_uInt64 nOffset);
 
 // FileStream
 

@@ -2110,7 +2110,7 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 
 namespace {
 
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, long nVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
@@ -2132,7 +2132,7 @@ long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, long nVal, SCCOL& rStar
     return nVal;
 }
 
-SAL_WARN_UNUSED_RESULT
+[[nodiscard]]
 long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;

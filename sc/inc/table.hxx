@@ -313,15 +313,15 @@ public:
     bool        IsStreamValid() const                        { return bStreamValid; }
     void        SetStreamValid( bool bSet, bool bIgnoreLock = false );
 
-    SAL_WARN_UNUSED_RESULT bool IsColValid( const SCCOL nScCol ) const
+    [[nodiscard]] bool IsColValid( const SCCOL nScCol ) const
     {
         return nScCol >= static_cast< SCCOL >( 0 ) && nScCol < aCol.size();
     }
-    SAL_WARN_UNUSED_RESULT bool IsColRowValid( const SCCOL nScCol, const SCROW nScRow ) const
+    [[nodiscard]] bool IsColRowValid( const SCCOL nScCol, const SCROW nScRow ) const
     {
         return IsColValid( nScCol ) && ValidRow( nScRow );
     }
-    SAL_WARN_UNUSED_RESULT bool IsColRowTabValid( const SCCOL nScCol, const SCROW nScRow, const SCTAB nScTab ) const
+    [[nodiscard]] bool IsColRowTabValid( const SCCOL nScCol, const SCROW nScRow, const SCTAB nScTab ) const
     {
         return IsColValid( nScCol ) && ValidRow( nScRow ) && ValidTab( nScTab );
     }
@@ -944,7 +944,7 @@ public:
 
     void GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries );
     void GetFilteredFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries );
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     bool GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit);
 
     bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;

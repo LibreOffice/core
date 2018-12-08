@@ -180,7 +180,7 @@ public:
     SmNodeStack & GetNodeStack()    { return aNodeStack; }
 
     bool GetSuccess()              { return bSuccess; }
-    SAL_WARN_UNUSED_RESULT const OUString& GetText() { return aText; }
+    [[nodiscard]] const OUString& GetText() { return aText; }
     void SetText(const OUString &rStr) { aText = rStr; }
 
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;

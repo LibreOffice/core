@@ -76,7 +76,7 @@ public:
 
     /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     Type                readAligned() { align( sizeof( Type ) ); return readValue< Type >(); }
     /** Aligns the stream according to the passed type and skips the size of the type. */
     template< typename Type >

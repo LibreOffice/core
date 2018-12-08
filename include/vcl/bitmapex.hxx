@@ -375,7 +375,7 @@ public:
         @param bSmooth
         Defines if pixel interpolation is to be used to create the result
     */
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     BitmapEx            TransformBitmapEx(
                             double fWidth,
                             double fHeight,
@@ -403,7 +403,7 @@ public:
 
         @return The transformed bitmap
     */
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     BitmapEx            getTransformed(
                             const basegfx::B2DHomMatrix& rTransformation,
                             const basegfx::B2DRange& rVisibleRange,
@@ -415,10 +415,10 @@ public:
         @param rBColorModifierStack
         A ColrModifierStack which defines how each pixel has to be modified
     */
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     BitmapEx            ModifyBitmapEx( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     static BitmapEx     AutoScaleBitmap( BitmapEx const & aBitmap, const long aStandardSize );
 
     /// populate from a canvas implementation

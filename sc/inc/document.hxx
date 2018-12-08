@@ -1014,7 +1014,7 @@ public:
 
     void            BeginUnoRefUndo();
     bool            HasUnoRefUndo() const       { return ( pUnoRefUndoList != nullptr ); }
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     std::unique_ptr<ScUnoRefList> EndUnoRefUndo();            // must be deleted by caller!
     sal_Int64       GetNewUnoId() { return ++nUnoObjectId; }
     void            AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges );

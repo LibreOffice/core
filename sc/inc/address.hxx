@@ -91,47 +91,47 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 
 #define MAXROW_30   8191
 
-SAL_WARN_UNUSED_RESULT inline bool ValidCol( SCCOL nCol )
+[[nodiscard]] inline bool ValidCol( SCCOL nCol )
 {
     return nCol >= 0 && nCol <= MAXCOL;
 }
 
-SAL_WARN_UNUSED_RESULT inline bool ValidRow( SCROW nRow )
+[[nodiscard]] inline bool ValidRow( SCROW nRow )
 {
     return nRow >= 0 && nRow <= MAXROW;
 }
 
-SAL_WARN_UNUSED_RESULT inline bool ValidTab( SCTAB nTab )
+[[nodiscard]] inline bool ValidTab( SCTAB nTab )
 {
     return nTab >= 0 && nTab <= MAXTAB;
 }
 
-SAL_WARN_UNUSED_RESULT inline bool ValidTab( SCTAB nTab, SCTAB nMaxTab )
+[[nodiscard]] inline bool ValidTab( SCTAB nTab, SCTAB nMaxTab )
 {
     return nTab >= 0 && nTab <= nMaxTab;
 }
 
-SAL_WARN_UNUSED_RESULT inline bool ValidColRow( SCCOL nCol, SCROW nRow )
+[[nodiscard]] inline bool ValidColRow( SCCOL nCol, SCROW nRow )
 {
     return ValidCol( nCol) && ValidRow( nRow);
 }
 
-SAL_WARN_UNUSED_RESULT inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
+[[nodiscard]] inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ValidCol( nCol) && ValidRow( nRow) && ValidTab( nTab);
 }
 
-SAL_WARN_UNUSED_RESULT inline SCCOL SanitizeCol( SCCOL nCol )
+[[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol )
 {
     return nCol < 0 ? 0 : std::min(nCol, MAXCOL);
 }
 
-SAL_WARN_UNUSED_RESULT inline SCROW SanitizeRow( SCROW nRow )
+[[nodiscard]] inline SCROW SanitizeRow( SCROW nRow )
 {
     return nRow < 0 ? 0 : std::min(nRow, MAXROW);
 }
 
-SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab )
+[[nodiscard]] inline SCTAB SanitizeTab( SCTAB nTab )
 {
     return nTab < 0 ? 0 : std::min(nTab, MAXTAB);
 }
@@ -341,7 +341,7 @@ public:
         @param  pDocument
                 The document for the maximum defined sheet number.
      */
-    SAL_WARN_UNUSED_RESULT SC_DLLPUBLIC bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
+    [[nodiscard]] SC_DLLPUBLIC bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
             ScAddress& rErrorPos, const ScDocument* pDocument = nullptr );
 
     inline bool operator==( const ScAddress& rAddress ) const;
@@ -616,11 +616,11 @@ public:
         @param  pDocument
                 The document for the maximum defined sheet number.
      */
-    SAL_WARN_UNUSED_RESULT SC_DLLPUBLIC bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
+    [[nodiscard]] SC_DLLPUBLIC bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange, const ScDocument* pDocument = nullptr );
 
     /** Same as Move() but with sticky end col/row anchors. */
-    SAL_WARN_UNUSED_RESULT SC_DLLPUBLIC bool MoveSticky( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
+    [[nodiscard]] SC_DLLPUBLIC bool MoveSticky( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange );
 
     SC_DLLPUBLIC void IncColIfNotLessThan(SCCOL nStartCol, SCCOL nOffset);
