@@ -1356,21 +1356,30 @@ void WinSalGraphicsImpl::SetLineColor()
 {
     // create and select new pen
     HPEN hNewPen = GetStockPen( NULL_PEN );
-    HPEN hOldPen = SelectPen( mrParent.getHDC(), hNewPen );
 
-    // destroy or save old pen
-    if ( mhPen )
-    {
-        if ( !mbStockPen )
-            DeletePen( mhPen );
-    }
-    else
-        mrParent.mhDefPen = hOldPen;
+    DestroyOrSaveOldPen(hNewPen);
 
     // set new data
     mhPen       = hNewPen;
     mbPen       = FALSE;
     mbStockPen  = TRUE;
+}
+
+void WinSalGraphicsImpl::DestroyOrSaveOldPen(HPEN hNewPen)
+{
+    HPEN hOldPen = SelectPen(mrParent.getHDC(), hNewPen);
+
+    if (mhPen)
+    {
+        if (!mbStockPen)
+        {
+            DeletePen(mhPen);
+        }
+    }
+    else
+    {
+        mrParent.mhDefPen = hOldPen;
+    }
 }
 
 void WinSalGraphicsImpl::SetLineColor( Color nColor )
@@ -1412,16 +1421,7 @@ void WinSalGraphicsImpl::SetLineColor( Color nColor )
     }
 
     // select new pen
-    HPEN hOldPen = SelectPen( mrParent.getHDC(), hNewPen );
-
-    // destroy or save old pen
-    if ( mhPen )
-    {
-        if ( !mbStockPen )
-            DeletePen( mhPen );
-    }
-    else
-        mrParent.mhDefPen = hOldPen;
+    DestroyOrSaveOldPen(hNewPen);
 
     // set new data
     mnPenColor  = nPenColor;
