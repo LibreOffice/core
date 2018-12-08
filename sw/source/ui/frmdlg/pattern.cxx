@@ -29,9 +29,14 @@ SwBackgroundDlg::SwBackgroundDlg(weld::Window* pParent, const SfxItemSet& rSet)
 {
     m_xDialog->set_title(SwResId(STR_FRMUI_PATTERN));
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG );
     if ( fnCreatePage )
-        SetTabPage((*fnCreatePage)(get_content_area(), this, &rSet));
+    {
+        std::unique_ptr<SfxTabPage> xRet = (*fnCreatePage)(get_content_area(), this, &rSet);
+        xRet->PageCreated(rSet);
+        xRet->ActivatePage(rSet);
+        SetTabPage(std::move(xRet));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2591,7 +2591,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         case FN_FORMAT_BACKGROUND_DLG:
         {
             SfxItemSet aSet( rSh.GetAttrPool(),
-                             svl::Items<RES_BACKGROUND, RES_BACKGROUND>{} );
+                             svl::Items<RES_BACKGROUND, RES_BACKGROUND,
+                                        XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
             ScopedVclPtr<SfxAbstractDialog> pDlg;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
