@@ -91,7 +91,7 @@ public:
     const tools::Rectangle&    GetInnerRect() const                    { return aInnerRect; }
     const tools::Rectangle&    GetOuterRect() const                    { return aOuterRect; }
     SfxBindings&        GetBindings() const                     { return *pBindings; }
-    sal_uInt16              GetType() const                         { return pMgr->GetType(); }
+    sal_uInt16          GetType() const                         { return pMgr->GetType(); }
     SfxChildAlignment   GetAlignment() const                    { return pMgr->GetAlignment(); }
     void                SetAlignment(SfxChildAlignment eAlign)  { pMgr->SetAlignment(eAlign); }
     const Size&         GetFloatingSize() const                 { return aFloatSize; }
