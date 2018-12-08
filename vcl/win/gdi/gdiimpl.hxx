@@ -52,6 +52,7 @@ private:
     bool tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
     void drawPixelImpl( long nX, long nY, COLORREF crColor );
 
+    void ResetPen(HPEN hNewPen);
 public:
 
     explicit WinSalGraphicsImpl(WinSalGraphics& rParent);
