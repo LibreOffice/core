@@ -379,7 +379,7 @@ void SidebarController::NotifyResize()
     }
 
     vcl::Window* pParentWindow = mpTabBar->GetParent();
-    sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
+    const sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
 
     const sal_Int32 nWidth (pParentWindow->GetSizePixel().Width());
     const sal_Int32 nHeight (pParentWindow->GetSizePixel().Height());
@@ -411,13 +411,17 @@ void SidebarController::NotifyResize()
         else   // attach the Sidebar towards the right-side of screen
         {
             nDeckX = 0;
-            nTabX = nWidth-nTabBarDefaultWidth;
+            nTabX = nWidth - nTabBarDefaultWidth;
         }
 
         // Place the deck first.
         if (bIsDeckVisible)
         {
-            mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
+            // No TabBar in LOK.
+            if (comphelper::LibreOfficeKit::isActive())
+                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nHeight);
+            else
+                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
             mpCurrentDeck->Show();
             mpCurrentDeck->RequestLayout();
         }
@@ -426,8 +430,8 @@ void SidebarController::NotifyResize()
 
         // Now place the tab bar.
         mpTabBar->setPosSizePixel(nTabX, 0, nTabBarDefaultWidth, nHeight);
-        mpTabBar->Show();
-
+        if (!comphelper::LibreOfficeKit::isActive())
+            mpTabBar->Show(); // Don't show TabBar in LOK.
     }
 
     // Determine if the closer of the deck can be shown.
