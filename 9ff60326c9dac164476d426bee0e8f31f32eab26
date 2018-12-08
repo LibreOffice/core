@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_e2c85f75",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-08T15:46:24Z",
+      "side": 1,
+      "message": "Why Buf? There is no buffer involved. Rather bModified.",
+      "range": {
+        "startLine": 716,
+        "startChar": 9,
+        "endLine": 716,
+        "endChar": 19
+      },
+      "revId": "9ff60326c9dac164476d426bee0e8f31f32eab26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_c2c5635d",
+        "filename": "svx/source/svdraw/svdedxv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-08T15:46:24Z",
+      "side": 1,
+      "message": "Why Buf? There is no buffer involved. Rather bMapModeEnabled.",
+      "range": {
+        "startLine": 747,
+        "startChar": 23,
+        "endLine": 747,
+        "endChar": 27
+      },
+      "revId": "9ff60326c9dac164476d426bee0e8f31f32eab26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
