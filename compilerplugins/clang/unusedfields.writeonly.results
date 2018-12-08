@@ -1,10 +1,10 @@
-basctl/source/basicide/basicbox.hxx:69
-    basctl::DocListenerBox m_aNotifier class basctl::DocumentEventNotifier
+basctl/source/basicide/basicbox.hxx:101
+    basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/bastype2.hxx:183
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
-basctl/source/inc/bastype2.hxx:259
+basctl/source/inc/bastype2.hxx:258
     basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basic/qa/cppunit/test_scanner.cxx:26
     (anonymous namespace)::Symbol line sal_uInt16
@@ -25,7 +25,7 @@ bridges/source/cpp_uno/gcc3_linux_x86-64/cpp2uno.cxx:438
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:115
     __cxxabiv1::__cxa_exception exceptionDestructor void (*)(void *)
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:116
-    __cxxabiv1::__cxa_exception unexpectedHandler std::unexpected_handler
+    __cxxabiv1::__cxa_exception unexpectedHandler void (*)(void)
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:117
     __cxxabiv1::__cxa_exception terminateHandler std::terminate_handler
 bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx:118
@@ -88,18 +88,8 @@ connectivity/source/inc/OTypeInfo.hxx:36
     connectivity::OTypeInfo nMaximumScale sal_Int16
 connectivity/source/inc/OTypeInfo.hxx:38
     connectivity::OTypeInfo nType sal_Int16
-cppcanvas/source/mtfrenderer/emfpbrush.hxx:102
-    cppcanvas::internal::EMFPBrush wrapMode sal_Int32
-cppcanvas/source/mtfrenderer/emfppen.hxx:42
-    cppcanvas::internal::EMFPPen pen_transformation struct cppcanvas::internal::XForm
-cppcanvas/source/mtfrenderer/emfppen.hxx:47
-    cppcanvas::internal::EMFPPen mitterLimit float
-cppcanvas/source/mtfrenderer/emfppen.hxx:49
-    cppcanvas::internal::EMFPPen dashCap sal_Int32
-cppcanvas/source/mtfrenderer/emfppen.hxx:50
-    cppcanvas::internal::EMFPPen dashOffset float
-cppcanvas/source/mtfrenderer/emfppen.hxx:52
-    cppcanvas::internal::EMFPPen alignment sal_Int32
+cppcanvas/source/inc/implrenderer.hxx:254
+    cppcanvas::internal::ImplRenderer aBaseTransform struct cppcanvas::internal::XForm
 cppu/source/uno/check.cxx:38
     (anonymous namespace)::C1 n1 sal_Int16
 cppu/source/uno/check.cxx:67
@@ -154,16 +144,16 @@ cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:288
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
-desktop/qa/desktop_lib/test_desktop_lib.cxx:186
+desktop/qa/desktop_lib/test_desktop_lib.cxx:188
     DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:370
-     functions unsigned long
+     flags unsigned long
 desktop/unx/source/splashx.c:370
      decorations unsigned long
 desktop/unx/source/splashx.c:370
-     flags unsigned long
+     functions unsigned long
 desktop/unx/source/splashx.c:371
      input_mode long
 drawinglayer/source/attribute/sdrfillgraphicattribute.cxx:44
@@ -220,7 +210,7 @@ framework/inc/services/layoutmanager.hxx:258
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:285
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
-i18nutil/source/utility/paper.cxx:298
+i18nutil/source/utility/paper.cxx:303
     paperword string char *
 include/basic/basmgr.hxx:52
     BasicError nReason enum BasicErrorReason
@@ -235,15 +225,15 @@ include/canvas/rendering/irendermodule.hxx:40
 include/canvas/rendering/irendermodule.hxx:40
     canvas::Vertex g float
 include/canvas/rendering/irendermodule.hxx:41
-    canvas::Vertex u float
-include/canvas/rendering/irendermodule.hxx:41
     canvas::Vertex v float
+include/canvas/rendering/irendermodule.hxx:41
+    canvas::Vertex u float
 include/canvas/rendering/irendermodule.hxx:42
-    canvas::Vertex y float
+    canvas::Vertex z float
 include/canvas/rendering/irendermodule.hxx:42
     canvas::Vertex x float
 include/canvas/rendering/irendermodule.hxx:42
-    canvas::Vertex z float
+    canvas::Vertex y float
 include/drawinglayer/attribute/sdrallattribute3d.hxx:44
     drawinglayer::attribute::SdrLineFillShadowAttribute3D maLineStartEnd const class drawinglayer::attribute::SdrLineStartEndAttribute
 include/drawinglayer/primitive2d/mediaprimitive2d.hxx:51
@@ -287,12 +277,12 @@ include/svx/imapdlg.hxx:118
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
 include/svx/viewpt3d.hxx:62
-    Viewport3D::(anonymous) X double
-include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) H double
 include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) Y double
-include/vcl/opengl/OpenGLContext.hxx:41
+include/svx/viewpt3d.hxx:62
+    Viewport3D::(anonymous) X double
+include/vcl/opengl/OpenGLContext.hxx:35
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:446
     ToolbarValue mbIsTopDockingArea _Bool
@@ -302,13 +292,13 @@ include/vcl/salnativewidgets.hxx:512
     PushButtonValue mbSingleLine _Bool
 include/vcl/textrectinfo.hxx:31
     TextRectInfo mnLineCount sal_uInt16
-include/vcl/vclenum.hxx:197
+include/vcl/vclenum.hxx:199
     ItalicMatrix xy double
-include/vcl/vclenum.hxx:197
+include/vcl/vclenum.hxx:199
     ItalicMatrix yx double
-include/vcl/vclenum.hxx:197
+include/vcl/vclenum.hxx:199
     ItalicMatrix yy double
-include/vcl/vclenum.hxx:197
+include/vcl/vclenum.hxx:199
     ItalicMatrix xx double
 include/xmloff/shapeimport.hxx:180
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
@@ -331,9 +321,9 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
 package/inc/ByteChucker.hxx:38
-    ByteChucker p2Sequence sal_Int8 *const
-package/inc/ByteChucker.hxx:38
     ByteChucker p4Sequence sal_Int8 *const
+package/inc/ByteChucker.hxx:38
+    ByteChucker p2Sequence sal_Int8 *const
 registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflread.cxx:467
@@ -349,16 +339,16 @@ sal/qa/osl/file/osl_File.cxx:2426
 sal/qa/osl/file/osl_File.cxx:2898
     osl_File::write nCount_read sal_uInt64
 sal/qa/osl/file/osl_File.cxx:4156
-    osl_Directory::isOpen nError1 osl::class FileBase::RC
-sal/qa/osl/file/osl_File.cxx:4156
     osl_Directory::isOpen nError2 osl::class FileBase::RC
+sal/qa/osl/file/osl_File.cxx:4156
+    osl_Directory::isOpen nError1 osl::class FileBase::RC
 sal/qa/osl/file/osl_File.cxx:4214
     osl_Directory::close nError2 osl::class FileBase::RC
 sal/rtl/alloc_arena.hxx:35
     rtl_arena_stat_type m_mem_total sal_Size
 sal/rtl/alloc_arena.hxx:36
     rtl_arena_stat_type m_mem_alloc sal_Size
-sal/rtl/math.cxx:1005
+sal/rtl/math.cxx:1015
      md union sal_math_Double
 sal/textenc/tcvtutf7.cxx:96
     ImplUTF7ToUCContextData mbShifted _Bool
@@ -382,7 +372,7 @@ sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2533
+sc/inc/document.hxx:2536
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/interpretercontext.hxx:39
     ScInterpreterContext mpDoc const class ScDocument *
@@ -637,7 +627,7 @@ vcl/inc/WidgetThemeLibrary.hxx:20
 vcl/inc/WidgetThemeLibrary.hxx:91
     vcl::ControlDrawParameters eButtonValue enum ButtonValue
 vcl/inc/WidgetThemeLibrary.hxx:92
-    vcl::ControlDrawParameters bIsStock _Bool
+    vcl::ControlDrawParameters bIsAction _Bool
 vcl/inc/WidgetThemeLibrary.hxx:93
     vcl::ControlDrawParameters nValue int64_t
 vcl/opengl/salbmp.cxx:441
@@ -650,16 +640,16 @@ vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
 vcl/source/filter/jpeg/Exif.hxx:57
     Exif::ExifIFD count sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:180
-    vcl::PDFWriterImpl::BitmapID m_nChecksum BitmapChecksum
 vcl/source/gdi/pdfwriter_impl.hxx:181
+    vcl::PDFWriterImpl::BitmapID m_nChecksum BitmapChecksum
+vcl/source/gdi/pdfwriter_impl.hxx:182
     vcl::PDFWriterImpl::BitmapID m_nMaskChecksum BitmapChecksum
 vcl/unx/generic/app/wmadaptor.cxx:1268
     _mwmhints deco unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1268
-    _mwmhints func unsigned long
-vcl/unx/generic/app/wmadaptor.cxx:1268
     _mwmhints flags unsigned long
+vcl/unx/generic/app/wmadaptor.cxx:1268
+    _mwmhints func unsigned long
 vcl/unx/generic/app/wmadaptor.cxx:1269
     _mwmhints input_mode long
 vcl/unx/generic/app/wmadaptor.cxx:1270
@@ -672,6 +662,8 @@ vcl/unx/generic/gdi/cairotextrender.cxx:57
     (anonymous namespace)::CairoFontsCache::CacheId mbVerticalMetrics _Bool
 vcl/unx/gtk3/gtk3gtkinst.cxx:1155
      in char *
+vcl/unx/gtk3/gtk3gtkinst.cxx:1205
+    GtkInstanceWidget m_nKeyReleaseSignalId gulong
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
 vcl/unx/gtk/a11y/atkwrapper.hxx:80

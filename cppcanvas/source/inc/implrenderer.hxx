@@ -128,12 +128,6 @@ namespace cppcanvas
         };
 
         // EMF+
-        typedef struct {
-            XForm aWorldTransform;
-            OutDevState aDevState;
-        } EmfPlusGraphicState;
-
-        typedef std::map<int,EmfPlusGraphicState> GraphicStateMap;
 
         class ImplRenderer : public virtual Renderer, protected CanvasGraphicHelper
         {
@@ -224,7 +218,6 @@ namespace cppcanvas
 
             /* EMF+ */
             XForm           aBaseTransform;
-            XForm           aWorldTransform;
             std::unique_ptr<EMFPObject> aObjects [256];
             /* EMF+ emf header info */
             sal_Int32       nFrameLeft;
@@ -235,11 +228,6 @@ namespace cppcanvas
             sal_Int32       nPixY;
             sal_Int32       nMmX;
             sal_Int32       nMmY;
-            /* multipart object data */
-            SvMemoryStream  mMStream;
-            /* emf+ graphic state stack */
-            GraphicStateMap mGSStack;
-            GraphicStateMap mGSContainerStack;
         };
 
 

@@ -53,7 +53,6 @@ public:
 private:
     PaletteManager          m_aPaletteManager;
     Color                   m_aTabBgColor;
-    const OUString          m_aTabBgColorNoColorText;
 
     std::unique_ptr<weld::ComboBox> m_xSelectPalette;
     std::unique_ptr<ScTabBgColorValueSet> m_xTabBgColorSet;

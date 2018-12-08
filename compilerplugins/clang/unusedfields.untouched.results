@@ -44,10 +44,38 @@ connectivity/source/drivers/evoab2/NStatement.hxx:57
     connectivity::evoab::FieldSort bAscending _Bool
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
+cppcanvas/source/inc/implrenderer.hxx:158
+    cppcanvas::internal::(anonymous) aWorldTransform struct cppcanvas::internal::XForm
+cppcanvas/source/inc/implrenderer.hxx:159
+    cppcanvas::internal::(anonymous) aDevState struct cppcanvas::internal::OutDevState
+cppcanvas/source/inc/implrenderer.hxx:255
+    cppcanvas::internal::ImplRenderer aWorldTransform struct cppcanvas::internal::XForm
+cppcanvas/source/inc/implrenderer.hxx:257
+    cppcanvas::internal::ImplRenderer fPageScale float
+cppcanvas/source/inc/implrenderer.hxx:258
+    cppcanvas::internal::ImplRenderer nOriginX sal_Int32
+cppcanvas/source/inc/implrenderer.hxx:259
+    cppcanvas::internal::ImplRenderer nOriginY sal_Int32
+cppcanvas/source/inc/implrenderer.hxx:260
+    cppcanvas::internal::ImplRenderer nHDPI sal_Int32
+cppcanvas/source/inc/implrenderer.hxx:261
+    cppcanvas::internal::ImplRenderer nVDPI sal_Int32
+cppcanvas/source/inc/implrenderer.hxx:272
+    cppcanvas::internal::ImplRenderer mbMultipart _Bool
+cppcanvas/source/inc/implrenderer.hxx:273
+    cppcanvas::internal::ImplRenderer mMFlags sal_uInt16
+cppcanvas/source/inc/implrenderer.hxx:274
+    cppcanvas::internal::ImplRenderer mMStream class SvMemoryStream
+cppcanvas/source/inc/implrenderer.hxx:276
+    cppcanvas::internal::ImplRenderer mGSStack cppcanvas::internal::GraphicStateMap
+cppcanvas/source/inc/implrenderer.hxx:277
+    cppcanvas::internal::ImplRenderer mGSContainerStack cppcanvas::internal::GraphicStateMap
 cppu/source/threadpool/threadpool.cxx:355
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:59
     AlignSize_Impl nInt16 sal_Int16
+cui/source/customize/cfgutil.cxx:447
+    CuiConfigGroupBoxResource_Impl m_sMacros class rtl::OUString
 cui/source/dialogs/colorpicker.cxx:714
     cui::ColorPickerDialog m_xColorField std::unique_ptr<weld::CustomWeld>
 cui/source/dialogs/colorpicker.cxx:716
@@ -66,7 +94,7 @@ cui/source/inc/cuicharmap.hxx:103
     SvxCharacterMap m_xShowSetArea std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuicharmap.hxx:105
     SvxCharacterMap m_xSearchSetArea std::unique_ptr<weld::CustomWeld>
-cui/source/inc/cuigaldlg.hxx:252
+cui/source/inc/cuigaldlg.hxx:251
     TPGalleryThemeProperties m_xWndPreview std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuigrfflt.hxx:79
     GraphicFilterDialog mxPreview std::unique_ptr<weld::CustomWeld>
@@ -116,7 +144,7 @@ dbaccess/source/ui/dlg/detailpages.hxx:69
     dbaui::OCommonBehaviourTabPage m_xAutoRetrievingLabel std::unique_ptr<weld::Label>
 dbaccess/source/ui/dlg/detailpages.hxx:70
     dbaui::OCommonBehaviourTabPage m_xAutoRetrieving std::unique_ptr<weld::Entry>
-emfio/source/emfuno/xemfparser.cxx:60
+emfio/source/emfuno/xemfparser.cxx:61
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:44
     ScannerManager maProtector osl::Mutex
@@ -175,9 +203,9 @@ include/sfx2/msg.hxx:135
 include/sfx2/msg.hxx:135
     SfxType4 nAttribs sal_uInt16
 include/sfx2/msg.hxx:135
-    SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:135
     SfxType4 pType const std::type_info *
+include/sfx2/msg.hxx:135
+    SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:136
     SfxType5 aAttrib struct SfxTypeAttrib [5]
 include/sfx2/msg.hxx:136
@@ -219,9 +247,9 @@ include/sfx2/msg.hxx:140
 include/sfx2/msg.hxx:140
     SfxType10 aAttrib struct SfxTypeAttrib [10]
 include/sfx2/msg.hxx:141
-    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:141
     SfxType11 nAttribs sal_uInt16
+include/sfx2/msg.hxx:141
+    SfxType11 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:141
     SfxType11 pType const std::type_info *
 include/sfx2/msg.hxx:141
@@ -392,6 +420,12 @@ sal/qa/osl/security/osl_Security.cxx:157
     osl_Security::getUserName bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:191
     osl_Security::getConfigDir bRes1 _Bool
+sc/inc/xmlwrap.hxx:102
+    ScXMLChartExportWrapper mxModel css::uno::Reference<css::frame::XModel>
+sc/inc/xmlwrap.hxx:103
+    ScXMLChartExportWrapper mxStorage css::uno::Reference<css::embed::XStorage>
+sc/inc/xmlwrap.hxx:104
+    ScXMLChartExportWrapper mrMedium class SfxMedium &
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
 sc/source/core/data/document.cxx:1225
@@ -408,7 +442,7 @@ sc/source/ui/inc/crdlg.hxx:32
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
 sc/source/ui/inc/delcodlg.hxx:39
     ScDeleteContentsDlg m_xBtnOk std::unique_ptr<weld::Button>
-sc/source/ui/inc/docsh.hxx:456
+sc/source/ui/inc/docsh.hxx:454
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/instbdlg.hxx:66
     ScInsertTableDlg m_xBtnBehind std::unique_ptr<weld::RadioButton>
@@ -446,7 +480,7 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:64
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:104
     sd::TableDesignPane aImpl const class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1313
+sd/source/ui/view/DocumentRenderer.cxx:1297
     sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1208
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -459,9 +493,9 @@ sd/source/ui/view/viewshel.cxx:1211
 sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
-    PDFGrammar::definition value rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     PDFGrammar::definition array rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
+    PDFGrammar::definition value rule<ScannerT>
 sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
@@ -512,8 +546,6 @@ svl/source/crypto/cryptosign.cxx:283
     (anonymous namespace)::(anonymous) statusString SECItem
 svl/source/crypto/cryptosign.cxx:284
     (anonymous namespace)::(anonymous) failInfo SECItem
-svtools/source/contnr/contentenumeration.hxx:177
-    svt::FileViewContentEnumerator m_xDocProps css::uno::Reference<css::document::XDocumentProperties>
 svtools/source/filter/exportdialog.hxx:125
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
 svx/source/inc/datanavi.hxx:604
@@ -586,7 +618,7 @@ uui/source/unknownauthdlg.hxx:36
     UnknownAuthDialog m_xOptionButtonDontAccept std::unique_ptr<weld::RadioButton>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone const class OpenGLZone
-vcl/inc/salprn.hxx:44
+vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
 vcl/inc/WidgetThemeLibrary.hxx:87
     vcl::ControlDrawParameters nSize uint32_t
@@ -598,7 +630,7 @@ vcl/inc/WidgetThemeLibrary.hxx:90
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:106
     vcl::WidgetThemeLibrary_t nSize uint32_t
-vcl/source/app/salvtables.cxx:622
+vcl/source/app/salvtables.cxx:667
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
@@ -610,7 +642,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2637
+vcl/unx/gtk3/gtk3gtkinst.cxx:2709
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink
