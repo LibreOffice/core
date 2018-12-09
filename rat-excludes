@@ -731,6 +731,7 @@ main/odk/examples/OLE/vbscript/WriterDemo.vbs
 #
 
 main/accessibility/bridge/org/openoffice/accessibility/manifest
+main/accessibility/java/java_uno_accessbridge/manifest
 main/accessibility/prj/l10n
 main/accessibility/workben/TODO
 main/accessibility/workben/org/openoffice/accessibility/awb/manifest
@@ -741,7 +742,7 @@ main/avmedia/source/java/manifest
 main/bean/util/delzip
 main/binfilter/no_localization
 main/binfilter/prj/l10n
-main/bridges/source/jni_uno/java/com/sun/star/bridges/jni_uno/manifest
+main/bridges/java/java_uno/manifest
 main/cairo/cairo/dummy_pkg_config
 main/cli_ure/source/basetypes/cli_basetypes_config
 main/cli_ure/source/native/cli_cppuhelper_config
