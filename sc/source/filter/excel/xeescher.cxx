@@ -27,25 +27,19 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
-#include <com/sun/star/script/ScriptEventDescriptor.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
 #include <set>
-#include <rtl/ustrbuf.h>
 #include <vcl/bitmapaccess.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
 #include <o3tl/make_unique.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/embedhlp.hxx>
 
-#include <editutil.hxx>
 #include <unonames.hxx>
 #include <convuno.hxx>
 #include <postit.hxx>
@@ -64,18 +58,9 @@
 #include <drwlayer.hxx>
 #include <svl/itemset.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/algitem.hxx>
-#include <scitems.hxx>
-#include <editeng/justifyitem.hxx>
 #include <svx/sdtaitm.hxx>
-#include <attrib.hxx>
 #include <document.hxx>
-#include <svx/svdattr.hxx>
-#include <svx/sdr/properties/properties.hxx>
-#include <detfunc.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnstit.hxx>
 
 #include <oox/token/tokens.hxx>
 #include <oox/token/relationship.hxx>
@@ -100,7 +85,6 @@ using ::com::sun::star::form::binding::XListEntrySink;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::chart2::XChartDocument;
 using ::oox::drawingml::DrawingML;
 using ::oox::drawingml::ChartExport;
 using namespace oox;

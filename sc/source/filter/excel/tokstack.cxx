@@ -18,8 +18,6 @@
  */
 
 #include <tokstack.hxx>
-#include <compiler.hxx>
-#include <global.hxx>
 #include <scmatrix.hxx>
 
 #include <svl/sharedstringpool.hxx>

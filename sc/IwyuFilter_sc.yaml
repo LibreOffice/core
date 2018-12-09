@@ -392,9 +392,19 @@ blacklist:
     sc/source/filter/inc/xerecord.hxx:
     # Needed for member access
     - xestream.hxx
+    sc/source/filter/inc/xetable.hxx:
+    # Needed for typedef
+    - class XclExpNote
+    sc/source/filter/inc/xilink.hxx:
+    # Needed for typedef
+    - class XclImpCachedMatrix
+    - class ScTokenArray
     sc/source/filter/inc/xistream.hxx:
     # Needed for implicit dtor
     - com/sun/star/beans/NamedValue.hpp
+    sc/source/filter/inc/xlpage.hxx:
+    # Needed for typedef
+    - class SvxBrushItem
     sc/source/ui/inc/AccessibleContextBase.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleComponent.hpp
@@ -649,3 +659,26 @@ blacklist:
     sc/source/filter/xml/xmldrani.hxx:
     # Complex type needs complete type
     - com/sun/star/beans/PropertyValue.hpp
+    sc/source/filter/excel/excimp8.cxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XIndexContainer.hpp
+    sc/source/filter/excel/xechart.cxx:
+    # Complex type needs complete type
+    - com/sun/star/chart2/RelativePosition.hpp
+    - com/sun/star/chart2/RelativeSize.hpp
+    sc/source/filter/excel/xeescher.cxx:
+    # base class has to be a complete type
+    - com/sun/star/chart/XChartDocument.hpp
+    sc/source/filter/excel/xeroot.cxx:
+    # Complex type needs complete type
+    - com/sun/star/sheet/FormulaOpCodeMapEntry.hpp
+    sc/source/filter/excel/xicontent.cxx:
+    # Needed for implicit dtor
+    - editeng/editobj.hxx
+    sc/source/filter/excel/xiescher.cxx:
+    # Needed for implicit dtor
+    - editeng/editobj.hxx
+    - com/sun/star/form/XForm.hpp
+    sc/source/filter/excel/xistyle.cxx:
+    # Needed for direct member access
+    - xladdress.hxx

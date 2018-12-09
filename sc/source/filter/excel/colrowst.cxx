@@ -19,15 +19,10 @@
 
 #include <colrowst.hxx>
 
-#include <string.h>
-
 #include <document.hxx>
-#include <root.hxx>
 #include <ftools.hxx>
 #include <xltable.hxx>
-#include <xistream.hxx>
 #include <xistyle.hxx>
-#include <queryparam.hxx>
 #include <excimp8.hxx>
 #include <table.hxx>
 

@@ -18,31 +18,22 @@
  */
 
 #include <sfx2/docfile.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <filter/msfilter/classids.hxx>
 #include <tools/globname.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <scitems.hxx>
-#include <svl/stritem.hxx>
 #include <unotools/streamwrap.hxx>
 #include <filter.hxx>
 #include <document.hxx>
-#include <optuno.hxx>
 #include <xistream.hxx>
 #include <xltools.hxx>
+#include <docoptio.hxx>
 
 #include <docsh.hxx>
 #include <scerrors.hxx>
-#include <root.hxx>
 #include <imp_op.hxx>
 #include <excimp8.hxx>
 #include <exp_op.hxx>

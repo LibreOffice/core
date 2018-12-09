@@ -20,24 +20,14 @@
 #include <lotfntbf.hxx>
 
 #include <scitems.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/shdditem.hxx>
-#include <editeng/escapementitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <osl/diagnose.h>
-#include <sfx2/printer.hxx>
 #include <o3tl/make_unique.hxx>
+#include <svl/itemset.hxx>
 
-#include <attrib.hxx>
-#include <document.hxx>
 #include <global.hxx>
-#include <docpool.hxx>
-#include <patattr.hxx>
-#include <ftools.hxx>
 
 void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
 {

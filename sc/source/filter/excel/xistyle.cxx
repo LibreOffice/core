@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <xistyle.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/ctrltool.hxx>
 #include <editeng/editobj.hxx>
@@ -54,7 +53,6 @@
 #include <patattr.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
-#include <formulacell.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <attarray.hxx>
@@ -67,7 +65,6 @@
 
 #include <root.hxx>
 #include <colrowst.hxx>
-#include <svl/poolcach.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <vector>

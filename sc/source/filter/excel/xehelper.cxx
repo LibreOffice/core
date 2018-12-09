@@ -38,7 +38,6 @@
 
 #include <document.hxx>
 #include <docpool.hxx>
-#include <formulacell.hxx>
 #include <editutil.hxx>
 #include <patattr.hxx>
 #include <scmatrix.hxx>

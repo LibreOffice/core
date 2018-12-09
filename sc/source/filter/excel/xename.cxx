@@ -24,10 +24,8 @@
 #include <document.hxx>
 #include <rangenam.hxx>
 #include <tokenarray.hxx>
-#include <dbdata.hxx>
 #include <xehelper.hxx>
 #include <xelink.hxx>
-#include <globalnames.hxx>
 #include <excrecds.hxx>
 #include <xlname.hxx>
 #include <xeformula.hxx>
@@ -106,9 +104,6 @@ private:
     sal_uInt16          mnExtSheet;     /// The 1-based index to a global EXTERNSHEET record.
     sal_uInt16          mnXclTab;       /// The 1-based Excel sheet index for local names.
 };
-
-class ScRangeData;
-class ScDBData;
 
 /** Implementation class of the name manager. */
 class XclExpNameManagerImpl : protected XclExpRoot

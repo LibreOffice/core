@@ -19,16 +19,11 @@
 
 #include <xlpage.hxx>
 #include <xltools.hxx>
-#include <sfx2/printer.hxx>
-#include <editeng/svxenum.hxx>
 #include <editeng/paperinf.hxx>
-#include <vcl/svapp.hxx>
 #include <sal/macros.h>
-#include <scitems.hxx>
 #include <editeng/brushitem.hxx>
 #include <global.hxx>
 #include <xlconst.hxx>
-#include <oox/core/xmlfilterbase.hxx>
 
 namespace{
 

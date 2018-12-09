@@ -25,7 +25,6 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <o3tl/make_unique.hxx>
 

@@ -7,22 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "xltoolbar.hxx"
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <stdarg.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
-#include <fstream>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <vcl/graph.hxx>
 #include <map>
 
 using namespace com::sun::star;

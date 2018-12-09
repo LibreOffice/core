@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <xlroot.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -31,7 +30,6 @@
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <vcl/font.hxx>

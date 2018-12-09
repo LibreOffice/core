@@ -85,13 +85,10 @@
 
 #include <document.hxx>
 #include <drwlayer.hxx>
-#include <rangeutl.hxx>
 #include <tokenarray.hxx>
-#include <token.hxx>
 #include <compiler.hxx>
 #include <reftokenhelper.hxx>
 #include <chartlis.hxx>
-#include <fprogressbar.hxx>
 #include <xltracer.hxx>
 #include <xltools.hxx>
 #include <xistream.hxx>

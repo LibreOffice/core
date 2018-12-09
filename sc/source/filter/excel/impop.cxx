@@ -23,17 +23,8 @@
 #include <filter/msfilter/countryid.hxx>
 
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 
-#include <editeng/editdata.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/flditem.hxx>
-#include <editeng/colritem.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/pageitem.hxx>
 #include <svx/svxids.hrc>
 #include <svl/zforlist.hxx>
 #include <unotools/configmgr.hxx>
@@ -45,52 +36,36 @@
 
 #include <formulacell.hxx>
 #include <document.hxx>
-#include <rangenam.hxx>
-#include <compiler.hxx>
-#include <patattr.hxx>
-#include <attrib.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <global.hxx>
-#include <markdata.hxx>
 #include <olinetab.hxx>
-#include <stlsheet.hxx>
 #include <stlpool.hxx>
 #include <viewopti.hxx>
 #include <docoptio.hxx>
 #include <scextopt.hxx>
-#include <editutil.hxx>
-#include <filtopt.hxx>
-#include <scerrors.hxx>
 #include <unonames.hxx>
 #include <paramisc.hxx>
-#include <postit.hxx>
 #include <colrowst.hxx>
 #include <otlnbuff.hxx>
 #include <xistyle.hxx>
 
-#include <fapihelper.hxx>
 #include <namebuff.hxx>
 #include <xltools.hxx>
 #include <xltable.hxx>
-#include <xlview.hxx>
 #include <xltracer.hxx>
 #include <xihelper.hxx>
 #include <xipage.hxx>
 #include <xiview.hxx>
-#include <xilink.hxx>
 #include <xiescher.hxx>
 #include <xicontent.hxx>
 
-#include <excimp8.hxx>
 #include <excform.hxx>
 #include <documentimport.hxx>
 #include <o3tl/make_unique.hxx>
 
 #if defined(_WIN32)
 #include <math.h>
-#else
-#include <stdlib.h>
 #endif
 
 using namespace ::com::sun::star;

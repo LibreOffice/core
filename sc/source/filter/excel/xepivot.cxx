@@ -30,9 +30,7 @@
 #include <algorithm>
 #include <math.h>
 
-#include <rtl/math.hxx>
-#include <tools/date.hxx>
-#include <svl/zformat.hxx>
+#include <osl/diagnose.h>
 #include <sot/storage.hxx>
 #include <document.hxx>
 #include <dpcache.hxx>
@@ -43,7 +41,6 @@
 #include <dpshttab.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <fapihelper.hxx>
 #include <xestring.hxx>
 #include <xelink.hxx>
 #include <dputil.hxx>
