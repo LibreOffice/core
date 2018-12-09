@@ -22,6 +22,30 @@
       "revId": "719f0959c607f7281a6643119c5827cbc4284bf1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_7d09b2db",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2018-12-09T13:33:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f4e5783_6240ef08",
+      "range": {
+        "startLine": 1360,
+        "startChar": 4,
+        "endLine": 1360,
+        "endChar": 22
+      },
+      "revId": "719f0959c607f7281a6643119c5827cbc4284bf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
