@@ -39,13 +39,9 @@ namespace connectivity
             const sal_Int32 nTableIndex {sStatement.indexOf(sTable)};
             if ( nTableIndex>=0 )
             { // we need a table name
-                sal_Int32 nIntoIndex = sStmt.indexOf("INTO ");
-                sStmt = sStmt.copy(nIntoIndex+5);
-                while (sStmt.startsWith(" "))
-                {
-                    sStmt = sStmt.copy(1);
-                }
-                const OUString sTableName = sStmt.getToken(0, ' ');
+                sal_Int32 nIntoIndex = sStmt.indexOf("INTO ") + 5;
+                while (nIntoIndex<sStmt.getLength() && sStmt[nIntoIndex]==' ') ++nIntoIndex;
+                const OUString sTableName = sStmt.getToken(0, ' ', nIntoIndex);
                 sStatement = sStatement.replaceAt(nTableIndex, strlen(sTable), sTableName);
             }
         }
