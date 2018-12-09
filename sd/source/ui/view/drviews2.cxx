@@ -3208,7 +3208,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else if (nSId == SID_MASTER_SLIDES_PANEL)
                 panelId = "SdAllMasterPagesPanel";
 
-            ::sfx2::sidebar::Sidebar::ShowPanel(
+            ::sfx2::sidebar::Sidebar::TogglePanel(
                 panelId,
                 GetViewFrame()->GetFrame().GetFrameInterface());
 
