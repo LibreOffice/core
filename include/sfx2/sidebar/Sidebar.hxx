@@ -41,6 +41,16 @@ public:
         const OUString& rsPanelId,
         const css::uno::Reference<css::frame::XFrame>& rxFrame, bool bFocus = false);
 
+    /** Switch to the deck that contains the specified panel and toggle
+        the visibility of the panel (expanded and scrolled into the
+        visible area when visible)
+        Note that most of the work is done asynchronously and that
+        this function probably returns before the requested panel is visible.
+    */
+    static void TogglePanel (
+        const OUString& rsPanelId,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
     static bool IsPanelVisible(
         const OUString& rsPanelId,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
