@@ -52,7 +52,10 @@ private:
     bool tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
     void drawPixelImpl( long nX, long nY, COLORREF crColor );
 
+    HPEN SearchStockPen(COLORREF nPenColor);
+    HPEN MakePen(Color nColor, COLORREF nPenColor);
     void ResetPen(HPEN hNewPen);
+
     void ResetBrush(HBRUSH hNewBrush);
 public:
 
