@@ -18,7 +18,6 @@
  */
 
 #include <xlview.hxx>
-#include <ftools.hxx>
 #include <osl/diagnose.h>
 
 // Structs ====================================================================

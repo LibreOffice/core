@@ -20,15 +20,12 @@
 #include <namebuff.hxx>
 
 #include <document.hxx>
-#include <compiler.hxx>
 #include <scextopt.hxx>
+#include <tokenarray.hxx>
 
 #include <root.hxx>
-#include <tokstack.hxx>
-#include <xltools.hxx>
 #include <xiroot.hxx>
 
-#include <string.h>
 #include <osl/diagnose.h>
 
 sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )

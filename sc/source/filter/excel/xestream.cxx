@@ -29,6 +29,7 @@
 #include <sax/fshelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sot/storage.hxx>
+#include <tools/urlobj.hxx>
 
 #include <docuno.hxx>
 #include <xestream.hxx>
@@ -36,7 +37,6 @@
 #include <xlstring.hxx>
 #include <xltools.hxx>
 #include <xeroot.hxx>
-#include <xestyle.hxx>
 #include <xcl97rec.hxx>
 #include <rangelst.hxx>
 #include <compiler.hxx>
@@ -54,14 +54,10 @@
 
 #include <oox/token/tokens.hxx>
 #include <oox/token/relationship.hxx>
+#include <oox/export/utils.hxx>
 #include <formula/grammar.hxx>
-#include <oox/export/drawingml.hxx>
 #include <oox/ole/vbaexport.hxx>
 #include <excelvbaproject.hxx>
-
-#include <sfx2/docfile.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/app.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <memory>

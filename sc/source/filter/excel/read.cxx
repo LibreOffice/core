@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
-
 #include <document.hxx>
 #include <scerrors.hxx>
 #include <fprogressbar.hxx>

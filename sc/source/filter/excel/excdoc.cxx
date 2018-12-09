@@ -17,49 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
-
-#include <svx/svdobj.hxx>
-#include <svx/svditer.hxx>
-#include <svx/svdpage.hxx>
-#include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/zformat.hxx>
-#include <sot/storage.hxx>
 #include <sfx2/objsh.hxx>
 #include <rtl/ustring.hxx>
 
-#include <formulacell.hxx>
-#include <dociter.hxx>
 #include <document.hxx>
-#include <dbdata.hxx>
-#include <global.hxx>
-#include <progress.hxx>
-#include <conditio.hxx>
-#include <dpobject.hxx>
-#include <attrib.hxx>
 #include <scextopt.hxx>
-#include <stlsheet.hxx>
-#include <stlpool.hxx>
-#include <olinetab.hxx>
-#include <unonames.hxx>
-#include <convuno.hxx>
-#include <patattr.hxx>
 #include <docoptio.hxx>
 #include <tabprotection.hxx>
 #include <postit.hxx>
+#include <root.hxx>
 
 #include <excdoc.hxx>
-#include <namebuff.hxx>
 #include <xeextlst.hxx>
 #include <biffhelper.hxx>
 
 #include <xcl97rec.hxx>
-#include <xcl97esc.hxx>
 #include <xetable.hxx>
 #include <xelink.hxx>
-#include <xename.hxx>
 #include <xepage.hxx>
 #include <xeview.hxx>
 #include <xecontent.hxx>
@@ -73,9 +47,6 @@
 #include <xllink.hxx>
 #include <xltools.hxx>
 
-#include <math.h>
-
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>

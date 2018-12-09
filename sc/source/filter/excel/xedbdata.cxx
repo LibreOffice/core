@@ -9,7 +9,6 @@
 
 #include <xedbdata.hxx>
 #include <excrecds.hxx>
-#include <xltools.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>
 #include <oox/export/utils.hxx>
