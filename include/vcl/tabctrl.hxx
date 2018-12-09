@@ -110,7 +110,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
     virtual void        ActivatePage();
-    virtual bool        DeactivatePage();
+    bool                DeactivatePage();
 
     virtual Size GetOptimalSize() const override;
 

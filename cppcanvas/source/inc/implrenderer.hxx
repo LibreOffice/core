@@ -64,11 +64,6 @@ namespace cppcanvas
         struct ActionFactoryParameters;
         struct XForm;
 
-        struct EMFPObject
-        {
-            virtual ~EMFPObject() {}
-        };
-
         // state stack of OutputDevice, to correctly handle
         // push/pop actions
         class VectorOfOutDevStates
@@ -218,7 +213,6 @@ namespace cppcanvas
 
             /* EMF+ */
             XForm           aBaseTransform;
-            std::unique_ptr<EMFPObject> aObjects [256];
             /* EMF+ emf header info */
             sal_Int32       nFrameLeft;
             sal_Int32       nFrameTop;
