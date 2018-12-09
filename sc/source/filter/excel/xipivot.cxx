@@ -26,7 +26,6 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 
 #include <tools/datetime.hxx>
-#include <svl/zformat.hxx>
 #include <svl/intitem.hxx>
 #include <sal/log.hxx>
 #include <sot/storage.hxx>
@@ -49,7 +48,6 @@
 
 //TODO ExcelToSc usage
 #include <excform.hxx>
-#include <xltable.hxx>
 #include <documentimport.hxx>
 
 #include <vector>

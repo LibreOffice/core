@@ -34,11 +34,9 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <sal/macros.h>
-#include <rtl/math.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -47,8 +45,6 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/unomid.hxx>
 #include <filter/msfilter/escherex.hxx>
-#include <editeng/memberids.h>
-#include <global.hxx>
 #include <xlroot.hxx>
 #include <xlstyle.hxx>
 #include <xltools.hxx>

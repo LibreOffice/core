@@ -26,84 +26,38 @@
 #include <comphelper/sequence.hxx>
 #include <unotools/fltrcfg.hxx>
 
-#include <vcl/wmf.hxx>
-
-#include <editeng/eeitem.hxx>
-
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/docinf.hxx>
-#include <sfx2/frame.hxx>
-
-#include <editeng/brushitem.hxx>
-#include <editeng/editdata.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/flditem.hxx>
-#include <svx/xflclit.hxx>
-
-#include <vcl/graph.hxx>
-#include <vcl/bitmapaccess.hxx>
-#include <sot/exchange.hxx>
 #include <sot/storage.hxx>
-
-#include <svl/stritem.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/charclass.hxx>
-#include <drwlayer.hxx>
 
-#include <formulacell.hxx>
 #include <document.hxx>
-#include <patattr.hxx>
-#include <docpool.hxx>
 #include <attrib.hxx>
-#include <conditio.hxx>
 #include <dbdata.hxx>
 #include <globalnames.hxx>
-#include <editutil.hxx>
-#include <markdata.hxx>
-#include <rangenam.hxx>
 #include <docoptio.hxx>
-#include <fprogressbar.hxx>
-#include <xltracer.hxx>
 #include <xihelper.hxx>
-#include <xipage.hxx>
 #include <xicontent.hxx>
 #include <xilink.hxx>
 #include <xiescher.hxx>
-#include <xipivot.hxx>
 #include <xistyle.hxx>
 #include <excdefs.hxx>
 
 #include <excform.hxx>
-#include <scextopt.hxx>
-#include <stlpool.hxx>
-#include <stlsheet.hxx>
-#include <detfunc.hxx>
-#include <macromgr.hxx>
 #include <queryentry.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implbase.hxx>
 #include "xltoolbar.hxx"
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
-#include <unotools/streamwrap.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;

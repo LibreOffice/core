@@ -21,8 +21,6 @@
 
 #include <formulacell.hxx>
 #include <document.hxx>
-#include <rangenam.hxx>
-#include <global.hxx>
 #include <scmatrix.hxx>
 
 #include <formula/errorcodes.hxx>
@@ -34,7 +32,6 @@
 #include <root.hxx>
 #include <xltracer.hxx>
 #include <xihelper.hxx>
-#include <xilink.hxx>
 #include <xiname.hxx>
 #include <xistyle.hxx>
 #include <documentimport.hxx>

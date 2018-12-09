@@ -27,7 +27,6 @@
 #include <svl/zforlist.hxx>
 #include <sal/log.hxx>
 #include <document.hxx>
-#include <formulacell.hxx>
 #include <scextopt.hxx>
 #include <externalrefmgr.hxx>
 #include <tokenarray.hxx>

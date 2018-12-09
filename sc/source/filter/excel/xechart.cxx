@@ -60,11 +60,8 @@
 #include <filter/msfilter/escherex.hxx>
 
 #include <document.hxx>
-#include <rangelst.hxx>
-#include <rangeutl.hxx>
 #include <compiler.hxx>
 #include <tokenarray.hxx>
-#include <token.hxx>
 #include <xeescher.hxx>
 #include <xeformula.hxx>
 #include <xehelper.hxx>

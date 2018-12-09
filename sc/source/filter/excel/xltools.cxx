@@ -20,23 +20,19 @@
 #include <algorithm>
 #include <math.h>
 #include <sal/mathconf.h>
-#include <unotools/fontcvt.hxx>
-#include <sfx2/objsh.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
-#include <editeng/editstat.hxx>
+#include <tools/solar.h>
+#include <unotools/fontdefs.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <xestream.hxx>
-#include <document.hxx>
-#include <docuno.hxx>
-#include <editutil.hxx>
+#include <global.hxx>
 #include <formula/errorcodes.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <xlstyle.hxx>
 #include <xlname.hxx>
 #include <xistream.hxx>
-#include <xiroot.hxx>
 #include <xltools.hxx>
 
 // GUID import/export

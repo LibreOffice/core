@@ -32,7 +32,6 @@
 #include <sax/fastattribs.hxx>
 #include <document.hxx>
 #include <stlpool.hxx>
-#include <stlsheet.hxx>
 #include <attrib.hxx>
 #include <xehelper.hxx>
 #include <xeescher.hxx>

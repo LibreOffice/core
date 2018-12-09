@@ -19,10 +19,7 @@
 
 #include <xlformula.hxx>
 
-#include <algorithm>
-#include <compiler.hxx>
-#include <rangenam.hxx>
-#include <token.hxx>
+#include <refdata.hxx>
 #include <tokenarray.hxx>
 #include <xestream.hxx>
 #include <xistream.hxx>

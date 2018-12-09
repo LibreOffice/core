@@ -20,16 +20,12 @@
 #include <rtl/random.h>
 #include <sal/log.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <unotools/saveopt.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
 #include <xecontent.hxx>
-#include <xltracer.hxx>
 #include <xeescher.hxx>
 #include <xeformula.hxx>
 #include <xehelper.hxx>
@@ -47,7 +43,6 @@
 #include <excrecds.hxx>
 #include <tabprotection.hxx>
 #include <document.hxx>
-#include <scextopt.hxx>
 
 #include <formulabase.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>

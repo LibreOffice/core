@@ -22,63 +22,23 @@
 #include <map>
 #include <filter/msfilter/countryid.hxx>
 
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
-
-#include <sfx2/objsh.hxx>
-
-#include <editeng/editdata.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-
-#include <editeng/flditem.hxx>
-#include <editeng/flstitem.hxx>
-
-#include <svx/algitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/brushitem.hxx>
-#include <svx/pageitem.hxx>
-#include <editeng/paperinf.hxx>
-#include <editeng/sizeitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/escapementitem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/zformat.hxx>
-#include <svtools/ctrltool.hxx>
 #include <sal/log.hxx>
 
 #include <string.h>
 
 #include <global.hxx>
-#include <docpool.hxx>
-#include <patattr.hxx>
-#include <formulacell.hxx>
 #include <document.hxx>
-#include <scextopt.hxx>
-#include <attrib.hxx>
-#include <progress.hxx>
-#include <dociter.hxx>
-#include <rangenam.hxx>
 #include <dbdata.hxx>
-#include <stlsheet.hxx>
-#include <stlpool.hxx>
-#include <editutil.hxx>
-#include <formula/errorcodes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <queryentry.hxx>
 #include <queryparam.hxx>
 #include <root.hxx>
 
-#include <excdoc.hxx>
 #include <xeescher.hxx>
-#include <xeformula.hxx>
 #include <xelink.hxx>
 #include <xename.hxx>
-#include <xecontent.hxx>
 #include <xlname.hxx>
 
 #include <xcl97rec.hxx>

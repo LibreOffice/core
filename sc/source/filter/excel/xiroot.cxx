@@ -22,7 +22,6 @@
 #include <colrowst.hxx>
 #include <document.hxx>
 #include <scextopt.hxx>
-#include <xltracer.hxx>
 #include <xihelper.hxx>
 #include <xiformula.hxx>
 #include <xilink.hxx>

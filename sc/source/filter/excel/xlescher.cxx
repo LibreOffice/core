@@ -21,9 +21,7 @@
 
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
-#include <svx/unoapi.hxx>
 #include <document.hxx>
-#include <xestream.hxx>
 #include <xistream.hxx>
 #include <xlroot.hxx>
 #include <xltools.hxx>

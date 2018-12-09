@@ -22,6 +22,29 @@
 
 #include <svl/typedwhich.hxx>
 
+class SfxBoolItem;
+class SvxCharReliefItem;
+class SvxColorItem;
+class SvxContourItem;
+class SvxCrossedOutItem;
+class SvxEmphasisMarkItem;
+class SvxFontHeightItem;
+class SvxFontItem;
+class SvxForbiddenRuleItem;
+class SvxFrameDirectionItem;
+class SvxHangingPunctuationItem;
+class SvxLanguageItem;
+class SvxLRSpaceItem;
+class SvxOverlineItem;
+class SvxPostureItem;
+class SvXMLAttrContainerItem;
+class SvxScriptSpaceItem;
+class SvxShadowedItem;
+class SvxULSpaceItem;
+class SvxUnderlineItem;
+class SvxWeightItem;
+class SvxWordLineModeItem;
+
 //  EditEngine is not allowed to define its own ITEMID's
 #define INCLUDED_EDITENG_EEITEMID_HXX
 

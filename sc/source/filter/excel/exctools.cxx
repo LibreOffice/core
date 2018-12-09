@@ -17,33 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scitems.hxx>
-#include <editeng/eeitem.hxx>
-
-#include <editeng/editdata.hxx>
-#include <editeng/editeng.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-
+#include <osl/diagnose.h>
 #include <document.hxx>
-#include <patattr.hxx>
 #include <attrib.hxx>
 #include <scextopt.hxx>
-#include <progress.hxx>
-#include <rangenam.hxx>
-#include <editutil.hxx>
 #include <olinetab.hxx>
 
-#include <excrecds.hxx>
 #include <root.hxx>
-#include <imp_op.hxx>
 #include <excimp8.hxx>
 #include <namebuff.hxx>
 #include <otlnbuff.hxx>
-#include <xcl97rec.hxx>
 #include <formel.hxx>
 #include <xilink.hxx>
-#include <xecontent.hxx>
 
 #include <memory>
 #include <vector>

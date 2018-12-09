@@ -27,10 +27,8 @@
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/itemset.hxx>
 #include <formula/grammar.hxx>
 #include <scitems.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <document.hxx>
 #include <validat.hxx>
