@@ -211,9 +211,9 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             sal_Int32 nCloseNode = 0;
 
             aFileHandle.writeString("<item oor:path=\"");
-            for(sal_Int32 nIndex = 0;; ++nIndex)
+            for(sal_Int32 nIndex = 0;;)
             {
-                OUString aNextPathPart = aPathAndNodes.getToken(nIndex, '\\');
+                OUString aNextPathPart = aPathAndNodes.getToken(0, '\\', nIndex);
 
                 if(!aNextPathPart.isEmpty())
                 {
