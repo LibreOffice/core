@@ -231,8 +231,8 @@ class Foo18 {
 void foo19()
 {
     std::vector<char*> vec; // expected-note {{var is here [loplugin:useuniqueptr]}}
-    for(char * p : vec)
-        delete p; // expected-error {{rather manage this var with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+    for(char * p : vec) // expected-note {{var is here [loplugin:useuniqueptr]}}
+        delete p; // expected-error {{rather manage this var with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}} expected-error {{call to delete on a var, should be using std::unique_ptr [loplugin:useuniqueptr]}}
 }
 
 // no warning expected
