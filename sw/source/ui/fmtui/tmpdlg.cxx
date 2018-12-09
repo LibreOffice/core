@@ -518,12 +518,6 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     {
         static_cast<SwWrapTabPage&>(rPage).SetFormatUsed( true, false );
     }
-    else if (rId == "columns")
-    {
-        if( nType == SfxStyleFamily::Frame )
-            static_cast<SwColumnPage&>(rPage).SetFrameMode(true);
-        static_cast<SwColumnPage&>(rPage).SetFormatUsed( true );
-    }
     else if (rId == "macros")
     {
         SfxAllItemSet aNewSet(*aSet.GetPool());
