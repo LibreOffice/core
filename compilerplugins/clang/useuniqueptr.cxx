@@ -511,7 +511,7 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
             || name == "StgDirEntry::SetSize" || name == "UCBStorage::CopyStorageElement_Impl"
             || parentName == "SfxItemSet" || parentName == "SfxItemPool"
             || name == "OutputDevice::ImplDrawPolyPolygon" || name == "OutputDevice::ImplDrawPolyPolygon"
-            || name == "ImplListBox::InsertEntry" || "Edit::dispose")
+            || name == "ImplListBox::InsertEntry" || name == "Edit::dispose")
             return;
         // very dodgy
         if (name == "UCBStorage::OpenStorage_Impl")
