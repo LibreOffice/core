@@ -101,7 +101,7 @@ class anova(UITestCase):
         self.assertEqual(round(get_cell_by_position(document, 0, 6, 9).getValue(),11), 1876.56832844573)
         self.assertEqual(round(get_cell_by_position(document, 0, 6, 10).getValue(),10), 6025.1090909091)
         #bug 80583
-#        self.assertEqual(round(get_cell_by_position(document, 0, 6, 11).getValue(),11), 7901.67741935484)
+        self.assertEqual(round(get_cell_by_position(document, 0, 6, 11).getValue(),11), 7901.67741935484)
 
         self.assertEqual(get_cell_by_position(document, 0, 7, 3).getString(), "Sum")
         self.assertEqual(get_cell_by_position(document, 0, 7, 4).getValue(), 461)
