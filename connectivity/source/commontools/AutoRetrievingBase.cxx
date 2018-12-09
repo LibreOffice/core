@@ -32,14 +32,12 @@ namespace connectivity
         {
             sStatement = m_sGeneratedValueStatement;
             static const char sTable[] = "$table";
-            sal_Int32 nIndex = 0;
-            nIndex = sStatement.indexOf("$column",nIndex);
-            if ( -1 != nIndex )
+            const sal_Int32 nColumnIndex {sStatement.indexOf("$column")};
+            if ( nColumnIndex>=0 )
             { // we need a column
             }
-            nIndex = 0;
-            nIndex = sStatement.indexOf(sTable,nIndex);
-            if ( -1 != nIndex )
+            const sal_Int32 nTableIndex {sStatement.indexOf(sTable)};
+            if ( nTableIndex>=0 )
             { // we need a table name
                 sal_Int32 nIntoIndex = sStmt.indexOf("INTO ");
                 sStmt = sStmt.copy(nIntoIndex+5);
@@ -47,10 +45,8 @@ namespace connectivity
                 {
                     sStmt = sStmt.copy(1);
                 }
-
-                nIntoIndex = 0;
-                OUString sTableName = sStmt.getToken(0,' ',nIntoIndex);
-                sStatement = sStatement.replaceAt(nIndex, strlen(sTable), sTableName);
+                const OUString sTableName = sStmt.getToken(0, ' ');
+                sStatement = sStatement.replaceAt(nTableIndex, strlen(sTable), sTableName);
             }
         }
         return sStatement;
