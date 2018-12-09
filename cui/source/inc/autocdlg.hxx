@@ -54,10 +54,7 @@ public:
     void EnableLanguage(bool bEnable);
 };
 
-// class OfaACorrCheckListBox ------------------------------------------
-
 // class OfaAutocorrOptionsPage ------------------------------------------
-
 
 class OfaAutocorrOptionsPage : public SfxTabPage
 {
