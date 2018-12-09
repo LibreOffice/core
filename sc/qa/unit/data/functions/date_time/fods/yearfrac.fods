@@ -1227,7 +1227,237 @@
      <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>without 3<text:span text:style-name="T3">rd</text:span> argument</text:p>
      </table:table-cell>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="167">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2003-02-28" calcext:value-type="date">
+      <text:p>28-02-2003</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2004-02-29" calcext:value-type="date">
+      <text:p>29-02-2004</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B34-A34)/YEARFRAC(A34;B34;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B34]-[.A34])/YEARFRAC([.A34];[.B34];1)" office:value-type="float" office:value="365.5" calcext:value-type="float">
+      <text:p>365,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="365.500000" calcext:value-type="float">
+      <text:p>365,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D34]=[.E34]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2003-02-28" calcext:value-type="date">
+      <text:p>28-02-2003</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2004-02-28" calcext:value-type="date">
+      <text:p>28-02-2004</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B35-A35)/YEARFRAC(A35;B35;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B35]-[.A35])/YEARFRAC([.A35];[.B35];1)" office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="365.000000" calcext:value-type="float">
+      <text:p>365,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D35]=[.E35]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2004-02-28" calcext:value-type="date">
+      <text:p>28-02-2004</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2005-02-28" calcext:value-type="date">
+      <text:p>28-02-2005</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B36-A36)/YEARFRAC(A36;B36;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B36]-[.A36])/YEARFRAC([.A36];[.B36];1)" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="366.000000" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D36]=[.E36]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-01-01" calcext:value-type="date">
+      <text:p>01-01-2016</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-01-31" calcext:value-type="date">
+      <text:p>31-01-2016</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B37-A37)/YEARFRAC(A37;B37;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B37]-[.A37])/YEARFRAC([.A37];[.B37];1)" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="366.000000" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D37]=[.E37]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-01-01" calcext:value-type="date">
+      <text:p>01-01-2016</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2017-01-01" calcext:value-type="date">
+      <text:p>01-01-2017</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B38-A38)/YEARFRAC(A38;B38;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B38]-[.A38])/YEARFRAC([.A38];[.B38];1)" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="366.000000" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D38]=[.E38]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-01-31" calcext:value-type="date">
+      <text:p>31-01-2016</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2017-01-01" calcext:value-type="date">
+      <text:p>01-01-2017</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B39-A39)/YEARFRAC(A39;B39;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B39]-[.A39])/YEARFRAC([.A39];[.B39];1)" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="366.000000" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D39]=[.E39]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-01-31" calcext:value-type="date">
+      <text:p>31-01-2016</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2017-01-31" calcext:value-type="date">
+      <text:p>31-01-2017</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B40-A40)/YEARFRAC(A40;B40;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B40]-[.A40])/YEARFRAC([.A40];[.B40];1)" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="366.000000" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D40]=[.E40]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-02-29" calcext:value-type="date">
+      <text:p>29-02-2016</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-05-01" calcext:value-type="date">
+      <text:p>01-05-2016</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B41-A41)/YEARFRAC(A41;B41;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B41]-[.A41])/YEARFRAC([.A41];[.B41];1)" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="366.000000" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D41]=[.E41]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-04-30" calcext:value-type="date">
+      <text:p>30-04-2016</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-09-01" calcext:value-type="date">
+      <text:p>01-09-2016</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B42-A42)/YEARFRAC(A42;B42;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B42]-[.A42])/YEARFRAC([.A42];[.B42];1)" office:value-type="float" office:value="366" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="366.000000" calcext:value-type="float">
+      <text:p>366,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D42]=[.E42]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2016-11-30" calcext:value-type="date">
+      <text:p>30-11-2016</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2017-09-29" calcext:value-type="date">
+      <text:p>29-09-2017</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>=(B43-A43)/YEARFRAC(A43;B43;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=([.B43]-[.A43])/YEARFRAC([.A43];[.B43];1)" office:value-type="float" office:value="365" calcext:value-type="float">
+      <text:p>365.000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="365.000000" calcext:value-type="float">
+      <text:p>365,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D43]=[.E43]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf69569, days in year</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="157">
      <table:table-cell table:number-columns-repeated="7"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
