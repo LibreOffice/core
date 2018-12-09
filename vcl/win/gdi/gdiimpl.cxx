@@ -1361,50 +1361,58 @@ void WinSalGraphicsImpl::SetLineColor()
     mbStockPen  = TRUE;
 }
 
-void WinSalGraphicsImpl::SetLineColor( Color nColor )
+void WinSalGraphicsImpl::SetLineColor(Color nColor)
 {
-    maLineColor = nColor;
-    COLORREF    nPenColor = PALETTERGB( nColor.GetRed(),
-                                        nColor.GetGreen(),
-                                        nColor.GetBlue() );
-    HPEN        hNewPen = nullptr;
-    bool        bStockPen = FALSE;
+    COLORREF nPenColor = PALETTERGB(nColor.GetRed(),
+                                    nColor.GetGreen(),
+                                    nColor.GetBlue());
+    bool bStockPen = false;
 
-    // search for stock pen (only screen, because printer have problems,
-    // when we use stock objects)
-    if ( !mrParent.isPrinter() )
-    {
-        SalData* pSalData = GetSalData();
-        for ( sal_uInt16 i = 0; i < pSalData->mnStockPenCount; i++ )
-        {
-            if ( nPenColor == pSalData->maStockPenColorAry[i] )
-            {
-                hNewPen = pSalData->mhStockPenAry[i];
-                bStockPen = TRUE;
-                break;
-            }
-        }
-    }
-
-    // create new pen
-    if ( !hNewPen )
-    {
-        if ( !mrParent.isPrinter() )
-        {
-            if ( GetSalData()->mhDitherPal && ImplIsSysColorEntry( nColor ) )
-                nPenColor = PALRGB_TO_RGB( nPenColor );
-        }
-
-        hNewPen = CreatePen( PS_SOLID, mrParent.mnPenWidth, nPenColor );
-        bStockPen = FALSE;
-    }
+    HPEN hNewPen = SearchStockPen(nPenColor);
+    if (hNewPen)
+        bStockPen = true;
+    else
+        hNewPen = MakePen(nColor, nPenColor);
 
     ResetPen(hNewPen);
 
     // set new data
     mnPenColor  = nPenColor;
+    maLineColor = nColor;
     mbPen       = TRUE;
     mbStockPen  = bStockPen;
+}
+
+HPEN WinSalGraphicsImpl::SearchStockPen(COLORREF nPenColor)
+{
+    // Only screen, because printer has problems, when we use stock objects.
+    if (mrParent.isPrinter())
+    {
+        return nullptr;
+    }
+
+    const SalData* pSalData = GetSalData();
+
+    for (sal_uInt16 i = 0; i < pSalData->mnStockPenCount; i++)
+    {
+        if (nPenColor == pSalData->maStockPenColorAry[i])
+            return pSalData->mhStockPenAry[i];
+    }
+
+    return nullptr;
+}
+
+HPEN WinSalGraphicsImpl::MakePen(Color nColor, COLORREF nPenColor)
+{
+    if (!mrParent.isPrinter())
+    {
+        if (GetSalData()->mhDitherPal && ImplIsSysColorEntry(nColor))
+        {
+            nPenColor = PALRGB_TO_RGB(nPenColor);
+        }
+    }
+
+    return CreatePen(PS_SOLID, mrParent.mnPenWidth, nPenColor);
 }
 
 void WinSalGraphicsImpl::ResetPen(HPEN hNewPen)
