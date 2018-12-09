@@ -2861,8 +2861,6 @@ namespace cppcanvas
             , nMmX(0)
             , nMmY(0)
         {
-            memset (aObjects, 0, sizeof (aObjects));
-
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::ImplRenderer(mtf)" );
 
             OSL_ENSURE( rCanvas.get() != nullptr && rCanvas->getUNOCanvas().is(),
