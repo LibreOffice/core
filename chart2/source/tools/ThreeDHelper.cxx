@@ -976,7 +976,7 @@ void ThreeDHelper::setRotationAngleToDiagram(
 
     try
     {
-        //remind old rotation for adaption of light directions
+        //remind old rotation for adaptation of light directions
         ::basegfx::B3DHomMatrix aInverseOldRotation( lcl_getInverseRotationMatrix( xSceneProperties ) );
 
         ::basegfx::B3DHomMatrix aInverseCameraRotation;
