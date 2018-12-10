@@ -60,7 +60,7 @@ public class JdbcLongVarCharTest extends ComplexTestCase
             /* Get URL from environment variable.
             *
             * Example URL:
-            * jdbc:mysql://localhost:3306/mysql?user=username?password=password
+            * jdbc:mysql://localhost:3306/mysql?user=username&password=password
             */
             String url = System.getenv("CONNECTIVITY_TEST_MYSQL_DRIVER_JDBC");
             com.sun.star.beans.PropertyValue prop[] = new PropertyValue[1];
