@@ -801,7 +801,10 @@ public:
      * @param pPrefixName the prefix passed to Translate::Create()
      * @param pBcp47LanguageTag the locale into which the string should be translated
      */
-    char* translateGet( const char* pId, const char* pPrefixName, const char* pBcp47LanguageTag );
+    char* translateGet( const char* pId, const char* pPrefixName, const char* pBcp47LanguageTag )
+    {
+        return mpThis->pClass->translateGet( mpThis, pId, pPrefixName, pBcp47LanguageTag );
+    }
 
     /**
      * Fetch translation for a string corresponding to a specific number of something.
@@ -813,7 +816,10 @@ public:
      * @param pPrefixName the prefix passed to Translate::Create()
      * @param pBcp47LanguageTag the locale into which the string should be translated
      */
-    char* translateNGet( const char* pId, int n, const char* pPrefixName, const char* pBcp47LanguageTag );
+    char* translateNGet( const char* pId, int n, const char* pPrefixName, const char* pBcp47LanguageTag )
+    {
+        return mpThis->pClass->translateNGet( mpThis, pId, n, pPrefixName, pBcp47LanguageTag );
+    }
 };
 
 /// Factory method to create a lok::Office instance.
