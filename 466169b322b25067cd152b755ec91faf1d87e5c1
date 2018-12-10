@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_d820b4fa",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-10T13:15:31Z",
+      "side": 1,
+      "message": "\u0027Minimizing the presentation is irreverSible operation\"\n(but I\u0027m not sure if I\u0027d include this information here, how relevant to the user it really is?)",
+      "revId": "466169b322b25067cd152b755ec91faf1d87e5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_9878fcf8",
+        "filename": "officecfg/registry/data/org/openoffice/Office/PresentationMinimizer.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-10T13:15:31Z",
+      "side": 1,
+      "message": "Perhaps I\u0027d simply ask \u0027Do you want to minimize it (\u003d the presentation) without saving?\u0027",
+      "revId": "466169b322b25067cd152b755ec91faf1d87e5c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
