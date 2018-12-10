@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
@@ -73,7 +74,6 @@ class SdrObjPlusData;
 class SdrGluePoint;
 class SdrGluePointList;
 class SdrLayerIDSet;
-class OutputDevice;
 class Fraction;
 
 namespace basegfx
