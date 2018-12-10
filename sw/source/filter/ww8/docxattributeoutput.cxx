@@ -6055,8 +6055,9 @@ void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLi
     pAttr->add( FSNS( XML_w, XML_restart ), rLnNumInfo.IsRestartEachPage() ? "newPage" : "continuous" );
     if( rLnNumInfo.GetPosFromLeft())
         pAttr->add( FSNS( XML_w, XML_distance ), OString::number(rLnNumInfo.GetPosFromLeft()).getStr());
-    if( nRestartNo )
-        pAttr->add( FSNS( XML_w, XML_start ), OString::number( nRestartNo).getStr());
+    if (nRestartNo > 0)
+        // Writer is 1-based, Word is 0-based.
+        pAttr->add(FSNS(XML_w, XML_start), OString::number(nRestartNo - 1).getStr());
     XFastAttributeListRef xAttrs( pAttr );
     m_pSerializer->singleElementNS( XML_w, XML_lnNumType, xAttrs );
 }

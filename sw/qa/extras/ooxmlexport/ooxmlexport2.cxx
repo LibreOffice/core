@@ -802,7 +802,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66543, "fdo66543.docx")
     // but nothing was done with it.
 
     uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), getProperty< sal_Int32 >( paragraph1, "ParaLineNumberStartValue" ));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
+                         getProperty<sal_Int32>(paragraph1, "ParaLineNumberStartValue"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN822175, "n822175.odt")
