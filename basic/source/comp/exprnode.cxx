@@ -110,7 +110,7 @@ SbiExprNode::~SbiExprNode()
     {
         delete aVar.pPar;
         delete aVar.pNext;
-        delete aVar.pvMorePar;
+        aVar.pvMorePar.reset();
     }
 }
 

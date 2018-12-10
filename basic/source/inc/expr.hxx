@@ -42,7 +42,7 @@ struct SbVar {
     SbiExprNode*        pNext;      // next element (for structures)
     SbiSymDef*          pDef;       // symbol definition
     SbiExprList*        pPar;       // optional parameters (is deleted)
-    SbiExprListVector*  pvMorePar;  // Array of arrays foo(pPar)(avMorePar[0])(avMorePar[1])...
+    std::unique_ptr<SbiExprListVector> pvMorePar;  // Array of arrays foo(pPar)(avMorePar[0])(avMorePar[1])...
 };
 
 struct KeywordSymbolInfo
