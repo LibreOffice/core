@@ -223,7 +223,10 @@ public:
     void Update(const SfxStringItem* pItem);
 
 protected:
-    /// Called for setting language when user selects a language in ComboBox
+    /*!
+     * Called for setting language when user selects a language in ComboBox.
+     * Setup selected language for the dialog.
+     */
     virtual void Select() override;
 
     /*!
@@ -237,8 +240,6 @@ protected:
 private:
     /// Delete all languages from ComboBox
     void ClearBox();
-    /// Switch inferface of dialog to selected language
-    void SetLanguage();
 
     /// Fill up the language combobox
     virtual void FillBox() override;
@@ -246,8 +247,6 @@ private:
     OUString msNotLocalizedStr;
     OUString msDefaultLanguageStr;
     OUString msCurrentText;
-
-    bool mbIgnoreSelect; ///< do not use in this class
 };
 
 } // namespace basctl

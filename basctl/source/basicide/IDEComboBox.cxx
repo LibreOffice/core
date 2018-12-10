@@ -357,7 +357,6 @@ LanguageBox::LanguageBox(vcl::Window* pParent)
     : DocListenerBox(pParent)
     , msNotLocalizedStr(IDEResId(RID_STR_TRANSLATION_NOTLOCALIZED))
     , msDefaultLanguageStr(IDEResId(RID_STR_TRANSLATION_DEFAULT))
-    , mbIgnoreSelect(false)
 {
     SetSizePixel(Size(210, 200));
     FillBox();
@@ -374,7 +373,6 @@ void LanguageBox::dispose()
 void LanguageBox::FillBox()
 {
     SetUpdateMode(false);
-    mbIgnoreSelect = true;
     msCurrentText = GetSelectedEntry();
     ClearBox();
 
@@ -419,7 +417,6 @@ void LanguageBox::FillBox()
     }
 
     SetUpdateMode(true);
-    mbIgnoreSelect = false;
 }
 
 void LanguageBox::ClearBox()
@@ -433,19 +430,12 @@ void LanguageBox::ClearBox()
     ListBox::Clear();
 }
 
-void LanguageBox::SetLanguage()
+void LanguageBox::Select()
 {
+    //Setup selected language
     LanguageEntry* pEntry = static_cast<LanguageEntry*>(GetSelectedEntryData());
     if (pEntry)
         GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale(pEntry->m_aLocale);
-}
-
-void LanguageBox::Select()
-{
-    if (!mbIgnoreSelect)
-        SetLanguage();
-    else
-        SelectEntry(msCurrentText); // Select after Escape
 }
 
 bool LanguageBox::PreNotify(NotifyEvent& rNEvt)
@@ -458,7 +448,7 @@ bool LanguageBox::PreNotify(NotifyEvent& rNEvt)
         {
             case KEY_RETURN:
             {
-                SetLanguage();
+                Select();
                 bDone = true;
             }
             break;
