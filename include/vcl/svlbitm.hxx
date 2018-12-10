@@ -84,10 +84,11 @@ public:
     // as buttons are not derived from LinkHdl
     void                    CallLink();
 
-    void                    StoreButtonState( SvTreeListEntry* pEntry );
+    void                    StoreButtonState(SvTreeListEntry* pActEntry, SvLBoxButton* pActBox);
     static SvButtonState    ConvertToButtonState( SvItemStateFlags nItemFlags );
 
     SvTreeListEntry*        GetActEntry() const;
+    SvLBoxButton*           GetActBox() const;
 
     void                    SetImage(SvBmp nIndex, const Image& aImage) { aBmps[static_cast<int>(nIndex)] = aImage; }
     Image&                  GetImage(SvBmp nIndex) { return aBmps[static_cast<int>(nIndex)]; }

@@ -403,12 +403,20 @@ class VCL_DLLPUBLIC TreeView : virtual public Container
 protected:
     Link<TreeView&, void> m_aChangeHdl;
     Link<TreeView&, void> m_aRowActivatedHdl;
+    Link<const std::pair<int, int>&, void> m_aRadioToggleHdl;
     // if handler returns false, the expansion of the row is refused
     Link<TreeIter&, bool> m_aExpandingHdl;
+
+    std::vector<int> m_aRadioIndexes;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_row_activated() { m_aRowActivatedHdl.Call(*this); }
     bool signal_expanding(TreeIter& rIter) { return m_aExpandingHdl.Call(rIter); }
+    // arg is pair<row,col>
+    void signal_radio_toggled(const std::pair<int, int>& rRowCol)
+    {
+        m_aRadioToggleHdl.Call(rRowCol);
+    }
 
 public:
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
@@ -451,6 +459,10 @@ public:
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_row_activated(const Link<TreeView&, void>& rLink) { m_aRowActivatedHdl = rLink; }
+    void connect_radio_toggled(const Link<const std::pair<int, int>&, void>& rLink)
+    {
+        m_aRadioToggleHdl = rLink;
+    }
 
     //by index
     virtual int get_selected_index() const = 0;
@@ -531,9 +543,12 @@ public:
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) = 0;
     virtual OUString get_column_title(int nColumn) const = 0;
+    virtual void set_column_title(int nColumn, const OUString& rTitle) = 0;
 
     virtual void set_selection_mode(SelectionMode eMode) = 0;
     virtual int count_selected_rows() const = 0;
+
+    void set_toggle_columns_as_radio(const std::vector<int>& rCols) { m_aRadioIndexes = rCols; }
 };
 
 class VCL_DLLPUBLIC Button : virtual public Container
