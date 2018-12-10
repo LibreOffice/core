@@ -913,7 +913,7 @@ void MasterPageContainer::Implementation::FireContainerChange (
     MasterPageContainerChangeEvent::EventType eType,
     Token aToken)
 {
-    ::std::vector<Link<MasterPageContainerChangeEvent&,void>> aCopy(maChangeListeners.begin(),maChangeListeners.end());
+    ::std::vector<Link<MasterPageContainerChangeEvent&,void>> aCopy(maChangeListeners);
     MasterPageContainerChangeEvent aEvent;
     aEvent.meEventType = eType;
     aEvent.maChildToken = aToken;
