@@ -477,14 +477,15 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     // linked list
     if (parentName == "ScFunctionList" || parentName == "SwNodes"
         || parentName == "SwUnoCursor" || parentName == "SortedResultSet"
-        || parentName == "Atom")
+        || parentName == "Atom" || parentName == "RegionBand" || parentName == "WMFWriter"
+        || parentName == "Scheduler" || parentName == "OpenGLContext")
         return;
     // manual ref counting
     if (parentName == "ScBroadcastAreaSlot")
         return;
     // complicated
     if (parentName == "SwFormatField" || parentName == "FontPropertyBox" || parentName == "SdFontPropertyBox"
-        || parentName == "SwHTMLParser")
+        || parentName == "SwHTMLParser" || parentName == "PDFWriterImpl")
         return;
 
     if (functionDecl->getIdentifier())
@@ -515,6 +516,12 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
             return;
         // very dodgy
         if (name == "UCBStorage::OpenStorage_Impl")
+            return;
+        // complicated ownership
+        if (name == "ParseCMAP" || name == "OpenGLSalBitmap::CreateTexture" || name == "X11SalGraphicsImpl::drawAlphaBitmap")
+            return;
+        // complicated delete
+        if (name == "X11SalObject::CreateObject")
             return;
     }
 

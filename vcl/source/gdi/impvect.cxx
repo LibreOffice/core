@@ -30,6 +30,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 #include "impvect.hxx"
+#include <array>
 #include <memory>
 
 #define VECT_POLY_MAX 8192
@@ -112,30 +113,24 @@ struct ImplColorSet
     bool        mbSet = false;
 };
 
-extern "C" {
-
-static int ImplColorSetCmpFnc( const void* p1, const void* p2 )
+static int ImplColorSetCmpFnc( const ImplColorSet& lhs, const ImplColorSet& rhs)
 {
-    ImplColorSet const * pSet1 = static_cast<ImplColorSet const *>(p1);
-    ImplColorSet const * pSet2 = static_cast<ImplColorSet const *>(p2);
     int             nRet;
 
-    if( pSet1->mbSet && pSet2->mbSet )
+    if( lhs.mbSet && rhs.mbSet )
     {
-        const sal_uInt8 cLum1 = pSet1->maColor.GetLuminance();
-        const sal_uInt8 cLum2 = pSet2->maColor.GetLuminance();
-        nRet = ( ( cLum1 > cLum2 ) ? -1 : ( ( cLum1 == cLum2 ) ? 0 : 1 ) );
+        const sal_uInt8 cLum1 = lhs.maColor.GetLuminance();
+        const sal_uInt8 cLum2 = rhs.maColor.GetLuminance();
+        nRet = ( cLum1 > cLum2 ) ? -1 : ( ( cLum1 == cLum2 ) ? 0 : 1 );
     }
-    else if( pSet1->mbSet )
+    else if( lhs.mbSet )
         nRet = -1;
-    else if( pSet2->mbSet )
+    else if( rhs.mbSet )
         nRet = 1;
     else
         nRet = 0;
 
     return nRet;
-}
-
 }
 
 class ImplPointArray
@@ -652,28 +647,28 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         const long          nHeight = pRAcc->Height();
         const sal_uInt16        nColorCount = pRAcc->GetPaletteEntryCount();
         sal_uInt16              n;
-        ImplColorSet*       pColorSet = new ImplColorSet[ 256 ];
+        std::array<ImplColorSet, 256> aColorSet;
 
         rMtf.Clear();
 
         // get used palette colors and sort them from light to dark colors
         for( n = 0; n < nColorCount; n++ )
         {
-            pColorSet[ n ].mnIndex = n;
-            pColorSet[ n ].maColor = pRAcc->GetPaletteColor( n );
+            aColorSet[ n ].mnIndex = n;
+            aColorSet[ n ].maColor = pRAcc->GetPaletteColor( n );
         }
 
         for( long nY = 0; nY < nHeight; nY++ )
         {
             Scanline pScanlineRead = pRAcc->GetScanline( nY );
             for( long nX = 0; nX < nWidth; nX++ )
-                pColorSet[ pRAcc->GetIndexFromData( pScanlineRead, nX ) ].mbSet = true;
+                aColorSet[ pRAcc->GetIndexFromData( pScanlineRead, nX ) ].mbSet = true;
         }
 
-        qsort( pColorSet, 256, sizeof( ImplColorSet ), ImplColorSetCmpFnc );
+        std::sort( aColorSet.begin(), aColorSet.end(), ImplColorSetCmpFnc );
 
         for( n = 0; n < 256; n++ )
-            if( !pColorSet[ n ].mbSet )
+            if( !aColorSet[ n ].mbSet )
                 break;
 
         if( n )
@@ -684,7 +679,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
         for( sal_uInt16 i = 0; i < n; i++ )
         {
-            const BitmapColor   aBmpCol( pRAcc->GetPaletteColor( pColorSet[ i ].mnIndex ) );
+            const BitmapColor   aBmpCol( pRAcc->GetPaletteColor( aColorSet[ i ].mnIndex ) );
             const Color         aFindColor( aBmpCol.GetRed(), aBmpCol.GetGreen(), aBmpCol.GetBlue() );
             std::unique_ptr<ImplVectMap> xMap(ImplExpand( pRAcc.get(), aFindColor ));
 
@@ -715,8 +710,6 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             fPercent += fPercentStep_2;
             VECT_PROGRESS( pProgress, FRound( fPercent ) );
         }
-
-        delete[] pColorSet;
 
         if( rMtf.GetActionSize() )
         {

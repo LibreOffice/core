@@ -23,18 +23,17 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
 
     if (mnTileWidth > 1 || mnTileHeight > 1)
     {
-        Bitmap* pNewBmp;
+        std::unique_ptr<Bitmap> pNewBmp;
         BitmapReadAccess* pReadAcc;
         BitmapWriteAccess* pWriteAcc;
 
         if (aBitmap.GetBitCount() > 8)
         {
-            pNewBmp = nullptr;
             pReadAcc = pWriteAcc = aBitmap.AcquireWriteAccess();
         }
         else
         {
-            pNewBmp = new Bitmap(aBitmap.GetSizePixel(), 24);
+            pNewBmp.reset(new Bitmap(aBitmap.GetSizePixel(), 24));
             pReadAcc = aBitmap.AcquireReadAccess();
             pWriteAcc = pNewBmp->AcquireWriteAccess();
         }
@@ -174,8 +173,6 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
                 aBitmap.SetPrefMapMode(aMap);
                 aBitmap.SetPrefSize(aPrefSize);
             }
-
-            delete pNewBmp;
         }
     }
 

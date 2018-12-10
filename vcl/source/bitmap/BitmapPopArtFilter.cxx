@@ -35,11 +35,11 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
             const long nHeight = pWriteAcc->Height();
             const int nEntryCount = 1 << pWriteAcc->GetBitCount();
             int n = 0;
-            PopArtEntry* pPopArtTable = new PopArtEntry[nEntryCount];
+            std::vector<PopArtEntry> aPopArtTable(nEntryCount);
 
             for (n = 0; n < nEntryCount; n++)
             {
-                PopArtEntry& rEntry = pPopArtTable[n];
+                PopArtEntry& rEntry = aPopArtTable[n];
                 rEntry.mnIndex = static_cast<sal_uInt16>(n);
                 rEntry.mnCount = 0;
             }
@@ -50,32 +50,30 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
                 Scanline pScanline = pWriteAcc->GetScanline(nY);
                 for (long nX = 0; nX < nWidth; nX++)
                 {
-                    pPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount++;
+                    aPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount++;
                 }
             }
 
             // sort table
-            std::qsort(pPopArtTable, nEntryCount, sizeof(PopArtEntry),
-                       [](const void* p1, const void* p2) {
-                           int nRet;
+            std::sort(aPopArtTable.begin(), aPopArtTable.end(),
+                      [](const PopArtEntry& lhs, const PopArtEntry& rhs) {
+                          int nRet;
 
-                           if (static_cast<PopArtEntry const*>(p1)->mnCount
-                               < static_cast<PopArtEntry const*>(p2)->mnCount)
-                           {
-                               nRet = 1;
-                           }
-                           else if (static_cast<PopArtEntry const*>(p1)->mnCount
-                                    == static_cast<PopArtEntry const*>(p2)->mnCount)
-                           {
-                               nRet = 0;
-                           }
-                           else
-                           {
-                               nRet = -1;
-                           }
+                          if (lhs.mnCount < rhs.mnCount)
+                          {
+                              nRet = 1;
+                          }
+                          else if (lhs.mnCount == rhs.mnCount)
+                          {
+                              nRet = 0;
+                          }
+                          else
+                          {
+                              nRet = -1;
+                          }
 
-                           return nRet;
-                       });
+                          return nRet;
+                      });
 
             // get last used entry
             sal_uLong nFirstEntry;
@@ -83,27 +81,26 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
 
             for (n = 0; n < nEntryCount; n++)
             {
-                if (pPopArtTable[n].mnCount)
+                if (aPopArtTable[n].mnCount)
                     nLastEntry = n;
             }
 
             // rotate palette (one entry)
             const BitmapColor aFirstCol(pWriteAcc->GetPaletteColor(
-                sal::static_int_cast<sal_uInt16>(pPopArtTable[0].mnIndex)));
+                sal::static_int_cast<sal_uInt16>(aPopArtTable[0].mnIndex)));
 
             for (nFirstEntry = 0; nFirstEntry < nLastEntry; nFirstEntry++)
             {
                 pWriteAcc->SetPaletteColor(
-                    sal::static_int_cast<sal_uInt16>(pPopArtTable[nFirstEntry].mnIndex),
+                    sal::static_int_cast<sal_uInt16>(aPopArtTable[nFirstEntry].mnIndex),
                     pWriteAcc->GetPaletteColor(
-                        sal::static_int_cast<sal_uInt16>(pPopArtTable[nFirstEntry + 1].mnIndex)));
+                        sal::static_int_cast<sal_uInt16>(aPopArtTable[nFirstEntry + 1].mnIndex)));
             }
 
             pWriteAcc->SetPaletteColor(
-                sal::static_int_cast<sal_uInt16>(pPopArtTable[nLastEntry].mnIndex), aFirstCol);
+                sal::static_int_cast<sal_uInt16>(aPopArtTable[nLastEntry].mnIndex), aFirstCol);
 
             // cleanup
-            delete[] pPopArtTable;
             pWriteAcc.reset();
             bRet = true;
         }

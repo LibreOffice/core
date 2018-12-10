@@ -46,8 +46,8 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
                 long nGrey31, nGrey32, nGrey33;
                 double fAzim = basegfx::deg2rad(mnAzimuthAngle100 * 0.01);
                 double fElev = basegfx::deg2rad(mnElevationAngle100 * 0.01);
-                long* pHMap = new long[nWidth + 2];
-                long* pVMap = new long[nHeight + 2];
+                std::unique_ptr<long[]> pHMap(new long[nWidth + 2]);
+                std::unique_ptr<long[]> pVMap(new long[nHeight + 2]);
                 long nX, nY, nNx, nNy, nDotL;
                 const long nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
                 const long nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
@@ -127,8 +127,8 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
                     }
                 }
 
-                delete[] pHMap;
-                delete[] pVMap;
+                pHMap.reset();
+                pVMap.reset();
                 pWriteAcc.reset();
                 bRet = true;
             }

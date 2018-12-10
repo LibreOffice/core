@@ -503,20 +503,20 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                         maMask.CopyPixel_AlphaOptimized( rRectDst, rRectSrc, &pBmpExSrc->maMask );
                     else if( IsTransparent() )
                     {
-                        AlphaMask* pAlpha = new AlphaMask( maMask );
+                        std::unique_ptr<AlphaMask> pAlpha(new AlphaMask( maMask ));
 
                         maMask = pAlpha->ImplGetBitmap();
-                        delete pAlpha;
+                        pAlpha.reset();
                         mbAlpha = true;
                         maMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maMask );
                     }
                     else
                     {
                         sal_uInt8 cBlack = 0;
-                        AlphaMask* pAlpha = new AlphaMask(GetSizePixel(), &cBlack);
+                        std::unique_ptr<AlphaMask> pAlpha(new AlphaMask(GetSizePixel(), &cBlack));
 
                         maMask = pAlpha->ImplGetBitmap();
-                        delete pAlpha;
+                        pAlpha.reset();
                         meTransparent = TransparentType::Bitmap;
                         mbAlpha = true;
                         maMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maMask );

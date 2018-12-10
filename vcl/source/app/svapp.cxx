@@ -813,19 +813,17 @@ ImplSVEvent * Application::PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, K
 
     if( pWin && pKeyEvent )
     {
-        ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pKeyEvent );
+        std::unique_ptr<ImplPostEventData> pPostEventData(new ImplPostEventData( nEvent, pWin, *pKeyEvent ));
 
         nEventId = PostUserEvent(
                        LINK( nullptr, Application, PostEventHandler ),
-                       pPostEventData );
+                       pPostEventData.get() );
 
         if( nEventId )
         {
             pPostEventData->mnEventId = nEventId;
-            ImplGetSVData()->maAppData.maPostedEventList.emplace_back( pWin, pPostEventData );
+            ImplGetSVData()->maAppData.maPostedEventList.emplace_back( pWin, pPostEventData.release() );
         }
-        else
-            delete pPostEventData;
     }
 
     return nEventId;
@@ -846,19 +844,17 @@ ImplSVEvent * Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin,
         const MouseEvent aTransformedEvent( aTransformedPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(),
                                             pMouseEvent->GetButtons(), pMouseEvent->GetModifier() );
 
-        ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
+        std::unique_ptr<ImplPostEventData> pPostEventData(new ImplPostEventData( nEvent, pWin, aTransformedEvent ));
 
         nEventId = PostUserEvent(
                        LINK( nullptr, Application, PostEventHandler ),
-                       pPostEventData );
+                       pPostEventData.get() );
 
         if( nEventId )
         {
             pPostEventData->mnEventId = nEventId;
-            ImplGetSVData()->maAppData.maPostedEventList.emplace_back( pWin, pPostEventData );
+            ImplGetSVData()->maAppData.maPostedEventList.emplace_back( pWin, pPostEventData.release() );
         }
-        else
-            delete pPostEventData;
     }
 
     return nEventId;
