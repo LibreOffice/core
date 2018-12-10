@@ -623,6 +623,7 @@ void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
     if (mbUpdateBackground)
     {
         rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
+        rRenderContext.Erase();
         mbUpdateBackground = false;
     }
 
