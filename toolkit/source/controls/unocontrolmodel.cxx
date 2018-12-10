@@ -774,7 +774,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
     // No data for the model may be added following the properties
 
     // Used for import of old parts in css::awt::FontDescriptor
-    css::awt::FontDescriptor* pFD = nullptr;
+    std::unique_ptr<css::awt::FontDescriptor> pFD;
 
     sal_uInt32 i;
     for ( i = 0; i < nProps; i++ )
@@ -911,7 +911,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                     {
                         if ( !pFD )
                         {
-                            pFD = new css::awt::FontDescriptor;
+                            pFD.reset(new css::awt::FontDescriptor);
                             if ( maData.find( BASEPROPERTY_FONTDESCRIPTOR ) != maData.end() ) // due to defaults...
                                 maData[ BASEPROPERTY_FONTDESCRIPTOR ] >>= *pFD;
                         }
@@ -928,7 +928,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                     {
                         if ( !pFD )
                         {
-                            pFD = new css::awt::FontDescriptor;
+                            pFD.reset(new css::awt::FontDescriptor);
                             if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
                                 maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
                         }
@@ -945,7 +945,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                     {
                          if ( !pFD )
                         {
-                            pFD = new css::awt::FontDescriptor;
+                            pFD.reset(new css::awt::FontDescriptor);
                             if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
                                 maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
                         }
@@ -1015,7 +1015,6 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
         css::uno::Any aValue;
         aValue <<= *pFD;
         setPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ), aValue );
-        delete pFD;
     }
 }
 
