@@ -22,6 +22,30 @@
       "revId": "1aeaf683d82db97486d990e30236c06fc82d481b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_3818e87f",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2018-12-10T15:22:04Z",
+      "side": 1,
+      "message": "About the comment - agree, I\u0027ll move it to the hxx file.\n\nAbout the braces. For me it\u0027s some kind of a small rule of thumb. I just pick\nan approach of using braces everywhere. It simplifies things because now you\ndon\u0027t need to think is it OK for other developers to see one line \"if\" or\n\"if/else\" without the braces. During the review I usually force developers to\nuse braces because sometimes as you know avoiding braces may lead to very\ninteresting construction :) aka:\n\n ```\n if (a \u003d\u003d 10)\n    if (b \u003c 20)\n        // do\n    else\n        // done\nelse\n{\n   // etc\n}\n```\n\nBTW, did you mean to avoid braces only in \"SearchStockPen\" or in the whole\npatch?",
+      "parentUuid": "5f4e5783_f8fff031",
+      "range": {
+        "startLine": 1394,
+        "startChar": 0,
+        "endLine": 1395,
+        "endChar": 37
+      },
+      "revId": "1aeaf683d82db97486d990e30236c06fc82d481b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
