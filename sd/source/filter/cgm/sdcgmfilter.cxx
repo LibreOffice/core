@@ -61,17 +61,14 @@ namespace
     class CGMPointer
     {
         ImportCGMPointer m_pPointer;
-#ifndef DISABLE_DYNLOADING
-        std::unique_ptr<osl::Module> m_xLibrary;
-#endif
     public:
         CGMPointer()
         {
 #ifdef DISABLE_DYNLOADING
             m_pPointer = ImportCGM;
 #else
-            m_xLibrary.reset(SdFilter::OpenLibrary("icg"));
-            m_pPointer = m_xLibrary ? reinterpret_cast<ImportCGMPointer>(m_xLibrary->getFunctionSymbol("ImportCGM")) : nullptr;
+            m_pPointer = reinterpret_cast<ImportCGMPointer>(
+                SdFilter::GetLibrarySymbol("icg", "ImportCGM"));
 #endif
         }
         ImportCGMPointer get() { return m_pPointer; }

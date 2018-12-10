@@ -290,6 +290,7 @@ static short lcl_AskRedlineFlags(weld::Window *pWin)
 {
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin, "modules/swriter/ui/queryredlinedialog.ui"));
     std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryRedlineDialog"));
+    xQBox->set_title(SwResId(STR_AUTOCORRECT));
     return xQBox->run();
 }
 
