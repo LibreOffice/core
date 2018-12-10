@@ -140,13 +140,13 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     }
     else if( mnCurrentPalette == mnNumOfPalettes - 1 )
     {
+        rColorSet.Clear();
         // Add doc colors to palette
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         if (pDocSh)
         {
             std::set<Color> aColors = pDocSh->GetDocColors();
             mnColorCount = aColors.size();
-            rColorSet.Clear();
             rColorSet.addEntriesForColorSet(aColors, SvxResId( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
         }
     }

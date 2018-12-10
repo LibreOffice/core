@@ -26,6 +26,7 @@
 #include <svx/dlgctrl.hxx>
 #include <vcl/button.hxx>
 #include <svx/xtable.hxx>
+#include <svx/PaletteManager.hxx>
 
 #include "cfgchart.hxx"
 
@@ -35,24 +36,24 @@ class SvxDefaultColorOptPage : public SfxTabPage
 {
 private:
     VclPtr<ListBox>                m_pLbChartColors;
-    VclPtr<ValueSet>               m_pValSetColorBox;
+    VclPtr<ListBox>                m_pLbPaletteSelector;
+    VclPtr<SvxColorValueSet>       m_pValSetColorBox;
     VclPtr<PushButton>             m_pPBDefault;
     VclPtr<PushButton>             m_pPBAdd;
     VclPtr<PushButton>             m_pPBRemove;
 
     std::unique_ptr<SvxChartOptions>        pChartOptions;
     std::unique_ptr<SvxChartColorTableItem> pColorConfig;
-    XColorListRef           pColorList;
     ImpColorList            aColorList;
+    PaletteManager          aPaletteManager;
 
     DECL_LINK( ResetToDefaults, Button *, void );
     DECL_LINK( AddChartColor, Button *, void );
     DECL_LINK( RemoveChartColor, Button *, void );
-    DECL_LINK( ListClickedHdl, ListBox&, void );
     DECL_LINK(BoxClickedHdl, ValueSet*, void);
+    DECL_LINK( SelectPaletteLbHdl, ListBox&, void );
 
-    void FillColorBox();
-    long GetColorIndex( const Color& rCol );
+    void FillPaletteLB();
 
 private:
     void InsertColorEntry(const XColorEntry& rEntry, sal_Int32 nPos = LISTBOX_APPEND);
@@ -60,8 +61,6 @@ private:
     void ModifyColorEntry(const XColorEntry& rEntry, sal_Int32 nPos);
     void ClearColorEntries();
     void FillBoxChartColorLB();
-    Color GetEntryColor(sal_Int32 nPos) const;
-    Color GetSelectEntryColor() const;
 
 public:
     SvxDefaultColorOptPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
