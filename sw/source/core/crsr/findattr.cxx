@@ -1162,8 +1162,9 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             const_cast<SwPaM &>(rRegion).GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
-        std::unique_ptr<OUString> pRepl( bRegExp ?
-                ReplaceBackReferences(*pSearchOpt, &rCursor) : nullptr );
+        std::unique_ptr<OUString> pRepl(bRegExp
+                ? sw::ReplaceBackReferences(*pSearchOpt, &rCursor, nullptr/*FIXME*/)
+                : nullptr);
         m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
             rCursor, pRepl ? *pRepl : pSearchOpt->replaceString, bRegExp);
         m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );

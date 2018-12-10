@@ -4062,10 +4062,6 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
 
         SwPosition *pStt = aDelPam.Start(),
                    *pEnd = aDelPam.End();
-        OSL_ENSURE( pStt->nNode == pEnd->nNode ||
-                ( pStt->nNode.GetIndex() + 1 == pEnd->nNode.GetIndex() &&
-                    !pEnd->nContent.GetIndex() ),
-                "invalid range: Point and Mark on different nodes" );
         bool bOneNode = pStt->nNode == pEnd->nNode;
 
         // Own Undo?
@@ -4202,6 +4198,11 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         }
         else
         {
+            assert((pStt->nNode == pEnd->nNode ||
+                    ( pStt->nNode.GetIndex() + 1 == pEnd->nNode.GetIndex() &&
+                        !pEnd->nContent.GetIndex() )) &&
+                    "invalid range: Point and Mark on different nodes" );
+
             if( !m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() )
                 m_rDoc.getIDocumentRedlineAccess().DeleteRedline( aDelPam, true, USHRT_MAX );
 

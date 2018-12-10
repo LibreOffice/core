@@ -21,14 +21,11 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_ACORRECT_HXX
 
 #include <memory>
-#include <vector>
 
 #include <tools/solar.h>
 #include <editeng/svxacorr.hxx>
 #include <swundo.hxx>
 
-class SwDoc;
-class SwUnoCursor;
 class SwEditShell;
 class SwPaM;
 class SwNodeIndex;
@@ -116,13 +113,6 @@ public:
     void CheckChar(const SwPosition& rPos, sal_Unicode cChar);
     bool CheckDelChar(const SwPosition& rPos);
 };
-
-namespace sw {
-
-bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
-        SwDoc & rDoc, SwPaM const& rDelPam);
-
-} // namespace sw
 
 #endif
 

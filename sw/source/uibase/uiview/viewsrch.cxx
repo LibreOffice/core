@@ -308,7 +308,8 @@ void SwView::ExecSearch(SfxRequest& rReq)
                             m_pWrtShell->Push();
                         OUString aReplace( m_pSrchItem->GetReplaceString() );
                         i18nutil::SearchOptions2 aTmp( m_pSrchItem->GetSearchOptions() );
-                        OUString *pBackRef = ReplaceBackReferences( aTmp, m_pWrtShell->GetCursor() );
+                        OUString *pBackRef = sw::ReplaceBackReferences(aTmp,
+                            m_pWrtShell->GetCursor(), m_pWrtShell->GetLayout());
                         if( pBackRef )
                             m_pSrchItem->SetReplaceString( *pBackRef );
                         Replace();

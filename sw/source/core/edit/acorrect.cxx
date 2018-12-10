@@ -415,7 +415,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                             *ranges.front(), pFnd->GetLong(), false);
                     for (auto it = ranges.begin() + 1; it != ranges.end(); ++it)
                     {
-                        DeleteSel(**it);
+                        DeleteSelImpl(**it);
                     }
                 }
 

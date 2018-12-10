@@ -36,11 +36,14 @@
 #include <txtatr.hxx>
 #include <txtfld.hxx>
 #include <txtfrm.hxx>
+#include <rootfrm.hxx>
 #include <swcrsr.hxx>
+#include <redline.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <dcontact.hxx>
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
@@ -940,10 +943,12 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
         }
 
         std::unique_ptr<OUString> pRepl( bRegExp
-                ? ReplaceBackReferences(m_rSearchOpt, &rCursor) : nullptr );
-        bool const bReplaced =
-            m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
-                rCursor, pRepl ? *pRepl : m_rSearchOpt.replaceString, bRegExp);
+                ? sw::ReplaceBackReferences(m_rSearchOpt, &rCursor, m_pLayout)
+                : nullptr );
+        bool const bReplaced = sw::ReplaceImpl(rCursor,
+                pRepl ? *pRepl : m_rSearchOpt.replaceString,
+                bRegExp, *m_rCursor.GetDoc(), m_pLayout);
+
         m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );
 
         if( bRegExp )
@@ -1010,22 +1015,115 @@ sal_uLong SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool 
     return nRet;
 }
 
-OUString *ReplaceBackReferences( const i18nutil::SearchOptions2& rSearchOpt, SwPaM* pPam )
+namespace sw {
+
+bool ReplaceImpl(
+        SwPaM & rCursor,
+        OUString const& rReplacement,
+        bool const bRegExp,
+        SwDoc & rDoc,
+        SwRootFrame const*const pLayout)
+{
+    bool bReplaced(true);
+    IDocumentContentOperations & rIDCO(rDoc.getIDocumentContentOperations());
+#if 0
+    // FIXME there's some problem with multiple redlines here on Undo
+    std::vector<std::shared_ptr<SwUnoCursor>> ranges;
+    if (rDoc.getIDocumentRedlineAccess().IsRedlineOn()
+        || !pLayout
+        || !pLayout->IsHideRedlines()
+        || sw::GetRanges(ranges, rDoc, rCursor))
+    {
+        bReplaced = rIDCO.ReplaceRange(rCursor, rReplacement, bRegExp);
+    }
+    else
+    {
+        assert(!ranges.empty());
+        assert(ranges.front()->GetPoint()->nNode == ranges.front()->GetMark()->nNode);
+        bReplaced = rIDCO.ReplaceRange(*ranges.front(), rReplacement, bRegExp);
+        for (auto it = ranges.begin() + 1; it != ranges.end(); ++it)
+        {
+            bReplaced &= rIDCO.DeleteAndJoin(**it);
+        }
+    }
+#else
+    IDocumentRedlineAccess const& rIDRA(rDoc.getIDocumentRedlineAccess());
+    if (pLayout && pLayout->IsHideRedlines()
+        && !rIDRA.IsRedlineOn() // otherwise: ReplaceRange will handle it
+        && (rIDRA.GetRedlineFlags() & RedlineFlags::ShowDelete)) // otherwise: ReplaceRange will DeleteRedline()
+    {
+        SwRedlineTable::size_type tmp;
+        rIDRA.GetRedline(*rCursor.Start(), &tmp);
+        while (tmp < rIDRA.GetRedlineTable().size())
+        {
+            SwRangeRedline const*const pRedline(rIDRA.GetRedlineTable()[tmp]);
+            if (*rCursor.End() <= *pRedline->Start())
+            {
+                break;
+            }
+            if (*pRedline->End() <= *rCursor.Start())
+            {
+                ++tmp;
+                continue;
+            }
+            if (pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
+            {
+                assert(*pRedline->Start() != *pRedline->End());
+                // search in hidden layout can't overlap redlines
+                assert(*rCursor.Start() <= *pRedline->Start() && *pRedline->End() <= *rCursor.End());
+                SwPaM pam(*pRedline, nullptr);
+                bReplaced &= rIDCO.DeleteAndJoin(pam);
+            }
+            else
+            {
+                ++tmp;
+            }
+        }
+    }
+    bReplaced &= rIDCO.ReplaceRange(rCursor, rReplacement, bRegExp);
+#endif
+    return bReplaced;
+}
+
+OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
+        SwPaM *const pPam, SwRootFrame const*const pLayout)
 {
     OUString *pRet = nullptr;
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2 )
     {
         const SwContentNode* pTextNode = pPam->GetContentNode();
+        if (!pTextNode || !pTextNode->IsTextNode())
+        {
+            return pRet;
+        }
+        SwTextFrame const*const pFrame(pLayout
+            ? static_cast<SwTextFrame const*>(pTextNode->getLayoutFrame(pLayout))
+            : nullptr);
         const bool bParaEnd = rSearchOpt.searchString == "$" || rSearchOpt.searchString == "^$" || rSearchOpt.searchString == "$^";
-        if ( pTextNode && pTextNode->IsTextNode() && (bParaEnd || pTextNode == pPam->GetContentNode( false )) )
+        if (bParaEnd || (pLayout
+                ? sw::FrameContainsNode(*pFrame, pPam->GetMark()->nNode.GetIndex())
+                : pTextNode == pPam->GetContentNode(false)))
         {
             utl::TextSearch aSText( utl::TextSearch::UpgradeToSearchOptions2( rSearchOpt) );
-            OUString rStr = pTextNode->GetTextNode()->GetText();
-            sal_Int32 nStart = pPam->Start()->nContent.GetIndex();
-            sal_Int32 nEnd = pPam->End()->nContent.GetIndex();
+            OUString rStr = pLayout
+                ? pFrame->GetText()
+                : pTextNode->GetTextNode()->GetText();
+            AmbiguousIndex nStart;
+            AmbiguousIndex nEnd;
+            if (pLayout)
+            {
+                nStart.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->Start()));
+                nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->End()));
+            }
+            else
+            {
+                nStart.SetModelIndex(pPam->Start()->nContent.GetIndex());
+                nEnd.SetModelIndex(pPam->End()->nContent.GetIndex());
+            }
             SearchResult aResult;
-            if ( bParaEnd || aSText.SearchForward( rStr, &nStart, &nEnd, &aResult ) )
+            if (bParaEnd ||
+                aSText.SearchForward(rStr, &nStart.GetAnyIndex(), &nEnd.GetAnyIndex(), &aResult))
             {
                 if ( bParaEnd )
                 {
@@ -1044,5 +1142,7 @@ OUString *ReplaceBackReferences( const i18nutil::SearchOptions2& rSearchOpt, SwP
     }
     return pRet;
 }
+
+} // namespace sw
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
