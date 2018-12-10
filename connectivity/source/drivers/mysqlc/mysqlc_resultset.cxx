@@ -134,6 +134,18 @@ void OResultSet::ensureResultFetched()
     }
 }
 
+void OResultSet::ensureFieldInfoFetched()
+{
+    if (!m_aFields.empty())
+        return;
+    unsigned nFieldCount = mysql_num_fields(m_pResult);
+    MYSQL_FIELD* pFields = mysql_fetch_fields(m_pResult);
+    m_aFields.reserve(nFieldCount);
+    for (unsigned i = 0; i < nFieldCount; ++i)
+        m_aFields.push_back(OUString{
+            pFields[i].name, static_cast<sal_Int32>(strlen(pFields[i].name)), m_encoding });
+}
+
 void OResultSet::fetchResult()
 {
     // Mysql C API does not allow simultaneously opened result sets, but sdbc does.
@@ -143,12 +155,10 @@ void OResultSet::fetchResult()
     // TODO ensure that
     m_nRowCount = mysql_num_rows(m_pResult);
 
+    ensureFieldInfoFetched();
+
     // fetch all the data
     m_aRows.reserve(m_nRowCount);
-
-    m_nFieldCount = mysql_num_fields(m_pResult);
-    MYSQL_FIELD* pFields = mysql_fetch_fields(m_pResult);
-    m_aFields.assign(pFields, pFields + m_nFieldCount);
 
     for (sal_Int32 row = 0; row < m_nRowCount; ++row)
     {
@@ -156,7 +166,7 @@ void OResultSet::fetchResult()
         unsigned long* lengths = mysql_fetch_lengths(m_pResult);
         m_aRows.push_back(DataFields{});
         // MYSQL_ROW is char**, array of strings
-        for (unsigned col = 0; col < m_nFieldCount; ++col)
+        for (std::size_t col = 0; col < m_aFields.size(); ++col)
         {
             m_aRows.back().push_back(OString{ data[col], static_cast<sal_Int32>(lengths[col]) });
         }
@@ -202,11 +212,12 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureFieldInfoFetched();
 
-    for (unsigned int i = 0; i < m_nFieldCount; ++i)
+    for (std::size_t i = 0; i < m_aFields.size(); ++i)
     {
-        if (columnName.equalsIgnoreAsciiCaseAscii(m_aFields[i].name))
-            return i + 1; // sdbc indexes from 1
+        if (columnName.equalsIgnoreAsciiCase(m_aFields[i]))
+            return static_cast<sal_Int32>(i) + 1; // sdbc indexes from 1
     }
 
     throw SQLException("The column name '" + columnName + "' is not valid.", *this, "42S22", 0,
@@ -1092,7 +1103,7 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL OResultSet::getProper
 
 void OResultSet::checkColumnIndex(sal_Int32 index)
 {
-    if (index < 1 || index > static_cast<int>(m_nFieldCount))
+    if (index < 1 || index > static_cast<int>(m_aFields.size()))
     {
         /* static object for efficiency or thread safety is a problem ? */
         throw SQLException("index out of range", *this, OUString(), 1, Any());

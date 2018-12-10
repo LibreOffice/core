@@ -64,12 +64,11 @@ class OResultSet final : public OBase_Mutex,
 {
     using DataFields = std::vector<OString>;
     std::vector<DataFields> m_aRows;
-    std::vector<MYSQL_FIELD> m_aFields;
+    std::vector<OUString> m_aFields;
     MYSQL* m_pMysql = nullptr;
     css::uno::WeakReferenceHelper m_aStatement;
     css::uno::Reference<css::sdbc::XResultSetMetaData> m_xMetaData;
     MYSQL_RES* m_pResult;
-    unsigned int m_nFieldCount = 0;
     rtl_TextEncoding m_encoding;
     bool m_bWasNull = false; // did the last getXXX result null?
     bool m_bResultFetched = false;
@@ -101,6 +100,7 @@ class OResultSet final : public OBase_Mutex,
     virtual ~OResultSet() override = default;
 
     void ensureResultFetched();
+    void ensureFieldInfoFetched();
     void fetchResult();
 
 public:
