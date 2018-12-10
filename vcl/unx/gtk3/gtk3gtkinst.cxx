@@ -4704,17 +4704,14 @@ namespace
         gchar* pName2;
         GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
         gint sort_column_id(0);
-        GtkSortType order(GTK_SORT_ASCENDING);
-        gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, &order);
+        gtk_tree_sortable_get_sort_column_id(pSortable, &sort_column_id, nullptr);
         gtk_tree_model_get(pModel, a, sort_column_id, &pName1, -1);
         gtk_tree_model_get(pModel, b, sort_column_id, &pName2, -1);
         gint ret = pSorter->compare(OUString(pName1, strlen(pName1), RTL_TEXTENCODING_UTF8),
                                     OUString(pName2, strlen(pName2), RTL_TEXTENCODING_UTF8));
         g_free(pName1);
         g_free(pName2);
-        if (ret == 0)
-            return ret;
-        return order == GTK_SORT_ASCENDING ? ret : -ret;
+        return ret;
     }
 }
 
