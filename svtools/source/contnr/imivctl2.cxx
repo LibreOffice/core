@@ -70,10 +70,10 @@ void IcnCursor_Impl::ImplCreate()
     xColumns.reset(new IconChoiceMap);
     xRows.reset(new IconChoiceMap);
 
-    size_t nCount = pView->aEntries.size();
+    size_t nCount = pView->maEntries.size();
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
+        SvxIconChoiceCtrlEntry* pEntry = pView->maEntries[ nCur ].get();
         // const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
         tools::Rectangle rRect( pView->CalcBmpRect( pEntry ) );
         short nY = static_cast<short>( ((rRect.Top()+rRect.Bottom())/2) / nDeltaHeight );
@@ -341,8 +341,8 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
         if( bDown )
         {
             nNewPos += nEntriesInView;
-            if( nNewPos >= static_cast<long>(pView->aEntries.size()) )
-                nNewPos = pView->aEntries.size() - 1;
+            if( nNewPos >= static_cast<long>(pView->maEntries.size()) )
+                nNewPos = pView->maEntries.size() - 1;
         }
         else
         {
@@ -351,7 +351,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
                 nNewPos = 0;
         }
         if( nPos != nNewPos )
-            return pView->aEntries[ static_cast<size_t>(nNewPos) ];
+            return pView->maEntries[ static_cast<size_t>(nNewPos) ].get();
         return nullptr;
     }
     long nOpt = pView->GetEntryBoundRect( pStart ).Top();
@@ -394,10 +394,10 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
         sal_uLong nPos = pView->GetEntryListPos( pCtrlEntry );
-        if( bDown && nPos < (pView->aEntries.size() - 1) )
-            return pView->aEntries[ nPos + 1 ];
+        if( bDown && nPos < (pView->maEntries.size() - 1) )
+            return pView->maEntries[ nPos + 1 ].get();
         else if( !bDown && nPos > 0 )
-            return pView->aEntries[ nPos - 1 ];
+            return pView->maEntries[ nPos - 1 ].get();
         return nullptr;
     }
 
@@ -524,9 +524,9 @@ void IcnGridMap_Impl::Create_Impl()
     _pGridMap.reset( new bool[nCellCount] );
     memset(_pGridMap.get(), 0, nCellCount * sizeof(bool));
 
-    const size_t nCount = _pView->aEntries.size();
+    const size_t nCount = _pView->maEntries.size();
     for( size_t nCur=0; nCur < nCount; nCur++ )
-        OccupyGrids( _pView->aEntries[ nCur ] );
+        OccupyGrids( _pView->maEntries[ nCur ].get() );
 }
 
 void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const

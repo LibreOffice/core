@@ -97,45 +97,6 @@ struct LocalFocus
 };
 
 
-// Entry-List
-
-class EntryList_Impl
-{
-private:
-    std::vector< SvxIconChoiceCtrlEntry* > maIconChoiceCtrlEntryList;
-    SvxIconChoiceCtrl_Impl*         _pOwner;
-
-public:
-                            explicit EntryList_Impl( SvxIconChoiceCtrl_Impl* );
-                            ~EntryList_Impl();
-
-    void                    clear();
-
-    size_t                  size()
-                            {
-                                return maIconChoiceCtrlEntryList.size();
-                            }
-    size_t                  size() const
-                            {
-                                return maIconChoiceCtrlEntryList.size();
-                            }
-
-    SvxIconChoiceCtrlEntry* operator[]( size_t nPos )
-                            {
-                                return  ( nPos < maIconChoiceCtrlEntryList.size() )
-                                        ? maIconChoiceCtrlEntryList[ nPos ]
-                                        : nullptr;
-                            }
-    SvxIconChoiceCtrlEntry* operator[]( size_t nPos ) const
-                            {
-                                return  ( nPos < maIconChoiceCtrlEntryList.size() )
-                                        ? maIconChoiceCtrlEntryList[ nPos ]
-                                        : nullptr;
-                            }
-    void                    insert( size_t nPos, SvxIconChoiceCtrlEntry* pEntry );
-};
-
-
 // Implementation-class of IconChoiceCtrl
 
 
@@ -145,11 +106,10 @@ typedef std::vector<SvxIconChoiceCtrlEntry*> SvxIconChoiceCtrlEntryPtrVec;
 class SvxIconChoiceCtrl_Impl
 {
     friend class IcnCursor_Impl;
-    friend class EntryList_Impl;
     friend class IcnGridMap_Impl;
 
     bool                    bChooseWithCursor;
-    EntryList_Impl          aEntries;
+    std::vector< std::unique_ptr<SvxIconChoiceCtrlEntry> > maEntries;
     VclPtr<ScrollBar>       aVerSBar;
     VclPtr<ScrollBar>       aHorSBar;
     VclPtr<ScrollBarBox>    aScrBarBox;
@@ -177,7 +137,7 @@ class SvxIconChoiceCtrl_Impl
     ImplSVEvent *           nUserEventAdjustScrBars;
     SvxIconChoiceCtrlEntry* pCurHighlightFrame;
     bool                    bHighlightFramePressed;
-    SvxIconChoiceCtrlEntry* pHead;                      // top left entry
+    SvxIconChoiceCtrlEntry* pHead = nullptr;            // top left entry
     SvxIconChoiceCtrlEntry* pCursor;
     SvxIconChoiceCtrlEntry* pHdlEntry;
     VclPtr<VirtualDevice>   pDDDev;
@@ -302,7 +262,7 @@ public:
     void                Clear( bool bInCtor );
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const { return nWinBits; }
-    void                InsertEntry( SvxIconChoiceCtrlEntry*, size_t nPos );
+    void                InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry>, size_t nPos );
     void                CreateAutoMnemonics( MnemonicGenerator* _pGenerator );
     void                FontModified();
     void                SelectAll();
@@ -421,14 +381,14 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry
                         );
 #endif
-    size_t              GetEntryCount() const { return aEntries.size(); }
+    size_t              GetEntryCount() const { return maEntries.size(); }
     SvxIconChoiceCtrlEntry* GetEntry( size_t nPos )
                             {
-                                return aEntries[ nPos ];
+                                return maEntries[ nPos ].get();
                             }
     SvxIconChoiceCtrlEntry* GetEntry( size_t nPos ) const
                             {
-                                return aEntries[ nPos ];
+                                return maEntries[ nPos ].get();
                             }
     SvxIconChoiceCtrlEntry* GetFirstSelectedEntry() const;
     void                SetSelectionMode( SelectionMode eMode ) { eSelectionMode=eMode; }
