@@ -1345,7 +1345,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     //set the start value at the beginning of the document
                     xRangeProperties.set( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
                 }
-                xRangeProperties->setPropertyValue( getPropertyName( PROP_PARA_LINE_NUMBER_START_VALUE ), uno::makeAny( m_nLnnMin ) );
+                // Writer is 1-based, Word is 0-based.
+                xRangeProperties->setPropertyValue(
+                    getPropertyName(PROP_PARA_LINE_NUMBER_START_VALUE),
+                    uno::makeAny(m_nLnnMin + 1));
             }
             catch ( const uno::Exception& )
             {
