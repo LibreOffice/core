@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_f8fff031",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-10T13:58:30Z",
+      "side": 1,
+      "message": "Move this up: \"search for stock pen ...\" belongs to what the whole function does, not only to the condition when it\u0027s Printer. The comment makes sense for all the lines below.\n\nAnd no need to use {} braces in all cases. Appropriately-indented single-liners are OK without {} (there are cases where they make sense, though, - but not always).",
+      "range": {
+        "startLine": 1394,
+        "startChar": 0,
+        "endLine": 1395,
+        "endChar": 37
+      },
+      "revId": "1aeaf683d82db97486d990e30236c06fc82d481b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
