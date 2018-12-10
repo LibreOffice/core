@@ -1505,10 +1505,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuInsert-InsertFormula">
+      <object class="GtkMenuItem" id="MenuInsert-InsertObjectStarMath">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertFormula</property>
+        <property name="action_name">.uno:InsertObjectStarMath</property>
       </object>
     </child>
     <child>
