@@ -367,15 +367,18 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     // would normally arrive, it would be too late (would be after the
     // paragraph start has been written).
     bool bEndParaSdt = false;
-    SwTextNode* pTextNode = m_rExport.m_pCurPam->GetNode().GetTextNode();
-    if (pTextNode && pTextNode->GetpSwAttrSet())
+    if (m_bStartedParaSdt)
     {
-        const SfxItemSet* pSet = pTextNode->GetpSwAttrSet();
-        if (const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_GRABBAG))
+        SwTextNode* pTextNode = m_rExport.m_pCurPam->GetNode().GetTextNode();
+        if (pTextNode && pTextNode->GetpSwAttrSet())
         {
-            const SfxGrabBagItem& rParaGrabBag = static_cast<const SfxGrabBagItem&>(*pItem);
-            const std::map<OUString, css::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
-            bEndParaSdt = m_bStartedParaSdt && rMap.find("ParaSdtEndBefore") != rMap.end();
+            const SfxItemSet* pSet = pTextNode->GetpSwAttrSet();
+            if (const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_GRABBAG))
+            {
+                const SfxGrabBagItem& rParaGrabBag = static_cast<const SfxGrabBagItem&>(*pItem);
+                const std::map<OUString, css::uno::Any>& rMap = rParaGrabBag.GetGrabBag();
+                bEndParaSdt = m_bStartedParaSdt && rMap.find("ParaSdtEndBefore") != rMap.end();
+            }
         }
     }
     // TODO also avoid multiline paragraphs in those SDT types for shape text
