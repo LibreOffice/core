@@ -68,17 +68,14 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
         {
             const long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
             const long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
-            long* pColm = new long[nWidth2];
-            long* pRows = new long[nHeight2];
-            BitmapColor* pColRow1
-                = reinterpret_cast<BitmapColor*>(new sal_uInt8[sizeof(BitmapColor) * nWidth2]);
-            BitmapColor* pColRow2
-                = reinterpret_cast<BitmapColor*>(new sal_uInt8[sizeof(BitmapColor) * nWidth2]);
-            BitmapColor* pColRow3
-                = reinterpret_cast<BitmapColor*>(new sal_uInt8[sizeof(BitmapColor) * nWidth2]);
-            BitmapColor* pRowTmp1 = pColRow1;
-            BitmapColor* pRowTmp2 = pColRow2;
-            BitmapColor* pRowTmp3 = pColRow3;
+            std::unique_ptr<long[]> pColm(new long[nWidth2]);
+            std::unique_ptr<long[]> pRows(new long[nHeight2]);
+            std::unique_ptr<BitmapColor[]> pColRow1(new BitmapColor[nWidth2]);
+            std::unique_ptr<BitmapColor[]> pColRow2(new BitmapColor[nWidth2]);
+            std::unique_ptr<BitmapColor[]> pColRow3(new BitmapColor[nWidth2]);
+            BitmapColor* pRowTmp1 = pColRow1.get();
+            BitmapColor* pRowTmp2 = pColRow2.get();
+            BitmapColor* pRowTmp3 = pColRow3.get();
             BitmapColor* pColor;
             long nY, nX, i;
             long nR1, nR2, nR3, nR4, nR5, nR6, nR7, nR8, nR9;
@@ -171,35 +168,29 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
 
                 if (++nY < nHeight)
                 {
-                    if (pRowTmp1 == pColRow1)
+                    if (pRowTmp1 == pColRow1.get())
                     {
-                        pRowTmp1 = pColRow2;
-                        pRowTmp2 = pColRow3;
-                        pRowTmp3 = pColRow1;
+                        pRowTmp1 = pColRow2.get();
+                        pRowTmp2 = pColRow3.get();
+                        pRowTmp3 = pColRow1.get();
                     }
-                    else if (pRowTmp1 == pColRow2)
+                    else if (pRowTmp1 == pColRow2.get())
                     {
-                        pRowTmp1 = pColRow3;
-                        pRowTmp2 = pColRow1;
-                        pRowTmp3 = pColRow2;
+                        pRowTmp1 = pColRow3.get();
+                        pRowTmp2 = pColRow1.get();
+                        pRowTmp3 = pColRow2.get();
                     }
                     else
                     {
-                        pRowTmp1 = pColRow1;
-                        pRowTmp2 = pColRow2;
-                        pRowTmp3 = pColRow3;
+                        pRowTmp1 = pColRow1.get();
+                        pRowTmp2 = pColRow2.get();
+                        pRowTmp3 = pColRow3.get();
                     }
 
                     for (i = 0; i < nWidth2; i++)
                         pRowTmp3[i] = pReadAcc->GetColor(pRows[nY + 2], pColm[i]);
                 }
             }
-
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow1);
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow2);
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow3);
-            delete[] pColm;
-            delete[] pRows;
 
             pWriteAcc.reset();
 

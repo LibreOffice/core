@@ -18,6 +18,7 @@
 #include <vcl/BitmapSharpenFilter.hxx>
 
 #include <bitmapwriteaccess.hxx>
+#include <array>
 
 BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
 {
@@ -36,20 +37,17 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
         {
             const long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
             const long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
-            long* pColm = new long[nWidth2];
-            long* pRows = new long[nHeight2];
-            BitmapColor* pColRow1
-                = reinterpret_cast<BitmapColor*>(new sal_uInt8[sizeof(BitmapColor) * nWidth2]);
-            BitmapColor* pColRow2
-                = reinterpret_cast<BitmapColor*>(new sal_uInt8[sizeof(BitmapColor) * nWidth2]);
-            BitmapColor* pColRow3
-                = reinterpret_cast<BitmapColor*>(new sal_uInt8[sizeof(BitmapColor) * nWidth2]);
-            BitmapColor* pRowTmp1 = pColRow1;
-            BitmapColor* pRowTmp2 = pColRow2;
-            BitmapColor* pRowTmp3 = pColRow3;
+            std::unique_ptr<long[]> pColm(new long[nWidth2]);
+            std::unique_ptr<long[]> pRows(new long[nHeight2]);
+            std::unique_ptr<BitmapColor[]> pColRow1(new BitmapColor[nWidth2]);
+            std::unique_ptr<BitmapColor[]> pColRow2(new BitmapColor[nWidth2]);
+            std::unique_ptr<BitmapColor[]> pColRow3(new BitmapColor[nWidth2]);
+            BitmapColor* pRowTmp1 = pColRow1.get();
+            BitmapColor* pRowTmp2 = pColRow2.get();
+            BitmapColor* pRowTmp3 = pColRow3.get();
             BitmapColor* pColor;
             long nY, nX, i, nSumR, nSumG, nSumB, nMatrixVal, nTmp;
-            long(*pKoeff)[256] = new long[9][256];
+            std::array<std::array<long, 256>, 9> aKoeff;
             long* pTmp;
 
             // create LUT of products of matrix value and possible color component values
@@ -57,7 +55,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
             {
                 for (nX = nTmp = 0, nMatrixVal = mrMatrix[nY]; nX < 256; nX++, nTmp += nMatrixVal)
                 {
-                    pKoeff[nY][nX] = nTmp;
+                    aKoeff[nY][nX] = nTmp;
                 }
             }
 
@@ -92,52 +90,52 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
                 for (nX = 0; nX < nWidth; nX++)
                 {
                     // first row
-                    pTmp = pKoeff[0];
+                    pTmp = aKoeff[0].data();
                     pColor = pRowTmp1 + nX;
                     nSumR = pTmp[pColor->GetRed()];
                     nSumG = pTmp[pColor->GetGreen()];
                     nSumB = pTmp[pColor->GetBlue()];
 
-                    pTmp = pKoeff[1];
+                    pTmp = aKoeff[1].data();
                     nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    pTmp = pKoeff[2];
+                    pTmp = aKoeff[2].data();
                     nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
                     // second row
-                    pTmp = pKoeff[3];
+                    pTmp = aKoeff[3].data();
                     pColor = pRowTmp2 + nX;
                     nSumR += pTmp[pColor->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    pTmp = pKoeff[4];
+                    pTmp = aKoeff[4].data();
                     nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    pTmp = pKoeff[5];
+                    pTmp = aKoeff[5].data();
                     nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
                     // third row
-                    pTmp = pKoeff[6];
+                    pTmp = aKoeff[6].data();
                     pColor = pRowTmp3 + nX;
                     nSumR += pTmp[pColor->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    pTmp = pKoeff[7];
+                    pTmp = aKoeff[7].data();
                     nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
 
-                    pTmp = pKoeff[8];
+                    pTmp = aKoeff[8].data();
                     nSumR += pTmp[(++pColor)->GetRed()];
                     nSumG += pTmp[pColor->GetGreen()];
                     nSumB += pTmp[pColor->GetBlue()];
@@ -152,23 +150,23 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
 
                 if (++nY < nHeight)
                 {
-                    if (pRowTmp1 == pColRow1)
+                    if (pRowTmp1 == pColRow1.get())
                     {
-                        pRowTmp1 = pColRow2;
-                        pRowTmp2 = pColRow3;
-                        pRowTmp3 = pColRow1;
+                        pRowTmp1 = pColRow2.get();
+                        pRowTmp2 = pColRow3.get();
+                        pRowTmp3 = pColRow1.get();
                     }
-                    else if (pRowTmp1 == pColRow2)
+                    else if (pRowTmp1 == pColRow2.get())
                     {
-                        pRowTmp1 = pColRow3;
-                        pRowTmp2 = pColRow1;
-                        pRowTmp3 = pColRow2;
+                        pRowTmp1 = pColRow3.get();
+                        pRowTmp2 = pColRow1.get();
+                        pRowTmp3 = pColRow2.get();
                     }
                     else
                     {
-                        pRowTmp1 = pColRow1;
-                        pRowTmp2 = pColRow2;
-                        pRowTmp3 = pColRow3;
+                        pRowTmp1 = pColRow1.get();
+                        pRowTmp2 = pColRow2.get();
+                        pRowTmp3 = pColRow3.get();
                     }
 
                     for (i = 0; i < nWidth2; i++)
@@ -177,13 +175,6 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
                     }
                 }
             }
-
-            delete[] pKoeff;
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow1);
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow2);
-            delete[] reinterpret_cast<sal_uInt8*>(pColRow3);
-            delete[] pColm;
-            delete[] pRows;
 
             pWriteAcc.reset();
 

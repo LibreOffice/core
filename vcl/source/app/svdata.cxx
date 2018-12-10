@@ -50,6 +50,7 @@
 #include <salsys.hxx>
 #include <strings.hrc>
 #include <units.hrc>
+#include <print.h>
 
 #include <com/sun/star/accessibility/MSAAService.hpp>
 
