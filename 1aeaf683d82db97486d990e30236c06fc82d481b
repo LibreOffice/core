@@ -46,6 +46,30 @@
       "revId": "1aeaf683d82db97486d990e30236c06fc82d481b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_d31bf770",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-10T15:30:08Z",
+      "side": 1,
+      "message": "Well - as you like; it\u0027s just a matter of taste, and I won\u0027t insist on one style or the other (as I didn\u0027t previously) - I just expressed my aesthetic feelings.\n\nPersonally I prefer to avoid braces for 1-liners where no ambiguity possible (e.g., in your example, I\u0027d enclose the whole inner if..else into braces, but their own //do and //done would be without braces if 1-line). I usually use braces with 1-liners when also a comment is needed... well - that\u0027s a matter of taste, as I mentioned.\n\nA note: when you will review others here, please refrain from *forcing* them to use braces (as you told you do), because personal opinions are OK here, but not as something enforced. At least unless you have a good objective reason to require that.",
+      "parentUuid": "5f4e5783_3818e87f",
+      "range": {
+        "startLine": 1394,
+        "startChar": 0,
+        "endLine": 1395,
+        "endChar": 37
+      },
+      "revId": "1aeaf683d82db97486d990e30236c06fc82d481b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
