@@ -289,7 +289,7 @@ Sequence< OUString > SwXFootnoteProperties::getSupportedServiceNames()
 }
 
 SwXFootnoteProperties::SwXFootnoteProperties(SwDoc* pDc) :
-    pDoc(pDc),
+    m_pDoc(pDc),
     m_pPropertySet(GetFootnoteSet())
 {
 }
@@ -308,7 +308,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXFootnoteProperties::getPropertySet
 void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
-    if(!pDoc)
+    if(!m_pDoc)
         throw uno::RuntimeException();
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
@@ -317,7 +317,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
 
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    SwFootnoteInfo aFootnoteInfo(pDoc->GetFootnoteInfo());
+    SwFootnoteInfo aFootnoteInfo(m_pDoc->GetFootnoteInfo());
     switch(pEntry->nWID)
     {
         case WID_PREFIX:
@@ -374,14 +374,14 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
         break;
         case WID_PARAGRAPH_STYLE:
         {
-            SwTextFormatColl* pColl = lcl_GetParaStyle(pDoc, aValue);
+            SwTextFormatColl* pColl = lcl_GetParaStyle(m_pDoc, aValue);
             if(pColl)
                 aFootnoteInfo.SetFootnoteTextColl(*pColl);
         }
         break;
         case WID_PAGE_STYLE:
         {
-            SwPageDesc* pDesc = lcl_GetPageDesc(pDoc, aValue);
+            SwPageDesc* pDesc = lcl_GetPageDesc(m_pDoc, aValue);
             if(pDesc)
                 aFootnoteInfo.ChgPageDesc( pDesc );
         }
@@ -389,7 +389,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
         case WID_ANCHOR_CHARACTER_STYLE:
         case WID_CHARACTER_STYLE:
         {
-            SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
+            SwCharFormat* pFormat = lcl_getCharFormat(m_pDoc, aValue);
             if(pFormat)
             {
                 if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
@@ -420,7 +420,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
         }
         break;
     }
-    pDoc->SetFootnoteInfo(aFootnoteInfo);
+    m_pDoc->SetFootnoteInfo(aFootnoteInfo);
 
 
 }
@@ -429,14 +429,14 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    if(!pDoc)
+    if(!m_pDoc)
         throw uno::RuntimeException();
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
         throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
+    const SwFootnoteInfo& rFootnoteInfo = m_pDoc->GetFootnoteInfo();
     switch(pEntry->nWID)
     {
         case WID_PREFIX:
@@ -491,7 +491,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
             if( rFootnoteInfo.KnowsPageDesc() )
             {
                 SwStyleNameMapper::FillProgName(
-                        rFootnoteInfo.GetPageDesc( *pDoc )->GetName(),
+                        rFootnoteInfo.GetPageDesc( *m_pDoc )->GetName(),
                         aString,
                         SwGetPoolIdFromName::PageDesc);
             }
@@ -569,7 +569,7 @@ Sequence< OUString > SwXEndnoteProperties::getSupportedServiceNames()
 }
 
 SwXEndnoteProperties::SwXEndnoteProperties(SwDoc* pDc) :
-    pDoc(pDc),
+    m_pDoc(pDc),
     m_pPropertySet(GetEndnoteSet())
 {
 }
@@ -587,7 +587,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXEndnoteProperties::getPropertySetI
 void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
-    if(pDoc)
+    if(m_pDoc)
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(!pEntry)
@@ -595,7 +595,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
 
         if ( pEntry->nFlags & PropertyAttribute::READONLY)
             throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-        SwEndNoteInfo aEndInfo(pDoc->GetEndNoteInfo());
+        SwEndNoteInfo aEndInfo(m_pDoc->GetEndNoteInfo());
         switch(pEntry->nWID)
         {
             case WID_PREFIX:
@@ -628,14 +628,14 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
             break;
             case  WID_PARAGRAPH_STYLE    :
             {
-                SwTextFormatColl* pColl = lcl_GetParaStyle(pDoc, aValue);
+                SwTextFormatColl* pColl = lcl_GetParaStyle(m_pDoc, aValue);
                 if(pColl)
                     aEndInfo.SetFootnoteTextColl(*pColl);
             }
             break;
             case  WID_PAGE_STYLE :
             {
-                SwPageDesc* pDesc = lcl_GetPageDesc(pDoc, aValue);
+                SwPageDesc* pDesc = lcl_GetPageDesc(m_pDoc, aValue);
                 if(pDesc)
                     aEndInfo.ChgPageDesc( pDesc );
             }
@@ -643,7 +643,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
             case WID_ANCHOR_CHARACTER_STYLE:
             case  WID_CHARACTER_STYLE    :
             {
-                SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
+                SwCharFormat* pFormat = lcl_getCharFormat(m_pDoc, aValue);
                 if(pFormat)
                 {
                     if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
@@ -654,7 +654,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
             }
             break;
         }
-        pDoc->SetEndNoteInfo(aEndInfo);
+        m_pDoc->SetEndNoteInfo(aEndInfo);
 
     }
 }
@@ -663,13 +663,13 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    if(pDoc)
+    if(m_pDoc)
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(!pEntry)
             throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-        const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
+        const SwEndNoteInfo& rEndInfo = m_pDoc->GetEndNoteInfo();
         switch(pEntry->nWID)
         {
             case WID_PREFIX:
@@ -704,7 +704,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 if( rEndInfo.KnowsPageDesc() )
                 {
                     SwStyleNameMapper::FillProgName(
-                        rEndInfo.GetPageDesc( *pDoc )->GetName(),
+                        rEndInfo.GetPageDesc( *m_pDoc )->GetName(),
                         aString,
                         SwGetPoolIdFromName::PageDesc);
                 }
@@ -772,7 +772,7 @@ Sequence< OUString > SwXLineNumberingProperties::getSupportedServiceNames()
 }
 
 SwXLineNumberingProperties::SwXLineNumberingProperties(SwDoc* pDc) :
-    pDoc(pDc),
+    m_pDoc(pDc),
     m_pPropertySet(GetLineNumberingSet())
 {
 }
@@ -791,7 +791,7 @@ void SwXLineNumberingProperties::setPropertyValue(
     const OUString& rPropertyName, const Any& aValue)
 {
     SolarMutexGuard aGuard;
-    if(!pDoc)
+    if(!m_pDoc)
         throw uno::RuntimeException();
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
@@ -800,7 +800,7 @@ void SwXLineNumberingProperties::setPropertyValue(
 
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    SwLineNumberInfo  aFontMetric(pDoc->GetLineNumberInfo());
+    SwLineNumberInfo  aFontMetric(m_pDoc->GetLineNumberInfo());
     switch(pEntry->nWID)
     {
         case WID_NUM_ON:
@@ -811,7 +811,7 @@ void SwXLineNumberingProperties::setPropertyValue(
         break;
         case WID_CHARACTER_STYLE :
         {
-            SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
+            SwCharFormat* pFormat = lcl_getCharFormat(m_pDoc, aValue);
             if(pFormat)
                 aFontMetric.SetCharFormat(pFormat);
         }
@@ -898,21 +898,21 @@ void SwXLineNumberingProperties::setPropertyValue(
         }
         break;
     }
-    pDoc->SetLineNumberInfo(aFontMetric);
+    m_pDoc->SetLineNumberInfo(aFontMetric);
 }
 
 Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     Any aRet;
-    if(!pDoc)
+    if(!m_pDoc)
         throw uno::RuntimeException();
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
         throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    const SwLineNumberInfo& rInfo = pDoc->GetLineNumberInfo();
+    const SwLineNumberInfo& rInfo = m_pDoc->GetLineNumberInfo();
     switch(pEntry->nWID)
     {
         case WID_NUM_ON:
@@ -926,7 +926,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
             if(rInfo.HasCharFormat())
             {
                 SwStyleNameMapper::FillProgName(
-                            rInfo.GetCharFormat(pDoc->getIDocumentStylePoolAccess())->GetName(),
+                            rInfo.GetCharFormat(m_pDoc->getIDocumentStylePoolAccess())->GetName(),
                             aString,
                             SwGetPoolIdFromName::ChrFmt);
             }
