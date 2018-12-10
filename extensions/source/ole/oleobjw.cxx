@@ -2154,8 +2154,8 @@ void IUnknownWrapper::getFuncDescForInvoke(const OUString & sFuncName,
             {
                 throw IllegalArgumentException(
                     "[automation bridge] The object does not have a function"
-                    "or readable property \""
-                    + sFuncName, Reference<XInterface>(), 0);
+                    " or readable property \""
+                    + sFuncName + "\"", Reference<XInterface>(), 0);
             }
         }
         *pFuncDesc = aFuncDesc.Detach();
