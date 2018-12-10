@@ -1825,17 +1825,19 @@ private:
     std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<SvTabListBox> m_xTreeView;
     SvLBoxButtonData m_aCheckButtonData;
+    SvLBoxButtonData m_aRadioButtonData;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(ExpandingHdl, SvTreeListBox*, bool);
     DECL_LINK(EndDragHdl, HeaderBar*, void);
-
+    DECL_LINK(ToggleHdl, SvLBoxButtonData*, void);
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, bTakeOwnership)
         , m_xTreeView(pTreeView)
-        , m_aCheckButtonData(pTreeView)
+        , m_aCheckButtonData(pTreeView, false)
+        , m_aRadioButtonData(pTreeView, true)
     {
         m_xTreeView->SetNodeDefaultImages();
         m_xTreeView->SetSelectHdl(LINK(this, SalInstanceTreeView, SelectHdl));
@@ -1850,6 +1852,7 @@ public:
             pHeaderBar->SetItemSize(pHeaderBar->GetItemId(pHeaderBar->GetItemCount() - 1 ), HEADERBAR_FULLSIZE);
             pHeaderBar->SetEndDragHdl(LINK(this, SalInstanceTreeView, EndDragHdl));
         }
+        m_aRadioButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
     }
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
@@ -1877,6 +1880,15 @@ public:
             return pHeaderBar->GetItemText(pHeaderBar->GetItemId(nColumn));
         }
         return OUString();
+    }
+
+    virtual void set_column_title(int nColumn, const OUString& rTitle) override
+    {
+        SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
+        if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
+        {
+            return pHeaderBar->SetItemText(pHeaderBar->GetItemId(nColumn), rTitle);
+        }
     }
 
     virtual void show() override
@@ -1915,40 +1927,32 @@ public:
         else
             pUserData = nullptr;
 
-        bool bSimple = !pIconName && !pImageSurface && pStr;
-        SvTreeListEntry* pResult;
-        if (bSimple)
-            pResult = m_xTreeView->InsertEntry(*pStr, iter, false, nInsertPos, pUserData);
+        SvTreeListEntry* pEntry = new SvTreeListEntry;
+        if (pIconName || pImageSurface)
+        {
+            Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
+            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+        }
         else
         {
-            SvTreeListEntry* pEntry = new SvTreeListEntry;
-            if (pIconName || pImageSurface)
-            {
-                Image aImage(pIconName ? createImage(*pIconName) : createImage(*pImageSurface));
-                pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
-            }
-            else
-            {
-                Image aDummy;
-                pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
-            }
-            if (pStr)
-                pEntry->AddItem(o3tl::make_unique<SvLBoxString>(*pStr));
-            pEntry->SetUserData(pUserData);
-            m_xTreeView->Insert(pEntry, iter, nInsertPos);
-            pResult = pEntry;
+            Image aDummy;
+            pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
         }
+        if (pStr)
+            pEntry->AddItem(o3tl::make_unique<SvLBoxString>(*pStr));
+        pEntry->SetUserData(pUserData);
+        m_xTreeView->Insert(pEntry, iter, nInsertPos);
 
         if (pExpanderName)
         {
             Image aImage(createImage(*pExpanderName));
-            m_xTreeView->SetExpandedEntryBmp(pResult, aImage);
-            m_xTreeView->SetCollapsedEntryBmp(pResult, aImage);
+            m_xTreeView->SetExpandedEntryBmp(pEntry, aImage);
+            m_xTreeView->SetCollapsedEntryBmp(pEntry, aImage);
         }
 
         if (bChildrenOnDemand)
         {
-            m_xTreeView->InsertEntry("<dummy>", pResult, false, 0, nullptr);
+            m_xTreeView->InsertEntry("<dummy>", pEntry, false, 0, nullptr);
         }
     }
 
@@ -2138,6 +2142,7 @@ public:
             return;
         }
 
+        bool bRadio = std::find(m_aRadioIndexes.begin(), m_aRadioIndexes.end(), col) != m_aRadioIndexes.end();
         ++col; //skip dummy/expander column
 
         // blank out missing entries
@@ -2147,7 +2152,7 @@ public:
         if (static_cast<size_t>(col) == pEntry->ItemCount())
         {
             pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox,
-                                                            &m_aCheckButtonData));
+                                                            bRadio ? &m_aRadioButtonData : &m_aCheckButtonData));
             SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
             m_xTreeView->InitViewData(pViewData, pEntry);
         }
@@ -2402,6 +2407,24 @@ public:
         m_xTreeView->SetSelectHdl(Link<SvTreeListBox*, void>());
     }
 };
+
+IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
+{
+    SvTreeListEntry* pEntry = pData->GetActEntry();
+    SvLBoxButton* pBox = pData->GetActBox();
+
+    for (int i = 1, nCount = pEntry->ItemCount(); i < nCount; ++i)
+    {
+        SvLBoxItem& rItem = pEntry->GetItem(i);
+        if (&rItem == pBox)
+        {
+            int nRow = m_xTreeView->GetAbsPos(pEntry);
+            int nCol = i - 1; // less dummy/expander column
+            signal_radio_toggled(std::make_pair(nRow, nCol));
+            break;
+        }
+    }
+}
 
 IMPL_LINK_NOARG(SalInstanceTreeView, SelectHdl, SvTreeListBox*, void)
 {

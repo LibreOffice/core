@@ -4899,7 +4899,7 @@ private:
         pThis->signal_toggled(path, reinterpret_cast<sal_IntPtr>(pData));
     }
 
-    void signal_toggled(const gchar *path, int nIndex)
+    void signal_toggled(const gchar *path, int nCol)
     {
         GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
 
@@ -4908,9 +4908,15 @@ private:
         gtk_tree_model_get_iter(pModel, &iter, tree_path);
 
         gboolean bRet(false);
-        gtk_tree_model_get(pModel, &iter, nIndex, &bRet, -1);
+        gtk_tree_model_get(pModel, &iter, nCol, &bRet, -1);
         bRet = !bRet;
-        gtk_tree_store_set(m_pTreeStore, &iter, nIndex, bRet, -1);
+        gtk_tree_store_set(m_pTreeStore, &iter, nCol, bRet, -1);
+
+        if (std::find(m_aRadioIndexes.begin(), m_aRadioIndexes.end(), nCol) != m_aRadioIndexes.end())
+        {
+            int nRow = gtk_tree_path_get_indices(tree_path)[0];
+            signal_radio_toggled(std::make_pair(nRow, nCol));
+        }
 
         gtk_tree_path_free(tree_path);
     }
@@ -4986,6 +4992,15 @@ public:
         OUString sRet = OUString(pTitle, pTitle ? strlen(pTitle) : 0, RTL_TEXTENCODING_UTF8);
         g_list_free(pColumns);
         return sRet;
+    }
+
+    virtual void set_column_title(int nColumn, const OUString& rTitle) override
+    {
+        GList *pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(g_list_nth_data(pColumns, nColumn));
+        assert(pColumn && "wrong count");
+        gtk_tree_view_column_set_title(pColumn, OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
+        g_list_free(pColumns);
     }
 
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pText, const OUString* pId, const OUString* pIconName,
