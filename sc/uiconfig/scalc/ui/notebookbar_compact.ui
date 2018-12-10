@@ -854,6 +854,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
+        <property name="label" translatable="yes" context="notebookbar_compact|Menu">_Check for Updates...</property>
       </object>
     </child>
     <child>
@@ -1674,6 +1675,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
+        <property name="label" translatable="yes" context="notebookbar_compact|Tools">_Check for Updates...</property>
       </object>
     </child>
     <child>
