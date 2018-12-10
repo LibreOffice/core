@@ -1023,7 +1023,11 @@ long ScDPGroupTableData::Compare(long nDim, long nDataId1, long nDataId2)
 {
     if ( getIsDataLayoutDimension(nDim) )
         return 0;
-    return ScDPItemData::Compare( *GetMemberById(nDim,  nDataId1),*GetMemberById(nDim,  nDataId2) );
+    const ScDPItemData* rItem1 = GetMemberById(nDim, nDataId1);
+    const ScDPItemData* rItem2 = GetMemberById(nDim, nDataId2);
+    if (rItem1 == nullptr || rItem2 == nullptr)
+        return 0;
+    return ScDPItemData::Compare( *rItem1,*rItem2);
 }
 
 #if DUMP_PIVOT_TABLE
