@@ -46,7 +46,7 @@ class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
     css::lang::XServiceInfo
 >
 {
-    SwDoc*                      pDoc;
+    SwDoc*                      m_pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXFootnoteProperties() override;
@@ -67,7 +67,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    void            Invalidate() {pDoc = nullptr;}
+    void            Invalidate() {m_pDoc = nullptr;}
 };
 
 class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
@@ -76,7 +76,7 @@ class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
     css::lang::XServiceInfo
 >
 {
-    SwDoc*                      pDoc;
+    SwDoc*                      m_pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXEndnoteProperties() override;
@@ -97,7 +97,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    void            Invalidate() {pDoc = nullptr;}
+    void            Invalidate() {m_pDoc = nullptr;}
 };
 
 class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
@@ -106,7 +106,7 @@ class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
     css::lang::XServiceInfo
 >
 {
-    SwDoc*                      pDoc;
+    SwDoc*                      m_pDoc;
     const SfxItemPropertySet*   m_pPropertySet;
 protected:
     virtual ~SwXLineNumberingProperties() override;
@@ -127,7 +127,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    void            Invalidate() {pDoc = nullptr;}
+    void            Invalidate() {m_pDoc = nullptr;}
 };
 
 class SwXNumberingRules : public cppu::WeakAggImplHelper5
