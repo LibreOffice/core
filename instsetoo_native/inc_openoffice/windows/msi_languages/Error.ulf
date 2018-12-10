@@ -406,4 +406,7 @@ en-US = "This setup requires Internet Information Server 4.0 or higher for confi
 [OOO_ERROR_130]
 en-US = "This setup requires Administrator privileges for configuring IIS Virtual Roots."
 
+[OOO_ERROR_131]
+en-US = "Installing a pre-requisite KB2999226 failed. You might need to manually install it from Microsoft site to be able to run the product. [2]"
+
 

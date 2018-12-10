@@ -120,6 +120,17 @@ template <class... StrType> void WriteLog(MSIHANDLE hInst, const StrType&... ele
     WriteLogElem(hInst, hRec, sTemplate, 1, elements...);
 }
 
+void ShowWarning(MSIHANDLE hInst, const std::wstring& sErrNo, const char* sMessage)
+{
+    PMSIHANDLE hRec = MsiCreateRecord(2);
+    // To show a message from Error table, record's Field 0 must be null
+    MsiRecordSetStringW(hRec, 1, sErrNo.c_str());
+    std::string s("\n");
+    s += sMessage;
+    MsiRecordSetStringA(hRec, 2, s.c_str());
+    MsiProcessMessage(hInst, INSTALLMESSAGE_WARNING, hRec);
+}
+
 typedef std::unique_ptr<void, decltype(&CloseHandle)> CloseHandleGuard;
 CloseHandleGuard Guard(HANDLE h) { return CloseHandleGuard(h, CloseHandle); }
 
@@ -166,16 +177,6 @@ bool IsWow64Process()
 #endif
 }
 
-// An exception class to differentiate a non-fatal exception
-class nonfatal_exception : public std::exception
-{
-public:
-    nonfatal_exception(const std::exception& e)
-        : std::exception(e)
-    {
-    }
-};
-
 // Checks if Windows Update service is disabled, and if it is, enables it temporarily.
 class WUServiceEnabler
 {
@@ -205,37 +206,27 @@ public:
 private:
     static CloseServiceHandleGuard EnableWUService(MSIHANDLE hInstall)
     {
-        try
+        auto hSCM = Guard(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
+        if (!hSCM)
+            ThrowLastError("OpenSCManagerW");
+        WriteLog(hInstall, "Opened service control manager");
+
+        auto hService = Guard(OpenServiceW(hSCM.get(), L"wuauserv",
+                                           SERVICE_QUERY_CONFIG | SERVICE_CHANGE_CONFIG
+                                               | SERVICE_QUERY_STATUS | SERVICE_STOP));
+        if (!hService)
+            ThrowLastError("OpenServiceW");
+        WriteLog(hInstall, "Obtained WU service handle");
+
+        if (ServiceStatus(hInstall, hService.get()) == SERVICE_RUNNING
+            || !EnsureServiceEnabled(hInstall, hService.get(), true))
         {
-            auto hSCM = Guard(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
-            if (!hSCM)
-                ThrowLastError("OpenSCManagerW");
-            WriteLog(hInstall, "Opened service control manager");
-
-            auto hService = Guard(OpenServiceW(hSCM.get(), L"wuauserv",
-                                               SERVICE_QUERY_CONFIG | SERVICE_CHANGE_CONFIG
-                                                   | SERVICE_QUERY_STATUS | SERVICE_STOP));
-            if (!hService)
-                ThrowLastError("OpenServiceW");
-            WriteLog(hInstall, "Obtained WU service handle");
-
-            if (ServiceStatus(hInstall, hService.get()) == SERVICE_RUNNING
-                || !EnsureServiceEnabled(hInstall, hService.get(), true))
-            {
-                // No need to restore anything back, since we didn't change config
-                hService.reset();
-                WriteLog(hInstall, "Service configuration is unchanged");
-            }
-
-            return hService;
+            // No need to restore anything back, since we didn't change config
+            hService.reset();
+            WriteLog(hInstall, "Service configuration is unchanged");
         }
-        catch (const std::exception& e)
-        {
-            // Allow errors opening service to be logged, but not interrupt installation.
-            // They are likely to happen in situations where people hard-disable WU service,
-            // and for these cases, let people deal with install logs instead of failing.
-            throw nonfatal_exception(e);
-        }
+
+        return hService;
     }
 
     // Returns if the service configuration was actually changed
@@ -354,11 +345,18 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
         WriteLog(hInstall, "started");
 
         WriteLog(hInstall, "Checking value of InstMSUBinary");
-        wchar_t sBinaryName[MAX_PATH + 1];
-        DWORD nCCh = sizeof(sBinaryName) / sizeof(*sBinaryName);
+        wchar_t sInstMSUBinary[MAX_PATH + 10];
+        DWORD nCCh = sizeof(sInstMSUBinary) / sizeof(*sInstMSUBinary);
         CheckWin32Error("MsiGetPropertyW",
-                        MsiGetPropertyW(hInstall, L"InstMSUBinary", sBinaryName, &nCCh));
-        WriteLog(hInstall, "Got InstMSUBinary value:", sBinaryName);
+                        MsiGetPropertyW(hInstall, L"InstMSUBinary", sInstMSUBinary, &nCCh));
+        WriteLog(hInstall,
+                 "Got InstMSUBinary value:", sInstMSUBinary); // 123|Windows61-KB2999226-x64msu
+        const wchar_t* sBinaryName = wcschr(sInstMSUBinary, L'|');
+        if (!sBinaryName)
+            throw std::exception("No error code in InstMSUBinary!");
+        // "123" - # of the message in Error table to be shown on failure
+        const std::wstring sErrNo(sInstMSUBinary, sBinaryName - sInstMSUBinary);
+        ++sBinaryName;
 
         PMSIHANDLE hDatabase = MsiGetActiveDatabase(hInstall);
         if (!hDatabase)
@@ -415,8 +413,9 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
 
             WriteLog(hInstall, "Successfully wrote", Num2Dec(nTotal), "bytes");
         }
-
-        CheckWin32Error("MsiSetPropertyW", MsiSetPropertyW(hInstall, L"inst_msu", sBinary.c_str()));
+        const std::wstring s_inst_msu = sErrNo + L"|" + sBinary;
+        CheckWin32Error("MsiSetPropertyW",
+                        MsiSetPropertyW(hInstall, L"inst_msu", s_inst_msu.c_str()));
 
         // Don't delete the file: it will be done by following actions (inst_msu or cleanup_msu)
         (void)aDeleteFileGuard.release();
@@ -433,17 +432,23 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
 // "CustomActionData" property, and runs wusa.exe to install it. Waits for it and checks exit code.
 extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
 {
+    std::wstring sErrNo; // "123" - # of the message in Error table to be shown on failure
     try
     {
         sLogPrefix = "InstallMSU:";
         WriteLog(hInstall, "started");
 
         WriteLog(hInstall, "Checking value of CustomActionData");
-        wchar_t sBinaryName[MAX_PATH + 1];
-        DWORD nCCh = sizeof(sBinaryName) / sizeof(*sBinaryName);
+        wchar_t sCustomActionData[MAX_PATH + 10]; // "123|C:\Temp\binary.tmp"
+        DWORD nCCh = sizeof(sCustomActionData) / sizeof(*sCustomActionData);
         CheckWin32Error("MsiGetPropertyW",
-                        MsiGetPropertyW(hInstall, L"CustomActionData", sBinaryName, &nCCh));
-        WriteLog(hInstall, "Got CustomActionData value:", sBinaryName);
+                        MsiGetPropertyW(hInstall, L"CustomActionData", sCustomActionData, &nCCh));
+        WriteLog(hInstall, "Got CustomActionData value:", sCustomActionData);
+        const wchar_t* sBinaryName = wcschr(sCustomActionData, L'|');
+        if (!sBinaryName)
+            throw std::exception("No error code in CustomActionData!");
+        sErrNo = std::wstring(sCustomActionData, sBinaryName - sCustomActionData);
+        ++sBinaryName;
         auto aDeleteFileGuard(Guard(sBinaryName));
 
         // In case the Windows Update service is disabled, we temporarily enable it here
@@ -496,19 +501,12 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
                 ThrowWin32Error("Execution of wusa.exe", nExitCode);
         }
     }
-    catch (nonfatal_exception& e)
-    {
-        // An error that should not interrupt installation
-        WriteLog(hInstall, e.what());
-        WriteLog(hInstall, "Installation of MSU package failed, but installation of product will "
-                           "continue. You may need to install the required update manually");
-        return ERROR_SUCCESS;
-    }
     catch (std::exception& e)
     {
         WriteLog(hInstall, e.what());
+        ShowWarning(hInstall, sErrNo, e.what());
     }
-    return ERROR_INSTALL_FAILURE;
+    return ERROR_SUCCESS; // Do not break on MSU installation errors
 }
 
 // Rollback deferred action "cleanup_msu" that is executed on error or cancel.

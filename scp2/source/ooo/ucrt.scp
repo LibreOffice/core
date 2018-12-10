@@ -85,11 +85,14 @@ WindowsCustomAction gid_Customaction_cleanup_msu
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And cleanup_msu", "inst_msu");
 End
 
+/* The "InstMSUBinary" property contains an error message number and a binary name, separated by "|".
+   The former is used when installing the MSU fails.
+*/
 WindowsCustomAction gid_Customaction_check_win7x64_ucrt
 	Name = "check_win7x64_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "Windows61-KB2999226-x64msu";
+	Target = "25000|Windows61-KB2999226-x64msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 601 And VersionNT64", "FileCost");
 	Styles = "NO_FILE";
@@ -99,7 +102,7 @@ WindowsCustomAction gid_Customaction_check_win8x64_ucrt
 	Name = "check_win8x64_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "Windows8-RT-KB2999226-x64msu";
+	Target = "25000|Windows8-RT-KB2999226-x64msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 602 And VersionNT64", "check_win7x64_ucrt");
 	Styles = "NO_FILE";
@@ -109,7 +112,7 @@ WindowsCustomAction gid_Customaction_check_win81x64_ucrt
 	Name = "check_win81x64_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "Windows81-KB2999226-x64msu";
+	Target = "25000|Windows81-KB2999226-x64msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And VersionNT64", "check_win8x64_ucrt");
 	Styles = "NO_FILE";
@@ -125,7 +128,7 @@ WindowsCustomAction gid_Customaction_check_win7x32_ucrt
 	Name = "check_win7x32_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "Windows61-KB2999226-x86msu";
+	Target = "25000|Windows61-KB2999226-x86msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 601 And Not VersionNT64", "check_win81x64_ucrt");
 	Styles = "NO_FILE";
@@ -135,7 +138,7 @@ WindowsCustomAction gid_Customaction_check_win8x32_ucrt
 	Name = "check_win8x32_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "Windows8-RT-KB2999226-x86msu";
+	Target = "25000|Windows8-RT-KB2999226-x86msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 602 And Not VersionNT64", "check_win7x32_ucrt");
 	Styles = "NO_FILE";
@@ -145,7 +148,7 @@ WindowsCustomAction gid_Customaction_check_win81x32_ucrt
 	Name = "check_win81x32_ucrt";
 	Typ = "51";
 	Source = "InstMSUBinary";
-	Target = "Windows81-KB2999226-x86msu";
+	Target = "25000|Windows81-KB2999226-x86msu";
 	Inbinarytable = 0;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And Not VersionNT64", "check_win8x32_ucrt");
 	Styles = "NO_FILE";
