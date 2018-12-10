@@ -516,12 +516,15 @@ void LanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTypes
             if (lcl_isScriptTypeRequested( nLang, nLangList))
             {
                 int nAt = ImplTypeToPos(nLang);
-                if (nAt == -1)
-                {
-                    rEntries.push_back(BuildEntry(nLang));
-                    if (rEntries.back().sString.isEmpty())
-                        rEntries.pop_back();
-                }
+                if (nAt != -1)
+                    continue;
+                weld::ComboBoxEntry aNewEntry(BuildEntry(nLang));
+                if (aNewEntry.sString.isEmpty())
+                    continue;
+                if (std::find_if(rEntries.begin(), rEntries.end(),
+                                 [=](const weld::ComboBoxEntry& rEntry){ return rEntry.sId == aNewEntry.sId; }) != rEntries.end())
+                    continue;
+                rEntries.push_back(aNewEntry);
             }
         }
     }
