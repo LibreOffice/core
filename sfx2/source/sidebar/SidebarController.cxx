@@ -388,7 +388,13 @@ void SidebarController::NotifyResize()
         {
             // No TabBar in LOK.
             if (comphelper::LibreOfficeKit::isActive())
-                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nHeight);
+            {
+                const sal_Int32 nMinimalHeight = mpCurrentDeck->GetMinimalHeight();
+                if (nMinimalHeight > 0)
+                    mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nMinimalHeight);
+                else
+                    mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nHeight);
+            }
             else
                 mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
             mpCurrentDeck->Show();
@@ -1184,7 +1190,14 @@ void SidebarController::UpdateDeckOpenState()
                 mnSavedSidebarWidth = aNewSize.Width(); // Save the current width to restore.
 
                 aNewPos.setX(aNewPos.X() + mnSavedSidebarWidth - nTabBarDefaultWidth);
-                aNewSize.setWidth(nTabBarDefaultWidth);
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    // Hide by collapsing, otherwise with 0x0 the client might expect
+                    // to get valid dimensions on rendering and not collapse the sidebar.
+                    aNewSize.setWidth(1);
+                }
+                else
+                    aNewSize.setWidth(nTabBarDefaultWidth);
 
                 mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
 
