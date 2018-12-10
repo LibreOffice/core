@@ -1204,7 +1204,8 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
 
         // Is a ToolBox required in this context ?
         bool bModesMatching = (nUpdateMode != SfxVisibilityFlags::Invisible) && ((nTbxMode & nUpdateMode) == nUpdateMode);
-        if ( bDestroy || sfx2::SfxNotebookBar::IsActive())
+        // tdf#122010: Full Screen toolbar is needed even in notebookbar mode
+        if ( bDestroy || (sfx2::SfxNotebookBar::IsActive() && !bIsFullScreen))
         {
             OUString aTbxId = g_aTbxTypeName + GetResourceURLFromToolbarId(eId);
             xLayoutManager->destroyElement( aTbxId );
