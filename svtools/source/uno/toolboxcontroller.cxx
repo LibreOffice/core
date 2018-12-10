@@ -660,10 +660,10 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, sTarget, 0 ), UNO_QUERY_THROW );
 
-        DispatchInfo *pDispatchInfo = new DispatchInfo( xDispatch, aURL, rArgs );
-        if ( !Application::PostUserEvent( LINK(nullptr, ToolboxController, ExecuteHdl_Impl),
-                                          pDispatchInfo ) )
-            delete pDispatchInfo;
+        std::unique_ptr<DispatchInfo> pDispatchInfo(new DispatchInfo( xDispatch, aURL, rArgs ));
+        if ( Application::PostUserEvent( LINK(nullptr, ToolboxController, ExecuteHdl_Impl),
+                                          pDispatchInfo.get() ) )
+            pDispatchInfo.release();
 
     }
     catch( Exception& )

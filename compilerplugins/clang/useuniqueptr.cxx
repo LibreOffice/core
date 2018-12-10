@@ -205,7 +205,7 @@ void UseUniquePtr::CheckCompoundStmt(const FunctionDecl* functionDecl, const Com
 //     if (m_pField != nullptr) delete m_pField;
 void UseUniquePtr::CheckIfStmt(const FunctionDecl* functionDecl, const IfStmt* ifStmt)
 {
-    auto cond = ifStmt->getCond()->IgnoreImpCasts();
+    auto cond = ifStmt->getCond()->IgnoreImplicit();
     if (auto ifCondMemberExpr = dyn_cast<MemberExpr>(cond))
     {
         // ignore "if (bMine)"
@@ -215,9 +215,9 @@ void UseUniquePtr::CheckIfStmt(const FunctionDecl* functionDecl, const IfStmt* i
     }
     else if (auto binaryOp = dyn_cast<BinaryOperator>(cond))
     {
-        if (!isa<MemberExpr>(binaryOp->getLHS()->IgnoreImpCasts()))
+        if (!isa<MemberExpr>(binaryOp->getLHS()->IgnoreImplicit()))
             return;
-        if (!isa<CXXNullPtrLiteralExpr>(binaryOp->getRHS()->IgnoreImpCasts()))
+        if (!isa<CXXNullPtrLiteralExpr>(binaryOp->getRHS()->IgnoreImplicit()))
             return;
         // good
     }
@@ -254,7 +254,7 @@ void UseUniquePtr::CheckIfStmt(const FunctionDecl* functionDecl, const IfStmt* i
 
 void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDeleteExpr* deleteExpr)
 {
-    auto deleteExprArg = deleteExpr->getArgument()->IgnoreParenImpCasts();
+    auto deleteExprArg = deleteExpr->getArgument()->IgnoreParens()->IgnoreImplicit();
 
 
     if (const MemberExpr* memberExpr = dyn_cast<MemberExpr>(deleteExprArg))
@@ -292,7 +292,7 @@ void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDe
     const ArraySubscriptExpr* arrayExpr = dyn_cast<ArraySubscriptExpr>(deleteExprArg);
     if (arrayExpr)
     {
-       auto baseMemberExpr = dyn_cast<MemberExpr>(arrayExpr->getBase()->IgnoreParenImpCasts());
+       auto baseMemberExpr = dyn_cast<MemberExpr>(arrayExpr->getBase()->IgnoreParens()->IgnoreImplicit());
        if (baseMemberExpr)
             CheckMemberDeleteExpr(functionDecl, deleteExpr, baseMemberExpr,
                 "unconditional call to delete on an array member, should be using std::unique_ptr");
@@ -478,7 +478,8 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     if (parentName == "ScFunctionList" || parentName == "SwNodes"
         || parentName == "SwUnoCursor" || parentName == "SortedResultSet"
         || parentName == "Atom" || parentName == "RegionBand" || parentName == "WMFWriter"
-        || parentName == "Scheduler" || parentName == "OpenGLContext")
+        || parentName == "Scheduler" || parentName == "OpenGLContext"
+        || parentName == "WizardDialog")
         return;
     // manual ref counting
     if (parentName == "ScBroadcastAreaSlot")
@@ -518,7 +519,9 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
         if (name == "UCBStorage::OpenStorage_Impl")
             return;
         // complicated ownership
-        if (name == "ParseCMAP" || name == "OpenGLSalBitmap::CreateTexture" || name == "X11SalGraphicsImpl::drawAlphaBitmap")
+        if (name == "ParseCMAP" || name == "OpenGLSalBitmap::CreateTexture" || name == "X11SalGraphicsImpl::drawAlphaBitmap"
+            || name == "SvEmbedTransferHelper::GetData" || name == "ORoadmap::dispose"
+            || name == "BrowseBox::SetMode" || name == "ExportDialog::GetFilterData")
             return;
         // complicated delete
         if (name == "X11SalObject::CreateObject")
@@ -573,7 +576,7 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
     // drill down looking for a MemberExpr
     for (;;)
     {
-        subExpr = subExpr->IgnoreParenImpCasts();
+        subExpr = subExpr->IgnoreParens()->IgnoreImplicit();
         if ((memberExpr = dyn_cast<MemberExpr>(subExpr)))
         {
             if (memberExpr->getMemberDecl()->getName() == "first" || memberExpr->getMemberDecl()->getName() == "second")
@@ -594,7 +597,7 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
         else if (auto cxxOperatorCallExpr = dyn_cast<CXXOperatorCallExpr>(subExpr))
         {
             // look for deletes of an iterator object where the iterator is over a member field
-            if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxOperatorCallExpr->getArg(0)->IgnoreImpCasts()))
+            if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxOperatorCallExpr->getArg(0)->IgnoreImplicit()))
             {
                 if (auto iterVarDecl = dyn_cast<VarDecl>(declRefExpr->getDecl()))
                 {
@@ -628,7 +631,7 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
             // look for deletes like "delete m_pField[0]"
             if (cxxOperatorCallExpr->getOperator() == OO_Subscript)
             {
-                subExpr = cxxOperatorCallExpr->getArg(0)->IgnoreImpCasts();
+                subExpr = cxxOperatorCallExpr->getArg(0)->IgnoreImplicit();
                 if ((memberExpr = dyn_cast<MemberExpr>(subExpr)))
                     break;
                 if (auto declRefExpr = dyn_cast<DeclRefExpr>(subExpr))
@@ -805,7 +808,7 @@ void UseUniquePtr::CheckCXXForRangeStmt(const FunctionDecl* functionDecl, const 
     }
 
     // check for delete of var
-    if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxForRangeStmt->getRangeInit()->IgnoreParenImpCasts()))
+    if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxForRangeStmt->getRangeInit()->IgnoreParens()->IgnoreImplicit()))
     {
         auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
         if (!varDecl)
@@ -1054,7 +1057,7 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
         return true;
     if (isInUnoIncludeFile(compat::getBeginLoc(mpCurrentFunctionDecl->getCanonicalDecl())))
         return true;
-    auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts());
+    auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts()->IgnoreImplicit());
     if (!declRefExpr)
         return true;
     if (auto parmVarDecl = dyn_cast<ParmVarDecl>(declRefExpr->getDecl()))
