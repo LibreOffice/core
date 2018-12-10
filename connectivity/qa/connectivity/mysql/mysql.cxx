@@ -165,6 +165,7 @@ void MysqlTestDriver::testIntegerInsertAndQuery()
     Reference<XResultSet> xResultSet = xStatement->executeQuery("SELECT id from myTestTable");
     CPPUNIT_ASSERT_MESSAGE("result set cannot be instantiated after query", xResultSet.is());
     Reference<XRow> xRow(xResultSet, UNO_QUERY);
+    Reference<XColumnLocate> xColumnLocate(xResultSet, UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("cannot extract row from result set!", xRow.is());
 
     for (long i = 0; i < ROW_COUNT; ++i)
@@ -172,6 +173,7 @@ void MysqlTestDriver::testIntegerInsertAndQuery()
         bool hasRow = xResultSet->next();
         CPPUNIT_ASSERT_MESSAGE("not enough result after query", hasRow);
         CPPUNIT_ASSERT_EQUAL(i, xRow->getLong(1)); // first and only column
+        CPPUNIT_ASSERT_EQUAL(i, xRow->getLong(xColumnLocate->findColumn("id"))); // test findColumn
     }
     CPPUNIT_ASSERT_MESSAGE("Cursor is not on last position.",
                            xResultSet->isLast()); // cursor is on last position
