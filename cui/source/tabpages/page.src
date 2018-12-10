@@ -21,7 +21,7 @@
 
 
 
- // include ---------------------------------------------------------------
+// include ---------------------------------------------------------------
 
 #include <cuires.hrc>
 #include "helpid.hrc"
@@ -29,7 +29,7 @@
 #include "page.h"
 #include <svx/dialogs.hrc>
 
- // RID_SVXPAGE_PAGE ------------------------------------------------------
+// RID_SVXPAGE_PAGE ------------------------------------------------------
 
 TabPage RID_SVXPAGE_PAGE
 {
@@ -46,11 +46,11 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12, 16 ) ;
         Size = MAP_APPFONT ( 35, 8 ) ;
-        Text [ en-US ] = "~Format";
+        Text [ en-US ] = "~Format" ;
     };
     ListBox LB_PAPER_SIZE
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_PAPER_SIZE";
+        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_PAPER_SIZE" ;
         Pos = MAP_APPFONT ( 50, 14 ) ;
         Size = MAP_APPFONT ( 75, 64 ) ;
         DropDown = TRUE ;
@@ -65,7 +65,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     MetricField ED_PAPER_WIDTH
     {
-        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_PAPER_WIDTH";
+        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_PAPER_WIDTH" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 50, 30 ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -87,7 +87,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     MetricField ED_PAPER_HEIGHT
     {
-        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_PAPER_HEIGHT";
+        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_PAPER_HEIGHT" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 50, 46 ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -104,11 +104,11 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12, 62 ) ;
         Size = MAP_APPFONT ( 35, 8 ) ;
-        Text [ en-US ] = "Orientation";
+        Text [ en-US ] = "Orientation" ;
     };
     RadioButton RB_PORTRAIT
     {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_PAGE:RB_PORTRAIT";
+        HelpID = "cui:RadioButton:RID_SVXPAGE_PAGE:RB_PORTRAIT" ;
         Pos = MAP_APPFONT ( 50, 62 ) ;
         Size = MAP_APPFONT ( 53, 10 ) ;
         Check = TRUE ;
@@ -116,10 +116,10 @@ TabPage RID_SVXPAGE_PAGE
     };
     RadioButton RB_LANDSCAPE
     {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_PAGE:RB_LANDSCAPE";
+        HelpID = "cui:RadioButton:RID_SVXPAGE_PAGE:RB_LANDSCAPE" ;
         Pos = MAP_APPFONT ( 50, 74 ) ;
         Size = MAP_APPFONT ( 53, 10 ) ;
-        Text [ en-US ] = "L~andscape";
+        Text [ en-US ] = "L~andscape" ;
     };
     Window WN_BSP
     {
@@ -133,11 +133,11 @@ TabPage RID_SVXPAGE_PAGE
         Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
         Hide = TRUE ;
-        Text [ en-US ] = "~Text direction";
+        Text [ en-US ] = "~Text direction" ;
     };
     ListBox LB_TEXT_FLOW
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_TEXT_FLOW";
+        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_TEXT_FLOW" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 165, 58 ) ;
         Size = MAP_APPFONT ( 83, 50 ) ;
@@ -150,11 +150,11 @@ TabPage RID_SVXPAGE_PAGE
         Pos = MAP_APPFONT ( 113, 74 ) ;
         Size = MAP_APPFONT ( 50, 8 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "Paper ~tray";
+        Text [ en-US ] = "Paper ~tray" ;
     };
     ListBox LB_PAPER_TRAY
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_PAPER_TRAY";
+        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_PAPER_TRAY" ;
         Pos = MAP_APPFONT ( 165, 72 ) ;
         Size = MAP_APPFONT ( 83, 50 ) ;
         DropDown = TRUE ;
@@ -164,7 +164,7 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 6, 90 ) ;
         Size = MAP_APPFONT ( 95, 8 ) ;
-        Text [ en-US ] = "Margins";
+        Text [ en-US ] = "Margins" ;
     };
     FixedText FT_LEFT_MARGIN
     {
@@ -175,7 +175,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     MetricField ED_LEFT_MARGIN
     {
-        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_LEFT_MARGIN";
+        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_LEFT_MARGIN" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55, 101 ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -197,7 +197,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     MetricField ED_RIGHT_MARGIN
     {
-        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_RIGHT_MARGIN";
+        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_RIGHT_MARGIN" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55, 117 ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -219,7 +219,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     MetricField ED_TOP_MARGIN
     {
-        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_TOP_MARGIN";
+        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_TOP_MARGIN" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55, 133 ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -241,7 +241,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     MetricField ED_BOTTOM_MARGIN
     {
-        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_BOTTOM_MARGIN";
+        HelpID = "cui:MetricField:RID_SVXPAGE_PAGE:ED_BOTTOM_MARGIN" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55, 149 ) ;
         Size = MAP_APPFONT ( 40, 12 ) ;
@@ -258,13 +258,13 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 102, 101 ) ;
         Size = MAP_APPFONT ( 4, 68 ) ;
-        Vert = TRUE;
+        Vert = TRUE ;
     };
     FixedLine FL_LAYOUT
     {
         Pos = MAP_APPFONT ( 107, 90 ) ;
         Size = MAP_APPFONT ( 147, 8 ) ;
-        Text [ en-US ] = "Layout settings";
+        Text [ en-US ] = "Layout settings" ;
     };
     FixedText FT_PAGELAYOUT
     {
@@ -274,7 +274,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     ListBox LB_LAYOUT
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_LAYOUT";
+        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_LAYOUT" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170, 101 ) ;
         Size = MAP_APPFONT ( 78, 44 ) ;
@@ -291,11 +291,11 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 113, 119 ) ;
         Size = MAP_APPFONT ( 54, 8 ) ;
-        Text [ en-US ] = "For~mat";
+        Text [ en-US ] = "For~mat" ;
     };
     ListBox LB_NUMBER_FORMAT
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_NUMBER_FORMAT";
+        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_NUMBER_FORMAT" ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170, 117 ) ;
         Size = MAP_APPFONT ( 78, 64 ) ;
@@ -315,11 +315,11 @@ TabPage RID_SVXPAGE_PAGE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113, 133 ) ;
         Size = MAP_APPFONT ( 60, 8 ) ;
-        Text [ en-US ] = "Table alignment";
+        Text [ en-US ] = "Table alignment" ;
     };
     CheckBox CB_HORZ
     {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_HORZ";
+        HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_HORZ" ;
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 175, 133 ) ;
         Size = MAP_APPFONT ( 73, 10 ) ;
@@ -327,7 +327,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     CheckBox CB_VERT
     {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_VERT";
+        HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_VERT" ;
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 175, 147 ) ;
         Size = MAP_APPFONT ( 73, 10 ) ;
@@ -335,16 +335,16 @@ TabPage RID_SVXPAGE_PAGE
     };
     CheckBox CB_ADAPT
     {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_ADAPT";
+        HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_ADAPT" ;
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113, 133 ) ;
         Size = MAP_APPFONT ( 135, 10 ) ;
-        Text [ en-US ] = "~Fit object to paper format";
+        Text [ en-US ] = "~Fit object to paper format" ;
     };
-    /* Registerhaltigkeit (fuer SW) */
+    /* Register-true (for Writer) */
     CheckBox CB_REGISTER
     {
-        HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_REGISTER";
+        HelpID = "cui:CheckBox:RID_SVXPAGE_PAGE:CB_REGISTER" ;
         Pos = MAP_APPFONT ( 113, 133 ) ;
         Size = MAP_APPFONT ( 135, 10 ) ;
         Hide = TRUE ;
@@ -359,7 +359,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     ListBox LB_REGISTER
     {
-        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_REGISTER";
+        HelpID = "cui:ListBox:RID_SVXPAGE_PAGE:LB_REGISTER" ;
         Pos = MAP_APPFONT ( 122, 157 ) ;
         Size = MAP_APPFONT ( 126, 50 ) ;
         DropDown = TRUE ;
@@ -378,7 +378,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     String STR_QUERY_PRINTRANGE
     {
-        Text [ en-US ] = "The margin settings are out of print range.\n\nDo you still want to apply these settings?";
+        Text [ en-US ] = "The margin settings are out of print range.\n\nDo you still want to apply these settings?" ;
     };
 };
 StringArray RID_SVXSTRARY_PAPERSIZE_STD
@@ -399,21 +399,21 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
         < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
         < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "16 Kai" ; PAPERSIZE_KAI16; > ;
-        < "32 Kai" ; PAPERSIZE_KAI32; > ;
-        < "Big 32 Kai" ; PAPERSIZE_KAI32BIG; > ;
+        < "16 Kai" ; PAPERSIZE_KAI16 ; > ;
+        < "32 Kai" ; PAPERSIZE_KAI32 ; > ;
+        < "Big 32 Kai" ; PAPERSIZE_KAI32BIG ; > ;
         < "User" ; PAPERSIZE_USER ; > ;
         < "DL Envelope" ; PAPERSIZE_DL ; > ;
         < "C6 Envelope" ; PAPERSIZE_C6 ; > ;
         < "C6/5 Envelope" ; PAPERSIZE_C65 ; > ;
         < "C5 Envelope" ; PAPERSIZE_C5 ; > ;
         < "C4 Envelope" ; PAPERSIZE_C4 ; > ;
-        < "#6 3/4 (Personal) Envelope" ; PAPERSIZE_COM675; > ;
-        < "#8 (Monarch) Envelope" ; PAPERSIZE_MONARCH; > ;
-        < "#9 Envelope" ; PAPERSIZE_COM9; > ;
-        < "#10 Envelope" ; PAPERSIZE_COM10; > ;
-        < "#11 Envelope" ; PAPERSIZE_COM11; > ;
-        < "#12 Envelope" ; PAPERSIZE_COM12; > ;
+        < "#6 3/4 (Personal) Envelope" ; PAPERSIZE_COM675 ; > ;
+        < "#8 (Monarch) Envelope" ; PAPERSIZE_MONARCH ; > ;
+        < "#9 Envelope" ; PAPERSIZE_COM9 ; > ;
+        < "#10 Envelope" ; PAPERSIZE_COM10 ; > ;
+        < "#11 Envelope" ; PAPERSIZE_COM11 ; > ;
+        < "#12 Envelope" ; PAPERSIZE_COM12 ; > ;
     };
 };
 StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
@@ -437,9 +437,9 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
         < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
         < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "16 Kai" ; PAPERSIZE_KAI16; > ;
-        < "32 Kai" ; PAPERSIZE_KAI32; > ;
-        < "Big 32 Kai" ; PAPERSIZE_KAI32BIG; > ;
+        < "16 Kai" ; PAPERSIZE_KAI16 ; > ;
+        < "32 Kai" ; PAPERSIZE_KAI32 ; > ;
+        < "Big 32 Kai" ; PAPERSIZE_KAI32BIG ; > ;
         < "User" ; PAPERSIZE_USER ; > ;
         < "DL Envelope" ; PAPERSIZE_DL ; > ;
         < "C6 Envelope" ; PAPERSIZE_C6 ; > ;
@@ -451,4 +451,5 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
 
     };
 };
- // ********************************************************************** EOF
+
+// ********************************************************************** EOF
