@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_93369fb4",
+        "filename": "svx/source/dialog/langbox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-10T18:00:32Z",
+      "side": 1,
+      "message": "doesn\u0027t this need special handling too, when BuildEntry is called from SetLanguageList or AddLanguages?",
+      "range": {
+        "startLine": 661,
+        "startChar": 18,
+        "endLine": 661,
+        "endChar": 31
+      },
+      "revId": "f6ad6eedfd21bc8f9de09d53d3be883bbc543cc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
