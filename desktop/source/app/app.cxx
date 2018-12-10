@@ -45,6 +45,7 @@
 #include "updater.hxx"
 #endif
 
+#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/runtimetooustring.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/javacontext.hxx>
