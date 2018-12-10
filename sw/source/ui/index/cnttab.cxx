@@ -512,249 +512,213 @@ bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
         ! rSh.GetTextCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle();
 }
 
-class SwIndexTreeLB : public SvSimpleTable
+class SwAddStylesDlg_Impl : public SfxDialogController
 {
-public:
-    explicit SwIndexTreeLB(SvSimpleTableContainer& rParent);
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-    virtual void Resize() override;
-    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) override;
-    void setColSizes();
-};
-
-SwIndexTreeLB::SwIndexTreeLB(SvSimpleTableContainer& rParent)
-    : SvSimpleTable(rParent, 0)
-{
-    HeaderBar& rStylesHB = GetTheHeaderBar();
-    rStylesHB.SetStyle(rStylesHB.GetStyle()|WB_BUTTONSTYLE);
-    SetStyle(GetStyle() & ~(WB_AUTOHSCROLL|WB_HSCROLL));
-}
-
-sal_IntPtr SwIndexTreeLB::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
-{
-    sal_IntPtr nData = reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
-    if(nData != USHRT_MAX)
-    {
-        HeaderBar& rStylesHB = GetTheHeaderBar();
-        sal_IntPtr  nPos = rStylesHB.GetItemRect( static_cast< sal_uInt16 >(2 + nData) ).TopLeft().X();
-        nData = nPos;
-    }
-    else
-        nData = 0;
-    nData += pTab->GetPos();
-    return nData;
-}
-
-void SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
-{
-    SvTreeListEntry* pEntry = FirstSelected();
-    vcl::KeyCode aCode = rKEvt.GetKeyCode();
-    bool bChanged = false;
-    if(pEntry)
-    {
-        sal_IntPtr nLevel = reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
-        if(aCode.GetCode() == KEY_ADD )
-        {
-            if(nLevel < MAXLEVEL - 1)
-                nLevel++;
-            else if(nLevel == USHRT_MAX)
-                nLevel = 0;
-            bChanged = true;
-        }
-        else if(aCode.GetCode() == KEY_SUBTRACT)
-        {
-            if(!nLevel)
-                nLevel = USHRT_MAX;
-            else if(nLevel != USHRT_MAX)
-                nLevel--;
-            bChanged = true;
-        }
-        if(bChanged)
-        {
-            pEntry->SetUserData(reinterpret_cast<void*>(nLevel));
-            Invalidate();
-        }
-    }
-    if(!bChanged)
-        SvTreeListBox::KeyInput(rKEvt);
-}
-
-void SwIndexTreeLB::Resize()
-{
-    SvSimpleTable::Resize();
-    setColSizes();
-}
-
-void SwIndexTreeLB::setColSizes()
-{
-    HeaderBar &rHB = GetTheHeaderBar();
-    if (rHB.GetItemCount() < MAXLEVEL+1)
-        return;
-
-    long nWidth = rHB.GetSizePixel().Width();
-    nWidth /= 14;
-    nWidth--;
-
-    long nTabs[MAXLEVEL+1];
-    nTabs[0] = 3 * nWidth;
-    for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
-        nTabs[i] = nTabs[i-1] + nWidth;
-    SvSimpleTable::SetTabs(SAL_N_ELEMENTS(nTabs), nTabs, MapUnit::MapPixel);
-}
-
-class SwAddStylesDlg_Impl : public SfxModalDialog
-{
-    VclPtr<OKButton>       m_pOk;
-
-    VclPtr<SwIndexTreeLB>  m_pHeaderTree;
-    VclPtr<PushButton>     m_pLeftPB;
-    VclPtr<PushButton>     m_pRightPB;
-
     OUString*       pStyleArr;
 
-    DECL_LINK(OkHdl, Button*, void);
-    DECL_LINK(LeftRightHdl, Button*, void);
-    DECL_LINK(HeaderDragHdl, HeaderBar*, void);
+    std::unique_ptr<weld::Button> m_xOk;
+    std::unique_ptr<weld::Button> m_xLeftPB;
+    std::unique_ptr<weld::Button> m_xRightPB;
+    std::unique_ptr<weld::TreeView> m_xHeaderTree;
+
+    DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(LeftRightHdl, weld::Button&, void);
+    DECL_LINK(KeyInput, const KeyEvent&, bool);
+    DECL_LINK(TreeSizeAllocHdl, const Size&, void);
+    typedef std::pair<int, int> row_col;
+    DECL_LINK(RadioToggleOnHdl, const row_col&, void);
 
 public:
-    SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell const & rWrtSh, OUString rStringArr[]);
-    virtual ~SwAddStylesDlg_Impl() override;
-    virtual void dispose() override;
+    SwAddStylesDlg_Impl(weld::Window* pParent, SwWrtShell const & rWrtSh, OUString rStringArr[]);
 };
 
-SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
+SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
             SwWrtShell const & rWrtSh, OUString rStringArr[])
-    : SfxModalDialog(pParent, "AssignStylesDialog",
-        "modules/swriter/ui/assignstylesdialog.ui")
+    : SfxDialogController(pParent, "modules/swriter/ui/assignstylesdialog.ui", "AssignStylesDialog")
     , pStyleArr(rStringArr)
+    , m_xOk(m_xBuilder->weld_button("ok"))
+    , m_xLeftPB(m_xBuilder->weld_button("left"))
+    , m_xRightPB(m_xBuilder->weld_button("right"))
+    , m_xHeaderTree(m_xBuilder->weld_tree_view("styles"))
 {
-    get(m_pOk, "ok");
-    get(m_pLeftPB, "left");
-    get(m_pRightPB, "right");
-    OUString sHBFirst = get<FixedText>("notapplied")->GetText();
-    SvSimpleTableContainer *pHeaderTreeContainer = get<SvSimpleTableContainer>("styles");
-    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MapMode(MapUnit::MapAppFont));
-    pHeaderTreeContainer->set_width_request(aSize.Width());
-    pHeaderTreeContainer->set_height_request(aSize.Height());
-    m_pHeaderTree = VclPtr<SwIndexTreeLB>::Create(*pHeaderTreeContainer);
+    m_xOk->connect_clicked(LINK(this, SwAddStylesDlg_Impl, OkHdl));
+    m_xLeftPB->connect_clicked(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
+    m_xRightPB->connect_clicked(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
+    m_xHeaderTree->connect_size_allocate(LINK(this, SwAddStylesDlg_Impl, TreeSizeAllocHdl));
 
-    m_pOk->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
-    m_pLeftPB->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
-    m_pRightPB->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
+    std::vector<int> aRadioColumns;
+    for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
+        aRadioColumns.push_back(i + 1);
+    m_xHeaderTree->set_toggle_columns_as_radio(aRadioColumns);
+    m_xHeaderTree->connect_radio_toggled(LINK(this, SwAddStylesDlg_Impl, RadioToggleOnHdl));
 
-    HeaderBar& rHB = m_pHeaderTree->GetTheHeaderBar();
-    rHB.SetEndDragHdl(LINK(this, SwAddStylesDlg_Impl, HeaderDragHdl));
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xHeaderTree->get_approximate_digit_width() * 30);
+    int nPadding = m_xHeaderTree->get_approximate_digit_width() * 2;
+    OUString sTitle(m_xHeaderTree->get_column_title(1));
+    for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
+    {
+        sTitle = OUString::number(i);
+        m_xHeaderTree->set_column_title(i + 1, sTitle);
+        aWidths.push_back(m_xHeaderTree->get_pixel_size(sTitle).Width() + nPadding);
+    }
+    m_xHeaderTree->set_column_fixed_widths(aWidths);
+    auto nWidth = std::accumulate(aWidths.begin(), aWidths.end(), 0);
+    m_xHeaderTree->set_size_request(nWidth, m_xHeaderTree->get_height_rows(15));
 
-    for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
-        sHBFirst += "\t" + OUString::number(i);
-    m_pHeaderTree->InsertHeaderEntry(sHBFirst);
-    m_pHeaderTree->setColSizes();
-
-    m_pHeaderTree->SetStyle(m_pHeaderTree->GetStyle()|WB_CLIPCHILDREN|WB_SORT);
-    m_pHeaderTree->GetModel()->SetSortMode(SortAscending);
+    int nRow(0);
     for (sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         const OUString &rStyles{rStringArr[i]};
         if (rStyles.isEmpty())
             continue;
-        sal_Int32 nPos {0};
-        do {
-            SvTreeListEntry* pEntry = m_pHeaderTree->InsertEntry(rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos));
-            pEntry->SetUserData(reinterpret_cast<void*>(i));
+        sal_Int32 nPos(0);
+        do
+        {
+            OUString sEntry = rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos);
+            m_xHeaderTree->append_text(sEntry);
+            for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
+                m_xHeaderTree->set_toggle(nRow, i == j - 1, j + 1);
+            ++nRow;
         } while (nPos>=0);
     }
     // now the other styles
 
-    const SwTextFormatColl *pColl   = nullptr;
     const sal_uInt16 nSz = rWrtSh.GetTextFormatCollCount();
-
-    for ( sal_uInt16 j = 0;j < nSz; ++j )
+    for (sal_uInt16 j = 0; j < nSz; ++j)
     {
-        pColl = &rWrtSh.GetTextFormatColl(j);
-        if(pColl->IsDefault())
+        const SwTextFormatColl& rColl = rWrtSh.GetTextFormatColl(j);
+        if (rColl.IsDefault())
             continue;
 
-        const OUString aName = pColl->GetName();
+        const OUString aName = rColl.GetName();
         if (!aName.isEmpty())
         {
-            SvTreeListEntry* pEntry = m_pHeaderTree->First();
-            while (pEntry && SvTabListBox::GetEntryText(pEntry, 0) != aName)
+            bool bEntry = false;
+            int nChildren = m_xHeaderTree->n_children();
+            for (int i = 0; i < nChildren; ++i)
             {
-                pEntry = m_pHeaderTree->Next(pEntry);
+                if (m_xHeaderTree->get_text(i, 0) == aName)
+                {
+                    bEntry = true;
+                    break;
+                }
             }
-            if (!pEntry)
+            if (!bEntry)
             {
-                m_pHeaderTree->InsertEntry(aName)->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
+                m_xHeaderTree->append_text(aName);
+                for (sal_uInt16 k = 0; k <= MAXLEVEL; ++k)
+                    m_xHeaderTree->set_toggle(nRow, k == 0, k + 1);
+                ++nRow;
             }
         }
     }
-    m_pHeaderTree->GetModel()->Resort();
+    m_xHeaderTree->make_sorted();
+    m_xHeaderTree->select(0);
+    m_xHeaderTree->connect_key_release(LINK(this, SwAddStylesDlg_Impl, KeyInput));
 }
 
-SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
+IMPL_LINK(SwAddStylesDlg_Impl, TreeSizeAllocHdl, const Size&, rSize, void)
 {
-    disposeOnce();
+    auto nWidth = rSize.Width();
+
+    std::vector<int> aWidths;
+    aWidths.push_back(0);
+    int nPadding = m_xHeaderTree->get_approximate_digit_width() * 2;
+    for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
+    {
+        OUString sTitle(m_xHeaderTree->get_column_title(i + 1));
+        aWidths.push_back(m_xHeaderTree->get_pixel_size(sTitle).Width() + nPadding);
+    }
+    auto nOtherWidth = std::accumulate(aWidths.begin(), aWidths.end(), 0);
+    aWidths[0] = nWidth - nOtherWidth;
+    m_xHeaderTree->set_column_fixed_widths(aWidths);
 }
 
-void SwAddStylesDlg_Impl::dispose()
+IMPL_LINK(SwAddStylesDlg_Impl, RadioToggleOnHdl, const row_col&, rRowCol, void)
 {
-    m_pHeaderTree.disposeAndClear();
-    m_pOk.clear();
-    m_pLeftPB.clear();
-    m_pRightPB.clear();
-    SfxModalDialog::dispose();
+    for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
+        m_xHeaderTree->set_toggle(rRowCol.first, rRowCol.second == i + 1, i + 1);
 }
 
-IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl, Button*, void)
+IMPL_LINK(SwAddStylesDlg_Impl, KeyInput, const KeyEvent&, rKEvt, bool)
+{
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
+    bool bHandled = false;
+
+    if (aCode.GetCode() == KEY_ADD || aCode.GetCode() == KEY_RIGHT)
+    {
+        LeftRightHdl(*m_xRightPB);
+        bHandled = true;
+    }
+    else if (aCode.GetCode() == KEY_SUBTRACT || aCode.GetCode() == KEY_LEFT)
+    {
+        LeftRightHdl(*m_xLeftPB);
+        bHandled = true;
+    }
+
+    return bHandled;
+}
+
+IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl, weld::Button&, void)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         pStyleArr[i].clear();
 
-    SvTreeListEntry* pEntry = m_pHeaderTree->First();
-    while(pEntry)
+    int nChildren = m_xHeaderTree->n_children();
+    for (int i = 0; i < nChildren; ++i)
     {
-        sal_IntPtr nLevel = reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
-        if(nLevel != USHRT_MAX)
+        int nToggleColumn = 0;
+        for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
         {
+            if (m_xHeaderTree->get_toggle(i, j + 1))
+            {
+                nToggleColumn = j;
+                break;
+            }
+        }
+        if (nToggleColumn)
+        {
+            int nLevel = nToggleColumn - 1;
             if(!pStyleArr[nLevel].isEmpty())
                 pStyleArr[nLevel] += OUStringLiteral1(TOX_STYLE_DELIMITER);
-            pStyleArr[nLevel] += SvTabListBox::GetEntryText(pEntry, 0);
+            pStyleArr[nLevel] += m_xHeaderTree->get_text(i, 0);
         }
-        pEntry = m_pHeaderTree->Next(pEntry);
     }
 
     //TODO write back style names
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwAddStylesDlg_Impl, HeaderDragHdl, HeaderBar*, void)
+IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, weld::Button&, rBtn, void)
 {
-    m_pHeaderTree->Invalidate();
-}
-
-IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, Button*, pBtn, void)
-{
-    bool bLeft = pBtn == m_pLeftPB;
-    SvTreeListEntry* pEntry = m_pHeaderTree->FirstSelected();
-    if(pEntry)
+    bool bLeft = &rBtn == m_xLeftPB.get();
+    int nEntry = m_xHeaderTree->get_selected_index();
+    if (nEntry != -1)
     {
-        sal_IntPtr nLevel = reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
-        if(bLeft)
+        int nToggleColumn = 0;
+        for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
         {
-            if(!nLevel)
-                nLevel = USHRT_MAX;
-            else if(nLevel != USHRT_MAX)
-                nLevel--;
+            if (m_xHeaderTree->get_toggle(nEntry, j + 1))
+            {
+                nToggleColumn = j;
+                break;
+            }
+        }
+
+        if (bLeft)
+        {
+            if (nToggleColumn)
+                --nToggleColumn;
         }
         else
         {
-            if(nLevel < MAXLEVEL - 1)
-                nLevel++;
-            else if(nLevel == USHRT_MAX)
-                nLevel = 0;
+            if (nToggleColumn < MAXLEVEL)
+                ++nToggleColumn;
         }
-        pEntry->SetUserData(reinterpret_cast<void*>(nLevel));
-        m_pHeaderTree->Invalidate();
+
+        for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
+            m_xHeaderTree->set_toggle(nEntry, j == nToggleColumn, j + 1);
     }
 }
 
@@ -1448,13 +1412,11 @@ void SwTOXSelectTabPage::LanguageHdl( ListBox const * pBox )
         ModifyHdl(*m_pTitleED);
 };
 
-IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwTOXSelectTabPage, AddStylesHdl, Button*, void)
 {
-    ScopedVclPtrInstance<SwAddStylesDlg_Impl> pDlg(
-        pButton, static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
+    SwAddStylesDlg_Impl aDlg(GetFrameWeld(), static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
         aStyleArr);
-    pDlg->Execute();
-    pDlg.disposeAndClear();
+    aDlg.run();
     ModifyHdl(*m_pTitleED);
 }
 
