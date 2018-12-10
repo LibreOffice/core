@@ -395,7 +395,13 @@ void SidebarController::NotifyResize()
         {
             // No TabBar in LOK.
             if (comphelper::LibreOfficeKit::isActive())
-                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nHeight);
+            {
+                const sal_Int32 nMinimalHeight = mpCurrentDeck->GetMinimalHeight();
+                if (nMinimalHeight > 0)
+                    mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nMinimalHeight);
+                else
+                    mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nHeight);
+            }
             else
                 mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
             mpCurrentDeck->Show();
@@ -456,7 +462,7 @@ void SidebarController::UpdateConfigurations()
         return;
 
     if ((maCurrentContext.msApplication != "none") &&
-         !maCurrentContext.msApplication.isEmpty())
+            !maCurrentContext.msApplication.isEmpty())
     {
         mpResourceManager->SaveDecksSettings(maCurrentContext);
         mpResourceManager->SetLastActiveDeck(maCurrentContext, msCurrentDeckId);
@@ -464,11 +470,11 @@ void SidebarController::UpdateConfigurations()
 
     // get last active deck for this application on first update
     if (!maRequestedContext.msApplication.isEmpty() &&
-         (maCurrentContext.msApplication != maRequestedContext.msApplication))
+            (maCurrentContext.msApplication != maRequestedContext.msApplication))
     {
-       OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
-       if (!sLastActiveDeck.isEmpty())
-           msCurrentDeckId = sLastActiveDeck;
+        OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
+        if (!sLastActiveDeck.isEmpty())
+            msCurrentDeckId = sLastActiveDeck;
     }
 
     maCurrentContext = maRequestedContext;
@@ -507,18 +513,18 @@ void SidebarController::UpdateConfigurations()
         }
     }
 
-    if (sNewDeckId.getLength() == 0)
-    {
-        // We did not find a valid deck.
-        RequestCloseDeck();
-        return;
-    }
+        if (sNewDeckId.getLength() == 0)
+        {
+            // We did not find a valid deck.
+            RequestCloseDeck();
+            return;
+        }
 
-    // Tell the tab bar to highlight the button associated
-    // with the deck.
-    mpTabBar->HighlightDeck(sNewDeckId);
+        // Tell the tab bar to highlight the button associated
+        // with the deck.
+        mpTabBar->HighlightDeck(sNewDeckId);
 
-    std::shared_ptr<DeckDescriptor> xDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
+        std::shared_ptr<DeckDescriptor> xDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
 
     if (xDescriptor)
     {
@@ -637,7 +643,7 @@ void SidebarController::CreateDeck(const OUString& rDeckId, const Context& rCont
 
 void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rContext)
 {
-    std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
+     std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
     // init panels bounded to that deck, do not wait them being displayed as may be accessed through API
 
@@ -1233,7 +1239,14 @@ void SidebarController::UpdateDeckOpenState()
             mnSavedSidebarWidth = aNewSize.Width(); // Save the current width to restore.
 
             aNewPos.setX(aNewPos.X() + mnSavedSidebarWidth - nTabBarDefaultWidth);
-            aNewSize.setWidth(nTabBarDefaultWidth);
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                // Hide by collapsing, otherwise with 0x0 the client might expect
+                // to get valid dimensions on rendering and not collapse the sidebar.
+                aNewSize.setWidth(1);
+            }
+            else
+                aNewSize.setWidth(nTabBarDefaultWidth);
 
             mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
             // Sidebar too narrow to render the menu; disable it.

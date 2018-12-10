@@ -49,6 +49,7 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
     : Window(pParentWindow, 0)
     , msId(rDeckDescriptor.msId)
     , mnMinimalWidth(0)
+    , mnMinimalHeight(0)
     , maPanels()
     , mpTitleBar(VclPtr<DeckTitleBar>::Create(rDeckDescriptor.msTitle, this, rCloserAction))
     , mpScrollClipWindow(VclPtr<vcl::Window>::Create(this))
@@ -249,8 +250,9 @@ void Deck::ResetPanels(const SharedPanelContainer& rPanelContainer)
 void Deck::RequestLayout()
 {
     mnMinimalWidth = 0;
+    mnMinimalHeight = 0;
 
-    DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, maPanels,
+    DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, mnMinimalHeight, maPanels,
                              *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
                              *mpFiller, *mpVerticalScrollBar);
 
