@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_b3699b8c",
+        "filename": "sc/qa/unit/data/functions/date_time/fods/yearfrac.fods",
+        "patchSetId": 1
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-10T19:14:41Z",
+      "side": 1,
+      "message": "Seeing this, how do office:value\u003d\"365\" and display text 365,50000 fit together? I assume some copy\u0026paste of XML content error.\nAlso, I assume you have your General format set to 5 decimals in the Options.\nApart from that, calculations and (default) formatting should happen in an en-US locale so as to not produce too large a diff when later someone changes anything. (and yes, I much appreciate you manually merge new content to existing test case files to keep diffs small :-)\n\nUsing an English-US locale with the standard unlimited General precision, loading and recalculating and saving gives more congruent date formats display text and, more important, correct display texts for the values.\n\nIf could please do so?",
+      "range": {
+        "startLine": 1447,
+        "startChar": 0,
+        "endLine": 1448,
+        "endChar": 32
+      },
+      "revId": "742b4da9ecc79d9ceb26ec65a45ff98ac29a5b62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
