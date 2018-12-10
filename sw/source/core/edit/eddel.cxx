@@ -22,9 +22,11 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <editsh.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
+#include <unocrsr.hxx>
 #include <swundo.hxx>
 #include <edimp.hxx>
 #include <IMark.hxx>
@@ -318,7 +320,7 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
         {
             if( rPaM.HasMark() && *rPaM.GetMark() != *rPaM.GetPoint() )
             {
-                bRet = GetDoc()->getIDocumentContentOperations().ReplaceRange( rPaM, rNewStr, bRegExpRplc )
+                bRet = sw::ReplaceImpl(rPaM, rNewStr, bRegExpRplc, *GetDoc(), GetLayout())
                     || bRet;
                 SaveTableBoxContent( rPaM.GetPoint() );
             }
