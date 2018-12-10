@@ -49,8 +49,8 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
                 long nGrey11, nGrey12, nGrey13;
                 long nGrey21, nGrey22, nGrey23;
                 long nGrey31, nGrey32, nGrey33;
-                long* pHMap = new long[nWidth + 2];
-                long* pVMap = new long[nHeight + 2];
+                std::unique_ptr<long[]> pHMap(new long[nWidth + 2]);
+                std::unique_ptr<long[]> pVMap(new long[nHeight + 2]);
                 long nX, nY, nSum1, nSum2;
 
                 // fill mapping tables
@@ -139,8 +139,8 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
                     }
                 }
 
-                delete[] pHMap;
-                delete[] pVMap;
+                pHMap.reset();
+                pVMap.reset();
                 pWriteAcc.reset();
                 bRet = true;
             }

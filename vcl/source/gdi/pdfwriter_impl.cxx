@@ -9727,7 +9727,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         return;
     }
 
-    SvMemoryStream* pStream = new SvMemoryStream;
+    std::unique_ptr<SvMemoryStream> pStream(new SvMemoryStream);
     pStream->WriteStream( rDCTData );
     pStream->Seek( STREAM_SEEK_TO_END );
 
@@ -9748,7 +9748,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         if (!rGraphic.hasPdfData() || m_aContext.UseReferenceXObject)
             rEmit.m_nObject = createObject();
         rEmit.m_aID         = aID;
-        rEmit.m_pStream.reset( pStream );
+        rEmit.m_pStream = std::move( pStream );
         rEmit.m_bTrueColor  = bIsTrueColor;
         if( !! rMask && rMask.GetSizePixel() == rSizePixel )
             rEmit.m_aMask   = rMask;
@@ -9756,8 +9756,6 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
 
         it = m_aJPGs.begin();
     }
-    else
-        delete pStream;
 
     aLine.append( "q " );
     sal_Int32 nCheckWidth = 0;

@@ -381,23 +381,17 @@ static void ImplInitPrnQueueList()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    pSVData->maGDIData.mpPrinterQueueList = new ImplPrnQueueList;
+    pSVData->maGDIData.mpPrinterQueueList.reset(new ImplPrnQueueList);
 
     static const char* pEnv = getenv( "SAL_DISABLE_PRINTERLIST" );
     if( !pEnv || !*pEnv )
-        pSVData->mpDefInst->GetPrinterQueueInfo( pSVData->maGDIData.mpPrinterQueueList );
+        pSVData->mpDefInst->GetPrinterQueueInfo( pSVData->maGDIData.mpPrinterQueueList.get() );
 }
 
 void ImplDeletePrnQueueList()
 {
     ImplSVData*         pSVData = ImplGetSVData();
-    ImplPrnQueueList*   pPrnList = pSVData->maGDIData.mpPrinterQueueList;
-
-    if ( pPrnList )
-    {
-        delete pPrnList;
-        pSVData->maGDIData.mpPrinterQueueList = nullptr;
-    }
+    pSVData->maGDIData.mpPrinterQueueList.reset();
 }
 
 const std::vector<OUString>& Printer::GetPrinterQueues()
@@ -781,7 +775,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
     if ( !pSVData->maGDIData.mpPrinterQueueList )
         ImplInitPrnQueueList();
 
-    ImplPrnQueueList* pPrnList = pSVData->maGDIData.mpPrinterQueueList;
+    ImplPrnQueueList* pPrnList = pSVData->maGDIData.mpPrinterQueueList.get();
     if ( pPrnList && !pPrnList->m_aQueueInfos.empty() )
     {
         // first search for the printer name directly
@@ -1624,12 +1618,12 @@ void Printer::ImplEndPage()
 void Printer::updatePrinters()
 {
     ImplSVData*         pSVData = ImplGetSVData();
-    ImplPrnQueueList*   pPrnList = pSVData->maGDIData.mpPrinterQueueList;
+    ImplPrnQueueList*   pPrnList = pSVData->maGDIData.mpPrinterQueueList.get();
 
     if ( pPrnList )
     {
-        ImplPrnQueueList* pNewList = new ImplPrnQueueList;
-        pSVData->mpDefInst->GetPrinterQueueInfo( pNewList );
+        std::unique_ptr<ImplPrnQueueList> pNewList(new ImplPrnQueueList);
+        pSVData->mpDefInst->GetPrinterQueueInfo( pNewList.get() );
 
         bool bChanged = pPrnList->m_aQueueInfos.size() != pNewList->m_aQueueInfos.size();
         for( decltype(pPrnList->m_aQueueInfos)::size_type i = 0; ! bChanged && i < pPrnList->m_aQueueInfos.size(); i++ )
@@ -1645,7 +1639,7 @@ void Printer::updatePrinters()
         if( bChanged )
         {
             ImplDeletePrnQueueList();
-            pSVData->maGDIData.mpPrinterQueueList = pNewList;
+            pSVData->maGDIData.mpPrinterQueueList = std::move(pNewList);
 
             Application* pApp = GetpApp();
             if( pApp )
@@ -1655,8 +1649,6 @@ void Printer::updatePrinters()
                 Application::NotifyAllWindows( aDCEvt );
             }
         }
-        else
-            delete pNewList;
     }
 }
 
