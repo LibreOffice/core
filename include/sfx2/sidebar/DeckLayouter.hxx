@@ -35,6 +35,7 @@ namespace DeckLayouter
     void LayoutDeck (
         const tools::Rectangle& rContentArea,
         sal_Int32& rMinimalWidth,
+        sal_Int32& rMinimalHeight,
         SharedPanelContainer& rPanels,
         vcl::Window& pDeckTitleBar,
         vcl::Window& pScrollClipWindow,
