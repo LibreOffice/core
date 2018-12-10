@@ -70,6 +70,30 @@
       "revId": "1aeaf683d82db97486d990e30236c06fc82d481b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_33136b10",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-10T19:49:16Z",
+      "side": 1,
+      "message": "\u003e About the comment - agree, I\u0027ll move it to the hxx file.\n\nI overlooked this. Well - please leave it here (just move 2 lines up); you are also welcome to add a comment at hxx, too - but the comment here is useful to developers hacking on the cxx code.",
+      "parentUuid": "5f4e5783_3818e87f",
+      "range": {
+        "startLine": 1394,
+        "startChar": 0,
+        "endLine": 1395,
+        "endChar": 37
+      },
+      "revId": "1aeaf683d82db97486d990e30236c06fc82d481b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
