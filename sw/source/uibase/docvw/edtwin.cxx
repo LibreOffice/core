@@ -4730,6 +4730,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             //if the clipboard is empty after paste remove the ApplyTemplate
             if(!pFormatClipboard->HasContent())
                 SetApplyTemplate(SwApplyTemplate());
+
+            //tdf#38101 remove temporary highlighting
+            m_pUserMarker.reset();
         }
         else if( m_pApplyTempl->nColor )
         {
