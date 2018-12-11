@@ -45,7 +45,6 @@ enum class SvListAction
     RESORTING        = 9,
     RESORTED         = 10,
     CLEARED          = 11,
-    REVERSING        = 12,
     REVERSED         = 13
 };
 
