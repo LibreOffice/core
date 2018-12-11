@@ -30,11 +30,32 @@ public:
     static bool SafeDiv( double& fVal1, double fVal2);
 };
 
+/** Implements the Welford Online one-pass algorithm.
+    See https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_Online_algorithm
+    and Donald E. Knuth, TAoCP vol.2, 3rd edn., p. 232
+ */
+class WelfordRunner
+{
+public:
+    WelfordRunner() : fMean(0.0), fM2(0.0), nCount(0) {}
+    void        update( double fVal );
+    sal_uInt64  getCount() const                { return nCount; }
+    double      getMean() const                 { return fMean; }
+    double      getVarianceSample() const       { return nCount > 1 ? fM2 / (nCount-1) : 0.0; }
+    double      getVariancePopulation() const   { return nCount > 0 ? fM2 / nCount : 0.0; }
+
+private:
+    double      fMean;
+    double      fM2;
+    sal_Int64   nCount;
+};
+
 struct ScFunctionData                   // to calculate single functions
 {
+    WelfordRunner   maWelford;
     ScSubTotalFunc const  eFunc;
     double          nVal;
-    long            nCount;
+    sal_uInt64      nCount;
     bool            bError;
 
     ScFunctionData( ScSubTotalFunc eFn ) :
