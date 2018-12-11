@@ -44,38 +44,10 @@ connectivity/source/drivers/evoab2/NStatement.hxx:57
     connectivity::evoab::FieldSort bAscending _Bool
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
-cppcanvas/source/inc/implrenderer.hxx:158
-    cppcanvas::internal::(anonymous) aWorldTransform struct cppcanvas::internal::XForm
-cppcanvas/source/inc/implrenderer.hxx:159
-    cppcanvas::internal::(anonymous) aDevState struct cppcanvas::internal::OutDevState
-cppcanvas/source/inc/implrenderer.hxx:255
-    cppcanvas::internal::ImplRenderer aWorldTransform struct cppcanvas::internal::XForm
-cppcanvas/source/inc/implrenderer.hxx:257
-    cppcanvas::internal::ImplRenderer fPageScale float
-cppcanvas/source/inc/implrenderer.hxx:258
-    cppcanvas::internal::ImplRenderer nOriginX sal_Int32
-cppcanvas/source/inc/implrenderer.hxx:259
-    cppcanvas::internal::ImplRenderer nOriginY sal_Int32
-cppcanvas/source/inc/implrenderer.hxx:260
-    cppcanvas::internal::ImplRenderer nHDPI sal_Int32
-cppcanvas/source/inc/implrenderer.hxx:261
-    cppcanvas::internal::ImplRenderer nVDPI sal_Int32
-cppcanvas/source/inc/implrenderer.hxx:272
-    cppcanvas::internal::ImplRenderer mbMultipart _Bool
-cppcanvas/source/inc/implrenderer.hxx:273
-    cppcanvas::internal::ImplRenderer mMFlags sal_uInt16
-cppcanvas/source/inc/implrenderer.hxx:274
-    cppcanvas::internal::ImplRenderer mMStream class SvMemoryStream
-cppcanvas/source/inc/implrenderer.hxx:276
-    cppcanvas::internal::ImplRenderer mGSStack cppcanvas::internal::GraphicStateMap
-cppcanvas/source/inc/implrenderer.hxx:277
-    cppcanvas::internal::ImplRenderer mGSContainerStack cppcanvas::internal::GraphicStateMap
 cppu/source/threadpool/threadpool.cxx:355
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:59
     AlignSize_Impl nInt16 sal_Int16
-cui/source/customize/cfgutil.cxx:447
-    CuiConfigGroupBoxResource_Impl m_sMacros class rtl::OUString
 cui/source/dialogs/colorpicker.cxx:714
     cui::ColorPickerDialog m_xColorField std::unique_ptr<weld::CustomWeld>
 cui/source/dialogs/colorpicker.cxx:716
@@ -203,9 +175,9 @@ include/sfx2/msg.hxx:135
 include/sfx2/msg.hxx:135
     SfxType4 nAttribs sal_uInt16
 include/sfx2/msg.hxx:135
-    SfxType4 pType const std::type_info *
-include/sfx2/msg.hxx:135
     SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:135
+    SfxType4 pType const std::type_info *
 include/sfx2/msg.hxx:136
     SfxType5 aAttrib struct SfxTypeAttrib [5]
 include/sfx2/msg.hxx:136
@@ -420,17 +392,11 @@ sal/qa/osl/security/osl_Security.cxx:157
     osl_Security::getUserName bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:191
     osl_Security::getConfigDir bRes1 _Bool
-sc/inc/xmlwrap.hxx:102
-    ScXMLChartExportWrapper mxModel css::uno::Reference<css::frame::XModel>
-sc/inc/xmlwrap.hxx:103
-    ScXMLChartExportWrapper mxStorage css::uno::Reference<css::embed::XStorage>
-sc/inc/xmlwrap.hxx:104
-    ScXMLChartExportWrapper mrMedium class SfxMedium &
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
-sc/source/core/data/document.cxx:1225
+sc/source/core/data/document.cxx:1237
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1226
+sc/source/core/data/document.cxx:1238
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk const class ScBulkBroadcast
 sc/source/filter/html/htmlpars.cxx:3030
     (anonymous namespace)::CSSHandler::MemStr mp const char *
@@ -493,9 +459,9 @@ sd/source/ui/view/viewshel.cxx:1211
 sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
-    PDFGrammar::definition array rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
     PDFGrammar::definition value rule<ScannerT>
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
+    PDFGrammar::definition array rule<ScannerT>
 sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
@@ -642,7 +608,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2709
+vcl/unx/gtk3/gtk3gtkinst.cxx:2712
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink

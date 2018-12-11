@@ -178,8 +178,8 @@ class SwUndoTableNdsChg : public SwUndo
     std::unique_ptr< std::set<BoxMove> > m_pNewSttNds;
     std::unique_ptr<SwUndoSaveSections> m_pDelSects;
     long m_nMin, m_nMax;        // for redo of delete column
-    sal_uLong m_nSttNode, m_nCurrBox;
-    sal_uInt16 m_nCount, m_nRelDiff, m_nAbsDiff;
+    sal_uLong m_nSttNode;
+    sal_uInt16 m_nCount;
     TableChgWidthHeightType m_nSetColType;
     bool const m_bFlag;
     bool const m_bSameHeight;                   // only used for SplitRow

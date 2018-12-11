@@ -640,6 +640,12 @@ sw/source/core/doc/tblrwcl.cxx:83
     CpyTabFrame::(anonymous) nSize SwTwips
 sw/source/core/inc/swblocks.hxx:68
     SwImpBlocks m_bInPutMuchBlocks _Bool
+sw/source/core/inc/UndoTable.hxx:181
+    SwUndoTableNdsChg m_nCurrBox sal_uLong
+sw/source/core/inc/UndoTable.hxx:182
+    SwUndoTableNdsChg m_nRelDiff sal_uInt16
+sw/source/core/inc/UndoTable.hxx:182
+    SwUndoTableNdsChg m_nAbsDiff sal_uInt16
 sw/source/core/text/atrhndl.hxx:48
     SwAttrHandler::SwAttrStack m_pInitialArray class SwTextAttr *[3]
 sw/source/filter/inc/rtf.hxx:32
@@ -948,12 +954,12 @@ vcl/source/window/menuitemlist.hxx:58
     MenuItemData aAccessibleName const class rtl::OUString
 vcl/unx/generic/print/bitmap_gfx.cxx:67
     psp::HexEncoder mpFileBuffer sal_Char [16400]
-vcl/unx/gtk3/gtk3gtkinst.cxx:1155
+vcl/unx/gtk3/gtk3gtkinst.cxx:1156
      out gpointer *
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass const AtkObjectClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
