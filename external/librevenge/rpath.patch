@@ -1,0 +1,10 @@
+--- configure
++++ configure
+@@ -14983,6 +14983,7 @@
+ 	    esac
+ 	    ;;
+ 	esac
++hardcode_libdir_flag_spec_CXX=
+ 	;;
+ 
+       lynxos*)
