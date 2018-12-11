@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_b675089b",
+        "filename": "sw/source/filter/ww8/docxexportfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-11T14:03:05Z",
+      "side": 1,
+      "message": "You will probably need code like this in all 3 export filters (also for .xltx and .potx) so maybe it\u0027d be better if it lived in XmlFilterBase class. Then it can be reused elsewhere cuz all OOXML export filters eventually inherit from XmlFilterBase",
+      "revId": "d63b0b6c42e84354e9b96ff7789e755d3dc7e92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
