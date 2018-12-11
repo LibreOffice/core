@@ -5176,6 +5176,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">%PRODUCTNAME ~Basic...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:MacroOrganizer?TabId:short=1" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">

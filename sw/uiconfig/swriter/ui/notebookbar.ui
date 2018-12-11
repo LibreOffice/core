@@ -14620,10 +14620,10 @@
                                 <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Tools-ScriptOrganizer">
+                                  <object class="GtkToolButton" id="Tools-MacroDialog">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:ScriptOrganizer</property>
+                                    <property name="action_name">.uno:MacroDialog</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
