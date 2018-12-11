@@ -1122,17 +1122,11 @@ void SvListView::Impl::InitTable()
     pEntry = m_rThis.pModel->First();
     while( pEntry )
     {
-        pViewData = m_rThis.CreateViewData( pEntry );
-        DBG_ASSERT(pViewData,"InitTable:No ViewData");
+        pViewData = o3tl::make_unique<SvViewDataEntry>();
         m_rThis.InitViewData( pViewData.get(), pEntry );
         m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
         pEntry = m_rThis.pModel->Next( pEntry );
     }
-}
-
-std::unique_ptr<SvViewDataEntry> SvListView::CreateViewData( SvTreeListEntry* )
-{
-    return o3tl::make_unique<SvViewDataEntry>();
 }
 
 void SvListView::Clear()
@@ -1211,7 +1205,7 @@ void SvListView::Impl::ActionMoved()
 void SvListView::Impl::ActionInserted( SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Insert:No Entry");
-    std::unique_ptr<SvViewDataEntry> pData(m_rThis.CreateViewData( pEntry ));
+    std::unique_ptr<SvViewDataEntry> pData(new SvViewDataEntry());
     m_rThis.InitViewData( pData.get(), pEntry );
     std::pair<SvDataTable::iterator, bool> aSuccess =
         m_DataTable.insert(std::make_pair(pEntry, std::move(pData)));
@@ -1236,8 +1230,7 @@ void SvListView::Impl::ActionInsertedTree( SvTreeListEntry* pEntry )
     while( pCurEntry )
     {
         DBG_ASSERT(m_DataTable.find(pCurEntry) != m_DataTable.end(),"Entry already in Table");
-        std::unique_ptr<SvViewDataEntry> pViewData(m_rThis.CreateViewData(pCurEntry));
-        DBG_ASSERT(pViewData,"No ViewData");
+        std::unique_ptr<SvViewDataEntry> pViewData(new SvViewDataEntry());
         m_rThis.InitViewData( pViewData.get(), pEntry );
         m_DataTable.insert(std::make_pair(pCurEntry, std::move(pViewData)));
         pCurEntry = m_rThis.pModel->Next( pCurEntry );

@@ -808,11 +808,6 @@ const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEnt
     return &pEntryData->GetItem(nItemPos);
 }
 
-std::unique_ptr<SvViewDataEntry> SvTreeListBox::CreateViewData( SvTreeListEntry* )
-{
-    return o3tl::make_unique<SvViewDataEntry>();
-}
-
 void SvTreeListBox::InitViewData( SvViewDataEntry* pData, SvTreeListEntry* pEntry )
 {
     SvTreeListEntry* pInhEntry = pEntry;
