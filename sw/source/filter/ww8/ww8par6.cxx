@@ -2033,8 +2033,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     const WW8SwFlyPara* pFS, bool bGraf)
     : SfxItemSet(rReader.m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>{})
 {
-    if (!rReader.m_bNewDoc)
-        Reader::ResetFrameFormatAttrs(*this);    // remove distance/border
+    Reader::ResetFrameFormatAttrs(*this);    // remove distance/border
                                             // position
     Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
 
@@ -2121,8 +2120,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
 
 void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
 {
-    if (!rReader.m_bNewDoc)
-        Reader::ResetFrameFormatAttrs(*this);  // remove distance/borders
+    Reader::ResetFrameFormatAttrs(*this);  // remove distance/borders
 
     Put(SvxLRSpaceItem(RES_LR_SPACE)); //inline writer ole2 objects start with 0.2cm l/r
     SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);

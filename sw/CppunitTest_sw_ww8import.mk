@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8import, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     test \
     unotest \

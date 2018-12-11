@@ -6340,12 +6340,8 @@ ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, cons
             rBaseURL, bNew, bSkipImages, *rPaM.GetPoint()));
         if (bNew)
         {
-            // Remove Frame and offsets from Frame Template
-            Reader::ResetFrameFormats( rDoc );
-
             rPaM.GetBound().nContent.Assign(nullptr, 0);
             rPaM.GetBound(false).nContent.Assign(nullptr, 0);
-
         }
         try
         {
