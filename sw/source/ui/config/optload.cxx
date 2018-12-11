@@ -944,12 +944,6 @@ void SwCaptionOptPage::InvalidatePreview()
 CaptionComboBox::CaptionComboBox(vcl::Window* pParent, WinBits nStyle)
     : ComboBox(pParent, nStyle)
 {
-    // create administration for the resource's Stringlist
-    sal_Int32 nSize = GetEntryCount();
-    for( sal_Int32 i=0; i < nSize; ++i )
-    {
-        m_EntryList.push_back(ComboBox::GetEntry(i));
-    }
 }
 
 CaptionComboBox::~CaptionComboBox()
