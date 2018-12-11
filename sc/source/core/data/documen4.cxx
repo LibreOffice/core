@@ -642,10 +642,43 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
                 else
                     aData.bError = true;
                 break;
+            case SUBTOTAL_FUNC_VAR:
+            case SUBTOTAL_FUNC_STD:
+                if (aData.maWelford.getCount() < 2)
+                    aData.bError = true;
+                else
+                {
+                    rResult = aData.maWelford.getVarianceSample();
+                    if (eFunc == SUBTOTAL_FUNC_STD)
+                    {
+                        if (rResult < 0.0)
+                            aData.bError = true;
+                        else
+                            rResult = sqrt( rResult);
+                    }
+                }
+                break;
+            case SUBTOTAL_FUNC_VARP:
+            case SUBTOTAL_FUNC_STDP:
+                if (aData.maWelford.getCount() < 1)
+                    aData.bError = true;
+                else if (aData.maWelford.getCount() == 1)
+                    rResult = 0.0;
+                else
+                {
+                    rResult = aData.maWelford.getVariancePopulation();
+                    if (eFunc == SUBTOTAL_FUNC_STDP)
+                    {
+                        if (rResult < 0.0)
+                            aData.bError = true;
+                        else
+                            rResult = sqrt( rResult);
+                    }
+                }
+                break;
             default:
-            {
-                // added to avoid warnings
-            }
+                // unhandled unknown
+                aData.bError = true;
         }
 
     if (aData.bError)

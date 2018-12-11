@@ -62,4 +62,17 @@ bool SubTotal::SafeDiv(double& fVal1, double fVal2)
     return bOk;
 }
 
+/* TODO: is the SubTotal::SafePlus() above really still necessary? Wasn't
+ * that something when a formula cell result could be a NaN or Inf as stored in
+ * a binary .sdc file? Formula double results nowadays are either valid or 0
+ * if error. Let's do without now. */
+
+void WelfordRunner::update( double fVal )
+{
+    ++nCount;
+    const double fDelta = fVal - fMean;
+    fMean += fDelta / nCount;
+    fM2 += fDelta * (fVal - fMean);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
