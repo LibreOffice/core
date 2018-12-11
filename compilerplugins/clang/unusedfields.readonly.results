@@ -662,8 +662,6 @@ sw/source/uibase/dbui/mmconfigitem.cxx:111
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:78
     SwInsertField_Data m_aDBDataSource const css::uno::Any
-sw/source/uibase/inc/optload.hxx:106
-    CaptionComboBox aDefault const class rtl::OUString
 toolkit/source/awt/vclxtoolkit.cxx:434
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:46
