@@ -1033,25 +1033,32 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
     switch (m_eCurrOper)
     {
         case CALC_SIN:
+            SAL_INFO("sw.calc", "sin");
             return StdFunc(&sin, false);
             break;
         case CALC_COS:
+            SAL_INFO("sw.calc", "cos");
             return StdFunc(&cos, false);
             break;
         case CALC_TAN:
+            SAL_INFO("sw.calc", "tan");
             return StdFunc(&tan, false);
             break;
         case CALC_ATAN:
+            SAL_INFO("sw.calc", "atan");
             return StdFunc(&atan, false);
             break;
         case CALC_ASIN:
+            SAL_INFO("sw.calc", "asin");
             return StdFunc(&asin, true);
             break;
         case CALC_ACOS:
+            SAL_INFO("sw.calc", "acos");
             return StdFunc(&acos, true);
             break;
         case CALC_NOT:
         {
+            SAL_INFO("sw.calc", "not");
             GetToken();
             SwSbxValue nErg = Prim();
             if( SbxSTRING == nErg.GetType() )
@@ -1079,6 +1086,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         }
         case CALC_NUMBER:
         {
+            SAL_INFO("sw.calc", "number: " << m_nNumberValue.GetDouble());
             SwSbxValue nErg;
             if( GetToken() == CALC_PHD )
             {
@@ -1101,6 +1109,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         }
         case CALC_NAME:
         {
+            SAL_INFO("sw.calc", "name");
             SwSbxValue nErg;
             switch(SwCalcOper eOper = GetToken())
             {
@@ -1126,6 +1135,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         }
         case CALC_MINUS:
         {
+            SAL_INFO("sw.calc", "-");
             SwSbxValue nErg;
             GetToken();
             nErg.PutDouble( -(Prim().GetDouble()) );
@@ -1134,6 +1144,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         }
         case CALC_LP:
         {
+            SAL_INFO("sw.calc", "(");
             GetToken();
             SwSbxValue nErg = Expr();
             if( m_eCurrOper != CALC_RP )
@@ -1150,6 +1161,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         }
         case CALC_MEAN:
         {
+            SAL_INFO("sw.calc", "mean");
             m_nListPor = 1;
             GetToken();
             SwSbxValue nErg = Expr();
@@ -1161,6 +1173,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         }
         case CALC_SQRT:
         {
+            SAL_INFO("sw.calc", "sqrt");
             GetToken();
             SwSbxValue nErg = Prim();
             if( nErg.GetDouble() < 0 )
@@ -1175,6 +1188,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         case CALC_MIN:
         case CALC_MAX:
         {
+            SAL_INFO("sw.calc", "sum/date/min/max");
             GetToken();
             SwSbxValue nErg = Expr();
             return nErg;
@@ -1182,12 +1196,14 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
         }
         case CALC_ENDCALC:
         {
+            SAL_INFO("sw.calc", "endcalc");
             SwSbxValue nErg;
             nErg.Clear();
             return nErg;
             break;
         }
         default:
+            SAL_INFO("sw.calc", "syntax error");
             m_eError = SwCalcError::Syntax;
             break;
     }

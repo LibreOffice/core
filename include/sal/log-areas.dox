@@ -509,6 +509,7 @@ certain functionality.
 
 @li @c sw
 @li @c sw.a11y - accessibility
+@li @c sw.calc - formula calculation
 @li @c sw.core - Writer core
 @li @c sw.createcopy
 @li @c sw.doc
