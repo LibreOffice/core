@@ -380,6 +380,44 @@ DECLARE_UNOAPI_TEST_FILE(testSelectionInTableEnum, "selection-in-table-enum.odt"
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 }
 
+DECLARE_UNOAPI_TEST_FILE(testSelectionInTableEnumEnd, "selection-in-table-enum.odt")
+{
+    // Select from "Before" till the table end.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->Down(/*bSelect=*/true);
+
+    // Access the selection.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<container::XIndexAccess> xSelections(xModel->getCurrentSelection(),
+                                                        uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelections.is());
+    uno::Reference<text::XTextRange> xSelection(xSelections->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelection.is());
+    OUString aExpectedSelection
+        = "Before" SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING "B1" SAL_NEWLINE_STRING
+          "C2" SAL_NEWLINE_STRING "A2" SAL_NEWLINE_STRING "B2" SAL_NEWLINE_STRING
+          "C2" SAL_NEWLINE_STRING;
+    CPPUNIT_ASSERT_EQUAL(aExpectedSelection, xSelection->getString());
+
+    // Enumerate paragraphs in the selection.
+    uno::Reference<container::XEnumerationAccess> xCursor(
+        xSelection->getText()->createTextCursorByRange(xSelection), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCursor.is());
+    uno::Reference<container::XEnumeration> xEnum = xCursor->createEnumeration();
+    // Before.
+    xEnum->nextElement();
+    // Table.
+    xEnum->nextElement();
+    // Without the accompanying fix in place, this test would have failed: i.e.
+    // the enumeration contained the paragraph after the table, but no part of
+    // that paragraph was part of the selection.
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

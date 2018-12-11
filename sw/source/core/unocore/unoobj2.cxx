@@ -513,6 +513,12 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
     /// @throws lang::WrappedTargetException
     /// @throws uno::RuntimeException
     uno::Reference< text::XTextContent > NextElement_Impl();
+
+    /**
+     * Determines if the last element in the enumeration should be ignored or
+     * not.
+     */
+    bool IgnoreLastElement(SwUnoCursor& rCursor, bool bMovedFromTable);
 };
 
 SwXParagraphEnumeration* SwXParagraphEnumeration::Create(
@@ -566,6 +572,23 @@ lcl_CursorIsInSection(
     return bRes;
 }
 
+bool SwXParagraphEnumerationImpl::IgnoreLastElement(SwUnoCursor& rCursor, bool bMovedFromTable)
+{
+    // Ignore the last element of a selection enumeration if this is a stub
+    // paragraph (directly after table, selection ends at paragaph start).
+
+    if (rCursor.Start()->nNode.GetIndex() != m_nEndIndex)
+        return false;
+
+    if (m_eCursorType != CursorType::Selection)
+        return false;
+
+    if (!bMovedFromTable)
+        return false;
+
+    return m_nLastParaEnd == 0;
+}
+
 uno::Reference< text::XTextContent >
 SwXParagraphEnumerationImpl::NextElement_Impl()
 {
@@ -588,17 +611,24 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         // os 2005-01-14: This part is only necessary to detect movements out
         // of a selection; if there is no selection we don't have to care
         SwTableNode *const pTableNode = aNewCursor->GetNode().FindTableNode();
+        bool bMovedFromTable = false;
         if (((CursorType::TableText != m_eCursorType) &&
             (CursorType::SelectionInTable != m_eCursorType)) && pTableNode)
         {
             aNewCursor->GetPoint()->nNode = pTableNode->EndOfSectionIndex();
             aNewCursor->Move(fnMoveForward, GoInNode);
+            bMovedFromTable = true;
         }
         else
         {
             aNewCursor->MovePara(GoNextPara, fnParaStart);
         }
         if (m_nEndIndex < aNewCursor->Start()->nNode.GetIndex())
+        {
+            return nullptr;
+        }
+
+        if (IgnoreLastElement(*aNewCursor, bMovedFromTable))
         {
             return nullptr;
         }
