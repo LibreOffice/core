@@ -171,6 +171,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                 frames.push_back(pFrame);
             }
         }
+        auto eMode(sw::FrameMode::Existing);
         for (SwTextFrame * pFrame : frames)
         {
             SwTextNode & rFirstNode(pFrame->GetMergedPara()
@@ -180,7 +181,8 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             // clear old one first to avoid DelFrames confusing updates & asserts...
             pFrame->SetMergedPara(nullptr);
             pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
-                *pFrame, rFirstNode, sw::FrameMode::Existing));
+                *pFrame, rFirstNode, eMode));
+            eMode = sw::FrameMode::New; // Existing is not idempotent!
             // the first node of the new redline is not necessarily the first
             // node of the merged frame, there could be another redline nearby
             sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, *pStartNode, nullptr);
@@ -234,6 +236,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
         {
             // first, call CheckParaRedlineMerge on the first paragraph,
             // to init flag on new merge range (if any) + 1st node post the merge
+            auto eMode(sw::FrameMode::Existing);
             for (SwTextFrame * pFrame : frames)
             {
                 if (auto const pMergedPara = pFrame->GetMergedPara())
@@ -243,7 +246,8 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                     SwTextNode & rFirstNode(*pMergedPara->pFirstNode);
                     pFrame->SetMergedPara(nullptr);
                     pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
-                        *pFrame, rFirstNode, sw::FrameMode::Existing));
+                        *pFrame, rFirstNode, eMode));
+                    eMode = sw::FrameMode::New; // Existing is not idempotent!
                 }
             }
             // now start node until end of merge + 1 has proper flags; MakeFrames
