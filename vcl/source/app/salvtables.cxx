@@ -1625,15 +1625,8 @@ public:
     }
 };
 
-class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
+namespace
 {
-private:
-    VclPtr<Edit> m_xEntry;
-
-    DECL_LINK(ChangeHdl, Edit&, void);
-    DECL_LINK(CursorListener, VclWindowEvent&, void);
-    DECL_LINK(ActivateHdl, Edit&, bool);
-
     class WeldTextFilter : public TextFilter
     {
     private:
@@ -1656,6 +1649,16 @@ private:
             return sText;
         }
     };
+}
+
+class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
+{
+private:
+    VclPtr<Edit> m_xEntry;
+
+    DECL_LINK(ChangeHdl, Edit&, void);
+    DECL_LINK(CursorListener, VclWindowEvent&, void);
+    DECL_LINK(ActivateHdl, Edit&, bool);
 
     WeldTextFilter m_aTextFilter;
 public:
@@ -1852,6 +1855,7 @@ public:
             pHeaderBar->SetItemSize(pHeaderBar->GetItemId(pHeaderBar->GetItemCount() - 1 ), HEADERBAR_FULLSIZE);
             pHeaderBar->SetEndDragHdl(LINK(this, SalInstanceTreeView, EndDragHdl));
         }
+        m_aCheckButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
         m_aRadioButtonData.SetLink(LINK(this, SalInstanceTreeView, ToggleHdl));
     }
 
@@ -2420,7 +2424,7 @@ IMPL_LINK(SalInstanceTreeView, ToggleHdl, SvLBoxButtonData*, pData, void)
         {
             int nRow = m_xTreeView->GetAbsPos(pEntry);
             int nCol = i - 1; // less dummy/expander column
-            signal_radio_toggled(std::make_pair(nRow, nCol));
+            signal_toggled(std::make_pair(nRow, nCol));
             break;
         }
     }
@@ -3183,12 +3187,15 @@ class SalInstanceComboBoxWithEdit : public SalInstanceComboBox<ComboBox>
 private:
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(EntryActivateHdl, Edit&, bool);
+    WeldTextFilter m_aTextFilter;
 public:
     SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, bool bTakeOwnership)
         : SalInstanceComboBox<::ComboBox>(pComboBox, bTakeOwnership)
+        , m_aTextFilter(m_aEntryInsertTextHdl)
     {
         m_xComboBox->SetModifyHdl(LINK(this, SalInstanceComboBoxWithEdit, ChangeHdl));
         m_xComboBox->SetEntryActivateHdl(LINK(this, SalInstanceComboBoxWithEdit, EntryActivateHdl));
+        m_xComboBox->SetTextFilter(&m_aTextFilter);
     }
 
     virtual bool has_entry() const override
@@ -3267,6 +3274,7 @@ public:
 
     virtual ~SalInstanceComboBoxWithEdit() override
     {
+        m_xComboBox->SetTextFilter(nullptr);
         m_xComboBox->SetEntryActivateHdl(Link<Edit&, bool>());
         m_xComboBox->SetModifyHdl(Link<Edit&, void>());
     }
