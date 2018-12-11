@@ -3456,8 +3456,21 @@
                                         <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom26">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkMenuToolButton" id="Default-Color">
+                                      <object class="GtkMenuToolButton" id="Default-Color1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:Color</property>
@@ -3471,7 +3484,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">1</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -3546,8 +3559,6 @@
                                       <object class="GtkMenuToolButton" id="Default-SetBoarderStyle">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="has_tooltip">True</property>
-                                        <property name="tooltip_text" translatable="yes" context="notebookbar_groupedbar_compact|bordertype">Specify the borders of the selected cells.</property>
                                         <property name="action_name">.uno:SetBorderStyle</property>
                                       </object>
                                       <packing>
@@ -3555,8 +3566,23 @@
                                         <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="sfxlo-NotebookbarToolBox" id="ExtTop1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="halign">end</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkMenuToolButton" id="Default-BackgroundColor">
+                                      <object class="GtkMenuToolButton" id="Default-BackgroundColor1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:BackgroundColor</property>
@@ -3570,7 +3596,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">1</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4166,10 +4192,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Default-SortAscending">
+                                  <object class="GtkToolButton" id="Default-DataSort">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:SortAscending</property>
+                                    <property name="action_name">.uno:DataSort</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -4757,6 +4783,7 @@
                                   <object class="sfxlo-NotebookbarToolBox" id="SectionBottom40">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="margin_left">5</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -4770,8 +4797,21 @@
                                         <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom27">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkMenuToolButton" id="DrawText-fontcolor">
+                                      <object class="GtkMenuToolButton" id="DrawText-fontcolor1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:Color</property>
@@ -4785,7 +4825,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">1</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4857,18 +4897,33 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="DrawText-Strikeout">
+                                      <object class="GtkMenuToolButton" id="DrawText-SetBoarderStyle">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:Strikeout</property>
+                                        <property name="action_name">.uno:SetBorderStyle</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="sfxlo-NotebookbarToolBox" id="ExtTop2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="halign">end</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="toolbar_style">icons</property>
+                                    <property name="show_arrow">False</property>
                                     <child>
-                                      <object class="GtkMenuToolButton" id="DrawText-CharBackColor">
+                                      <object class="GtkMenuToolButton" id="DrawText-CharBackColor1">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="action_name">.uno:CharBackColor</property>
@@ -4882,7 +4937,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">1</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
