@@ -64,6 +64,15 @@ public:
 namespace __cxxabiv1 {
     struct __cxa_exception
     {
+#if defined _LIBCPPABI_VERSION // detect libc++abi
+#if defined __LP64__ || defined __ARM_EABI__
+        // Quoting android-ndk-r18b/sources/cxx-stl/llvm-libc++abi/src/cxa_exception.hpp: "This is a
+        // new field to support C++ 0x exception_ptr. For binary compatibility it is at the start of
+        // this struct which is prepended to the object thrown in __cxa_allocate_exception."
+        std::size_t referenceCount;
+#endif
+#endif
+
         std::type_info *exceptionType;
         void (*exceptionDestructor)(void *);
 
