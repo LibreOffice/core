@@ -21,10 +21,12 @@
 
 #include <sfx2/tabdlg.hxx>
 
+#include <vcl/customweld.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <svx/strarray.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/checklbx.hxx>
@@ -99,16 +101,6 @@ public:
     SwCaptionOptDlg(vcl::Window* pParent, const SfxItemSet& rSet);
 };
 
-class CaptionComboBox : public ComboBox
-{
-protected:
-    virtual void KeyInput( const KeyEvent& ) override;
-
-public:
-    CaptionComboBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~CaptionComboBox() override;
-};
-
 class SwCaptionPreview : public vcl::Window
 {
 private:
@@ -123,32 +115,25 @@ public:
     virtual Size GetOptimalSize() const override;
 };
 
+class CaptionPreview : public weld::CustomWidgetController
+{
+private:
+    OUString maText;
+    bool mbFontInitialized;
+    vcl::Font maFont;
+
+    void ApplySettings(vcl::RenderContext& rRenderContext);
+
+public:
+    CaptionPreview();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    void SetPreviewText(const OUString& rText);
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+};
+
 class SwCaptionOptPage : public SfxTabPage
 {
 private:
-    VclPtr<SvxCheckListBox>  m_pCheckLB;
-    VclPtr<ListBox>          m_pLbCaptionOrder;
-    VclPtr<SwCaptionPreview> m_pPreview;
-
-    VclPtr<VclContainer>     m_pSettingsGroup;
-    VclPtr<CaptionComboBox>  m_pCategoryBox;
-    VclPtr<FixedText>        m_pFormatText;
-    VclPtr<ListBox>          m_pFormatBox;
-    //#i61007# order of captions
-    VclPtr<FixedText>        m_pNumberingSeparatorFT;
-    VclPtr<Edit>             m_pNumberingSeparatorED;
-    VclPtr<FixedText>        m_pTextText;
-    VclPtr<Edit>             m_pTextEdit;
-    VclPtr<ListBox>          m_pPosBox;
-
-    VclPtr<VclContainer>     m_pNumCapt;
-    VclPtr<ListBox>          m_pLbLevel;
-    VclPtr<Edit>             m_pEdDelim;
-
-    VclPtr<VclContainer>     m_pCategory;
-    VclPtr<ListBox>          m_pCharStyleLB;
-    VclPtr<CheckBox>         m_pApplyBorderCB;
-
     OUString const m_sSWTable;
     OUString const m_sSWFrame;
     OUString const m_sSWGraphic;
@@ -166,31 +151,62 @@ private:
 
     OUString const m_sNone;
 
+    int m_nPrevSelectedEntry;
+
     std::unique_ptr<SwFieldMgr> pMgr;
     bool bHTMLMode;
 
     TextFilterAutoConvert m_aTextFilter;
 
-    DECL_LINK(SelectHdl, ComboBox&, void);
-    DECL_LINK(SelectListBoxHdl, ListBox&, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
-    DECL_LINK( OrderHdl, ListBox&, void );
-    DECL_LINK(ShowEntryHdl, SvTreeListBox*, void);
-    DECL_LINK(SaveEntryHdl, SvTreeListBox*, void);
+    CaptionPreview m_aPreview;
+    std::unique_ptr<weld::TreeView> m_xCheckLB;
+    std::unique_ptr<weld::ComboBox> m_xLbCaptionOrder;
 
+    std::unique_ptr<weld::Widget> m_xSettingsGroup;
+    std::unique_ptr<weld::ComboBox> m_xCategoryBox;
+    std::unique_ptr<weld::Label> m_xFormatText;
+    std::unique_ptr<weld::ComboBox> m_xFormatBox;
+    //#i61007# order of captions
+    std::unique_ptr<weld::Label> m_xNumberingSeparatorFT;
+    std::unique_ptr<weld::Entry> m_xNumberingSeparatorED;
+    std::unique_ptr<weld::Label> m_xTextText;
+    std::unique_ptr<weld::Entry> m_xTextEdit;
+    std::unique_ptr<weld::ComboBox> m_xPosBox;
+
+    std::unique_ptr<weld::Widget> m_xNumCapt;
+    std::unique_ptr<weld::ComboBox> m_xLbLevel;
+    std::unique_ptr<weld::Entry> m_xEdDelim;
+
+    std::unique_ptr<weld::Widget> m_xCategory;
+    std::unique_ptr<weld::ComboBox> m_xCharStyleLB;
+    std::unique_ptr<weld::CheckButton> m_xApplyBorderCB;
+    std::unique_ptr<weld::CustomWeld> m_xPreview;
+
+    typedef std::pair<int, int> row_col;
+
+    DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(SelectListBoxHdl, weld::ComboBox&, void);
+    DECL_LINK(ModifyEntryHdl, weld::Entry&, void);
+    DECL_LINK(ModifyComboHdl, weld::ComboBox&, void);
+    DECL_LINK(OrderHdl, weld::ComboBox&, void );
+    DECL_LINK(ShowEntryHdl, weld::TreeView&, void);
+    DECL_LINK(ToggleEntryHdl, const row_col&, void);
+    DECL_LINK(TextFilterHdl, OUString&, bool);
+
+    void ModifyHdl();
+    void UpdateEntry(int nRow);
     void DelUserData();
     void SetOptions(const sal_uLong nPos, const SwCapObjType eType, const SvGlobalName *pOleId = nullptr);
-    void SaveEntry(SvTreeListEntry const * pEntry);
+    void SaveEntry(int nEntry);
     void InvalidatePreview();
 
 public:
-                        SwCaptionOptPage( vcl::Window* pParent,
-                                         const SfxItemSet& rSet );
-                        virtual ~SwCaptionOptPage() override;
+    SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet);
+    virtual ~SwCaptionOptPage() override;
     virtual void        dispose() override;
 
-    static VclPtr<SfxTabPage> Create( TabPageParent pParent,
-                                      const SfxItemSet* rAttrSet);
+    static VclPtr<SfxTabPage> Create(TabPageParent pParent,
+                                     const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

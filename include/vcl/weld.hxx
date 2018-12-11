@@ -313,6 +313,7 @@ private:
 protected:
     Link<ComboBox&, void> m_aChangeHdl;
     Link<ComboBox&, bool> m_aEntryActivateHdl;
+    Link<OUString&, bool> m_aEntryInsertTextHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
 
@@ -379,6 +380,11 @@ public:
 
     virtual bool get_popup_shown() const = 0;
 
+    void connect_entry_insert_text(const Link<OUString&, bool>& rLink)
+    {
+        m_aEntryInsertTextHdl = rLink;
+    }
+
     // callback returns true to indicated no further processing of activate wanted
     void connect_entry_activate(const Link<ComboBox&, bool>& rLink) { m_aEntryActivateHdl = rLink; }
 
@@ -413,10 +419,7 @@ protected:
     void signal_row_activated() { m_aRowActivatedHdl.Call(*this); }
     bool signal_expanding(TreeIter& rIter) { return m_aExpandingHdl.Call(rIter); }
     // arg is pair<row,col>
-    void signal_radio_toggled(const std::pair<int, int>& rRowCol)
-    {
-        m_aRadioToggleHdl.Call(rRowCol);
-    }
+    void signal_toggled(const std::pair<int, int>& rRowCol) { m_aRadioToggleHdl.Call(rRowCol); }
 
 public:
     virtual void insert(weld::TreeIter* pParent, int pos, const OUString* pStr, const OUString* pId,
@@ -459,7 +462,7 @@ public:
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_row_activated(const Link<TreeView&, void>& rLink) { m_aRowActivatedHdl = rLink; }
-    void connect_radio_toggled(const Link<const std::pair<int, int>&, void>& rLink)
+    void connect_toggled(const Link<const std::pair<int, int>&, void>& rLink)
     {
         m_aRadioToggleHdl = rLink;
     }
