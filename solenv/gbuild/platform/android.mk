@@ -9,25 +9,14 @@
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 
-ifeq ($(ANDROID_APP_ABI),armeabi-v7a)
-# TODO: gnustl is deprecated/will be removed in future versions of the ndk
-gb_STDLIBS := -lgnustl_static
-else
 gb_STDLIBS := \
 	-lc++_static \
 	-lc++abi \
 	-landroid_support \
 
-endif
-
 else
 
-ifeq ($(ANDROID_APP_ABI),armeabi-v7a)
-# TODO: gnustl is deprecated/will be removed in future versions of the ndk
-gb_STDLIBS := -lgnustl_shared
-else
 gb_STDLIBS := -lc++_shared
-endif
 
 endif
 
