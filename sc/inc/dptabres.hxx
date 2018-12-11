@@ -24,6 +24,7 @@
 #include "dpfilteredcache.hxx"
 #include "calcmacros.hxx"
 #include "dpitemdata.hxx"
+#include "subtotal.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
@@ -144,18 +145,19 @@ struct ScDPRelativePos
 
 //  Possible values for the nCount member:
 //  (greater than 0 counts the collected values)
-const long SC_DPAGG_EMPTY        =  0;  // empty during data collection
-const long SC_DPAGG_DATA_ERROR   = -1;  // error during data collection
-const long SC_DPAGG_RESULT_EMPTY = -2;  // empty result calculated
-const long SC_DPAGG_RESULT_VALID = -3;  // valid result calculated
-const long SC_DPAGG_RESULT_ERROR = -4;  // error in calculated result
+const sal_Int64 SC_DPAGG_EMPTY        =  0;  // empty during data collection
+const sal_Int64 SC_DPAGG_DATA_ERROR   = -1;  // error during data collection
+const sal_Int64 SC_DPAGG_RESULT_EMPTY = -2;  // empty result calculated
+const sal_Int64 SC_DPAGG_RESULT_VALID = -3;  // valid result calculated
+const sal_Int64 SC_DPAGG_RESULT_ERROR = -4;  // error in calculated result
 
 class ScDPAggData
 {
 private:
+    WelfordRunner   maWelford;
     double          fVal;
     double          fAux;
-    long            nCount;
+    sal_Int64       nCount;
     std::unique_ptr<ScDPAggData> pChild;
     std::vector<double> mSortedValues;
 
