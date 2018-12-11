@@ -276,9 +276,10 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
             const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
             void* pRawData = std::malloc( nBytesPerRow * nDY );
+#ifdef MACOSX
             const int nFlags = kCGImageAlphaNoneSkipFirst;
-#ifndef MACOSX
-            nFlags |= kCGImageByteOrder32Little;
+#else
+            const int nFlags = kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little;
 #endif
             mxBitmapContext = CGBitmapContextCreate(pRawData, nDX, nDY, 8, nBytesPerRow,
                                                     GetSalData()->mxRGBSpace, nFlags);
