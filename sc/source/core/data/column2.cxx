@@ -3423,10 +3423,20 @@ class UpdateSubTotalHandler
                     mrData.nVal = fVal;
             }
             break;
-            default:
+            case SUBTOTAL_FUNC_VAR:
+            case SUBTOTAL_FUNC_VARP:
+            case SUBTOTAL_FUNC_STD:
+            case SUBTOTAL_FUNC_STDP:
             {
-                // added to avoid warnings
+                if (!bVal)
+                    return;
+
+                mrData.maWelford.update( fVal);
             }
+            break;
+            default:
+                // unhandled unknown
+                mrData.bError = true;
         }
     }
 

@@ -62,4 +62,12 @@ bool SubTotal::SafeDiv(double& fVal1, double fVal2)
     return bOk;
 }
 
+void WelfordRunner::update( double fVal )
+{
+    ++nCount;
+    const double fDelta = fVal - fMean;
+    fMean += fDelta / nCount;
+    fM2 += fDelta * (fVal - fMean);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
