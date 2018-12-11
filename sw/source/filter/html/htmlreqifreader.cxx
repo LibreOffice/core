@@ -237,7 +237,7 @@ void WrapOleGraphicInRtf(SvStream& rRtf, SwOLENode& rOLENode, const Graphic& rGr
     SvMemoryStream aGraphicStream;
     if (GraphicConverter::Export(aGraphicStream, rGraphic, ConvertDataFormat::WMF) == ERRCODE_NONE)
     {
-        const sal_uInt8* pGraphicAry = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
+        auto pGraphicAry = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
         sal_uInt64 nSize = aGraphicStream.TellEnd();
         msfilter::rtfutil::StripMetafileHeader(pGraphicAry, nSize);
         rRtf.WriteCharPtr(SAL_NEWLINE_STRING);

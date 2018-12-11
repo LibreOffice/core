@@ -36,7 +36,10 @@ public:
 
     void TableStyle(uno::Sequence<beans::PropertyValue>& rStyle);
 
-    void setSerializer(sax_fastparser::FSHelperPtr pSerializer) { m_pSerializer = pSerializer; }
+    void setSerializer(sax_fastparser::FSHelperPtr pSerializer)
+    {
+        m_pSerializer = std::move(pSerializer);
+    }
 
     sax_fastparser::FSHelperPtr getSerializer() const { return m_pSerializer; }
 
@@ -420,9 +423,19 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
 
     m_pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aRFonts, aLang, aColor, aSpacingSequence;
+    uno::Sequence<beans::PropertyValue> aRFonts;
+    uno::Sequence<beans::PropertyValue> aLang;
+    uno::Sequence<beans::PropertyValue> aColor;
+    uno::Sequence<beans::PropertyValue> aSpacingSequence;
     bool bSequenceFlag = false;
-    OUString aB, aBCs, aI, aSz, aSzCs, aCaps, aSmallCaps, aSpacing;
+    OUString aB;
+    OUString aBCs;
+    OUString aI;
+    OUString aSz;
+    OUString aSzCs;
+    OUString aCaps;
+    OUString aSmallCaps;
+    OUString aSpacing;
     for (sal_Int32 i = 0; i < rRPr.getLength(); ++i)
     {
         if (rRPr[i].Name == "rFonts")
@@ -490,9 +503,11 @@ void DocxTableStyleExport::Impl::tableStylePPr(uno::Sequence<beans::PropertyValu
 
     m_pSerializer->startElementNS(XML_w, XML_pPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aSpacing, aInd;
+    uno::Sequence<beans::PropertyValue> aSpacing;
+    uno::Sequence<beans::PropertyValue> aInd;
     bool bWordWrap = false;
-    OUString aJc, aSnapToGrid;
+    OUString aJc;
+    OUString aSnapToGrid;
     for (sal_Int32 i = 0; i < rPPr.getLength(); ++i)
     {
         if (rPPr[i].Name == "spacing")
@@ -524,8 +539,11 @@ void DocxTableStyleExport::Impl::tableStyleTablePr(uno::Sequence<beans::Property
 
     m_pSerializer->startElementNS(XML_w, XML_tblPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aTableInd, aTableBorders, aTableCellMar;
-    boost::optional<sal_Int32> oTableStyleRowBandSize, oTableStyleColBandSize;
+    uno::Sequence<beans::PropertyValue> aTableInd;
+    uno::Sequence<beans::PropertyValue> aTableBorders;
+    uno::Sequence<beans::PropertyValue> aTableCellMar;
+    boost::optional<sal_Int32> oTableStyleRowBandSize;
+    boost::optional<sal_Int32> oTableStyleColBandSize;
     for (sal_Int32 i = 0; i < rTablePr.getLength(); ++i)
     {
         if (rTablePr[i].Name == "tblStyleRowBandSize")
@@ -559,7 +577,9 @@ void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyVal
 
     m_pSerializer->startElementNS(XML_w, XML_tcPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aShd, aTcBorders, aTcMar;
+    uno::Sequence<beans::PropertyValue> aShd;
+    uno::Sequence<beans::PropertyValue> aTcBorders;
+    uno::Sequence<beans::PropertyValue> aTcMar;
     OUString aVAlign;
     for (sal_Int32 i = 0; i < rTcPr.getLength(); ++i)
     {
@@ -589,7 +609,10 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
         return;
 
     OUString aType;
-    uno::Sequence<beans::PropertyValue> aPPr, aRPr, aTablePr, aTcPr;
+    uno::Sequence<beans::PropertyValue> aPPr;
+    uno::Sequence<beans::PropertyValue> aRPr;
+    uno::Sequence<beans::PropertyValue> aTablePr;
+    uno::Sequence<beans::PropertyValue> aTcPr;
     for (sal_Int32 i = 0; i < rTableStylePr.getLength(); ++i)
     {
         if (rTableStylePr[i].Name == "type")
@@ -623,10 +646,20 @@ void DocxTableStyleExport::Impl::tableStyleTableStylePr(
 
 void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle)
 {
-    bool bDefault = false, bCustomStyle = false, bQFormat = false, bSemiHidden = false,
-         bUnhideWhenUsed = false;
-    OUString aStyleId, aName, aBasedOn, aRsid, aUiPriority;
-    uno::Sequence<beans::PropertyValue> aPPr, aRPr, aTablePr, aTcPr;
+    bool bDefault = false;
+    bool bCustomStyle = false;
+    bool bQFormat = false;
+    bool bSemiHidden = false;
+    bool bUnhideWhenUsed = false;
+    OUString aStyleId;
+    OUString aName;
+    OUString aBasedOn;
+    OUString aRsid;
+    OUString aUiPriority;
+    uno::Sequence<beans::PropertyValue> aPPr;
+    uno::Sequence<beans::PropertyValue> aRPr;
+    uno::Sequence<beans::PropertyValue> aTablePr;
+    uno::Sequence<beans::PropertyValue> aTcPr;
     std::vector<uno::Sequence<beans::PropertyValue>> aTableStylePrs;
     for (sal_Int32 i = 0; i < rStyle.getLength(); ++i)
     {
