@@ -176,6 +176,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 pair< t_rtti_map::iterator, bool > insertion(
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
                 SAL_WARN_IF( !insertion.second, "bridges", "### inserting new generated rtti failed?!" );
+#else
+                (void) rttiName; // silence -Wunused-variable
 #endif
             }
             else // taking already generated rtti
