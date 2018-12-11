@@ -1148,6 +1148,9 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             return nErg;
             break;
         }
+        case CALC_RP:
+            // ignore, see tdf#121962
+            break;
         case CALC_MEAN:
         {
             m_nListPor = 1;
