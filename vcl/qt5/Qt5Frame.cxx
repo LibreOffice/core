@@ -115,7 +115,10 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     }
     else
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
+
     connect(this, SIGNAL(setVisibleSignal(bool)), SLOT(setVisible(bool)));
+    connect(this, &Qt5Frame::tooltipRequest, static_cast<Qt5Widget*>(m_pQWidget),
+            &Qt5Widget::showTooltip);
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
@@ -635,6 +638,12 @@ void Qt5Frame::Flush()
     // unclear if we need to also flush cairo surface - gtk3 backend
     // does not do it. QPainter in Qt5Widget::paintEvent() is
     // destroyed, so that state should be safely flushed.
+}
+
+bool Qt5Frame::ShowTooltip(const OUString& rText, const tools::Rectangle& /*rHelpArea*/)
+{
+    emit tooltipRequest(rText);
+    return true;
 }
 
 // do we even need it? void Qt5Frame::Flush(const tools::Rectangle& /*rRect*/) {}
