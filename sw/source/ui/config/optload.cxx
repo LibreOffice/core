@@ -449,8 +449,60 @@ void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     rRenderContext.DrawText(Point(4, 6), maText);
 }
 
-SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptCaptionPage", "modules/swriter/ui/optcaptionpage.ui", &rSet)
+CaptionPreview::CaptionPreview()
+    : mbFontInitialized(false)
+{
+}
+
+void CaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    Wallpaper aBack(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
+    rRenderContext.SetBackground(aBack);
+    rRenderContext.SetFillColor(aBack.GetColor());
+    rRenderContext.SetLineColor(aBack.GetColor());
+
+    if (!mbFontInitialized)
+    {
+        maFont = rRenderContext.GetFont();
+        maFont.SetFontHeight(maFont.GetFontHeight() * 120 / 100);
+        mbFontInitialized = true;
+    }
+    rRenderContext.SetFont(maFont);
+}
+
+void CaptionPreview::SetPreviewText(const OUString& rText)
+{
+    if (rText != maText)
+    {
+        maText = rText;
+        Invalidate();
+    }
+}
+
+void CaptionPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(106 , 20), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+}
+
+void CaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    ApplySettings(rRenderContext);
+
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
+    rRenderContext.DrawText(Point(4, 6), maText);
+}
+
+
+IMPL_LINK(SwCaptionOptPage, TextFilterHdl, OUString&, rTest, bool)
+{
+    rTest = m_aTextFilter.filter(rTest);
+    return true;
+}
+
+SwCaptionOptPage::SwCaptionOptPage(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/optcaptionpage.ui", "OptCaptionPage", &rSet)
     , m_sSWTable(SwResId(STR_CAPTION_TABLE))
     , m_sSWFrame(SwResId(STR_CAPTION_FRAME))
     , m_sSWGraphic(SwResId(STR_CAPTION_GRAPHIC))
@@ -460,29 +512,34 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     , m_sAbove(SwResId(STR_CAPTION_ABOVE))
     , m_sBelow(SwResId(STR_CAPTION_BELOW))
     , m_sNone(SwResId(SW_STR_NONE))
-    , pMgr(new SwFieldMgr())
+    , m_nPrevSelectedEntry(-1)
+    , pMgr(new SwFieldMgr)
     , bHTMLMode(false)
     , m_aTextFilter(m_sNone)
+    , m_xCheckLB(m_xBuilder->weld_tree_view("objects"))
+    , m_xLbCaptionOrder(m_xBuilder->weld_combo_box("captionorder"))
+    , m_xSettingsGroup(m_xBuilder->weld_widget("settings"))
+    , m_xCategoryBox(m_xBuilder->weld_combo_box("category"))
+    , m_xFormatText(m_xBuilder->weld_label("numberingft"))
+    , m_xFormatBox(m_xBuilder->weld_combo_box("numbering"))
+    , m_xNumberingSeparatorFT(m_xBuilder->weld_label("numseparatorft"))
+    , m_xNumberingSeparatorED(m_xBuilder->weld_entry("numseparator"))
+    , m_xTextText(m_xBuilder->weld_label("separatorft"))
+    , m_xTextEdit(m_xBuilder->weld_entry("separator"))
+    , m_xPosBox(m_xBuilder->weld_combo_box("position"))
+    , m_xNumCapt(m_xBuilder->weld_widget("numcaption"))
+    , m_xLbLevel(m_xBuilder->weld_combo_box("level"))
+    , m_xEdDelim(m_xBuilder->weld_entry("chapseparator"))
+    , m_xCategory(m_xBuilder->weld_widget("categoryformat"))
+    , m_xCharStyleLB(m_xBuilder->weld_combo_box("charstyle"))
+    , m_xApplyBorderCB(m_xBuilder->weld_check_button("applyborder"))
+    , m_xPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreview))
 {
-    get(m_pCheckLB, "objects");
-    get(m_pLbCaptionOrder, "captionorder");
-    get(m_pPreview, "preview");
-    get(m_pSettingsGroup, "settings");
-    get(m_pCategoryBox, "category");
-    m_pCategoryBox->SetTextFilter(&m_aTextFilter);
-    get(m_pFormatText, "numberingft");
-    get(m_pFormatBox, "numbering");
-    get(m_pNumberingSeparatorFT, "numseparatorft");
-    get(m_pNumberingSeparatorED, "numseparator");
-    get(m_pTextText, "separatorft");
-    get(m_pTextEdit, "separator");
-    get(m_pPosBox, "position");
-    get(m_pNumCapt, "numcaption");
-    get(m_pLbLevel, "level");
-    get(m_pEdDelim, "chapseparator");
-    get(m_pCategory, "categoryformat");
-    get(m_pCharStyleLB, "charstyle");
-    get(m_pApplyBorderCB, "applyborder");
+    m_xCategoryBox->connect_entry_insert_text(LINK(this, SwCaptionOptPage, TextFilterHdl));
+
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xCheckLB->get_approximate_digit_width() * 3 + 6);
+    m_xCheckLB->set_column_fixed_widths(aWidths);
 
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, m_sIllustration);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_TABLE, m_sTable);
@@ -491,7 +548,7 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     SwWrtShell* pSh = ::GetActiveWrtShell();
 
-    // m_pFormatBox
+    // m_xFormatBox
     sal_uInt16 nSelFormat = SVX_NUM_ARABIC;
     if (pSh)
     {
@@ -499,28 +556,27 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
         {
             SwFieldType* pFieldType = pMgr->GetFieldType(SwFieldIds::Unknown, --i);
             if (!pFieldType->GetName().isEmpty()
-                && pFieldType->GetName() == m_pCategoryBox->GetText())
+                && pFieldType->GetName() == m_xCategoryBox->get_active_text())
             {
                 nSelFormat = static_cast<sal_uInt16>(static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat());
                 break;
             }
         }
 
-        ::FillCharStyleListBox( *m_pCharStyleLB, pSh->GetView().GetDocShell(), true, true );
+        ::FillCharStyleListBox( *m_xCharStyleLB, pSh->GetView().GetDocShell(), true, true );
     }
 
     const sal_uInt16 nCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        m_pFormatBox->InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
         const sal_uInt16 nFormatId = pMgr->GetFormatId(TYP_SEQFLD, i);
-        m_pFormatBox->SetEntryData( i, reinterpret_cast<void*>(nFormatId) );
-        if( nFormatId == nSelFormat )
-            m_pFormatBox->SelectEntryPos( i );
+        m_xFormatBox->append(OUString::number(nFormatId), pMgr->GetFormatStr(TYP_SEQFLD, i));
+        if (nFormatId == nSelFormat)
+            m_xFormatBox->set_active(i);
     }
 
     for (int i = 0; i < MAXLEVEL; ++i)
-        m_pLbLevel->InsertEntry(OUString::number(i + 1));
+        m_xLbLevel->append_text(OUString::number(i + 1));
 
     sal_Unicode nLvl = MAXLEVEL;
     OUString sDelim(": ");
@@ -528,7 +584,7 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     if (pSh)
     {
         SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(pMgr->GetFieldType(
-                                            SwFieldIds::SetExp, m_pCategoryBox->GetText() ));
+                                            SwFieldIds::SetExp, m_xCategoryBox->get_active_text() ));
         if( pFieldType )
         {
             sDelim = pFieldType->GetDelimiter();
@@ -536,22 +592,21 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
         }
     }
 
-    m_pLbLevel->SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
-    m_pEdDelim->SetText( sDelim );
+    m_xLbLevel->set_active(nLvl < MAXLEVEL ? nLvl + 1 : 0);
+    m_xEdDelim->set_text(sDelim);
 
-    Link<Edit&,void> aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
-    m_pCategoryBox->SetModifyHdl( aLk );
-    m_pNumberingSeparatorED->SetModifyHdl( aLk );
-    m_pTextEdit->SetModifyHdl( aLk );
+    m_xCategoryBox->connect_changed(LINK(this, SwCaptionOptPage, ModifyComboHdl));
+    Link<weld::Entry&,void> aLk = LINK(this, SwCaptionOptPage, ModifyEntryHdl);
+    m_xNumberingSeparatorED->connect_changed(aLk);
+    m_xTextEdit->connect_changed(aLk);
 
-    m_pCategoryBox->SetSelectHdl( LINK(this, SwCaptionOptPage, SelectHdl) );
-    m_pFormatBox->SetSelectHdl( LINK(this, SwCaptionOptPage, SelectListBoxHdl) );
+    m_xCategoryBox->connect_changed(LINK(this, SwCaptionOptPage, SelectHdl));
+    m_xFormatBox->connect_changed(LINK(this, SwCaptionOptPage, SelectListBoxHdl));
 
-    m_pLbCaptionOrder->SetSelectHdl( LINK(this, SwCaptionOptPage, OrderHdl));
+    m_xLbCaptionOrder->connect_changed(LINK(this, SwCaptionOptPage, OrderHdl));
 
-    m_pCheckLB->SetSelectHdl( LINK(this, SwCaptionOptPage, ShowEntryHdl) );
-    m_pCheckLB->SetCheckButtonHdl( LINK(this, SwCaptionOptPage, ShowEntryHdl) );
-    m_pCheckLB->SetDeselectHdl( LINK(this, SwCaptionOptPage, SaveEntryHdl) );
+    m_xCheckLB->connect_changed(LINK(this, SwCaptionOptPage, ShowEntryHdl));
+    m_xCheckLB->connect_toggled(LINK(this, SwCaptionOptPage, ToggleEntryHdl));
 }
 
 SwCaptionOptPage::~SwCaptionOptPage()
@@ -563,31 +618,14 @@ void SwCaptionOptPage::dispose()
 {
     DelUserData();
     pMgr.reset();
-    m_pCheckLB.clear();
-    m_pLbCaptionOrder.clear();
-    m_pPreview.clear();
-    m_pSettingsGroup.clear();
-    m_pCategoryBox.clear();
-    m_pFormatText.clear();
-    m_pFormatBox.clear();
-    m_pNumberingSeparatorFT.clear();
-    m_pNumberingSeparatorED.clear();
-    m_pTextText.clear();
-    m_pTextEdit.clear();
-    m_pPosBox.clear();
-    m_pNumCapt.clear();
-    m_pLbLevel.clear();
-    m_pEdDelim.clear();
-    m_pCategory.clear();
-    m_pCharStyleLB.clear();
-    m_pApplyBorderCB.clear();
+    m_xPreview.reset();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SwCaptionOptPage::Create( TabPageParent pParent,
-                                             const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SwCaptionOptPage::Create(TabPageParent pParent,
+                                            const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SwCaptionOptPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<SwCaptionOptPage>::Create(pParent, *rAttrSet);
 }
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
@@ -595,21 +633,20 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
     bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    SaveEntry(m_pCheckLB->FirstSelected());    // apply current entry
+    SaveEntry(m_xCheckLB->get_selected_index());    // apply current entry
 
-    SvTreeListEntry* pEntry = m_pCheckLB->First();
-
-    while (pEntry)
+    int nCheckCount = 0;
+    for (int i = 0, nCount = m_xCheckLB->n_children(); i < nCount; ++i)
     {
-        InsCaptionOpt* pData = static_cast<InsCaptionOpt*>(pEntry->GetUserData());
+        if (m_xCheckLB->get_toggle(i, 0))
+            ++nCheckCount;
+        InsCaptionOpt* pData = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(i).toInt64());
         bRet |= pModOpt->SetCapOption(bHTMLMode, pData);
-        pEntry = m_pCheckLB->Next(pEntry);
     }
 
-    sal_uLong nCheckCount = m_pCheckLB->GetCheckedEntryCount();
-    pModOpt->SetInsWithCaption( bHTMLMode, nCheckCount > 0 );
+    pModOpt->SetInsWithCaption(bHTMLMode, nCheckCount > 0);
 
-    sal_Int32 nPos = m_pLbCaptionOrder->GetSelectedEntryPos();
+    int nPos = m_xLbCaptionOrder->get_active();
     pModOpt->SetCaptionOrderNumberingFirst(nPos == 1);
 
     return bRet;
@@ -624,15 +661,21 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
     }
 
     DelUserData();
-    m_pCheckLB->GetModel()->Clear();   // remove all entries
+    m_xCheckLB->clear();   // remove all entries
 
     // Writer objects
     sal_uLong nPos = 0;
-    m_pCheckLB->InsertEntry(m_sSWTable);
+    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+    m_xCheckLB->set_toggle(nPos, false, 0);
+    m_xCheckLB->set_text(nPos, m_sSWTable, 1);
     SetOptions(nPos++, TABLE_CAP);
-    m_pCheckLB->InsertEntry(m_sSWFrame);
+    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+    m_xCheckLB->set_toggle(nPos, false, 0);
+    m_xCheckLB->set_text(nPos, m_sSWFrame, 1);
     SetOptions(nPos++, FRAME_CAP);
-    m_pCheckLB->InsertEntry(m_sSWGraphic);
+    m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+    m_xCheckLB->set_toggle(nPos, false, 0);
+    m_xCheckLB->set_text(nPos, m_sSWGraphic, 1);
     SetOptions(nPos++, GRAPHIC_CAP);
 
     // get Productname and -version
@@ -655,12 +698,15 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
             sClass = aObjS[i].GetHumanName();
         // don't show product version
         sClass = sClass.replaceFirst( sComplete, sWithoutVersion );
-        m_pCheckLB->InsertEntry( sClass );
+        m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, nullptr, false);
+        m_xCheckLB->set_toggle(nPos, false, 0);
+        m_xCheckLB->set_text(nPos, sClass, 1);
         SetOptions( nPos++, OLE_CAP, &rOleId );
     }
-    m_pLbCaptionOrder->SelectEntryPos(
+    m_xLbCaptionOrder->set_active(
         SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() ? 1 : 0);
-    ModifyHdl(*m_pCategoryBox);
+    m_xCheckLB->select(0);
+    UpdateEntry(0);
 }
 
 void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
@@ -671,48 +717,47 @@ void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
 
     if (pOpt)
     {
-        m_pCheckLB->SetEntryData(nPos, new InsCaptionOpt(*pOpt));
-        m_pCheckLB->CheckEntryPos(nPos, pOpt->UseCaption());
+        InsCaptionOpt* pIns = new InsCaptionOpt(*pOpt);
+        m_xCheckLB->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(pIns)));
+        m_xCheckLB->set_toggle(nPos, pOpt->UseCaption(), 0);
     }
     else
-        m_pCheckLB->SetEntryData(nPos, new InsCaptionOpt(eObjType, pOleId));
+    {
+        InsCaptionOpt* pIns = new InsCaptionOpt(eObjType, pOleId);
+        m_xCheckLB->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(pIns)));
+    }
 }
 
 void SwCaptionOptPage::DelUserData()
 {
-    SvTreeListEntry* pEntry = m_pCheckLB->First();
-
-    while (pEntry)
+    for (int i = 0, nCount = m_xCheckLB->n_children(); i < nCount; ++i)
     {
-        delete static_cast<InsCaptionOpt*>(pEntry->GetUserData());
-        pEntry->SetUserData(nullptr);
-        pEntry = m_pCheckLB->Next(pEntry);
+        delete reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(i).toInt64());
+        m_xCheckLB->set_id(i, "0");
     }
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
+void SwCaptionOptPage::UpdateEntry(int nSelEntry)
 {
-    SvTreeListEntry* pSelEntry = m_pCheckLB->FirstSelected();
-
-    if (pSelEntry)
+    if (nSelEntry != -1)
     {
-        bool bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
+        bool bChecked = m_xCheckLB->get_toggle(nSelEntry, 0);
 
-        m_pSettingsGroup->Enable(bChecked);
-        bool bNumSep = bChecked && m_pLbCaptionOrder->GetSelectedEntryPos() == 1;
-        m_pNumberingSeparatorED->Enable( bNumSep );
-        m_pNumberingSeparatorFT->Enable( bNumSep );
+        m_xSettingsGroup->set_sensitive(bChecked);
+        bool bNumSep = bChecked && m_xLbCaptionOrder->get_active() == 1;
+        m_xNumberingSeparatorED->set_sensitive( bNumSep );
+        m_xNumberingSeparatorFT->set_sensitive( bNumSep );
 
-        m_pNumCapt->Enable(bChecked);
-        m_pCategory->Enable(bChecked);
-        m_pPreview->Enable(bChecked);
+        m_xNumCapt->set_sensitive(bChecked);
+        m_xCategory->set_sensitive(bChecked);
+        m_xPreview->set_sensitive(bChecked);
 
         SwWrtShell *pSh = ::GetActiveWrtShell();
 
-        InsCaptionOpt* pOpt = static_cast<InsCaptionOpt*>(pSelEntry->GetUserData());
+        InsCaptionOpt* pOpt = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(nSelEntry).toInt64());
 
-        m_pCategoryBox->Clear();
-        m_pCategoryBox->InsertEntry(m_sNone, 0);
+        m_xCategoryBox->clear();
+        m_xCategoryBox->append_text(m_sNone);
         if (pSh)
         {
             const size_t nCount = pMgr->GetFieldTypeCount();
@@ -722,25 +767,29 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
                 SwFieldType *pType = pMgr->GetFieldType( SwFieldIds::Unknown, i );
                 if( pType->Which() == SwFieldIds::SetExp &&
                     static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
-                    m_pCategoryBox->InsertEntry(pType->GetName());
+                {
+                    m_xCategoryBox->append_text(pType->GetName());
+                }
             }
         }
         else
         {
-            m_pCategoryBox->InsertEntry(m_sIllustration);
-            m_pCategoryBox->InsertEntry(m_sTable);
-            m_pCategoryBox->InsertEntry(m_sText);
-            m_pCategoryBox->InsertEntry(m_sDrawing);
+            m_xCategoryBox->append_text(m_sIllustration);
+            m_xCategoryBox->append_text(m_sTable);
+            m_xCategoryBox->append_text(m_sText);
+            m_xCategoryBox->append_text(m_sDrawing);
         }
 
-        if(!pOpt->GetCategory().isEmpty())
-            m_pCategoryBox->SetText(pOpt->GetCategory());
+        if (!pOpt->GetCategory().isEmpty())
+        {
+            if (m_xCategoryBox->find_text(pOpt->GetCategory()) == -1)
+                m_xCategoryBox->insert_text(0, pOpt->GetCategory());
+            m_xCategoryBox->set_active_text(pOpt->GetCategory());
+        }
         else
-            m_pCategoryBox->SetText(m_sNone);
-        if (!pOpt->GetCategory().isEmpty() &&
-            m_pCategoryBox->GetEntryPos(pOpt->GetCategory()) == COMBOBOX_ENTRY_NOTFOUND)
-            m_pCategoryBox->InsertEntry(pOpt->GetCategory(), 0);
-        if (m_pCategoryBox->GetText().isEmpty())
+            m_xCategoryBox->set_active_text(m_sNone);
+
+        if (m_xCategoryBox->get_active_text().isEmpty())
         {
             sal_Int32 nPos = 0;
             switch(pOpt->GetObjType())
@@ -750,161 +799,170 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
                 case TABLE_CAP:         nPos = 2;   break;
                 case FRAME_CAP:         nPos = 3;   break;
             }
-            m_pCategoryBox->SetText(m_pCategoryBox->GetEntry(nPos));
+            m_xCategoryBox->set_active(nPos);
         }
 
-        for (sal_Int32 i = 0; i < m_pFormatBox->GetEntryCount(); i++)
+        for (sal_Int32 i = 0; i < m_xFormatBox->get_count(); i++)
         {
-            if (pOpt->GetNumType() == static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(i))))
+            if (pOpt->GetNumType() == m_xFormatBox->get_id(i).toUInt32())
             {
-                m_pFormatBox->SelectEntryPos(i);
+                m_xFormatBox->set_active(i);
                 break;
             }
         }
-        m_pTextEdit->SetText(pOpt->GetCaption());
+        m_xTextEdit->set_text(pOpt->GetCaption());
 
-        m_pPosBox->Clear();
+        m_xPosBox->clear();
         switch (pOpt->GetObjType())
         {
             case GRAPHIC_CAP:
             case TABLE_CAP:
             case OLE_CAP:
-                m_pPosBox->InsertEntry(m_sAbove);
-                m_pPosBox->InsertEntry(m_sBelow);
+                m_xPosBox->append_text(m_sAbove);
+                m_xPosBox->append_text(m_sBelow);
                 break;
             case FRAME_CAP:
-                m_pPosBox->InsertEntry(m_sBegin);
-                m_pPosBox->InsertEntry(m_sEnd);
+                m_xPosBox->append_text(m_sBegin);
+                m_xPosBox->append_text(m_sEnd);
                 break;
         }
-        m_pPosBox->Enable( m_pPosBox->IsEnabled() );
-        if (m_pPosBox->IsEnabled())
-            m_pPosBox->SelectEntryPos(pOpt->GetPos());
-        else
-            m_pPosBox->SelectEntryPos(0);
+        m_xPosBox->set_active(pOpt->GetPos());
 
         sal_Int32 nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;
-        m_pLbLevel->SelectEntryPos( nLevelPos );
-        m_pEdDelim->SetText(pOpt->GetSeparator());
-        m_pNumberingSeparatorED->SetText( pOpt->GetNumSeparator() );
-        if(!pOpt->GetCharacterStyle().isEmpty())
-            m_pCharStyleLB->SelectEntry( pOpt->GetCharacterStyle() );
+        m_xLbLevel->set_active(nLevelPos);
+        m_xEdDelim->set_text(pOpt->GetSeparator());
+        m_xNumberingSeparatorED->set_text(pOpt->GetNumSeparator());
+        if (!pOpt->GetCharacterStyle().isEmpty())
+            m_xCharStyleLB->set_active_text(pOpt->GetCharacterStyle());
         else
-            m_pCharStyleLB->SelectEntryPos( 0 );
-        m_pApplyBorderCB->Enable( m_pCategoryBox->IsEnabled() &&
+            m_xCharStyleLB->set_active(0);
+        m_xApplyBorderCB->set_sensitive(m_xCategoryBox->get_sensitive() &&
                 pOpt->GetObjType() != TABLE_CAP && pOpt->GetObjType() != FRAME_CAP );
-        m_pApplyBorderCB->Check( pOpt->CopyAttributes() );
+        m_xApplyBorderCB->set_active(pOpt->CopyAttributes());
     }
 
-    ModifyHdl(*m_pCategoryBox);
+    ModifyHdl();
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, weld::TreeView&, void)
 {
-    SvTreeListEntry* pEntry = m_pCheckLB->GetHdlEntry();
-
-    if (pEntry) // save all
-        SaveEntry(pEntry);
+    if (m_nPrevSelectedEntry != -1)
+        SaveEntry(m_nPrevSelectedEntry);
+    UpdateEntry(m_xCheckLB->get_selected_index());
+    m_nPrevSelectedEntry = m_xCheckLB->get_selected_index();
 }
 
-void SwCaptionOptPage::SaveEntry(SvTreeListEntry const * pEntry)
+IMPL_LINK(SwCaptionOptPage, ToggleEntryHdl, const row_col&, rRowCol, void)
 {
-    if (!pEntry)
+    UpdateEntry(rRowCol.first);
+}
+
+void SwCaptionOptPage::SaveEntry(int nEntry)
+{
+    if (nEntry == -1)
         return;
 
-    InsCaptionOpt* pOpt = static_cast<InsCaptionOpt*>(pEntry->GetUserData());
+    InsCaptionOpt* pOpt = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(nEntry).toInt64());
 
-    pOpt->UseCaption() = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pEntry));
-    const OUString aName( m_pCategoryBox->GetText() );
+    pOpt->UseCaption() = m_xCheckLB->get_toggle(nEntry, 0);
+    const OUString aName(m_xCategoryBox->get_active_text());
     if (aName == m_sNone)
         pOpt->SetCategory("");
     else
         pOpt->SetCategory(comphelper::string::strip(aName, ' '));
-    pOpt->SetNumType(static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFormatBox->GetSelectedEntryData())));
-    pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString() );
-    pOpt->SetPos(m_pPosBox->GetSelectedEntryPos());
-    sal_Int32 nPos = m_pLbLevel->GetSelectedEntryPos();
-    sal_Int32 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
+    pOpt->SetNumType(m_xFormatBox->get_active_id().toUInt32());
+    pOpt->SetCaption(m_xTextEdit->get_sensitive() ? m_xTextEdit->get_text() : OUString() );
+    pOpt->SetPos(m_xPosBox->get_active());
+    int nPos = m_xLbLevel->get_active();
+    sal_Int32 nLevel = (nPos > 0) ? nPos - 1 : MAXLEVEL;
     pOpt->SetLevel(nLevel);
-    pOpt->SetSeparator(m_pEdDelim->GetText());
-    pOpt->SetNumSeparator( m_pNumberingSeparatorED->GetText());
-    if(!m_pCharStyleLB->GetSelectedEntryPos())
+    pOpt->SetSeparator(m_xEdDelim->get_text());
+    pOpt->SetNumSeparator(m_xNumberingSeparatorED->get_text());
+    if (m_xCharStyleLB->get_active() == -1)
         pOpt->SetCharacterStyle("");
     else
-        pOpt->SetCharacterStyle(m_pCharStyleLB->GetSelectedEntry());
-    pOpt->CopyAttributes() = m_pApplyBorderCB->IsChecked();
-
+        pOpt->SetCharacterStyle(m_xCharStyleLB->get_active_text());
+    pOpt->CopyAttributes() = m_xApplyBorderCB->get_active();
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl, Edit&, void)
+void SwCaptionOptPage::ModifyHdl()
 {
-    const OUString sFieldTypeName = m_pCategoryBox->GetText();
+    const OUString sFieldTypeName = m_xCategoryBox->get_active_text();
 
-    SfxSingleTabDialog *pDlg = dynamic_cast<SfxSingleTabDialog*>(GetParentDialog());
+    SfxSingleTabDialog *pDlg = dynamic_cast<SfxSingleTabDialog*>(GetTabDialog());
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : nullptr;
     if (pBtn)
         pBtn->Enable(!sFieldTypeName.isEmpty());
-    bool bEnable = m_pCategoryBox->IsEnabled() && sFieldTypeName != m_sNone;
+    bool bEnable = m_xCategoryBox->get_sensitive() && sFieldTypeName != m_sNone;
 
-    m_pFormatText->Enable(bEnable);
-    m_pFormatBox->Enable(bEnable);
-    m_pTextText->Enable(bEnable);
-    m_pTextEdit->Enable(bEnable);
+    m_xFormatText->set_sensitive(bEnable);
+    m_xFormatBox->set_sensitive(bEnable);
+    m_xTextText->set_sensitive(bEnable);
+    m_xTextEdit->set_sensitive(bEnable);
 
     InvalidatePreview();
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, SelectHdl, ComboBox&, void)
+IMPL_LINK_NOARG(SwCaptionOptPage, ModifyEntryHdl, weld::Entry&, void)
+{
+    ModifyHdl();
+}
+
+IMPL_LINK_NOARG(SwCaptionOptPage, ModifyComboHdl, weld::ComboBox&, void)
+{
+    ModifyHdl();
+}
+
+IMPL_LINK_NOARG(SwCaptionOptPage, SelectHdl, weld::ComboBox&, void)
 {
     InvalidatePreview();
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, SelectListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwCaptionOptPage, SelectListBoxHdl, weld::ComboBox&, void)
 {
     InvalidatePreview();
 }
 
-IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox&, rBox, void )
+IMPL_LINK(SwCaptionOptPage, OrderHdl, weld::ComboBox&, rBox, void)
 {
     InvalidatePreview();
 
-    SvTreeListEntry* pSelEntry = m_pCheckLB->FirstSelected();
+    int nSelEntry = m_xCheckLB->get_selected_index();
     bool bChecked = false;
-    if (pSelEntry)
+    if (nSelEntry != -1)
     {
-        bChecked = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pSelEntry));
+        bChecked = m_xCheckLB->get_toggle(nSelEntry, 0);
     }
 
-    sal_Int32 nPos = rBox.GetSelectedEntryPos();
-    m_pNumberingSeparatorFT->Enable( bChecked && nPos == 1 );
-    m_pNumberingSeparatorED->Enable( bChecked && nPos == 1 );
+    int nPos = rBox.get_active();
+    m_xNumberingSeparatorFT->set_sensitive(bChecked && nPos == 1);
+    m_xNumberingSeparatorED->set_sensitive(bChecked && nPos == 1);
 }
 
 void SwCaptionOptPage::InvalidatePreview()
 {
     OUString aStr;
 
-    if( m_pCategoryBox->GetText() != m_sNone)
+    if (m_xCategoryBox->get_active_text() != m_sNone)
     {
         //#i61007# order of captions
-        bool bOrderNumberingFirst = m_pLbCaptionOrder->GetSelectedEntryPos() == 1;
+        bool bOrderNumberingFirst = m_xLbCaptionOrder->get_active() == 1;
         // number
-        const sal_uInt16 nNumFormat = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(
-                                        m_pFormatBox->GetSelectedEntryPos() )));
-        if( SVX_NUM_NUMBER_NONE != nNumFormat )
+        const sal_uInt16 nNumFormat = m_xFormatBox->get_active_id().toUInt32();
+        if (SVX_NUM_NUMBER_NONE != nNumFormat)
         {
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
             {
                 // category
-                aStr += m_pCategoryBox->GetText() + " ";
+                aStr += m_xCategoryBox->get_active_text() + " ";
             }
 
             SwWrtShell *pSh = ::GetActiveWrtShell();
             if (pSh)
             {
                 SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(pMgr->GetFieldType(
-                                                SwFieldIds::SetExp, m_pCategoryBox->GetText() ));
+                                                SwFieldIds::SetExp, m_xCategoryBox->get_active_text() ));
                 if( pFieldType && pFieldType->GetOutlineLvl() < MAXLEVEL )
                 {
                     sal_uInt8 nLvl = pFieldType->GetOutlineLvl();
@@ -934,38 +992,11 @@ void SwCaptionOptPage::InvalidatePreview()
         //#i61007# order of captions
         if( bOrderNumberingFirst )
         {
-            aStr += m_pNumberingSeparatorED->GetText() + m_pCategoryBox->GetText();
+            aStr += m_xNumberingSeparatorED->get_text() + m_xCategoryBox->get_active_text();
         }
-        aStr += m_pTextEdit->GetText();
+        aStr += m_xTextEdit->get_text();
     }
-    m_pPreview->SetPreviewText(aStr);
-}
-
-CaptionComboBox::CaptionComboBox(vcl::Window* pParent, WinBits nStyle)
-    : ComboBox(pParent, nStyle)
-{
-}
-
-CaptionComboBox::~CaptionComboBox()
-{
-}
-
-// Description: ComboBox without Spaces
-void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
-{
-    if (rEvt.GetKeyCode().GetCode() != KEY_SPACE)
-        ComboBox::KeyInput(rEvt);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeCaptionComboBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    if (bDropdown)
-        nBits |= WB_DROPDOWN;
-    VclPtrInstance<CaptionComboBox> pComboBox(pParent, nBits);
-    pComboBox->EnableAutoSize(true);
-    rRet = pComboBox;
+    m_aPreview.SetPreviewText(aStr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
