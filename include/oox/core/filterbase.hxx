@@ -240,6 +240,8 @@ public:
 
     bool exportVBA() const;
 
+    bool isExportTemplate() const;
+
 protected:
     virtual css::uno::Reference< css::io::XInputStream >
                         implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const;

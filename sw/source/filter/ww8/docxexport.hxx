@@ -108,6 +108,9 @@ class DocxExport : public MSWordExportBase
     /// If the result will be a .docm file or not.
     bool m_bDocm;
 
+    /// Export is done into template (.dotx)
+    bool const m_bTemplate;
+
     DocxSettingsData m_aSettings;
 
 public:
@@ -265,8 +268,8 @@ public:
     void WriteMainText();
 
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
-    DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument,
-            SwPaM *pCurrentPam, SwPaM *pOriginalPam, bool bDocm );
+    DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM* pCurrentPam, SwPaM* pOriginalPam,
+               bool bDocm, bool bTemplate);
 
     /// Destructor.
     virtual ~DocxExport() override;
