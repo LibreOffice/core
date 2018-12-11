@@ -102,7 +102,6 @@ public:
 class CaptionComboBox : public ComboBox
 {
     std::vector<OUString> m_EntryList;
-    std::vector<OUString> m_DelEntryList;
     OUString const        aDefault;
 
     void InsertSorted(OUString const& rEntry);
