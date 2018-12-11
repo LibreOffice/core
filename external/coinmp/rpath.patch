@@ -38,6 +38,16 @@
      ;;
    lynxos*)
      # FIXME: insert proper C++ library support
+--- CoinUtils/configure
++++ CoinUtils/configure
+@@ -13939,6 +13939,7 @@
+ 	output_verbose_link_cmd='templist=`$CC -shared $CFLAGS -v conftest.$objext 2>&1 | grep "ld"`; templist=`echo $templist | $SED "s/\(^.*ld.*\)\( .*ld .*$\)/\1/"`; list=""; for z in $templist; do case $z in conftest.$objext) list="$list $z";; *.$objext);; *) list="$list $z";;esac; done; echo $list'
+ 	;;
+     esac
++hardcode_libdir_flag_spec_CXX=
+     ;;
+   lynxos*)
+     # FIXME: insert proper C++ library support
 --- Osi/configure
 +++ Osi/configure
 @@ -12453,6 +12453,7 @@
