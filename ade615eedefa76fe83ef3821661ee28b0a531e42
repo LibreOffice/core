@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_53138767",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-11T07:54:45Z",
+      "side": 1,
+      "message": "I believe that it\u0027s OK to change these to just int, and remove those cargo-cult L, in this change.",
+      "range": {
+        "startLine": 1501,
+        "startChar": 13,
+        "endLine": 1503,
+        "endChar": 43
+      },
+      "revId": "ade615eedefa76fe83ef3821661ee28b0a531e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_33180b80",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-11T07:54:45Z",
+      "side": 1,
+      "message": "Also here",
+      "range": {
+        "startLine": 1526,
+        "startChar": 9,
+        "endLine": 1528,
+        "endChar": 40
+      },
+      "revId": "ade615eedefa76fe83ef3821661ee28b0a531e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
