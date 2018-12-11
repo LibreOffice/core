@@ -264,8 +264,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         pFlySet = pTempSet.get();
 
         // Remove distance/borders
-        if (!m_bNewDoc)
-            Reader::ResetFrameFormatAttrs( *pTempSet );
+        Reader::ResetFrameFormatAttrs( *pTempSet );
 
         SwFormatAnchor aAnchor( RndStdIds::FLY_AS_CHAR );
         aAnchor.SetAnchor( m_pPaM->GetPoint() );
