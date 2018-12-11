@@ -595,6 +595,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
 static SwTextNode* lcl_FindOutlineName(const SwOutlineNodes& rOutlNds,
     SwRootFrame const*const pLayout, const OUString& rName, bool const bExact)
 {
+    SwTextNode * pExactButDeleted(nullptr);
     SwTextNode* pSavedNode = nullptr;
     for( auto pOutlNd : rOutlNds )
     {
@@ -604,10 +605,18 @@ static SwTextNode* lcl_FindOutlineName(const SwOutlineNodes& rOutlNds,
         {
             if (sText.getLength() == rName.getLength())
             {
-                // Found "exact", set Pos to the Node
-                return pTextNd;
+                if (pLayout && !sw::IsParaPropsNode(*pLayout, *pTextNd))
+                {
+                    pExactButDeleted = pTextNd;
+                }
+                else
+                {
+                    // Found "exact", set Pos to the Node
+                    return pTextNd;
+                }
             }
-            if( !bExact && !pSavedNode )
+            if (!bExact && !pSavedNode
+                && (!pLayout || sw::IsParaPropsNode(*pLayout, *pTextNd)))
             {
                 // maybe we just found the text's first part
                 pSavedNode = pTextNd;
@@ -615,7 +624,7 @@ static SwTextNode* lcl_FindOutlineName(const SwOutlineNodes& rOutlNds,
         }
     }
 
-    return pSavedNode;
+    return bExact ? pExactButDeleted : pSavedNode;
 }
 
 static SwTextNode* lcl_FindOutlineNum(const SwOutlineNodes& rOutlNds,
@@ -750,6 +759,10 @@ bool SwDoc::GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame con
                 SwTextNode *pTmpNd = ::lcl_FindOutlineName(rOutlNds, pLayout, sName, true);
                 if ( pTmpNd )             // found via the Name
                 {
+                    if (pLayout && !sw::IsParaPropsNode(*pLayout, *pTmpNd))
+                    {   // found the correct node but it's deleted!
+                        return false; // avoid fallback to inexact search
+                    }
                     pNd = pTmpNd;
                 }
             }

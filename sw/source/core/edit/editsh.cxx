@@ -696,15 +696,21 @@ void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 {
     rArr.clear();
 
-    const SwTextNode* pTextNd;
     const SwCharFormats* pFormats = GetDoc()->GetCharFormats();
     for( auto n = pFormats->size(); 1 < n; )
     {
         SwIterator<SwTextINetFormat,SwCharFormat> aIter(*(*pFormats)[--n]);
         for( SwTextINetFormat* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
         {
-            if( nullptr != ( pTextNd = pFnd->GetpTextNode()) &&
-                pTextNd->GetNodes().IsDocNodes() )
+            SwTextNode const*const pTextNd(pFnd->GetpTextNode());
+            SwTextFrame const*const pFrame(pTextNd
+                ? static_cast<SwTextFrame const*>(pTextNd->getLayoutFrame(GetLayout()))
+                : nullptr);
+            if (nullptr != pTextNd && nullptr != pFrame
+                && pTextNd->GetNodes().IsDocNodes()
+                // check it's not fully deleted
+                && pFrame->MapModelToView(pTextNd, pFnd->GetStart())
+                    != pFrame->MapModelToView(pTextNd, *pFnd->GetEnd()))
             {
                 SwTextINetFormat& rAttr = *pFnd;
                 OUString sText( pTextNd->GetExpandText(GetLayout(),
