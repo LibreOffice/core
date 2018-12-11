@@ -550,7 +550,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
     for (sal_uInt16 i = 0; i <= MAXLEVEL; ++i)
         aRadioColumns.push_back(i + 1);
     m_xHeaderTree->set_toggle_columns_as_radio(aRadioColumns);
-    m_xHeaderTree->connect_radio_toggled(LINK(this, SwAddStylesDlg_Impl, RadioToggleOnHdl));
+    m_xHeaderTree->connect_toggled(LINK(this, SwAddStylesDlg_Impl, RadioToggleOnHdl));
 
     std::vector<int> aWidths;
     aWidths.push_back(m_xHeaderTree->get_approximate_digit_width() * 30);
