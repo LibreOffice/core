@@ -428,15 +428,7 @@ void ScDPAggData::Update( const ScDPValue& rNext, ScSubTotalFunc eFunc, const Sc
         case SUBTOTAL_FUNC_STDP:
         case SUBTOTAL_FUNC_VAR:
         case SUBTOTAL_FUNC_VARP:
-            {
-                // fAux is used to sum up squares
-                if ( !SubTotal::SafePlus( fVal, rNext.mfValue ) )
-                    nCount = -1;                            // -1 for error
-                double fAdd = rNext.mfValue;
-                if ( !SubTotal::SafeMult( fAdd, rNext.mfValue ) ||
-                     !SubTotal::SafePlus( fAux, fAdd ) )
-                    nCount = -1;                            // -1 for error
-            }
+            maWelford.update( rNext.mfValue);
             break;
         case SUBTOTAL_FUNC_MED:
             {
@@ -486,14 +478,19 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
         case SUBTOTAL_FUNC_MED:
         case SUBTOTAL_FUNC_MAX:
         case SUBTOTAL_FUNC_MIN:
+            bError = ( nCount <= 0 );       // no data is an error
+            break;
+
         case SUBTOTAL_FUNC_STDP:
         case SUBTOTAL_FUNC_VARP:
             bError = ( nCount <= 0 );       // no data is an error
+            assert(bError || nCount == static_cast<sal_Int64>(maWelford.getCount()));
             break;
 
         case SUBTOTAL_FUNC_STD:
         case SUBTOTAL_FUNC_VAR:
             bError = ( nCount < 2 );        // need at least 2 values
+            assert(bError || nCount == static_cast<sal_Int64>(maWelford.getCount()));
             break;
 
         default:
@@ -525,23 +522,33 @@ void ScDPAggData::Calculate( ScSubTotalFunc eFunc, const ScDPSubTotalState& rSub
                     fResult = fVal / static_cast<double>(nCount);
                 break;
 
-            //TODO: use safe mul for fVal * fVal
-
             case SUBTOTAL_FUNC_STD:
                 if ( nCount >= 2 )
-                    fResult = sqrt((fAux - fVal*fVal/static_cast<double>(nCount)) / static_cast<double>(nCount-1));
+                {
+                    fResult = maWelford.getVarianceSample();
+                    if (fResult < 0.0)
+                        bError = true;
+                    else
+                        fResult = sqrt( fResult);
+                }
                 break;
             case SUBTOTAL_FUNC_VAR:
                 if ( nCount >= 2 )
-                    fResult = (fAux - fVal*fVal/static_cast<double>(nCount)) / static_cast<double>(nCount-1);
+                    fResult = maWelford.getVarianceSample();
                 break;
             case SUBTOTAL_FUNC_STDP:
                 if ( nCount > 0 )
-                    fResult = sqrt((fAux - fVal*fVal/static_cast<double>(nCount)) / static_cast<double>(nCount));
+                {
+                    fResult = maWelford.getVariancePopulation();
+                    if (fResult < 0.0)
+                        bError = true;
+                    else
+                        fResult = sqrt( fResult);
+                }
                 break;
             case SUBTOTAL_FUNC_VARP:
                 if ( nCount > 0 )
-                    fResult = (fAux - fVal*fVal/static_cast<double>(nCount)) / static_cast<double>(nCount);
+                    fResult = maWelford.getVariancePopulation();
                 break;
             case SUBTOTAL_FUNC_MED:
                 {
