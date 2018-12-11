@@ -165,31 +165,6 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
     }
 }
 
-
-static BYTE aOrdDither8Bit[8][8] =
-{
-   {  0, 38,  9, 48,  2, 40, 12, 50 },
-   { 25, 12, 35, 22, 28, 15, 37, 24 },
-   {  6, 44,  3, 41,  8, 47,  5, 44 },
-   { 32, 19, 28, 16, 34, 21, 31, 18 },
-   {  1, 40, 11, 49,  0, 39, 10, 48 },
-   { 27, 14, 36, 24, 26, 13, 36, 23 },
-   {  8, 46,  4, 43,  7, 45,  4, 42 },
-   { 33, 20, 30, 17, 32, 20, 29, 16 }
-};
-
-static BYTE aOrdDither16Bit[8][8] =
-{
-   { 0, 6, 1, 7, 0, 6, 1, 7 },
-   { 4, 2, 5, 3, 4, 2, 5, 3 },
-   { 1, 7, 0, 6, 1, 7, 0, 6 },
-   { 5, 3, 4, 2, 5, 3, 4, 2 },
-   { 0, 6, 1, 7, 0, 6, 1, 7 },
-   { 4, 2, 5, 3, 4, 2, 5, 3 },
-   { 1, 7, 0, 6, 1, 7, 0, 6 },
-   { 5, 3, 4, 2, 5, 3, 4, 2 }
-};
-
 Color ImplGetROPColor( SalROPColor nROPColor )
 {
     Color nColor;
@@ -1443,96 +1418,126 @@ void WinSalGraphicsImpl::SetFillColor()
     mbStockBrush = TRUE;
 }
 
-void WinSalGraphicsImpl::SetFillColor( Color nColor )
+void WinSalGraphicsImpl::SetFillColor(Color nColor)
 {
-    maFillColor = nColor;
-    SalData*    pSalData    = GetSalData();
-    BYTE        nRed        = nColor.GetRed();
-    BYTE        nGreen      = nColor.GetGreen();
-    BYTE        nBlue       = nColor.GetBlue();
-    COLORREF    nBrushColor = PALETTERGB( nRed, nGreen, nBlue );
-    HBRUSH      hNewBrush   = nullptr;
-    bool        bStockBrush = FALSE;
+    COLORREF nBrushColor = PALETTERGB(nColor.GetRed(),
+                                      nColor.GetGreen(),
+                                      nColor.GetBlue());
+    bool bStockBrush = false;
 
-    // search for stock brush (only screen, because printer have problems,
-    // when we use stock objects)
-    if ( !mrParent.isPrinter() )
-    {
-        for ( sal_uInt16 i = 0; i < pSalData->mnStockBrushCount; i++ )
-        {
-            if ( nBrushColor == pSalData->maStockBrushColorAry[ i ] )
-            {
-                hNewBrush = pSalData->mhStockBrushAry[i];
-                bStockBrush = TRUE;
-                break;
-            }
-        }
-    }
-
-    // create new brush
-    if ( !hNewBrush )
-    {
-        if ( mrParent.isPrinter() || !pSalData->mhDitherDIB )
-            hNewBrush = CreateSolidBrush( nBrushColor );
-        else
-        {
-            if ( 24 == reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB)->biBitCount )
-            {
-                BYTE* pTmp = pSalData->mpDitherDIBData;
-                long* pDitherDiff = pSalData->mpDitherDiff;
-                BYTE* pDitherLow = pSalData->mpDitherLow;
-                BYTE* pDitherHigh = pSalData->mpDitherHigh;
-
-                for( long nY = 0L; nY < 8L; nY++ )
-                {
-                    for( long nX = 0L; nX < 8L; nX++ )
-                    {
-                        const long nThres = aOrdDither16Bit[ nY ][ nX ];
-                        *pTmp++ = DMAP( nBlue, nThres );
-                        *pTmp++ = DMAP( nGreen, nThres );
-                        *pTmp++ = DMAP( nRed, nThres );
-                    }
-                }
-
-                hNewBrush = CreateDIBPatternBrush( pSalData->mhDitherDIB, DIB_RGB_COLORS );
-            }
-            else if ( ImplIsSysColorEntry( nColor ) )
-            {
-                nBrushColor = PALRGB_TO_RGB( nBrushColor );
-                hNewBrush = CreateSolidBrush( nBrushColor );
-            }
-            else if ( ImplIsPaletteEntry( nRed, nGreen, nBlue ) )
-                hNewBrush = CreateSolidBrush( nBrushColor );
-            else
-            {
-                BYTE* pTmp = pSalData->mpDitherDIBData;
-                long* pDitherDiff = pSalData->mpDitherDiff;
-                BYTE* pDitherLow = pSalData->mpDitherLow;
-                BYTE* pDitherHigh = pSalData->mpDitherHigh;
-
-                for ( long nY = 0L; nY < 8L; nY++ )
-                {
-                    for ( long nX = 0L; nX < 8L; nX++ )
-                    {
-                        const long nThres = aOrdDither8Bit[ nY ][ nX ];
-                        *pTmp = DMAP( nRed, nThres ) + DMAP( nGreen, nThres ) * 6 + DMAP( nBlue, nThres ) * 36;
-                        pTmp++;
-                    }
-                }
-
-                hNewBrush = CreateDIBPatternBrush( pSalData->mhDitherDIB, DIB_PAL_COLORS );
-            }
-        }
-
-        bStockBrush = FALSE;
-    }
+    HBRUSH hNewBrush = SearchStockBrush(nBrushColor);
+    if (hNewBrush)
+        bStockBrush = true;
+    else
+        hNewBrush = MakeBrush(nColor);
 
     ResetBrush(hNewBrush);
 
     // set new data
     mnBrushColor = nBrushColor;
+    maFillColor = nColor;
     mbBrush     = TRUE;
     mbStockBrush = bStockBrush;
+}
+
+HBRUSH WinSalGraphicsImpl::SearchStockBrush(COLORREF nBrushColor)
+{
+    // Only screen, because printer has problems, when we use stock objects.
+    if (!mrParent.isPrinter())
+    {
+        const SalData* pSalData = GetSalData();
+
+        for (sal_uInt16 i = 0; i < pSalData->mnStockBrushCount; i++)
+        {
+            if (nBrushColor == pSalData->maStockBrushColorAry[i])
+                return pSalData->mhStockBrushAry[i];
+        }
+    }
+
+    return nullptr;
+}
+
+HBRUSH WinSalGraphicsImpl::MakeBrush(Color nColor)
+{
+    const SalData* pSalData = GetSalData();
+
+    BYTE        nRed        = nColor.GetRed();
+    BYTE        nGreen      = nColor.GetGreen();
+    BYTE        nBlue       = nColor.GetBlue();
+    COLORREF    nBrushColor = PALETTERGB(nRed, nGreen, nBlue);
+
+    if (mrParent.isPrinter() || !pSalData->mhDitherDIB)
+        return CreateSolidBrush(nBrushColor);
+
+    if (24 == reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB)->biBitCount)
+    {
+        static const BYTE aOrdDither16Bit[8][8] =
+        {
+           { 0, 6, 1, 7, 0, 6, 1, 7 },
+           { 4, 2, 5, 3, 4, 2, 5, 3 },
+           { 1, 7, 0, 6, 1, 7, 0, 6 },
+           { 5, 3, 4, 2, 5, 3, 4, 2 },
+           { 0, 6, 1, 7, 0, 6, 1, 7 },
+           { 4, 2, 5, 3, 4, 2, 5, 3 },
+           { 1, 7, 0, 6, 1, 7, 0, 6 },
+           { 5, 3, 4, 2, 5, 3, 4, 2 }
+        };
+
+        BYTE* pTmp = pSalData->mpDitherDIBData;
+        long* pDitherDiff = pSalData->mpDitherDiff;
+        BYTE* pDitherLow = pSalData->mpDitherLow;
+        BYTE* pDitherHigh = pSalData->mpDitherHigh;
+
+        for(int nY = 0; nY < 8; ++nY)
+        {
+            for(int nX = 0; nX < 8; ++nX)
+            {
+                const BYTE nThres = aOrdDither16Bit[nY][nX];
+                *pTmp++ = DMAP(nBlue, nThres);
+                *pTmp++ = DMAP(nGreen, nThres);
+                *pTmp++ = DMAP(nRed, nThres);
+            }
+        }
+
+        return CreateDIBPatternBrush(pSalData->mhDitherDIB, DIB_RGB_COLORS);
+    }
+
+    if (ImplIsSysColorEntry(nColor))
+        return CreateSolidBrush(PALRGB_TO_RGB(nBrushColor));
+
+    if (ImplIsPaletteEntry(nRed, nGreen, nBlue))
+        return CreateSolidBrush(nBrushColor);
+
+    static const BYTE aOrdDither8Bit[8][8] =
+    {
+       {  0, 38,  9, 48,  2, 40, 12, 50 },
+       { 25, 12, 35, 22, 28, 15, 37, 24 },
+       {  6, 44,  3, 41,  8, 47,  5, 44 },
+       { 32, 19, 28, 16, 34, 21, 31, 18 },
+       {  1, 40, 11, 49,  0, 39, 10, 48 },
+       { 27, 14, 36, 24, 26, 13, 36, 23 },
+       {  8, 46,  4, 43,  7, 45,  4, 42 },
+       { 33, 20, 30, 17, 32, 20, 29, 16 }
+    };
+
+    BYTE* pTmp = pSalData->mpDitherDIBData;
+    long* pDitherDiff = pSalData->mpDitherDiff;
+    BYTE* pDitherLow = pSalData->mpDitherLow;
+    BYTE* pDitherHigh = pSalData->mpDitherHigh;
+
+    for (int nY = 0; nY < 8; ++nY)
+    {
+        for (int nX = 0; nX < 8; ++nX)
+        {
+            const BYTE nThres = aOrdDither8Bit[nY][nX];
+            *pTmp = DMAP(nRed, nThres) +
+                    DMAP(nGreen, nThres) * 6 +
+                    DMAP(nBlue, nThres) * 36;
+            pTmp++;
+        }
+    }
+
+    return CreateDIBPatternBrush(pSalData->mhDitherDIB, DIB_PAL_COLORS);
 }
 
 void WinSalGraphicsImpl::ResetBrush(HBRUSH hNewBrush)
