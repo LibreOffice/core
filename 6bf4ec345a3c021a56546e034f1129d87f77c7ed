@@ -70,6 +70,30 @@
       "revId": "6bf4ec345a3c021a56546e034f1129d87f77c7ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_b3a75b50",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-11T06:30:12Z",
+      "side": 1,
+      "message": "Well - I guess that with your change, you will have no pens for printing, with obvious consequences. For this specific change, it would be ~simple to write one (just check result of printing to some virtual printer and pixel-compare to reference; pixel-comparison should allow enough fuzz!); but I believe that such a test would not be particularly useful, because it would test something really rare, and also that is easily visible - so would be caught and bisected early in any case. More useful tests (e.g. more precise, to not only catch drastic differences, and stable enough in the same time) are much more difficult to imagine and design, though.",
+      "parentUuid": "5f4e5783_53b70788",
+      "range": {
+        "startLine": 1407,
+        "startChar": 4,
+        "endLine": 1410,
+        "endChar": 5
+      },
+      "revId": "6bf4ec345a3c021a56546e034f1129d87f77c7ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
