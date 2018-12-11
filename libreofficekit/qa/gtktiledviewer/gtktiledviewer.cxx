@@ -29,6 +29,10 @@
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
 #endif
 
+#if defined __GNUC__ && __GNUC__ >= 7
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 static int help()
 {
     fprintf(stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install's-program-directory> <path-to-document> [<options> ... ]\n\n");
