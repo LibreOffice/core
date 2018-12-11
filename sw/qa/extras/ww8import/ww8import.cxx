@@ -13,6 +13,9 @@
 #include <ndtxt.hxx>
 #include <viscrs.hxx>
 #include <wrtsh.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -137,6 +140,46 @@ DECLARE_WW8IMPORT_TEST(testTdf112346, "tdf112346.doc")
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     // This was 1, multi-page table was imported as a floating one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf121734, "tdf121734.doc")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
+    // There is only one fly frame in the document: the one with the imported floating table
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPosFlyFrames.size());
+    for (const auto& rPosFlyFrame : aPosFlyFrames)
+    {
+        const SwFrameFormat& rFormat = rPosFlyFrame->GetFormat();
+        const SfxPoolItem* pItem = nullptr;
+
+        // The LR and UL spacings and borders must all be set explicitly;
+        // spacings and border distances must be 0; borders must be absent.
+
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_LR_SPACE, false, &pItem));
+        auto pLR = static_cast<const SvxLRSpaceItem*>(pItem);
+        CPPUNIT_ASSERT(pLR);
+        CPPUNIT_ASSERT_EQUAL(long(0), pLR->GetLeft());
+        CPPUNIT_ASSERT_EQUAL(long(0), pLR->GetRight());
+
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_UL_SPACE, false, &pItem));
+        auto pUL = static_cast<const SvxULSpaceItem*>(pItem);
+        CPPUNIT_ASSERT(pUL);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetUpper());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetLower());
+
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_BOX, false, &pItem));
+        auto pBox = static_cast<const SvxBoxItem*>(pItem);
+        CPPUNIT_ASSERT(pBox);
+        for (auto eLine : { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM,
+                            SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT })
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pBox->GetDistance(eLine));
+            CPPUNIT_ASSERT(!pBox->GetLine(eLine));
+        }
+    }
 }
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
