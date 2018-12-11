@@ -1,11 +1,11 @@
-basctl/source/basicide/basicbox.hxx:101
-    basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/basidesh.hxx:87
     basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/bastype2.hxx:183
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/bastype2.hxx:258
     basctl::SbTreeListBox m_aNotifier class basctl::DocumentEventNotifier
+basctl/source/inc/IDEComboBox.hxx:101
+    basctl::DocListenerBox maNotifier class basctl::DocumentEventNotifier
 basic/qa/cppunit/test_scanner.cxx:26
     (anonymous namespace)::Symbol line sal_uInt16
 basic/qa/cppunit/test_scanner.cxx:27
@@ -88,7 +88,19 @@ connectivity/source/inc/OTypeInfo.hxx:36
     connectivity::OTypeInfo nMaximumScale sal_Int16
 connectivity/source/inc/OTypeInfo.hxx:38
     connectivity::OTypeInfo nType sal_Int16
-cppcanvas/source/inc/implrenderer.hxx:254
+cppcanvas/source/inc/implrenderer.hxx:92
+    cppcanvas::internal::XForm eM11 float
+cppcanvas/source/inc/implrenderer.hxx:93
+    cppcanvas::internal::XForm eM12 float
+cppcanvas/source/inc/implrenderer.hxx:94
+    cppcanvas::internal::XForm eM21 float
+cppcanvas/source/inc/implrenderer.hxx:95
+    cppcanvas::internal::XForm eM22 float
+cppcanvas/source/inc/implrenderer.hxx:96
+    cppcanvas::internal::XForm eDx float
+cppcanvas/source/inc/implrenderer.hxx:97
+    cppcanvas::internal::XForm eDy float
+cppcanvas/source/inc/implrenderer.hxx:215
     cppcanvas::internal::ImplRenderer aBaseTransform struct cppcanvas::internal::XForm
 cppu/source/uno/check.cxx:38
     (anonymous namespace)::C1 n1 sal_Int16
@@ -149,11 +161,11 @@ desktop/qa/desktop_lib/test_desktop_lib.cxx:188
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:117
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:370
-     flags unsigned long
+     functions unsigned long
 desktop/unx/source/splashx.c:370
      decorations unsigned long
 desktop/unx/source/splashx.c:370
-     functions unsigned long
+     flags unsigned long
 desktop/unx/source/splashx.c:371
      input_mode long
 drawinglayer/source/attribute/sdrfillgraphicattribute.cxx:44
@@ -225,15 +237,15 @@ include/canvas/rendering/irendermodule.hxx:40
 include/canvas/rendering/irendermodule.hxx:40
     canvas::Vertex g float
 include/canvas/rendering/irendermodule.hxx:41
-    canvas::Vertex v float
-include/canvas/rendering/irendermodule.hxx:41
     canvas::Vertex u float
+include/canvas/rendering/irendermodule.hxx:41
+    canvas::Vertex v float
+include/canvas/rendering/irendermodule.hxx:42
+    canvas::Vertex y float
 include/canvas/rendering/irendermodule.hxx:42
     canvas::Vertex z float
 include/canvas/rendering/irendermodule.hxx:42
     canvas::Vertex x float
-include/canvas/rendering/irendermodule.hxx:42
-    canvas::Vertex y float
 include/drawinglayer/attribute/sdrallattribute3d.hxx:44
     drawinglayer::attribute::SdrLineFillShadowAttribute3D maLineStartEnd const class drawinglayer::attribute::SdrLineStartEndAttribute
 include/drawinglayer/primitive2d/mediaprimitive2d.hxx:51
@@ -277,11 +289,11 @@ include/svx/imapdlg.hxx:118
 include/svx/ofaitem.hxx:44
     OfaRefItem mxRef rtl::Reference<reference_type>
 include/svx/viewpt3d.hxx:62
+    Viewport3D::(anonymous) X double
+include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) H double
 include/svx/viewpt3d.hxx:62
     Viewport3D::(anonymous) Y double
-include/svx/viewpt3d.hxx:62
-    Viewport3D::(anonymous) X double
 include/vcl/opengl/OpenGLContext.hxx:35
     GLWindow bMultiSampleSupported _Bool
 include/vcl/salnativewidgets.hxx:446
@@ -293,11 +305,11 @@ include/vcl/salnativewidgets.hxx:512
 include/vcl/textrectinfo.hxx:31
     TextRectInfo mnLineCount sal_uInt16
 include/vcl/vclenum.hxx:199
-    ItalicMatrix xy double
+    ItalicMatrix yy double
 include/vcl/vclenum.hxx:199
     ItalicMatrix yx double
 include/vcl/vclenum.hxx:199
-    ItalicMatrix yy double
+    ItalicMatrix xy double
 include/vcl/vclenum.hxx:199
     ItalicMatrix xx double
 include/xmloff/shapeimport.hxx:180
@@ -321,9 +333,9 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
 package/inc/ByteChucker.hxx:38
-    ByteChucker p4Sequence sal_Int8 *const
-package/inc/ByteChucker.hxx:38
     ByteChucker p2Sequence sal_Int8 *const
+package/inc/ByteChucker.hxx:38
+    ByteChucker p4Sequence sal_Int8 *const
 registry/source/reflread.cxx:466
     ConstantPool::readDoubleConstant(sal_uInt16)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflread.cxx:467
@@ -339,9 +351,9 @@ sal/qa/osl/file/osl_File.cxx:2426
 sal/qa/osl/file/osl_File.cxx:2898
     osl_File::write nCount_read sal_uInt64
 sal/qa/osl/file/osl_File.cxx:4156
-    osl_Directory::isOpen nError2 osl::class FileBase::RC
-sal/qa/osl/file/osl_File.cxx:4156
     osl_Directory::isOpen nError1 osl::class FileBase::RC
+sal/qa/osl/file/osl_File.cxx:4156
+    osl_Directory::isOpen nError2 osl::class FileBase::RC
 sal/qa/osl/file/osl_File.cxx:4214
     osl_Directory::close nError2 osl::class FileBase::RC
 sal/rtl/alloc_arena.hxx:35
@@ -372,7 +384,7 @@ sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2536
+sc/inc/document.hxx:2545
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/interpretercontext.hxx:39
     ScInterpreterContext mpDoc const class ScDocument *
@@ -660,14 +672,12 @@ vcl/unx/generic/gdi/cairotextrender.cxx:56
     (anonymous namespace)::CairoFontsCache::CacheId mbEmbolden _Bool
 vcl/unx/generic/gdi/cairotextrender.cxx:57
     (anonymous namespace)::CairoFontsCache::CacheId mbVerticalMetrics _Bool
-vcl/unx/gtk3/gtk3gtkinst.cxx:1155
+vcl/unx/gtk3/gtk3gtkinst.cxx:1156
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:1205
-    GtkInstanceWidget m_nKeyReleaseSignalId gulong
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass const AtkObjectClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

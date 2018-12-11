@@ -1471,8 +1471,8 @@ SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
                                     sal_uInt16 nCnt, bool bFlg, bool bSmHght )
     : SwUndo( nAction, rTableNd.GetDoc() ),
     m_nMin( nMn ), m_nMax( nMx ),
-    m_nSttNode( rTableNd.GetIndex() ), m_nCurrBox( 0 ),
-    m_nCount( nCnt ), m_nRelDiff( 0 ), m_nAbsDiff( 0 ),
+    m_nSttNode( rTableNd.GetIndex() ),
+    m_nCount( nCnt ),
     m_nSetColType( TableChgWidthHeightType::InvalidPos ),
     m_bFlag( bFlg ),
     m_bSameHeight( bSmHght )
@@ -1808,9 +1808,8 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             rDoc.InsertCol( aSelBoxes, m_nCount, m_bFlag );
         else
         {
-            SwTableBox* pBox = pTableNd->GetTable().GetTableBox( m_nCurrBox );
-            rDoc.SetColRowWidthHeight( *pBox, m_nSetColType, m_nAbsDiff,
-                                        m_nRelDiff );
+            SwTableBox* pBox = pTableNd->GetTable().GetTableBox( 0 );
+            rDoc.SetColRowWidthHeight( *pBox, m_nSetColType, 0, 0 );
         }
         break;
 
@@ -1820,10 +1819,10 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
         else
         {
             SwTable& rTable = pTableNd->GetTable();
-            SwTableBox* pBox = rTable.GetTableBox( m_nCurrBox );
+            SwTableBox* pBox = rTable.GetTableBox( 0 );
             TableChgMode eOldMode = rTable.GetTableChgMode();
             rTable.SetTableChgMode( static_cast<TableChgMode>(m_nCount) );
-            rDoc.SetColRowWidthHeight( *pBox, m_nSetColType, m_nAbsDiff, m_nRelDiff );
+            rDoc.SetColRowWidthHeight( *pBox, m_nSetColType, 0, 0 );
             rTable.SetTableChgMode( eOldMode );
         }
         break;
@@ -1852,7 +1851,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             aMsgHint.m_eFlags = TBL_BOXPTR;
             rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
-            SwTableBox* pBox = rTable.GetTableBox( m_nCurrBox );
+            SwTableBox* pBox = rTable.GetTableBox( 0 );
             TableChgMode eOldMode = rTable.GetTableChgMode();
             rTable.SetTableChgMode( static_cast<TableChgMode>(m_nCount) );
 
@@ -1866,14 +1865,12 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             case TableChgWidthHeightType::ColRight:
             case TableChgWidthHeightType::CellLeft:
             case TableChgWidthHeightType::CellRight:
-                 rTable.SetColWidth( *pBox, m_nSetColType, m_nAbsDiff,
-                                    m_nRelDiff, &pUndo );
+                 rTable.SetColWidth( *pBox, m_nSetColType, 0, 0, &pUndo );
                 break;
             case TableChgWidthHeightType::RowBottom:
             case TableChgWidthHeightType::CellTop:
             case TableChgWidthHeightType::CellBottom:
-                rTable.SetRowHeight( *pBox, m_nSetColType, m_nAbsDiff,
-                                    m_nRelDiff, &pUndo );
+                rTable.SetRowHeight( *pBox, m_nSetColType, 0, 0, &pUndo );
                 break;
             default: break;
             }
