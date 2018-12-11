@@ -27,12 +27,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 ))
 endif
 
-# TODO: remove once switching arm to llvm-c++
-ifeq ($(ANDROID_APP_ABI),armeabi-v7a)
-$(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
-	external/liborcus/android-workaround.patch \
-))
-endif
-
-
 # vim: set noet sw=4 ts=4:

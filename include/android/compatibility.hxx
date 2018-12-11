@@ -27,12 +27,6 @@ namespace std
 {
 inline double fmax(double x, double y) { return ::fmax(x, y); }
 
-inline long stol(const std::string& str, std::size_t* /*pos*/ = 0, int base = 10)
-{
-    char* end;
-    return strtol(str.c_str(), &end, base);
-}
-
 template <typename T> T round(T x) { return ::round(x); }
 
 template <typename T> T trunc(T x) { return ::trunc(x); }

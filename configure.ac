@@ -486,22 +486,14 @@ if test -n "$with_android_ndk"; then
     ANDROIDCFLAGS="$ANDROIDCFLAGS -D__ANDROID_API__=$ANDROID_API_LEVEL -isystem $ANDROID_NDK_HOME/sysroot/usr/include"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -isystem $ANDROID_NDK_HOME/sysroot/usr/include/$android_gnu_prefix"
     ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot=$SYSBASE -ffunction-sections -fdata-sections -Qunused-arguments"
-    if test "$ANDROID_APP_ABI" = "armeabi-v7a"; then
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/4.9/libs/$ANDROID_APP_ABI -D_GTHREAD_USE_MUTEX_INIT_FUNC=1"
-    else
     ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++/libs/$ANDROID_APP_ABI"
-    fi
     if test "$ENABLE_LTO" = TRUE; then
         # -flto comes from com_GCC_defs.mk, too, but we need to make sure it gets passed as part of
         # $CC and $CXX when building external libraries
         ANDROIDCFLAGS="$ANDROIDCFLAGS -flto -fuse-linker-plugin -O2"
     fi
 
-    if test "$ANDROID_APP_ABI" = "armeabi-v7a"; then
-    ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/4.9/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/4.9/libs/$ANDROID_APP_ABI/include -std=c++11"
-    else
     ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++/include -I$ANDROID_NDK_HOME/sources/cxx-stl/llvm-libc++abi/include -I$ANDROID_NDK_HOME/sources/android/support/include -std=c++11"
-    fi
 
     if test -z "$CC"; then
         CC="$ANDROID_COMPILER_BIN/clang $ANDROIDCFLAGS"
