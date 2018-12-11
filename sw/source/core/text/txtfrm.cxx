@@ -845,7 +845,7 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         return TextFrameIndex(0);
     }
     OUStringBuffer text(rMerged.mergedText);
-    sal_Int32 nTFIndex(0);
+    sal_Int32 nTFIndex(0); // index used for insertion at the end
     sal_Int32 nInserted(0);
     bool bInserted(false);
     bool bFoundNode(false);
@@ -927,10 +927,16 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         }
         else if (rNode.GetIndex() < it->pNode->GetIndex() || bFoundNode)
         {
-            itInsert = it;
+            if (itInsert == rMerged.extents.end())
+            {
+                itInsert = it;
+            }
             break;
         }
-        nTFIndex += it->nEnd - it->nStart;
+        if (itInsert == rMerged.extents.end())
+        {
+            nTFIndex += it->nEnd - it->nStart;
+        }
     }
 //    assert((bFoundNode || rMerged.extents.empty()) && "text node not found - why is it sending hints to us");
     if (!bInserted)
