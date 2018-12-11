@@ -4466,11 +4466,17 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     }
     mbHideRedlines = bHideRedlines;
     SwDoc & rDoc(*GetFormat()->GetDoc());
-    if (!bHideRedlines // Show->Hide must init hidden number trees
+    // don't do early return if there are no redlines:
+    // Show->Hide must init hidden number trees
+    // Hide->Show may be called after all redlines have been deleted but there
+    //            may still be MergedParas because those aren't deleted yet...
+#if 0
+    if (!bHideRedlines
         && rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
         return;
     }
+#endif
     // Hide->Show: clear MergedPara, create frames
     // Show->Hide: call CheckParaRedlineMerge, delete frames
     // Traverse the document via the nodes-array; traversing via the layout
