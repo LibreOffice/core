@@ -33,6 +33,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
+#include <QtGui/QToolTip>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QtWidgets>
 #include <QtWidgets/QMainWindow>
@@ -408,6 +409,12 @@ void Qt5Widget::focusInEvent(QFocusEvent*) { m_pFrame->CallCallback(SalEvent::Ge
 void Qt5Widget::focusOutEvent(QFocusEvent*)
 {
     m_pFrame->CallCallback(SalEvent::LoseFocus, nullptr);
+}
+
+void Qt5Widget::showTooltip(const OUString& rTooltip)
+{
+    QPoint pt = QCursor::pos();
+    QToolTip::showText(pt, toQString(rTooltip));
 }
 
 Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
