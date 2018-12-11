@@ -896,8 +896,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103982, "tdf103982.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf97417, "section_break_numbering.docx")
 {
     uno::Reference<beans::XPropertySet> xProps(getParagraph(1), uno::UNO_QUERY_THROW);
-    auto prop = xProps->getPropertyValue("NumberingRules");
-
     CPPUNIT_ASSERT_MESSAGE("1st page: first paragraph erroneous numbering",
         !xProps->getPropertyValue("NumberingRules").hasValue());
     // paragraph with numbering and section break was removed by writerfilter
