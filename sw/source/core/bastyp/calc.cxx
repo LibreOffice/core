@@ -1159,6 +1159,10 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             return nErg;
             break;
         }
+        case CALC_RP:
+            // ignore, see tdf#121962
+            SAL_INFO("sw.calc", ")");
+            break;
         case CALC_MEAN:
         {
             SAL_INFO("sw.calc", "mean");
