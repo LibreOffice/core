@@ -148,9 +148,6 @@ namespace CPPU_CURRENT_NAMESPACE
             rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
 #else
             rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
-            // Unfortunately dlsym for weak symbols doesn't work in
-            // Android 4.0 at least, sigh, so we will always take the
-            // else branch below.
 #endif
 
             if (rtti)
