@@ -29,6 +29,7 @@
 #include <unotxdoc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
+#include <comphelper/documentconstants.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -79,10 +80,31 @@ bool DocxExportFilter::exportDocument()
     getMediaDescriptor()[utl::MediaDescriptor::PROP_FILTERNAME()] >>= aFilterName;
     bool bDocm = aFilterName.endsWith("VBA");
 
+    // Get current filter flags
+    uno::Reference<lang::XMultiServiceFactory> xMan = ::comphelper::getProcessServiceFactory();
+    uno::Reference<lang::XMultiServiceFactory> xFilterFact(
+        xMan->createInstance("com.sun.star.document.FilterFactory"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFilters(xFilterFact, uno::UNO_QUERY);
+    bool bTemplate = false;
+    if (xFilters->hasByName(aFilterName))
+    {
+        uno::Sequence<beans::PropertyValue> aFilterProps;
+        xFilters->getByName(aFilterName) >>= aFilterProps;
+        for (const auto & rProperty : aFilterProps)
+        {
+            if (rProperty.Name == "Flags")
+            {
+                sal_Int32 nFlags;
+                rProperty.Value >>= nFlags;
+                bTemplate = bool(static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::TEMPLATE);
+            }
+        }
+    }
+
     // export the document
     // (in a separate block so that it's destructed before the commit)
     {
-        DocxExport aExport( this, pDoc, pCurPam.get(), &aPam, bDocm );
+        DocxExport aExport( this, pDoc, pCurPam.get(), &aPam, bDocm, bTemplate );
         aExport.ExportDocument( true ); // FIXME support exporting selection only
     }
 
