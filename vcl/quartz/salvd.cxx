@@ -273,7 +273,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
         if (!xCGContext)
         {
-            assert(Application::IsBitmapRendering());
+            // assert(Application::IsBitmapRendering());
             mnBitmapDepth = 32;
 
             const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
