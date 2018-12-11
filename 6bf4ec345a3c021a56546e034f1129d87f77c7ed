@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_d34e57c0",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-11T06:00:22Z",
+      "side": 1,
+      "message": "This changes the logic - please compare to original",
+      "range": {
+        "startLine": 1407,
+        "startChar": 4,
+        "endLine": 1410,
+        "endChar": 5
+      },
+      "revId": "6bf4ec345a3c021a56546e034f1129d87f77c7ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
