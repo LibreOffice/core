@@ -3839,9 +3839,13 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
                 {
                     if (!GetExport().m_bBreakBefore)
                         PageBreakBefore(true);
-                    break;
                 }
-                [[fallthrough]];
+                else
+                {
+                    bBefore = true;
+                    nC = msword::PageBreak;
+                }
+                break;
             case SvxBreak::PageAfter:
             case SvxBreak::PageBoth:
                 nC = msword::PageBreak;
@@ -3858,12 +3862,11 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
                 break;
         }
 
-        if ( (( bBefore != GetExport().m_bBreakBefore ) && ( nC == msword::PageBreak)) ||
-             (( bBefore == GetExport().m_bBreakBefore ) && ( nC == msword::ColumnBreak)) )
+        if ( ( bBefore == GetExport().m_bBreakBefore ) && nC )
         {
             // #i76300#
             bool bFollowPageDescWritten = false;
-            if ( bCheckForFollowPageDesc && !bBefore )
+            if ( bCheckForFollowPageDesc )
             {
                 bFollowPageDescWritten =
                     GetExport().OutputFollowPageDesc( GetExport().GetCurItemSet(),
