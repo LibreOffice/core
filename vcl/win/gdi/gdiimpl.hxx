@@ -58,6 +58,8 @@ private:
 
     HBRUSH SearchStockBrush(COLORREF nBrushColor);
     HBRUSH MakeBrush(Color nColor, COLORREF nBrushColor);
+    HBRUSH MakeSolidBrush(Color nColor, COLORREF nBrushColor);
+    HBRUSH MakeDIBPatternBrush(Color nColor);
     void ResetBrush(HBRUSH hNewBrush);
 public:
 

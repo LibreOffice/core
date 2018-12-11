@@ -1488,10 +1488,32 @@ HBRUSH WinSalGraphicsImpl::SearchStockBrush(COLORREF nBrushColor)
 
 HBRUSH WinSalGraphicsImpl::MakeBrush(Color nColor, COLORREF nBrushColor)
 {
+    HBRUSH hNewBrush = MakeSolidBrush(nColor, nBrushColor);
+    if (hNewBrush)
+        return hNewBrush;
+
+    return MakeDIBPatternBrush(nColor);
+}
+
+HBRUSH WinSalGraphicsImpl::MakeSolidBrush(Color nColor, COLORREF nBrushColor)
+{
     const SalData* pSalData = GetSalData();
 
     if (mrParent.isPrinter() || !pSalData->mhDitherDIB)
         return CreateSolidBrush(nBrushColor);
+
+    if (ImplIsSysColorEntry(nColor))
+        return CreateSolidBrush(PALRGB_TO_RGB(nBrushColor));
+
+    if (ImplIsPaletteEntry(nColor.GetRed(), nColor.GetGreen(), nColor.GetBlue()))
+        return CreateSolidBrush(nBrushColor);
+
+    return nullptr;
+}
+
+HBRUSH WinSalGraphicsImpl::MakeDIBPatternBrush(Color nColor)
+{
+    const SalData* pSalData = GetSalData();
 
     if (24 == reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB)->biBitCount)
     {
@@ -1513,12 +1535,6 @@ HBRUSH WinSalGraphicsImpl::MakeBrush(Color nColor, COLORREF nBrushColor)
 
         return CreateDIBPatternBrush(pSalData->mhDitherDIB, DIB_RGB_COLORS);
     }
-
-    if (ImplIsSysColorEntry(nColor))
-        return CreateSolidBrush(PALRGB_TO_RGB(nBrushColor));
-
-    if (ImplIsPaletteEntry(nColor.GetRed(), nColor.GetGreen(), nColor.GetBlue()))
-        return CreateSolidBrush(nBrushColor);
 
     BYTE* pTmp = pSalData->mpDitherDIBData;
     long* pDitherDiff = pSalData->mpDitherDiff;
