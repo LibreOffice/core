@@ -35,11 +35,11 @@
 #include <sfx2/sfxsids.hrc>
 
 
-void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFactory *pFact )
+void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, std::unique_ptr<SfxChildWinFactory> pFact )
 {
     if ( pMod )
     {
-        pMod->RegisterChildWindow( pFact );
+        pMod->RegisterChildWindow( std::move(pFact) );
         return;
     }
 
@@ -54,7 +54,7 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
         }
     }
 
-    pImpl->pFactArr->push_back( pFact );
+    pImpl->pFactArr->push_back( std::move(pFact) );
 }
 
 void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt16 nId,
@@ -103,7 +103,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
                     // DLL-exit
                     pF = new SfxChildWinFactory( pFac->pCtor, pFac->nId,
                             pFac->nPos );
-                    pMod->RegisterChildWindow( pF );
+                    pMod->RegisterChildWindow( std::unique_ptr<SfxChildWinFactory>(pF) );
                 }
                 else
                     pF = pFac;

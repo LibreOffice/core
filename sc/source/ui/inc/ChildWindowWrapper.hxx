@@ -53,10 +53,10 @@ public:
                     SfxModule* pModule  = nullptr,
                     SfxChildWindowFlags nFlags = SfxChildWindowFlags::NONE)
     {
-        SfxChildWinFactory* pFactory = new SfxChildWinFactory(ChildWindowWrapper::CreateImpl, WindowID, CHILDWIN_NOPOS );
+        auto pFactory = o3tl::make_unique<SfxChildWinFactory>(ChildWindowWrapper::CreateImpl, WindowID, CHILDWIN_NOPOS );
         pFactory->aInfo.nFlags |= nFlags;
         pFactory->aInfo.bVisible = bVisible;
-        SfxChildWindow::RegisterChildWindow(pModule, pFactory);
+        SfxChildWindow::RegisterChildWindow(pModule, std::move(pFactory));
     }
 
     virtual SfxChildWinInfo GetInfo() const override
