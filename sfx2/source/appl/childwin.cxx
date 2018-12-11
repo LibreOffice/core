@@ -720,9 +720,9 @@ void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > &
     }
 }
 
-void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, SfxChildWinContextFactory* pFact)
+void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, std::unique_ptr<SfxChildWinContextFactory> pFact)
 {
-    SfxGetpApp()->RegisterChildWindowContext_Impl( pMod, nId, pFact );
+    SfxGetpApp()->RegisterChildWindowContext_Impl( pMod, nId, std::move(pFact) );
 }
 
 void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, SfxChildWinFactory* pFact)

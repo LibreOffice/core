@@ -73,10 +73,10 @@ SfxChildWindowContext* SwNavigationChild::CreateImpl( vcl::Window *pParent,
 }
 void    SwNavigationChild::RegisterChildWindowContext(SfxModule* pMod)
 {
-    SfxChildWinContextFactory *pFact = new SfxChildWinContextFactory(
+    auto pFact = o3tl::make_unique<SfxChildWinContextFactory>(
        SwNavigationChild::CreateImpl,
        /* cast is safe here! */static_cast< sal_uInt16 >(SwView::GetInterfaceId()) );
-    SfxChildWindowContext::RegisterChildWindowContext(pMod, SID_NAVIGATOR, pFact);
+    SfxChildWindowContext::RegisterChildWindowContext(pMod, SID_NAVIGATOR, std::move(pFact));
 }
 
 

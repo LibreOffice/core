@@ -35,9 +35,9 @@ SfxChildWinContextFactory& SfxChildWinContextArr_Impl::operator []( size_t i )
     return *maData[i].get();
 }
 
-void SfxChildWinContextArr_Impl::push_back( SfxChildWinContextFactory* p )
+void SfxChildWinContextArr_Impl::push_back( std::unique_ptr<SfxChildWinContextFactory> p )
 {
-    maData.push_back(std::unique_ptr<SfxChildWinContextFactory>(p));
+    maData.push_back(std::move(p));
 }
 
 size_t SfxChildWinFactArr_Impl::size() const

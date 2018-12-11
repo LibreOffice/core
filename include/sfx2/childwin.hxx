@@ -24,6 +24,7 @@
 
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
+#include <o3tl/make_unique.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -138,7 +139,7 @@ public:
 
     static FloatingWindow* GetFloatingWindow(vcl::Window *pParent);
 
-    static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, SfxChildWinContextFactory*);
+    static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, std::unique_ptr<SfxChildWinContextFactory>);
 };
 
 class SFX2_DLLPUBLIC SfxChildWindow
@@ -234,9 +235,9 @@ public:
         } \
         void    Class::RegisterChildWindowContext(sal_uInt16 nId, SfxModule* pMod)   \
         {   \
-            SfxChildWinContextFactory *pFact = new SfxChildWinContextFactory( \
+            auto pFact = o3tl::make_unique<SfxChildWinContextFactory>( \
                 Class::CreateImpl, nId );   \
-            SfxChildWindowContext::RegisterChildWindowContext(pMod, MyID, pFact); \
+            SfxChildWindowContext::RegisterChildWindowContext(pMod, MyID, std::move(pFact)); \
         }
 
 #define SFX_DECL_CHILDWINDOW(Class) \
