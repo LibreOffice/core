@@ -236,7 +236,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     bool bClipRegion = pTarget->IsClipRegion();
     vcl::Region aOldRegion = pTarget->GetClipRegion();
 
-    tools::PolyPolygon* pPolyPoly = nullptr;
+    std::unique_ptr<tools::PolyPolygon> pPolyPoly;
 
     if ( !pRegion )
     {
@@ -260,7 +260,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     }
     else
     {
-        pPolyPoly = new tools::PolyPolygon;
+        pPolyPoly.reset(new tools::PolyPolygon);
     }
 
     DBG_ASSERT( !pEditEngine->IsIdleFormatterActive(), "DrawSelectionXOR: Not formatted!" );
@@ -339,7 +339,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 Range aLineXPosStartEnd = pEditEngine->GetLineXPosStartEnd(pTmpPortion, &rLine);
                 aTopLeft.setX( aLineXPosStartEnd.Min() );
                 aBottomRight.setX( aLineXPosStartEnd.Max() );
-                ImplDrawHighlightRect( pTarget, aTopLeft, aBottomRight, pPolyPoly );
+                ImplDrawHighlightRect( pTarget, aTopLeft, aBottomRight, pPolyPoly.get() );
             }
             else
             {
@@ -360,7 +360,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     Point aPt1( std::min( nX1, nX2 ), aTopLeft.Y() );
                     Point aPt2( std::max( nX1, nX2 ), aBottomRight.Y() );
 
-                    ImplDrawHighlightRect( pTarget, aPt1, aPt2, pPolyPoly );
+                    ImplDrawHighlightRect( pTarget, aPt1, aPt2, pPolyPoly.get() );
 
                     nTmpStartIndex = nTmpEndIndex;
                 }
@@ -464,7 +464,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             pOutWin->Pop();
         }
 
-        delete pPolyPoly;
+        pPolyPoly.reset();
     }
     else
     {

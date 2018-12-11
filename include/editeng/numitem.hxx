@@ -346,7 +346,7 @@ inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )
     return *this;
 }
 
-SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, sal_uInt16 nLevel, SvxNumRuleType eType );
+std::unique_ptr<SvxNumRule> SvxConvertNumRule( const SvxNumRule* pRule, sal_uInt16 nLevel, SvxNumRuleType eType );
 
 #endif
 

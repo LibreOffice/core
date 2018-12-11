@@ -1706,14 +1706,13 @@ void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
 
 void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
 {
-    EditSelection* pSel = pImpEditEngine->SelectParagraph( nPara );
+    std::unique_ptr<EditSelection> pSel = pImpEditEngine->SelectParagraph( nPara );
     if ( pSel )
     {
         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
         pImpEditEngine->ImpInsertText( *pSel, rTxt );
         pImpEditEngine->UndoActionEnd();
         pImpEditEngine->FormatAndUpdate();
-        delete pSel;
     }
 }
 

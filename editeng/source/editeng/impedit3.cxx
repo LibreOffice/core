@@ -4174,13 +4174,13 @@ EditPaM ImpEditEngine::InsertParagraph( sal_Int32 nPara )
     return ImpInsertParaBreak( aPaM );
 }
 
-EditSelection* ImpEditEngine::SelectParagraph( sal_Int32 nPara )
+std::unique_ptr<EditSelection> ImpEditEngine::SelectParagraph( sal_Int32 nPara )
 {
-    EditSelection* pSel = nullptr;
+    std::unique_ptr<EditSelection> pSel;
     ContentNode* pNode = GetEditDoc().GetObject( nPara );
     SAL_WARN_IF( !pNode, "editeng", "Paragraph does not exist: SelectParagraph" );
     if ( pNode )
-        pSel = new EditSelection( EditPaM( pNode, 0 ), EditPaM( pNode, pNode->Len() ) );
+        pSel.reset(new EditSelection( EditPaM( pNode, 0 ), EditPaM( pNode, pNode->Len() ) ));
 
     return pSel;
 }
