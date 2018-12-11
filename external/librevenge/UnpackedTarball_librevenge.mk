@@ -15,6 +15,10 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,librevenge))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,librevenge,0))
 
+$(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
+    external/librevenge/rpath.patch \
+))
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,librevenge, \
