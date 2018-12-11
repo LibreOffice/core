@@ -722,15 +722,15 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
                 SwFieldType *pType = pMgr->GetFieldType( SwFieldIds::Unknown, i );
                 if( pType->Which() == SwFieldIds::SetExp &&
                     static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
-                    m_pCategoryBox->InsertSwEntry(pType->GetName());
+                    m_pCategoryBox->InsertEntry(pType->GetName());
             }
         }
         else
         {
-            m_pCategoryBox->InsertSwEntry(m_sIllustration);
-            m_pCategoryBox->InsertSwEntry(m_sTable);
-            m_pCategoryBox->InsertSwEntry(m_sText);
-            m_pCategoryBox->InsertSwEntry(m_sDrawing);
+            m_pCategoryBox->InsertEntry(m_sIllustration);
+            m_pCategoryBox->InsertEntry(m_sTable);
+            m_pCategoryBox->InsertEntry(m_sText);
+            m_pCategoryBox->InsertEntry(m_sDrawing);
         }
 
         if(!pOpt->GetCategory().isEmpty())
@@ -750,7 +750,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
                 case TABLE_CAP:         nPos = 2;   break;
                 case FRAME_CAP:         nPos = 3;   break;
             }
-            m_pCategoryBox->SetText(m_pCategoryBox->GetSwEntry(nPos));
+            m_pCategoryBox->SetText(m_pCategoryBox->GetEntry(nPos));
         }
 
         for (sal_Int32 i = 0; i < m_pFormatBox->GetEntryCount(); i++)
@@ -948,43 +948,6 @@ CaptionComboBox::CaptionComboBox(vcl::Window* pParent, WinBits nStyle)
 
 CaptionComboBox::~CaptionComboBox()
 {
-}
-
-sal_Int32 CaptionComboBox::InsertEntry(const OUString& rStr, sal_Int32)
-{
-    InsertSwEntry(rStr);
-    return 0;
-}
-
-void CaptionComboBox::InsertSwEntry(const OUString& rEntry)
-{
-    InsertSorted(rEntry);
-}
-
-void CaptionComboBox::InsertSorted(OUString const& rEntry)
-{
-    ComboBox::InsertEntry(rEntry);
-    sal_Int32 nPos = ComboBox::GetEntryPos(rEntry);
-    m_EntryList.insert(m_EntryList.begin() + nPos, rEntry);
-}
-
-void CaptionComboBox::RemoveEntryAt(sal_Int32 const nPos)
-{
-    if (nPos < 0 || static_cast<size_t>(nPos) >= m_EntryList.size())
-        return;
-
-    // Remove old element
-    ComboBox::RemoveEntryAt(nPos);
-
-    m_EntryList.erase(m_EntryList.begin() + nPos);
-}
-
-const OUString& CaptionComboBox::GetSwEntry(sal_Int32 const nPos) const
-{
-    if (0 <= nPos && static_cast<size_t>(nPos) < m_EntryList.size())
-        return m_EntryList[nPos];
-
-    return aDefault;
 }
 
 // Description: ComboBox without Spaces
