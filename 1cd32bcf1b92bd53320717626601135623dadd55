@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_16697c24",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3844,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-11T19:47:55Z",
+      "side": 0,
+      "message": "earlier this didn\u0027t fallthrough.  The only thing it needs from below is nC, so avoid the unnecessary processing.",
+      "range": {
+        "startLine": 3844,
+        "startChar": 16,
+        "endLine": 3844,
+        "endChar": 31
+      },
+      "revId": "1cd32bcf1b92bd53320717626601135623dadd55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_7682f0ca",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3861,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-11T19:47:55Z",
+      "side": 0,
+      "message": "Setting to !\u003d looked totally wrong, so I reviewed the history. Previously, this was \u003d\u003d as expected, but a horrible patch changed that and it was never reverted. Instead of changing to !\u003d, it should have re-introduced bBefore\u003dtrue, which wouldn\u0027t have broken the PageAfter context, and given the desired behaviour for PageBefore.",
+      "range": {
+        "startLine": 3861,
+        "startChar": 24,
+        "endLine": 3861,
+        "endChar": 26
+      },
+      "revId": "1cd32bcf1b92bd53320717626601135623dadd55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_5687f4d8",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3866,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-11T19:47:55Z",
+      "side": 0,
+      "message": "by definition, CheckForFollowPageDesc is only true in one instance - for PageAfter.\n\nInterestingly, this was here on the original commit, where it also wasn\u0027t needed.",
+      "range": {
+        "startLine": 3866,
+        "startChar": 40,
+        "endLine": 3866,
+        "endChar": 52
+      },
+      "revId": "1cd32bcf1b92bd53320717626601135623dadd55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
