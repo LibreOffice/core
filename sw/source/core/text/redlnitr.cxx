@@ -270,7 +270,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
             {
                 hidden.emplace_back(nLast, pTextNode->Len());
             }
-            sw::RemoveFootnotesForNode(rFrame, *pTextNode, &hidden);
+            sw::RemoveFootnotesForNode(*rFrame.getRootFrame(), *pTextNode, &hidden);
         }
         // unfortunately DelFrames() must be done before StartListening too,
         // otherwise footnotes cannot be deleted by SwTextFootnote::DelFrames!
