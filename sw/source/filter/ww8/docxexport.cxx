@@ -1545,7 +1545,8 @@ void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr const & pFS )
     mpFS = pFS;
 }
 
-DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam, bool bDocm )
+DocxExport::DocxExport(DocxExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrentPam,
+                       SwPaM* pOriginalPam, bool bDocm, bool bTemplate)
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
       m_nHeaders( 0 ),
@@ -1553,7 +1554,8 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_nOLEObjects( 0 ),
       m_nActiveXControls( 0 ),
       m_nHeadersFootersInSection(0),
-      m_bDocm(bDocm)
+      m_bDocm(bDocm),
+      m_bTemplate(bTemplate)
 {
     // Write the document properties
     WriteProperties( );
@@ -1562,10 +1564,32 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     m_pFilter->addRelation( oox::getRelationship(Relationship::OFFICEDOCUMENT),
             "word/document.xml" );
 
-    // DOCM needs a different media type for the document.xml stream.
-    OUString aMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml";
+    // Set media type depending of document type
+    OUString aMediaType;
     if (m_bDocm)
-        aMediaType = "application/vnd.ms-word.document.macroEnabled.main+xml";
+    {
+        if (m_bTemplate)
+        {
+            aMediaType = "application/vnd.ms-word.template.macroEnabledTemplate.main+xml";
+        }
+        else
+        {
+            aMediaType = "application/vnd.ms-word.document.macroEnabled.main+xml";
+        }
+    }
+    else
+    {
+        if (m_bTemplate)
+        {
+            aMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml";
+        }
+        else
+        {
+            aMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml";
+        }
+    }
+
+
     // the actual document
     m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( "word/document.xml", aMediaType );
 
