@@ -5087,6 +5087,8 @@ find_winsdk_version()
                 winsdklibsubdir="10.0.15063.0"
             elif test "$regvalue" = "10.0.17134"; then
                 winsdklibsubdir="$regvalue.0"
+            elif test "$regvalue" = "10.0.17763"; then
+                winsdklibsubdir="$regvalue.0"
             fi
             return
         fi
