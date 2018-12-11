@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_mailmerge, \
     cppuhelper \
     sal \
     sfx \
+    svl \
     sw \
     test \
     tl \

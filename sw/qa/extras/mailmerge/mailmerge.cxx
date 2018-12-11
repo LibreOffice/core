@@ -900,5 +900,33 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118845, "tdf118845.fodt", "4_v01.ods", "Tabe
     CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testTdf62364, "tdf62364.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // prepare unit test and run
+    executeMailMerge();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 19 ), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 10 pages, but each sub-document starts on odd page number
+
+    // check: each page (one page is one sub doc) has 4 paragraphs:
+    // - 1st and 2nd are regular paragraphs
+    // - 3rd and 4th are inside list
+    const bool nodeInList[4] = { false, false, true, true };
+
+    const auto & rNodes = pTextDoc->GetDocShell()->GetDoc()->GetNodes();
+    for (int pageIndex=0; pageIndex<10; pageIndex++)
+    {
+        for (int nodeIndex = 0; nodeIndex<4; nodeIndex++)
+        {
+            const SwNodePtr aNode = rNodes[9 + pageIndex * 4 + nodeIndex];
+            CPPUNIT_ASSERT_EQUAL(true, aNode->IsTextNode());
+
+            const SwTextNode* pTextNode = aNode->GetTextNode();
+            CPPUNIT_ASSERT(pTextNode);
+            CPPUNIT_ASSERT_EQUAL(nodeInList[nodeIndex], pTextNode->GetSwAttrSet().HasItem(RES_PARATR_LIST_ID));
+        }
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
