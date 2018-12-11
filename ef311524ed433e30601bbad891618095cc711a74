@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_b3d19a5a",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-12-11T08:58:21Z",
+      "side": 1,
+      "message": "Similar here: you won\u0027t need to care about css pixels: you just generate a metafile for a Writer page, and insert that metafile to the Draw page. All work can be done in logic sizes (both Draw and Writer UNO API uses mm100 as unit), I expect.",
+      "revId": "ef311524ed433e30601bbad891618095cc711a74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_f3e5d239",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-12-11T08:58:21Z",
+      "side": 1,
+      "message": "You probably won\u0027t need this: you can just work with a list of GDEMetaFile instances, without any serialization to SVG (which was necessary for EPUB).",
+      "revId": "ef311524ed433e30601bbad891618095cc711a74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
