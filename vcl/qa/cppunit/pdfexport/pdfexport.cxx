@@ -90,6 +90,7 @@ public:
     void testTdf105954();
     void testTdf106702();
     void testTdf113143();
+    void testTdf121962();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -120,6 +121,7 @@ public:
     CPPUNIT_TEST(testTdf105954);
     CPPUNIT_TEST(testTdf106702);
     CPPUNIT_TEST(testTdf113143);
+    CPPUNIT_TEST(testTdf121962);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1463,6 +1465,34 @@ void PdfExportTest::testForcePoint71()
 {
     // I just care it doesn't crash
     topdf("forcepoint71.key");
+}
+
+void PdfExportTest::testTdf121962()
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf121962.odt";
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // Get the first page
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
+    FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
+
+    // Make sure the table sum is displayed as "0", not faulty expression.
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
+        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_TEXT)
+            continue;
+        unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
+        std::vector<sal_Unicode> aText(nTextSize);
+        FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+        OUString sText(aText.data(), nTextSize / 2 - 1);
+        CPPUNIT_ASSERT(sText != "** Expression is faulty **");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
