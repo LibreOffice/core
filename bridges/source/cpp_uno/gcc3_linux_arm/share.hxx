@@ -96,11 +96,15 @@ namespace CPPU_CURRENT_NAMESPACE
 
     // -- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
 
+#if !HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION
     extern "C" void *__cxa_allocate_exception(
         std::size_t thrown_size ) throw();
+#endif
+#if !HAVE_CXXABI_H_CXA_THROW
     extern "C" void __cxa_throw (
         void *thrown_exception, std::type_info *tinfo,
         void (*dest) (void *) ) __attribute__((noreturn));
+#endif
 
 }
 
