@@ -27,6 +27,7 @@
 
 namespace com { namespace sun { namespace star { namespace linguistic2 { class XHyphenatedWord; } } } }
 
+namespace sw { namespace mark { class IMark; } }
 class SwCharRange;
 class SwTextNode;
 class SwTextFormatter;
@@ -135,6 +136,8 @@ void AddRemoveFlysAnchoredToFrameStartingAtNode(
 OUString GetExpandTextMerged(SwRootFrame const* pLayout,
         SwTextNode const& rNode, bool bWithNumber,
         bool bWithSpacesForLevel, ExpandMode i_mode);
+
+bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark);
 
 } // namespace sw
 

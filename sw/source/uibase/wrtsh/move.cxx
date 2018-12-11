@@ -580,13 +580,14 @@ bool SwWrtShell::GotoPage(sal_uInt16 nPage, bool bRecord)
     return false;
 }
 
-void SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect )
+bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect )
 {
     ShellMoveCursor aTmp( this, bSelect );
     SwPosition aPos = *GetCursor()->GetPoint();
     bool bRet = SwCursorShell::GotoMark( pMark, true/*bStart*/ );
     if (bRet)
         m_aNavigationMgr.addEntry(aPos);
+    return bRet;
 }
 
 bool SwWrtShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame )
