@@ -2269,7 +2269,7 @@
       <object class="GtkMenuItem" id="MenuSettings-Menubar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|MenubarAction">Menubar</property>
+        <property name="action_name">.uno:Menubar</property>
       </object>
     </child>
     <child>
@@ -2324,11 +2324,31 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Menu">_Check for Updates...</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|MenuAction">_Check for Updates...</property>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="MenuSettings-separator3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuSettings-RunMacro">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RunMacro</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuSettings-ScriptOrganizer">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ScriptOrganizer</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuSettings-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -2898,64 +2918,72 @@
             <property name="can_focus">False</property>
             <property name="margin_left">5</property>
             <property name="margin_right">5</property>
-            <property name="baseline_position">bottom</property>
             <child>
               <object class="sfxlo-DropdownBox" id="ToolsSection">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="margin_right">5</property>
                 <child>
                   <object class="GtkBox" id="Ext2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox" id="Section2">
+                      <object class="sfxlo-NotebookbarToolBox" id="SectionBottom2">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">end</property>
+                        <property name="can_focus">True</property>
+                        <property name="toolbar_style">icons</property>
+                        <property name="show_arrow">False</property>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom2">
+                          <object class="GtkToolButton" id="Tools-SearchDialog">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="toolbar_style">icons</property>
-                            <property name="show_arrow">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="SearchDialog">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="action_name">.uno:SearchDialog</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
+                            <property name="can_focus">False</property>
+                            <property name="action_name">.uno:SearchDialog</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="homogeneous">False</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-ManagedMenuButton" id="menub:MenuSettings">
-                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|menub">_Menu</property>
+                          <object class="GtkToolButton" id="Tools-HelpIndex">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
-                            <property name="receives_default">False</property>
-                            <property name="halign">end</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="action_name">.uno:HelpIndex</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="homogeneous">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="Tools-CloseDoc">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="action_name">.uno:CloseDoc</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="Edit-Undo1">
+                            <property name="can_focus">False</property>
+                            <property name="action_name">.uno:Undo</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="Edit-Redo1">
+                            <property name="can_focus">False</property>
+                            <property name="action_name">.uno:Redo</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">False</property>
                           </packing>
                         </child>
                       </object>
@@ -2970,25 +2998,16 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="thirdExt2">
+                          <object class="svtlo-ManagedMenuButton" id="Tools-Menu:MenuSettings">
+                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|MenuButton">_Menu</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
+                            <property name="receives_default">False</property>
                             <property name="halign">end</property>
                             <property name="hexpand">True</property>
-                            <property name="toolbar_style">icons</property>
-                            <property name="show_arrow">False</property>
-                            <property name="icon_size">1</property>
-                            <child>
-                              <object class="GtkToolButton" id="HelpIndex1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="action_name">.uno:HelpIndex</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
+                            <property name="relief">none</property>
+                            <property name="use_underline">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2996,28 +3015,11 @@
                             <property name="position">0</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="svtlo-ManagedMenuButton" id="toolsb:MenuTools">
-                            <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|toolsb">_Tools</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="focus_on_click">False</property>
-                            <property name="receives_default">False</property>
-                            <property name="halign">end</property>
-                            <property name="relief">none</property>
-                            <property name="use_underline">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -3030,7 +3032,7 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="pack_type">end</property>
                 <property name="position">0</property>
               </packing>
@@ -3040,13 +3042,11 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_left">5</property>
-                <property name="baseline_position">bottom</property>
                 <child>
                   <object class="GtkBox" id="Section">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="baseline_position">top</property>
                     <child>
                       <object class="sfxlo-NotebookbarToolBox" id="SectionBottom">
                         <property name="visible">True</property>
@@ -3061,7 +3061,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="homogeneous">False</property>
                           </packing>
                         </child>
                         <child>
@@ -3072,7 +3072,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="homogeneous">False</property>
                           </packing>
                         </child>
                         <child>
@@ -3083,7 +3083,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="homogeneous">False</property>
                           </packing>
                         </child>
                       </object>
@@ -3104,8 +3104,6 @@
                             <property name="can_focus">True</property>
                             <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                           </object>
@@ -3141,6 +3139,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">5</property>
                 <property name="orientation">vertical</property>
               </object>
               <packing>
@@ -3155,11 +3155,12 @@
               <object class="sfxlo-DropdownBox" id="ClipboardSection">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="baseline_position">bottom</property>
                 <child>
                   <object class="GtkSeparator" id="separator1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
                     <property name="orientation">vertical</property>
                   </object>
                   <packing>
@@ -3188,7 +3189,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="homogeneous">False</property>
                           </packing>
                         </child>
                         <child>
@@ -3199,7 +3200,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="homogeneous">False</property>
                           </packing>
                         </child>
                         <child>
@@ -3210,7 +3211,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="homogeneous">False</property>
                           </packing>
                         </child>
                       </object>
@@ -3231,8 +3232,6 @@
                             <property name="can_focus">True</property>
                             <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                           </object>
@@ -3240,44 +3239,6 @@
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="ExtBottom10">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="halign">end</property>
-                            <property name="hexpand">True</property>
-                            <property name="toolbar_style">icons</property>
-                            <property name="show_arrow">False</property>
-                            <property name="icon_size">1</property>
-                            <child>
-                              <object class="GtkToolButton" id="Cut">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="action_name">.uno:Cut</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToolButton" id="Copy">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="action_name">.uno:Copy</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
@@ -3313,11 +3274,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-Styles">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -3357,7 +3319,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3368,7 +3330,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -3426,11 +3388,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-Font">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -3465,7 +3428,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -3490,7 +3453,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3546,7 +3509,6 @@
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Default-Bold">
                                         <property name="visible">True</property>
@@ -3555,7 +3517,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3566,7 +3528,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3577,7 +3539,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3601,7 +3563,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -3636,11 +3598,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-Paragraph">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -3673,7 +3636,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3684,7 +3647,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3695,7 +3658,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3706,7 +3669,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -3721,6 +3684,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
                                     <property name="hexpand">True</property>
                                     <property name="orientation">vertical</property>
                                   </object>
@@ -3747,7 +3712,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3758,7 +3723,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3769,7 +3734,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -3814,7 +3779,6 @@
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Default-ToggleMergeCells">
                                         <property name="visible">True</property>
@@ -3823,7 +3787,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3834,7 +3798,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -3845,7 +3809,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -3870,7 +3834,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-6"/>
+                          <class name="priority-7"/>
                         </style>
                       </object>
                       <packing>
@@ -3883,11 +3847,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-Cell">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator21">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -3916,7 +3881,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3927,7 +3892,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3938,7 +3903,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -3952,7 +3917,6 @@
                               <object class="sfxlo-NotebookbarToolBox" id="ExtTop14">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="opacity">0.92156862745098034</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -3963,7 +3927,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3974,7 +3938,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3985,7 +3949,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4003,7 +3967,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-5"/>
+                          <class name="priority-6"/>
                         </style>
                       </object>
                       <packing>
@@ -4016,11 +3980,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-Number">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator151">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -4076,7 +4041,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -4087,7 +4052,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -4139,7 +4104,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-7"/>
+                          <class name="priority-5"/>
                         </style>
                       </object>
                       <packing>
@@ -4152,11 +4117,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-Data">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator141">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -4185,7 +4151,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4196,7 +4162,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4207,7 +4173,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4252,7 +4218,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-3"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>
@@ -4265,11 +4231,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-Insert">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator18">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -4298,7 +4265,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4309,7 +4276,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4320,7 +4287,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4341,8 +4308,6 @@
                                     <property name="can_focus">True</property>
                                     <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
-                                    <property name="valign">center</property>
-                                    <property name="vexpand">True</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
                                   </object>
@@ -4367,7 +4332,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-4"/>
+                          <class name="priority-3"/>
                         </style>
                       </object>
                       <packing>
@@ -4380,11 +4345,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-Review">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator27">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -4413,7 +4379,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4424,7 +4390,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4456,8 +4422,6 @@
                                     <property name="can_focus">True</property>
                                     <property name="focus_on_click">False</property>
                                     <property name="receives_default">False</property>
-                                    <property name="valign">center</property>
-                                    <property name="vexpand">True</property>
                                     <property name="relief">none</property>
                                     <property name="use_underline">True</property>
                                   </object>
@@ -4495,11 +4459,12 @@
                       <object class="sfxlo-OptionalBox" id="Default-Section-View">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator24">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -4528,7 +4493,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4539,7 +4504,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4550,7 +4515,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4618,9 +4583,6 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
                   <object class="sfxlo-PriorityMergedHBox" id="DrawTextContainer">
                     <property name="can_focus">False</property>
                     <child>
@@ -4631,6 +4593,8 @@
                           <object class="GtkSeparator" id="separator109">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -4670,7 +4634,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4681,7 +4645,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4726,7 +4690,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-8"/>
+                          <class name="priority-3"/>
                         </style>
                       </object>
                       <packing>
@@ -4739,11 +4703,12 @@
                       <object class="sfxlo-OptionalBox" id="DrawText-Section-Font1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator110">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -4778,7 +4743,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -4802,7 +4767,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -4813,7 +4778,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -4858,7 +4823,6 @@
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="DrawText-Bold1">
                                         <property name="visible">True</property>
@@ -4867,7 +4831,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -4878,7 +4842,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -4889,7 +4853,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -4900,7 +4864,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -4950,6 +4914,8 @@
                           <object class="GtkSeparator" id="separator139">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -4982,7 +4948,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -4993,7 +4959,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5004,7 +4970,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5015,7 +4981,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5029,6 +4995,8 @@
                                   <object class="GtkSeparator" id="separator150">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
                                     <property name="orientation">vertical</property>
                                   </object>
                                   <packing>
@@ -5052,7 +5020,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5063,7 +5031,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5074,7 +5042,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5119,7 +5087,6 @@
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="ParaspaceDecrease">
                                         <property name="visible">True</property>
@@ -5128,7 +5095,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5139,7 +5106,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5192,6 +5159,8 @@
                           <object class="GtkSeparator" id="separator145">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -5220,7 +5189,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -5231,7 +5200,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -5242,7 +5211,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -5303,7 +5272,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -5317,6 +5286,8 @@
                           <object class="GtkSeparator" id="separator34">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -5349,7 +5320,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5360,7 +5331,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5371,7 +5342,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5467,7 +5438,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -5491,7 +5462,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -5520,7 +5491,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first2">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -5546,7 +5517,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first3">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="toolbar_style">both-horiz</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -5557,7 +5528,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5589,7 +5560,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -5625,7 +5596,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -5649,7 +5620,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -5667,7 +5638,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-6"/>
+                          <class name="priority-5"/>
                         </style>
                       </object>
                       <packing>
@@ -5680,11 +5651,12 @@
                       <object class="sfxlo-OptionalBox" id="Draw-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator25">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -5717,7 +5689,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5728,7 +5700,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5739,7 +5711,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5750,7 +5722,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5764,6 +5736,8 @@
                                   <object class="GtkSeparator" id="separator29">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
                                     <property name="orientation">vertical</property>
                                   </object>
                                   <packing>
@@ -5776,7 +5750,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="Align2">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -5787,7 +5761,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5798,7 +5772,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5809,7 +5783,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5849,12 +5823,11 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="Align3">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Draw-AlignUp">
                                         <property name="visible">True</property>
@@ -5863,7 +5836,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5874,7 +5847,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5885,7 +5858,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -5910,7 +5883,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-5"/>
+                          <class name="priority-4"/>
                         </style>
                       </object>
                       <packing>
@@ -5923,11 +5896,12 @@
                       <object class="sfxlo-OptionalBox" id="Draw-Section-Draw">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator31">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -5960,7 +5934,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5971,7 +5945,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5982,7 +5956,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -6023,7 +5997,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6034,7 +6008,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6045,7 +6019,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -6089,7 +6063,6 @@
                                     <property name="halign">end</property>
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Draw-StarShapes">
                                         <property name="visible">True</property>
@@ -6098,7 +6071,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6109,7 +6082,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6120,7 +6093,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -6145,7 +6118,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-4"/>
+                          <class name="priority-3"/>
                         </style>
                       </object>
                       <packing>
@@ -6162,6 +6135,8 @@
                           <object class="GtkSeparator" id="separator92">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -6179,7 +6154,7 @@
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="SectionBottom25">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="valign">end</property>
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
@@ -6191,7 +6166,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -6202,7 +6177,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -6213,7 +6188,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -6275,6 +6250,8 @@
                           <object class="GtkSeparator" id="separator93">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -6296,7 +6273,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="SectionBottom46">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="valign">end</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
@@ -6319,7 +6296,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6330,7 +6307,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6341,7 +6318,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6352,7 +6329,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -6392,12 +6369,11 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="third4">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Draw-ExtrusionDepthFloater">
                                         <property name="visible">True</property>
@@ -6406,7 +6382,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6417,7 +6393,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -6460,7 +6436,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -6470,11 +6446,12 @@
                       <object class="sfxlo-OptionalBox" id="Image-Section-Image">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator14">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -6504,7 +6481,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -6515,7 +6492,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -6615,7 +6592,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -6639,7 +6616,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -6668,7 +6645,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first41">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -6694,7 +6671,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first1">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="toolbar_style">both-horiz</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -6705,7 +6682,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -6737,7 +6714,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -6773,7 +6750,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -6797,7 +6774,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -6828,11 +6805,12 @@
                       <object class="sfxlo-OptionalBox" id="Image-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator17">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -6865,7 +6843,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6876,7 +6854,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6887,7 +6865,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6898,7 +6876,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -6912,6 +6890,8 @@
                                   <object class="GtkSeparator" id="separator144">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
                                     <property name="orientation">vertical</property>
                                   </object>
                                   <packing>
@@ -6924,7 +6904,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="Align5">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -6935,7 +6915,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6946,7 +6926,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -6957,7 +6937,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -6997,12 +6977,11 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="Align1">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Image-Section-AlignUp">
                                         <property name="visible">True</property>
@@ -7011,7 +6990,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -7022,7 +7001,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -7033,7 +7012,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -7058,7 +7037,7 @@
                           </packing>
                         </child>
                         <style>
-                          <class name="priority-6"/>
+                          <class name="priority-5"/>
                         </style>
                       </object>
                       <packing>
@@ -7071,11 +7050,12 @@
                       <object class="sfxlo-OptionalBox" id="Image-Section-Color">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -7104,7 +7084,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7171,7 +7151,7 @@
                             <child>
                               <object class="sfxlo-SidebarToolBox" id="colorbox3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -7197,10 +7177,9 @@
                             <child>
                               <object class="sfxlo-SidebarToolBox" id="colorbox4">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
-                                <property name="icon_size">1</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="Image-GrafTransparence">
                                     <property name="width_request">130</property>
@@ -7252,7 +7231,7 @@
                             <child>
                               <object class="sfxlo-SidebarToolBox" id="colorbox5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
@@ -7278,10 +7257,9 @@
                             <child>
                               <object class="sfxlo-SidebarToolBox" id="colorbox6">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
-                                <property name="icon_size">1</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="Image-GrafGamma">
                                     <property name="width_request">130</property>
@@ -7323,11 +7301,12 @@
                       <object class="sfxlo-OptionalBox" id="Image-Section-Grid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator81">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -7357,7 +7336,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -7368,7 +7347,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -7379,7 +7358,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7440,7 +7419,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -7450,11 +7429,12 @@
                       <object class="sfxlo-OptionalBox" id="Object-Section-Graphic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator28">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -7484,7 +7464,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -7495,7 +7475,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -7506,7 +7486,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7595,7 +7575,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7619,7 +7599,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7648,7 +7628,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first6">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -7674,7 +7654,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first7">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="toolbar_style">both-horiz</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -7685,7 +7665,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -7717,7 +7697,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7753,7 +7733,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7777,7 +7757,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7808,11 +7788,12 @@
                       <object class="sfxlo-OptionalBox" id="Object-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator82">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -7845,7 +7826,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -7856,7 +7837,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -7867,7 +7848,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -7878,7 +7859,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -7892,6 +7873,8 @@
                                   <object class="GtkSeparator" id="separator83">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
                                     <property name="orientation">vertical</property>
                                   </object>
                                   <packing>
@@ -7904,7 +7887,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="Align4">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -7915,7 +7898,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -7926,7 +7909,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -7937,7 +7920,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -7977,12 +7960,11 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="Align6">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Object-AlignUp">
                                         <property name="visible">True</property>
@@ -7991,7 +7973,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8002,7 +7984,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8013,7 +7995,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -8051,11 +8033,12 @@
                       <object class="sfxlo-OptionalBox" id="Object-Section-Grid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator84">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -8085,7 +8068,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -8096,7 +8079,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -8107,7 +8090,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -8169,7 +8152,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -8179,11 +8162,12 @@
                       <object class="sfxlo-OptionalBox" id="Media-Section-Graphic">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator69">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -8213,7 +8197,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -8224,7 +8208,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -8235,7 +8219,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -8327,7 +8311,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -8355,7 +8339,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8366,7 +8350,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8377,7 +8361,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8388,7 +8372,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -8402,6 +8386,8 @@
                                   <object class="GtkSeparator" id="separator70">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
                                     <property name="orientation">vertical</property>
                                   </object>
                                   <packing>
@@ -8414,7 +8400,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="Align9">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -8425,7 +8411,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8436,7 +8422,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8447,7 +8433,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -8461,6 +8447,8 @@
                                   <object class="GtkSeparator" id="separator74">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
                                     <property name="orientation">vertical</property>
                                   </object>
                                   <packing>
@@ -8473,10 +8461,9 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="Align10">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Media-Section-AlignUp">
                                         <property name="visible">True</property>
@@ -8485,7 +8472,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8496,7 +8483,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8507,7 +8494,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -8545,11 +8532,12 @@
                       <object class="sfxlo-OptionalBox" id="Media-Section-Grid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator75">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -8579,7 +8567,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -8590,7 +8578,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -8601,7 +8589,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -8662,7 +8650,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
@@ -8676,6 +8664,8 @@
                           <object class="GtkSeparator" id="separator76">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -8708,7 +8698,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8719,7 +8709,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -8730,7 +8720,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -8826,7 +8816,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -8850,7 +8840,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -8879,7 +8869,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first9">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -8905,7 +8895,7 @@
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="first10">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                     <property name="toolbar_style">both-horiz</property>
                                     <property name="show_arrow">False</property>
                                     <child>
@@ -8916,7 +8906,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -8948,7 +8938,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -8984,7 +8974,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9008,7 +8998,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9039,11 +9029,12 @@
                       <object class="sfxlo-OptionalBox" id="Multi-Section-Arrange">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator94">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -9076,7 +9067,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9087,7 +9078,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9098,7 +9089,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9109,7 +9100,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -9123,6 +9114,8 @@
                                   <object class="GtkSeparator" id="separator95">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="margin_top">5</property>
+                                    <property name="margin_bottom">5</property>
                                     <property name="orientation">vertical</property>
                                   </object>
                                   <packing>
@@ -9146,7 +9139,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9157,7 +9150,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9168,7 +9161,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -9213,7 +9206,6 @@
                                     <property name="hexpand">True</property>
                                     <property name="toolbar_style">icons</property>
                                     <property name="show_arrow">False</property>
-                                    <property name="icon_size">1</property>
                                     <child>
                                       <object class="GtkToolButton" id="Multi-AlignUp">
                                         <property name="visible">True</property>
@@ -9222,7 +9214,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9233,7 +9225,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9244,7 +9236,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -9286,6 +9278,8 @@
                           <object class="GtkSeparator" id="separator100">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -9315,7 +9309,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -9326,7 +9320,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -9337,7 +9331,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9395,11 +9389,12 @@
                       <object class="sfxlo-OptionalBox" id="Multi-Section-Grid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator96">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -9429,7 +9424,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -9440,7 +9435,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -9451,7 +9446,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9512,7 +9507,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">7</property>
+                    <property name="position">6</property>
                   </packing>
                 </child>
                 <child>
@@ -9522,11 +9517,12 @@
                       <object class="sfxlo-OptionalBox" id="Print-Section-SlideLayout">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator111">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -9556,7 +9552,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9581,7 +9577,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9602,8 +9598,6 @@
                           <object class="GtkBox" id="box43">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="first25">
@@ -9620,7 +9614,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9645,7 +9639,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9695,8 +9689,6 @@
                           <object class="GtkBox" id="box27">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="first29">
@@ -9713,7 +9705,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -9724,7 +9716,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -9735,7 +9727,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -9746,7 +9738,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="homogeneous">False</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9760,8 +9752,6 @@
                               <object class="GtkBox" id="box41">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign">center</property>
-                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="second13">
                                     <property name="visible">True</property>
@@ -9777,7 +9767,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -9802,7 +9792,7 @@
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="homogeneous">True</property>
+                                        <property name="homogeneous">False</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -9841,11 +9831,12 @@
                       <object class="sfxlo-OptionalBox" id="Print-Section-Print">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="baseline_position">bottom</property>
                         <child>
                           <object class="GtkSeparator" id="separator117">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
@@ -9861,32 +9852,57 @@
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="SectionBottom49">
+                              <object class="GtkBox" id="box55">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="valign">end</property>
-                                <property name="toolbar_style">both-horiz</property>
-                                <property name="show_arrow">False</property>
+                                <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Print-Print">
+                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom49">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:Print</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="valign">end</property>
+                                    <property name="toolbar_style">both-horiz</property>
+                                    <property name="show_arrow">False</property>
+                                    <child>
+                                      <object class="GtkToolButton" id="Print-Print">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:Print</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">False</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Print-ClosePreview">
+                                  <object class="sfxlo-NotebookbarToolBox" id="SectionBottom24">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:ClosePreview</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="valign">end</property>
+                                    <property name="toolbar_style">both-horiz</property>
+                                    <property name="show_arrow">False</property>
+                                    <child>
+                                      <object class="GtkToolButton" id="Print-ClosePreview">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="action_name">.uno:ClosePreview</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                        <property name="homogeneous">False</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9944,11 +9960,8 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">8</property>
+                    <property name="position">7</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
               <packing>
