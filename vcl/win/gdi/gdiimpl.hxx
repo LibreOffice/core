@@ -56,6 +56,8 @@ private:
     HPEN MakePen(Color nColor, COLORREF nPenColor);
     void ResetPen(HPEN hNewPen);
 
+    HBRUSH SearchStockBrush(COLORREF nBrushColor);
+    HBRUSH MakeBrush(Color nColor, COLORREF nBrushColor);
     void ResetBrush(HBRUSH hNewBrush);
 public:
 
