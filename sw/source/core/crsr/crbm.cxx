@@ -19,6 +19,8 @@
 
 #include <crsrsh.hxx>
 #include <ndtxt.hxx>
+#include <rootfrm.hxx>
+#include <txtfrm.hxx>
 #include <docary.hxx>
 #include <IMark.hxx>
 #include "callnk.hxx"
@@ -121,10 +123,53 @@ namespace
     EndAction();
     return pMark;
 }
-// set CurrentCursor.SPoint
 
+namespace sw {
+
+bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
+{
+    if (!rLayout.IsHideRedlines())
+    {
+        return false;
+    }
+    SwTextNode const& rNode(*rMark.GetMarkPos().nNode.GetNode().GetTextNode());
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+        rNode.getLayoutFrame(&rLayout)));
+    if (!pFrame)
+    {
+        return true;
+    }
+    if (rMark.IsExpanded())
+    {
+        SwTextFrame const*const pOtherFrame(static_cast<SwTextFrame const*>(
+            rMark.GetOtherMarkPos().nNode.GetNode().GetTextNode()->getLayoutFrame(&rLayout)));
+        return pFrame == pOtherFrame
+            && pFrame->MapModelToViewPos(rMark.GetMarkPos())
+                == pFrame->MapModelToViewPos(rMark.GetOtherMarkPos());
+    }
+    else
+    {
+        if (rMark.GetMarkPos().nContent.GetIndex() == rNode.Len())
+        {   // at end of node: never deleted (except if node deleted)
+            return rNode.GetRedlineMergeFlag() == SwNode::Merge::Hidden;
+        }
+        else
+        {   // check character following mark pos
+            return pFrame->MapModelToViewPos(rMark.GetMarkPos())
+                == pFrame->MapModelToView(&rNode, rMark.GetMarkPos().nContent.GetIndex() + 1);
+        }
+    }
+}
+
+} // namespace sw
+
+// set CurrentCursor.SPoint
 bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
 {
+    if (sw::IsMarkHidden(*GetLayout(), *pMark))
+    {
+        return false;
+    }
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
     if ( bAtStart )
@@ -140,6 +185,10 @@ bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart
 
 bool SwCursorShell::GotoMark(const ::sw::mark::IMark* const pMark)
 {
+    if (sw::IsMarkHidden(*GetLayout(), *pMark))
+    {
+        return false;
+    }
     // watch Cursor-Moves
     CursorStateHelper aCursorSt(*this);
     aCursorSt.SetCursorToMark(pMark);
@@ -169,6 +218,10 @@ bool SwCursorShell::GoNextBookmark()
     IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
     for(; ppMark!=vCandidates.end(); ++ppMark)
     {
+        if (sw::IsMarkHidden(*GetLayout(), **ppMark))
+        {
+            continue;
+        }
         aCursorSt.SetCursorToMark(ppMark->get());
         if(!aCursorSt.RollbackIfIllegal())
             break; // found legal move
@@ -214,6 +267,10 @@ bool SwCursorShell::GoPrevBookmark()
         // above)
         if(!(**ppMark).EndsBefore(*GetCursor()->GetPoint()))
             continue;
+        if (sw::IsMarkHidden(*GetLayout(), **ppMark))
+        {
+            continue;
+        }
         aCursorSt.SetCursorToMark(ppMark->get());
         if(!aCursorSt.RollbackIfIllegal())
             break; // found legal move

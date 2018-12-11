@@ -2101,7 +2101,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 const OUString& sBkName = pBkmk->GetName();
 
                 //jump to it
-                JumpToSwMark( &mrSh, sBkName );
+                if (! JumpToSwMark( &mrSh, sBkName ))
+                {
+                    continue;
+                }
 
                 // Destination Rectangle
                 const SwRect& rDestRect = mrSh.GetCharRect();
