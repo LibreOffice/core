@@ -5017,6 +5017,18 @@
                                         <property name="toolbar_style">icons</property>
                                         <property name="show_arrow">False</property>
                                         <child>
+                                          <object class="GtkToolButton" id="DataFilterAutoFilter">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="has_tooltip">True</property>
+                                            <property name="action_name">.uno:DataFilterAutoFilter</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
                                           <object class="GtkToolButton" id="DataFilterStandardFilter">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
@@ -5041,10 +5053,10 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkToolButton" id="FunctionBox">
+                                          <object class="GtkToolButton" id="DataSort">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="action_name">.uno:FunctionBox</property>
+                                            <property name="action_name">.uno:DataSort</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -6449,9 +6461,6 @@
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <object class="sfxlo-PriorityMergedHBox" id="AnnotationBox">
