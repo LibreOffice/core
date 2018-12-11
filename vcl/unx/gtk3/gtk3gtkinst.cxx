@@ -4892,14 +4892,14 @@ private:
         return bRet;
     }
 
-    static void signalToggled(GtkCellRendererToggle* pCell, const gchar *path, gpointer widget)
+    static void signalCellToggled(GtkCellRendererToggle* pCell, const gchar *path, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
         void* pData = g_object_get_data(G_OBJECT(pCell), "g-lo-CellIndex");
-        pThis->signal_toggled(path, reinterpret_cast<sal_IntPtr>(pData));
+        pThis->signal_cell_toggled(path, reinterpret_cast<sal_IntPtr>(pData));
     }
 
-    void signal_toggled(const gchar *path, int nCol)
+    void signal_cell_toggled(const gchar *path, int nCol)
     {
         GtkTreePath *tree_path = gtk_tree_path_new_from_string(path);
 
@@ -4912,11 +4912,8 @@ private:
         bRet = !bRet;
         gtk_tree_store_set(m_pTreeStore, &iter, nCol, bRet, -1);
 
-        if (std::find(m_aRadioIndexes.begin(), m_aRadioIndexes.end(), nCol) != m_aRadioIndexes.end())
-        {
-            int nRow = gtk_tree_path_get_indices(tree_path)[0];
-            signal_radio_toggled(std::make_pair(nRow, nCol));
-        }
+        int nRow = gtk_tree_path_get_indices(tree_path)[0];
+        signal_toggled(std::make_pair(nRow, nCol));
 
         gtk_tree_path_free(tree_path);
     }
@@ -4951,7 +4948,7 @@ public:
                     if (m_nToggleCol == -1)
                         m_nToggleCol = nIndex;
                     g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
-                    g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalToggled), this);
+                    g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalCellToggled), this);
                 }
                 else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
                 {
@@ -6342,7 +6339,32 @@ private:
     gulong m_nChangedSignalId;
     gulong m_nPopupShownSignalId;
     gulong m_nKeyPressEventSignalId;
+    gulong m_nEntryInsertTextSignalId;
     gulong m_nEntryActivateSignalId;
+
+    static void signalEntryInsertText(GtkEntry* pEntry, const gchar* pNewText, gint nNewTextLength,
+                                      gint* position, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_entry_insert_text(pEntry, pNewText, nNewTextLength, position);
+    }
+
+    void signal_entry_insert_text(GtkEntry* pEntry, const gchar* pNewText, gint nNewTextLength, gint* position)
+    {
+        if (!m_aEntryInsertTextHdl.IsSet())
+            return;
+        OUString sText(pNewText, nNewTextLength, RTL_TEXTENCODING_UTF8);
+        const bool bContinue = m_aEntryInsertTextHdl.Call(sText);
+        if (bContinue && !sText.isEmpty())
+        {
+            OString sFinalText(OUStringToOString(sText, RTL_TEXTENCODING_UTF8));
+            g_signal_handlers_block_by_func(pEntry, gpointer(signalEntryInsertText), this);
+            gtk_editable_insert_text(GTK_EDITABLE(pEntry), sFinalText.getStr(), sFinalText.getLength(), position);
+            g_signal_handlers_unblock_by_func(pEntry, gpointer(signalEntryInsertText), this);
+        }
+        g_signal_stop_emission_by_name(pEntry, "insert-text");
+    }
 
     static void signalChanged(GtkComboBox*, gpointer widget)
     {
@@ -6645,11 +6667,13 @@ public:
         if (GtkEntry* pEntry = get_entry())
         {
             setup_completion(pEntry);
+            m_nEntryInsertTextSignalId = g_signal_connect(pEntry, "insert-text", G_CALLBACK(signalEntryInsertText), this);
             m_nEntryActivateSignalId = g_signal_connect(pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
             m_nKeyPressEventSignalId = 0;
         }
         else
         {
+            m_nEntryInsertTextSignalId = 0;
             m_nEntryActivateSignalId = 0;
             m_nKeyPressEventSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
         }
@@ -6902,7 +6926,10 @@ public:
     virtual void disable_notify_events() override
     {
         if (GtkEntry* pEntry = get_entry())
+        {
+            g_signal_handler_block(pEntry, m_nEntryInsertTextSignalId);
             g_signal_handler_block(pEntry, m_nEntryActivateSignalId);
+        }
         else
             g_signal_handler_block(m_pComboBox, m_nKeyPressEventSignalId);
         g_signal_handler_block(m_pComboBox, m_nChangedSignalId);
@@ -6916,7 +6943,10 @@ public:
         g_signal_handler_unblock(m_pComboBox, m_nPopupShownSignalId);
         g_signal_handler_unblock(m_pComboBox, m_nChangedSignalId);
         if (GtkEntry* pEntry = get_entry())
+        {
             g_signal_handler_unblock(pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_unblock(pEntry, m_nEntryInsertTextSignalId);
+        }
         else
             g_signal_handler_unblock(m_pComboBox, m_nKeyPressEventSignalId);
     }
@@ -6959,7 +6989,10 @@ public:
     virtual ~GtkInstanceComboBox() override
     {
         if (GtkEntry* pEntry = get_entry())
+        {
+            g_signal_handler_disconnect(pEntry, m_nEntryInsertTextSignalId);
             g_signal_handler_disconnect(pEntry, m_nEntryActivateSignalId);
+        }
         else
             g_signal_handler_disconnect(m_pComboBox, m_nKeyPressEventSignalId);
         g_signal_handler_disconnect(m_pComboBox, m_nChangedSignalId);
