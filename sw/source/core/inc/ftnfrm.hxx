@@ -23,7 +23,7 @@
 #include "layfrm.hxx"
 
 class SwContentFrame;
-class SwTextFrame;
+class SwRootFrame;
 class SwTextNode;
 class SwTextFootnote;
 class SwBorderAttrs;
@@ -34,7 +34,7 @@ void sw_RemoveFootnotes( SwFootnoteBossFrame* pBoss, bool bPageOnly, bool bEndNo
 namespace sw {
 
 void RemoveFootnotesForNode(
-        SwTextFrame const& rTextFrame, SwTextNode const& rTextNode,
+        SwRootFrame const& rLayout, SwTextNode const& rTextNode,
         std::vector<std::pair<sal_Int32, sal_Int32>> const*const pExtents);
 
 }

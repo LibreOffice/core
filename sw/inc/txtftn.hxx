@@ -27,7 +27,7 @@ class SwNodeIndex;
 class SwTextNode;
 class SwNodes;
 class SwDoc;
-class SwFrame;
+class SwRootFrame;
 
 class SW_DLLPUBLIC SwTextFootnote : public SwTextAttr
 {
@@ -52,7 +52,7 @@ public:
     void MakeNewTextSection( SwNodes& rNodes );
 
     // Delete the FootnoteFrame from page.
-    void DelFrames( const SwFrame* );
+    void DelFrames(const SwRootFrame *);
 
     // Check conditional paragraph styles.
     void CheckCondColl();

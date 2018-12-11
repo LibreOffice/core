@@ -446,14 +446,13 @@ void SwTextFootnote::MakeNewTextSection( SwNodes& rNodes )
     m_pStartNode.reset(new SwNodeIndex(*pSttNd));
 }
 
-void SwTextFootnote::DelFrames( const SwFrame* pSib )
+void SwTextFootnote::DelFrames(SwRootFrame const*const pRoot)
 {
     // delete the FootnoteFrames from the pages
     OSL_ENSURE( m_pTextNode, "SwTextFootnote: where is my TextNode?" );
     if ( !m_pTextNode )
         return;
 
-    const SwRootFrame* pRoot = pSib ? pSib->getRootFrame() : nullptr;
     bool bFrameFnd = false;
     {
         SwIterator<SwContentFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*m_pTextNode);

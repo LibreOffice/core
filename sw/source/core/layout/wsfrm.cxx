@@ -4267,6 +4267,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 }
             }
             // this messes with pRegisteredIn so do it outside SwIterator
+            auto eMode(sw::FrameMode::Existing);
             for (SwTextFrame * pFrame : frames)
             {
                 if (rLayout.IsHideRedlines())
@@ -4277,7 +4278,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                     {
                         {
                             auto pMerged(CheckParaRedlineMerge(*pFrame,
-                                    rTextNode, sw::FrameMode::Existing));
+                                    rTextNode, eMode));
                             pFrame->SetMergedPara(std::move(pMerged));
                         }
                         auto const pMerged(pFrame->GetMergedPara());
@@ -4296,6 +4297,8 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                             }
                         }
                         sw::AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, rTextNode, pSkipped);
+                        // only *first* frame of node gets Existing because it
+                        eMode = sw::FrameMode::New; // is not idempotent!
                     }
                 }
                 else
@@ -4335,7 +4338,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                                 }
                                 else if (pNode->IsTextNode())
                                 {
-                                    sw::RemoveFootnotesForNode(*pFrame, *pNode->GetTextNode(), nullptr);
+                                    sw::RemoveFootnotesForNode(rLayout, *pNode->GetTextNode(), nullptr);
                                     // similarly, remove the anchored flys
                                     if (auto const pFlys = pNode->GetAnchoredFlys())
                                     {

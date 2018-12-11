@@ -743,7 +743,7 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
 namespace sw {
 
 void RemoveFootnotesForNode(
-        SwTextFrame const& rTextFrame, SwTextNode const& rTextNode,
+        SwRootFrame const& rLayout, SwTextNode const& rTextNode,
         std::vector<std::pair<sal_Int32, sal_Int32>> const*const pExtents)
 {
     if (pExtents && pExtents->empty())
@@ -782,7 +782,7 @@ void RemoveFootnotesForNode(
                 continue;
             }
         }
-        pTextFootnote->DelFrames( &rTextFrame );
+        pTextFootnote->DelFrames(&rLayout);
     }
 }
 
@@ -807,7 +807,7 @@ void SwTextFrame::DestroyImpl()
                     // sw_redlinehide: not sure if it's necessary to check
                     // if the nodes are still alive here, which would require
                     // accessing WriterMultiListener::m_vDepends
-                    sw::RemoveFootnotesForNode(*this, *pNode, nullptr);
+                    sw::RemoveFootnotesForNode(*getRootFrame(), *pNode, nullptr);
                 }
             }
         }
@@ -816,7 +816,7 @@ void SwTextFrame::DestroyImpl()
             SwTextNode *const pNode(static_cast<SwTextNode*>(GetDep()));
             if (pNode)
             {
-                sw::RemoveFootnotesForNode(*this, *pNode, nullptr);
+                sw::RemoveFootnotesForNode(*getRootFrame(), *pNode, nullptr);
             }
         }
     }

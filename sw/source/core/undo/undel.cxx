@@ -1098,6 +1098,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 frames.push_back(pFrame);
             }
         }
+        auto eMode(sw::FrameMode::Existing);
         for (SwTextFrame * pFrame : frames)
         {
             // SplitNode could have moved the original frame to the start node
@@ -1108,7 +1109,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 : *pStartNode);
             assert(rFirstNode.GetIndex() <= pStartNode->GetIndex());
             pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
-                        *pFrame, rFirstNode, sw::FrameMode::Existing));
+                        *pFrame, rFirstNode, eMode));
+            eMode = sw::FrameMode::New; // Existing is not idempotent!
             // note: this may or may not delete frames on the end node
         }
     }
