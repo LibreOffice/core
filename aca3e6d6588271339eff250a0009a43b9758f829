@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_b32abb8d",
+        "filename": "bin/check-elf-dynamic-objects",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-12-11T07:49:59Z",
+      "side": 1,
+      "message": "I\u0027d put:\nthis sounds counter intuitive but the idea",
+      "range": {
+        "startLine": 62,
+        "startChar": 7,
+        "endLine": 62,
+        "endChar": 48
+      },
+      "revId": "aca3e6d6588271339eff250a0009a43b9758f829",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_9319ff89",
+        "filename": "bin/check-elf-dynamic-objects",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-12-11T07:49:59Z",
+      "side": 1,
+      "message": "\"in the meantime\"",
+      "range": {
+        "startLine": 64,
+        "startChar": 14,
+        "endLine": 64,
+        "endChar": 29
+      },
+      "revId": "aca3e6d6588271339eff250a0009a43b9758f829",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
