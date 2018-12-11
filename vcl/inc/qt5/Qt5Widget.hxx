@@ -20,6 +20,7 @@
 #pragma once
 
 #include <QtWidgets/QWidget>
+#include <rtl/ustring.hxx>
 
 class Qt5Frame;
 class Qt5Object;
@@ -57,6 +58,9 @@ class Qt5Widget : public QWidget
     virtual void closeEvent(QCloseEvent*) override;
 
     const QString m_InternalMimeType = "application/x-libreoffice-dnditem";
+
+public slots:
+    static void showTooltip(const OUString& rTip);
 
 public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
