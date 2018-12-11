@@ -1341,8 +1341,6 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             break;
         case SvListAction::RESORTING:
             break;
-        case SvListAction::REVERSING:
-            break;
         case SvListAction::REVERSED:
             m_pImpl->m_bVisPositionsValid = false;
             break;
@@ -1458,7 +1456,6 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
 
 void SvTreeList::Reverse()
 {
-    Broadcast(SvListAction::REVERSING);
     bAbsPositionsValid = false;
     ReverseChildren(pRootItem.get());
     Broadcast(SvListAction::REVERSED);
