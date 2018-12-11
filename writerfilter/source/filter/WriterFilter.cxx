@@ -93,6 +93,7 @@ class WriterFilter : public cppu::WeakImplHelper
 {
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
+    uno::Sequence<uno::Any> m_xInitializationArguments;
 
 public:
     explicit WriterFilter(uno::Reference<uno::XComponentContext> xContext)
@@ -137,7 +138,11 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
             uno::Any a(cppu::getCaughtException());
             throw lang::WrappedTargetRuntimeException("wrapped " + a.getValueTypeName() + ": " + e.Message, uno::Reference<uno::XInterface>(), a);
         }
-        uno::Reference< document::XExporter > xExprtr(xIfc, uno::UNO_QUERY_THROW);
+
+        uno::Reference<lang::XInitialization> xInit(xIfc, uno::UNO_QUERY_THROW);
+        xInit->initialize(m_xInitializationArguments);
+
+        uno::Reference<document::XExporter> xExprtr(xIfc, uno::UNO_QUERY_THROW);
         uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
         if (!xExprtr.is() || !xFltr.is())
             return false;
@@ -307,8 +312,9 @@ void WriterFilter::setSourceDocument(const uno::Reference< lang::XComponent >& x
     m_xSrcDoc = xDoc;
 }
 
-void WriterFilter::initialize(const uno::Sequence< uno::Any >& /*rArguments*/)
+void WriterFilter::initialize(const uno::Sequence< uno::Any >& rArguments)
 {
+    m_xInitializationArguments = rArguments;
 }
 
 OUString WriterFilter::getImplementationName()

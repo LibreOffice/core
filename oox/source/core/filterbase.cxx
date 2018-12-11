@@ -28,6 +28,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/documentconstants.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
@@ -150,6 +151,8 @@ struct FilterBaseImpl
 
     bool mbExportVBA;
 
+    bool mbExportTemplate;
+
     /// @throws RuntimeException
     explicit            FilterBaseImpl( const Reference< XComponentContext >& rxContext );
 
@@ -163,7 +166,8 @@ FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext 
     meDirection( FILTERDIRECTION_UNKNOWN ),
     meVersion( ECMA_DIALECT ),
     mxComponentContext( rxContext, UNO_SET_THROW ),
-    mbExportVBA(false)
+    mbExportVBA(false),
+    mbExportTemplate(false)
 {
 }
 
@@ -426,10 +430,8 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
     {
         Sequence<css::beans::PropertyValue> aSeq;
         rArgs[0] >>= aSeq;
-        sal_Int32 nLen = aSeq.getLength();
-        for (sal_Int32 i = 0; i < nLen; ++i)
+        for (const auto& rVal : aSeq)
         {
-            css::beans::PropertyValue& rVal = aSeq[i];
             if (rVal.Name == "UserData")
             {
                 css::uno::Sequence<OUString> aUserDataSeq;
@@ -442,6 +444,12 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
                         mxImpl->mbExportVBA = true;
                     }
                 }
+            }
+            else if (rVal.Name == "Flags")
+            {
+                sal_Int32 nFlags;
+                rVal.Value >>= nFlags;
+                mxImpl->mbExportTemplate = bool(static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::TEMPLATE);
             }
         }
     }
@@ -584,6 +592,11 @@ GraphicHelper* FilterBase::implCreateGraphicHelper() const
 bool FilterBase::exportVBA() const
 {
     return mxImpl->mbExportVBA;
+}
+
+bool FilterBase::isExportTemplate() const
+{
+    return mxImpl->mbExportTemplate;
 }
 
 } // namespace core
