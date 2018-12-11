@@ -1105,12 +1105,12 @@ void SbModule::Run( SbMethod* pMeth )
 
             SbModule* pOldMod = GetSbData()->pMod;
             GetSbData()->pMod = this;
-            SbiRuntime* pRt = new SbiRuntime( this, pMeth, pMeth->nStart );
+            std::unique_ptr<SbiRuntime> pRt(new SbiRuntime( this, pMeth, pMeth->nStart ));
 
             pRt->pNext = GetSbData()->pInst->pRun;
             if( pRt->pNext )
                 pRt->pNext->block();
-            GetSbData()->pInst->pRun = pRt;
+            GetSbData()->pInst->pRun = pRt.get();
             if ( mbVBACompat )
             {
                 GetSbData()->pInst->EnableCompatibility( true );
@@ -1144,7 +1144,7 @@ void SbModule::Run( SbMethod* pMeth )
             if( pRtNext && (pRt->GetDebugFlags() & BasicDebugFlags::Break) )
                 pRtNext->SetDebugFlags( BasicDebugFlags::Break );
 
-            delete pRt;
+            pRt.reset();
             GetSbData()->pMod = pOldMod;
             if( bDelInst )
             {
@@ -1223,14 +1223,14 @@ void SbModule::RunInit()
         SbModule* pOldMod = GetSbData()->pMod;
         GetSbData()->pMod = this;
         // The init code starts always here
-        SbiRuntime* pRt = new SbiRuntime( this, nullptr, 0 );
+        std::unique_ptr<SbiRuntime> pRt(new SbiRuntime( this, nullptr, 0 ));
 
         pRt->pNext = GetSbData()->pInst->pRun;
-        GetSbData()->pInst->pRun = pRt;
+        GetSbData()->pInst->pRun = pRt.get();
         while( pRt->Step() ) {}
 
         GetSbData()->pInst->pRun = pRt->pNext;
-        delete pRt;
+        pRt.reset();
         GetSbData()->pMod = pOldMod;
         pImage->bInit = true;
         pImage->bFirstInit = false;

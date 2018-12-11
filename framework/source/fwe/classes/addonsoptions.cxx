@@ -262,7 +262,7 @@ class AddonsOptions_Impl : public ConfigItem
         void                 AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
         bool                 ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
         bool                 ReadStatusBarItem( const OUString& aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
-        ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
+        std::unique_ptr<ImageEntry> ReadImageData( const OUString& aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
         Image                ReadImageFromURL( const OUString& aURL );
         bool                 HasAssociatedImages( const OUString& aURL );
@@ -746,12 +746,11 @@ void AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
             OUString aImagesUserDefinedItemNode = aBuf.makeStringAndClear();
 
             // Read a user-defined images data
-            ImageEntry* pImageEntry = ReadImageData( aImagesUserDefinedItemNode );
+            std::unique_ptr<ImageEntry> pImageEntry = ReadImageData( aImagesUserDefinedItemNode );
             if ( pImageEntry )
             {
                 // Successfully read a user-defined images item, put it into our image manager
-                aImageManager.emplace( aURL, *pImageEntry );
-                delete pImageEntry; // We have the ownership of the pointer
+                aImageManager.emplace( aURL, std::move(*pImageEntry) );
             }
         }
     }
@@ -1328,14 +1327,14 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
     m_aImageManager.emplace( aURL, aImageEntry );
 }
 
-AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUString& aImagesNodeName )
+std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageData( const OUString& aImagesNodeName )
 {
     Sequence< OUString > aImageDataNodeNames = GetPropertyNamesImages( aImagesNodeName );
     Sequence< Any >      aPropertyData;
     Sequence< sal_Int8 > aImageDataSeq;
     OUString             aImageURL;
 
-    ImageEntry* pEntry = nullptr;
+    std::unique_ptr<ImageEntry> pEntry;
 
     // It is possible to use both forms (embedded image data and URLs to external bitmap files) at the
     // same time. Embedded image data has a higher priority.
@@ -1351,14 +1350,14 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
                 ( CreateImageFromSequence( aImage, aImageDataSeq ) ) )
             {
                 if ( !pEntry )
-                    pEntry = new ImageEntry;
+                    pEntry.reset(new ImageEntry);
                 pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG, aImage, "");
             }
         }
         else
         {
             if(!pEntry)
-                pEntry = new ImageEntry();
+                pEntry.reset(new ImageEntry());
 
             // Retrieve image data from a external bitmap file. Make sure that embedded image data
             // has a higher priority.
