@@ -725,9 +725,9 @@ void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt
     SfxGetpApp()->RegisterChildWindowContext_Impl( pMod, nId, std::move(pFact) );
 }
 
-void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, SfxChildWinFactory* pFact)
+void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, std::unique_ptr<SfxChildWinFactory> pFact)
 {
-    SfxGetpApp()->RegisterChildWindow_Impl( pMod, pFact );
+    SfxGetpApp()->RegisterChildWindow_Impl( pMod, std::move(pFact) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

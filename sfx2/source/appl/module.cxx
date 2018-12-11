@@ -108,7 +108,7 @@ SfxSlotPool* SfxModule::GetSlotPool() const
 }
 
 
-void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
+void SfxModule::RegisterChildWindow(std::unique_ptr<SfxChildWinFactory> pFact)
 {
     DBG_ASSERT( pImpl, "No real Module!" );
 
@@ -125,7 +125,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
         }
     }
 
-    pImpl->pFactArr->push_back( pFact );
+    pImpl->pFactArr->push_back( std::move(pFact) );
 }
 
 

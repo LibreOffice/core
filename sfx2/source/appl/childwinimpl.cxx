@@ -55,9 +55,9 @@ SfxChildWinFactory& SfxChildWinFactArr_Impl::operator []( size_t i )
     return *maData[i].get();
 }
 
-void SfxChildWinFactArr_Impl::push_back( SfxChildWinFactory* p )
+void SfxChildWinFactArr_Impl::push_back( std::unique_ptr<SfxChildWinFactory> p )
 {
-    maData.push_back(std::unique_ptr<SfxChildWinFactory>(p));
+    maData.push_back(std::move(p));
 }
 
 void SfxChildWinFactArr_Impl::erase( const iterator& it )
