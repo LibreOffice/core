@@ -39,7 +39,7 @@ enum class PivotFunc {
     Auto         = 0x1000
 };
 namespace o3tl {
-    template<> struct typed_flags<PivotFunc> : is_typed_flags<PivotFunc, 0x11ff> {};
+    template<> struct typed_flags<PivotFunc> : is_typed_flags<PivotFunc, 0x1fff> {};
 }
 
 struct ScDPValue
