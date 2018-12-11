@@ -768,11 +768,11 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
             nEndPara = aSel.nEndPara;
         }
 
-        SfxItemSet* pOldAttrSet = nullptr;
-        SfxItemSet* pNewAttrSet = nullptr;
+        std::unique_ptr<SfxItemSet> pOldAttrSet;
+        std::unique_ptr<SfxItemSet> pNewAttrSet;
 
-        SfxItemSet* pOldParaSet = nullptr;
-        SfxItemSet* pNewParaSet = nullptr;
+        std::unique_ptr<SfxItemSet> pOldParaSet;
+        std::unique_ptr<SfxItemSet> pNewParaSet;
 
         for( ; nCount; nCount--, pPropertyNames++, pValues++ )
         {
@@ -787,8 +787,8 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
                     if( nullptr == pNewAttrSet )
                     {
                         const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
-                        pOldAttrSet = new SfxItemSet( aSet );
-                        pNewAttrSet = new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() );
+                        pOldAttrSet.reset(new SfxItemSet( aSet ));
+                        pNewAttrSet.reset(new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() ));
                     }
 
                     setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
@@ -806,9 +806,9 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
                 {
                     if( nullptr == pNewParaSet )
                     {
-                        const SfxItemSet aSet( pForwarder->GetParaAttribs( nTempPara ) );
-                        pOldParaSet = new SfxItemSet( aSet );
-                        pNewParaSet = new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
+                        const SfxItemSet & rSet = pForwarder->GetParaAttribs( nTempPara );
+                        pOldParaSet.reset(new SfxItemSet( rSet ));
+                        pNewParaSet.reset(new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() ));
                     }
 
                     setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
@@ -842,8 +842,8 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
                 bNeedsUpdate = true;
             }
 
-            delete pNewParaSet;
-            delete pOldParaSet;
+            pNewParaSet.reset();
+            pOldParaSet.reset();
         }
 
         if( pNewAttrSet )
@@ -853,9 +853,8 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
                 pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
                 bNeedsUpdate = true;
             }
-            delete pNewAttrSet;
-            delete pOldAttrSet;
-
+            pNewAttrSet.reset();
+            pOldAttrSet.reset();
         }
 
         if( bNeedsUpdate )
