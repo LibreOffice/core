@@ -467,6 +467,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_firstParaInSection, "tdf104354_firstParaI
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testPageBreak_after, "pageBreak_after.odt")
+{
+    // The problem was that the page breakAfter put the empty page BEFORE the table
+    xmlDocPtr pDump = parseLayoutDump();
+    assertXPath(pDump, "/root/page[1]/body/tab", 1);
+    // There should be two pages actually - a blank page after a page break.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix?? Table should be on page one of two", 1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
 {
     // Select the second run containing the page number field
