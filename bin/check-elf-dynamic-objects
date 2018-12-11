@@ -59,9 +59,9 @@ while [ "${1:-}" != "" ]; do
 	    help
 	    ;;
         -p)
-	    # this sound counter intuitive. but the idea
+	    # this sounds counter intuitive but the idea
             # is to possibly support -p <n>
-            # in the mean time 0 = nolimit and -p 1 would mean
+            # in the meantime: 0 = nolimit and -p 1 would mean
             # the current default: serialize
             PARA=0
             ;;
