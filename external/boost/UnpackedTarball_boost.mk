@@ -88,6 +88,9 @@ boost_patches += boost_1_60_0.android.undef.warning.patch
 # Clang -Wimplicit-fallthrough":
 boost_patches += fallthrough.patch.0
 
+# Backport from boost 1.66 - fix gcc7 warnings
+boost_patches += boost.Wfallthrough.warnings.patch.1
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))

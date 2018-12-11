@@ -1,0 +1,12 @@
+--- a/boost/config/compiler/gcc.hpp	2015-12-08 19:55:19.000000000 +0100
++++ b/boost/config/compiler/gcc.hpp	2018-12-11 15:31:29.015359148 +0100
+@@ -67,6 +67,9 @@
+ # define BOOST_NO_EXCEPTIONS
+ #endif
+ 
++#if __GNUC__ >= 7
++#  define BOOST_FALLTHROUGH __attribute__((fallthrough))
++#endif
+ 
+ //
+ // Threading support: Turn this on unconditionally here (except for
