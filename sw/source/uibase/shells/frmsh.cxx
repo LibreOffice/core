@@ -346,7 +346,22 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
         case SID_ATTR_TRANSFORM:
         {
+            bool bApplyNewPos = false;
             bool bApplyNewSize = false;
+
+            Point aNewPos = aMgr.GetPos();
+            if (pArgs &&
+                SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_POS_X, false, &pItem))
+            {
+                aNewPos.setX( static_cast<const SfxInt32Item*>(pItem)->GetValue() );
+                bApplyNewPos = true;
+            }
+            if (pArgs &&
+                SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_POS_Y, false, &pItem))
+            {
+                aNewPos.setY( static_cast<const SfxInt32Item*>(pItem)->GetValue() );
+                bApplyNewPos = true;
+            }
 
             Size aNewSize = aMgr.GetSize();
             if (pArgs &&
@@ -389,11 +404,15 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 }
             }
 
+            if (bApplyNewPos)
+            {
+                aMgr.SetAbsPos(aNewPos);
+            }
             if ( bApplyNewSize )
             {
                 aMgr.SetSize( aNewSize );
             }
-            else
+            if (!bApplyNewPos && !bApplyNewSize)
             {
                 bUpdateMgr = false;
             }
