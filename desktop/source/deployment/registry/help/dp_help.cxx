@@ -440,7 +440,7 @@ void BackendImpl::implProcessHelp(
 
                         // Call compiler
                         sal_Int32 nXhpFileCount = aXhpFileVector.size();
-                        OUString* pXhpFiles = new OUString[nXhpFileCount];
+                        std::unique_ptr<OUString[]> pXhpFiles(new OUString[nXhpFileCount]);
                         for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
                         {
                             OUString aXhpFile = aXhpFileVector[iXhp];
@@ -455,10 +455,10 @@ void BackendImpl::implProcessHelp(
                         HelpProcessingErrorInfo aErrorInfo;
                         bool bSuccess = compileExtensionHelp(
                             aOfficeHelpPathFileURL, aHelpStr, aLangURL,
-                            nXhpFileCount, pXhpFiles,
+                            nXhpFileCount, pXhpFiles.get(),
                             langFolderDestExpanded, aErrorInfo );
 
-                        delete[] pXhpFiles;
+                        pXhpFiles.reset();
 
                         if( bSuccess )
                         {
