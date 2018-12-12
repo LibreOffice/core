@@ -12,6 +12,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 #include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
@@ -45,7 +46,7 @@ std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavo
     const QMimeData* mimeData = clipboard->mimeData();
     css::datatransfer::DataFlavor aFlavor;
 
-    if (mimeData->hasHtml())
+    /*if (mimeData->hasHtml())
     {
         aFlavor.MimeType = "text/html";
         aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
@@ -64,6 +65,23 @@ std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavo
         aFlavor.MimeType = "image/png";
         aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
         aVector.push_back(aFlavor);
+    }*/
+
+    for (QString& rMimeType : mimeData->formats())
+    {
+        SAL_WARN("vcl.qt5", "foo " << toOUString(rMimeType));
+        if (rMimeType.startsWith("text/plain"))
+        {
+            aFlavor.MimeType = "text/plain;charset=utf-16";
+            aFlavor.DataType = cppu::UnoType<OUString>::get();
+            aVector.push_back(aFlavor);
+        }
+        else
+        {
+            aFlavor.MimeType = toOUString(rMimeType);
+            aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+            aVector.push_back(aFlavor);
+        }
     }
 
     return aVector;
@@ -75,11 +93,13 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL Qt5Transferable::getT
 }
 
 sal_Bool SAL_CALL
-Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& /*rFlavor*/)
+Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     const std::vector<css::datatransfer::DataFlavor> aAll = getTransferDataFlavorsAsVector();
 
-    return !aAll.empty(); //FIXME
+    return std::any_of(aAll.begin(), aAll.end(), [&](const css::datatransfer::DataFlavor& aFlavor) {
+        return rFlavor.MimeType == aFlavor.MimeType;
+    }); //FIXME
 }
 
 /*
@@ -181,13 +201,21 @@ void VclQt5Clipboard::setContents(
     {
         css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
             = xTrans->getTransferDataFlavors();
+        QMimeData* mimeData = new QMimeData;
+
+        for (int i = 0; i < aFormats.getLength(); ++i)
+        {
+            const css::datatransfer::DataFlavor& rFlavor = aFormats[i];
+            //mimeData->setData(rFlavor.MimeData, )
+        }
+
         bool bHasHtml = false, bHasImage = false;
         lcl_peekFormats(aFormats, bHasHtml, bHasImage);
 
         css::datatransfer::DataFlavor aFlavor;
         QClipboard* clipboard = QApplication::clipboard();
 
-        if (bHasImage)
+        /*if (bHasImage)
         {
             //FIXME: other image formats?
             aFlavor.MimeType = "image/png";
@@ -199,10 +227,10 @@ void VclQt5Clipboard::setContents(
             aFlavor.DataType = cppu::UnoType<sal_Int8>::get();
         }
         else
-        {
-            aFlavor.MimeType = "text/plain;charset=utf-16";
-            aFlavor.DataType = cppu::UnoType<OUString>::get();
-        }
+        {*/
+        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        //}
 
         Any aValue;
         try
