@@ -94,9 +94,12 @@ void svtools::executeRestartDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     weld::Window* parent, RestartReason reason)
 {
+    auto xRestartManager = css::task::OfficeRestartManager::get(context);
+    if (xRestartManager->isRestartRequested(false))
+        return; // don't try to show another dialog when restart is already in progress
     RestartDialog aDlg(parent, reason);
     if (aDlg.run()) {
-        css::task::OfficeRestartManager::get(context)->requestRestart(
+        xRestartManager->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());
     }
 }
