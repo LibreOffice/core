@@ -116,7 +116,6 @@ namespace sw {
             // additional container for fieldmarks
             container_t m_vFieldmarks;
 
-            std::unordered_set<OUString> m_aMarkNamesSet;
             mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
 
             // container for annotation marks
