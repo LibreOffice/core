@@ -1481,9 +1481,6 @@ HBRUSH Make16BitDIBPatternBrush(Color nColor)
     };
 
     BYTE* pTmp = pSalData->mpDitherDIBData;
-    long* pDitherDiff = pSalData->mpDitherDiff;
-    BYTE* pDitherLow = pSalData->mpDitherLow;
-    BYTE* pDitherHigh = pSalData->mpDitherHigh;
 
     for(int nY = 0; nY < 8; ++nY)
     {
@@ -1520,9 +1517,6 @@ HBRUSH Make8BitDIBPatternBrush(Color nColor)
     };
 
     BYTE* pTmp = pSalData->mpDitherDIBData;
-    long* pDitherDiff = pSalData->mpDitherDiff;
-    BYTE* pDitherLow = pSalData->mpDitherLow;
-    BYTE* pDitherHigh = pSalData->mpDitherHigh;
 
     for (int nY = 0; nY < 8; ++nY)
     {
