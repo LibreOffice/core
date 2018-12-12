@@ -195,7 +195,7 @@ class SfxWorkWindow final
     tools::Rectangle               aClientArea;
     tools::Rectangle               aUpperClientArea;
     VclPtr<SfxSplitWindow>  pSplit[SFX_SPLITWINDOWS_MAX];
-    std::vector<SfxChild_Impl*>
+    std::vector<std::unique_ptr<SfxChild_Impl>>
                             aChildren;
     std::vector<std::unique_ptr<SfxChildWin_Impl>>
                             aChildWins;
