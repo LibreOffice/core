@@ -71,13 +71,30 @@ KDE5SalInstance::createFilePicker(const uno::Reference<uno::XComponentContext>& 
         return Q_EMIT createFilePickerSignal(xMSF);
     }
 
-    return uno::Reference<ui::dialogs::XFilePicker2>(new KDE5FilePicker(QFileDialog::ExistingFile));
+    vcl::Window* pWindow = ::Application::GetActiveTopWindow();
+    assert(pWindow);
+    Qt5MainWindow* pTransientParent = nullptr;
+    SAL_WARN("vcl.kde5", pWindow);
+
+    if (pWindow)
+    {
+        Qt5Frame* pFrame = dynamic_cast<Qt5Frame*>(pWindow->ImplGetFrame());
+        assert(pFrame);
+        if (pFrame)
+        {
+            pTransientParent = pFrame->GetTopLevelWindow();
+        }
+    }
+
+    return uno::Reference<ui::dialogs::XFilePicker2>(
+        new KDE5FilePicker(pTransientParent, QFileDialog::ExistingFile));
 }
 
 uno::Reference<ui::dialogs::XFolderPicker2>
 KDE5SalInstance::createFolderPicker(const uno::Reference<uno::XComponentContext>& /*xMSF*/)
 {
-    return uno::Reference<ui::dialogs::XFolderPicker2>(new KDE5FilePicker(QFileDialog::Directory));
+    return uno::Reference<ui::dialogs::XFolderPicker2>(
+        new KDE5FilePicker(nullptr, QFileDialog::Directory));
 }
 
 bool KDE5SalInstance::IsMainThread() const { return qApp->thread() == QThread::currentThread(); }

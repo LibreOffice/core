@@ -39,6 +39,7 @@
 #include <qt5/Qt5Tools.hxx>
 
 #include <QtCore/QDebug>
+#include <QtCore/QEventLoop>
 #include <QtCore/QThread>
 #include <QtCore/QUrl>
 #include <QtGui/QClipboard>
@@ -78,9 +79,9 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 
 // KDE5FilePicker
 
-KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
+KDE5FilePicker::KDE5FilePicker(Qt5MainWindow* qw, QFileDialog::FileMode eMode)
     : KDE5FilePicker_Base(_helperMutex)
-    , _dialog(new QFileDialog(nullptr, {}, QDir::homePath()))
+    , _dialog(new QFileDialog(qw, {}, QDir::homePath()))
     , _extraControls(new QWidget)
     , _layout(new QGridLayout(_extraControls))
     , allowRemoteUrls(false)
@@ -97,6 +98,7 @@ KDE5FilePicker::KDE5FilePicker(QFileDialog::FileMode eMode)
     });
 
     _dialog->setFileMode(eMode);
+    pTransientWindow = qw->window()->windowHandle();
 
     if (mbIsFolderPicker)
     {
@@ -198,9 +200,15 @@ sal_Int16 SAL_CALL KDE5FilePicker::execute()
     if (!_currentFilter.isEmpty())
         _dialog->selectNameFilter(_currentFilter);
 
-    _dialog->show();
+    QEventLoop q;
+    connect(_dialog, &QFileDialog::finished, &q, &QEventLoop::quit);
+
+    _dialog->open();
+    _dialog->window()->windowHandle()->setTransientParent(pTransientWindow);
+    q.exec();
+
     //block and wait for user input
-    return _dialog->exec() == QFileDialog::Accepted ? 1 : 0;
+    return _dialog->result() == QFileDialog::Accepted ? 1 : 0;
 }
 
 // XFilePicker

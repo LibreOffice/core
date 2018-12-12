@@ -43,6 +43,7 @@
 class QFileDialog;
 class QGridLayout;
 class QWidget;
+class Qt5MainWindow;
 
 typedef ::cppu::WeakComponentImplHelper<css::ui::dialogs::XFilePicker3,
                                         css::ui::dialogs::XFilePickerControlAccess,
@@ -61,6 +62,7 @@ protected:
 
     //the dialog to display
     QFileDialog* _dialog;
+    QWindow* pTransientWindow;
 
     //running filter string to add to dialog
     QStringList _filters;
@@ -82,7 +84,7 @@ protected:
     bool mbIsFolderPicker;
 
 public:
-    explicit KDE5FilePicker(QFileDialog::FileMode);
+    explicit KDE5FilePicker(Qt5MainWindow* qw, QFileDialog::FileMode);
     virtual ~KDE5FilePicker() override;
 
     // XFilePickerNotifier
