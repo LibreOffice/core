@@ -108,9 +108,8 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                 pSlideSorterViewShell->GetPageSelection());
             if (xSelection)
             {
-                for (auto it = xSelection->begin(); it != xSelection->end(); ++it)
+                for (SdPage *pPage : *xSelection)
                 {
-                    SdPage *pPage = *it;
                     if (pPage->IsSelected() || pPage->GetPageKind() != PageKind::Standard)
                         continue;
                     mpDoc->SetSelected(pPage, true);

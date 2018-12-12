@@ -599,17 +599,10 @@ void SdPageObjsTLB::AddShapeList (
             bIsExcluded ? rIconProvider.maImgPageObjsExcl : rIconProvider.maImgPageObjs);
         if (mbSaveTreeItemState)
         {
-            std::vector<OUString>::iterator iteStart = maTreeItem.begin();
-            while (iteStart != maTreeItem.end())
-            {
-                OUString strEntry = GetEntryText(pEntry);
-                if (*iteStart == strEntry)
-                {
-                    Expand( pEntry );
-                    break;
-                }
-                ++iteStart;
-            }
+            OUString strEntry = GetEntryText(pEntry);
+            auto it = std::find(maTreeItem.begin(), maTreeItem.end(), strEntry);
+            if (it != maTreeItem.end())
+                Expand( pEntry );
         }
         else
             Expand( pEntry );

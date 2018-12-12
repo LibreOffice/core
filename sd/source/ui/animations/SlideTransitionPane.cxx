@@ -226,11 +226,9 @@ void lcl_ApplyToPages(
     const ::sd::slidesorter::SharedPageSelection& rpPages,
     const ::sd::impl::TransitionEffect & rEffect )
 {
-    ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
-    const ::std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
-    for( ; aIt != aEndIt; ++aIt )
+    for( const auto& rpPage : *rpPages )
     {
-        rEffect.applyTo( *(*aIt) );
+        rEffect.applyTo( *rpPage );
     }
 }
 
@@ -253,11 +251,9 @@ void lcl_CreateUndoForPages(
     std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup( pDoc ));
     pUndoGroup->SetComment( aComment );
 
-    ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
-    const ::std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
-    for( ; aIt != aEndIt; ++aIt )
+    for( const auto& rpPage : *rpPages )
     {
-        pUndoGroup->AddAction( new sd::UndoTransition( pDoc, (*aIt) ) );
+        pUndoGroup->AddAction( new sd::UndoTransition( pDoc, rpPage ) );
     }
 
     pManager->AddUndoAction( std::move(pUndoGroup) );
@@ -612,16 +608,12 @@ void SlideTransitionPane::updateControls()
     impl::TransitionEffect aEffect( *pFirstPage );
 
     // merge with other pages
-    ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aPageIt(
-        pSelectedPages->begin());
-    ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aPageEndIt(
-        pSelectedPages->end());
 
     // start with second page (note aIt != aEndIt, because ! aSelectedPages.empty())
-    for( ++aPageIt; aPageIt != aPageEndIt; ++aPageIt )
+    for( const auto& rpPage : *pSelectedPages )
     {
-        if( *aPageIt )
-            aEffect.compareWith( *(*aPageIt) );
+        if( rpPage )
+            aEffect.compareWith( *rpPage );
     }
 
     // detect current slide effect

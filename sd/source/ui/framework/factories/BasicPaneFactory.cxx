@@ -109,13 +109,11 @@ void SAL_CALL BasicPaneFactory::disposing()
         mxConfigurationControllerWeak.clear();
     }
 
-    for (PaneContainer::const_iterator iDescriptor = mpPaneContainer->begin();
-         iDescriptor != mpPaneContainer->end();
-         ++iDescriptor)
+    for (const auto& rDescriptor : *mpPaneContainer)
     {
-        if (iDescriptor->mbIsReleased)
+        if (rDescriptor.mbIsReleased)
         {
-            Reference<XComponent> xComponent (iDescriptor->mxPane, UNO_QUERY);
+            Reference<XComponent> xComponent (rDescriptor.mxPane, UNO_QUERY);
             if (xComponent.is())
             {
                 xComponent->removeEventListener(this);

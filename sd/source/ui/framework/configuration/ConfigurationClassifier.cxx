@@ -73,12 +73,11 @@ void ConfigurationClassifier::PartitionResources (
     CopyResources(aC2minusC1, mxConfiguration2, maC2minusC1);
 
     // Process the unique resources that belong to both configurations.
-    ResourceIdVector::const_iterator iResource;
-    for (iResource=aC1andC2.begin(); iResource!=aC1andC2.end(); ++iResource)
+    for (const auto& rxResource : aC1andC2)
     {
         PartitionResources(
-            mxConfiguration1->getResources(*iResource, OUString(), AnchorBindingMode_DIRECT),
-            mxConfiguration2->getResources(*iResource, OUString(), AnchorBindingMode_DIRECT));
+            mxConfiguration1->getResources(rxResource, OUString(), AnchorBindingMode_DIRECT),
+            mxConfiguration2->getResources(rxResource, OUString(), AnchorBindingMode_DIRECT));
     }
 }
 
@@ -131,22 +130,20 @@ void ConfigurationClassifier::CopyResources (
     ResourceIdVector& rTarget)
 {
     // Copy all resources bound to the ones in aC1minusC2Unique to rC1minusC2.
-    ResourceIdVector::const_iterator iResource (rSource.begin());
-    ResourceIdVector::const_iterator iEnd(rSource.end());
-    for ( ; iResource!=iEnd; ++iResource)
+    for (const auto& rxResource : rSource)
     {
         const Sequence<Reference<XResourceId> > aBoundResources (
             rxConfiguration->getResources(
-                *iResource,
+                rxResource,
                 OUString(),
                 AnchorBindingMode_INDIRECT));
         const sal_Int32 nL (aBoundResources.getLength());
 
         rTarget.reserve(rTarget.size() + 1 + nL);
-        rTarget.push_back(*iResource);
+        rTarget.push_back(rxResource);
 
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    copying " <<
-            FrameworkHelper::ResourceIdToString(*iResource));
+            FrameworkHelper::ResourceIdToString(rxResource));
 
         const Reference<XResourceId>* aA = aBoundResources.getConstArray();
         for (sal_Int32 i=0; i<nL; ++i)
@@ -166,10 +163,9 @@ void ConfigurationClassifier::TraceResourceIdVector (
 {
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " << pMessage);
-    ResourceIdVector::const_iterator iResource;
-    for (iResource=rResources.begin(); iResource!=rResources.end(); ++iResource)
+    for (const auto& rxResource : rResources)
     {
-        OUString sResource (FrameworkHelper::ResourceIdToString(*iResource));
+        OUString sResource (FrameworkHelper::ResourceIdToString(rxResource));
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " << sResource);
     }
 }
