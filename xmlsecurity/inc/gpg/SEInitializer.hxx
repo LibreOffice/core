@@ -19,10 +19,10 @@
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
-#include <xsecgpgdllapi.h>
+#include <xsecxmlsecdllapi.h>
 #include <cppuhelper/implbase.hxx>
 
-class XSECGPG_DLLPUBLIC SEInitializerGpg : public cppu::WeakImplHelper
+class XSECXMLSEC_DLLPUBLIC SEInitializerGpg : public cppu::WeakImplHelper
 <
     css::xml::crypto::XSEInitializer,
     css::lang::XServiceInfo

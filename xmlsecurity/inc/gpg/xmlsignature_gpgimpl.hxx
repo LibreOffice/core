@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <xsecgpgdllapi.h>
+#include <xsecxmlsecdllapi.h>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -36,7 +36,7 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
-class XSECGPG_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
+class XSECXMLSEC_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,
     css::lang::XServiceInfo >
 {
