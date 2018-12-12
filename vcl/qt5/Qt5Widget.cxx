@@ -33,10 +33,10 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
-#include <QtGui/QToolTip>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QtWidgets>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QToolTip>
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
