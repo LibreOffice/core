@@ -30,6 +30,7 @@
 #include <editeng/colritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
+#include <comphelper/doublecheckedinit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/misccfg.hxx>
@@ -1731,16 +1732,17 @@ SwTableLineFormat* SwDoc::MakeTableLineFormat()
     return pFormat;
 }
 
-void SwDoc::CreateNumberFormatter()
+void SwDoc::EnsureNumberFormatter()
 {
-    OSL_ENSURE( !mpNumberFormatter, "is already there" );
-
-    LanguageType eLang = LANGUAGE_SYSTEM;
-
-    mpNumberFormatter.reset( new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang ) );
-    mpNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
-    if (!utl::ConfigManager::IsFuzzing())
-        mpNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
+    comphelper::doubleCheckedInit(mpNumberFormatter, []()
+    {
+        LanguageType eLang = LANGUAGE_SYSTEM;
+        SvNumberFormatter* pRet = new SvNumberFormatter(comphelper::getProcessComponentContext(), eLang);
+        pRet->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
+        if (!utl::ConfigManager::IsFuzzing())
+            pRet->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
+        return pRet;
+    });
 }
 
 SwTableNumFormatMerge::SwTableNumFormatMerge( const SwDoc& rSrc, SwDoc& rDest )
