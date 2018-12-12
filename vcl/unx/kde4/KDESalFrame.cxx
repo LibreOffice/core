@@ -170,12 +170,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     style.SetToolbarIconSize( ToolbarIconSize::Large );
 
-    style.SetActiveColor(toColor(pal.color(QPalette::Active, QPalette::Window)));
-    style.SetDeactiveColor(toColor(pal.color(QPalette::Inactive, QPalette::Window)));
-
-    style.SetActiveTextColor(toColor(pal.color(QPalette::Active, QPalette::WindowText)));
-    style.SetDeactiveTextColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
-
     // Font
     vcl::Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
     style.BatchSetFonts( aFont, aFont );
