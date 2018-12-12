@@ -45,25 +45,27 @@ std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavo
     const QMimeData* mimeData = clipboard->mimeData();
     css::datatransfer::DataFlavor aFlavor;
 
-    if (mimeData->hasHtml())
+    if (mimeData)
     {
-        aFlavor.MimeType = "text/html";
-        aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
-        aVector.push_back(aFlavor);
-    }
+        for (QString& rMimeType : mimeData->formats())
+        {
+            // filter out non-MIME types such as TARGETS, MULTIPLE, TIMESTAMP
+            if (rMimeType.indexOf('/') == -1)
+                continue;
 
-    if (mimeData->hasText())
-    {
-        aFlavor.MimeType = "text/plain;charset=utf-16";
-        aFlavor.DataType = cppu::UnoType<OUString>::get();
-        aVector.push_back(aFlavor);
-    }
-
-    if (mimeData->hasImage())
-    {
-        aFlavor.MimeType = "image/png";
-        aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
-        aVector.push_back(aFlavor);
+            if (rMimeType.startsWith("text/plain"))
+            {
+                aFlavor.MimeType = "text/plain;charset=utf-16";
+                aFlavor.DataType = cppu::UnoType<OUString>::get();
+                aVector.push_back(aFlavor);
+            }
+            else
+            {
+                aFlavor.MimeType = toOUString(rMimeType);
+                aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+                aVector.push_back(aFlavor);
+            }
+        }
     }
 
     return aVector;
@@ -75,11 +77,13 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL Qt5Transferable::getT
 }
 
 sal_Bool SAL_CALL
-Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& /*rFlavor*/)
+Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     const std::vector<css::datatransfer::DataFlavor> aAll = getTransferDataFlavorsAsVector();
 
-    return !aAll.empty(); //FIXME
+    return std::any_of(aAll.begin(), aAll.end(), [&](const css::datatransfer::DataFlavor& aFlavor) {
+        return rFlavor.MimeType == aFlavor.MimeType;
+    }); //FIXME
 }
 
 /*
