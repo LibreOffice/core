@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="step_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
     <property name="lower">1</property>
     <property name="step_increment">1</property>
   </object>
@@ -11,6 +15,9 @@
     <property name="border_width">5</property>
     <property name="title" translatable="yes" context="mailmerge|MailmergeDialog">Mail Merge</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -183,6 +190,7 @@
                                   <object class="GtkSpinButton" id="from">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="activates_default">True</property>
                                     <property name="adjustment">adjustment1</property>
                                     <property name="numeric">True</property>
                                   </object>
@@ -210,7 +218,8 @@
                                   <object class="GtkSpinButton" id="to">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="adjustment">adjustment1</property>
+                                    <property name="activates_default">True</property>
+                                    <property name="adjustment">adjustment2</property>
                                     <property name="numeric">True</property>
                                   </object>
                                   <packing>
@@ -399,8 +408,8 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
-                                                    <property name="xalign">0</property>
                                                     <property name="label" translatable="yes" context="mailmerge|fieldlabel">Field:</property>
+                                                    <property name="xalign">0</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -412,10 +421,10 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
-                                                    <property name="xalign">0</property>
                                                     <property name="label" translatable="yes" context="mailmerge|pathlabel">_Path:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">path</property>
+                                                    <property name="xalign">0</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -427,10 +436,10 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
-                                                    <property name="xalign">0</property>
                                                     <property name="label" translatable="yes" context="mailmerge|fileformatlabel">F_ile format:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">fileformat</property>
+                                                    <property name="xalign">0</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -438,7 +447,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkComboBox" id="field">
+                                                  <object class="GtkComboBoxText" id="field">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                   </object>
@@ -449,7 +458,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkComboBox" id="fileformat">
+                                                  <object class="GtkComboBoxText" id="fileformat">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                   </object>
@@ -476,6 +485,7 @@
                                                   <object class="GtkEntry" id="path">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="activates_default">True</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -488,10 +498,10 @@
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
-                                                    <property name="xalign">0</property>
                                                     <property name="label" translatable="yes" context="mailmerge|subjectlabel">_Subject:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">subject</property>
+                                                    <property name="xalign">0</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -503,6 +513,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="activates_default">True</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -515,9 +526,9 @@
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
-                                                    <property name="xalign">0</property>
                                                     <property name="label" translatable="yes" context="mailmerge|attachmentslabel">Attachments:</property>
                                                     <property name="mnemonic_widget">attachments</property>
+                                                    <property name="xalign">0</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -529,6 +540,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="activates_default">True</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -555,8 +567,8 @@
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
-                                                    <property name="xalign">0</property>
                                                     <property name="label" translatable="yes" context="mailmerge|mailformatlabel">Mail format:</property>
+                                                    <property name="xalign">0</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
@@ -564,7 +576,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkComboBox" id="address">
+                                                  <object class="GtkComboBoxText" id="address">
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="hexpand">True</property>
