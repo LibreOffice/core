@@ -490,7 +490,8 @@ void SwXTextDocument::GetNumberFormatter()
     {
         if(!xNumFormatAgg.is())
         {
-            if ( pDocShell->GetDoc() )
+            SolarMutexGuard aGuard;
+            if (pDocShell->GetDoc())
             {
                 SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj(
                                     pDocShell->GetDoc()->GetNumberFormatter());
