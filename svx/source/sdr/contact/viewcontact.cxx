@@ -55,20 +55,14 @@ void ViewContact::deleteAllVOCs()
     // #i84257# To avoid that each 'delete pCandidate' again uses
     // the local RemoveViewObjectContact with a search and removal in the
     // vector, simply copy and clear local vector.
-    std::vector< ViewObjectContact* > aLocalVOCList(maViewObjectContactVector);
-    maViewObjectContactVector.clear();
+    std::vector< ViewObjectContact* > aLocalVOCList;
+    aLocalVOCList.swap(maViewObjectContactVector);
 
-    while(!aLocalVOCList.empty())
-    {
-        ViewObjectContact* pCandidate = aLocalVOCList.back();
-        aLocalVOCList.pop_back();
-        DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList in VC (!)");
-
+    for (auto & pCandidate : aLocalVOCList)
         // ViewObjectContacts only make sense with View and Object contacts.
         // When the contact to the SdrObject is deleted like in this case,
         // all ViewObjectContacts can be deleted, too.
         delete pCandidate;
-    }
 
     // assert when there were new entries added during deletion
     DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList in VC (!)");
