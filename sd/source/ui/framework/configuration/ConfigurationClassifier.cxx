@@ -34,8 +34,7 @@ ConfigurationClassifier::ConfigurationClassifier (
     : mxConfiguration1(rxConfiguration1),
       mxConfiguration2(rxConfiguration2),
       maC1minusC2(),
-      maC2minusC1(),
-      maC1andC2()
+      maC2minusC1()
 {
 }
 
@@ -43,7 +42,6 @@ bool ConfigurationClassifier::Partition()
 {
     maC1minusC2.clear();
     maC2minusC1.clear();
-    maC1andC2.clear();
 
     PartitionResources(
         mxConfiguration1->getResources(nullptr, OUString(), AnchorBindingMode_DIRECT),
@@ -78,7 +76,6 @@ void ConfigurationClassifier::PartitionResources (
     ResourceIdVector::const_iterator iResource;
     for (iResource=aC1andC2.begin(); iResource!=aC1andC2.end(); ++iResource)
     {
-        maC1andC2.push_back(*iResource);
         PartitionResources(
             mxConfiguration1->getResources(*iResource, OUString(), AnchorBindingMode_DIRECT),
             mxConfiguration2->getResources(*iResource, OUString(), AnchorBindingMode_DIRECT));

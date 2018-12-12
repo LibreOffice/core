@@ -116,12 +116,6 @@ private:
     */
     PageList maPagesToRemove;
 
-    /** Remember the pages inserted from another document or another place
-        in the same document so that they can be selected after the
-        drag-and-drop operation is completed.
-    */
-    PageList maPagesToSelect;
-
     /** Used when a drop is executed to combine all undo actions into one.
         Typically created in ExecuteDrop() and released in DragFinish().
     */
