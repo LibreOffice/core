@@ -561,16 +561,17 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
             aBuf.ensureCapacity(strlen(i.pLib) + 4);    // mostly "*.dll"
             aBuf.appendAscii(i.pLib).append( SAL_DLLEXTENSION );
 #endif
-            osl::Module *module = new osl::Module();
+            std::unique_ptr<osl::Module> module(new osl::Module());
             if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
             {
                 ::osl::MutexGuard aGuard( maMutex );
-                maLookupTable.emplace_back(i.pLib, module, i.pLocale);
+                auto pTmpModule = module.get();
+                maLookupTable.emplace_back(i.pLib, module.release(), i.pLocale);
                 OSL_ASSERT( pOutCachedItem );
                 if( pOutCachedItem )
                 {
                     pOutCachedItem->reset(new LocaleDataLookupTableItem( maLookupTable.back() ));
-                    return module->getFunctionSymbol(
+                    return pTmpModule->getFunctionSymbol(
                             aBuf.appendAscii(pFunction).append(cUnder).
                             appendAscii((*pOutCachedItem)->localeName).makeStringAndClear());
                 }
@@ -578,7 +579,7 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                     return nullptr;
             }
             else
-                delete module;
+                module.reset();
 #else
             (void) pOutCachedItem;
 
