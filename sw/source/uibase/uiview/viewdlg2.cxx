@@ -46,14 +46,12 @@ using namespace css;
 
 void SwView::ExecDlgExt(SfxRequest const &rReq)
 {
-    vcl::Window& rMDI = GetViewFrame()->GetWindow();
-
     switch ( rReq.GetSlot() )
     {
         case FN_INSERT_CAPTION:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( &rMDI, *this ));
+            ScopedVclPtr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog(GetFrameWeld(), *this ));
             pDialog->Execute();
             break;
         }

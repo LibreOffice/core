@@ -508,7 +508,6 @@ custom_widgets = [
     'SvxTextEncodingBox',
     'SvxTextEncodingBox',
     'SwAddressPreview',
-    'SwCaptionPreview',
     'SwFieldRefTreeListBox',
     'SwGlTreeListBox',
     'SwIdxTreeListBox',
