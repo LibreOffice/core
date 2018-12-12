@@ -62,6 +62,115 @@ bool SubTotal::SafeDiv(double& fVal1, double fVal2)
     return bOk;
 }
 
+void ScFunctionData::update( double fNewVal )
+{
+    if (bError)
+        return;
+
+    switch (eFunc)
+    {
+        case SUBTOTAL_FUNC_SUM:
+            if (!SubTotal::SafePlus(nVal, fNewVal))
+                bError = true;
+        break;
+        case SUBTOTAL_FUNC_PROD:
+            if (!SubTotal::SafeMult(nVal, fNewVal))
+                bError = true;
+        break;
+        case SUBTOTAL_FUNC_CNT:
+        case SUBTOTAL_FUNC_CNT2:
+            ++nCount;
+        break;
+        case SUBTOTAL_FUNC_AVE:
+            if (!SubTotal::SafePlus(nVal, fNewVal))
+                bError = true;
+            else
+                ++nCount;
+        break;
+        case SUBTOTAL_FUNC_MAX:
+            if (fNewVal > nVal)
+                nVal = fNewVal;
+        break;
+        case SUBTOTAL_FUNC_MIN:
+            if (fNewVal < nVal)
+                nVal = fNewVal;
+        break;
+        case SUBTOTAL_FUNC_STD:
+        case SUBTOTAL_FUNC_STDP:
+        case SUBTOTAL_FUNC_VAR:
+        case SUBTOTAL_FUNC_VARP:
+            maWelford.update( fNewVal);
+            /* TODO: do we really need this extra nCount? */
+            ++nCount;
+        break;
+        default:
+            // unhandled unknown
+            bError = true;
+    }
+}
+
+double ScFunctionData::getResult()
+{
+    if (bError)
+        return 0.0;
+
+    double fRet;
+    switch (eFunc)
+    {
+        case SUBTOTAL_FUNC_CNT:
+        case SUBTOTAL_FUNC_CNT2:
+            fRet = nCount;
+        break;
+        case SUBTOTAL_FUNC_SUM:
+        case SUBTOTAL_FUNC_MAX:
+        case SUBTOTAL_FUNC_MIN:
+        case SUBTOTAL_FUNC_PROD:
+            fRet = nVal;
+        break;
+        case SUBTOTAL_FUNC_AVE:
+            if (nCount == 0)
+                bError = true;
+            else
+                fRet = nVal / nCount;
+        break;
+        case SUBTOTAL_FUNC_VAR:
+        case SUBTOTAL_FUNC_STD:
+            if (maWelford.getCount() < 2)
+                bError = true;
+            else
+            {
+                fRet = maWelford.getVarianceSample();
+                if (fRet < 0.0)
+                    bError = true;
+                else if (eFunc == SUBTOTAL_FUNC_STD)
+                    fRet = sqrt( fRet);
+            }
+        break;
+        case SUBTOTAL_FUNC_VARP:
+        case SUBTOTAL_FUNC_STDP:
+            if (maWelford.getCount() < 1)
+                bError = true;
+            else if (maWelford.getCount() == 1)
+                fRet = 0.0;
+            else
+            {
+                fRet = maWelford.getVariancePopulation();
+                if (fRet < 0.0)
+                    bError = true;
+                else if (eFunc == SUBTOTAL_FUNC_STDP)
+                    fRet = sqrt( fRet);
+            }
+        break;
+        default:
+            assert(!"unhandled unknown");
+            bError = true;
+        break;
+    }
+    if (bError)
+        fRet = 0.0;
+    return fRet;
+}
+
 void WelfordRunner::update( double fVal )
 {
     ++nCount;
