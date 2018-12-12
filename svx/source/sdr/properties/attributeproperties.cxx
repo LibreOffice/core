@@ -298,7 +298,7 @@ namespace sdr
         {
             if(pNewItem)
             {
-                const SfxPoolItem* pResultItem = nullptr;
+                std::unique_ptr<SfxPoolItem> pResultItem;
                 SdrModel& rModel(GetSdrObject().getSdrModelFromSdrObject());
 
                 switch( nWhich )
@@ -351,7 +351,7 @@ namespace sdr
                     mpItemSet->Put(*pResultItem);
 
                     // delete item if it was a generated one
-                    delete pResultItem;
+                    pResultItem.reset();
                 }
                 else
                 {
