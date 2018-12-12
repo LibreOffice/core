@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -997,6 +998,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_MASTERPAGE:          // BASIC
         {
+            if (comphelper::LibreOfficeKit::isActive())
+                GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                           ".uno:SlideMasterPage=true");
+
             // AutoLayouts needs to be finished
             GetDoc()->StopWorkStartupDelay();
 
