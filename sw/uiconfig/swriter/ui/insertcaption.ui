@@ -127,6 +127,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                     </child>
                   </object>
@@ -226,6 +227,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="text" translatable="yes" context="insertcaption|separator_edit">: </property>
                           </object>
                           <packing>
@@ -252,6 +254,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="text" translatable="yes" context="insertcaption|num_separator_edit">. </property>
                           </object>
                           <packing>
@@ -292,6 +295,7 @@
                             <child internal-child="entry">
                               <object class="GtkEntry" id="comboboxtext-entry">
                                 <property name="can_focus">False</property>
+                                <property name="activates_default">True</property>
                               </object>
                             </child>
                           </object>
