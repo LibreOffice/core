@@ -203,11 +203,10 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     SetHideNotDelete( true );
 }
 
-SfxChildWindow* SfxDockingWrapper::CreateImpl(vcl::Window *pParent, sal_uInt16 nId,
+std::unique_ptr<SfxChildWindow> SfxDockingWrapper::CreateImpl(vcl::Window *pParent, sal_uInt16 nId,
                                               SfxBindings *pBindings, SfxChildWinInfo* pInfo)
 {
-    SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo);
-    return pWin;
+    return o3tl::make_unique<SfxDockingWrapper>(pParent, nId, pBindings, pInfo);
 }
 
 void SfxDockingWrapper::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChildWindowFlags nFlags)

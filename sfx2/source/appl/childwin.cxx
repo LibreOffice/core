@@ -201,10 +201,10 @@ SfxChildWindow::~SfxChildWindow()
 }
 
 
-SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
+std::unique_ptr<SfxChildWindow> SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
         vcl::Window *pParent, SfxBindings* pBindings, SfxChildWinInfo const & rInfo)
 {
-    SfxChildWindow *pChild=nullptr;
+    std::unique_ptr<SfxChildWindow> pChild;
     SfxChildWinFactory* pFact=nullptr;
     SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
 
@@ -275,7 +275,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
 
     if (pChild && (!pChild->pWindow && !pChild->xController))
     {
-        DELETEZ(pChild);
+        pChild.reset();
         SAL_INFO("sfx.appl", "ChildWindow has no Window!");
     }
 

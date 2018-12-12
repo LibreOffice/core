@@ -40,12 +40,11 @@ public:
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );
     }
 
-    static SfxChildWindow* CreateImpl(
+    static std::unique_ptr<SfxChildWindow> CreateImpl(
                 vcl::Window *pParent, sal_uInt16 nId,
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo )
     {
-        SfxChildWindow* pWindow = new ChildWindowWrapper(pParent, nId, pBindings, pInfo);
-        return pWindow;
+        return o3tl::make_unique<ChildWindowWrapper>(pParent, nId, pBindings, pInfo);
     }
 
     static void RegisterChildWindow (
