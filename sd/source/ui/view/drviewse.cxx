@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/waitobj.hxx>
@@ -1018,6 +1019,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_MASTERPAGE:          // BASIC
         {
+            if (comphelper::LibreOfficeKit::isActive())
+                GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                           ".uno:SlideMasterPage=true");
+
             // AutoLayouts needs to be finished
             GetDoc()->StopWorkStartupDelay();
 

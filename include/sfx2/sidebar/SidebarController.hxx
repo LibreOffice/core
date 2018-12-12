@@ -28,6 +28,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <vcl/menu.hxx>
 
@@ -67,9 +68,8 @@ class SFX2_DLLPUBLIC SidebarController
       public SidebarControllerInterfaceBase
 {
 public:
-    static rtl::Reference<SidebarController> create(
-        SidebarDockingWindow* pParentWindow,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static rtl::Reference<SidebarController> create(SidebarDockingWindow* pParentWindow,
+                                                    const SfxViewFrame* pViewFrame);
     virtual ~SidebarController() override;
     SidebarController(const SidebarController&) = delete;
     SidebarController& operator=( const SidebarController& ) = delete;
@@ -171,14 +171,13 @@ public:
     css::uno::Reference<css::frame::XFrame> getXFrame() {return mxFrame;}
 
 private:
-    SidebarController(
-        SidebarDockingWindow* pParentWindow,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
 
     VclPtr<Deck> mpCurrentDeck;
     VclPtr<SidebarDockingWindow> mpParentWindow;
-    VclPtr<TabBar> mpTabBar;
+    const SfxViewFrame* mpViewFrame;
     css::uno::Reference<css::frame::XFrame> mxFrame;
+    VclPtr<TabBar> mpTabBar;
     Context maCurrentContext;
     Context maRequestedContext;
     css::uno::Reference<css::frame::XController> mxCurrentController;

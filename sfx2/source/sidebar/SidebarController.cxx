@@ -48,6 +48,8 @@
 #include <o3tl/make_unique.hxx>
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
+#include <officecfg/Office/UI/Sidebar.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
@@ -115,17 +117,18 @@ namespace {
 
 SidebarController::SidebarController (
     SidebarDockingWindow* pParentWindow,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    const SfxViewFrame* pViewFrame)
     : SidebarControllerInterfaceBase(m_aMutex),
       mpCurrentDeck(),
       mpParentWindow(pParentWindow),
+      mpViewFrame(pViewFrame),
+      mxFrame(pViewFrame->GetFrame().GetFrameInterface()),
       mpTabBar(VclPtr<TabBar>::Create(
               mpParentWindow,
-              rxFrame,
+              mxFrame,
               [this](const OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
               [this](const tools::Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
               this)),
-      mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
       mnRequestedForceFlags(SwitchFlag_NoForce),
@@ -149,13 +152,12 @@ SidebarController::SidebarController (
     mpResourceManager = o3tl::make_unique<ResourceManager>();
 }
 
-rtl::Reference<SidebarController> SidebarController::create(
-    SidebarDockingWindow* pParentWindow,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow* pParentWindow,
+                                                            const SfxViewFrame* pViewFrame)
 {
-    rtl::Reference<SidebarController> instance(
-        new SidebarController(pParentWindow, rxFrame));
+    rtl::Reference<SidebarController> instance(new SidebarController(pParentWindow, pViewFrame));
 
+    const css::uno::Reference<css::frame::XFrame>& rxFrame = pViewFrame->GetFrame().GetFrameInterface();
     registerSidebarForFrame(instance.get(), rxFrame->getController());
     rxFrame->addFrameActionListener(instance.get());
     // Listen for window events.
@@ -746,6 +748,22 @@ void SidebarController::SwitchToDeck (
         if (mpCurrentDeck)
             mpCurrentDeck->Hide();
 
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
+            {
+                const std::string hide = UnoNameFromDeckId(msCurrentDeckId);
+                if (!hide.empty())
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                           (hide + "=false").c_str());
+
+                const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId);
+                if (!show.empty())
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                           (show + "=true").c_str());
+            }
+        }
+
         msCurrentDeckId = rDeckDescriptor.msId;
     }
     mpTabBar->Invalidate();
@@ -1235,9 +1253,20 @@ void SidebarController::UpdateDeckOpenState()
             aNewSize.setWidth(mnSavedSidebarWidth);
 
             mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
-            // Sidebar wide enought to render the menu; enable it.
+
             if (comphelper::LibreOfficeKit::isActive())
+            {
+                // Sidebar wide enought to render the menu; enable it.
                 mpTabBar->EnableMenuButton(true);
+
+                if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
+                {
+                    const std::string uno = UnoNameFromDeckId(msCurrentDeckId);
+                    if (!uno.empty())
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                                (uno + "=true").c_str());
+                }
+            }
         }
     }
     else
@@ -1262,10 +1291,22 @@ void SidebarController::UpdateDeckOpenState()
                 aNewSize.setWidth(nTabBarDefaultWidth);
 
             mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
-            // Sidebar too narrow to render the menu; disable it.
+
             if (comphelper::LibreOfficeKit::isActive())
+            {
+                // Sidebar too narrow to render the menu; disable it.
                 mpTabBar->EnableMenuButton(false);
+
+                if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
+                {
+                    const std::string uno = UnoNameFromDeckId(msCurrentDeckId);
+                    if (!uno.empty())
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                                (uno + "=false").c_str());
+                }
+            }
         }
+
         if (mnWidthOnSplitterButtonDown > nTabBarDefaultWidth)
             mnSavedSidebarWidth = mnWidthOnSplitterButtonDown;
         mpParentWindow->SetStyle(mpParentWindow->GetStyle() & ~WB_SIZEABLE);
