@@ -829,10 +829,9 @@ VclPtr<AbstractSwConvertTableDlg> SwAbstractDialogFactory_Impl::CreateSwConvertT
     return VclPtr<AbstractSwConvertTableDlg_Impl>::Create(o3tl::make_unique<SwConvertTableDlg>(rView, bToTable));
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV)
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog(weld::Window *pParent, SwView &rV)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwCaptionDialog>::Create( pParent, rV );
-    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGenericDialog_Impl>::Create(o3tl::make_unique<SwCaptionDialog>(pParent, rV));
 }
 
 VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
