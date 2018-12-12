@@ -95,7 +95,7 @@ namespace drawinglayer
             virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const = 0;
+            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const = 0;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -133,7 +133,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -174,7 +174,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -234,7 +234,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -274,7 +274,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -313,7 +313,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const override;
+            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
@@ -349,7 +349,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             // transformed clone operator
-            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
+            virtual std::unique_ptr<SdrTextPrimitive2D> createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const override;
 
             // provide unique ID
             DeclPrimitive2DIDBlock()
