@@ -43,12 +43,11 @@
 LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
     :
         pDoc( pDocP),
-        maRangeNames( this ),
-        pScRangeName( pDocP->GetRangeName()),
+        maRangeNames(),
         eCharsetQ( eQ),
         eFirstType( Lotus123Typ::X),
         eActType( Lotus123Typ::X),
-        pRngNmBffWK3( new RangeNameBufferWK3(this)),
+        pRngNmBffWK3( new RangeNameBufferWK3() ),
         maAttrTable( this )
 {
 }

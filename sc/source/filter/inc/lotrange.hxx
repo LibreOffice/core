@@ -87,18 +87,17 @@ inline bool LotusRange::IsSingle() const
 class LotusRangeList
 {
 private:
-    LOTUS_ROOT*         m_pLotRoot;
     LR_ID               nIdCnt;
     ScComplexRefData    aComplRef;
     std::vector<LotusRange*> maRanges;
 
 public:
-    LotusRangeList(LOTUS_ROOT* pLotRoot);
+    LotusRangeList();
     ~LotusRangeList();
     inline sal_uInt16       GetIndex( SCCOL nCol, SCROW nRow );
     inline sal_uInt16       GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
     sal_uInt16              GetIndex( const LotusRange& );
-    void                Append( LotusRange* pLR, const OUString& rName );
+    void                Append( LotusRange* pLR );
 };
 
 inline LR_ID LotusRangeList::GetIndex( SCCOL nCol, SCROW nRow )
