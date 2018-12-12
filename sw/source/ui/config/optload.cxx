@@ -495,7 +495,6 @@ void CaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.DrawText(Point(4, 6), maText);
 }
 
-
 IMPL_LINK(SwCaptionOptPage, TextFilterHdl, OUString&, rTest, bool)
 {
     rTest = m_aTextFilter.filter(rTest);
