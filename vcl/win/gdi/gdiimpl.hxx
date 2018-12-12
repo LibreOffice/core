@@ -53,7 +53,7 @@ private:
     void drawPixelImpl( long nX, long nY, COLORREF crColor );
 
     HPEN SearchStockPen(COLORREF nPenColor);
-    HPEN MakePen(Color nColor, COLORREF nPenColor);
+    HPEN MakePen(Color nColor);
     void ResetPen(HPEN hNewPen);
 
     HBRUSH SearchStockBrush(COLORREF nBrushColor);

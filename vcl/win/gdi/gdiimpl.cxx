@@ -1347,7 +1347,7 @@ void WinSalGraphicsImpl::SetLineColor(Color nColor)
     if (hNewPen)
         bStockPen = true;
     else
-        hNewPen = MakePen(nColor, nPenColor);
+        hNewPen = MakePen(nColor);
 
     ResetPen(hNewPen);
 
@@ -1375,8 +1375,12 @@ HPEN WinSalGraphicsImpl::SearchStockPen(COLORREF nPenColor)
     return nullptr;
 }
 
-HPEN WinSalGraphicsImpl::MakePen(Color nColor, COLORREF nPenColor)
+HPEN WinSalGraphicsImpl::MakePen(Color nColor)
 {
+    COLORREF nPenColor = PALETTERGB(nColor.GetRed(),
+                                    nColor.GetGreen(),
+                                    nColor.GetBlue());
+
     if (!mrParent.isPrinter())
     {
         if (GetSalData()->mhDitherPal && ImplIsSysColorEntry(nColor))
