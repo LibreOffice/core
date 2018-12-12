@@ -145,7 +145,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
             udata_setAppData("OpenOffice", OpenOffice_dat, &status);
             if ( !U_SUCCESS(status) ) throw uno::RuntimeException();
 
-            OOoRuleBasedBreakIterator *rbi = nullptr;
+            std::unique_ptr<OOoRuleBasedBreakIterator> rbi;
 
             if (breakRules.getLength() > breakType && !breakRules[breakType].isEmpty())
             {
@@ -161,19 +161,18 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                     break;  // do
                 }
 
-                rbi = new OOoRuleBasedBreakIterator(udata_open("OpenOffice", "brk",
-                    OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
+                rbi.reset(new OOoRuleBasedBreakIterator(udata_open("OpenOffice", "brk",
+                    OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status));
 
                 if (U_SUCCESS(status))
                 {
                     icuBI->mpValue.reset( new BI_ValueData);
-                    icuBI->mpValue->mpBreakIterator.reset( rbi);
+                    icuBI->mpValue->mpBreakIterator = std::move( rbi);
                     theBIMap.insert( std::make_pair( aBIMapRuleTypeKey, icuBI->mpValue));
                 }
                 else
                 {
-                    delete rbi;
-                    rbi = nullptr;
+                    rbi.reset();
                 }
             }
             //use icu's breakiterator for Thai, Tibetan and Dzongkha
@@ -199,17 +198,16 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                 aUDName.append( aLanguage);
                 UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
                 if( U_SUCCESS(status) )
-                    rbi = new OOoRuleBasedBreakIterator( pUData, status);
+                    rbi.reset(new OOoRuleBasedBreakIterator( pUData, status));
                 if ( U_SUCCESS(status) )
                 {
                     icuBI->mpValue.reset( new BI_ValueData);
-                    icuBI->mpValue->mpBreakIterator.reset( rbi);
+                    icuBI->mpValue->mpBreakIterator = std::move( rbi);
                     theBIMap.insert( std::make_pair( aBIMapRuleKey, icuBI->mpValue));
                 }
                 else
                 {
-                    delete rbi;
-                    rbi = nullptr;
+                    rbi.reset();
 
                     // ;rule (only)
                     const OString aBIMapRuleOnlyKey( OString(";") + rule);
@@ -226,17 +224,16 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                     status = U_ZERO_ERROR;
                     pUData = udata_open("OpenOffice", "brk", rule, &status);
                     if( U_SUCCESS(status) )
-                        rbi = new OOoRuleBasedBreakIterator( pUData, status);
+                        rbi.reset(new OOoRuleBasedBreakIterator( pUData, status));
                     if ( U_SUCCESS(status) )
                     {
                         icuBI->mpValue.reset( new BI_ValueData);
-                        icuBI->mpValue->mpBreakIterator.reset( rbi);
+                        icuBI->mpValue->mpBreakIterator = std::move( rbi);
                         theBIMap.insert( std::make_pair( aBIMapRuleOnlyKey, icuBI->mpValue));
                     }
                     else
                     {
-                        delete rbi;
-                        rbi = nullptr;
+                        rbi.reset();
                     }
                 }
             }
