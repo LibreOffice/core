@@ -16,6 +16,24 @@
       "revId": "2b6bd096f5bd9d250e4590d7150190086ad282b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_dcc1c330",
+        "filename": "include/svtools/restartdialog.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-12T17:20:56Z",
+      "side": 1,
+      "message": "With all my respect:\n\nEven with that indent, e.g., Visual Studio shows the preceding comments in the tooltips for the items, not the following. So all the interesting formatting used in the comments is not useful if it doesn\u0027t make it easy for developer (using their IDEs) to take advantage of them.",
+      "parentUuid": "5f4e5783_bc896727",
+      "revId": "2b6bd096f5bd9d250e4590d7150190086ad282b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
