@@ -570,6 +570,14 @@
             ]
         }
     ],
+    "add-extensions": {
+        "org.libreoffice.LibreOffice.Help": {
+            "directory": "libreoffice/help",
+            "bundle": true,
+            "autodelete": true,
+            "no-autodownload": true
+        }
+    },
     "finish-args": [
         "--share=network",
         "--share=ipc",
