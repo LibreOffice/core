@@ -921,6 +921,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
     CPPUNIT_ASSERT(xPara3->getPropertyValue("NumberingRules").hasValue());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf99631, "tdf99631.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "//w:object", 2);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 2);
+    // first XSLX OLE object (1:1 scale)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]", "dxaOrig", "2560");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]", "dyaOrig", "513");
+    // second XLSX OLE object (same content + 1 row, but zoomed)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dxaOrig", "2560");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dyaOrig", "768");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

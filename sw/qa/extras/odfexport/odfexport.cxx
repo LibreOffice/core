@@ -2123,6 +2123,21 @@ DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
     CPPUNIT_ASSERT(xReplacementGraphic.is());
 }
 
+DECLARE_ODFEXPORT_TEST(tdf99631, "tdf99631.docx")
+{
+    // check import of VisualArea settings of the embedded XLSX OLE objects
+    xmlDocPtr pXmlDoc = parseExport("Object 1/settings.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaHeight']", "903");
+
+    xmlDocPtr pXmlDoc2 = parseExport("Object 2/settings.xml");
+    if (!pXmlDoc2)
+        return;
+    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
+    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1354");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
