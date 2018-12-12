@@ -420,12 +420,6 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
                 tmpStep.excludeConfig.push_back(rSeqEntry);
         }
 
-        // included extensions...
-        if (tmpAccess->getByName("IncludedExtensions") >>= tmpSeq) {
-            for (const OUString& rSeqEntry : tmpSeq)
-                tmpStep.includeExtensions.push_back(rSeqEntry);
-        }
-
         // excluded extensions...
         if (tmpAccess->getByName("ExcludedExtensions") >>= tmpSeq) {
             for (const OUString& rSeqEntry : tmpSeq)
