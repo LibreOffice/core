@@ -458,7 +458,7 @@ void ChartAreaPanel::updateData()
         xPropSet->getPropertyValue("FillBitmapName") >>= aBitmapName;
         GraphicObject aBitmap = getXBitmapFromName(mxModel, aBitmapName);
         XFillBitmapItem aBitmapItem(aBitmapName, aBitmap);
-        XFillBitmapItem* pBitmapItem = nullptr;
+        std::unique_ptr<XFillBitmapItem> pBitmapItem;
         DrawModelWrapper* pModelWrapper = nullptr;
         try
         {
@@ -471,8 +471,7 @@ void ChartAreaPanel::updateData()
         catch (...)
         {
         }
-        updateFillBitmap(false, true, pBitmapItem ? pBitmapItem : &aBitmapItem);
-        delete pBitmapItem;
+        updateFillBitmap(false, true, pBitmapItem ? pBitmapItem.get() : &aBitmapItem);
     }
 
     if (xInfo->hasPropertyByName("FillTransparenceGradientName"))

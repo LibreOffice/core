@@ -54,7 +54,7 @@ public:
     void                    SetEnabled( bool bEnable ) { bEnabled = bEnable; }
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
-    XFillFloatTransparenceItem* checkForUniqueItem( SdrModel* pModel ) const;
+    std::unique_ptr<XFillFloatTransparenceItem> checkForUniqueItem( SdrModel* pModel ) const;
 };
 
 #endif
