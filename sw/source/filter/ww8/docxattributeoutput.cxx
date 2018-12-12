@@ -147,6 +147,8 @@
 #include <algorithm>
 #include <stdarg.h>
 
+#include <toolkit/helper/vclunohelper.hxx>
+
 using ::editeng::SvxBorderLine;
 
 using namespace oox;
@@ -5314,7 +5316,31 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     m_rDrawingML.SetFS(m_pSerializer);
     OUString sImageId = m_rDrawingML.WriteImage( *pGraphic );
 
-    m_pSerializer->startElementNS( XML_w, XML_object, FSEND );
+    if ( sDrawAspect == "Content" )
+    {
+        awt::Size aSize;
+        try
+        {
+            aSize = xObj->getVisualAreaSize( rNode.GetAspect() );
+
+            MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rNode.GetAspect() ) );
+            Size aOriginalSize( OutputDevice::LogicToLogic(Size( aSize.Width, aSize.Height),
+                                                MapMode(aUnit), MapMode(MapUnit::MapTwip)));
+
+            m_pSerializer->startElementNS( XML_w, XML_object,
+                                   FSNS(XML_w, XML_dxaOrig), OString::number(aOriginalSize.Width()),
+                                   FSNS(XML_w, XML_dyaOrig), OString::number(aOriginalSize.Height()),
+                                   FSEND );
+        }
+        catch ( uno::Exception& )
+        {
+            m_pSerializer->startElementNS( XML_w, XML_object, FSEND );
+        }
+    }
+    else
+    {
+        m_pSerializer->startElementNS( XML_w, XML_object, FSEND );
+    }
 
     OStringBuffer sShapeStyle, sShapeId;
     sShapeStyle.append( "width:" ).append( double( rSize.Width() ) / 20 )

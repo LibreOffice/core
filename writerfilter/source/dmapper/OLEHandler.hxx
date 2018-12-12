@@ -52,6 +52,8 @@ class OLEHandler : public LoggedProperties
     OUString     m_sProgId;
     OUString     m_sShapeId;
     OUString     m_sDrawAspect;
+    OUString     m_sVisAreaWidth;
+    OUString     m_sVisAreaHeight;
     OUString     m_sObjectId;
     OUString     m_sr_id;
     /// The stream URL right after the import of the raw data.
@@ -90,6 +92,8 @@ public:
     OUString getCLSID(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext) const;
 
     OUString const & GetDrawAspect() const;
+    OUString const & GetVisAreaWidth() const;
+    OUString const & GetVisAreaHeight() const;
 
     OUString copyOLEOStream(css::uno::Reference<css::text::XTextDocument> const& xTextDocument);
 
