@@ -422,28 +422,22 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
         "requested and current resources:\n", aClassifier.GetC1andC2());
 #endif
 
-    ConfigurationClassifier::ResourceIdVector::const_iterator iResource;
-
     // Request the deactivation of resources that are not requested in the
     // new configuration.
     const ConfigurationClassifier::ResourceIdVector& rResourcesToDeactivate (
         aClassifier.GetC2minusC1());
-    for (iResource=rResourcesToDeactivate.begin();
-         iResource!=rResourcesToDeactivate.end();
-         ++iResource)
+    for (const auto& rxResource : rResourcesToDeactivate)
     {
-        requestResourceDeactivation(*iResource);
+        requestResourceDeactivation(rxResource);
     }
 
     // Request the activation of resources that are requested in the
     // new configuration but are not part of the current configuration.
     const ConfigurationClassifier::ResourceIdVector& rResourcesToActivate (
         aClassifier.GetC1minusC2());
-    for (iResource=rResourcesToActivate.begin();
-         iResource!=rResourcesToActivate.end();
-         ++iResource)
+    for (const auto& rxResource : rResourcesToActivate)
     {
-        requestResourceActivation(*iResource, ResourceActivationMode_ADD);
+        requestResourceActivation(rxResource, ResourceActivationMode_ADD);
     }
 
     pLock.reset();

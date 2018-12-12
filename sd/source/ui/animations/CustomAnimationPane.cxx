@@ -730,12 +730,8 @@ void CustomAnimationPane::updateControls()
             MainSequenceRebuildGuard aGuard( mpMainSequence );
 
             EffectSequenceHelper* pSequence = nullptr;
-            EffectSequence::iterator aRebuildIter( maListSelection.begin() );
-            const EffectSequence::iterator aRebuildEnd( maListSelection.end() );
-            while( aRebuildIter != aRebuildEnd )
+            for( CustomAnimationEffectPtr& pEffect : maListSelection )
             {
-                CustomAnimationEffectPtr pEffect = *aRebuildIter++;
-
                 if( pEffect.get() )
                 {
                     if( pSequence == nullptr )
@@ -775,18 +771,15 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
         {
             rtl::Reference< MotionPathTag > xMotionPathTag;
             // first try to find if there is already a tag for this
-            MotionPathTagVector::iterator aMIter( rOldTags.begin() );
-            for( ; aMIter != rOldTags.end(); ++aMIter )
+            auto aMIter = std::find_if(rOldTags.begin(), rOldTags.end(),
+                [&pEffect](const rtl::Reference<MotionPathTag>& xTag) { return xTag->getEffect() == pEffect; });
+            if (aMIter != rOldTags.end())
             {
                 rtl::Reference< MotionPathTag > xTag( *aMIter );
-                if( xTag->getEffect() == pEffect )
+                if( !xTag->isDisposed() )
                 {
-                    if( !xTag->isDisposed() )
-                    {
-                        xMotionPathTag = xTag;
-                        rOldTags.erase( aMIter );
-                    }
-                    break;
+                    xMotionPathTag = xTag;
+                    rOldTags.erase( aMIter );
                 }
             }
 
@@ -835,10 +828,8 @@ void CustomAnimationPane::updateMotionPathTags()
     if( !aTags.empty() )
     {
         bChanges = true;
-        MotionPathTagVector::iterator aIter( aTags.begin() );
-        while( aIter != aTags.end() )
+        for( rtl::Reference< MotionPathTag >& xTag : aTags )
         {
-            rtl::Reference< MotionPathTag > xTag( *aIter++ );
             xTag->Dispose();
         }
     }
@@ -1127,13 +1118,9 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
     sal_Int32 nMaxParaDepth = 0;
 
     // get options from selected effects
-    EffectSequence::iterator aIter( maListSelection.begin() );
-    const EffectSequence::iterator aEnd( maListSelection.end() );
     const CustomAnimationPresets& rPresets (getPresets());
-    while( aIter != aEnd )
+    for( CustomAnimationEffectPtr& pEffect : maListSelection )
     {
-        CustomAnimationEffectPtr pEffect = *aIter++;
-
         EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
         if( !pEffectSequence )
             pEffectSequence = mpMainSequence.get();
@@ -1245,12 +1232,8 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
 
     MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-    EffectSequence::iterator aIter( maListSelection.begin() );
-    const EffectSequence::iterator aEnd( maListSelection.end() );
-    while( aIter != aEnd )
+    for( CustomAnimationEffectPtr& pEffect : maListSelection )
     {
-        CustomAnimationEffectPtr pEffect = *aIter++;
-
         DBG_ASSERT( pEffect->getEffectSequence(), "sd::CustomAnimationPane::changeSelection(), dead effect in selection!" );
         if( !pEffect->getEffectSequence() )
             continue;
@@ -1516,12 +1499,8 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
             pOldSet->getPropertyValue(nHandleTextReverse) >>= bTextReverse;
 
         EffectSequence const aSelectedEffects( maListSelection );
-        EffectSequence::const_iterator iter( aSelectedEffects.begin() );
-        const EffectSequence::const_iterator iEnd( aSelectedEffects.end() );
-        while( iter != iEnd )
+        for( CustomAnimationEffectPtr const& pEffect : aSelectedEffects )
         {
-            CustomAnimationEffectPtr const& pEffect = *iter++;
-
             EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
             if( !pEffectSequence )
                 pEffectSequence = mpMainSequence.get();
@@ -1808,10 +1787,9 @@ void CustomAnimationPane::onAdd()
             ParagraphTarget aParaTarget;
             aParaTarget.Shape = xShape;
 
-            std::vector< sal_Int16 >::iterator aIter( aParaList.begin() );
-            for( ; aIter != aParaList.end(); ++aIter )
+            for( const auto& rPara : aParaList )
             {
-                aParaTarget.Paragraph = (*aIter);
+                aParaTarget.Paragraph = rPara;
                 aTargets.push_back( makeAny( aParaTarget ) );
             }
         }
@@ -1849,17 +1827,15 @@ void CustomAnimationPane::onAdd()
         mpCustomAnimationList->SelectAll( false );
 
         // gather shapes from the selection
-        std::vector< Any >::iterator aIter( aTargets.begin() );
-        const std::vector< Any >::iterator aEnd( aTargets.end() );
         bool bFirst = true;
-        for( ; aIter != aEnd; ++aIter )
+        for( const auto& rTarget : aTargets )
         {
-            CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
+            CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, rTarget, fDuration );
 
             // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
             if( bHasText && (aTargets.size() == 1) )
             {
-                Reference< XShape > xShape( (*aIter), UNO_QUERY );
+                Reference< XShape > xShape( rTarget, UNO_QUERY );
                 if( xShape.is() && !hasVisibleShape( xShape ) )
                 {
                     mpMainSequence->createTextGroup( pCreated, 1, -1.0, false, false );
@@ -1893,11 +1869,8 @@ void CustomAnimationPane::onRemove()
 
         EffectSequence aList( maListSelection );
 
-        EffectSequence::iterator aIter( aList.begin() );
-        const EffectSequence::iterator aEnd( aList.end() );
-        while( aIter != aEnd )
+        for( CustomAnimationEffectPtr& pEffect : aList )
         {
-            CustomAnimationEffectPtr pEffect = *aIter++;
             if( pEffect->getEffectSequence() )
                 pEffect->getEffectSequence()->remove( pEffect );
         }
@@ -1943,11 +1916,8 @@ void CustomAnimationPane::onChangeStart( sal_Int16 nNodeType )
 
     bool bNeedRebuild = false;
 
-    EffectSequence::iterator aIter( maListSelection.begin() );
-    const EffectSequence::iterator aEnd( maListSelection.end() );
-    while( aIter != aEnd )
+    for( CustomAnimationEffectPtr& pEffect : maListSelection )
     {
-        CustomAnimationEffectPtr pEffect = *aIter++;
         if( pEffect->getNodeType() != nNodeType )
         {
             pEffect->setNodeType( nNodeType );
@@ -1976,11 +1946,8 @@ void CustomAnimationPane::onChangeSpeed()
         MainSequenceRebuildGuard aGuard( mpMainSequence );
 
         // change selected effect
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
-        while( aIter != aEnd )
+        for( CustomAnimationEffectPtr& pEffect : maListSelection )
         {
-            CustomAnimationEffectPtr pEffect = *aIter++;
             pEffect->setDuration( fDuration );
         }
 
@@ -2073,12 +2040,8 @@ IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
         bool bNeedUpdate = false;
 
         // change selected effect
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
-        while( aIter != aEnd )
+        for( CustomAnimationEffectPtr& pEffect : maListSelection )
         {
-            CustomAnimationEffectPtr pEffect = *aIter++;
-
             if( setProperty1Value( mnPropertyType, pEffect, aValue ) )
                 bNeedUpdate = true;
         }
@@ -2107,11 +2070,8 @@ IMPL_LINK_NOARG(CustomAnimationPane, DelayLoseFocusHdl, Control&, void)
     MainSequenceRebuildGuard aGuard( mpMainSequence );
 
     // change selected effect
-    EffectSequence::iterator aIter( maListSelection.begin() );
-    const EffectSequence::iterator aEnd( maListSelection.end() );
-    while( aIter != aEnd )
+    for( CustomAnimationEffectPtr& pEffect : maListSelection )
     {
-        CustomAnimationEffectPtr pEffect = *aIter++;
         pEffect->setBegin( fBegin/10.0 );
     }
 
@@ -2134,18 +2094,14 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 
         VclPtr<vcl::Window> xSaveFocusId = Window::SaveFocus();
 
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
-
         if ( ePathKind != PathKind::NONE )
         {
             std::vector< Any > aTargets;
             MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-            while( aIter != aEnd )
+            for( CustomAnimationEffectPtr& pEffect : maListSelection )
             {
-                aTargets.push_back( (*aIter)->getTarget() );
-                CustomAnimationEffectPtr pEffect = *aIter++;
+                aTargets.push_back( pEffect->getTarget() );
 
                 EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
                 if( !pEffectSequence )
@@ -2167,10 +2123,8 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
         MainSequenceRebuildGuard aGuard( mpMainSequence );
 
         // get selected effect
-        while( aIter != aEnd )
+        for( CustomAnimationEffectPtr& pEffect : maListSelection )
         {
-            CustomAnimationEffectPtr pEffect = *aIter++;
-
             // Dispose the deprecated motion path tag. It will be rebuilt later.
             if (pEffect->getPresetClass() == css::presentation::EffectPresetClass::MOTIONPATH)
             {
@@ -2229,8 +2183,6 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 
     sal_uInt32 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
-    PresetCategoryList::const_iterator aCategoryIter( rCategoryList.begin() );
-    const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
     mpLBAnimation->Clear();
 
     if(nPosition == gnMotionPathPos)
@@ -2242,9 +2194,8 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
         mnFreeformPathPos = mpLBAnimation->InsertEntry( SvxResId(STR_ObjNameSingulFREELINE) );
     }
 
-    while(aCategoryIter != aCategoryEnd)
+    for (PresetCategoryPtr& pCategory : rCategoryList)
     {
-        PresetCategoryPtr pCategory( *aCategoryIter++ );
         if( pCategory.get() )
         {
             mpLBAnimation->InsertCategory( pCategory->maLabel );
@@ -2252,11 +2203,8 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
             std::vector< CustomAnimationPresetPtr > aSortedVector(pCategory->maEffects.size());
             std::copy( pCategory->maEffects.begin(), pCategory->maEffects.end(), aSortedVector.begin() );
 
-            std::vector< CustomAnimationPresetPtr >::const_iterator aIter( aSortedVector.begin() );
-            const std::vector< CustomAnimationPresetPtr >::const_iterator aEnd( aSortedVector.end() );
-            while( aIter != aEnd )
+            for( CustomAnimationPresetPtr& pDescriptor : aSortedVector )
             {
-                CustomAnimationPresetPtr pDescriptor = *aIter++;
                 // ( !isTextOnly || ( isTextOnly && bHasText ) ) <=> !isTextOnly || bHasText
                 if( pDescriptor.get() && ( !pDescriptor->isTextOnly() || bHasText ) )
                 {
@@ -2334,13 +2282,8 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
     if( bUp )
     {
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
-
-        while( aIter != aEnd )
+        for( CustomAnimationEffectPtr& pEffect : maListSelection )
         {
-            CustomAnimationEffectPtr pEffect = *aIter++;
-
             EffectSequence::iterator aUpEffectPos( pSequence->find( pEffect ) );
             // coverity[copy_paste_error : FALSE] - this is correct, checking if it exists
             if( aUpEffectPos != rEffectSequence.end() )
@@ -2416,15 +2359,10 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     if( maListSelection.empty() )
     {
         rtl::Reference< MotionPathTag > xMotionPathTag;
-        MotionPathTagVector::iterator aIter;
-        for( aIter = maMotionPathTags.begin(); aIter != maMotionPathTags.end(); ++aIter )
-        {
-            if( (*aIter)->isSelected() )
-            {
-                xMotionPathTag = *aIter;
-                break;
-            }
-        }
+        auto aIter = std::find_if(maMotionPathTags.begin(), maMotionPathTags.end(),
+            [](const MotionPathTagVector::value_type& rxMotionPathTag) { return rxMotionPathTag->isSelected(); });
+        if (aIter != maMotionPathTags.end())
+            xMotionPathTag = *aIter;
 
         if( xMotionPathTag.is() )
         {
@@ -2445,12 +2383,8 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     {
         MainSequencePtr pSequence( new MainSequence() );
 
-        EffectSequence::iterator aIter( maListSelection.begin() );
-        const EffectSequence::iterator aEnd( maListSelection.end() );
-
-        while( aIter != aEnd )
+        for( CustomAnimationEffectPtr& pEffect : maListSelection )
         {
-            CustomAnimationEffectPtr pEffect = *aIter++;
             pSequence->append( pEffect->clone() );
         }
 
@@ -2493,12 +2427,8 @@ void CustomAnimationPane::onSelect()
         if( pView )
         {
             pView->UnmarkAllObj();
-            EffectSequence::iterator aIter( maListSelection.begin() );
-            const EffectSequence::iterator aEnd( maListSelection.end() );
-            while( aIter != aEnd )
+            for( const CustomAnimationEffectPtr& pEffect : maListSelection )
             {
-                CustomAnimationEffectPtr pEffect = *aIter++;
-
                 Reference< XShape > xShape( pEffect->getTargetShape() );
                 SdrObject* pObj = GetSdrObjectFromXShape( xShape );
                 if( pObj )

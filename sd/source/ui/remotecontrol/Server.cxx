@@ -202,10 +202,9 @@ void RemoteServer::presentationStarted( const css::uno::Reference<
     if ( !spServer )
         return;
     MutexGuard aGuard( sDataMutex );
-    for ( vector<Communicator*>::const_iterator aIt = sCommunicators.begin();
-         aIt != sCommunicators.end(); ++aIt )
+    for ( const auto& rpCommunicator : sCommunicators )
     {
-        (*aIt)->presentationStarted( rController );
+        rpCommunicator->presentationStarted( rController );
     }
 }
 void RemoteServer::presentationStopped()
@@ -213,10 +212,9 @@ void RemoteServer::presentationStopped()
     if ( !spServer )
         return;
     MutexGuard aGuard( sDataMutex );
-    for ( vector<Communicator*>::const_iterator aIt = sCommunicators.begin();
-         aIt != sCommunicators.end(); ++aIt )
+    for ( const auto& rpCommunicator : sCommunicators )
     {
-        (*aIt)->disposeListener();
+        rpCommunicator->disposeListener();
     }
 }
 
@@ -225,15 +223,9 @@ void RemoteServer::removeCommunicator( Communicator const * mCommunicator )
     if ( !spServer )
         return;
     MutexGuard aGuard( sDataMutex );
-    for ( vector<Communicator*>::iterator aIt = sCommunicators.begin();
-         aIt != sCommunicators.end(); ++aIt )
-    {
-        if ( mCommunicator == *aIt )
-        {
-            sCommunicators.erase( aIt );
-            break;
-        }
-    }
+    auto aIt = std::find(sCommunicators.begin(), sCommunicators.end(), mCommunicator);
+    if (aIt != sCommunicators.end())
+        sCommunicators.erase( aIt );
 }
 
 std::vector< std::shared_ptr< ClientInfo > > RemoteServer::getClients()
@@ -318,15 +310,9 @@ bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, 
 
         sCommunicators.push_back( pCommunicator );
 
-        for ( vector< std::shared_ptr< ClientInfoInternal > >::iterator aIt = spServer->mAvailableClients.begin();
-            aIt != spServer->mAvailableClients.end(); ++aIt )
-        {
-            if ( pClient == *aIt )
-            {
-                spServer->mAvailableClients.erase( aIt );
-                break;
-            }
-        }
+        auto aIt = std::find(spServer->mAvailableClients.begin(), spServer->mAvailableClients.end(), pClient);
+        if (aIt != spServer->mAvailableClients.end())
+            spServer->mAvailableClients.erase( aIt );
         pCommunicator->launch();
         return true;
     }

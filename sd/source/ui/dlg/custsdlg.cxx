@@ -303,10 +303,9 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
         m_xEdtName->set_text( aOldName );
 
         // fill ListBox with CustomShow pages
-        for( SdCustomShow::PageVec::iterator it = rpCustomShow->PagesVector().begin();
-             it != rpCustomShow->PagesVector().end(); ++it )
+        for( const auto& rpPage : rpCustomShow->PagesVector() )
         {
-            m_xLbCustomPages->append(OUString::number(reinterpret_cast<sal_uInt64>(*it)) ,(*it)->GetName(), "");
+            m_xLbCustomPages->append(OUString::number(reinterpret_cast<sal_uInt64>(rpPage)), rpPage->GetName(), "");
         }
     }
     else
@@ -420,17 +419,18 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     // compare page pointer
     if( !bDifferent )
     {
-        SdCustomShow::PageVec::iterator it1 = rpCustomShow->PagesVector().begin();
         size_t i = 0;
-        for( ; it1 != rpCustomShow->PagesVector().end() && i < nCount && !bDifferent;
-             ++it1, ++i )
+        for (const auto& rpPage : rpCustomShow->PagesVector())
         {
             SdPage* pPage = reinterpret_cast<SdPage*>(m_xLbCustomPages->get_id(i).toUInt64());
-            if (*it1 != pPage)
+            if (rpPage != pPage)
             {
                 rpCustomShow->PagesVector().clear();
                 bDifferent = true;
+                break;
             }
+
+            ++i;
         }
     }
 
