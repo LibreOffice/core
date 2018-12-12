@@ -453,7 +453,6 @@ namespace sw { namespace mark
             pMarkBase->SetName( getUniqueMarkName( pMarkBase->GetName() ) );
 
         // register mark
-        m_aMarkNamesSet.insert(pMarkBase->GetName());
         lcl_InsertMarkSorted(m_vAllMarks, pMark);
         switch(eType)
         {
@@ -575,8 +574,6 @@ namespace sw { namespace mark
         if (::sw::mark::MarkBase* pMarkBase = dynamic_cast< ::sw::mark::MarkBase* >(io_pMark))
         {
             const OUString sOldName(pMarkBase->GetName());
-            m_aMarkNamesSet.erase(sOldName);
-            m_aMarkNamesSet.insert(rNewName);
             pMarkBase->SetName(rNewName);
 
             if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark))
@@ -962,7 +959,6 @@ namespace sw { namespace mark
         //vector, and on xHoldPastErase release findMark won't find
         //it anymore.
         pMark_t xHoldPastErase = *aI;
-        m_aMarkNamesSet.erase(ppMark->get()->GetName());
         m_vAllMarks.erase(aI);
         return ret;
     }
@@ -994,7 +990,6 @@ namespace sw { namespace mark
     {
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
-        m_aMarkNamesSet.clear();
 
         m_vAnnotationMarks.clear();
 
