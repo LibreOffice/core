@@ -141,7 +141,6 @@ Clipboard::Clipboard (SlideSorter& rSlideSorter)
       mrSlideSorter(rSlideSorter),
       mrController(mrSlideSorter.GetController()),
       maPagesToRemove(),
-      maPagesToSelect(),
       mxUndoContext(),
       mxSelectionObserverContext(),
       mnDragFinishedUserEventId(nullptr)
@@ -573,7 +572,6 @@ void Clipboard::StartDrag (
     vcl::Window* pWindow)
 {
     maPagesToRemove.clear();
-    maPagesToSelect.clear();
     CreateSlideTransferable(pWindow, true);
 
     mrController.GetInsertionIndicatorHandler()->UpdatePosition(
@@ -834,15 +832,6 @@ sal_uInt16 Clipboard::InsertSlides (
     sal_uInt16 nInsertedPageCount = ViewClipboard::InsertSlides (
         rTransferable,
         nInsertPosition);
-
-    // Remember the inserted pages so that they can be selected when the
-    // operation is finished.
-    maPagesToSelect.clear();
-    SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-    if (pDocument != nullptr)
-        for (sal_Int32 i=0; i<=nInsertedPageCount; i+=2)
-            maPagesToSelect.push_back(
-                dynamic_cast<SdPage*>(pDocument->GetPage(nInsertPosition+i)));
 
     return nInsertedPageCount;
 }
