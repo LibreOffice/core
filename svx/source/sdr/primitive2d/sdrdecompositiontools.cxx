@@ -382,10 +382,10 @@ namespace drawinglayer
                     aISRT.invert();
 
                     // bring the primitive back to scaled only and get scaled range, create new clone for this
-                    SdrTextPrimitive2D* pNew2 = pNew->createTransformedClone(aISRT);
+                    std::unique_ptr<SdrTextPrimitive2D> pNew2 = pNew->createTransformedClone(aISRT);
                     OSL_ENSURE(pNew2, "createTextPrimitive: Could not create transformed clone of text primitive (!)");
                     delete pNew;
-                    pNew = pNew2;
+                    pNew = pNew2.release();
 
                     // create neutral geometry::ViewInformation2D for local range and decompose calls. This is okay
                     // since the decompose is view-independent
