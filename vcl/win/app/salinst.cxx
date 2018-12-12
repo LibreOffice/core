@@ -668,6 +668,11 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             nRet = static_cast<LRESULT>( pTimer->ImplHandle_WM_TIMER( wParam ) );
             break;
 
+        case SAL_MSG_FORCE_REAL_TIMER:
+            assert(pTimer != nullptr);
+            pTimer->SetForceRealTimer(true);
+            break;
+
         case SAL_MSG_DUMMY:
             break;
 
