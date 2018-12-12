@@ -67,15 +67,12 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/unreffun \
     compilerplugins/clang/test/unusedindex \
     compilerplugins/clang/test/unusedenumconstants \
+    compilerplugins/clang/test/unusedfields \
     compilerplugins/clang/test/unusedvariablecheck \
     compilerplugins/clang/test/unusedvariablemore \
     compilerplugins/clang/test/useuniqueptr \
     compilerplugins/clang/test/vclwidgets \
 ))
-
-# clang-3.8 and clang trunk differ in how they represent ranged-for
-# which leads to a test failure
-#    compilerplugins/clang/test/unusedfields \
 
 $(eval $(call gb_CompilerTest_use_externals,compilerplugins_clang, \
     boost_headers \

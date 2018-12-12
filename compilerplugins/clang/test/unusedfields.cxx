@@ -114,14 +114,13 @@ struct ReadOnly1 { ReadOnly1(int&); };
 struct ReadOnlyAnalysis
 // expected-error@-1 {{read m_f2 [loplugin:unusedfields]}}
 // expected-error@-2 {{read m_f3 [loplugin:unusedfields]}}
-// expected-error@-3 {{read m_f4 [loplugin:unusedfields]}}
-// expected-error@-4 {{read m_f5 [loplugin:unusedfields]}}
-// expected-error@-5 {{read m_f6 [loplugin:unusedfields]}}
-// expected-error@-6 {{write m_f2 [loplugin:unusedfields]}}
-// expected-error@-7 {{write m_f3 [loplugin:unusedfields]}}
-// expected-error@-8 {{write m_f4 [loplugin:unusedfields]}}
-// expected-error@-9 {{write m_f5 [loplugin:unusedfields]}}
-// expected-error@-10 {{write m_f6 [loplugin:unusedfields]}}
+// expected-error@-3 {{read m_f5 [loplugin:unusedfields]}}
+// expected-error@-4 {{read m_f6 [loplugin:unusedfields]}}
+// expected-error@-5 {{write m_f2 [loplugin:unusedfields]}}
+// expected-error@-6 {{write m_f3 [loplugin:unusedfields]}}
+// expected-error@-7 {{write m_f4 [loplugin:unusedfields]}}
+// expected-error@-8 {{write m_f5 [loplugin:unusedfields]}}
+// expected-error@-9 {{write m_f6 [loplugin:unusedfields]}}
 {
     int m_f1;
     int m_f2;
@@ -177,9 +176,8 @@ struct ReadOnlyAnalysis3
 // add elements.
 struct ReadOnlyAnalysis4
 // expected-error@-1 {{read m_readonly [loplugin:unusedfields]}}
-// expected-error@-2 {{read m_readwrite [loplugin:unusedfields]}}
-// expected-error@-3 {{write m_readwrite [loplugin:unusedfields]}}
-// expected-error@-4 {{read m_readonlyCss [loplugin:unusedfields]}}
+// expected-error@-2 {{write m_readwrite [loplugin:unusedfields]}}
+// expected-error@-3 {{read m_readonlyCss [loplugin:unusedfields]}}
 {
     std::vector<int> m_readonly;
     std::vector<int> m_readwrite;
