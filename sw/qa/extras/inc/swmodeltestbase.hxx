@@ -348,8 +348,8 @@ protected:
         return false;
     }
 
-private:
-    void dumpLayout()
+protected:
+    void dumpLayout(uno::Reference< lang::XComponent > & rComponent)
     {
         // create the xml writer
         mpXmlBuffer = xmlBufferCreate();
@@ -357,7 +357,7 @@ private:
         xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
 
         // create the dump
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(rComponent.get());
         CPPUNIT_ASSERT(pTextDoc);
         SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
         SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -368,7 +368,6 @@ private:
         xmlFreeTextWriter(pXmlWriter);
     }
 
-protected:
     void discardDumpedLayout()
     {
         if (mpXmlBuffer)
@@ -428,7 +427,7 @@ protected:
     xmlDocPtr parseLayoutDump()
     {
         if (!mpXmlBuffer)
-            dumpLayout();
+            dumpLayout(mxComponent);
 
         return xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer)), xmlBufferLength(mpXmlBuffer));
     }
