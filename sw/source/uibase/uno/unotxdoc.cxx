@@ -486,11 +486,12 @@ SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
 
 void SwXTextDocument::GetNumberFormatter()
 {
+    SolarMutexGuard aGuard;
     if(IsValid())
     {
         if(!xNumFormatAgg.is())
         {
-            if ( pDocShell->GetDoc() )
+            if(pDocShell->GetDoc())
             {
                 SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj(
                                     pDocShell->GetDoc()->GetNumberFormatter());
