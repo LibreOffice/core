@@ -170,7 +170,7 @@ public:
                         SfxBindings*  );
 
     //! soon obsolete !
-    static  SfxChildWindowContext* CreateImpl(vcl::Window *pParent,
+    static  std::unique_ptr<SfxChildWindowContext> CreateImpl(vcl::Window *pParent,
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo );
     static  void RegisterChildWindowContext(SfxModule *pMod);
 };
