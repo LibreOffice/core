@@ -120,7 +120,6 @@ void ScMyTables::NewSheet(const OUString& sTableName, const OUString& sStyleName
         else
             pDoc->SetTabNameOnLoad(maCurrentCellPos.Tab(), sTableName);
 
-        rImport.SetTableStyle(sStyleName);
         xCurrentSheet = getCurrentSheet(rImport.GetModel(), maCurrentCellPos.Tab());
         if (xCurrentSheet.is())
         {

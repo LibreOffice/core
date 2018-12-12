@@ -485,7 +485,6 @@ void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
     ScDPGroupDimension aNewGroup( rGroup );
     aNewGroup.SetGroupDim( GetColumnCount() );      // new dimension will be at the end
     aGroups.push_back( aNewGroup );
-    aGroupNames.insert(aNewGroup.GetName());
 }
 
 void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup )

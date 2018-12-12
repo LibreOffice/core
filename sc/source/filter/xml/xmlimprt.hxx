@@ -268,7 +268,6 @@ class ScXMLImport: public SvXMLImport
     std::unique_ptr<ScMyImpDetectiveOpArray>    pDetectiveOpArray;
     std::unique_ptr<SolarMutexGuard>        pSolarMutexGuard;
 
-    std::vector<OUString>          aTableStyles;
     std::unique_ptr<XMLNumberFormatAttributesExportHelper> pNumberFormatAttributesExportHelper;
     std::unique_ptr<ScMyStyleNumberFormats> pStyleNumberFormats;
     css::uno::Reference <css::util::XNumberFormats> xNumberFormats;
@@ -388,7 +387,6 @@ public:
     virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
-    void SetTableStyle(const OUString& rValue) { aTableStyles.push_back(rValue); }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper.get(); }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const OUString& rCurrency);
     bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrencySymbol, const OUString& sBankSymbol);
