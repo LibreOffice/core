@@ -4143,6 +4143,11 @@ public:
         MenuHelper::set_item_active(rIdent, bActive);
     }
 
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        MenuHelper::set_item_sensitive(rIdent, bSensitive);
+    }
+
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
         MenuHelper::set_item_label(rIdent, rLabel);
