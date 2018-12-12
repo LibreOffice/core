@@ -428,7 +428,7 @@ void SfxWorkWindow::Sort_Impl()
     aSortedList.clear();
     for (size_t i = 0; i < aChildren.size(); ++i)
     {
-        SfxChild_Impl *pCli = aChildren[i];
+        SfxChild_Impl *pCli = aChildren[i].get();
         if (pCli)
         {
             decltype(aSortedList)::size_type k;
@@ -684,7 +684,7 @@ void SfxWorkWindow::FlushPendingChildSizes()
     // size to which they are getting resized towards.
     for (size_t i = 0; i < aChildren.size(); ++i)
     {
-        SfxChild_Impl *pCli = aChildren[i];
+        SfxChild_Impl *pCli = aChildren[i].get();
         if (!pCli || !pCli->pWin)
             continue;
         (void)pCli->pWin->GetSizePixel();
@@ -725,7 +725,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
 
     for (sal_uInt16 n : aSortedList)
     {
-        SfxChild_Impl* pCli = aChildren[n];
+        SfxChild_Impl* pCli = aChildren[n].get();
         if ( !pCli->pWin )
             continue;
 
@@ -873,13 +873,13 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
     if ( rWindow.GetParent() != pWorkWin )
         rWindow.SetParent( pWorkWin );
 
-    SfxChild_Impl *pChild = new SfxChild_Impl(rWindow, rWindow.GetSizePixel(),
+    auto pChild = o3tl::make_unique<SfxChild_Impl>(rWindow, rWindow.GetSizePixel(),
                                     eAlign, rWindow.IsVisible());
 
-    aChildren.push_back(pChild);
+    aChildren.push_back(std::move(pChild));
     bSorted = false;
     nChildren++;
-    return aChildren.back();
+    return aChildren.back().get();
 }
 
 SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl(std::shared_ptr<SfxModelessDialogController>& rController,
@@ -888,12 +888,12 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl(std::shared_ptr<SfxModelessDial
     DBG_ASSERT( aChildren.size() < 255, "too many children" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
 
-    SfxChild_Impl *pChild = new SfxChild_Impl(rController, eAlign);
+    auto pChild = o3tl::make_unique<SfxChild_Impl>(rController, eAlign);
 
-    aChildren.push_back(pChild);
+    aChildren.push_back(std::move(pChild));
     bSorted = false;
     nChildren++;
-    return aChildren.back();
+    return aChildren.back().get();
 }
 
 void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
@@ -903,21 +903,16 @@ void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
     decltype(aChildren)::size_type nPos;
     for ( nPos = 0; nPos < aChildren.size(); ++nPos )
     {
-        pChild = aChildren[nPos];
+        pChild = aChildren[nPos].get();
         if ( pChild && pChild->pWin == &rWindow )
-            break;
+        {
+            bSorted = false;
+            nChildren--;
+            aChildren.erase(aChildren.begin() + nPos);
+            return;
+        }
     }
-
-    if ( nPos < aChildren.size() )
-    {
-        bSorted = false;
-        nChildren--;
-        aChildren.erase(aChildren.begin() + nPos);
-        delete pChild;
-    }
-    else {
-        OSL_FAIL( "releasing unregistered child" );
-    }
+    OSL_FAIL( "releasing unregistered child" );
 }
 
 void SfxWorkWindow::ReleaseChild_Impl(SfxModelessDialogController& rController)
@@ -927,21 +922,16 @@ void SfxWorkWindow::ReleaseChild_Impl(SfxModelessDialogController& rController)
     decltype(aChildren)::size_type nPos;
     for ( nPos = 0; nPos < aChildren.size(); ++nPos )
     {
-        pChild = aChildren[nPos];
+        pChild = aChildren[nPos].get();
         if (pChild && pChild->xController.get() == &rController)
-            break;
+        {
+            bSorted = false;
+            nChildren--;
+            aChildren.erase(aChildren.begin() + nPos);
+            return;
+        }
     }
-
-    if ( nPos < aChildren.size() )
-    {
-        bSorted = false;
-        nChildren--;
-        aChildren.erase(aChildren.begin() + nPos);
-        delete pChild;
-    }
-    else {
-        OSL_FAIL( "releasing unregistered child" );
-    }
+    OSL_FAIL( "releasing unregistered child" );
 }
 
 SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window& rWindow ) const
@@ -950,7 +940,7 @@ SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window& rWindow ) const
     sal_uInt16 nCount = aChildren.size();
     for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
     {
-        SfxChild_Impl *pChild = aChildren[nPos];
+        SfxChild_Impl *pChild = aChildren[nPos].get();
         if ( pChild && pChild->pWin == &rWindow )
             return pChild;
     }
@@ -964,7 +954,7 @@ void SfxWorkWindow::ShowChildren_Impl()
 
     bool bInvisible = ( !IsVisible_Impl() || ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() ));
 
-    for (SfxChild_Impl* pCli : aChildren)
+    for (std::unique_ptr<SfxChild_Impl>& pCli : aChildren)
     {
         if (!pCli)
             continue;
@@ -976,7 +966,7 @@ void SfxWorkWindow::ShowChildren_Impl()
             for (std::unique_ptr<SfxChildWin_Impl>& pCWin : aChildWins)
             {
                 SfxChild_Impl*    pChild  = pCWin->pCli;
-                if ( pChild == pCli )
+                if ( pChild == pCli.get() )
                 {
                     pCW = pCWin.get();
                     break;
@@ -1000,8 +990,9 @@ void SfxWorkWindow::ShowChildren_Impl()
                 {
                     if (!pCli->xController->getDialog()->get_visible())
                     {
-                        weld::DialogController::runAsync(pCli->xController,
-                            [=](sal_Int32 /*nResult*/){ pCli->xController->Close(); });
+                        auto xController = pCli->xController;
+                        weld::DialogController::runAsync(xController,
+                            [=](sal_Int32 /*nResult*/){ xController->Close(); });
                     }
                 }
                 else
@@ -1027,7 +1018,7 @@ void SfxWorkWindow::HideChildren_Impl()
 {
     for ( sal_uInt16 nPos = aChildren.size(); nPos > 0; --nPos )
     {
-        SfxChild_Impl *pChild = aChildren[nPos-1];
+        SfxChild_Impl *pChild = aChildren[nPos-1].get();
         if (!pChild)
             continue;
         if (pChild->xController)
@@ -1587,7 +1578,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     decltype(aSortedList)::size_type n;
     for ( n=0; n<aSortedList.size(); ++n )
     {
-        SfxChild_Impl *pChild = aChildren[aSortedList[n]];
+        SfxChild_Impl *pChild = aChildren[aSortedList[n]].get();
         if ( pChild && pChild->pWin == pWin )
             break;
     }
@@ -1611,7 +1602,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             // the inner rectangle!
             for (sal_uInt16 i : aSortedList)
             {
-                SfxChild_Impl* pCli = aChildren[i];
+                SfxChild_Impl* pCli = aChildren[i].get();
 
                 if ( pCli && pCli->nVisible == SfxChildVisibility::VISIBLE && pCli->pWin )
                 {
@@ -1698,7 +1689,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 return;
 
             SfxChildAlignment eAlign = SfxChildAlignment::NOALIGNMENT;
-            SfxChild_Impl *pCli = ( nPos != USHRT_MAX ) ? aChildren[nPos] : nullptr;
+            SfxChild_Impl *pCli = ( nPos != USHRT_MAX ) ? aChildren[nPos].get() : nullptr;
             if ( pCli && pDockWin )
             {
                 eAlign = pDockWin->GetAlignment();
@@ -2224,7 +2215,7 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
             Sort_Impl();
         for (sal_uInt16 n : aSortedList)
         {
-            SfxChild_Impl* pCli = aChildren[n];
+            SfxChild_Impl* pCli = aChildren[n].get();
             if ( (pCli->eAlign == SfxChildAlignment::NOALIGNMENT) || (IsDockingAllowed() && bInternalDockingAllowed) )
                 pCli->nVisible |= SfxChildVisibility::ACTIVE;
         }
@@ -2235,7 +2226,7 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
             Sort_Impl();
         for (sal_uInt16 n : aSortedList)
         {
-            SfxChild_Impl* pCli = aChildren[n];
+            SfxChild_Impl* pCli = aChildren[n].get();
             pCli->nVisible &= ~SfxChildVisibility::ACTIVE;
         }
     }
