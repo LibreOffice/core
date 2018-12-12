@@ -478,19 +478,14 @@ uno::Sequence< sal_Int32 > SAL_CALL
     }
     std::sort( vXShapes.begin(), vXShapes.end(), XShapePosCompareHelper() );
     //get the index of the selected object in the group
-    std::vector< uno::Reference<drawing::XShape> >::iterator aIter;
-    //we start counting position from 1
-    sal_Int32 nPos = 1;
-    for ( aIter = vXShapes.begin(); aIter != vXShapes.end(); ++aIter, nPos++ )
+    auto aIter = std::find_if(vXShapes.begin(), vXShapes.end(),
+        [&xCurShape](const uno::Reference<drawing::XShape>& rxShape) { return rxShape.get() == xCurShape.get(); });
+    if (aIter != vXShapes.end())
     {
-        if ( (*aIter).get() == xCurShape.get() )
-        {
-            sal_Int32* pArray = aRet.getArray();
-            pArray[0] = 1; //it should be 1 based, not 0 based.
-            pArray[1] = vXShapes.size();
-            pArray[2] = nPos;
-            break;
-        }
+        sal_Int32* pArray = aRet.getArray();
+        pArray[0] = 1; //it should be 1 based, not 0 based.
+        pArray[1] = vXShapes.size();
+        pArray[2] = static_cast<sal_Int32>(std::distance(vXShapes.begin(), aIter)) + 1; //we start counting position from 1
     }
     return aRet;
 }

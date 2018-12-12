@@ -83,25 +83,19 @@ bool Assistent::GotoPage(const int nPageToGo)
     {
         int nIndex=mnCurrentPage-1;
 
-        auto iter = maPages[nIndex].begin();
-        auto iterEnd = maPages[nIndex].end();
-
-        for(; iter != iterEnd; ++iter)
+        for(auto& rxPage : maPages[nIndex])
         {
-            (*iter)->Disable();
-            (*iter)->Hide();
+            rxPage->Disable();
+            rxPage->Hide();
         }
 
         mnCurrentPage=nPageToGo;
         nIndex=mnCurrentPage-1;
 
-        iter = maPages[nIndex].begin();
-        iterEnd = maPages[nIndex].end();
-
-        for(; iter != iterEnd; ++iter)
+        for(auto& rxPage : maPages[nIndex])
         {
-            (*iter)->Enable();
-            (*iter)->Show();
+            rxPage->Enable();
+            rxPage->Show();
         }
 
         return true;

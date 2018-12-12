@@ -79,11 +79,10 @@ namespace
 OUString lcl_GetExtensionsList ( ::std::vector< FilterDesc > const& rFilterDescList )
 {
     OUStringBuffer aExtensions;
-    ::std::vector< FilterDesc >::const_iterator aIter( rFilterDescList.begin() );
 
-    while (aIter != rFilterDescList.end())
+    for (const auto& rFilterDesc : rFilterDescList)
     {
-        OUString sWildcard = (*aIter).second;
+        OUString sWildcard = rFilterDesc.second;
 
         if ( aExtensions.indexOf( sWildcard ) == -1 )
         {
@@ -92,7 +91,6 @@ OUString lcl_GetExtensionsList ( ::std::vector< FilterDesc > const& rFilterDescL
             aExtensions.append(sWildcard);
         }
 
-        ++aIter;
     }
 
     return aExtensions.makeStringAndClear();
@@ -206,14 +204,10 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 lcl_AddFilter( aFilterVector, pFilter );
 
                 // add additional supported filters
-                ::std::vector< OUString >::const_iterator aOtherIter( aOtherFilterVector.begin() );
-
-                while( aOtherIter != aOtherFilterVector.end() )
+                for( const auto& rOtherFilter : aOtherFilterVector )
                 {
-                    if( ( pFilter = rMatcher.GetFilter4Mime( *aOtherIter ) ) != nullptr )
+                    if( ( pFilter = rMatcher.GetFilter4Mime( rOtherFilter ) ) != nullptr )
                         lcl_AddFilter( aFilterVector, pFilter );
-
-                    ++aOtherIter;
                 }
 
                 // set "All supported formats" as the default filter
@@ -225,12 +219,9 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 xFilterManager->setCurrentFilter( aAllSpec );
 
                 // append individual filters
-                ::std::vector< ::std::pair < OUString, OUString > >::const_iterator aIter( aFilterVector.begin() );
-
-                while( aIter != aFilterVector.end() )
+                for( const auto& rFilter : aFilterVector )
                 {
-                    xFilterManager->appendFilter( (*aIter).first, (*aIter).second );
-                    ++aIter;
+                    xFilterManager->appendFilter( rFilter.first, rFilter.second );
                 }
 
                 // end with "All files" as fallback

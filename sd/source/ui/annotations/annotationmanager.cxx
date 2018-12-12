@@ -270,14 +270,12 @@ Reference<XAnnotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 nAnno
         if( pPage && !pPage->getAnnotations().empty() )
         {
             AnnotationVector aAnnotations(pPage->getAnnotations());
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
-            {
-                Reference<XAnnotation> xAnnotation(*iter);
-                if( sd::getAnnotationId(xAnnotation) == nAnnotationId )
-                {
-                    return xAnnotation;
-                }
-            }
+            auto iter = std::find_if(aAnnotations.begin(), aAnnotations.end(),
+                [nAnnotationId](const Reference<XAnnotation>& xAnnotation) {
+                    return sd::getAnnotationId(xAnnotation) == nAnnotationId;
+                });
+            if (iter != aAnnotations.end())
+                return *iter;
         }
     } while( pPage );
 
@@ -457,9 +455,9 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
                 ::tools::Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
                 bool bFree = true;
 
-                for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+                for( const auto& rxAnnotation : aAnnotations )
                 {
-                    RealPoint2D aPoint( (*iter)->getPosition() );
+                    RealPoint2D aPoint( rxAnnotation->getPosition() );
                     aTagRect.SetLeft( sal::static_int_cast< long >( aPoint.X * 100.0 ) );
                     aTagRect.SetTop( sal::static_int_cast< long >( aPoint.Y * 100.0 ) );
                     aTagRect.SetRight( aTagRect.Left() + width - 1 );
@@ -645,9 +643,8 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const OUString& sAuthor )
         if( pPage && !pPage->getAnnotations().empty() )
         {
             AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            for( Reference< XAnnotation >& xAnnotation : aAnnotations )
             {
-                Reference< XAnnotation > xAnnotation( *iter );
                 if( xAnnotation->getAuthor() == sAuthor )
                 {
                     if( mxSelectedAnnotation == xAnnotation )
@@ -676,9 +673,9 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
         {
 
             AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            for( const auto& rxAnnotation : aAnnotations )
             {
-                pPage->removeAnnotation( *iter );
+                pPage->removeAnnotation( rxAnnotation );
             }
         }
     }
@@ -755,17 +752,14 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         if( xCurrent.is() )
         {
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            auto iter = std::find(aAnnotations.begin(), aAnnotations.end(), xCurrent);
+            if (iter != aAnnotations.end())
             {
-                if( (*iter) == xCurrent )
+                ++iter;
+                if( iter != aAnnotations.end() )
                 {
-                    ++iter;
-                    if( iter != aAnnotations.end() )
-                    {
-                        SelectAnnotation( (*iter) );
-                        return;
-                    }
-                    break;
+                    SelectAnnotation( (*iter) );
+                    return;
                 }
             }
         }
@@ -779,18 +773,12 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         if( xCurrent.is() )
         {
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            auto iter = std::find(aAnnotations.begin(), aAnnotations.end(), xCurrent);
+            if (iter != aAnnotations.end() && iter != aAnnotations.begin())
             {
-                if( (*iter) == xCurrent )
-                {
-                    if( iter != aAnnotations.begin() )
-                    {
-                        --iter;
-                        SelectAnnotation( (*iter) );
-                        return;
-                    }
-                    break;
-                }
+                --iter;
+                SelectAnnotation( (*iter) );
+                return;
             }
         }
         else if( !aAnnotations.empty() )
@@ -866,17 +854,13 @@ void AnnotationManagerImpl::SelectAnnotation( const css::uno::Reference< css::of
 {
     mxSelectedAnnotation = xAnnotation;
 
-    const AnnotationTagVector::const_iterator aEnd( maTagVector.end() );
-    for( AnnotationTagVector::const_iterator iter( maTagVector.begin() );
-        iter != aEnd; ++iter)
+    auto iter = std::find_if(maTagVector.begin(), maTagVector.end(),
+        [&xAnnotation](const rtl::Reference<AnnotationTag>& rxTag) { return rxTag->GetAnnotation() == xAnnotation; });
+    if (iter != maTagVector.end())
     {
-        if( (*iter)->GetAnnotation() == xAnnotation )
-        {
-            SmartTagReference xTag( (*iter).get() );
-            mrBase.GetMainViewShell()->GetView()->getSmartTags().select( xTag );
-            (*iter)->OpenPopup( bEdit );
-            break;
-        }
+        SmartTagReference xTag( (*iter).get() );
+        mrBase.GetMainViewShell()->GetView()->getSmartTags().select( xTag );
+        (*iter)->OpenPopup( bEdit );
     }
 }
 
@@ -992,17 +976,12 @@ void AnnotationManagerImpl::CreateTags()
 
 void AnnotationManagerImpl::DisposeTags()
 {
-    if( !maTagVector.empty() )
+    for (auto& rxTag : maTagVector)
     {
-        AnnotationTagVector::iterator iter = maTagVector.begin();
-        do
-        {
-            (*iter++)->Dispose();
-        }
-        while( iter != maTagVector.end() );
-
-        maTagVector.clear();
+        rxTag->Dispose();
     }
+
+    maTagVector.clear();
 }
 
 void AnnotationManagerImpl::addListener()

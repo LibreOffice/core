@@ -198,10 +198,9 @@ void ConfigurationUpdater::CleanRequestedConfiguration()
         {
             Reference<XConfigurationController> xCC (
                 mxControllerManager->getConfigurationController());
-            vector<Reference<XResourceId> >::iterator iId;
-            for (iId=aResourcesToDeactivate.begin(); iId!=aResourcesToDeactivate.end(); ++iId)
-                if (iId->is())
-                    xCC->requestResourceDeactivation(*iId);
+            for (auto& rxId : aResourcesToDeactivate)
+                if (rxId.is())
+                    xCC->requestResourceDeactivation(rxId);
         }
     }
 }

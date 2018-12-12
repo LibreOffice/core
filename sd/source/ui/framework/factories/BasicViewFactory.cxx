@@ -109,10 +109,9 @@ void SAL_CALL BasicViewFactory::disposing()
     }
 
     // Release the view cache.
-    ViewShellContainer::const_iterator iView;
-    for (iView=mpViewCache->begin(); iView!=mpViewCache->end(); ++iView)
+    for (const auto& rxView : *mpViewCache)
     {
-        ReleaseView(*iView, true);
+        ReleaseView(rxView, true);
     }
 
     // Release the view shell container.  At this point no one other than us
@@ -120,9 +119,9 @@ void SAL_CALL BasicViewFactory::disposing()
     // trivial requirement, because no one other than us holds a shared
     // pointer).
     //    ViewShellContainer::const_iterator iView;
-    for (iView=mpViewShellContainer->begin(); iView!=mpViewShellContainer->end(); ++iView)
+    for (const auto& rxView : *mpViewShellContainer)
     {
-        OSL_ASSERT((*iView)->mpViewShell.use_count() == 1);
+        OSL_ASSERT(rxView->mpViewShell.use_count() == 1);
     }
     mpViewShellContainer.reset();
 }
@@ -452,15 +451,8 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
             return tmp;
         }();
 
-        ::std::vector<Reference<XResourceId> >::const_iterator iId;
-        for (iId=s_aCacheableResources.begin(); iId!=s_aCacheableResources.end(); ++iId)
-        {
-            if ((*iId)->compareTo(rpDescriptor->mxViewId) == 0)
-            {
-                bIsCacheable = true;
-                break;
-            }
-        }
+        bIsCacheable = std::any_of(s_aCacheableResources.begin(), s_aCacheableResources.end(),
+            [&rpDescriptor](const Reference<XResourceId>& rxId) { return rxId->compareTo(rpDescriptor->mxViewId) == 0; });
     }
 
     return bIsCacheable;
@@ -473,15 +465,12 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromC
     std::shared_ptr<ViewDescriptor> pDescriptor;
 
     // Search for the requested view in the cache.
-    ViewCache::iterator iEntry;
-    for (iEntry=mpViewCache->begin(); iEntry!=mpViewCache->end(); ++iEntry)
+    ViewCache::iterator iEntry = std::find_if(mpViewCache->begin(), mpViewCache->end(),
+        [&rxViewId](const ViewCache::value_type& rxEntry) { return rxEntry->mxViewId->compareTo(rxViewId) == 0; });
+    if (iEntry != mpViewCache->end())
     {
-        if ((*iEntry)->mxViewId->compareTo(rxViewId) == 0)
-        {
-            pDescriptor = *iEntry;
-            mpViewCache->erase(iEntry);
-            break;
-        }
+        pDescriptor = *iEntry;
+        mpViewCache->erase(iEntry);
     }
 
     // When the view has been found then relocate it to the given pane and

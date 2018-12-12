@@ -642,12 +642,9 @@ void ClientBox::populateEntries()
 
     vector< std::shared_ptr< ClientInfo > > aClients( RemoteServer::getClients() );
 
-    const vector< std::shared_ptr<ClientInfo > >::const_iterator aEnd( aClients.end() );
-
-    for ( vector< std::shared_ptr< ClientInfo > >::const_iterator aIt( aClients.begin() );
-        aIt != aEnd; ++aIt )
+    for ( const auto& rxClient : aClients )
     {
-        addEntry( *aIt );
+        addEntry( rxClient );
     }
 #endif
 

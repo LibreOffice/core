@@ -148,8 +148,8 @@ void SmartTagSet::Dispose()
 {
     std::set< SmartTagReference > aSet;
     aSet.swap( maSet );
-    for( std::set< SmartTagReference >::iterator aIter( aSet.begin() ); aIter != aSet.end(); )
-        (*aIter++)->Dispose();
+    for( auto& rxItem : aSet )
+        rxItem->Dispose();
     mrView.InvalidateAllWin();
     mxMouseOverTag.clear();
     mxSelectedTag.clear();
@@ -276,8 +276,8 @@ bool SmartTagSet::Command( const CommandEvent& rCEvt )
 
 void SmartTagSet::addCustomHandles( SdrHdlList& rHandlerList )
 {
-    for( std::set< SmartTagReference >::iterator aIter( maSet.begin() ); aIter != maSet.end(); )
-        (*aIter++)->addCustomHandles( rHandlerList );
+    for( auto& rxItem : maSet )
+        rxItem->addCustomHandles( rHandlerList );
 }
 
 /** returns true if the currently selected smart tag has

@@ -137,12 +137,9 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
 
     // Collect the matching resources in a vector.
     ::std::vector<Reference<XResourceId> > aResources;
-    ResourceContainer::const_iterator iResource;
-    for (iResource=mpResourceContainer->begin();
-         iResource!=mpResourceContainer->end();
-         ++iResource)
+    for (const auto& rxResource : *mpResourceContainer)
     {
-        if ( ! (*iResource)->isBoundTo(rxAnchorId,eMode))
+        if ( ! rxResource->isBoundTo(rxAnchorId,eMode))
             continue;
 
         if (bFilterResources)
@@ -151,19 +148,19 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
 
             // Make sure that the resource is bound directly to the anchor.
             if (eMode != AnchorBindingMode_DIRECT
-                && ! (*iResource)->isBoundTo(rxAnchorId, AnchorBindingMode_DIRECT))
+                && ! rxResource->isBoundTo(rxAnchorId, AnchorBindingMode_DIRECT))
             {
                 continue;
             }
 
             // Make sure that the resource URL matches the given prefix.
-            if ( ! (*iResource)->getResourceURL().match(rsResourceURLPrefix))
+            if ( ! rxResource->getResourceURL().match(rsResourceURLPrefix))
             {
                 continue;
             }
         }
 
-        aResources.push_back(*iResource);
+        aResources.push_back(rxResource);
     }
 
     return comphelper::containerToSequence(aResources);

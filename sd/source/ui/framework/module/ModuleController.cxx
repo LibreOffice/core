@@ -133,11 +133,10 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::adding factory " << sServiceName);
 
     // Add the resource URLs to the map.
-    ::std::vector<OUString>::const_iterator iResource;
-    for (iResource=aURLs.begin(); iResource!=aURLs.end(); ++iResource)
+    for (const auto& rResource : aURLs)
     {
-        (*mpResourceToFactoryMap)[*iResource] = sServiceName;
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " << *iResource);
+        (*mpResourceToFactoryMap)[rResource] = sServiceName;
+        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    " << rResource);
     }
 }
 

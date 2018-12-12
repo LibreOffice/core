@@ -59,9 +59,9 @@ void SdMoveStyleSheetsUndoAction::Undo()
         for (auto& a : maStyles)
         {
             OUString aParent(a.m_xStyleSheet->GetName());
-            for( SdStyleSheetVector::iterator childiter = (*childlistiter).begin(); childiter != (*childlistiter).end(); ++childiter )
+            for( auto& rxChild : *childlistiter )
             {
-                (*childiter)->SetParent(aParent);
+                rxChild->SetParent(aParent);
             }
             ++childlistiter;
         }

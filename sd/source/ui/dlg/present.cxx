@@ -77,8 +77,8 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     m_xTmfPause->connect_value_changed( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
 
     // fill Listbox with page names
-    for (std::vector<OUString>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
-        m_xLbDias->append_text(*pIter);
+    for (const auto& rPageName : rPageNames)
+        m_xLbDias->append_text(rPageName);
 
     if( pCustomShowList )
     {

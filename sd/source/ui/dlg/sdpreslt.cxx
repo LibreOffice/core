@@ -197,24 +197,18 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, weld::Button&, void)
     if( !bCancel )
     {
         // check if template already exists
-        bool bExists = false;
         OUString aCompareStr(maName);
         if (aCompareStr.isEmpty())
             aCompareStr = maStrNone;
 
-        sal_uInt16 aPos = 0;
-        for (std::vector<OUString>::iterator it = maLayoutNames.begin();
-              it != maLayoutNames.end() && !bExists; ++it, ++aPos)
+        auto it = std::find(maLayoutNames.begin(), maLayoutNames.end(), aCompareStr);
+        if (it != maLayoutNames.end())
         {
-            if( aCompareStr == *it )
-            {
-                bExists = true;
-                // select template
-                m_xVS->SelectItem( aPos + 1 );
-            }
+            sal_uInt16 aPos = static_cast<sal_uInt16>(std::distance(maLayoutNames.begin(), it));
+            // select template
+            m_xVS->SelectItem( aPos + 1 );
         }
-
-        if( !bExists )
+        else
         {
             // load document in order to determine preview bitmap (if template is selected)
             if (!maName.isEmpty())

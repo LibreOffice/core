@@ -389,10 +389,9 @@ void SdTransferable::AddSupportedFormats()
             AddFormat( SotClipboardFormatId::EMBED_SOURCE );
 
             DataFlavorExVector              aVector( mpOLEDataHelper->GetDataFlavorExVector() );
-            DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
 
-            while( aIter != aEnd )
-                AddFormat( *aIter++ );
+            for( const auto& rItem : aVector )
+                AddFormat( rItem );
         }
         else if( mpGraphic )
         {
