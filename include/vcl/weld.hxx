@@ -651,6 +651,7 @@ public:
     {
         insert_item(-1, rId, rStr, nullptr, &rImage, false);
     }
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
     virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">10</property>
@@ -38,43 +37,15 @@
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkTreeStore" id="liststore1">
     <columns>
-      <!-- column-name gchararray1 -->
+      <!-- column-name check -->
+      <column type="gboolean"/>
+      <!-- column-name text -->
       <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="tocindexpage|liststore1">Table of Contents</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tocindexpage|liststore1">Alphabetical Index</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tocindexpage|liststore1">Table of Figures</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tocindexpage|liststore1">Index of Tables</col>
-        <col id="1">8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tocindexpage|liststore1">User-Defined</col>
-        <col id="1">16</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tocindexpage|liststore1">Table of Objects</col>
-        <col id="1">32</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tocindexpage|liststore1">Bibliography</col>
-        <col id="1">64</col>
-      </row>
-    </data>
   </object>
   <object class="GtkBox" id="TocIndexPage">
     <property name="visible">True</property>
@@ -107,10 +78,10 @@
                   <object class="GtkLabel" id="mainstyleft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="tocindexpage|mainstyleft">_Title:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">title</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -122,6 +93,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -132,10 +104,10 @@
                   <object class="GtkLabel" id="typeft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="tocindexpage|typeft">Type:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">type</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -143,11 +115,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="type">
+                  <object class="GtkComboBoxText" id="type">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="model">liststore1</property>
+                    <items>
+                      <item id="1" context="tocindexpage|liststore1">Table of Contents</item>
+                      <item id="2" context="tocindexpage|liststore1">Alphabetical Index</item>
+                      <item id="4" context="tocindexpage|liststore1">Table of Figures</item>
+                      <item id="8" context="tocindexpage|liststore1">Index of Tables</item>
+                      <item id="16" context="tocindexpage|liststore1">User-Defined</item>
+                      <item id="32" context="tocindexpage|liststore1">Table of Objects</item>
+                      <item id="64" context="tocindexpage|liststore1">Bibliography</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -221,10 +201,10 @@
                       <object class="GtkLabel" id="mainstyleft2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="tocindexpage|mainstyleft2">For:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">scope</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -260,10 +240,10 @@
                       <object class="GtkLabel" id="levelft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="tocindexpage|levelft">Evaluate up to level:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">level</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -274,6 +254,7 @@
                       <object class="GtkSpinButton" id="level">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -545,8 +526,8 @@
                         <property name="label" translatable="yes" context="tocindexpage|captions">Captions</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="no_show_all">True</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">objnames</property>
@@ -561,8 +542,8 @@
                         <property name="label" translatable="yes" context="tocindexpage|objnames">Object names</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
                         <property name="no_show_all">True</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
@@ -582,10 +563,10 @@
                           <object class="GtkLabel" id="categoryft">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="tocindexpage|categoryft">Category:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">category</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -606,10 +587,10 @@
                           <object class="GtkLabel" id="displayft">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="tocindexpage|displayft">Display:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">display</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -670,6 +651,7 @@
         <property name="can_focus">False</property>
         <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
@@ -681,11 +663,54 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="svxcorelo-SvxCheckListBox" id="objects:border">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Check List Box-selection1"/>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="objects">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="alignment">0.5</property>
+                        <child>
+                          <object class="GtkCellRendererToggle" id="cellrenderer2"/>
+                          <attributes>
+                            <attribute name="active">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <property name="resizable">True</property>
+                        <property name="spacing">6</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">0</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderer1"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
             </child>
@@ -733,10 +758,10 @@
                   <object class="GtkLabel" id="mainstyleft9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="tocindexpage|mainstyleft9">_Brackets:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">brackets</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -934,7 +959,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="file:filemenu">
+                      <object class="GtkMenuButton" id="file">
                         <property name="label" translatable="yes" context="tocindexpage|file">_File</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -942,6 +967,11 @@
                         <property name="halign">start</property>
                         <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
+                        <property name="popup">filemenu</property>
+                        <property name="use_popover">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -998,10 +1028,10 @@
                           <object class="GtkLabel" id="mainstyleft3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="tocindexpage|mainstyleft3">Language:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">lang</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1009,7 +1039,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxcorelo-SvxLanguageBox" id="lang">
+                          <object class="GtkComboBoxText" id="lang">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                           </object>
@@ -1033,10 +1063,10 @@
                           <object class="GtkLabel" id="mainstyleft5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="tocindexpage|mainstyleft5">Key type:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">keytype</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
