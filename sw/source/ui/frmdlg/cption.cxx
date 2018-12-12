@@ -352,8 +352,8 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl, Edit&, void)
 IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl, Button*, void)
 {
     SfxItemSet  aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
-    ScopedVclPtrInstance< SwCaptionOptDlg > aDlg( this, aSet );
-    aDlg->Execute();
+    SwCaptionOptDlg aDlg(GetFrameWeld(), aSet);
+    aDlg.run();
 }
 
 void SwCaptionDialog::DrawSample()

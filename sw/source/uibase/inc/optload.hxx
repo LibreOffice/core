@@ -95,10 +95,10 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
-class SwCaptionOptDlg : public SfxSingleTabDialog
+class SwCaptionOptDlg : public SfxSingleTabDialogController
 {
 public:
-    SwCaptionOptDlg(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet);
 };
 
 class SwCaptionPreview : public vcl::Window
