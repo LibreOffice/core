@@ -269,6 +269,8 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_TIMER_CALLBACK      (WM_USER+162)
 // Stop the timer from the main thread; wParam = 0, lParam = 0
 #define SAL_MSG_STOPTIMER           (WM_USER+163)
+// Start a real timer while GUI is blocked by native dialog
+#define SAL_MSG_FORCE_REAL_TIMER    (WM_USER+164)
 
 inline void SetWindowPtr( HWND hWnd, WinSalFrame* pThis )
 {
