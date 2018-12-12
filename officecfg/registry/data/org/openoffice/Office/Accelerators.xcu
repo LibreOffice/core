@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
+<!-- problematic combinations
+Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
+Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
+ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Accelerators" oor:package="org.openoffice.Office">
   <node oor:name="PrimaryKeys">
@@ -5865,6 +5869,12 @@
             <value xml:lang="en-US">.uno:SubScript</value>
           </prop>
         </node>
+        <node oor:name="C_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:TrackChanges</value>
+          </prop>
+        </node>
         <node oor:name="DELETE_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5960,12 +5970,6 @@
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:CenterPara</value>
             <value xml:lang="es">.uno:SelectAll</value>
-          </prop>
-        </node>
-        <node oor:name="E_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:TrackChanges</value>
           </prop>
         </node>
         <node oor:name="F10_MOD1" oor:op="replace">
