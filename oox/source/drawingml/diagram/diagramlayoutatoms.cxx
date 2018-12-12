@@ -536,9 +536,24 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             const sal_Int32 nIncX = nDir==XML_fromL ? 1 : (nDir==XML_fromR ? -1 : 0);
             const sal_Int32 nIncY = nDir==XML_fromT ? 1 : (nDir==XML_fromB ? -1 : 0);
 
-            // TODO: get values from constraints
             sal_Int32 nCount = rShape->getChildren().size();
             double fSpace = 0.3;
+
+            // Find out which constraint is relevant for which (internal) name.
+            LayoutPropertyMap aProperties;
+            for (const auto& rConstraint : rConstraints)
+            {
+                if (rConstraint.msForName.isEmpty())
+                    continue;
+
+                LayoutProperty& rProperty = aProperties[rConstraint.msForName];
+                if (rConstraint.mnType == XML_w)
+                    rProperty[XML_w] = rShape->getSize().Width * rConstraint.mfFactor;
+
+                // TODO: get values from differently named constraints as well
+                if (rConstraint.msForName == "sibTrans" && rConstraint.mnType == XML_w)
+                    fSpace = rConstraint.mfFactor;
+            }
 
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromL || nDir == XML_fromR)
@@ -551,18 +566,6 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
             if (nIncY == -1)
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
-
-            // Find out which constraint is relevant for which (internal) name.
-            LayoutPropertyMap aProperties;
-            for (const auto& rConstraint : rConstraints)
-            {
-                if (rConstraint.msForName.isEmpty())
-                    continue;
-
-                LayoutProperty& rProperty = aProperties[rConstraint.msForName];
-                if (rConstraint.mnType == XML_w)
-                    rProperty[XML_w] = rShape->getSize().Width * rConstraint.mfFactor;
-            }
 
             // See if children requested more than 100% space in total: scale
             // down in that case.
