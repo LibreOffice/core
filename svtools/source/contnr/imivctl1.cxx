@@ -1473,7 +1473,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     OUString aEntryText(SvtIconChoiceCtrl::GetEntryText(pEntry));
-    tools::Rectangle aTextRect(CalcTextRect(pEntry, &rPos, false, &aEntryText));
+    tools::Rectangle aTextRect(CalcTextRect(pEntry, &rPos, &aEntryText));
     tools::Rectangle aBmpRect(CalcBmpRect(pEntry, &rPos));
 
     bool bShowSelection = (bSelected && (eSelectionMode != SelectionMode::NONE));
@@ -1673,7 +1673,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcBmpRect( SvxIconChoiceCtrlEntry* pE
 }
 
 tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* pEntry,
-    const Point* pEntryPos, bool bEdit, const OUString* pStr )
+    const Point* pEntryPos, const OUString* pStr )
 {
     OUString aEntryText;
     if( !pStr )
@@ -1687,8 +1687,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
         aBound.SetPos( *pEntryPos );
 
     tools::Rectangle aTextRect( aMaxTextRect );
-    if( !bEdit )
-        aTextRect = pView->GetTextRect( aTextRect, aEntryText, nCurTextDrawFlags );
+    aTextRect = pView->GetTextRect( aTextRect, aEntryText, nCurTextDrawFlags );
 
     Size aTextSize( aTextRect.GetSize() );
 
@@ -1701,23 +1700,6 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
         case WB_ICON:
             aPos.AdjustY(aImageSize.Height() );
             aPos.AdjustY(VER_DIST_BMP_STRING );
-            // at little more space when editing
-            if( bEdit )
-            {
-                // +20%
-                long nMinWidth = (( (aImageSize.Width()*10) / 100 ) * 2 ) +
-                                 aImageSize.Width();
-                if( nMinWidth > nBoundWidth )
-                    nMinWidth = nBoundWidth;
-
-                if( aTextSize.Width() < nMinWidth )
-                    aTextSize.setWidth( nMinWidth );
-
-                // when editing, overlap with the area below is allowed
-                Size aOptSize = aMaxTextRect.GetSize();
-                if( aOptSize.Height() > aTextSize.Height() )
-                    aTextSize.setHeight( aOptSize.Height() );
-            }
             aPos.AdjustX((nBoundWidth - aTextSize.Width()) / 2 );
             break;
 
@@ -2886,7 +2868,7 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 
     OUString sQuickHelpText = pEntry->GetQuickHelpText();
     OUString aEntryText( SvtIconChoiceCtrl::GetEntryText( pEntry ) );
-    tools::Rectangle aTextRect( CalcTextRect( pEntry, nullptr, false, &aEntryText ) );
+    tools::Rectangle aTextRect( CalcTextRect( pEntry, nullptr, &aEntryText ) );
     if ( ( !aTextRect.IsInside( aPos ) || aEntryText.isEmpty() ) && sQuickHelpText.isEmpty() )
         return false;
 

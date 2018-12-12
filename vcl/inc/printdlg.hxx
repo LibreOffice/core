@@ -227,7 +227,7 @@ namespace vcl
 
         css::beans::PropertyValue* getValueForWindow( vcl::Window* ) const;
 
-        void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
+        void preparePreview( bool i_bMayUseCache );
         void setupPaperSidesBox();
         void storeToSettings();
         void readFromSettings();

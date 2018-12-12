@@ -289,11 +289,11 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
         }
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    m_nSelectId = AddTabPage("index", SwTOXSelectTabPage::Create, nullptr);
-    AddTabPage("styles", SwTOXStylesTabPage::Create, nullptr);
-    m_nColumnId = AddTabPage("columns", SwColumnPage::Create, nullptr);
-    m_nBackGroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
-    m_nEntriesId = AddTabPage("entries", SwTOXEntryTabPage::Create, nullptr);
+    m_nSelectId = AddTabPage("index", SwTOXSelectTabPage::Create);
+    AddTabPage("styles", SwTOXStylesTabPage::Create);
+    m_nColumnId = AddTabPage("columns", SwColumnPage::Create);
+    m_nBackGroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ));
+    m_nEntriesId = AddTabPage("entries", SwTOXEntryTabPage::Create);
     if(!pCurTOX)
         SetCurPageId(m_nSelectId);
 

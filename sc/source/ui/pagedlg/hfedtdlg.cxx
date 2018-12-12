@@ -53,8 +53,8 @@ ScHFEditHeaderDlg::ScHFEditHeaderDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "HeaderDialog", "modules/scalc/ui/headerdialog.ui" )
 {
-    AddTabPage( "headerright", ScRightHeaderEditPage::Create, nullptr );
-    AddTabPage( "headerleft", ScLeftHeaderEditPage::Create, nullptr );
+    AddTabPage( "headerright", ScRightHeaderEditPage::Create );
+    AddTabPage( "headerleft", ScLeftHeaderEditPage::Create );
 }
 
 ScHFEditFooterDlg::ScHFEditFooterDlg(
@@ -64,8 +64,8 @@ ScHFEditFooterDlg::ScHFEditFooterDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "FooterDialog", "modules/scalc/ui/footerdialog.ui" )
 {
-    AddTabPage( "footerright", ScRightFooterEditPage::Create, nullptr );
-    AddTabPage( "footerleft", ScLeftFooterEditPage::Create, nullptr );
+    AddTabPage( "footerright", ScRightFooterEditPage::Create );
+    AddTabPage( "footerleft", ScLeftFooterEditPage::Create );
 }
 
 ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg(
@@ -75,7 +75,7 @@ ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "LeftHeaderDialog", "modules/scalc/ui/leftheaderdialog.ui" )
 {
-    AddTabPage( "headerleft", ScLeftHeaderEditPage::Create, nullptr );
+    AddTabPage( "headerleft", ScLeftHeaderEditPage::Create );
 }
 
 ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg(
@@ -85,7 +85,7 @@ ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "RightHeaderDialog", "modules/scalc/ui/rightheaderdialog.ui" )
 {
-    AddTabPage( "headerright", ScRightHeaderEditPage::Create, nullptr );
+    AddTabPage( "headerright", ScRightHeaderEditPage::Create );
 }
 
 ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg(
@@ -95,7 +95,7 @@ ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "LeftFooterDialog", "modules/scalc/ui/leftfooterdialog.ui" )
 {
-    AddTabPage( "footerleft", ScLeftFooterEditPage::Create, nullptr );
+    AddTabPage( "footerleft", ScLeftFooterEditPage::Create );
 }
 
 ScHFEditRightFooterDlg::ScHFEditRightFooterDlg(
@@ -105,7 +105,7 @@ ScHFEditRightFooterDlg::ScHFEditRightFooterDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "RightFooterDialog", "modules/scalc/ui/rightfooterdialog.ui" )
 {
-    AddTabPage( "footerright", ScRightFooterEditPage::Create, nullptr );
+    AddTabPage( "footerright", ScRightFooterEditPage::Create );
 }
 
 ScHFEditSharedHeaderDlg::ScHFEditSharedHeaderDlg(
@@ -115,9 +115,9 @@ ScHFEditSharedHeaderDlg::ScHFEditSharedHeaderDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "SharedHeaderDialog", "modules/scalc/ui/sharedheaderdialog.ui" )
 {
-    AddTabPage( "header", ScRightHeaderEditPage::Create, nullptr );
-    AddTabPage( "footerright", ScRightFooterEditPage::Create, nullptr );
-    AddTabPage( "footerleft", ScLeftFooterEditPage::Create,  nullptr );
+    AddTabPage( "header", ScRightHeaderEditPage::Create );
+    AddTabPage( "footerright", ScRightFooterEditPage::Create );
+    AddTabPage( "footerleft", ScLeftFooterEditPage::Create );
 }
 
 ScHFEditSharedFooterDlg::ScHFEditSharedFooterDlg(
@@ -127,9 +127,9 @@ ScHFEditSharedFooterDlg::ScHFEditSharedFooterDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "SharedFooterDialog", "modules/scalc/ui/sharedfooterdialog.ui" )
 {
-    AddTabPage( "headerright", ScRightHeaderEditPage::Create, nullptr );
-    AddTabPage( "headerleft", ScLeftHeaderEditPage::Create, nullptr );
-    AddTabPage( "footer", ScRightFooterEditPage::Create, nullptr );
+    AddTabPage( "headerright", ScRightHeaderEditPage::Create );
+    AddTabPage( "headerleft", ScLeftHeaderEditPage::Create );
+    AddTabPage( "footer", ScRightFooterEditPage::Create );
 }
 
 ScHFEditAllDlg::ScHFEditAllDlg(
@@ -139,10 +139,10 @@ ScHFEditAllDlg::ScHFEditAllDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "AllHeaderFooterDialog", "modules/scalc/ui/allheaderfooterdialog.ui" )
 {
-    AddTabPage( "headerright", ScRightHeaderEditPage::Create, nullptr );
-    AddTabPage( "headerleft", ScLeftHeaderEditPage::Create, nullptr );
-    AddTabPage( "footerright", ScRightFooterEditPage::Create, nullptr );
-    AddTabPage( "footerleft", ScLeftFooterEditPage::Create, nullptr );
+    AddTabPage( "headerright", ScRightHeaderEditPage::Create );
+    AddTabPage( "headerleft", ScLeftHeaderEditPage::Create );
+    AddTabPage( "footerright", ScRightFooterEditPage::Create );
+    AddTabPage( "footerleft", ScLeftFooterEditPage::Create );
 }
 
 ScHFEditActiveDlg::ScHFEditActiveDlg(
@@ -160,8 +160,8 @@ ScHFEditActiveDlg::ScHFEditActiveDlg(
 
     if ( bRightPage )
     {
-        AddTabPage( "header", ScRightHeaderEditPage::Create, nullptr );
-        AddTabPage( "footer", ScRightFooterEditPage::Create, nullptr );
+        AddTabPage( "header", ScRightHeaderEditPage::Create );
+        AddTabPage( "footer", ScRightFooterEditPage::Create );
     }
     else
     {
@@ -170,16 +170,16 @@ ScHFEditActiveDlg::ScHFEditActiveDlg(
         bool bShareHeader = rCoreSet.Get(ATTR_PAGE_HEADERSET).GetItemSet().
                                 Get(ATTR_PAGE_SHARED).GetValue();
         if ( bShareHeader )
-            AddTabPage( "header", ScRightHeaderEditPage::Create, nullptr );
+            AddTabPage( "header", ScRightHeaderEditPage::Create );
         else
-            AddTabPage( "header", ScLeftHeaderEditPage::Create, nullptr );
+            AddTabPage( "header", ScLeftHeaderEditPage::Create );
 
         bool bShareFooter = rCoreSet.Get(ATTR_PAGE_FOOTERSET).GetItemSet().
                                 Get(ATTR_PAGE_SHARED).GetValue();
         if ( bShareFooter )
-            AddTabPage( "footer", ScRightFooterEditPage::Create, nullptr );
+            AddTabPage( "footer", ScRightFooterEditPage::Create );
         else
-            AddTabPage( "footer", ScLeftFooterEditPage::Create, nullptr );
+            AddTabPage( "footer", ScLeftFooterEditPage::Create );
     }
 }
 

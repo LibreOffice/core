@@ -295,7 +295,7 @@ private:
     bool            GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowColMove = false);
     void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect, bool bMakeVisible);
 
-    void            ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice, bool _bDrawSelections);
+    void            ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice);
 
     bool            PaintCursorIfHiddenOnce() const { return !m_bFocusOnlyCursor && !HasFocus(); }
 

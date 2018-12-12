@@ -317,7 +317,6 @@ public:
     tools::Rectangle           CalcTextRect(
                             SvxIconChoiceCtrlEntry*,
                             const Point* pPos = nullptr,
-                            bool bForInplaceEdit = false,
                             const OUString* pStr = nullptr
                         );
 

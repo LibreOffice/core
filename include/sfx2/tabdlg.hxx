@@ -123,13 +123,12 @@ protected:
 public:
     SfxTabDialog(vcl::Window* pParent,
                  const OUString& rID, const OUString& rUIXMLDescription,
-                 const SfxItemSet * = nullptr, bool bEditFmt = false);
+                 const SfxItemSet * = nullptr);
     virtual ~SfxTabDialog() override;
     virtual void dispose() override;
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
-                                    CreateTabPage pCreateFunc,      // != 0
-                                    GetTabPageRanges pRangesFunc);  // can be 0
+                                    CreateTabPage pCreateFunc);      // != 0
 
     void                AddTabPage( sal_uInt16 nId,
                                     const OUString &rRiderText,

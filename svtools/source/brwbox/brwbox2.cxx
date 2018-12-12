@@ -751,7 +751,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         pDev->DrawRect( aRect );
     }
 
-    ImplPaintData( *pDev, tools::Rectangle( aRealPos, aRealSize ), true, /*bDrawSelection*/true );
+    ImplPaintData( *pDev, tools::Rectangle( aRealPos, aRealSize ), true );
 
     // restore the column widths/data row height
     nDataRowHeight = nOriginalHeight;
@@ -771,7 +771,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 }
 
 
-void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice, bool _bDrawSelections)
+void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice)
 {
     Point aOverallAreaPos = _bForeignDevice ? _rRect.TopLeft() : Point(0,0);
     Size aOverallAreaSize = _bForeignDevice ? _rRect.GetSize() : pDataWin->GetOutputSizePixel();
@@ -828,8 +828,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
         tools::Rectangle aRowRect( Point( _rRect.TopLeft().X(), aPos.Y() ),
                 Size( _rRect.GetSize().Width(), nDataRowHeigt ) );
 
-        bool bRowSelected   =   _bDrawSelections
-                            &&  !bHideSelect
+        bool bRowSelected   =   !bHideSelect
                             &&  IsRowSelected( nRow );
         if ( bRowSelected )
         {
@@ -865,8 +864,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             }
 
             // prepare Column-AutoHighlight
-            bool bColAutoHighlight  =   _bDrawSelections
-                                    &&  bColumnCursor
+            bool bColAutoHighlight  =   bColumnCursor
                                     &&  IsColumnSelected( pCol->GetId() );
             if ( bColAutoHighlight )
             {
@@ -1027,7 +1025,7 @@ void BrowseBox::PaintData( vcl::Window const & rWin, vcl::RenderContext& rRender
         Resize();
     // MI: who was that? Window::Update();
 
-    ImplPaintData(rRenderContext, rRect, false, true);
+    ImplPaintData(rRenderContext, rRect, false);
 }
 
 void BrowseBox::UpdateScrollbars()

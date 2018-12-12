@@ -1409,11 +1409,11 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     , rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    m_nSectionPageId = AddTabPage("section", SwInsertSectionTabPage::Create, nullptr);
-    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
-    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
-    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
+    m_nSectionPageId = AddTabPage("section", SwInsertSectionTabPage::Create);
+    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create);
+    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ));
+    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create);
+    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create);
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = rHtmlOpt.GetExportMode();
@@ -2057,10 +2057,10 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     , rWrtSh(rSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create,    nullptr);
-    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
-    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
-    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
+    m_nColumnPageId = AddTabPage("columns",   SwColumnPage::Create);
+    m_nBackPageId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ) );
+    m_nNotePageId = AddTabPage("notes", SwSectionFootnoteEndTabPage::Create);
+    m_nIndentPage = AddTabPage("indents", SwSectionIndentTabPage::Create);
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     long nHtmlMode = rHtmlOpt.GetExportMode();

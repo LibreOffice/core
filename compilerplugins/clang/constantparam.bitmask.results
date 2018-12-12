@@ -6,7 +6,7 @@ codemaker/source/javamaker/classfile.hxx:168
     enum codemaker::javamaker::ClassFile::AccessFlags accessFlags setBits=0x1
 cui/source/options/webconninfo.hxx:35
     void svx::PasswordTable::InsertHeaderItem(unsigned short,const class rtl::OUString &,enum HeaderBarItemBits)
-    enum HeaderBarItemBits nBits setBits=0x211 clearBits=0x1ee
+    enum HeaderBarItemBits nBits setBits=0x201 clearBits=0x1fe
 dbaccess/source/filter/xml/xmlExport.hxx:171
     void dbaxml::ODBExport::ODBExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlag setBits=0x400 clearBits=0x200
@@ -16,16 +16,16 @@ include/basegfx/polygon/b2dpolygontools.hxx:144
 include/framework/framelistanalyzer.hxx:181
     void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
-include/sfx2/objsh.hxx:472
+include/sfx2/objsh.hxx:457
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
     enum SfxLoadedFlags nWhich setBits=0x1
-include/svtools/brwbox.hxx:438
+include/svtools/brwbox.hxx:433
     void BrowseBox::InsertDataColumn(unsigned short,const class rtl::OUString &,long,enum HeaderBarItemBits,unsigned short)
-    enum HeaderBarItemBits nBits setBits=0x410 clearBits=0x3ac
+    enum HeaderBarItemBits nBits setBits=0x400 clearBits=0x3ec
 include/svtools/wizardmachine.hxx:178
     void svt::OWizardMachine::OWizardMachine(class vcl::Window *,enum WizardButtonFlags)
     enum WizardButtonFlags _nButtonFlags setBits=0xf
-include/vcl/gdimtf.hxx:195
+include/vcl/gdimtf.hxx:194
     _Bool GDIMetaFile::CreateThumbnail(class BitmapEx &,enum BmpConversion,enum BmpScaleFlag) const
     enum BmpScaleFlag nScaleFlag setBits=0x1
 sc/inc/rangelst.hxx:48
@@ -43,13 +43,13 @@ sc/source/ui/view/cellsh1.cxx:115
 sc/source/ui/view/cellsh1.cxx:138
     class rtl::OUString FlagsToString(enum InsertDeleteFlags,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x87f clearBits=0x700
-sw/source/core/view/viewsh.cxx:734
+sw/source/core/view/viewsh.cxx:733
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
     enum SwInvalidateFlags nInv setBits=0x2
 sw/source/filter/html/swhtml.hxx:671
     void SwHTMLParser::SetFrameFormatAttrs(class SfxItemSet &,enum HtmlFrameFormatFlags,class SfxItemSet &)
     enum HtmlFrameFormatFlags nFlags setBits=0x1
-sw/source/filter/ww8/wrtw8esh.cxx:1529
+sw/source/filter/ww8/wrtw8esh.cxx:1526
     enum ShapeFlag AddMirrorFlags(enum ShapeFlag,const class SwMirrorGrf &)
     enum ShapeFlag nFlags setBits=0xa00 clearBits=0x5ef
 xmloff/inc/MetaExportComponent.hxx:32

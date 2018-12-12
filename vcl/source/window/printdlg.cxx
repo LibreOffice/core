@@ -943,7 +943,7 @@ void PrintDialog::setPreviewText()
     mpNumPagesText->SetText( aNewText );
 }
 
-void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
+void PrintDialog::preparePreview( bool i_bMayUseCache )
 {
     VclPtr<Printer> aPrt( maPController->getPrinter() );
     Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
@@ -979,31 +979,29 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
     if( mnCurPage < 0 )
         mnCurPage = 0;
 
-    if( i_bNewPage )
+
+    const MapMode aMapMode( MapUnit::Map100thMM );
+    if( nPages > 0 )
     {
-        const MapMode aMapMode( MapUnit::Map100thMM );
-        if( nPages > 0 )
+        PrinterController::PageSize aPageSize =
+            maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
+        if( ! aPageSize.bFullPaper )
         {
-            PrinterController::PageSize aPageSize =
-                maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
-            if( ! aPageSize.bFullPaper )
-            {
-                Point aOff( aPrt->PixelToLogic( aPrt->GetPageOffsetPixel(), aMapMode ) );
-                aMtf.Move( aOff.X(), aOff.Y() );
-            }
+            Point aOff( aPrt->PixelToLogic( aPrt->GetPageOffsetPixel(), aMapMode ) );
+            aMtf.Move( aOff.X(), aOff.Y() );
         }
-
-        mpPreviewWindow->setPreview( aMtf, aCurPageSize,
-                                    Printer::GetPaperName( mePaper ),
-                                    nPages > 0 ? OUString() : maNoPageStr,
-                                    aPrt->GetDPIX(), aPrt->GetDPIY(),
-                                    aPrt->GetPrinterOptions().IsConvertToGreyscales()
-                                   );
-
-        mpForwardBtn->Enable( mnCurPage < nPages-1 );
-        mpBackwardBtn->Enable( mnCurPage != 0 );
-        mpPageEdit->Enable( nPages > 1 );
     }
+
+    mpPreviewWindow->setPreview( aMtf, aCurPageSize,
+                                Printer::GetPaperName( mePaper ),
+                                nPages > 0 ? OUString() : maNoPageStr,
+                                aPrt->GetDPIX(), aPrt->GetDPIY(),
+                                aPrt->GetPrinterOptions().IsConvertToGreyscales()
+                               );
+
+    mpForwardBtn->Enable( mnCurPage < nPages-1 );
+    mpBackwardBtn->Enable( mnCurPage != 0 );
+    mpPageEdit->Enable( nPages > 1 );
 }
 
 void PrintDialog::updateOrientationBox( const bool bAutomatic )
@@ -1199,7 +1197,7 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
 
     mpNupOrderWin->setValues( aMPS.nOrder, nCols, nRows );
 
-    preparePreview( true, i_bMayUseCache );
+    preparePreview( i_bMayUseCache );
 }
 
 void PrintDialog::updateNupFromPages( bool i_bMayUseCache )
@@ -1851,7 +1849,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
     }
     else if ( pButton == mpPreviewBox )
     {
-        preparePreview( true, true );
+        preparePreview( true );
     }
     else if( pButton == mpForwardBtn )
     {
@@ -1872,7 +1870,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
             checkOptionalControlDependencies();
 
             // update preview and page settings
-            preparePreview();
+            preparePreview(false);
         }
         if( mpBrochureBtn->IsChecked() )
         {
@@ -1903,7 +1901,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
         maPController->setReversePrint( bChecked );
         maPController->setValue( "PrintReverse",
                                  makeAny( bChecked ) );
-        preparePreview( true, true );
+        preparePreview( true );
     }
     else if( pButton == mpBorderCB )
     {
@@ -1942,7 +1940,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
             updateOrientationBox( false );
 
             // tdf#63905 don't use cache: page size may change
-            preparePreview();
+            preparePreview(false);
         }
         checkControlDependencies();
     }
@@ -1966,7 +1964,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             mpOKButton->SetText( maPrintText );
             updatePrinterText();
             setPaperSizes();
-            preparePreview();
+            preparePreview(false);
         }
         else // print to file
         {
@@ -1977,7 +1975,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
 
             setPaperSizes();
             updateOrientationBox();
-            preparePreview( true, true );
+            preparePreview( true );
         }
 
         setupPaperSidesBox();
@@ -2021,7 +2019,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
         checkPaperSize( aPaperSize );
         maPController->setPaperSizeFromUser( aPaperSize );
 
-        preparePreview();
+        preparePreview(false);
     }
 }
 
@@ -2037,7 +2035,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit&, rEdit, void )
     else if( &rEdit == mpPageEdit )
     {
         mnCurPage = sal_Int32( mpPageEdit->GetValue() - 1 );
-        preparePreview( true, true );
+        preparePreview( true );
     }
     else if( &rEdit == mpCopyCountField )
     {
@@ -2061,7 +2059,7 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview();
+        preparePreview(false);
     }
 }
 
@@ -2090,7 +2088,7 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
             checkOptionalControlDependencies();
 
             // update preview and page settings
-            preparePreview();
+            preparePreview(false);
         }
     }
 }
@@ -2116,7 +2114,7 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview();
+        preparePreview(false);
     }
 }
 
@@ -2148,7 +2146,7 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview();
+        preparePreview(false);
     }
 }
 

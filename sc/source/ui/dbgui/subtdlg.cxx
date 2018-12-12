@@ -29,10 +29,10 @@ ScSubTotalDlg::ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
 {
     get(m_pBtnRemove, "remove");
 
-    AddTabPage("1stgroup",  ScTpSubTotalGroup1::Create, nullptr);
-    AddTabPage("2ndgroup",  ScTpSubTotalGroup2::Create, nullptr);
-    AddTabPage("3rdgroup",  ScTpSubTotalGroup3::Create, nullptr);
-    AddTabPage("options", ScTpSubTotalOptions::Create, nullptr);
+    AddTabPage("1stgroup",  ScTpSubTotalGroup1::Create);
+    AddTabPage("2ndgroup",  ScTpSubTotalGroup2::Create);
+    AddTabPage("3rdgroup",  ScTpSubTotalGroup3::Create);
+    AddTabPage("options", ScTpSubTotalOptions::Create);
     m_pBtnRemove->SetClickHdl( LINK( this, ScSubTotalDlg, RemoveHdl ) );
 }
 
