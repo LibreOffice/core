@@ -1181,7 +1181,7 @@ bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
 
     sal_Int32 nPos = -1;
     SwTextNode* pTextNd = SwGetRefFieldType::FindAnchor( GetDoc(), rRefMark,
-                                                    nSubType, nSeqNo, &nPos );
+                                nSubType, nSeqNo, &nPos, nullptr, GetLayout());
     if( pTextNd && pTextNd->GetNodes().IsDocNodes() )
     {
         m_pCurrentCursor->GetPoint()->nNode = *pTextNd;

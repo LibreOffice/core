@@ -1101,19 +1101,49 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
     NotifyClients( pOld, pNew );
 }
 
+static bool
+IsRefMarkHidden(SwRootFrame const& rLayout, SwTextRefMark const& rRefMark)
+{
+    if (!rLayout.IsHideRedlines())
+    {
+        return false;
+    }
+    SwTextNode const& rNode(rRefMark.GetTextNode());
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
+        rNode.getLayoutFrame(&rLayout)));
+    if (!pFrame)
+    {
+        return true;
+    }
+    sal_Int32 const*const pEnd(const_cast<SwTextRefMark&>(rRefMark).GetEnd());
+    if (pEnd)
+    {
+        return pFrame->MapModelToView(&rNode, rRefMark.GetStart())
+            == pFrame->MapModelToView(&rNode, *pEnd);
+    }
+    else
+    {
+        return pFrame->MapModelToView(&rNode, rRefMark.GetStart())
+            == pFrame->MapModelToView(&rNode, rRefMark.GetStart() + 1);
+    }
+}
+
 SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
-                                        sal_Int32* pStt, sal_Int32* pEnd )
+                                        sal_Int32* pStt, sal_Int32* pEnd,
+                                        SwRootFrame const*const pLayout)
 {
     OSL_ENSURE( pStt, "Why did no one check the StartPos?" );
 
+    IDocumentRedlineAccess & rIDRA(pDoc->getIDocumentRedlineAccess());
     SwTextNode* pTextNd = nullptr;
     switch( nSubType )
     {
     case REF_SETREFATTR:
         {
             const SwFormatRefMark *pRef = pDoc->GetRefMark( rRefMark );
-            if( pRef && pRef->GetTextRefMark() )
+            SwTextRefMark const*const pRefMark(pRef ? pRef->GetTextRefMark() : nullptr);
+            if (pRefMark && (!pLayout || !IsRefMarkHidden(*pLayout, *pRefMark)))
             {
                 pTextNd = const_cast<SwTextNode*>(&pRef->GetTextRefMark()->GetTextNode());
                 *pStt = pRef->GetTextRefMark()->GetStart();
@@ -1132,10 +1162,12 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
                 SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
                 for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
                 {
-                    if( pFormatField->GetTextField() && nSeqNo ==
-                        static_cast<SwSetExpField*>(pFormatField->GetField())->GetSeqNumber() )
+                    SwTextField *const pTextField(pFormatField->GetTextField());
+                    if (pTextField && nSeqNo ==
+                        static_cast<SwSetExpField*>(pFormatField->GetField())->GetSeqNumber()
+                        && (!pLayout || !pLayout->IsHideRedlines()
+                            || !sw::IsFieldDeletedInModel(rIDRA, *pTextField)))
                     {
-                        SwTextField* pTextField = pFormatField->GetTextField();
                         pTextNd = pTextField->GetpTextNode();
                         *pStt = pTextField->GetStart();
                         if( pEnd )
@@ -1150,7 +1182,9 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
     case REF_BOOKMARK:
         {
             IDocumentMarkAccess::const_iterator_t ppMark = pDoc->getIDocumentMarkAccess()->findMark(rRefMark);
-            if(ppMark != pDoc->getIDocumentMarkAccess()->getAllMarksEnd())
+            if (ppMark != pDoc->getIDocumentMarkAccess()->getAllMarksEnd()
+                && (!pLayout || !pLayout->IsHideRedlines()
+                    || !sw::IsMarkHidden(*pLayout, **ppMark)))
             {
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 const SwPosition* pPos = &pBkmk->GetMarkStart();
@@ -1188,6 +1222,13 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
             for( auto pFootnoteIdx : pDoc->GetFootnoteIdxs() )
                 if( nSeqNo == pFootnoteIdx->GetSeqRefNo() )
                 {
+                    if (pLayout && pLayout->IsHideRedlines()
+                        && sw::IsFootnoteDeleted(rIDRA, *pFootnoteIdx))
+                    {
+                        return nullptr;
+                    }
+                    // otherwise: the position at the start of the footnote
+                    // will be mapped to something visible at least...
                     SwNodeIndex* pIdx = pFootnoteIdx->GetStartNode();
                     if( pIdx )
                     {
