@@ -503,57 +503,31 @@ static AquaSalFrame* getMouseContainerFrame()
     return NO;
 }
 
-// helper class similar to a osl::Guard< comphelper::SolarMutex > for the
-// SalYieldMutex; the difference is that it only does tryToAcquire instead of
-// acquire so dreaded deadlocks like #i93512# are prevented
-class TryGuard
-{
-public:
-            TryGuard()  { mbGuarded = ImplSalYieldMutexTryToAcquire(); }
-            ~TryGuard() { if( mbGuarded ) ImplSalYieldMutexRelease(); }
-    bool    IsGuarded() { return mbGuarded; }
-private:
-    bool    mbGuarded;
-};
-
 -(void)drawRect: (NSRect)aRect
 {
-    if( GetSalData()->mpInstance )
-    {
-        const bool bIsLiveResize = [self inLiveResize];
-        const bool bWasLiveResize = GetSalData()->mpInstance->mbIsLiveResize;
-        if ( bWasLiveResize != bIsLiveResize )
-        {
-            GetSalData()->mpInstance->mbIsLiveResize = bIsLiveResize;
-            Scheduler::ProcessTaskScheduling();
-        }
-    }
-
-    // HOTFIX: #i93512# prevent deadlocks if any other thread already has the SalYieldMutex
-    TryGuard aTryGuard;
-    if( !aTryGuard.IsGuarded() )
-    {
-        // NOTE: the mpFrame access below is not guarded yet!
-        // TODO: mpFrame et al need to be guarded by an independent mutex
-        AquaSalGraphics* pGraphics = (mpFrame && AquaSalFrame::isAlive(mpFrame)) ? mpFrame->mpGraphics : nullptr;
-        if( pGraphics )
-        {
-            // we did not get the mutex so we cannot draw now => request to redraw later
-            // convert the NSRect to a CGRect for Refreshrect()
-            const CGRect aCGRect = {{aRect.origin.x,aRect.origin.y},{aRect.size.width,aRect.size.height}};
-            pGraphics->RefreshRect( aCGRect );
-        }
+    AquaSalInstance *pInstance = GetSalData()->mpInstance;
+    assert(pInstance);
+    if (!pInstance)
         return;
+
+    SolarMutexGuard aGuard;
+    if (!mpFrame || !AquaSalFrame::isAlive(mpFrame))
+        return;
+
+    const bool bIsLiveResize = [self inLiveResize];
+    const bool bWasLiveResize = pInstance->mbIsLiveResize;
+    if (bWasLiveResize != bIsLiveResize)
+    {
+        pInstance->mbIsLiveResize = bIsLiveResize;
+        Scheduler::ProcessTaskScheduling();
     }
 
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+    AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
+    if (pGraphics)
     {
-        if( mpFrame->mpGraphics )
-        {
-            mpFrame->mpGraphics->UpdateWindow( aRect );
-            if( mpFrame->getClipPath() )
-                [mpFrame->getNSWindow() invalidateShadow];
-        }
+        pGraphics->UpdateWindow(aRect);
+        if (mpFrame->getClipPath())
+            [mpFrame->getNSWindow() invalidateShadow];
     }
 }
 
