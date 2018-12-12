@@ -1361,17 +1361,15 @@ void WinSalGraphicsImpl::SetLineColor(Color nColor)
 HPEN WinSalGraphicsImpl::SearchStockPen(COLORREF nPenColor)
 {
     // Only screen, because printer has problems, when we use stock objects.
-    if (mrParent.isPrinter())
+    if (!mrParent.isPrinter())
     {
-        return nullptr;
-    }
+        const SalData* pSalData = GetSalData();
 
-    const SalData* pSalData = GetSalData();
-
-    for (sal_uInt16 i = 0; i < pSalData->mnStockPenCount; i++)
-    {
-        if (nPenColor == pSalData->maStockPenColorAry[i])
-            return pSalData->mhStockPenAry[i];
+        for (sal_uInt16 i = 0; i < pSalData->mnStockPenCount; i++)
+        {
+            if (nPenColor == pSalData->maStockPenColorAry[i])
+                return pSalData->mhStockPenAry[i];
+        }
     }
 
     return nullptr;
