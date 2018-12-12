@@ -391,12 +391,6 @@ public:
 
     //TODO rename to GetFrameWeld when SfxTabPage doesn't inherit from anything
     weld::Window*   GetDialogFrameWeld() const;
-
-    //TODO rename to get_preferred_size when SfxTabPage doesn't inherit from anything
-    Size get_container_size() const
-    {
-        return m_xContainer->get_preferred_size();
-    }
 };
 
 #endif
