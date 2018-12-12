@@ -25,8 +25,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <osl/diagnose.h>
-#include <defnamesbuffer.hxx>
-#include <sheetdatacontext.hxx>
+#include <addressconverter.hxx>
 #include <unitconverter.hxx>
 #include <biffhelper.hxx>
 

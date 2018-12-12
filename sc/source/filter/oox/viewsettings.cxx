@@ -23,7 +23,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
@@ -38,9 +37,10 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
-#include <unitconverter.hxx>
 #include <workbooksettings.hxx>
 #include <worksheetbuffer.hxx>
+
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
 
 namespace oox {
 namespace xls {

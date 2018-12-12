@@ -27,8 +27,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <oox/helper/helper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 

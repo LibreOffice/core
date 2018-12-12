@@ -19,7 +19,6 @@
 
 #include <pivotcachebuffer.hxx>
 
-#include <set>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -28,9 +27,7 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
 #include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/containerhelper.hxx>
@@ -39,7 +36,6 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <defnamesbuffer.hxx>
-#include <excelhandlers.hxx>
 #include <pivotcachefragment.hxx>
 #include <sheetdatabuffer.hxx>
 #include <tablebuffer.hxx>
@@ -47,7 +43,6 @@
 #include <worksheetbuffer.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
-#include <dpdimsave.hxx>
 #include <tools/datetime.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>

@@ -48,19 +48,15 @@
 #include <autofilterbuffer.hxx>
 #include <commentsbuffer.hxx>
 #include <condformatbuffer.hxx>
-#include <convuno.hxx>
 #include <document.hxx>
 #include <drawingfragment.hxx>
-#include <formulaparser.hxx>
 #include <pagesettings.hxx>
 #include <querytablebuffer.hxx>
-#include <sharedstringsbuffer.hxx>
 #include <sheetdatabuffer.hxx>
 #include <stylesbuffer.hxx>
 #include <tokenuno.hxx>
 #include <unitconverter.hxx>
 #include <viewsettings.hxx>
-#include <workbooksettings.hxx>
 #include <worksheetbuffer.hxx>
 #include <worksheetsettings.hxx>
 #include <formulabuffer.hxx>
@@ -76,7 +72,6 @@
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
-#include <vcl/virdev.hxx>
 
 namespace oox {
 namespace xls {

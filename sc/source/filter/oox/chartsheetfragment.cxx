@@ -21,10 +21,8 @@
 
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
-#include <oox/token/tokens.hxx>
 #include <pagesettings.hxx>
 #include <viewsettings.hxx>
-#include <workbooksettings.hxx>
 #include <worksheetsettings.hxx>
 #include <biffhelper.hxx>
 

@@ -33,11 +33,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
-#include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
-#include <oox/helper/propertymap.hxx>
-#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <scitems.hxx>
 #include <document.hxx>

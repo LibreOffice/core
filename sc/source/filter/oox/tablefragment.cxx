@@ -20,13 +20,10 @@
 #include <tablefragment.hxx>
 #include <biffhelper.hxx>
 
-#include <autofilterbuffer.hxx>
 #include <autofiltercontext.hxx>
-#include <tablecolumnsbuffer.hxx>
 #include <tablecolumnscontext.hxx>
 #include <tablebuffer.hxx>
 #include <oox/token/namespaces.hxx>
-#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace xls {

@@ -19,8 +19,6 @@
 
 #include <excelhandlers.hxx>
 
-#include <oox/core/filterbase.hxx>
-
 namespace oox {
 namespace xls {
 

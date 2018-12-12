@@ -20,19 +20,19 @@
 #include <unitconverter.hxx>
 
 #include <com/sun/star/awt/DeviceInfo.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XFont.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <osl/diagnose.h>
-#include <rtl/math.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <stylesbuffer.hxx>
 #include <biffhelper.hxx>
+
+namespace com { namespace sun { namespace star { namespace awt { struct FontDescriptor; } } } }
 
 namespace oox {
 namespace xls {

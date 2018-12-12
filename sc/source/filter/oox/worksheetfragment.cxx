@@ -33,18 +33,15 @@
 #include <commentsfragment.hxx>
 #include <condformatcontext.hxx>
 #include <drawingfragment.hxx>
-#include <externallinkbuffer.hxx>
 #include <pagesettings.hxx>
 #include <pivottablefragment.hxx>
 #include <querytablefragment.hxx>
-#include <scenariobuffer.hxx>
 #include <scenariocontext.hxx>
 #include <sheetdatabuffer.hxx>
 #include <sheetdatacontext.hxx>
 #include <tablefragment.hxx>
 #include <extlstcontext.hxx>
 #include <viewsettings.hxx>
-#include <workbooksettings.hxx>
 #include <worksheetsettings.hxx>
 
 namespace oox {

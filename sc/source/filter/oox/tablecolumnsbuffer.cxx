@@ -19,15 +19,9 @@
 
 #include <tablecolumnsbuffer.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <oox/helper/attributelist.hxx>
-#include <oox/helper/containerhelper.hxx>
-#include <oox/helper/propertyset.hxx>
-#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <addressconverter.hxx>
-#include <defnamesbuffer.hxx>
 #include <dbdata.hxx>
 
 namespace oox {

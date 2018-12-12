@@ -23,14 +23,11 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-#include <oox/helper/binaryinputstream.hxx>
-#include <excelchartconverter.hxx>
 #include <excelvbaproject.hxx>
 #include <stylesbuffer.hxx>
 #include <themebuffer.hxx>
 #include <workbookfragment.hxx>
 #include <xestream.hxx>
-#include <xlstream.hxx>
 
 #include <addressconverter.hxx>
 #include <document.hxx>
@@ -39,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/sfxecode.hxx>
+#include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
 
 namespace oox {

@@ -20,17 +20,12 @@
 #include <memory>
 #include <defnamesbuffer.hxx>
 
-#include <com/sun/star/sheet/ComplexReference.hpp>
-#include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
-#include <com/sun/star/sheet/ReferenceFlags.hpp>
-#include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
-#include <oox/helper/propertyset.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
