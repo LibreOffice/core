@@ -855,7 +855,7 @@ bool XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* 
     return static_cast<const XLineDashItem*>(p1)->GetDashValue() == static_cast<const XLineDashItem*>(p2)->GetDashValue();
 }
 
-XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
+std::unique_ptr<XLineDashItem> XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
@@ -866,7 +866,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return new XLineDashItem( aUniqueName, aDash );
+            return o3tl::make_unique<XLineDashItem>( aUniqueName, aDash );
     }
 
     return nullptr;
@@ -1062,11 +1062,11 @@ bool XLineStartItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 /** this function searches in both the models pool and the styles pool for XLineStartItem
     and XLineEndItem with the same value or name and returns an item with the value of
     this item and a unique name for an item with this value. */
-XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
+std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        XLineStartItem* pTempItem = nullptr;
+        std::unique_ptr<XLineStartItem> pTempItem;
         const XLineStartItem* pLineStartItem = this;
 
         OUString aUniqueName( GetName() );
@@ -1078,7 +1078,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 return nullptr;
 
             // force empty name for empty polygons
-            return new XLineStartItem( "", maPolyPolygon );
+            return o3tl::make_unique<XLineStartItem>( "", maPolyPolygon );
         }
 
         if( maPolyPolygon.count() > 1 )
@@ -1089,8 +1089,8 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 // force a closed polygon
                 basegfx::B2DPolyPolygon aNew(maPolyPolygon);
                 aNew.setClosed(true);
-                pTempItem = new XLineStartItem( aUniqueName, aNew );
-                pLineStartItem = pTempItem;
+                pTempItem.reset(new XLineStartItem( aUniqueName, aNew ));
+                pLineStartItem = pTempItem.get();
             }
         }
 
@@ -1266,7 +1266,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             }
             else
             {
-                return new XLineStartItem( aUniqueName, maPolyPolygon );
+                return o3tl::make_unique<XLineStartItem>( aUniqueName, maPolyPolygon );
             }
         }
     }
@@ -1313,11 +1313,11 @@ bool XLineEndItem::operator==(const SfxPoolItem& rItem) const
 /** this function searches in both the models pool and the styles pool for XLineStartItem
     and XLineEndItem with the same value or name and returns an item with the value of
     this item and a unique name for an item with this value. */
-XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
+std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        XLineEndItem* pTempItem = nullptr;
+        std::unique_ptr<XLineEndItem> pTempItem;
         const XLineEndItem* pLineEndItem = this;
 
         OUString aUniqueName( GetName() );
@@ -1329,7 +1329,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 return nullptr;
 
             // force empty name for empty polygons
-            return new XLineEndItem( "", maPolyPolygon );
+            return o3tl::make_unique<XLineEndItem>( "", maPolyPolygon );
         }
 
         if( maPolyPolygon.count() > 1 )
@@ -1340,8 +1340,8 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 // force a closed polygon
                 basegfx::B2DPolyPolygon aNew(maPolyPolygon);
                 aNew.setClosed(true);
-                pTempItem = new XLineEndItem( aUniqueName, aNew );
-                pLineEndItem = pTempItem;
+                pTempItem.reset(new XLineEndItem( aUniqueName, aNew ));
+                pLineEndItem = pTempItem.get();
             }
         }
 
@@ -1517,7 +1517,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             }
             else
             {
-                return new XLineEndItem( aUniqueName, maPolyPolygon );
+                return o3tl::make_unique<XLineEndItem>( aUniqueName, maPolyPolygon );
             }
         }
     }
@@ -2253,7 +2253,7 @@ bool XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrInd
     return static_cast<const XFillGradientItem*>(p1)->GetGradientValue() == static_cast<const XFillGradientItem*>(p2)->GetGradientValue();
 }
 
-XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) const
+std::unique_ptr<XFillGradientItem> XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
@@ -2264,7 +2264,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return new XFillGradientItem( aUniqueName, aGradient, Which() );
+            return o3tl::make_unique<XFillGradientItem>( aUniqueName, aGradient, Which() );
     }
 
     return nullptr;
@@ -2343,7 +2343,7 @@ bool XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const 
             static_cast<const XFillFloatTransparenceItem*>(p1)->GetGradientValue()  == static_cast<const XFillFloatTransparenceItem*>(p2)->GetGradientValue();
 }
 
-XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrModel* pModel ) const
+std::unique_ptr<XFillFloatTransparenceItem> XFillFloatTransparenceItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     // #85953# unique name only necessary when enabled
     if(IsEnabled())
@@ -2360,7 +2360,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
             // if the given name is not valid, replace it!
             if( aUniqueName != GetName() )
             {
-                return new XFillFloatTransparenceItem( aUniqueName, GetGradientValue(), true );
+                return o3tl::make_unique<XFillFloatTransparenceItem>( aUniqueName, GetGradientValue(), true );
             }
         }
     }
@@ -2369,7 +2369,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
         // #85953# if disabled, force name to empty string
         if( !GetName().isEmpty() )
         {
-            return new XFillFloatTransparenceItem(OUString(), GetGradientValue(), false);
+            return o3tl::make_unique<XFillFloatTransparenceItem>(OUString(), GetGradientValue(), false);
         }
     }
 
@@ -2605,7 +2605,7 @@ bool XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex*
     return static_cast<const XFillHatchItem*>(p1)->GetHatchValue() == static_cast<const XFillHatchItem*>(p2)->GetHatchValue();
 }
 
-XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
+std::unique_ptr<XFillHatchItem> XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
@@ -2616,7 +2616,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-            return new XFillHatchItem( aUniqueName, aHatch );
+            return o3tl::make_unique<XFillHatchItem>( aUniqueName, aHatch );
     }
 
     return nullptr;
