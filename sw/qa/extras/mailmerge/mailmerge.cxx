@@ -276,6 +276,17 @@ public:
         loadMailMergeDocument( name );
     }
 
+    /**
+     Resets currently opened layout of the original template,
+     and creates the layout of the document with N mails inside
+     (result run with text::MailMergeType::SHELL)
+    */
+    void dumpMMLayout()
+    {
+        mpXmlBuffer = xmlBufferPtr();
+        dumpLayout(mxMMComponent);
+    }
+
 protected:
     // Returns page number of the first page of a MM document inside the large MM document (used in the SHELL case).
     int documentStartPageNumber( int document ) const;
@@ -925,6 +936,41 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf62364, "tdf62364.odt", "10-testing-addresses
             CPPUNIT_ASSERT(pTextNode);
             CPPUNIT_ASSERT_EQUAL(nodeInList[nodeIndex], pTextNode->GetSwAttrSet().HasItem(RES_PARATR_LIST_ID));
         }
+    }
+}
+
+DECLARE_SHELL_MAILMERGE_TEST(testTd78611_shell, "tdf78611.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // prepare unit test and run
+    executeMailMerge();
+
+    // reset currently opened layout of the original template,
+    // and create the layout of the document with 10 mails inside
+    dumpMMLayout();
+
+    // check: each page (one page is one sub doc) has different paragraphs and header paragraphs.
+    // All header paragraphs should have numbering.
+
+    // check first page
+    CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[1]/body/txt[6]/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[1]/body/txt[8]/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[1]/body/txt[10]/Special", "rText"));
+
+    // check some other pages
+    CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[3]/body/txt[6]/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[5]/body/txt[8]/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[7]/body/txt[10]/Special", "rText"));
+}
+
+DECLARE_FILE_MAILMERGE_TEST(testTd78611_file, "tdf78611.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    executeMailMerge(true);
+    for (int doc = 0; doc < 10; ++doc)
+    {
+        loadMailMergeDocument( doc );
+        CPPUNIT_ASSERT_EQUAL( OUString("1"), parseDump("/root/page[1]/body/txt[6]/Special", "rText"));
+        CPPUNIT_ASSERT_EQUAL( OUString("1.1"), parseDump("/root/page[1]/body/txt[8]/Special", "rText"));
+        CPPUNIT_ASSERT_EQUAL( OUString("1.2"), parseDump("/root/page[1]/body/txt[10]/Special", "rText"));
     }
 }
 
