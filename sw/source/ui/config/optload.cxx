@@ -393,12 +393,13 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, ListBox&, void)
     }
 }
 
-SwCaptionOptDlg::SwCaptionOptDlg(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet, "CaptionDialog",
-        "modules/swriter/ui/captiondialog.ui")
+SwCaptionOptDlg::SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet)
+    : SfxSingleTabDialogController(pParent, rSet, "modules/swriter/ui/captiondialog.ui",
+                                   "CaptionDialog")
 {
     // create TabPage
-    SetTabPage(SwCaptionOptPage::Create(get_content_area(), &rSet));
+    TabPageParent aParent(get_content_area(), this);
+    SetTabPage(SwCaptionOptPage::Create(aParent, &rSet));
 }
 
 SwCaptionPreview::SwCaptionPreview(vcl::Window* pParent, WinBits nStyle)
@@ -889,10 +890,8 @@ void SwCaptionOptPage::ModifyHdl()
 {
     const OUString sFieldTypeName = m_xCategoryBox->get_active_text();
 
-    SfxSingleTabDialog *pDlg = dynamic_cast<SfxSingleTabDialog*>(GetTabDialog());
-    PushButton *pBtn = pDlg ? pDlg->GetOKButton() : nullptr;
-    if (pBtn)
-        pBtn->Enable(!sFieldTypeName.isEmpty());
+    if (SfxSingleTabDialogController* pDlg = dynamic_cast<SfxSingleTabDialogController*>(GetDialogController()))
+        pDlg->GetOKButton().set_sensitive(!sFieldTypeName.isEmpty());
     bool bEnable = m_xCategoryBox->get_sensitive() && sFieldTypeName != m_sNone;
 
     m_xFormatText->set_sensitive(bEnable);
