@@ -39,6 +39,7 @@
 #include "tblenum.hxx"
 #include "ndarr.hxx"
 #include "ndtyp.hxx"
+#include <atomic>
 #include <memory>
 #include <set>
 #include <unordered_map>
@@ -258,7 +259,7 @@ class SW_DLLPUBLIC SwDoc final
     std::unique_ptr<SwAutoCorrExceptWord> mpACEWord;               /**< For the automated takeover of
                                                    auto-corrected words that are "re-corrected". */
     std::unique_ptr<SwURLStateChanged> mpURLStateChgd;             //< SfxClient for changes in INetHistory
-    std::unique_ptr<SvNumberFormatter> mpNumberFormatter;          //< NumFormatter for tables / fields
+    std::atomic<SvNumberFormatter*> mpNumberFormatter;             //< NumFormatter for tables / fields
 
     mutable std::unique_ptr<SwNumRuleTable> mpNumRuleTable;     //< List of all named NumRules.
 
@@ -347,7 +348,7 @@ private:
                                 const OUString& rFormula,
                                 std::vector<OUString>& rUsedDBNames );
 
-    void CreateNumberFormatter();
+    void EnsureNumberFormatter();
 
     bool UnProtectTableCells( SwTable& rTable );
 
@@ -1382,8 +1383,17 @@ public:
             SwRootFrame const* pLayout = nullptr);
 
     // Query NumberFormatter.
-    inline       SvNumberFormatter* GetNumberFormatter( bool bCreate = true );
-    inline const SvNumberFormatter* GetNumberFormatter( bool bCreate = true ) const;
+    SvNumberFormatter* GetNumberFormatter(bool bCreate = true)
+    {
+        if (bCreate)
+            EnsureNumberFormatter();
+        return mpNumberFormatter;
+    }
+
+    const SvNumberFormatter* GetNumberFormatter(bool bCreate = true) const
+    {
+        return const_cast<SwDoc*>(this)->GetNumberFormatter(bCreate);
+    }
 
     bool HasInvisibleContent() const;
     // delete invisible content, like hidden sections and paragraphs
@@ -1632,18 +1642,6 @@ void ClrContourCache();
 inline const SwTableNode* SwDoc::IsIdxInTable( const SwNodeIndex& rIdx ) const
 {
     return const_cast<SwDoc*>(this)->IsIdxInTable( rIdx );
-}
-
-inline SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate )
-{
-    if( bCreate && !mpNumberFormatter )
-        CreateNumberFormatter();
-    return mpNumberFormatter.get();
-}
-
-inline const SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate ) const
-{
-    return const_cast<SwDoc*>(this)->GetNumberFormatter( bCreate );
 }
 
 inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
