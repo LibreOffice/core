@@ -1457,56 +1457,55 @@ HBRUSH WinSalGraphicsImpl::SearchStockBrush(COLORREF nBrushColor)
     return nullptr;
 }
 
-HBRUSH WinSalGraphicsImpl::MakeBrush(Color nColor)
+namespace
+{
+
+HBRUSH Make16BitDIBPatternBrush(Color nColor)
 {
     const SalData* pSalData = GetSalData();
 
-    BYTE        nRed        = nColor.GetRed();
-    BYTE        nGreen      = nColor.GetGreen();
-    BYTE        nBlue       = nColor.GetBlue();
-    COLORREF    nBrushColor = PALETTERGB(nRed, nGreen, nBlue);
+    const BYTE nRed   = nColor.GetRed();
+    const BYTE nGreen = nColor.GetGreen();
+    const BYTE nBlue  = nColor.GetBlue();
 
-    if (mrParent.isPrinter() || !pSalData->mhDitherDIB)
-        return CreateSolidBrush(nBrushColor);
-
-    if (24 == reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB)->biBitCount)
+    static const BYTE aOrdDither16Bit[8][8] =
     {
-        static const BYTE aOrdDither16Bit[8][8] =
-        {
-           { 0, 6, 1, 7, 0, 6, 1, 7 },
-           { 4, 2, 5, 3, 4, 2, 5, 3 },
-           { 1, 7, 0, 6, 1, 7, 0, 6 },
-           { 5, 3, 4, 2, 5, 3, 4, 2 },
-           { 0, 6, 1, 7, 0, 6, 1, 7 },
-           { 4, 2, 5, 3, 4, 2, 5, 3 },
-           { 1, 7, 0, 6, 1, 7, 0, 6 },
-           { 5, 3, 4, 2, 5, 3, 4, 2 }
-        };
+       { 0, 6, 1, 7, 0, 6, 1, 7 },
+       { 4, 2, 5, 3, 4, 2, 5, 3 },
+       { 1, 7, 0, 6, 1, 7, 0, 6 },
+       { 5, 3, 4, 2, 5, 3, 4, 2 },
+       { 0, 6, 1, 7, 0, 6, 1, 7 },
+       { 4, 2, 5, 3, 4, 2, 5, 3 },
+       { 1, 7, 0, 6, 1, 7, 0, 6 },
+       { 5, 3, 4, 2, 5, 3, 4, 2 }
+    };
 
-        BYTE* pTmp = pSalData->mpDitherDIBData;
-        long* pDitherDiff = pSalData->mpDitherDiff;
-        BYTE* pDitherLow = pSalData->mpDitherLow;
-        BYTE* pDitherHigh = pSalData->mpDitherHigh;
+    BYTE* pTmp = pSalData->mpDitherDIBData;
+    long* pDitherDiff = pSalData->mpDitherDiff;
+    BYTE* pDitherLow = pSalData->mpDitherLow;
+    BYTE* pDitherHigh = pSalData->mpDitherHigh;
 
-        for(int nY = 0; nY < 8; ++nY)
+    for(int nY = 0; nY < 8; ++nY)
+    {
+        for(int nX = 0; nX < 8; ++nX)
         {
-            for(int nX = 0; nX < 8; ++nX)
-            {
-                const BYTE nThres = aOrdDither16Bit[nY][nX];
-                *pTmp++ = DMAP(nBlue, nThres);
-                *pTmp++ = DMAP(nGreen, nThres);
-                *pTmp++ = DMAP(nRed, nThres);
-            }
+            const BYTE nThres = aOrdDither16Bit[nY][nX];
+            *pTmp++ = DMAP(nBlue, nThres);
+            *pTmp++ = DMAP(nGreen, nThres);
+            *pTmp++ = DMAP(nRed, nThres);
         }
-
-        return CreateDIBPatternBrush(pSalData->mhDitherDIB, DIB_RGB_COLORS);
     }
 
-    if (ImplIsSysColorEntry(nColor))
-        return CreateSolidBrush(PALRGB_TO_RGB(nBrushColor));
+    return CreateDIBPatternBrush(pSalData->mhDitherDIB, DIB_RGB_COLORS);
+}
 
-    if (ImplIsPaletteEntry(nRed, nGreen, nBlue))
-        return CreateSolidBrush(nBrushColor);
+HBRUSH Make8BitDIBPatternBrush(Color nColor)
+{
+    const SalData* pSalData = GetSalData();
+
+    const BYTE nRed   = nColor.GetRed();
+    const BYTE nGreen = nColor.GetGreen();
+    const BYTE nBlue  = nColor.GetBlue();
 
     static const BYTE aOrdDither8Bit[8][8] =
     {
@@ -1538,6 +1537,32 @@ HBRUSH WinSalGraphicsImpl::MakeBrush(Color nColor)
     }
 
     return CreateDIBPatternBrush(pSalData->mhDitherDIB, DIB_PAL_COLORS);
+}
+
+} // namespace
+
+HBRUSH WinSalGraphicsImpl::MakeBrush(Color nColor)
+{
+    const SalData* pSalData = GetSalData();
+
+    const BYTE        nRed        = nColor.GetRed();
+    const BYTE        nGreen      = nColor.GetGreen();
+    const BYTE        nBlue       = nColor.GetBlue();
+    const COLORREF    nBrushColor = PALETTERGB(nRed, nGreen, nBlue);
+
+    if (mrParent.isPrinter() || !pSalData->mhDitherDIB)
+        return CreateSolidBrush(nBrushColor);
+
+    if (24 == reinterpret_cast<BITMAPINFOHEADER*>(pSalData->mpDitherDIB)->biBitCount)
+        return Make16BitDIBPatternBrush(nColor);
+
+    if (ImplIsSysColorEntry(nColor))
+        return CreateSolidBrush(PALRGB_TO_RGB(nBrushColor));
+
+    if (ImplIsPaletteEntry(nRed, nGreen, nBlue))
+        return CreateSolidBrush(nBrushColor);
+
+    return Make8BitDIBPatternBrush(nColor);
 }
 
 void WinSalGraphicsImpl::ResetBrush(HBRUSH hNewBrush)
