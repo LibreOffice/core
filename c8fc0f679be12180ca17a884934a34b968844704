@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_39dc6973",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-12T05:51:43Z",
+      "side": 1,
+      "message": "Passing ~same data twice (pre- and postprocessed) looks like implementation detail. Given that PALETTERGB is cheap, maybe better pass Color to both this and SearchStockBrush, and convert ad hoc?",
+      "range": {
+        "startLine": 1462,
+        "startChar": 37,
+        "endLine": 1462,
+        "endChar": 71
+      },
+      "revId": "c8fc0f679be12180ca17a884934a34b968844704",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
