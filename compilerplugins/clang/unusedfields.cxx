@@ -586,10 +586,18 @@ void UnusedFields::checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* membe
                 if (startswith(name, "read"))
                     // this is a write-only call
                     ;
+                else if (startswith(name, "emplace") || name == "insert"
+                    || name == "erase" || name == "remove" || name == "remove_if" || name == "sort"
+                    || name == "push_back" || name == "pop_back"
+                    || name == "push_front" || name == "pop_front"
+                    || name == "reserve"  || name == "resize"
+                    || name == "clear" || name == "fill")
+                    // write-only modifications to collections
+                    ;
                 else if (name.find(">>=") != std::string::npos && callExpr->getArg(1) == child)
                     // this is a write-only call
                     ;
-                else if (name == "clear" || name == "dispose" || name == "disposeAndClear" || name == "swap")
+                else if (name == "dispose" || name == "disposeAndClear" || name == "swap")
                     // we're abusing the write-only analysis here to look for fields which don't have anything useful
                     // being done to them, so we're ignoring things like std::vector::clear, std::vector::swap,
                     // and VclPtr::disposeAndClear
