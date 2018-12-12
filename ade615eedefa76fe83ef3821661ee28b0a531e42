@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5f4e5783_99ed9d27",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2018-12-12T05:45:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f4e5783_53138767",
+      "range": {
+        "startLine": 1501,
+        "startChar": 13,
+        "endLine": 1503,
+        "endChar": 43
+      },
+      "revId": "ade615eedefa76fe83ef3821661ee28b0a531e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4e5783_33180b80",
         "filename": "vcl/win/gdi/gdiimpl.cxx",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-12-11T07:54:45Z",
       "side": 1,
       "message": "Also here",
+      "range": {
+        "startLine": 1526,
+        "startChar": 9,
+        "endLine": 1528,
+        "endChar": 40
+      },
+      "revId": "ade615eedefa76fe83ef3821661ee28b0a531e42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_79f2e108",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2018-12-12T05:45:37Z",
+      "side": 1,
+      "message": "Done.\n\nPlease note that I also changed the \u003cconst long nThres\u003e to \u003cconst BYTE nThres\u003e.",
+      "parentUuid": "5f4e5783_33180b80",
       "range": {
         "startLine": 1526,
         "startChar": 9,
