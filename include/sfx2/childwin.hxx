@@ -88,7 +88,7 @@ typedef std::unique_ptr<SfxChildWindow> (*SfxChildWinCtor)( vcl::Window *pParent
                                             SfxChildWinInfo *pInfo);
 
 // ChildWindowsContexts factory methods
-typedef SfxChildWindowContext* (*SfxChildWinContextCtor)( vcl::Window *pParentWindow,
+typedef std::unique_ptr<SfxChildWindowContext> (*SfxChildWinContextCtor)( vcl::Window *pParentWindow,
                                             SfxBindings *pBindings,
                                             SfxChildWinInfo *pInfo);
 struct SfxChildWinContextFactory
@@ -218,7 +218,7 @@ public:
 
 //! The Macro of the future ...
 #define SFX_DECL_CHILDWINDOWCONTEXT(Class) \
-        static  SfxChildWindowContext* CreateImpl(vcl::Window *pParent, \
+        static  std::unique_ptr<SfxChildWindowContext> CreateImpl(vcl::Window *pParent, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindowContext(sal_uInt16, SfxModule *pMod=nullptr); \
 
@@ -227,11 +227,10 @@ public:
 // factory. As long as Id is set to 0 and patched in
 // SfxChildWindow::CreateContext
 #define SFX_IMPL_CHILDWINDOWCONTEXT(Class, MyID) \
-        SfxChildWindowContext* Class::CreateImpl( vcl::Window *pParent, \
+        std::unique_ptr<SfxChildWindowContext> Class::CreateImpl( vcl::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
-            SfxChildWindowContext *pContext = new Class(pParent,0,pBindings,pInfo);\
-            return pContext; \
+            return o3tl::make_unique<Class>(pParent,0,pBindings,pInfo);\
         } \
         void    Class::RegisterChildWindowContext(sal_uInt16 nId, SfxModule* pMod)   \
         {   \

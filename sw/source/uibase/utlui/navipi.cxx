@@ -63,13 +63,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
 //! soon obsolete !
-SfxChildWindowContext* SwNavigationChild::CreateImpl( vcl::Window *pParent,
+std::unique_ptr<SfxChildWindowContext> SwNavigationChild::CreateImpl( vcl::Window *pParent,
         SfxBindings *pBindings, SfxChildWinInfo* /*pInfo*/ )
 {
-    SfxChildWindowContext *pContext = new SwNavigationChild(pParent,
+    return o3tl::make_unique<SwNavigationChild>(pParent,
             /* cast is safe here! */static_cast< sal_uInt16 >(SwView::GetInterfaceId()),
             pBindings);
-    return pContext;
 }
 void    SwNavigationChild::RegisterChildWindowContext(SfxModule* pMod)
 {

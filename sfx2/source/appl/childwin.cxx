@@ -433,7 +433,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
 
 void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBindings )
 {
-    SfxChildWindowContext *pCon = nullptr;
+    std::unique_ptr<SfxChildWindowContext> pCon;
     SfxChildWinFactory* pFact=nullptr;
     SfxApplication *pApp = SfxGetpApp();
     SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
@@ -508,7 +508,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
         return;
     }
 
-    pContext.reset(pCon);
+    pContext = std::move(pCon);
     pContext->GetWindow()->SetSizePixel( pWindow->GetOutputSizePixel() );
     pContext->GetWindow()->Show();
 }
