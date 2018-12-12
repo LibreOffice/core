@@ -46,6 +46,7 @@ public:
     void testVertialBracketList();
     void testTableList();
     void testAccentProcess();
+    void testContinuousBlockProcess();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testVertialBracketList);
     CPPUNIT_TEST(testTableList);
     CPPUNIT_TEST(testAccentProcess);
+    CPPUNIT_TEST(testContinuousBlockProcess);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -524,6 +526,35 @@ void SdImportTestSmartArt::testAccentProcess()
     // 'Expected less than: 12700; Actual  : 18540', i.e. the "b" and "c"
     // shapes overlapped.
     CPPUNIT_ASSERT_LESS(nSecondParentLeft, nFirstChildRight);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testContinuousBlockProcess()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-continuous-block-process.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+    // 2 children: background, foreground.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
+
+    uno::Reference<drawing::XShapes> xLinear(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xLinear.is());
+    // 3 children: A, B and C.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xLinear->getCount());
+
+    uno::Reference<text::XText> xA(xLinear->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xA.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), xA->getString());
+    uno::Reference<drawing::XShape> xAShape(xA, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAShape.is());
+    // Without the accompanying fix in place, this test would have failed: the
+    // theoretically correct value is 5462 mm100 (16933 is the total width, and
+    // need to divide that to 1, 0.5, 1, 0.5 and 1 units), while the old value
+    // was 4703 and the new one is 5461.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(5000), xAShape->getSize().Width);
 
     xDocShRef->DoClose();
 }
