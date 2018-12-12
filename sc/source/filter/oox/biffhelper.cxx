@@ -20,10 +20,7 @@
 #include <biffhelper.hxx>
 
 #include <rtl/math.hxx>
-#include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
-#include <worksheethelper.hxx>
-#include <oox/helper/binaryoutputstream.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 
 namespace oox {

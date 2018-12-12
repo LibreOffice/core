@@ -34,7 +34,6 @@
 #include <defnamesbuffer.hxx>
 #include <externallinkbuffer.hxx>
 #include <tablebuffer.hxx>
-#include <worksheethelper.hxx>
 
 namespace oox {
 namespace xls {

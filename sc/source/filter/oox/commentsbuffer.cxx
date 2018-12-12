@@ -34,7 +34,6 @@
 #include <addressconverter.hxx>
 #include <drawingfragment.hxx>
 #include <svx/sdtaitm.hxx>
-#include <unitconverter.hxx>
 
 namespace oox {
 namespace xls {

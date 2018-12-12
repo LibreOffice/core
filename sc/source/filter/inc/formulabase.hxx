@@ -22,6 +22,7 @@
 
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
@@ -33,7 +34,6 @@ namespace com { namespace sun { namespace star {
 
 namespace oox { template< typename Type > class Matrix; }
 namespace com { namespace sun { namespace star { namespace sheet { struct FormulaOpCodeMapEntry; } } } }
-namespace com { namespace sun { namespace star { namespace table { struct CellAddress; } } } }
 namespace oox { class SequenceInputStream; }
 namespace oox { namespace xls { struct BinAddress; } }
 class ScRangeList;

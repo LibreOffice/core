@@ -25,7 +25,6 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/progressbar.hxx>
-#include <oox/helper/propertyset.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -36,7 +35,6 @@
 #include <externallinkfragment.hxx>
 #include <formulabuffer.hxx>
 #include <pivotcachebuffer.hxx>
-#include <sharedstringsbuffer.hxx>
 #include <sharedstringsfragment.hxx>
 #include <revisionfragment.hxx>
 #include <stylesfragment.hxx>
@@ -47,9 +45,7 @@
 #include <worksheetbuffer.hxx>
 #include <worksheethelper.hxx>
 #include <worksheetfragment.hxx>
-#include <sheetdatacontext.hxx>
 #include <extlstcontext.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <documentimport.hxx>
 #include <biffhelper.hxx>
 
@@ -66,15 +62,10 @@
 #include <vcl/weld.hxx>
 
 #include <oox/core/fastparser.hxx>
-#include <salhelper/thread.hxx>
 #include <comphelper/threadpool.hxx>
-#include <osl/conditn.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
-#include <algorithm>
-#include <queue>
-#include <thread>
 #include <memory>
 
 #include <oox/ole/vbaproject.hxx>

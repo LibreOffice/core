@@ -23,11 +23,10 @@
 #include <memory>
 #include <oox/drawingml/theme.hxx>
 #include "workbookhelper.hxx"
+#include "stylesbuffer.hxx"
 
 namespace oox {
 namespace xls {
-
-struct FontModel;
 
 class ThemeBuffer : public ::oox::drawingml::Theme, public WorkbookHelper
 {

@@ -8,15 +8,12 @@
  */
 
 #include <formulabuffer.hxx>
-#include <formulaparser.hxx>
 #include <externallinkbuffer.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
 #include <documentimport.hxx>
 
-#include <rangelst.hxx>
 #include <autonamecache.hxx>
-#include <tokenuno.hxx>
 #include <tokenarray.hxx>
 #include <sharedformulagroups.hxx>
 #include <externalrefmgr.hxx>

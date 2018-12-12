@@ -25,14 +25,10 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <editeng/boxitem.hxx>
-#include <editeng/editobj.hxx>
-#include <svl/eitem.hxx>
 #include <oox/helper/containerhelper.hxx>
-#include <oox/helper/propertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
@@ -40,11 +36,9 @@
 #include <formulaparser.hxx>
 #include <sharedstringsbuffer.hxx>
 #include <unitconverter.hxx>
-#include <markdata.hxx>
 #include <rangelst.hxx>
 #include <document.hxx>
 #include <scitems.hxx>
-#include <formulacell.hxx>
 #include <docpool.hxx>
 #include <paramisc.hxx>
 #include <patattr.hxx>

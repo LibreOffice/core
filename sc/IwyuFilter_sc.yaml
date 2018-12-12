@@ -384,11 +384,17 @@ blacklist:
     - class XclExpChangeTrack
     # Needed for typedef
     - excrecds.hxx
+    sc/source/filter/inc/formulabase.hxx:
+    # Needed for typedef
+    - com/sun/star/table/CellAddress.hpp
     sc/source/filter/inc/ooxformulaparser.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XFilterFormulaParser.hpp
+    sc/source/filter/inc/themebuffer.hxx:
+    # Needed for typedef
+    - stylesbuffer.hxx
     sc/source/filter/inc/xerecord.hxx:
     # Needed for member access
     - xestream.hxx
@@ -682,3 +688,12 @@ blacklist:
     sc/source/filter/excel/xistyle.cxx:
     # Needed for direct member access
     - xladdress.hxx
+    sc/source/filter/oox/ooxformulaparser.cxx:
+    # Needed for direct member access
+    - com/sun/star/lang/XComponent.hpp
+    sc/source/filter/oox/richstring.cxx:
+    # Complete type needed for unique_ptr
+    - editeng/editobj.hxx
+    sc/source/filter/oox/worksheethelper.cxx:
+    # Needed for implicit dtor
+    - editeng/editobj.hxx

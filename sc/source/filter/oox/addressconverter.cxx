@@ -24,10 +24,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <convuno.hxx>
 #include <osl/diagnose.h>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <oox/core/filterbase.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 
 namespace oox {
