@@ -2181,6 +2181,8 @@ void Desktop::OpenDefault()
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::IMPRESS );
         else if ( rArgs.IsBase() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::DATABASE );
+        else if (rArgs.IsBasicIDE() && aOpt.IsModuleInstalled(SvtModuleOptions::EModule::BASIC))
+            aName = aOpt.GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::BASIC);
         else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory::DRAW );
         else if ( rArgs.IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )

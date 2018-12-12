@@ -86,6 +86,7 @@ class CommandLineArgs
         bool                IsDraw() const { return m_draw;}
         bool                IsImpress() const { return m_impress;}
         bool                IsBase() const { return m_base;}
+        bool                IsBasicIDE() const { return m_bBasicIDE;}
         bool                IsGlobal() const { return m_global;}
         bool                IsMath() const { return m_math;}
         bool                IsWeb() const { return m_web;}
@@ -149,6 +150,7 @@ class CommandLineArgs
         bool m_math;
         bool m_web;
         bool m_base;
+        bool m_bBasicIDE;
         bool m_helpwriter;
         bool m_helpcalc;
         bool m_helpdraw;

@@ -1139,6 +1139,8 @@ OUString SvtModuleOptions::GetDefaultModuleName() const
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::WRITERGLOBAL);
     else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::MATH))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::MATH);
+    else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::BASIC))
+        aModule = GetFactoryShortName(SvtModuleOptions::EFactory::BASIC);
     return aModule;
 }
 

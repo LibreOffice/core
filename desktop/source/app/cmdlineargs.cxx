@@ -492,6 +492,10 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 m_base = true;
                 m_bDocumentArgs = true;
             }
+            else if ( oArg == "basicide" )
+            {
+                m_bBasicIDE = true;
+            }
             else if ( oArg == "global" )
             {
                 m_global = true;
@@ -714,6 +718,7 @@ void CommandLineArgs::InitParamValues()
     m_math = false;
     m_web = false;
     m_base = false;
+    m_bBasicIDE = false;
     m_helpwriter = false;
     m_helpcalc = false;
     m_helpdraw = false;
@@ -733,7 +738,7 @@ void CommandLineArgs::InitParamValues()
 bool CommandLineArgs::HasModuleParam() const
 {
     return m_writer || m_calc || m_draw || m_impress || m_global || m_math
-        || m_web || m_base;
+        || m_web || m_base || m_bBasicIDE;
 }
 
 std::vector< OUString > CommandLineArgs::GetOpenList() const

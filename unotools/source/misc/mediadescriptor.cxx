@@ -607,6 +607,11 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         return false;
     }
 
+    if (sURL == "private:factory/sbasic")
+    {
+        SfxGetpApp()->ExecuteSlot(SfxRequest(SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool()));
+        return true;
+    }
     // prepare the environment
     css::uno::Reference< css::task::XInteractionHandler > xOrgInteraction = getUnpackedValueOrDefault(
         MediaDescriptor::PROP_INTERACTIONHANDLER(),
