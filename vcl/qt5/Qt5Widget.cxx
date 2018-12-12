@@ -24,7 +24,8 @@
 #include <Qt5Graphics.hxx>
 #include <Qt5Tools.hxx>
 
-#include <QtCore/QtGlobal>
+#include <QtCore/QMimeData>
+#include <QtGui/QDrag>
 #include <QtGui/QFocusEvent>
 #include <QtGui/QImage>
 #include <QtGui/QKeyEvent>
@@ -33,10 +34,10 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
-#include <QtGui/QToolTip>
 #include <QtGui/QWheelEvent>
-#include <QtWidgets/QtWidgets>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QWidget>
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
