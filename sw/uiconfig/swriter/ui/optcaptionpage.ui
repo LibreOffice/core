@@ -441,7 +441,6 @@
                                 <property name="alignment">0.5</property>
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer2">
-                                    <property name="radio">True</property>
                                   </object>
                                   <attributes>
                                     <attribute name="active">0</attribute>
