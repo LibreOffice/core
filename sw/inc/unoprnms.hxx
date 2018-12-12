@@ -821,6 +821,8 @@
 #define UNO_NAME_RSID "Rsid"
 #define UNO_NAME_PARRSID "ParRsid"
 #define UNO_NAME_DRAW_ASPECT "DrawAspect"
+#define UNO_NAME_VISIBLE_AREA_WIDTH "VisibleAreaWidth"
+#define UNO_NAME_VISIBLE_AREA_HEIGHT "VisibleAreaHeight"
 
 #define UNO_NAME_LINE_STYLE "LineStyle"
 #define UNO_NAME_LINE_WIDTH "LineWidth"
