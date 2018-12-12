@@ -665,6 +665,7 @@ ScDPAggData* ScDPAggData::GetChild()
 
 void ScDPAggData::Reset()
 {
+    maWelford = WelfordRunner();
     fVal = 0.0;
     fAux = 0.0;
     nCount = SC_DPAGG_EMPTY;
