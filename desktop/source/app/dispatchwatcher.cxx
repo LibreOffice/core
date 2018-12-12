@@ -430,7 +430,6 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 {
                     ::osl::ClearableMutexGuard aGuard(m_mutex);
                     // Remember request so we can find it in statusChanged!
-                    m_aRequestContainer.emplace(aURL.Complete, 1);
                     m_nRequestCount++;
                 }
 

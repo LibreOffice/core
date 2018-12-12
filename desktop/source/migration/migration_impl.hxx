@@ -60,7 +60,6 @@ struct migration_step
     strings_v excludeFiles;
     strings_v includeConfig;
     strings_v excludeConfig;
-    strings_v includeExtensions;
     strings_v excludeExtensions;
     OUString service;
 };

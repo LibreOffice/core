@@ -224,7 +224,6 @@ protected:
             css::uno::Sequence< OUString> m_aColumnNames;
             OValueRow                m_aRow;
             OValueRow                m_aParameterRow;
-            std::vector< OUString> m_aAttributeStrings;
             sal_Int32                m_nParamIndex;
             bool                 m_bIsAlwaysFalseQuery;
             ::rtl::Reference<OKeySet>     m_pKeySet;

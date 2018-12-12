@@ -499,8 +499,6 @@ void OCalcTable::fillColumns()
         Reference< XPropertySet> xCol = pColumn;
         m_aColumns->get().push_back(xCol);
         m_aTypes.push_back(eType);
-        m_aPrecisions.push_back(nPrecision);
-        m_aScales.push_back(nDecimals);
     }
 }
 
