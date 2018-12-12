@@ -599,6 +599,8 @@
 #define FN_UNO_HIDDEN                       (FN_EXTRA2 + 122)
 #define FN_UNO_STYLE_INTEROP_GRAB_BAG       (FN_EXTRA2 + 123)
 #define FN_UNO_TABLE_TEMPLATE_NAME          (FN_EXTRA2 + 124)
+#define FN_UNO_VISIBLE_AREA_WIDTH           (FN_EXTRA2 + 125)
+#define FN_UNO_VISIBLE_AREA_HEIGHT          (FN_EXTRA2 + 126)
 
 // Area: Help
 // Region: Traveling & Selection

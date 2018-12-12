@@ -72,6 +72,8 @@ private:
     std::unique_ptr<SwPaM>          m_pCopySource;
 
     sal_Int64                       m_nDrawAspect;
+    sal_Int64                       m_nVisibleAreaWidth;
+    sal_Int64                       m_nVisibleAreaHeight;
 
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxStyleData;

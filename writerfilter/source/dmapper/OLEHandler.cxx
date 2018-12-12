@@ -95,8 +95,10 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
             rVal.getAny() >>= m_xInputStream;
         break;
         case NS_ooxml::LN_CT_Object_dxaOrig:
+             m_sVisAreaWidth = sStringValue;
         break;
         case NS_ooxml::LN_CT_Object_dyaOrig:
+             m_sVisAreaHeight = sStringValue;
         break;
         case NS_ooxml::LN_shape:
         {
@@ -260,6 +262,16 @@ OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xCom
 OUString const & OLEHandler::GetDrawAspect() const
 {
     return m_sDrawAspect;
+}
+
+OUString const & OLEHandler::GetVisAreaWidth() const
+{
+    return m_sVisAreaWidth;
+}
+
+OUString const & OLEHandler::GetVisAreaHeight() const
+{
+    return m_sVisAreaHeight;
 }
 
 OUString OLEHandler::copyOLEOStream(
