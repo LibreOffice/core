@@ -43,7 +43,7 @@ class SwCaptionDialog : public SfxDialogController
 
     css::uno::Reference< css::container::XNameAccess >    xNameAccess;
 
-    CaptionPreview m_aPreview;
+    SwCaptionPreview m_aPreview;
     std::unique_ptr<weld::Entry> m_xTextEdit;
     std::unique_ptr<weld::ComboBox> m_xCategoryBox;
     std::unique_ptr<weld::Label> m_xFormatText;
