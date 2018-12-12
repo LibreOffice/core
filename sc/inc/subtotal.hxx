@@ -60,6 +60,9 @@ struct ScFunctionData                   // to calculate single functions
 
     ScFunctionData( ScSubTotalFunc eFn ) :
         eFunc(eFn), nVal(0.0), nCount(0), bError(false) {}
+    void update( double fNewVal );
+    /// Check bError after (!) obtaining the result.
+    double getResult();
 };
 
 #endif
