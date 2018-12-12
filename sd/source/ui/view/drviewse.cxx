@@ -29,6 +29,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <undo/undomanager.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
@@ -1057,6 +1058,11 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_CLOSE_MASTER_VIEW:
         {
+            // Notify of disabling master view, which is enabled in DrawViewShell::ChangeEditMode.
+            if (comphelper::LibreOfficeKit::isActive())
+                GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                           ".uno:SlideMasterPage=false");
+
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
 
