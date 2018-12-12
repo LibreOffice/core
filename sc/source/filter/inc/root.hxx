@@ -86,7 +86,6 @@ struct LOTUS_ROOT
 {
     ScDocument*         pDoc;
     LotusRangeList      maRangeNames;
-    ScRangeName*        pScRangeName;
     rtl_TextEncoding const    eCharsetQ;
     Lotus123Typ         eFirstType;
     Lotus123Typ         eActType;

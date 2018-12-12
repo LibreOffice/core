@@ -125,8 +125,6 @@ class ScDPGroupTableData : public ScDPTableData
     std::unique_ptr<ScDPNumGroupDimension[]>
                             pNumGroups;     // array[nSourceCount]
     ScDocument* const       pDoc;
-    std::unordered_set< OUString >
-                            aGroupNames;
 
     void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<long>& rDims);
     virtual long                GetSourceDim( long nDim ) override;

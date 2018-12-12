@@ -369,8 +369,7 @@ LotusRange::LotusRange( const LotusRange& rCpy )
     Copy( rCpy );
 }
 
-LotusRangeList::LotusRangeList(LOTUS_ROOT* pLotRoot)
-    : m_pLotRoot(pLotRoot)
+LotusRangeList::LotusRangeList()
 {
     aComplRef.InitFlags();
 
@@ -409,7 +408,7 @@ LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
     return ID_FAIL;
 }
 
-void LotusRangeList::Append( LotusRange* pLR, const OUString& rName )
+void LotusRangeList::Append( LotusRange* pLR )
 {
     SAL_WARN_IF( !pLR, "sc.filter", "*LotusRangeList::Append(): no pointer!" );
     maRanges.push_back(pLR);
@@ -431,19 +430,13 @@ void LotusRangeList::Append( LotusRange* pLR, const OUString& rName )
         aTokArray.AddDoubleReference( aComplRef );
     }
 
-    ScRangeData*    pData = new ScRangeData(
-        m_pLotRoot->pDoc, rName, aTokArray );
-
-    m_pLotRoot->pScRangeName->insert( pData );
-
     pLR->SetId( nIdCnt );
 
     nIdCnt++;
 }
 
-RangeNameBufferWK3::RangeNameBufferWK3(LOTUS_ROOT* pLotRoot)
-    : m_pLotRoot(pLotRoot)
-    , pScTokenArray( new ScTokenArray )
+RangeNameBufferWK3::RangeNameBufferWK3()
+    : pScTokenArray( new ScTokenArray )
 {
     nIntCount = 1;
 }
@@ -475,14 +468,10 @@ void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& 
         aInsert.bSingleRef = false;
     }
 
-    ScRangeData*        pData = new ScRangeData( m_pLotRoot->pDoc, aScName, *pScTokenArray );
-
     aInsert.nRelInd = nIntCount;
-    pData->SetIndex( nIntCount );
     nIntCount++;
 
     maEntries.push_back( aInsert );
-    m_pLotRoot->pScRangeName->insert( pData );
 }
 
 bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
@@ -536,13 +525,8 @@ bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
                     pScTokenArray->AddDoubleReference( itr->aScComplexRefDataRel );
                 }
 
-                ScRangeData*    pData = new ScRangeData( m_pLotRoot->pDoc, itr->aScAbsName, *pScTokenArray );
-
                 rIndex = itr->nAbsInd = nIntCount;
-                pData->SetIndex( rIndex );
                 nIntCount++;
-
-                m_pLotRoot->pScRangeName->insert( pData );
             }
 
             return true;
