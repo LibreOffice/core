@@ -62,6 +62,9 @@ public:
         case svtools::RESTART_REASON_OPENGL:
             reason_ = m_xBuilder->weld_widget("reason_opengl");
             break;
+        case svtools::RESTART_REASON_OPENCL:
+            reason_ = m_xBuilder->weld_widget("reason_opencl");
+            break;
         default:
             assert(false); // this cannot happen
         }
