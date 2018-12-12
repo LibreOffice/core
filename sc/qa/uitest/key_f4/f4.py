@@ -76,62 +76,63 @@ class keyF4(UITestCase):
 
         self.ui_test.close_doc()
 
-#    def test_tdf39650_F4_R1C1(self):
-#        #Bug 39650 - Shift+F4 conversion from relative to absolute does not work for R1C1 syntax
-#        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-#        xCalcDoc = self.xUITest.getTopFocusWindow()
-#        gridwin = xCalcDoc.getChild("grid_window")
-#        document = self.ui_test.get_component()
-#        #* Tools --> Options --> Calc --> Formula -->  Syntax = Excel R1C1
-#        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-#        xDialogOpt = self.xUITest.getTopFocusWindow()
+    def test_tdf39650_F4_R1C1(self):
+        #Bug 39650 - Shift+F4 conversion from relative to absolute does not work for R1C1 syntax
+        calc_doc = self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
+        document = self.ui_test.get_component()
+        #* Tools --> Options --> Calc --> Formula -->  Syntax = Excel R1C1
+        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+        xDialogOpt = self.xUITest.getTopFocusWindow()
 
-#        xPages = xDialogOpt.getChild("pages")
-#        xCalcEntry = xPages.getChild('3')                 # Calc
-#        xCalcEntry.executeAction("EXPAND", tuple())
-#        xCalcFormulaEntry = xCalcEntry.getChild('4')
-#        xCalcFormulaEntry.executeAction("SELECT", tuple())          #Formula
+        xPages = xDialogOpt.getChild("pages")
+        xCalcEntry = xPages.getChild('3')                 # Calc
+        xCalcEntry.executeAction("EXPAND", tuple())
+        xCalcFormulaEntry = xCalcEntry.getChild('4')
+        xCalcFormulaEntry.executeAction("SELECT", tuple())          #Formula
 
-#        formulasyntax = xDialogOpt.getChild("formulasyntax")
-#        #Excel R1C1
-#        props = {"TEXT": "Excel R1C1"}
-#        actionProps = mkPropertyValues(props)
-#        formulasyntax.executeAction("SELECT", actionProps)
+        formulasyntax = xDialogOpt.getChild("formulasyntax")
+        #Excel R1C1
+        props = {"TEXT": "Excel R1C1"}
+        actionProps = mkPropertyValues(props)
+        formulasyntax.executeAction("SELECT", actionProps)
 
-#        xOKBtn = xDialogOpt.getChild("ok")
-#        self.ui_test.close_dialog_through_button(xOKBtn)
+        xOKBtn = xDialogOpt.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
 
-#        #In cell R3C3 enter "xxx".
-#        enter_text_to_cell(gridwin, "C3", "xxx")
-#        # In cell R2C2 type = and then click on the xxx in R3C3.
-#        enter_text_to_cell(gridwin, "B2", "=R[1]C[1]")
-#        # With cell R2C2 still selected, type Shift-F4.
-#        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
-#        sleep(5)
-#        #F4
-#        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "F4"}))
-#        sleep(5)
-#        #This should change the formula in R2C2 from =R[1]C[1] to =R3C3.
-#        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "xxx")
-#        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getFormula(), "=R3C3") -> fails here AssertionError: '=$C$3' != '=R3C3'
+        #In cell R3C3 enter "xxx".
+        enter_text_to_cell(gridwin, "C3", "xxx")
+        # In cell R2C2 type = and then click on the xxx in R3C3.
+        enter_text_to_cell(gridwin, "B2", "=R[1]C[1]")
+        # With cell R2C2 still selected, type Shift-F4.
+        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
 
-#        #Give it back Tools --> Options --> Calc --> Formula -->  Syntax = Calc A1
-#        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-#        xDialogOpt = self.xUITest.getTopFocusWindow()
+        #F4
+        gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "F4"}))
 
-#        xPages = xDialogOpt.getChild("pages")
-#        xCalcEntry = xPages.getChild('3')                 # Calc
-#        xCalcEntry.executeAction("EXPAND", tuple())
-#        xCalcFormulaEntry = xCalcEntry.getChild('4')
-#        xCalcFormulaEntry.executeAction("SELECT", tuple())          #Formula
+        #This should change the formula in R2C2 from =R[1]C[1] to =R3C3.
+        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "xxx")
+        enter_text_to_cell(gridwin, "A1", "=FORMULA(R[1]C[1])")
+        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "=R3C3")
 
-#        formulasyntax = xDialogOpt.getChild("formulasyntax")
-#        #Excel R1C1
-#        props = {"TEXT": "Calc A1"}
-#        actionProps = mkPropertyValues(props)
-#        formulasyntax.executeAction("SELECT", actionProps)
+        #Give it back Tools --> Options --> Calc --> Formula -->  Syntax = Calc A1
+        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
+        xDialogOpt = self.xUITest.getTopFocusWindow()
 
-#        xOKBtn = xDialogOpt.getChild("ok")
-#        self.ui_test.close_dialog_through_button(xOKBtn)
-#        self.ui_test.close_doc()
+        xPages = xDialogOpt.getChild("pages")
+        xCalcEntry = xPages.getChild('3')                 # Calc
+        xCalcEntry.executeAction("EXPAND", tuple())
+        xCalcFormulaEntry = xCalcEntry.getChild('4')
+        xCalcFormulaEntry.executeAction("SELECT", tuple())          #Formula
+
+        formulasyntax = xDialogOpt.getChild("formulasyntax")
+        #Excel R1C1
+        props = {"TEXT": "Calc A1"}
+        actionProps = mkPropertyValues(props)
+        formulasyntax.executeAction("SELECT", actionProps)
+
+        xOKBtn = xDialogOpt.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
