@@ -45,6 +45,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/lok.hxx>
 #include <o3tl/make_unique.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
@@ -63,6 +64,32 @@ namespace
     const static char gsReadOnlyCommandName[] = ".uno:EditDoc";
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
+
+    static std::string UnoNameFromDeckId(const OUString& rsDeckId)
+    {
+        if (rsDeckId == "SdCustomAnimationDeck")
+            return ".uno:CustomAnimation";
+
+        if (rsDeckId == "PropertyDeck")
+            return ".uno:ModifyPage";
+
+        if (rsDeckId == "SdLayoutsDeck")
+            return ".uno:ModifyPage";
+
+        if (rsDeckId == "SdSlideTransitionDeck")
+            return ".uno:SlideChangeWindow";
+
+        if (rsDeckId == "SdAllMasterPagesDeck")
+            return ".uno:MasterSlidesPanel";
+
+        if (rsDeckId == "SdMasterPagesDeck")
+            return ".uno:MasterSlidesPanel";
+
+        if (rsDeckId == "GalleryDeck")
+            return ".uno:Gallery";
+
+        return "";
+    }
 }
 
 namespace sfx2 { namespace sidebar {
@@ -84,47 +111,48 @@ namespace {
     static const char gsDefaultDeckId[] = "PropertyDeck";
 }
 
-SidebarController::SidebarController (
-    SidebarDockingWindow* pParentWindow,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : SidebarControllerInterfaceBase(m_aMutex),
-      mpCurrentDeck(),
-      mpParentWindow(pParentWindow),
-      mpTabBar(VclPtr<TabBar>::Create(
-              mpParentWindow,
-              rxFrame,
-              [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
-              [this](const tools::Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
-              this)),
-      mxFrame(rxFrame),
-      maCurrentContext(OUString(), OUString()),
-      maRequestedContext(),
-      mnRequestedForceFlags(SwitchFlag_NoForce),
-      msCurrentDeckId(gsDefaultDeckId),
-      maPropertyChangeForwarder([this](){ return this->BroadcastPropertyChange(); }),
-      maContextChangeUpdate([this](){ return this->UpdateConfigurations(); }),
-      maAsynchronousDeckSwitch(),
-      mbIsDeckRequestedOpen(),
-      mbIsDeckOpen(),
-      mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
-      maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
-      mxReadOnlyModeDispatch(),
-      mbIsDocumentReadOnly(false),
-      mpSplitWindow(nullptr),
-      mnWidthOnSplitterButtonDown(0),
-      mpResourceManager()
+SidebarController::SidebarController(SidebarDockingWindow* pParentWindow,
+                                     const SfxViewFrame* pViewFrame)
+    : SidebarControllerInterfaceBase(m_aMutex)
+    , mpCurrentDeck()
+    , mpParentWindow(pParentWindow)
+    , mpViewFrame(pViewFrame)
+    , mxFrame(pViewFrame->GetFrame().GetFrameInterface())
+    , mpTabBar(VclPtr<TabBar>::Create(
+          mpParentWindow, mxFrame,
+          [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
+          [this](const tools::Rectangle& rButtonBox,
+                 const ::std::vector<TabBar::DeckMenuData>& rMenuData) {
+              return this->ShowPopupMenu(rButtonBox, rMenuData);
+          },
+          this))
+    , maCurrentContext(OUString(), OUString())
+    , maRequestedContext()
+    , mnRequestedForceFlags(SwitchFlag_NoForce)
+    , msCurrentDeckId(gsDefaultDeckId)
+    , maPropertyChangeForwarder([this]() { return this->BroadcastPropertyChange(); })
+    , maContextChangeUpdate([this]() { return this->UpdateConfigurations(); })
+    , maAsynchronousDeckSwitch()
+    , mbIsDeckRequestedOpen()
+    , mbIsDeckOpen()
+    , mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width())
+    , maFocusManager([this](const Panel& rPanel) { return this->ShowPanel(rPanel); })
+    , mxReadOnlyModeDispatch()
+    , mbIsDocumentReadOnly(false)
+    , mpSplitWindow(nullptr)
+    , mnWidthOnSplitterButtonDown(0)
+    , mpResourceManager()
 {
     // Decks and panel collections for this sidebar
     mpResourceManager = o3tl::make_unique<ResourceManager>();
 }
 
-rtl::Reference<SidebarController> SidebarController::create(
-    SidebarDockingWindow* pParentWindow,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow* pParentWindow,
+                                                            const SfxViewFrame* pViewFrame)
 {
-    rtl::Reference<SidebarController> instance(
-        new SidebarController(pParentWindow, rxFrame));
+    rtl::Reference<SidebarController> instance(new SidebarController(pParentWindow, pViewFrame));
 
+    const css::uno::Reference<css::frame::XFrame>& rxFrame = pViewFrame->GetFrame().GetFrameInterface();
     registerSidebarForFrame(instance.get(), rxFrame->getController());
     rxFrame->addFrameActionListener(instance.get());
     // Listen for window events.
@@ -698,6 +726,22 @@ void SidebarController::SwitchToDeck (
         if (mpCurrentDeck)
             mpCurrentDeck->Hide();
 
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
+            {
+                const std::string hide = UnoNameFromDeckId(msCurrentDeckId);
+                if (!hide.empty())
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                           (hide + "=false").c_str());
+
+                const std::string show = UnoNameFromDeckId(rDeckDescriptor.msId);
+                if (!show.empty())
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                           (show + "=true").c_str());
+            }
+        }
+
         msCurrentDeckId = rDeckDescriptor.msId;
     }
     mpTabBar->HighlightDeck(msCurrentDeckId);
@@ -1173,9 +1217,19 @@ void SidebarController::UpdateDeckOpenState()
 
                 mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
 
-                // Sidebar wide enought to render the menu; enable it.
                 if (comphelper::LibreOfficeKit::isActive())
+                {
+                    // Sidebar wide enought to render the menu; enable it.
                     mpTabBar->EnableMenuButton(true);
+
+                    if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
+                    {
+                        const std::string uno = UnoNameFromDeckId(msCurrentDeckId);
+                        if (!uno.empty())
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                                   (uno + "=true").c_str());
+                    }
+                }
             }
         }
         else
@@ -1201,9 +1255,19 @@ void SidebarController::UpdateDeckOpenState()
 
                 mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
 
-                // Sidebar too narrow to render the menu; disable it.
                 if (comphelper::LibreOfficeKit::isActive())
+                {
+                    // Sidebar too narrow to render the menu; disable it.
                     mpTabBar->EnableMenuButton(false);
+
+                    if (const SfxViewShell* pViewShell = mpViewFrame->GetViewShell())
+                    {
+                        const std::string uno = UnoNameFromDeckId(msCurrentDeckId);
+                        if (!uno.empty())
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                                                   (uno + "=false").c_str());
+                    }
+                }
             }
 
             if (mnWidthOnSplitterButtonDown > nTabBarDefaultWidth)
