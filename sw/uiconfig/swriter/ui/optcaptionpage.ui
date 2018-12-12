@@ -139,6 +139,7 @@
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -151,6 +152,7 @@
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="text" translatable="yes" context="optcaptionpage|numseparator">. </property>
                           </object>
                           <packing>
@@ -180,6 +182,7 @@
                             <child internal-child="entry">
                               <object class="GtkEntry" id="comboboxtext-entry">
                                 <property name="can_focus">False</property>
+                                <property name="activates_default">True</property>
                               </object>
                             </child>
                           </object>
@@ -263,6 +266,7 @@
                             <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -440,8 +444,7 @@
                                 <property name="spacing">6</property>
                                 <property name="alignment">0.5</property>
                                 <child>
-                                  <object class="GtkCellRendererToggle" id="cellrenderer2">
-                                  </object>
+                                  <object class="GtkCellRendererToggle" id="cellrenderer2"/>
                                   <attributes>
                                     <attribute name="active">0</attribute>
                                   </attributes>
