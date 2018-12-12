@@ -51,7 +51,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame ) :
-    LineLB( pParent ),
+    ListBox(pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
     bRelease    ( true ),
@@ -67,6 +67,43 @@ SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame 
 }
 
 
+// Fills the listbox (provisional) with strings
+
+void SvxLineBox::Fill( const XDashListRef &pList )
+{
+    Clear();
+
+    if( !pList.is() )
+        return;
+
+    // entry for 'none'
+    InsertEntry(pList->GetStringForUiNoLine());
+
+    // entry for solid line
+    InsertEntry(pList->GetStringForUiSolidLine(),
+            Image(pList->GetBitmapForUISolidLine()));
+
+    // entries for dashed lines
+
+    long nCount = pList->Count();
+    SetUpdateMode( false );
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XDashEntry* pEntry = pList->GetDash(i);
+        const BitmapEx aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
+        {
+            InsertEntry(pEntry->GetName(), Image(aBitmap));
+        }
+        else
+            InsertEntry( pEntry->GetName() );
+    }
+
+    AdaptDropDownLineCountToMaximum();
+    SetUpdateMode( true );
+}
+
 IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl, Timer *, void)
 {
     if ( GetEntryCount() == 0 )
@@ -80,7 +117,7 @@ IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl, Timer *, void)
 void SvxLineBox::Select()
 {
     // Call the parent's Select() member to trigger accessibility events.
-    LineLB::Select();
+    ListBox::Select();
 
     if ( IsTravelSelect() )
         return;
@@ -166,13 +203,13 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
         default:
         break;
     }
-    return LineLB::PreNotify( rNEvt );
+    return ListBox::PreNotify( rNEvt );
 }
 
 
 bool SvxLineBox::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = LineLB::EventNotify( rNEvt );
+    bool bHandled = ListBox::EventNotify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -221,7 +258,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
         SetSizePixel(LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont)));
     }
 
-    LineLB::DataChanged( rDCEvt );
+    ListBox::DataChanged( rDCEvt );
 }
 
 void SvxLineBox::FillControl()

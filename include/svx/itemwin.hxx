@@ -28,7 +28,7 @@ class XLineColorItem;
 class XLineWidthItem;
 class SfxObjectShell;
 
-class SvxLineBox : public LineLB
+class SvxLineBox : public ListBox
 {
     sal_uInt16      nCurPos;
     Timer           aDelayTimer;
@@ -46,6 +46,8 @@ public:
                 const css::uno::Reference< css::frame::XFrame >& rFrame );
 
     void FillControl();
+
+    void Fill(const XDashListRef &pList);
 
 protected:
     virtual void    Select() override;
