@@ -49,6 +49,7 @@
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/classids.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -631,11 +632,20 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     try
     {
+        SvGlobalName aCLSID( xObj->getClassID() );
+        // tdf#99631 VisibleArea settings of embedded XLSX haven't been imported in DOCX, yet:
+        // set the 1:1 scale based on the OLE object size instead of bad scaling in non-modified documents
+        bool bUpdateDOCXSheet = !GetDoc()->GetDocShell()->IsModified() &&
+               // embedded spreadsheet
+               aCLSID == SvGlobalName( SO3_SC_CLASSID_60 ) &&
+               // in docx
+               GetView().GetViewFrame()->GetFrame().GetCurrentDocument()->GetModel()->getURL().endsWithIgnoreAsciiCase(".docx");
+
         nMisc = xObj->getStatus( nAspect );
 
         // This can surely only be a non-active object, if desired they
         // get the new size set as VisArea (StarChart).
-        if( embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE & nMisc )
+        if ((embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE & nMisc) || bUpdateDOCXSheet)
         {
             // TODO/MBA: testing
             SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
@@ -672,6 +682,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                 // nothing has been changed.
                 // If the replacement graphic changes by this action, the document
                 // will be already modified via other mechanisms.
+                if (embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE & nMisc)
                 {
                     bool bResetEnableSetModified(false);
                     if ( GetDoc()->GetDocShell()->IsEnableSetModified() )
