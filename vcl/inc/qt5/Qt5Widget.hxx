@@ -60,7 +60,7 @@ class Qt5Widget : public QWidget
     const QString m_InternalMimeType = "application/x-libreoffice-dnditem";
 
 public slots:
-    void showTooltip(const OUString& rTip);
+    static void showTooltip(const OUString& rTip);
 
 public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());

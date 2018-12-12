@@ -158,7 +158,7 @@ public:
     virtual void SetPointer(PointerStyle ePointerStyle) override;
     virtual void CaptureMouse(bool bMouse) override;
     virtual void SetPointerPos(long nX, long nY) override;
-    virtual bool ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpArea);
+    virtual bool ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpArea) override;
     using SalFrame::Flush;
     virtual void Flush() override;
     virtual void SetInputContext(SalInputContext* pContext) override;
