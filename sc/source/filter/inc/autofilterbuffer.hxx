@@ -23,9 +23,9 @@
 #include <oox/helper/helper.hxx>
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
+#include <com/sun/star/sheet/TableFilterField3.hpp>
 
 namespace com { namespace sun { namespace star {
-    namespace sheet { struct TableFilterField3; }
     namespace sheet { class XDatabaseRange; }
     namespace sheet { class XSheetFilterDescriptor3; }
 } } }

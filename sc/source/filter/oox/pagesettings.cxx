@@ -27,14 +27,12 @@
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
-#include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/graphichelper.hxx>
@@ -43,14 +41,13 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <excelhandlers.hxx>
+#include <oox/core/filterbase.hxx>
+#include <oox/core/relations.hxx>
 #include <stylesbuffer.hxx>
 #include <unitconverter.hxx>
 #include <document.hxx>
 #include <biffhelper.hxx>
 #include <filter/msfilter/util.hxx>
-
-namespace oox { class AttributeList; }
 
 namespace oox {
 namespace xls {

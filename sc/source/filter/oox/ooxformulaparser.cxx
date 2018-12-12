@@ -21,10 +21,11 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <formulaparser.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace oox {
 namespace xls {

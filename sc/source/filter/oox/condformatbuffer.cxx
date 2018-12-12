@@ -22,17 +22,12 @@
 #include <formulaparser.hxx>
 
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <svl/intitem.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
-#include <oox/helper/containerhelper.hxx>
-#include <oox/helper/propertyset.hxx>
-#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
@@ -42,11 +37,8 @@
 #include <colorscale.hxx>
 #include <conditio.hxx>
 #include <document.hxx>
-#include <docfunc.hxx>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
-
-namespace oox { class AttributeList; }
 
 namespace oox {
 namespace xls {
