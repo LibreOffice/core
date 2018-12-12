@@ -2473,8 +2473,8 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     if( bWasVisible )
         Show( true );
 
-    std::list< GtkSalFrame* > aChildren = m_aChildren;
-    m_aChildren.clear();
+    std::list< GtkSalFrame* > aChildren;
+    aChildren.swap(m_aChildren);
     for (auto const& child : aChildren)
         child->createNewWindow( None, false, m_nXScreen );
 

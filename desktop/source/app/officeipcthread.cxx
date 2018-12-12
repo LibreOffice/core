@@ -1343,8 +1343,8 @@ bool RequestHandler::ExecuteCmdLineRequests(
             pGlobal->mpDispatchWatcher);
 
         // copy for execute
-        std::vector<DispatchWatcher::DispatchRequest> aTempList( aDispatchList );
-        aDispatchList.clear();
+        std::vector<DispatchWatcher::DispatchRequest> aTempList;
+        aTempList.swap( aDispatchList );
 
         aGuard.clear();
 
