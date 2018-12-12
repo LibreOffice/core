@@ -60,10 +60,6 @@ class OWriterConnection;
 class OWriterTable : public OWriterTable_BASE
 {
 private:
-    std::vector<sal_Int32>
-        m_aTypes; // holds all type for columns just to avoid to ask the propertyset
-    std::vector<sal_Int32> m_aPrecisions; // same as aboth
-    std::vector<sal_Int32> m_aScales;
     css::uno::Reference<css::text::XTextTable> m_xTable;
     OWriterConnection* m_pWriterConnection;
     sal_Int32 m_nStartCol;

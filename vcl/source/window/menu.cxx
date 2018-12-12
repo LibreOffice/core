@@ -77,7 +77,6 @@ namespace vcl
 struct MenuLayoutData : public ControlLayoutData
 {
     std::vector< sal_uInt16 >               m_aLineItemIds;
-    std::vector< sal_uInt16 >               m_aLineItemPositions;
     std::map< sal_uInt16, tools::Rectangle >       m_aVisibleItemBoundRects;
 };
 
@@ -1951,7 +1950,6 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     {
                         mpLayoutData->m_aLineIndices.push_back(mpLayoutData->m_aDisplayText.getLength());
                         mpLayoutData->m_aLineItemIds.push_back(pData->nId);
-                        mpLayoutData->m_aLineItemPositions.push_back(n);
                     }
                     // #i47946# with NWF painted menus the background is transparent
                     // since DrawCtrlText can depend on the background (e.g. for
