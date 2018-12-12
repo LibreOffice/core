@@ -3452,6 +3452,13 @@ private:
             ++i;
         }
 
+        for (i = 0; i < m_nEndTabCount; ++i)
+        {
+            GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook,
+                                                               gtk_notebook_get_nth_page(m_pNotebook, i));
+            gtk_widget_set_hexpand(pTabWidget, true);
+        }
+
         // have to have some tab as the active tab of the overflow notebook
         append_useless_page(m_pOverFlowNotebook);
         gtk_notebook_set_current_page(m_pOverFlowNotebook, gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1);
