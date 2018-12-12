@@ -82,7 +82,7 @@ struct SAL_DLLPUBLIC_RTTI SfxChildWinInfo
 };
 
 // ChildWindow factory methods
-typedef SfxChildWindow* (*SfxChildWinCtor)( vcl::Window *pParentWindow,
+typedef std::unique_ptr<SfxChildWindow> (*SfxChildWinCtor)( vcl::Window *pParentWindow,
                                             sal_uInt16 nId,
                                             SfxBindings *pBindings,
                                             SfxChildWinInfo *pInfo);
@@ -193,7 +193,7 @@ public:
 
     static void         RegisterChildWindow(SfxModule*, std::unique_ptr<SfxChildWinFactory>);
 
-    static SfxChildWindow* CreateChildWindow( sal_uInt16, vcl::Window*, SfxBindings*, SfxChildWinInfo const &);
+    static std::unique_ptr<SfxChildWindow> CreateChildWindow( sal_uInt16, vcl::Window*, SfxBindings*, SfxChildWinInfo const &);
     void                SetHideNotDelete( bool bOn );
     bool                IsHideNotDelete() const;
     bool                IsVisible() const;
@@ -242,7 +242,7 @@ public:
 
 #define SFX_DECL_CHILDWINDOW(Class) \
     public  :   \
-        static  SfxChildWindow* CreateImpl(vcl::Window *pParent, sal_uInt16 nId, \
+        static  std::unique_ptr<SfxChildWindow> CreateImpl(vcl::Window *pParent, sal_uInt16 nId, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindow (bool bVisible=false, SfxModule *pMod=nullptr, SfxChildWindowFlags nFlags=SfxChildWindowFlags::NONE); \
         virtual SfxChildWinInfo GetInfo() const override
@@ -258,11 +258,10 @@ public:
         SFX_IMPL_POS_CHILDWINDOW_WITHID(Class, MyID, CHILDWIN_NOPOS)
 
 #define SFX_IMPL_POS_CHILDWINDOW(Class, MyID, Pos) \
-        SfxChildWindow* Class::CreateImpl( vcl::Window *pParent, \
+        std::unique_ptr<SfxChildWindow> Class::CreateImpl( vcl::Window *pParent, \
                 sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
                 {   \
-                    SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
-                    return pWin; \
+                    return o3tl::make_unique<Class>(pParent, nId, pBindings, pInfo);\
                 } \
         void    Class::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChildWindowFlags nFlags)   \
                 {   \
