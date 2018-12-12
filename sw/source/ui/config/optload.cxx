@@ -402,13 +402,10 @@ SwCaptionOptDlg::SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet)
     SetTabPage(SwCaptionOptPage::Create(aParent, &rSet));
 }
 
-SwCaptionPreview::SwCaptionPreview(vcl::Window* pParent, WinBits nStyle)
-    : Window(pParent, nStyle)
-    , mbFontInitialized(false)
+SwCaptionPreview::SwCaptionPreview()
+    : mbFontInitialized(false)
 {
 }
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SwCaptionPreview, 0)
 
 void SwCaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)
 {
@@ -424,8 +421,6 @@ void SwCaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)
         mbFontInitialized = true;
     }
     rRenderContext.SetFont(maFont);
-
-    SetBorderStyle(WindowBorderStyle::MONO);
 }
 
 void SwCaptionPreview::SetPreviewText(const OUString& rText)
@@ -437,57 +432,14 @@ void SwCaptionPreview::SetPreviewText(const OUString& rText)
     }
 }
 
-Size SwCaptionPreview::GetOptimalSize() const
-{
-    return LogicToPixel(Size(106 , 20), MapMode(MapUnit::MapAppFont));
-}
-
-void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
-{
-    Window::Paint(rRenderContext, rRect);
-
-    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetSizePixel()));
-    rRenderContext.DrawText(Point(4, 6), maText);
-}
-
-CaptionPreview::CaptionPreview()
-    : mbFontInitialized(false)
-{
-}
-
-void CaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)
-{
-    Wallpaper aBack(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
-    rRenderContext.SetBackground(aBack);
-    rRenderContext.SetFillColor(aBack.GetColor());
-    rRenderContext.SetLineColor(aBack.GetColor());
-
-    if (!mbFontInitialized)
-    {
-        maFont = rRenderContext.GetFont();
-        maFont.SetFontHeight(maFont.GetFontHeight() * 120 / 100);
-        mbFontInitialized = true;
-    }
-    rRenderContext.SetFont(maFont);
-}
-
-void CaptionPreview::SetPreviewText(const OUString& rText)
-{
-    if (rText != maText)
-    {
-        maText = rText;
-        Invalidate();
-    }
-}
-
-void CaptionPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SwCaptionPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(106 , 20), MapMode(MapUnit::MapAppFont)));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 }
 
-void CaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     ApplySettings(rRenderContext);
 
