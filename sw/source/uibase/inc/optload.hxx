@@ -101,21 +101,7 @@ public:
     SwCaptionOptDlg(weld::Window* pParent, const SfxItemSet& rSet);
 };
 
-class SwCaptionPreview : public vcl::Window
-{
-private:
-    OUString maText;
-    bool mbFontInitialized;
-    vcl::Font maFont;
-public:
-    SwCaptionPreview(vcl::Window* pParent, WinBits nStyle);
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    void SetPreviewText( const OUString& rText );
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual Size GetOptimalSize() const override;
-};
-
-class CaptionPreview : public weld::CustomWidgetController
+class SwCaptionPreview : public weld::CustomWidgetController
 {
 private:
     OUString maText;
@@ -125,7 +111,7 @@ private:
     void ApplySettings(vcl::RenderContext& rRenderContext);
 
 public:
-    CaptionPreview();
+    SwCaptionPreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     void SetPreviewText(const OUString& rText);
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -158,7 +144,7 @@ private:
 
     TextFilterAutoConvert m_aTextFilter;
 
-    CaptionPreview m_aPreview;
+    SwCaptionPreview m_aPreview;
     std::unique_ptr<weld::TreeView> m_xCheckLB;
     std::unique_ptr<weld::ComboBox> m_xLbCaptionOrder;
 
