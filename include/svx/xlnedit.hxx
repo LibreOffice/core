@@ -54,7 +54,7 @@ public:
     const basegfx::B2DPolyPolygon& GetLineEndValue() const { return maPolyPolygon;}
     void SetLineEndValue(const basegfx::B2DPolyPolygon& rPolyPolygon) { maPolyPolygon = rPolyPolygon; Detach(); }
 
-    XLineEndItem* checkForUniqueItem( SdrModel* pModel ) const;
+    std::unique_ptr<XLineEndItem> checkForUniqueItem( SdrModel* pModel ) const;
 };
 
 #endif
