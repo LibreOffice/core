@@ -131,65 +131,6 @@ public:
 
 class SwTOXSelectTabPage : public SfxTabPage
 {
-    VclPtr<Edit>           m_pTitleED;
-    VclPtr<FixedText>      m_pTypeFT;
-    VclPtr<ListBox>        m_pTypeLB;
-    VclPtr<CheckBox>       m_pReadOnlyCB;
-
-    VclPtr<VclContainer>   m_pAreaFrame;
-    VclPtr<ListBox>        m_pAreaLB;
-    VclPtr<FixedText>      m_pLevelFT;   //content, user
-    VclPtr<NumericField>   m_pLevelNF;   //content, user
-
-    //content
-    VclPtr<VclContainer>   m_pCreateFrame;  // content, user, illustration
-    VclPtr<CheckBox>       m_pFromHeadingsCB;
-    VclPtr<CheckBox>       m_pAddStylesCB;
-    VclPtr<PushButton>     m_pAddStylesPB;
-    //user
-    VclPtr<CheckBox>       m_pFromTablesCB;
-    VclPtr<CheckBox>       m_pFromFramesCB;
-    VclPtr<CheckBox>       m_pFromGraphicsCB;
-    VclPtr<CheckBox>       m_pFromOLECB;
-    VclPtr<CheckBox>       m_pLevelFromChapterCB;
-
-    //illustration + table
-    VclPtr<RadioButton>    m_pFromCaptionsRB;
-    VclPtr<RadioButton>    m_pFromObjectNamesRB;
-
-    //illustration and tables
-    VclPtr<FixedText>      m_pCaptionSequenceFT;
-    VclPtr<ListBox>        m_pCaptionSequenceLB;
-    VclPtr<FixedText>      m_pDisplayTypeFT;
-    VclPtr<ListBox>        m_pDisplayTypeLB;
-
-    //all but illustration and table
-    VclPtr<CheckBox>       m_pTOXMarksCB;
-
-    //index only
-    VclPtr<VclContainer>   m_pIdxOptionsFrame;
-    VclPtr<CheckBox>       m_pCollectSameCB;
-    VclPtr<CheckBox>       m_pUseFFCB;
-    VclPtr<CheckBox>       m_pUseDashCB;
-    VclPtr<CheckBox>       m_pCaseSensitiveCB;
-    VclPtr<CheckBox>       m_pInitialCapsCB;
-    VclPtr<CheckBox>       m_pKeyAsEntryCB;
-    VclPtr<CheckBox>       m_pFromFileCB;
-    VclPtr<MenuButton>     m_pAutoMarkPB;
-
-    // object only
-    VclPtr<SvxCheckListBox> m_pFromObjCLB;
-    VclPtr<VclContainer>   m_pFromObjFrame;
-
-    VclPtr<CheckBox>       m_pSequenceCB;
-    VclPtr<ListBox>        m_pBracketLB;
-    VclPtr<VclContainer>   m_pAuthorityFrame;
-
-    //all
-    VclPtr<VclContainer>   m_pSortFrame;
-    VclPtr<SvxLanguageBox> m_pLanguageLB;
-    VclPtr<ListBox>        m_pSortAlgorithmLB;
-
     std::unique_ptr<IndexEntryResource> pIndexRes;
 
     OUString        aStyleArr[MAXLEVEL];
@@ -202,25 +143,87 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     bool            m_bWaitingInitialSettings;
 
-    DECL_LINK(TOXTypeHdl,   ListBox&, void );
-    DECL_LINK(AddStylesHdl, Button*, void );
-    DECL_LINK(MenuEnableHdl, Menu*, bool);
-    DECL_LINK(MenuExecuteHdl, Menu*, bool);
-    DECL_LINK(LanguageListBoxHdl, ListBox&, void);
-    void LanguageHdl(ListBox const *);
-    DECL_LINK(CheckBoxHdl, Button*, void );
-    DECL_LINK(RadioButtonHdl, Button*, void);
-    DECL_LINK(ModifyHdl, Edit&, void);
-    DECL_LINK(ModifyListBoxHdl, ListBox&, void);
+    std::unique_ptr<weld::Entry> m_xTitleED;
+    std::unique_ptr<weld::Label> m_xTypeFT;
+    std::unique_ptr<weld::ComboBox> m_xTypeLB;
+    std::unique_ptr<weld::CheckButton> m_xReadOnlyCB;
 
-    void  ApplyTOXDescription();
-    void    FillTOXDescription();
+    std::unique_ptr<weld::Widget> m_xAreaFrame;
+    std::unique_ptr<weld::ComboBox> m_xAreaLB;
+    std::unique_ptr<weld::Widget> m_xLevelFT;   //content, user
+    std::unique_ptr<weld::SpinButton> m_xLevelNF;   //content, user
+
+    //content
+    std::unique_ptr<weld::Widget> m_xCreateFrame;  // content, user, illustration
+    std::unique_ptr<weld::CheckButton> m_xFromHeadingsCB;
+    std::unique_ptr<weld::CheckButton> m_xStylesCB;
+    std::unique_ptr<weld::CheckButton> m_xAddStylesCB;
+    std::unique_ptr<weld::Button> m_xAddStylesPB;
+    //user
+    std::unique_ptr<weld::CheckButton> m_xFromTablesCB;
+    std::unique_ptr<weld::CheckButton> m_xFromFramesCB;
+    std::unique_ptr<weld::CheckButton> m_xFromGraphicsCB;
+    std::unique_ptr<weld::CheckButton> m_xFromOLECB;
+    std::unique_ptr<weld::CheckButton> m_xLevelFromChapterCB;
+
+    //illustration + table
+    std::unique_ptr<weld::RadioButton> m_xFromCaptionsRB;
+    std::unique_ptr<weld::RadioButton> m_xFromObjectNamesRB;
+
+    //illustration and tables
+    std::unique_ptr<weld::Label> m_xCaptionSequenceFT;
+    std::unique_ptr<weld::ComboBox> m_xCaptionSequenceLB;
+    std::unique_ptr<weld::Label> m_xDisplayTypeFT;
+    std::unique_ptr<weld::ComboBox> m_xDisplayTypeLB;
+
+    //all but illustration and table
+    std::unique_ptr<weld::CheckButton> m_xTOXMarksCB;
+
+    //index only
+    std::unique_ptr<weld::Widget>   m_xIdxOptionsFrame;
+    std::unique_ptr<weld::CheckButton> m_xCollectSameCB;
+    std::unique_ptr<weld::CheckButton> m_xUseFFCB;
+    std::unique_ptr<weld::CheckButton> m_xUseDashCB;
+    std::unique_ptr<weld::CheckButton> m_xCaseSensitiveCB;
+    std::unique_ptr<weld::CheckButton> m_xInitialCapsCB;
+    std::unique_ptr<weld::CheckButton> m_xKeyAsEntryCB;
+    std::unique_ptr<weld::CheckButton> m_xFromFileCB;
+    std::unique_ptr<weld::MenuButton> m_xAutoMarkPB;
+
+    // object only
+    std::unique_ptr<weld::TreeView> m_xFromObjCLB;
+    std::unique_ptr<weld::Widget> m_xFromObjFrame;
+
+    std::unique_ptr<weld::CheckButton> m_xSequenceCB;
+    std::unique_ptr<weld::ComboBox> m_xBracketLB;
+    std::unique_ptr<weld::Widget> m_xAuthorityFrame;
+
+    //all
+    std::unique_ptr<weld::Widget> m_xSortFrame;
+    std::unique_ptr<LanguageBox> m_xLanguageLB;
+    std::unique_ptr<weld::ComboBox> m_xSortAlgorithmLB;
+
+    DECL_LINK(TOXTypeHdl,   weld::ComboBox&, void );
+    DECL_LINK(AddStylesHdl, weld::Button&, void );
+    DECL_LINK(MenuEnableHdl, weld::ToggleButton&, void);
+    DECL_LINK(MenuExecuteHdl, const OString&, void);
+    DECL_LINK(LanguageListBoxHdl, weld::ComboBox&, void);
+    void LanguageHdl(const weld::ComboBox*);
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK(RadioButtonHdl, weld::ToggleButton&, void);
+    DECL_LINK(ModifyEntryHdl, weld::Entry&, void);
+    DECL_LINK(ModifySpinHdl, weld::SpinButton&, void);
+    DECL_LINK(ModifyListBoxHdl, weld::ComboBox&, void);
+
+    void ModifyHdl();
+    void ApplyTOXDescription();
+    void FillTOXDescription();
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
+    SwTOXSelectTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXSelectTabPage() override;
     virtual void        dispose() override;
 

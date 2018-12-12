@@ -1328,6 +1328,12 @@ public:
         insert_to_menu(m_xMenuButton->GetPopupMenu(), pos, rId, rStr, pIconName, pImageSurface, bCheck);
     }
 
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+        pMenu->EnableItem(rIdent, bSensitive);
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
