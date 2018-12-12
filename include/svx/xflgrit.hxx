@@ -55,7 +55,7 @@ public:
     void                    SetGradientValue(const XGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
-    XFillGradientItem* checkForUniqueItem( SdrModel* pModel ) const;
+    std::unique_ptr<XFillGradientItem> checkForUniqueItem( SdrModel* pModel ) const;
 };
 
 #endif

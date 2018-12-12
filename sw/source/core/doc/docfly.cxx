@@ -498,7 +498,7 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
     {
         if (IsInvalidItem(pItem))
             continue;
-        const SfxPoolItem* pResult = nullptr;
+        std::unique_ptr<SfxPoolItem> pResult;
 
         switch(pItem->Which())
         {
@@ -542,7 +542,6 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
         if(pResult)
         {
             rSet.Put(*pResult);
-            delete pResult;
         }
     }
 }
