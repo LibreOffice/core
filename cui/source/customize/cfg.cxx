@@ -219,11 +219,11 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
 {
     SvxConfigPageHelper::InitImageType();
 
-    m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
-    m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
-    m_nContextMenusPageId = AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
-    m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
-    m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage, nullptr);
+    m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage);
+    m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage);
+    m_nContextMenusPageId = AddTabPage("contextmenus", CreateSvxContextMenuConfigPage);
+    m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage);
+    m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage);
 
     const SfxPoolItem* pItem =
         pInSet->GetItem( pInSet->GetPool()->GetWhich( SID_CONFIG ) );

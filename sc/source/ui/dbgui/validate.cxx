@@ -93,9 +93,9 @@ ScValidationDlg::ScValidationDlg(vcl::Window* pParent, const SfxItemSet* pArgSet
     , m_bOwnRefHdlr(false)
     , m_bRefInputting(false)
 {
-    m_nValuePageId = AddTabPage("criteria", ScTPValidationValue::Create, nullptr);
-    AddTabPage("inputhelp", ScTPValidationHelp::Create, nullptr);
-    AddTabPage("erroralert", ScTPValidationError::Create, nullptr);
+    m_nValuePageId = AddTabPage("criteria", ScTPValidationValue::Create);
+    AddTabPage("inputhelp", ScTPValidationHelp::Create);
+    AddTabPage("erroralert", ScTPValidationError::Create);
     get(m_pHBox, "refinputbox");
 }
 

@@ -65,14 +65,14 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pPa
 
     GetOKButton().SetClickHdl(LINK(this, SwFieldDlg, OKHdl));
 
-    m_nDokId = AddTabPage("document", SwFieldDokPage::Create, nullptr);
-    m_nVarId = AddTabPage("variables", SwFieldVarPage::Create, nullptr);
-    m_nDokInf = AddTabPage("docinfo", SwFieldDokInfPage::Create, nullptr);
+    m_nDokId = AddTabPage("document", SwFieldDokPage::Create);
+    m_nVarId = AddTabPage("variables", SwFieldVarPage::Create);
+    m_nDokInf = AddTabPage("docinfo", SwFieldDokInfPage::Create);
 
     if (!m_bHtmlMode)
     {
-        m_nRefId = AddTabPage("ref", SwFieldRefPage::Create, nullptr);
-        m_nFuncId = AddTabPage("functions", SwFieldFuncPage::Create, nullptr);
+        m_nRefId = AddTabPage("ref", SwFieldRefPage::Create);
+        m_nFuncId = AddTabPage("functions", SwFieldFuncPage::Create);
 
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(
@@ -87,7 +87,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pPa
             OUString("DatabaseFields")) >>= bDatabaseFields;
 
         if (bDatabaseFields)
-            m_nDbId = AddTabPage("database", SwFieldDBPage::Create, nullptr);
+            m_nDbId = AddTabPage("database", SwFieldDBPage::Create);
         else
 #endif
             RemoveTabPage("database");

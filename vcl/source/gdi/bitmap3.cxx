@@ -888,23 +888,13 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
     }
 }
 
-bool Bitmap::Dither( BmpDitherFlags nDitherFlags )
-{
-    bool bRet = false;
-
-    const Size aSizePix( GetSizePixel() );
-
-    if( aSizePix.Width() == 1 || aSizePix.Height() == 1 )
-        bRet = true;
-    else if( nDitherFlags & BmpDitherFlags::Floyd )
-        bRet = ImplDitherFloyd();
-
-    return bRet;
-}
-
-bool Bitmap::ImplDitherFloyd()
+bool Bitmap::Dither()
 {
     const Size aSize( GetSizePixel() );
+
+    if( aSize.Width() == 1 || aSize.Height() == 1 )
+        return true;
+
     bool bRet = false;
 
     if( ( aSize.Width() > 3 ) && ( aSize.Height() > 2 ) )

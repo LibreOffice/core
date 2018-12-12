@@ -1165,11 +1165,11 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
     SetText( aTitle );
 
     // Property Pages
-    m_nDocInfoId = AddTabPage("general", SfxDocumentPage::Create, nullptr);
-    AddTabPage("description", SfxDocumentDescPage::Create, nullptr);
-    AddTabPage("customprops", SfxCustomPropertiesPage::Create, nullptr);
-    AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, nullptr);
-    AddTabPage("security", SfxSecurityPage::Create, nullptr);
+    m_nDocInfoId = AddTabPage("general", SfxDocumentPage::Create);
+    AddTabPage("description", SfxDocumentDescPage::Create);
+    AddTabPage("customprops", SfxCustomPropertiesPage::Create);
+    AddTabPage("cmisprops", SfxCmisPropertiesPage::Create);
+    AddTabPage("security", SfxSecurityPage::Create);
 }
 
 

@@ -379,9 +379,8 @@ SfxTabDialog::SfxTabDialog
 (
     vcl::Window* pParent,              // Parent Window
     const OUString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
-    const SfxItemSet* pItemSet,   // Itemset with the data;
+    const SfxItemSet* pItemSet    // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
-    bool bEditFmt                 // when yes -> additional Button for standard
 )
     : TabDialog(pParent, rID, rUIXMLDescription)
     , m_pSet(pItemSet ? new SfxItemSet(*pItemSet) : nullptr)
@@ -389,7 +388,7 @@ SfxTabDialog::SfxTabDialog
     , m_bStandardPushed(false)
     , m_pExampleSet(nullptr)
 {
-    Init_Impl(bEditFmt);
+    Init_Impl(/*bEditFmt*/false);
 
     sal_uInt16 nPageCount = m_pTabCtrl->GetPageCount();
     for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
@@ -622,13 +621,11 @@ void SfxTabDialog::Start_Impl()
 sal_uInt16 SfxTabDialog::AddTabPage
 (
     const OString &rName,          // Page ID
-    CreateTabPage pCreateFunc,     // Pointer to the Factory Method
-    GetTabPageRanges pRangesFunc   // Pointer to the Method for querying
-                                   // Ranges onDemand
+    CreateTabPage pCreateFunc     // Pointer to the Factory Method
 )
 {
     sal_uInt16 nId = m_pTabCtrl->GetPageId(rName);
-    m_pImpl->aData.push_back(new Data_Impl(nId, rName, pCreateFunc, pRangesFunc));
+    m_pImpl->aData.push_back(new Data_Impl(nId, rName, pCreateFunc, nullptr));
     return nId;
 }
 
