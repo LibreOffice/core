@@ -227,14 +227,6 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC LineLB : public ListBox
-{
-public:
-    LineLB(vcl::Window* pParent);
-
-    void Fill(const XDashListRef &pList);
-};
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineLB
 {
 private:

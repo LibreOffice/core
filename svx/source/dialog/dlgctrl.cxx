@@ -922,49 +922,6 @@ void FillTypeLB::Fill()
     SetUpdateMode( true );
 }
 
-LineLB::LineLB(vcl::Window* pParent)
-:   ListBox(pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL)
-{
-    // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
-}
-
-// Fills the listbox (provisional) with strings
-
-void LineLB::Fill( const XDashListRef &pList )
-{
-    Clear();
-
-    if( !pList.is() )
-        return;
-
-    // entry for 'none'
-    InsertEntry(pList->GetStringForUiNoLine());
-
-    // entry for solid line
-    InsertEntry(pList->GetStringForUiSolidLine(),
-            Image(pList->GetBitmapForUISolidLine()));
-
-    // entries for dashed lines
-
-    long nCount = pList->Count();
-    SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        const XDashEntry* pEntry = pList->GetDash(i);
-        const BitmapEx aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-        {
-            InsertEntry(pEntry->GetName(), Image(aBitmap));
-        }
-        else
-            InsertEntry( pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( true );
-}
-
 SvxLineLB::SvxLineLB(std::unique_ptr<weld::ComboBox> pControl)
     : m_xControl(std::move(pControl))
     , mbAddStandardFields(true)
