@@ -188,16 +188,20 @@ PageMarginControl::PageMarginControl( sal_uInt16 nId, vcl::Window* pParent )
     Link<Edit&,void> aLinkLR = LINK( this, PageMarginControl, ModifyLRMarginHdl );
     m_pLeftMarginEdit->SetModifyHdl( aLinkLR );
     SetMetricValue( *m_pLeftMarginEdit.get(), m_nPageLeftMargin, m_eUnit );
+    SetFieldUnit( *m_pLeftMarginEdit.get(), lcl_GetFieldUnit() );
 
     m_pRightMarginEdit->SetModifyHdl( aLinkLR );
     SetMetricValue( *m_pRightMarginEdit.get(), m_nPageRightMargin, m_eUnit );
+    SetFieldUnit( *m_pRightMarginEdit.get(), lcl_GetFieldUnit() );
 
     Link<Edit&,void> aLinkUL = LINK( this, PageMarginControl, ModifyULMarginHdl );
     m_pTopMarginEdit->SetModifyHdl( aLinkUL );
     SetMetricValue( *m_pTopMarginEdit.get(), m_nPageTopMargin, m_eUnit );
+    SetFieldUnit( *m_pTopMarginEdit.get(), lcl_GetFieldUnit() );
 
     m_pBottomMarginEdit->SetModifyHdl( aLinkUL );
     SetMetricValue( *m_pBottomMarginEdit.get(), m_nPageBottomMargin, m_eUnit );
+    SetFieldUnit( *m_pBottomMarginEdit.get(), lcl_GetFieldUnit() );
 
     m_aPageSize = pSize->GetSize();
     SetMetricFieldMaxValues( m_aPageSize );
