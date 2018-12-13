@@ -1474,6 +1474,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                nIndex = pTableNode->EndOfSectionIndex();
                 continue; // skip it
             }
 
@@ -1699,6 +1700,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             if (pLayout->IsHideRedlines() && !pNd->IsCreateFrameWhenHidingRedlines())
             {
                 assert(pNd->GetRedlineMergeFlag() == SwNode::Merge::Hidden);
+                assert(false); // actually a fly-section can't be deleted?
                 continue; // skip it
             }
             if ( !pTable->empty() && bObjsDirect && !bDontCreateObjects )
@@ -1709,8 +1711,12 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             }
         }
         else
+        {
+            assert(!pLayout->IsHideRedlines()
+                || pNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden);
             // Neither Content nor table nor section, so we are done.
             break;
+        }
     }
 
     if ( pActualSection )
