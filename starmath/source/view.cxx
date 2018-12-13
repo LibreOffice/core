@@ -1611,6 +1611,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
                         OUString aString;
                         if (aDataHelper.GetString( nId, aString))
                         {
+                            // tdf#117091 force xml declaration to exist
+                            if (!aString.startsWith("<?xml"))
+                                aString = "<?xml version=\"1.0\"?>\n" + aString;
+
                             std::unique_ptr<SfxMedium> pClipboardMedium(new SfxMedium());
                             pClipboardMedium->GetItemSet(); //generates initial itemset, not sure if necessary
                             std::shared_ptr<const SfxFilter> pMathFilter =
