@@ -2630,8 +2630,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 bStateChanged = true;
             }
 
-            // #122919# Force field update before PDF export
-            pViewShell->SwViewShell::UpdateFields(true);
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified();
 
@@ -2640,6 +2638,9 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             //TODO: check what exactly needs to be done and make just one function for that
             pViewShell->CalcLayout();
             pViewShell->CalcPagesForPrint( pViewShell->GetPageCount() );
+
+            // #122919# Force field update before PDF export, but after layout init (tdf#121962)
+            pViewShell->SwViewShell::UpdateFields(true);
 
             pViewShell->SetPDFExportOption( false );
 
