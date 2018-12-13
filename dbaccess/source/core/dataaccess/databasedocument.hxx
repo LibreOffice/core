@@ -328,6 +328,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableViewControllerNames(  ) override ;
     virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createDefaultViewController( const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
     virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createViewController( const OUString& ViewName, const css::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
+    virtual void SAL_CALL setArgs(const css::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
 
     // XStorable
     virtual sal_Bool SAL_CALL hasLocation(  ) override ;
