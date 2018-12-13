@@ -30,15 +30,15 @@ void XDDELink::testGetItem()
 {
     uno::Reference<sheet::XDDELink> xLink(init(), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getItem()", OUString("Sheet.A1"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getItem()", OUString("Sheet1.A1"),
                                  xLink->getItem());
 }
 void XDDELink::testGetTopic()
 {
     uno::Reference<sheet::XDDELink> xLink(init(), UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to execute getTopic()", OUString("ScDDELinksObj.ods"),
-                                 xLink->getTopic());
+    CPPUNIT_ASSERT_MESSAGE("Unable to execute getTopic()",
+                           xLink->getTopic().endsWith("ScDDELinksObj.ods"));
 }
 } // namespace apitest
 

@@ -56,9 +56,7 @@ public:
     CPPUNIT_TEST(testCreateEnumeration);
 
     // XRefreshable
-    CPPUNIT_TEST(testAddRefreshListener);
-    CPPUNIT_TEST(testRefresh);
-    CPPUNIT_TEST(testRemoveRefreshListener);
+    CPPUNIT_TEST(testRefreshListener);
 
     CPPUNIT_TEST_SUITE_END();
 
