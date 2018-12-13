@@ -3383,60 +3383,12 @@ class UpdateSubTotalHandler
 
         switch (mrData.eFunc)
         {
-            case SUBTOTAL_FUNC_SUM:
-            case SUBTOTAL_FUNC_AVE:
-            {
-                if (!bVal)
-                    return;
-
-                ++mrData.nCount;
-                if (!SubTotal::SafePlus(mrData.nVal, fVal))
-                    mrData.bError = true;
-            }
+            case SUBTOTAL_FUNC_CNT2:    // everything
+                mrData.update( fVal);
             break;
-            case SUBTOTAL_FUNC_CNT:             // only the value
-            {
-                if (!bVal)
-                    return;
-
-                ++mrData.nCount;
-            }
-            break;
-            case SUBTOTAL_FUNC_CNT2:            // everything
-                ++mrData.nCount;
-            break;
-            case SUBTOTAL_FUNC_MAX:
-            {
-                if (!bVal)
-                    return;
-
-                if (++mrData.nCount == 1 || fVal > mrData.nVal)
-                    mrData.nVal = fVal;
-            }
-            break;
-            case SUBTOTAL_FUNC_MIN:
-            {
-                if (!bVal)
-                    return;
-
-                if (++mrData.nCount == 1 || fVal < mrData.nVal)
-                    mrData.nVal = fVal;
-            }
-            break;
-            case SUBTOTAL_FUNC_VAR:
-            case SUBTOTAL_FUNC_VARP:
-            case SUBTOTAL_FUNC_STD:
-            case SUBTOTAL_FUNC_STDP:
-            {
-                if (!bVal)
-                    return;
-
-                mrData.maWelford.update( fVal);
-            }
-            break;
-            default:
-                // unhandled unknown
-                mrData.bError = true;
+            default:                    // only numeric values
+                if (bVal)
+                    mrData.update( fVal);
         }
     }
 
@@ -3520,7 +3472,7 @@ void ScColumn::UpdateSelectionFunction(
         {
             // Simply count selected rows regardless of cell contents.
             for (; it != itEnd; ++it)
-                rData.nCount += it->mnRow2 - it->mnRow1 + 1;
+                rData.update( it->mnRow2 - it->mnRow1 + 1);
         }
         break;
         case SUBTOTAL_FUNC_CNT2:
