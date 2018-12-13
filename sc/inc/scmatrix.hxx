@@ -399,7 +399,7 @@ public:
     void DivOp(bool bFlag, double fVal, ScMatrix& rMat) ;
     void PowOp(bool bFlag, double fVal, ScMatrix& rMat) ;
 
-    std::vector<ScMatrix::IterateResult> Collect(const std::vector<std::unique_ptr<sc::op::Op>>& aOp) ;
+    std::vector<ScMatrix::IterateResult> Collect(const std::vector<sc::op::Op>& aOp) ;
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,
             DoubleOpFunction aDoubleFunc, BoolOpFunction aBoolFunc, StringOpFunction aStringFunc,

@@ -2745,9 +2745,9 @@ void ScInterpreter::ScFTest()
     double fSum2    = 0.0;
     double fSumSqr2 = 0.0;
 
-    std::vector<std::unique_ptr<sc::op::Op>> aOp;
-    aOp.emplace_back(new sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal;}));
-    aOp.emplace_back(new sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal * fVal;}));
+    std::vector<sc::op::Op> aOp;
+    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal;}));
+    aOp.emplace_back(sc::op::Op(0.0, [](double& rAccum, double fVal){rAccum += fVal * fVal;}));
 
     auto aVal1 = pMat1->Collect(aOp);
     fSum1 = aVal1[0].mfFirst + aVal1[0].mfRest;
