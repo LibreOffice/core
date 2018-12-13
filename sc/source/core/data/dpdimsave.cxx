@@ -57,13 +57,12 @@ void ScDPSaveGroupItem::AddElementsFromGroup( const ScDPSaveGroupItem& rGroup )
 
 bool ScDPSaveGroupItem::RemoveElement( const OUString& rName )
 {
-    for (std::vector<OUString>::iterator aIter = aElements.begin(); aIter != aElements.end(); ++aIter)
-        if (*aIter == rName)          //TODO: ignore case
-        {
-            aElements.erase(aIter);   // found -> remove
-            return true;                // don't have to look further
-        }
-
+    auto it = std::find(aElements.begin(), aElements.end(), rName); //TODO: ignore case
+    if (it != aElements.end())
+    {
+        aElements.erase(it);
+        return true;
+    }
     return false;   // not found
 }
 
