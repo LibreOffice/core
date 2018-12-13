@@ -16,6 +16,24 @@
       "revId": "cd25d3b004df10f13ea9baed2e10d415a87d32a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a2301e09",
+        "filename": "sc/inc/subtotal.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-13T17:25:27Z",
+      "side": 1,
+      "message": "That will be addressed in a follow-up commit.",
+      "parentUuid": "5f4e5783_42716ae0",
+      "revId": "cd25d3b004df10f13ea9baed2e10d415a87d32a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
