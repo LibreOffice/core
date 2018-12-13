@@ -16,6 +16,24 @@
       "revId": "5bb798a99e7b178ac57ee8c15238534723000bf9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a2fede02",
+        "filename": "embeddedobj/Library_emboleobj.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-13T10:49:56Z",
+      "side": 1,
+      "message": "I know.\n\nI don\u0027t want to move this Windows specific hacks to include/vcl. I guess I\u0027ll just create a single function and hide all the details in VCL.\n\nActually I\u0027m pondering about a better fix, so this hack isn\u0027t needed, but that currently looks much more complicated.",
+      "parentUuid": "5f4e5783_87cbf41c",
+      "revId": "5bb798a99e7b178ac57ee8c15238534723000bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
