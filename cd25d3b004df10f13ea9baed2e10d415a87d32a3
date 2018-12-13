@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_42716ae0",
+        "filename": "sc/inc/subtotal.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-13T17:13:34Z",
+      "side": 1,
+      "message": "if space is an issue, should maWelford not be in a union with nVal and nCount ? (where nVal and nCount would be a struct that shares space with WelfordRunner)",
+      "revId": "cd25d3b004df10f13ea9baed2e10d415a87d32a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
