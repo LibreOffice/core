@@ -610,15 +610,15 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     ScMarkData::const_iterator itr = aMark.begin(), itrEnd = aMark.end();
 
-    for (; itr != itrEnd && *itr < nMax && !aData.bError; ++itr)
+    for (; itr != itrEnd && *itr < nMax && !aData.getError(); ++itr)
         if (maTabs[*itr])
             maTabs[*itr]->UpdateSelectionFunction(aData, aMark);
 
     rResult = aData.getResult();
-    if (aData.bError)
+    if (aData.getError())
         rResult = 0.0;
 
-    return !aData.bError;
+    return !aData.getError();
 }
 
 double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScInterpreterContext* pContext ) const
