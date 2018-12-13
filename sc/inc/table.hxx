@@ -99,7 +99,7 @@ class ScStyleSheet;
 class ScTableProtection;
 class ScUserListData;
 struct RowInfo;
-struct ScFunctionData;
+class ScFunctionData;
 class CollatorWrapper;
 class ScFlatUInt16RowSegments;
 class ScFlatBoolRowSegments;

@@ -30,6 +30,8 @@ public:
     static bool SafeDiv( double& fVal1, double fVal2);
 };
 
+class ScFunctionData;
+
 /** Implements the Welford Online one-pass algorithm.
     See https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_Online_algorithm
     and Donald E. Knuth, TAoCP vol.2, 3rd edn., p. 232
@@ -37,34 +39,44 @@ public:
 class WelfordRunner
 {
 public:
-    WelfordRunner() : fMean(0.0), fM2(0.0), nCount(0) {}
+    WelfordRunner() : mfMean(0.0), mfM2(0.0), mnCount(0) {}
     void        update( double fVal );
-    sal_uInt64  getCount() const                { return nCount; }
-    double      getMean() const                 { return fMean; }
-    double      getVarianceSample() const       { return nCount > 1 ? fM2 / (nCount-1) : 0.0; }
-    double      getVariancePopulation() const   { return nCount > 0 ? fM2 / nCount : 0.0; }
+    sal_uInt64  getCount() const                { return mnCount; }
+    double      getMean() const                 { return mfMean; }
+    double      getVarianceSample() const       { return mnCount > 1 ? mfM2 / (mnCount-1) : 0.0; }
+    double      getVariancePopulation() const   { return mnCount > 0 ? mfM2 / mnCount : 0.0; }
 
+    // The private variables can be abused by ScFunctionData as general
+    // sum/min/max/ave/count/... variables to reduce memory footprint for that
+    // ScFunctionData may be a mass object during consolidation.
+    // ScFunctionData::update() and getResult() take care that purposes are not
+    // mixed.
+    friend class ScFunctionData;
 private:
-    double      fMean;
-    double      fM2;
-    sal_uInt64  nCount;
+    double      mfMean;
+    double      mfM2;
+    sal_uInt64  mnCount;
 };
 
-struct ScFunctionData                   // to calculate single functions
+/** To calculate a single subtotal function. */
+class ScFunctionData
 {
-private:
-    WelfordRunner   maWelford;
-    double          nVal;
-    sal_uInt64      nCount;
 public:
-    ScSubTotalFunc const  eFunc;
-    bool            bError;
+    ScFunctionData( ScSubTotalFunc eFn ) : meFunc(eFn), mbError(false) {}
+    void                    update( double fNewVal );
+    /// Check getError() after (!) obtaining the result.
+    double                  getResult();
+    inline bool             getError() const    { return mbError; }
+    inline ScSubTotalFunc   getFunc() const     { return meFunc; }
+    inline void             setError()          { mbError = true; }
 
-    ScFunctionData( ScSubTotalFunc eFn ) :
-        nVal(0.0), nCount(0), eFunc(eFn), bError(false) {}
-    void update( double fNewVal );
-    /// Check bError after (!) obtaining the result.
-    double getResult();
+private:
+    WelfordRunner           maWelford;
+    ScSubTotalFunc const    meFunc;
+    bool                    mbError;
+
+    inline double&          getValueRef()  { return maWelford.mfMean; }
+    inline sal_uInt64&      getCountRef()  { return maWelford.mnCount; }
 };
 
 #endif

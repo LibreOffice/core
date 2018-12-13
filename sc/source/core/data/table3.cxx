@@ -3595,7 +3595,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& 
     }
     const SCCOL nStartCol = aMarkArea.aStart.Col();
     const SCCOL nEndCol = aMarkArea.aEnd.Col();
-    for (SCCOL nCol = nStartCol; nCol <= nEndCol && !rData.bError; ++nCol)
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol && !rData.getError(); ++nCol)
     {
         if (mpColFlags && ColHidden(nCol))
             continue;
