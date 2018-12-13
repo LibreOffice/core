@@ -29,6 +29,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_xautotextcontainer \
 	check_xautotextgroup \
 	check_xmodifiable2 \
+	check_xmodel \
 	check_xnamedgraph \
 	check_xrefreshable \
 	check_xtextrangecompare \
