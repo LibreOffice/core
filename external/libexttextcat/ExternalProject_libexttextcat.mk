@@ -17,6 +17,7 @@ $(call gb_ExternalProject_get_state_target,libexttextcat,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-shared --with-pic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(ENABLE_WERROR),--enable-werror,--disable-werror) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
 			$(if $(COM_IS_CLANG),-Qunused-arguments) \
