@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_c79a0c6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-13T07:25:00Z",
+      "side": 1,
+      "message": "This is not useful as a part of the commit message. Rather, it\u0027s good as a gerrit comment.",
+      "range": {
+        "startLine": 11,
+        "startChar": 27,
+        "endLine": 15,
+        "endChar": 43
+      },
+      "revId": "934c336093a9ffc7956c32ba3852950559829fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
