@@ -51,6 +51,7 @@
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/InvalidStateException.hpp>
 #include <comphelper/enumhelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -1050,6 +1051,35 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(RuntimeE
     return m_pData->m_seqArguments;
 }
 
+void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
+{
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if (!pMedium)
+    {
+        throw util::InvalidStateException(
+            "Medium could not be retrieved, unable to execute setArgs");
+    }
+
+    for (int i = 0; i < aArgs.getLength(); i++)
+    {
+        OUString sValue;
+        aArgs[i].Value >>= sValue;
+
+        if (aArgs[i].Name == "SuggestedSaveAsName")
+        {
+            pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASNAME, sValue));
+        }
+        else if (aArgs[i].Name == "SuggestedSaveAsDir")
+        {
+            pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASDIR, sValue));
+        }
+        else
+        {
+            throw lang::IllegalArgumentException("Setting property not supported: " + aArgs[i].Name,
+                                                 comphelper::getProcessComponentContext(), 0);
+        }
+    }
+}
 
 //  frame::XModel
 

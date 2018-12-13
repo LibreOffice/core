@@ -327,6 +327,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableViewControllerNames(  ) throw (css::uno::RuntimeException, std::exception) override ;
     virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createDefaultViewController( const css::uno::Reference< css::frame::XFrame >& Frame ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) override ;
     virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createViewController( const OUString& ViewName, const css::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XFrame >& Frame ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) override ;
+    virtual void SAL_CALL setArgs(const css::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
 
     // XStorable
     virtual sal_Bool SAL_CALL hasLocation(  ) throw (css::uno::RuntimeException, std::exception) override ;

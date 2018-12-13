@@ -350,6 +350,8 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::Exception, std::exception                ) override;
 
+    virtual void SAL_CALL setArgs(const css::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
+
 
     //  XModifiable2
 
