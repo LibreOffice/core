@@ -31,6 +31,10 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_types \
 ))
 
+$(eval $(call gb_Module_add_targets,sal,\
+	Executable_helloworld \
+))
+
 endif
 
 # vim: set noet sw=4 ts=4:
