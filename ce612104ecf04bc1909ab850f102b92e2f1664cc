@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_c7c56c5d",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-13T07:18:13Z",
+      "side": 1,
+      "message": "using ?: operator here seems nicer :-)",
+      "range": {
+        "startLine": 1465,
+        "startChar": 4,
+        "endLine": 1468,
+        "endChar": 39
+      },
+      "revId": "ce612104ecf04bc1909ab850f102b92e2f1664cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
