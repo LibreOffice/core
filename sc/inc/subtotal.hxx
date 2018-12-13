@@ -47,7 +47,7 @@ public:
 private:
     double      fMean;
     double      fM2;
-    sal_Int64   nCount;
+    sal_uInt64  nCount;
 };
 
 struct ScFunctionData                   // to calculate single functions
