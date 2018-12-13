@@ -336,6 +336,8 @@ public:
                                                                                           const css::uno::Sequence< css::beans::PropertyValue >& Arguments      ,
                                                                                           const css::uno::Reference< css::frame::XFrame >&       Frame          ) override;
 
+    virtual void SAL_CALL setArgs(const css::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
+
 
     //  XModifiable2
 

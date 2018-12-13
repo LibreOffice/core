@@ -44,6 +44,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
@@ -795,6 +796,11 @@ Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  )
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     return m_pImpl->getMediaDescriptor().getPropertyValues();
+}
+
+void SAL_CALL ODatabaseDocument::setArgs(const Sequence<beans::PropertyValue>& aArgs)
+{
+    throw NoSupportException();
 }
 
 void SAL_CALL ODatabaseDocument::connectController( const Reference< XController >& _xController )
