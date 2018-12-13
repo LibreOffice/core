@@ -28,12 +28,8 @@ namespace apitest
 class MockedRefreshListener : public ::cppu::WeakImplHelper<util::XRefreshListener>
 {
 public:
-    MockedRefreshListener()
-        : m_bListenerCalled(false)
-    {
-    }
-
-    bool m_bListenerCalled;
+    bool m_bListenerCalled = false;
+    MockedRefreshListener() = default;
     virtual void SAL_CALL refreshed(const lang::EventObject& /* xEvent */) override
     {
         m_bListenerCalled = true;
@@ -41,27 +37,7 @@ public:
     virtual void SAL_CALL disposing(const lang::EventObject& /* xEventObj */) override {}
 };
 
-void XRefreshable::testAddRefreshListener()
-{
-    uno::Reference<util::XRefreshable> xRefreshable(init(), uno::UNO_QUERY_THROW);
-
-    rtl::Reference<MockedRefreshListener> xListener = new MockedRefreshListener();
-    xRefreshable->addRefreshListener(uno::Reference<util::XRefreshListener>(xListener.get()));
-}
-
-void XRefreshable::testRefresh()
-{
-    uno::Reference<util::XRefreshable> xRefreshable(init(), uno::UNO_QUERY_THROW);
-
-    rtl::Reference<MockedRefreshListener> xListener = new MockedRefreshListener();
-    xRefreshable->addRefreshListener(uno::Reference<util::XRefreshListener>(xListener.get()));
-
-    xRefreshable->refresh();
-
-    CPPUNIT_ASSERT(xListener->m_bListenerCalled);
-}
-
-void XRefreshable::testRemoveRefreshListener()
+void XRefreshable::testRefreshListener()
 {
     uno::Reference<util::XRefreshable> xRefreshable(init(), uno::UNO_QUERY_THROW);
 

@@ -23,9 +23,7 @@ class OOO_DLLPUBLIC_TEST XRefreshable
 public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
 
-    void testAddRefreshListener();
-    void testRefresh();
-    void testRemoveRefreshListener();
+    void testRefreshListener();
 
 protected:
     ~XRefreshable() {}
