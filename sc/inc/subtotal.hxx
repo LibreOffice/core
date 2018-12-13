@@ -53,13 +53,13 @@ private:
 struct ScFunctionData                   // to calculate single functions
 {
     WelfordRunner   maWelford;
-    ScSubTotalFunc const  eFunc;
     double          nVal;
     sal_uInt64      nCount;
+    ScSubTotalFunc const  eFunc;
     bool            bError;
 
     ScFunctionData( ScSubTotalFunc eFn ) :
-        eFunc(eFn), nVal(0.0), nCount(0), bError(false) {}
+        nVal(0.0), nCount(0), eFunc(eFn), bError(false) {}
     void update( double fNewVal );
     /// Check bError after (!) obtaining the result.
     double getResult();
