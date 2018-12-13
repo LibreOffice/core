@@ -43,10 +43,7 @@
 #ifdef _WIN32
 
 #include <oledlg.h>
-
-#include <svsys.h>
-#include <win/saldata.hxx>
-#include <win/salinst.h>
+#include <vcl/winscheduler.hxx>
 
 class InitializedOleGuard
 {
@@ -180,8 +177,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
     // Disable any event loop shortcuts by enabling a real timer.
     // This way the native windows dialog won't block our own processing.
-    BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, SAL_MSG_FORCE_REAL_TIMER, 0, 0);
-    SAL_WARN_IF(0 == ret, "embeddedobj.ole", "ERROR: PostMessage() failed!");
+    WinScheduler::SetForceRealTimer();
 
     uTemp=pInsertFct(&io);
 
