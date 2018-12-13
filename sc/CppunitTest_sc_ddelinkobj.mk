@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ddelinkobj, \
 	subsequenttest \
 	test \
 	unotest \
+	vcl \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_ddelinkobj,\

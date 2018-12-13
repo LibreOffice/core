@@ -12,6 +12,8 @@
 #include <test/sheet/xddelink.hxx>
 #include <test/util/xrefreshable.hxx>
 
+#include <sfx2/app.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -55,9 +57,7 @@ public:
     CPPUNIT_TEST(testSetNameThrowsException);
 
     // XRefreshable
-    CPPUNIT_TEST(testAddRefreshListener);
-    CPPUNIT_TEST(testRefresh);
-    CPPUNIT_TEST(testRemoveRefreshListener);
+    CPPUNIT_TEST(testRefreshListener);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -67,7 +67,9 @@ private:
 
 ScDDELinkObj::ScDDELinkObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
-    , XNamed("soffice|ScDDELinksObj.ods!Sheet.A1")
+    , XNamed("soffice|"
+             + m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods")
+             + "!Sheet1.A1")
 {
 }
 
@@ -79,10 +81,13 @@ uno::Reference<uno::XInterface> ScDDELinkObj::init()
     uno::Reference<container::XIndexAccess> xIA(xSheets, UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
 
-    xSheet->getCellByPosition(5, 5)->setFormula(
-        "=DDE(\"soffice\";\"ScDDELinksObj.ods\";\"Sheet.A1\"");
-    xSheet->getCellByPosition(1, 4)->setFormula(
-        "=DDE(\"soffice\";\"ScDDELinksObj.ods\";\"Sheet.A1\"");
+    const OUString testdoc
+        = m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods");
+
+    xSheet->getCellByPosition(5, 5)->setFormula("=DDE(\"soffice\";\"" + testdoc
+                                                + "\";\"Sheet1.A1\")");
+    xSheet->getCellByPosition(1, 4)->setFormula("=DDE(\"soffice\";\"" + testdoc
+                                                + "\";\"Sheet1.A1\")");
 
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, UNO_QUERY_THROW);
     uno::Any aDDELinks = xPropSet->getPropertyValue("DDELinks");
@@ -94,6 +99,7 @@ uno::Reference<uno::XInterface> ScDDELinkObj::init()
 
 void ScDDELinkObj::setUp()
 {
+    Application::SetAppName("soffice"); // Enable DDE
     CalcUnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
