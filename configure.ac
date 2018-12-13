@@ -526,6 +526,16 @@ if test -n "$with_android_sdk"; then
 fi
 AC_SUBST(ANDROID_SDK_HOME)
 
+libo_FUZZ_ARG_ENABLE([android-editing],
+    AS_HELP_STRING([--enable-android-editing],
+        [Enable the experimental editing feature on Android.])
+)
+ENABLE_ANDROID_EDITING=
+if test "$enable_android_editing" = yes; then
+    ENABLE_ANDROID_EDITING=TRUE
+fi
+AC_SUBST([ENABLE_ANDROID_EDITING])
+
 dnl ===================================================================
 dnl The following is a list of supported systems.
 dnl Sequential to keep the logic very simple
