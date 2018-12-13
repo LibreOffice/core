@@ -90,7 +90,7 @@ class RTTI
     t_rtti_map m_rttis;
     t_rtti_map m_generatedRttis;
 
-#if defined ANDROID
+#if !defined ANDROID
     void * m_hApp;
 #endif
 
