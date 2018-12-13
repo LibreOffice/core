@@ -52,9 +52,11 @@ private:
 
 struct ScFunctionData                   // to calculate single functions
 {
+private:
     WelfordRunner   maWelford;
     double          nVal;
     sal_uInt64      nCount;
+public:
     ScSubTotalFunc const  eFunc;
     bool            bError;
 

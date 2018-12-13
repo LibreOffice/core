@@ -616,71 +616,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
 
             //TODO: pass rMark to UpdateSelection Function !!!!!
 
-    if (!aData.bError)
-        switch (eFunc)
-        {
-            case SUBTOTAL_FUNC_SUM:
-                rResult = aData.nVal;
-                break;
-            case SUBTOTAL_FUNC_SELECTION_COUNT:
-                rResult = aData.nCount;
-                break;
-            case SUBTOTAL_FUNC_CNT:
-            case SUBTOTAL_FUNC_CNT2:
-                rResult = aData.nCount;
-                break;
-            case SUBTOTAL_FUNC_AVE:
-                if (aData.nCount)
-                    rResult = aData.nVal / static_cast<double>(aData.nCount);
-                else
-                    aData.bError = true;
-                break;
-            case SUBTOTAL_FUNC_MAX:
-            case SUBTOTAL_FUNC_MIN:
-                if (aData.nCount)
-                    rResult = aData.nVal;
-                else
-                    aData.bError = true;
-                break;
-            case SUBTOTAL_FUNC_VAR:
-            case SUBTOTAL_FUNC_STD:
-                if (aData.maWelford.getCount() < 2)
-                    aData.bError = true;
-                else
-                {
-                    rResult = aData.maWelford.getVarianceSample();
-                    if (eFunc == SUBTOTAL_FUNC_STD)
-                    {
-                        if (rResult < 0.0)
-                            aData.bError = true;
-                        else
-                            rResult = sqrt( rResult);
-                    }
-                }
-                break;
-            case SUBTOTAL_FUNC_VARP:
-            case SUBTOTAL_FUNC_STDP:
-                if (aData.maWelford.getCount() < 1)
-                    aData.bError = true;
-                else if (aData.maWelford.getCount() == 1)
-                    rResult = 0.0;
-                else
-                {
-                    rResult = aData.maWelford.getVariancePopulation();
-                    if (eFunc == SUBTOTAL_FUNC_STDP)
-                    {
-                        if (rResult < 0.0)
-                            aData.bError = true;
-                        else
-                            rResult = sqrt( rResult);
-                    }
-                }
-                break;
-            default:
-                // unhandled unknown
-                aData.bError = true;
-        }
-
+    rResult = aData.getResult();
     if (aData.bError)
         rResult = 0.0;
 
