@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_cd5fcb0c",
+        "filename": "vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-12-13T18:12:44Z",
+      "side": 1,
+      "message": "Looks better with the full width, so nX \u003d 0; and nWidth\u003dGetWidth();",
+      "range": {
+        "startLine": 2225,
+        "startChar": 1,
+        "endLine": 2226,
+        "endChar": 58
+      },
+      "revId": "65a457eb061e396c89d512aa58cf373a9ed39a71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
