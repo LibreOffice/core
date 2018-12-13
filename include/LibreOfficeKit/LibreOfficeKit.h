@@ -94,16 +94,6 @@ struct _LibreOfficeKitClass
         @since LibreOffice 6.0
      */
     int (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
-
-    /** @see lok::Office::translateGet().
-        @since LibreOffice 6.3
-     */
-    char* (*translateGet) (LibreOfficeKit *pThis, const char* pId, const char* pPrefixName, const char* pBcp47LanguageTag);
-
-    /** @see lok::Office::translateNGet().
-        @since LibreOffice 6.3
-     */
-    char* (*translateNGet) (LibreOfficeKit *pThis, const char* pId, int n, const char* pPrefixName, const char* pBcp47LanguageTag);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
