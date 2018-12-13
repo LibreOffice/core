@@ -38,28 +38,28 @@ TabPage TAB_PAGE_USERADMIN
 {
     SVLook      = TRUE ;
     HelpId      = HID_TAB_PAGE_USERADMIN ;
-    Size        = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Hide = TRUE;
+    Size        = MAP_APPFONT ( WINDOW_SIZE_X, WINDOW_SIZE_Y ) ;
+    Hide = TRUE ;
 
     FixedLine FL_USER
     {
-        Pos                 = MAP_APPFONT ( 6 , 3  ) ;
+        Pos                 = MAP_APPFONT ( 6, 3 ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
-        Text [ en-US ]  = "User selection";
+        Text [ en-US ]  = "User selection" ;
     };
 
     FixedText FT_USER
     {
-        Pos                 = MAP_APPFONT ( 12 , 14 ) ;
-        Size                = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ en-US ]  = "Us~er:";
+        Pos                 = MAP_APPFONT ( 12, 14 ) ;
+        Size                = MAP_APPFONT ( 90, 10 ) ;
+        Text [ en-US ]  = "Us~er:" ;
     };
 
     ListBox LB_USER
     {
         Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( 108 , 13) ;
-        Size                = MAP_APPFONT ( 105 , 97 ) ;
+        Pos                 = MAP_APPFONT ( 108, 13) ;
+        Size                = MAP_APPFONT ( 105, 97 ) ;
         TabStop             = TRUE ;
         HScroll             = TRUE ;
         Sort                = TRUE ;
@@ -70,45 +70,45 @@ TabPage TAB_PAGE_USERADMIN
 
     PushButton PB_NEWUSER
     {
-        Pos                 = MAP_APPFONT ( 12 , 29 ) ;
-        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        Pos                 = MAP_APPFONT ( 12, 29 ) ;
+        Size                = MAP_APPFONT ( 70, 14 ) ;
         TabStop             = TRUE ;
         DefButton           = TRUE ;
         HelpId              = HID_TAB_PAGE_PBUSER ;
-        Text [ en-US ] = "~Add User...";
+        Text [ en-US ] = "~Add User..." ;
     };
 
     PushButton PB_CHANGEPWD
     {
-        Pos                 = MAP_APPFONT ( 95 , 29 ) ;
-        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        Pos                 = MAP_APPFONT ( 95, 29 ) ;
+        Size                = MAP_APPFONT ( 70, 14 ) ;
         TabStop             = TRUE ;
         DefButton           = TRUE ;
         HelpId              = HID_TAB_PAGE_PBCHGPWD ;
-        Text [ en-US ] = "Change ~Password...";
+        Text [ en-US ] = "Change ~Password..." ;
     };
 
     PushButton PB_DELETEUSER
     {
-        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 82 , 29 ) ;
-        Size                = MAP_APPFONT ( 70 , 14 ) ;
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 82, 29 ) ;
+        Size                = MAP_APPFONT ( 70, 14 ) ;
         TabStop             = TRUE ;
         DefButton           = TRUE ;
         HelpId              = HID_TAB_PAGE_PBUSERDELETE ;
-        Text [ en-US ] = "~Delete User...";
+        Text [ en-US ] = "~Delete User..." ;
     };
 
     FixedLine FL_TABLE_GRANTS
     {
-        Pos                 = MAP_APPFONT ( 6 , 52  ) ;
+        Pos                 = MAP_APPFONT ( 6, 52 ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
-        Text [ en-US ] = "Access rights for selected user";
+        Text [ en-US ] = "Access rights for selected user" ;
     };
 
     Control CTRL_TABLE_GRANTS
     {
-        Pos                 = MAP_APPFONT ( 12 , 63  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 22, WINDOW_SIZE_Y - 75 );
+        Pos                 = MAP_APPFONT ( 12, 63 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 22, WINDOW_SIZE_Y - 75 ) ;
         Border              = TRUE ;
         TabStop             = TRUE ;
         HelpId              = HID_TAB_PAGE_TBLGRANTS ;
@@ -118,7 +118,7 @@ TabPage TAB_PAGE_USERADMIN
 QueryBox QUERY_USERADMIN_DELETE_USER
 {
     Buttons = WB_YES_NO ;
-    Message [ en-US ] = "Do you really want to delete the user?";
+    Message [ en-US ] = "Do you really want to delete the user?" ;
 };
 
 String STR_USERADMIN_NOT_AVAILABLE
@@ -138,104 +138,81 @@ ModalDialog DLG_PASSWORD
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
+    Size = MAP_APPFONT ( WIN_X, WIN_Y ) ;
 
     FixedLine FL_USER
     {
-        Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
-        Text [ en-US ] = "User \"$name$:  $\"";
+        Pos = MAP_APPFONT ( 3, 3 ) ;
+        Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50, 8 ) ;
+        Text [ en-US ] = "User \"$name$: $\"" ;
     };
 
     FixedText FT_OLDPASSWORD
     {
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( FT_SIZE_X , 10 ) ;
-        Text [ en-US ] = "Old p~assword";
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT ( FT_SIZE_X, 10 ) ;
+        Text [ en-US ] = "Old p~assword" ;
     };
     Edit ED_OLDPASSWORD
     {
-        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_OLDPASSWORD";
+        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_OLDPASSWORD" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
-        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
+        Pos = MAP_APPFONT ( 12 + FT_SIZE_X, 16 ) ;
+        Size = MAP_APPFONT ( EDIT_SIZE_X, 12 ) ;
         PassWord = TRUE ;
     };
 
     FixedText FT_PASSWORD
     {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
-        Size = MAP_APPFONT ( FT_SIZE_X , 10 ) ;
-        Text [ en-US ] = "~Password";
+        Pos = MAP_APPFONT ( 6, 35 ) ;
+        Size = MAP_APPFONT ( FT_SIZE_X, 10 ) ;
+        Text [ en-US ] = "~Password" ;
     };
     Edit ED_PASSWORD
     {
-        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_PASSWORD";
+        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_PASSWORD" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 34 ) ;
-        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
+        Pos = MAP_APPFONT ( 12 + FT_SIZE_X, 34 ) ;
+        Size = MAP_APPFONT ( EDIT_SIZE_X, 12 ) ;
         PassWord = TRUE ;
     };
     FixedText FT_PASSWORD_REPEAT
     {
-        Pos = MAP_APPFONT ( 6 , 52 ) ;
-        Size = MAP_APPFONT ( FT_SIZE_X , 10 ) ;
-        Text [ en-US ] = "~Confirm  password";
+        Pos = MAP_APPFONT ( 6, 52 ) ;
+        Size = MAP_APPFONT ( FT_SIZE_X, 10 ) ;
+        Text [ en-US ] = "~Confirm password" ;
     };
     Edit ED_PASSWORD_REPEAT
     {
-        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_PASSWORD_REPEAT";
+        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_PASSWORD_REPEAT" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 51 ) ;
-        Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
+        Pos = MAP_APPFONT ( 12 + FT_SIZE_X, 51 ) ;
+        Size = MAP_APPFONT ( EDIT_SIZE_X, 12 ) ;
         PassWord = TRUE ;
     };
 
     OKButton BTN_PASSWORD_OK
     {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( WIN_X - 56, 6 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_PASSWORD_CANCEL
     {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( WIN_X - 56, 23 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
     };
     HelpButton BTN_PASSWORD_HELP
     {
-        Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( WIN_X - 56, 43 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
     };
-    Text [ en-US ] = "Change Password";
+    Text [ en-US ] = "Change Password" ;
 };
 
 String STR_ERROR_PASSWORDS_NOT_IDENTICAL
 {
-    Text [ en-US ] = "The passwords do not match. Please enter the password again.";
+    Text [ en-US ] = "The passwords do not match. Please enter the password again." ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ********************************************************************** EOF
