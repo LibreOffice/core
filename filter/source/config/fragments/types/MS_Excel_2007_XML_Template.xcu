@@ -18,7 +18,7 @@
 <node oor:name="MS Excel 2007 XML Template" oor:op="replace" >
     <prop oor:name="DetectService"><value>com.sun.star.comp.oox.FormatDetector</value></prop>
     <prop oor:name="URLPattern"/>
-    <prop oor:name="Extensions"><value>xltm xltx</value></prop>
+    <prop oor:name="Extensions"><value>xltx xltm</value></prop>
     <prop oor:name="MediaType"><value>application/vnd.openxmlformats-officedocument.spreadsheetml.template</value></prop>
     <prop oor:name="Preferred"><value>false</value></prop>
     <prop oor:name="PreferredFilter"><value>Calc MS Excel 2007 XML Template</value></prop>
