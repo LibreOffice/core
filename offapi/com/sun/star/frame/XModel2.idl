@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XEnumeration.idl>
 #include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/util/InvalidStateException.idl>
 
 
  module com {  module sun {  module star {  module frame {
@@ -129,6 +130,22 @@ interface XModel2 : com::sun::star::frame::XModel
                                                               [in]  com::sun::star::frame::XFrame                    Frame          )
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::uno::Exception                );
+
+    /** Sets com::sun::star::document::MediaDescriptor properties
+        of the current model during runtime.
+
+        @param Arguments
+            Properties which should be set
+            Supported properties:
+            <ul>
+                <li>com::sun::star::document::MediaDescriptor::SuggestedSaveAsDir</li>
+                <li>com::sun::star::document::MediaDescriptor::SuggestedSaveAsName</li>
+            </ul>
+
+        @throws IllegalArgumentException When trying to set an unsupported property
+        @throws InvalidStateException When the document model can not be retrieved
+     */
+    void setArgs([in] sequence< com::sun::star::beans::PropertyValue > Arguments);
 };
 
 
