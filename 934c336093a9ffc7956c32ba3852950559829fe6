@@ -22,6 +22,29 @@
       "revId": "934c336093a9ffc7956c32ba3852950559829fe6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_077a6423",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-13T07:29:45Z",
+      "side": 1,
+      "message": "despite the precedence, I prefer using the parentheses, for clarity.",
+      "range": {
+        "startLine": 1465,
+        "startChar": 11,
+        "endLine": 1465,
+        "endChar": 50
+      },
+      "revId": "934c336093a9ffc7956c32ba3852950559829fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
