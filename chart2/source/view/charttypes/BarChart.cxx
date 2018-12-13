@@ -244,11 +244,13 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
         {
         fY = (fBaseValue < fScaledUpperYValue) ? fScaledUpperYValue : fScaledLowerYValue;
         if( pPosHelper->isSwapXAndY() )
+            // if datapoint value is 0 the label will appear RIGHT in case of Bar Chart
             if( fBaseValue == fScaledUpperYValue && fBaseValue == fScaledLowerYValue )
                 rAlignment = LABEL_ALIGN_RIGHT;
             else
                 rAlignment = bNormalOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
         else
+            // if datapoint value is 0 the label will appear TOP in case of Column Chart
             if( fBaseValue == fScaledUpperYValue && fBaseValue == fScaledLowerYValue )
                 rAlignment = LABEL_ALIGN_TOP;
             else
@@ -272,16 +274,31 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
         {
         fY = (fBaseValue < fScaledUpperYValue) ? fScaledLowerYValue : fScaledUpperYValue;
         if( pPosHelper->isSwapXAndY() )
-            rAlignment = bNormalOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
+            // if datapoint value is 0 the label will appear RIGHT in case of Bar Chart
+            if( fBaseValue == fScaledUpperYValue && fBaseValue == fScaledLowerYValue )
+                rAlignment = LABEL_ALIGN_RIGHT;
+            else
+                rAlignment = bNormalOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
         else
-            rAlignment = bNormalOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
+            // if datapoint value is 0 the label will appear TOP in case of Column Chart
+            if( fBaseValue == fScaledUpperYValue && fBaseValue == fScaledLowerYValue )
+                rAlignment = LABEL_ALIGN_TOP;
+            else
+                rAlignment = bNormalOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
         if(m_nDimension==3)
             fDepth = (fBaseValue < fScaledUpperYValue) ? fabs(fScaledLowerBarDepth) : fabs(fScaledUpperBarDepth);
         }
         break;
     case css::chart::DataLabelPlacement::CENTER:
         fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
-        rAlignment = LABEL_ALIGN_CENTER;
+        // if datapoint value is 0 the label will appear TOP/RIGHT in case of Column/Bar Charts
+        if( fBaseValue == fScaledUpperYValue && fBaseValue == fScaledLowerYValue )
+            if( pPosHelper->isSwapXAndY() )
+                rAlignment = LABEL_ALIGN_RIGHT;
+            else
+                rAlignment = LABEL_ALIGN_TOP;
+        else
+            rAlignment = LABEL_ALIGN_CENTER;
         if(m_nDimension==3)
             fDepth = fabs(fScaledUpperBarDepth-fScaledLowerBarDepth)/2.0;
         break;
