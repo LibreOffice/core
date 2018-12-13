@@ -915,10 +915,11 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     return pStream;
 }
 
-XclExpXmlStream::XclExpXmlStream( const uno::Reference< XComponentContext >& rCC, bool bExportVBA )
+XclExpXmlStream::XclExpXmlStream( const uno::Reference< XComponentContext >& rCC, bool bExportVBA, bool bExportTemplate )
     : XmlFilterBase( rCC ),
       mpRoot( nullptr ),
-      mbExportVBA(bExportVBA)
+      mbExportVBA(bExportVBA),
+      mbExportTemplate(bExportTemplate)
 {
 }
 
@@ -1080,11 +1081,29 @@ bool XclExpXmlStream::exportDocument()
         ScDocShell::GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
 
     OUString const workbook = "xl/workbook.xml";
-    const char* pWorkbookContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
-
-
+    const char* pWorkbookContentType = nullptr;
     if (mbExportVBA)
-        pWorkbookContentType = "application/vnd.ms-excel.sheet.macroEnabled.main+xml";
+    {
+        if (mbExportTemplate)
+        {
+            pWorkbookContentType = "application/vnd.ms-excel.template.macroEnabled.main+xml";
+        }
+        else
+        {
+            pWorkbookContentType = "application/vnd.ms-excel.sheet.macroEnabled.main+xml";
+        }
+    }
+    else
+    {
+        if (mbExportTemplate)
+        {
+            pWorkbookContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml";
+        }
+        else
+        {
+            pWorkbookContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
+        }
+    }
 
     PushStream( CreateOutputStream( workbook, workbook,
                                     uno::Reference <XOutputStream>(),
