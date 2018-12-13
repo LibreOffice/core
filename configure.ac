@@ -405,7 +405,7 @@ if test -n "$with_android_ndk"; then
         ;;
     esac
 
-    ANDROID_API_LEVEL=14
+    ANDROID_API_LEVEL=16
     android_cpu=$host_cpu
     ANDROID_ARCH=$android_cpu
     if test $host_cpu = arm; then

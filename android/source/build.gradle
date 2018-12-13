@@ -61,7 +61,7 @@ android {
         strippedUIEditing.assets.srcDirs 'assets_strippedUI'
     }
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 26
         vectorDrawables.useSupportLibrary = true
     }
