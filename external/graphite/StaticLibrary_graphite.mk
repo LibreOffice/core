@@ -44,7 +44,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,graphite,\
 	UnpackedTarball/graphite/src/gr_segment \
 	UnpackedTarball/graphite/src/gr_slot \
 	UnpackedTarball/graphite/src/json \
-	UnpackedTarball/graphite/src/CachedFace \
 	UnpackedTarball/graphite/src/CmapCache \
 	UnpackedTarball/graphite/src/Code \
 	UnpackedTarball/graphite/src/Collider \
@@ -60,9 +59,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,graphite,\
 	UnpackedTarball/graphite/src/NameTable \
 	UnpackedTarball/graphite/src/Pass \
 	UnpackedTarball/graphite/src/Position \
-	UnpackedTarball/graphite/src/SegCache \
-	UnpackedTarball/graphite/src/SegCacheEntry \
-	UnpackedTarball/graphite/src/SegCacheStore \
 	UnpackedTarball/graphite/src/Segment \
 	UnpackedTarball/graphite/src/Silf \
 	UnpackedTarball/graphite/src/Slot \
