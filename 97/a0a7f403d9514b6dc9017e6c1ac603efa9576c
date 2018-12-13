@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+1: Lionel Elie Mamane <lionel@mamane.lu>
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Submitted-by: Eike Rathke <erack@redhat.com>
+Submitted-at: Thu, 13 Dec 2018 19:49:37 +0100
+Reviewed-on: https://gerrit.libreoffice.org/64642
+Project: core
+Branch: refs/heads/master
