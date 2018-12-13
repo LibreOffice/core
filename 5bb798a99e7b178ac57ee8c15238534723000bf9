@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_87cbf41c",
+        "filename": "embeddedobj/Library_emboleobj.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-12-13T10:42:10Z",
+      "side": 1,
+      "message": "If some headers are used outside vcl, why do this makefile hack instead of moving them properly to /include/vcl instead, please? Could you fix that? Thanks!",
+      "revId": "5bb798a99e7b178ac57ee8c15238534723000bf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
