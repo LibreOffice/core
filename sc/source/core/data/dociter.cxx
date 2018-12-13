@@ -44,6 +44,7 @@
 #include <svl/sharedstring.hxx>
 #include <unotools/collatorwrapper.hxx>
 
+#include <algorithm>
 #include <vector>
 
 using ::rtl::math::approxEqual;
@@ -732,12 +733,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
     }
 
     // Row is valid as long as there is at least one result being true.
-    vector<bool>::const_iterator itr = aResults.begin(), itrEnd = aResults.end();
-    for (; itr != itrEnd; ++itr)
-        if (*itr)
-            return true;
-
-    return false;
+    return std::find(aResults.begin(), aResults.end(), true) != aResults.end();
 }
 
 ScDBQueryDataIterator::Value::Value() :

@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <osl/diagnose.h>
+#include <algorithm>
 
 using ::std::vector;
 using ::com::sun::star::uno::Sequence;
@@ -51,14 +52,7 @@ ScDPFilteredCache::GroupFilter::GroupFilter()
 
 bool ScDPFilteredCache::GroupFilter::match(const ScDPItemData& rCellData) const
 {
-    vector<ScDPItemData>::const_iterator it = maItems.begin(), itEnd = maItems.end();
-    for (; it != itEnd; ++it)
-    {
-        bool bMatch = *it == rCellData;
-        if (bMatch)
-            return true;
-    }
-    return false;
+    return std::find(maItems.begin(), maItems.end(), rCellData) != maItems.end();
 }
 
 std::vector<ScDPItemData> ScDPFilteredCache::GroupFilter::getMatchValues() const
