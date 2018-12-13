@@ -614,8 +614,6 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
         if (maTabs[*itr])
             maTabs[*itr]->UpdateSelectionFunction(aData, aMark);
 
-            //TODO: pass rMark to UpdateSelection Function !!!!!
-
     rResult = aData.getResult();
     if (aData.bError)
         rResult = 0.0;
