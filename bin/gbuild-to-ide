@@ -1488,7 +1488,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                     headers_list.append(lopath(file_ + ext))
 
             # List all include paths
-            for hdir in lib.include:
+            for hdir in (lib.include + lib.include_sys):
                 hf_lopath = lopath(hdir)
                 includepath_list.append(hf_lopath)
 
