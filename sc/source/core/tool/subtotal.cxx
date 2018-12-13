@@ -64,54 +64,54 @@ bool SubTotal::SafeDiv(double& fVal1, double fVal2)
 
 void ScFunctionData::update( double fNewVal )
 {
-    if (bError)
+    if (mbError)
         return;
 
-    switch (eFunc)
+    switch (meFunc)
     {
         case SUBTOTAL_FUNC_SUM:
-            if (!SubTotal::SafePlus(nVal, fNewVal))
-                bError = true;
+            if (!SubTotal::SafePlus(getValueRef(), fNewVal))
+                mbError = true;
         break;
         case SUBTOTAL_FUNC_PROD:
-            if (nCount == 0)    // copy first value (nVal is initialized to 0)
+            if (getCountRef() == 0)    // copy first value (nVal is initialized to 0)
             {
-                nVal = fNewVal;
-                nCount = 1;     // don't care about further count
+                getValueRef() = fNewVal;
+                getCountRef() = 1;     // don't care about further count
             }
-            else if (!SubTotal::SafeMult(nVal, fNewVal))
-                bError = true;
+            else if (!SubTotal::SafeMult(getValueRef(), fNewVal))
+                mbError = true;
         break;
         case SUBTOTAL_FUNC_CNT:
         case SUBTOTAL_FUNC_CNT2:
-            ++nCount;
+            ++getCountRef();
         break;
         case SUBTOTAL_FUNC_SELECTION_COUNT:
-            nCount += fNewVal;
+            getCountRef() += fNewVal;
         break;
         case SUBTOTAL_FUNC_AVE:
-            if (!SubTotal::SafePlus(nVal, fNewVal))
-                bError = true;
+            if (!SubTotal::SafePlus(getValueRef(), fNewVal))
+                mbError = true;
             else
-                ++nCount;
+                ++getCountRef();
         break;
         case SUBTOTAL_FUNC_MAX:
-            if (nCount == 0)    // copy first value (nVal is initialized to 0)
+            if (getCountRef() == 0)    // copy first value (nVal is initialized to 0)
             {
-                nVal = fNewVal;
-                nCount = 1;     // don't care about further count
+                getValueRef() = fNewVal;
+                getCountRef() = 1;     // don't care about further count
             }
-            else if (fNewVal > nVal)
-                nVal = fNewVal;
+            else if (fNewVal > getValueRef())
+                getValueRef() = fNewVal;
         break;
         case SUBTOTAL_FUNC_MIN:
-            if (nCount == 0)    // copy first value (nVal is initialized to 0)
+            if (getCountRef() == 0)    // copy first value (nVal is initialized to 0)
             {
-                nVal = fNewVal;
-                nCount = 1;     // don't care about further count
+                getValueRef() = fNewVal;
+                getCountRef() = 1;     // don't care about further count
             }
-            else if (fNewVal < nVal)
-                nVal = fNewVal;
+            else if (fNewVal < getValueRef())
+                getValueRef() = fNewVal;
         break;
         case SUBTOTAL_FUNC_VAR:
         case SUBTOTAL_FUNC_STD:
@@ -121,83 +121,83 @@ void ScFunctionData::update( double fNewVal )
         break;
         default:
             // unhandled unknown
-            bError = true;
+            mbError = true;
     }
 }
 
 double ScFunctionData::getResult()
 {
-    if (bError)
+    if (mbError)
         return 0.0;
 
     double fRet = 0.0;
-    switch (eFunc)
+    switch (meFunc)
     {
         case SUBTOTAL_FUNC_CNT:
         case SUBTOTAL_FUNC_CNT2:
         case SUBTOTAL_FUNC_SELECTION_COUNT:
-            fRet = nCount;
+            fRet = getCountRef();
         break;
         case SUBTOTAL_FUNC_SUM:
         case SUBTOTAL_FUNC_MAX:
         case SUBTOTAL_FUNC_MIN:
             // Note that nVal is 0.0 for MAX and MIN if nCount==0, that's also
             // how it is defined in ODFF.
-            fRet = nVal;
+            fRet = getValueRef();
         break;
         case SUBTOTAL_FUNC_PROD:
-            fRet = (nCount > 0) ? nVal : 0.0;
+            fRet = (getCountRef() > 0) ? getValueRef() : 0.0;
         break;
         case SUBTOTAL_FUNC_AVE:
-            if (nCount == 0)
-                bError = true;
+            if (getCountRef() == 0)
+                mbError = true;
             else
-                fRet = nVal / nCount;
+                fRet = getValueRef() / getCountRef();
         break;
         case SUBTOTAL_FUNC_VAR:
         case SUBTOTAL_FUNC_STD:
             if (maWelford.getCount() < 2)
-                bError = true;
+                mbError = true;
             else
             {
                 fRet = maWelford.getVarianceSample();
                 if (fRet < 0.0)
-                    bError = true;
-                else if (eFunc == SUBTOTAL_FUNC_STD)
+                    mbError = true;
+                else if (meFunc == SUBTOTAL_FUNC_STD)
                     fRet = sqrt( fRet);
             }
         break;
         case SUBTOTAL_FUNC_VARP:
         case SUBTOTAL_FUNC_STDP:
             if (maWelford.getCount() < 1)
-                bError = true;
+                mbError = true;
             else if (maWelford.getCount() == 1)
                 fRet = 0.0;
             else
             {
                 fRet = maWelford.getVariancePopulation();
                 if (fRet < 0.0)
-                    bError = true;
-                else if (eFunc == SUBTOTAL_FUNC_STDP)
+                    mbError = true;
+                else if (meFunc == SUBTOTAL_FUNC_STDP)
                     fRet = sqrt( fRet);
             }
         break;
         default:
             assert(!"unhandled unknown");
-            bError = true;
+            mbError = true;
         break;
     }
-    if (bError)
+    if (mbError)
         fRet = 0.0;
     return fRet;
 }
 
 void WelfordRunner::update( double fVal )
 {
-    ++nCount;
-    const double fDelta = fVal - fMean;
-    fMean += fDelta / nCount;
-    fM2 += fDelta * (fVal - fMean);
+    ++mnCount;
+    const double fDelta = fVal - mfMean;
+    mfMean += fDelta / mnCount;
+    mfM2 += fDelta * (fVal - mfMean);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

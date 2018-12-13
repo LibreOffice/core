@@ -85,7 +85,7 @@ class ScStyleSheet;
 class SvtBroadcaster;
 class ScTypedStrData;
 class ScProgress;
-struct ScFunctionData;
+class ScFunctionData;
 class ScFlatBoolRowSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;

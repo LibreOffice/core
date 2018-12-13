@@ -3378,10 +3378,10 @@ class UpdateSubTotalHandler
 
     void update(double fVal, bool bVal)
     {
-        if (mrData.bError)
+        if (mrData.getError())
             return;
 
-        switch (mrData.eFunc)
+        switch (mrData.getFunc())
         {
             case SUBTOTAL_FUNC_CNT2:    // everything
                 mrData.update( fVal);
@@ -3414,13 +3414,13 @@ public:
     {
         double fVal = 0.0;
         bool bVal = false;
-        if (mrData.eFunc != SUBTOTAL_FUNC_CNT2) // it doesn't interest us
+        if (mrData.getFunc() != SUBTOTAL_FUNC_CNT2) // it doesn't interest us
         {
 
             if (pCell->GetErrCode() != FormulaError::NONE)
             {
-                if (mrData.eFunc != SUBTOTAL_FUNC_CNT) // simply remove from count
-                    mrData.bError = true;
+                if (mrData.getFunc() != SUBTOTAL_FUNC_CNT) // simply remove from count
+                    mrData.setError();
             }
             else if (pCell->IsValue())
             {
@@ -3466,7 +3466,7 @@ void ScColumn::UpdateSelectionFunction(
 
     sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
 
-    switch (rData.eFunc)
+    switch (rData.getFunc())
     {
         case SUBTOTAL_FUNC_SELECTION_COUNT:
         {
