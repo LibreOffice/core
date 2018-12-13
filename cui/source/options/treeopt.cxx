@@ -696,8 +696,9 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ApplyHdl_Impl, Button*, void)
     if ( bNeedsRestart )
     {
         SolarMutexGuard aGuard;
-        ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                        GetFrameWeld(), eRestartReason);
+        if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+                                        GetFrameWeld(), eRestartReason))
+            EndDialog(RET_OK);
     }
 }
 
