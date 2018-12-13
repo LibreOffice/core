@@ -16,6 +16,24 @@
       "revId": "5c8f6e0261915ea05b2251e3b4e085e89c117893",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a205be7c",
+        "filename": "writerfilter/source/filter/WriterFilter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-12-13T14:17:06Z",
+      "side": 1,
+      "message": "writer here has somewhat confusing structure: this main WriterFilter is creating DocxExport filter, but do not passing initialization params to it. And among other stuff there are export filter flags which are used in FilterBase to detect template export.\n\nSo for me it is just a bugfix essential for normal template export work.",
+      "parentUuid": "5f4e5783_c2a8ba78",
+      "revId": "5c8f6e0261915ea05b2251e3b4e085e89c117893",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
