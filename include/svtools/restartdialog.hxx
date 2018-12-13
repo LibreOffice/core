@@ -63,8 +63,8 @@ enum RestartReason {
     RESTART_REASON_NONE
 };
 
-// Must be called with the solar mutex locked:
-SVT_DLLPUBLIC void executeRestartDialog(
+// Must be called with the solar mutex locked; returns if restart was initiated:
+SVT_DLLPUBLIC bool executeRestartDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     weld::Window* parent, RestartReason reason);
 
