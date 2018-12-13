@@ -763,35 +763,6 @@ public:
     {
         return mpThis->pClass->runMacro( mpThis, pURL );
     }
-
-    /**
-     * Fetch translation for a string.
-     *
-     * @since LibreOffice 6.3
-     * @returns the translated string, if available
-     * @param pId the context and string, separated by a '\004' character
-     * @param pPrefixName the prefix passed to Translate::Create()
-     * @param pBcp47LanguageTag the locale into which the string should be translated
-     */
-    char* translateGet( const char* pId, const char* pPrefixName, const char* pBcp47LanguageTag )
-    {
-        return mpThis->pClass->translateGet( mpThis, pId, pPrefixName, pBcp47LanguageTag );
-    }
-
-    /**
-     * In this branch this is equivalent to translateGet().
-     *
-     * @since LibreOffice 6.3
-     * @returns the translated string, if available
-     * @param pId the context and string, separated by a '\004' character
-     * @param n Ignored in this branch
-     * @param pPrefixName the prefix passed to Translate::Create()
-     * @param pBcp47LanguageTag the locale into which the string should be translated
-     */
-    char* translateNGet( const char* pId, int n, const char* pPrefixName, const char* pBcp47LanguageTag )
-    {
-        return mpThis->pClass->translateNGet( mpThis, pId, n, pPrefixName, pBcp47LanguageTag );
-    }
 };
 
 /// Factory method to create a lok::Office instance.

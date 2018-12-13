@@ -1423,8 +1423,6 @@ static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
                                                        const char* pPassword);
 static char*                   lo_getVersionInfo(LibreOfficeKit* pThis);
 static int                     lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
-static char*                   lo_translateGet  (LibreOfficeKit *pThis, const char* pId, const char* pPrefixName, const char* pBcp47LanguageTag);
-static char*                   lo_translateNGet (LibreOfficeKit *pThis, const char* pId, int n, const char* pPrefixName, const char* pBcp47LanguageTag);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
@@ -1448,8 +1446,6 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->setDocumentPassword = lo_setDocumentPassword;
         m_pOfficeClass->getVersionInfo = lo_getVersionInfo;
         m_pOfficeClass->runMacro = lo_runMacro;
-        m_pOfficeClass->translateGet = lo_translateGet;
-        m_pOfficeClass->translateNGet = lo_translateNGet;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -1675,25 +1671,6 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
     }
 
     return false;
-}
-
-static char* lo_translateGet(LibreOfficeKit *, const char* pId, const char* pPrefixName, const char* pBcp47LanguageTag)
-{
-    LanguageTag tag(OUString::fromUtf8(pBcp47LanguageTag));
-    std::locale locale = Translate::Create(pPrefixName, tag);
-    OUString result = Translate::get(pId, locale);
-
-    return strdup(result.toUtf8().getStr());
-}
-
-static char* lo_translateNGet(LibreOfficeKit *, const char* pId, int, const char* pPrefixName, const char* pBcp47LanguageTag)
-{
-    LanguageTag tag(OUString::fromUtf8(pBcp47LanguageTag));
-    std::locale locale = Translate::Create(pPrefixName, tag);
-    // In this branch there is no Translate::nget().
-    OUString result = Translate::get(pId, locale);
-
-    return strdup(result.toUtf8().getStr());
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,

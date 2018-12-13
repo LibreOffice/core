@@ -32,7 +32,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <osl/conditn.hxx>
 #include <svl/srchitem.hxx>
-#include <svtools/strings.hrc>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/tempfile.hxx>
 #include <sfx2/viewsh.hxx>
@@ -118,7 +117,6 @@ public:
     void testCommentsImpress();
     void testCommentsCallbacksWriter();
     void testRunMacro();
-    void testTranslate();
     void testExtractParameter();
     void testGetSignatureState_NonSigned();
     void testGetSignatureState_Signed();
@@ -166,7 +164,6 @@ public:
     CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testRunMacro);
-    CPPUNIT_TEST(testTranslate);
     CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST(testGetSignatureState_Signed);
     CPPUNIT_TEST(testGetSignatureState_NonSigned);
@@ -2221,20 +2218,6 @@ void DesktopLOKTest::testRunMacro()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
-void DesktopLOKTest::testTranslate()
-{
-    comphelper::LibreOfficeKit::setActive();
-
-    LibLibreOffice_Impl aOffice;
-
-    // Try translating to a non-existent locale, should return the English string
-    char *translated = aOffice.m_pOfficeClass->translateGet(&aOffice, STR_DESCRIPTION_FACTORY_WRITER, "svt", "foo");
-    CPPUNIT_ASSERT_EQUAL(0, strcmp(translated, "Text Document"));
-    free(translated);
-
-    comphelper::LibreOfficeKit::setActive(false);
-}
-
 void DesktopLOKTest::testExtractParameter()
 {
     comphelper::LibreOfficeKit::setActive();
@@ -2479,11 +2462,6 @@ void DesktopLOKTest::testInsertCertificatePEM()
 
 namespace {
 
-size_t classOffset(int i)
-{
-    return sizeof(static_cast<struct _LibreOfficeKitClass*>(nullptr)->nSize) + i * sizeof(void*);
-}
-
 size_t documentClassOffset(int i)
 {
     return sizeof(static_cast<struct _LibreOfficeKitDocumentClass*>(nullptr)->nSize) + i * sizeof(void*);
@@ -2494,21 +2472,6 @@ size_t documentClassOffset(int i)
 void DesktopLOKTest::testABI()
 {
     // STABLE ABI, NEVER CHANGE (unless there's a very good reason, agreed by ESC, etc.)
-
-    CPPUNIT_ASSERT_EQUAL(classOffset(0), offsetof(struct _LibreOfficeKitClass, destroy));
-    CPPUNIT_ASSERT_EQUAL(classOffset(1), offsetof(struct _LibreOfficeKitClass, documentLoad));
-    CPPUNIT_ASSERT_EQUAL(classOffset(2), offsetof(struct _LibreOfficeKitClass, getError));
-    CPPUNIT_ASSERT_EQUAL(classOffset(3), offsetof(struct _LibreOfficeKitClass, documentLoadWithOptions));
-    CPPUNIT_ASSERT_EQUAL(classOffset(4), offsetof(struct _LibreOfficeKitClass, freeError));
-    CPPUNIT_ASSERT_EQUAL(classOffset(5), offsetof(struct _LibreOfficeKitClass, registerCallback));
-    CPPUNIT_ASSERT_EQUAL(classOffset(6), offsetof(struct _LibreOfficeKitClass, getFilterTypes));
-    CPPUNIT_ASSERT_EQUAL(classOffset(7), offsetof(struct _LibreOfficeKitClass, setOptionalFeatures));
-    CPPUNIT_ASSERT_EQUAL(classOffset(8), offsetof(struct _LibreOfficeKitClass, setDocumentPassword));
-    CPPUNIT_ASSERT_EQUAL(classOffset(9), offsetof(struct _LibreOfficeKitClass, getVersionInfo));
-    CPPUNIT_ASSERT_EQUAL(classOffset(10), offsetof(struct _LibreOfficeKitClass, runMacro));
-    CPPUNIT_ASSERT_EQUAL(classOffset(11), offsetof(struct _LibreOfficeKitClass, translateGet));
-    CPPUNIT_ASSERT_EQUAL(classOffset(12), offsetof(struct _LibreOfficeKitClass, translateNGet));
-
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(struct _LibreOfficeKitDocumentClass, destroy));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(struct _LibreOfficeKitDocumentClass, saveAs));
 
