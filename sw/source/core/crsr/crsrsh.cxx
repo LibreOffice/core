@@ -3356,7 +3356,7 @@ sal_uLong SwCursorShell::FindAttrs( const SfxItemSet& rSet,
     m_pTableCursor = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
     sal_uLong nRet = m_pCurrentCursor->FindAttrs(rSet, bNoCollections, eStart, eEnd,
-                                     bCancel, eRng, pSearchOpt, rReplSet );
+                         bCancel, eRng, pSearchOpt, rReplSet, GetLayout());
     if( nRet )
         UpdateCursor();
     return nRet;

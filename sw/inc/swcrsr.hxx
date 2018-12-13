@@ -127,7 +127,8 @@ public:
                 bool& bCancel,
                 FindRanges,
                 const i18nutil::SearchOptions2* pSearchOpt,
-                const SfxItemSet* rReplSet = nullptr );
+                const SfxItemSet* rReplSet = nullptr,
+                SwRootFrame const*const pLayout = nullptr);
 
     // UI versions
     bool IsStartEndSentence(bool bEnd, SwRootFrame const* pLayout) const;
