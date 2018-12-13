@@ -22,6 +22,7 @@
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLPROPERTYBACKPATCHER_HXX
 
 #include <map>
+#include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star {
@@ -65,13 +66,8 @@ class XMLPropertyBackpatcher
     typedef ::std::vector<
                 css::uno::Reference<css::beans::XPropertySet> > BackpatchListType;
 
-    /* use void* instead of BackpatchListType to avoid linker problems
-       with long typenames. The real typename (commented out) contains
-       >1200 chars. */
-
     /// backpatch list for unresolved IDs
-    //::std::map<const OUString, BackpatchListType*> aBackpatchListMap;
-    ::std::map<const OUString, void*> aBackpatchListMap;
+    ::std::map<const OUString, std::unique_ptr<BackpatchListType>> aBackpatchListMap;
 
     /// mapping of names -> IDs
     ::std::map<const OUString, A> aIDMap;

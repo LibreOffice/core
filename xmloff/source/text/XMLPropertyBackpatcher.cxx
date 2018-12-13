@@ -54,14 +54,14 @@ void XMLPropertyBackpatcher<A>::ResolveId(
     aIDMap[sName] = aValue;
 
     // backpatch old references, if backpatch list exists
-    if (aBackpatchListMap.count(sName))
+    auto it = aBackpatchListMap.find(sName);
+    if (it != aBackpatchListMap.end())
     {
         // aah, we have a backpatch list!
-        BackpatchListType* pList =
-            static_cast<BackpatchListType*>(aBackpatchListMap[sName]);
+        std::unique_ptr<BackpatchListType> pList = std::move(it->second);
 
         // a) remove list from list map
-        aBackpatchListMap.erase(sName);
+        aBackpatchListMap.erase(it);
 
         // b) for every item, set SequenceNumber
         //    (and preserve Property, if appropriate)
@@ -71,9 +71,6 @@ void XMLPropertyBackpatcher<A>::ResolveId(
         {
             rBackpatch->setPropertyValue(sPropertyName, aAny);
         }
-
-        // c) delete list
-        delete pList;
     }
     // else: no backpatch list -> then we're finished
 }
@@ -103,12 +100,11 @@ void XMLPropertyBackpatcher<A>::SetProperty(
         if (! aBackpatchListMap.count(sName))
         {
             // create backpatch list for this name
-            BackpatchListType* pTmp = new BackpatchListType;
-            aBackpatchListMap[sName] = static_cast<void*>(pTmp);
+            aBackpatchListMap.emplace(sName, new BackpatchListType);
         }
 
         // insert footnote
-        static_cast<BackpatchListType*>(aBackpatchListMap[sName])->push_back(xPropSet);
+        aBackpatchListMap[sName]->push_back(xPropSet);
     }
 }
 
