@@ -34,6 +34,7 @@ $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 		LIBS="$(gb_STDLIBS) $(LIBS)" \
 		$(SHELL) ./configure --disable-shared --with-pic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
+			$(if $(ENABLE_WERROR),--enable-werror,--disable-werror) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 			$(if $(libnumbertext_CPPFLAGS),CPPFLAGS='$(libnumbertext_CPPFLAGS)') \
