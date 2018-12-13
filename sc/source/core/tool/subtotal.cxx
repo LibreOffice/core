@@ -86,6 +86,9 @@ void ScFunctionData::update( double fNewVal )
         case SUBTOTAL_FUNC_CNT2:
             ++nCount;
         break;
+        case SUBTOTAL_FUNC_SELECTION_COUNT:
+            nCount += fNewVal;
+        break;
         case SUBTOTAL_FUNC_AVE:
             if (!SubTotal::SafePlus(nVal, fNewVal))
                 bError = true;
@@ -132,6 +135,7 @@ double ScFunctionData::getResult()
     {
         case SUBTOTAL_FUNC_CNT:
         case SUBTOTAL_FUNC_CNT2:
+        case SUBTOTAL_FUNC_SELECTION_COUNT:
             fRet = nCount;
         break;
         case SUBTOTAL_FUNC_SUM:
