@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_c2a8ba78",
+        "filename": "writerfilter/source/filter/WriterFilter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-13T13:29:57Z",
+      "side": 1,
+      "message": "Curious, why is this change now necessary? Build fails otherwise or is there sth else?",
+      "revId": "5c8f6e0261915ea05b2251e3b4e085e89c117893",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
