@@ -398,7 +398,7 @@ DECLARE_ODFIMPORT_TEST(testFdo79269, "fdo79269.odt")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, "FirstIsShared"));
 
     uno::Reference<text::XTextRange> xFooter1 = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "FooterTextFirst");
-    CPPUNIT_ASSERT_EQUAL(OUString("forst"), xFooter1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("first"), xFooter1->getString());
     uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "FooterText");
     CPPUNIT_ASSERT_EQUAL(OUString("second"), xFooter->getString());
 }
@@ -415,7 +415,7 @@ DECLARE_ODFIMPORT_TEST(testFdo79269_header, "fdo79269_header.odt")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, "FirstIsShared"));
 
     uno::Reference<text::XTextRange> xFooter1 = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "HeaderTextFirst");
-    CPPUNIT_ASSERT_EQUAL(OUString("forst"), xFooter1->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("first"), xFooter1->getString());
     uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPropSet, "HeaderText");
     CPPUNIT_ASSERT_EQUAL(OUString("second"), xFooter->getString());
 }
