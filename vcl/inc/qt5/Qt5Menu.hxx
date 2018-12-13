@@ -11,9 +11,12 @@
 
 #include <salmenu.hxx>
 
+#include <QtCore/QObject>
+
 #include <memory>
 
 class MenuItemList;
+class QAction;
 class QActionGroup;
 class QMenu;
 class QMenuBar;
