@@ -2166,6 +2166,77 @@ static gfloat getArrowSize(GtkStyleContext* context)
     return arrow_size;
 }
 
+namespace
+{
+    void draw_vertical_separator(GtkStyleContext *context, cairo_t *cr, const tools::Rectangle& rControlRegion)
+    {
+        long nX = 0;
+        long nY = 0;
+
+        const bool bNewStyle = gtk_check_version(3, 20, 0) == nullptr;
+
+        gint nSeparatorWidth = 1;
+
+        if (bNewStyle)
+        {
+            gtk_style_context_get(context,
+                gtk_style_context_get_state(context),
+                "min-width", &nSeparatorWidth, nullptr);
+        }
+
+        gint nHalfSeparatorWidth = nSeparatorWidth / 2;
+        gint nHalfRegionWidth = rControlRegion.GetWidth() / 2;
+
+        nX = nX + nHalfRegionWidth - nHalfSeparatorWidth;
+        nY = rControlRegion.GetHeight() * 0.1;
+        int nHeight = rControlRegion.GetHeight() - (2 * nY);
+
+        if (bNewStyle)
+        {
+            gtk_render_background(context, cr, nX, nY, nSeparatorWidth, nHeight);
+            gtk_render_frame(context, cr, nX, nY, nSeparatorWidth, nHeight);
+        }
+        else
+        {
+            gtk_render_line(context, cr, nX, nY, nX, nY + nHeight);
+        }
+    }
+
+    void draw_horizontal_separator(GtkStyleContext *context, cairo_t *cr, const tools::Rectangle& rControlRegion)
+    {
+        long nX = 0;
+        long nY = 0;
+
+        const bool bNewStyle = gtk_check_version(3, 20, 0) == nullptr;
+
+        gint nSeparatorHeight = 1;
+
+        if (bNewStyle)
+        {
+            gtk_style_context_get(context,
+                gtk_style_context_get_state(context),
+                "min-height", &nSeparatorHeight, nullptr);
+        }
+
+        gint nHalfSeparatorHeight = nSeparatorHeight / 2;
+        gint nHalfRegionHeight = rControlRegion.GetHeight() / 2;
+
+        nY = nY + nHalfRegionHeight - nHalfSeparatorHeight;
+        nX = rControlRegion.GetWidth() * 0.1;
+        int nWidth = rControlRegion.GetWidth() - (2 * nX);
+
+        if (bNewStyle)
+        {
+            gtk_render_background(context, cr, nX, nY, nWidth, nSeparatorHeight);
+            gtk_render_frame(context, cr, nX, nY, nWidth, nSeparatorHeight);
+        }
+        else
+        {
+            gtk_render_line(context, cr, nX, nY, nX + nWidth, nY);
+        }
+    }
+}
+
 bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& rValue,
                                             const OUString& aCaptions)
@@ -2454,41 +2525,14 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case RenderType::ToolbarSeparator:
     {
-        const bool bNewStyle = gtk_check_version(3, 20, 0) == nullptr;
-
-        gint nSeparatorWidth = 1;
-
-        if (bNewStyle)
-        {
-            gtk_style_context_get(context,
-                gtk_style_context_get_state(context),
-                "min-width", &nSeparatorWidth, nullptr);
-        }
-
-        gint nHalfSeparatorWidth = nSeparatorWidth / 2;
-        gint nHalfRegionWidth = rControlRegion.GetWidth() / 2;
-
-        nX = nX + nHalfRegionWidth - nHalfSeparatorWidth;
-        nWidth = nSeparatorWidth;
-        nY = rControlRegion.GetHeight() * 0.1;
-        nHeight = rControlRegion.GetHeight() - (2 * nY);
-
-        if (bNewStyle)
-        {
-            gtk_render_background(context, cr, nX, nY, nSeparatorWidth, nHeight);
-            gtk_render_frame(context, cr, nX, nY, nSeparatorWidth, nHeight);
-        }
-        else
-        {
-            gtk_render_line(context, cr, nX, nY, nX, nY + nHeight);
-        }
+        draw_vertical_separator(context, cr, rControlRegion);
         break;
     }
     case RenderType::Separator:
         if (nPart == ControlPart::SeparatorHorz)
-            gtk_render_line(context, cr, 0, nHeight / 2, nWidth - 1, nHeight / 2);
+            draw_horizontal_separator(context, cr, rControlRegion);
         else
-            gtk_render_line(context, cr, nWidth / 2, 0, nWidth / 2, nHeight - 1);
+            draw_vertical_separator(context, cr, rControlRegion);
         break;
     case RenderType::Arrow:
         gtk_render_arrow(context, cr,
