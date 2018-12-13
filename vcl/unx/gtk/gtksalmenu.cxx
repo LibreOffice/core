@@ -506,6 +506,8 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     g_object_unref(mpActionGroup);
     ClearActionGroupAndMenuModel();
 
+    mpFrame = nullptr;
+
     return true;
 #else
     (void)pWin;
@@ -581,6 +583,9 @@ GtkSalMenu::~GtkSalMenu()
         g_object_unref(mpMenuModel);
 
     maItems.clear();
+
+    if (mpFrame)
+        mpFrame->SetMenu(nullptr);
 }
 
 bool GtkSalMenu::VisibleMenuBar()
