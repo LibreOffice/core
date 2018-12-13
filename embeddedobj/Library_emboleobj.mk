@@ -14,7 +14,6 @@ $(eval $(call gb_Library_set_componentfile,emboleobj,embeddedobj/source/msole/em
 
 $(eval $(call gb_Library_set_include,emboleobj,\
 	-I$(SRCDIR)/embeddedobj/source/inc \
-	$(if $(filter WNT,$(OS)),-I$(SRCDIR)/vcl/inc) \
 	$$(INCLUDE) \
 ))
 
