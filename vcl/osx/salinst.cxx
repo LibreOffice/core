@@ -516,10 +516,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         {
             SolarMutexReleaser aReleaser;
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
-            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
-SAL_WNODEPRECATED_DECLARATIONS_POP
+            pEvent = [NSApp nextEventMatchingMask: NSEventMaskAny
                             untilDate: nil
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
@@ -550,10 +547,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             SolarMutexReleaser aReleaser;
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
-            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
-SAL_WNODEPRECATED_DECLARATIONS_POP
+            pEvent = [NSApp nextEventMatchingMask: NSEventMaskAny
                             untilDate: [NSDate distantFuture]
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
