@@ -275,7 +275,7 @@ public:
 class XclExpXmlStream : public oox::core::XmlFilterBase
 {
 public:
-    XclExpXmlStream( const css::uno::Reference< css::uno::XComponentContext >& rCC, bool bExportVBA );
+    XclExpXmlStream( const css::uno::Reference< css::uno::XComponentContext >& rCC, bool bExportVBA, bool bExportTemplate );
     virtual ~XclExpXmlStream() override;
 
     /** Returns the filter root data. */
@@ -355,6 +355,7 @@ private:
     XclExpXmlPathToStateMap                     maOpenedStreamMap;
 
     bool const mbExportVBA;
+    bool const mbExportTemplate;
 };
 
 #endif

@@ -227,7 +227,7 @@ sal_Bool SAL_CALL ExcelFilter::filter( const css::uno::Sequence< css::beans::Pro
     {
         bool bExportVBA = exportVBA();
         Reference< XExporter > xExporter(
-            new XclExpXmlStream( getComponentContext(), bExportVBA ) );
+            new XclExpXmlStream( getComponentContext(), bExportVBA, isExportTemplate() ) );
 
         Reference< XComponent > xDocument( getModel(), UNO_QUERY );
         Reference< XFilter > xFilter( xExporter, UNO_QUERY );
