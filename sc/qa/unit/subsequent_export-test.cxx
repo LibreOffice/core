@@ -212,6 +212,8 @@ public:
     void testTdf118990();
     void testTdf121612();
 
+    void testXltxExport();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testTdf111876);
@@ -323,6 +325,8 @@ public:
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
 
+    CPPUNIT_TEST(testXltxExport);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -356,6 +360,7 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("r"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships") },
         { BAD_CAST("number"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0") },
         { BAD_CAST("loext"), BAD_CAST("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0") },
+        { BAD_CAST("ContentType"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/content-types") },
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -4086,6 +4091,22 @@ void ScExportTest::testTdf121612()
     ScDPCollection* pDPColl = rDoc.GetDPCollection();
     CPPUNIT_ASSERT(pDPColl);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
+}
+
+void ScExportTest::testXltxExport()
+{
+    // Create new document
+    ScDocShell* pShell = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+    pShell->DoInitNew();
+
+    // Export as template and check content type
+    xmlDocPtr pDoc = XPathHelper::parseExport(*pShell, m_xSFactory, "[Content_Types].xml", FORMAT_XLTX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/ContentType:Types/ContentType:Override[@PartName='/xl/workbook.xml']",
+        "ContentType", "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
