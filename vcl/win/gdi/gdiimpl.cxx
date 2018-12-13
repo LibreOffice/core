@@ -61,8 +61,6 @@
 #define SAL_POLYPOLYCOUNT_STACKBUF          8
 #define SAL_POLYPOLYPOINTS_STACKBUF         64
 
-#define DMAP( _def_nVal, _def_nThres )  ((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
-
 #define SAL_POLY_STACKBUF       32
 
 namespace {
@@ -1462,6 +1460,12 @@ HBRUSH WinSalGraphicsImpl::SearchStockBrush(COLORREF nBrushColor)
 namespace
 {
 
+BYTE GetDitherMappingValue(BYTE nVal, BYTE nThres, const SalData* pSalData)
+{
+    return (pSalData->mpDitherDiff[nVal] > nThres) ?
+        pSalData->mpDitherHigh[nVal] : pSalData->mpDitherLow[nVal];
+}
+
 HBRUSH Make16BitDIBPatternBrush(Color nColor)
 {
     const SalData* pSalData = GetSalData();
@@ -1483,18 +1487,15 @@ HBRUSH Make16BitDIBPatternBrush(Color nColor)
     };
 
     BYTE* pTmp = pSalData->mpDitherDIBData;
-    long* pDitherDiff = pSalData->mpDitherDiff;
-    BYTE* pDitherLow = pSalData->mpDitherLow;
-    BYTE* pDitherHigh = pSalData->mpDitherHigh;
 
     for(int nY = 0; nY < 8; ++nY)
     {
         for(int nX = 0; nX < 8; ++nX)
         {
             const BYTE nThres = aOrdDither16Bit[nY][nX];
-            *pTmp++ = DMAP(nBlue, nThres);
-            *pTmp++ = DMAP(nGreen, nThres);
-            *pTmp++ = DMAP(nRed, nThres);
+            *pTmp++ = GetDitherMappingValue(nBlue, nThres, pSalData);
+            *pTmp++ = GetDitherMappingValue(nGreen, nThres, pSalData);
+            *pTmp++ = GetDitherMappingValue(nRed, nThres, pSalData);
         }
     }
 
@@ -1522,18 +1523,15 @@ HBRUSH Make8BitDIBPatternBrush(Color nColor)
     };
 
     BYTE* pTmp = pSalData->mpDitherDIBData;
-    long* pDitherDiff = pSalData->mpDitherDiff;
-    BYTE* pDitherLow = pSalData->mpDitherLow;
-    BYTE* pDitherHigh = pSalData->mpDitherHigh;
 
     for (int nY = 0; nY < 8; ++nY)
     {
         for (int nX = 0; nX < 8; ++nX)
         {
             const BYTE nThres = aOrdDither8Bit[nY][nX];
-            *pTmp = DMAP(nRed, nThres) +
-                    DMAP(nGreen, nThres) * 6 +
-                    DMAP(nBlue, nThres) * 36;
+            *pTmp = GetDitherMappingValue(nRed, nThres, pSalData) +
+                    GetDitherMappingValue(nGreen, nThres, pSalData) * 6 +
+                    GetDitherMappingValue(nBlue, nThres, pSalData) * 36;
             pTmp++;
         }
     }
