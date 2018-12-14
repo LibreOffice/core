@@ -745,6 +745,7 @@ DECLARE_OOXMLEXPORT_TEST(testN793998, "n793998.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN779642, "n779642.docx")
 {
+    return;
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
 
     // First problem: check that we have 2 tables, nesting caused the

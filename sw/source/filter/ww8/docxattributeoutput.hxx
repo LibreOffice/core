@@ -417,6 +417,8 @@ private:
     void WriteFFData( const FieldInfos& rInfos );
     void WritePendingPlaceholder();
 
+    void WriteFloatingTable(ww8::Frame const* pParentFrame);
+
     void EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
         FontPitch pitch );
 
@@ -825,6 +827,7 @@ private:
     bool m_bPostponedPageBreak;
 
     std::vector<ww8::Frame> m_aFramesOfParagraph;
+    std::set<const SwFrameFormat*> m_aFloatingTablesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
 
     // close of hyperlink needed

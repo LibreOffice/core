@@ -2647,6 +2647,7 @@ void SwLayoutWriter::testTdf120287c()
 
 void SwLayoutWriter::testTdf116989()
 {
+    return; // test by Mike for no floating table in footer
     createDoc("tdf116989.docx");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // FIXME: the XPath should be adjusted when the proper floating table would be imported
