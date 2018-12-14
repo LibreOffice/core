@@ -3037,6 +3037,8 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
 
         if ( pSet && NoPageBreakSection( pSet ) )
             pSet = nullptr;
+        else
+            AttrOutput().SectionBreaks( rSectionNode );
 
         if ( !pSet )
         {

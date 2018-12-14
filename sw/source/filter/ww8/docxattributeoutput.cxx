@@ -872,7 +872,7 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
     // paragraph, and detect the section breaks there.
     SwNodeIndex aNextIndex( rNode, 1 );
 
-    if (rNode.IsTextNode())
+    if (rNode.IsTextNode() || rNode.IsSectionNode())
     {
         if (aNextIndex.GetNode().IsTextNode())
         {
