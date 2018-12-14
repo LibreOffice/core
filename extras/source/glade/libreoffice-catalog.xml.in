@@ -144,9 +144,6 @@
                         generic-name="Gamma Grid Widget" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
 
-    <glade-widget-class title="Token Window" name="swuilo-SwTokenWindow"
-                        generic-name="Token Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Template Local View" name="sfxlo-TemplateLocalView"
                         generic-name="Template Local View" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -293,9 +290,6 @@
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="CheckBox List" name="basctllo-CheckBox"
                         generic-name="CheckBox List" parent="vcllo-SvTabListBox"
-                        icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="SwIdxTreeListBox" name="swuilo-SwIdxTreeListBox"
-                        generic-name="SwIdxTreeListBox" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tooltip Tree List" name="swuilo-SwFldRefTreeListBox"
                         generic-name="Tooltip Tree List" parent="vcllo-SvTreeListBox"

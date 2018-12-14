@@ -1842,18 +1842,7 @@ IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl, ScrollBar*, void)
     if (!pChild)
         return;
 
-    Point aWinPos;
-
-    if (m_pHScroll->IsVisible())
-    {
-        aWinPos.setX( -m_pHScroll->GetThumbPos() );
-    }
-
-    if (m_pVScroll->IsVisible())
-    {
-        aWinPos.setY( -m_pVScroll->GetThumbPos() );
-    }
-
+    Point aWinPos(-m_pHScroll->GetThumbPos(), -m_pVScroll->GetThumbPos());
     pChild->SetPosPixel(aWinPos);
 }
 
@@ -1897,19 +1886,16 @@ void VclScrolledWindow::InitScrollBars(const Size &rRequest)
 
     Size aOutSize(getVisibleChildSize());
 
-    if (m_pVScroll->IsVisible())
-    {
-        m_pVScroll->SetRangeMax(rRequest.Height());
-        m_pVScroll->SetVisibleSize(aOutSize.Height());
-        m_pVScroll->SetPageSize(16);
-    }
+    m_pVScroll->SetRangeMax(rRequest.Height());
+    m_pVScroll->SetVisibleSize(aOutSize.Height());
+    m_pVScroll->SetPageSize(16);
 
-    if (m_pHScroll->IsVisible())
-    {
-        m_pHScroll->SetRangeMax(rRequest.Width());
-        m_pHScroll->SetVisibleSize(aOutSize.Width());
-        m_pHScroll->SetPageSize(16);
-    }
+    m_pHScroll->SetRangeMax(rRequest.Width());
+    m_pHScroll->SetVisibleSize(aOutSize.Width());
+    m_pHScroll->SetPageSize(16);
+
+    m_pVScroll->Scroll();
+    m_pHScroll->Scroll();
 }
 
 void VclScrolledWindow::setAllocation(const Size &rAllocation)

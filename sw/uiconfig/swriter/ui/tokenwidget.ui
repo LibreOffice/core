@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
@@ -14,6 +15,7 @@
   <object class="GtkBox" id="TokenWidget">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkButton" id="left">
@@ -29,10 +31,31 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="ctrl">
+      <object class="GtkScrolledWindow" id="scrollwin">
+        <property name="width_request">5</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
         <property name="hexpand">True</property>
+        <property name="hscrollbar_policy">external</property>
+        <property name="vscrollbar_policy">never</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkViewport">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <child>
+              <object class="GtkGrid" id="ctrl">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="expand">True</property>

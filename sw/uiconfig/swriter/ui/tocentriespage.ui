@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">19.989999999999998</property>
     <property name="step_increment">0.050000000000000003</property>
@@ -73,12 +81,33 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="swuilo-SwIdxTreeListBox" id="level:border">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="vexpand">True</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="level">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="model">liststore1</property>
+                        <property name="headers_visible">False</property>
+                        <property name="headers_clickable">False</property>
+                        <property name="search_column">0</property>
+                        <property name="show_expanders">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
                     </child>
                   </object>
                 </child>
@@ -189,7 +218,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="swuilo-SwTokenWindow" id="token">
+                              <object class="GtkBox" id="token">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
@@ -276,6 +305,7 @@
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="comboboxtext-entry">
                                     <property name="can_focus">False</property>
+                                    <property name="activates_default">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -290,7 +320,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" context="tocentriespage|tabstopposft">Tab stop position:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">tabstoppos:0.00cm</property>
+                                <property name="mnemonic_widget">tabstoppos</property>
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
@@ -299,11 +329,12 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="tabstoppos:0.00cm">
+                              <object class="GtkSpinButton" id="tabstoppos">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="halign">start</property>
                                 <property name="hexpand">True</property>
+                                <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="digits">2</property>
                               </object>
@@ -378,6 +409,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="halign">start</property>
                                 <property name="hexpand">True</property>
+                                <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment2</property>
                               </object>
                               <packing>
@@ -885,13 +917,12 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="tooltip_text" translatable="yes" context="tocentriespage|up1cb|tooltip_text">Ascending</property>
                             <property name="image">image1</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">down1cb</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -903,9 +934,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="tooltip_text" translatable="yes" context="tocentriespage|down1cb|tooltip_text">Descending</property>
                             <property name="image">image2</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">up1cb</property>
@@ -920,13 +951,13 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tocentriespage|up2cb|tooltip_text">Ascending</property>
                             <property name="image">image3</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">down2cb</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -938,13 +969,13 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tocentriespage|up3cb|tooltip_text">Ascending</property>
                             <property name="image">image4</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">down3cb</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -956,10 +987,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tocentriespage|down2cb|tooltip_text">Descending</property>
                             <property name="image">image5</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">up2cb</property>
@@ -974,10 +1005,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_underline">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="tocentriespage|down3cb|tooltip_text">Descending</property>
                             <property name="image">image6</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">up3cb</property>
@@ -1024,7 +1055,7 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
       <widget name="fillchar"/>
-      <widget name="tabstoppos:0.00cm"/>
+      <widget name="tabstoppos"/>
     </widgets>
   </object>
 </interface>
