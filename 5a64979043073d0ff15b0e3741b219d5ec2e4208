@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_4813c90e",
+        "filename": "sc/qa/unit/helper/qahelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-14T12:55:24Z",
+      "side": 1,
+      "message": "Is \u0027| SfxFilterFlags::TEMPLATE\u0027 missing here? Otherwise this line is a copy of the previous one",
+      "revId": "5a64979043073d0ff15b0e3741b219d5ec2e4208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
