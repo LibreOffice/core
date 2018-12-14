@@ -24,14 +24,18 @@
 
 #include <QtGui/QRegion>
 
-class QWidget;
 class Qt5Frame;
+class QWidget;
+class QWindow;
 
 class Qt5Object : public SalObject
 {
+    friend class Qt5OpenGLContext;
+
     SystemEnvData m_aSystemData;
     Qt5Frame* m_pParent;
-    QWidget* m_pQWidget;
+    QWidget* m_pQWidget; // main widget, container
+    QWindow* m_pQWindow; // contained window, used for opengl rendering
     QRegion m_pRegion;
 
 public:
