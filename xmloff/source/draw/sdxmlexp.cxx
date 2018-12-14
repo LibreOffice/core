@@ -205,9 +205,8 @@ class ImpXMLAutoLayoutInfo
 public:
     ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterInfo* pInf);
 
-    bool operator==(const ImpXMLAutoLayoutInfo& rInfo) const;
-
     sal_uInt16 GetLayoutType() const { return mnType; }
+    ImpXMLEXPPageMasterInfo* GetPageMasterInfo() const { return mpPageMasterInfo; }
     sal_Int32 GetGapX() const { return mnGapX; }
     sal_Int32 GetGapY() const { return mnGapY; }
 
@@ -227,12 +226,6 @@ bool ImpXMLAutoLayoutInfo::IsCreateNecessary(sal_uInt16 nTyp)
         || nTyp >= IMP_AUTOLAYOUT_INFO_MAX)
         return false;
     return true;
-}
-
-bool ImpXMLAutoLayoutInfo::operator==(const ImpXMLAutoLayoutInfo& rInfo) const
-{
-    return mnType == rInfo.mnType
-           && mpPageMasterInfo == rInfo.mpPageMasterInfo;
 }
 
 ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterInfo* pInf)
@@ -712,21 +705,16 @@ bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
                 }
 
                 // create entry and look for existence
-                ImpXMLAutoLayoutInfo* pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
-                bool bDidExist(false);
-
-                for( size_t nCnt = 0; !bDidExist && nCnt < mvAutoLayoutInfoList.size(); nCnt++)
+                ImpXMLAutoLayoutInfo* pNew;
+                auto it = std::find_if(mvAutoLayoutInfoList.begin(), mvAutoLayoutInfoList.end(),
+                            [=](std::unique_ptr<ImpXMLAutoLayoutInfo> const & rInfo) { return nType == rInfo->GetLayoutType() && pInfo == rInfo->GetPageMasterInfo(); });
+                if (it != mvAutoLayoutInfoList.end())
                 {
-                    if( *mvAutoLayoutInfoList.at( nCnt ) == *pNew)
-                    {
-                        delete pNew;
-                        pNew = mvAutoLayoutInfoList.at( nCnt ).get();
-                        bDidExist = true;
-                    }
+                    pNew = it->get();
                 }
-
-                if(!bDidExist)
+                else
                 {
+                    pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
                     mvAutoLayoutInfoList.emplace_back( pNew );
                     OUString sNewName = "AL";
                     sNewName += OUString::number(mvAutoLayoutInfoList.size() - 1);
