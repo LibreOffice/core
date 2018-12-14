@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_e86cb59d",
+        "filename": "uui/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-14T12:31:40Z",
+      "side": 1,
+      "message": "Possibly even remove the last remaining \\n, but add a single \\n in front of the next message (STR_OPENLOCKED_ALLOWIGNORE_MSG).",
+      "range": {
+        "startLine": 50,
+        "startChar": 206,
+        "endLine": 50,
+        "endChar": 208
+      },
+      "revId": "b6906ad7a0b742b825de27178064edabb40d99b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
