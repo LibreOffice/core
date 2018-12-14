@@ -853,13 +853,27 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             }
 
             ParamMap::const_iterator aBulletLvl = maMap.find(XML_stBulletLvl);
+            int nStartBulletsAtLevel = 0;
             if (aBulletLvl != maMap.end())
+            {
                 nBaseLevel -= aBulletLvl->second;
+                nStartBulletsAtLevel = aBulletLvl->second;
+            }
 
             for (auto & aParagraph : pTextBody->getParagraphs())
             {
                 sal_Int32 nLevel = aParagraph->getProperties().getLevel();
                 aParagraph->getProperties().setLevel(nLevel - nBaseLevel);
+                if (nStartBulletsAtLevel > 0 && nLevel >= nStartBulletsAtLevel)
+                {
+                    // It is not possible to change the bullet style for text.
+                    sal_Int32 nLeftMargin = 285750 * (nLevel - nStartBulletsAtLevel) / EMU_PER_HMM;
+                    aParagraph->getProperties().getParaLeftMargin() = nLeftMargin;
+                    aParagraph->getProperties().getFirstLineIndentation() = -285750 / EMU_PER_HMM;
+                    OUString aBulletChar = OUString::fromUtf8(u8"•");
+                    aParagraph->getProperties().getBulletList().setBulletChar(aBulletChar);
+                    aParagraph->getProperties().getBulletList().setSuffixNone();
+                }
             }
 
             // explicit alignment
