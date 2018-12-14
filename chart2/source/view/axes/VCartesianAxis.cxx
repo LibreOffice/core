@@ -521,7 +521,9 @@ bool VCartesianAxis::isBreakOfLabelsAllowed(
     //no break for value axis
     if( !m_bUseTextLabels )
         return false;
-    if( rAxisLabelProperties.fRotationAngleDegree != 0.0 )
+    if( !( rAxisLabelProperties.fRotationAngleDegree == 0.0 ||
+           rAxisLabelProperties.fRotationAngleDegree == 90.0 ||
+           rAxisLabelProperties.fRotationAngleDegree == 270.0 ) )
         return false;
     //break only for horizontal axis
     return bIsHorizontalAxis;
