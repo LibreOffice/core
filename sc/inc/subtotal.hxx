@@ -62,21 +62,23 @@ private:
 class ScFunctionData
 {
 public:
+    ScFunctionData() : meFunc(SUBTOTAL_FUNC_NONE), mbError(false) {}
     ScFunctionData( ScSubTotalFunc eFn ) : meFunc(eFn), mbError(false) {}
-    void             update( double fNewVal );
+
+    void            update( double fNewVal );
     /// Check getError() after (!) obtaining the result.
-    double           getResult();
-    bool             getError() const    { return mbError; }
-    ScSubTotalFunc   getFunc() const     { return meFunc; }
-    void             setError()          { mbError = true; }
+    double          getResult();
+    bool            getError() const    { return mbError; }
+    ScSubTotalFunc  getFunc() const     { return meFunc; }
+    void            setError()          { mbError = true; }
 
 private:
-    WelfordRunner           maWelford;
-    ScSubTotalFunc const    meFunc;
-    bool                    mbError;
+    WelfordRunner   maWelford;
+    ScSubTotalFunc  meFunc;
+    bool            mbError;
 
-    double&          getValueRef()  { return maWelford.mfMean; }
-    sal_uInt64&      getCountRef()  { return maWelford.mnCount; }
+    double&         getValueRef()   { return maWelford.mfMean; }
+    sal_uInt64&     getCountRef()   { return maWelford.mnCount; }
 };
 
 #endif
