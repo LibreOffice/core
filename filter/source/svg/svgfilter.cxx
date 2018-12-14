@@ -24,6 +24,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <uno/environment.h>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -78,17 +79,19 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpSVGExport( nullptr ),
     mpSVGFontExport( nullptr ),
     mpSVGWriter( nullptr ),
-    mpDefaultSdrPage( nullptr ),
-    mbPresentation( false ),
     mbSinglePage( false ),
     mnVisiblePage( -1 ),
     mpObjects( nullptr ),
     mxSrcDoc(),
     mxDstDoc(),
-    mxDefaultPage(),
-    maFilterData(),
     maShapeSelection(),
     mbExportShapeSelection(false),
+    maFilterData(),
+    mxDefaultPage(),
+    mbWriterFilter(false),
+    mpDefaultSdrPage( nullptr ),
+    mpSdrModel( nullptr ),
+    mbPresentation( false ),
     maOldFieldHdl()
 {
 }
@@ -103,6 +106,34 @@ SVGFilter::~SVGFilter()
 }
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+{
+    mbWriterFilter = false;
+
+    if(mxDstDoc.is()) // Import works for Impress / draw only
+        return filterImpressDraw(rDescriptor);
+
+    if(mxSrcDoc.is())
+    {
+        for (sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++)
+        {
+            if (rDescriptor[nInd].Name == "FilterName")
+            {
+                OUString sFilterName;
+                rDescriptor[nInd].Value >>= sFilterName;
+                if(sFilterName == "writer_svg_Export")
+                {
+                    mbWriterFilter = true;
+                    return filterWriter(rDescriptor);
+                }
+                break;
+            }
+        }
+        return filterImpressDraw(rDescriptor);
+    }
+    return false;
+}
+
+bool SVGFilter::filterImpressDraw( const Sequence< PropertyValue >& rDescriptor )
 {
     SolarMutexGuard aGuard;
     vcl::Window* pFocusWindow(Application::GetFocusWindow());
@@ -503,6 +534,49 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         pFocusWindow->LeaveWait();
 
     return bRet;
+}
+
+bool SVGFilter::filterWriter( const Sequence< PropertyValue >& rDescriptor )
+{
+    bool bSelectionOnly = false;
+
+    for (sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++)
+    {
+        if (rDescriptor[nInd].Name == "SelectionOnly")
+        {
+            rDescriptor[nInd].Value >>= bSelectionOnly;
+            break;
+        }
+    }
+
+    if(!bSelectionOnly) // For Writer onéy the selection-only mode is supported
+        return false;
+
+    uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
+    uno::Reference<frame::XController > xController;
+    if (xDesktop->getCurrentFrame().is())
+    {
+        uno::Reference<frame::XFrame> xFrame(xDesktop->getCurrentFrame(), uno::UNO_QUERY_THROW);
+        xController.set(xFrame->getController(), uno::UNO_QUERY_THROW);
+    }
+
+    Reference< view::XSelectionSupplier > xSelection (xController, UNO_QUERY);
+    if (!xSelection.is())
+        return false;
+
+    xSelection->getSelection() >>= maShapeSelection;
+
+    if (!maShapeSelection)
+        return false;
+
+    // Select only one draw page
+    uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex(0), uno::UNO_QUERY );
+    mSelectedPages.resize( 1 );
+    mSelectedPages[0] = xDrawPage;
+
+    return implExport( rDescriptor );
 }
 
 void SAL_CALL SVGFilter::cancel( )
