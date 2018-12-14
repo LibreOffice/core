@@ -1305,6 +1305,26 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // The default section type is nextPage.
     if ( m_nBreakType == -1 )
         m_nBreakType = NS_ooxml::LN_Value_ST_SectionMark_nextPage;
+    // if page orientation differs from previous section, it can't be treated as continuous
+    else if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_continuous )
+    {
+        SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
+        if ( pLastContext )
+        {
+            bool bIsLandscape = false;
+            boost::optional< PropertyMap::Property > pProp = getProperty( PROP_IS_LANDSCAPE );
+            if ( pProp )
+                pProp->second >>= bIsLandscape;
+
+            bool bPrevIsLandscape = false;
+            pProp = pLastContext->getProperty( PROP_IS_LANDSCAPE );
+            if ( pProp )
+                pProp->second >>= bPrevIsLandscape;
+
+            if ( bIsLandscape != bPrevIsLandscape )
+                m_nBreakType = NS_ooxml::LN_Value_ST_SectionMark_nextPage;
+        }
+    }
 
     // Text area width is known at the end of a section: decide if tables should be converted or not.
     std::vector<FloatingTableInfo>& rPendingFloatingTables = rDM_Impl.m_aPendingFloatingTables;

@@ -40,8 +40,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF, "tdf121374_sectionHF.odt")
     CPPUNIT_ASSERT_EQUAL( OUString("footer"), xFooterText->getString() );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Paragraphs", 6, getParagraphs() );
-    CPPUNIT_ASSERT_MESSAGE("Number of pages", getPages() > 2);
-    //CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 6, getPages() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 6, getPages() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
