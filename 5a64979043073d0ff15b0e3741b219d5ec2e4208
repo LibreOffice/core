@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5f4e5783_08915153",
+        "filename": "sc/qa/unit/helper/qahelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-12-14T13:50:06Z",
+      "side": 1,
+      "message": "Fixed. Actually it is not used in current unittests, so I\u0027ve missed this one. Thx!",
+      "parentUuid": "5f4e5783_4813c90e",
+      "revId": "5a64979043073d0ff15b0e3741b219d5ec2e4208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4e5783_e80155b1",
         "filename": "sc/source/filter/excel/xestream.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-12-14T13:03:35Z",
       "side": 1,
       "message": "Did you check that this actually produces valid OOXML macro enabled template files? The VBA export is a bit of a pain and contains a number of ugly hacks to adapt some stream URLs.",
+      "revId": "5a64979043073d0ff15b0e3741b219d5ec2e4208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_c89a196d",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-12-14T13:50:06Z",
+      "side": 1,
+      "message": "No. I did not enable and did not work yet on macro-enabled templates. But this content type is used by MS Excel for .xltm format.\nIt is not essential for current patch.",
+      "parentUuid": "5f4e5783_e80155b1",
       "revId": "5a64979043073d0ff15b0e3741b219d5ec2e4208",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
