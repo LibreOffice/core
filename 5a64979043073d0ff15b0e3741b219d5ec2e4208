@@ -16,6 +16,23 @@
       "revId": "5a64979043073d0ff15b0e3741b219d5ec2e4208",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_e80155b1",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-12-14T13:03:35Z",
+      "side": 1,
+      "message": "Did you check that this actually produces valid OOXML macro enabled template files? The VBA export is a bit of a pain and contains a number of ugly hacks to adapt some stream URLs.",
+      "revId": "5a64979043073d0ff15b0e3741b219d5ec2e4208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
