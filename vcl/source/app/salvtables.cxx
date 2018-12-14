@@ -973,9 +973,11 @@ class SalInstanceScrolledWindow : public SalInstanceContainer, public virtual we
 private:
     VclPtr<VclScrolledWindow> m_xScrolledWindow;
     Link<ScrollBar*,void> m_aOrigVScrollHdl;
+    Link<ScrollBar*,void> m_aOrigHScrollHdl;
     bool m_bUserManagedScrolling;
 
     DECL_LINK(VscrollHdl, ScrollBar*, void);
+    DECL_LINK(HscrollHdl, ScrollBar*, void);
 
 public:
     SalInstanceScrolledWindow(VclScrolledWindow* pScrolledWindow, bool bTakeOwnership)
@@ -986,6 +988,80 @@ public:
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
         m_aOrigVScrollHdl = rVertScrollBar.GetScrollHdl();
         rVertScrollBar.SetScrollHdl(LINK(this, SalInstanceScrolledWindow, VscrollHdl));
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        m_aOrigHScrollHdl = rHorzScrollBar.GetScrollHdl();
+        rHorzScrollBar.SetScrollHdl(LINK(this, SalInstanceScrolledWindow, HscrollHdl));
+    }
+
+    virtual void hadjustment_configure(int value, int lower, int upper,
+                                       int step_increment, int page_increment,
+                                       int page_size) override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        rHorzScrollBar.SetRangeMin(lower);
+        rHorzScrollBar.SetRangeMax(upper);
+        rHorzScrollBar.SetLineSize(step_increment);
+        rHorzScrollBar.SetPageSize(page_increment);
+        rHorzScrollBar.SetThumbPos(value);
+        rHorzScrollBar.SetVisibleSize(page_size);
+    }
+
+    virtual int hadjustment_get_value() const override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        return rHorzScrollBar.GetThumbPos();
+    }
+
+    virtual void hadjustment_set_value(int value) override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        rHorzScrollBar.SetThumbPos(value);
+        if (!m_bUserManagedScrolling)
+            m_aOrigHScrollHdl.Call(&rHorzScrollBar);
+    }
+
+    virtual int hadjustment_get_upper() const override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        return rHorzScrollBar.GetRangeMax();
+    }
+
+    virtual void hadjustment_set_upper(int upper) override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        rHorzScrollBar.SetRangeMax(upper);
+    }
+
+    virtual int hadjustment_get_page_size() const override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        return rHorzScrollBar.GetVisibleSize();
+    }
+
+    virtual void set_hpolicy(VclPolicyType eHPolicy) override
+    {
+        WinBits nWinBits = m_xScrolledWindow->GetStyle() & ~(WB_AUTOHSCROLL|WB_HSCROLL);
+        if (eHPolicy == VclPolicyType::ALWAYS)
+            nWinBits |= WB_HSCROLL;
+        else if (eHPolicy == VclPolicyType::AUTOMATIC)
+            nWinBits |= WB_AUTOHSCROLL;
+        m_xScrolledWindow->SetStyle(nWinBits);
+        m_xScrolledWindow->queue_resize();
+    }
+
+    virtual VclPolicyType get_hpolicy() const override
+    {
+        WinBits nWinBits = m_xScrolledWindow->GetStyle();
+        if (nWinBits & WB_AUTOHSCROLL)
+            return VclPolicyType::AUTOMATIC;
+        else if (nWinBits & WB_HSCROLL)
+            return VclPolicyType::ALWAYS;
+        return VclPolicyType::NEVER;
+    }
+
+    virtual int get_hscroll_height() const override
+    {
+        return m_xScrolledWindow->getHorzScrollBar().get_preferred_size().Height();
     }
 
     virtual void vadjustment_configure(int value, int lower, int upper,
@@ -1027,25 +1103,10 @@ public:
         rVertScrollBar.SetRangeMax(upper);
     }
 
-    virtual void set_hpolicy(VclPolicyType eHPolicy) override
+    virtual int vadjustment_get_page_size() const override
     {
-        WinBits nWinBits = m_xScrolledWindow->GetStyle() & ~(WB_AUTOHSCROLL|WB_HSCROLL);
-        if (eHPolicy == VclPolicyType::ALWAYS)
-            nWinBits |= WB_HSCROLL;
-        else if (eHPolicy == VclPolicyType::AUTOMATIC)
-            nWinBits |= WB_AUTOHSCROLL;
-        m_xScrolledWindow->SetStyle(nWinBits);
-        m_xScrolledWindow->queue_resize();
-    }
-
-    virtual VclPolicyType get_hpolicy() const override
-    {
-        WinBits nWinBits = m_xScrolledWindow->GetStyle();
-        if (nWinBits & WB_AUTOHSCROLL)
-            return VclPolicyType::AUTOMATIC;
-        else if (nWinBits & WB_HSCROLL)
-            return VclPolicyType::ALWAYS;
-        return VclPolicyType::NEVER;
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        return rVertScrollBar.GetVisibleSize();
     }
 
     virtual void set_vpolicy(VclPolicyType eVPolicy) override
@@ -1092,6 +1153,13 @@ IMPL_LINK_NOARG(SalInstanceScrolledWindow, VscrollHdl, ScrollBar*, void)
     signal_vadjustment_changed();
     if (!m_bUserManagedScrolling)
         m_aOrigVScrollHdl.Call(&m_xScrolledWindow->getVertScrollBar());
+}
+
+IMPL_LINK_NOARG(SalInstanceScrolledWindow, HscrollHdl, ScrollBar*, void)
+{
+    signal_hadjustment_changed();
+    if (!m_bUserManagedScrolling)
+        m_aOrigHScrollHdl.Call(&m_xScrolledWindow->getHorzScrollBar());
 }
 
 class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::Notebook
@@ -3172,6 +3240,11 @@ public:
         assert(false);
     }
 
+    virtual void set_entry_max_length(int /*nChars*/) override
+    {
+        assert(false);
+    }
+
     virtual void set_entry_completion(bool) override
     {
         assert(false);
@@ -3258,6 +3331,11 @@ public:
     virtual void set_entry_width_chars(int nChars) override
     {
         m_xComboBox->SetWidthInChars(nChars);
+    }
+
+    virtual void set_entry_max_length(int nChars) override
+    {
+        m_xComboBox->SetMaxTextLen(nChars);
     }
 
     virtual void set_entry_completion(bool bEnable) override
