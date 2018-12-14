@@ -576,6 +576,23 @@ void SdImportTestSmartArt::testAccentProcess()
     CPPUNIT_ASSERT_EQUAL(OUString("b"), xFirstChildText->getString());
     uno::Reference<drawing::XShape> xFirstChild(xFirstChildText, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFirstChildText.is());
+
+    {
+        uno::Reference<container::XEnumerationAccess> xParasAccess(xFirstChildText, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParas = xParasAccess->createEnumeration();
+        uno::Reference<beans::XPropertySet> xPara(xParas->nextElement(), uno::UNO_QUERY);
+        // Without the accompanying fix in place, this test would have failed
+        // with 'Expected: 0; Actual  : 1270', i.e. there was a large
+        // unexpected left margin.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                             xPara->getPropertyValue("ParaLeftMargin").get<sal_Int32>());
+
+        uno::Reference<container::XIndexAccess> xRules(xPara->getPropertyValue("NumberingRules"),
+                                                       uno::UNO_QUERY);
+        comphelper::SequenceAsHashMap aRule(xRules->getByIndex(1));
+        CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(u8"•"), aRule["BulletChar"].get<OUString>());
+    }
+
     int nFirstChildTop = xFirstChild->getPosition().Y;
     int nFirstChildRight = xFirstChild->getPosition().X + xFirstChild->getSize().Width;
 
