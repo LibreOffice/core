@@ -20,6 +20,7 @@
 #include <svsys.h>
 
 #include "gdiimpl.hxx"
+#include "raii.hxx"
 
 #include <string.h>
 #include <rtl/strbuf.hxx>
@@ -1575,16 +1576,17 @@ void WinSalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
 
 void WinSalGraphicsImpl::DrawPixelImpl( long nX, long nY, COLORREF crColor )
 {
-    if ( mbXORMode )
+    if (!mbXORMode)
     {
-        HBRUSH hBrush = CreateSolidBrush( crColor );
-        HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), hBrush );
-        PatBlt( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT );
-        SelectBrush( mrParent.getHDC(), hOldBrush );
-        DeleteBrush( hBrush );
+        SetPixel(mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), crColor);
+        return;
     }
-    else
-        SetPixel( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), crColor );
+
+    HBRUSHUniquePtr phBrush(CreateSolidBrush(crColor);
+
+    HBRUSH hOldBrush = SelectBrush(mrParent.getHDC(), phBrush.get());
+    PatBlt(mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT);
+    SelectBrush(mrParent.getHDC(), hOldBrush);
 }
 
 void WinSalGraphicsImpl::drawPixel( long nX, long nY )
