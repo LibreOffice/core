@@ -156,11 +156,30 @@ class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
 {
 protected:
     Link<ScrolledWindow&, void> m_aVChangeHdl;
+    Link<ScrolledWindow&, void> m_aHChangeHdl;
 
     void signal_vadjustment_changed() { m_aVChangeHdl.Call(*this); }
+    void signal_hadjustment_changed() { m_aHChangeHdl.Call(*this); }
 
 public:
     virtual void set_user_managed_scrolling() = 0;
+
+    virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
+                                       int page_increment, int page_size)
+        = 0;
+    virtual int hadjustment_get_value() const = 0;
+    virtual void hadjustment_set_value(int value) = 0;
+    virtual int hadjustment_get_upper() const = 0;
+    virtual void hadjustment_set_upper(int upper) = 0;
+    virtual int hadjustment_get_page_size() const = 0;
+    virtual void set_hpolicy(VclPolicyType eHPolicy) = 0;
+    virtual VclPolicyType get_hpolicy() const = 0;
+    void connect_hadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
+    {
+        m_aHChangeHdl = rLink;
+    }
+    virtual int get_hscroll_height() const = 0;
+
     virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
                                        int page_increment, int page_size)
         = 0;
@@ -168,8 +187,7 @@ public:
     virtual void vadjustment_set_value(int value) = 0;
     virtual int vadjustment_get_upper() const = 0;
     virtual void vadjustment_set_upper(int upper) = 0;
-    virtual void set_hpolicy(VclPolicyType eHPolicy) = 0;
-    virtual VclPolicyType get_hpolicy() const = 0;
+    virtual int vadjustment_get_page_size() const = 0;
     virtual void set_vpolicy(VclPolicyType eVPolicy) = 0;
     virtual VclPolicyType get_vpolicy() const = 0;
     void connect_vadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
@@ -374,6 +392,7 @@ public:
     virtual void set_entry_error(bool bError) = 0;
     virtual void set_entry_text(const OUString& rStr) = 0;
     virtual void set_entry_width_chars(int nChars) = 0;
+    virtual void set_entry_max_length(int nChars) = 0;
     virtual void select_entry_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_entry_completion(bool bEnable) = 0;
@@ -914,6 +933,7 @@ public:
     virtual void set_entry_error(bool bError) override { m_xEntry->set_error(bError); }
     virtual void set_entry_text(const OUString& rStr) override { m_xEntry->set_text(rStr); }
     virtual void set_entry_width_chars(int nChars) override { m_xEntry->set_width_chars(nChars); }
+    virtual void set_entry_max_length(int nChars) override { m_xEntry->set_max_length(nChars); }
     virtual void select_entry_region(int nStartPos, int nEndPos) override
     {
         m_xEntry->select_region(nStartPos, nEndPos);
