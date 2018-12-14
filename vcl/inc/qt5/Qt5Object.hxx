@@ -22,8 +22,6 @@
 #include <salobj.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <memory>
-
 #include <QtGui/QRegion>
 
 class QWidget;
@@ -32,8 +30,8 @@ class Qt5Frame;
 class Qt5Object : public SalObject
 {
     SystemEnvData m_aSystemData;
-    std::unique_ptr<QWidget> m_pQWidget;
     Qt5Frame* m_pParent;
+    QWidget* m_pQWidget;
     QRegion m_pRegion;
 
 public:
