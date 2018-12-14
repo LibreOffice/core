@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_a8135db8",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-14T15:23:33Z",
+      "side": 1,
+      "message": "not strictly necessary for this patch, but I ran across losing it in a header when developing this patch. I thought it was going to be required, but commenting it out doesn\u0027t break the unit test, so I must not be triggering that problem any more. But just leaving it in place since pagebreak certainly should never be written into a header or footer.",
+      "range": {
+        "startLine": 1146,
+        "startChar": 31,
+        "endLine": 1146,
+        "endChar": 58
+      },
+      "revId": "1ee13c32a0697ec9939c643b70e0bfa080f86396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_e84715bc",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3051,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-14T15:23:33Z",
+      "side": 1,
+      "message": "no change here - just cleanup/simplification of unnecessary redundancy.",
+      "range": {
+        "startLine": 3051,
+        "startChar": 12,
+        "endLine": 3051,
+        "endChar": 76
+      },
+      "revId": "1ee13c32a0697ec9939c643b70e0bfa080f86396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
