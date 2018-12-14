@@ -70,6 +70,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bInDrag(false)
     , m_bDefaultSize(true)
     , m_bDefaultPos(true)
+    , m_bFullScreen(false)
 {
     Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
     pInst->insertFrame(this);
@@ -380,7 +381,11 @@ Size Qt5Frame::CalcDefaultSize()
     else
         qSize = QApplication::desktop()->screenGeometry(0).size();
 
-    return bestmaxFrameSizeForScreenSize(toSize(qSize));
+    Size aSize = toSize(qSize);
+    if (!m_bFullScreen)
+        aSize = bestmaxFrameSizeForScreenSize(aSize);
+
+    return aSize;
 }
 
 void Qt5Frame::SetDefaultSize()
@@ -562,13 +567,15 @@ void Qt5Frame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     // only top-level windows can go fullscreen
     assert(m_pTopLevel);
 
+    m_bFullScreen = bFullScreen;
+
     // show it if it isn't shown yet
     if (!isWindow())
         m_pTopLevel->show();
 
     // do that before going fullscreen
     SetScreenNumber(nScreen);
-    bFullScreen ? windowHandle()->showFullScreen() : windowHandle()->showNormal();
+    m_bFullScreen ? windowHandle()->showFullScreen() : windowHandle()->showNormal();
 }
 
 void Qt5Frame::StartPresentation(bool)
