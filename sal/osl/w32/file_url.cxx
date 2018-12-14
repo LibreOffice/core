@@ -305,11 +305,12 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         return bValid ? dwPathType : PATHTYPE_ERROR;
 }
 
+// Expects a proper absolute or relative path
 static sal_Int32 PathRemoveFileSpec(LPWSTR lpPath, LPWSTR lpFileName, sal_Int32 nFileBufLen )
 {
     sal_Int32 nRemoved = 0;
 
-    if ( nFileBufLen )
+    if (nFileBufLen && wcscmp(lpPath, L"\\\\") != 0) // tdf#98343 do not remove leading UNC backslashes!
     {
         lpFileName[0] = 0;
         LPWSTR  lpLastBkSlash = wcsrchr( lpPath, '\\' );
@@ -359,7 +360,7 @@ static LPWSTR PathAddBackslash(LPWSTR lpPath, sal_uInt32 nBufLen)
     return lpEndPath;
 }
 
-// Same as GetLongPathName but also 95/NT4
+// Expects a proper absolute or relative path. NB: It is different from GetLongPathName WinAPI!
 static DWORD GetCaseCorrectPathNameEx(
     LPWSTR  lpszPath,   // path buffer to convert
     sal_uInt32 cchBuffer,      // size of path buffer
