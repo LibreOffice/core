@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+1: Kohei Yoshida <libreoffice@kohei.us>
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Submitted-by: Eike Rathke <erack@redhat.com>
+Submitted-at: Fri, 14 Dec 2018 16:25:03 +0100
+Reviewed-on: https://gerrit.libreoffice.org/64781
+Project: core
+Branch: refs/heads/master
