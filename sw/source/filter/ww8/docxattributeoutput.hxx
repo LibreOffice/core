@@ -417,6 +417,8 @@ private:
     void WriteFFData( const FieldInfos& rInfos );
     void WritePendingPlaceholder();
 
+    void WriteFloatingTable(ww8::Frame const* pParentFrame);
+
     void EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
         FontPitch pitch );
 

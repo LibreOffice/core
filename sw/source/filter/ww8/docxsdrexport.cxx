@@ -963,6 +963,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
     if ((msfilter::util::HasTextBoxContent(eShapeType)) && Impl::isSupportedDMLShape(xShape)
         && !bDMLAndVMLDrawingOpen)
     {
+        SAL_DEBUG("DocxSdrExport::writeDMLAndVMLDrawing: opening AlternateContent element");
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 
         auto pObjGroup = dynamic_cast<const SdrObjGroup*>(sdrObj);
@@ -1400,6 +1401,7 @@ void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
 void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAnchorId,
                                       bool bTextBoxOnly)
 {
+    SAL_DEBUG("DocxSdrExport::writeDMLTextFrame, Frame = " << pParentFrame->GetPosition());
     bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
     m_pImpl->m_bDMLAndVMLDrawingOpen = IsAnchorTypeInsideParagraph(pParentFrame);
 

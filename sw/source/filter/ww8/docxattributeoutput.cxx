@@ -316,8 +316,133 @@ static bool lcl_isOnelinerSdt(const OUString& rName)
     return rName == "Title" || rName == "Subtitle" || rName == "Company";
 }
 
+
+
+
+
+
+
+void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
+{
+    SAL_DEBUG("writeFloatingTable, Frame = " << pParentFrame->GetPosition());
+
+
+    sax_fastparser::FSHelperPtr pFS = GetSerializer();
+    const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
+    const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
+
+    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : 0;
+    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+    SAL_DEBUG("writeFloatingTable part 1");
+
+    // here it crashes
+
+    //Save data here and restore when out of scope
+    ExportDataSaveRestore aDataGuard(GetExport(), nStt, nEnd, pParentFrame);
+
+    SAL_DEBUG("writeFloatingTable part 2");
+
+
+    pFS->startElementNS(XML_wps, XML_txbx,
+                            FSEND); //text box is not linked, therefore no id.
+
+    pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+
+
+    GetExport().WriteText();
+
+    pFS->endElementNS(XML_w, XML_txbxContent);
+    pFS->endElementNS(XML_wps, XML_txbx);
+
+}
+
+
+
+
+
+
+
+
 void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo )
 {
+    if (!pTextNodeInfo)
+    {
+        // Ignore in-table paragraphs.
+        // TODO: what about if we're in a shape?
+        SAL_DEBUG("DocxAttributeOutput::StartParagraph: before starting a paragraph: " << m_rExport.m_pCurPam->GetNode().GetTextNode()->GetIndex());
+        // m_rExport.m_pDoc -> SwDoc access
+        // see sw/source/filter/ww8/ww8glsy.cxx:65
+        // need to filter out draw frames
+        for( sal_uInt16 nCnt = m_rExport.m_pDoc->GetSpzFrameFormats()->size(); nCnt; )
+        {
+            const SwFrameFormat* pFrameFormat = (*m_rExport.m_pDoc->GetSpzFrameFormats())[ --nCnt ];
+            const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+            const SwPosition* pPosition = rAnchor.GetContentAnchor();
+            if (pPosition)
+            {
+                if (pPosition->nNode == m_rExport.m_pCurPam->GetNode().GetTextNode()->GetIndex())
+                {
+                    SAL_DEBUG("DocxAttributeOutput::StartParagraph: this item is anchored to me");
+                    // then: FormatContent -> gives you a start node -> e.g. 5
+                    // increment it -> check that node type is table
+                    // then check the "end of section" of this table start node -> it (table end node) should be directly before the fly one
+                    // (fly end node) => you can make sure that the fly only contains a table
+                    // last step: check if the table properties have a "tblpPr" grab-bag key
+                    // see sw/source/filter/ww8/docxattributeoutput.cxx:3651 for example
+                    // then:
+                    // see who calls the start element for XML_tbl -> backtrace should give an idea how to write the DOCX markup for a table
+                    // then:
+                    // remember what is written -> avoid double output
+
+                    auto* pStartNode = pFrameFormat->GetContent().GetContentIdx();
+                    if (pStartNode)
+                    {
+                        auto aStartNode = *pStartNode;
+
+                        SAL_DEBUG(" startNode = " << aStartNode );
+
+                        // go to the next node (actual content)
+                        aStartNode++;
+
+                        // this has to be a table
+                        if (aStartNode.GetNode().IsTableNode())
+                        {
+                            SAL_DEBUG(" I am a table");
+                            // go to the end of the table
+                            auto aEndIndex = aStartNode.GetNode().EndOfSectionIndex();
+                            // go one deeper
+                            aEndIndex++;
+                            // this has to be the end of the content
+                            if (aEndIndex == pFrameFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionIndex())
+                            {
+                                SAL_DEBUG(" there is exactly one table in the fly");
+
+                                // vmiklos
+                                SwTableNode* pTableNode = aStartNode.GetNode().GetTableNode();
+                                SwTable& rTable = pTableNode->GetTable();
+                                SwFrameFormat* pTableFormat = rTable.GetFrameFormat();
+                                const SfxGrabBagItem* pTableGrabBag = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG);
+                                std::map<OUString, css::uno::Any> aTableGrabBag = pTableGrabBag->GetGrabBag();
+                                if (aTableGrabBag.find("TablePosition") != aTableGrabBag.end())
+                                {
+                                    SAL_DEBUG("this table used to be a floating one");
+
+                                    ww8::Frame aFrame(*pTableFormat,*pPosition);
+
+                                    SAL_DEBUG("pPosition : " << *pPosition);
+
+                                    this->WriteFloatingTable(&aFrame );
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     if ( m_nColBreakStatus == COLBRK_POSTPONE )
         m_nColBreakStatus = COLBRK_WRITE;
 
@@ -550,6 +675,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                     m_bStartedCharSdt = false;
                 }
                 m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+                SAL_DEBUG("DocxAttributeOutput::EndParagraph: opening AlternateContent element");
                 m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
                 m_pSerializer->startElementNS(XML_mc, XML_Choice,
                         XML_Requires, "wps",
@@ -3683,6 +3809,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
         }
         else if (rGrabBagElement.first == "TablePosition" )
         {
+            SAL_DEBUG(" ------ write table pProperties -------------");
             FastAttributeList *attrListTablePos = FastSerializerHelper::createAttrList( );
             uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();
             for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
@@ -5509,6 +5636,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
                 if( !bDuplicate )
                 {
                     m_bPostponedProcessingFly = true ;
+                    SAL_DEBUG("DocxAttributeOutput::OutputFlyFrame_Impl: remembering frame of paragraph");
                     m_aFramesOfParagraph.emplace_back(rFrame);
                 }
             }

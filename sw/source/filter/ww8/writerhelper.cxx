@@ -163,6 +163,7 @@ namespace ww8
         , mbForBullet(true)
         , maGrf(rGrf)
     {
+        SAL_DEBUG("ww8::Frame ctor #1");
         const MapMode aMap100mm( MapUnit::Map100thMM );
         Size    aSize( rGrf.GetPrefSize() );
         if ( MapUnit::MapPixel == rGrf.GetPrefMapMode().GetMapUnit() )
@@ -190,9 +191,11 @@ namespace ww8
         , mbForBullet(false)
         , maGrf()
     {
+        SAL_DEBUG("ww8::Frame ctor #2");
         switch (rFormat.Which())
         {
             case RES_FLYFRMFMT:
+                SAL_DEBUG("ww8::Frame ctor #2: fly frame format");
                 if (const SwNodeIndex* pIdx = rFormat.GetContent().GetContentIdx())
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
@@ -221,6 +224,7 @@ namespace ww8
                             break;
                         default:
                             meWriterType = eTextBox;
+                            SAL_DEBUG("ww8::Frame ctor #2: fly frame format: eTextBox case");
                             // #i43447# - Size equals layout size for text boxes
                             maSize = maLayoutSize;
                             break;
@@ -234,6 +238,7 @@ namespace ww8
                 }
                 break;
             default:
+                SAL_DEBUG("ww8::Frame ctor #2: non-fly frame format");
                 if (const SdrObject* pObj = rFormat.FindRealSdrObject())
                 {
                     if (pObj->GetObjInventor() == SdrInventor::FmForm)
