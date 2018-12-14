@@ -773,23 +773,33 @@ bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
     return bRet;
 }
 
-void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
-                            const SalBitmap& rSSalBitmap,
-                            Color nMaskColor )
+void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
+                                  const SalBitmap& rSSalBitmap,
+                                  Color nMaskColor)
 {
     SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No transparency print possible!" );
 
+    TryDrawMaskBitmapDirectly(rPosAry, rSSalBitmap);
+
+    const HDC hDC = mrParent.getHDC();
+    HBRUSH hMaskBrush = CreateSolidBrush(RGB(nMaskColor.GetRed(),
+                                             nMaskColor.GetGreen(),
+                                             nMaskColor.GetBlue()));
+
+    HBRUSH  hOldBrush = SelectBrush(hDC, hMaskBrush);
+    SelectBrush(hDC, hOldBrush);
+    DeleteBrush(hMaskBrush);
+}
+
+void WinSalGraphicsImpl::TryDrawMaskBitmapDirectly(const SalTwoRect& rPosAry,
+                                                   const SalBitmap& rSSalBitmap)
+{
     assert(dynamic_cast<const WinSalBitmap*>(&rSSalBitmap));
 
+    const HDC hDC = mrParent.getHDC();
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
-    SalTwoRect  aPosAry = rPosAry;
-    const BYTE  cRed = nMaskColor.GetRed();
-    const BYTE  cGreen = nMaskColor.GetGreen();
-    const BYTE  cBlue = nMaskColor.GetBlue();
-    HDC         hDC = mrParent.getHDC();
-    HBRUSH      hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
-    HBRUSH      hOldBrush = SelectBrush( hDC, hMaskBrush );
+    SalTwoRect aPosAry = rPosAry;
 
     // WIN/WNT seems to have a minor problem mapping the correct color of the
     // mask to the palette if we draw the DIB directly ==> draw DDB
@@ -798,13 +808,12 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
         WinSalBitmap aTmp;
 
         if( aTmp.Create( rSalBitmap, &mrParent ) )
-            ImplDrawBitmap( hDC, aPosAry, aTmp, false, 0x00B8074AUL );
+            ImplDrawBitmap(hDC, aPosAry, aTmp, false, 0x00B8074AUL);
     }
     else
+    {
         ImplDrawBitmap( hDC, aPosAry, rSalBitmap, false, 0x00B8074AUL );
-
-    SelectBrush( hDC, hOldBrush );
-    DeleteBrush( hMaskBrush );
+    }
 }
 
 std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
