@@ -2618,13 +2618,19 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
         uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aOutStream);
 
         utl::MediaDescriptor aMediaDescriptor;
-        if (doc_getDocumentType(pThis) == LOK_DOCTYPE_PRESENTATION)
+        switch (doc_getDocumentType(pThis))
         {
-            aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
-        }
-        else if(doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
-        {
-            aMediaDescriptor["FilterName"] <<= OUString("writer_svg_Export");
+            case LOK_DOCTYPE_PRESENTATION:
+                aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+                break;
+            case LOK_DOCTYPE_TEXT:
+                aMediaDescriptor["FilterName"] <<= OUString("writer_svg_Export");
+                break;
+            case LOK_DOCTYPE_SPREADSHEET:
+                aMediaDescriptor["FilterName"] <<= OUString("calc_svg_Export");
+                break;
+            default:
+                SAL_WARN("lok", "Failed to render shape selection: Document type is not supported");
         }
         aMediaDescriptor["SelectionOnly"] <<= true;
         aMediaDescriptor["OutputStream"] <<= xOut;
