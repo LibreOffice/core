@@ -194,12 +194,11 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                 // the mrSdrView that is used to insert (InsertObjectAtView below) the
                 // cloned SdrObject.
                 const bool bUseSpecialCalcMode(nullptr != mppSdrObject && nullptr != mpDestModel);
-                const bool bSdrViewInsertMode(true);
 
                 // center shape on current view
                 OutputDevice* pOutDev(mrSdrView.GetFirstOutputDevice());
 
-                if(pOutDev && (bUseSpecialCalcMode || bSdrViewInsertMode))
+                if (pOutDev)
                 {
                     // Clone directly to target SdrModel (may be different due to user/caller (!))
                     SdrObject* pNewObject(
@@ -226,11 +225,11 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     tools::Rectangle aNewObjectRectangle(aPagePos, aObjRect.GetSize());
                     pNewObject->SetLogicRect(aNewObjectRectangle);
 
-                    if(bUseSpecialCalcMode)
+                    if (bUseSpecialCalcMode)
                     {
                         *mppSdrObject = pNewObject;
                     }
-                    else // bSdrViewInsertMode
+                    else
                     {
                         SdrPageView* pPV(mrSdrView.GetSdrPageView());
 
