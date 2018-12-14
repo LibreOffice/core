@@ -604,7 +604,7 @@ protected:
                                 const tools::Rectangle& rVisArea,
                                 const int _nCalledByGroup
                             ) const override;
-    SvMemoryStream*         ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const;
+    std::unique_ptr<SvMemoryStream> ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const;
     SdrPage*                MakeBlancPage(bool bMaster) const;
     bool                    ReadFontCollection();
     PptSlidePersistList*    GetPageList(PptPageKind ePageKind) const;

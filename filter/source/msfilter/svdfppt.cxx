@@ -1972,9 +1972,9 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
     return pRet;
 }
 
-SvMemoryStream* SdrPowerPointImport::ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const
+std::unique_ptr<SvMemoryStream> SdrPowerPointImport::ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const
 {
-    SvMemoryStream* pRet = nullptr;
+    std::unique_ptr<SvMemoryStream> pRet;
     if ( nPersistPtr && ( nPersistPtr < nPersistPtrCnt ) )
     {
         sal_uInt32 nOldPos, nOfs = pPersistPtr[ nPersistPtr ];
@@ -1988,14 +1988,13 @@ SvMemoryStream* SdrPowerPointImport::ImportExOleObjStg( sal_uInt32 nPersistPtr, 
             if ( static_cast<sal_Int32>(nLen) > 0 )
             {
                 rStCtrl.ReadUInt32( nOleId );
-                pRet = new SvMemoryStream;
+                pRet.reset(new SvMemoryStream);
                 ZCodec aZCodec( 0x8000, 0x8000 );
                 aZCodec.BeginCompression();
                 aZCodec.Decompress( rStCtrl, *pRet );
                 if ( !aZCodec.EndCompression() )
                 {
-                    delete pRet;
-                    pRet = nullptr;
+                    pRet.reset();
                 }
             }
         }
@@ -2028,10 +2027,10 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                .ReadUInt32( nIDoNotKnow2 );
 
                         sal_uInt32 nOleId;
-                        SvMemoryStream* pBas = ImportExOleObjStg( nPersistPtr, nOleId );
+                        std::unique_ptr<SvMemoryStream> pBas = ImportExOleObjStg( nPersistPtr, nOleId );
                         if ( pBas )
                         {
-                            tools::SvRef<SotStorage> xSource( new SotStorage( pBas, true ) );
+                            tools::SvRef<SotStorage> xSource( new SotStorage( pBas.release(), true ) );
                             tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
                             if ( xSource.is() && xDest.is() )
                             {
