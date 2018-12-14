@@ -478,6 +478,7 @@ certain functionality.
 @li @c vcl.layout - Widget layout
 @li @c vcl.lazydelete
 @li @c vcl.opengl
+@li @c vcl.opengl.qt5 - QT5 OpenGL
 @li @c vcl.osx
 @li @c vcl.osx.print
 @li @c vcl.pdfwriter

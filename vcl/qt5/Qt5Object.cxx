@@ -22,15 +22,18 @@
 #include <Qt5Frame.hxx>
 
 #include <QtWidgets/QWidget>
+#include <QtGui/QWindow>
 
 Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     : m_pParent(pParent)
     , m_pQWidget(nullptr)
+    , m_pQWindow(nullptr)
 {
     if (!m_pParent || !pParent->GetQWidget())
         return;
 
-    m_pQWidget = new QWidget(pParent->GetQWidget());
+    m_pQWindow = new QWindow;
+    m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
 
     if (bShow)
         m_pQWidget->show();
