@@ -69,6 +69,7 @@ public:
     void testTdf86624(); // manually placed legends
     void testTdf105517();
     void testTdf106217();
+    void testTdf108021();
     void testAutoBackgroundXLSX();
     void testChartAreaStyleBackgroundXLSX();
     void testChartHatchFillXLSX();
@@ -151,6 +152,7 @@ public:
     CPPUNIT_TEST(testTdf86624);
     CPPUNIT_TEST(testTdf105517);
     CPPUNIT_TEST(testTdf106217);
+    CPPUNIT_TEST(testTdf108021);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
     CPPUNIT_TEST(testChartHatchFillXLSX);
@@ -851,6 +853,24 @@ void Chart2ImportTest::testTdf106217()
     awt::Size aSize = xCircle->getSize();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2701), aSize.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2700), aSize.Height);
+}
+
+void Chart2ImportTest::testTdf108021()
+{
+    // Tdf108021 : To check TextBreak value is true.
+    load("/chart2/qa/extras/data/ods/", "tdf108021.ods");
+    uno::Reference< chart::XDiagram > mxDiagram;
+    uno::Reference< beans::XPropertySet > xAxisProp;
+    bool bTextBreak = false;
+    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    mxDiagram.set(xChartDoc->getDiagram());
+    CPPUNIT_ASSERT(mxDiagram.is());
+    uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xAxisXSupp.is());
+    xAxisProp = xAxisXSupp->getXAxis();
+    xAxisProp->getPropertyValue("TextBreak") >>= bTextBreak;
+    // Expected value of 'TextBreak' is true
+    CPPUNIT_ASSERT(bTextBreak);
 }
 
 void Chart2ImportTest::testTransparentBackground(OUString const & filename)
