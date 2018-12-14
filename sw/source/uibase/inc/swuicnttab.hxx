@@ -42,6 +42,7 @@
 
 class IndexEntryResource;
 class IndexEntrySupplierWrapper;
+class SwTOXWidget;
 class SwTOXEdit;
 class SwTOXButton;
 class SwTOXEntryTabPage;
@@ -240,12 +241,8 @@ public:
     void                SetWrtShell(SwWrtShell const & rSh);
 };
 
-class SwTokenWindow : public VclHBox, public VclBuilderContainer
+class SwTokenWindow
 {
-    VclPtr<Button> m_pLeftScrollWin;
-    VclPtr<vcl::Window> m_pCtrlParentWin;
-    VclPtr<Button> m_pRightScrollWin;
-    std::vector<VclPtr<Control> >   m_aControlList;
     SwForm*         m_pForm;
     sal_uInt16      m_nLevel;
     bool            m_bValid;
@@ -253,7 +250,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     OUString        m_aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
     OUString const  m_sCharStyle;
     Link<SwFormToken&,void>   m_aButtonSelectedHdl;
-    VclPtr<Control>           m_pActiveCtrl;
+    SwTOXWidget* m_pActiveCtrl;
     Link<LinkParamNone*,void> m_aModifyHdl;
     OUString        m_sAccessibleName;
     OUString        m_sAdditionalAccnameString1;
@@ -261,30 +258,38 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     OUString        m_sAdditionalAccnameString3;
 
     VclPtr<SwTOXEntryTabPage>  m_pParent;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::Button> m_xLeftScrollWin;
+    std::unique_ptr<weld::Container> m_xCtrlParentWin;
+    std::unique_ptr<weld::ScrolledWindow> m_xScrollWin;
+    std::unique_ptr<weld::Button> m_xRightScrollWin;
+    std::vector<std::unique_ptr<SwTOXWidget>> m_aControlList;
 
-    DECL_LINK( EditResize, Edit&, void );
-    DECL_LINK( NextItemHdl, SwTOXEdit&, void );
-    DECL_LINK( TbxFocusHdl, Control&, void );
-    DECL_LINK( NextItemBtnHdl, SwTOXButton&, void );
-    DECL_LINK( TbxFocusBtnHdl, Control&, void );
-    DECL_LINK( ScrollHdl, Button*, void );
+    DECL_LINK(EditResize, SwTOXEdit&, void);
+    DECL_LINK(NextItemHdl, SwTOXEdit&, void);
+    DECL_LINK(TbxFocusHdl, SwTOXWidget&, void);
+    DECL_LINK(NextItemBtnHdl, SwTOXButton&, void);
+    DECL_LINK(TbxFocusBtnHdl, SwTOXWidget&, void);
+    DECL_LINK(ScrollBtnHdl, weld::Button&, void);
+    DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
-    void    SetActiveControl(Control* pSet);
+    void    SetActiveControl(SwTOXWidget* pSet);
 
-    Control*    InsertItem(const OUString& rText, const SwFormToken& aToken);
+    SwTOXWidget* InsertItem(const OUString& rText, const SwFormToken& aToken);
     void        AdjustPositions();
     void        AdjustScrolling();
     void        MoveControls(long nOffset);
 
 public:
-    SwTokenWindow(vcl::Window* pParent);
-    virtual ~SwTokenWindow() override;
-    virtual void dispose() override;
+    SwTokenWindow(std::unique_ptr<weld::Container> xParent);
+    weld::Container* get_child_container() { return m_xCtrlParentWin.get(); }
+    ~SwTokenWindow();
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
 
     void        SetForm(SwForm& rForm, sal_uInt16 nLevel);
-    sal_uInt16      GetLastLevel()const {return m_nLevel;};
+    sal_uInt16  GetLastLevel()const {return m_nLevel;};
 
     bool        IsValid() const {return m_bValid;}
 
@@ -297,100 +302,23 @@ public:
 
     void        SetModifyHdl(const Link<LinkParamNone*,void>& rLink){m_aModifyHdl = rLink;}
 
-    Control*    GetActiveControl() { return m_pActiveCtrl; }
+    SwTOXWidget* GetActiveControl() { return m_pActiveCtrl; }
 
-    void        InsertAtSelection(const OUString& rText, const SwFormToken& aToken);
+    void        InsertAtSelection(const SwFormToken& aToken);
     void        RemoveControl(SwTOXButton* pDel, bool bInternalCall = false);
 
     bool        Contains(FormTokenType) const;
 
     //helper for pattern buttons and edits
-    bool        CreateQuickHelp(Control const * pCtrl,
-                    const SwFormToken& rToken, const HelpEvent& );
+    OUString    CreateQuickHelp(const SwTOXWidget* pCtrl, const SwFormToken& rToken);
 
-    virtual void    GetFocus() override;
-    virtual void    setAllocation(const Size &rAllocation) override;
     void SetFocus2theAllBtn();
 private:
     sal_uInt32 GetControlIndex(FormTokenType eType) const;
 };
 
-class SwIdxTreeListBox : public SvTreeListBox
-{
-    VclPtr<SwTOXEntryTabPage> pParent;
-
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-public:
-    SwIdxTreeListBox(vcl::Window* pPar, WinBits nStyle);
-    virtual ~SwIdxTreeListBox() override;
-    virtual void dispose() override;
-
-    void SetTabPage(SwTOXEntryTabPage* pPar) { pParent = pPar; }
-};
-
 class SwTOXEntryTabPage : public SfxTabPage
 {
-    VclPtr<FixedText>          m_pLevelFT;
-    VclPtr<SwIdxTreeListBox>   m_pLevelLB;
-
-    VclPtr<SwTokenWindow>  m_pTokenWIN;
-
-    VclPtr<PushButton>     m_pAllLevelsPB;
-
-    VclPtr<PushButton>     m_pEntryNoPB;
-    VclPtr<PushButton>     m_pEntryPB;
-    VclPtr<PushButton>     m_pTabPB;
-    VclPtr<PushButton>     m_pChapterInfoPB;
-    VclPtr<PushButton>     m_pPageNoPB;
-    VclPtr<PushButton>     m_pHyperLinkPB;
-
-    VclPtr<ListBox>        m_pAuthFieldsLB;
-    VclPtr<PushButton>     m_pAuthInsertPB;
-    VclPtr<PushButton>     m_pAuthRemovePB;
-
-    VclPtr<ListBox>        m_pCharStyleLB;       // character style of the current token
-    VclPtr<PushButton>     m_pEditStylePB;
-
-    VclPtr<FixedText>      m_pChapterEntryFT;
-    VclPtr<ListBox>        m_pChapterEntryLB;    // type of chapter info
-
-    VclPtr<FixedText>      m_pNumberFormatFT;
-    VclPtr<ListBox>        m_pNumberFormatLB;    //!< format for numbering (E#)
-
-    VclPtr<FixedText>      m_pEntryOutlineLevelFT;    //!< Fixed text, for i53420
-    VclPtr<NumericField>   m_pEntryOutlineLevelNF;   //!< level to evaluate outline level to, for i53420
-
-    VclPtr<FixedText>      m_pFillCharFT;
-    VclPtr<ComboBox>       m_pFillCharCB;        // fill char for tab stop
-
-    VclPtr<FixedText>      m_pTabPosFT;
-    VclPtr<MetricField>    m_pTabPosMF;          // tab stop position
-    VclPtr<CheckBox>       m_pAutoRightCB;
-
-    VclPtr<VclContainer>   m_pFormatFrame;
-    VclPtr<FixedText>      m_pMainEntryStyleFT;
-    VclPtr<ListBox>        m_pMainEntryStyleLB;  // character style of main entries in indexes
-    VclPtr<CheckBox>       m_pAlphaDelimCB;
-    VclPtr<CheckBox>       m_pCommaSeparatedCB;
-    VclPtr<CheckBox>       m_pRelToStyleCB;      // position relative to the right margin of the para style
-
-    VclPtr<VclContainer>   m_pSortingFrame;
-    VclPtr<RadioButton>    m_pSortDocPosRB;
-    VclPtr<RadioButton>    m_pSortContentRB;
-
-    VclPtr<VclContainer>   m_pSortKeyFrame;
-    VclPtr<ListBox>        m_pFirstKeyLB;
-    VclPtr<RadioButton>    m_pFirstSortUpRB;
-    VclPtr<RadioButton>    m_pFirstSortDownRB;
-
-    VclPtr<ListBox>        m_pSecondKeyLB;
-    VclPtr<RadioButton>    m_pSecondSortUpRB;
-    VclPtr<RadioButton>    m_pSecondSortDownRB;
-
-    VclPtr<ListBox>        m_pThirdKeyLB;
-    VclPtr<RadioButton>    m_pThirdSortUpRB;
-    VclPtr<RadioButton>    m_pThirdSortDownRB;
-
     OUString const  sDelimStr;
     OUString        sLevelStr;
     OUString        sAuthTypeStr;
@@ -402,33 +330,80 @@ class SwTOXEntryTabPage : public SfxTabPage
     CurTOXType      aLastTOXType;
     bool            bInLevelHdl;
 
-    DECL_LINK(StyleSelectHdl, ListBox&, void);
-    DECL_LINK(EditStyleHdl, Button*, void);
-    DECL_LINK(InsertTokenHdl, Button*, void);
-    DECL_LINK(LevelHdl, SvTreeListBox*, void);
-    DECL_LINK(AutoRightHdl, Button*, void);
-    DECL_LINK(TokenSelectedHdl, SwFormToken&, void);
-    DECL_LINK(TabPosHdl, Edit&, void);
-    DECL_LINK(FillCharHdl, Edit&, void);
-    DECL_LINK(RemoveInsertAuthHdl, Button*, void);
-    DECL_LINK(SortKeyHdl, Button*, void);
-    DECL_LINK(ChapterInfoHdl, ListBox&, void);
-    DECL_LINK(ChapterInfoOutlineHdl, Edit&, void);
-    DECL_LINK(NumberFormatHdl, ListBox&, void);
+    std::unique_ptr<weld::Label> m_xTypeFT;
+    std::unique_ptr<weld::Label> m_xLevelFT;
+    std::unique_ptr<weld::TreeView> m_xLevelLB;
+    std::unique_ptr<weld::Button> m_xAllLevelsPB;
+    std::unique_ptr<weld::Button> m_xEntryNoPB;
+    std::unique_ptr<weld::Button> m_xEntryPB;
+    std::unique_ptr<weld::Button> m_xTabPB;
+    std::unique_ptr<weld::Button> m_xChapterInfoPB;
+    std::unique_ptr<weld::Button> m_xPageNoPB;
+    std::unique_ptr<weld::Button> m_xHyperLinkPB;
+    std::unique_ptr<weld::ComboBox> m_xAuthFieldsLB;
+    std::unique_ptr<weld::Button> m_xAuthInsertPB;
+    std::unique_ptr<weld::Button> m_xAuthRemovePB;
+    std::unique_ptr<weld::ComboBox> m_xCharStyleLB;       // character style of the current token
+    std::unique_ptr<weld::Button> m_xEditStylePB;
+    std::unique_ptr<weld::Label> m_xChapterEntryFT;
+    std::unique_ptr<weld::ComboBox> m_xChapterEntryLB;    // type of chapter info
+    std::unique_ptr<weld::Label> m_xNumberFormatFT;
+    std::unique_ptr<weld::ComboBox> m_xNumberFormatLB;    //!< format for numbering (E#)
+    std::unique_ptr<weld::Label> m_xEntryOutlineLevelFT;    //!< Fixed text, for i53420
+    std::unique_ptr<weld::SpinButton> m_xEntryOutlineLevelNF;   //!< level to evaluate outline level to, for i53420
+    std::unique_ptr<weld::Label> m_xFillCharFT;
+    std::unique_ptr<weld::ComboBox> m_xFillCharCB;        // fill char for tab stop
+    std::unique_ptr<weld::Label> m_xTabPosFT;
+    std::unique_ptr<weld::MetricSpinButton> m_xTabPosMF;          // tab stop position
+    std::unique_ptr<weld::CheckButton> m_xAutoRightCB;
+    std::unique_ptr<weld::Widget> m_xFormatFrame;
+    std::unique_ptr<weld::Label> m_xMainEntryStyleFT;
+    std::unique_ptr<weld::ComboBox> m_xMainEntryStyleLB;  // character style of main entries in indexes
+    std::unique_ptr<weld::CheckButton> m_xAlphaDelimCB;
+    std::unique_ptr<weld::CheckButton> m_xCommaSeparatedCB;
+    std::unique_ptr<weld::CheckButton> m_xRelToStyleCB;      // position relative to the right margin of the para style
+    std::unique_ptr<weld::Widget> m_xSortingFrame;
+    std::unique_ptr<weld::RadioButton> m_xSortDocPosRB;
+    std::unique_ptr<weld::RadioButton> m_xSortContentRB;
+    std::unique_ptr<weld::Widget> m_xSortKeyFrame;
+    std::unique_ptr<weld::ComboBox> m_xFirstKeyLB;
+    std::unique_ptr<weld::RadioButton> m_xFirstSortUpRB;
+    std::unique_ptr<weld::RadioButton> m_xFirstSortDownRB;
+    std::unique_ptr<weld::ComboBox> m_xSecondKeyLB;
+    std::unique_ptr<weld::RadioButton> m_xSecondSortUpRB;
+    std::unique_ptr<weld::RadioButton> m_xSecondSortDownRB;
+    std::unique_ptr<weld::ComboBox> m_xThirdKeyLB;
+    std::unique_ptr<weld::RadioButton> m_xThirdSortUpRB;
+    std::unique_ptr<weld::RadioButton> m_xThirdSortDownRB;
+    std::unique_ptr<SwTokenWindow> m_xTokenWIN;
 
-    DECL_LINK(AllLevelsHdl, Button*, void);
+    DECL_LINK(StyleSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(EditStyleHdl, weld::Button&, void);
+    DECL_LINK(InsertTokenHdl, weld::Button&, void);
+    DECL_LINK(LevelHdl, weld::TreeView&, void);
+    DECL_LINK(AutoRightHdl, weld::ToggleButton&, void);
+    DECL_LINK(TokenSelectedHdl, SwFormToken&, void);
+    DECL_LINK(TabPosHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(FillCharHdl, weld::ComboBox&, void);
+    DECL_LINK(RemoveInsertAuthHdl, weld::Button&, void);
+    DECL_LINK(SortKeyHdl, weld::ToggleButton&, void);
+    DECL_LINK(ChapterInfoHdl, weld::ComboBox&, void);
+    DECL_LINK(ChapterInfoOutlineHdl, weld::SpinButton&, void);
+    DECL_LINK(NumberFormatHdl, weld::ComboBox&, void);
+
+    DECL_LINK(AllLevelsHdl, weld::Button&, void);
 
     void            WriteBackLevel();
     void            UpdateDescriptor();
     DECL_LINK(ModifyHdl, LinkParamNone*, void);
-    void OnModify(void const *);
-    DECL_LINK(ModifyClickHdl, Button*, void);
+    void OnModify(bool bAllLevels);
+    DECL_LINK(ModifyClickHdl, weld::ToggleButton&, void);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
+    SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXEntryTabPage() override;
     virtual void dispose() override;
 
