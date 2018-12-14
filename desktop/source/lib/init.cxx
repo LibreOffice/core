@@ -2618,7 +2618,14 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
         uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aOutStream);
 
         utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+        if (doc_getDocumentType(pThis) == LOK_DOCTYPE_PRESENTATION)
+        {
+            aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+        }
+        else if(doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
+        {
+            aMediaDescriptor["FilterName"] <<= OUString("writer_svg_Export");
+        }
         aMediaDescriptor["SelectionOnly"] <<= true;
         aMediaDescriptor["OutputStream"] <<= xOut;
 
