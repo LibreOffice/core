@@ -55,6 +55,7 @@ private:
     bool                            mbReturnFocusToDocument;
     bool                            mbAddedGrab;
     GtkWidget*                      mpMenuBarContainerWidget;
+    GtkWidget*                      mpMenuAllowShrinkWidget;
     GtkWidget*                      mpMenuBarWidget;
     GtkWidget*                      mpCloseButton;
     VclPtr<Menu>                    mpVCLMenu;
