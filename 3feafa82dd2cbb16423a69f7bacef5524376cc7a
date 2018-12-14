@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_0d5cc349",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-14T09:22:55Z",
+      "side": 1,
+      "message": "Why is the original aHelpLink URL wrapped in this redirecting aTempFile HTML document, which apparently never gets removed on success (so is a resource leak)?  Why is aHelpLink not passed directly into sfx2::openUriExternally here?",
+      "revId": "3feafa82dd2cbb16423a69f7bacef5524376cc7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
