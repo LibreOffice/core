@@ -52,6 +52,24 @@
       "revId": "3feafa82dd2cbb16423a69f7bacef5524376cc7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a8047dc7",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-14T12:34:43Z",
+      "side": 1,
+      "message": "\u003e IIRC, For offline usage, opening a file:// URI with xdg opens the\n \u003e file manager. We had to wrap the file:// protocol in a temp html\n \u003e file with a script that loads the file:// URI. This way the\n \u003e file://().html URI opens inside the browser.\n\n(see \u003chttps://github.com/flathub/org.libreoffice.LibreOffice/issues/35#issuecomment-447295308\u003e \"Add integrated LibreOffice Help offline\" for some issues with file URIs with query parts and at least LibreOffice itself and some xdg-open)",
+      "parentUuid": "5f4e5783_2d0d3f3e",
+      "revId": "3feafa82dd2cbb16423a69f7bacef5524376cc7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
