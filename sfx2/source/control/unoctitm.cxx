@@ -1062,6 +1062,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "InsertRowsAfter" ||
              aEvent.FeatureURL.Path == "InsertColumnsBefore" ||
              aEvent.FeatureURL.Path == "InsertColumnsAfter" ||
+             aEvent.FeatureURL.Path == "InsertSymbol" ||
              aEvent.FeatureURL.Path == "DeleteRows" ||
              aEvent.FeatureURL.Path == "DeleteColumns" ||
              aEvent.FeatureURL.Path == "DeleteTable" ||
