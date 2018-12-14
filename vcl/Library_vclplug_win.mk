@@ -64,6 +64,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
     vcl/win/app/salinst \
     vcl/win/app/salshl \
     vcl/win/app/saltimer \
+	vcl/win/gdi/raii \
     vcl/win/gdi/gdiimpl \
     vcl/win/gdi/salbmp \
     vcl/win/gdi/salgdi \
