@@ -34,6 +34,24 @@
       "revId": "3feafa82dd2cbb16423a69f7bacef5524376cc7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_8803010e",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-14T10:05:38Z",
+      "side": 1,
+      "message": "\u003e The temp files are destroyed when LibeOffice exits.\n\n(indeed; the files are apparently stored in some /tmp/luXXX.tmp/ sub-dir that is removed upon LO exit)",
+      "parentUuid": "5f4e5783_2d0d3f3e",
+      "revId": "3feafa82dd2cbb16423a69f7bacef5524376cc7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
