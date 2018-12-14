@@ -22,6 +22,30 @@
       "revId": "37ef3eb298a6656b115d734d92dfe2992622615b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_28408d35",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2018-12-14T10:37:50Z",
+      "side": 1,
+      "message": "Agree. But do you agree with combining these two functions?",
+      "parentUuid": "5f4e5783_e834b5e0",
+      "range": {
+        "startLine": 1737,
+        "startChar": 4,
+        "endLine": 1737,
+        "endChar": 78
+      },
+      "revId": "37ef3eb298a6656b115d734d92dfe2992622615b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
