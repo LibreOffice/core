@@ -76,6 +76,8 @@ namespace frm
         getPropertyDefaultByHandle( PROPERTY_ID_WRITING_MODE            ) >>= m_nTextWritingMode;
         getPropertyDefaultByHandle( PROPERTY_ID_CONTEXT_WRITING_MODE    ) >>= m_nContextWritingMode;
 
+        m_bMultiLine = true;
+
         implInit();
     }
 
