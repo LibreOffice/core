@@ -647,7 +647,7 @@ void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& 
     }
 
     // try to draw using GdiPlus directly
-    if(bTryDirectPaint && tryDrawBitmapGdiPlus(rPosAry, rSalBitmap))
+    if(bTryDirectPaint && TryDrawBitmapGDIPlus(rPosAry, rSalBitmap))
     {
         return;
     }
@@ -1573,7 +1573,7 @@ void WinSalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
     SetFillColor( ImplGetROPColor( nROPColor ) );
 }
 
-void WinSalGraphicsImpl::drawPixelImpl( long nX, long nY, COLORREF crColor )
+void WinSalGraphicsImpl::DrawPixelImpl( long nX, long nY, COLORREF crColor )
 {
     if ( mbXORMode )
     {
@@ -1589,7 +1589,7 @@ void WinSalGraphicsImpl::drawPixelImpl( long nX, long nY, COLORREF crColor )
 
 void WinSalGraphicsImpl::drawPixel( long nX, long nY )
 {
-    drawPixelImpl( nX, nY, mnPenColor );
+    DrawPixelImpl( nX, nY, mnPenColor );
 }
 
 void WinSalGraphicsImpl::drawPixel( long nX, long nY, Color nColor )
@@ -1603,7 +1603,7 @@ void WinSalGraphicsImpl::drawPixel( long nX, long nY, Color nColor )
          ImplIsSysColorEntry( nColor ) )
         nCol = PALRGB_TO_RGB( nCol );
 
-    drawPixelImpl( nX, nY, nCol );
+    DrawPixelImpl( nX, nY, nCol );
 }
 
 void WinSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
@@ -1614,7 +1614,7 @@ void WinSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
     // LineTo doesn't draw the last pixel
     if ( !mrParent.isPrinter() )
-        drawPixelImpl( nX2, nY2, mnPenColor );
+        DrawPixelImpl( nX2, nY2, mnPenColor );
 }
 
 void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
@@ -1653,7 +1653,7 @@ void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAr
 
     // Polyline seems to uses LineTo, which doesn't paint the last pixel (see 87eb8f8ee)
     if ( !mrParent.isPrinter() )
-        drawPixelImpl( pWinPtAry[nPoints-1].x, pWinPtAry[nPoints-1].y, mnPenColor );
+        DrawPixelImpl( pWinPtAry[nPoints-1].x, pWinPtAry[nPoints-1].y, mnPenColor );
 }
 
 void WinSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -2416,7 +2416,7 @@ static void setInterpolationMode(
     }
 }
 
-bool WinSalGraphicsImpl::tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap)
+bool WinSalGraphicsImpl::TryDrawBitmapGDIPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap)
 {
     if(rTR.mnSrcWidth && rTR.mnSrcHeight && rTR.mnDestWidth && rTR.mnDestHeight)
     {
