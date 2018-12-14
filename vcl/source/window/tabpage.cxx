@@ -60,7 +60,7 @@ void TabPage::ImplInitSettings()
         SetParentClipMode();
         SetPaintTransparent( false );
 
-        if ( IsControlBackground() )
+        if (IsControlBackground() || !pParent)
             SetBackground( GetControlBackground() );
         else
             SetBackground( pParent->GetBackground() );
