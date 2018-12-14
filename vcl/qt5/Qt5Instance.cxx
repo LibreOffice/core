@@ -30,6 +30,7 @@
 #include <Qt5Frame.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5Object.hxx>
+#include <Qt5OpenGLContext.hxx>
 #include <Qt5System.hxx>
 #include <Qt5Timer.hxx>
 #include <Qt5VirtualDevice.hxx>
@@ -202,7 +203,7 @@ OUString Qt5Instance::GetConnectionIdentifier() { return OUString(); }
 
 void Qt5Instance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&) {}
 
-OpenGLContext* Qt5Instance::CreateOpenGLContext() { return nullptr; }
+OpenGLContext* Qt5Instance::CreateOpenGLContext() { return new Qt5OpenGLContext; }
 
 bool Qt5Instance::IsMainThread() const { return qApp->thread() != QThread::currentThread(); }
 
