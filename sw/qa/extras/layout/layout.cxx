@@ -41,6 +41,7 @@ public:
     void testRedlineCharAttributes();
     void testTdf116830();
     void testTdf114163();
+    void testTdf108021();
     void testTdf116925();
     void testTdf117028();
     void testTdf106390();
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testRedlineCharAttributes);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf114163);
+    CPPUNIT_TEST(testTdf108021);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf106390);
@@ -2319,6 +2321,24 @@ void SwLayoutWriter::testTdf114163()
         "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[12]/text",
         "Data3");
     // This failed, if the legend first label is not "Data3".
+}
+
+void SwLayoutWriter::testTdf108021()
+{
+    SwDoc* pDoc = createDoc("tdf108021.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='17']",
+        8);
+    // This failed, if the textarray length of the first axis label not 17.
 }
 
 void SwLayoutWriter::testTdf116925()
