@@ -25,6 +25,7 @@
 #include <vector>
 
 class ScDocument;
+class ScFunctionData;
 
 //  Sequence:
 //      1)  create ScConsData
@@ -54,9 +55,7 @@ private:
     SCSIZE              nColCount;
     SCSIZE              nRowCount;
     std::unique_ptr<std::unique_ptr<bool[]>[]> ppUsed;
-    std::unique_ptr<std::unique_ptr<double[]>[]> ppSum;
-    std::unique_ptr<std::unique_ptr<double[]>[]> ppCount;
-    std::unique_ptr<std::unique_ptr<double[]>[]> ppSumSqr;
+    std::unique_ptr<std::unique_ptr<ScFunctionData[]>[]> ppFunctionData;
     std::unique_ptr<std::unique_ptr<ScReferenceList[]>[]> ppRefs;
     ::std::vector<OUString> maColHeaders;
     ::std::vector<OUString> maRowHeaders;
