@@ -476,6 +476,11 @@ DECLARE_OOXMLEXPORT_TEST(testPageBreak_after, "pageBreak_after.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix?? Table should be on page one of two", 1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSectionBreaks, "sectionBreaks.odt")
+{
+    CPPUNIT_ASSERT_MESSAGE("Number of pages", getPages() > 2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
 {
     // Select the second run containing the page number field

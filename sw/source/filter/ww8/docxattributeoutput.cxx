@@ -869,7 +869,7 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
     // paragraph, and detect the section breaks there.
     SwNodeIndex aNextIndex( rNode, 1 );
 
-    if (rNode.IsTextNode())
+    if (rNode.IsTextNode() || rNode.IsSectionNode())
     {
         if (aNextIndex.GetNode().IsTextNode())
         {
@@ -1143,7 +1143,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         m_nColBreakStatus = COLBRK_NONE;
     }
 
-    if ( m_bPostponedPageBreak )
+    if ( m_bPostponedPageBreak && !m_bWritingHeaderFooter )
     {
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_br,
