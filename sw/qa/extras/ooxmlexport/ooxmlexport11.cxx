@@ -478,7 +478,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageBreak_after, "pageBreak_after.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testSectionBreaks, "sectionBreaks.odt")
 {
-    CPPUNIT_ASSERT_MESSAGE("Number of pages", getPages() > 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of pages", 4, getPages() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
