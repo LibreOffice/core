@@ -152,10 +152,10 @@ void SwView::ExecDraw(SfxRequest& rReq)
             m_pWrtShell->MakeDrawView();
 
         pSdrView = m_pWrtShell->GetDrawView();
-        if ( pSdrView )
+        if (pSdrView)
         {
             SdrObject* pObj = nullptr;
-            svx::FontWorkGalleryDialog aDlg(rWin.GetFrameWeld(), pSdrView);
+            svx::FontWorkGalleryDialog aDlg(rWin.GetFrameWeld(), *pSdrView);
             aDlg.SetSdrObjectRef( &pObj, pSdrView->GetModel() );
             aDlg.run();
             if ( pObj )
