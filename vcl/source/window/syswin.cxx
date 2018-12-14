@@ -1125,11 +1125,6 @@ void SystemWindow::setOptimalLayoutSize()
 
     Size aSize = get_preferred_size();
 
-    Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
-
-    aSize.setWidth( std::min(aMax.Width(), aSize.Width()) );
-    aSize.setHeight( std::min(aMax.Height(), aSize.Height()) );
-
     SetMinOutputSizePixel(aSize);
     SetSizePixel(aSize);
     setPosSizeOnContainee(aSize, *pBox);

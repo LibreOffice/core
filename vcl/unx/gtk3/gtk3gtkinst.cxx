@@ -2956,7 +2956,9 @@ private:
     GtkScrolledWindow* m_pScrolledWindow;
     GtkWidget *m_pOrigViewport;
     GtkAdjustment* m_pVAdjustment;
+    GtkAdjustment* m_pHAdjustment;
     gulong m_nVAdjustChangedSignalId;
+    gulong m_nHAdjustChangedSignalId;
 
     static void signalVAdjustValueChanged(GtkAdjustment*, gpointer widget)
     {
@@ -2965,14 +2967,104 @@ private:
         pThis->signal_vadjustment_changed();
     }
 
+    static void signalHAdjustValueChanged(GtkAdjustment*, gpointer widget)
+    {
+        GtkInstanceScrolledWindow* pThis = static_cast<GtkInstanceScrolledWindow*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_hadjustment_changed();
+    }
+
 public:
     GtkInstanceScrolledWindow(GtkScrolledWindow* pScrolledWindow, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pScrolledWindow), bTakeOwnership)
         , m_pScrolledWindow(pScrolledWindow)
         , m_pOrigViewport(nullptr)
         , m_pVAdjustment(gtk_scrolled_window_get_vadjustment(m_pScrolledWindow))
+        , m_pHAdjustment(gtk_scrolled_window_get_hadjustment(m_pScrolledWindow))
         , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
+        , m_nHAdjustChangedSignalId(g_signal_connect(m_pHAdjustment, "value-changed", G_CALLBACK(signalHAdjustValueChanged), this))
     {
+    }
+
+    virtual void set_user_managed_scrolling() override
+    {
+        disable_notify_events();
+        //remove the original viewport and replace it with our bodged one which
+        //doesn't do any scrolling and expects its child to figure it out somehow
+        assert(!m_pOrigViewport);
+        GtkWidget *pViewport = gtk_bin_get_child(GTK_BIN(m_pScrolledWindow));
+        assert(GTK_IS_VIEWPORT(pViewport));
+        GtkWidget *pChild = gtk_bin_get_child(GTK_BIN(pViewport));
+        g_object_ref(pChild);
+        gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
+        g_object_ref(pViewport);
+        gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
+        GtkWidget* pNewViewport = GTK_WIDGET(g_object_new(crippled_viewport_get_type(), nullptr));
+        gtk_widget_show(pNewViewport);
+        gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), pNewViewport);
+        gtk_container_add(GTK_CONTAINER(pNewViewport), pChild);
+        g_object_unref(pChild);
+        m_pOrigViewport = pViewport;
+        enable_notify_events();
+    }
+
+    virtual void hadjustment_configure(int value, int lower, int upper,
+                                       int step_increment, int page_increment,
+                                       int page_size) override
+    {
+        disable_notify_events();
+        gtk_adjustment_configure(m_pHAdjustment, value, lower, upper, step_increment, page_increment, page_size);
+        enable_notify_events();
+    }
+
+    virtual int hadjustment_get_value() const override
+    {
+        return gtk_adjustment_get_value(m_pHAdjustment);
+    }
+
+    virtual void hadjustment_set_value(int value) override
+    {
+        disable_notify_events();
+        gtk_adjustment_set_value(m_pHAdjustment, value);
+        enable_notify_events();
+    }
+
+    virtual int hadjustment_get_upper() const override
+    {
+         return gtk_adjustment_get_upper(m_pHAdjustment);
+    }
+
+    virtual void hadjustment_set_upper(int upper) override
+    {
+        disable_notify_events();
+        gtk_adjustment_set_upper(m_pHAdjustment, upper);
+        enable_notify_events();
+    }
+
+    virtual int hadjustment_get_page_size() const override
+    {
+        return gtk_adjustment_get_page_size(m_pHAdjustment);
+    }
+
+    virtual void set_hpolicy(VclPolicyType eHPolicy) override
+    {
+        GtkPolicyType eGtkVPolicy;
+        gtk_scrolled_window_get_policy(m_pScrolledWindow, nullptr, &eGtkVPolicy);
+        gtk_scrolled_window_set_policy(m_pScrolledWindow, eGtkVPolicy, VclToGtk(eHPolicy));
+    }
+
+    virtual VclPolicyType get_hpolicy() const override
+    {
+        GtkPolicyType eGtkHPolicy;
+        gtk_scrolled_window_get_policy(m_pScrolledWindow, &eGtkHPolicy, nullptr);
+        return GtkToVcl(eGtkHPolicy);
+    }
+
+    virtual int get_hscroll_height() const override
+    {
+        if (gtk_scrolled_window_get_overlay_scrolling(m_pScrolledWindow))
+            return 0;
+        return gtk_widget_get_allocated_height(gtk_scrolled_window_get_hscrollbar(m_pScrolledWindow));
     }
 
     virtual void vadjustment_configure(int value, int lower, int upper,
@@ -3008,40 +3100,9 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_user_managed_scrolling() override
+    virtual int vadjustment_get_page_size() const override
     {
-        disable_notify_events();
-        //remove the original viewport and replace it with our bodged one which
-        //doesn't do any scrolling and expects its child to figure it out somehow
-        assert(!m_pOrigViewport);
-        GtkWidget *pViewport = gtk_bin_get_child(GTK_BIN(m_pScrolledWindow));
-        assert(GTK_IS_VIEWPORT(pViewport));
-        GtkWidget *pChild = gtk_bin_get_child(GTK_BIN(pViewport));
-        g_object_ref(pChild);
-        gtk_container_remove(GTK_CONTAINER(pViewport), pChild);
-        g_object_ref(pViewport);
-        gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
-        GtkWidget* pNewViewport = GTK_WIDGET(g_object_new(crippled_viewport_get_type(), nullptr));
-        gtk_widget_show(pNewViewport);
-        gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), pNewViewport);
-        gtk_container_add(GTK_CONTAINER(pNewViewport), pChild);
-        g_object_unref(pChild);
-        m_pOrigViewport = pViewport;
-        enable_notify_events();
-    }
-
-    virtual void set_hpolicy(VclPolicyType eHPolicy) override
-    {
-        GtkPolicyType eGtkVPolicy;
-        gtk_scrolled_window_get_policy(m_pScrolledWindow, nullptr, &eGtkVPolicy);
-        gtk_scrolled_window_set_policy(m_pScrolledWindow, eGtkVPolicy, VclToGtk(eHPolicy));
-    }
-
-    virtual VclPolicyType get_hpolicy() const override
-    {
-        GtkPolicyType eGtkHPolicy;
-        gtk_scrolled_window_get_policy(m_pScrolledWindow, &eGtkHPolicy, nullptr);
-        return GtkToVcl(eGtkHPolicy);
+        return gtk_adjustment_get_page_size(m_pVAdjustment);
     }
 
     virtual void set_vpolicy(VclPolicyType eVPolicy) override
@@ -3062,7 +3123,7 @@ public:
     {
         if (gtk_scrolled_window_get_overlay_scrolling(m_pScrolledWindow))
             return 0;
-        return gtk_widget_get_allocated_width(GTK_WIDGET(m_pScrolledWindow));
+        return gtk_widget_get_allocated_width(gtk_scrolled_window_get_vscrollbar(m_pScrolledWindow));
     }
 
     virtual void disable_notify_events() override
@@ -6848,6 +6909,16 @@ public:
         disable_notify_events();
         gtk_entry_set_width_chars(pEntry, nChars);
         gtk_entry_set_max_width_chars(pEntry, nChars);
+        enable_notify_events();
+    }
+
+    virtual void set_entry_max_length(int nChars) override
+    {
+        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
+        assert(pChild && GTK_IS_ENTRY(pChild));
+        GtkEntry* pEntry = GTK_ENTRY(pChild);
+        disable_notify_events();
+        gtk_entry_set_max_length(pEntry, nChars);
         enable_notify_events();
     }
 
