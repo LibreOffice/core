@@ -31,6 +31,8 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/ShapeCollection.hpp>
 
 #include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
@@ -51,6 +53,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/animationexport.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdpage.hxx>
 
 #include <memory>
 
@@ -531,7 +535,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         }
     }
 
-    if(mbWriterOrCalcFilter)
+    if(mbWriterFilter || mbCalcFilter)
        return implExportWriterOrCalc(xOStm);
 
     return implExportImpressOrDraw(xOStm);
@@ -673,6 +677,45 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
     return bRet;
 }
 
+bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSupplier >& xSelectionSupplier )
+{
+    Any selection = xSelectionSupplier->getSelection();
+    uno::Reference<lang::XServiceInfo> xSelection;
+    selection >>= xSelection;
+    if (xSelection.is() && xSelection->supportsService("com.sun.star.text.TextGraphicObject"))
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xSelection, uno::UNO_QUERY);
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+
+        if (!xGraphic.is())
+            return false;
+
+        const Graphic aGraphic(xGraphic);
+
+        // Calculate size from Graphic
+        Point aPos( OutputDevice::LogicToLogic(aGraphic.GetPrefMapMode().GetOrigin(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
+        Size  aSize( OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
+
+        assert(mSelectedPages.size() == 1);
+        SvxDrawPage* pSvxDrawPage(SvxDrawPage::getImplementation(mSelectedPages[0]));
+        if(pSvxDrawPage == nullptr || pSvxDrawPage->GetSdrPage() == nullptr)
+            return false;
+
+        SdrGrafObj* pGraphicObj = new SdrGrafObj(pSvxDrawPage->GetSdrPage()->getSdrModelFromSdrPage(), aGraphic, tools::Rectangle( aPos, aSize ));
+        uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj);
+        uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
+        css::awt::Rectangle aBoundRect (aPos.X(), aPos.Y(), aSize.Width(), aSize.Height());
+        xShapePropSet->setPropertyValue("BoundRect", uno::Any(aBoundRect));
+        xShapePropSet->setPropertyValue("Graphic", uno::Any(xGraphic));
+
+        maShapeSelection = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
+        maShapeSelection->add(xShape);
+    }
+
+    return true;
+}
+
 
 Reference< XWriter > SVGFilter::implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm )
 {
@@ -773,7 +816,7 @@ bool SVGFilter::implExportDocument()
         }
     }
 
-    if(mbWriterOrCalcFilter)
+    if(mbWriterFilter || mbCalcFilter)
         implExportDocumentHeaderWriterOrCalc(nDocX, nDocY, nDocWidth, nDocHeight);
     else
         implExportDocumentHeaderImpressOrDraw(nDocX, nDocY, nDocWidth, nDocHeight);
@@ -2039,7 +2082,23 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
 
         if( pObj )
         {
-            const Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pObj));
+            Graphic aGraphic(SdrExchangeView::GetObjGraphic(*pObj));
+
+            // Writer graphic shapes are handled differently
+            if( mbWriterFilter && aGraphic.GetType() == GraphicType::NONE )
+            {
+                if (rxShape->getShapeType() == "com.sun.star.drawing.GraphicObjectShape")
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(rxShape, uno::UNO_QUERY);
+                    uno::Reference<graphic::XGraphic> xGraphic;
+                    xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+
+                    if (!xGraphic.is())
+                        return false;
+
+                    aGraphic = Graphic(xGraphic);
+                }
+            }
 
             if( aGraphic.GetType() != GraphicType::NONE )
             {
