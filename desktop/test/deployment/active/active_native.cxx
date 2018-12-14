@@ -69,9 +69,9 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Provider(xContext)); }
 
-    static OUString SAL_CALL static_getImplementationName();
+    static rtl::OUString SAL_CALL static_getImplementationName();
 
-    static css::uno::Sequence< OUString > SAL_CALL
+    static css::uno::Sequence< rtl::OUString > SAL_CALL
     static_getSupportedServiceNames();
 
 private:
@@ -81,18 +81,18 @@ private:
 
     virtual ~Provider() {}
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual rtl::OUString SAL_CALL getImplementationName() override
     { return static_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() override
     { return static_getSupportedServiceNames(); }
 
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
-        css::util::URL const &, OUString const &, sal_Int32) override;
+        css::util::URL const &, rtl::OUString const &, sal_Int32) override;
 
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
     SAL_CALL queryDispatches(
@@ -101,18 +101,18 @@ private:
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
-OUString Provider::static_getImplementationName() {
-    return OUString("com.sun.star.comp.test.deployment.active_native");
+rtl::OUString Provider::static_getImplementationName() {
+    return rtl::OUString("com.sun.star.comp.test.deployment.active_native");
 }
 
-css::uno::Sequence< OUString > Provider::static_getSupportedServiceNames()
+css::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
 {
-    OUString name("com.sun.star.test.deployment.active_native");
-    return css::uno::Sequence< OUString >(&name, 1);
+    rtl::OUString name("com.sun.star.test.deployment.active_native");
+    return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
 css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
-    css::util::URL const &, OUString const &, sal_Int32)
+    css::util::URL const &, rtl::OUString const &, sal_Int32)
 {
     css::uno::Reference< css::frame::XDispatch > dispatch;
     if (!(context_->getValueByName(
@@ -156,11 +156,11 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Dispatch(xContext)); }
 
-    static OUString SAL_CALL static_getImplementationName();
+    static rtl::OUString SAL_CALL static_getImplementationName();
 
-    static css::uno::Sequence< OUString > SAL_CALL
+    static css::uno::Sequence< rtl::OUString > SAL_CALL
     static_getSupportedServiceNames()
-    { return css::uno::Sequence< OUString >(); }
+    { return css::uno::Sequence< rtl::OUString >(); }
 
 private:
     explicit Dispatch(
@@ -169,13 +169,13 @@ private:
 
     virtual ~Dispatch() {}
 
-    virtual OUString SAL_CALL getImplementationName() override
+    virtual rtl::OUString SAL_CALL getImplementationName() override
     { return static_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() override
     { return static_getSupportedServiceNames(); }
 
@@ -196,8 +196,8 @@ private:
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
-OUString Dispatch::static_getImplementationName() {
-    return OUString(
+rtl::OUString Dispatch::static_getImplementationName() {
+    return rtl::OUString(
         "com.sun.star.comp.test.deployment.active_native_singleton");
 }
 
