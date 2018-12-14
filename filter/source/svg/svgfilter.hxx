@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XWriter.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -57,6 +58,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml::sax;
 
 #define SVG_EXPORT_ALLPAGES ((sal_Int32)-1)
@@ -211,7 +213,9 @@ private:
     Reference< css::drawing::XDrawPage > mxDefaultPage;
     std::vector< Reference< css::drawing::XDrawPage > > mSelectedPages;
 
-    bool                                mbWriterOrCalcFilter;
+    bool                                mbWriterFilter;
+    bool                                mbCalcFilter;
+    bool                                mbImpressFilter;
 
 
     /// Impress / draw only members
@@ -235,6 +239,8 @@ private:
     bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
     bool                            implExportImpressOrDraw( const Reference< XOutputStream >& rxOStm );
     bool                            implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm );
+    bool                            implExportWriterTextGraphic( const Reference< view::XSelectionSupplier >& xSelectionSupplier );
+
     static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
     void                            implGetPagePropSet( const Reference< css::drawing::XDrawPage > & rxPage );
