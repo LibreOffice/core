@@ -513,9 +513,9 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79540, "fdo79540.docx")
     if (!pXmlDoc)
         return;
 
-    // Ensure that two separate w:drawing tags are written after the code changes.
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing",1);
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing",1);
+    // Ensure that two separate w:drawing tags are written and they are not nested.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
