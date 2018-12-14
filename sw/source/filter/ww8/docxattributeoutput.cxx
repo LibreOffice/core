@@ -316,8 +316,89 @@ static bool lcl_isOnelinerSdt(const OUString& rName)
     return rName == "Title" || rName == "Subtitle" || rName == "Company";
 }
 
+
+
+
+
+
+
+void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
+{
+    sax_fastparser::FSHelperPtr pFS = GetSerializer();
+    const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
+    m_aFloatingTablesOfParagraph.insert(&rFrameFormat);
+    const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
+
+    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : 0;
+    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+    //Save data here and restore when out of scope
+    ExportDataSaveRestore aDataGuard(GetExport(), nStt, nEnd, pParentFrame);
+
+    // unset parent frame, otherwise exporter thinks we are still in a frame
+    m_rExport.m_pParentFrame = nullptr;
+
+    GetExport().WriteText();
+}
+
+
+
+
+
+
+
+
 void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo )
 {
+    if (!pTextNodeInfo)
+    {
+        // TODO: what about if we're in a shape?
+        for( sal_uInt16 nCnt = m_rExport.m_pDoc->GetSpzFrameFormats()->size(); nCnt; )
+        {
+            const SwFrameFormat* pFrameFormat = (*m_rExport.m_pDoc->GetSpzFrameFormats())[ --nCnt ];
+            const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+            const SwPosition* pPosition = rAnchor.GetContentAnchor();
+            if (pPosition && m_rExport.m_pCurPam->GetNode().GetTextNode())
+            {
+                if (pPosition->nNode == m_rExport.m_pCurPam->GetNode().GetTextNode()->GetIndex())
+                {
+                    auto* pStartNode = pFrameFormat->GetContent().GetContentIdx();
+                    if (pStartNode)
+                    {
+                        auto aStartNode = *pStartNode;
+
+                        // go to the next node (actual content)
+                        aStartNode++;
+
+                        // this has to be a table
+                        if (aStartNode.GetNode().IsTableNode())
+                        {
+                            // go to the end of the table
+                            auto aEndIndex = aStartNode.GetNode().EndOfSectionIndex();
+                            // go one deeper
+                            aEndIndex++;
+                            // this has to be the end of the content
+                            if (aEndIndex == pFrameFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionIndex())
+                            {
+                                SwTableNode* pTableNode = aStartNode.GetNode().GetTableNode();
+                                SwTable& rTable = pTableNode->GetTable();
+                                SwFrameFormat* pTableFormat = rTable.GetFrameFormat();
+                                const SfxGrabBagItem* pTableGrabBag = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG);
+                                std::map<OUString, css::uno::Any> aTableGrabBag = pTableGrabBag->GetGrabBag();
+                                if (aTableGrabBag.find("TablePosition") != aTableGrabBag.end())
+                                {
+                                    ww8::Frame aFrame(*pFrameFormat,*pPosition);
+
+                                    this->WriteFloatingTable(&aFrame );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     if ( m_nColBreakStatus == COLBRK_POSTPONE )
         m_nColBreakStatus = COLBRK_WRITE;
 
@@ -615,6 +696,12 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_pPostponedCustomShape.reset(nullptr);
 
         m_aFramesOfParagraph.clear();
+
+        if (!pTextNodeInfoInner)
+        {
+            // Ending a non-table paragraph, clear floating tables before paragraph.
+            m_aFloatingTablesOfParagraph.clear();
+        }
     }
 
     --m_nTextFrameLevel;
@@ -5489,6 +5576,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const ww8::Frame &rFrame, const P
             {
                 // If this is a TextBox of a shape, then ignore: it's handled in WriteTextBox().
                 if (DocxSdrExport::isTextBox(rFrame.GetFrameFormat()))
+                    break;
+
+                // If this is a TextBox containing a table which we already exported directly, ignore it
+                if (m_aFloatingTablesOfParagraph.find(&rFrame.GetFrameFormat()) != m_aFloatingTablesOfParagraph.end())
                     break;
 
                 // The frame output is postponed to the end of the anchor paragraph

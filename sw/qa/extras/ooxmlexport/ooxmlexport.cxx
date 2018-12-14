@@ -248,9 +248,9 @@ DECLARE_OOXMLEXPORT_TEST(testShapeInFloattable, "shape-in-floattable.docx")
     {
         // No nested drawingML w:txbxContent.
         assertXPath(pXmlDoc, "//mc:Choice//w:txbxContent//w:txbxContent", 0);
-        // Instead, make sure we have a separate shape and group shape:
-        assertXPath(pXmlDoc, "//mc:AlternateContent//mc:Choice[@Requires='wps']", 1);
+        // Instead, make sure we have a separate shape and a table
         assertXPath(pXmlDoc, "//mc:AlternateContent//mc:Choice[@Requires='wpg']", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl", 1);
     }
 }
 
