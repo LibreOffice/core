@@ -549,7 +549,7 @@ bool SVGFilter::filterWriter( const Sequence< PropertyValue >& rDescriptor )
         }
     }
 
-    if(!bSelectionOnly) // For Writer onéy the selection-only mode is supported
+    if(!bSelectionOnly) // For Writer only the selection-only mode is supported
         return false;
 
     uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(mxContext));
