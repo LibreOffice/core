@@ -16,6 +16,24 @@
       "revId": "3feafa82dd2cbb16423a69f7bacef5524376cc7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_2d0d3f3e",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2018-12-14T10:01:30Z",
+      "side": 1,
+      "message": "IIRC, For offline usage, opening a file:// URI with xdg opens the file manager. We had to wrap the file:// protocol in a temp html file with a script that loads the file:// URI. This way the file://().html URI opens inside the browser.\n\nThe temp files are destroyed when LibeOffice exits.",
+      "parentUuid": "5f4e5783_0d5cc349",
+      "revId": "3feafa82dd2cbb16423a69f7bacef5524376cc7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
