@@ -49,8 +49,8 @@ private:
     Color                maLineColor;
     Color                maFillColor;
 
-    bool tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
-    void drawPixelImpl( long nX, long nY, COLORREF crColor );
+    bool TryDrawBitmapGDIPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
+    void DrawPixelImpl(long nX, long nY, COLORREF crColor);
 
     HPEN SearchStockPen(COLORREF nPenColor);
     HPEN MakePen(Color nColor);
