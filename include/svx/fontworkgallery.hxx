@@ -51,7 +51,7 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog : public weld::GenericDialogController
 {
     sal_uInt16          mnThemeId;
-    SdrView*            mpSdrView;
+    SdrView&            mrSdrView;
 
     SdrObject**         mppSdrObject;
     SdrModel*           mpDestModel;
@@ -70,7 +70,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog : public weld::Generic
     DECL_LINK(ClickOKHdl, weld::Button&, void );
 
 public:
-    FontWorkGalleryDialog(weld::Window* pParent, SdrView* pView);
+    FontWorkGalleryDialog(weld::Window* pParent, SdrView& rView);
     virtual ~FontWorkGalleryDialog() override;
 
     // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog

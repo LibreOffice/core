@@ -65,10 +65,10 @@ namespace svx
 const int nColCount = 4;
 const int nLineCount = 4;
 
-FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView* pSdrView)
+FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSdrView)
     : GenericDialogController(pParent, "svx/ui/fontworkgallerydialog.ui", "FontworkGalleryDialog")
     , mnThemeId(0xffff)
-    , mpSdrView(pSdrView)
+    , mrSdrView(rSdrView)
     , mppSdrObject(nullptr)
     , mpDestModel(nullptr)
     , maCtlFavorites(m_xBuilder->weld_scrolled_window("ctlFavoriteswin"))
@@ -191,20 +191,20 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                 // only caller of ::SetSdrObjectRef. Only in that case mpDestModel seems
                 // to be the correct target SdrModel.
                 // If this is not used, the correct SdrModel seems to be the one from
-                // the mpSdrView that is used to insert (InsertObjectAtView below) the
+                // the mrSdrView that is used to insert (InsertObjectAtView below) the
                 // cloned SdrObject.
                 const bool bUseSpecialCalcMode(nullptr != mppSdrObject && nullptr != mpDestModel);
-                const bool bSdrViewInsertMode(nullptr != mpSdrView);
+                const bool bSdrViewInsertMode(true);
 
                 // center shape on current view
-                OutputDevice* pOutDev(mpSdrView->GetFirstOutputDevice());
+                OutputDevice* pOutDev(mrSdrView.GetFirstOutputDevice());
 
                 if(pOutDev && (bUseSpecialCalcMode || bSdrViewInsertMode))
                 {
                     // Clone directly to target SdrModel (may be different due to user/caller (!))
                     SdrObject* pNewObject(
                         pPage->GetObj(0)->CloneSdrObject(
-                            bUseSpecialCalcMode ? *mpDestModel : mpSdrView->getSdrModelFromSdrView()));
+                            bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
 
                     // tdf#117629
                     // Since the 'old' ::CloneSdrObject also copies the SdrPage* the
@@ -232,11 +232,11 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     }
                     else // bSdrViewInsertMode
                     {
-                        SdrPageView* pPV(mpSdrView->GetSdrPageView());
+                        SdrPageView* pPV(mrSdrView.GetSdrPageView());
 
-                        if(nullptr != pPV)
+                        if (nullptr != pPV)
                         {
-                            mpSdrView->InsertObjectAtView( pNewObject, *pPV );
+                            mrSdrView.InsertObjectAtView( pNewObject, *pPV );
                         }
                         else
                         {

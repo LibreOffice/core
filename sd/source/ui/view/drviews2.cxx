@@ -1284,7 +1284,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_DRAW_FONTWORK:
         case SID_DRAW_FONTWORK_VERTICAL:
         {
-            svx::FontworkBar::execute( mpView, rReq, GetViewFrame()->GetBindings() );       // SJ: can be removed  (I think)
+            svx::FontworkBar::execute(*mpView, rReq, GetViewFrame()->GetBindings());       // SJ: can be removed  (I think)
             Cancel();
             rReq.Done();
         }
@@ -3103,7 +3103,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_FONTWORK_CHARACTER_SPACING_FLOATER:
         case SID_FONTWORK_ALIGNMENT_FLOATER:
         case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
-            svx::FontworkBar::execute( mpDrawView.get(), rReq, GetViewFrame()->GetBindings() );
+            svx::FontworkBar::execute(*mpDrawView, rReq, GetViewFrame()->GetBindings());
             Cancel();
             rReq.Ignore ();
             break;

@@ -470,7 +470,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             break;
 
         case SID_FONTWORK_GALLERY_FLOATER:
-            svx::FontworkBar::execute( pView, rReq, GetViewFrame()->GetBindings() );
+            svx::FontworkBar::execute(*pView, rReq, GetViewFrame()->GetBindings());
             rReq.Ignore();
             break;
     }

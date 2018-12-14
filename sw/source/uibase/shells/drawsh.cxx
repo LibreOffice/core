@@ -341,7 +341,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_FONTWORK_CHARACTER_SPACING_FLOATER:
         case SID_FONTWORK_ALIGNMENT_FLOATER:
         case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
-            svx::FontworkBar::execute( pSdrView, rReq, rBnd );
+            svx::FontworkBar::execute(*pSdrView, rReq, rBnd);
             rReq.Ignore ();
             break;
 
