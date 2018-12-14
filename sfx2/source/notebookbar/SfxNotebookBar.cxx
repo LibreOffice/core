@@ -188,11 +188,13 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
 void SfxNotebookBar::LockNotebookBar()
 {
     m_bHide = true;
+    m_bLock = true;
 }
 
 void SfxNotebookBar::UnlockNotebookBar()
 {
     m_bHide = false;
+    m_bLock = false;
 }
 
 bool SfxNotebookBar::IsActive()
