@@ -1916,7 +1916,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:TransformDialog"),
         OUString(".uno:InsertPageHeader"),
         OUString(".uno:InsertPageFooter"),
-        OUString(".uno:OnlineAutoFormat")
+        OUString(".uno:OnlineAutoFormat"),
+        OUString(".uno:InsertSymbol")
     };
 
     util::URL aCommandURL;
