@@ -65,33 +65,6 @@
 
 namespace {
 
-// #100127# draw an array of points which might also contain bezier control points
-void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const PolyFlags* pFlgAry )
-{
-    if( nPoints )
-    {
-        // TODO: profile whether the following options are faster:
-        // a) look ahead and draw consecutive bezier or line segments by PolyBezierTo/PolyLineTo resp.
-        // b) convert our flag array to window's and use PolyDraw
-
-        MoveToEx( hdc, pPtAry->mnX, pPtAry->mnY, nullptr );
-        ++pPtAry; ++pFlgAry;
-
-        for( sal_uLong i=1; i<nPoints; ++i, ++pPtAry, ++pFlgAry )
-        {
-            if( *pFlgAry != PolyFlags::Control )
-            {
-                LineTo( hdc, pPtAry->mnX, pPtAry->mnY );
-            }
-            else if( nPoints - i > 2 )
-            {
-                PolyBezierTo( hdc, reinterpret_cast<const POINT*>(pPtAry), 3 );
-                i += 2; pPtAry += 2; pFlgAry += 2;
-            }
-        }
-    }
-}
-
 // #100127# Fill point and flag memory from array of points which
 // might also contain bezier control points for the PolyDraw() GDI method
 // Make sure pWinPointAry and pWinFlagAry are big enough
@@ -1763,7 +1736,36 @@ bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint*
 {
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
-    ImplRenderPath( mrParent.getHDC(), nPoints, pPtAry, pFlgAry );
+    // #100127# draw an array of points which might also contain bezier control points
+    if (!nPoints)
+        return true;
+
+    const HDC hdc = mrParent.getHDC();
+
+    // TODO: profile whether the following options are faster:
+    // a) look ahead and draw consecutive bezier or line segments by PolyBezierTo/PolyLineTo resp.
+    // b) convert our flag array to window's and use PolyDraw
+    MoveToEx(hdc, pPtAry->mnX, pPtAry->mnY, nullptr);
+    ++pPtAry;
+    ++pFlgAry;
+
+    for(sal_uInt32 i = 1; i < nPoints; ++i)
+    {
+        if(*pFlgAry != PolyFlags::Control)
+        {
+            LineTo(hdc, pPtAry->mnX, pPtAry->mnY);
+        }
+        else if(nPoints - i > 2)
+        {
+            PolyBezierTo(hdc, reinterpret_cast<const POINT*>(pPtAry), 3);
+            i += 2;
+            pPtAry += 2;
+            pFlgAry += 2;
+        }
+
+        ++pPtAry;
+        ++pFlgAry;
+    }
 
     return true;
 }
