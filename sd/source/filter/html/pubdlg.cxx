@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/FilterConfigItem.hxx>
@@ -464,9 +465,8 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
     pPage5_Buttons->SetLineCount( 4 );
     pPage5_Buttons->SetExtraSpacing( 1 );
 
-    std::vector<SdPublishingDesign>::iterator it;
-    for( it = m_aDesignList.begin(); it != m_aDesignList.end(); ++it )
-        pPage1_Designs->InsertEntry(it->m_aDesignName);
+    for( const auto& rDesign : m_aDesignList )
+        pPage1_Designs->InsertEntry(rDesign.m_aDesignName);
 
     pPage6_Preview->SetBorderStyle(WindowBorderStyle::MONO);
 
@@ -924,13 +924,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
         aProps.push_back( aValue );
     }
 
-    rParams.realloc( aProps.size() );
-    PropertyValue* pParams = rParams.getArray();
-
-    for( std::vector< PropertyValue >::iterator i = aProps.begin(); i != aProps.end(); ++i )
-    {
-        *pParams++ = *i;
-    }
+    rParams = comphelper::containerToSequence(aProps);
 }
 
 // Clickhandler for the radiobuttons of the design-selection
@@ -1146,12 +1140,8 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl, Button*, void)
             {
                 aDesign.m_aDesignName = aDlg.GetDesignName();
 
-                std::vector<SdPublishingDesign>::iterator iter;
-                for (iter = m_aDesignList.begin(); iter != m_aDesignList.end(); ++iter)
-                {
-                    if (iter->m_aDesignName == aDesign.m_aDesignName)
-                        break;
-                }
+                auto iter = std::find_if(m_aDesignList.begin(), m_aDesignList.end(),
+                    [&aDesign](const SdPublishingDesign& rDesign) { return rDesign.m_aDesignName == aDesign.m_aDesignName; });
 
                 if (iter != m_aDesignList.end())
                 {

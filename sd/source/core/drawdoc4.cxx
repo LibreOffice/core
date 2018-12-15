@@ -1168,9 +1168,8 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
 
                             if (pOPO)
                             {
-                                std::vector<StyleReplaceData>::iterator it;
-                                for (it = aReplList.begin(); it != aReplList.end(); ++it)
-                                    pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
+                                for (const auto& rRepl : aReplList)
+                                    pOPO->ChangeStyleSheets( rRepl.aName, rRepl.nFamily, rRepl.aNewName, rRepl.nNewFamily );
                             }
                         }
                         break;
@@ -1211,9 +1210,8 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
 
                             if (pOPO)
                             {
-                                std::vector<StyleReplaceData>::iterator it;
-                                for (it = aReplList.begin(); it != aReplList.end(); ++it)
-                                    pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
+                                for (const auto& rRepl : aReplList)
+                                    pOPO->ChangeStyleSheets( rRepl.aName, rRepl.nFamily, rRepl.aNewName, rRepl.nNewFamily );
                             }
                         }
                         break;

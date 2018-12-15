@@ -1428,10 +1428,8 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_I
     rEditEngine.GetPortions( nPara, aPortionList );
 
     sal_Int32 nPos1 = 0;
-    for( std::vector<sal_Int32>::const_iterator it( aPortionList.begin() ); it != aPortionList.end(); ++it )
+    for( sal_Int32 nPos2 : aPortionList )
     {
-        sal_Int32 nPos2 = *it;
-
         ESelection aSelection( nPara, nPos1, nPara, nPos2);
 
         SfxItemSet aSet( rEditEngine.GetAttribs( aSelection ) );

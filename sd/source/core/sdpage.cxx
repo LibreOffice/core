@@ -905,11 +905,10 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
     bool bNoObjectFound = true;  //used to break from outer loop
 
     const std::vector< Reference<XNode> >& objectInfo = static_cast< const SdDrawDocument& >(rPage.getSdrModelFromSdrPage()).GetObjectVector();
-    for( std::vector< Reference<XNode> >::const_iterator aIter=objectInfo.begin(); aIter != objectInfo.end(); ++aIter )
+    for( const Reference<XNode>& objectNode : objectInfo )
     {
         if(bNoObjectFound)
         {
-            Reference<XNode> objectNode = *aIter;      //get i'th object element
             Reference<XNamedNodeMap> objectattrlist = objectNode->getAttributes();
             Reference<XNode> objectattr = objectattrlist->getNamedItem("type");
             OUString sObjType = objectattr->getNodeValue();
@@ -1369,71 +1368,70 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
     double propvalue[] = {0,0,0,0};
 
     const std::vector< Reference<XNode> >& layoutInfo = static_cast< const SdDrawDocument& >(rPage.getSdrModelFromSdrPage()).GetLayoutVector();
-    for( std::vector< Reference<XNode> >::const_iterator aIter=layoutInfo.begin(); aIter != layoutInfo.end(); ++aIter )
+    auto aIter = std::find_if(layoutInfo.begin(), layoutInfo.end(),
+        [&sLayoutType](const Reference<XNode>& layoutNode) {
+            Reference<XNamedNodeMap> layoutAttrList = layoutNode->getAttributes();
+
+            // get the attribute value of layout (i.e it's type)
+            OUString sLayoutAttName = layoutAttrList->getNamedItem("type")->getNodeValue();
+            return sLayoutAttName == sLayoutType;
+        });
+    if (aIter != layoutInfo.end())
     {
+        int count=0;
         Reference<XNode> layoutNode = *aIter;
-        Reference<XNamedNodeMap> layoutAttrList =layoutNode->getAttributes();
-
-        // get the attribute value of layout (i.e it's type)
-        OUString sLayoutAttName =
-            layoutAttrList->getNamedItem("type")->getNodeValue();
-        if(sLayoutAttName == sLayoutType)
+        Reference<XNodeList> layoutChildren = layoutNode->getChildNodes();
+        const int presobjsize = layoutChildren->getLength();
+        for( int j=0; j< presobjsize ; j++)
         {
-            int count=0;
-            Reference<XNodeList> layoutChildren = layoutNode->getChildNodes();
-            const int presobjsize = layoutChildren->getLength();
-            for( int j=0; j< presobjsize ; j++)
+            OUString nodename;
+            Reference<XNode> presobj = layoutChildren->item(j);
+            nodename=presobj->getNodeName();
+
+            //check whether children is blank 'text-node' or 'presobj' node
+            if(nodename == "presobj")
             {
-                OUString nodename;
-                Reference<XNode> presobj = layoutChildren->item(j);
-                nodename=presobj->getNodeName();
+                // TODO: rework sd to permit arbitrary number of presentation objects
+                assert(count < MAX_PRESOBJS);
 
-                //check whether children is blank 'text-node' or 'presobj' node
-                if(nodename == "presobj")
+                Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
+
+                Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("relative-height");
+                OUString sValue = presObjSizeHeight->getNodeValue();
+                propvalue[0] = sValue.toDouble();
+
+                Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("relative-width");
+                sValue = presObjSizeWidth->getNodeValue();
+                propvalue[1] = sValue.toDouble();
+
+                Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("relative-posX");
+                sValue = presObjPosX->getNodeValue();
+                propvalue[2] = sValue.toDouble();
+
+                Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("relative-posY");
+                sValue = presObjPosY->getNodeValue();
+                propvalue[3] = sValue.toDouble();
+
+                if(count == 0)
                 {
-                    // TODO: rework sd to permit arbitrary number of presentation objects
-                    assert(count < MAX_PRESOBJS);
-
-                    Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
-
-                    Reference<XNode> presObjSizeHeight = presObjAttributes->getNamedItem("relative-height");
-                    OUString sValue = presObjSizeHeight->getNodeValue();
-                    propvalue[0] = sValue.toDouble();
-
-                    Reference<XNode> presObjSizeWidth = presObjAttributes->getNamedItem("relative-width");
-                    sValue = presObjSizeWidth->getNodeValue();
-                    propvalue[1] = sValue.toDouble();
-
-                    Reference<XNode> presObjPosX = presObjAttributes->getNamedItem("relative-posX");
-                    sValue = presObjPosX->getNodeValue();
-                    propvalue[2] = sValue.toDouble();
-
-                    Reference<XNode> presObjPosY = presObjAttributes->getNamedItem("relative-posY");
-                    sValue = presObjPosY->getNodeValue();
-                    propvalue[3] = sValue.toDouble();
-
-                    if(count == 0)
-                    {
-                        Size aSize ( aTitleRect.GetSize() );
-                        aSize.setHeight( basegfx::fround(aSize.Height() * propvalue[0]) );
-                        aSize.setWidth( basegfx::fround(aSize.Width() * propvalue[1]) );
-                        Point aPos( basegfx::fround(aTitlePos.X() +(aSize.Width() * propvalue[2])),
-                                    basegfx::fround(aTitlePos.Y() + (aSize.Height() * propvalue[3])) );
-                        rRectangle[count] = ::tools::Rectangle(aPos, aSize);
-                        count = count+1;
-                    }
-                    else
-                    {
-                        Size aSize( basegfx::fround(aLayoutSize.Width() * propvalue[1]),
-                                    basegfx::fround(aLayoutSize.Height() * propvalue[0]) );
-                        Point aPos( basegfx::fround(aLayoutPos.X() +(aSize.Width() * propvalue[2])),
-                                    basegfx::fround(aLayoutPos.Y() + (aSize.Height() * propvalue[3])) );
-                        rRectangle[count] = ::tools::Rectangle (aPos, aSize);
-                        count = count+1;
-                    }
+                    Size aSize ( aTitleRect.GetSize() );
+                    aSize.setHeight( basegfx::fround(aSize.Height() * propvalue[0]) );
+                    aSize.setWidth( basegfx::fround(aSize.Width() * propvalue[1]) );
+                    Point aPos( basegfx::fround(aTitlePos.X() +(aSize.Width() * propvalue[2])),
+                                basegfx::fround(aTitlePos.Y() + (aSize.Height() * propvalue[3])) );
+                    rRectangle[count] = ::tools::Rectangle(aPos, aSize);
+                    count = count+1;
+                }
+                else
+                {
+                    Size aSize( basegfx::fround(aLayoutSize.Width() * propvalue[1]),
+                                basegfx::fround(aLayoutSize.Height() * propvalue[0]) );
+                    Point aPos( basegfx::fround(aLayoutPos.X() +(aSize.Width() * propvalue[2])),
+                                basegfx::fround(aLayoutPos.Y() + (aSize.Height() * propvalue[3])) );
+                    rRectangle[count] = ::tools::Rectangle (aPos, aSize);
+                    count = count+1;
                 }
             }
-            break;
         }
     }
 }

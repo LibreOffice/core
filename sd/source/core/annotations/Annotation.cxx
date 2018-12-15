@@ -478,13 +478,8 @@ UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotat
         Reference< XAnnotation > xAnnotation( &rAnnotation );
 
         const AnnotationVector& rVec = pPage->getAnnotations();
-        for( AnnotationVector::const_iterator iter = rVec.begin(); iter != rVec.end(); ++iter )
-        {
-            if( (*iter) == xAnnotation )
-                break;
-
-            mnIndex++;
-        }
+        auto iter = std::find(rVec.begin(), rVec.end(), xAnnotation);
+        mnIndex += std::distance(rVec.begin(), iter);
     }
 }
 
