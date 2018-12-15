@@ -171,6 +171,10 @@ class GbuildParser:
             GbuildParser.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
             json['LINKED_LIBS'].strip().split(' '))
 
+    @staticmethod
+    def extract_includes(flags):
+        return GbuildParser.__split_includes(' '.join(flags))
+
     def parse(self):
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Library')):
             with open(os.path.join(self.workdir, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
@@ -1491,6 +1495,12 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             for hdir in (lib.include + lib.include_sys):
                 hf_lopath = lopath(hdir)
                 includepath_list.append(hf_lopath)
+
+            # check whether any additional '-I'/'-isystem' compiler
+            # flags were set directly in cxxflags, rather than in includes
+            (includes, isystem) = GbuildParser.extract_includes(lib.cxxflags)
+            includepath_list.extend(includes)
+            includepath_list.extend(isystem)
 
             # List headers files from current lib
             for hdir in lib.include:
