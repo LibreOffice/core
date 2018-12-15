@@ -220,12 +220,8 @@ bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
     if ( nId )
     {
-        std::vector<std::unique_ptr<PropEntry> >::const_iterator iter;
-        for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
-        {
-            if ((*iter)->mnId == nId)
-                break;
-        }
+        auto iter = std::find_if(maEntries.begin(), maEntries.end(),
+            [nId](const std::unique_ptr<PropEntry>& rxEntry) { return rxEntry->mnId == nId; });
 
         if (iter != maEntries.end())
         {
@@ -249,29 +245,25 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
         nId = 0;
 
     // do not allow same PropId's, sort
-    std::vector<std::unique_ptr<PropEntry> >::iterator iter;
-    for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter )
+    auto iter = std::find_if(maEntries.begin(), maEntries.end(),
+        [nId](const std::unique_ptr<PropEntry>& rxEntry) { return rxEntry->mnId >= nId; });
+    if (iter != maEntries.end())
     {
         if ( (*iter)->mnId == nId )
             (*iter).reset(new PropEntry( nId, pBuf, nBufSize ));
-        else if ( (*iter)->mnId > nId )
-            maEntries.insert( iter, o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize ));
         else
-            continue;
-        return;
+            maEntries.insert( iter, o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize ));
     }
-
-    maEntries.push_back( o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize ) );
+    else
+    {
+        maEntries.push_back( o3tl::make_unique<PropEntry>( nId, pBuf, nBufSize ) );
+    }
 }
 
 void Section::GetDictionary(Dictionary& rDict)
 {
-    std::vector<std::unique_ptr<PropEntry> >::iterator iter;
-    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
-    {
-        if ( (*iter)->mnId == 0 )
-            break;
-    }
+    auto iter = std::find_if(maEntries.begin(), maEntries.end(),
+        [](const std::unique_ptr<PropEntry>& rxEntry) { return rxEntry->mnId == 0; });
 
     if (iter == maEntries.end())
         return;
@@ -551,12 +543,10 @@ PropRead::PropRead( SotStorage& rStorage, const OUString& rName ) :
 
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
-    std::vector<std::unique_ptr<Section> >::iterator it;
-    for ( it = maSections.begin(); it != maSections.end(); ++it)
-    {
-        if ( memcmp( (*it)->GetFMTID(), pFMTID, 16 ) == 0 )
-            return it->get();
-    }
+    auto it = std::find_if(maSections.begin(), maSections.end(),
+        [&pFMTID](const std::unique_ptr<Section>& rxSection) { return memcmp( rxSection->GetFMTID(), pFMTID, 16 ) == 0; });
+    if (it != maSections.end())
+        return it->get();
     return nullptr;
 }
 

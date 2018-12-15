@@ -1854,14 +1854,11 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
 
         std::sort( aAnimationsOnThisPage.begin(), aAnimationsOnThisPage.end(), Ppt97AnimationStlSortHelper() );
 
-        tAnimationVector::iterator aIter( aAnimationsOnThisPage.begin() );
-        const tAnimationVector::iterator aEnd( aAnimationsOnThisPage.end() );
-
-        for( ;aIter != aEnd; ++aIter )
+        for( auto& rEntry : aAnimationsOnThisPage )
         {
-            Ppt97AnimationPtr pPpt97Animation = (*aIter).second;
+            Ppt97AnimationPtr pPpt97Animation = rEntry.second;
             if( pPpt97Animation.get() )
-                pPpt97Animation->createAndSetCustomAnimationEffect( (*aIter).first );
+                pPpt97Animation->createAndSetCustomAnimationEffect( rEntry.first );
         }
     }
     rStCtrl.Seek( nFilePosMerk );

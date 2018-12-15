@@ -393,16 +393,14 @@ void SdImportTest::testN759180()
         CPPUNIT_ASSERT(pULSpace);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Para bottom spacing is wrong!", static_cast<sal_uInt16>(0), pULSpace->GetLower());
         aEdit.GetCharAttribs(1, rLst);
-        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+        auto it = std::find_if(rLst.rbegin(), rLst.rend(),
+            [](const EECharAttrib& rCharAttr) { return dynamic_cast<const SvxFontHeightItem *>(rCharAttr.pAttr) != nullptr; });
+        if (it != rLst.rend())
         {
             const SvxFontHeightItem * pFontHeight = dynamic_cast<const SvxFontHeightItem *>((*it).pAttr);
-            if(pFontHeight)
-            {
-                // nStart == 9
-                // font height = 5 => 5*2540/72
-                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font height is wrong", static_cast<sal_uInt32>(176), pFontHeight->GetHeight() );
-                break;
-            }
+            // nStart == 9
+            // font height = 5 => 5*2540/72
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font height is wrong", static_cast<sal_uInt32>(176), pFontHeight->GetHeight() );
         }
     }
 
@@ -486,7 +484,6 @@ void SdImportTest::testN828390_2()
 
 void SdImportTest::testN828390_3()
 {
-    bool bPassed = true;
     sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/n828390_3.pptx"), PPTX );
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
@@ -496,18 +493,11 @@ void SdImportTest::testN828390_3()
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     std::vector<EECharAttrib> rLst;
     aEdit.GetCharAttribs(1, rLst);
-    for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
-    {
-        const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>((*it).pAttr);
-        if(pFontEscapement)
-        {
-            if( pFontEscapement->GetEsc() != 0 )
-            {
-                bPassed = false;
-                break;
-            }
-        }
-    }
+    bool bPassed = std::none_of(rLst.rbegin(), rLst.rend(),
+        [](const EECharAttrib& rCharAttr) {
+            const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>(rCharAttr.pAttr);
+            return pFontEscapement && (pFontEscapement->GetEsc() != 0);
+        });
     CPPUNIT_ASSERT_MESSAGE("CharEscapment not imported properly", bPassed);
 
     xDocShRef->DoClose();

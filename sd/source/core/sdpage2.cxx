@@ -198,12 +198,11 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
             }
 
 
-            std::vector<SfxStyleSheetBase*>::iterator iterOut = aOutlineStyles.begin();
             std::vector<SfxStyleSheetBase*>::iterator iterOldOut = aOldOutlineStyles.begin();
 
-            while (iterOut != aOutlineStyles.end())
+            for (auto& rpOut : aOutlineStyles)
             {
-                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(*iterOut);
+                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(rpOut);
                 SfxStyleSheet* pOldSheet = static_cast<SfxStyleSheet*>(*iterOldOut);
 
                 if (pSheet != pOldSheet)
@@ -215,18 +214,15 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                         pObj->StartListening(*pSheet);
                 }
 
-                ++iterOut;
                 ++iterOldOut;
             }
 
             OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
             if ( bReplaceStyleSheets && pOPO )
             {
-                std::vector<StyleReplaceData>::const_iterator it = aReplList.begin();
-                while (it != aReplList.end())
+                for (const auto& rRepl : aReplList)
                 {
-                    pOPO->ChangeStyleSheets( it->aName, it->nFamily, it->aNewName, it->nNewFamily );
-                    ++it;
+                    pOPO->ChangeStyleSheets( rRepl.aName, rRepl.nFamily, rRepl.aNewName, rRepl.nNewFamily );
                 }
             }
         }
@@ -273,10 +269,9 @@ void SdPage::EndListenOutlineText()
         std::vector<SfxStyleSheetBase*> aOutlineStyles;
         pSPool->CreateOutlineSheetList(aTrueLayoutName,aOutlineStyles);
 
-        std::vector<SfxStyleSheetBase*>::iterator iter;
-        for (iter = aOutlineStyles.begin(); iter != aOutlineStyles.end(); ++iter)
+        for (auto& rpStyle : aOutlineStyles)
         {
-            SfxStyleSheet *pSheet = static_cast<SfxStyleSheet*>(*iter);
+            SfxStyleSheet *pSheet = static_cast<SfxStyleSheet*>(rpStyle);
             pOutlineTextObj->EndListening(*pSheet);
         }
     }
@@ -380,9 +375,8 @@ void SdPage::lateInit(const SdPage& rSrcPage)
 
     // use shape list directly to preserve constness of rSrcPage
     const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
-    for( std::list< SdrObject* >::const_iterator aIter = rShapeList.begin(); aIter != rShapeList.end(); ++aIter )
+    for( SdrObject* pObj : rShapeList )
     {
-        SdrObject* pObj = *aIter;
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
     }
 
