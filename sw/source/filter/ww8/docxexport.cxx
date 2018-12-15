@@ -577,8 +577,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
             else
                 nRstLnNum = 0;
 
-            AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo( ) );
-            m_pSections->AppendSection( m_pCurrentPageDesc, pParentFormat, nRstLnNum );
+            AppendSection( m_pCurrentPageDesc, pParentFormat, nRstLnNum );
         }
         else
         {

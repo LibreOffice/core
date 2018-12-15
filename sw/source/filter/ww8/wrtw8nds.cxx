@@ -3042,7 +3042,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         {
             // new Section with no own PageDesc/-Break
             //  -> write follow section break;
-            const SwSectionFormat& rFormat = *rSection.GetFormat();
+            const SwSectionFormat* pFormat = rSection.GetFormat();
             ReplaceCr( msword::PageBreak ); // Indicator for Page/Section-Break
 
             // Get the page in use at the top of this section
@@ -3052,7 +3052,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
             if (!pCurrent)
                 pCurrent = m_pCurrentPageDesc;
 
-            AppendSection( pCurrent, &rFormat, nRstLnNum );
+            AppendSection( pCurrent, pFormat, nRstLnNum );
         }
     }
     if ( TOX_CONTENT_SECTION == rSection.GetType() )

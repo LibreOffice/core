@@ -436,7 +436,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                 Converting a page break to section break would cause serious issues while importing
                 the RT files with different first page being set.
             */
-            bNewPageDesc = false;
 
             /*
              * If Table cell is open and page header types are different
