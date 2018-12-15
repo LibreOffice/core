@@ -21,12 +21,14 @@
 #define INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKPICKER_HXX
 
 #include <osl/mutex.hxx>
+#include <tools/link.hxx>
 #include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
