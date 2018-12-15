@@ -227,11 +227,10 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
         PresStyleMap& rStyleMap = mpImpl->getStyleSheets();
         Sequence< OUString > aNames( rStyleMap.size() );
 
-        PresStyleMap::iterator iter( rStyleMap.begin() );
         OUString* pNames = aNames.getArray();
-        while( iter != rStyleMap.end() )
+        for( const auto& rEntry : rStyleMap )
         {
-            rtl::Reference< SdStyleSheet > xStyle( (*iter++).second );
+            rtl::Reference< SdStyleSheet > xStyle( rEntry.second );
             if( xStyle.is() )
             {
                 *pNames++ = xStyle->GetApiName();
@@ -350,14 +349,11 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
         if( mnFamily == SfxStyleFamily::Page )
         {
             PresStyleMap& rStyleSheets = mpImpl->getStyleSheets();
-            if( !rStyleSheets.empty() )
+            if( Index < static_cast<sal_Int32>(rStyleSheets.size()) )
             {
                 PresStyleMap::iterator iter( rStyleSheets.begin() );
-                while( Index-- && (iter != rStyleSheets.end()) )
-                    ++iter;
-
-                if( (Index==-1) && (iter != rStyleSheets.end()) )
-                    return Any( Reference< XStyle >( (*iter).second.get() ) );
+                std::advance(iter, Index);
+                return Any( Reference< XStyle >( (*iter).second.get() ) );
             }
         }
         else

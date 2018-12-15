@@ -1462,10 +1462,9 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
             {
                 OUString  aBookmark( *o3tl::doAccess<OUString>(mAny) );
                 sal_uInt32 nIndex = 0;
-                std::vector<OUString>::const_iterator pIter;
-                for ( pIter = maSlideNameList.begin(); pIter != maSlideNameList.end(); ++pIter, nIndex++ )
+                for ( const auto& rSlideName : maSlideNameList )
                 {
-                    if ( *pIter == aBookmark )
+                    if ( rSlideName == aBookmark )
                     {
                         // Bookmark is a link to a document page
                         nAction = 4;
@@ -1478,6 +1477,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
                         aHyperString += OUString::number(nIndex + 1);
                         nHyperLinkID = ImplInsertBookmarkURL( aHyperString, 1 | ( nIndex << 8 ) | ( 1U << 31 ), aBookmark, "", "", aHyperString );
                     }
+                    nIndex++;
                 }
             }
         }
@@ -3141,9 +3141,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                     .WriteUInt16( nRowCount )
                     .WriteUInt16( 4 );
 
-            std::vector< std::pair< sal_Int32, sal_Int32 > >::const_iterator aIter( aRows.begin() );
-            while( aIter != aRows.end() )
-                aMemStrm.WriteInt32( (*aIter++).second );
+            for( const auto& rRow : aRows )
+                aMemStrm.WriteInt32( rRow.second );
 
             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x1000100 );
             aPropOpt2.AddOpt( ESCHER_Prop_tableProperties, 1 );

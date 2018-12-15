@@ -304,17 +304,12 @@ void SdDrawDocument::InsertBookmark(
         else
             bOK = false;
 
-        std::vector<OUString>::const_iterator pIter;
-        for ( pIter = rBookmarkList.begin(); bOK && pIter != rBookmarkList.end() && !bInsertPages; ++pIter )
-        {
-            // Is there a page name in the bookmark list?
-            bool    bIsMasterPage;
-            if( pBookmarkDoc->GetPageByName( *pIter, bIsMasterPage ) != SDRPAGE_NOTFOUND )
-            {
-                // Found the page
-                bInsertPages = true;
-            }
-        }
+        bInsertPages = bOK && std::any_of(rBookmarkList.begin(), rBookmarkList.end(),
+            [&pBookmarkDoc](const OUString& rBookmark) {
+                // Is there a page name in the bookmark list?
+                bool    bIsMasterPage;
+                return pBookmarkDoc->GetPageByName(rBookmark, bIsMasterPage) != SDRPAGE_NOTFOUND;
+            });
     }
 
     bool bCalcObjCount = !rExchangeList.empty();
@@ -503,11 +498,9 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     if( !aLayoutsToTransfer.empty() )
         bMergeMasterPages = true;
 
-    std::vector<OUString>::const_iterator pIter;
-    for ( pIter = aLayoutsToTransfer.begin(); pIter != aLayoutsToTransfer.end(); ++pIter )
+    for ( const OUString& layoutName : aLayoutsToTransfer )
     {
         StyleSheetCopyResultVector aCreatedStyles;
-        OUString layoutName = *pIter;
 
         rStyleSheetPool.CopyLayoutSheets(layoutName, rBookmarkStyleSheetPool,aCreatedStyles);
 
@@ -1006,11 +999,10 @@ bool SdDrawDocument::InsertBookmarkAsObject(
         SdrPage* pPage;
         SdrPageView* pPV;
 
-        std::vector<OUString>::const_iterator pIter;
-        for ( pIter = rBookmarkList.begin(); pIter != rBookmarkList.end(); ++pIter )
+        for ( const auto& rBookmark : rBookmarkList )
         {
             // Get names of bookmarks from the list
-            SdrObject* pObj = pBookmarkDoc->GetObj(*pIter);
+            SdrObject* pObj = pBookmarkDoc->GetObj(rBookmark);
 
             if (pObj)
             {
@@ -1109,24 +1101,22 @@ bool SdDrawDocument::InsertBookmarkAsObject(
 
         delete pView;
 
-        if (!rExchangeList.empty())
+        // Get number of objects after inserting.
+        const size_t nCount = pPage->GetObjCount();
+        if (nCountBefore < nCount)
         {
-            // Get number of objects after inserting.
-            const size_t nCount = pPage->GetObjCount();
-
-            std::vector<OUString>::const_iterator pIter = rExchangeList.begin();
-            for (size_t nObj = nCountBefore; nObj < nCount; ++nObj)
+            size_t nObj = nCountBefore;
+            for (const auto& rExchange : rExchangeList)
             {
                 // Get the name to use from the Exchange list
-                if (pIter != rExchangeList.end())
+                if (pPage->GetObj(nObj))
                 {
-                    if (pPage->GetObj(nObj))
-                    {
-                        pPage->GetObj(nObj)->SetName(*pIter);
-                    }
-
-                    ++pIter;
+                    pPage->GetObj(nObj)->SetName(rExchange);
                 }
+
+                ++nObj;
+                if (nObj >= nCount)
+                    break;
             }
         }
     }
@@ -1312,8 +1302,8 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
                             pUndoMgr->AddUndoAction(o3tl::make_unique<SdMoveStyleSheetsUndoAction>(this, aUndoRemove, false));
                     }
 
-                    for( SdStyleSheetVector::iterator iter = aRemove.begin(); iter != aRemove.end(); ++iter )
-                        static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->Remove((*iter).get());
+                    for( const auto& a : aRemove )
+                        static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->Remove(a.get());
                 }
             }
         }
@@ -1604,11 +1594,10 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             // sets in the styles.
             if(!aCreatedStyles.empty())
             {
-                std::vector<StyleReplaceData>::iterator pRDataIter;
-                for ( pRDataIter = aReplList.begin(); pRDataIter != aReplList.end(); ++pRDataIter )
+                for ( const auto& rRData : aReplList )
                 {
-                    SfxStyleSheetBase* pSOld = mxStyleSheetPool->Find(pRDataIter->aName);
-                    SfxStyleSheetBase* pSNew = mxStyleSheetPool->Find(pRDataIter->aNewName);
+                    SfxStyleSheetBase* pSOld = mxStyleSheetPool->Find(rRData.aName);
+                    SfxStyleSheetBase* pSNew = mxStyleSheetPool->Find(rRData.aNewName);
 
                     if (pSOld && pSNew)
                     {
@@ -1617,15 +1606,12 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                         if (!rParentOfOld.isEmpty() && rParentOfNew.isEmpty())
                         {
-                            std::vector<StyleReplaceData>::iterator pRDIter;
-                            for ( pRDIter = aReplList.begin(); pRDIter != aReplList.end(); ++pRDIter )
+                            std::vector<StyleReplaceData>::iterator pRDIter = std::find_if(aReplList.begin(), aReplList.end(),
+                                [&rParentOfOld](const StyleReplaceData& rRD) { return (rRD.aName == rParentOfOld) && (rRD.aName != rRD.aNewName); });
+                            if (pRDIter != aReplList.end())
                             {
-                                if ((pRDIter->aName == rParentOfOld) && (pRDIter->aName != pRDIter->aNewName))
-                                {
-                                    OUString aParentOfNew(pRDIter->aNewName);
-                                    pSNew->SetParent(aParentOfNew);
-                                    break;
-                                }
+                                OUString aParentOfNew(pRDIter->aNewName);
+                                pSNew->SetParent(aParentOfNew);
                             }
                         }
                     }
@@ -1720,9 +1706,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             aPageList.push_back(pNotes);
         }
 
-        for (std::vector<SdPage*>::iterator pIter = aPageList.begin(); pIter != aPageList.end(); ++pIter)
+        for (SdPage* pPage : aPageList)
         {
-            SdPage* pPage = *pIter;
             AutoLayout eAutoLayout = pPage->GetAutoLayout();
 
             if( bUndo )
@@ -1731,7 +1716,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         (this,
                         pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
                         aLayoutName,
-                         eAutoLayout, eAutoLayout, false, *pIter));
+                         eAutoLayout, eAutoLayout, false, pPage));
             }
             pPage->SetPresentationLayout(aLayoutName);
             pPage->SetAutoLayout(eAutoLayout);
@@ -1854,22 +1839,22 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         }
 
         // Set presentation layout and AutoLayout for the affected pages
-        for ( std::vector<SdPage*>::iterator pIter = aPageList.begin(); pIter != aPageList.end(); ++pIter )
+        for ( auto& rpPage : aPageList )
         {
-            AutoLayout eOldAutoLayout = (*pIter)->GetAutoLayout();
+            AutoLayout eOldAutoLayout = rpPage->GetAutoLayout();
             AutoLayout eNewAutoLayout =
-                (*pIter)->GetPageKind() == PageKind::Standard ? AUTOLAYOUT_NONE : AUTOLAYOUT_NOTES;
+                rpPage->GetPageKind() == PageKind::Standard ? AUTOLAYOUT_NONE : AUTOLAYOUT_NOTES;
 
             if( bUndo )
             {
                 pUndoMgr->AddUndoAction(o3tl::make_unique<SdPresentationLayoutUndoAction>
                             (this, aOldLayoutName, aName,
                              eOldAutoLayout, eNewAutoLayout, true,
-                             *pIter));
+                             rpPage));
             }
 
-            (*pIter)->SetPresentationLayout(aName);
-            (*pIter)->SetAutoLayout(eNewAutoLayout);
+            rpPage->SetPresentationLayout(aName);
+            rpPage->SetAutoLayout(eNewAutoLayout);
         }
     }
 

@@ -817,11 +817,9 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
         nTargetPage = nPage;
         nTargetPage = 2 * nTargetPage + 1;    // PageKind::Standard --> absolute
 
-        std::vector<SdPage*>::iterator iter;
-        for (iter = aPageList.begin(); iter != aPageList.end(); ++iter)
+        for (const auto& rpPage : aPageList)
         {
-            pPage = *iter;
-            nPage = pPage->GetPageNum();
+            nPage = rpPage->GetPageNum();
             if (nPage > nTargetPage)
             {
                 nTargetPage += 2;        // Insert _after_ the page
@@ -854,7 +852,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
                     bSomethingHappened = true;
                 }
             }
-            nTargetPage = pPage->GetPageNum();
+            nTargetPage = rpPage->GetPageNum();
         }
     }
 

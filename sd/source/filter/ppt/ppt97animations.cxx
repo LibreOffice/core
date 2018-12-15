@@ -646,13 +646,12 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         if( pGroup )
         {
             const ::sd::EffectSequence& rEffects = pGroup->getEffects();
-            ::sd::EffectSequence::const_iterator aIter = rEffects.begin();
 
             ::sd::CustomAnimationEffectPtr pLastEffect;
             sal_Int32 nIndex = 0;
-            for( ; aIter != rEffects.end(); ++aIter )
+            for( const auto& rxEffect : rEffects )
             {
-                ::sd::CustomAnimationEffectPtr pGroupEffect(*aIter);
+                ::sd::CustomAnimationEffectPtr pGroupEffect(rxEffect);
 
                 ////todo? if( nIndex > 1 && pLastEffect && HasSoundEffect() )
                 ////          pLastEffect->setStopAudio();

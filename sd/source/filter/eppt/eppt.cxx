@@ -125,15 +125,10 @@ void PPTWriter::exportPPTPre( const std::vector< css::beans::PropertyValue >& rM
     if ( !mpPicStrm )
         mpPicStrm.reset( mrStg->OpenSotStream( "Pictures" ) );
 
-    for (std::vector< css::beans::PropertyValue >::const_iterator aIter( rMediaData.begin() ), aEnd( rMediaData.end() );
-        aIter != aEnd ; ++aIter)
-    {
-        if ( (*aIter).Name == "BaseURI" )
-        {
-            (*aIter).Value >>= maBaseURI;
-            break;
-        }
-    }
+    auto aIter = std::find_if(rMediaData.begin(), rMediaData.end(),
+        [](const css::beans::PropertyValue& rProp) { return rProp.Name == "BaseURI"; });
+    if (aIter != rMediaData.end())
+        (*aIter).Value >>= maBaseURI;
     mpPptEscherEx.reset( new PptEscherEx( *mpStrm, maBaseURI ) );
 }
 
@@ -925,7 +920,7 @@ void PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     rStrm.WriteUInt32( 0 );         // property size
     rStrm.WriteUInt32( 0 );         // property count
 
-    for ( std::vector<EPPTHyperlink>::const_iterator pIter = maHyperlink.begin(); pIter != maHyperlink.end(); ++pIter )
+    for ( const auto& rHyperlink : maHyperlink )
     {
         nParaCount += 6;
         rStrm  .WriteUInt32( 3 )    // Type VT_I4
@@ -949,15 +944,15 @@ void PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
         //          = 7 :    "         "      " " (PPT) text range
         //          = 8 :    "         "      " " (Project) task
 
-        sal_Int32 nUrlLen = pIter->aURL.getLength();
-        const OUString& rUrl = pIter->aURL;
+        sal_Int32 nUrlLen = rHyperlink.aURL.getLength();
+        const OUString& rUrl = rHyperlink.aURL;
 
         sal_uInt32 const nInfo = 7;
 
         rStrm  .WriteUInt32( 3 )    // Type VT_I4
                .WriteUInt32( nInfo );       // Info
 
-        switch( pIter->nType & 0xff )
+        switch( rHyperlink.nType & 0xff )
         {
             case 1 :        // click action to slidenumber
             {
@@ -1250,9 +1245,9 @@ void PPTWriter::ImplWriteOLE( )
 
     SvxMSExportOLEObjects aOleExport( mnCnvrtFlags );
 
-    for ( auto it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
+    for ( auto& rxExOleObjEntry : maExOleObj )
     {
-        PPTExOleObjEntry* pPtr = it->get();
+        PPTExOleObjEntry* pPtr = rxExOleObjEntry.get();
         std::unique_ptr<SvMemoryStream> pStrm;
         pPtr->nOfsB = mpStrm->Tell();
         switch ( pPtr->eType )
@@ -1374,9 +1369,9 @@ void PPTWriter::ImplWriteAtomEnding()
         }
     }
     // Ole persists
-    for ( auto it = maExOleObj.begin(); it != maExOleObj.end(); ++it )
+    for ( auto& rxExOleObjEntry : maExOleObj )
     {
-        PPTExOleObjEntry* pPtr = it->get();
+        PPTExOleObjEntry* pPtr = rxExOleObjEntry.get();
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_ExObj );
         if ( nOfs )
         {

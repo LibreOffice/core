@@ -81,12 +81,10 @@ namespace
 
 OUString lcl_findRenamedStyleName(std::vector< std::pair< OUString, OUString > > &rRenamedList, OUString const & aOriginalName )
 {
-    std::vector< std::pair< OUString, OUString > >::iterator aIter;
-    for( aIter = rRenamedList.begin(); aIter != rRenamedList.end(); ++aIter )
-    {
-        if((*aIter).first == aOriginalName )
-            return (*aIter).second;
-    }
+    auto aIter = std::find_if(rRenamedList.begin(), rRenamedList.end(),
+        [&aOriginalName](const std::pair<OUString, OUString>& rItem) { return rItem.first == aOriginalName; });
+    if (aIter != rRenamedList.end())
+        return (*aIter).second;
     return OUString();
 }
 
@@ -633,10 +631,9 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
     HasFamilyPredicate aHasFamilyPredicate(eFamily);
     std::vector<unsigned> aSheetsWithFamily = rSourcePool.GetIndexedStyleSheets().FindPositionsByPredicate(aHasFamilyPredicate);
 
-    for (std::vector<unsigned>::const_iterator it = aSheetsWithFamily.begin();
-         it != aSheetsWithFamily.end(); ++it )
+    for (const auto& rPos : aSheetsWithFamily)
     {
-        SfxStyleSheetBase* pSheet = rSourcePool.GetStyleSheetByPositionInIndex( *it );
+        SfxStyleSheetBase* pSheet = rSourcePool.GetStyleSheetByPositionInIndex( rPos );
         if( !pSheet )
             continue;
         OUString aName( pSheet->GetName() );
@@ -701,20 +698,19 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
     }
 
     // set parents on newly added stylesheets
-    std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, OUString > >::iterator aIter;
-    for( aIter = aNewStyles.begin(); aIter != aNewStyles.end(); ++aIter )
+    for( auto& rStyle : aNewStyles )
     {
         if( !rRenameSuffix.isEmpty() )
         {
-            SfxStyleSheet *pParent = lcl_findStyle(rCreatedSheets, lcl_findRenamedStyleName(aRenamedList, (*aIter).second));
+            SfxStyleSheet *pParent = lcl_findStyle(rCreatedSheets, lcl_findRenamedStyleName(aRenamedList, rStyle.second));
             if( pParent )
             {
-                (*aIter).first->SetParent( pParent->GetName() );
+                rStyle.first->SetParent( pParent->GetName() );
                 continue;
             }
         }
-        DBG_ASSERT( rSourcePool.Find( (*aIter).second, eFamily ), "StyleSheet has invalid parent: Family mismatch" );
-        (*aIter).first->SetParent( (*aIter).second );
+        DBG_ASSERT( rSourcePool.Find( rStyle.second, eFamily ), "StyleSheet has invalid parent: Family mismatch" );
+        rStyle.first->SetParent( rStyle.second );
     }
     // we have changed names of style sheets. Trigger reindexing.
     Reindex();
@@ -738,17 +734,17 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
     std::vector<OUString> aNameList;
     CreateLayoutSheetNames(rLayoutName,aNameList);
 
-    for (std::vector<OUString>::const_iterator it = aNameList.begin(); it != aNameList.end(); ++it)
+    for (const auto& rName : aNameList)
     {
-        pSheet = Find(*it, SfxStyleFamily::Page);
+        pSheet = Find(rName, SfxStyleFamily::Page);
         if (!pSheet)
         {
-            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*it, SfxStyleFamily::Page);
+            SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(rName, SfxStyleFamily::Page);
             DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Style sheet missing");
             if (pSourceSheet)
             {
                 // In the case one comes with Methusalem-Docs.
-                SfxStyleSheetBase& rNewSheet = Make(*it, SfxStyleFamily::Page);
+                SfxStyleSheetBase& rNewSheet = Make(rName, SfxStyleFamily::Page);
                 OUString file;
                 rNewSheet.SetHelpId( file, pSourceSheet->GetHelpId( file ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
@@ -933,10 +929,9 @@ void SdStyleSheetPool::UpdateStdNames()
     StyleSheetIsUserDefinedPredicate aPredicate;
     std::vector<SfxStyleSheetBase*> aEraseList;
     std::vector<unsigned> aUserDefinedStyles = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
-    for (std::vector<unsigned>::const_iterator it = aUserDefinedStyles.begin();
-            it != aUserDefinedStyles.end(); ++it)
+    for (const auto& rStyle : aUserDefinedStyles)
     {
-        SfxStyleSheetBase* pStyle = GetStyleSheetByPositionInIndex(*it);
+        SfxStyleSheetBase* pStyle = GetStyleSheetByPositionInIndex(rStyle);
 
         if( !pStyle->IsUserDefined() )
         {
@@ -1259,11 +1254,10 @@ Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName )
     if( msTableFamilyName == aName )
         return Any( mxTableFamily );
 
-    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); ++iter )
-    {
-        if( (*iter).second->getName() == aName )
-            return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
-    }
+    auto iter = std::find_if(maStyleFamilyMap.begin(), maStyleFamilyMap.end(),
+            [&aName](const SdStyleFamilyMap::value_type& rEntry) { return rEntry.second->getName() == aName; });
+    if (iter != maStyleFamilyMap.end())
+        return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
 
     throw NoSuchElementException();
 }
@@ -1279,9 +1273,9 @@ Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames()
     *pNames++ = mxCellFamily->getName();
     *pNames++ = msTableFamilyName;
 
-    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); ++iter )
+    for( const auto& rEntry : maStyleFamilyMap )
     {
-        *pNames++ = (*iter).second->getName();
+        *pNames++ = rEntry.second->getName();
     }
 
     return aNames;
@@ -1300,13 +1294,8 @@ sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName )
     if( msTableFamilyName == aName )
         return true;
 
-    for( SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() ); iter != maStyleFamilyMap.end(); ++iter )
-    {
-        if( (*iter).second->getName() == aName )
-            return true;
-    }
-
-    return false;
+    return std::any_of(maStyleFamilyMap.begin(), maStyleFamilyMap.end(),
+        [&aName](const SdStyleFamilyMap::value_type& rEntry) { return rEntry.second->getName() == aName; });
 }
 
 // XElementAccess
@@ -1351,8 +1340,7 @@ Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index )
             if( (Index < 0) || (Index >= sal::static_int_cast<sal_Int32>(maStyleFamilyMap.size())) )
                 throw IndexOutOfBoundsException();
             SdStyleFamilyMap::iterator iter( maStyleFamilyMap.begin() );
-            while( Index-- )
-                ++iter;
+            std::advance(iter, Index);
 
             return Any( Reference< XNameAccess >( static_cast< XNameAccess* >( (*iter).second.get() ) ) );
         }
@@ -1378,9 +1366,9 @@ void SAL_CALL SdStyleSheetPool::dispose()
         SdStyleFamilyMap aTempMap;
         aTempMap.swap( maStyleFamilyMap );
 
-        for( SdStyleFamilyMap::iterator iter( aTempMap.begin() ); iter != aTempMap.end(); ++iter ) try
+        for( auto& rEntry : aTempMap ) try
         {
-            (*iter).second->dispose();
+            rEntry.second->dispose();
         }
         catch( Exception& )
         {

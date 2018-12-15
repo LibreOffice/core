@@ -2910,14 +2910,12 @@ void AnimationImporter::dump( const PropertySet& rSet )
 {
     // dump property set
 
-    map< sal_Int32, Any >::const_iterator aIter( rSet.maProperties.begin() );
-    const map< sal_Int32, Any >::const_iterator aEnd( rSet.maProperties.end() );
-    while( aIter != aEnd )
+    for( const auto& rProp : rSet.maProperties )
     {
         bool bKnown = false;
 
-        const sal_Int32 nInstance = (*aIter).first;
-        Any aAny( (*aIter).second );
+        const sal_Int32 nInstance = rProp.first;
+        Any aAny( rProp.second );
 
         switch ( nInstance )
         {
@@ -3158,8 +3156,6 @@ void AnimationImporter::dump( const PropertySet& rSet )
             dump( aAny );
             fprintf( mpFile, "\"" );
         }
-
-        ++aIter;
     }
 }
 
