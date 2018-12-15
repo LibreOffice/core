@@ -54,7 +54,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/animationexport.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdpage.hxx>
 
 #include <memory>
 
