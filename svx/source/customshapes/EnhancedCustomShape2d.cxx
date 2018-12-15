@@ -917,40 +917,32 @@ bool EnhancedCustomShape2d::SetAdjustValueAsDouble( const double& rValue, const 
     return bRetValue;
 }
 
+basegfx::B2DPoint EnhancedCustomShape2d::GetPointAsB2DPoint( const css::drawing::EnhancedCustomShapeParameterPair& rPair,
+                                        const bool bScale, const bool bReplaceGeoSize ) const
+{
+    double fValX, fValY;
+    // width
+    GetParameter(fValX, rPair.First, bReplaceGeoSize, false);
+    fValX -= nCoordLeft;
+    if (bScale)
+    {
+        fValX *= fXScale;
+    }
+    // height
+    GetParameter(fValY, rPair.Second, false, bReplaceGeoSize);
+    fValY -= nCoordTop;
+    if (bScale)
+    {
+        fValY *= fYScale;
+    }
+    return basegfx::B2DPoint(fValX,fValY);
+}
+
 Point EnhancedCustomShape2d::GetPoint( const css::drawing::EnhancedCustomShapeParameterPair& rPair,
                                         const bool bScale, const bool bReplaceGeoSize ) const
 {
-    Point       aRetValue;
-    sal_uInt32  nPass = 0;
-    do
-    {
-        sal_uInt32  nIndex = nPass;
-
-        double      fVal;
-        const EnhancedCustomShapeParameter& rParameter = nIndex ? rPair.Second : rPair.First;
-        if ( nPass )    // height
-        {
-            GetParameter( fVal, rParameter, false, bReplaceGeoSize );
-            fVal -= nCoordTop;
-            if ( bScale )
-            {
-                fVal *= fYScale;
-            }
-            aRetValue.setY( static_cast<sal_Int32>(fVal) );
-        }
-        else            // width
-        {
-            GetParameter( fVal, rParameter, bReplaceGeoSize, false );
-            fVal -= nCoordLeft;
-            if ( bScale )
-            {
-                fVal *= fXScale;
-            }
-            aRetValue.setX( static_cast<long>(fVal) );
-        }
-    }
-    while ( ++nPass < 2 );
-    return aRetValue;
+    basegfx::B2DPoint aPoint(GetPointAsB2DPoint(rPair, bScale, bReplaceGeoSize));
+    return Point(static_cast<long>(aPoint.getX()), static_cast<long>(aPoint.getY()));
 }
 
 void EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCustomShapeParameter& rParameter,
@@ -1841,69 +1833,96 @@ void EnhancedCustomShape2d::CreateSubPath(
                 case ELLIPTICALQUADRANTX :
                 case ELLIPTICALQUADRANTY :
                 {
-                    bool bFirstDirection(true);
-                    basegfx::B2DPoint aControlPointA;
-                    basegfx::B2DPoint aControlPointB;
-
-                    for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
+                    if (nPntCount && (rSrcPt < nCoordSize))
                     {
-                        sal_uInt32 nModT = ( nCommand == ELLIPTICALQUADRANTX ) ? 1 : 0;
-                        Point aCurrent( GetPoint( seqCoordinates[ rSrcPt ], true, true ) );
-
-                        if ( rSrcPt )   // we need a previous point
+                        // The arc starts at the previous point and ends at the point given in the parameter.
+                        basegfx::B2DPoint aStart;
+                        basegfx::B2DPoint aEnd;
+                        sal_uInt16 i = 0;
+                        if (rSrcPt)
                         {
-                            Point aPrev( GetPoint( seqCoordinates[ rSrcPt - 1 ], true, true ) );
-                            sal_Int32 nX, nY;
-                            nX = aCurrent.X() - aPrev.X();
-                            nY = aCurrent.Y() - aPrev.Y();
-                            if ( ( nY ^ nX ) & 0x80000000 )
-                            {
-                                if ( !i )
-                                    bFirstDirection = true;
-                                else if ( !bFirstDirection )
-                                    nModT ^= 1;
-                            }
-                            else
-                            {
-                                if ( !i )
-                                    bFirstDirection = false;
-                                else if ( bFirstDirection )
-                                    nModT ^= 1;
-                            }
-                            if ( nModT )            // get the right corner
-                            {
-                                nX = aCurrent.X();
-                                nY = aPrev.Y();
-                            }
-                            else
-                            {
-                                nX = aPrev.X();
-                                nY = aCurrent.Y();
-                            }
-                            sal_Int32 nXVec = ( nX - aPrev.X() ) >> 1;
-                            sal_Int32 nYVec = ( nY - aPrev.Y() ) >> 1;
-                            Point aControl1( aPrev.X() + nXVec, aPrev.Y() + nYVec );
-
-                            aControlPointA = basegfx::B2DPoint(aControl1.X(), aControl1.Y());
-
-                            nXVec = ( nX - aCurrent.X() ) >> 1;
-                            nYVec = ( nY - aCurrent.Y() ) >> 1;
-                            Point aControl2( aCurrent.X() + nXVec, aCurrent.Y() + nYVec );
-
-                            aControlPointB = basegfx::B2DPoint(aControl2.X(), aControl2.Y());
-
-                            aNewB2DPolygon.appendBezierSegment(
-                                aControlPointA,
-                                aControlPointB,
-                                basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
+                            aStart = GetPointAsB2DPoint(seqCoordinates[rSrcPt - 1], true, true);
                         }
                         else
-                        {
-                            aNewB2DPolygon.append(basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
+                        {   // no previous point, path is ill-structured. But we want to show as much as possible.
+                            // Thus make a moveTo to the point given as parameter and continue from there.
+                            aStart = GetPointAsB2DPoint(seqCoordinates[static_cast<sal_uInt16>(rSrcPt)], true, true);
+                            aNewB2DPolygon.append(aStart);
+                            rSrcPt++;
+                            i++;
                         }
-
-                        rSrcPt++;
+                        // If there are several points, then the direction changes with every point.
+                        bool bIsXDirection(nCommand == ELLIPTICALQUADRANTX);
+                        basegfx::B2DPolygon aArc;
+                        for ( ; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
+                        {
+                            aEnd = GetPointAsB2DPoint(seqCoordinates[rSrcPt], true, true);
+                            basegfx::B2DPoint aCenter;
+                            double fRadiusX = fabs(aEnd.getX() - aStart.getX());
+                            double fRadiusY = fabs(aEnd.getY() - aStart.getY());
+                            if (bIsXDirection)
+                            {
+                                aCenter = basegfx::B2DPoint(aStart.getX(),aEnd.getY());
+                                if (aEnd.getX()<aStart.getX())
+                                {
+                                    if (aEnd.getY()<aStart.getY()) // left, up
+                                    {
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI2, F_PI);
+                                    }
+                                    else // left, down
+                                    {
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI, 1.5*F_PI);
+                                        aArc.flip();
+                                    }
+                                }
+                                else // aEnd.getX()>=aStart.getX()
+                                {
+                                    if (aEnd.getY()<aStart.getY()) // right, up
+                                    {
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 0.0, F_PI2);
+                                        aArc.flip();
+                                    }
+                                    else // right, down
+                                    {
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*F_PI, F_2PI);
+                                    }
+                                }
+                            }
+                            else // y-direction
+                            {
+                                aCenter = basegfx::B2DPoint(aEnd.getX(),aStart.getY());
+                                if (aEnd.getX()<aStart.getX())
+                                {
+                                    if (aEnd.getY()<aStart.getY()) // up, left
+                                    {
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 1.5*F_PI, F_2PI);
+                                        aArc.flip();
+                                    }
+                                    else // down, left
+                                    {
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, 0.0, F_PI2);
+                                    }
+                                }
+                                else // aEnd.getX()>=aStart.getX()
+                                {
+                                    if (aEnd.getY()<aStart.getY()) // up, right
+                                    {
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI, 1.5*F_PI);
+                                    }
+                                    else // down, right
+                                    {
+                                        aArc = basegfx::utils::createPolygonFromEllipseSegment(aCenter, fRadiusX, fRadiusY, F_PI2, F_PI);
+                                        aArc.flip();
+                                    }
+                                }
+                            }
+                            aNewB2DPolygon.append(aArc);
+                            rSrcPt++;
+                            bIsXDirection = !bIsXDirection;
+                            aStart = aEnd;
+                        }
                     }
+                    // else error in path syntax, do nothing
                 }
                 break;
 
