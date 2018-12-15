@@ -25,16 +25,19 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3, \
     -Wno-deprecated-declarations \
 ))
 
+# TODO: possibly split GTK3_CFLAGS into those that deal with includes
+# and those that don't (in configure.ac, then use here)
 $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     $$(INCLUDE) \
+    $$(GTK3_CFLAGS) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/unx \
     -I$(SRCDIR)/vcl/unx/gtk3 \
 ))
 
+# TODO: possibly pass non-include compiler flags here
 $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3,\
     $$(INCLUDE) \
-    $$(GTK3_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk3,\
