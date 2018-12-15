@@ -5924,20 +5924,6 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                     bEmit = (nColumns > 1 && bBalance);
                 }
 
-                if (!bEmit)
-                {
-                    // Also need to emit if the page desc contains a header or
-                    // footer, otherwise we go with the properties of the
-                    // section (and not the page style), which never has
-                    // headers/footers.
-                    const SwPageDesc* pPageDesc = pSectionInfo->pPageDesc;
-                    if ( pPageDesc && pPageDesc != m_rExport.m_pCurrentPageDesc )
-                    {
-                        const auto& rMaster = pPageDesc->GetMaster();
-                        bEmit = rMaster.GetHeader().IsActive() || rMaster.GetFooter().IsActive();
-                    }
-                }
-
                 // don't add section properties if this will be the first
                 // paragraph in the document
                 if ( !m_bParagraphOpened && !m_bIsFirstParagraph && bEmit )
