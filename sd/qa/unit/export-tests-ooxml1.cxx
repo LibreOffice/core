@@ -345,18 +345,11 @@ void SdOOXMLExportTest1::testN828390()
         CPPUNIT_ASSERT( pTxtObj );
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         aEdit.GetCharAttribs(0, rLst);
-        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
-        {
-            const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>((*it).pAttr);
-            if(pFontEscapement)
-            {
-                if( pFontEscapement->GetEsc() == -25 )
-                {
-                    bPassed = true;
-                    break;
-                }
-            }
-        }
+        bPassed = std::any_of(rLst.rbegin(), rLst.rend(),
+            [](const EECharAttrib& rCharAttr) {
+                const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>(rCharAttr.pAttr);
+                return pFontEscapement && (pFontEscapement->GetEsc() == -25);
+            });
     }
     CPPUNIT_ASSERT_MESSAGE("Subscript not exported properly", bPassed);
 

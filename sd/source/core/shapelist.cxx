@@ -76,9 +76,8 @@ void ShapeList::clear()
     ListImpl aShapeList;
     aShapeList.swap( maShapeList );
 
-    ListImpl::iterator aIter( aShapeList.begin() );
-    while( aIter != aShapeList.end() )
-        (*aIter++)->RemoveObjectUser(*this);
+    for( auto& rpShape : aShapeList )
+        rpShape->RemoveObjectUser(*this);
 
     maIter = aShapeList.end();
 }
@@ -128,8 +127,8 @@ SdrObject* ShapeList::getNextShape()
 void ShapeList::seekShape( sal_uInt32 nIndex )
 {
     maIter = maShapeList.begin();
-    while( nIndex-- && (maIter != maShapeList.end()) )
-        ++maIter;
+    nIndex = std::min(nIndex, static_cast<sal_uInt32>(maShapeList.size()));
+    std::advance(maIter, nIndex);
 }
 
 bool ShapeList::hasMore() const

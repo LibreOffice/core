@@ -223,11 +223,8 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 
         Point aPos;
 
-        std::vector< Graphic >::iterator aGraphIter( aGraphics.begin() );
-        while( aGraphIter != aGraphics.end() )
+        for( Graphic& aGraphic : aGraphics )
         {
-            Graphic aGraphic( *aGraphIter++ );
-
             aGraphic.Draw( pDev, aPos );
 
             aPos.AdjustX(aGraphic.GetSizePixel().Width() + 3 );

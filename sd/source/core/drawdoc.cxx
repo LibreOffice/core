@@ -1105,16 +1105,8 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
         maAnnotationAuthors.push_back( aUserOptions.GetFullName() );
     }
 
-    sal_uInt16 idx = 0;
-    const std::vector< OUString >::const_iterator aEnd( maAnnotationAuthors.end());
-    for( std::vector< OUString >::const_iterator iter( maAnnotationAuthors.begin() ); iter != aEnd; ++iter )
-    {
-        if( (*iter) == rAuthor )
-        {
-            break;
-        }
-        idx++;
-    }
+    auto iter = std::find(maAnnotationAuthors.begin(), maAnnotationAuthors.end(), rAuthor);
+    sal_uInt16 idx = static_cast<sal_uInt16>(std::distance(maAnnotationAuthors.begin(), iter));
 
     if( idx == maAnnotationAuthors.size() )
     {

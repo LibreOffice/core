@@ -152,13 +152,10 @@ sal_uInt32 ExSoundCollection::GetId(const OUString& rString)
     if (!rString.isEmpty())
     {
         const sal_uInt32 nSoundCount = maEntries.size();
-        std::vector<ExSoundEntry>::const_iterator iter;
 
-        for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++nSoundId)
-        {
-            if (iter->IsSameURL(rString))
-                break;
-        }
+        auto iter = std::find_if(maEntries.begin(), maEntries.end(),
+            [&rString](const ExSoundEntry& rEntry) { return rEntry.IsSameURL(rString); });
+        nSoundId = static_cast<sal_uInt32>(std::distance(maEntries.begin(), iter));
 
         if ( nSoundId++ == nSoundCount )
         {
@@ -180,10 +177,12 @@ sal_uInt32 ExSoundCollection::GetSize() const
     if (!maEntries.empty())
     {
         nSize += 8 + 12;    // size of SoundCollectionContainerHeader + SoundCollAtom
-        std::vector<ExSoundEntry>::const_iterator iter;
         sal_uInt32 i = 1;
-        for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++i)
-            nSize += iter->GetSize(i);
+        for ( const auto& rEntry : maEntries )
+        {
+            nSize += rEntry.GetSize(i);
+            ++i;
+        }
     }
     return nSize;
 }
@@ -201,9 +200,11 @@ void ExSoundCollection::Write( SvStream& rSt ) const
         // create SoundCollAtom ( reference to the next free SoundId );
         rSt.WriteUInt32( EPP_SoundCollAtom << 16 ).WriteUInt32( 4 ).WriteUInt32( nSoundCount );
 
-        std::vector<ExSoundEntry>::const_iterator iter;
-        for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++i)
-            iter->Write(rSt,i);
+        for ( const auto& rEntry : maEntries )
+        {
+            rEntry.Write(rSt,i);
+            ++i;
+        }
     }
 }
 

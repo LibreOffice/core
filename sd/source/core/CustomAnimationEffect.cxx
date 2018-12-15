@@ -65,6 +65,7 @@
 
 #include <algorithm>
 #include <deque>
+#include <numeric>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -1615,11 +1616,8 @@ EffectSequenceHelper::~EffectSequenceHelper()
 
 void EffectSequenceHelper::reset()
 {
-    EffectSequence::iterator aIter( maEffects.begin() );
-    EffectSequence::iterator aEnd( maEffects.end() );
-    if( aIter != aEnd )
+    for( CustomAnimationEffectPtr& pEffect : maEffects )
     {
-        CustomAnimationEffectPtr pEffect = *aIter++;
         pEffect->setEffectSequence(nullptr);
     }
     maEffects.clear();
@@ -2079,29 +2077,19 @@ CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const css::uno::Refer
 {
     CustomAnimationEffectPtr pEffect;
 
-    EffectSequence::const_iterator aIter( maEffects.begin() );
-    for( ; aIter != maEffects.end(); ++aIter )
-    {
-        if( (*aIter)->getNode() == xNode )
-        {
-            pEffect = *aIter;
-            break;
-        }
-    }
+    EffectSequence::const_iterator aIter = std::find_if(maEffects.begin(), maEffects.end(),
+        [&xNode](const CustomAnimationEffectPtr& rxEffect) { return rxEffect->getNode() == xNode; });
+    if (aIter != maEffects.end())
+        pEffect = *aIter;
 
     return pEffect;
 }
 
 sal_Int32 EffectSequenceHelper::getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const
 {
-    sal_Int32 nOffset = 0;
-
-    EffectSequence::const_iterator aIter( maEffects.begin() );
-    for( ; aIter != maEffects.end(); ++aIter, nOffset++ )
-    {
-        if( (*aIter) == xEffect )
-            return nOffset;
-    }
+    auto aIter = std::find(maEffects.begin(), maEffects.end(), xEffect);
+    if (aIter != maEffects.end())
+        return static_cast<sal_Int32>(std::distance(maEffects.begin(), aIter));
 
     return -1;
 }
@@ -2109,8 +2097,8 @@ sal_Int32 EffectSequenceHelper::getOffsetFromEffect( const CustomAnimationEffect
 CustomAnimationEffectPtr EffectSequenceHelper::getEffectFromOffset( sal_Int32 nOffset ) const
 {
     EffectSequence::const_iterator aIter( maEffects.begin() );
-    while( nOffset-- && aIter != maEffects.end() )
-        ++aIter;
+    nOffset = std::min(nOffset, static_cast<sal_Int32>(maEffects.size()));
+    std::advance(aIter, nOffset);
 
     CustomAnimationEffectPtr pEffect;
     if( aIter != maEffects.end() )
@@ -2143,32 +2131,22 @@ bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
 
 bool EffectSequenceHelper::hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
-    EffectSequence::iterator aIter( maEffects.begin() );
-    while( aIter != maEffects.end() )
-    {
-        if( (*aIter)->getTargetShape() == xShape )
-            return true;
-        ++aIter;
-    }
-
-    return false;
+    return std::any_of(maEffects.begin(), maEffects.end(),
+        [&xShape](const CustomAnimationEffectPtr& rxEffect) { return rxEffect->getTargetShape() == xShape; });
 }
 
 void EffectSequenceHelper::insertTextRange( const css::uno::Any& aTarget )
 {
-    bool bChanges = false;
-
     ParagraphTarget aParaTarget;
     if( !(aTarget >>= aParaTarget ) )
         return;
 
-    EffectSequence::iterator aIter( maEffects.begin() );
-    while( aIter != maEffects.end() )
-    {
-        if( (*aIter)->getTargetShape() == aParaTarget.Shape )
-            bChanges |= (*aIter)->checkForText();
-        ++aIter;
-    }
+    bool bChanges = std::accumulate(maEffects.begin(), maEffects.end(), false,
+        [&aParaTarget](const bool bCheck, const CustomAnimationEffectPtr& rxEffect) {
+            if( rxEffect->getTargetShape() == aParaTarget.Shape )
+                return bCheck || rxEffect->checkForText();
+            return bCheck;
+        });
 
     if( bChanges )
         rebuild();
@@ -2313,12 +2291,8 @@ void EffectSequenceHelper::updateTextGroups()
     maGroupMap.clear();
 
     // first create all the groups
-    EffectSequence::iterator aIter( maEffects.begin() );
-    const EffectSequence::iterator aEnd( maEffects.end() );
-    while( aIter != aEnd )
+    for( CustomAnimationEffectPtr& pEffect : maEffects )
     {
-        CustomAnimationEffectPtr pEffect( *aIter++ );
-
         const sal_Int32 nGroupId = pEffect->getGroupId();
 
         if( nGroupId == -1 )
@@ -2519,12 +2493,8 @@ void EffectSequenceHelper::setTextGrouping( const CustomAnimationTextGroupPtr& p
         EffectSequence aEffects( pTextGroup->maEffects );
         pTextGroup->reset();
 
-        EffectSequence::iterator aIter( aEffects.begin() );
-        const EffectSequence::iterator aEnd( aEffects.end() );
-        while( aIter != aEnd )
+        for( CustomAnimationEffectPtr& pEffect : aEffects )
         {
-            CustomAnimationEffectPtr pEffect( *aIter++ );
-
             if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
                 remove( pEffect );
             else
@@ -2540,12 +2510,8 @@ void EffectSequenceHelper::setTextGrouping( const CustomAnimationTextGroupPtr& p
         EffectSequence aEffects( pTextGroup->maEffects );
         pTextGroup->reset();
 
-        EffectSequence::iterator aIter( aEffects.begin() );
-        const EffectSequence::iterator aEnd( aEffects.end() );
-        while( aIter != aEnd )
+        for( CustomAnimationEffectPtr& pEffect : aEffects )
         {
-            CustomAnimationEffectPtr pEffect( *aIter++ );
-
             if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
             {
                 // set correct node type
@@ -2655,12 +2621,8 @@ void EffectSequenceHelper::setTextGroupingAuto( const CustomAnimationTextGroupPt
     EffectSequence aEffects( pTextGroup->maEffects );
     pTextGroup->reset();
 
-    EffectSequence::iterator aIter( aEffects.begin() );
-    const EffectSequence::iterator aEnd( aEffects.end() );
-    while( aIter != aEnd )
+    for( CustomAnimationEffectPtr& pEffect : aEffects )
     {
-        CustomAnimationEffectPtr pEffect( *aIter++ );
-
         if( pEffect->getTarget().getValueType() == ::cppu::UnoType<ParagraphTarget>::get() )
         {
             // set correct node type
@@ -3238,14 +3200,12 @@ void MainSequence::onTextChanged( const Reference< XShape >& xShape )
 
 void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
 {
-    bool bChanges = false;
-
-    EffectSequence::iterator aIter;
-    for( aIter = maEffects.begin(); aIter != maEffects.end(); ++aIter )
-    {
-        if( (*aIter)->getTargetShape() == xShape )
-            bChanges |= (*aIter)->checkForText();
-    }
+    bool bChanges = std::accumulate(maEffects.begin(), maEffects.end(), false,
+        [&xShape](const bool bCheck, const CustomAnimationEffectPtr& rxEffect) {
+            if( rxEffect->getTargetShape() == xShape )
+                return bCheck || rxEffect->checkForText();
+            return bCheck;
+        });
 
     if( bChanges )
         EffectSequenceHelper::implRebuild();
