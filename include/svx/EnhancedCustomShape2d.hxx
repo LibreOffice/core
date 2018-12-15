@@ -35,6 +35,7 @@
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
 #include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 
 #include <memory>
 #include <vector>
@@ -131,6 +132,8 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
             sal_uInt32& nColorIndex,
             sal_uInt32 nColorCount);
         SAL_DLLPRIVATE Point    GetPoint( const css::drawing::EnhancedCustomShapeParameterPair&,
+                                                    const bool bScale = true, const bool bReplaceGeoSize = false ) const;
+        SAL_DLLPRIVATE basegfx::B2DPoint GetPointAsB2DPoint(const css::drawing::EnhancedCustomShapeParameterPair&,
                                                     const bool bScale = true, const bool bReplaceGeoSize = false ) const;
 
         SAL_DLLPRIVATE void CreateSubPath(
