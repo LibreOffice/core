@@ -2369,7 +2369,18 @@ void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet)
             double fTextRotation = 0;
             uno::Any aAny = xPropSet->getPropertyValue("TextRotation");
             if (aAny.hasValue() && (aAny >>= fTextRotation))
+            {
+                // The MS Office UI allows values only in range of [-90,90].
+                if (fTextRotation > 9000.0 && fTextRotation < 27000.0)
+                {
+                    fTextRotation = 0;
+                }
+                else if (fTextRotation < 36000.0 && fTextRotation >=27000.0)
+                {
+                    fTextRotation = -(36000.0 - fTextRotation);
+                }
                 nRotation = std::round(fTextRotation * fMultiplier);
+            }
         }
     }
 
