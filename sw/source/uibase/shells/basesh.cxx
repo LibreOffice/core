@@ -2202,7 +2202,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     SelectionType nSelType(rSh.GetSelectionType());
     SvxBrushItem aBrushItem(RES_BACKGROUND);
 
-    if( SelectionType::TableCell & nSelType )
+    if( SelectionType::Table & nSelType )
     {
         rSh.GetBoxBackground( aBrushItem );
     }
@@ -2262,7 +2262,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
     SvxBrushItem aBrushItem(RES_BACKGROUND);
 
-    if( SelectionType::TableCell & nSelType )
+    if( SelectionType::Table & nSelType )
     {
         rSh.GetBoxBackground( aBrushItem );
     }
@@ -2322,7 +2322,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         }
     }
 
-    if( SelectionType::TableCell & nSelType )
+    if( SelectionType::Table & nSelType )
     {
         rSh.SetBoxBackground( aBrushItem );
     }

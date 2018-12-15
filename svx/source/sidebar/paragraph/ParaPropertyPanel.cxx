@@ -104,7 +104,7 @@ void ParaPropertyPanel::HandleContextChange (
 
         case CombinedEnumContext(Application::WriterVariants, Context::Table):
             mpTBxVertAlign->Show();
-            mpTBxBackColor->Show();
+            mpTBxBackColor->Hide();
             mpTBxNumBullet->Show();
             ReSize();
             break;
