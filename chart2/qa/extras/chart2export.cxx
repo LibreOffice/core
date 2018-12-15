@@ -120,6 +120,7 @@ public:
     void testChartTitlePropertiesColorFillPPTX();
     void testChartTitlePropertiesGradientFillPPTX();
     void testChartTitlePropertiesBitmapFillPPTX();
+    void testxAxisLabelsRotation();
     void testTdf116163();
     void testTdf119029();
 
@@ -204,6 +205,7 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesColorFillPPTX);
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillPPTX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillPPTX);
+    CPPUNIT_TEST(testxAxisLabelsRotation);
     CPPUNIT_TEST(testTdf116163);
     CPPUNIT_TEST(testTdf119029);
     CPPUNIT_TEST_SUITE_END();
@@ -1914,6 +1916,16 @@ void Chart2ExportTest::testChartTitlePropertiesBitmapFillPPTX()
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:blipFill/a:blip", "embed", "rId1");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
+}
+
+void Chart2ExportTest::testxAxisLabelsRotation()
+{
+    load ("/chart2/qa/extras/data/xlsx/", "xAxisLabelsRotation.xlsx");
+    xmlDocPtr pXmlDoc1 = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc1);
+
+    // Chart1 xAxis labels should be 45 degree
+    assertXPath(pXmlDoc1, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:txPr/a:bodyPr", "rot", "2700000");
 }
 
 void Chart2ExportTest::testTdf116163()
