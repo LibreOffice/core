@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_1c763608",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-15T17:57:04Z",
+      "side": 1,
+      "message": "Is PROP_IS_LANDSCAPE is missing, that means PORTRAIT, not \"inherit\" right?",
+      "range": {
+        "startLine": 1319,
+        "startChar": 36,
+        "endLine": 1319,
+        "endChar": 41
+      },
+      "revId": "311028004b8af6dc0e270718eac453e7ed93717f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
