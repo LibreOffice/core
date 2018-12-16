@@ -217,7 +217,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
     // tdf#106792 Checked loading of tdf113946.docx. Before the change, the expected
     // value of this test was "1696". Opening the file shows a single short line anchored
     // at the doc start. Only diff is that in 'old' version it is slightly rotated, in 'new'
-    // version line is strict hiorizontal. Checked against MSWord2013, there the line
+    // version line is strict horizontal. Checked against MSWord2013, there the line
     // is also not rotated -> the change is to the better, correct the expected result here.
     CPPUNIT_ASSERT_EQUAL(OUString("1695"), aTop);
 }
