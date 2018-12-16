@@ -20,14 +20,18 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCONTROLLERRESOURCEMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCONTROLLERRESOURCEMANAGER_HXX
 
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#include <com/sun/star/drawing/framework/XResource.hpp>
-#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <osl/mutex.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <map>
 #include <memory>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceFactory; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResource; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
 
 namespace sd { namespace framework {
 

@@ -30,6 +30,7 @@
 #include "FullScreenPane.hxx"
 
 #include <framework/FrameworkHelper.hxx>
+#include <PaneShells.hxx>
 #include <ViewShellBase.hxx>
 #include <PaneChildWindows.hxx>
 #include <DrawController.hxx>

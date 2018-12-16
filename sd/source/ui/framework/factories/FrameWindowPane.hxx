@@ -22,7 +22,7 @@
 
 #include <framework/Pane.hxx>
 
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
 
 namespace sd { namespace framework {
 

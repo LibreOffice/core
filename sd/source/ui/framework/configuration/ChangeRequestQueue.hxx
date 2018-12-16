@@ -20,9 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CHANGEREQUESTQUEUE_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CHANGEREQUESTQUEUE_HXX
 
-#include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <list>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationChangeRequest; } } } } }
 
 namespace sd { namespace framework {
 

@@ -20,16 +20,12 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONWINDOW_HXX
 #define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONWINDOW_HXX
 
-#include <com/sun/star/office/XAnnotation.hpp>
-
 #include <vcl/ctrl.hxx>
-#include <vcl/lineinfo.hxx>
 #include <vcl/floatwin.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <svx/sdr/overlay/overlayobject.hxx>
-#include <editeng/editstat.hxx>
+namespace com { namespace sun { namespace star { namespace office { class XAnnotation; } } } }
 
 class OutlinerView;
 class Outliner;
@@ -44,7 +40,6 @@ class AnnotationManagerImpl;
 class AnnotationWindow;
 class DrawDocShell;
 class TextApiObject;
-class View;
 
 class AnnotationTextWindow : public Control
 {

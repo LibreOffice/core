@@ -20,21 +20,18 @@
 #ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERCANVAS_HXX
 #define INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERCANVAS_HXX
 
-#include "CanvasUpdateRequester.hxx"
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/rendering/XBitmapCanvas.hpp>
-#include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <memory>
+
+namespace sd { namespace presenter { class CanvasUpdateRequester; } }
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace geometry { struct AffineMatrix2D; } } } }
 
 namespace sd { namespace presenter {
 

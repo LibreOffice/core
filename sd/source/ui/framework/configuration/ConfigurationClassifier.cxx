@@ -20,6 +20,7 @@
 #include "ConfigurationClassifier.hxx"
 
 #include <framework/FrameworkHelper.hxx>
+#include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

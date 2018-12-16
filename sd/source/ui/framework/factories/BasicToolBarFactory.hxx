@@ -20,19 +20,14 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_BASICTOOLBARFACTORY_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_BASICTOOLBARFACTORY_HXX
 
-#include <MutexOwner.hxx>
-
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace sd {
-class ViewShellBase;
-}
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
 
 namespace sd { namespace framework {
 

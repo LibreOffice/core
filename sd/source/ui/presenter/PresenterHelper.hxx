@@ -22,9 +22,10 @@
 
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace sd { namespace presenter {
 

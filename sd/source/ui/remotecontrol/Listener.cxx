@@ -11,8 +11,12 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
+#include "Communicator.hxx"
 #include "Listener.hxx"
 #include "ImagePreparer.hxx"
+#include "Transmitter.hxx"
+
+#include <com/sun/star/presentation/XSlideShowController.hpp>
 
 using namespace sd;
 using namespace ::com::sun::star::presentation;

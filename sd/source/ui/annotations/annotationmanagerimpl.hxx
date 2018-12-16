@@ -21,24 +21,26 @@
 #define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONMANAGERIMPL_HXX
 
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/office/XAnnotationAccess.hpp>
-#include <com/sun/star/drawing/XDrawView.hpp>
 
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-#include <ViewShellBase.hxx>
-
 #include "annotationtag.hxx"
+
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
+namespace com { namespace sun { namespace star { namespace office { class XAnnotationAccess; } } } }
+namespace com { namespace sun { namespace star { namespace office { class XAnnotation; } } } }
 
 class SfxRequest;
 class SdPage;
+class SdDrawDocument;
 
 namespace sd
 {
 
+class ViewShellBase;
 typedef std::vector< rtl::Reference< AnnotationTag > > AnnotationTagVector;
 
 namespace tools {

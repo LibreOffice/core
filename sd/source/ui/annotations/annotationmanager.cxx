@@ -26,6 +26,7 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <comphelper/lok.hxx>
 #include <svx/svxids.hrc>
 
@@ -77,6 +78,7 @@
 #include <DrawController.hxx>
 #include <sdresid.hxx>
 #include <EventMultiplexer.hxx>
+#include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>

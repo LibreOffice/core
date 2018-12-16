@@ -23,14 +23,15 @@
 #include <MutexOwner.hxx>
 
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <cppuhelper/compbase.hxx>
 
 #include <vcl/vclptr.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XPane; } } } } }
 
 namespace sd {
 class ViewShell;

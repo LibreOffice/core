@@ -11,29 +11,20 @@
 #define INCLUDED_SD_SOURCE_UI_DLG_PHOTOALBUMDIALOG_HXX
 
 #include <tools/link.hxx>
-#include <sdpage.hxx>
-#include <pres.hxx>
-#include <drawdoc.hxx>
 
 #include <vcl/weld.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <svx/graphctl.hxx>
-#include <svx/svdotext.hxx>
-#include <svx/svdobj.hxx>
+#include <xmloff/autolayout.hxx>
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/drawing/XDrawPages.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPages; } } } }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphicProvider; } } } }
 
-class SdrTextObj;
 class SdDrawDocument;
-class SdPage;
+class GraphicFilter;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::presentation;
 
 namespace sd
 {

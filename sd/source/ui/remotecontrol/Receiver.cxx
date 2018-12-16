@@ -22,6 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <vcl/svapp.hxx>
 
 using namespace sd;
 using namespace ::osl;

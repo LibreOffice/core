@@ -20,16 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
 
-#include <CustomAnimationEffect.hxx>
-#include <CustomAnimationPreset.hxx>
-#include <vcl/tabdlg.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 
-class TabControl;
-class OKButton;
-class CancelButton;
-class HelpButton;
 namespace sd {
 
 // property handles

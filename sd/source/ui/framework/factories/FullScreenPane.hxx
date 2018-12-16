@@ -21,14 +21,13 @@
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_FULLSCREENPANE_HXX
 
 #include "FrameWindowPane.hxx"
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <vcl/vclevent.hxx>
-#include <vcl/window.hxx>
-#include <memory>
+#include <tools/link.hxx>
 
 class WorkWindow;
+class VclWindowEvent;
 
-namespace sd { class ViewShellBase; }
+namespace vcl { class Window; }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace sd { namespace framework {
 

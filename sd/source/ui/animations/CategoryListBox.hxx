@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CATEGORYLISTBOX_HXX
 
 #include <vcl/lstbox.hxx>
-#include <vcl/builderfactory.hxx>
 
 namespace sd {
 
