@@ -1,0 +1,11 @@
+--- src/gr_face.cpp
++++ src/gr_face.cpp
+@@ -95,7 +95,7 @@
+ 
+     Face *res = new Face(appFaceHandle, *ops);
+     if (res && load_face(*res, faceOptions))
+-        return static_cast<gr_face *>(res);
++        return reinterpret_cast<gr_face *>(res);
+ 
+     delete res;
+     return 0;
