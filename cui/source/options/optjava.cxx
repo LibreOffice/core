@@ -1012,9 +1012,9 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
             m_xPathList->append("", sPath, SvFileInformationManager::GetImageId(aURL));
         }
         while (nIdx>=0);
+        // select first entry
+        m_xPathList->select(0);
     }
-    // select first entry
-    m_xPathList->select(0);
     SelectHdl_Impl(*m_xPathList);
 }
 
