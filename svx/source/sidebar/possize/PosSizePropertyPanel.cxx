@@ -731,6 +731,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     long nTmp = pItem->GetValue();
+                    nTmp = nTmp < 0 ? 36000+nTmp : nTmp;
 
                     mpMtrAngle->SetValue( nTmp );
                     mpDial->SetRotation( nTmp );
