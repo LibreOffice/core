@@ -5,3 +5,4 @@ INSTALLLOCATION	installuser
 INSTALLLOCATION	installuser_
 INSTALLLOCATION	installmachine
 INSTALLLOCATION	installmachine_
+WINMAJORVER	WinMajorVer
