@@ -42,6 +42,8 @@
 #include "CustomAnimationPane.hxx"
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationList.hxx"
+#include "motionpathtag.hxx"
+#include <CustomAnimationPreset.hxx>
 #include <createcustomanimationpanel.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>

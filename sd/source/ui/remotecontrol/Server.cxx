@@ -21,6 +21,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
+#include <vcl/svapp.hxx>
+#include <osl/socket.hxx>
 
 #include <sddll.hxx>
 

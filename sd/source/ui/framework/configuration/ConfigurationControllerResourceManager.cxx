@@ -22,6 +22,8 @@
 #include "ResourceFactoryManager.hxx"
 #include <framework/FrameworkHelper.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <algorithm>

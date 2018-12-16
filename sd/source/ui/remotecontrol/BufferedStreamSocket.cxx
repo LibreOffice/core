@@ -9,6 +9,7 @@
 
 #include "BufferedStreamSocket.hxx"
 
+#include <osl/socket.hxx>
 #include <sal/log.hxx>
 #include <algorithm>
 

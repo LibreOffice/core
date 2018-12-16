@@ -21,8 +21,6 @@
 
 #include <osl/diagnose.h>
 
-using namespace com::sun::star::beans;
-
 using com::sun::star::uno::Any;
 
 namespace sd

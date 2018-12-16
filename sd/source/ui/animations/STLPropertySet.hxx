@@ -20,10 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_STLPROPERTYSET_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_STLPROPERTYSET_HXX
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-
-#include <list>
 #include <map>
+#include <com/sun/star/uno/Any.hxx>
 
 namespace sd
 {

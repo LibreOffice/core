@@ -9,14 +9,13 @@
 #ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_RECEIVER_HXX
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_RECEIVER_HXX
 
-#include <osl/socket.hxx>
-#include <stdlib.h>
+#include <rtl/string.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/svapp.hxx>
 
 #include <vector>
+#include <deque>
 
-#include "Transmitter.hxx"
+namespace sd { class Transmitter; }
 
 namespace sd
 {

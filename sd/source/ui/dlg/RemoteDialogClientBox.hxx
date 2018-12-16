@@ -22,16 +22,12 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 
-#include <svtools/extensionlistbox.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/deployment/XPackage.hpp>
 
 #include <memory>
 

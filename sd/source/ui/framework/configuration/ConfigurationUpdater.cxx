@@ -21,9 +21,11 @@
 #include "ConfigurationTracer.hxx"
 #include "ConfigurationClassifier.hxx"
 #include "ConfigurationControllerBroadcaster.hxx"
+#include "ConfigurationControllerResourceManager.hxx"
 #include <framework/Configuration.hxx>
 #include <framework/FrameworkHelper.hxx>
 
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <comphelper/scopeguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>

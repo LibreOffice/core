@@ -24,15 +24,14 @@
 
 #include <memory>
 
-#include <com/sun/star/drawing/XShape.hpp>
 #include <vcl/treelistbox.hxx>
 #include <vcl/builder.hxx>
 #include <CustomAnimationEffect.hxx>
-#include <CustomAnimationPreset.hxx>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
 namespace sd {
 
-class CustomAnimationEffect;
 typedef std::shared_ptr< CustomAnimationEffect > CustomAnimationEffectPtr;
 
 class ICustomAnimationListController

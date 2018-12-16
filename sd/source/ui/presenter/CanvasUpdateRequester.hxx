@@ -20,10 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_CANVASUPDATEREQUESTER_HXX
 #define INCLUDED_SD_SOURCE_UI_PRESENTER_CANVASUPDATEREQUESTER_HXX
 
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <sal/types.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include <tools/link.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace rendering { class XSpriteCanvas; } } } }
 
 struct ImplSVEvent;
 

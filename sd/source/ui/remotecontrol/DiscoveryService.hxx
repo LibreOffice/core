@@ -9,15 +9,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_DISCOVERYSERVICE_HXX
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_DISCOVERYSERVICE_HXX
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <osl/socket.hxx>
 #include <osl/thread.hxx>
 
-#include "ZeroconfService.hxx"
-
-struct sockaddr_in;
+namespace sd { class ZeroconfService; }
 
 namespace sd
 {

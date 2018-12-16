@@ -24,6 +24,7 @@
 #include "ConfigurationControllerBroadcaster.hxx"
 #include "ConfigurationTracer.hxx"
 #include "GenericConfigurationChangeRequest.hxx"
+#include "ConfigurationControllerResourceManager.hxx"
 #include "ResourceFactoryManager.hxx"
 #include "UpdateRequest.hxx"
 #include "ChangeRequestQueueProcessor.hxx"

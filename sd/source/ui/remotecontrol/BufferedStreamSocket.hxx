@@ -10,7 +10,7 @@
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_BUFFEREDSTREAMSOCKET_HXX
 
 #include "IBluetoothSocket.hxx"
-#include <osl/socket.hxx>
+#include <osl/socket_decl.hxx>
 #include <vector>
 
 #define CHARSET RTL_TEXTENCODING_UTF8

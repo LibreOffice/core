@@ -23,8 +23,9 @@
 #include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <cppuhelper/compbase.hxx>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
 
 namespace sd { namespace framework {
 

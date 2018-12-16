@@ -21,12 +21,11 @@
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_MOTIONPATHTAG_HXX
 
 #include <com/sun/star/util/XChangesListener.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <smarttag.hxx>
 #include <CustomAnimationEffect.hxx>
 
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 class SdrPathObj;
 
 namespace sd {

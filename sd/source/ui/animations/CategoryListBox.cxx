@@ -18,6 +18,7 @@
  */
 
 #include "CategoryListBox.hxx"
+#include <vcl/builderfactory.hxx>
 
 namespace sd {
 

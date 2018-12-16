@@ -18,6 +18,7 @@
  */
 
 #include "ImagePreparer.hxx"
+#include "Transmitter.hxx"
 
 #include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
@@ -38,6 +39,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 

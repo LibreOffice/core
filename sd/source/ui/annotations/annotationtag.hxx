@@ -20,10 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONTAG_HXX
 #define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONTAG_HXX
 
-#include <com/sun/star/office/XAnnotation.hpp>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <smarttag.hxx>
+
+namespace com { namespace sun { namespace star { namespace office { class XAnnotation; } } } }
 
 namespace sd {
 

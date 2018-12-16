@@ -77,6 +77,7 @@
 #include "annotationwindow.hxx"
 #include "annotationmanagerimpl.hxx"
 
+#include <com/sun/star/office/XAnnotation.hpp>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>

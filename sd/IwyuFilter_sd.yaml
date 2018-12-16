@@ -69,6 +69,55 @@ blacklist:
     sd/source/filter/eppt/eppt.hxx:
     # base class has to be a complete type
     - escherex.hxx
+    sd/source/ui/annotations/annotationmanagerimpl.hxx:
+    # base class has to be a complete type
+    - annotationtag.hxx
+    - com/sun/star/document/XEventListener.hpp
+    sd/source/ui/framework/configuration/ConfigurationTracer.hxx:
+    # Needed for css shortcut
+    - sal/types.h
+    sd/source/ui/framework/configuration/GenericConfigurationChangeRequest.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp
+    sd/source/ui/framework/configuration/UpdateRequest.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp
+    sd/source/ui/framework/factories/BasicToolBarFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XResourceFactory.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/framework/factories/BasicPaneFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
+    - com/sun/star/drawing/framework/XResourceFactory.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/framework/factories/BasicViewFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XResourceFactory.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/framework/factories/ChildWindowPane.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp
+    - framework/Pane.hxx
+    sd/source/ui/framework/module/CenterViewFocusModule.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
+    sd/source/ui/framework/module/ShellStackGuard.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
+    sd/source/ui/framework/module/ToolBarModule.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
+    # Needed for template
+    - o3tl/deleter.hxx
+    sd/source/ui/framework/module/SlideSorterModule.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
+    sd/source/ui/framework/module/ViewTabBarModule.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/framework/XConfigurationChangeListener.hpp
     sd/source/ui/inc/AccessibleDocumentViewBase.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
@@ -186,3 +235,28 @@ blacklist:
     sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:
     # Needed for template
     - o3tl/deleter.hxx
+    sd/source/ui/presenter/PresenterHelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XPresenterHelper.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/presenter/PresenterPreviewCache.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XSlidePreviewCache.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/presenter/PresenterCanvas.hxx:
+    # base class has to be a complete type
+    - com/sun/star/rendering/XSpriteCanvas.hpp
+    - com/sun/star/rendering/XBitmap.hpp
+    - com/sun/star/awt/XWindowListener.hpp
+    sd/source/ui/presenter/PresenterTextView.hxx:
+    # base class has to be a complete type
+    - tools/PropertySet.hxx
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/presenter/SlideRenderer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XSlideRenderer.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/remotecontrol/Listener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/presentation/XSlideShowListener.hpp

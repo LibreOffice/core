@@ -12,11 +12,12 @@
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-#include "IBluetoothSocket.hxx"
 #include <osl/thread.hxx>
 #include <rtl/string.hxx>
 
 #include <queue>
+
+namespace sd { struct IBluetoothSocket; }
 
 namespace sd
 {

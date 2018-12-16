@@ -26,11 +26,13 @@
 #include <utility>
 #include <vector>
 
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <com/sun/star/drawing/framework/XModuleController.hpp>
-#include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XControllerManager; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceFactory; } } } } }
+namespace com { namespace sun { namespace star { namespace util { class XURLTransformer; } } } }
 
 namespace sd { namespace framework {
 
