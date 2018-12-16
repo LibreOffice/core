@@ -501,7 +501,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_DEFLANG:
         case RTF_ADEFLANG:
         {
-            LanguageTag aTag((LanguageType(nParam)));
+            LanguageTag aTag((LanguageType(static_cast<sal_uInt16>(nParam))));
             auto pValue = new RTFValue(aTag.getBcp47());
             putNestedAttribute(m_aStates.top().aCharacterSprms,
                                (nKeyword == RTF_DEFLANG ? NS_ooxml::LN_EG_RPrBase_lang
