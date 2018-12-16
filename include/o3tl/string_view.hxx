@@ -792,12 +792,13 @@ operator <<(
     std::basic_ostream<charT, traits> & os,
     basic_string_view<charT, traits> str)
 {
-    typename std::basic_ostream<charT, traits>::sentry sentry;
+    typename std::basic_ostream<charT, traits>::sentry sentry(os);
     if (sentry) {
         auto const w = os.width();
-        auto const pad
-            = std::max<std::make_unsigned<decltype(w + str.size())>::type>(
-                w < 0 ? 0 : w, str.size());
+        auto pad
+            = std::max<typename std::make_unsigned<decltype(w + str.size())>::type>(
+                  w < 0 ? 0 : w, str.size())
+              - str.size();
         auto const after = (os.flags() & std::ios_base::adjustfield)
             == std::ios_base::left;
         if (pad != 0 && !after) {
@@ -814,8 +815,6 @@ operator <<(
             }
         }
         os.width(0);
-    } else {
-        os.setstate(std::ios_base::failbit);
     }
     return os;
 }
