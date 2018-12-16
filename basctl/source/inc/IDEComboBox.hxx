@@ -237,7 +237,7 @@ protected:
 private:
     /// Delete all languages from ComboBox
     void ClearBox();
-    /// Switch inferface of dialog to selected language
+    /// Switch interface of dialog to selected language
     void SetLanguage();
 
     /// Fill up the language combobox
