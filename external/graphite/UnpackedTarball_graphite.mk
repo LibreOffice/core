@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,graphite))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,graphite,$(GRAPHITE_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,graphite,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,graphite, \
+    external/graphite/ubsan.patch \
+))
+
 # vim: set noet sw=4 ts=4:
