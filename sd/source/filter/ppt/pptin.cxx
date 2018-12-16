@@ -1492,14 +1492,12 @@ struct Ppt97AnimationStlSortHelper
 bool Ppt97AnimationStlSortHelper::operator()( const std::pair< SdrObject*, Ppt97AnimationPtr >& p1, const std::pair< SdrObject*, Ppt97AnimationPtr >& p2 )
 {
     if( !p1.second.get() || !p2.second.get() )
-        return true;
+        return p1.second.get() < p2.second.get();
     if( *p1.second < *p2.second )
         return true;
     if( *p1.second > *p2.second )
         return false;
-    if( p1.first->GetOrdNum() < p2.first->GetOrdNum() )
-        return true;
-    return false;
+    return p1.first->GetOrdNum() < p2.first->GetOrdNum();
 }
 
 void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimationsUsed )
