@@ -20,25 +20,22 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
-#include <com/sun/star/drawing/XDrawView.hpp>
 #include <vcl/layout.hxx>
 #include <vcl/field.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
-#include <CustomAnimationPreset.hxx>
 #include "CustomAnimationList.hxx"
 #include "CategoryListBox.hxx"
-#include "motionpathtag.hxx"
 #include <misc/scopelock.hxx>
 
 #include <vector>
 
-class PushButton;
-class FixedLine;
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
+namespace sd { class CustomAnimationPresets; }
+namespace sd { class MotionPathTag; }
+
 class FixedText;
-class ListBox;
-class ComboBox;
-class CheckBox;
+namespace weld { class ComboBox; }
 
 enum class PathKind { NONE, CURVE, POLYGON, FREEFORM };
 

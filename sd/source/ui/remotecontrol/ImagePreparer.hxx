@@ -9,11 +9,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IMAGEPREPARER_HXX
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IMAGEPREPARER_HXX
 
-#include <osl/thread.hxx>
 #include <vcl/timer.hxx>
-#include <com/sun/star/presentation/XSlideShowController.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
-#include "Transmitter.hxx"
+namespace com { namespace sun { namespace star { namespace presentation { class XSlideShowController; } } } }
+namespace sd { class Transmitter; }
 
 namespace sd
 {

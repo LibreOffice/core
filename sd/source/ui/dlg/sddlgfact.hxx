@@ -56,10 +56,8 @@ namespace sd {
     class BreakDlg;
     class HeaderFooterDialog;
     class MasterLayoutDialog;
-    class OutlineBulletDlg;
 }
 
-class Dialog;
 class SdVclAbstractDialog_Impl : public VclAbstractDialog
 {
     DECL_ABSTDLG_BASE(SdVclAbstractDialog_Impl,Dialog)

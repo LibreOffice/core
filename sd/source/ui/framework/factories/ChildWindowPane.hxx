@@ -21,16 +21,17 @@
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_CHILDWINDOWPANE_HXX
 
 #include <framework/Pane.hxx>
-#include <PaneShells.hxx>
 
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <memory>
 
+class SfxShell;
+
 namespace sd { class ViewShellBase; }
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
 
 namespace sd { namespace framework {
 

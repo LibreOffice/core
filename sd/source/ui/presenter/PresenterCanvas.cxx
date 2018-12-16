@@ -18,6 +18,7 @@
  */
 
 #include "PresenterCanvas.hxx"
+#include "CanvasUpdateRequester.hxx"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -25,6 +26,7 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <canvas/canvastools.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>

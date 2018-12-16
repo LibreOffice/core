@@ -21,14 +21,14 @@
 #define INCLUDED_SD_SOURCE_UI_PRESENTER_SLIDERENDERER_HXX
 
 #include <PreviewRenderer.hxx>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XSlideRenderer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 
 namespace sd { namespace presenter {
 

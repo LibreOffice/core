@@ -21,10 +21,12 @@
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCLASSIFIER_HXX
 
 #include "debugtrace.hxx"
-
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
 
 namespace sd { namespace framework {
 

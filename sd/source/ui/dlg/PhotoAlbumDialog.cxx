@@ -13,7 +13,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-
+#include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 
@@ -26,6 +26,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svdview.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/unoshape.hxx>
@@ -36,6 +37,8 @@
 #include "PhotoAlbumDialog.hxx"
 #include <strings.hrc>
 #include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 
 namespace sd
 {

@@ -20,8 +20,10 @@
 #include <sal/log.hxx>
 
 #include "Communicator.hxx"
+#include "IBluetoothSocket.hxx"
 #include "Listener.hxx"
 #include "Receiver.hxx"
+#include "Transmitter.hxx"
 #include <RemoteServer.hxx>
 
 using namespace sd;

@@ -20,18 +20,21 @@
 #ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONUPDATER_HXX
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONUPDATER_HXX
 
-#include "ConfigurationControllerResourceManager.hxx"
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <vcl/timer.hxx>
 #include <memory>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XControllerManager; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XResourceId; } } } } }
 
 namespace sd { namespace framework {
 
 class ConfigurationClassifier;
 class ConfigurationUpdaterLock;
+class ConfigurationControllerResourceManager;
+class ConfigurationControllerBroadcaster;
 
 /** This is a helper class for the ConfigurationController.  It handles the
     update of the current configuration so that it looks like a requested

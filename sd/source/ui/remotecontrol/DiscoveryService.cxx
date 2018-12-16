@@ -15,6 +15,7 @@
 #include <iostream>
 
 #include <rtl/strbuf.hxx>
+#include <osl/socket.hxx>
 #include <config_features.h>
 #include <sal/log.hxx>
 

@@ -11,14 +11,15 @@
 
 #include <sal/config.h>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
-#include <com/sun/star/presentation/XSlideShowController.hpp>
 
+#include <rtl/ref.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <osl/socket.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
-#include "Communicator.hxx"
-#include "Transmitter.hxx"
+namespace com { namespace sun { namespace star { namespace presentation { class XSlideShowController; } } } }
+namespace sd { class Communicator; }
+namespace sd { class Transmitter; }
 
 namespace sd {
 /**

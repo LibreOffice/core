@@ -18,6 +18,7 @@
  */
 
 #include "ConfigurationControllerBroadcaster.hxx"
+#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/diagnose_ex.h>

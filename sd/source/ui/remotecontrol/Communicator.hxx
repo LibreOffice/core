@@ -9,20 +9,14 @@
 #ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_COMMUNICATOR_HXX
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_COMMUNICATOR_HXX
 
-#include <stdlib.h>
-#ifndef _WIN32
-#include <unistd.h>
-#endif
-#include <sys/types.h>
 #include <memory>
-#include <vector>
 
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
 
-#include <com/sun/star/presentation/XSlideShowController.hpp>
-
-#include "IBluetoothSocket.hxx"
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace presentation { class XSlideShowController; } } } }
+namespace sd { struct IBluetoothSocket; }
 
 #define CHARSET RTL_TEXTENCODING_UTF8
 namespace sd

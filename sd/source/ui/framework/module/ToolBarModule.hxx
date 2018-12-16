@@ -22,13 +22,13 @@
 
 #include <ToolBarManager.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#include <com/sun/star/drawing/framework/XTabBar.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <o3tl/deleter.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
 
 namespace sd {
 class ViewShellBase;
