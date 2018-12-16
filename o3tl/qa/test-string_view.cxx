@@ -9,7 +9,9 @@
 
 #include <sal/config.h>
 
+#include <sstream>
 #include <stdexcept>
+#include <string>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -27,6 +29,7 @@ private:
     CPPUNIT_TEST(testChar32Literal);
     CPPUNIT_TEST(testWcharLiteral);
     CPPUNIT_TEST(testOperations);
+    CPPUNIT_TEST(testOutput);
     CPPUNIT_TEST_SUITE_END();
 
     void testCharLiteral() {
@@ -202,6 +205,12 @@ private:
             o3tl::string_view::size_type(1),
             v.find_last_not_of("fxo", o3tl::string_view::npos, 2));
         CPPUNIT_ASSERT_EQUAL(npos, v.find_last_not_of("fxo"));
+    }
+
+    void testOutput() {
+        std::ostringstream s;
+        s << o3tl::string_view("foo");
+        CPPUNIT_ASSERT_EQUAL(std::string("foo"), s.str());
     }
 };
 
