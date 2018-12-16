@@ -408,11 +408,10 @@ void SidebarController::NotifyResize()
             // No TabBar in LOK.
             if (comphelper::LibreOfficeKit::isActive())
             {
-                const sal_Int32 nMinimalHeight = mpCurrentDeck->GetMinimalHeight();
-                if (nMinimalHeight > 0)
-                    mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nMinimalHeight);
-                else
-                    mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, nHeight);
+                // The minimal deck height is unreliable because of
+                // the fluid way the panels are stretched. Fix minimum manually.
+                // const sal_Int32 nMinimalHeight = mpCurrentDeck->GetMinimalHeight();
+                mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth, 600);
             }
             else
                 mpCurrentDeck->setPosSizePixel(nDeckX, 0, nWidth - nTabBarDefaultWidth, nHeight);
