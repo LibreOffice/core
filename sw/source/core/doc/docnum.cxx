@@ -2224,8 +2224,6 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
                 aPam.GetPoint()->nContent.Assign(pNode, pNode->Len());
             }
 
-            RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
-            GetDocumentRedlineManager().checkRedlining(eOld);
             if (GetIDocumentUndoRedo().DoesUndo())
             {
                 // Still NEEDS to be optimized (even after 14 years)
@@ -2249,8 +2247,6 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
             aPam.GetBound(false).nContent.Assign(aPam.GetBound(false).nNode.GetNode().GetContentNode(), 0);
             sw::UpdateFramesForAddDeleteRedline(*this, aPam);
 
-            // Still NEEDS to be optimized!
-            getIDocumentRedlineAccess().SetRedlineFlags( eOld );
             GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             getIDocumentState().SetModified();
 
