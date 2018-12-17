@@ -334,7 +334,7 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, Button*, void)
     ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwAddressAbstractDlg(this, aSet));
     if (RET_OK == pDlg->Execute())
     {
-        pSh->UpdateFields( *pCurField );
+        pSh->UpdateOneField(*pCurField);
     }
 }
 
