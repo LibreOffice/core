@@ -92,16 +92,16 @@
                     "dest-filename": "external/tarballs/1725634df4bb3dcb1b2c91a6175f8789-GentiumBasic_1102.zip"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/134d8262145fc793c6af494dcace3e71-liberation-fonts-ttf-1.07.4.tar.gz",
-                    "sha256": "61a7e2b6742a43c73e8762cdfeaf6dfcf9abdd2cfa0b099a9854d69bc4cfee5c",
+                    "url": "https://dev-www.libreoffice.org/src/liberation-narrow-fonts-ttf-1.07.6.tar.gz",
+                    "sha256": "8879d89b5ff7b506c9fc28efc31a5c0b954bbe9333e66e5283d27d20a8519ea3",
                     "type": "file",
-                    "dest-filename": "external/tarballs/134d8262145fc793c6af494dcace3e71-liberation-fonts-ttf-1.07.4.tar.gz"
+                    "dest-filename": "external/tarballs/liberation-narrow-fonts-ttf-1.07.6.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/5c781723a0d9ed6188960defba8e91cf-liberation-fonts-ttf-2.00.1.tar.gz",
-                    "sha256": "7890278a6cd17873c57d9cd785c2d230d9abdea837e96516019c5885dd271504",
+                    "url": "https://dev-www.libreoffice.org/src/liberation-fonts-ttf-2.00.4.tar.gz",
+                    "sha256": "c40e95fc5e0ecb73d4be565ae2afc1114e2bc7dc5253e00ee92d8fd6cc4adf45",
                     "type": "file",
-                    "dest-filename": "external/tarballs/5c781723a0d9ed6188960defba8e91cf-liberation-fonts-ttf-2.00.1.tar.gz"
+                    "dest-filename": "external/tarballs/liberation-fonts-ttf-2.00.4.tar.gz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip",
