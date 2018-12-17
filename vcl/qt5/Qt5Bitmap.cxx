@@ -267,7 +267,11 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
             break;
         case 32:
         {
+#ifdef OSL_BIGENDIAN
             pBuffer->mnFormat = ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown;
+#else
+            pBuffer->mnFormat = ScanlineFormat::N32BitTcBgra | ScanlineFormat::TopDown;
+#endif
             pBuffer->maPalette = aEmptyPalette;
             break;
         }
