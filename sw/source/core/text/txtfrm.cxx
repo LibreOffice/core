@@ -1061,6 +1061,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
     // pFirstNode is never updated
     if (nErased && nErased == nFoundNode)
     {   // all visible text from node was erased
+#if 0
         if (rMerged.pParaPropsNode == &rNode)
         {
             rMerged.pParaPropsNode->RemoveFromListRLHidden();
@@ -1069,6 +1070,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                 : rMerged.extents.front().pNode;
             rMerged.pParaPropsNode->AddToListRLHidden();
         }
+#endif
 // NOPE must listen on all non-hidden nodes; particularly on pLastNode        rMerged.listener.EndListening(&const_cast<SwTextNode&>(rNode));
     }
     rMerged.mergedText = text.makeStringAndClear();
@@ -1219,7 +1221,21 @@ SwTextNode const* SwTextFrame::GetTextNodeForParaProps() const
 //nope    assert(GetPara());
     sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
+    {
+        assert(pMerged->pFirstNode == pMerged->pParaPropsNode); // surprising news!
         return pMerged->pParaPropsNode;
+    }
+    else
+        return static_cast<SwTextNode const*>(SwFrame::GetDep());
+}
+
+SwTextNode const* SwTextFrame::GetTextNodeForFirstText() const
+{
+    sw::MergedPara const*const pMerged(GetMergedPara());
+    if (pMerged)
+        return pMerged->extents.empty()
+            ? pMerged->pFirstNode
+            : pMerged->extents.front().pNode;
     else
         return static_cast<SwTextNode const*>(SwFrame::GetDep());
 }
