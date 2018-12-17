@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_9f0d7892",
+        "filename": "lotuswordpro/inc/xfilter/xfcellstyle.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-12-17T08:05:20Z",
+      "side": 1,
+      "message": "shouldn\u0027t be \"are\"?",
+      "range": {
+        "startLine": 111,
+        "startChar": 28,
+        "endLine": 111,
+        "endChar": 30
+      },
+      "revId": "20cf82044195c4d8588d856751048ed2d5216759",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
