@@ -2385,7 +2385,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_PPrBase_mirrorIndents: // mirrorIndents
         rContext->Insert(PROP_MIRROR_INDENTS, uno::makeAny( nIntValue != 0 ), true, PARA_GRAB_BAG);
     break;
-    case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
+    case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection
+    {
+        if( pSectionContext )
+            pSectionContext->Insert( PROP_IS_PROTECTED, uno::makeAny( bool(nIntValue) ) );
+    }
     break;
     case NS_ooxml::LN_EG_SectPrContents_vAlign:
     {

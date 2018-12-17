@@ -265,6 +265,9 @@ private:
 
     void DontBalanceTextColumns();
 
+    /// Check if document is protected. If so, ensure a section exists, and apply its protected value.
+    void ApplyProtectionProperties( css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
+
     css::uno::Reference< css::text::XTextColumns > ApplyColumnProperties( const css::uno::Reference< css::beans::XPropertySet >& xFollowPageStyle,
                                                                           DomainMapper_Impl& rDM_Impl);
 
