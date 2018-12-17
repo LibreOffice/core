@@ -27,6 +27,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <apitools.hxx>
 #include <comphelper/uno3.hxx>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
@@ -138,7 +139,7 @@ public:
     css::uno::Reference< css::embed::XStorage >
         getContainerStorage() const;
 
-    bool save(bool _bApprove);
+    bool save(bool _bApprove, const css::uno::Reference<css::awt::XTopWindow>& rDialogParent);
     void saveAs();
     void closeObject();
     bool isModified();

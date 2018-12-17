@@ -104,7 +104,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValu
 
     if ( URL.Complete == m_aInterceptedURL[ DISPATCH_SAVE ] )
     {
-        m_pContentHolder->save( false );
+        m_pContentHolder->save(false, css::uno::Reference<css::awt::XTopWindow>());
         return;
     }
 

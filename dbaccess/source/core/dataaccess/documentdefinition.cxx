@@ -29,7 +29,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1196,7 +1195,7 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
     aGuard.clear();
 }
 
-bool ODocumentDefinition::save(bool _bApprove)
+bool ODocumentDefinition::save(bool _bApprove, const css::uno::Reference<css::awt::XTopWindow>& rDialogParent)
 {
     // default handling: instantiate an interaction handler and let it handle the parameter request
     if ( !m_bOpenInDesign )
@@ -1244,8 +1243,10 @@ bool ODocumentDefinition::save(bool _bApprove)
             OInteractionAbort* pAbort = new OInteractionAbort;
             pRequest->addContinuation(pAbort);
 
+            Reference<XWindow> xDialogParent(rDialogParent, UNO_QUERY);
+
             // create the handler, let it handle the request
-            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
+            Reference<XInteractionHandler2> xHandler(InteractionHandler::createWithParent(m_aContext, xDialogParent));
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
@@ -1293,7 +1294,7 @@ void ODocumentDefinition::saveAs()
         if ( m_pImpl->m_aProps.aTitle.isEmpty() )
         {
             aGuard.clear();
-            save(false); // (sal_False) : we don't want an approve dialog
+            save(false, css::uno::Reference<css::awt::XTopWindow>()); // (sal_False) : we don't want an approve dialog
             return;
         }
     }
@@ -1977,12 +1978,13 @@ bool ODocumentDefinition::prepareClose()
         if ( isModified() )
         {
             Reference< XFrame > xFrame( xController->getFrame() );
+            Reference<XTopWindow> xTopWindow;
             if ( xFrame.is() )
             {
-                Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+                xTopWindow = Reference<XTopWindow>(xFrame->getContainerWindow(), UNO_QUERY_THROW);
                 xTopWindow->toFront();
             }
-            if ( !save( true ) )
+            if (!save(true, xTopWindow))
             {
                 // revert suspension
                 xController->suspend(false);
