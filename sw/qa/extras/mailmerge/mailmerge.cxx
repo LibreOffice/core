@@ -867,5 +867,86 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118845, "tdf118845.fodt", "4_v01.ods", "Tabe
     CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testTdf122156_shell, "linked-with-condition.odt", "5-with-blanks.ods",
+                             "names")
+{
+    // A document with a linked section hidden on an "empty field" condition
+    // For combined documents, hidden sections are removed completely
+    executeMailMerge();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    // 5 documents 1 page each, starting at odd page numbers => 9
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(9), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
+    uno::Reference<text::XTextSectionsSupplier> xSectionsSupplier(mxMMComponent,
+                                                                  uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSections(xSectionsSupplier->getTextSections(),
+                                                      uno::UNO_QUERY_THROW);
+    // 2 out of 5 dataset records have empty "Title" field => no sections in respective documents
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSections->getCount());
+}
+
+DECLARE_FILE_MAILMERGE_TEST(testTdf122156_file, "linked-with-condition.odt", "5-with-blanks.ods",
+                            "names")
+{
+    // A document with a linked section hidden on an "empty field" condition
+    // For separate documents, the sections are hidden, but not removed
+    executeMailMerge();
+    {
+        loadMailMergeDocument(0);
+        uno::Reference<text::XTextSectionsSupplier> xSectionsSupplier(mxComponent,
+                                                                      uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xSections(xSectionsSupplier->getTextSections(),
+                                                          uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+        uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
+        // Record 1 has empty "Title" field => section is not shown
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xSect, "IsCurrentlyVisible"));
+    }
+    {
+        loadMailMergeDocument(1);
+        uno::Reference<text::XTextSectionsSupplier> xSectionsSupplier(mxComponent,
+                                                                      uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xSections(xSectionsSupplier->getTextSections(),
+                                                          uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+        uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
+        // Record 2 has non-empty "Title" field => section is shown
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, "IsCurrentlyVisible"));
+    }
+    {
+        loadMailMergeDocument(2);
+        uno::Reference<text::XTextSectionsSupplier> xSectionsSupplier(mxComponent,
+                                                                      uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xSections(xSectionsSupplier->getTextSections(),
+                                                          uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+        uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
+        // Record 3 has non-empty "Title" field => section is shown
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, "IsCurrentlyVisible"));
+    }
+    {
+        loadMailMergeDocument(3);
+        uno::Reference<text::XTextSectionsSupplier> xSectionsSupplier(mxComponent,
+                                                                      uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xSections(xSectionsSupplier->getTextSections(),
+                                                          uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+        uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
+        // Record 4 has empty "Title" field => section is not shown
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xSect, "IsCurrentlyVisible"));
+    }
+    {
+        loadMailMergeDocument(4);
+        uno::Reference<text::XTextSectionsSupplier> xSectionsSupplier(mxComponent,
+                                                                      uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xSections(xSectionsSupplier->getTextSections(),
+                                                          uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+        uno::Reference<beans::XPropertySet> xSect(xSections->getByIndex(0), uno::UNO_QUERY_THROW);
+        // Record 5 has non-empty "Title" field => section is shown
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xSect, "IsCurrentlyVisible"));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
