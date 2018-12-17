@@ -95,7 +95,8 @@ namespace sw {
     bool FindFormatImpl(SwPaM & rSearchPam,
                 const SwFormat& rFormat,
                 SwMoveFnCollection const & fnMove,
-                const SwPaM & rRegion, bool bInReadOnly = false);
+                const SwPaM & rRegion, bool bInReadOnly,
+                SwRootFrame const* pLayout);
     bool FindAttrImpl(SwPaM & rSearchPam,
                 const SfxPoolItem& rAttr,
                 SwMoveFnCollection const & fnMove,
