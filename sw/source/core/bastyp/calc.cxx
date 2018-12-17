@@ -503,17 +503,14 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             // Initialize again because this doesn't happen in docfld anymore for
             // elements != SwFieldIds::Database. E.g. if there is an expression field before
             // an DB_Field in a document.
-            VarChange( sDBNum, pMgr->GetSelectedRecordId(sSourceName, sTableName));
+            const sal_uInt32 nTmpRec = pMgr->GetSelectedRecordId(sSourceName, sTableName);
+            VarChange(sDBNum, nTmpRec);
 
             if( sDBNum.equalsIgnoreAsciiCase(sColumnName) )
             {
-                m_aErrExpr.nValue.PutLong(long(pMgr->GetSelectedRecordId(sSourceName, sTableName)));
+                m_aErrExpr.nValue.PutULong(nTmpRec);
                 return &m_aErrExpr;
             }
-
-            sal_uLong nTmpRec = 0;
-            if( nullptr != ( pFnd = m_aVarTable.Find( sDBNum ) ) )
-                nTmpRec = pFnd->nValue.GetULong();
 
             OUString sResult;
             double nNumber = DBL_MAX;
