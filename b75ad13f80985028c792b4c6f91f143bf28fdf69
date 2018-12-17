@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_b203cb0d",
+        "filename": "offapi/com/sun/star/frame/XModel2.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-17T10:05:02Z",
+      "side": 1,
+      "message": "please add a @since tag",
+      "revId": "b75ad13f80985028c792b4c6f91f143bf28fdf69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_9208cf28",
+        "filename": "offapi/com/sun/star/frame/XModel2.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-17T10:05:02Z",
+      "side": 1,
+      "message": "these @throws tags should list the fully-qualified names of the exceptions, I think",
+      "revId": "b75ad13f80985028c792b4c6f91f143bf28fdf69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_720d5336",
+        "filename": "offapi/com/sun/star/frame/XModel2.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-17T10:05:02Z",
+      "side": 1,
+      "message": "* \"setArguments\"? (other method names here don\u0027t use abbreviations, either)\n\n* css::util::InvalidStateException is not a RuntimeException; must be listed in a raises clause here if it can be thrown.  (Otherwise, including com/sun/star/util/InvalidStateException.idl can be removed.)",
+      "revId": "b75ad13f80985028c792b4c6f91f143bf28fdf69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
