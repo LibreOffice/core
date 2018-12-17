@@ -86,7 +86,7 @@ published interface XModel: com::sun::star::lang::XComponent
 
     /** provides read access on currently representation of the
         com::sun::star::document::MediaDescriptor
-        of this model which describes the model and his state
+        of this model which describes the model and its state
 
         @returns
             the arguments with which the model was originally created or
