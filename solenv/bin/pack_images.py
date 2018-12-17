@@ -518,18 +518,16 @@ def parse_image_list(imagelist_filenames):
 
                     if line.startswith('%GLOBALRES%'):
                         key = "res/%s" % line.replace('%GLOBALRES%/', '')
-                        if key in global_image_list:
-                            global_image_list[key] += 1
-                        else:
-                            global_image_list[key] = 0
+                        global_image_list[key] = True
+                        if key.endswith('.png'):
+                            global_image_list[key[:-4] + '.svg'] = True
                         continue
 
                     if line.startswith('%MODULE%'):
                         key = line.replace('%MODULE%/', '')
-                        if key in module_image_list:
-                            module_image_list[key] += 1
-                        else:
-                            module_image_list[key] = 0
+                        module_image_list[key] = True
+                        if key.endswith('.png'):
+                            module_image_list[key[:-4] + '.svg'] = True
                         continue
 
                     LOGGER.error("Cannot parse line %s:%d", imagelist_filename, line_count)
