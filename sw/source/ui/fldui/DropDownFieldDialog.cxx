@@ -96,7 +96,7 @@ void sw::DropDownFieldDialog::Apply()
                 static_cast<SwDropDownField*>(m_pDropField->CopyField()));
 
             pCopy->SetPar1(sSelect);
-            m_rSh.SwEditShell::UpdateFields(*pCopy);
+            m_rSh.SwEditShell::UpdateOneField(*pCopy);
 
             m_rSh.SetUndoNoResetModified();
             m_rSh.EndAllAction();

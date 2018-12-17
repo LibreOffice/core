@@ -97,9 +97,10 @@ namespace sw {
                 SwMoveFnCollection const & fnMove,
                 const SwPaM & rRegion, bool bInReadOnly = false);
     bool FindAttrImpl(SwPaM & rSearchPam,
-                const SfxPoolItem& rAttr, bool bValue,
+                const SfxPoolItem& rAttr,
                 SwMoveFnCollection const & fnMove,
-                const SwPaM & rPam, bool bInReadOnly = false);
+                const SwPaM & rPam, bool bInReadOnly,
+                SwRootFrame const* pLayout);
 
 } // namespace sw
 

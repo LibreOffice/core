@@ -1521,7 +1521,7 @@ bool SwFieldMgr::InsertField(
     if(bTable)
     {
         pCurShell->Left(CRSR_SKIP_CHARS, false, 1, false );
-        pCurShell->UpdateFields(*pField);
+        pCurShell->UpdateOneField(*pField);
         pCurShell->Right(CRSR_SKIP_CHARS, false, 1, false );
     }
     else if( bPageVar )
@@ -1702,7 +1702,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
     }
     else {
         // mb: #32157
-        pSh->SwEditShell::UpdateFields(*pTmpField);
+        pSh->SwEditShell::UpdateOneField(*pTmpField);
         GetCurField();
     }
 

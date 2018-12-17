@@ -130,14 +130,14 @@ void SwFieldInputDlg::Apply()
         else if( aTmp != pInpField->GetPar1() )
         {
             pInpField->SetPar1(aTmp);
-            rSh.SwEditShell::UpdateFields(*pInpField);
+            rSh.SwEditShell::UpdateOneField(*pInpField);
             bModified = true;
         }
     }
     else if( aTmp != pSetField->GetPar2())
     {
         pSetField->SetPar2(aTmp);
-        rSh.SwEditShell::UpdateFields(*pSetField);
+        rSh.SwEditShell::UpdateOneField(*pSetField);
         bModified = true;
     }
 

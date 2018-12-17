@@ -392,7 +392,7 @@ public:
 
     void Insert2(SwField const &, const bool bForceExpandHints);
 
-    void UpdateFields( SwField & );   ///< One single field.
+    void UpdateOneField(SwField &);   ///< One single field.
 
     size_t GetFieldTypeCount(SwFieldIds nResId = SwFieldIds::Unknown) const;
     SwFieldType* GetFieldType(size_t nField, SwFieldIds nResId = SwFieldIds::Unknown) const;

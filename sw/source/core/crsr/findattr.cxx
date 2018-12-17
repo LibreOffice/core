@@ -154,12 +154,11 @@ static void lcl_SetAttrPam( SwPaM& rPam, sal_Int32 nStart, const sal_Int32* pEnd
     @param rPam     ???
     @param rCmpItem ???
     @param fnMove   ???
-    @param bValue   ???
     @return Returns <true> if found, <false> otherwise.
 */
-static bool lcl_Search( const SwTextNode& rTextNd, SwPaM& rPam,
+static bool lcl_SearchAttr( const SwTextNode& rTextNd, SwPaM& rPam,
                     const SfxPoolItem& rCmpItem,
-                    SwMoveFnCollection const & fnMove, bool bValue )
+                    SwMoveFnCollection const & fnMove)
 {
     if ( !rTextNd.HasHints() )
         return false;
@@ -170,8 +169,7 @@ static bool lcl_Search( const SwTextNode& rTextNd, SwPaM& rPam,
     sal_Int32 nContentPos = rPam.GetPoint()->nContent.GetIndex();
 
     while( nullptr != ( pTextHt=(*fnMove.fnGetHint)(rTextNd.GetSwpHints(),nPos,nContentPos)))
-        if( pTextHt->Which() == rCmpItem.Which() &&
-            ( !bValue || CmpAttr( pTextHt->GetAttr(), rCmpItem )))
+        if (pTextHt->Which() == rCmpItem.Which())
         {
             lcl_SetAttrPam( rPam, pTextHt->GetStart(), pTextHt->End(), bForward );
             return true;
@@ -889,12 +887,14 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
 namespace sw {
 
 bool FindAttrImpl(SwPaM & rSearchPam,
-        const SfxPoolItem& rAttr, bool bValue, SwMoveFnCollection const & fnMove,
-        const SwPaM & rRegion, bool bInReadOnly)
+        const SfxPoolItem& rAttr, SwMoveFnCollection const & fnMove,
+        const SwPaM & rRegion, bool bInReadOnly,
+        SwRootFrame const*const pLayout)
 {
     // determine which attribute is searched:
     const sal_uInt16 nWhich = rAttr.Which();
     bool bCharAttr = isCHRATR(nWhich) || isTXTATR(nWhich);
+    assert(isTXTATR(nWhich)); // sw_redlinehide: only works for non-formatting hints such as needed in UpdateFields; use FindAttrsImpl for others
 
     std::unique_ptr<SwPaM> pPam(sw::MakeRegion(fnMove, rRegion));
 
@@ -902,8 +902,6 @@ bool FindAttrImpl(SwPaM & rSearchPam,
     bool bFirst = true;
     const bool bSrchForward = &fnMove == &fnMoveForward;
     SwContentNode * pNode;
-    const SfxPoolItem* pItem;
-    SwpFormats aFormatArr;
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
@@ -918,27 +916,73 @@ bool FindAttrImpl(SwPaM & rSearchPam,
         pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
-    while( nullptr != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ) )
+    while (nullptr != (pNode = ::GetNode(*pPam, bFirst, fnMove, bInReadOnly, pLayout)))
     {
         if( bCharAttr )
         {
             if( !pNode->IsTextNode() ) // CharAttr are only in text nodes
                 continue;
 
-            if( pNode->GetTextNode()->HasHints() &&
-                lcl_Search( *pNode->GetTextNode(), *pPam, rAttr, fnMove,  bValue ))
+            SwTextFrame const*const pFrame(pLayout
+                ? static_cast<SwTextFrame const*>(pNode->getLayoutFrame(pLayout))
+                : nullptr);
+            if (pFrame)
+            {
+                SwTextNode const* pAttrNode(nullptr);
+                SwTextAttr const* pAttr(nullptr);
+                if (bSrchForward)
+                {
+                    sw::MergedAttrIter iter(*pFrame);
+                    do
+                    {
+                        pAttr = iter.NextAttr(&pAttrNode);
+                    }
+                    while (pAttr
+                        && (pAttrNode->GetIndex() < pPam->GetPoint()->nNode.GetIndex()
+                            || (pAttrNode->GetIndex() == pPam->GetPoint()->nNode.GetIndex()
+                                && pAttr->GetStart() < pPam->GetPoint()->nContent.GetIndex())
+                            || pAttr->Which() != nWhich));
+                }
+                else
+                {
+                    sw::MergedAttrIterReverse iter(*pFrame);
+                    do
+                    {
+                        pAttr = iter.PrevAttr(&pAttrNode);
+                    }
+                    while (pAttr
+                        && (pPam->GetPoint()->nNode.GetIndex() < pAttrNode->GetIndex()
+                            || (pPam->GetPoint()->nNode.GetIndex() == pAttrNode->GetIndex()
+                                && pPam->GetPoint()->nContent.GetIndex() <= pAttr->GetStart())
+                            || pAttr->Which() != nWhich));
+                }
+                if (pAttr)
+                {
+                    assert(pAttrNode);
+                    pPam->GetPoint()->nNode = *pAttrNode;
+                    lcl_SetAttrPam(*pPam, pAttr->GetStart(), pAttr->End(), bSrchForward);
+                    bFound = true;
+                    break;
+                }
+            }
+            else if (!pLayout && pNode->GetTextNode()->HasHints() &&
+                lcl_SearchAttr(*pNode->GetTextNode(), *pPam, rAttr, fnMove))
+            {
+                bFound = true;
+            }
+            if (bFound)
             {
                 // set to the values of the attribute
                 rSearchPam.SetMark();
                 *rSearchPam.GetPoint() = *pPam->GetPoint();
                 *rSearchPam.GetMark() = *pPam->GetMark();
-                bFound = true;
                 break;
             }
             else if (isTXTATR(nWhich))
                 continue;
         }
 
+#if 0
         // no hard attribution, so check if node was asked for this attr before
         if( !pNode->HasSwAttrSet() )
         {
@@ -949,7 +993,7 @@ bool FindAttrImpl(SwPaM & rSearchPam,
         }
 
         if( SfxItemState::SET == pNode->GetSwAttrSet().GetItemState( nWhich,
-            true, &pItem ) && ( !bValue || *pItem == rAttr ) )
+                true, &pItem ))
         {
             // FORWARD:  SPoint at the end, GetMark at the beginning of the node
             // BACKWARD: SPoint at the beginning, GetMark at the end of the node
@@ -960,6 +1004,7 @@ bool FindAttrImpl(SwPaM & rSearchPam,
             bFound = true;
             break;
         }
+#endif
     }
 
     // if backward search, switch point and mark

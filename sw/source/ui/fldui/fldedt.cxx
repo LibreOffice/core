@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, Button*, void)
     assert(pDlg && "Dialog creation failed!");
     if (RET_OK == pDlg->Execute())
     {
-        pSh->UpdateFields( *pCurField );
+        pSh->UpdateOneField(*pCurField);
     }
 }
 
