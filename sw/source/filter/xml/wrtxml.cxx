@@ -183,7 +183,8 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
 
     // save show redline mode ...
     const OUString sShowChanges("ShowChanges");
-    RedlineFlags nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    RedlineFlags const nOrigRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    RedlineFlags nRedlineFlags(nOrigRedlineFlags);
     bool isShowChanges;
     if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
     {   // TODO: ideally this would be stored per-view...
@@ -420,7 +421,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     nRedlineFlags |= RedlineFlags::ShowInsert;
     if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
     {
-        nRedlineFlags |= RedlineFlags::ShowDelete;
+        nRedlineFlags |= nOrigRedlineFlags & RedlineFlags::ShowMask;
     }
     else
     {
