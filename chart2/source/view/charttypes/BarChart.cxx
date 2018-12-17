@@ -685,7 +685,9 @@ void BarChart::createShapes()
                             fLogicBarHeight = 0.0;
                     }
 
-                    //sort negative and positive values, to display them on different sides of the x axis
+                   // tdf#114141 set a very small number to a Column when it's value equals to 0.
+                    if( fLogicBarHeight == 0.0 ) fLogicBarHeight = DBL_MIN;
+                     //sort negative and positive values, to display them on different sides of the x axis
                     bool bPositive = fLogicBarHeight >= 0.0;
                     double fLowerYValue = bPositive ? fPositiveLogicYForNextSeries : fNegativeLogicYForNextSeries;
                     double fUpperYValue = fLowerYValue+fLogicBarHeight;
