@@ -222,6 +222,24 @@ DECLARE_OOXMLIMPORT_TEST(testTdf113946, "tdf113946.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("1695"), aTop);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf121804, "tdf121804.docx")
+{
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFirstPara = getParagraphOfText(1, xShape->getText());
+    uno::Reference<text::XTextRange> xFirstRun = getRun(xFirstPara, 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(xFirstRun, "CharEscapement"));
+    // This failed with a NoSuchElementException, super/subscript property was
+    // lost on import, so the whole paragraph was a single run.
+    uno::Reference<text::XTextRange> xSecondRun = getRun(xFirstPara, 2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(30),
+                         getProperty<sal_Int32>(xSecondRun, "CharEscapement"));
+    uno::Reference<text::XTextRange> xThirdRun = getRun(xFirstPara, 3);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-25),
+                         getProperty<sal_Int32>(xThirdRun, "CharEscapement"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf114217, "tdf114217.docx")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
