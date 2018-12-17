@@ -686,6 +686,7 @@ void BarChart::createShapes()
                     }
 
                     //sort negative and positive values, to display them on different sides of the x axis
+                    if( fLogicBarHeight == 0.0 ) fLogicBarHeight = DBL_MIN;
                     bool bPositive = fLogicBarHeight >= 0.0;
                     double fLowerYValue = bPositive ? fPositiveLogicYForNextSeries : fNegativeLogicYForNextSeries;
                     double fUpperYValue = fLowerYValue+fLogicBarHeight;
