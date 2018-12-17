@@ -197,7 +197,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/queryredlinedialog \
 	sw/uiconfig/swriter/ui/queryrotateintostandarddialog \
 	sw/uiconfig/swriter/ui/querysavelabeldialog \
-	sw/uiconfig/swriter/ui/queryshowchangesdialog \
 	sw/uiconfig/swriter/ui/mailmerge \
 	sw/uiconfig/swriter/ui/managechangessidebar \
 	sw/uiconfig/swriter/ui/mmaddressblockpage \

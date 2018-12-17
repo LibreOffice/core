@@ -787,7 +787,6 @@ DocumentRedlineManager::DocumentRedlineManager(SwDoc& i_rSwdoc)
     , mpExtraRedlineTable(new SwExtraRedlineTable)
     , mpAutoFormatRedlnComment(nullptr)
     , mbIsRedlineMove(false)
-    , mbReadlineChecked(false)
     , mnAutoFormatRedlnCommentNo(0)
 {
 }
@@ -2907,27 +2906,6 @@ void DocumentRedlineManager::SetAutoFormatRedlineComment( const OUString* pText,
     }
 
     mnAutoFormatRedlnCommentNo = nSeqNo;
-}
-
-#define MAX_REDLINE_COUNT   250
-
-void DocumentRedlineManager::checkRedlining(RedlineFlags& _rReadlineMode)
-{
-    const SwRedlineTable& rRedlineTable = GetRedlineTable();
-    SwEditShell* pEditShell = m_rDoc.GetEditShell();
-    vcl::Window* pParent = pEditShell ? pEditShell->GetWin() : nullptr;
-    if ( pParent && !mbReadlineChecked && rRedlineTable.size() > MAX_REDLINE_COUNT
-        && ((_rReadlineMode & RedlineFlags::ShowDelete) != RedlineFlags::ShowDelete) )
-    {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParent->GetFrameWeld(), "modules/swriter/ui/queryshowchangesdialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryShowChangesDialog"));
-        sal_uInt16 nResult = xQuery->run();
-        mbReadlineChecked = true;
-        if ( nResult == RET_YES )
-        {
-            _rReadlineMode |= RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
-        }
-    }
 }
 
 DocumentRedlineManager::~DocumentRedlineManager()
