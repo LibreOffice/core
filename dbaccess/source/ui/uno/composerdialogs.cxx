@@ -198,7 +198,7 @@ namespace dbaui
 
     void SAL_CALL RowsetOrderDialog::initialize( const Sequence< Any >& aArguments )
     {
-        if( aArguments.getLength() == 2 )
+        if (aArguments.getLength() == 2 || aArguments.getLength() == 3)
         {
             Reference<css::sdb::XSingleSelectQueryComposer> xQueryComposer;
             aArguments[0] >>= xQueryComposer;
@@ -206,6 +206,12 @@ namespace dbaui
             aArguments[1] >>= xRowSet;
             setPropertyValue( "QueryComposer", makeAny( xQueryComposer ) );
             setPropertyValue( "RowSet",        makeAny( xRowSet ) );
+            if (aArguments.getLength() == 3)
+            {
+                Reference<css::awt::XWindow> xParentWindow;
+                aArguments[2] >>= xParentWindow;
+                setPropertyValue("ParentWindow",  makeAny(xParentWindow));
+            }
         }
         else
             ComposerDialog::initialize(aArguments);
