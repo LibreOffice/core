@@ -63,7 +63,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, true));
 
-    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
