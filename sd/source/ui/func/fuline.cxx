@@ -77,7 +77,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSvxLineTabDialog(mpViewShell->GetFrameWeld(), pNewAttr.get(), mpDoc, pObj, bHasMarked) );
 
-    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([=, this](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
