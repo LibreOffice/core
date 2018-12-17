@@ -636,7 +636,7 @@ void SfxChildWindow::Show( ShowFlags nFlags )
         if (!xController->getDialog()->get_visible())
         {
             weld::DialogController::runAsync(xController,
-                [=](sal_Int32 /*nResult*/){ xController->Close(); });
+                [this](sal_Int32 /*nResult*/){ xController->Close(); });
         }
     }
     else

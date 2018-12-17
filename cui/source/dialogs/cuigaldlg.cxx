@@ -818,7 +818,7 @@ void TPGalleryThemeProperties::SearchFiles()
     xProgress->SetDirectory( INetURLObject() );
 
     xProgress->LaunchThread();
-    weld::DialogController::runAsync(xProgress, [=](sal_Int32 nResult) {
+    weld::DialogController::runAsync(xProgress, [this](sal_Int32 nResult) {
         EndSearchProgressHdl(nResult);
     });
 }

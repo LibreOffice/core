@@ -191,7 +191,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
         rReq.Ignore(); // the 'old' request is not relevant any more
 
-        pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        pDlg->StartExecuteAsync([=, this](sal_Int32 nResult){
             if (RET_OK == nResult)
             {
                 const SfxPoolItem* pItem;
