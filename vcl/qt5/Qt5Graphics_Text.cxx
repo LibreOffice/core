@@ -98,6 +98,7 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
 
     if (bUseFontconfig)
     {
+        const QStringList aFontFamilyList = aFDB.families();
         ::std::vector<psp::fontID> aList;
         psp::FastPrintFontInfo aInfo;
 
@@ -109,7 +110,11 @@ void Qt5Graphics::GetDevFontList(PhysicalFontCollection* pPFC)
                 continue;
             QString aFilename = toQString(
                 OStringToOUString(rMgr.getFontFileSysPath(aInfo.m_nID), RTL_TEXTENCODING_UTF8));
-            QFontDatabase::addApplicationFont(aFilename);
+            QRawFont aRawFont(aFilename, 0.0);
+            QString aFamilyName = aRawFont.familyName();
+            if (!aFontFamilyList.contains(aFamilyName)
+                || !aFDB.styles(aFamilyName).contains(aRawFont.styleName()))
+                QFontDatabase::addApplicationFont(aFilename);
         }
 
         SalGenericInstance::RegisterFontSubstitutors(pPFC);
