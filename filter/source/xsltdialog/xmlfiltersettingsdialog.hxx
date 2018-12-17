@@ -92,7 +92,7 @@ public:
     DECL_LINK(SelectionChangedHdl_Impl, SvTreeListBox*, void );
     DECL_LINK(DoubleClickHdl_Impl, SvTreeListBox*, bool );
 
-    virtual short Execute() override;
+    void    UpdateWindow();
 
     void    onNew();
     void    onEdit();
