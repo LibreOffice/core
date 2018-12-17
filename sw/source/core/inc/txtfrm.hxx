@@ -437,6 +437,7 @@ public:
     /// Returns the text portion we want to edit (for inline see underneath)
     const OUString& GetText() const;
     SwTextNode const* GetTextNodeForParaProps() const;
+    SwTextNode const* GetTextNodeForFirstText() const;
     SwTextNode      * GetTextNodeFirst()
         { return const_cast<SwTextNode*>(const_cast<SwTextFrame const*>(this)->GetTextNodeFirst()); };
     SwTextNode const* GetTextNodeFirst() const;
