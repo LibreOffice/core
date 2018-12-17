@@ -121,7 +121,8 @@ public:
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges,
-                const SwTextFormatColl* pReplFormat );
+                const SwTextFormatColl* pReplFormat,
+                SwRootFrame const*const pLayout = nullptr);
     sal_uLong FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,

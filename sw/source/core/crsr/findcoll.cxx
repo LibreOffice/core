@@ -30,8 +30,13 @@
 struct SwFindParaFormatColl : public SwFindParas
 {
     const SwTextFormatColl *pFormatColl, *pReplColl;
-    SwFindParaFormatColl(const SwTextFormatColl& rFormatColl, const SwTextFormatColl* pRpColl)
-        : pFormatColl( &rFormatColl ), pReplColl( pRpColl )
+    SwRootFrame const* m_pLayout;
+    SwFindParaFormatColl(const SwTextFormatColl& rFormatColl,
+            const SwTextFormatColl *const pRpColl,
+            SwRootFrame const*const pLayout)
+        : pFormatColl( &rFormatColl )
+        , pReplColl( pRpColl )
+        , m_pLayout(pLayout)
     {}
     virtual ~SwFindParaFormatColl() {}
     virtual int DoFind(SwPaM &, SwMoveFnCollection const &, const SwPaM &, bool bInReadOnly) override;
@@ -45,11 +50,12 @@ int SwFindParaFormatColl::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnM
     if( bInReadOnly && pReplColl )
         bInReadOnly = false;
 
-    if (!sw::FindFormatImpl(rCursor, *pFormatColl, fnMove, rRegion, bInReadOnly))
+    if (!sw::FindFormatImpl(rCursor, *pFormatColl, fnMove, rRegion, bInReadOnly, m_pLayout))
         nRet = FIND_NOT_FOUND;
     else if( pReplColl )
     {
-        rCursor.GetDoc()->SetTextFormatColl(rCursor, const_cast<SwTextFormatColl*>(pReplColl));
+        rCursor.GetDoc()->SetTextFormatColl(rCursor,
+            const_cast<SwTextFormatColl*>(pReplColl), true, false, m_pLayout);
         nRet = FIND_NO_RING;
     }
     return nRet;
@@ -63,7 +69,8 @@ bool SwFindParaFormatColl::IsReplaceMode() const
 /// search for Format-Collections
 sal_uLong SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositions nStart,
                           SwDocPositions nEnd, bool& bCancel,
-                          FindRanges eFndRngs, const SwTextFormatColl* pReplFormatColl )
+                          FindRanges eFndRngs, const SwTextFormatColl* pReplFormatColl,
+                          SwRootFrame const*const pLayout)
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
@@ -83,7 +90,7 @@ sal_uLong SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositi
                 &aRewriter );
     }
 
-    SwFindParaFormatColl aSwFindParaFormatColl(rFormatColl, pReplFormatColl);
+    SwFindParaFormatColl aSwFindParaFormatColl(rFormatColl, pReplFormatColl, pLayout);
 
     sal_uLong nRet = FindAll( aSwFindParaFormatColl, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
