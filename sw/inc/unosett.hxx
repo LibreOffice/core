@@ -147,11 +147,11 @@ private:
     OUString                    m_sNewCharStyleNames[MAXLEVEL];
     OUString                    m_sNewBulletFontNames[MAXLEVEL];
     OUString                    m_sCreatedNumRuleName; //connects to a numbering in SwDoc
-    SwDoc*                      pDoc;
-    SwDocShell*                 pDocShell; // Only if used as chapter numbering.
-    SwNumRule*                  pNumRule;
+    SwDoc*                      m_pDoc;
+    SwDocShell*                 m_pDocShell; // Only if used as chapter numbering.
+    SwNumRule*                  m_pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
-    bool const                  bOwnNumRuleCreated;
+    bool const                  m_bOwnNumRuleCreated;
 protected:
     virtual ~SwXNumberingRules() override;
 
@@ -202,10 +202,10 @@ public:
 
     const OUString*         GetNewCharStyleNames() const {return m_sNewCharStyleNames;}
     const OUString*         GetBulletFontNames() const {return m_sNewBulletFontNames;}
-    const SwNumRule*        GetNumRule() {return pNumRule;}
+    const SwNumRule*        GetNumRule() {return m_pNumRule;}
 
     static bool             isInvalidStyle(const OUString &rName);
-    void    Invalidate()    {pDocShell = nullptr;}
+    void    Invalidate()    {m_pDocShell = nullptr;}
     const OUString&   GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
 
     static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(

@@ -1063,26 +1063,26 @@ Sequence< OUString > SwXNumberingRules::getSupportedServiceNames()
 
 SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
     m_pImpl(new SwXNumberingRules::Impl(*this)),
-    pDoc(doc),
-    pDocShell(nullptr),
-    pNumRule(new SwNumRule(rRule)),
+    m_pDoc(doc),
+    m_pDocShell(nullptr),
+    m_pNumRule(new SwNumRule(rRule)),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(true)
+    m_bOwnNumRuleCreated(true)
 {
     // first organize the document - it is dependent on the set character formats
     // if no format is set, it should work as well
     for( sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
-        SwNumFormat rFormat(pNumRule->Get(i));
+        SwNumFormat rFormat(m_pNumRule->Get(i));
         SwCharFormat* pCharFormat = rFormat.GetCharFormat();
         if(pCharFormat)
         {
-            pDoc = pCharFormat->GetDoc();
+            m_pDoc = pCharFormat->GetDoc();
             break;
         }
     }
-    if(pDoc)
-        m_pImpl->StartListening(GetPageDescNotifier(pDoc));
+    if(m_pDoc)
+        m_pImpl->StartListening(GetPageDescNotifier(m_pDoc));
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         m_sNewCharStyleNames[i] = aInvalidStyle;
@@ -1092,22 +1092,22 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
 
 SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     m_pImpl(new SwXNumberingRules::Impl(*this)),
-    pDoc(nullptr),
-    pDocShell(&rDocSh),
-    pNumRule(nullptr),
+    m_pDoc(nullptr),
+    m_pDocShell(&rDocSh),
+    m_pNumRule(nullptr),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(false)
+    m_bOwnNumRuleCreated(false)
 {
-    m_pImpl->StartListening(GetPageDescNotifier(pDocShell->GetDoc()));
+    m_pImpl->StartListening(GetPageDescNotifier(m_pDocShell->GetDoc()));
 }
 
 SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     m_pImpl(new SwXNumberingRules::Impl(*this)),
-    pDoc(&rDoc),
-    pDocShell(nullptr),
-    pNumRule(nullptr),
+    m_pDoc(&rDoc),
+    m_pDocShell(nullptr),
+    m_pNumRule(nullptr),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(false)
+    m_bOwnNumRuleCreated(false)
 {
     m_pImpl->StartListening(GetPageDescNotifier(&rDoc));
     m_sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
@@ -1119,10 +1119,10 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
 SwXNumberingRules::~SwXNumberingRules()
 {
     SolarMutexGuard aGuard;
-    if(pDoc && !m_sCreatedNumRuleName.isEmpty())
-        pDoc->DelNumRule( m_sCreatedNumRuleName );
-    if( bOwnNumRuleCreated )
-        delete pNumRule;
+    if(m_pDoc && !m_sCreatedNumRuleName.isEmpty())
+        m_pDoc->DelNumRule( m_sCreatedNumRuleName );
+    if( m_bOwnNumRuleCreated )
+        delete m_pNumRule;
 }
 
 void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElement)
@@ -1136,17 +1136,17 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
     if(!rProperties)
         throw lang::IllegalArgumentException();
     SwNumRule* pRule = nullptr;
-    if(pNumRule)
-        SwXNumberingRules::SetNumberingRuleByIndex( *pNumRule,
+    if(m_pNumRule)
+        SwXNumberingRules::SetNumberingRuleByIndex( *m_pNumRule,
                             *rProperties, nIndex);
-    else if(pDocShell)
+    else if(m_pDocShell)
     {
         // #i87650# - correction of cws warnings:
-        SwNumRule aNumRule( *(pDocShell->GetDoc()->GetOutlineNumRule()) );
+        SwNumRule aNumRule( *(m_pDocShell->GetDoc()->GetOutlineNumRule()) );
         SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
                             *rProperties, nIndex);
         // set character format if needed
-        const SwCharFormats* pFormats = pDocShell->GetDoc()->GetCharFormats();
+        const SwCharFormats* pFormats = m_pDocShell->GetDoc()->GetCharFormats();
         const size_t nChCount = pFormats->size();
         for(sal_uInt16 i = 0; i < MAXLEVEL;i++)
         {
@@ -1168,10 +1168,10 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                 if(!pCharFormat)
                 {
                     SfxStyleSheetBase* pBase;
-                    pBase = pDocShell->GetStyleSheetPool()->Find(m_sNewCharStyleNames[i],
+                    pBase = m_pDocShell->GetStyleSheetPool()->Find(m_sNewCharStyleNames[i],
                                                                     SfxStyleFamily::Char);
                     if(!pBase)
-                        pBase = &pDocShell->GetStyleSheetPool()->Make(m_sNewCharStyleNames[i], SfxStyleFamily::Char);
+                        pBase = &m_pDocShell->GetStyleSheetPool()->Make(m_sNewCharStyleNames[i], SfxStyleFamily::Char);
                     pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
 
                 }
@@ -1179,10 +1179,10 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                 aNumRule.Set( i, aFormat );
             }
         }
-        pDocShell->GetDoc()->SetOutlineNumRule( aNumRule );
+        m_pDocShell->GetDoc()->SetOutlineNumRule( aNumRule );
     }
-    else if(!pNumRule && pDoc && !m_sCreatedNumRuleName.isEmpty() &&
-        nullptr != (pRule = pDoc->FindNumRulePtr( m_sCreatedNumRuleName )))
+    else if(!m_pNumRule && m_pDoc && !m_sCreatedNumRuleName.isEmpty() &&
+        nullptr != (pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName )))
     {
         SwXNumberingRules::SetNumberingRuleByIndex( *pRule,
                             *rProperties, nIndex);
@@ -1205,9 +1205,9 @@ uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     uno::Any aVal;
-    const SwNumRule* pRule = pNumRule;
-    if(!pRule && pDoc && !m_sCreatedNumRuleName.isEmpty())
-        pRule = pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
+    const SwNumRule* pRule = m_pNumRule;
+    if(!pRule && m_pDoc && !m_sCreatedNumRuleName.isEmpty())
+        pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
     if(pRule)
     {
         uno::Sequence<beans::PropertyValue> aRet = GetNumberingRuleByIndex(
@@ -1215,10 +1215,10 @@ uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
         aVal <<= aRet;
 
     }
-    else if(pDocShell)
+    else if(m_pDocShell)
     {
         uno::Sequence<beans::PropertyValue> aRet = GetNumberingRuleByIndex(
-                *pDocShell->GetDoc()->GetOutlineNumRule(), nIndex);
+                *m_pDocShell->GetDoc()->GetOutlineNumRule(), nIndex);
         aVal <<= aRet;
     }
     else
@@ -1271,11 +1271,11 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     }
 
     OUString aUString;
-    if (pDocShell) // -> Chapter Numbering
+    if (m_pDocShell) // -> Chapter Numbering
     {
         // template name
         OUString sValue(SwResId(STR_POOLCOLL_HEADLINE_ARY[nIndex]));
-        const SwTextFormatColls* pColls = pDocShell->GetDoc()->GetTextFormatColls();
+        const SwTextFormatColls* pColls = m_pDocShell->GetDoc()->GetTextFormatColls();
         const size_t nCount = pColls->size();
         for(size_t i = 0; i < nCount; ++i)
         {
@@ -1301,7 +1301,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         SwStyleNameMapper::FillProgName(sValue, aUString, SwGetPoolIdFromName::TxtColl);
     }
 
-    return GetPropertiesForNumFormat(rFormat, CharStyleName, (pDocShell) ? & aUString : nullptr);
+    return GetPropertiesForNumFormat(rFormat, CharStyleName, (m_pDocShell) ? & aUString : nullptr);
 
 }
 
@@ -1489,12 +1489,12 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     SetPropertiesToNumFormat(aFormat, m_sNewCharStyleNames[nIndex],
         &m_sNewBulletFontNames[nIndex],
         &sHeadingStyleName, &sParagraphStyleName,
-        pDoc, pDocShell, rProperties);
+        m_pDoc, m_pDocShell, rProperties);
 
 
-    if (pDoc && !sParagraphStyleName.isEmpty())
+    if (m_pDoc && !sParagraphStyleName.isEmpty())
     {
-        const SwTextFormatColls* pColls = pDoc->GetTextFormatColls();
+        const SwTextFormatColls* pColls = m_pDoc->GetTextFormatColls();
         const size_t nCount = pColls->size();
         for (size_t k = 0; k < nCount; ++k)
         {
@@ -1506,8 +1506,8 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
 
     if (!sHeadingStyleName.isEmpty())
     {
-        assert(pDocShell);
-        const SwTextFormatColls* pColls = pDocShell->GetDoc()->GetTextFormatColls();
+        assert(m_pDocShell);
+        const SwTextFormatColls* pColls = m_pDocShell->GetDoc()->GetTextFormatColls();
         const size_t nCount = pColls->size();
         for (size_t k = 0; k < nCount; ++k)
         {
@@ -2088,32 +2088,32 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     SolarMutexGuard aGuard;
     SwNumRule* pDocRule = nullptr;
     SwNumRule* pCreatedRule = nullptr;
-    if(!pNumRule)
+    if(!m_pNumRule)
     {
-        if(pDocShell)
+        if(m_pDocShell)
         {
-            pDocRule = new SwNumRule(*pDocShell->GetDoc()->GetOutlineNumRule());
+            pDocRule = new SwNumRule(*m_pDocShell->GetDoc()->GetOutlineNumRule());
         }
-        else if(pDoc && !m_sCreatedNumRuleName.isEmpty())
+        else if(m_pDoc && !m_sCreatedNumRuleName.isEmpty())
         {
-            pCreatedRule = pDoc->FindNumRulePtr(m_sCreatedNumRuleName);
+            pCreatedRule = m_pDoc->FindNumRulePtr(m_sCreatedNumRuleName);
         }
 
     }
-    if(!pNumRule && !pDocRule && !pCreatedRule)
+    if(!m_pNumRule && !pDocRule && !pCreatedRule)
         throw RuntimeException();
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
         bool bVal = *o3tl::doAccess<bool>(rValue);
         if(!pCreatedRule)
-            pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
+            pDocRule ? pDocRule->SetAutoRule(bVal) : m_pNumRule->SetAutoRule(bVal);
     }
     else if(rPropertyName == UNO_NAME_IS_CONTINUOUS_NUMBERING)
     {
         bool bVal = *o3tl::doAccess<bool>(rValue);
         pDocRule ? pDocRule->SetContinusNum(bVal) :
-            pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
+            pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : m_pNumRule->SetContinusNum(bVal);
     }
     else if(rPropertyName == UNO_NAME_NAME)
     {
@@ -2124,14 +2124,14 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     {
         bool bVal = *o3tl::doAccess<bool>(rValue);
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
-            pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
+            pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : m_pNumRule->SetAbsSpaces(bVal);
     }
     else if(rPropertyName == UNO_NAME_NUMBERING_IS_OUTLINE)
     {
         bool bVal = *o3tl::doAccess<bool>(rValue);
         SwNumRuleType eNumRuleType = bVal ? OUTLINE_RULE : NUM_RULE;
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
-            pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
+            pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : m_pNumRule->SetRuleType(eNumRuleType);
     }
     else if(rPropertyName == UNO_NAME_DEFAULT_LIST_ID)
     {
@@ -2143,7 +2143,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     if(pDocRule)
     {
-        pDocShell->GetDoc()->SetOutlineNumRule(*pDocRule);
+        m_pDocShell->GetDoc()->SetOutlineNumRule(*pDocRule);
         delete pDocRule;
     }
     else if(pCreatedRule)
@@ -2155,11 +2155,11 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
 {
     Any aRet;
-    const SwNumRule* pRule = pNumRule;
-    if(!pRule && pDocShell)
-        pRule = pDocShell->GetDoc()->GetOutlineNumRule();
-    else if(pDoc && !m_sCreatedNumRuleName.isEmpty())
-        pRule = pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
+    const SwNumRule* pRule = m_pNumRule;
+    if(!pRule && m_pDocShell)
+        pRule = m_pDocShell->GetDoc()->GetOutlineNumRule();
+    else if(m_pDoc && !m_sCreatedNumRuleName.isEmpty())
+        pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
     if(!pRule)
         throw RuntimeException();
 
@@ -2214,17 +2214,17 @@ void SwXNumberingRules::removeVetoableChangeListener(
 
 OUString SwXNumberingRules::getName()
 {
-    if(pNumRule)
+    if(m_pNumRule)
     {
         OUString aString;
-        SwStyleNameMapper::FillProgName(pNumRule->GetName(), aString, SwGetPoolIdFromName::NumRule );
+        SwStyleNameMapper::FillProgName(m_pNumRule->GetName(), aString, SwGetPoolIdFromName::NumRule );
         return aString;
     }
     // consider chapter numbering <SwXNumberingRules>
-    if ( pDocShell )
+    if ( m_pDocShell )
     {
         OUString aString;
-        SwStyleNameMapper::FillProgName( pDocShell->GetDoc()->GetOutlineNumRule()->GetName(),
+        SwStyleNameMapper::FillProgName( m_pDocShell->GetDoc()->GetOutlineNumRule()->GetName(),
                                          aString, SwGetPoolIdFromName::NumRule );
         return aString;
     }
@@ -2242,10 +2242,10 @@ void SwXNumberingRules::Impl::Notify(const SfxHint& rHint)
 {
     if(rHint.GetId() == SfxHintId::Dying)
     {
-        if(m_rParent.bOwnNumRuleCreated)
-            delete m_rParent.pNumRule;
-        m_rParent.pNumRule = nullptr;
-        m_rParent.pDoc = nullptr;
+        if(m_rParent.m_bOwnNumRuleCreated)
+            delete m_rParent.m_pNumRule;
+        m_rParent.m_pNumRule = nullptr;
+        m_rParent.m_pDoc = nullptr;
     }
 }
 
