@@ -1455,7 +1455,6 @@ void SwIntrnlSectRefLink::Closed()
                 SwSectionData aSectionData(*rSectFormat.GetSection());
                 aSectionData.SetType( CONTENT_SECTION );
                 aSectionData.SetLinkFileName( OUString() );
-                aSectionData.SetHidden( false );
                 aSectionData.SetProtectFlag( false );
                 // edit in readonly sections
                 aSectionData.SetEditInReadonlyFlag( false );
