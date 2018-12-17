@@ -52,6 +52,8 @@
 
 #include <string>
 #include <config_features.h>
+#include <unocrsr.hxx>
+#include <ndtxt.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -1001,6 +1003,28 @@ DECLARE_OOXMLEXPORT_TEST(tdf66398_permissions, "tdf66398_permissions.docx")
     CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), static_cast<sal_Int32>(2));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("_GoBack"));
     CPPUNIT_ASSERT(xBookmarksByName->hasByName("permission-for-group:267014232:everyone"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotectedText.odt")
+{
+    // get the document
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    // get two different nodes
+    SwNodeIndex aDocEnd(pDoc->GetNodes().GetEndOfContent());
+    SwNodeIndex aDocStart(*aDocEnd.GetNode().StartOfSectionNode(), 3);
+
+    // check protected area
+    SwPaM aPaMPortected(aDocStart);
+    CPPUNIT_ASSERT(aPaMPortected.HasReadonlySel(false));
+
+    // check unprotected area
+    SwPaM aPaMUnprotected(aDocEnd);
+    CPPUNIT_ASSERT(!aPaMUnprotected.HasReadonlySel(false));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
