@@ -163,7 +163,6 @@ modules/swriter/ui/querycontinueenddialog.ui
 modules/swriter/ui/querydefaultcompatdialog.ui
 modules/swriter/ui/queryrotateintostandarddialog.ui
 modules/swriter/ui/querysavelabeldialog.ui
-modules/swriter/ui/queryshowchangesdialog.ui
 modules/swriter/ui/renameautotextdialog.ui
 modules/swriter/ui/renameentrydialog.ui
 modules/swriter/ui/renameobjectdialog.ui
