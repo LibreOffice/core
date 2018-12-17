@@ -20,6 +20,7 @@
 #ifndef __com_sun_star_sdb_OrderDialog_idl__
 #define __com_sun_star_sdb_OrderDialog_idl__
 
+#include <com/sun/star/awt/XWindow.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.idl>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
@@ -37,7 +38,8 @@ service OrderDialog : com::sun::star::ui::dialogs::XExecutableDialog
     createDefault();
 
     createWithQuery([in] com::sun::star::sdb::XSingleSelectQueryComposer QueryComposer,
-                    [in] com::sun::star::beans::XPropertySet RowSet);
+                    [in] com::sun::star::beans::XPropertySet RowSet,
+                    [in] com::sun::star::awt::XWindow ParentWindow);
 };
 
 
