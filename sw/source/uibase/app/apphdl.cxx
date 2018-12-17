@@ -479,7 +479,7 @@ void SwMailMergeWizardExecutor::ExecutionFinished()
 
 void SwMailMergeWizardExecutor::ExecuteWizard()
 {
-    m_pWizard->StartExecuteAsync([=](sal_Int32 nResult){
+    m_pWizard->StartExecuteAsync([this](sal_Int32 nResult){
         EndDialogHdl(nResult);
     });
 }

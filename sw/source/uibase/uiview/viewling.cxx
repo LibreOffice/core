@@ -578,7 +578,7 @@ void SwView::StartThesaurus()
         {
             guard.dismiss(); // ignore, we'll call SetIdle() explicitly after the dialog ends
 
-            pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+            pDlg->StartExecuteAsync([aTmp, bSelection, bOldIdle, pDlg, pVOpt, this](sal_Int32 nResult){
                 if (nResult == RET_OK )
                     InsertThesaurusSynonym(pDlg->GetWord(), aTmp, bSelection);
 

@@ -65,7 +65,7 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< css::ui::dial
     prepareExecute();
     SvtFileDialog_Base* pDialog = getDialog();
     pDialog->EnableAutocompletion();
-    pDialog->StartExecuteAsync([=](sal_Int32 nResult){
+    pDialog->StartExecuteAsync([this](sal_Int32 nResult){
         DialogClosedHdl(nResult);
     });
 }
