@@ -346,10 +346,10 @@ void ODbaseTable::fillColumns()
                 aTypeName = "NUMERIC";
             eType = DataType::DECIMAL;
 
-            // for numeric fields two characters more are written, than the precision of the column description predescribes,
+            // for numeric fields two characters more are written, then the precision of the column description predescribes,
             // to keep room for the possible sign and the comma. This has to be considered...
             nPrecision = SvDbaseConverter::ConvertPrecisionToOdbc(nPrecision,aDBFColumn.db_dez);
-            // This is not true for older versions ....
+            // This is not true for older versions...
             break;
         case 'L':
             eType = DataType::BIT;
