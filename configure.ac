@@ -4532,7 +4532,6 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         config_host_lang.mk.in \
         Makefile.in \
-        lo.xcent.in \
         bin/bffvalidator.sh.in \
         bin/odfvalidator.sh.in \
         bin/officeotron.sh.in \
@@ -12844,7 +12843,6 @@ CPPFLAGS=$my_original_CPPFLAGS
 AC_CONFIG_FILES([config_host.mk
                  config_host_lang.mk
                  Makefile
-                 lo.xcent
                  bin/bffvalidator.sh
                  bin/odfvalidator.sh
                  bin/officeotron.sh
