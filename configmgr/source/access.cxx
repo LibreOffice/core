@@ -1381,7 +1381,7 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
             ("access best-matching localized property value via \"*<locale>\""
              " with empty <locale>; falling back to defaults"));
         if (!locale.isEmpty()) {
-            // Find best match using an adaption of RFC 4647 lookup matching
+            // Find best match using an adaptation of RFC 4647 lookup matching
             // rules, removing "-" or "_" delimited segments from the end:
             for (;;) {
                 rtl::Reference< ChildAccess > child(getChild(locale));
