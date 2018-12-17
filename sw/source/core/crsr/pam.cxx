@@ -606,6 +606,16 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         {
             bRet = true;
         }
+        else
+        {
+            const SwSectionNode* pParentSectionNd = pNd->FindSectionNode();
+            if ( pParentSectionNd != nullptr
+                 && ( pParentSectionNd->GetSection().IsProtectFlag()
+                      || ( bFormView && !pParentSectionNd->GetSection().IsEditInReadonlyFlag()) ) )
+            {
+                bRet = true;
+            }
+        }
     }
 
     if ( !bRet
@@ -700,6 +710,9 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
         if ( ( pA == pB ) && bUnhandledMark )
             bRet = true;
+        else if (! pA && ! pB)
+        {
+        }
         else
         {
             bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());

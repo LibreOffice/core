@@ -699,7 +699,7 @@ void SectionPropertyMap::ApplyProtectionProperties( uno::Reference< beans::XProp
             if ( xSection.is() )
                 xSection->setPropertyValue( getPropertyName(PROP_IS_PROTECTED), uno::makeAny(bIsProtected) );
         }
-        Erase(PROP_IS_PROTECTED);
+//        Erase(PROP_IS_PROTECTED);
     }
     catch ( uno::Exception& )
     {
