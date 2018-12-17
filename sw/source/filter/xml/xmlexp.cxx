@@ -26,6 +26,7 @@
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 
 #include <o3tl/any.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sax/tools/converter.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
@@ -46,6 +47,7 @@
 #include <swmodule.hxx>
 #include <docsh.hxx>
 #include <viewsh.hxx>
+#include <rootfrm.hxx>
 #include <docstat.hxx>
 #include <swerror.h>
 #include <unotext.hxx>
@@ -277,7 +279,15 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
     RedlineFlags nRedlineFlags = RedlineFlags::NONE;
-    m_bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get(getComponentContext()))
+    {
+        SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+        m_bSavedShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
+    }
+    else
+    {
+        m_bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+    }
     if( bSaveRedline )
     {
         // now save and switch redline mode
