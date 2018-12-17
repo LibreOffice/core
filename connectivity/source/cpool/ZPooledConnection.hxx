@@ -38,7 +38,7 @@ namespace connectivity
     class OPooledConnection : public ::cppu::BaseMutex
                              ,public OPooledConnection_Base
     {
-        css::uno::Reference< css::sdbc::XConnection >             m_xRealConnection;  // the connection fom driver
+        css::uno::Reference< css::sdbc::XConnection >             m_xRealConnection;  // the connection from driver
         css::uno::Reference< css::lang::XComponent >              m_xComponent;       // the connection which wraps the real connection
         css::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
     public:
