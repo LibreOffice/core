@@ -1172,16 +1172,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     const OUString sDescriptorPrefix = sPrefix_;
 
     // Setup for dumping debugging documents
-    static const char *sMaxDumpDocs = nullptr;
-    static sal_Int32 nMaxDumpDocs = 0;
-    if (!sMaxDumpDocs)
-    {
-        sMaxDumpDocs = getenv("SW_DEBUG_MAILMERGE_DOCS");
-        if (!sMaxDumpDocs)
-            sMaxDumpDocs = "";
+    static const sal_Int32 nMaxDumpDocs = []() {
+        if (const char* sEnv = getenv("SW_DEBUG_MAILMERGE_DOCS"))
+            return OUString(sEnv, strlen(sEnv), osl_getThreadTextEncoding()).toInt32();
         else
-            nMaxDumpDocs = OUString(sMaxDumpDocs, strlen(sMaxDumpDocs), osl_getThreadTextEncoding()).toInt32();
-    }
+            return sal_Int32(0);
+    }();
 
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     ::rtl::Reference< IMailDispatcherListener > xMailListener;
