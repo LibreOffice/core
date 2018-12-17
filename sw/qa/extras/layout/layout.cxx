@@ -61,6 +61,7 @@ public:
     void testTdf120287b();
     void testTdf120287c();
     void testTdf116989();
+    void testTdf114141();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -73,6 +74,7 @@ public:
     CPPUNIT_TEST(testRedlineTables);
     CPPUNIT_TEST(testRedlineCharAttributes);
     CPPUNIT_TEST(testTdf116830);
+    CPPUNIT_TEST(testTdf114141);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testTdf106390);
@@ -2605,6 +2607,17 @@ void SwLayoutWriter::testTdf116989()
         CPPUNIT_ASSERT_MESSAGE(OString("testing paragraph #" + OString::number(i)).getStr(),
                                nTxtBottom <= nTblTop);
     }
+}
+
+void SwLayoutWriter::testTdf114141()
+{
+    SwDoc* pDoc = createDoc("tdf114141.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/bmpexscale", "crc", "145abb0b");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
