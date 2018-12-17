@@ -2525,7 +2525,7 @@ else
 fi
 AC_SUBST(DISABLE_DYNLOADING)
 
-# remenber SYSBASE value
+# remember SYSBASE value
 AC_SUBST(SYSBASE)
 
 dnl ===================================================================
