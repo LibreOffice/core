@@ -4291,8 +4291,7 @@ void SwTextNode::AddToList()
         {
             if (pFrame->getRootFrame()->IsHideRedlines())
             {
-                sw::MergedPara const*const pMerged = pFrame->GetMergedPara();
-                if (!pMerged || this == pMerged->pParaPropsNode)
+                if (pFrame->GetTextNodeForParaProps() == this)
                 {
                     AddToListRLHidden();
                 }
