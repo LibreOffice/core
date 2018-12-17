@@ -243,7 +243,7 @@ namespace dbaui
         if ( -1 != nApprovePos )
         {
             // ask whether it should be saved
-            nRet = ExecuteQuerySaveDocument(nullptr,_rDocuRequest.Name);
+            nRet = ExecuteQuerySaveDocument(Application::GetFrameWeld(m_xParentWindow), _rDocuRequest.Name);
         }
 
         if ( RET_CANCEL == nRet )
