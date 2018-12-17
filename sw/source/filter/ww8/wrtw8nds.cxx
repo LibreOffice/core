@@ -3048,9 +3048,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
             ReplaceCr( msword::PageBreak ); // Indicator for Page/Section-Break
 
             // Get the page in use at the top of this section
-            SwNodeIndex aIdxTmp(rSectionNode, 1);
-            const SwPageDesc *pCurrent =
-                SwPageDesc::GetPageDescOfNode(aIdxTmp.GetNode());
+            const SwPageDesc *pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
             if (!pCurrent)
                 pCurrent = m_pCurrentPageDesc;
 
