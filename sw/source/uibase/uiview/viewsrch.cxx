@@ -358,13 +358,15 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     {   //Scope for SwWait-Object
                         SwWait aWait( *GetDocShell(), true );
                         m_pWrtShell->StartAllAction();
+
+                        // i#8288 "replace all" should not change cursor
+                        // position, so save current cursor
+                        m_pWrtShell->Push();
+
                         if (!m_pSrchItem->GetSelection())
                         {
                             // if we don't want to search in the selection...
                             m_pWrtShell->KillSelection(nullptr, false);
-                            // i#8288 "replace all" should not change cursor
-                            // position, so save current cursor
-                            m_pWrtShell->Push();
                             if (SwDocPositions::Start == aOpts.eEnd)
                             {
                                 m_pWrtShell->EndOfSection();
@@ -375,13 +377,10 @@ void SwView::ExecSearch(SfxRequest& rReq)
                             }
                         }
                         nFound = FUNC_Search( aOpts );
-                        if (!m_pSrchItem->GetSelection())
-                        {
-                            // create it just to overwrite it with stack cursor
-                            m_pWrtShell->CreateCursor();
-                            // i#8288 restore the original cursor position
-                            m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
-                        }
+                        // create it just to overwrite it with stack cursor
+                         m_pWrtShell->CreateCursor();
+                        // i#8288 restore the original cursor position
+                        m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
                         m_pWrtShell->EndAllAction();
                     }
 
