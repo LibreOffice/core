@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_3270fb72",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3045,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-17T12:22:14Z",
+      "side": 0,
+      "message": "converted a pointer into a reference, but only used as a pointer.",
+      "range": {
+        "startLine": 3045,
+        "startChar": 18,
+        "endLine": 3045,
+        "endChar": 34
+      },
+      "revId": "4229dc0ba4e02b17ad73d62ead281441f1786e9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_52737781",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-17T12:22:14Z",
+      "side": 0,
+      "message": "already false...",
+      "range": {
+        "startLine": 439,
+        "startChar": 12,
+        "endLine": 439,
+        "endChar": 32
+      },
+      "revId": "4229dc0ba4e02b17ad73d62ead281441f1786e9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

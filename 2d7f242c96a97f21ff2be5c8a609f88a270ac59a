@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_126dff97",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-12-17T12:22:14Z",
+      "side": 1,
+      "message": "This function is identical to these two steps. Use the function instead.",
+      "range": {
+        "startLine": 580,
+        "startChar": 11,
+        "endLine": 580,
+        "endChar": 25
+      },
+      "revId": "2d7f242c96a97f21ff2be5c8a609f88a270ac59a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
