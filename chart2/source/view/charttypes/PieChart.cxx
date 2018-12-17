@@ -1483,7 +1483,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // passing through a b.b. vertex is less than half width of the pie slice;
     // when the nearest edge e crosses a Cartesian axis it is sufficient
     // to test only the vertices belonging to e, else we need to test
-    // the 2 vertices that aren’t either N or F . Note that if a b.b. edge
+    // the 2 vertices that aren't either N or F. Note that if a b.b. edge
     // crosses a Cartesian axis then it is the nearest edge to C
 
     // check the angle between CP and CM
