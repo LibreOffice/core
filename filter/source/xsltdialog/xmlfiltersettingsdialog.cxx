@@ -179,15 +179,13 @@ IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl, SvTreeListBox*, bo
     return false;
 }
 
-short XMLFilterSettingsDialog::Execute()
+void XMLFilterSettingsDialog::UpdateWindow()
 {
     m_pCtrlFilterList->GrabFocus();
     disposeFilterList();
     m_pFilterListBox->Clear();
     initFilterList();
     updateStates();
-
-    return ModelessDialog::Execute();
 }
 
 void XMLFilterSettingsDialog::updateStates()
