@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_12e4dfab",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-12-17T15:44:59Z",
+      "side": 1,
+      "message": "It should be set to:\ndouble fTextRotation \u003d 0.0;",
+      "revId": "6de7c09d79e330a8dac9e19325b510349d5fa93a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_124f3fbe",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-12-17T15:44:59Z",
+      "side": 1,
+      "message": "Do you know where fTextRotation is set?\nAs I understand this code, it is always 0.0.",
+      "revId": "6de7c09d79e330a8dac9e19325b510349d5fa93a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_52da57e9",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2377,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-12-17T15:44:59Z",
+      "side": 1,
+      "message": "Why do you need this condition?\n\nWhy it cannot be:\nfTextRotation \u003d (fTextRotation - 18000.0);\n?",
+      "revId": "6de7c09d79e330a8dac9e19325b510349d5fa93a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_32d7dbc2",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-12-17T15:44:59Z",
+      "side": 1,
+      "message": "I think it will be better to set it as:\nfTextRotation \u003d (fTextRotation - 36000.0);\nor even:\nfTextRotation \u003d- 36000.0;",
+      "revId": "6de7c09d79e330a8dac9e19325b510349d5fa93a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
