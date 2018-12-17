@@ -830,7 +830,7 @@ void SwDocShell::Edit(
             pReq->Ignore(); // the 'old' request is not relevant any more
         }
 
-        pDlg->StartExecuteAsync([=](sal_Int32 nResult){
+        pDlg->StartExecuteAsync([bModified, bNew, nFamily, nSlot, nNewStyleUndoId, pApplyStyleHelper, pRequest, xTmp, this](sal_Int32 nResult){
             if (RET_OK == nResult)
                 pApplyStyleHelper->apply();
 

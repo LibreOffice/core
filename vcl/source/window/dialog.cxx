@@ -1086,7 +1086,7 @@ void Dialog::RemoveFromDlgList()
     auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
 
     // remove dialog from the list of dialogs which are being executed
-    rExecuteDialogs.erase(std::remove_if(rExecuteDialogs.begin(), rExecuteDialogs.end(), [=](VclPtr<Dialog>& dialog){ return dialog.get() == this; }), rExecuteDialogs.end());
+    rExecuteDialogs.erase(std::remove_if(rExecuteDialogs.begin(), rExecuteDialogs.end(), [this](VclPtr<Dialog>& dialog){ return dialog.get() == this; }), rExecuteDialogs.end());
 }
 
 void Dialog::EndDialog( long nResult )

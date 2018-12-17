@@ -1645,7 +1645,7 @@ void CustomAnimationPane::showOptions(const OString& rPage)
 
     std::shared_ptr<CustomAnimationDialog> xDlg(new CustomAnimationDialog(GetFrameWeld(), std::move(xSet), rPage));
 
-    weld::DialogController::runAsync(xDlg, [=](sal_Int32 nResult){
+    weld::DialogController::runAsync(xDlg, [xDlg, this](sal_Int32 nResult){
         if (nResult )
         {
             addUndo();
