@@ -176,7 +176,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     {
         assert(m_pMergedPara);
         m_pTextNode = m_pMergedPara->pFirstNode;
-        InitFontAndAttrHandler(*m_pTextNode, m_pMergedPara->mergedText, nullptr);
+        InitFontAndAttrHandler(*m_pMergedPara->pParaPropsNode, *m_pTextNode, m_pMergedPara->mergedText, nullptr);
     }
 
     // reset font to its original state
@@ -310,7 +310,7 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
         // items at all; it can only apply a previously effective item.
         // So do this by recreating the font from scratch.
         // Apply new para items:
-        InitFontAndAttrHandler(*newPos.first, m_pMergedPara->mergedText, nullptr);
+        InitFontAndAttrHandler(*m_pMergedPara->pParaPropsNode, *newPos.first, m_pMergedPara->mergedText, nullptr);
         // reset to next
         m_pTextNode = newPos.first;
         m_nStartIndex = 0;
@@ -332,7 +332,7 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
                 m_pTextNode = newPos.first;
                 // sw_redlinehide: hope it's okay to use the current text node
                 // here; the AttrHandler shouldn't care about non-char items
-                InitFontAndAttrHandler(*m_pTextNode, m_pMergedPara->mergedText, nullptr);
+                InitFontAndAttrHandler(*m_pMergedPara->pParaPropsNode, *m_pTextNode, m_pMergedPara->mergedText, nullptr);
             }
         }
         if (m_pMergedPara || m_pTextNode->GetpSwpHints())
@@ -1397,8 +1397,7 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
         {
             // Only consider master frames:
             if (!pFrame->IsFollow() &&
-                // sw_redlinehide: paraPropsNode has the first text of the frame
-                (!pFrame->GetMergedPara() || pFrame->GetMergedPara()->pParaPropsNode == this))
+                pFrame->GetTextNodeForFirstText() == this)
             {
                 SwRectFnSet aRectFnSet(pFrame);
                 SwRect aRect;

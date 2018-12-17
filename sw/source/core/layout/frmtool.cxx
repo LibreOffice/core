@@ -1169,10 +1169,6 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
                     {
                         AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
                     }
-                    else
-                    {
-                        assert(pMerged->pParaPropsNode == iter->pNode); // first iteration
-                    }
                     pNode = iter->pNode;
                     iterFirst = iter;
                 }

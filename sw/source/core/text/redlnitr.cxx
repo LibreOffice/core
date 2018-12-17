@@ -219,13 +219,14 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     if (extents.empty()) // there was no text anywhere
     {
         assert(mergedText.isEmpty());
-        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
+//        pParaPropsNode = &rTextNode; // if every node is empty, the first one wins
     }
     else
     {
         assert(!mergedText.isEmpty());
-        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
+//        pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
     }
+    pParaPropsNode = &rTextNode; // well, actually...
     // keep lists up to date with visible nodes
     if (pParaPropsNode->IsInList() && !pParaPropsNode->GetNum(rFrame.getRootFrame()))
     {
@@ -300,12 +301,14 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
 
 } // namespace sw
 
-void SwAttrIter::InitFontAndAttrHandler(SwTextNode const& rTextNode,
+void SwAttrIter::InitFontAndAttrHandler(
+        SwTextNode const& rPropsNode,
+        SwTextNode const& rTextNode,
         OUString const& rText,
         bool const*const pbVertLayout)
 {
     // Build a font matching the default paragraph style:
-    SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), m_pViewShell );
+    SwFontAccess aFontAccess( &rPropsNode.GetAnyFormatColl(), m_pViewShell );
     // It is possible that Init is called more than once, e.g., in a
     // SwTextFrame::FormatOnceMore situation or (since sw_redlinehide)
     // from SwAttrIter::Seek(); in the latter case SwTextSizeInfo::m_pFnt
@@ -396,7 +399,9 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
     if (m_pScriptInfo->GetInvalidityA() != TextFrameIndex(COMPLETE_STRING))
          m_pScriptInfo->InitScriptInfo(rTextNode, m_pMergedPara, bRTL);
 
-    InitFontAndAttrHandler(rTextNode,
+    InitFontAndAttrHandler(
+            m_pMergedPara ? *m_pMergedPara->pParaPropsNode : rTextNode,
+            rTextNode,
             m_pMergedPara ? m_pMergedPara->mergedText : rTextNode.GetText(),
             & bVertLayout);
 
