@@ -1146,7 +1146,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         m_nColBreakStatus = COLBRK_NONE;
     }
 
-    if ( m_bPostponedPageBreak )
+    if ( m_bPostponedPageBreak && !m_bWritingHeaderFooter )
     {
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_br,
