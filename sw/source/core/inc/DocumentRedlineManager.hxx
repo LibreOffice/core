@@ -124,8 +124,6 @@ public:
      Sequence number is for conjoining of Redlines by the UI. */
     void SetAutoFormatRedlineComment( const OUString* pText, sal_uInt16 nSeqNo = 0 );
 
-    void checkRedlining(RedlineFlags& _rReadlineMode);
-
     bool IsHideRedlines() const { return m_bHideRedlines; }
     void SetHideRedlines(bool const bHideRedlines) { m_bHideRedlines = bHideRedlines; }
 
@@ -143,7 +141,6 @@ private:
     std::unique_ptr<SwExtraRedlineTable> mpExtraRedlineTable;      //< List of all Extra Redlines.
     std::unique_ptr<OUString> mpAutoFormatRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
     bool mbIsRedlineMove;    //< true: Redlines are moved into to / out of the section.
-    bool mbReadlineChecked;    //< true: if the query was already shown
     sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.
                                          by the UI. Managed by SwAutoFormat! */
     css::uno::Sequence <sal_Int8 > maRedlinePasswd;
