@@ -104,6 +104,24 @@
       "revId": "b75ad13f80985028c792b4c6f91f143bf28fdf69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_d275279a",
+        "filename": "offapi/com/sun/star/frame/XModel2.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-17T10:20:16Z",
+      "side": 1,
+      "message": "\"XModel has getArgs, so I chose setArgs in line with that.\" ah, I see; all fine with me",
+      "parentUuid": "5f4e5783_323d9bbb",
+      "revId": "b75ad13f80985028c792b4c6f91f143bf28fdf69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
