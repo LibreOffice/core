@@ -52,7 +52,7 @@ void throwGenericSQLException( const OUString& _rMessage )
     throw aError;
 }
 
-/** throws an SQLException saying than no Mac OS installation was found
+/** throws an SQLException saying that no Mac OS installation was found
  */
 void throwNoMacOSException()
 {
