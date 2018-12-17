@@ -685,6 +685,11 @@ void BarChart::createShapes()
                             fLogicBarHeight = 0.0;
                     }
 
+                    // tdf#114141 to draw the top of the zero height 3D bar
+                    // we set a small positive value, here the smallest one for the type double (DBL_MIN)
+                    if( fLogicBarHeight == 0.0 )
+                        fLogicBarHeight = DBL_MIN;
+
                     //sort negative and positive values, to display them on different sides of the x axis
                     bool bPositive = fLogicBarHeight >= 0.0;
                     double fLowerYValue = bPositive ? fPositiveLogicYForNextSeries : fNegativeLogicYForNextSeries;
