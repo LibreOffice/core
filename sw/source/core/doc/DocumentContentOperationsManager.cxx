@@ -3688,9 +3688,6 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
 {
     assert(m_rDoc.getIDocumentRedlineAccess().IsRedlineOn());
 
-    RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
-    m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
-
     if (*rPam.GetPoint() == *rPam.GetMark())
     {
         return false; // do not add empty redlines
@@ -3811,8 +3808,6 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         {
             m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
         }
-        //JP 06.01.98: MUSS noch optimiert werden!!!
-        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
     }
     return true;
 }
@@ -4078,8 +4073,6 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
 
         if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
         {
-            RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
-            m_rDoc.GetDocumentRedlineManager().checkRedlining(eOld);
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
@@ -4189,8 +4182,6 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 rPam.GetPoint()->nNode = 0;
                 rPam.GetPoint()->nContent = rIdx;
                 *rPam.GetMark() = *rPam.GetPoint();
-                //JP 06.01.98: MUSS noch optimiert werden!!!
-                m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetMarkPos();
                 if(pBkmk->IsExpanded())
