@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_b29f4bb3",
+        "filename": "vcl/Library_vclplug_gtk3.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-12-17T10:29:55Z",
+      "side": 0,
+      "message": "adding $(INCLUDE) to cxxflags looks quite redundant, and will duplicate all the -I flags on the command line - did you try removing that?",
+      "revId": "f10404e30ab2f468147457f0304e0e9fe64eefa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
