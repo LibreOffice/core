@@ -54,7 +54,6 @@
 /config_build.mk
 /config_build_lang.mk
 /configure
-/lo.xcent
 /bin/bffvalidator.sh
 /bin/odfvalidator.sh
 /bin/officeotron.sh
