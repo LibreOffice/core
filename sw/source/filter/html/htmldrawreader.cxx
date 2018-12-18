@@ -231,7 +231,7 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
         {
             const SvxBrushItem& rBrushItem = static_cast<const SvxBrushItem&>(rSwItem);
             rEEItemSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
-            rEEItemSet.Put( XFillColorItem(aEmptyOUStr,
+            rEEItemSet.Put(XFillColorItem(OUString(),
                             rBrushItem.GetColor()) );
         }
         break;
@@ -438,7 +438,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( bBGColor )
     {
         aItemSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
-        aItemSet.Put( XFillColorItem(aEmptyOUStr, aBGColor) );
+        aItemSet.Put(XFillColorItem(OUString(), aBGColor));
     }
 
     // parse styles (is here only possible for attributes, which also

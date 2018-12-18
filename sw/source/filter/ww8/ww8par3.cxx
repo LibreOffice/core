@@ -2003,7 +2003,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 // here a paragraph is being directly formatted
 
                 // empty the numbering/list style applied to the current paragraph
-                SwNumRuleItem aEmptyRule( aEmptyOUStr );
+                SwNumRuleItem aEmptyRule;
                 pTextNode->SetAttr( aEmptyRule );
 
                 // create an empty SvxLRSpaceItem

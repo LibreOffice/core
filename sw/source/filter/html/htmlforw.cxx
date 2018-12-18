@@ -1045,7 +1045,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     }
     OString aEndTags;
     if( nFrameOpts != HtmlFrmOpts::NONE )
-        aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrameOpts );
+        aEndTags = rHTMLWrt.OutFrameFormatOptions(rFormat, OUString(), nFrameOpts);
 
     if( rHTMLWrt.m_bCfgOutStyles )
     {
@@ -1101,7 +1101,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                             if( auto n = o3tl::tryAccess<sal_Int16>(aTmp2) )
                                 eFamily = static_cast<FontFamily>(*n);
                         }
-                        SvxFontItem aItem( eFamily, *aFName, aEmptyOUStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
+                        SvxFontItem aItem(eFamily, *aFName, OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
                         aItemSet.Put( aItem );
                     }
                 }

@@ -459,7 +459,7 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
         nOldFormat != nFormat || m_pFixedCB->IsValueChangedFromSaved()
         || (DI_CUSTOM == nSubType && aName != m_sOldCustomFieldName ))
     {
-        InsertField(TYP_DOCINFOFLD, nSubType, aName, aEmptyOUStr, nFormat,
+        InsertField(TYP_DOCINFOFLD, nSubType, aName, OUString(), nFormat,
                 ' ', m_pFormatLB->IsAutomaticLanguage());
     }
 

@@ -112,7 +112,7 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFieldMgr& rFieldMgr, const OUStrin
                     if (comphelper::string::getTokenCount(sDBName, '.') >= 3)
                     {
                         sDBName = ::ReplacePoint(sDBName, true);
-                        SwInsertField_Data aData(TYP_DBFLD, 0, sDBName, aEmptyOUStr, 0, &rSh );
+                        SwInsertField_Data aData(TYP_DBFLD, 0, sDBName, OUString(), 0, &rSh);
                         rFieldMgr.InsertField( aData );
                         sRet = sDBName;
                         bField = true;

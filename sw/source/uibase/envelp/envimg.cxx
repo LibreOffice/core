@@ -94,7 +94,6 @@ OUString MakeSender()
 SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {
-    m_aAddrText       = aEmptyOUStr;
     m_bSend           = true;
     m_aSendText       = MakeSender();
     m_nSendFromLeft   = 566; // 1 cm

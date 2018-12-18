@@ -788,7 +788,7 @@ IMAGE_SETEVENT:
     // passing empty sGrfNm here, means we don't want the graphic to be linked
     SwFrameFormat *const pFlyFormat =
         m_xDoc->getIDocumentContentOperations().InsertGraphic(
-            *m_pPam, sGrfNm, aEmptyOUStr, &aGraphic,
+            *m_pPam, sGrfNm, OUString(), &aGraphic,
             &aFrameSet, nullptr, nullptr);
     SwGrfNode *pGrfNd = m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();
@@ -1264,7 +1264,9 @@ ANCHOR_SETEVENT:
         if( bEnAnchor || bFootnoteAnchor || bFootnoteEnSymbol )
         {
             aFootnoteName = sHRef.copy( 1 );
-            aClass = aStrippedClass = aName = aEmptyOUStr;
+            aClass.clear();
+            aStrippedClass.clear();
+            aName.clear();
             bHasHRef = false;
         }
     }

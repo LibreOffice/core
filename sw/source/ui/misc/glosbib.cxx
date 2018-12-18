@@ -288,7 +288,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, weld::Button&, rButton, void )
     if (!m_xGroupTLB->n_children())
         rButton.set_sensitive(false);
     //the content must be deleted - otherwise the new handler would be called in Apply()
-    m_xNameED->set_text(aEmptyOUStr);
+    m_xNameED->set_text(OUString());
     ModifyHdl(*m_xNameED);
 }
 
