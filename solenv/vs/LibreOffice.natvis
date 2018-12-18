@@ -113,6 +113,16 @@
     <DisplayString Condition="nElements == 0">_sal_Sequence (empty)</DisplayString>
     <DisplayString>_sal_Sequence of {nElements,d} elements</DisplayString>
   </Type>
+  <Type Name="com::sun::star::uno::Sequence &lt; signed char &gt;">
+    <DisplayString Condition="_pSequence->nElements == 0">Sequence (empty)</DisplayString>
+    <DisplayString>Sequence of {_pSequence->nElements,d} signed char</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>_pSequence->nElements</Size>
+        <ValuePointer>reinterpret_cast &lt; const char* &gt;( _pSequence->elements )</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
   <Type Name="com::sun::star::uno::Sequence &lt; * &gt;">
     <DisplayString Condition="_pSequence->nElements == 0">Sequence (empty)</DisplayString>
     <DisplayString>Sequence of {_pSequence->nElements,d} {"$T1",sb}</DisplayString>
