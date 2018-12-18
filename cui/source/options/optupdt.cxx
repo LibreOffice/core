@@ -152,7 +152,6 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         nFormat = pNumberFormatter->GetStandardFormat( SvNumFormatType::TIME, eUILang );
         pNumberFormatter->GetOutputString( aTime.GetTimeInDays(), nFormat, aTimeStr, &pColor );
 
-        delete pColor;
         delete pNumberFormatter;
 
         aText = m_aLastCheckedTemplate;
