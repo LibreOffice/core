@@ -9,8 +9,8 @@
 
 # simple wrapper script to run non-installed executables from workdir
 
-if uname | grep -i CYGWIN >/dev/null; then
-
+setdefaults()
+{
     dir=$(realpath "$(pwd)")
 
     while test ! -d "${dir}/instdir/program" ; do
@@ -21,15 +21,18 @@ if uname | grep -i CYGWIN >/dev/null; then
         dir=$(realpath "${dir}/..")
     done
 
+    exedir="${dir}"/workdir/LinkTarget/Executable
+    export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
+}
+
+if uname | grep -i CYGWIN >/dev/null; then
+
+    setdefaults
+
     exedir=$(cygpath -m "${dir}"/workdir/LinkTarget/Executable)
     export URE_BOOTSTRAP=file:///$(cygpath -m "${dir}")/instdir/program/fundamental.ini
     export PATH=${PATH:+$PATH:}"${dir}"/instdir/program
-
-#    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
-#    echo "setting search path to: ${PATH}"
-#    echo "execing: ${exedir}/$1"
-
-    exec ${LO_TRACE} "${exedir}/$@"
+    SEARCH_PATH="${PATH}"
 
 elif [ $(uname) = Darwin ]; then
 
@@ -43,60 +46,30 @@ elif [ $(uname) = Darwin ]; then
         exit 1
     fi
 
-    exedir="${dir}"/workdir/LinkTarget/Executable
     export URE_BOOTSTRAP=file://"${dir}"/instdir/$PRODUCTNAME.app/Contents/Resources/fundamentalrc
     export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+$DYLD_LIBRARY_PATH:}"${dir}"/instdir/$PRODUCTNAME.app/Contents/Frameworks
-
-#    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
-#    echo "setting search path to: ${DYLD_LIBRARY_PATH}"
-#    echo "execing: ${exedir}/$1"
-
-    exec ${LO_TRACE} "${exedir}/$@"
+    SEARCH_PATH="${DYLD_LIBRARY_PATH}"
 
 elif [ $(uname) = Haiku ]; then
 
-    dir=$(readlink -f "$(pwd)")
+    setdefaults
 
-    while test ! -d "${dir}/instdir/program" ; do
-        if test "${dir}" = "/"; then
-            echo "error: cannot find \"program\" dir from \"$(pwd)\""
-            exit 1
-        fi
-        dir=$(readlink -f "${dir}/..")
-    done
-
-    exedir="${dir}"/workdir/LinkTarget/Executable
-    export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
     export LIBRARY_PATH=${LIBRARY_PATH:+$LIBRARY_PATH:}"${dir}"/instdir/program
-
-#    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
-#    echo "setting search path to: ${LIBRARY_PATH}"
-#    echo "execing: ${exedir}/$1"
-
-    exec ${LO_TRACE} "${exedir}/$@"
+    SEARCH_PATH="${LIBRARY_PATH}"
 
 else
 
-    dir=$(readlink -f "$(pwd)")
+    setdefaults
 
-    while test ! -d "${dir}/instdir/program" ; do
-        if test "${dir}" = "/"; then
-            echo "error: cannot find \"program\" dir from \"$(pwd)\""
-            exit 1
-        fi
-        dir=$(readlink -f "${dir}/..")
-    done
-
-    exedir="${dir}"/workdir/LinkTarget/Executable
-    export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}"${dir}"/instdir/program
-
-#    echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
-#    echo "setting search path to: ${LD_LIBRARY_PATH}"
-#    echo "execing: ${exedir}/$1"
-
-    exec ${LO_TRACE} "${exedir}/$@"
+    SEARCH_PATH="${LD_LIBRARY_PATH}"
 
 fi
+
+# echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
+# echo "setting search path to: ${SEARCH_PATH}"
+# echo "execing: ${exedir}/$1"
+
+exec ${LO_TRACE} "${exedir}/$@"
 
 # vi:set shiftwidth=4 expandtab:
