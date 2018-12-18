@@ -88,6 +88,24 @@
       "revId": "43a63b725208bfa378355011ea56cb936afa4411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_f07c9bb6",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2018-12-18T13:38:44Z",
+      "side": 0,
+      "message": "I\u0027ve tested it, and it acts like a modal window: I can only resize main libreoffice window while filepicker dialog is opened, but everything else (i.e. window contents) is inactive.\n\nSure, I\u0027ll move this change to a separate commit.",
+      "parentUuid": "5f4e5783_909e8705",
+      "revId": "43a63b725208bfa378355011ea56cb936afa4411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
