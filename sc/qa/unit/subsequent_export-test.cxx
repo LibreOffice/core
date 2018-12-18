@@ -43,6 +43,8 @@
 #include <validat.hxx>
 #include <attrib.hxx>
 #include <global.hxx>
+#include <scmod.hxx>
+#include <dpcache.hxx>
 #include <dpobject.hxx>
 
 #include <svx/svdoole2.hxx>
@@ -211,6 +213,7 @@ public:
 
     void testTdf118990();
     void testTdf121612();
+    void testPivotCacheAfterExportXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -322,6 +325,7 @@ public:
 
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
+    CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4086,6 +4090,35 @@ void ScExportTest::testTdf121612()
     ScDPCollection* pDPColl = rDoc.GetDPCollection();
     CPPUNIT_ASSERT(pDPColl);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
+}
+
+void ScExportTest::testPivotCacheAfterExportXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("numgroup_example.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    // export only
+    std::shared_ptr<utl::TempFile> pTemp = ScBootstrapFixture::saveAs(xDocSh.get(), FORMAT_XLSX);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(rDoc.HasPivotTable());
+
+    // Two pivot tables
+    ScDPCollection* pDPColl = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT(pDPColl);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDPColl->GetCount());
+
+    // One cache
+    ScDPCollection::SheetCaches& rSheetCaches = pDPColl->GetSheetCaches();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+    const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0, 0, 0, 3, 30, 0));
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:D31 on the first sheet.", pCache);
+
+    // See if XLSX export didn't damage group info of the 1st pivot table
+    const ScDPNumGroupInfo* pInfo = pCache->GetNumGroupInfo(1);
+    CPPUNIT_ASSERT_MESSAGE("No number group info :(", pInfo);
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
