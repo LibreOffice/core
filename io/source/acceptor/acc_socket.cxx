@@ -330,17 +330,15 @@ namespace io_acceptor {
 
     Reference< XConnection > SocketAcceptor::accept( )
     {
-        SocketConnection *pConn = new SocketConnection( m_sConnectionDescription );
+        std::unique_ptr<SocketConnection> pConn(new SocketConnection( m_sConnectionDescription ));
 
         if( m_socket.acceptConnection( pConn->m_socket )!= osl_Socket_Ok )
         {
             // stopAccepting was called
-            delete pConn;
             return Reference < XConnection > ();
         }
         if( m_bClosed )
         {
-            delete pConn;
             return Reference < XConnection > ();
         }
 
@@ -358,7 +356,7 @@ namespace io_acceptor {
                                        sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
         }
 
-        return Reference < XConnection > ( static_cast<XConnection *>(pConn) );
+        return Reference < XConnection > ( static_cast<XConnection *>(pConn.release()) );
     }
 
     void SocketAcceptor::stopAccepting()

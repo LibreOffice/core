@@ -85,11 +85,11 @@ namespace stoc_connector
             {
                 OUString aName(aDesc.getParameter("name"));
 
-                PipeConnection *pConn = new PipeConnection( sConnectionDescription );
+                std::unique_ptr<PipeConnection> pConn(new PipeConnection( sConnectionDescription ));
 
                 if( pConn->m_pipe.create( aName.pData, osl_Pipe_OPEN, osl::Security() ) )
                 {
-                    r.set( static_cast<XConnection *>(pConn) );
+                    r.set( static_cast<XConnection *>(pConn.release()) );
                 }
                 else
                 {
@@ -97,7 +97,6 @@ namespace stoc_connector
                         "Connector : couldn't connect to pipe " + aName + "("
                         + OUString::number(pConn->m_pipe.getError()) + ")");
                     SAL_WARN("io.connector", sMessage);
-                    delete pConn;
                     throw NoConnectException( sMessage );
                 }
             }
@@ -114,7 +113,7 @@ namespace stoc_connector
                 bool bTcpNoDelay
                     = aDesc.getParameter("tcpnodelay").toInt32() != 0;
 
-                SocketConnection *pConn = new SocketConnection( sConnectionDescription);
+                std::unique_ptr<SocketConnection> pConn(new SocketConnection( sConnectionDescription));
 
                 SocketAddr AddrTarget( aHost.pData, nPort );
                 if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
@@ -123,7 +122,6 @@ namespace stoc_connector
                     OUString sError = pConn->m_socket.getErrorAsString();
                     sMessage += sError;
                     sMessage += ")";
-                    delete pConn;
                     throw NoConnectException( sMessage );
                 }
                 // we enable tcpNoDelay for loopback connections because
@@ -135,7 +133,7 @@ namespace stoc_connector
                                                sizeof( nTcpNoDelay ) , osl_Socket_LevelTcp );
                 }
                 pConn->completeConnectionString();
-                r.set( static_cast<XConnection *>(pConn) );
+                r.set( static_cast<XConnection *>(pConn.release()) );
             }
             else
             {
