@@ -904,7 +904,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
-                                                        this, aSet,
+                                                        GetFrameWeld(), aSet,
                                                         *m_pActiveShell,
                                                         nullptr,
                                                         true));

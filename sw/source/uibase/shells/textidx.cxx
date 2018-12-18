@@ -48,7 +48,6 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
        pArgs->GetItemState(nSlot, false, &pItem );
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
-    vcl::Window *pMDI = &pVFrame->GetWindow();
 
     switch( nSlot )
     {
@@ -132,7 +131,7 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
             }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
-                                                        pMDI, aSet, rSh, const_cast<SwTOXBase*>(pCurTOX),
+                                                        GetView().GetFrameWeld(), aSet, rSh, const_cast<SwTOXBase*>(pCurTOX),
                                                         bGlobal));
             pDlg->Execute();
         }
