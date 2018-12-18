@@ -136,16 +136,16 @@ std::unique_ptr<SfxMedium> DocumentInserter::CreateMedium(char const*const pFall
     return pMedium;
 }
 
-SfxMediumList* DocumentInserter::CreateMediumList()
+SfxMediumList DocumentInserter::CreateMediumList()
 {
-    SfxMediumList* pMediumList = new SfxMediumList;
+    SfxMediumList aMediumList;
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
         for (auto const& url : m_pURLList)
         {
-            SfxMedium* pMedium = new SfxMedium(
+            std::unique_ptr<SfxMedium> pMedium(new SfxMedium(
                     url, SFX_STREAM_READONLY,
-                    SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), std::unique_ptr<SfxItemSet>(m_pItemSet) );
+                    SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), std::unique_ptr<SfxItemSet>(m_pItemSet) ));
 
             pMedium->UseInteractionHandler( true );
 
@@ -155,16 +155,14 @@ SfxMediumList* DocumentInserter::CreateMediumList()
             if ( nError == ERRCODE_NONE && pFilter )
                 pMedium->SetFilter( pFilter );
             else
-                DELETEZ( pMedium );
+                pMedium.reset();
 
-            if( pMedium && CheckPasswd_Impl( nullptr, pMedium ) != ERRCODE_ABORT )
-                pMediumList->push_back( pMedium );
-            else
-                delete pMedium;
+            if( pMedium && CheckPasswd_Impl( nullptr, pMedium.get() ) != ERRCODE_ABORT )
+                aMediumList.push_back( std::move(pMedium) );
         }
     }
 
-    return pMediumList;
+    return aMediumList;
 }
 
 static void impl_FillURLList( sfx2::FileDialogHelper const * _pFileDlg, std::vector<OUString>& _rpURLList )

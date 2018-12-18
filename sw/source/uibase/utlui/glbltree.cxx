@@ -1356,13 +1356,13 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
     if ( ERRCODE_NONE != _pFileDlg->GetError() )
         return;
 
-    std::unique_ptr<SfxMediumList> pMedList(m_pDocInserter->CreateMediumList());
-    if ( pMedList )
+    SfxMediumList aMedList(m_pDocInserter->CreateMediumList());
+    if ( !aMedList.empty() )
     {
-        Sequence< OUString >aFileNames( pMedList->size() );
+        Sequence< OUString >aFileNames( aMedList.size() );
         OUString* pFileNames = aFileNames.getArray();
         sal_Int32 nPos = 0;
-        for (SfxMedium* pMed : *pMedList)
+        for (std::unique_ptr<SfxMedium>& pMed : aMedList)
         {
             OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE )
                 + OUStringLiteral1(sfx2::cTokenSeparator)
@@ -1370,7 +1370,6 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
                 + OUStringLiteral1(sfx2::cTokenSeparator);
             pFileNames[nPos++] = sFileName;
         }
-        pMedList.reset();
         InsertRegion( m_pDocContent.get(), aFileNames );
         m_pDocContent.reset();
     }
