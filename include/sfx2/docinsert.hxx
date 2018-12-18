@@ -33,7 +33,7 @@ namespace weld { class Window; }
 class SfxItemSet;
 enum class FileDialogFlags;
 
-typedef ::std::vector< SfxMedium* > SfxMediumList;
+typedef ::std::vector< std::unique_ptr<SfxMedium> > SfxMediumList;
 
 namespace sfx2 {
 
@@ -67,7 +67,7 @@ public:
 
     void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );
     std::unique_ptr<SfxMedium> CreateMedium(char const* pFallbackHack = nullptr);
-    SfxMediumList*          CreateMediumList();
+    SfxMediumList CreateMediumList();
 };
 
 } // namespace sfx2
