@@ -44,49 +44,41 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <rtl/bootstrap.hxx>
-#include <sal/macros.h>
 #include <vcl/canvastools.hxx>
+#include <sal/macros.h>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-
+#include <vcl/wrkwin.hxx>
 
 // never import whole leaf namespaces, since this will result in
 // absolutely weird effects during (Koenig) name lookup
 using namespace ::com::sun::star;
 
 
-class DemoApp : public Application
-{
-public:
-    virtual void Main();
-    virtual void Exception( ExceptionCategory nCategory );
-};
-
 static void PrintHelp()
 {
     fprintf( stdout, "canvasdemo - Exercise the new canvas impl\n" );
 }
 
-class TestWindow : public Dialog
+class TestWindow : public WorkWindow
 {
     public:
-        TestWindow() : Dialog( (vcl::Window *) NULL )
+        TestWindow() : WorkWindow(nullptr, WB_APP | WB_STDWORK)
         {
-            SetText( OUString( "Canvas test" ) );
+            SetText("Canvas test");
             SetSizePixel( Size( 600, 450 ) );
             EnablePaint( true );
             Show();
         }
-        virtual ~TestWindow() {}
-        virtual void MouseButtonUp( const MouseEvent& /*rMEvt*/ )
+        virtual ~TestWindow() override {}
+        virtual void MouseButtonUp( const MouseEvent& /*rMEvt*/ ) override
         {
             //TODO: do something cool
-            EndDialog();
+            Application::Quit();
         }
-        virtual void Paint( const Rectangle& rRect );
+        virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 };
 
 class DemoRenderer
@@ -130,8 +122,8 @@ class DemoRenderer
             //but nothing changes
             maRenderState.CompositeOperation = rendering::CompositeOperation::OVER;
 
-            maBox.Width() = aSize.Width() / 3;
-            maBox.Height() = aSize.Height() / 3;
+            maBox.setWidth(aSize.Width() / 3);
+            maBox.setHeight(aSize.Height() / 3);
 
             lang::Locale aLocale;
             rendering::FontInfo aFontInfo;
@@ -173,7 +165,7 @@ class DemoRenderer
             mxCanvas->drawText( aText, mxDefaultFont, maViewState, aRenderState, 0);
         }
 
-        void drawRect( Rectangle rRect, uno::Sequence< double > &aColor, int /*nWidth*/ )
+        void drawRect( tools::Rectangle rRect, uno::Sequence< double > &aColor, int /*nWidth*/ )
         {
             uno::Sequence< geometry::RealPoint2D > aPoints(4);
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
@@ -298,11 +290,11 @@ class DemoRenderer
 
             drawTitle( OString( "Rectangles" ) );
 
-            drawRect( Rectangle( 20, 30, 70, 60 ), maColorRed, 8 );
+            drawRect( tools::Rectangle( 20, 30, 70, 60 ), maColorRed, 8 );
             // color mediumseagreen, stipple fill, outline black
-            drawRect( Rectangle( 90, 40, 180, 100 ), maColorBlack, 4 );
+            drawRect( tools::Rectangle( 90, 40, 180, 100 ), maColorBlack, 4 );
             // color steelblue, filled, no outline
-            drawRect( Rectangle( 10, 80, 80, 140 ), maColorBlack, 1 );
+            drawRect( tools::Rectangle( 10, 80, 80, 140 ), maColorBlack, 1 );
 
             maRenderState = maOldRenderState; // pop
         }
@@ -444,7 +436,7 @@ class DemoRenderer
 
     double gimmerand()
         {
-            return (double)(rand()) / RAND_MAX * 100 + 50;
+            return static_cast<double>(rand()) / RAND_MAX * 100 + 50;
         }
 
         void drawArcs()
@@ -555,18 +547,15 @@ class DemoRenderer
 };
 
 
-void TestWindow::Paint( const Rectangle& /*rRect*/ )
+void TestWindow::Paint(vcl::RenderContext&, const tools::Rectangle&)
 {
     try
     {
-        const Size aVDevSize(300,300);
-        VirtualDevice aVDev(*this);
-        aVDev.SetOutputSizePixel(aVDevSize);
-        uno::Reference< rendering::XCanvas > xVDevCanvas( aVDev.GetCanvas(),
+        uno::Reference< rendering::XCanvas > xVDevCanvas( GetCanvas(),
                                                           uno::UNO_QUERY_THROW );
         uno::Reference< rendering::XGraphicDevice > xVDevDevice( xVDevCanvas->getDevice(),
                                                                  uno::UNO_QUERY_THROW );
-        DemoRenderer aVDevRenderer( xVDevDevice, xVDevCanvas, aVDevSize);
+        DemoRenderer aVDevRenderer( xVDevDevice, xVDevCanvas, GetSizePixel());
         xVDevCanvas->clear();
         aVDevRenderer.drawGrid();
         aVDevRenderer.drawRectangles();
@@ -607,7 +596,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas,
                                                                   uno::UNO_QUERY );
         if( xSpriteCanvas.is() )
-            xSpriteCanvas->updateScreen( sal_True ); // without
+            xSpriteCanvas->updateScreen( true ); // without
                                                      // updateScreen(),
                                                      // nothing is
                                                      // visible
@@ -619,21 +608,22 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
     }
 }
 
-void DemoApp::Exception( ExceptionCategory nCategory )
+class DemoApp : public Application
 {
-    switch( nCategory )
-    {
-        case ExceptionCategory::ResourceNotLoaded:
-            Abort( "Error: could not load language resources.\nPlease check your installation.\n" );
-            break;
-    }
-}
+public:
+    virtual int Main() override;
+    virtual void Exception(ExceptionCategory nCategory) override;
 
-void DemoApp::Main()
+protected:
+    void Init() override;
+    void DeInit() override;
+};
+
+int DemoApp::Main()
 {
     bool bHelp = false;
 
-    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
+    for( unsigned int i = 0; i < GetCommandLineParamCount(); i++ )
     {
         OUString aParam = GetCommandLineParam( i );
 
@@ -644,28 +634,7 @@ void DemoApp::Main()
     if( bHelp )
     {
         PrintHelp();
-        return;
-    }
-
-
-    // create the global service-manager
-
-    uno::Reference< lang::XMultiServiceFactory > xFactory;
-    try
-    {
-        uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
-        xFactory.set(  xCtx->getServiceManager(), uno::UNO_QUERY );
-        if( xFactory.is() )
-            ::comphelper::setProcessServiceFactory( xFactory );
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    if( !xFactory.is() )
-    {
-        fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
-        exit( 1 );
+        return 1;
     }
 
     // Create UCB (for backwards compatibility, in case some code still uses
@@ -673,13 +642,56 @@ void DemoApp::Main()
     ::ucb::UniversalContentBroker::create(
         comphelper::getProcessComponentContext() );
 
-    InitVCL();
-    TestWindow pWindow;
-    pWindow.Execute();
-    DeInitVCL();
+    ScopedVclPtr<TestWindow> aWindow = VclPtr<TestWindow>::Create();
+    aWindow->Show();
+
+    Application::Execute();
+    return 0;
 }
 
-DemoApp aDemoApp;
+void DemoApp::Exception( ExceptionCategory nCategory )
+{
+    switch( nCategory )
+    {
+        case ExceptionCategory::ResourceNotLoaded:
+            Abort( "Error: could not load language resources.\nPlease check your installation.\n" );
+            break;
+        default:
+            break;
+    }
+}
+
+void DemoApp::Init()
+{
+    try
+    {
+        uno::Reference<uno::XComponentContext> xComponentContext
+            = ::cppu::defaultBootstrap_InitialComponentContext();
+        uno::Reference<lang::XMultiServiceFactory> xMSF;
+        xMSF.set(xComponentContext->getServiceManager(), uno::UNO_QUERY);
+        if(!xMSF.is())
+            Application::Abort("Bootstrap failure - no service manager");
+
+        ::comphelper::setProcessServiceFactory(xMSF);
+    }
+    catch (const uno::Exception &e)
+    {
+        Application::Abort("Bootstrap exception " + e.Message);
+    }
+}
+
+void DemoApp::DeInit()
+{
+    uno::Reference< lang::XComponent >(
+        comphelper::getProcessComponentContext(),
+        uno::UNO_QUERY_THROW)-> dispose();
+    ::comphelper::setProcessServiceFactory(nullptr);
+}
+
+void vclmain::createApplication()
+{
+    static DemoApp aApp;
+}
 
 // TODO
 //   - bouncing clip-rectangle mode - bounce a clip-rect around the window...
