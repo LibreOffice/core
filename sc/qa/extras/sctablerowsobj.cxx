@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -15,18 +16,23 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <cppu/unotype.hxx>
+
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScTableRowsObj : public CalcUnoApiTest, public apitest::XIndexAccess
+class ScTableRowsObj : public CalcUnoApiTest,
+                       public apitest::XElementAccess,
+                       public apitest::XIndexAccess
 {
 public:
     ScTableRowsObj();
@@ -36,6 +42,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableRowsObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
@@ -49,6 +59,7 @@ private:
 
 ScTableRowsObj::ScTableRowsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuemts")
+    , XElementAccess(cppu::UnoType<table::XCellRange>::get())
     , XIndexAccess(1048576)
 {
 }
