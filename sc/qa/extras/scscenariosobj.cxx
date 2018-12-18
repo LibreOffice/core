@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xscenarios.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -43,7 +44,8 @@ class ScScenariosObj : public CalcUnoApiTest,
                        public apitest::XEnumerationAccess,
                        public apitest::XNameAccess,
                        public apitest::XIndexAccess,
-                       public apitest::XScenarios
+                       public apitest::XScenarios,
+                       public apitest::XServiceInfo
 {
 public:
     ScScenariosObj();
@@ -74,6 +76,11 @@ public:
     CPPUNIT_TEST(testAddNewByName);
     CPPUNIT_TEST(testRemoveByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -85,6 +92,7 @@ ScScenariosObj::ScScenariosObj()
     , XElementAccess(cppu::UnoType<sheet::XScenario>::get())
     , XNameAccess("ScScenarios")
     , XIndexAccess(1)
+    , XServiceInfo("ScScenariosObj", "com.sun.star.sheet.Scenarios")
 {
 }
 
