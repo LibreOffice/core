@@ -3542,9 +3542,9 @@ bool ScDPCollection::ReloadGroupsInCache(const ScDPObject* pDPObj, std::set<ScDP
     if (!pCache)
         return false;
 
-    // Clear the existing group data from the cache, and rebuild it from the
+    // Clear the existing group/field data from the cache, and rebuild it from the
     // dimension data.
-    pCache->ClearGroupFields();
+    pCache->ClearAllFields();
     const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
     if (pDimData)
         pDimData->WriteToCache(*pCache);
