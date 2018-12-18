@@ -2129,9 +2129,9 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             // Otherwise split Set, if necessary.
             // Now we build an ItemSet aSet that doesn't contain EE_Items from
             // *pSet (otherwise it would be a copy).
-            sal_uInt16* pNewWhichTable=RemoveWhichRange(pSet->GetRanges(),EE_ITEMS_START,EE_ITEMS_END);
-            SfxItemSet aSet(mpModel->GetItemPool(),pNewWhichTable);
-            delete[] pNewWhichTable;
+            std::unique_ptr<sal_uInt16[]> pNewWhichTable=RemoveWhichRange(pSet->GetRanges(),EE_ITEMS_START,EE_ITEMS_END);
+            SfxItemSet aSet(mpModel->GetItemPool(),pNewWhichTable.get());
+            pNewWhichTable.reset();
             SfxWhichIter aIter(aSet);
             sal_uInt16 nWhich=aIter.FirstWhich();
             while (nWhich!=0)

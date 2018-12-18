@@ -103,7 +103,7 @@ bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnl
 /**
  * @returns a new WhichTable, which we need to squash at some point with a delete
  */
-sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd);
+std::unique_ptr<sal_uInt16[]> RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd);
 
 /**
  * Helper class for the communication between the dialog

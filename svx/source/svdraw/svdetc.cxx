@@ -377,7 +377,7 @@ bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnl
     return bHas;
 }
 
-sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd)
+std::unique_ptr<sal_uInt16[]> RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd)
 {
     // Six possible cases (per range):
     //         [Beg..End]          Range, to delete
@@ -403,8 +403,8 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
         else /* nCase=6 */ nAlloc+=2;
     }
 
-    sal_uInt16* pNewWhichTable=new sal_uInt16[nAlloc];
-    memcpy(pNewWhichTable,pOldWhichTable,nAlloc*sizeof(sal_uInt16));
+    std::unique_ptr<sal_uInt16[]> pNewWhichTable(new sal_uInt16[nAlloc]);
+    memcpy(pNewWhichTable.get(), pOldWhichTable, nAlloc*sizeof(sal_uInt16));
     pNewWhichTable[nAlloc-1]=0; // in case 3, there's no 0 at the end.
     // now remove the unwanted ranges
     nNum=nAlloc-1;
