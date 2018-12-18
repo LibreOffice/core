@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_104a9754",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2379,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2018-12-18T09:19:30Z",
+      "side": 1,
+      "message": "Theoretically it is possible that angle is 36000.0.\nCan you check only if angle is \u003e\u003d than 27000.0 ?\n\n  else if (fTextRotation \u003e\u003d 27000.0)",
+      "revId": "26c6fa3a45dd22471126789b0d943588bc3a9170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
