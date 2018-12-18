@@ -451,10 +451,15 @@ protected:
     bool DropdownField(const SwField* pField) override;
     bool PlaceholderField(const SwField* pField) override;
 
+private:
     /// Reference to the export, where to get the data from
     RtfExport& m_rExport;
 
-private:
+    OStringBuffer m_aTabStop;
+
+    /// Access to the page style of the previous paragraph.
+    const SwPageDesc* m_pPrevPageDesc;
+
     /// Output graphic fly frames.
     void FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode);
     void FlyFrameOLE(const SwFlyFrameFormat* pFlyFrameFormat, SwOLENode& rOLENode,
@@ -619,11 +624,6 @@ public:
     /// Return the right export class.
     MSWordExportBase& GetExport() override;
 
-    OStringBuffer m_aTabStop;
-
-    /// Access to the page style of the previous paragraph.
-    const SwPageDesc* m_pPrevPageDesc;
-
     // These are used by wwFont::WriteRtf()
     /// Start the font.
     void StartFont(const OUString& rFamilyName) const;
@@ -647,6 +647,10 @@ public:
 
     /// Handles just the {\shptxt ...} part of a shape export.
     void writeTextFrame(const ww8::Frame& rFrame, bool bTextBox = false);
+
+    OStringBuffer& GetTabStop() { return m_aTabStop; }
+
+    const SwPageDesc* GetPrevPageDesc() const { return m_pPrevPageDesc; }
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
