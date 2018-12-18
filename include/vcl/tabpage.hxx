@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_TABPAGE_HXX
 #define INCLUDED_VCL_TABPAGE_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/weld.hxx>

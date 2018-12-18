@@ -69,6 +69,7 @@
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <swabstdlg.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>

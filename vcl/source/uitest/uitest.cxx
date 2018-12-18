@@ -16,6 +16,7 @@
 #include <svdata.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 bool UITest::executeCommand(const OUString& rCommand)
 {

@@ -40,6 +40,7 @@
 #include <strings.hxx>
 #include <ColumnInfo.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/treelistentry.hxx>

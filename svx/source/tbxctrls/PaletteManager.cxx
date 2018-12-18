@@ -34,6 +34,9 @@
 #include <set>
 #include <cppu/unotype.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <palettes.hxx>
 

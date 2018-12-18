@@ -10,14 +10,16 @@
 #include <vcl/dllapi.h>
 
 #include <tools/stream.hxx>
-#include <vcl/ctrl.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <vcl/vclevent.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 struct EventDescription;
+class Control;
+class KeyEvent;
 
 class UITEST_DLLPUBLIC UITestLogger
 {

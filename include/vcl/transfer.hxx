@@ -23,8 +23,6 @@
 #include <vcl/dllapi.h>
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
-#include <tools/link.hxx>
-#include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
@@ -35,15 +33,20 @@
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
-#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace datatransfer { namespace dnd { class XDragGestureRecognizer; } } } } }
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace datatransfer { namespace dnd { class XDropTarget; } } } } }
+
+namespace tools { template <typename T> class SvRef; }
+template <typename Arg, typename Ret> class Link;
 
 class BitmapEx;
 class GDIMetaFile;

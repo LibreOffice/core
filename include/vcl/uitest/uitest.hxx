@@ -12,11 +12,11 @@
 #include <vcl/dllapi.h>
 
 #include <memory>
-#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 class UIObject;
 

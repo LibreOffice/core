@@ -30,7 +30,6 @@
 struct ImplTabItem;
 struct ImplTabCtrlData;
 class TabPage;
-class PushButton;
 class ListBox;
 
 #ifndef TAB_APPEND

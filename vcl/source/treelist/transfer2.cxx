@@ -27,6 +27,8 @@
 #include <vcl/window.hxx>
 #include <comphelper/fileformat.h>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <svl/urlbmk.hxx>
 #include <vcl/inetimg.hxx>
 #include <vcl/imap.hxx>

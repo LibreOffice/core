@@ -22,6 +22,7 @@
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>
 #include <sfx2/objsh.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>

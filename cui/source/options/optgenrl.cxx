@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <config_gpgme.h>
 #if HAVE_FEATURE_GPGME

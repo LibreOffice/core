@@ -27,9 +27,6 @@
 #include <vector>
 
 #include <vcl/ctrl.hxx>
-#include <vcl/seleng.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/mnemonicengine.hxx>
 #include <vcl/quickselectionengine.hxx>
@@ -39,20 +36,19 @@
 #include <vcl/treelist.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/menu.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class Application;
 class SvTreeListBox;
 class SvTreeListEntry;
 struct SvViewDataItem;
 class SvViewDataEntry;
 class SvInplaceEdit2;
 class SvLBoxString;
-class SvLBoxButton;
-class SvLBoxContextBmp;
 class SvImpLBox;
 class SvLBoxButtonData;
-struct SvLBoxDDInfo;
+class Timer;
+class Edit;
 
 namespace utl {
     class AccessibleStateSetHelper;
@@ -186,8 +182,6 @@ namespace o3tl
 }
 
 struct SvTreeListBoxImpl;
-class SalInstanceTreeView;
-class SalInstanceEntryTreeView;
 
 class VCL_DLLPUBLIC SvTreeListBox
                 :public Control

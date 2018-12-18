@@ -98,6 +98,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <dlgname.hxx>
 

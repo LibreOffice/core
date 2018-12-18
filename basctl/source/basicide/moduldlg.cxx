@@ -39,6 +39,7 @@
 #include <tools/diagnose_ex.h>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <vcl/treelistentry.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace basctl
 {
