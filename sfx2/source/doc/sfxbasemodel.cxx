@@ -2007,7 +2007,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
                 if (xMetaFile)
                 {
-                    std::shared_ptr<SvMemoryStream> xStream(
+                    std::unique_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
                             xMetaFile.get(), ConvertDataFormat::EMF ) );
                     if (xStream)
@@ -2042,7 +2042,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
                 if (xMetaFile)
                 {
-                    std::shared_ptr<SvMemoryStream> xStream(
+                    std::unique_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
                             xMetaFile.get(), ConvertDataFormat::WMF ) );
 
@@ -2083,7 +2083,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
             if (xMetaFile)
             {
-                std::shared_ptr<SvMemoryStream> xStream(
+                std::unique_ptr<SvMemoryStream> xStream(
                     GraphicHelper::getFormatStrFromGDI_Impl(
                         xMetaFile.get(), ConvertDataFormat::BMP ) );
 
@@ -2105,7 +2105,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
             if (xMetaFile)
             {
-                std::shared_ptr<SvMemoryStream> xStream(
+                std::unique_ptr<SvMemoryStream> xStream(
                     GraphicHelper::getFormatStrFromGDI_Impl(
                         xMetaFile.get(), ConvertDataFormat::PNG ) );
 

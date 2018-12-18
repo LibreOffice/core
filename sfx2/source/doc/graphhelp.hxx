@@ -33,7 +33,7 @@ class GraphicHelper
 {
 public:
 
-    static SvMemoryStream* getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat );
+    static std::unique_ptr<SvMemoryStream> getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat );
 
     static void* getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta );
 

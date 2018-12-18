@@ -56,17 +56,15 @@
 
 using namespace css;
 
-SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat )
+std::unique_ptr<SvMemoryStream> GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat )
 {
-    SvMemoryStream* pResult = nullptr;
+    std::unique_ptr<SvMemoryStream> pResult;
     if ( pGDIMeta )
     {
-        SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );
+        std::unique_ptr<SvMemoryStream> pStream(new SvMemoryStream( 65535, 65535 ));
         Graphic aGraph( *pGDIMeta );
         if ( GraphicConverter::Export( *pStream, aGraph, nFormat ) == ERRCODE_NONE )
-            pResult = pStream;
-        else
-            delete pStream;
+            pResult = std::move(pStream);
     }
 
     return pResult;
