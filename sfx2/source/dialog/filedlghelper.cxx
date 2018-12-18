@@ -1387,7 +1387,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
 }
 
 ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
-                                        SfxItemSet *&   rpSet,
+                                        std::unique_ptr<SfxItemSet>& rpSet,
                                         OUString&       rFilter )
 {
     // rFilter is a pure output parameter, it shouldn't be used for anything else
@@ -1403,15 +1403,15 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         // check password checkbox if the document had password before
         if( mbHasPassword )
         {
-            const SfxBoolItem* pPassItem = SfxItemSet::GetItem<SfxBoolItem>(rpSet, SID_PASSWORDINTERACTION, false);
+            const SfxBoolItem* pPassItem = SfxItemSet::GetItem<SfxBoolItem>(rpSet.get(), SID_PASSWORDINTERACTION, false);
             mbPwdCheckBoxState = ( pPassItem != nullptr && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
-            const SfxUnoAnyItem* pPassToModifyItem = SfxItemSet::GetItem<SfxUnoAnyItem>(rpSet, SID_MODIFYPASSWORDINFO, false);
+            const SfxUnoAnyItem* pPassToModifyItem = SfxItemSet::GetItem<SfxUnoAnyItem>(rpSet.get(), SID_MODIFYPASSWORDINFO, false);
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
-        const SfxBoolItem* pSelectItem = SfxItemSet::GetItem<SfxBoolItem>(rpSet, SID_SELECTION, false);
+        const SfxBoolItem* pSelectItem = SfxItemSet::GetItem<SfxBoolItem>(rpSet.get(), SID_SELECTION, false);
         if ( pSelectItem )
             mbSelection = pSelectItem->GetValue();
         else
@@ -1442,7 +1442,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
     {
         // create an itemset if there is no
         if( !rpSet )
-            rpSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+            rpSet.reset(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
 
         // the item should remain only if it was set by the dialog
         rpSet->ClearItem( SID_SELECTION );
@@ -1518,7 +1518,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 {
                     // ask for a password
                     OUString aDocName(rpURLList[0]);
-                    ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, rpSet, GetFrameInterface());
+                    ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, rpSet.get(), GetFrameInterface());
                     if (errCode != ERRCODE_NONE)
                         return errCode;
                 }
@@ -2367,7 +2367,7 @@ IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker, void*, void)
 
 // rDirPath has to be a directory
 ErrCode FileDialogHelper::Execute( std::vector<OUString>& rpURLList,
-                                   SfxItemSet *&   rpSet,
+                                   std::unique_ptr<SfxItemSet>& rpSet,
                                    OUString&       rFilter,
                                    const OUString& rDirPath )
 {
@@ -2381,7 +2381,7 @@ ErrCode FileDialogHelper::Execute()
     return mpImpl->execute();
 }
 
-ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
+ErrCode FileDialogHelper::Execute( std::unique_ptr<SfxItemSet>& rpSet,
                                    OUString&       rFilter )
 {
     ErrCode nRet;
@@ -2630,7 +2630,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              FileDialogFlags nFlags,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,
-                             SfxItemSet *& rpSet,
+                             std::unique_ptr<SfxItemSet>& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,

@@ -230,10 +230,10 @@ public:
    DECL_LINK( ExecuteSystemFilePicker, void*, void );
 
    ErrCode                  Execute( std::vector<OUString>& rpURLList,
-                                     SfxItemSet *&   rpSet,
+                                     std::unique_ptr<SfxItemSet>& rpSet,
                                      OUString&         rFilter,
                                      const OUString&   rDirPath );
-   ErrCode                  Execute( SfxItemSet *&   rpSet,
+   ErrCode                  Execute( std::unique_ptr<SfxItemSet>& rpSet,
                                      OUString&         rFilter );
 };
 
@@ -247,7 +247,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              FileDialogFlags nFlags,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,
-                             SfxItemSet *& rpSet,
+                             std::unique_ptr<SfxItemSet>& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,

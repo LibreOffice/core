@@ -961,18 +961,17 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // generate SidSet from MediaDescriptor and provide it into FileDialog
     // than merge changed SidSet back
-    SfxAllItemSet aDialogParams( SfxGetpApp()->GetPool() );
-    SfxItemSet* pDialogParams = &aDialogParams;
+    std::unique_ptr<SfxItemSet> pDialogParams(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
     TransformParameters( nSlotID,
                          GetMediaDescr().getAsConstPropertyValueList(),
-                         aDialogParams );
+                         static_cast<SfxAllItemSet&>(*pDialogParams) );
 
     const SfxPoolItem* pItem = nullptr;
-    if ( bPreselectPassword && aDialogParams.GetItemState( SID_ENCRYPTIONDATA, true, &pItem ) != SfxItemState::SET )
+    if ( bPreselectPassword && pDialogParams->GetItemState( SID_ENCRYPTIONDATA, true, &pItem ) != SfxItemState::SET )
     {
         // the file dialog preselects the password checkbox if the provided mediadescriptor has encryption data entry
         // after dialog execution the password interaction flag will be either removed or not
-        aDialogParams.Put( SfxBoolItem( SID_PASSWORDINTERACTION, true ) );
+        pDialogParams->Put( SfxBoolItem( SID_PASSWORDINTERACTION, true ) );
     }
 
     // aFilterName is a pure output parameter, pDialogParams is an in/out parameter
@@ -986,7 +985,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // the following two arguments can not be converted in MediaDescriptor,
     // so they should be removed from the ItemSet after retrieving
-    const SfxBoolItem* pRecommendReadOnly = SfxItemSet::GetItem<SfxBoolItem>(pDialogParams, SID_RECOMMENDREADONLY, false);
+    const SfxBoolItem* pRecommendReadOnly = SfxItemSet::GetItem<SfxBoolItem>(pDialogParams.get(), SID_RECOMMENDREADONLY, false);
     m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
     pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
