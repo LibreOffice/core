@@ -16,6 +16,24 @@
       "revId": "b19c17ad1be71e27287ba3c743699ab91696bbe5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_101bb71b",
+        "filename": "vcl/qt5/Qt5OpenGLContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2018-12-18T10:50:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f4e5783_100297b5",
+      "revId": "b19c17ad1be71e27287ba3c743699ab91696bbe5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
