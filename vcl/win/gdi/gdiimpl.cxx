@@ -853,6 +853,24 @@ Color WinSalGraphicsImpl::getPixel( long nX, long nY )
                               GetBValue( aWinCol ) );
 }
 
+namespace
+{
+
+HBRUSH Get50PercentBrush()
+{
+    SalData* pSalData = GetSalData();
+    if ( !pSalData->mh50Brush )
+    {
+        if ( !pSalData->mh50Bmp )
+            pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
+        pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
+    }
+
+    return pSalData->mh50Brush;
+}
+
+} // namespace
+
 void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
     if ( nFlags & SalInvert::TrackFrame )
@@ -871,16 +889,8 @@ void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, Sa
     }
     else if ( nFlags & SalInvert::N50 )
     {
-        SalData* pSalData = GetSalData();
-        if ( !pSalData->mh50Brush )
-        {
-            if ( !pSalData->mh50Bmp )
-                pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
-            pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
-        }
-
         COLORREF nOldTextColor = ::SetTextColor( mrParent.getHDC(), 0 );
-        HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), pSalData->mh50Brush );
+        HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), Get50PercentBrush() );
         PatBlt( mrParent.getHDC(), nX, nY, nWidth, nHeight, PATINVERT );
         ::SetTextColor( mrParent.getHDC(), nOldTextColor );
         SelectBrush( mrParent.getHDC(), hOldBrush );
@@ -911,17 +921,7 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     {
 
         if ( nSalFlags & SalInvert::N50 )
-        {
-            SalData* pSalData = GetSalData();
-            if ( !pSalData->mh50Brush )
-            {
-                if ( !pSalData->mh50Bmp )
-                    pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
-                pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
-            }
-
-            hBrush = pSalData->mh50Brush;
-        }
+            hBrush = Get50PercentBrush();
         else
             hBrush = GetStockBrush( BLACK_BRUSH );
 
