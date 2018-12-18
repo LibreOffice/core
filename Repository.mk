@@ -21,6 +21,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	HelpIndexer \
 	HelpLinker \
 	bestreversemap \
+	canvasdemo \
 	cfgex \
 	concat-deps \
 	cpp \
