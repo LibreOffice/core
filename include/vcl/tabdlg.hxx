@@ -24,7 +24,6 @@
 #include <vcl/dialog.hxx>
 
 class FixedLine;
-class TabControl;
 
 class VCL_DLLPUBLIC TabDialog : public Dialog
 {

@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 
@@ -32,7 +31,6 @@ namespace star {
 namespace i18n {
     class XBreakIterator;
     class XCharacterClassification;
-    class XCollator;
 }}}}
 
 namespace com {
@@ -42,11 +40,6 @@ namespace accessibility {
     struct AccessibleEventObject;
 }
 }}}
-
-namespace comphelper {
-    namespace string {
-        class NaturalStringSorter;
-}}
 
 namespace vcl
 {

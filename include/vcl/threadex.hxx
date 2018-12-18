@@ -21,11 +21,9 @@
 #define INCLUDED_VCL_THREADEX_HXX
 
 #include <osl/conditn.hxx>
-#include <osl/thread.h>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
-#include <cppuhelper/exc_hlp.hxx>
 #include <boost/optional.hpp>
 #include <memory>
 

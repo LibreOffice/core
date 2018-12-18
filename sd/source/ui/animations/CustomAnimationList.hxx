@@ -26,6 +26,7 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <vcl/treelistbox.hxx>
+#include <vcl/builder.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <CustomAnimationPreset.hxx>
 

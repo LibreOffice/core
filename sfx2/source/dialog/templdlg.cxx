@@ -65,6 +65,7 @@
 
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <comphelper/string.hxx>
 
 #include <sfx2/StyleManager.hxx>

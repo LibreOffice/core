@@ -16,7 +16,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <svdata.hxx>
-
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <memory>
 
 UITestLogger::UITestLogger():

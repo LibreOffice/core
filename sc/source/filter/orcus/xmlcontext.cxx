@@ -27,6 +27,7 @@
 #include <orcus/sax_parser_base.hpp>
 #include <orcus/stream.hpp>
 
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <comphelper/processfactory.hxx>
 

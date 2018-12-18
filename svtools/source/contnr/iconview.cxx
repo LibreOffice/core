@@ -19,6 +19,7 @@
 
 #include <svtools/iconview.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <svtools/fileview.hxx>
 #include <iconviewimpl.hxx>
 

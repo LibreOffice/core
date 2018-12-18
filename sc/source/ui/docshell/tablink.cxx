@@ -35,6 +35,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/configmgr.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <tablink.hxx>
 

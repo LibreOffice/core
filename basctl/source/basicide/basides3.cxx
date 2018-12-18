@@ -26,6 +26,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace basctl
 {

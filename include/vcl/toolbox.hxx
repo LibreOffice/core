@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_TOOLBOX_HXX
 #define INCLUDED_VCL_TOOLBOX_HXX
 
-#include <vcl/vclstatuslistener.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
@@ -31,14 +30,13 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com { namespace sun { namespace star { namespace frame { struct FeatureStateEvent; } } } }
+template <class T> class VclStatusListener;
 
 class Timer;
-class UserDrawEvent;
 struct ImplToolItem;
 struct ImplToolBoxPrivateData;
-class  ImplTrackRect;
 class  PopupMenu;
 
 #define TOOLBOX_STYLE_FLAT          (sal_uInt16(0x0004))

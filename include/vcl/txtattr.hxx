@@ -20,10 +20,9 @@
 #ifndef INCLUDED_VCL_TXTATTR_HXX
 #define INCLUDED_VCL_TXTATTR_HXX
 
-#include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 #include <memory>
 

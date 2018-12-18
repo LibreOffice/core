@@ -270,3 +270,13 @@ blacklist:
     include/vcl/prntypes.hxx:
     # Needed for macro
     - tools/solar.h
+    include/vcl/transfer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/datatransfer/XTransferable2.hpp
+    - com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp
+    - com/sun/star/datatransfer/dnd/XDragSourceListener.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/frame/XTerminateListener.hpp
+    - com/sun/star/datatransfer/dnd/XDragGestureListener.hpp
+    - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp

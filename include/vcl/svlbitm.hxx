@@ -29,6 +29,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 class SvTreeListEntry;
+class SvLBoxButton;
 
 
 enum class SvBmp
