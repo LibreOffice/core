@@ -235,7 +235,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
     m_xLbCategory->set_size_request(nWidth, m_xLbCategory->get_height_rows(7));
     m_xLbFormat->set_size_request(nWidth, m_xLbFormat->get_height_rows(5));
     m_xLbCurrency->set_size_request(1, -1);  // width of 1, so real width will be that of its LbFormat sibling
-    m_xWndPreview->set_size_request(GetTextHeight()*3, -1);
 
     // Initially remove the "Automatically" entry.
     m_xLbCurrency->set_active(-1); // First ensure that nothing is selected.
