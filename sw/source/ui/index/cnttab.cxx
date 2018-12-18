@@ -270,7 +270,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
             if(TOX_AUTHORITIES == m_eCurrentTOXType.eType)
             {
                 const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                                m_rWrtShell.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
+                                                m_rWrtShell.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
                 if(pFType)
                 {
                     OUString sBrackets;
@@ -408,7 +408,7 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
         if(TOX_AUTHORITIES == eType.eType)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                            m_rWrtShell.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
+                                            m_rWrtShell.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             if(pFType)
             {
                 m_vTypeData[nIndex].m_pDescription->SetAuthBrackets(OUStringLiteral1(pFType->GetPrefix()) +
@@ -933,7 +933,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         if (rDesc.GetTitle())
             m_xTitleED->set_text(*rDesc.GetTitle());
         else
-            m_xTitleED->set_text(aEmptyOUStr);
+            m_xTitleED->set_text(OUString());
         m_xTitleED->save_value();
     }
 
@@ -1087,7 +1087,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
             if(m_xFromFileCB->get_active())
                 rDesc.SetAutoMarkURL(sAutoMarkURL);
             else
-                rDesc.SetAutoMarkURL(aEmptyOUStr);
+                rDesc.SetAutoMarkURL(OUString());
         }
         break;
         case TOX_ILLUSTRATIONS:
@@ -1116,7 +1116,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
             if (m_xBracketLB->get_active() != -1)
                 rDesc.SetAuthBrackets(m_xBracketLB->get_active_text());
             else
-                rDesc.SetAuthBrackets(aEmptyOUStr);
+                rDesc.SetAuthBrackets(OUString());
             rDesc.SetAuthSequence(m_xSequenceCB->get_active());
         }
         break;
@@ -2022,7 +2022,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         {
             SwWrtShell& rSh = pTOXDlg->GetWrtShell();
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                    rSh.GetFieldType(SwFieldIds::TableOfAuthorities, aEmptyOUStr));
+                                    rSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString()));
             if(pFType)
             {
                 if(pFType->IsSortByDocument())
@@ -2104,7 +2104,7 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     if(TOX_INDEX == aLastTOXType.eType)
     {
         const OUString sTemp(m_pMainEntryStyleLB->GetSelectedEntry());
-        rDesc.SetMainEntryCharStyle(sNoCharStyle == sTemp ? aEmptyOUStr : sTemp);
+        rDesc.SetMainEntryCharStyle(sNoCharStyle == sTemp ? OUString() : sTemp);
         SwTOIOptions nIdxOptions = rDesc.GetIndexOptions() & ~SwTOIOptions::AlphaDelimiter;
         if(m_pAlphaDelimCB->IsChecked())
             nIdxOptions |= SwTOIOptions::AlphaDelimiter;
@@ -2582,7 +2582,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
         }
     }
     m_pMainEntryStyleLB->SelectEntry( SwStyleNameMapper::GetUIName(
-                                RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyOUStr ));
+                                RES_POOLCHR_IDX_MAIN_ENTRY, OUString()));
 }
 
 OUString SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
@@ -2746,7 +2746,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 if( !bLastWasText )
                 {
                     SwFormToken aTemp(TOKEN_TEXT);
-                    Control* pCtrl = InsertItem(aEmptyOUStr, aTemp);
+                    Control* pCtrl = InsertItem(OUString(), aTemp);
                     if(!pSetActiveControl)
                         pSetActiveControl = pCtrl;
                 }
@@ -2773,7 +2773,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
         if(!bLastWasText)
         {
             SwFormToken aTemp(TOKEN_TEXT);
-            Control* pCtrl = InsertItem(aEmptyOUStr, aTemp);
+            Control* pCtrl = InsertItem(OUString(), aTemp);
             if(!pSetActiveControl)
                 pSetActiveControl = pCtrl;
         }
@@ -3662,7 +3662,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl, weld::Button&, void)
         m_xLevelLB->remove(nPos);
         m_xLevelLB->insert_text(nPos, aStr);
         m_xLevelLB->select_text(aStr);
-        m_pCurrentForm->SetTemplate(nPos, aEmptyOUStr);
+        m_pCurrentForm->SetTemplate(nPos, OUString());
         Modify();
     }
 }
@@ -3842,22 +3842,22 @@ bool SwEntryBrowseBox::SeekRow( long nRow )
 
 OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
-    const OUString* pRet = &aEmptyOUStr;
+    OUString pRet;
     if (static_cast<size_t>(nRow) < m_Entries.size())
     {
         const AutoMarkEntry* pEntry = m_Entries[ nRow ].get();
         switch(nColumn)
         {
-            case  ITEM_SEARCH       :pRet = &pEntry->sSearch; break;
-            case  ITEM_ALTERNATIVE  :pRet = &pEntry->sAlternative; break;
-            case  ITEM_PRIM_KEY     :pRet = &pEntry->sPrimKey   ; break;
-            case  ITEM_SEC_KEY      :pRet = &pEntry->sSecKey    ; break;
-            case  ITEM_COMMENT      :pRet = &pEntry->sComment   ; break;
-            case  ITEM_CASE         :pRet = pEntry->bCase ? &m_sYes : &m_sNo; break;
-            case  ITEM_WORDONLY     :pRet = pEntry->bWord ? &m_sYes : &m_sNo; break;
+            case ITEM_SEARCH      : pRet = pEntry->sSearch;      break;
+            case ITEM_ALTERNATIVE : pRet = pEntry->sAlternative; break;
+            case ITEM_PRIM_KEY    : pRet = pEntry->sPrimKey;     break;
+            case ITEM_SEC_KEY     : pRet = pEntry->sSecKey;      break;
+            case ITEM_COMMENT     : pRet = pEntry->sComment;     break;
+            case ITEM_CASE        : pRet = pEntry->bCase ? m_sYes : m_sNo; break;
+            case ITEM_WORDONLY    : pRet = pEntry->bWord ? m_sYes : m_sNo; break;
         }
     }
-    return *pRet;
+    return pRet;
 }
 
 void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,

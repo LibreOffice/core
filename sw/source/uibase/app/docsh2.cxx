@@ -729,7 +729,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         aTempFile.EnableKillingFile();
                         pSrcView->SaveContent(aTempFile.GetURL());
                         bDone = true;
-                        SvxMacro aMac(aEmptyOUStr, aEmptyOUStr, STARBASIC);
+                        SvxMacro aMac(OUString(), OUString(), STARBASIC);
                         SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC ), aMac, this);
                         SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( GlobalEventId::PREPARECLOSEDOC ), aMac, this);
                         SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( GlobalEventId::ACTIVATEDOC ),     aMac, this);
@@ -783,7 +783,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     WriterRef xWrt;
                     // mba: looks as if relative URLs don't make sense here
-                    ::GetRTFWriter( aEmptyOUStr, OUString(), xWrt );
+                    ::GetRTFWriter(OUString(), OUString(), xWrt);
                     SvMemoryStream *pStrm = new SvMemoryStream();
                     pStrm->SetBufferSize( 16348 );
                     SwWriter aWrt( *pStrm, *pSmryDoc );
@@ -1142,7 +1142,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         if( bDone )
                         {
                             SfxStringItem aName( SID_FILE_NAME, aFileName );
-                            SfxStringItem aReferer( SID_REFERER, aEmptyOUStr );
+                            SfxStringItem aReferer(SID_REFERER, OUString());
                             SfxViewShell* pViewShell = SfxViewShell::GetFirst();
                             while(pViewShell)
                             {

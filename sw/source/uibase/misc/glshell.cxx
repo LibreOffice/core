@@ -106,8 +106,8 @@ static bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     std::unique_ptr<SwTextBlocks> pBlock(::GetGlossaries()->GetGroupDoc( rGroupName ));
 
-    SvxMacro aStart(aEmptyOUStr, aEmptyOUStr);
-    SvxMacro aEnd(aEmptyOUStr, aEmptyOUStr);
+    SvxMacro aStart = SvxMacro(OUString(), OUString());
+    SvxMacro aEnd = SvxMacro(OUString(), OUString());
     SwGlossaryHdl* pGlosHdl;
 
     pGlosHdl = rSh.GetView().GetGlosHdl();

@@ -87,7 +87,7 @@ void SwChangeDBDlg::FillDBPopup()
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
     const SwDBData& rDBData = pSh->GetDBData();
-    m_pAvailDBTLB->Select(rDBData.sDataSource, rDBData.sCommand, aEmptyOUStr);
+    m_pAvailDBTLB->Select(rDBData.sDataSource, rDBData.sCommand, OUString());
 
     std::vector<OUString> aAllDBNames;
 

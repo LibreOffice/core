@@ -3923,12 +3923,12 @@ void SwHTMLParser::NewPara()
 
     // parse styles (Don't consider class. This is only possible as long as none of
     // the CSS1 properties of the class must be formatted hard!!!)
-    if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
+    if (HasStyleOptions(aStyle, aId, OUString(), &aLang, &aDir))
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
+        if (ParseStyleOptions(aStyle, aId, OUString(), aItemSet, aPropInfo, &aLang, &aDir))
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
                     "Class is not considered" );
@@ -4057,12 +4057,12 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nTextColl, aClass));
 
     // parse styles (regarding class see also NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
+    if (HasStyleOptions(aStyle, aId, OUString(), &aLang, &aDir))
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
+        if (ParseStyleOptions(aStyle, aId, OUString(), aItemSet, aPropInfo, &aLang, &aDir))
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
                     "Class is not considered" );
@@ -4166,7 +4166,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         // These both tags will be mapped to the PRE style. For the case that a
         // a CLASS exists we will delete it so that we don't get the CLASS of
         // the PRE style.
-        aClass = aEmptyOUStr;
+        aClass.clear();
         [[fallthrough]];
     case HtmlTokenId::BLOCKQUOTE_ON:
     case HtmlTokenId::BLOCKQUOTE30_ON:
@@ -4193,12 +4193,12 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, aClass));
 
     // parse styles (regarding class see also NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
+    if (HasStyleOptions(aStyle, aId, OUString(), &aLang, &aDir))
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
+        if (ParseStyleOptions(aStyle, aId, OUString(), aItemSet, aPropInfo, &aLang, &aDir))
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
                     "Class is not considered" );
@@ -4333,7 +4333,7 @@ void SwHTMLParser::NewDefList()
 
         // and the one of the DT-style of the current level
         SvxLRSpaceItem rLRSpace =
-            m_pCSS1Parser->GetTextFormatColl( RES_POOLCOLL_HTML_DD, aEmptyOUStr )
+            m_pCSS1Parser->GetTextFormatColl(RES_POOLCOLL_HTML_DD, OUString())
                        ->GetLRSpace();
         nLeft = nLeft + static_cast< sal_uInt16 >(rLRSpace.GetTextLeft());
     }
@@ -4553,7 +4553,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     SwTextFormatColl *pCollToSet = nullptr; // the style to set
     SfxItemSet *pItemSet = nullptr;         // set of hard attributes
     sal_uInt16 nTopColl = pContext ? pContext->GetTextFormatColl() : 0;
-    const OUString& rTopClass = pContext ? pContext->GetClass() : aEmptyOUStr;
+    const OUString rTopClass = pContext ? pContext->GetClass() : OUString();
     sal_uInt16 nDfltColl = RES_POOLCOLL_TEXT;
 
     bool bInPRE=false;                          // some context info
@@ -4681,7 +4681,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             if( RES_POOLCOLL_HTML_DD == nTopColl )
             {
                 const SvxLRSpaceItem& rDTLRSpace = m_pCSS1Parser
-                    ->GetTextFormatColl( RES_POOLCOLL_HTML_DT, aEmptyOUStr )
+                    ->GetTextFormatColl(RES_POOLCOLL_HTML_DT, OUString())
                     ->GetLRSpace();
                 nLeft -= rDTLRSpace.GetTextLeft();
                 nRight -= rDTLRSpace.GetRight();
@@ -4799,12 +4799,12 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
     OSL_ENSURE( pCFormat, "No character format found for token" );
 
     // parse styles (regarding class see also NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
+    if (HasStyleOptions(aStyle, aId, OUString(), &aLang, &aDir))
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
+        if (ParseStyleOptions(aStyle, aId, OUString(), aItemSet, aPropInfo, &aLang, &aDir))
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
                     "Class is not considered" );
@@ -5259,7 +5259,7 @@ void SwHTMLParser::InsertHorzRule()
 
     // ...and save in a context
     std::unique_ptr<HTMLAttrContext> xCntxt(
-        new HTMLAttrContext(HtmlTokenId::HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr));
+        new HTMLAttrContext(HtmlTokenId::HORZRULE, RES_POOLCOLL_HTML_HR, OUString()));
 
     PushContext(xCntxt);
 
@@ -5427,7 +5427,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     SwPostItField aPostItField(
         static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Postit )),
-        aEmptyOUStr, sText.makeStringAndClear(), aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
+        OUString(), sText.makeStringAndClear(), OUString(), OUString(), DateTime(DateTime::SYSTEM));
     SwFormatField aFormatField( aPostItField );
     InsertAttr( aFormatField,  false );
 }

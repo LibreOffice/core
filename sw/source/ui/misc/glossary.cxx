@@ -516,8 +516,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     {
         SfxItemSet aSet( pSh->GetAttrPool(), svl::Items<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
 
-        SvxMacro aStart(aEmptyOUStr, aEmptyOUStr, STARBASIC);
-        SvxMacro aEnd(aEmptyOUStr, aEmptyOUStr, STARBASIC);
+        SvxMacro aStart(OUString(), OUString(), STARBASIC);
+        SvxMacro aEnd(OUString(), OUString(), STARBASIC);
         pGlossaryHdl->GetMacros(m_pShortNameEdit->GetText(), aStart, aEnd );
 
         SvxMacroItem aItem(RES_FRMMACRO);
