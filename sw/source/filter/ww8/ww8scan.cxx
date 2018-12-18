@@ -5765,10 +5765,15 @@ ww::WordVersion WW8Fib::GetFIBVersion() const
     return eVer;
 }
 
-WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
-    : m_nFibError( 0 )
+WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
+    m_fDot(false), m_fGlsy(false), m_fComplex(false), m_fHasPic(false), m_cQuickSaves(0),
+    m_fEncrypted(false), m_fWhichTableStm(false), m_fReadOnlyRecommended(false),
+    m_fWriteReservation(false), m_fExtChar(false), m_fFarEast(false), m_fObfuscated(false),
+    m_fMac(false), m_fEmptySpecial(false), m_fLoadOverridePage(false), m_fFuturesavedUndo(false),
+    m_fWord97Saved(false), m_fWord2000Saved(false)
+        // in C++20 with P06831R1 "Default member initializers for bit-fields (revision 1)", the
+        // above bit-field member initializations can be moved to the class definition
 {
-    memset(this, 0, sizeof(*this));
     sal_uInt8 aBits1;
     sal_uInt8 aBits2;
     sal_uInt8 aVer8Bits1;    // only used starting with WinWord 8
@@ -6187,9 +6192,15 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     }
 }
 
-WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
+WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot):
+    m_fDot(false), m_fGlsy(false), m_fComplex(false), m_fHasPic(false), m_cQuickSaves(0),
+    m_fEncrypted(false), m_fWhichTableStm(false), m_fReadOnlyRecommended(false),
+    m_fWriteReservation(false), m_fExtChar(false), m_fFarEast(false), m_fObfuscated(false),
+    m_fMac(false), m_fEmptySpecial(false), m_fLoadOverridePage(false), m_fFuturesavedUndo(false),
+    m_fWord97Saved(false), m_fWord2000Saved(false)
+        // in C++20 with P06831R1 "Default member initializers for bit-fields (revision 1)", the
+        // above bit-field member initializations can be moved to the class definition
 {
-    memset(this, 0, sizeof(*this));
     m_nVersion = nVer;
     if (8 == nVer)
     {
@@ -7508,9 +7519,61 @@ void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
             nIdxOffset++;
 }
 
-WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
+WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):
+    fFacingPages(false), fWidowControl(false), fPMHMainDoc(false), grfSuppression(0), fpc(0),
+    grpfIhdt(0), rncFootnote(0), nFootnote(0), fOutlineDirtySave(false), fOnlyMacPics(false),
+    fOnlyWinPics(false), fLabelDoc(false), fHyphCapitals(false), fAutoHyphen(false),
+    fFormNoFields(false), fLinkStyles(false), fRevMarking(false), fBackup(false),
+    fExactCWords(false), fPagHidden(false), fPagResults(false), fLockAtn(false),
+    fMirrorMargins(false), fReadOnlyRecommended(false), fDfltTrueType(false),
+    fPagSuppressTopSpacing(false), fProtEnabled(false), fDispFormFieldSel(false), fRMView(false),
+    fRMPrint(false), fWriteReservation(false), fLockRev(false), fEmbedFonts(false),
+    copts_fNoTabForInd(false), copts_fNoSpaceRaiseLower(false), copts_fSupressSpbfAfterPgBrk(false),
+    copts_fWrapTrailSpaces(false), copts_fMapPrintTextColor(false), copts_fNoColumnBalance(false),
+    copts_fConvMailMergeEsc(false), copts_fSupressTopSpacing(false),
+    copts_fOrigWordTableRules(false), copts_fTransparentMetafiles(false),
+    copts_fShowBreaksInFrames(false), copts_fSwapBordersFacingPgs(false), copts_fExpShRtn(false),
+    rncEdn(0), nEdn(0), epc(0), fPrintFormData(false), fSaveFormData(false), fShadeFormData(false),
+    fWCFootnoteEdn(false), wvkSaved(0), wScaleSaved(0), zkSaved(0), fRotateFontW6(false),
+    iGutterPos(false), fNoTabForInd(false), fNoSpaceRaiseLower(false),
+    fSupressSpbfAfterPageBreak(false), fWrapTrailSpaces(false), fMapPrintTextColor(false),
+    fNoColumnBalance(false), fConvMailMergeEsc(false), fSupressTopSpacing(false),
+    fOrigWordTableRules(false), fTransparentMetafiles(false), fShowBreaksInFrames(false),
+    fSwapBordersFacingPgs(false), fCompatibilityOptions_Unknown1_13(false), fExpShRtn(false),
+    fCompatibilityOptions_Unknown1_15(false), fCompatibilityOptions_Unknown1_16(false),
+    fSuppressTopSpacingMac5(false), fTruncDxaExpand(false), fPrintBodyBeforeHdr(false),
+    fNoLeading(false), fCompatibilityOptions_Unknown1_21(false), fMWSmallCaps(false),
+    fCompatibilityOptions_Unknown1_23(false), fCompatibilityOptions_Unknown1_24(false),
+    fCompatibilityOptions_Unknown1_25(false), fCompatibilityOptions_Unknown1_26(false),
+    fCompatibilityOptions_Unknown1_27(false), fCompatibilityOptions_Unknown1_28(false),
+    fCompatibilityOptions_Unknown1_29(false), fCompatibilityOptions_Unknown1_30(false),
+    fCompatibilityOptions_Unknown1_31(false), fUsePrinterMetrics(false), lvl(0), fHtmlDoc(false),
+    fSnapBorder(false), fIncludeHeader(false), fIncludeFooter(false), fForcePageSizePag(false),
+    fMinFontSizePag(false), fHaveVersions(false), fAutoVersion(false),
+    fCompatibilityOptions_Unknown2_1(false), fCompatibilityOptions_Unknown2_2(false),
+    fDontUseHTMLAutoSpacing(false), fCompatibilityOptions_Unknown2_4(false),
+    fCompatibilityOptions_Unknown2_5(false), fCompatibilityOptions_Unknown2_6(false),
+    fCompatibilityOptions_Unknown2_7(false), fCompatibilityOptions_Unknown2_8(false),
+    fCompatibilityOptions_Unknown2_9(false), fCompatibilityOptions_Unknown2_10(false),
+    fCompatibilityOptions_Unknown2_11(false), fCompatibilityOptions_Unknown2_12(false),
+    fCompatibilityOptions_Unknown2_13(false), fCompatibilityOptions_Unknown2_14(false),
+    fCompatibilityOptions_Unknown2_15(false), fCompatibilityOptions_Unknown2_16(false),
+    fCompatibilityOptions_Unknown2_17(false), fCompatibilityOptions_Unknown2_18(false),
+    fCompatibilityOptions_Unknown2_19(false), fCompatibilityOptions_Unknown2_20(false),
+    fCompatibilityOptions_Unknown2_21(false), fCompatibilityOptions_Unknown2_22(false),
+    fCompatibilityOptions_Unknown2_23(false), fCompatibilityOptions_Unknown2_24(false),
+    fCompatibilityOptions_Unknown2_25(false), fCompatibilityOptions_Unknown2_26(false),
+    fCompatibilityOptions_Unknown2_27(false), fCompatibilityOptions_Unknown2_28(false),
+    fCompatibilityOptions_Unknown2_29(false), fCompatibilityOptions_Unknown2_30(false),
+    fCompatibilityOptions_Unknown2_31(false), fCompatibilityOptions_Unknown2_32(false),
+    fUnknown3(0), fUseBackGroundInAllmodes(false), fDoNotEmbedSystemFont(false), fWordCompat(false),
+    fLiveRecover(false), fEmbedFactoids(false), fFactoidXML(false), fFactoidAllDone(false),
+    fFolioPrint(false), fReverseFolio(false), iTextLineEnding(0), fHideFcc(false),
+    fAcetateShowMarkup(false), fAcetateShowAtn(false), fAcetateShowInsDel(false),
+    fAcetateShowProps(false)
+        // in C++20 with P06831R1 "Default member initializers for bit-fields (revision 1)", the
+        // above bit-field member initializations can be moved to the class definition
 {
-    memset(this, 0, sizeof(WW8Dop));
     fDontUseHTMLAutoSpacing = true; //default
     fAcetateShowAtn = true; //default
     const sal_uInt32 nMaxDopSize = 0x268;
@@ -7725,11 +7788,61 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
     }
 }
 
-WW8Dop::WW8Dop()
+WW8Dop::WW8Dop():
+    fFacingPages(false), fWidowControl(false), fPMHMainDoc(false), grfSuppression(0), fpc(0),
+    grpfIhdt(0), rncFootnote(0), nFootnote(0), fOutlineDirtySave(false), fOnlyMacPics(false),
+    fOnlyWinPics(false), fLabelDoc(false), fHyphCapitals(false), fAutoHyphen(false),
+    fFormNoFields(false), fLinkStyles(false), fRevMarking(false), fBackup(false),
+    fExactCWords(false), fPagHidden(false), fPagResults(false), fLockAtn(false),
+    fMirrorMargins(false), fReadOnlyRecommended(false), fDfltTrueType(false),
+    fPagSuppressTopSpacing(false), fProtEnabled(false), fDispFormFieldSel(false), fRMView(false),
+    fRMPrint(false), fWriteReservation(false), fLockRev(false), fEmbedFonts(false),
+    copts_fNoTabForInd(false), copts_fNoSpaceRaiseLower(false), copts_fSupressSpbfAfterPgBrk(false),
+    copts_fWrapTrailSpaces(false), copts_fMapPrintTextColor(false), copts_fNoColumnBalance(false),
+    copts_fConvMailMergeEsc(false), copts_fSupressTopSpacing(false),
+    copts_fOrigWordTableRules(false), copts_fTransparentMetafiles(false),
+    copts_fShowBreaksInFrames(false), copts_fSwapBordersFacingPgs(false), copts_fExpShRtn(false),
+    rncEdn(0), nEdn(0), epc(0), fPrintFormData(false), fSaveFormData(false), fShadeFormData(false),
+    fWCFootnoteEdn(false), wvkSaved(0), wScaleSaved(0), zkSaved(0), fRotateFontW6(false),
+    iGutterPos(false), fNoTabForInd(false), fNoSpaceRaiseLower(false),
+    fSupressSpbfAfterPageBreak(false), fWrapTrailSpaces(false), fMapPrintTextColor(false),
+    fNoColumnBalance(false), fConvMailMergeEsc(false), fSupressTopSpacing(false),
+    fOrigWordTableRules(false), fTransparentMetafiles(false), fShowBreaksInFrames(false),
+    fSwapBordersFacingPgs(false), fCompatibilityOptions_Unknown1_13(false), fExpShRtn(false),
+    fCompatibilityOptions_Unknown1_15(false), fCompatibilityOptions_Unknown1_16(false),
+    fSuppressTopSpacingMac5(false), fTruncDxaExpand(false), fPrintBodyBeforeHdr(false),
+    fNoLeading(false), fCompatibilityOptions_Unknown1_21(false), fMWSmallCaps(false),
+    fCompatibilityOptions_Unknown1_23(false), fCompatibilityOptions_Unknown1_24(false),
+    fCompatibilityOptions_Unknown1_25(false), fCompatibilityOptions_Unknown1_26(false),
+    fCompatibilityOptions_Unknown1_27(false), fCompatibilityOptions_Unknown1_28(false),
+    fCompatibilityOptions_Unknown1_29(false), fCompatibilityOptions_Unknown1_30(false),
+    fCompatibilityOptions_Unknown1_31(false), fUsePrinterMetrics(false), lvl(0), fHtmlDoc(false),
+    fSnapBorder(false), fIncludeHeader(false), fIncludeFooter(false), fForcePageSizePag(false),
+    fMinFontSizePag(false), fHaveVersions(false), fAutoVersion(false),
+    fCompatibilityOptions_Unknown2_1(false), fCompatibilityOptions_Unknown2_2(false),
+    fDontUseHTMLAutoSpacing(false), fCompatibilityOptions_Unknown2_4(false),
+    fCompatibilityOptions_Unknown2_5(false), fCompatibilityOptions_Unknown2_6(false),
+    fCompatibilityOptions_Unknown2_7(false), fCompatibilityOptions_Unknown2_8(false),
+    fCompatibilityOptions_Unknown2_9(false), fCompatibilityOptions_Unknown2_10(false),
+    fCompatibilityOptions_Unknown2_11(false), fCompatibilityOptions_Unknown2_12(false),
+    fCompatibilityOptions_Unknown2_13(false), fCompatibilityOptions_Unknown2_14(false),
+    fCompatibilityOptions_Unknown2_15(false), fCompatibilityOptions_Unknown2_16(false),
+    fCompatibilityOptions_Unknown2_17(false), fCompatibilityOptions_Unknown2_18(false),
+    fCompatibilityOptions_Unknown2_19(false), fCompatibilityOptions_Unknown2_20(false),
+    fCompatibilityOptions_Unknown2_21(false), fCompatibilityOptions_Unknown2_22(false),
+    fCompatibilityOptions_Unknown2_23(false), fCompatibilityOptions_Unknown2_24(false),
+    fCompatibilityOptions_Unknown2_25(false), fCompatibilityOptions_Unknown2_26(false),
+    fCompatibilityOptions_Unknown2_27(false), fCompatibilityOptions_Unknown2_28(false),
+    fCompatibilityOptions_Unknown2_29(false), fCompatibilityOptions_Unknown2_30(false),
+    fCompatibilityOptions_Unknown2_31(false), fCompatibilityOptions_Unknown2_32(false),
+    fUnknown3(0), fUseBackGroundInAllmodes(false), fDoNotEmbedSystemFont(false), fWordCompat(false),
+    fLiveRecover(false), fEmbedFactoids(false), fFactoidXML(false), fFactoidAllDone(false),
+    fFolioPrint(false), fReverseFolio(false), iTextLineEnding(0), fHideFcc(false),
+    fAcetateShowMarkup(false), fAcetateShowAtn(false), fAcetateShowInsDel(false),
+    fAcetateShowProps(false)
+        // in C++20 with P06831R1 "Default member initializers for bit-fields (revision 1)", the
+        // above bit-field member initializations can be moved to the class definition
 {
-    // first set everything to a default of 0
-    memset(this, 0, sizeof(WW8Dop));
-
     fWidowControl = true;
     fpc = 1;
     nFootnote = 1;
