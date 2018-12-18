@@ -706,7 +706,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     WriteUserProps();
     // Default TabSize
     Strm()
-        .WriteCharPtr(m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr())
+        .WriteCharPtr(m_pAttrOutput->GetTabStop().makeStringAndClear().getStr())
         .WriteCharPtr(SAL_NEWLINE_STRING);
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
@@ -966,8 +966,8 @@ void RtfExport::PrepareNewPageDesc(const SfxItemSet* pSet, const SwNode& rNd,
         m_pSections->AppendSection(pNewPgDesc, rNd, pFormat, nLnNm);
 
     // Don't insert a page break, when we're changing page style just because the next page has to be a different one.
-    if (!m_pAttrOutput->m_pPrevPageDesc
-        || m_pAttrOutput->m_pPrevPageDesc->GetFollow() != pNewPgDesc)
+    if (!m_pAttrOutput->GetPrevPageDesc()
+        || m_pAttrOutput->GetPrevPageDesc()->GetFollow() != pNewPgDesc)
         AttrOutput().SectionBreak(msword::PageBreak, m_pSections->CurrentSectionInfo());
 }
 

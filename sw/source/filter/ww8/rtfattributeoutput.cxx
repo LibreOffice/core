@@ -3594,6 +3594,7 @@ bool RtfAttributeOutput::PlaceholderField(const SwField* pField)
 
 RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
     : m_rExport(rExport)
+    , m_pPrevPageDesc(nullptr)
     , m_nStyleId(0)
     , m_nListId(0)
     , m_nNextAnnotationMarkId(0)
@@ -3614,7 +3615,6 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
     , m_nParaBeforeSpacing(0)
     , m_bParaAfterAutoSpacing(false)
     , m_nParaAfterSpacing(0)
-    , m_pPrevPageDesc(nullptr)
 {
 }
 
