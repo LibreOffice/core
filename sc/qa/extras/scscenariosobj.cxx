@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/sheet/xscenarios.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -20,12 +21,12 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #include <unonames.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -35,6 +36,7 @@ namespace sc_apitest
 {
 class ScScenariosObj : public CalcUnoApiTest,
                        public apitest::XEnumerationAccess,
+                       public apitest::XIndexAccess,
                        public apitest::XScenarios
 {
 public:
@@ -49,6 +51,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     // XScenarios
     CPPUNIT_TEST(testAddNewByName);
     CPPUNIT_TEST(testRemoveByName);
@@ -61,6 +67,7 @@ private:
 
 ScScenariosObj::ScScenariosObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(1)
 {
 }
 
