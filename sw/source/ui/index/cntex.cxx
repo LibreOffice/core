@@ -94,11 +94,11 @@ static void lcl_SetBOOLProp(
     }
 }
 
-IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void)
+IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, OneExampleFrame&, void)
 {
     try
     {
-         uno::Reference< frame::XModel > & xModel = m_pExampleFrame->GetModel();
+         uno::Reference< frame::XModel > & xModel = m_xExampleFrame->GetModel();
         uno::Reference< lang::XUnoTunnel > xDocTunnel(xModel, uno::UNO_QUERY);
         SwXTextDocument* pDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
 
@@ -138,7 +138,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
 void SwMultiTOXTabDialog::CreateOrUpdateExample(
     TOXTypes nTOXIndex, sal_uInt16 nPage, sal_uInt16 nCurrentLevel)
 {
-    if(!m_pExampleFrame || !m_pExampleFrame->IsInitialized())
+    if(!m_xExampleFrame || !m_xExampleFrame->IsInitialized())
         return;
 
     try
@@ -157,7 +157,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
          OSL_ENSURE(m_vTypeData[nTOXIndex].m_pxIndexSections &&
                         m_vTypeData[nTOXIndex].m_pxIndexSections->xContainerSection.is(),
                             "Section not created");
-         uno::Reference< frame::XModel > & xModel = m_pExampleFrame->GetModel();
+         uno::Reference< frame::XModel > & xModel = m_xExampleFrame->GetModel();
          bool bInitialCreate = true;
          if(!m_vTypeData[nTOXIndex].m_pxIndexSections->xDocumentIndex.is())
          {

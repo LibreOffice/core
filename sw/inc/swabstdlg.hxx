@@ -469,7 +469,7 @@ public:
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) = 0;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(
-                                                vcl::Window* pParent, const SfxItemSet& rSet,
+                                                weld::Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX,
                                                 bool bGlobal) = 0;

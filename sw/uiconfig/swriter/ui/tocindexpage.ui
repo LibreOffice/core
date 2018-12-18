@@ -47,284 +47,50 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkBox" id="TocIndexPage">
+  <object class="GtkGrid" id="TocIndexPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="orientation">vertical</property>
-    <property name="spacing">12</property>
     <child>
-      <object class="GtkFrame" id="formatframe">
+      <object class="GtkGrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="valign">start</property>
         <property name="hexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="vexpand">True</property>
+        <property name="orientation">vertical</property>
+        <property name="row_spacing">12</property>
         <child>
-          <object class="GtkAlignment" id="alignment2">
+          <object class="GtkFrame" id="formatframe">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
             <child>
-              <object class="GtkGrid" id="grid6">
+              <object class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkLabel" id="mainstyleft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="tocindexpage|mainstyleft">_Title:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">title</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="title">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="activates_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="typeft">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="tocindexpage|typeft">Type:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">type</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="type">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <items>
-                      <item id="1" context="tocindexpage|liststore1">Table of Contents</item>
-                      <item id="2" context="tocindexpage|liststore1">Alphabetical Index</item>
-                      <item id="4" context="tocindexpage|liststore1">Table of Figures</item>
-                      <item id="8" context="tocindexpage|liststore1">Index of Tables</item>
-                      <item id="16" context="tocindexpage|liststore1">User-Defined</item>
-                      <item id="32" context="tocindexpage|liststore1">Table of Objects</item>
-                      <item id="64" context="tocindexpage|liststore1">Bibliography</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="readonly">
-                    <property name="label" translatable="yes" context="tocindexpage|readonly">Protected against manual changes</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="tocindexpage|label3">Type and Title</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFrame" id="areaframe">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
-        <child>
-          <object class="GtkAlignment" id="alignment1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkGrid" id="grid1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="column_spacing">18</property>
-                <child>
-                  <object class="GtkGrid" id="grid3">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="mainstyleft2">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="tocindexpage|mainstyleft2">For:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">scope</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="scope">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <items>
-                          <item translatable="yes" context="tocindexpage|scope">Entire document</item>
-                          <item translatable="yes" context="tocindexpage|scope">Chapter</item>
-                        </items>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid4">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="levelft">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="tocindexpage|levelft">Evaluate up to level:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">level</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="level">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="activates_default">True</property>
-                        <property name="adjustment">adjustment1</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="tocindexpage|label1">Create Index or Table of Contents</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFrame" id="createframe">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="hexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
-        <child>
-          <object class="GtkAlignment" id="alignment3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkGrid" id="grid2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <child>
-                  <object class="GtkGrid" id="grid10">
+                  <object class="GtkGrid" id="grid6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="fromheadings">
-                        <property name="label" translatable="yes" context="tocindexpage|fromheadings">Outline</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="no_show_all">True</property>
+                      <object class="GtkLabel" id="mainstyleft">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="tocindexpage|mainstyleft">_Title:</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">title</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -332,8 +98,54 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="indexmarks">
-                        <property name="label" translatable="yes" context="tocindexpage|indexmarks">Inde_x marks</property>
+                      <object class="GtkEntry" id="title">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates_default">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="typeft">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="tocindexpage|typeft">Type:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">type</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="type">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <items>
+                          <item id="1" context="tocindexpage|liststore1">Table of Contents</item>
+                          <item id="2" context="tocindexpage|liststore1">Alphabetical Index</item>
+                          <item id="4" context="tocindexpage|liststore1">Table of Figures</item>
+                          <item id="8" context="tocindexpage|liststore1">Index of Tables</item>
+                          <item id="16" context="tocindexpage|liststore1">User-Defined</item>
+                          <item id="32" context="tocindexpage|liststore1">Table of Objects</item>
+                          <item id="64" context="tocindexpage|liststore1">Bibliography</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="readonly">
+                        <property name="label" translatable="yes" context="tocindexpage|readonly">Protected against manual changes</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -345,106 +157,324 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="fromtables">
-                        <property name="label" translatable="yes" context="tocindexpage|fromtables">Tables</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="fromframes">
-                        <property name="label" translatable="yes" context="tocindexpage|fromframes">Te_xt frames</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="fromgraphics">
-                        <property name="label" translatable="yes" context="tocindexpage|fromgraphics">Graphics</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="fromoles">
-                        <property name="label" translatable="yes" context="tocindexpage|fromoles">OLE objects</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="uselevel">
-                        <property name="label" translatable="yes" context="tocindexpage|uselevel">Use level from source chapter</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
                         <property name="width">2</property>
                       </packing>
                     </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="tocindexpage|label3">Type and Title</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="areaframe">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkGrid" id="grid1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="column_spacing">18</property>
                     <child>
-                      <object class="GtkBox" id="box1">
+                      <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">center</property>
-                        <property name="spacing">12</property>
+                        <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkBox" id="box2">
+                          <object class="GtkLabel" id="mainstyleft2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="tocindexpage|mainstyleft2">For:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">scope</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="scope">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <items>
+                              <item translatable="yes" context="tocindexpage|scope">Entire document</item>
+                              <item translatable="yes" context="tocindexpage|scope">Chapter</item>
+                            </items>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="grid4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="levelft">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes" context="tocindexpage|levelft">Evaluate up to level:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">level</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="level">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment1</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="tocindexpage|label1">Create Index or Table of Contents</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="createframe">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="hexpand">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkGrid" id="grid2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <child>
+                      <object class="GtkGrid" id="grid10">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkCheckButton" id="fromheadings">
+                            <property name="label" translatable="yes" context="tocindexpage|fromheadings">Outline</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="no_show_all">True</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="indexmarks">
+                            <property name="label" translatable="yes" context="tocindexpage|indexmarks">Inde_x marks</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="fromtables">
+                            <property name="label" translatable="yes" context="tocindexpage|fromtables">Tables</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="fromframes">
+                            <property name="label" translatable="yes" context="tocindexpage|fromframes">Te_xt frames</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="fromgraphics">
+                            <property name="label" translatable="yes" context="tocindexpage|fromgraphics">Graphics</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="fromoles">
+                            <property name="label" translatable="yes" context="tocindexpage|fromoles">OLE objects</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="uselevel">
+                            <property name="label" translatable="yes" context="tocindexpage|uselevel">Use level from source chapter</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="margin_left">12</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="orientation">vertical</property>
+                            <property name="spacing">12</property>
                             <child>
-                              <object class="GtkCheckButton" id="addstylescb">
-                                <property name="label" translatable="yes" context="tocindexpage|addstylescb">_Additional styles</property>
+                              <object class="GtkBox" id="box2">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="addstylescb">
+                                    <property name="label" translatable="yes" context="tocindexpage|addstylescb">_Additional styles</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="stylescb">
+                                    <property name="label" translatable="yes" context="tocindexpage|stylescb">Styl_es</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="no_show_all">True</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -453,14 +483,16 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="stylescb">
-                                <property name="label" translatable="yes" context="tocindexpage|stylescb">Styl_es</property>
+                              <object class="GtkButton" id="styles">
+                                <property name="label" translatable="yes" context="tocindexpage|styles">Assign styles...</property>
+                                <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="halign">start</property>
+                                <property name="valign">center</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="addstylescb"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -470,512 +502,134 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="styles">
-                            <property name="label" translatable="yes" context="tocindexpage|styles">Assign styles...</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="halign">start</property>
-                            <property name="valign">center</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="addstylescb"/>
-                            </accessibility>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid13">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkRadioButton" id="captions">
-                        <property name="label" translatable="yes" context="tocindexpage|captions">Captions</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">objnames</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="objnames">
-                        <property name="label" translatable="yes" context="tocindexpage|objnames">Object names</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkGrid" id="grid12">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="categoryft">
-                            <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="label" translatable="yes" context="tocindexpage|categoryft">Category:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">category</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="category">
-                            <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="displayft">
-                            <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="label" translatable="yes" context="tocindexpage|displayft">Display:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">display</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBoxText" id="display">
-                            <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
-                            <items>
-                              <item translatable="yes" context="tocindexpage|display">References</item>
-                              <item translatable="yes" context="tocindexpage|display">Category and Number</item>
-                              <item translatable="yes" context="tocindexpage|display">Caption Text</item>
-                            </items>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
+                          <placeholder/>
                         </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="tocindexpage|label2">Create From</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFrame" id="objectframe">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
-        <child>
-          <object class="GtkAlignment" id="alignment6">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="objects">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore1</property>
-                    <property name="headers_visible">False</property>
-                    <property name="search_column">0</property>
-                    <property name="show_expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="alignment">0.5</property>
                         <child>
-                          <object class="GtkCellRendererToggle" id="cellrenderer2"/>
-                          <attributes>
-                            <attribute name="active">0</attribute>
-                          </attributes>
+                          <placeholder/>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                        <property name="resizable">True</property>
-                        <property name="spacing">6</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">0</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderer1"/>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label6">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="tocindexpage|label6">Create From the Following Objects</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFrame" id="authframe">
-        <property name="can_focus">False</property>
-        <property name="no_show_all">True</property>
-        <property name="hexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
-        <child>
-          <object class="GtkAlignment" id="alignment7">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
-            <child>
-              <object class="GtkGrid" id="grid11">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="mainstyleft9">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="tocindexpage|mainstyleft9">_Brackets:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">brackets</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="numberentries">
-                    <property name="label" translatable="yes" context="tocindexpage|numberentries">_Number entries</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="brackets">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <items>
-                      <item translatable="yes" context="tocindexpage|brackets">[none]</item>
-                      <item translatable="yes" context="tocindexpage|brackets">[]</item>
-                      <item translatable="yes" context="tocindexpage|brackets">()</item>
-                      <item translatable="yes" context="tocindexpage|brackets">{}</item>
-                      <item translatable="yes" context="tocindexpage|brackets">&lt;&gt;</item>
-                    </items>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label7">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="tocindexpage|label7">Formatting of the Entries</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">5</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="alphapane">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkFrame" id="optionsframe">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <object class="GtkAlignment" id="alignment5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkGrid" id="grid9">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkCheckButton" id="combinesame">
-                        <property name="label" translatable="yes" context="tocindexpage|combinesame">Combine identical entries</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="useff">
-                        <property name="label" translatable="yes" context="tocindexpage|useff">Combine identical entries with p or _pp</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="usedash">
-                        <property name="label" translatable="yes" context="tocindexpage|usedash">Combine with -</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="casesens">
-                        <property name="label" translatable="yes" context="tocindexpage|casesens">Case sensitive</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="margin_left">12</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="initcaps">
-                        <property name="label" translatable="yes" context="tocindexpage|initcaps">AutoCapitalize entries</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="keyasentry">
-                        <property name="label" translatable="yes" context="tocindexpage|keyasentry">Keys as separate entries</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="fromfile">
-                        <property name="label" translatable="yes" context="tocindexpage|fromfile">_Concordance file</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkMenuButton" id="file">
-                        <property name="label" translatable="yes" context="tocindexpage|file">_File</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="halign">start</property>
-                        <property name="margin_left">12</property>
-                        <property name="use_underline">True</property>
-                        <property name="popup">filemenu</property>
-                        <property name="use_popover">False</property>
                         <child>
                           <placeholder/>
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkGrid" id="grid13">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkRadioButton" id="captions">
+                            <property name="label" translatable="yes" context="tocindexpage|captions">Captions</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="no_show_all">True</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">objnames</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="objnames">
+                            <property name="label" translatable="yes" context="tocindexpage|objnames">Object names</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="no_show_all">True</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="grid12">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="row_spacing">6</property>
+                            <property name="column_spacing">12</property>
+                            <child>
+                              <object class="GtkLabel" id="categoryft">
+                                <property name="can_focus">False</property>
+                                <property name="no_show_all">True</property>
+                                <property name="label" translatable="yes" context="tocindexpage|categoryft">Category:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">category</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="category">
+                                <property name="can_focus">False</property>
+                                <property name="no_show_all">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="displayft">
+                                <property name="can_focus">False</property>
+                                <property name="no_show_all">True</property>
+                                <property name="label" translatable="yes" context="tocindexpage|displayft">Display:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">display</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="display">
+                                <property name="can_focus">False</property>
+                                <property name="no_show_all">True</property>
+                                <items>
+                                  <item translatable="yes" context="tocindexpage|display">References</item>
+                                  <item translatable="yes" context="tocindexpage|display">Category and Number</item>
+                                  <item translatable="yes" context="tocindexpage|display">Caption Text</item>
+                                </items>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                   </object>
@@ -983,10 +637,10 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label5">
+              <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="tocindexpage|label5">Options</property>
+                <property name="label" translatable="yes" context="tocindexpage|label2">Create From</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -994,20 +648,20 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="sortframe">
-            <property name="visible">True</property>
+          <object class="GtkFrame" id="objectframe">
             <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
             <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
-              <object class="GtkAlignment" id="alignment4">
+              <object class="GtkAlignment" id="alignment6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
@@ -1015,89 +669,64 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkGrid" id="grid5">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="column_spacing">18</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkGrid" id="grid7">
+                      <object class="GtkTreeView" id="objects">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="mainstyleft3">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="tocindexpage|mainstyleft3">Language:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">lang</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="model">liststore1</property>
+                        <property name="headers_visible">False</property>
+                        <property name="search_column">0</property>
+                        <property name="show_expanders">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                         </child>
                         <child>
-                          <object class="GtkComboBoxText" id="lang">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                            <property name="resizable">True</property>
+                            <property name="spacing">6</property>
+                            <property name="alignment">0.5</property>
+                            <child>
+                              <object class="GtkCellRendererToggle" id="cellrenderer2"/>
+                              <attributes>
+                                <attribute name="active">0</attribute>
+                              </attributes>
+                            </child>
                           </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                            <property name="resizable">True</property>
+                            <property name="spacing">6</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">0</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderer1"/>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
+                            </child>
+                          </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkGrid" id="grid8">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="column_spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="mainstyleft5">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="tocindexpage|mainstyleft5">Key type:</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">keytype</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="keytype">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="tocindexpage|label4">Sort</property>
+                <property name="label" translatable="yes" context="tocindexpage|label6">Create From the Following Objects</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -1105,16 +734,396 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="authframe">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="hexpand">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment7">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkGrid" id="grid11">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="mainstyleft9">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="tocindexpage|mainstyleft9">_Brackets:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">brackets</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="numberentries">
+                        <property name="label" translatable="yes" context="tocindexpage|numberentries">_Number entries</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="brackets">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <items>
+                          <item translatable="yes" context="tocindexpage|brackets">[none]</item>
+                          <item translatable="yes" context="tocindexpage|brackets">[]</item>
+                          <item translatable="yes" context="tocindexpage|brackets">()</item>
+                          <item translatable="yes" context="tocindexpage|brackets">{}</item>
+                          <item translatable="yes" context="tocindexpage|brackets">&lt;&gt;</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label7">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="tocindexpage|label7">Formatting of the Entries</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="alphapane">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkFrame" id="optionsframe">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkGrid" id="grid9">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkCheckButton" id="combinesame">
+                            <property name="label" translatable="yes" context="tocindexpage|combinesame">Combine identical entries</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="useff">
+                            <property name="label" translatable="yes" context="tocindexpage|useff">Combine identical entries with p or _pp</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="margin_left">12</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="usedash">
+                            <property name="label" translatable="yes" context="tocindexpage|usedash">Combine with -</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="margin_left">12</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="casesens">
+                            <property name="label" translatable="yes" context="tocindexpage|casesens">Case sensitive</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="margin_left">12</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="initcaps">
+                            <property name="label" translatable="yes" context="tocindexpage|initcaps">AutoCapitalize entries</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="keyasentry">
+                            <property name="label" translatable="yes" context="tocindexpage|keyasentry">Keys as separate entries</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="fromfile">
+                            <property name="label" translatable="yes" context="tocindexpage|fromfile">_Concordance file</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkMenuButton" id="file">
+                            <property name="label" translatable="yes" context="tocindexpage|file">_File</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="halign">start</property>
+                            <property name="margin_left">12</property>
+                            <property name="use_underline">True</property>
+                            <property name="popup">filemenu</property>
+                            <property name="use_popover">False</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="tocindexpage|label5">Options</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="sortframe">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkGrid" id="grid5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="column_spacing">18</property>
+                        <child>
+                          <object class="GtkGrid" id="grid7">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="column_spacing">12</property>
+                            <child>
+                              <object class="GtkLabel" id="mainstyleft3">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="tocindexpage|mainstyleft3">Language:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">lang</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="lang">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="grid8">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="column_spacing">12</property>
+                            <child>
+                              <object class="GtkLabel" id="mainstyleft5">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="tocindexpage|mainstyleft5">Key type:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">keytype</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="keytype">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="tocindexpage|label4">Sort</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">6</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
   </object>
