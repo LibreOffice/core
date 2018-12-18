@@ -149,6 +149,7 @@ public:
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
     void GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const;
     void ClearGroupFields();
+    void ClearAllFields();
     const ScDPNumGroupInfo* GetNumGroupInfo(long nDim) const;
 
     /**
