@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_d52ab1e5",
+        "filename": "sw/source/uibase/app/docstyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-18T06:25:15Z",
+      "side": 1,
+      "message": "short of changing the return type, there is nothing else you can do here",
+      "revId": "229b8c9f98a69f23d408cb315291158a19e9339e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
