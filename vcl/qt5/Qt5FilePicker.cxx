@@ -187,7 +187,6 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
     }
 
     vcl::Window* pWindow = ::Application::GetActiveTopWindow();
-    assert(pWindow);
     QWidget* pTransientParent = nullptr;
     QWindow* pTransientWindow = nullptr;
     if (pWindow)
