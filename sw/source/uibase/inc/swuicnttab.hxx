@@ -46,7 +46,7 @@ class SwTOXWidget;
 class SwTOXEdit;
 class SwTOXButton;
 class SwTOXEntryTabPage;
-class SwOneExampleFrame;
+class OneExampleFrame;
 class SwWrtShell;
 
 namespace com{namespace sun{namespace star{
@@ -62,19 +62,10 @@ struct SwIndexSections_Impl
     css::uno::Reference< css::text::XDocumentIndex >    xDocumentIndex;
 };
 
-class SwMultiTOXTabDialog : public SfxTabDialog
+class SwMultiTOXTabDialog : public SfxTabDialogController
 {
-    VclPtr<vcl::Window>     m_pExampleContainerWIN;
-    VclPtr<CheckBox>        m_pShowExampleCB;
     std::unique_ptr<SwTOXMgr> m_pMgr;
     SwWrtShell&             m_rWrtShell;
-
-    sal_uInt16              m_nSelectId;
-    sal_uInt16              m_nColumnId;
-    sal_uInt16              m_nBackGroundId;
-    sal_uInt16              m_nEntriesId;
-
-    std::unique_ptr<SwOneExampleFrame> m_pExampleFrame;
 
     struct TypeData
     {
@@ -95,21 +86,24 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     bool                m_bExampleCreated;
     bool const          m_bGlobalFlag;
 
+    std::unique_ptr<OneExampleFrame> m_xExampleFrame;
+    std::unique_ptr<weld::CheckButton> m_xShowExampleCB;
+    std::unique_ptr<weld::CustomWeld> m_xExampleFrameWin;
+
     virtual short       Ok() override;
     std::unique_ptr<SwTOXDescription> CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
 
-    DECL_LINK(CreateExample_Hdl, SwOneExampleFrame&, void);
-    DECL_LINK(ShowPreviewHdl, Button*, void);
+    DECL_LINK(CreateExample_Hdl, OneExampleFrame&, void);
+    DECL_LINK(ShowPreviewHdl, weld::ToggleButton&, void);
 
 public:
-    SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet& rSet,
+    SwMultiTOXTabDialog(weld::Window* pParent, const SfxItemSet& rSet,
                         SwWrtShell &rShell,
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType,
                         bool bGlobal);
     virtual ~SwMultiTOXTabDialog() override;
-    virtual void        dispose() override;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
     SwForm*             GetForm(CurTOXType eType);
 
@@ -258,6 +252,7 @@ class SwTokenWindow
     OUString        m_sAdditionalAccnameString3;
 
     VclPtr<SwTOXEntryTabPage>  m_pParent;
+    std::unique_ptr<weld::Container> m_xParentWidget;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Button> m_xLeftScrollWin;
@@ -442,7 +437,7 @@ class SwTOXStylesTabPage : public SfxTabPage
 
     SwForm&     GetForm()
     {
-        SwMultiTOXTabDialog* pDlg = static_cast<SwMultiTOXTabDialog*>(GetTabDialog());
+        SwMultiTOXTabDialog* pDlg = static_cast<SwMultiTOXTabDialog*>(GetDialogController());
         return *pDlg->GetForm(pDlg->GetCurrentTOXType());
     }
 

@@ -228,7 +228,11 @@ short AbstractMailMergeFieldConnectionsDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractMultiTOXTabDialog_Impl);
+short AbstractMultiTOXTabDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl);
 
@@ -632,17 +636,17 @@ bool AbstractMailMergeFieldConnectionsDlg_Impl::IsUseExistingConnections() const
 
 CurTOXType AbstractMultiTOXTabDialog_Impl::GetCurrentTOXType() const
 {
-    return pDlg->GetCurrentTOXType();
+    return m_xDlg->GetCurrentTOXType();
 }
 
 SwTOXDescription& AbstractMultiTOXTabDialog_Impl::GetTOXDescription(CurTOXType eTOXTypes)
 {
-    return pDlg->GetTOXDescription(eTOXTypes);
+    return m_xDlg->GetTOXDescription(eTOXTypes);
 }
 
 const SfxItemSet* AbstractMultiTOXTabDialog_Impl::GetOutputItemSet() const
 {
-    return pDlg->GetOutputItemSet();
+    return m_xDlg->GetOutputItemSet();
 }
 
 void AbstractEditRegionDlg_Impl::SelectSection(const OUString& rSectionName)
@@ -1050,14 +1054,10 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialo
     return VclPtr<AbstractTabController_Impl>::Create(o3tl::make_unique<SwOutlineTabDialog>(pParent, pSwItemSet, rWrtSh));
 }
 
-VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(
-                                                vcl::Window* pParent, const SfxItemSet& rSet,
-                                                SwWrtShell &rShell,
-                                                SwTOXBase* pCurTOX,
-                                                bool bGlobal)
+VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(weld::Window* pParent, const SfxItemSet& rSet,
+                                                                                        SwWrtShell &rShell, SwTOXBase* pCurTOX, bool bGlobal)
 {
-    VclPtr<SwMultiTOXTabDialog> pDlg = VclPtr<SwMultiTOXTabDialog>::Create( pParent, rSet, rShell, pCurTOX, USHRT_MAX, bGlobal );
-    return VclPtr<AbstractMultiTOXTabDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractMultiTOXTabDialog_Impl>::Create(o3tl::make_unique<SwMultiTOXTabDialog>(pParent, rSet, rShell, pCurTOX, USHRT_MAX, bGlobal));
 }
 
 VclPtr<AbstractEditRegionDlg> SwAbstractDialogFactory_Impl::CreateEditRegionDlg(vcl::Window* pParent, SwWrtShell& rWrtSh)
