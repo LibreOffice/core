@@ -128,7 +128,6 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     m_aColorSize = m_xFillTab->get_preferred_size();
     m_pFillTabPage.disposeAndReset(SvxGradientTabPage::Create(aFillTab, &m_rXFSet));
     Size aGradientSize = m_xFillTab->get_preferred_size();
-    fprintf(stderr, "aGradientSize %ld\n", aGradientSize.Height());
     m_pFillTabPage.disposeAndReset(SvxBitmapTabPage::Create(aFillTab, &m_rXFSet));
     Size aBitmapSize = m_xFillTab->get_preferred_size();
     m_pFillTabPage.disposeAndReset(SvxHatchTabPage::Create(aFillTab, &m_rXFSet));
