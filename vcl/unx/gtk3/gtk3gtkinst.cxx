@@ -5295,6 +5295,11 @@ public:
         set_item_visible(rIdent, bShow);
     }
 
+    virtual void set_label(const OString& rIdent, const OUString& rLabel) override
+    {
+        set_item_label(rIdent, rLabel);
+    }
+
     virtual void insert_separator(int pos, const OUString& rId) override
     {
         MenuHelper::insert_separator(pos, rId);

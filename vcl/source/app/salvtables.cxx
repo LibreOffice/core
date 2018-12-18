@@ -843,6 +843,10 @@ public:
     {
         return m_xMenu->IsItemChecked(m_xMenu->GetItemId(rIdent));
     }
+    virtual void set_label(const OString& rIdent, const OUString& rLabel) override
+    {
+        m_xMenu->SetItemText(m_xMenu->GetItemId(rIdent), rLabel);
+    }
     virtual void set_visible(const OString& rIdent, bool bShow) override
     {
         m_xMenu->ShowItem(m_xMenu->GetItemId(rIdent), bShow);
