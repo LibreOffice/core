@@ -981,5 +981,38 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf122156_file, "linked-with-condition.odt", "5-
     }
 }
 
+DECLARE_SHELL_MAILMERGE_TEST(testTdf121168, "section_ps.odt", "4_v01.ods", "Tabelle1")
+{
+    // A document starting with a section on a page with non-default page style with header
+    executeMailMerge();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    // 4 documents 1 page each, starting at odd page numbers => 7
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
+
+    SwDoc* pDocMM = pTextDoc->GetDocShell()->GetDoc();
+    sal_uLong nSizeMM = pDocMM->GetNodes().GetEndOfContent().GetIndex()
+                        - pDocMM->GetNodes().GetEndOfExtras().GetIndex() - 2;
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(16), nSizeMM);
+
+    // All even pages should be empty, all sub-documents have one page
+    const SwRootFrame* pLayout = pDocMM->getIDocumentLayoutAccess().GetCurrentLayout();
+    const SwPageFrame* pPageFrm = static_cast<const SwPageFrame*>(pLayout->Lower());
+    while (pPageFrm)
+    {
+        sal_uInt16 nPageNum = pPageFrm->GetPhyPageNum();
+        bool bOdd = (1 == (nPageNum % 2));
+        CPPUNIT_ASSERT_EQUAL(!bOdd, pPageFrm->IsEmptyPage());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(bOdd ? 1 : 2), pPageFrm->GetVirtPageNum());
+        if (bOdd)
+        {
+            const SwPageDesc* pDesc = pPageFrm->GetPageDesc();
+            CPPUNIT_ASSERT_EQUAL(OUString("Teststyle" + OUString::number(nPageNum / 2 + 1)),
+                                 pDesc->GetName());
+        }
+        pPageFrm = static_cast<const SwPageFrame*>(pPageFrm->GetNext());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
