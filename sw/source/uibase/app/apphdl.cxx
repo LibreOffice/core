@@ -60,10 +60,12 @@
 #include <uinums.hxx>
 #include <dbconfig.hxx>
 #include <mmconfigitem.hxx>
+#include <strings.hrc>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/TextConnectionSettings.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <swabstdlg.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -417,6 +419,17 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             SAL_INFO(
                 "sw.core",
                 "trying to install LibreOffice Base, caught " << e);
+            auto xRestartManager
+                = css::task::OfficeRestartManager::get(comphelper::getProcessComponentContext());
+            if (!xRestartManager->isRestartRequested(false))
+            {
+                // Base is absent, and could not initiate its install - ask user to do that manually
+                // Only show the dialog if restart is not initiated yet
+                std::unique_ptr<weld::MessageDialog> xWarnBox(Application::CreateMessageDialog(
+                    nullptr, VclMessageType::Info, VclButtonsType::Ok,
+                    SwResId(STR_NO_BASE_FOR_MERGE)));
+                xWarnBox->run();
+            }
         }
         return;
     }

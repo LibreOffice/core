@@ -1302,6 +1302,7 @@
 
 #define STR_QUERY_SPECIAL_FORCED                NC_("STR_QUERY_SPECIAL_FORCED", "Check special regions is deactivated. Check anyway?")
 #define STR_NO_MERGE_ENTRY                      NC_("STR_NO_MERGE_ENTRY", "Could not merge documents.")
+#define STR_NO_BASE_FOR_MERGE                   NC_("STR_NO_BASE_FOR_MERGE", "%PRODUCTNAME Base component is absent, and it is required to use Mail Merge.")
 #define STR_ERR_SRCSTREAM                       NC_("STR_ERR_SRCSTREAM", "The source cannot be loaded.")
 #define STR_ERR_NO_FAX                          NC_("STR_ERR_NO_FAX", "No fax printer has been set under Tools/Options/%1/Print.")
 #define STR_WEBOPTIONS                          NC_("STR_WEBOPTIONS", "HTML document")
