@@ -636,7 +636,22 @@ void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType t)
 
 bool Qt5AccessibleWidget::isValid() const
 {
-    return m_xAccessible.is() && m_xAccessible->getAccessibleContext().is();
+    if (m_xAccessible.is())
+    {
+        try
+        {
+            // getAccessibleContext throws RuntimeException if context is no longer alive
+            Reference<XAccessibleContext> xAc = m_xAccessible->getAccessibleContext();
+            return xAc.is();
+        }
+        // so let's catch it here, cuz otherwise soffice falls flat on its face
+        // with FatalError and nothing else
+        catch (css::uno::RuntimeException /*ex*/)
+        {
+            return false;
+        }
+    }
+    return false;
 }
 
 QObject* Qt5AccessibleWidget::object() const { return nullptr; }
