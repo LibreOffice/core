@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -32,6 +33,7 @@ namespace sc_apitest
 {
 class ScTableRowsObj : public CalcUnoApiTest,
                        public apitest::XElementAccess,
+                       public apitest::XEnumerationAccess,
                        public apitest::XIndexAccess
 {
 public:
@@ -46,6 +48,9 @@ public:
     // XElementAccess
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);

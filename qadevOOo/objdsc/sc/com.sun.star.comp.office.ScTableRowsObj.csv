@@ -1,3 +1,2 @@
 "ScTableRowsObj";"com::sun::star::table::XTableRows";"insertByIndex()"
 "ScTableRowsObj";"com::sun::star::table::XTableRows";"removeByIndex()"
-"ScTableRowsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
