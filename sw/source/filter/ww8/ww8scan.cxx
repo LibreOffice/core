@@ -5766,9 +5766,7 @@ ww::WordVersion WW8Fib::GetFIBVersion() const
 }
 
 WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
-    : m_nFibError( 0 )
 {
-    memset(this, 0, sizeof(*this));
     sal_uInt8 aBits1;
     sal_uInt8 aBits2;
     sal_uInt8 aVer8Bits1;    // only used starting with WinWord 8
@@ -6189,7 +6187,6 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
 
 WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
 {
-    memset(this, 0, sizeof(*this));
     m_nVersion = nVer;
     if (8 == nVer)
     {
@@ -7510,7 +7507,6 @@ void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
 
 WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
 {
-    memset(this, 0, sizeof(WW8Dop));
     fDontUseHTMLAutoSpacing = true; //default
     fAcetateShowAtn = true; //default
     const sal_uInt32 nMaxDopSize = 0x268;
@@ -7727,9 +7723,6 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
 
 WW8Dop::WW8Dop()
 {
-    // first set everything to a default of 0
-    memset(this, 0, sizeof(WW8Dop));
-
     fWidowControl = true;
     fpc = 1;
     nFootnote = 1;
