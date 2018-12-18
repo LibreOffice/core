@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_f5036d0e",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-18T08:53:11Z",
+      "side": 1,
+      "message": "This added space is useless (although harmless).",
+      "range": {
+        "startLine": 478,
+        "startChar": 213,
+        "endLine": 478,
+        "endChar": 214
+      },
+      "revId": "8e157fcc6a8b56ca597d0cacfdd2db0108cb58a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
