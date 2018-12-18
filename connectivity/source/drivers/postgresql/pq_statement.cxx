@@ -936,6 +936,15 @@ sal_Int32 Statement::getUpdateCount(  )
 
 sal_Bool Statement::getMoreResults(  )
 {
+    // The PostgreSQL C interface always returns a single result,
+    // so we will never have multiple ones.
+    // Implicitly close the open resultset (if any) as per spec,
+    // and setup to signal "no more result, neither as resultset,
+    // nor as update count".
+    Reference< XCloseable > lastResultSetHolder = m_lastResultset;
+    if( lastResultSetHolder.is() )
+        lastResultSetHolder->close();
+    m_multipleResultUpdateCount = -1;
     return false;
 }
 
