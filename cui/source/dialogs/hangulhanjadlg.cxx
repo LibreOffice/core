@@ -1222,7 +1222,7 @@ namespace svx
     {
     private:
     protected:
-        std::vector<OUString*> m_vElements;
+        std::vector<OUString> m_vElements;
         sal_uInt16          m_nNumOfEntries;
         // index of the internal iterator, used for First() and Next() methods
         sal_uInt16          m_nAct;
@@ -1233,8 +1233,8 @@ namespace svx
                             ~SuggestionList();
 
         void                Set( const OUString& _rElement, sal_uInt16 _nNumOfElement );
-        bool                Reset( sal_uInt16 _nNumOfElement );
-        const OUString*     Get( sal_uInt16 _nNumOfElement ) const;
+        void                Reset( sal_uInt16 _nNumOfElement );
+        const OUString &    Get( sal_uInt16 _nNumOfElement ) const;
         void                Clear();
 
         const OUString*     First();
@@ -1244,7 +1244,7 @@ namespace svx
     };
 
     SuggestionList::SuggestionList() :
-        m_vElements(MAXNUM_SUGGESTIONS, static_cast<OUString*>(nullptr))
+        m_vElements(MAXNUM_SUGGESTIONS)
     {
         m_nAct = m_nNumOfEntries = 0;
     }
@@ -1256,40 +1256,19 @@ namespace svx
 
     void SuggestionList::Set( const OUString& _rElement, sal_uInt16 _nNumOfElement )
     {
-        bool    bRet = _nNumOfElement < m_vElements.size();
-        if( bRet )
-        {
-            if( m_vElements[_nNumOfElement] != nullptr )
-                *(m_vElements[_nNumOfElement]) = _rElement;
-            else
-            {
-                m_vElements[_nNumOfElement] = new OUString( _rElement );
-                ++m_nNumOfEntries;
-            }
-        }
+        m_vElements[_nNumOfElement] = _rElement;
+        ++m_nNumOfEntries;
     }
 
-    bool SuggestionList::Reset( sal_uInt16 _nNumOfElement )
+    void SuggestionList::Reset( sal_uInt16 _nNumOfElement )
     {
-        bool    bRet = _nNumOfElement < m_vElements.size();
-        if( bRet )
-        {
-            if( m_vElements[_nNumOfElement] != nullptr )
-            {
-                delete m_vElements[_nNumOfElement];
-                m_vElements[_nNumOfElement] = nullptr;
-                --m_nNumOfEntries;
-            }
-        }
-
-        return bRet;
+        m_vElements[_nNumOfElement].clear();
+        --m_nNumOfEntries;
     }
 
-    const OUString* SuggestionList::Get( sal_uInt16 _nNumOfElement ) const
+    const OUString& SuggestionList::Get( sal_uInt16 _nNumOfElement ) const
     {
-        if( _nNumOfElement < m_vElements.size())
-            return m_vElements[_nNumOfElement];
-        return nullptr;
+        return m_vElements[_nNumOfElement];
     }
 
     void SuggestionList::Clear()
@@ -1297,29 +1276,22 @@ namespace svx
         if( m_nNumOfEntries )
         {
             for (auto & vElement : m_vElements)
-            {
-                if( vElement != nullptr )
-                {
-                    delete vElement;
-                    vElement = nullptr;
-                }
-            }
-
+                vElement.clear();
             m_nNumOfEntries = m_nAct = 0;
         }
     }
 
     const OUString* SuggestionList::Next_()
     {
-        const OUString*   pRet = nullptr;
-        while( m_nAct < m_vElements.size() && !pRet )
+        while( m_nAct < m_vElements.size() )
         {
-            pRet = m_vElements[ m_nAct ];
-            if( !pRet )
-                ++m_nAct;
+            auto & s = m_vElements[ m_nAct ];
+            if (!s.isEmpty())
+                return &s;
+            ++m_nAct;
         }
 
-        return pRet;
+        return nullptr;
     }
 
     const OUString* SuggestionList::First()
@@ -1688,9 +1660,7 @@ namespace svx
         OUString  aStr;
         if( m_pSuggestions )
         {
-            const OUString*   p = m_pSuggestions->Get( _nEntryNum );
-            if( p )
-                aStr = *p;
+            aStr = m_pSuggestions->Get( _nEntryNum );
         }
 
         _rEdit.SetText( aStr );
