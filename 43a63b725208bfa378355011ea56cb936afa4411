@@ -106,6 +106,24 @@
       "revId": "43a63b725208bfa378355011ea56cb936afa4411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_704aeb80",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2018-12-18T13:52:21Z",
+      "side": 0,
+      "message": "I\u0027ve checked behavious when \u0027open\u0027 toolbar button is used, and I couldn\u0027t find difference in behaviour with dialog opened through \"File\" -\u003e \"Open\" menu with my change. Except it didn\u0027t crash even without this change.",
+      "parentUuid": "5f4e5783_f07c9bb6",
+      "revId": "43a63b725208bfa378355011ea56cb936afa4411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
