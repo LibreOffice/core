@@ -70,6 +70,24 @@
       "revId": "43a63b725208bfa378355011ea56cb936afa4411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_909e8705",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-18T13:08:53Z",
+      "side": 0,
+      "message": "Actually - can you please move this assert removal into a 2nd patch and explaining the popup menu assert in the commit message. Eventually even mention the parentWindow handling as a TODO for the qt5 backend.\nHaving that just as a by-product of all the other stuff isn\u0027t good.",
+      "parentUuid": "5f4e5783_d0c63f17",
+      "revId": "43a63b725208bfa378355011ea56cb936afa4411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
