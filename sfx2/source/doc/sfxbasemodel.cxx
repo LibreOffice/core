@@ -1040,6 +1040,8 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
 
 void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
 {
+    SfxModelGuard aGuard( *this );
+
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
     if (!pMedium)
     {
