@@ -597,42 +597,42 @@ bool ScDPAggData::IsCalculated() const
 
 double ScDPAggData::GetResult() const
 {
-    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
+    assert( IsCalculated() && "ScDPAggData not calculated" );
 
     return fVal;        // use calculated value
 }
 
 bool ScDPAggData::HasError() const
 {
-    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
+    assert( IsCalculated() && "ScDPAggData not calculated" );
 
     return ( nCount == SC_DPAGG_RESULT_ERROR );
 }
 
 bool ScDPAggData::HasData() const
 {
-    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
+    assert( IsCalculated() && "ScDPAggData not calculated" );
 
     return ( nCount != SC_DPAGG_RESULT_EMPTY );     // values or error
 }
 
 void ScDPAggData::SetResult( double fNew )
 {
-    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
+    assert( IsCalculated() && "ScDPAggData not calculated" );
 
     fVal = fNew;        // don't reset error flag
 }
 
 void ScDPAggData::SetError()
 {
-    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
+    assert( IsCalculated() && "ScDPAggData not calculated" );
 
     nCount = SC_DPAGG_RESULT_ERROR;
 }
 
 void ScDPAggData::SetEmpty( bool bSet )
 {
-    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
+    assert( IsCalculated() && "ScDPAggData not calculated" );
 
     if ( bSet )
         nCount = SC_DPAGG_RESULT_EMPTY;
@@ -643,7 +643,7 @@ void ScDPAggData::SetEmpty( bool bSet )
 double ScDPAggData::GetAuxiliary() const
 {
     // after Calculate, fAux is used as auxiliary value for running totals and reference values
-    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
+    assert( IsCalculated() && "ScDPAggData not calculated" );
 
     return fAux;
 }
@@ -651,7 +651,7 @@ double ScDPAggData::GetAuxiliary() const
 void ScDPAggData::SetAuxiliary( double fNew )
 {
     // after Calculate, fAux is used as auxiliary value for running totals and reference values
-    OSL_ENSURE( IsCalculated(), "ScDPAggData not calculated" );
+    assert( IsCalculated() && "ScDPAggData not calculated" );
 
     fAux = fNew;
 }
