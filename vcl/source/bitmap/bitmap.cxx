@@ -352,7 +352,7 @@ BitmapInfoAccess* Bitmap::AcquireInfoAccess()
 
     if( !*pInfoAccess )
     {
-        return nullptr;;
+        return nullptr;
     }
 
     return pInfoAccess.release();

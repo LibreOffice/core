@@ -3313,7 +3313,7 @@ private:
             else
             {
                 auto nMainLen = gtk_notebook_get_n_pages(m_pNotebook);
-                return nOverFlowIndex + nMainLen;;
+                return nOverFlowIndex + nMainLen;
             }
         }
     }
