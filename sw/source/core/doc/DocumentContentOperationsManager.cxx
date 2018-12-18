@@ -3693,7 +3693,6 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     assert(m_rDoc.getIDocumentRedlineAccess().IsRedlineOn());
 
     RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
-    m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
 
     if (*rPam.GetPoint() == *rPam.GetMark())
     {
@@ -3750,9 +3749,10 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     std::vector<std::unique_ptr<SwUndoRedlineDelete>> undos;
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        /* please don't translate -- for cultural reasons this comment is protected
-           until the redline implementation is finally fixed some day */
-        //JP 06.01.98: MUSS noch optimiert werden!!!
+        // this should no longer happen in calls from the UI but maybe via API
+        // (randomTest and testTdf54819 triggers it)
+        SAL_WARN_IF((eOld & RedlineFlags::ShowMask) != RedlineFlags::ShowMask,
+                "sw.core", "redlines will be moved in DeleteAndJoin");
         m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
             RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
         for (SwRangeRedline * pRedline : redlines)
@@ -3811,7 +3811,6 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         {
             m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
         }
-        //JP 06.01.98: MUSS noch optimiert werden!!!
         m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
     }
     return true;
@@ -4075,9 +4074,12 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
         {
             RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
-            m_rDoc.GetDocumentRedlineManager().checkRedlining(eOld);
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
+                // this should no longer happen in calls from the UI but maybe via API
+                SAL_WARN_IF((eOld & RedlineFlags::ShowMask) != RedlineFlags::ShowMask,
+                        "sw.core", "redlines will be moved in ReplaceRange");
+
                 m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
@@ -4086,7 +4088,6 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                         OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
                         ::sw::mark::InsertMode::New);
 
-                //JP 06.01.98: MUSS noch optimiert werden!!!
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
                     RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
 
@@ -4186,7 +4187,6 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 rPam.GetPoint()->nNode = 0;
                 rPam.GetPoint()->nContent = rIdx;
                 *rPam.GetMark() = *rPam.GetPoint();
-                //JP 06.01.98: MUSS noch optimiert werden!!!
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetMarkPos();

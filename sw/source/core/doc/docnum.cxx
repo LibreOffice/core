@@ -2272,10 +2272,12 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
             }
 
             RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
-            GetDocumentRedlineManager().checkRedlining(eOld);
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                // Still NEEDS to be optimized (even after 14 years)
+                // this should no longer happen in calls from the UI but maybe via API
+                SAL_WARN_IF((eOld & RedlineFlags::ShowMask) != RedlineFlags::ShowMask,
+                    "sw.core", "redlines will be moved in DeleteAndJoin");
+
                 getIDocumentRedlineAccess().SetRedlineFlags(
                    RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
                 SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, SwUndoId::DELETE));
@@ -2296,7 +2298,6 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
             aPam.GetBound(false).nContent.Assign(aPam.GetBound(false).nNode.GetNode().GetContentNode(), 0);
             sw::UpdateFramesForAddDeleteRedline(*this, aPam);
 
-            // Still NEEDS to be optimized!
             getIDocumentRedlineAccess().SetRedlineFlags( eOld );
             GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             getIDocumentState().SetModified();
