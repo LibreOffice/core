@@ -177,7 +177,7 @@ namespace sfx2
         virtual                 ~FileDialogHelper_Impl() override;
 
         ErrCode                 execute( std::vector<OUString>& rpURLList,
-                                         SfxItemSet *&   rpSet,
+                                         std::unique_ptr<SfxItemSet>& rpSet,
                                          OUString&       rFilter );
         ErrCode                 execute();
 
