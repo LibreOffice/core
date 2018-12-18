@@ -1603,6 +1603,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell)
         return;
+    const bool bNoWatermark = rWatermark.GetText().isEmpty();
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
@@ -1618,7 +1619,12 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
         bool bHeaderIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
         if (!bHeaderIsOn)
+        {
+            if (bNoWatermark)
+                continue; // the style doesn't have any watermark - no need to do anything
+
             xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
+        }
 
         // backup header height
         bool bDynamicHeight = true;
