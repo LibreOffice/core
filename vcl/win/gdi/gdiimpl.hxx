@@ -59,6 +59,10 @@ private:
     HBRUSH SearchStockBrush(COLORREF nBrushColor);
     HBRUSH MakeBrush(Color nColor);
     void ResetBrush(HBRUSH hNewBrush);
+
+    void InvertTrackFrame(long nX, long nY, long nWidth, long nHeight);
+    void InvertN50(long nX, long nY, long nWidth, long nHeight);
+    void InvertNone(long nX, long nY, long nWidth, long nHeight);
 public:
 
     explicit WinSalGraphicsImpl(WinSalGraphics& rParent);

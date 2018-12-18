@@ -853,47 +853,73 @@ Color WinSalGraphicsImpl::getPixel( long nX, long nY )
                               GetBValue( aWinCol ) );
 }
 
+namespace
+{
+
+HBRUSH Get50PercentBrush()
+{
+    SalData* pSalData = GetSalData();
+
+    if ( !pSalData->mh50Brush )
+    {
+        if ( !pSalData->mh50Bmp )
+            pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
+        pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
+    }
+
+    return pSalData->mh50Brush;
+}
+
+} // namespace
+
 void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
     if ( nFlags & SalInvert::TrackFrame )
-    {
-        HPEN    hDotPen = CreatePen( PS_DOT, 0, 0 );
-        HPEN    hOldPen = SelectPen( mrParent.getHDC(), hDotPen );
-        HBRUSH  hOldBrush = SelectBrush( mrParent.getHDC(), GetStockBrush( NULL_BRUSH ) );
-        int     nOldROP = SetROP2( mrParent.getHDC(), R2_NOT );
-
-        Rectangle( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nX+nWidth), static_cast<int>(nY+nHeight) );
-
-        SetROP2( mrParent.getHDC(), nOldROP );
-        SelectPen( mrParent.getHDC(), hOldPen );
-        SelectBrush( mrParent.getHDC(), hOldBrush );
-        DeletePen( hDotPen );
-    }
+        InvertTrackFrame(nX, nY, nWidth, nHeight);
     else if ( nFlags & SalInvert::N50 )
-    {
-        SalData* pSalData = GetSalData();
-        if ( !pSalData->mh50Brush )
-        {
-            if ( !pSalData->mh50Bmp )
-                pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
-            pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
-        }
-
-        COLORREF nOldTextColor = ::SetTextColor( mrParent.getHDC(), 0 );
-        HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), pSalData->mh50Brush );
-        PatBlt( mrParent.getHDC(), nX, nY, nWidth, nHeight, PATINVERT );
-        ::SetTextColor( mrParent.getHDC(), nOldTextColor );
-        SelectBrush( mrParent.getHDC(), hOldBrush );
-    }
+        InvertN50(nX, nY, nWidth, nHeight);
     else
-    {
-         RECT aRect;
-         aRect.left      = static_cast<int>(nX);
-         aRect.top       = static_cast<int>(nY);
-         aRect.right     = static_cast<int>(nX)+nWidth;
-         aRect.bottom    = static_cast<int>(nY)+nHeight;
-         ::InvertRect( mrParent.getHDC(), &aRect );
-    }
+        InvertNone(nX, nY, nWidth, nHeight);
+}
+
+void WinSalGraphicsImpl::InvertTrackFrame(long nX, long nY, long nWidth, long nHeight)
+{
+    HPEN    hDotPen = CreatePen( PS_DOT, 0, 0 );
+    HPEN    hOldPen = SelectPen( mrParent.getHDC(), hDotPen );
+    HBRUSH  hOldBrush = SelectBrush( mrParent.getHDC(), GetStockBrush( NULL_BRUSH ) );
+    int     nOldROP = SetROP2( mrParent.getHDC(), R2_NOT );
+
+    Rectangle(mrParent.getHDC(),
+              static_cast<int>(nX),
+              static_cast<int>(nY),
+              static_cast<int>(nX+nWidth),
+              static_cast<int>(nY+nHeight));
+
+    SetROP2( mrParent.getHDC(), nOldROP );
+    SelectPen( mrParent.getHDC(), hOldPen );
+    SelectBrush( mrParent.getHDC(), hOldBrush );
+    DeletePen( hDotPen );
+}
+
+void WinSalGraphicsImpl::InvertN50(long nX, long nY, long nWidth, long nHeight)
+{
+    COLORREF nOldTextColor = ::SetTextColor( mrParent.getHDC(), 0 );
+    HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), Get50PercentBrush() );
+
+    PatBlt( mrParent.getHDC(), nX, nY, nWidth, nHeight, PATINVERT );
+
+    ::SetTextColor( mrParent.getHDC(), nOldTextColor );
+    SelectBrush( mrParent.getHDC(), hOldBrush );
+}
+
+void WinSalGraphicsImpl::InvertNone(long nX, long nY, long nWidth, long nHeight)
+{
+     RECT aRect;
+     aRect.left      = static_cast<int>(nX);
+     aRect.top       = static_cast<int>(nY);
+     aRect.right     = static_cast<int>(nX)+nWidth;
+     aRect.bottom    = static_cast<int>(nY)+nHeight;
+     ::InvertRect( mrParent.getHDC(), &aRect );
 }
 
 void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
@@ -912,15 +938,7 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
 
         if ( nSalFlags & SalInvert::N50 )
         {
-            SalData* pSalData = GetSalData();
-            if ( !pSalData->mh50Brush )
-            {
-                if ( !pSalData->mh50Bmp )
-                    pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
-                pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
-            }
-
-            hBrush = pSalData->mh50Brush;
+            hBrush = Get50PercentBrush();
         }
         else
             hBrush = GetStockBrush( BLACK_BRUSH );
