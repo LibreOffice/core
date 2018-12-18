@@ -988,7 +988,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextObj \
     qadevOOo/tests/java/mod/_sc/ScModelObj \
     qadevOOo/tests/java/mod/_sc/ScNamedRangesObj \
-    qadevOOo/tests/java/mod/_sc/ScScenariosObj \
     qadevOOo/tests/java/mod/_sc/ScShapeObj \
     qadevOOo/tests/java/mod/_sc/ScSheetLinkObj \
     qadevOOo/tests/java/mod/_sc/ScSheetLinksObj \
