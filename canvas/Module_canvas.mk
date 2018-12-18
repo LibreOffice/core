@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,canvas,\
 	Library_canvastools \
 	Library_simplecanvas \
 	Library_vclcanvas \
+	$(if $(DISABLE_GUI),,Executable_canvasdemo) \
 ))
 
 ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)
