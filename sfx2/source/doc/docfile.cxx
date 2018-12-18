@@ -885,7 +885,8 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const OUString& aD
 
     if ( xHandler.is() && ( bIsLoading || !bHandleSysLocked || bOwnLock ) )
     {
-        OUString aDocumentURL = GetURLObject().GetLastName();
+        OUString aDocumentURL
+            = GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
         OUString aInfo;
         ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl;
 
