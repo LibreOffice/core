@@ -4487,7 +4487,7 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     // don't do early return if there are no redlines:
     // Show->Hide must init hidden number trees
     // Hide->Show may be called after all redlines have been deleted but there
-    //            may still be MergedParas because those aren't deleted yet...
+    //            may still be MergedPara because those aren't deleted yet...
 #if 0
     if (!bHideRedlines
         && rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
