@@ -148,19 +148,18 @@ namespace io_acceptor
             OUString error = "io.acceptor: pipe already closed" + m_sPipeName;
             throw ConnectionSetupException( error );
         }
-        PipeConnection *pConn = new PipeConnection( m_sConnectionDescription );
+        std::unique_ptr<PipeConnection> pConn(new PipeConnection( m_sConnectionDescription ));
 
         oslPipeError status = pipe.accept( pConn->m_pipe );
 
         if( m_bClosed )
         {
             // stopAccepting was called !
-            delete pConn;
             return Reference < XConnection >();
         }
         else if( osl_Pipe_E_None == status )
         {
-            return Reference < XConnection > ( static_cast<XConnection *>(pConn) );
+            return Reference < XConnection > ( static_cast<XConnection *>(pConn.release()) );
         }
         else
         {
