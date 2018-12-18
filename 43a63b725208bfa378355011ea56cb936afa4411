@@ -16,6 +16,24 @@
       "revId": "43a63b725208bfa378355011ea56cb936afa4411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_90aa0783",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001976
+      },
+      "writtenOn": "2018-12-18T11:17:53Z",
+      "side": 0,
+      "message": "I\u0027m starting LO with following command after building it:\n\nLC_ALL\u003dC SAL_LOG\u003d\"-INFO\" SAL_USE_VCLPLUGIN\u003d\"qt5\" ./soffice --norestore --impress\n\nAfter it loads and \"Select a Template\" dialog is shown, I press cancel button. After that I open menu \"File\" -\u003e \"Open\", and it crashes.\n\nIt behaves same way if I start it without \"--impress\" parameter and then create new presentation, close dialog and use same menu.\n\nIt also behaves same way if I use \"--writer\" instead of \"--impress\" and open menu \"File\" -\u003e \"Open\".\n\nThis code is used only by \"qt5\" backend, even \"kde5\" backend uses different code (it uses \"KDE5FilePicker::execute\"), thus no other backend is affected.\n\nAs you can see on line 193, code using pWindow is under a condition, thus assert looks excessive. Or condition is excessive.\n\nAnd what\u0027s wrong with free floating file picker dialog?",
+      "parentUuid": "5f4e5783_b032a3a6",
+      "revId": "43a63b725208bfa378355011ea56cb936afa4411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
