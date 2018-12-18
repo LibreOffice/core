@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_50d00ff8",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-12-18T11:47:59Z",
+      "side": 1,
+      "message": "I wonder what should happen here",
+      "revId": "48fe0a0c7e930e175a4b3b107abbd79cff2c752d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_70eb0bb0",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-12-18T11:47:59Z",
+      "side": 1,
+      "message": "Hmm, so if that\u0027s not needed - remove it?",
+      "revId": "48fe0a0c7e930e175a4b3b107abbd79cff2c752d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
