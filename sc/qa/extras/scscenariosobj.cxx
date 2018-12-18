@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/sheet/xscenarios.hxx>
@@ -15,6 +16,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XScenario.hpp>
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -24,6 +26,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <unonames.hxx>
+#include <cppu/unotype.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -35,6 +38,7 @@ using namespace com::sun::star;
 namespace sc_apitest
 {
 class ScScenariosObj : public CalcUnoApiTest,
+                       public apitest::XElementAccess,
                        public apitest::XEnumerationAccess,
                        public apitest::XIndexAccess,
                        public apitest::XScenarios
@@ -47,6 +51,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScScenariosObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -67,6 +75,7 @@ private:
 
 ScScenariosObj::ScScenariosObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<sheet::XScenario>::get())
     , XIndexAccess(1)
 {
 }
