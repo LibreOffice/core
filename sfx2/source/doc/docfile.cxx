@@ -986,8 +986,7 @@ OUString tryForeignLockfiles(const OUString& sDocURL)
 }
 }
 
-SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const OUString& aDocURL,
-                                                              const LockFileEntry& aData,
+SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntry& aData,
                                                               bool bIsLoading, bool bOwnLock,
                                                               bool bHandleSysLocked)
 {
@@ -1028,9 +1027,10 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const OUString& aD
             else
                 aInfo = aData[LockFileComponent::SYSUSERNAME];
 
-            if (aInfo.isEmpty() && !aDocURL.isEmpty())
+            if (aInfo.isEmpty() && !GetURLObject().isAnyKnownWebDAVScheme())
                 // Try to get name of user who has locked the file using other applications
-                aInfo = tryForeignLockfiles(aDocURL);
+                aInfo = tryForeignLockfiles(
+                    GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
             if ( !aInfo.isEmpty() && !aData[LockFileComponent::EDITTIME].isEmpty() )
                 aInfo += " ( " + aData[LockFileComponent::EDITTIME] + " )";
@@ -1265,7 +1265,8 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
 
                             if ( !bResult && !bNoUI )
                             {
-                                bUIStatus = ShowLockedDocumentDialog("", aLockData, bLoading, false , true );
+                                bUIStatus
+                                    = ShowLockedDocumentDialog(aLockData, bLoading, false, true);
                             }
                         }
                         catch( ucb::InteractiveNetworkWriteException& )
@@ -1488,8 +1489,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                                 {
                                     if (!bNoUI)
                                         bUIStatus = ShowLockedDocumentDialog(
-                                            pImpl->m_aLogicName, aData, bLoading, bOwnLock,
-                                            bHandleSysLocked);
+                                            aData, bLoading, bOwnLock, bHandleSysLocked);
                                     else if (bLoading && bTryIgnoreLockFile && !bHandleSysLocked)
                                         bUIStatus = ShowLockResult::Succeeded;
 
