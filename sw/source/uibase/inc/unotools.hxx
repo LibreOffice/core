@@ -24,6 +24,8 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/customweld.hxx>
 #include "actctrl.hxx"
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -99,6 +101,55 @@ public:
     void CreatePopup(const Point& rPt);
 
     static void     CreateErrorMessage();
+};
+
+class SW_DLLPUBLIC OneExampleFrame : public weld::CustomWidgetController
+{
+    css::uno::Reference< css::awt::XControl >         m_xControl;
+    css::uno::Reference< css::frame::XModel >         m_xModel;
+    css::uno::Reference< css::frame::XController >    m_xController;
+    css::uno::Reference< css::text::XTextCursor >     m_xCursor;
+
+    Idle            m_aLoadedIdle;
+    Link<OneExampleFrame&,void> m_aInitializedLink;
+
+    OUString        m_sArgumentURL;
+
+    SwView* const    m_pModuleView;
+
+    sal_uInt32 const m_nStyleFlags;
+
+    bool            m_bIsInitialized;
+    bool            m_bServiceAvailable;
+
+    static  bool    bShowServiceNotAvailableMessage;
+
+    DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( PopupHdl, Menu*, bool );
+
+    SAL_DLLPRIVATE void  CreateControl();
+    SAL_DLLPRIVATE void  DisposeControl();
+
+public:
+    OneExampleFrame(sal_uInt32 nStyleFlags,
+                    const Link<OneExampleFrame&,void>* pInitalizedLink,
+                    const OUString* pURL = nullptr);
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
+    ~OneExampleFrame();
+
+    css::uno::Reference< css::frame::XModel > &       GetModel()      {return m_xModel;}
+    css::uno::Reference< css::frame::XController > &  GetController() {return m_xController;}
+    css::uno::Reference< css::text::XTextCursor > &   GetTextCursor() {return m_xCursor;}
+
+    void ClearDocument();
+
+    bool IsInitialized() const {return m_bIsInitialized;}
+    bool IsServiceAvailable() const {return m_bServiceAvailable;}
+
+    void CreatePopup(const Point& rPt);
+
+    void CreateErrorMessage();
 };
 
 #endif
