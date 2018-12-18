@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/rpath.patch \
 	external/libetonyek/warnings.patch \
 	external/libetonyek/initial-creator.patch.1 \
+	external/libetonyek/forcepoint.parsepath.null.deref.patch \
 ))
 
 ifneq ($(OS),MACOSX)
