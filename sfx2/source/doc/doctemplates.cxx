@@ -158,7 +158,7 @@ struct NamePair_Impl
 class DocTemplates_EntryData_Impl;
 class GroupData_Impl;
 
-typedef vector< GroupData_Impl* > GroupList_Impl;
+typedef vector< std::unique_ptr<GroupData_Impl> > GroupList_Impl;
 
 
 class TplTaskEnvironment : public ::cppu::WeakImplHelper< ucb::XCommandEnvironment >
@@ -1162,7 +1162,7 @@ void SfxDocTplService_Impl::doUpdate()
     }
 
     // now check the list
-    for(GroupData_Impl* pGroup : aGroupList)
+    for(std::unique_ptr<GroupData_Impl>& pGroup : aGroupList)
     {
         if ( pGroup->getInUse() )
         {
@@ -1183,7 +1183,7 @@ void SfxDocTplService_Impl::doUpdate()
                         if ( pData->getInHierarchy() )
                             removeFromHierarchy( pData ); // delete entry in hierarchy
                         else
-                            addToHierarchy( pGroup, pData ); // add entry to hierarchy
+                            addToHierarchy( pGroup.get(), pData ); // add entry to hierarchy
                     }
                     else if ( pData->getUpdateType() ||
                               pData->getUpdateLink() )
@@ -1194,13 +1194,11 @@ void SfxDocTplService_Impl::doUpdate()
             }
             else
             {
-                addGroupToHierarchy( pGroup ); // add group to hierarchy
+                addGroupToHierarchy( pGroup.get() ); // add group to hierarchy
             }
         }
         else
-            removeFromHierarchy( pGroup ); // delete group from hierarchy
-
-        delete pGroup;
+            removeFromHierarchy( pGroup.get() ); // delete group from hierarchy
     }
     aGroupList.clear();
 
@@ -2343,7 +2341,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
         GroupData_Impl *pGroup = new GroupData_Impl( rTitle );
         pGroup->setHierarchy( true );
         pGroup->setHierarchyURL( rOwnURL );
-        rList.push_back( pGroup );
+        rList.push_back( std::unique_ptr<GroupData_Impl>(pGroup) );
 
         uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
@@ -2405,11 +2403,11 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
         return;
 
     GroupData_Impl* pGroup = nullptr;
-    for (GroupData_Impl* i : rList)
+    for (std::unique_ptr<GroupData_Impl>& i : rList)
     {
         if ( i->getTitle() == aTitle )
         {
-            pGroup = i;
+            pGroup = i.get();
             break;
         }
     }
@@ -2417,7 +2415,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     if ( !pGroup )
     {
         pGroup = new GroupData_Impl( aTitle );
-        rList.push_back( pGroup );
+        rList.push_back( std::unique_ptr<GroupData_Impl>(pGroup) );
     }
 
     if ( bWriteableGroup )
