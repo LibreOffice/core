@@ -677,9 +677,11 @@ int cmd, void * /*argp*/, int /*argv*/)
 }
 
 
-HWPDrawingObject::HWPDrawingObject()
+HWPDrawingObject::HWPDrawingObject():
+    type(0), offset{0, 0}, offset2{0, 0}, extent{0, 0}, vrect{0, 0, 0, 0}
 {
-    memset(this, 0, sizeof(HWPDrawingObject));
+    memset(&property, 0, sizeof property);
+    memset(&u, 0, sizeof u);
     index = ++count;
 }
 
