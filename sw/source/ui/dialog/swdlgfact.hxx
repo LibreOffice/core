@@ -513,7 +513,15 @@ public:
 class SwMultiTOXTabDialog;
 class AbstractMultiTOXTabDialog_Impl : public AbstractMultiTOXTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractMultiTOXTabDialog_Impl,SwMultiTOXTabDialog)
+protected:
+    std::shared_ptr<SwMultiTOXTabDialog> m_xDlg;
+public:
+    explicit AbstractMultiTOXTabDialog_Impl(std::unique_ptr<SwMultiTOXTabDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) override;
     virtual CurTOXType          GetCurrentTOXType() const override ;
     virtual SwTOXDescription&   GetTOXDescription(CurTOXType eTOXTypes) override;
     //from SfxTabDialog
@@ -700,7 +708,7 @@ public:
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(
-                                                vcl::Window* pParent, const SfxItemSet& rSet,
+                                                weld::Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX,
                                                 bool bGlobal) override;
