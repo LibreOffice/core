@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_d513d1b7",
+        "filename": "sd/source/core/CustomAnimationEffect.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-18T07:21:10Z",
+      "side": 1,
+      "message": "this is short-circuit evaluation, so it will skip calling checkForText if bCheck is already true, wheres the original code would always call checkForText. Are you sure that is ok?",
+      "revId": "3c8709cf44dea07ca4554c5776bcc8cf9718d15a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_3524650d",
+        "filename": "sd/source/core/CustomAnimationEffect.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3206,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-18T07:21:10Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "3c8709cf44dea07ca4554c5776bcc8cf9718d15a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_f54b6dad",
+        "filename": "sd/source/filter/ppt/propread.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-18T07:21:10Z",
+      "side": 1,
+      "message": "oh nice, this is so much clearer now",
+      "revId": "3c8709cf44dea07ca4554c5776bcc8cf9718d15a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
