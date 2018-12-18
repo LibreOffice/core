@@ -905,7 +905,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl, SvxTPFilter*, void)
     if (pFilterTP->IsAction())
         m_sFilterAction = pFilterTP->GetLbAction()->GetSelectedEntry();
     else
-        m_sFilterAction = aEmptyOUStr;
+        m_sFilterAction.clear();
 
     Init();
 }

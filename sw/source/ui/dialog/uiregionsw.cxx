@@ -997,9 +997,9 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, Button *, pButton, void )
                 pSectRepr->SetContent(false);
             else
             {
-                pSectRepr->SetFile(aEmptyOUStr);
-                pSectRepr->SetSubRegion(aEmptyOUStr);
-                pSectRepr->GetSectionData().SetLinkFilePassword(aEmptyOUStr);
+                pSectRepr->SetFile(OUString());
+                pSectRepr->SetSubRegion(OUString());
+                pSectRepr->GetSectionData().SetLinkFilePassword(OUString());
             }
 
             pEntry = m_pTree->NextSelected(pEntry);
@@ -1178,7 +1178,7 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit&, rEdit, void )
                     aAbs, sTmp, URIHelper::GetMaybeFileHdl() );
             }
             pSectRepr->SetFile( sTmp );
-            pSectRepr->GetSectionData().SetLinkFilePassword( aEmptyOUStr );
+            pSectRepr->GetSectionData().SetLinkFilePassword(OUString());
         }
     }
     else
@@ -1810,7 +1810,10 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
         }
     }
     else
-        m_sFilterName = m_sFilePasswd = aEmptyOUStr;
+    {
+        m_sFilterName.clear();
+        m_sFilePasswd.clear();
+    }
 }
 
 SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage(TabPageParent pParent, const SfxItemSet &rAttrSet)

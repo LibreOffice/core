@@ -1334,7 +1334,7 @@ void SwDoc::DelNumRules(const SwPaM& rPam, SwRootFrame const*const pLayout)
 
     SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
 
-    SwNumRuleItem aEmptyRule( aEmptyOUStr );
+    SwNumRuleItem aEmptyRule;
     const SwNode* pOutlNd = nullptr;
     for( ; nStt <= nEnd; ++nStt )
     {

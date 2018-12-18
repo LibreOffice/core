@@ -35,7 +35,7 @@
 static sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
                              sal_Int32 nPos )
 {
-    rPart = aEmptyOUStr;
+    rPart.clear();
     sal_Int32 nLen = rContent.getLength();
     if( nPos >= nLen )
     {
@@ -182,7 +182,7 @@ void SwHTMLParser::InsertFootEndNote( const OUString& rName, bool bEndNote,
     m_pFootEndNoteImpl->sName = m_pFootEndNoteImpl->sName.toAsciiUpperCase();
     m_pFootEndNoteImpl->bEndNote = bEndNote;
     m_pFootEndNoteImpl->bFixed = bFixed;
-    m_pFootEndNoteImpl->sContent = aEmptyOUStr;
+    m_pFootEndNoteImpl->sContent.clear();
 }
 
 void SwHTMLParser::FinishFootEndNote()
@@ -201,8 +201,8 @@ void SwHTMLParser::FinishFootEndNote()
     // In header and footer no footnotes can be inserted.
     if (pTextFootnote)
         m_pFootEndNoteImpl->aTextFootnotes.push_back(SwHTMLTextFootnote(m_pFootEndNoteImpl->sName,pTextFootnote));
-    m_pFootEndNoteImpl->sName = aEmptyOUStr;
-    m_pFootEndNoteImpl->sContent = aEmptyOUStr;
+    m_pFootEndNoteImpl->sName.clear();
+    m_pFootEndNoteImpl->sContent.clear();
     m_pFootEndNoteImpl->bFixed = false;
 }
 

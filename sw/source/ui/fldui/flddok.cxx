@@ -374,7 +374,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, ListBox&, void)
                         m_pValueED->SetText(
                             OUString::number(nOff + 1) );
                     else
-                        m_pValueED->SetText(aEmptyOUStr);
+                        m_pValueED->SetText(OUString());
                 }
                 else
                     m_pValueED->SetText(static_cast<SwPageNumberField*>(GetCurField())->GetUserString());
@@ -550,7 +550,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, FormatHdl, ListBox&, void)
             m_pValueFT->SetText( sNewText );
 
         if (sOldText != m_pValueFT->GetText())
-            m_pValueED->SetText( aEmptyOUStr );
+            m_pValueED->SetText(OUString());
     }
 }
 
@@ -640,7 +640,7 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
         m_pLevelED->IsValueChangedFromSaved() ||
         m_pDateOffsetED->IsValueChangedFromSaved())
     {
-        InsertField( nTypeId, nSubType, aEmptyOUStr, aVal, nFormat, ' ', m_pNumFormatLB->IsAutomaticLanguage() );
+        InsertField(nTypeId, nSubType, OUString(), aVal, nFormat, ' ', m_pNumFormatLB->IsAutomaticLanguage());
     }
 
     return false;

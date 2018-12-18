@@ -479,8 +479,8 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
     }
     else
     {
-        SvxMacro aStartMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
-        SvxMacro aEndMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
+        SvxMacro aStartMacro(OUString(), OUString(), STARBASIC);
+        SvxMacro aEndMacro(OUString(), OUString(), STARBASIC);
         GetMacros( aShortName, aStartMacro, aEndMacro, pGlossary.get() );
 
         // StartAction must not be before HasSelection and DelRight,
@@ -527,8 +527,8 @@ bool SwGlossaryHdl::InsertGlossary(const OUString &rName)
         return false;
     }
 
-    SvxMacro aStartMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
-    SvxMacro aEndMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
+    SvxMacro aStartMacro(OUString(), OUString(), STARBASIC);
+    SvxMacro aEndMacro(OUString(), OUString(), STARBASIC);
     GetMacros( rName, aStartMacro, aEndMacro, pGlos );
 
     // StartAction must not be before HasSelection and DelRight,

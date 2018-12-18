@@ -642,7 +642,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         // Insert fly frame. If the are columns, the fly frame's name is not
         // the sections name but a generated one.
-        OUString aFlyName( aEmptyOUStr );
+        OUString aFlyName;
         if( nCols < 2 )
         {
             aFlyName = aId;

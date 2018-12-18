@@ -607,7 +607,7 @@ void SwTextFormatColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLe
         {
             if ( pDerivedTextFormatColl->GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::DEFAULT )
             {
-                SwNumRuleItem aItem(aEmptyOUStr);
+                SwNumRuleItem aItem;
                 pDerivedTextFormatColl->SetFormatAttr( aItem );
             }
             if ( pDerivedTextFormatColl->GetItemState( RES_PARATR_OUTLINELEVEL, false ) == SfxItemState::DEFAULT )

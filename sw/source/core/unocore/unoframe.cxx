@@ -2462,7 +2462,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                 SwFlyFrameFormat& rFlyFormat = dynamic_cast<SwFlyFrameFormat&>(*pFormat);
                 // assure that <SdrObject> instance exists.
                 GetOrCreateSdrObject(rFlyFormat);
-                rFlyFormat.GetDoc()->SetFlyFrameTitle(rFlyFormat, aEmptyOUStr);
+                rFlyFormat.GetDoc()->SetFlyFrameTitle(rFlyFormat, OUString());
             }
             // New attribute Description
             else if( FN_UNO_DESCRIPTION == pEntry->nWID )
@@ -2470,7 +2470,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                 SwFlyFrameFormat& rFlyFormat = dynamic_cast<SwFlyFrameFormat&>(*pFormat);
                 // assure that <SdrObject> instance exists.
                 GetOrCreateSdrObject(rFlyFormat);
-                rFlyFormat.GetDoc()->SetFlyFrameDescription(rFlyFormat, aEmptyOUStr);
+                rFlyFormat.GetDoc()->SetFlyFrameDescription(rFlyFormat, OUString());
             }
             else
             {

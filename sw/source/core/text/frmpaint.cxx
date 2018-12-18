@@ -498,7 +498,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 {
                     pFnt->SetFamily( FAMILY_DONTKNOW, SwFontScript::Latin );
                     pFnt->SetName( numfunc::GetDefBulletFontname(), SwFontScript::Latin );
-                    pFnt->SetStyleName( aEmptyOUStr, SwFontScript::Latin );
+                    pFnt->SetStyleName(OUString(), SwFontScript::Latin);
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SwFontScript::Latin );
                 }
                 pFnt->SetVertical( 0, IsVertical() );

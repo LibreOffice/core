@@ -353,7 +353,7 @@ void SwCSS1Parser::SetTableTextColl( bool bHeader )
     SvxCSS1MapEntry *pStyleEntry = GetTag( sTag );
     if( pStyleEntry )
     {
-        pColl = GetTextFormatColl( nPoolId, aEmptyOUStr );
+        pColl = GetTextFormatColl(nPoolId, OUString());
         SetTextCollAttrs( pColl, pStyleEntry->GetItemSet(),
                          pStyleEntry->GetPropertyInfo(), this );
     }
@@ -363,7 +363,7 @@ void SwCSS1Parser::SetTableTextColl( bool bHeader )
     if( pStyleEntry )
     {
         if( !pColl )
-            pColl = GetTextFormatColl( nPoolId, aEmptyOUStr );
+            pColl = GetTextFormatColl(nPoolId, OUString());
         SetTextCollAttrs( pColl, pStyleEntry->GetItemSet(),
                          pStyleEntry->GetPropertyInfo(), this );
     }
@@ -893,7 +893,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 nPoolCollId = RES_POOLCOLL_FOOTNOTE;
 
             if( nPoolCollId )
-                aClass = aEmptyOUStr;
+                aClass.clear();
             else
                 nPoolCollId = RES_POOLCOLL_TEXT;
         }
@@ -978,7 +978,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             // either not a composed selector or a X:first-line { float: left; ... }
 
             // search resp. create the style
-            SwTextFormatColl *pColl = GetTextFormatColl( nPoolCollId, aEmptyOUStr );
+            SwTextFormatColl* pColl = GetTextFormatColl(nPoolCollId, OUString());
             SwTextFormatColl* pParentColl = nullptr;
             if( !aClass.isEmpty() )
             {
@@ -1072,7 +1072,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     if( pNext )
         return;
 
-    SwCharFormat *pCFormat = GetChrFormat( nToken2, aEmptyOUStr );
+    SwCharFormat* pCFormat = GetChrFormat(nToken2, OUString());
     if( pCFormat )
     {
         SwCharFormat *pParentCFormat = nullptr;
@@ -1252,12 +1252,12 @@ SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( sal_uInt16 nTextColl,
         if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdendnote) )
         {
             nTextColl = RES_POOLCOLL_ENDNOTE;
-            aClass = aEmptyOUStr;
+            aClass.clear();
         }
         else if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
         {
             nTextColl = RES_POOLCOLL_FOOTNOTE;
-            aClass = aEmptyOUStr;
+            aClass.clear();
         }
     }
 
@@ -1798,7 +1798,7 @@ bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
     SwPageDesc *pMasterPageDesc =
         m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
-    SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyOUStr, false );
+    SvxCSS1MapEntry* pPageEntry = GetPage(OUString(), false);
     if( pPageEntry )
     {
         // @page (affects all already existing pages)

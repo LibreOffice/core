@@ -1007,7 +1007,7 @@ void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
 
     m_xBackgroundBrush.reset(m_pParser->CreateBrushItem(
                     rOptions.bBGColor ? &(rOptions.aBGColor) : nullptr,
-                    rOptions.aBGImage, aEmptyOUStr, aEmptyOUStr, aEmptyOUStr));
+                    rOptions.aBGImage, OUString(), OUString(), OUString()));
 
     m_pContext = nullptr;
     m_xParentContents.reset();
@@ -2998,7 +2998,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable const *pCurTabl
         nToken = HtmlTokenId::TABLEDATA_ON;
         nColl = RES_POOLCOLL_TABLE;
     }
-    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, aEmptyOUStr, true));
+    std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken, nColl, OUString(), true));
     if( SvxAdjust::End != eAdjust )
         rParser.InsertAttr(&rParser.m_xAttrTab->pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST),
                            xCntxt.get());

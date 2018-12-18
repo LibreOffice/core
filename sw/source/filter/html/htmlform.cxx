@@ -243,7 +243,7 @@ public:
     void SetShape( const uno::Reference< drawing::XShape >& r ) { m_xShape = r; }
 
     OUString& GetText() { return m_sText; }
-    void EraseText() { m_sText = aEmptyOUStr; }
+    void EraseText() { m_sText.clear(); }
 
     std::vector<OUString>& GetStringList() { return m_aStringList; }
     void EraseStringList()
@@ -2449,7 +2449,7 @@ void SwHTMLParser::InsertSelectOption()
     }
 
     sal_uInt16 nEntryCnt = m_pFormImpl->GetStringList().size();
-    m_pFormImpl->GetStringList().push_back(aEmptyOUStr);
+    m_pFormImpl->GetStringList().push_back(OUString());
     m_pFormImpl->GetValueList().push_back(aValue);
     if( m_bLBEntrySelected )
     {
