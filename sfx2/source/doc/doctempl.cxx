@@ -224,7 +224,7 @@ public:
     RegionData_Impl*    GetRegion( size_t nIndex ) const;
 
     bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
-    bool            InsertRegion( RegionData_Impl *pData, size_t nPos );
+    bool            InsertRegion( std::unique_ptr<RegionData_Impl> pData, size_t nPos );
     const OUString& GetRootURL() const { return maRootURL; }
 
     const uno::Reference< XDocumentTemplates >& getDocTemplates() { return mxTemplates; }
@@ -1021,14 +1021,7 @@ bool SfxDocumentTemplates::InsertDir
 
     if ( xTemplates->addGroup( rText ) )
     {
-        RegionData_Impl* pNewRegion = new RegionData_Impl( pImp.get(), rText );
-
-        if ( ! pImp->InsertRegion( pNewRegion, nRegion ) )
-        {
-            delete pNewRegion;
-            return false;
-        }
-        return true;
+        return pImp->InsertRegion( o3tl::make_unique<RegionData_Impl>( pImp.get(), rText ), nRegion );
     }
 
     return false;
@@ -1498,12 +1491,11 @@ void SfxDocTemplate_Impl::DeleteRegion( size_t nIndex )
 void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
                                      Content& rContent )
 {
-    RegionData_Impl* pRegion;
-    pRegion = new RegionData_Impl( this, rTitle );
+    auto pRegion = o3tl::make_unique<RegionData_Impl>( this, rTitle );
+    auto pRegionTmp = pRegion.get();
 
-    if ( ! InsertRegion( pRegion, size_t(-1) ) )
+    if ( ! InsertRegion( std::move(pRegion), size_t(-1) ) )
     {
-        delete pRegion;
         return;
     }
 
@@ -1530,7 +1522,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
         {
             while ( xResultSet->next() )
             {
-                pRegion->AddEntry( xRow->getString( 1 ), xRow->getString( 2 ), nullptr );
+                pRegionTmp->AddEntry( xRow->getString( 1 ), xRow->getString( 2 ), nullptr );
             }
         }
         catch ( Exception& ) {}
@@ -1622,13 +1614,13 @@ void SfxDocTemplate_Impl::ReInitFromComponent()
 }
 
 
-bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
+bool SfxDocTemplate_Impl::InsertRegion( std::unique_ptr<RegionData_Impl> pNew, size_t nPos )
 {
     ::osl::MutexGuard   aGuard( maMutex );
 
     // return false (not inserted) if the entry already exists
     for (auto const& pRegion : maRegions)
-        if ( pRegion->Compare( pNew ) == 0 )
+        if ( pRegion->Compare( pNew.get() ) == 0 )
             return false;
 
     size_t newPos = nPos;
@@ -1639,10 +1631,10 @@ bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
     {
         auto it = maRegions.begin();
         std::advance( it, newPos );
-        maRegions.emplace( it, pNew );
+        maRegions.emplace( it, std::move(pNew) );
     }
     else
-        maRegions.emplace_back( pNew );
+        maRegions.emplace_back( std::move(pNew) );
 
     return true;
 }
