@@ -34,6 +34,24 @@
       "revId": "43a63b725208bfa378355011ea56cb936afa4411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_70b66bdc",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-12-18T11:45:31Z",
+      "side": 0,
+      "message": "\u003e And what\u0027s wrong with free floating file picker dialog?\n\nEverything :)\nNow seriously, what jmux likely means is that fpicker should be modal to the window that requested to open it (i.e. the input to the underlying window should be blocked as long as the fpicker remains open). And window-modality is not possible to achieve w/o a parent window",
+      "parentUuid": "5f4e5783_90aa0783",
+      "revId": "43a63b725208bfa378355011ea56cb936afa4411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
