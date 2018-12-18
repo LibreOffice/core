@@ -1459,6 +1459,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 // ExpFields update during printing, generation of preview, etc.
                 pWorkShell->LockExpFields();
                 pWorkShell->CalcLayout();
+                // tdf#121168: Now force correct page descriptions applied to page frames. Without
+                // this, e.g., page frames starting with sections could have page descriptions set
+                // wrong. This would lead to wrong page styles applied in SwDoc::AppendDoc below.
+                pWorkShell->GetViewOptions()->SetIdle(true);
+                for (auto aLayout : pWorkShell->GetDoc()->GetAllLayouts())
+                {
+                    aLayout->FreezeLayout(false);
+                    aLayout->AllCheckPageDescs();
+                }
             }
 
             lcl_emitEvent(SfxEventHintId::SwEventFieldMerge, STR_SW_EVENT_FIELD_MERGE, xWorkDocSh);
