@@ -20,7 +20,6 @@
 #include <svsys.h>
 
 #include "gdiimpl.hxx"
-#include "raii.hxx"
 
 #include <string.h>
 #include <rtl/strbuf.hxx>
@@ -773,9 +772,9 @@ bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
     return bRet;
 }
 
-void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
-                                  const SalBitmap& rSSalBitmap,
-                                  Color nMaskColor)
+void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
+                            const SalBitmap& rSSalBitmap,
+                            Color nMaskColor )
 {
     SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No transparency print possible!" );
 
@@ -783,8 +782,13 @@ void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
-    SalTwoRect aPosAry = rPosAry;
-    const HDC hDC = mrParent.getHDC();
+    SalTwoRect  aPosAry = rPosAry;
+    const BYTE  cRed = nMaskColor.GetRed();
+    const BYTE  cGreen = nMaskColor.GetGreen();
+    const BYTE  cBlue = nMaskColor.GetBlue();
+    HDC         hDC = mrParent.getHDC();
+    HBRUSH      hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
+    HBRUSH      hOldBrush = SelectBrush( hDC, hMaskBrush );
 
     // WIN/WNT seems to have a minor problem mapping the correct color of the
     // mask to the palette if we draw the DIB directly ==> draw DDB
@@ -798,12 +802,8 @@ void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
     else
         ImplDrawBitmap( hDC, aPosAry, rSalBitmap, false, 0x00B8074AUL );
 
-    HBRUSHUniquePtr phMaskBrush(CreateSolidBrush(RGB(nMaskColor.GetRed(),
-                                                     nMaskColor.GetGreen(),
-                                                     nMaskColor.GetBlue())));
-
-    HBRUSH  hOldBrush = SelectBrush(hDC, phMaskBrush.get());
-    SelectBrush(hDC, hOldBrush);
+    SelectBrush( hDC, hOldBrush );
+    DeleteBrush( hMaskBrush );
 }
 
 std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
@@ -853,6 +853,24 @@ Color WinSalGraphicsImpl::getPixel( long nX, long nY )
                               GetBValue( aWinCol ) );
 }
 
+namespace
+{
+
+HBRUSH Get50PercentBrush()
+{
+    SalData* pSalData = GetSalData();
+    if ( !pSalData->mh50Brush )
+    {
+        if ( !pSalData->mh50Bmp )
+            pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
+        pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
+    }
+
+    return pSalData->mh50Brush;
+}
+
+} // namespace
+
 void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
     if ( nFlags & SalInvert::TrackFrame )
@@ -871,16 +889,8 @@ void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, Sa
     }
     else if ( nFlags & SalInvert::N50 )
     {
-        SalData* pSalData = GetSalData();
-        if ( !pSalData->mh50Brush )
-        {
-            if ( !pSalData->mh50Bmp )
-                pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
-            pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
-        }
-
         COLORREF nOldTextColor = ::SetTextColor( mrParent.getHDC(), 0 );
-        HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), pSalData->mh50Brush );
+        HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), Get50PercentBrush() );
         PatBlt( mrParent.getHDC(), nX, nY, nWidth, nHeight, PATINVERT );
         ::SetTextColor( mrParent.getHDC(), nOldTextColor );
         SelectBrush( mrParent.getHDC(), hOldBrush );
@@ -911,17 +921,7 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     {
 
         if ( nSalFlags & SalInvert::N50 )
-        {
-            SalData* pSalData = GetSalData();
-            if ( !pSalData->mh50Brush )
-            {
-                if ( !pSalData->mh50Bmp )
-                    pSalData->mh50Bmp = ImplLoadSalBitmap( SAL_RESID_BITMAP_50 );
-                pSalData->mh50Brush = CreatePatternBrush( pSalData->mh50Bmp );
-            }
-
-            hBrush = pSalData->mh50Brush;
-        }
+            hBrush = Get50PercentBrush();
         else
             hBrush = GetStockBrush( BLACK_BRUSH );
 
@@ -1575,19 +1575,16 @@ void WinSalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
 
 void WinSalGraphicsImpl::DrawPixelImpl( long nX, long nY, COLORREF crColor )
 {
-    const HDC hDC = mrParent.getHDC();
-
-    if (!mbXORMode)
+    if ( mbXORMode )
     {
-        SetPixel(hDC, static_cast<int>(nX), static_cast<int>(nY), crColor);
-        return;
+        HBRUSH hBrush = CreateSolidBrush( crColor );
+        HBRUSH hOldBrush = SelectBrush( mrParent.getHDC(), hBrush );
+        PatBlt( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT );
+        SelectBrush( mrParent.getHDC(), hOldBrush );
+        DeleteBrush( hBrush );
     }
-
-    HBRUSHUniquePtr phBrush(CreateSolidBrush(crColor));
-
-    HBRUSH hOldBrush = SelectBrush(hDC, phBrush.get());
-    PatBlt(hDC, static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT);
-    SelectBrush(hDC, hOldBrush);
+    else
+        SetPixel( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), crColor );
 }
 
 void WinSalGraphicsImpl::drawPixel( long nX, long nY )
