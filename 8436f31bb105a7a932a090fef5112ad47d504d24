@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_d02abfe5",
+        "filename": "offapi/com/sun/star/sdb/OrderDialog.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-18T11:59:15Z",
+      "side": 1,
+      "message": "looks reasonable to me to make that change; won\u0027t hurt though to flag it as [API CHANGE]/add it to \u003chttps://wiki.documentfoundation.org/ReleaseNotes/6.2#API_changes\u003e",
+      "revId": "8436f31bb105a7a932a090fef5112ad47d504d24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
