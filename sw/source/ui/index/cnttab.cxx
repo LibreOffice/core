@@ -997,6 +997,8 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         if (nIndex != -1)
             m_xCaptionSequenceLB->set_active(nIndex);
         m_xDisplayTypeLB->set_active(static_cast<sal_Int32>(rDesc.GetCaptionDisplay()));
+        if (m_xDisplayTypeLB->get_active() == -1)
+            m_xDisplayTypeLB->set_active(0);
         RadioButtonHdl(*m_xFromCaptionsRB);
 
     }
