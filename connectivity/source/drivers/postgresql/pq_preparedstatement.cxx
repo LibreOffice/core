@@ -278,10 +278,6 @@ void PreparedStatement::raiseSQLException( const char * errorMsg )
 
 Reference< XResultSet > PreparedStatement::executeQuery( )
 {
-    Reference< XCloseable > lastResultSet = m_lastResultset;
-    if( lastResultSet.is() )
-        lastResultSet->close();
-
     if( ! execute( ) )
     {
         raiseSQLException(  "not a query" );
@@ -356,6 +352,10 @@ sal_Bool PreparedStatement::execute( )
     }
 
     m_executedStatement = buf.makeStringAndClear();
+
+    Reference< XCloseable > lastResultSet = m_lastResultset;
+    if( lastResultSet.is() )
+        lastResultSet->close();
 
     m_lastResultset.clear();
     m_lastTableInserted.clear();

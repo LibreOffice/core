@@ -235,10 +235,6 @@ void Statement::raiseSQLException(
 
 Reference< XResultSet > Statement::executeQuery(const OUString& sql )
 {
-    Reference< XCloseable > lastResultSetHolder = m_lastResultset;
-    if( lastResultSetHolder.is() )
-        lastResultSetHolder->close();
-
     if( ! execute( sql ) )
     {
         raiseSQLException( sql, "not a query" );
@@ -804,6 +800,10 @@ sal_Bool Statement::execute( const OUString& sql )
     osl::MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
     OString cmd = OUStringToOString( sql, m_pSettings );
+
+    Reference< XCloseable > lastResultSetHolder = m_lastResultset;
+    if( lastResultSetHolder.is() )
+        lastResultSetHolder->close();
 
     m_lastResultset.clear();
     m_lastTableInserted.clear();
