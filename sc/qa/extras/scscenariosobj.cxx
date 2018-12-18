@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xnameaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/sheet/xscenarios.hxx>
 
@@ -40,6 +41,7 @@ namespace sc_apitest
 class ScScenariosObj : public CalcUnoApiTest,
                        public apitest::XElementAccess,
                        public apitest::XEnumerationAccess,
+                       public apitest::XNameAccess,
                        public apitest::XIndexAccess,
                        public apitest::XScenarios
 {
@@ -59,6 +61,11 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XNameAccess
+    CPPUNIT_TEST(testGetByName);
+    CPPUNIT_TEST(testGetElementNames);
+    CPPUNIT_TEST(testHasByName);
+
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetCount);
@@ -76,6 +83,7 @@ private:
 ScScenariosObj::ScScenariosObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XScenario>::get())
+    , XNameAccess("ScScenarios")
     , XIndexAccess(1)
 {
 }

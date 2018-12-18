@@ -17,7 +17,6 @@
 #
 -o sc.ScModelObj
 -o sc.ScNamedRangesObj
-# -o sc.ScScenariosObj
 # -o sc.ScShapeObj
 # -o sc.ScSheetLinkObj
 -o sc.ScSheetLinksObj
