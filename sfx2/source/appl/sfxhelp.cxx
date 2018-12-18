@@ -877,9 +877,8 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     // display" code below:
     if (SfxContentHelper::IsHelpErrorDocument(aHelpURL))
     {
-        if ( impl_hasHTMLHelpInstalled() )
+        if ( impl_hasHTMLHelpInstalled() && impl_showOfflineHelp(aHelpURL) )
         {
-            impl_showOfflineHelp(aHelpURL);
             return true;
         }
 
@@ -1035,9 +1034,8 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
     // display" code below:
     if (SfxContentHelper::IsHelpErrorDocument(aHelpURL))
     {
-        if ( impl_hasHTMLHelpInstalled() )
+        if ( impl_hasHTMLHelpInstalled() && impl_showOfflineHelp(aHelpURL) )
         {
-            impl_showOfflineHelp(aHelpURL);
             return true;
         }
 
