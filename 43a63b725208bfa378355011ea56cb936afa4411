@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_b032a3a6",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-18T10:49:25Z",
+      "side": 0,
+      "message": "There should always be a parent windows of a file picker.\nMy opinion is that we don\u0027t want free floating file picker dialogs, but I might be wrong\n\nMaybe we should fall back to Application::GetAppWindow() if GetActiveWindow() returns nullptr.\n\n- What happens for other VCL backends?\n- How do you get the assertion?",
+      "revId": "43a63b725208bfa378355011ea56cb936afa4411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
