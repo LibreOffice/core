@@ -80,9 +80,6 @@ const SwTwips lMinBorder = 1134;
 //TODO: Replace with SwViewOption::defDocumentBorder
 #define DOCUMENTBORDER  284
 
-// Constant strings.
-SW_DLLPUBLIC extern OUString aEmptyOUStr;  // remove once aEmptyOUStr can be changed to OUString
-
 // For inserting of captions (what and where to insert).
 // It's here because it is not big enough to justify its own hxx
 // and does not seem to fit somewhere else.

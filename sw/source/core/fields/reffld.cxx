@@ -1384,7 +1384,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 
         // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
         // need to be converted to have unique IDs for both documents
-        RefIdsMap aFntMap( aEmptyOUStr );
+        RefIdsMap aFntMap = RefIdsMap(OUString());
         std::vector<std::unique_ptr<RefIdsMap>> aFieldMap;
 
         SwIterator<SwFormatField,SwFieldType> aIter( *this );

@@ -158,7 +158,7 @@ static bool lcl_AddColumns( SwLayoutFrame *pCont, sal_uInt16 nCount )
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
-            SwFrameFormat *pFormat = pDoc->MakeFrameFormat(aEmptyOUStr, pDoc->GetDfltFrameFormat());
+            SwFrameFormat *pFormat = pDoc->MakeFrameFormat(OUString(), pDoc->GetDfltFrameFormat());
             SwColumnFrame *pTmp = new SwColumnFrame( pFormat, pCont );
             pTmp->SetMaxFootnoteHeight( nMax );
             pTmp->Paste( pCont );

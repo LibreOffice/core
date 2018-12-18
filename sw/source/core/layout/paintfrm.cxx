@@ -2111,7 +2111,7 @@ void DrawGraphic(
     {
         const BitmapEx& rBmp = rSh.GetReplacementBitmap(false);
         vcl::Font aTmp( pOutDev->GetFont() );
-        Graphic::DrawEx( pOutDev, aEmptyOUStr, aTmp, rBmp, rOrg.Pos(), rOrg.SSize() );
+        Graphic::DrawEx(pOutDev, OUString(), aTmp, rBmp, rOrg.Pos(), rOrg.SSize());
     }
 }
 
@@ -6977,7 +6977,7 @@ const vcl::Font& SwPageFrame::GetEmptyPageFont()
         vcl::Font tmp;
         tmp.SetFontSize( Size( 0, 80 * 20 )); // == 80 pt
         tmp.SetWeight( WEIGHT_BOLD );
-        tmp.SetStyleName( aEmptyOUStr );
+        tmp.SetStyleName(OUString());
         tmp.SetFamilyName("Helvetica");
         tmp.SetFamily( FAMILY_SWISS );
         tmp.SetTransparent( true );

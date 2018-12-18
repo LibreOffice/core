@@ -251,11 +251,11 @@ void SwNumPositionTabPage::InitControls()
     if(bSameDist)
         m_xDistNumMF->set_value(m_xDistNumMF->normalize(aNumFormatArr[nLvl]->GetCharTextDistance()), FieldUnit::TWIP);
     else
-        m_xDistNumMF->set_text(aEmptyOUStr);
+        m_xDistNumMF->set_text(OUString());
     if(bSameIndent)
         m_xIndentMF->set_value(m_xIndentMF->normalize(-aNumFormatArr[nLvl]->GetFirstLineOffset()), FieldUnit::TWIP);
     else
-        m_xIndentMF->set_text(aEmptyOUStr);
+        m_xIndentMF->set_text(OUString());
 
     if(bSameAdjust)
     {
@@ -305,14 +305,14 @@ void SwNumPositionTabPage::InitControls()
         }
         else
         {
-            m_xListtabMF->set_text(aEmptyOUStr);
+            m_xListtabMF->set_text(OUString());
         }
     }
     else
     {
         m_xListtabFT->set_sensitive( false );
         m_xListtabMF->set_sensitive( false );
-        m_xListtabMF->set_text(aEmptyOUStr);
+        m_xListtabMF->set_text(OUString());
     }
 
     if ( bSameAlignAt )
@@ -324,7 +324,7 @@ void SwNumPositionTabPage::InitControls()
     }
     else
     {
-        m_xAlignedAtMF->set_text(aEmptyOUStr);
+        m_xAlignedAtMF->set_text(OUString());
     }
 
     if ( bSameIndentAt )
@@ -334,11 +334,11 @@ void SwNumPositionTabPage::InitControls()
     }
     else
     {
-        m_xIndentAtMF->set_text(aEmptyOUStr);
+        m_xIndentAtMF->set_text(OUString());
     }
 
     if (bSetDistEmpty)
-        m_xDistBorderMF->set_text(aEmptyOUStr);
+        m_xDistBorderMF->set_text(OUString());
 
     bInInintControl = false;
 }
@@ -659,7 +659,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
 
     SetModified();
     if(!m_xDistBorderMF->get_sensitive())
-        m_xDistBorderMF->set_text(aEmptyOUStr);
+        m_xDistBorderMF->set_text(OUString());
 }
 
 IMPL_LINK( SwNumPositionTabPage, RelativeHdl, weld::ToggleButton&, rBox, void )
@@ -695,7 +695,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, weld::ToggleButton&, rBox, void )
     if(bSetValue)
         m_xDistBorderMF->set_value(m_xDistBorderMF->normalize(nValue), FieldUnit::TWIP);
     else
-        m_xDistBorderMF->set_text(aEmptyOUStr);
+        m_xDistBorderMF->set_text(OUString());
     m_xDistBorderMF->set_sensitive(bOn || bSingleSelection || pOutlineDlg);
     bLastRelative = bOn;
 }

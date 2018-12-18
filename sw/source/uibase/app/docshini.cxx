@@ -199,7 +199,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 }
 
                 pFontItem.reset(new SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                                aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+                                                OUString(), aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
             }
             else
             {
@@ -216,7 +216,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     eLanguage,
                     GetDefaultFontFlags::OnlyOne );
                 pFontItem.reset(new SvxFontItem(aLangDefFont.GetFamilyType(), aLangDefFont.GetFamilyName(),
-                                                aEmptyOUStr, aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich));
+                                                OUString(), aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich));
             }
             m_xDoc->SetDefault(*pFontItem);
             if( !bHTMLTemplSet )
@@ -284,7 +284,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                                                     nFontWhich, false ) )
                 {
                     pColl->SetFormatAttr(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                                  aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+                                                  OUString(), aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
                 }
             }
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx]), 0, eLanguage );
@@ -521,7 +521,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                     if( ReadXML )
                     {
                         ReadXML->SetOrganizerMode( true );
-                        SwReader aRdr( rMedium, aEmptyOUStr, m_xDoc.get() );
+                        SwReader aRdr(rMedium, OUString(), m_xDoc.get());
                         nErr = aRdr.Read( *ReadXML );
                         ReadXML->SetOrganizerMode( false );
                     }
@@ -544,7 +544,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                     {
                         // set Doc's DocInfo at DocShell-Medium
                         SAL_INFO( "sw.ui", "before ReadDocInfo" );
-                        SwReader aRdr( rMedium, aEmptyOUStr, m_xDoc.get() );
+                        SwReader aRdr(rMedium, OUString(), m_xDoc.get());
                         SAL_INFO( "sw.ui", "before Read" );
                         nErr = aRdr.Read( *pReader );
                         SAL_INFO( "sw.ui", "after Read" );
@@ -611,7 +611,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
                 if( ReadXML )
                 {
                     ReadXML->SetOrganizerMode( true );
-                    SwReader aRdr( rMedium, aEmptyOUStr, m_xDoc.get() );
+                    SwReader aRdr(rMedium, OUString(), m_xDoc.get());
                     nErr = aRdr.Read( *ReadXML );
                     ReadXML->SetOrganizerMode( false );
                 }

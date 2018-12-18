@@ -1319,7 +1319,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     }
 
     // Progress, to prohibit KeyInputs
-    SfxProgress aProgress(pSourceDocSh, ::aEmptyOUStr, 1);
+    SfxProgress aProgress(pSourceDocSh, OUString(), 1);
 
     // lock all dispatchers
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(pSourceDocSh);

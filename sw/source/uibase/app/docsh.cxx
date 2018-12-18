@@ -320,7 +320,7 @@ bool SwDocShell::Save()
         case SfxObjectCreateMode::ORGANIZER:
             {
                 WriterRef xWrt;
-                ::GetXMLWriter( aEmptyOUStr, GetMedium()->GetBaseURL( true ), xWrt );
+                ::GetXMLWriter(OUString(), GetMedium()->GetBaseURL(true), xWrt);
                 xWrt->SetOrganizerMode( true );
                 SwWriter aWrt( *GetMedium(), *m_xDoc );
                 nErr = aWrt.Write( xWrt );
@@ -348,7 +348,7 @@ bool SwDocShell::Save()
                     m_pWrtShell->EndAllTableBoxEdit();
 
                 WriterRef xWrt;
-                ::GetXMLWriter( aEmptyOUStr, GetMedium()->GetBaseURL( true ), xWrt );
+                ::GetXMLWriter(OUString(), GetMedium()->GetBaseURL(true), xWrt);
 
                 bool bLockedView(false);
                 if (m_pWrtShell)
@@ -544,7 +544,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
                             SfxObjectCreateMode::EMBEDDED == GetCreateMode() );
 
         WriterRef xWrt;
-        ::GetXMLWriter( aEmptyOUStr, rMedium.GetBaseURL( true ), xWrt );
+        ::GetXMLWriter(OUString(), rMedium.GetBaseURL(true), xWrt);
 
         bool bLockedView(false);
         if (m_pWrtShell)
@@ -984,7 +984,7 @@ HiddenInformation SwDocShell::GetHiddenInformationState( HiddenInformation nStat
         OSL_ENSURE( GetWrtShell(), "No SwWrtShell, no information" );
         if ( GetWrtShell() )
         {
-            SwFieldType* pType = GetWrtShell()->GetFieldType( SwFieldIds::Postit, aEmptyOUStr );
+            SwFieldType* pType = GetWrtShell()->GetFieldType(SwFieldIds::Postit, OUString());
             SwIterator<SwFormatField,SwFieldType> aIter( *pType );
             SwFormatField* pFirst = aIter.First();
             while( pFirst )

@@ -166,7 +166,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
             if(pSh)
             {
                 SwDBData aTmp(pSh->GetDBData());
-                m_pDatabaseTLB->Select(aTmp.sDataSource, aTmp.sCommand, aEmptyOUStr);
+                m_pDatabaseTLB->Select(aTmp.sDataSource, aTmp.sCommand, OUString());
             }
         }
     }
@@ -411,11 +411,11 @@ void SwFieldDBPage::TypeHdl( ListBox const * pBox )
 
     if (!IsFieldEdit())
     {
-        m_pValueED->SetText(aEmptyOUStr);
+        m_pValueED->SetText(OUString());
         if (bCond)
             m_pConditionED->SetText("TRUE");
         else
-            m_pConditionED->SetText(aEmptyOUStr);
+            m_pConditionED->SetText(OUString());
     }
 
     CheckInsert();
@@ -530,7 +530,7 @@ void SwFieldDBPage::ActivateMailMergeAddress()
     m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos( reinterpret_cast<const void*>( TYP_DBFLD ) ));
     m_pTypeLB->GetSelectHdl().Call(*m_pTypeLB);
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
-    m_pDatabaseTLB->Select(rData.sDataSource, rData.sCommand, aEmptyOUStr);
+    m_pDatabaseTLB->Select(rData.sDataSource, rData.sCommand, OUString());
 }
 
 void SwFieldDBPage::SetWrtShell(SwWrtShell& rSh)

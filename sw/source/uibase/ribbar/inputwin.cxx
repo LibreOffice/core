@@ -66,7 +66,7 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher const * pDispat
     , aEdit(VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION))
     , pWrtShell(nullptr)
     , pView(nullptr)
-    , aCurrentTableName(aEmptyOUStr)
+    , aCurrentTableName(OUString())
     , m_bDoesUndo(true)
     , m_bResetUndo(false)
     , m_bCallUndo(false)

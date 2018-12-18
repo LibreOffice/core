@@ -402,9 +402,9 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
     if ( ( !IsFieldEdit() || m_pSelectionLB->GetEntryCount() ) &&
          nOld != LISTBOX_ENTRY_NOTFOUND )
     {
-        m_pNameED->SetText(aEmptyOUStr);
-        m_pValueED->SetText(aEmptyOUStr);
-        m_pFilterED->SetText(aEmptyOUStr);
+        m_pNameED->SetText(OUString());
+        m_pValueED->SetText(OUString());
+        m_pFilterED->SetText(OUString());
     }
 
     switch (nTypeId)

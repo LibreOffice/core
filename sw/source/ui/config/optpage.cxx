@@ -419,7 +419,7 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
                                                         SwPostItMode::InMargins;
 
         const OUString sFax = m_xFaxLB->get_active_text();
-        aAddPrinterAttr.m_sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
+        aAddPrinterAttr.m_sFaxName = sNone == sFax ? OUString() : sFax;
         rCoreSet->Put(aAddPrinterAttr);
     }
     return bAttrModified;
@@ -614,7 +614,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
         aFont = pPrt->GetFontMetric( aFont );
     SwTextFormatColl *pColl = pWrtShell->GetTextCollFromPool(nType);
     pColl->SetFormatAttr(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+                OUString(), aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -690,7 +690,7 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
             if( pPrinter )
                 aFont = pPrinter->GetFontMetric( aFont );
             m_pWrtShell->SetDefault(SvxFontItem(aFont.GetFamilyType(), aFont.GetFamilyName(),
-                                  aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+                                  OUString(), aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
             SwTextFormatColl *pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFormatAttr(nFontWhich);
             bMod = true;

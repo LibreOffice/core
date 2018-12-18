@@ -737,7 +737,7 @@ const OUString&  SwDocStyleSheet::GetParent() const
         case SfxStyleFamily::Page:
         case SfxStyleFamily::Pseudo:
         default:
-            return aEmptyOUStr;       // there's no parent
+            return OUString();       // there's no parent
         }
 
         OUString sTmp;
