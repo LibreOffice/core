@@ -1753,6 +1753,14 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
         xOLEProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
                         uno::makeAny(aSize.Height));
 
+        OUString aVisAreaWidth = pOLEHandler->GetVisAreaWidth();
+        if(!aVisAreaWidth.isEmpty())
+            xOLEProperties->setPropertyValue("VisibleAreaWidth", uno::makeAny(aVisAreaWidth));
+
+        OUString aVisAreaHeight = pOLEHandler->GetVisAreaHeight();
+        if(!aVisAreaHeight.isEmpty())
+            xOLEProperties->setPropertyValue("VisibleAreaHeight", uno::makeAny(aVisAreaHeight));
+
         uno::Reference< graphic::XGraphic > xGraphic = pOLEHandler->getReplacement();
         xOLEProperties->setPropertyValue(getPropertyName( PROP_GRAPHIC ),
                         uno::makeAny(xGraphic));
