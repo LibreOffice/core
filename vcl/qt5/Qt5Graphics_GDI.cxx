@@ -485,15 +485,17 @@ void Qt5Graphics::invert(long nX, long nY, long nWidth, long nHeight, SalInvert 
     if (SalInvert::N50 & nFlags)
     {
         aPainter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-        aPainter.setBrush(Qt::DiagCrossPattern);
-        aPainter.fillRect(nX, nY, nWidth, nHeight, aPainter.brush());
+        QBrush aBrush(Qt::white, Qt::Dense4Pattern);
+        aPainter.fillRect(nX, nY, nWidth, nHeight, aBrush);
     }
     else
     {
         if (SalInvert::TrackFrame & nFlags)
         {
             aPainter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-            aPainter.setPen(Qt::DashLine);
+            QPen aPen(Qt::white);
+            aPen.setStyle(Qt::DotLine);
+            aPainter.setPen(aPen);
             aPainter.drawRect(nX, nY, nWidth, nHeight);
         }
         else
