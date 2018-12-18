@@ -52,6 +52,24 @@
       "revId": "43a63b725208bfa378355011ea56cb936afa4411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_d0c63f17",
+        "filename": "vcl/qt5/Qt5FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-12-18T12:51:25Z",
+      "side": 0,
+      "message": "So I had a look at SalGtkFilePicker::initialize and it looks like the 2nd argument is supposed to be the parent window. And Gtk+ warns in SalGtkFilePicker::execute about a missing parent, but IMHO it should also do in initialize.\n\nThe whole Qt5FilePicker was just a quick hack to have anything. It should already warn in initialize about the missing parent, if I compare it with the Gtk+ file picker.\n\nI never checked the file menu, just used the toolbar buttons, so I never realized. Since the popup menu is gone after the selection, we don\u0027t have an active window and assert. We should implement the same parent handling then Gtk+ and just warn about the missing parent.\n\nThere is nothing inherently wrong with a free floating file picker, but IMHO it\u0027s a bad UX. But I\u0027m fine with dropping the assert now, but I guess this way nobody will be motivated to fix this for good ;-(",
+      "parentUuid": "5f4e5783_70b66bdc",
+      "revId": "43a63b725208bfa378355011ea56cb936afa4411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
