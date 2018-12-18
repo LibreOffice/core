@@ -741,6 +741,10 @@ sal_Int32 PreparedStatement::getUpdateCount(  )
 }
 sal_Bool PreparedStatement::getMoreResults(  )
 {
+    Reference< XCloseable > lastResultSet = m_lastResultset;
+    if( lastResultSet.is() )
+        lastResultSet->close();
+    m_multipleResultUpdateCount = -1;
     return false;
 }
 
