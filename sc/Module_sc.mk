@@ -182,6 +182,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_subtotalfieldobj \
 	CppunitTest_sc_tableconditionalentryobj \
 	CppunitTest_sc_tableconditionalformatobj \
+	CppunitTest_sc_tablerowsobj \
 	CppunitTest_sc_tablesheetobj \
 	CppunitTest_sc_tablesheetsobj \
 	CppunitTest_sc_tablevalidationobj \
