@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5f4e5783_70f78bf7",
+        "filename": "sd/source/core/CustomAnimationEffect.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-12-18T10:05:09Z",
+      "side": 1,
+      "message": "Skipping checkForText() was intentional. My fault is guessing behavior from method\u0027s name without looking through implementation.\nI\u0027ll commit fixed change later today.",
+      "parentUuid": "5f4e5783_d513d1b7",
+      "revId": "3c8709cf44dea07ca4554c5776bcc8cf9718d15a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4e5783_3524650d",
         "filename": "sd/source/core/CustomAnimationEffect.cxx",
         "patchSetId": 2
