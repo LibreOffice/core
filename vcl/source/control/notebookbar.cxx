@@ -13,7 +13,9 @@
 #include <vcl/taskpanelist.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/processfactory.hxx>
 #include <vcl/vclevent.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 /**
  * split from the main class since it needs different ref-counting mana

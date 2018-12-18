@@ -19,12 +19,14 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <swmodule.hxx>
 #include <swdll.hxx>
 #include <unofreg.hxx>
 #include "unomodule.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/processfactory.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>

@@ -66,6 +66,7 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <list>
 #include <algorithm>

@@ -49,6 +49,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 

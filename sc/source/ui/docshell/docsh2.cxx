@@ -28,6 +28,7 @@
 #include <orcusfiltersimpl.hxx>
 #include <config_folders.h>
 #include <unotools/configmgr.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <drwlayer.hxx>
 #include <stlpool.hxx>

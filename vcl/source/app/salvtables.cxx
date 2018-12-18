@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <salframe.hxx>
 #include <salinst.hxx>
 #include <salvd.hxx>

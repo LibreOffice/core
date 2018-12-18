@@ -27,6 +27,7 @@
 #include <svl/itempool.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/intitem.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace svx;
 

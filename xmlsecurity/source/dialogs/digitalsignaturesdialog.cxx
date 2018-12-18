@@ -54,6 +54,7 @@
 #include <strings.hrc>
 #include <resourcemanager.hxx>
 #include <comphelper/xmlsechelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <vcl/weld.hxx>
 #include <unotools/configitem.hxx>

@@ -41,6 +41,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/profilezone.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>

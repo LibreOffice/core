@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 
 typedef cppu::ImplInheritanceHelper< svt::ToolboxController,
                                      css::frame::XSubToolbarController,

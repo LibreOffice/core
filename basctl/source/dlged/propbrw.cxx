@@ -33,6 +33,7 @@
 #include <com/sun/star/inspection/XObjectInspector.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/types.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdview.hxx>

@@ -20,7 +20,8 @@
 #ifndef INCLUDED_VCL_TEXTRECTINFO_HXX
 #define INCLUDED_VCL_TEXTRECTINFO_HXX
 
-#include <vcl/outdev.hxx>
+#include <vcl/dllapi.h>
+class OutputDevice;
 
 class VCL_DLLPUBLIC TextRectInfo
 {

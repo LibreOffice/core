@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <o3tl/make_unique.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/frmdiritem.hxx>

@@ -21,6 +21,7 @@
 
 #include <IDocumentStatistics.hxx>
 #include <SwDocIdle.hxx>
+#include <memory>
 
 class SwDoc;
 struct SwDocStat;

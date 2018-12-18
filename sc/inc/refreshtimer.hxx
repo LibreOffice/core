@@ -26,6 +26,7 @@
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
 #include "scdllapi.h"
+#include <memory>
 
 class ScRefreshTimerControl
 {

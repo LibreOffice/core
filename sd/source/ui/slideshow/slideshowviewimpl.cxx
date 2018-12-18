@@ -33,6 +33,7 @@
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;

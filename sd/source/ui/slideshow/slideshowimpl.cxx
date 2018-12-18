@@ -66,6 +66,7 @@
 #include <vcl/settings.hxx>
 
 #include <comphelper/anytostring.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>

@@ -85,6 +85,7 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>

@@ -22,15 +22,12 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/treelistentries.hxx>
-#include <vcl/viewdataentry.hxx>
 
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <tools/contnr.hxx>
 
-#include <limits.h>
 #include <memory>
-#include <vector>
 
 enum class SvListAction
 {
@@ -50,6 +47,7 @@ enum class SvListAction
 
 class SvTreeListEntry;
 class SvListView;
+class SvViewDataEntry;
 
 enum SvSortMode { SortAscending, SortDescending, SortNone };
 

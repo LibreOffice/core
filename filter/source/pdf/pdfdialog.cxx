@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/solar.hrc>
 #include <com/sun/star/view/XRenderable.hpp>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

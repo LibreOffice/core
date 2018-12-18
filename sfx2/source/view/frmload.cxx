@@ -49,6 +49,7 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>

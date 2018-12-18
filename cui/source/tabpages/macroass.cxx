@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <basic/basmgr.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svl/macitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/svmedit.hxx>

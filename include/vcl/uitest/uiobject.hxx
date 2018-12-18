@@ -17,7 +17,6 @@
 #include <vcl/window.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/button.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
@@ -28,6 +27,8 @@
 #include <vcl/dllapi.h>
 
 #include <set>
+
+class Edit;
 
 typedef std::map<const OUString, OUString> StringMap;
 

@@ -26,19 +26,15 @@
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/textdata.hxx>
-#include <vcl/window.hxx>
+#include <vcl/outdev.hxx>
 #include <memory>
 
 class TextEngine;
-class OutputDevice;
 
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
-class TextSelFunctionSet;
-class SelectionEngine;
-class VirtualDevice;
-struct TextDDInfo;
+namespace vcl { class Window; }
 
 namespace com { namespace sun { namespace star {
     namespace datatransfer { namespace clipboard {

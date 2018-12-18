@@ -20,6 +20,7 @@
 #include <SvxConfigPageHelper.hxx>
 
 #include <comphelper/random.hxx>
+#include <comphelper/processfactory.hxx>
 
 static sal_Int16 theImageType =
     css::ui::ImageType::COLOR_NORMAL |

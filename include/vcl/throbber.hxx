@@ -24,8 +24,6 @@
 #include <vcl/imgctrl.hxx>
 #include <vcl/timer.hxx>
 
-#include <com/sun/star/graphic/XGraphic.hpp>
-
 #include <vector>
 
 class VCL_DLLPUBLIC Throbber : public ImageControl

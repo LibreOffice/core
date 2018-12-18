@@ -22,9 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <sal/log.hxx>
-#include <memory>
 
-class Scheduler;
 struct ImplSchedulerData;
 
 enum class TaskPriority

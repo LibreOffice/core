@@ -28,6 +28,7 @@
 #include <sfx2/objsh.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

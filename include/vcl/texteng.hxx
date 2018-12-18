@@ -47,19 +47,14 @@ class TextAttrib;
 class TextCharAttrib;
 class TextUndo;
 class TextUndoManager;
-class EditSelFunctionSet;
-class Idle;
 class IdleFormatter;
 class TextNode;
 class OutputDevice;
-class SfxUndoAction;
 class KeyEvent;
 class Timer;
 class SfxUndoManager;
 class TextLine;
-class TETextPortion;
 struct TEIMEInfos;
-class SvtCTLOptions;
 
 namespace com {
 namespace sun {

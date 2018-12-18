@@ -69,6 +69,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

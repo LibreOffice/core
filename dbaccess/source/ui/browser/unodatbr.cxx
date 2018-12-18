@@ -91,6 +91,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 
