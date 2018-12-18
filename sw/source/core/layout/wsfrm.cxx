@@ -4168,6 +4168,42 @@ void SwRootFrame::InvalidateAllObjPos()
     }
 }
 
+static void AddRemoveFlysForNode(
+        SwTextFrame & rFrame, SwTextNode & rTextNode,
+        std::set<sal_uLong> *const pSkipped,
+        SwFrameFormats & rTable,
+        SwPageFrame *const pPage,
+        SwTextNode const*const pNode,
+        std::vector<sw::Extent>::const_iterator & rIterFirst,
+        std::vector<sw::Extent>::const_iterator const& rIterEnd)
+{
+    if (pNode == &rTextNode)
+    {   // remove existing hidden at-char anchored flys
+        RemoveHiddenObjsOfNode(rTextNode, &rIterFirst, &rIterEnd);
+    }
+    else if (rTextNode.GetIndex() < pNode->GetIndex())
+    {
+        // pNode's frame has been deleted by CheckParaRedlineMerge()
+        AppendObjsOfNode(&rTable,
+            pNode->GetIndex(), &rFrame, pPage, rTextNode.GetDoc(),
+            &rIterFirst, &rIterEnd);
+        if (pSkipped)
+        {
+            // if a fly has been added by AppendObjsOfNode, it must be skipped; if not, then it doesn't matter if it's skipped or not because it has no frames and because of that it would be skipped anyway
+            if (auto const pFlys = pNode->GetAnchoredFlys())
+            {
+                for (auto const pFly : *pFlys)
+                {
+                    if (pFly->Which() != RES_DRAWFRMFMT)
+                    {
+                        pSkipped->insert(pFly->GetContent().GetContentIdx()->GetIndex());
+                    }
+                }
+            }
+        }
+    }
+}
+
 namespace sw {
 
 /// rTextNode is the first one of the "new" merge - if rTextNode isn't the same
@@ -4197,30 +4233,20 @@ void AddRemoveFlysAnchoredToFrameStartingAtNode(
             if (iter == pMerged->extents.end()
                 || iter->pNode != pNode)
             {
-                if (pNode == &rTextNode)
-                {   // remove existing hidden at-char anchored flys
-                    RemoveHiddenObjsOfNode(
-                        rTextNode, &iterFirst, &iter);
-                }
-                else if (rTextNode.GetIndex() < pNode->GetIndex())
+                AddRemoveFlysForNode(rFrame, rTextNode, pSkipped, rTable, pPage,
+                        pNode, iterFirst, iter);
+                sal_uLong const until = iter == pMerged->extents.end()
+                    ? pMerged->pLastNode->GetIndex() + 1
+                    : iter->pNode->GetIndex();
+                for (sal_uLong i = pNode->GetIndex() + 1; i < until; ++i)
                 {
-                    // pNode's frame has been deleted by CheckParaRedlineMerge()
-                    AppendObjsOfNode(&rTable,
-                        pNode->GetIndex(), &rFrame, pPage, rTextNode.GetDoc(),
-                        &iterFirst, &iter);
-                    if (pSkipped)
+                    // let's show at-para flys on nodes that contain start/end of
+                    // redline too, even if there's no text there
+                    SwNode const*const pTmp(pNode->GetNodes()[i]);
+                    if (pTmp->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
                     {
-                        // if a fly has been added by AppendObjsOfNode, it must be skipped; if not, then it doesn't matter if it's skipped or not because it has no frames and because of that it would be skipped anyway
-                        if (auto const pFlys = pNode->GetAnchoredFlys())
-                        {
-                            for (auto const pFly : *pFlys)
-                            {
-                                if (pFly->Which() != RES_DRAWFRMFMT)
-                                {
-                                    pSkipped->insert(pFly->GetContent().GetContentIdx()->GetIndex());
-                                }
-                            }
-                        }
+                        AddRemoveFlysForNode(rFrame, rTextNode, pSkipped,
+                            rTable, pPage, pTmp->GetTextNode(), iter, iter);
                     }
                 }
                 if (iter == pMerged->extents.end())

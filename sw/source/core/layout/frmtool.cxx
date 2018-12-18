@@ -1160,24 +1160,34 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
         {
             std::vector<sw::Extent>::const_iterator iterFirst(pMerged->extents.begin());
             std::vector<sw::Extent>::const_iterator iter(iterFirst);
-            SwTextNode const* pNode(nullptr);
-            for ( ; iter != pMerged->extents.end(); ++iter)
+            SwTextNode const* pNode(pMerged->pFirstNode);
+            for ( ; ; ++iter)
             {
-                if (iter->pNode != pNode)
+                if (iter == pMerged->extents.end()
+                    || iter->pNode != pNode)
                 {
-                    if (pNode)
+                    AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
+                    sal_uLong const until = iter == pMerged->extents.end()
+                        ? pMerged->pLastNode->GetIndex() + 1
+                        : iter->pNode->GetIndex();
+                    for (sal_uLong i = pNode->GetIndex() + 1; i < until; ++i)
                     {
-                        AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
+                        // let's show at-para flys on nodes that contain start/end of
+                        // redline too, even if there's no text there
+                        SwNode const*const pTmp(pNode->GetNodes()[i]);
+                        if (pTmp->GetRedlineMergeFlag() == SwNode::Merge::NonFirst)
+                        {
+                            AppendObjsOfNode(pTable, pTmp->GetIndex(), pFrame, pPage, pDoc, &iter, &iter);
+                        }
+                    }
+                    if (iter == pMerged->extents.end())
+                    {
+                        break;
                     }
                     pNode = iter->pNode;
                     iterFirst = iter;
                 }
             }
-            if (!pNode)
-            {   // no extents?
-                pNode = pMerged->pFirstNode;
-            }
-            AppendObjsOfNode(pTable, pNode->GetIndex(), pFrame, pPage, pDoc, &iterFirst, &iter);
         }
         else
         {
