@@ -20,6 +20,8 @@
 #include <services/frame.hxx>
 #include <dispatch/dispatchprovider.hxx>
 
+#include <boost/bind.hpp>
+
 #include <dispatch/interceptionhelper.hxx>
 #include <dispatch/closedispatcher.hxx>
 #include <dispatch/windowcommanddispatch.hxx>
@@ -82,7 +84,9 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
+#include <unotools/cmdoptions.hxx>
 
+#include <vcl/threadex.hxx>
 #include <vcl/menu.hxx>
 
 namespace framework{
@@ -320,7 +324,10 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
 
-    return LoadEnv::loadComponentFromURL(xThis, xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
+    return vcl::solarthread::syncExecute(
+        boost::bind(&LoadEnv::loadComponentFromURL, xThis,
+                    xContext, sURL, sTargetFrameName,
+                    nSearchFlags, lArguments));
 }
 
 /*-****************************************************************************************************//**
