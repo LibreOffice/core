@@ -196,14 +196,13 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         {
             if ( t.pEnv->IsInstanceOf( jThrow,java_sql_SQLException_BASE::st_getMyClass() ) )
             {
-                java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE( t.pEnv, jThrow );
-                SQLException e( pException->getMessage(),
+                java_sql_SQLException_BASE aException( t.pEnv, jThrow );
+                SQLException e( aException.getMessage(),
                                     *this,
-                                    pException->getSQLState(),
-                                    pException->getErrorCode(),
+                                    aException.getSQLState(),
+                                    aException.getErrorCode(),
                                     Any()
                                 );
-                delete pException;
                 throw  e;
             }
         }

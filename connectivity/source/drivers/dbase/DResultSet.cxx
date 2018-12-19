@@ -163,7 +163,7 @@ bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xInde
         dbase::ODbaseIndex* pIndex = reinterpret_cast< dbase::ODbaseIndex* >( xTunnel->getSomething(dbase::ODbaseIndex::getUnoTunnelImplementationId()) );
         if(pIndex)
         {
-            dbase::OIndexIterator* pIter = pIndex->createIterator();
+            std::unique_ptr<dbase::OIndexIterator> pIter = pIndex->createIterator();
 
             if (pIter)
             {
@@ -174,7 +174,6 @@ bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xInde
                     nRec = pIter->Next();
                 }
                 m_pFileSet->setFrozen();
-                delete pIter;
                 return true;
             }
         }
