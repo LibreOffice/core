@@ -22,8 +22,6 @@
 #include <vcl/salgtype.hxx>
 #include <bitmapwriteaccess.hxx>
 
-#define FAST_ARGB_BGRA
-
 #include <stdlib.h>
 #include <sal/log.hxx>
 
@@ -409,12 +407,10 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
 
         case ScanlineFormat::N32BitTcAbgr:
             return ImplConvertToBitmap<ScanlineFormat::N32BitTcAbgr>( aSrcType, rDst, rSrc );
-#ifdef FAST_ARGB_BGRA
         case ScanlineFormat::N32BitTcArgb:
             return ImplConvertToBitmap<ScanlineFormat::N32BitTcArgb>( aSrcType, rDst, rSrc );
         case ScanlineFormat::N32BitTcBgra:
             return ImplConvertToBitmap<ScanlineFormat::N32BitTcBgra>( aSrcType, rDst, rSrc );
-#endif
         case ScanlineFormat::N32BitTcRgba:
             return ImplConvertToBitmap<ScanlineFormat::N32BitTcRgba>( aSrcType, rDst, rSrc );
         default: break;
@@ -517,12 +513,10 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
 
         case ScanlineFormat::N32BitTcAbgr:
             return ImplConvertFromBitmap<ScanlineFormat::N32BitTcAbgr>( rDst, rSrc );
-#ifdef FAST_ARGB_BGRA
         case ScanlineFormat::N32BitTcArgb:
             return ImplConvertFromBitmap<ScanlineFormat::N32BitTcArgb>( rDst, rSrc );
         case ScanlineFormat::N32BitTcBgra:
             return ImplConvertFromBitmap<ScanlineFormat::N32BitTcBgra>( rDst, rSrc );
-#endif
         case ScanlineFormat::N32BitTcRgba:
             return ImplConvertFromBitmap<ScanlineFormat::N32BitTcRgba>( rDst, rSrc );
         default: break;
@@ -644,12 +638,10 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
 
         case ScanlineFormat::N32BitTcAbgr:
             return ImplBlendToBitmap<ScanlineFormat::N32BitTcAbgr>( aSrcType, rDst, rSrc, rMsk );
-#ifdef FAST_ARGB_BGRA
         case ScanlineFormat::N32BitTcArgb:
             return ImplBlendToBitmap<ScanlineFormat::N32BitTcArgb>( aSrcType, rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcBgra:
             return ImplBlendToBitmap<ScanlineFormat::N32BitTcBgra>( aSrcType, rDst, rSrc, rMsk );
-#endif
         case ScanlineFormat::N32BitTcRgba:
             return ImplBlendToBitmap<ScanlineFormat::N32BitTcRgba>( aSrcType, rDst, rSrc, rMsk );
         default: break;
@@ -759,12 +751,10 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
 
         case ScanlineFormat::N32BitTcAbgr:
             return ImplBlendFromBitmap<ScanlineFormat::N32BitTcAbgr>( rDst, rSrc, rMsk );
-#ifdef FAST_ARGB_BGRA
         case ScanlineFormat::N32BitTcArgb:
             return ImplBlendFromBitmap<ScanlineFormat::N32BitTcArgb>( rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcBgra:
             return ImplBlendFromBitmap<ScanlineFormat::N32BitTcBgra>( rDst, rSrc, rMsk );
-#endif
         case ScanlineFormat::N32BitTcRgba:
             return ImplBlendFromBitmap<ScanlineFormat::N32BitTcRgba>( rDst, rSrc, rMsk );
         default: break;
@@ -836,10 +826,8 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
         case ScanlineFormat::N24BitTcRgb:
 
         case ScanlineFormat::N32BitTcAbgr:
-#ifdef FAST_ARGB_BGRA
         case ScanlineFormat::N32BitTcArgb:
         case ScanlineFormat::N32BitTcBgra:
-#endif
         case ScanlineFormat::N32BitTcRgba:
             break;
 
