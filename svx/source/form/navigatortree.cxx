@@ -1009,7 +1009,7 @@ namespace svxform
         DBG_ASSERT( DND_ACTION_COPY != _nAction, "NavigatorTree::implExecuteDataTransfer: somebody changed the logics!" );
 
         // list of dragged entries
-        const ListBoxEntrySet& aDropped = _rData.selected();
+        const ListBoxEntrySet aDropped = _rData.selected();
         DBG_ASSERT(!aDropped.empty(), "NavigatorTree::implExecuteDataTransfer: no entries!");
 
         // shell and model
