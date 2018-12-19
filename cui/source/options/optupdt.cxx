@@ -142,7 +142,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         }
 
         LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
-        SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), eUILang );
+        std::unique_ptr<SvNumberFormatter> pNumberFormatter(new SvNumberFormatter( ::comphelper::getProcessComponentContext(), eUILang ));
         Color*      pColor = nullptr;
         const Date& rNullDate = pNumberFormatter->GetNullDate();
         sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( SvNumFormatType::DATE, eUILang );
@@ -152,7 +152,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         nFormat = pNumberFormatter->GetStandardFormat( SvNumFormatType::TIME, eUILang );
         pNumberFormatter->GetOutputString( aTime.GetTimeInDays(), nFormat, aTimeStr, &pColor );
 
-        delete pNumberFormatter;
+        pNumberFormatter.reset();
 
         aText = m_aLastCheckedTemplate;
         sal_Int32 nIndex = aText.indexOf( "%DATE%" );
