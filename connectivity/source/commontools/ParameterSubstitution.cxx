@@ -83,12 +83,11 @@ namespace connectivity
                 OSQLParser aParser( m_xContext );
                 OUString sErrorMessage;
                 OUString sNewSql;
-                OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sText);
+                std::unique_ptr<OSQLParseNode> pNode = aParser.parseTree(sErrorMessage,_sText);
                 if(pNode)
                 {   // special handling for parameters
-                    OSQLParseNode::substituteParameterNames(pNode);
+                    OSQLParseNode::substituteParameterNames(pNode.get());
                     pNode->parseNodeToStr( sNewSql, xConnection );
-                    delete pNode;
                     sRet = sNewSql;
                 }
             }

@@ -664,14 +664,14 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
     {
         // automatically add parentheses around subqueries
         OUString devnull;
-        OSQLParseNode *pParseNode = rParser.parseTree( devnull, _sFieldName, true );
+        std::unique_ptr<OSQLParseNode> pParseNode = rParser.parseTree( devnull, _sFieldName, true );
         if (pParseNode == nullptr)
             pParseNode = rParser.parseTree( devnull, _sFieldName );
         if (pParseNode != nullptr && SQL_ISRULE(pParseNode, select_statement))
             _sFieldName = "(" + _sFieldName + ")";
     }
 
-    OSQLParseNode* pParseNode = nullptr;
+    std::unique_ptr<OSQLParseNode> pParseNode;
     {
         // 4 passes in trying to interpret the field name
         // - don't quote the field name, parse internationally
@@ -879,7 +879,6 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef co
             }
         }
     }
-    delete pParseNode;
 
     return bError;
 }
@@ -1085,7 +1084,7 @@ bool OSelectionBrowseBox::SaveModified()
                 {
                     OUString aErrorMsg;
                     Reference<XPropertySet> xColumn;
-                    OSQLParseNode* pParseNode = getDesignView()->getPredicateTreeFromEntry(pEntry,aText,aErrorMsg,xColumn);
+                    std::unique_ptr<OSQLParseNode> pParseNode = getDesignView()->getPredicateTreeFromEntry(pEntry,aText,aErrorMsg,xColumn);
 
                     if (pParseNode)
                     {
@@ -1097,7 +1096,6 @@ bool OSelectionBrowseBox::SaveModified()
                                                             getDesignView()->getLocale(),
                                                             static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
                                                             &(static_cast<OQueryController&>(getDesignView()->getController()).getParser().getContext()));
-                        delete pParseNode;
                     }
                     else
                     {
@@ -1135,7 +1133,6 @@ bool OSelectionBrowseBox::SaveModified()
                                                                     getDesignView()->getLocale(),
                                                                     static_cast<sal_Char>(getDesignView()->getDecimalSeparator().toChar()),
                                                                     &(static_cast<OQueryController&>(getDesignView()->getController()).getParser().getContext()));
-                                delete pParseNode;
                             }
                             else
                             {

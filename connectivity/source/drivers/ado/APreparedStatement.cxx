@@ -61,15 +61,14 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection, const OUStrin
     OSQLParser aParser(comphelper::getComponentContext(_pConnection->getDriver()->getORB()));
     OUString sErrorMessage;
     OUString sNewSql;
-    OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
+    std::unique_ptr<OSQLParseNode> pNode = aParser.parseTree(sErrorMessage,sql);
     if(pNode)
     {   // special handling for parameters
         //  we recursive replace all occurrences of ? in the statement and
         //  replace them with name like "parame" */
         sal_Int32 nParameterCount = 0;
-        replaceParameterNodeName(pNode,"parame",nParameterCount);
+        replaceParameterNodeName(pNode.get(), "parame", nParameterCount);
         pNode->parseNodeToStr( sNewSql, _pConnection );
-        delete pNode;
     }
     else
         sNewSql = sql;

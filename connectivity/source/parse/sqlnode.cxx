@@ -1159,7 +1159,7 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
 }
 
 
-OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString& rStatement,
+std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage, const OUString& rStatement,
                                          const Reference< css::util::XNumberFormatter > & xFormatter,
                                          const Reference< XPropertySet > & xField,
                                          bool bUseRealName)
@@ -1309,14 +1309,13 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
 
         // Instead, the parse method sets the member pParseTree and simply returns that
         OSL_ENSURE(m_pParseTree != nullptr,"OSQLParser: Parser did not return a ParseTree!");
-        return m_pParseTree;
+        return std::move(m_pParseTree);
     }
 }
 
 
 OSQLParser::OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
     :m_pContext(_pContext)
-    ,m_pParseTree(nullptr)
     ,m_pData( new OSQLParser_Data )
     ,m_nFormatKey(0)
     ,m_nDateFormatKey(0)
