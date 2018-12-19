@@ -549,6 +549,7 @@ test_dbus=yes
 test_fontconfig=yes
 test_cairo=no
 test_gdb_index=no
+test_split_debug=no
 
 # Default values, as such probably valid just for Linux, set
 # differently below just for Mac OSX, but at least better than
@@ -602,6 +603,7 @@ linux-gnu*|k*bsd*-gnu*)
     test_kde5=yes
     test_gtk3_kde5=yes
     test_gdb_index=yes
+    test_split_debug=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
         test_fontconfig=yes
@@ -1125,9 +1127,9 @@ libo_FUZZ_ARG_ENABLE(debug,
          extra debugging code like assertions. Extra large build! (enables -g compiler flag).]))
 
 libo_FUZZ_ARG_ENABLE(split-debug,
-    AS_HELP_STRING([--enable-split-debug],
-        [Uses split debug information (-gsplit-dwarf compile flag). Saves disk space and build time,
-         but requires tools that support it (both build tools and debuggers).]))
+    AS_HELP_STRING([--disable-split-debug],
+        [Disable using split debug information (-gsplit-dwarf compile flag). Split debug information
+         saves disk space and build time, but requires tools that support it (both build tools and debuggers).]))
 
 libo_FUZZ_ARG_ENABLE(gdb-index,
     AS_HELP_STRING([--disable-gdb-index],
@@ -3859,9 +3861,10 @@ else
 fi
 AC_SUBST(ENABLE_DEBUG)
 
-if test "$enable_split_debug" = yes; then
-    HAVE_GSPLIT_DWARF=
-    if test "$GCC" = "yes"; then
+HAVE_GSPLIT_DWARF=
+if test "$enable_split_debug" != no; then
+    dnl Currently by default enabled only on Linux, feel free to set test_split_debug above also for other platforms.
+    if test "$enable_split_debug" = yes -o \( "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
         AC_MSG_CHECKING([whether $CC supports -gsplit-dwarf])
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -Werror -gsplit-dwarf"
@@ -3870,11 +3873,19 @@ if test "$enable_split_debug" = yes; then
         if test "$HAVE_GCC_SPLIT_DWARF" = "TRUE"; then
             AC_MSG_RESULT([yes])
         else
-            AC_MSG_RESULT([no])
+            if test "$enable_split_debug" = yes; then
+                AC_MSG_ERROR([no])
+            else
+                AC_MSG_RESULT([no])
+            fi
         fi
     fi
-    AC_SUBST(HAVE_GCC_SPLIT_DWARF)
+    if test -z "$HAVE_GCC_SPLIT_DWARF" -a "$test_split_debug" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+        AC_MSG_WARN([Compiler is not capable of creating split debug info, linking will require more time and disk space.])
+        add_warning "Compiler is not capable of creating split debug info, linking will require more time and disk space."
+    fi
 fi
+AC_SUBST(HAVE_GCC_SPLIT_DWARF)
 
 ENABLE_GDB_INDEX=
 if test "$enable_gdb_index" != "no"; then
