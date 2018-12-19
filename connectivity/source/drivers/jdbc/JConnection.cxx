@@ -770,7 +770,7 @@ bool java_sql_Connection::construct(const OUString& url,
             jvalue args[2];
             // convert Parameter
             args[0].l = convertwchar_tToJavaString(t.pEnv,url);
-            java_util_Properties* pProps = createStringPropertyArray(info);
+            std::unique_ptr<java_util_Properties> pProps = createStringPropertyArray(info);
             args[1].l = pProps->getJavaObject();
 
             LocalRef< jobject > ensureDelete( t.env(), args[0].l );
@@ -792,8 +792,7 @@ bool java_sql_Connection::construct(const OUString& url,
             {
                 ContextClassLoaderScope ccl( t.env(), getDriverClassLoader(), getLogger(), *this );
                 out = t.pEnv->CallObjectMethod( m_pDriverobject, mID, args[0].l,args[1].l );
-                delete pProps;
-                pProps = nullptr;
+                pProps.reset();
                 ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             }
 
