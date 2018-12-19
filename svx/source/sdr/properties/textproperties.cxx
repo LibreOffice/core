@@ -261,13 +261,13 @@ namespace sdr
                     {
                         for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                         {
-                            SfxItemSet* pTempSet = nullptr;
+                            std::unique_ptr<SfxItemSet> pTempSet;
 
                             // since setting the stylesheet removes all para attributes
                             if(bDontRemoveHardAttr)
                             {
                                 // we need to remember them if we want to keep them
-                                pTempSet = new SfxItemSet(rOutliner.GetParaAttribs(nPara));
+                                pTempSet.reset(new SfxItemSet(rOutliner.GetParaAttribs(nPara)));
                             }
 
                             if(GetStyleSheet())
@@ -333,8 +333,6 @@ namespace sdr
                                     }
                                 }
                             }
-
-                            delete pTempSet;
                         }
 
                         std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);

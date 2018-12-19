@@ -512,7 +512,7 @@ namespace svxform
             {
                 DataItemType eType = DITElement;
                 SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
-                ItemNode* pNode = nullptr;
+                std::unique_ptr<ItemNode> pNode;
                 Reference< css::xml::dom::XNode > xParentNode;
                 Reference< XPropertySet > xNewBinding;
                 const char* pResId = nullptr;
@@ -597,7 +597,7 @@ namespace svxform
                     {
                         SAL_WARN( "svx.form", "XFormsPage::DoToolBoxAction(): exception while get binding for node" );
                     }
-                    pNode = new ItemNode( xNewNode );
+                    pNode.reset(new ItemNode( xNewNode ));
                 }
                 else
                 {
@@ -607,7 +607,7 @@ namespace svxform
                         xNewBinding = xModel->createBinding();
                         Reference< XSet > xBindings( xModel->getBindings(), UNO_QUERY );
                         xBindings->insert( makeAny( xNewBinding ) );
-                        pNode = new ItemNode( xNewBinding );
+                        pNode.reset(new ItemNode( xNewBinding ));
                         eType = DITBinding;
                     }
                     catch ( Exception& )
@@ -616,7 +616,7 @@ namespace svxform
                     }
                 }
 
-                ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
+                ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode.get(), m_xUIHelper );
                 aDlg->SetText( SvxResId( pResId ) );
                 aDlg->InitText( eType );
                 short nReturn = aDlg->Execute();
@@ -624,7 +624,7 @@ namespace svxform
                 {
                     if ( RET_OK == nReturn )
                     {
-                        SvTreeListEntry* pNewEntry = AddEntry( pNode, bIsElement );
+                        SvTreeListEntry* pNewEntry = AddEntry( std::move(pNode), bIsElement );
                         m_pItemList->MakeVisible( pNewEntry );
                         m_pItemList->Select( pNewEntry );
                         bIsDocModified = true;
@@ -639,7 +639,6 @@ namespace svxform
                             if ( xNode.is() )
                                 xPNode = xNode->getParentNode();
                             DBG_ASSERT( !xPNode.is(), "XFormsPage::RemoveEntry(): node not removed" );
-                            delete pNode;
                         }
                         catch ( Exception& )
                         {
@@ -667,7 +666,6 @@ namespace svxform
                             SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught" );
                         }
                     }
-                    delete pNode;
                 }
             }
         }
@@ -787,7 +785,7 @@ namespace svxform
         return bHandled;
     }
 
-    SvTreeListEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
+    SvTreeListEntry* XFormsPage::AddEntry( std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement )
     {
         SvTreeListEntry* pParent = m_pItemList->FirstSelected();
         Image aImage(StockImage::Yes, _bIsElement ? OUString(RID_SVXBMP_ELEMENT) : OUString(RID_SVXBMP_ATTRIBUTE));
@@ -802,7 +800,7 @@ namespace svxform
             DBG_UNHANDLED_EXCEPTION("svx");
         }
         return m_pItemList->InsertEntry(
-            sName, aImage, aImage, pParent, false, TREELIST_APPEND, _pNewNode );
+            sName, aImage, aImage, pParent, false, TREELIST_APPEND, _pNewNode.release() );
     }
 
     SvTreeListEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )

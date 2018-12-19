@@ -239,25 +239,18 @@ void SdrPageView::CompleteRedraw(
     if(GetPage())
     {
         SdrPageWindow* pPageWindow = FindPageWindow(rPaintWindow);
-        bool bIsTempTarget(false);
+        std::unique_ptr<SdrPageWindow> pTempPageWindow;
 
         if(!pPageWindow)
         {
             // create temp PageWindow
-            pPageWindow = new SdrPageWindow(*this, rPaintWindow);
-            bIsTempTarget = true;
+            pTempPageWindow.reset(new SdrPageWindow(*this, rPaintWindow));
+            pPageWindow = pTempPageWindow.get();
         }
 
         // do the redraw
         pPageWindow->PrepareRedraw(rReg);
         pPageWindow->RedrawAll(pRedirector);
-
-        // get rid of temp PageWindow
-        if(bIsTempTarget)
-        {
-            delete pPageWindow;
-            pPageWindow = nullptr;
-        }
     }
 }
 
