@@ -492,8 +492,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
             }
         }
 
-        typedef Sequence< PropertyChangeEvent > PropertyEventSequence;
-        typedef std::map< XPropertiesChangeListener*, PropertyEventSequence* > PropertiesEventListenerMap;
+        typedef std::map< XPropertiesChangeListener*, Sequence< PropertyChangeEvent > > PropertiesEventListenerMap;
         PropertiesEventListenerMap aListeners;
 
         const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();
@@ -509,39 +508,32 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
                 OInterfaceIteratorHelper aIter( *pPropsContainer );
                 while ( aIter.hasMoreElements() )
                 {
-                    PropertyEventSequence* propertyEvents = nullptr;
+                    Sequence< PropertyChangeEvent >* propertyEvents;
 
                     XPropertiesChangeListener* pListener = static_cast< XPropertiesChangeListener * >( aIter.next() );
-                    PropertiesEventListenerMap::const_iterator it = aListeners.find( pListener );
+                    PropertiesEventListenerMap::iterator it = aListeners.find( pListener );
                     if ( it == aListeners.end() )
                     {
                         // Not in map - create and insert new entry.
-                        propertyEvents = new PropertyEventSequence( nCount );
-                        aListeners[ pListener ] = propertyEvents;
+                        auto pair = aListeners.emplace( pListener, Sequence< PropertyChangeEvent >( nCount ));
+                        propertyEvents = &pair.first->second;
                     }
                     else
-                        propertyEvents = (*it).second;
+                        propertyEvents = &(*it).second;
 
-                    if ( propertyEvents )
-                        (*propertyEvents)[n] = rEvent;
+                    (*propertyEvents)[n] = rEvent;
                 }
             }
         }
 
         // Notify listeners.
-        PropertiesEventListenerMap::const_iterator it = aListeners.begin();
-        while ( !aListeners.empty() )
+        for (auto & rPair : aListeners)
         {
-            XPropertiesChangeListener* pListener = (*it).first;
-            PropertyEventSequence* pSeq = (*it).second;
-
-            // Remove current element.
-            it = aListeners.erase( it );
+            XPropertiesChangeListener* pListener = rPair.first;
+            Sequence< PropertyChangeEvent >& rSeq = rPair.second;
 
             // Propagate event.
-            pListener->propertiesChange( *pSeq );
-
-            delete pSeq;
+            pListener->propertiesChange( rSeq );
         }
     }
 }
