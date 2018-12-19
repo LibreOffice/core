@@ -182,8 +182,8 @@ private:
         @param functionOffset  the function offset of the first vtable slot
         (typically coded into the code snippet for that vtable slot)
         @param functionCount  the number of vtable slots to fill (the number of
-        local functions of the given type, passed in so that it need not be
-        recomputed)
+        local functions of the given type, passed in so that it doesn't need to
+        be recomputed)
         @param vtableOffset  the offset of this vtable (needed to adjust the
         this pointer, typically coded into the code snippets for all the filled
         vtable slots)
