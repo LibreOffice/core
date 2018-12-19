@@ -16,6 +16,7 @@ extras_AUTOCORR_LANGS := \
 	cs:cs-CZ \
 	da:da-DK \
 	de:de \
+	dsb:dsb \
 	el:el-GR \
 	en-AU:en-AU \
 	en-GB:en-GB \
@@ -27,6 +28,7 @@ extras_AUTOCORR_LANGS := \
 	fr:fr \
 	ga-IE:ga-IE \
 	hr:hr-HR \
+	hsb:hsb \
 	hu:hu-HU \
 	is:is-IS \
 	it:it \
@@ -79,6 +81,8 @@ extras_AUTOCORR_XMLFILES := \
 	de/META-INF/manifest.xml \
 	de/SentenceExceptList.xml \
 	de/WordExceptList.xml \
+	dsb/DocumentList.xml \
+	dsb/META-INF/manifest.xml \
 	el/DocumentList.xml \
 	el/META-INF/manifest.xml \
 	el/SentenceExceptList.xml \
@@ -121,6 +125,8 @@ extras_AUTOCORR_XMLFILES := \
 	hr/META-INF/manifest.xml \
 	hr/SentenceExceptList.xml \
 	hr/WordExceptList.xml \
+	hsb/DocumentList.xml \
+	hsb/META-INF/manifest.xml \
 	hu/DocumentList.xml \
 	hu/META-INF/manifest.xml \
 	hu/SentenceExceptList.xml \
