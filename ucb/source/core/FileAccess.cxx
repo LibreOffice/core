@@ -20,6 +20,7 @@
 #include <uno/mapping.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -434,7 +435,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
 {
     // SfxContentHelper::GetFolderContents
 
-    StringList_Impl* pFiles = nullptr;
+    std::vector<OUString> aFiles;
     INetURLObject aFolderObj( FolderURL, INetProtocol::File );
 
     ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
@@ -454,35 +455,17 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
 
     if ( xResultSet.is() )
     {
-        pFiles = new StringList_Impl;
         Reference< css::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
         while ( xResultSet->next() )
         {
             OUString aId = xContentAccess->queryContentIdentifierString();
             INetURLObject aURL( aId, INetProtocol::File );
-            OUString* pFile = new OUString( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-            pFiles->push_back( pFile );
+            aFiles.push_back( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         }
     }
 
-    if ( pFiles )
-    {
-        size_t nCount = pFiles->size();
-        Sequence < OUString > aRet( nCount );
-        OUString* pRet = aRet.getArray();
-        for ( size_t i = 0; i < nCount; ++i )
-        {
-            OUString* pFile = pFiles->at( i );
-            pRet[i] = *pFile;
-            delete pFile;
-        }
-        pFiles->clear();
-        delete pFiles;
-        return aRet;
-    }
-    else
-        return Sequence < OUString > ();
+    return comphelper::containerToSequence(aFiles);
 }
 
 sal_Bool OFileAccess::exists( const OUString& FileURL )
