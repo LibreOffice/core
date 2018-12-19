@@ -50,7 +50,7 @@ namespace svxform
         OSQLParserClient(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
-        std::shared_ptr< ::connectivity::OSQLParseNode > predicateTree(
+        std::unique_ptr< ::connectivity::OSQLParseNode > predicateTree(
                 OUString& _rErrorMessage,
                 const OUString& _rStatement,
                 const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,

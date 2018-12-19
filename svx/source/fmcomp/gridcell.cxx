@@ -2890,7 +2890,7 @@ bool DbFilterField::commitControl()
             OUString aErrorMsg;
             Reference< XNumberFormatter >  xNumberFormatter(m_rColumn.GetParent().getNumberFormatter());
 
-            std::shared_ptr< OSQLParseNode > pParseNode = predicateTree(aErrorMsg, aNewText,xNumberFormatter, m_rColumn.GetField());
+            std::unique_ptr< OSQLParseNode > pParseNode = predicateTree(aErrorMsg, aNewText,xNumberFormatter, m_rColumn.GetField());
             if (pParseNode != nullptr)
             {
                 OUString aPreparedText;

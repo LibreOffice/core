@@ -100,10 +100,10 @@ namespace
 
         If the statement cannot be parsed, an error is thrown.
     */
-    const OSQLParseNode* parseStatement_throwError( OSQLParser& _rParser, const OUString& _rStatement, const Reference< XInterface >& _rxContext )
+    const std::unique_ptr<OSQLParseNode> parseStatement_throwError( OSQLParser& _rParser, const OUString& _rStatement, const Reference< XInterface >& _rxContext )
     {
         OUString aErrorMsg;
-        const OSQLParseNode* pNewSqlParseNode = _rParser.parseTree( aErrorMsg, _rStatement );
+        std::unique_ptr<OSQLParseNode> pNewSqlParseNode = _rParser.parseTree( aErrorMsg, _rStatement );
         if ( !pNewSqlParseNode )
         {
             OUString sSQLStateGeneralError( getStandardSQLState( StandardSQLState::GENERAL_ERROR ) );
@@ -146,8 +146,8 @@ namespace
     void parseAndCheck_throwError( OSQLParser& _rParser, const OUString& _rStatement,
         OSQLParseTreeIterator& _rIterator, const Reference< XInterface >& _rxContext )
     {
-        const OSQLParseNode* pNode = parseStatement_throwError( _rParser, _rStatement, _rxContext );
-        checkForSingleSelect_throwError( pNode, _rIterator, _rxContext, _rStatement );
+        std::unique_ptr<OSQLParseNode> pNode = parseStatement_throwError( _rParser, _rStatement, _rxContext );
+        checkForSingleSelect_throwError( pNode.release(), _rIterator, _rxContext, _rStatement );
     }
 
     /** transforms a parse node describing a complete statement into a pure select
