@@ -1573,10 +1573,10 @@ sal_Int32 SAL_CALL SwAccessibleTable::getBackground()
         uno::Reference<XAccessible> xAccDoc = getAccessibleParent();
         if (xAccDoc.is())
         {
-            uno::Reference<XAccessibleComponent> xCompoentDoc(xAccDoc,uno::UNO_QUERY);
-            if (xCompoentDoc.is())
+            uno::Reference<XAccessibleComponent> xComponentDoc(xAccDoc,uno::UNO_QUERY);
+            if (xComponentDoc.is())
             {
-                crBack = Color(xCompoentDoc->getBackground());
+                crBack = Color(xComponentDoc->getBackground());
             }
         }
     }
