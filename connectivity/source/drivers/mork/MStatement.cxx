@@ -115,7 +115,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
 {
     OUString aErr;
 
-    m_pParseTree.reset( m_aParser.parseTree(aErr,sql) );
+    m_pParseTree = m_aParser.parseTree(aErr,sql);
 
     if(m_pParseTree)
     {

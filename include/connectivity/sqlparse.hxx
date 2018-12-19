@@ -136,7 +136,7 @@ namespace connectivity
 
     // information on the current parse action
         const IParseContext*        m_pContext;
-        OSQLParseNode*              m_pParseTree;   // result from parsing
+        std::unique_ptr<OSQLParseNode> m_pParseTree;   // result from parsing
         ::std::unique_ptr< OSQLParser_Data >
                                     m_pData;
         OUString                     m_sFieldName;   // current field name for a predicate
@@ -171,14 +171,14 @@ namespace connectivity
         ~OSQLParser();
 
         // Parsing an SQLStatement
-        OSQLParseNode* parseTree(OUString& rErrorMessage,
+        std::unique_ptr<OSQLParseNode> parseTree(OUString& rErrorMessage,
                        const OUString& rStatement,
                        bool bInternational = false);
 
         // Check a Predicate
         // set bUseRealName to false if you pass a xField that comes from where you got that field,
         // as opposed from to from yourself.
-        OSQLParseNode* predicateTree(OUString& rErrorMessage, const OUString& rStatement,
+        std::unique_ptr<OSQLParseNode> predicateTree(OUString& rErrorMessage, const OUString& rStatement,
                        const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
                        const css::uno::Reference< css::beans::XPropertySet > & xField,
                        bool bUseRealName = true);
