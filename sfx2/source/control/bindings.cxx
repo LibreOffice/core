@@ -259,7 +259,7 @@ void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCa
     const SfxSlot *pRealSlot = nullptr;
     const SfxSlotServer* pMsgServer = nullptr;
     SfxFoundCacheArr_Impl aFound;
-    SfxItemSet *pSet = CreateSet_Impl(rCache, pRealSlot, &pMsgServer, aFound);
+    std::unique_ptr<SfxItemSet> pSet = CreateSet_Impl(rCache, pRealSlot, &pMsgServer, aFound);
     bool bUpdated = false;
     if ( pSet )
     {
@@ -280,7 +280,7 @@ void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCa
             bUpdated = true;
         }
 
-        delete pSet;
+        pSet.reset();
     }
 
     if (!bUpdated)
@@ -1093,7 +1093,7 @@ void SfxBindings::UpdateSlotServer_Impl()
 }
 
 
-SfxItemSet* SfxBindings::CreateSet_Impl
+std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
 (
     SfxStateCache&          rCache,     // in: Status-Cache from nId
     const SfxSlot*&         pRealSlot,  // out: RealSlot to nId
@@ -1182,7 +1182,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         pRanges[j++] = rFound[i++].nWhichId;
     }
     pRanges[j] = 0; // terminating NULL
-    SfxItemSet *pSet = new SfxItemSet(rPool, pRanges.get());
+    std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(rPool, pRanges.get()));
     pRanges.reset();
     return pSet;
 }

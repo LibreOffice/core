@@ -3172,10 +3172,10 @@ void SfxMedium::CompleteReOpen()
     bool bUseInteractionHandler = pImpl->bUseInteractionHandler;
     pImpl->bUseInteractionHandler = false;
 
-    ::utl::TempFile* pTmpFile = nullptr;
+    std::unique_ptr<::utl::TempFile> pTmpFile;
     if ( pImpl->pTempFile )
     {
-        pTmpFile = pImpl->pTempFile.release();
+        pTmpFile = std::move(pImpl->pTempFile);
         pImpl->m_aName.clear();
     }
 
@@ -3188,15 +3188,14 @@ void SfxMedium::CompleteReOpen()
             pImpl->pTempFile->EnableKillingFile();
             pImpl->pTempFile.reset();
         }
-        pImpl->pTempFile.reset( pTmpFile );
+        pImpl->pTempFile = std::move( pTmpFile );
         if ( pImpl->pTempFile )
             pImpl->m_aName = pImpl->pTempFile->GetFileName();
     }
     else if (pTmpFile)
     {
         pTmpFile->EnableKillingFile();
-        delete pTmpFile;
-
+        pTmpFile.reset();
     }
 
     pImpl->bUseInteractionHandler = bUseInteractionHandler;
@@ -3717,7 +3716,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
             GetOutStream();
             if ( pImpl->m_pOutStream )
             {
-                char        *pBuf = new char [8192];
+                std::unique_ptr<char[]> pBuf(new char [8192]);
                 ErrCode      nErr = ERRCODE_NONE;
 
                 pImpl->m_pInStream->Seek(0);
@@ -3725,13 +3724,12 @@ void SfxMedium::CreateTempFile( bool bReplace )
 
                 while( !pImpl->m_pInStream->eof() && nErr == ERRCODE_NONE )
                 {
-                    sal_uInt32 nRead = pImpl->m_pInStream->ReadBytes(pBuf, 8192);
+                    sal_uInt32 nRead = pImpl->m_pInStream->ReadBytes(pBuf.get(), 8192);
                     nErr = pImpl->m_pInStream->GetError();
-                    pImpl->m_pOutStream->WriteBytes( pBuf, nRead );
+                    pImpl->m_pOutStream->WriteBytes( pBuf.get(), nRead );
                 }
 
                 bTransferSuccess = true;
-                delete[] pBuf;
                 CloseInStream();
             }
             CloseOutStream_Impl();

@@ -772,9 +772,9 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
         // dispatch the URL
         if ( xDispatch.is() )
         {
-            ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
-            if( Application::PostUserEvent( Link<void*,void>( nullptr, implDispatchDelayed ), pDisp ) == nullptr )
-                delete pDisp; // event could not be posted for unknown reason, at least don't leak
+            std::unique_ptr<ImplDelayedDispatch> pDisp(new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs ));
+            if( ! Application::PostUserEvent( Link<void*,void>( nullptr, implDispatchDelayed ), pDisp.get() ) )
+                pDisp.reset(); // event could not be posted for unknown reason, at least don't leak
         }
     }
     catch (const css::uno::RuntimeException&)

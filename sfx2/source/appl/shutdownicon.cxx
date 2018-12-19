@@ -493,13 +493,11 @@ ShutdownIcon* ShutdownIcon::createInstance()
     if (pShutdownIcon)
         return pShutdownIcon;
 
-    ShutdownIcon *pIcon = nullptr;
     try {
-        pIcon = new ShutdownIcon( comphelper::getProcessComponentContext() );
+        ShutdownIcon *pIcon = new ShutdownIcon( comphelper::getProcessComponentContext() );
         pIcon->init ();
         pShutdownIcon = pIcon;
     } catch (...) {
-        delete pIcon;
     }
 
     return pShutdownIcon;
