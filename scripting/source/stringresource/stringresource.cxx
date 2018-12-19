@@ -38,6 +38,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <osl/diagnose.h>
+#include <o3tl/make_unique.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
@@ -337,8 +338,8 @@ void StringResourceImpl::setDefaultLocale( const Locale& locale )
     {
         if( m_pDefaultLocaleItem )
         {
-            LocaleItem* pChangedDefaultLocaleItem = new LocaleItem( m_pDefaultLocaleItem->m_locale );
-            m_aChangedDefaultLocaleVector.push_back( pChangedDefaultLocaleItem );
+            m_aChangedDefaultLocaleVector.push_back(
+                o3tl::make_unique<LocaleItem>( m_pDefaultLocaleItem->m_locale ) );
         }
 
         m_pDefaultLocaleItem = pLocaleItem;
@@ -523,8 +524,8 @@ void StringResourceImpl::removeLocale( const Locale& locale )
                     m_nNextUniqueNumericId = 0;
                     if( m_pDefaultLocaleItem )
                     {
-                        LocaleItem* pChangedDefaultLocaleItem = new LocaleItem( m_pDefaultLocaleItem->m_locale );
-                        m_aChangedDefaultLocaleVector.push_back( pChangedDefaultLocaleItem );
+                        m_aChangedDefaultLocaleVector.push_back(
+                                o3tl::make_unique<LocaleItem>( m_pDefaultLocaleItem->m_locale ) );
                     }
                     m_pCurrentLocaleItem = nullptr;
                     m_pDefaultLocaleItem = nullptr;
@@ -937,20 +938,17 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     {
         for( auto& pLocaleItem : m_aChangedDefaultLocaleVector )
         {
-            if( pLocaleItem != nullptr )
+            OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem.get(), m_aNameBase );
+            aStreamName += ".default";
+
+            try
             {
-                OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-                aStreamName += ".default";
-
-                try
-                {
-                    Storage->removeElement( aStreamName );
-                }
-                catch( Exception& )
-                {}
-
-                delete pLocaleItem;
+                Storage->removeElement( aStreamName );
             }
+            catch( Exception& )
+            {}
+
+            pLocaleItem.reset();
         }
         m_aChangedDefaultLocaleVector.clear();
     }
@@ -1019,15 +1017,11 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
     // Delete files for changed defaults
     for( auto& pLocaleItem : m_aChangedDefaultLocaleVector )
     {
-        if( pLocaleItem != nullptr )
-        {
-            OUString aCompleteFileName =
-                implGetPathForLocaleItem( pLocaleItem, aNameBase, Location, true );
-            if( xFileAccess->exists( aCompleteFileName ) )
-                xFileAccess->kill( aCompleteFileName );
-
-            delete pLocaleItem;
-        }
+        OUString aCompleteFileName =
+            implGetPathForLocaleItem( pLocaleItem.get(), aNameBase, Location, true );
+        if( xFileAccess->exists( aCompleteFileName ) )
+            xFileAccess->kill( aCompleteFileName );
+        pLocaleItem.reset();
     }
     m_aChangedDefaultLocaleVector.clear();
 }

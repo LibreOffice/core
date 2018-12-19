@@ -82,7 +82,7 @@ struct LocaleItem
     {}
 };
 
-typedef std::vector< LocaleItem* > LocaleItemVector;
+typedef std::vector< std::unique_ptr<LocaleItem> > LocaleItemVector;
 
 typedef ::cppu::WeakImplHelper<
     css::lang::XServiceInfo,
