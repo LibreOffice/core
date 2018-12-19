@@ -123,9 +123,9 @@ namespace dbtools
     }
 
 
-    OSQLParseNode* OPredicateInputController::implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const Reference< XPropertySet > & _rxField) const
+    std::unique_ptr<OSQLParseNode> OPredicateInputController::implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const Reference< XPropertySet > & _rxField) const
     {
-        OSQLParseNode* pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, _rStatement, m_xFormatter, _rxField );
+        std::unique_ptr<OSQLParseNode> pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, _rStatement, m_xFormatter, _rxField );
         if ( !pReturn )
         {   // is it a text field ?
             sal_Int32 nType = DataType::OTHER;
@@ -242,7 +242,7 @@ namespace dbtools
             // parse the string
             OUString sError;
             OUString sTransformedText( _rPredicateValue );
-            OSQLParseNode* pParseNode = implPredicateTree( sError, sTransformedText, _rxField );
+            std::unique_ptr<OSQLParseNode> pParseNode = implPredicateTree( sError, sTransformedText, _rxField );
             if ( _pErrorMessage ) *_pErrorMessage = sError;
 
             if ( pParseNode )
@@ -258,7 +258,6 @@ namespace dbtools
                     rParseContext.getPreferredLocale(), static_cast<sal_Char>(nDecSeparator), &rParseContext
                 );
                 _rPredicateValue = sTransformedText;
-                delete pParseNode;
 
                 bSuccess = true;
             }
@@ -279,9 +278,9 @@ namespace dbtools
             // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
 
             OUString sError;
-            OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, _rxField );
+            std::unique_ptr<OSQLParseNode> pParseNode = implPredicateTree( sError, _rPredicateValue, _rxField );
 
-            implParseNode(pParseNode, true) >>= sReturn;
+            implParseNode(std::move(pParseNode), true) >>= sReturn;
         }
 
         return sReturn;
@@ -325,10 +324,10 @@ namespace dbtools
         pColumn->setFunction(true);
         pColumn->setRealName(sField);
 
-        OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, xColumn );
+        std::unique_ptr<OSQLParseNode> pParseNode = implPredicateTree( sError, _rPredicateValue, xColumn );
         if(pParseNode)
         {
-            implParseNode(pParseNode, true) >>= sReturn;
+            implParseNode(std::move(pParseNode), true) >>= sReturn;
         }
         return sReturn;
     }
@@ -344,22 +343,21 @@ namespace dbtools
             // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
 
             OUString sError;
-            OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, _rxField );
+            std::unique_ptr<OSQLParseNode> pParseNode = implPredicateTree( sError, _rPredicateValue, _rxField );
 
-            return implParseNode(pParseNode, false);
+            return implParseNode(std::move(pParseNode), false);
         }
 
         return Any();
     }
 
-    Any OPredicateInputController::implParseNode(OSQLParseNode* pParseNode, bool _bForStatementUse) const
+    Any OPredicateInputController::implParseNode(std::unique_ptr<OSQLParseNode> pParseNode, bool _bForStatementUse) const
     {
         if ( ! pParseNode )
             return Any();
         else
         {
             OUString sReturn;
-            std::shared_ptr<OSQLParseNode> xTakeOwnership(pParseNode);
             OSQLParseNode* pOdbcSpec = pParseNode->getByRule( OSQLParseNode::odbc_fct_spec );
             if ( pOdbcSpec )
             {

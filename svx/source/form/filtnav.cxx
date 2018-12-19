@@ -805,7 +805,7 @@ bool FmFilterModel::ValidateText(FmFilterItem const * pItem, OUString& rText, OU
 
         // parse the given text as filter predicate
         OUString aErr, aTxt( rText );
-        std::shared_ptr< OSQLParseNode > pParseNode = predicateTree( aErr, aTxt, xFormatter, xField );
+        std::unique_ptr< OSQLParseNode > pParseNode = predicateTree( aErr, aTxt, xFormatter, xField );
         rErrorMsg = aErr;
         rText = aTxt;
         if ( pParseNode != nullptr )
