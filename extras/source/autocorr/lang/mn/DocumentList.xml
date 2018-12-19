@@ -281,23 +281,23 @@
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
   <block-list:block block-list:abbreviated-name=":100 Оноо:" block-list:name="💯"/>
-  <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
-  <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
-  <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
-  <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
-  <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
-  <block-list:block block-list:abbreviated-name=":_):" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":!!:" block-list:name="‼"/>
+  <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
+  <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
+  <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
   <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
   <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
   <block-list:block block-list:abbreviated-name=":-:" block-list:name="−"/>
-  <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
-  <block-list:block block-list:abbreviated-name=":!!:" block-list:name="‼"/>
-  <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
-  <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
-  <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
   <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
-  <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
+  <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
+  <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
+  <block-list:block block-list:abbreviated-name=":_):" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
   <block-list:block block-list:abbreviated-name=":Camera:" block-list:name="📷"/>
   <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
   <block-list:block block-list:abbreviated-name=":Instrction:" block-list:name="🚧"/>
@@ -323,10 +323,10 @@
   <block-list:block block-list:abbreviated-name=":богино:" block-list:name="👕"/>
   <block-list:block block-list:abbreviated-name=":Боолт:" block-list:name="🚢"/>
   <block-list:block block-list:abbreviated-name=":Бор:" block-list:name="☹"/>
-  <block-list:block block-list:abbreviated-name=":Бүрхүүл:" block-list:name="🐚"/>
-  <block-list:block block-list:abbreviated-name=":бүтэгдэхүүн:" block-list:name="∏"/>
   <block-list:block block-list:abbreviated-name=":Буцах:" block-list:name="🂫"/>
   <block-list:block block-list:abbreviated-name=":буюу:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":Бүрхүүл:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":бүтэгдэхүүн:" block-list:name="∏"/>
   <block-list:block block-list:abbreviated-name=":Валоон хэл:" block-list:name="🎈"/>
   <block-list:block block-list:abbreviated-name=":гадас:" block-list:name="⚓"/>
   <block-list:block block-list:abbreviated-name=":гамма:" block-list:name="γ"/>
@@ -344,8 +344,8 @@
   <block-list:block block-list:abbreviated-name=":диаграмм:" block-list:name="📉"/>
   <block-list:block block-list:abbreviated-name=":доогуур:" block-list:name="⚘"/>
   <block-list:block block-list:abbreviated-name=":доош:" block-list:name="☟"/>
-  <block-list:block block-list:abbreviated-name=":дөрвөлжин:" block-list:name="🐗"/>
   <block-list:block block-list:abbreviated-name=":дотор:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":дөрвөлжин:" block-list:name="🐗"/>
   <block-list:block block-list:abbreviated-name=":дугтуй:" block-list:name="✉"/>
   <block-list:block block-list:abbreviated-name=":Дугуй:" block-list:name="🂮"/>
   <block-list:block block-list:abbreviated-name=":дундаж:" block-list:name="🍖"/>
@@ -389,8 +389,8 @@
   <block-list:block block-list:abbreviated-name=":Нар:" block-list:name="☉"/>
   <block-list:block block-list:abbreviated-name=":нийлбэр:" block-list:name="∑"/>
   <block-list:block block-list:abbreviated-name=":ном:" block-list:name="📚"/>
-  <block-list:block block-list:abbreviated-name=":Нүд:" block-list:name="🔔"/>
   <block-list:block block-list:abbreviated-name=":нууц үг:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":Нүд:" block-list:name="🔔"/>
   <block-list:block block-list:abbreviated-name=":Нэгдэл:" block-list:name="∪"/>
   <block-list:block block-list:abbreviated-name=":нэрс:" block-list:name="📛"/>
   <block-list:block block-list:abbreviated-name=":ню:" block-list:name="ν"/>
@@ -398,10 +398,10 @@
   <block-list:block block-list:abbreviated-name=":олдсон:" block-list:name="£"/>
   <block-list:block block-list:abbreviated-name=":омега:" block-list:name="Ω"/>
   <block-list:block block-list:abbreviated-name=":омикрон:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":офис:" block-list:name="🏢"/>
   <block-list:block block-list:abbreviated-name=":өнцөг:" block-list:name="∠"/>
   <block-list:block block-list:abbreviated-name=":өөрийн:" block-list:name="🛃"/>
   <block-list:block block-list:abbreviated-name=":өөрчлөх:" block-list:name="⚖"/>
-  <block-list:block block-list:abbreviated-name=":офис:" block-list:name="🏢"/>
   <block-list:block block-list:abbreviated-name=":Параллелограмм:" block-list:name="▰"/>
   <block-list:block block-list:abbreviated-name=":пи:" block-list:name="π"/>
   <block-list:block block-list:abbreviated-name=":пси:" block-list:name="ψ"/>
@@ -430,8 +430,8 @@
   <block-list:block block-list:abbreviated-name=":тэмдэглэгээ:" block-list:name="📑"/>
   <block-list:block block-list:abbreviated-name=":тэмдэглэл:" block-list:name="¬"/>
   <block-list:block block-list:abbreviated-name=":тэнцүү биш:" block-list:name="≠"/>
-  <block-list:block block-list:abbreviated-name=":үгүй:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":уншилт:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":үгүй:" block-list:name="👎"/>
   <block-list:block block-list:abbreviated-name=":үнэн:" block-list:name="🌳"/>
   <block-list:block block-list:abbreviated-name=":үсэглэл:" block-list:name="🌱"/>
   <block-list:block block-list:abbreviated-name=":Үүл:" block-list:name="☁"/>
@@ -449,17 +449,17 @@
   <block-list:block block-list:abbreviated-name=":Ханш:" block-list:name="🍚"/>
   <block-list:block block-list:abbreviated-name=":харьцуулан тохируулах:" block-list:name="⌚"/>
   <block-list:block block-list:abbreviated-name=":хи:" block-list:name="χ"/>
-  <block-list:block block-list:abbreviated-name=":Хөл:" block-list:name="👢"/>
   <block-list:block block-list:abbreviated-name=":Холбоос:" block-list:name="😉"/>
   <block-list:block block-list:abbreviated-name=":хоосон:" block-list:name="🏦"/>
   <block-list:block block-list:abbreviated-name=":Хоосон олонлог:" block-list:name="∅"/>
   <block-list:block block-list:abbreviated-name=":Хошоонгор:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":Хөл:" block-list:name="👢"/>
   <block-list:block block-list:abbreviated-name=":Хуваагч:" block-list:name="∣"/>
   <block-list:block block-list:abbreviated-name=":хулгана:" block-list:name="🏠"/>
-  <block-list:block block-list:abbreviated-name=":хүснэгт:" block-list:name="🐑"/>
-  <block-list:block block-list:abbreviated-name=":Хүү:" block-list:name="🐀"/>
   <block-list:block block-list:abbreviated-name=":хуудас:" block-list:name="📟"/>
   <block-list:block block-list:abbreviated-name=":хуулах:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":хүснэгт:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":Хүү:" block-list:name="🐀"/>
   <block-list:block block-list:abbreviated-name=":хүчин зүйл:" block-list:name="🏭"/>
   <block-list:block block-list:abbreviated-name=":хэвлэж байгаа:" block-list:name="✍"/>
   <block-list:block block-list:abbreviated-name=":хэдийнэ байгаа:" block-list:name="∃"/>

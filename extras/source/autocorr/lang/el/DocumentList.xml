@@ -12,4 +12,1562 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
+  <block-list:block block-list:abbreviated-name=":1/2:" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name=":1/3:" block-list:name="⅓"/>
+  <block-list:block block-list:abbreviated-name=":1/4:" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name=":1/8:" block-list:name="⅛"/>
+  <block-list:block block-list:abbreviated-name=":2/3:" block-list:name="⅔"/>
+  <block-list:block block-list:abbreviated-name=":3/4:" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":3/8:" block-list:name="⅜"/>
+  <block-list:block block-list:abbreviated-name=":5/8:" block-list:name="⅝"/>
+  <block-list:block block-list:abbreviated-name=":7/8:" block-list:name="⅞"/>
+  <block-list:block block-list:abbreviated-name=":!!:" block-list:name="‼"/>
+  <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
+  <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
+  <block-list:block block-list:abbreviated-name=":-+:" block-list:name="∓"/>
+  <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
+  <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name=":-:" block-list:name="−"/>
+  <block-list:block block-list:abbreviated-name=":.:" block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
+  <block-list:block block-list:abbreviated-name=":dvd:" block-list:name="📀"/>
+  <block-list:block block-list:abbreviated-name=":E:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":ff:" block-list:name="ﬀ"/>
+  <block-list:block block-list:abbreviated-name=":ffi:" block-list:name="ﬃ"/>
+  <block-list:block block-list:abbreviated-name=":ffl:" block-list:name="ﬄ"/>
+  <block-list:block block-list:abbreviated-name=":fi:" block-list:name="ﬁ"/>
+  <block-list:block block-list:abbreviated-name=":fl:" block-list:name="ﬂ"/>
+  <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":hryvnia (Ουκρανίας):" block-list:name="₴"/>
+  <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":N:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":S:" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=":W:" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=":x4:" block-list:name="🗶"/>
+  <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
+  <block-list:block block-list:abbreviated-name=":αβγό:" block-list:name="🥚"/>
+  <block-list:block block-list:abbreviated-name=":αβοκάντο:" block-list:name="🥑"/>
+  <block-list:block block-list:abbreviated-name=":άγαλμα μοϊάι:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":άγαλμα της ελευθερίας:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":αγάπη2:" block-list:name="🤟"/>
+  <block-list:block block-list:abbreviated-name=":αγγελάκι:" block-list:name="👼"/>
+  <block-list:block block-list:abbreviated-name=":αγγούρι:" block-list:name="🥒"/>
+  <block-list:block block-list:abbreviated-name=":αγελάδα:" block-list:name="🐄"/>
+  <block-list:block block-list:abbreviated-name=":Αγία Βασίλαινα:" block-list:name="🤶"/>
+  <block-list:block block-list:abbreviated-name=":Άγιος Βασίλης:" block-list:name="🎅"/>
+  <block-list:block block-list:abbreviated-name=":αγκαλιά:" block-list:name="🤗"/>
+  <block-list:block block-list:abbreviated-name=":άγκυρα:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":αγόρι:" block-list:name="👦"/>
+  <block-list:block block-list:abbreviated-name=":αγόρια:" block-list:name="🛉"/>
+  <block-list:block block-list:abbreviated-name=":αγριόχοιρος:" block-list:name="🐗"/>
+  <block-list:block block-list:abbreviated-name=":αγωνιώδες πρόσωπο:" block-list:name="😧"/>
+  <block-list:block block-list:abbreviated-name=":αεροπλάνο2:" block-list:name="🛩"/>
+  <block-list:block block-list:abbreviated-name=":αεροπλάνο3:" block-list:name="🛧"/>
+  <block-list:block block-list:abbreviated-name=":αεροπλάνο4:" block-list:name="🛨"/>
+  <block-list:block block-list:abbreviated-name=":αεροπλάνο5:" block-list:name="🛦"/>
+  <block-list:block block-list:abbreviated-name=":αεροπλάνο6:" block-list:name="🛪"/>
+  <block-list:block block-list:abbreviated-name=":αεροπλάνο:" block-list:name="✈"/>
+  <block-list:block block-list:abbreviated-name=":αετός:" block-list:name="🦅"/>
+  <block-list:block block-list:abbreviated-name=":αθλητής χιονοσανίδας:" block-list:name="🏂"/>
+  <block-list:block block-list:abbreviated-name=":αθλητικό υπόδημα:" block-list:name="👟"/>
+  <block-list:block block-list:abbreviated-name=":άθροισμα:" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=":Αιγόκερως:" block-list:name="♑"/>
+  <block-list:block block-list:abbreviated-name=":ακουστικό:" block-list:name="🎧"/>
+  <block-list:block block-list:abbreviated-name=":ακουστικό τηλεφώνου2:" block-list:name="🕻"/>
+  <block-list:block block-list:abbreviated-name=":ακουστικό τηλεφώνου3:" block-list:name="🕽"/>
+  <block-list:block block-list:abbreviated-name=":ακουστικό τηλεφώνου:" block-list:name="📞"/>
+  <block-list:block block-list:abbreviated-name=":ακτή:" block-list:name="🏖"/>
+  <block-list:block block-list:abbreviated-name=":ακτίνες2:" block-list:name="🗥"/>
+  <block-list:block block-list:abbreviated-name=":ακτίνες3:" block-list:name="🗤"/>
+  <block-list:block block-list:abbreviated-name=":ακτίνες4:" block-list:name="🗧"/>
+  <block-list:block block-list:abbreviated-name=":ακτίνες:" block-list:name="🗦"/>
+  <block-list:block block-list:abbreviated-name=":ακύρωση:" block-list:name="🗙"/>
+  <block-list:block block-list:abbreviated-name=":αλεπού:" block-list:name="🦊"/>
+  <block-list:block block-list:abbreviated-name=":άλογο3:" block-list:name="🏇"/>
+  <block-list:block block-list:abbreviated-name=":άλογο:" block-list:name="🐎"/>
+  <block-list:block block-list:abbreviated-name=":αλυσίδα:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":αλυσίδες:" block-list:name="⛓"/>
+  <block-list:block block-list:abbreviated-name=":άλφα:" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=":Άλφα:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":αμαξίδιο:" block-list:name="♿"/>
+  <block-list:block block-list:abbreviated-name=":αμερικάνικο ποδόσφαιρο:" block-list:name="🏈"/>
+  <block-list:block block-list:abbreviated-name=":αμφορέας:" block-list:name="🏺"/>
+  <block-list:block block-list:abbreviated-name=":ανακουφισμένο πρόσωπο:" block-list:name="😌"/>
+  <block-list:block block-list:abbreviated-name=":ανακυκλωμένο χαρτί:" block-list:name="♼"/>
+  <block-list:block block-list:abbreviated-name=":ανανάς:" block-list:name="🍍"/>
+  <block-list:block block-list:abbreviated-name=":ανάποδα:" block-list:name="🙃"/>
+  <block-list:block block-list:abbreviated-name=":αναρριχητής:" block-list:name="🧗"/>
+  <block-list:block block-list:abbreviated-name=":ανατολή:" block-list:name="🌅"/>
+  <block-list:block block-list:abbreviated-name=":ανατολή πάνω από βουνά:" block-list:name="🌄"/>
+  <block-list:block block-list:abbreviated-name=":ανατολή πάνω από κτίρια:" block-list:name="🌇"/>
+  <block-list:block block-list:abbreviated-name=":αναχώρηση αεροπλάνου:" block-list:name="🛫"/>
+  <block-list:block block-list:abbreviated-name=":άνδρας:" block-list:name="👨"/>
+  <block-list:block block-list:abbreviated-name=":άνδρας και γυναίκα χέρι-χέρι:" block-list:name="👫"/>
+  <block-list:block block-list:abbreviated-name=":άνδρας με καπέλο γκούα πι μάο:" block-list:name="👲"/>
+  <block-list:block block-list:abbreviated-name=":άνδρας με σαρίκι:" block-list:name="👳"/>
+  <block-list:block block-list:abbreviated-name=":άνδρες:" block-list:name="🚹"/>
+  <block-list:block block-list:abbreviated-name=":ανδρικό παπούτσι:" block-list:name="👞"/>
+  <block-list:block block-list:abbreviated-name=":ανέκφραστο πρόσωπο:" block-list:name="😑"/>
+  <block-list:block block-list:abbreviated-name=":άνεμος:" block-list:name="🌬"/>
+  <block-list:block block-list:abbreviated-name=":ανεμοστρόβιλος:" block-list:name="🌪"/>
+  <block-list:block block-list:abbreviated-name=":ανήκει σε:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":ανήσυχο πρόσωπο:" block-list:name="😟"/>
+  <block-list:block block-list:abbreviated-name=":Άνθος2:" block-list:name="🌸"/>
+  <block-list:block block-list:abbreviated-name=":άνθος:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":άνθος δένδρου:" block-list:name="🌼"/>
+  <block-list:block block-list:abbreviated-name=":άνθος ίριδας:" block-list:name="⚜"/>
+  <block-list:block block-list:abbreviated-name=":ανκχ:" block-list:name="☥"/>
+  <block-list:block block-list:abbreviated-name=":ανοικτές παλάμες:" block-list:name="👐"/>
+  <block-list:block block-list:abbreviated-name=":ανοικτή κλειδαριά:" block-list:name="🔓"/>
+  <block-list:block block-list:abbreviated-name=":ανοικτό γραμματοκιβώτιο με υψωμένη σημαία:" block-list:name="📬"/>
+  <block-list:block block-list:abbreviated-name=":ανοικτό γραμματοκιβώτιο με χαμηλωμένη σημαία:" block-list:name="📭"/>
+  <block-list:block block-list:abbreviated-name=":ανοικτός φάκελος αρχείων:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":ανταλλαγή:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":αντιπτέριση:" block-list:name="🏸"/>
+  <block-list:block block-list:abbreviated-name=":Άντι Σάκτι:" block-list:name="☬"/>
+  <block-list:block block-list:abbreviated-name=":αντλία καυσίμου:" block-list:name="⛽"/>
+  <block-list:block block-list:abbreviated-name=":απαγορεύεται η είσοδος:" block-list:name="⛔"/>
+  <block-list:block block-list:abbreviated-name=":απαγορεύεται το κάπνισμα:" block-list:name="🚭"/>
+  <block-list:block block-list:abbreviated-name=":απαγορεύονται οι πεζοί:" block-list:name="🚷"/>
+  <block-list:block block-list:abbreviated-name=":απαγορεύονται τα κινητά τηλέφωνα:" block-list:name="📵"/>
+  <block-list:block block-list:abbreviated-name=":απαγορεύονται τα ποδήλατα:" block-list:name="🚳"/>
+  <block-list:block block-list:abbreviated-name=":απαγόρευση:" block-list:name="🛇"/>
+  <block-list:block block-list:abbreviated-name=":άπειρο:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":απελπισία:" block-list:name="🙇"/>
+  <block-list:block block-list:abbreviated-name=":απογοητευμένο αλλά ανακουφισμένο πρόσωπο:" block-list:name="😥"/>
+  <block-list:block block-list:abbreviated-name=":απογοητευμένο πρόσωπο:" block-list:name="😞"/>
+  <block-list:block block-list:abbreviated-name=":αποκαμωμένο πρόσωπο:" block-list:name="😩"/>
+  <block-list:block block-list:abbreviated-name=":αποκαμωμένο πρόσωπο γάτας:" block-list:name="🙀"/>
+  <block-list:block block-list:abbreviated-name=":αποσκευές:" block-list:name="🛄"/>
+  <block-list:block block-list:abbreviated-name=":αποσπώμενο ημερολόγιο:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":αποστακτήριο:" block-list:name="⚗"/>
+  <block-list:block block-list:abbreviated-name=":αποχωρητήριο:" block-list:name="🚾"/>
+  <block-list:block block-list:abbreviated-name=":αράχνη:" block-list:name="🕷"/>
+  <block-list:block block-list:abbreviated-name=":αργυρό:" block-list:name="🥈"/>
+  <block-list:block block-list:abbreviated-name=":αρθρωτό φορτηγό:" block-list:name="🚛"/>
+  <block-list:block block-list:abbreviated-name=":αριθμομηχανή:" block-list:name="🖩"/>
+  <block-list:block block-list:abbreviated-name=":αριστερό-δεξιό βέλος:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":αρνητικό σύμβολο Χ σε τετράγωνο:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":αρουραίος:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":αρσενικό:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":αρσιβαρίστας:" block-list:name="🏋"/>
+  <block-list:block block-list:abbreviated-name=":αρχάριος:" block-list:name="🔰"/>
+  <block-list:block block-list:abbreviated-name=":ασθενοφόρο:" block-list:name="🚑"/>
+  <block-list:block block-list:abbreviated-name=":άσος μπαστούνι:" block-list:name="🂡"/>
+  <block-list:block block-list:abbreviated-name=":ασπίδα2:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":ασπίδα:" block-list:name="🛡"/>
+  <block-list:block block-list:abbreviated-name=":άσπρο σπαθί:" block-list:name="♧"/>
+  <block-list:block block-list:abbreviated-name=":αστικό τοπίο το σούρουπο:" block-list:name="🌆"/>
+  <block-list:block block-list:abbreviated-name=":άστρο του Δαβίδ:" block-list:name="✡"/>
+  <block-list:block block-list:abbreviated-name=":αστυνομικός:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":ΑΤΜ:" block-list:name="🏧"/>
+  <block-list:block block-list:abbreviated-name=":άτομο:" block-list:name="⚛"/>
+  <block-list:block block-list:abbreviated-name=":άτομο με λυγισμένα χέρια:" block-list:name="🙏"/>
+  <block-list:block block-list:abbreviated-name=":άτομο με μπάλα:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":άτομο με συνοφρυωμένο πρόσωπο:" block-list:name="🙎"/>
+  <block-list:block block-list:abbreviated-name=":αυξανόμενη καρδιά:" block-list:name="💗"/>
+  <block-list:block block-list:abbreviated-name=":αύξουσα αμφίκυρτος σελήνη:" block-list:name="🌔"/>
+  <block-list:block block-list:abbreviated-name=":αύξων μηνίσκος σελήνης:" block-list:name="🌒"/>
+  <block-list:block block-list:abbreviated-name=":αυτάρεσκο πρόσωπο:" block-list:name="😏"/>
+  <block-list:block block-list:abbreviated-name=":αυτί:" block-list:name="👂"/>
+  <block-list:block block-list:abbreviated-name=":αυτοκίνητο4:" block-list:name="🏎"/>
+  <block-list:block block-list:abbreviated-name=":αυτοκίνητο:" block-list:name="🚗"/>
+  <block-list:block block-list:abbreviated-name=":αυτοκινητόδρομος:" block-list:name="🛣"/>
+  <block-list:block block-list:abbreviated-name=":αυτοφωτογράφηση:" block-list:name="🤳"/>
+  <block-list:block block-list:abbreviated-name=":άφιξη αεροπλάνου:" block-list:name="🛬"/>
+  <block-list:block block-list:abbreviated-name=":αχλάδι:" block-list:name="🍐"/>
+  <block-list:block block-list:abbreviated-name=":αψυχαγώγητο πρόσωπο:" block-list:name="😒"/>
+  <block-list:block block-list:abbreviated-name=":βαγόνι τρένου:" block-list:name="🚃"/>
+  <block-list:block block-list:abbreviated-name=":βαθμός:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":βακτριανή καμήλα:" block-list:name="🐫"/>
+  <block-list:block block-list:abbreviated-name=":βαλές μπαστούνι:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":βαρέλι:" block-list:name="🛢"/>
+  <block-list:block block-list:abbreviated-name=":βάρκα με κουπιά:" block-list:name="🚣"/>
+  <block-list:block block-list:abbreviated-name=":βέλη:" block-list:name="🗘"/>
+  <block-list:block block-list:abbreviated-name=":βενζινάκατος:" block-list:name="🛥"/>
+  <block-list:block block-list:abbreviated-name=":βερνίκι νυχιών:" block-list:name="💅"/>
+  <block-list:block block-list:abbreviated-name=":βέσπα2:" block-list:name="🛵"/>
+  <block-list:block block-list:abbreviated-name=":βήτα:" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=":Βήτα:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":βιβλία:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":βιβλίο2:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":βιβλίο3:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":βιβλίο:" block-list:name="🕮"/>
+  <block-list:block block-list:abbreviated-name=":βίδα και παξιμάδι:" block-list:name="🔩"/>
+  <block-list:block block-list:abbreviated-name=":βιντεοκάμερα:" block-list:name="📹"/>
+  <block-list:block block-list:abbreviated-name=":βιντεοκασέτα:" block-list:name="📼"/>
+  <block-list:block block-list:abbreviated-name=":βιντεοπαιχνίδι:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":βιοκίνδυνος:" block-list:name="☣"/>
+  <block-list:block block-list:abbreviated-name=":βιολί:" block-list:name="🎻"/>
+  <block-list:block block-list:abbreviated-name=":βόδι:" block-list:name="🐂"/>
+  <block-list:block block-list:abbreviated-name=":βόμβα:" block-list:name="💣"/>
+  <block-list:block block-list:abbreviated-name=":Βορειοανατολικό βέλος:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":Βορειοανατολικό διπλό βέλος:" block-list:name="⇗"/>
+  <block-list:block block-list:abbreviated-name=":Βορειοδυτικό βέλος:" block-list:name="↖"/>
+  <block-list:block block-list:abbreviated-name=":Βορειοδυτικό διπλό βέλος:" block-list:name="⇖"/>
+  <block-list:block block-list:abbreviated-name=":βουνό2:" block-list:name="🏔"/>
+  <block-list:block block-list:abbreviated-name=":βουνό:" block-list:name="⛰"/>
+  <block-list:block block-list:abbreviated-name=":βουνό Φούτζι:" block-list:name="🗻"/>
+  <block-list:block block-list:abbreviated-name=":βροχερός:" block-list:name="🌦"/>
+  <block-list:block block-list:abbreviated-name=":βροχή2:" block-list:name="⛆"/>
+  <block-list:block block-list:abbreviated-name=":βρυκόλακας:" block-list:name="🧛"/>
+  <block-list:block block-list:abbreviated-name=":γαβάθα:" block-list:name="🥣"/>
+  <block-list:block block-list:abbreviated-name=":γάλα:" block-list:name="🥛"/>
+  <block-list:block block-list:abbreviated-name=":Γαλαξίας:" block-list:name="🌌"/>
+  <block-list:block block-list:abbreviated-name=":γαλοπούλα:" block-list:name="🦃"/>
+  <block-list:block block-list:abbreviated-name=":γαμήλια τελετή:" block-list:name="💒"/>
+  <block-list:block block-list:abbreviated-name=":γάμμα:" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name=":Γάμμα:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":γάμος:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":γαμπρός:" block-list:name="🤵"/>
+  <block-list:block block-list:abbreviated-name=":γάντια:" block-list:name="🧤"/>
+  <block-list:block block-list:abbreviated-name=":γάντια πυγμαχίας:" block-list:name="🥊"/>
+  <block-list:block block-list:abbreviated-name=":γαρίδα:" block-list:name="🦐"/>
+  <block-list:block block-list:abbreviated-name=":γάτα:" block-list:name="🐈"/>
+  <block-list:block block-list:abbreviated-name=":γελαδάρης:" block-list:name="🤠"/>
+  <block-list:block block-list:abbreviated-name=":γέλιο:" block-list:name="😆"/>
+  <block-list:block block-list:abbreviated-name=":γενειάδα:" block-list:name="🧔"/>
+  <block-list:block block-list:abbreviated-name=":γερανός:" block-list:name="🏗"/>
+  <block-list:block block-list:abbreviated-name=":γέροντας:" block-list:name="👴"/>
+  <block-list:block block-list:abbreviated-name=":γερόντισσα:" block-list:name="👵"/>
+  <block-list:block block-list:abbreviated-name=":γέρος:" block-list:name="🧓"/>
+  <block-list:block block-list:abbreviated-name=":γέφυρα τη νύχτα:" block-list:name="🌉"/>
+  <block-list:block block-list:abbreviated-name=":Γη:" block-list:name="♁"/>
+  <block-list:block block-list:abbreviated-name=":για κάθε:" block-list:name="∀"/>
+  <block-list:block block-list:abbreviated-name=":γιαπωνέζικες κούκλες:" block-list:name="🎎"/>
+  <block-list:block block-list:abbreviated-name=":γιαπωνέζικη διακόσμηση θύρας νέου έτους:" block-list:name="🎍"/>
+  <block-list:block block-list:abbreviated-name=":γιαπωνέζικος πύργος :" block-list:name="🏯"/>
+  <block-list:block block-list:abbreviated-name=":γιαπωνέζικο ταχυδρομείο:" block-list:name="🏣"/>
+  <block-list:block block-list:abbreviated-name=":γιέν:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":γιν γιανγκ:" block-list:name="☯"/>
+  <block-list:block block-list:abbreviated-name=":γινόμενο:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":γιόγκα:" block-list:name="🧘"/>
+  <block-list:block block-list:abbreviated-name=":γιορτή2:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":γιορτή3:" block-list:name="🥂"/>
+  <block-list:block block-list:abbreviated-name=":γιορτή4:" block-list:name="🍾"/>
+  <block-list:block block-list:abbreviated-name=":γιορτή:" block-list:name="🎉"/>
+  <block-list:block block-list:abbreviated-name=":γιρλάντα κυπρίνου:" block-list:name="🎏"/>
+  <block-list:block block-list:abbreviated-name=":γιώτα:" block-list:name="ι"/>
+  <block-list:block block-list:abbreviated-name=":γκολφ2:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":γκολφ:" block-list:name="🏌"/>
+  <block-list:block block-list:abbreviated-name=":γλειφιτζούρι:" block-list:name="🍭"/>
+  <block-list:block block-list:abbreviated-name=":γλώσσα:" block-list:name="👅"/>
+  <block-list:block block-list:abbreviated-name=":γοργονόμορφος:" block-list:name="🧜"/>
+  <block-list:block block-list:abbreviated-name=":γορίλας:" block-list:name="🦍"/>
+  <block-list:block block-list:abbreviated-name=":γουάν:" block-list:name="₩"/>
+  <block-list:block block-list:abbreviated-name=":γουρούνι:" block-list:name="🐖"/>
+  <block-list:block block-list:abbreviated-name=":γραβάτα:" block-list:name="👔"/>
+  <block-list:block block-list:abbreviated-name=":γραμματοκιβώτιο:" block-list:name="📮"/>
+  <block-list:block block-list:abbreviated-name=":γραμματοσειρά2:" block-list:name="🗚"/>
+  <block-list:block block-list:abbreviated-name=":γραμματοσειρά:" block-list:name="🗛"/>
+  <block-list:block block-list:abbreviated-name=":γρανάζι:" block-list:name="⚙"/>
+  <block-list:block block-list:abbreviated-name=":γραφή2:" block-list:name="🖎"/>
+  <block-list:block block-list:abbreviated-name=":γράφημα:" block-list:name="📈"/>
+  <block-list:block block-list:abbreviated-name=":γράφημα ράβδων:" block-list:name="📊"/>
+  <block-list:block block-list:abbreviated-name=":γροθιά3:" block-list:name="🤛"/>
+  <block-list:block block-list:abbreviated-name=":γροθιά4:" block-list:name="🤜"/>
+  <block-list:block block-list:abbreviated-name=":γροθιά:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":γυαλί3:" block-list:name="🥃"/>
+  <block-list:block block-list:abbreviated-name=":γυαλιά:" block-list:name="👓"/>
+  <block-list:block block-list:abbreviated-name=":γυαλιά ηλίου:" block-list:name="🕶"/>
+  <block-list:block block-list:abbreviated-name=":γυαλικά ηλίου2:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":γυμναστής:" block-list:name="🤸"/>
+  <block-list:block block-list:abbreviated-name=":γυναίκα:" block-list:name="👩"/>
+  <block-list:block block-list:abbreviated-name=":γυναίκα με αυτιά λαγού:" block-list:name="👯"/>
+  <block-list:block block-list:abbreviated-name=":γυναικεία μπότα:" block-list:name="👢"/>
+  <block-list:block block-list:abbreviated-name=":γυναικεία ρούχα:" block-list:name="👚"/>
+  <block-list:block block-list:abbreviated-name=":γυναικεία τσάντα:" block-list:name="👜"/>
+  <block-list:block block-list:abbreviated-name=":γυναικείο καπέλο:" block-list:name="👒"/>
+  <block-list:block block-list:abbreviated-name=":γυναικείο πέδιλο:" block-list:name="👡"/>
+  <block-list:block block-list:abbreviated-name=":γυναίκες:" block-list:name="🚺"/>
+  <block-list:block block-list:abbreviated-name=":γωνία2:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=":γωνία:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":δαιμόνιο:" block-list:name="🧞"/>
+  <block-list:block block-list:abbreviated-name=":δακτυλίδι:" block-list:name="💍"/>
+  <block-list:block block-list:abbreviated-name=":δάκτυλο:" block-list:name="🖕"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 0:" block-list:name="₀"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 1:" block-list:name="₁"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 2:" block-list:name="₂"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 3:" block-list:name="₃"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 4:" block-list:name="₄"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 5:" block-list:name="₅"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 6:" block-list:name="₆"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 7:" block-list:name="₇"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 8:" block-list:name="₈"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης 9:" block-list:name="₉"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης a:" block-list:name="ₐ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης (:" block-list:name="₍"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης ):" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης +:" block-list:name="₊"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης -:" block-list:name="₋"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης =:" block-list:name="₌"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης e:" block-list:name="ₑ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης h:" block-list:name="ₕ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης i:" block-list:name="ᵢ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης j:" block-list:name="ⱼ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης k:" block-list:name="ₖ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης l:" block-list:name="ₗ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης m:" block-list:name="ₘ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης n:" block-list:name="ₙ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης o:" block-list:name="ₒ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης p:" block-list:name="ₚ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης r:" block-list:name="ᵣ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης s:" block-list:name="ₛ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης t:" block-list:name="ₜ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης u:" block-list:name="ᵤ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης v:" block-list:name="ᵥ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης x:" block-list:name="ₓ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης β:" block-list:name="ᵦ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης γ:" block-list:name="ᵧ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης παλάμης προς τα κάτω2:" block-list:name="🖟"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης παλάμης προς τα πάνω3:" block-list:name="🖞"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης ρ:" block-list:name="ᵨ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης φ:" block-list:name="ᵩ"/>
+  <block-list:block block-list:abbreviated-name=":δείκτης χ:" block-list:name="ᵪ"/>
+  <block-list:block block-list:abbreviated-name=":δεινόσαυρος2:" block-list:name="🦖"/>
+  <block-list:block block-list:abbreviated-name=":δεινόσαυρος:" block-list:name="🦕"/>
+  <block-list:block block-list:abbreviated-name=":δείπνο2:" block-list:name="🕄"/>
+  <block-list:block block-list:abbreviated-name=":δεκατοέκτο νότας:" block-list:name="𝅘𝅥𝅯"/>
+  <block-list:block block-list:abbreviated-name=":δέλτα:" block-list:name="δ"/>
+  <block-list:block block-list:abbreviated-name=":Δέλτα:" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=":δελφίνι:" block-list:name="🐬"/>
+  <block-list:block block-list:abbreviated-name=":δεν ανήκει σε:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":δεν διαιρεί:" block-list:name="∤"/>
+  <block-list:block block-list:abbreviated-name=":δενδρύλλιο:" block-list:name="🌱"/>
+  <block-list:block block-list:abbreviated-name=":δεν περιέχει ως μέλος:" block-list:name="∌"/>
+  <block-list:block block-list:abbreviated-name=":δέντρο ταναμπάτα με χαρτιά με επιθυμίες:" block-list:name="🎋"/>
+  <block-list:block block-list:abbreviated-name=":δεν υπάρχει:" block-list:name="∄"/>
+  <block-list:block block-list:abbreviated-name=":δέρμα1:" block-list:name="🏻"/>
+  <block-list:block block-list:abbreviated-name=":δέρμα2:" block-list:name="🏼"/>
+  <block-list:block block-list:abbreviated-name=":δέρμα3:" block-list:name="🏽"/>
+  <block-list:block block-list:abbreviated-name=":δέρμα4:" block-list:name="🏾"/>
+  <block-list:block block-list:abbreviated-name=":δέρμα5:" block-list:name="🏿"/>
+  <block-list:block block-list:abbreviated-name=":δέσμη από δεκαέξι νότες:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":δέσμη από οκτώ νότες:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":δηλητήριο:" block-list:name="☠"/>
+  <block-list:block block-list:abbreviated-name=":δημόσια τουαλέτα:" block-list:name="🚻"/>
+  <block-list:block block-list:abbreviated-name=":διάβαση πεζών:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":διαβολάκι:" block-list:name="👿"/>
+  <block-list:block block-list:abbreviated-name=":διαζύγιο:" block-list:name="⚮"/>
+  <block-list:block block-list:abbreviated-name=":διαιρεί:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":διακοπή2:" block-list:name="⏹"/>
+  <block-list:block block-list:abbreviated-name=":διακοπή:" block-list:name="🛑"/>
+  <block-list:block block-list:abbreviated-name=":διακοσμημένο σημειωματάριο:" block-list:name="📔"/>
+  <block-list:block block-list:abbreviated-name=":Διακοσμητικό λευκό ερωτηματικό:" block-list:name="❔"/>
+  <block-list:block block-list:abbreviated-name=":Διακοσμητικό λευκό θαυμαστικό:" block-list:name="❕"/>
+  <block-list:block block-list:abbreviated-name=":διακοσμητικό μαύρο ερωτηματικό:" block-list:name="❓"/>
+  <block-list:block block-list:abbreviated-name=":διακριτικό ονόματος:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":Δίας:" block-list:name="♃"/>
+  <block-list:block block-list:abbreviated-name=":διασταυρούμενα σπαθιά:" block-list:name="⚔"/>
+  <block-list:block block-list:abbreviated-name=":διάττων αστέρας:" block-list:name="🌠"/>
+  <block-list:block block-list:abbreviated-name=":διαχωριστικά καρτών:" block-list:name="🗂"/>
+  <block-list:block block-list:abbreviated-name=":Δίδυμοι:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":δίκτυο:" block-list:name="🖧"/>
+  <block-list:block block-list:abbreviated-name=":διπλή δίεση:" block-list:name="𝄪"/>
+  <block-list:block block-list:abbreviated-name=":διπλή καμπυλωτή θηλιά:" block-list:name="➿"/>
+  <block-list:block block-list:abbreviated-name=":διπλή ύφεση:" block-list:name="𝄫"/>
+  <block-list:block block-list:abbreviated-name=":Διπλό αριστερό-δεξιό βέλος:" block-list:name="⇔"/>
+  <block-list:block block-list:abbreviated-name=":Διπλό βέλος προς τα αριστερά:" block-list:name="⇐"/>
+  <block-list:block block-list:abbreviated-name=":Διπλό βέλος προς τα δεξιά:" block-list:name="⇒"/>
+  <block-list:block block-list:abbreviated-name=":Διπλό βέλος προς τα κάτω:" block-list:name="⇓"/>
+  <block-list:block block-list:abbreviated-name=":Διπλό βέλος προς τα πάνω:" block-list:name="⇑"/>
+  <block-list:block block-list:abbreviated-name=":διπλό ολοκλήρωμα:" block-list:name="∬"/>
+  <block-list:block block-list:abbreviated-name=":δισκέτα2:" block-list:name="🖬"/>
+  <block-list:block block-list:abbreviated-name=":δισκέτα3:" block-list:name="🖫"/>
+  <block-list:block block-list:abbreviated-name=":δισκέτα4:" block-list:name="🖪"/>
+  <block-list:block block-list:abbreviated-name=":δισκέτα:" block-list:name="💾"/>
+  <block-list:block block-list:abbreviated-name=":δίσκος εισερχομένων:" block-list:name="📥"/>
+  <block-list:block block-list:abbreviated-name=":δίσκος εξερχομένων:" block-list:name="📤"/>
+  <block-list:block block-list:abbreviated-name=":δονούμενη καρδιά:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":δορυφόρος:" block-list:name="🛰"/>
+  <block-list:block block-list:abbreviated-name=":δοχείο με τρόφιμα:" block-list:name="🍲"/>
+  <block-list:block block-list:abbreviated-name=":δράκος:" block-list:name="🐉"/>
+  <block-list:block block-list:abbreviated-name=":δρομέας:" block-list:name="🏃"/>
+  <block-list:block block-list:abbreviated-name=":δύο άνδρες χέρι-χέρι:" block-list:name="👬"/>
+  <block-list:block block-list:abbreviated-name=":δύο γυναίκες χέρι-χέρι:" block-list:name="👭"/>
+  <block-list:block block-list:abbreviated-name=":δύο καρδιές:" block-list:name="💕"/>
+  <block-list:block block-list:abbreviated-name=":εγγραφή:" block-list:name="⏺"/>
+  <block-list:block block-list:abbreviated-name=":έγγραφο2:" block-list:name="🖹"/>
+  <block-list:block block-list:abbreviated-name=":έγγραφο3:" block-list:name="🖻"/>
+  <block-list:block block-list:abbreviated-name=":έγγραφο4:" block-list:name="🖺"/>
+  <block-list:block block-list:abbreviated-name=":έγγραφο:" block-list:name="🗎"/>
+  <block-list:block block-list:abbreviated-name=":εγκέφαλος:" block-list:name="🧠"/>
+  <block-list:block block-list:abbreviated-name=":έγκυος:" block-list:name="🤰"/>
+  <block-list:block block-list:abbreviated-name=":ειρήνη:" block-list:name="☮"/>
+  <block-list:block block-list:abbreviated-name=":εισαγωγή λατινικών χαρακτήρων:" block-list:name="🔤"/>
+  <block-list:block block-list:abbreviated-name=":εισιτήριο2:" block-list:name="🎟"/>
+  <block-list:block block-list:abbreviated-name=":εισιτήριο:" block-list:name="🎫"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 0:" block-list:name="⁰"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 1:" block-list:name="¹"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 2:" block-list:name="²"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 3:" block-list:name="³"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης  4:" block-list:name="⁴"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 5:" block-list:name="⁵"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 6:" block-list:name="⁶"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 7:" block-list:name="⁷"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 8:" block-list:name="⁸"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης 9:" block-list:name="⁹"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης (:" block-list:name="⁽"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης ):" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης +:" block-list:name="⁺"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης -:" block-list:name="⁻"/>
+  <block-list:block block-list:abbreviated-name=":εκθέτης =:" block-list:name="⁼"/>
+  <block-list:block block-list:abbreviated-name=":εκκλησία:" block-list:name="⛪"/>
+  <block-list:block block-list:abbreviated-name=":εκκολαπτόμενο κοτόπουλο:" block-list:name="🐣"/>
+  <block-list:block block-list:abbreviated-name=":εκτυπωτής2:" block-list:name="🖶"/>
+  <block-list:block block-list:abbreviated-name=":εκτυπωτής:" block-list:name="🖨"/>
+  <block-list:block block-list:abbreviated-name=":ελάφι:" block-list:name="🦌"/>
+  <block-list:block block-list:abbreviated-name=":ελαφρύς σιδηρόδρομος:" block-list:name="🚈"/>
+  <block-list:block block-list:abbreviated-name=":ελαχιστοποίηση:" block-list:name="🗕"/>
+  <block-list:block block-list:abbreviated-name=":έλεγχος διαβατηρίων:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":ελέφαντας:" block-list:name="🐘"/>
+  <block-list:block block-list:abbreviated-name=":ελικοειδές κέλυφος:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":ελικόπτερο:" block-list:name="🚁"/>
+  <block-list:block block-list:abbreviated-name=":έλκηθρο:" block-list:name="🛷"/>
+  <block-list:block block-list:abbreviated-name=":ελκυστήρας:" block-list:name="🚜"/>
+  <block-list:block block-list:abbreviated-name=":ελληνικός σταυρός με περίγραμμα:" block-list:name="✙"/>
+  <block-list:block block-list:abbreviated-name=":εμβρόντητο πρόσωπο:" block-list:name="😲"/>
+  <block-list:block block-list:abbreviated-name=":εμετός:" block-list:name="🤮"/>
+  <block-list:block block-list:abbreviated-name=":εμπορικό σήμα:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":εναέριος τροχιόδρομος:" block-list:name="🚡"/>
+  <block-list:block block-list:abbreviated-name=":ενήλικος:" block-list:name="🧑"/>
+  <block-list:block block-list:abbreviated-name=":ενθουσιασμένος:" block-list:name="🤩"/>
+  <block-list:block block-list:abbreviated-name=":εντάξει2:" block-list:name="🖏"/>
+  <block-list:block block-list:abbreviated-name=":εντάξει3:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":εντάξει:" block-list:name="👌"/>
+  <block-list:block block-list:abbreviated-name=":ένταση σήματος:" block-list:name="📶"/>
+  <block-list:block block-list:abbreviated-name=":έντονη μαύρη κούπα:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":έντονο σημάδι ελέγχου:" block-list:name="✔"/>
+  <block-list:block block-list:abbreviated-name=":Έντονο σύμβολο θαυμαστικού:" block-list:name="❗"/>
+  <block-list:block block-list:abbreviated-name=":ένωση:" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=":εξωγήινος:" block-list:name="👽"/>
+  <block-list:block block-list:abbreviated-name=":εξωγήινο τέρας:" block-list:name="👾"/>
+  <block-list:block block-list:abbreviated-name=":επερχόμενο αυτοκίνητο:" block-list:name="🚘"/>
+  <block-list:block block-list:abbreviated-name=":επερχόμενο λεωφορείο:" block-list:name="🚍"/>
+  <block-list:block block-list:abbreviated-name=":επερχόμενο περιπολικό:" block-list:name="🚔"/>
+  <block-list:block block-list:abbreviated-name=":επερχόμενο ταξί:" block-list:name="🚖"/>
+  <block-list:block block-list:abbreviated-name=":επίδεσμος:" block-list:name="🤕"/>
+  <block-list:block block-list:abbreviated-name=":επικάλυψη:" block-list:name="🗗"/>
+  <block-list:block block-list:abbreviated-name=":επικαμπύλιο ολοκλήρωμα:" block-list:name="∮"/>
+  <block-list:block block-list:abbreviated-name=":επίμονο πρόσωπο:" block-list:name="😣"/>
+  <block-list:block block-list:abbreviated-name=":εργοστάσιο:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":έρημος:" block-list:name="🏜"/>
+  <block-list:block block-list:abbreviated-name=":ερμάριο:" block-list:name="🗄"/>
+  <block-list:block block-list:abbreviated-name=":ερωτικό γράμμα:" block-list:name="💌"/>
+  <block-list:block block-list:abbreviated-name=":ερωτικό ξενοδοχείο:" block-list:name="🏩"/>
+  <block-list:block block-list:abbreviated-name=":εστιατόριο:" block-list:name="🍴"/>
+  <block-list:block block-list:abbreviated-name=":ετικέτα:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":ευρώ:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":ευρωπαϊκός πύργος:" block-list:name="🏰"/>
+  <block-list:block block-list:abbreviated-name=":ευρωπαϊκό ταχυδρομείο:" block-list:name="🏤"/>
+  <block-list:block block-list:abbreviated-name=":ευτυχισμένο άτομο που σηκώνει το ένα χέρι:" block-list:name="🙋"/>
+  <block-list:block block-list:abbreviated-name=":εφημερίδα2:" block-list:name="🗞"/>
+  <block-list:block block-list:abbreviated-name=":εφημερίδα:" block-list:name="📰"/>
+  <block-list:block block-list:abbreviated-name=":έψιλον:" block-list:name="ε"/>
+  <block-list:block block-list:abbreviated-name=":Έψιλον:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":ζαλάδα:" block-list:name="💫"/>
+  <block-list:block block-list:abbreviated-name=":ζαλισμένο πρόσωπο:" block-list:name="😵"/>
+  <block-list:block block-list:abbreviated-name=":ζάρι 1:" block-list:name="⚀"/>
+  <block-list:block block-list:abbreviated-name=":ζάρι 2:" block-list:name="⚁"/>
+  <block-list:block block-list:abbreviated-name=":ζάρι 3:" block-list:name="⚂"/>
+  <block-list:block block-list:abbreviated-name=":ζάρι 4:" block-list:name="⚃"/>
+  <block-list:block block-list:abbreviated-name=":ζάρι 5:" block-list:name="⚄"/>
+  <block-list:block block-list:abbreviated-name=":ζάρι 6:" block-list:name="⚅"/>
+  <block-list:block block-list:abbreviated-name=":ζάρι:" block-list:name="🎲"/>
+  <block-list:block block-list:abbreviated-name=":ζέβρα:" block-list:name="🦓"/>
+  <block-list:block block-list:abbreviated-name=":ζευγάρι με καρδιά:" block-list:name="💑"/>
+  <block-list:block block-list:abbreviated-name=":ζήτα:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":Ζήτα:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":ζογκλέρ:" block-list:name="🤹"/>
+  <block-list:block block-list:abbreviated-name=":ζόμπι:" block-list:name="🧟"/>
+  <block-list:block block-list:abbreviated-name=":ζυγαριά:" block-list:name="⚖"/>
+  <block-list:block block-list:abbreviated-name=":Ζυγός:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":ζύμη με κρέας:" block-list:name="🥟"/>
+  <block-list:block block-list:abbreviated-name=":ή:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":ηλεκτρική λάμπα:" block-list:name="💡"/>
+  <block-list:block block-list:abbreviated-name=":ηλεκτρικός ρευματολήπτης:" block-list:name="🔌"/>
+  <block-list:block block-list:abbreviated-name=":ηλεκτρικός φακός:" block-list:name="🔦"/>
+  <block-list:block block-list:abbreviated-name=":ηλεκτρονική αλληλογραφία:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":ηλιόλουστος:" block-list:name="☀"/>
+  <block-list:block block-list:abbreviated-name=":ήλιος2:" block-list:name="🌣"/>
+  <block-list:block block-list:abbreviated-name=":Ήλιος:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":ήλιος με όψη:" block-list:name="🌞"/>
+  <block-list:block block-list:abbreviated-name=":ήλιος πίσω από σύννεφα:" block-list:name="⛅"/>
+  <block-list:block block-list:abbreviated-name=":ηλιοτρόπιο:" block-list:name="🌻"/>
+  <block-list:block block-list:abbreviated-name=":ημερολόγιο3:" block-list:name="🗓"/>
+  <block-list:block block-list:abbreviated-name=":ημερολόγιο:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":ημισέληνος με φεγγάρι:" block-list:name="☪"/>
+  <block-list:block block-list:abbreviated-name=":ήτα:" block-list:name="η"/>
+  <block-list:block block-list:abbreviated-name=":Ήτα:" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=":ηφαίστειο:" block-list:name="🌋"/>
+  <block-list:block block-list:abbreviated-name=":ηχείο2:" block-list:name="🕩"/>
+  <block-list:block block-list:abbreviated-name=":ηχείο3:" block-list:name="🕨"/>
+  <block-list:block block-list:abbreviated-name=":ηχείο4:" block-list:name="🕪"/>
+  <block-list:block block-list:abbreviated-name=":ηχείο:" block-list:name="🔈"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 10.30:" block-list:name="🕥"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 10:" block-list:name="🕙"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 11.30:" block-list:name="🕦"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 11:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 12.30:" block-list:name="🕧"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 12:" block-list:name="🕛"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 1.30:" block-list:name="🕜"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 1:" block-list:name="🕐"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 2.30:" block-list:name="🕝"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 2:" block-list:name="🕑"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 3.30:" block-list:name="🕞"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 3:" block-list:name="🕒"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 4.30:" block-list:name="🕟"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 4:" block-list:name="🕓"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 5.30:" block-list:name="🕠"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 5:" block-list:name="🕔"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 6.30:" block-list:name="🕡"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 6:" block-list:name="🕕"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 7.30:" block-list:name="🕢"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 7:" block-list:name="🕖"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 8.30:" block-list:name="🕣"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 8:" block-list:name="🕗"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 9.30:" block-list:name="🕤"/>
+  <block-list:block block-list:abbreviated-name=":Η ώρα είναι 9:" block-list:name="🕘"/>
+  <block-list:block block-list:abbreviated-name=":θέατρο:" block-list:name="🎭"/>
+  <block-list:block block-list:abbreviated-name=":θερμόμετρο2:" block-list:name="🤒"/>
+  <block-list:block block-list:abbreviated-name=":θερμόμετρο:" block-list:name="🌡"/>
+  <block-list:block block-list:abbreviated-name=":θερμοπηγές:" block-list:name="♨"/>
+  <block-list:block block-list:abbreviated-name=":θηλυκό:" block-list:name="♀"/>
+  <block-list:block block-list:abbreviated-name=":θήτα:" block-list:name="θ"/>
+  <block-list:block block-list:abbreviated-name=":Θήτα:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":θριαμβευτικό πρόσωπο:" block-list:name="😤"/>
+  <block-list:block block-list:abbreviated-name=":θυμός:" block-list:name="💢"/>
+  <block-list:block block-list:abbreviated-name=":θυμωμένο πρόσωπο:" block-list:name="😠"/>
+  <block-list:block block-list:abbreviated-name=":θύρα:" block-list:name="🚪"/>
+  <block-list:block block-list:abbreviated-name=":ίντσα:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":ιστιοσανίδα:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":ιστιοφόρο:" block-list:name="⛵"/>
+  <block-list:block block-list:abbreviated-name=":ιστός:" block-list:name="🕸"/>
+  <block-list:block block-list:abbreviated-name=":Ιχθείς:" block-list:name="♓"/>
+  <block-list:block block-list:abbreviated-name=":ιχνόσφαιρα:" block-list:name="🖲"/>
+  <block-list:block block-list:abbreviated-name=":Ιώτα:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":Κάαμπα:" block-list:name="🕋"/>
+  <block-list:block block-list:abbreviated-name=":κάθετος σηματοδότης:" block-list:name="🚦"/>
+  <block-list:block block-list:abbreviated-name=":κάθισμα:" block-list:name="💺"/>
+  <block-list:block block-list:abbreviated-name=":καθοδικό διάγραμμα:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":και:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":κάκτος:" block-list:name="🌵"/>
+  <block-list:block block-list:abbreviated-name=":καλάθι αχρήστων:" block-list:name="🗑"/>
+  <block-list:block block-list:abbreviated-name=":καλαθοσφαίριση:" block-list:name="🏀"/>
+  <block-list:block block-list:abbreviated-name=":καλαμάρι:" block-list:name="🦑"/>
+  <block-list:block block-list:abbreviated-name=":καλάμι και ψάρι:" block-list:name="🎣"/>
+  <block-list:block block-list:abbreviated-name=":καλή τύχη:" block-list:name="🤞"/>
+  <block-list:block block-list:abbreviated-name=":καλικάντζαρος:" block-list:name="👺"/>
+  <block-list:block block-list:abbreviated-name=":κάλπη:" block-list:name="🗳"/>
+  <block-list:block block-list:abbreviated-name=":κάλτσες:" block-list:name="🧦"/>
+  <block-list:block block-list:abbreviated-name=":κάμερα:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":κάμερα με αναλαμπή:" block-list:name="📸"/>
+  <block-list:block block-list:abbreviated-name=":καμήλα δρομάδα:" block-list:name="🐪"/>
+  <block-list:block block-list:abbreviated-name=":καμηλοπάρδαλη:" block-list:name="🦒"/>
+  <block-list:block block-list:abbreviated-name=":κάμπινγκ:" block-list:name="🏕"/>
+  <block-list:block block-list:abbreviated-name=":καμπυλωτή θηλιά:" block-list:name="➰"/>
+  <block-list:block block-list:abbreviated-name=":καναπές:" block-list:name="🛋"/>
+  <block-list:block block-list:abbreviated-name=":κανίς:" block-list:name="🐩"/>
+  <block-list:block block-list:abbreviated-name=":κανό:" block-list:name="🛶"/>
+  <block-list:block block-list:abbreviated-name=":κάπα:" block-list:name="κ"/>
+  <block-list:block block-list:abbreviated-name=":Κάπα:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":καπέλο:" block-list:name="🧢"/>
+  <block-list:block block-list:abbreviated-name=":καπέλο αποφοίτησης:" block-list:name="🎓"/>
+  <block-list:block block-list:abbreviated-name=":κάπνισμα:" block-list:name="🚬"/>
+  <block-list:block block-list:abbreviated-name=":καραμέλα:" block-list:name="🍬"/>
+  <block-list:block block-list:abbreviated-name=":καρδιά2:" block-list:name="🎔"/>
+  <block-list:block block-list:abbreviated-name=":καρδιά με βέλος:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":καρδιά με λουρίδα:" block-list:name="💝"/>
+  <block-list:block block-list:abbreviated-name=":καρδιά σε τετράγωνο:" block-list:name="💟"/>
+  <block-list:block block-list:abbreviated-name=":καρέ σημαία:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":καρκίνος:" block-list:name="🦀"/>
+  <block-list:block block-list:abbreviated-name=":Καρκίνος:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":καρότο:" block-list:name="🥕"/>
+  <block-list:block block-list:abbreviated-name=":καρότσι:" block-list:name="🛒"/>
+  <block-list:block block-list:abbreviated-name=":καρπούζι:" block-list:name="🍉"/>
+  <block-list:block block-list:abbreviated-name=":κάρτα ευρετηρίου:" block-list:name="📇"/>
+  <block-list:block block-list:abbreviated-name=":καρτελάκια σελιδοδεικτών:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":καρύδα:" block-list:name="🥥"/>
+  <block-list:block block-list:abbreviated-name=":καρχαρίας:" block-list:name="🦈"/>
+  <block-list:block block-list:abbreviated-name=":κασέτα:" block-list:name="🖭"/>
+  <block-list:block block-list:abbreviated-name=":κασμάς:" block-list:name="⛏"/>
+  <block-list:block block-list:abbreviated-name=":καστανιά:" block-list:name="🌰"/>
+  <block-list:block block-list:abbreviated-name=":καταιγίδα2:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":καταιγίδα:" block-list:name="🌧"/>
+  <block-list:block block-list:abbreviated-name=":κατάρα:" block-list:name="🤬"/>
+  <block-list:block block-list:abbreviated-name=":κατάσταση δόνησης:" block-list:name="📳"/>
+  <block-list:block block-list:abbreviated-name=":κατσίκα:" block-list:name="🐐"/>
+  <block-list:block block-list:abbreviated-name=":κατσούφιασμα2:" block-list:name="🙁"/>
+  <block-list:block block-list:abbreviated-name=":κατσουφιασμένο πρόσωπο:" block-list:name="😡"/>
+  <block-list:block block-list:abbreviated-name=":κατσουφιασμένο πρόσωπο γάτας:" block-list:name="😾"/>
+  <block-list:block block-list:abbreviated-name=":κάτω δεξιό μολύβι:" block-list:name="✎"/>
+  <block-list:block block-list:abbreviated-name=":καφές:" block-list:name="☕"/>
+  <block-list:block block-list:abbreviated-name=":κέικ:" block-list:name="🍰"/>
+  <block-list:block block-list:abbreviated-name=":Κελτικός σταυρός:" block-list:name="🕈"/>
+  <block-list:block block-list:abbreviated-name=":κενές σελίδες:" block-list:name="🗍"/>
+  <block-list:block block-list:abbreviated-name=":κενή σελίδα:" block-list:name="🗌"/>
+  <block-list:block block-list:abbreviated-name=":κενή σελίδα σημείωσης:" block-list:name="🗆"/>
+  <block-list:block block-list:abbreviated-name=":κενή σημείωση:" block-list:name="🗅"/>
+  <block-list:block block-list:abbreviated-name=":κενό έγγραφο:" block-list:name="🗋"/>
+  <block-list:block block-list:abbreviated-name=":κενό σημειωματάριο:" block-list:name="🗇"/>
+  <block-list:block block-list:abbreviated-name=":κενό σύνολο:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":κεραία:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":κεράσι:" block-list:name="🍒"/>
+  <block-list:block block-list:abbreviated-name=":κεραυνός2:" block-list:name="🗲"/>
+  <block-list:block block-list:abbreviated-name=":κεραυνός3:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":κερί:" block-list:name="🕯"/>
+  <block-list:block block-list:abbreviated-name=":κέρλινγκ:" block-list:name="🥌"/>
+  <block-list:block block-list:abbreviated-name=":κεφάλι:" block-list:name="🗣"/>
+  <block-list:block block-list:abbreviated-name=":κηρομπογιά:" block-list:name="🖍"/>
+  <block-list:block block-list:abbreviated-name=":κηρύκειο:" block-list:name="☤"/>
+  <block-list:block block-list:abbreviated-name=":κίβι:" block-list:name="🥝"/>
+  <block-list:block block-list:abbreviated-name=":κιθάρα:" block-list:name="🎸"/>
+  <block-list:block block-list:abbreviated-name=":κιμονό:" block-list:name="👘"/>
+  <block-list:block block-list:abbreviated-name=":κινηματογράφος:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":κίνηση ματιού:" block-list:name="🙄"/>
+  <block-list:block block-list:abbreviated-name=":κινητό2:" block-list:name="🖁"/>
+  <block-list:block block-list:abbreviated-name=":κινητό τηλέφωνο:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":κινητό τηλέφωνο με δεξιό βέλος στα αριστερά:" block-list:name="📲"/>
+  <block-list:block block-list:abbreviated-name=":κλακέτα:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":κλειδί2:" block-list:name="🗝"/>
+  <block-list:block block-list:abbreviated-name=":κλειδί:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":κλειδί του σολ:" block-list:name="𝄞"/>
+  <block-list:block block-list:abbreviated-name=":κλειστή ομπρέλα:" block-list:name="🌂"/>
+  <block-list:block block-list:abbreviated-name=":κλειστό γραμματοκιβώτιο με υψωμένη σημαία:" block-list:name="📫"/>
+  <block-list:block block-list:abbreviated-name=":κλειστό γραμματοκιβώτιο με χαμηλωμένη σημαία:" block-list:name="📪"/>
+  <block-list:block block-list:abbreviated-name=":κλειστό κινητό τηλέφωνο:" block-list:name="📴"/>
+  <block-list:block block-list:abbreviated-name=":κλειστό λουκέτο με κλειδί:" block-list:name="🔐"/>
+  <block-list:block block-list:abbreviated-name=":κλεψύδρα2:" block-list:name="⏳"/>
+  <block-list:block block-list:abbreviated-name=":κλεψύδρα:" block-list:name="⌛"/>
+  <block-list:block block-list:abbreviated-name=":κλήση:" block-list:name="🤙"/>
+  <block-list:block block-list:abbreviated-name=":κλόουν:" block-list:name="🤡"/>
+  <block-list:block block-list:abbreviated-name=":κοάλα:" block-list:name="🐨"/>
+  <block-list:block block-list:abbreviated-name=":κοιμισμένος:" block-list:name="😴"/>
+  <block-list:block block-list:abbreviated-name=":κόκκινο μήλο:" block-list:name="🍎"/>
+  <block-list:block block-list:abbreviated-name=":κόκορας:" block-list:name="🐓"/>
+  <block-list:block block-list:abbreviated-name=":κολυμβητής:" block-list:name="🏊"/>
+  <block-list:block block-list:abbreviated-name=":κομήτης:" block-list:name="☄"/>
+  <block-list:block block-list:abbreviated-name=":κομποσκοίνι:" block-list:name="📿"/>
+  <block-list:block block-list:abbreviated-name=":κονκάρδα2:" block-list:name="🏶"/>
+  <block-list:block block-list:abbreviated-name=":κονκάρδα:" block-list:name="🏵"/>
+  <block-list:block block-list:abbreviated-name=":κονσέρβα:" block-list:name="🥫"/>
+  <block-list:block block-list:abbreviated-name=":κορδέλα2:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":κορδέλα:" block-list:name="🎗"/>
+  <block-list:block block-list:abbreviated-name=":κοριός:" block-list:name="🐛"/>
+  <block-list:block block-list:abbreviated-name=":κορίτσι:" block-list:name="👧"/>
+  <block-list:block block-list:abbreviated-name=":κορίτσια:" block-list:name="🛊"/>
+  <block-list:block block-list:abbreviated-name=":κόρνες:" block-list:name="🤘"/>
+  <block-list:block block-list:abbreviated-name=":κοτοπουλάκι:" block-list:name="🐤"/>
+  <block-list:block block-list:abbreviated-name=":κοτοπουλάκι με μπροστινή όψη:" block-list:name="🐥"/>
+  <block-list:block block-list:abbreviated-name=":κοτόπουλο:" block-list:name="🐔"/>
+  <block-list:block block-list:abbreviated-name=":κουδούνι2:" block-list:name="🛎"/>
+  <block-list:block block-list:abbreviated-name=":κουδούνι3:" block-list:name="🕭"/>
+  <block-list:block block-list:abbreviated-name=":κουδούνι:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":κουδούνι σε σίγαση:" block-list:name="🔕"/>
+  <block-list:block block-list:abbreviated-name=":κουδούνισμα:" block-list:name="🎐"/>
+  <block-list:block block-list:abbreviated-name=":κουζινομάχαιρο:" block-list:name="🔪"/>
+  <block-list:block block-list:abbreviated-name=":κουκκίδα2:" block-list:name="‣"/>
+  <block-list:block block-list:abbreviated-name=":κουκκίδα:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":κουκουβάγια:" block-list:name="🦉"/>
+  <block-list:block block-list:abbreviated-name=":κουλουράκι:" block-list:name="🥨"/>
+  <block-list:block block-list:abbreviated-name=":κουλοχέρης:" block-list:name="🎰"/>
+  <block-list:block block-list:abbreviated-name=":κουνέλι:" block-list:name="🐇"/>
+  <block-list:block block-list:abbreviated-name=":κουρασμένο πρόσωπο:" block-list:name="😫"/>
+  <block-list:block block-list:abbreviated-name=":κουρέας:" block-list:name="💈"/>
+  <block-list:block block-list:abbreviated-name=":κούρεμα:" block-list:name="💇"/>
+  <block-list:block block-list:abbreviated-name=":κουστούμι:" block-list:name="🕴"/>
+  <block-list:block block-list:abbreviated-name=":κουτάλι:" block-list:name="🥄"/>
+  <block-list:block block-list:abbreviated-name=":κουτί:" block-list:name="🗃"/>
+  <block-list:block block-list:abbreviated-name=":κραγιόν:" block-list:name="💄"/>
+  <block-list:block block-list:abbreviated-name=":κράκερ ρυζιού:" block-list:name="🍘"/>
+  <block-list:block block-list:abbreviated-name=":κρανίο:" block-list:name="💀"/>
+  <block-list:block block-list:abbreviated-name=":κράνος με λευκό σταυρό:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":κρέας:" block-list:name="🍖"/>
+  <block-list:block block-list:abbreviated-name=":κρεβάτι:" block-list:name="🛏"/>
+  <block-list:block block-list:abbreviated-name=":κρέμα:" block-list:name="🍮"/>
+  <block-list:block block-list:abbreviated-name=":κρεμαστός σιδηρόδρομος:" block-list:name="🚟"/>
+  <block-list:block block-list:abbreviated-name=":κρίκετ2:" block-list:name="🦗"/>
+  <block-list:block block-list:abbreviated-name=":κρίκετ:" block-list:name="🏏"/>
+  <block-list:block block-list:abbreviated-name=":κριός:" block-list:name="🐏"/>
+  <block-list:block block-list:abbreviated-name=":Κριός:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":κροκόδειλος:" block-list:name="🐊"/>
+  <block-list:block block-list:abbreviated-name=":Κρόνος:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":κρουασάν:" block-list:name="🥐"/>
+  <block-list:block block-list:abbreviated-name=":κρυστάλλινη σφαίρα:" block-list:name="🔮"/>
+  <block-list:block block-list:abbreviated-name=":κτίριο γραφείου:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":κυβική ρίζα:" block-list:name="∛"/>
+  <block-list:block block-list:abbreviated-name=":κύκλος3:" block-list:name="🔾"/>
+  <block-list:block block-list:abbreviated-name=":κύκλος4:" block-list:name="🔿"/>
+  <block-list:block block-list:abbreviated-name=":κυκλώνας:" block-list:name="🌀"/>
+  <block-list:block block-list:abbreviated-name=":κύμα νερού:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":κύπελλο τσαγιού χωρίς χερούλι:" block-list:name="🍵"/>
+  <block-list:block block-list:abbreviated-name=":λάβαρο2:" block-list:name="🏱"/>
+  <block-list:block block-list:abbreviated-name=":λάβαρο:" block-list:name="🏲"/>
+  <block-list:block block-list:abbreviated-name=":λαγοκέφαλος (ψάρι):" block-list:name="🐡"/>
+  <block-list:block block-list:abbreviated-name=":λάμβδα:" block-list:name="λ"/>
+  <block-list:block block-list:abbreviated-name=":Λάμβδα:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":λαμπερό αστέρι:" block-list:name="🌟"/>
+  <block-list:block block-list:abbreviated-name=":λάμψεις:" block-list:name="✨"/>
+  <block-list:block block-list:abbreviated-name=":λάμψη:" block-list:name="❇"/>
+  <block-list:block block-list:abbreviated-name=":λατινικός σταυρός2:" block-list:name="🕆"/>
+  <block-list:block block-list:abbreviated-name=":λατινικός σταυρός3:" block-list:name="🕇"/>
+  <block-list:block block-list:abbreviated-name=":λατινικός σταυρός:" block-list:name="✝"/>
+  <block-list:block block-list:abbreviated-name=":λατρεία:" block-list:name="🛐"/>
+  <block-list:block block-list:abbreviated-name=":λεμόνι:" block-list:name="🍋"/>
+  <block-list:block block-list:abbreviated-name=":λεοπάρδαλη:" block-list:name="🐆"/>
+  <block-list:block block-list:abbreviated-name=":λεπτό:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":λευκή ανακύκλωση:" block-list:name="♲"/>
+  <block-list:block block-list:abbreviated-name=":λευκή βασίλισσα:" block-list:name="♕"/>
+  <block-list:block block-list:abbreviated-name=":λευκή καρδιά:" block-list:name="♡"/>
+  <block-list:block block-list:abbreviated-name=":λευκή κουκκίδα:" block-list:name="◦"/>
+  <block-list:block block-list:abbreviated-name=":λευκή μύτη πένας:" block-list:name="✑"/>
+  <block-list:block block-list:abbreviated-name=":λευκή οριζόντια έλλειψη:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":λευκό άνθος:" block-list:name="💮"/>
+  <block-list:block block-list:abbreviated-name=":λευκό αστέρι:" block-list:name="☆"/>
+  <block-list:block block-list:abbreviated-name=":λευκό εξάγωνο:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":λευκό καρό:" block-list:name="♢"/>
+  <block-list:block block-list:abbreviated-name=":λευκό μεγάλο τετράγωνο:" block-list:name="⬜"/>
+  <block-list:block block-list:abbreviated-name=":λευκό μεσαίο αστέρι:" block-list:name="⭐"/>
+  <block-list:block block-list:abbreviated-name=":λευκό μεσαίο μικρό τετράγωνο:" block-list:name="◽"/>
+  <block-list:block block-list:abbreviated-name=":λευκό μικρό αστέρι:" block-list:name="⭒"/>
+  <block-list:block block-list:abbreviated-name=":λευκό μπαστούνι:" block-list:name="♤"/>
+  <block-list:block block-list:abbreviated-name=":λευκό ορθογώνιο:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":λευκό παραλληλόγραμμο:" block-list:name="▱"/>
+  <block-list:block block-list:abbreviated-name=":λευκό πεντάγωνο:" block-list:name="⬠"/>
+  <block-list:block block-list:abbreviated-name=":λευκό πιόνι:" block-list:name="♙"/>
+  <block-list:block block-list:abbreviated-name=":λευκός αξιωματικός:" block-list:name="♗"/>
+  <block-list:block block-list:abbreviated-name=":λευκός αριστερός δείκτης:" block-list:name="☜"/>
+  <block-list:block block-list:abbreviated-name=":λευκός βασιλιάς:" block-list:name="♔"/>
+  <block-list:block block-list:abbreviated-name=":λευκός δείκτης παλάμης προς τα αριστερά:" block-list:name="👈"/>
+  <block-list:block block-list:abbreviated-name=":λευκός δείκτης παλάμης προς τα δεξιά:" block-list:name="👉"/>
+  <block-list:block block-list:abbreviated-name=":λευκός δείκτης παλάμης προς τα κάτω:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":λευκός δείκτης παλάμης προς τα πάνω:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":λευκός δεξιός δείκτης5:" block-list:name="🖙"/>
+  <block-list:block block-list:abbreviated-name=":λευκός δεξιός δείκτης:" block-list:name="☞"/>
+  <block-list:block block-list:abbreviated-name=":λευκός ήλιος με ακτίνες:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":λευκός ιππότης:" block-list:name="♘"/>
+  <block-list:block block-list:abbreviated-name=":λευκός κάτω δείκτης:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":λευκός κύκλος:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":λευκός πάνω δείκτης:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":λευκός πύργος:" block-list:name="♖"/>
+  <block-list:block block-list:abbreviated-name=":λευκό συνοφρυωμένο πρόσωπο:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":λευκό τετράγωνο:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":λευκό τετράγωνο κουμπί:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":λευκό τηλέφωνο:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":λευκό τρίγωνο προς τα πάνω:" block-list:name="△"/>
+  <block-list:block block-list:abbreviated-name=":λευκό χαμογελαστό πρόσωπο:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":λευκό χοντρό σημάδι επιλογής:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":λευκό ψαλίδι:" block-list:name="✄"/>
+  <block-list:block block-list:abbreviated-name=":Λέων:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":λεωφορείο:" block-list:name="🚌"/>
+  <block-list:block block-list:abbreviated-name=":λιοντάρι:" block-list:name="🦁"/>
+  <block-list:block block-list:abbreviated-name=":λίρα:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":λογιστικό βιβλίο:" block-list:name="📒"/>
+  <block-list:block block-list:abbreviated-name=":λουκάνικο1:" block-list:name="🌭"/>
+  <block-list:block block-list:abbreviated-name=":λουκέτο:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":λουκέτο με στυλό:" block-list:name="🔏"/>
+  <block-list:block block-list:abbreviated-name=":λουλούδι2:" block-list:name="🥀"/>
+  <block-list:block block-list:abbreviated-name=":λούνα παρκ2:" block-list:name="🎠"/>
+  <block-list:block block-list:abbreviated-name=":λουτήρας:" block-list:name="🛁"/>
+  <block-list:block block-list:abbreviated-name=":μαγείρεμα:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":μαγειρεμένο ρύζι:" block-list:name="🍚"/>
+  <block-list:block block-list:abbreviated-name=":μάγος:" block-list:name="🧙"/>
+  <block-list:block block-list:abbreviated-name=":μαϊμού:" block-list:name="🐒"/>
+  <block-list:block block-list:abbreviated-name=":μαλακό παγωτό (χωνάκι):" block-list:name="🍦"/>
+  <block-list:block block-list:abbreviated-name=":μαλάξεις προσώπου:" block-list:name="💆"/>
+  <block-list:block block-list:abbreviated-name=":μανιτάρι:" block-list:name="🍄"/>
+  <block-list:block block-list:abbreviated-name=":μανταρίνι:" block-list:name="🍊"/>
+  <block-list:block block-list:abbreviated-name=":μαντίλα:" block-list:name="🧕"/>
+  <block-list:block block-list:abbreviated-name=":ματζόνγκ-πλακίδιο κόκκινου δράκου:" block-list:name="🀄"/>
+  <block-list:block block-list:abbreviated-name=":μάτι:" block-list:name="👁"/>
+  <block-list:block block-list:abbreviated-name=":μάτια:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":μαύρα μπαστούνια:" block-list:name="♠"/>
+  <block-list:block block-list:abbreviated-name=":μαύρη ανακύκλωση:" block-list:name="♻"/>
+  <block-list:block block-list:abbreviated-name=":μαύρη βασίλισσα:" block-list:name="♛"/>
+  <block-list:block block-list:abbreviated-name=":μαύρη καρδιά:" block-list:name="🖤"/>
+  <block-list:block block-list:abbreviated-name=":μαύρη κούπα:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":μαύρη μύτη πένας:" block-list:name="✒"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο αστέρι:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο εξάγωνο:" block-list:name="⬢"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο καρό:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο μεγάλο τετράγωνο:" block-list:name="⬛"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο μεσαίο μικρό τετράγωνο:" block-list:name="◾"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο μικρό αστέρι:" block-list:name="⭑"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο ορθογώνιο:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο παραλληλόγραμμο:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο πεντάγωνο:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο πιόνι:" block-list:name="♟"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος αξιωματικός:" block-list:name="♝"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος αριστερός δείκτης5:" block-list:name="🖜"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος αριστερός δείκτης6:" block-list:name="🖘"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος αριστερός δείκτης:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος βασιλιάς:" block-list:name="♚"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος δείκτης παλάμης προς τα κάτω5:" block-list:name="🖣"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος δείκτης παλάμης προς τα κάτω6:" block-list:name="🖡"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος δείκτης προς τα πάνω:" block-list:name="🖠"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος δεξιός δείκτης4:" block-list:name="🖛"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος δεξιός δείκτης6:" block-list:name="🖝"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος δεξιός δείκτης:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος ιππότης:" block-list:name="♞"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος κύκλος:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος μεγάλος κύκλος:" block-list:name="⬤"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος μπαλαντέρ:" block-list:name="🃏"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο σπαθί:" block-list:name="♣"/>
+  <block-list:block block-list:abbreviated-name=":μαύρος πύργος:" block-list:name="♜"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο τετράγωνο:" block-list:name="■"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο τετράγωνο κουμπί:" block-list:name="🔲"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο τηλέφωνο:" block-list:name="☎"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο τρίγωνο προς τα πάνω:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο φορτηγό:" block-list:name="⛟"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο χαμογελαστό πρόσωπο:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":μαύρο ψαλίδι:" block-list:name="✂"/>
+  <block-list:block block-list:abbreviated-name=":μεγάλος κύκλος:" block-list:name="◯"/>
+  <block-list:block block-list:abbreviated-name=":μεγαλύτερο από ή ίσο με:" block-list:name="≥"/>
+  <block-list:block block-list:abbreviated-name=":μεγάφωνο:" block-list:name="📢"/>
+  <block-list:block block-list:abbreviated-name=":μεγάφωνο με ένα κύμα ήχου:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":μεγάφωνο με ηχητικά κύματα:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":μεγάφωνο με τρία κύματα ήχου:" block-list:name="🔊"/>
+  <block-list:block block-list:abbreviated-name=":μεγεθυντικός φακός προς τα αριστερά:" block-list:name="🔍"/>
+  <block-list:block block-list:abbreviated-name=":μεγεθυντικός φακός προς τα δεξιά:" block-list:name="🔎"/>
+  <block-list:block block-list:abbreviated-name=":μεγιστοποίηση:" block-list:name="🗖"/>
+  <block-list:block block-list:abbreviated-name=":μέλι:" block-list:name="🍯"/>
+  <block-list:block block-list:abbreviated-name=":μέλισσα:" block-list:name="🐝"/>
+  <block-list:block block-list:abbreviated-name=":μελιτζάνα:" block-list:name="🍆"/>
+  <block-list:block block-list:abbreviated-name=":μενορά:" block-list:name="🕎"/>
+  <block-list:block block-list:abbreviated-name=":μερική παράγωγος:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":μεσαία κουκκίδα:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":μεσαίο λευκό τετράγωνο:" block-list:name="◻"/>
+  <block-list:block block-list:abbreviated-name=":μεσαίο μαύρο τετράγωνο:" block-list:name="◼"/>
+  <block-list:block block-list:abbreviated-name=":μεσαίος λευκός κύκλος:" block-list:name="⚪"/>
+  <block-list:block block-list:abbreviated-name=":μεσαίος μαύρος κύκλος:" block-list:name="⚫"/>
+  <block-list:block block-list:abbreviated-name=":μετάλλιο2:" block-list:name="🎖"/>
+  <block-list:block block-list:abbreviated-name=":μετάλλιο:" block-list:name="🏅"/>
+  <block-list:block block-list:abbreviated-name=":μετρό:" block-list:name="🚇"/>
+  <block-list:block block-list:abbreviated-name=":μηνίσκος σελήνης:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":μη παράλληλος:" block-list:name="∦"/>
+  <block-list:block block-list:abbreviated-name=":μη πόσιμο νερό:" block-list:name="🚱"/>
+  <block-list:block block-list:abbreviated-name=":μηρμύγκι:" block-list:name="🐜"/>
+  <block-list:block block-list:abbreviated-name=":μηχανή:" block-list:name="🏍"/>
+  <block-list:block block-list:abbreviated-name=":μηχανή λήψης:" block-list:name="🎥"/>
+  <block-list:block block-list:abbreviated-name=":μηχανή τρένου2:" block-list:name="🛲"/>
+  <block-list:block block-list:abbreviated-name=":μηχανή τρένου:" block-list:name="🚂"/>
+  <block-list:block block-list:abbreviated-name=":μηχανικό κλειδί:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":μι:" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=":Μι:" block-list:name="Μ"/>
+  <block-list:block block-list:abbreviated-name=":μικρό ανήκει σε:" block-list:name="∊"/>
+  <block-list:block block-list:abbreviated-name=":μικρό λευκό τετράγωνο:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":μικρό λεωφορείο:" block-list:name="🚐"/>
+  <block-list:block block-list:abbreviated-name=":μικρό μαύρο τετράγωνο:" block-list:name="▪"/>
+  <block-list:block block-list:abbreviated-name=":μικρό περιέχει ως μέλος:" block-list:name="∍"/>
+  <block-list:block block-list:abbreviated-name=":μικρός δίσκος:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":μικροσκόπιο:" block-list:name="🔬"/>
+  <block-list:block block-list:abbreviated-name=":μικρότερο από ή ίσο με:" block-list:name="≤"/>
+  <block-list:block block-list:abbreviated-name=":μικρόφωνο2:" block-list:name="🎙"/>
+  <block-list:block block-list:abbreviated-name=":μικρόφωνο:" block-list:name="🎤"/>
+  <block-list:block block-list:abbreviated-name=":μισή νότα:" block-list:name="𝅗𝅥"/>
+  <block-list:block block-list:abbreviated-name=":μολύβι4:" block-list:name="🖉"/>
+  <block-list:block block-list:abbreviated-name=":μολύβι:" block-list:name="✏"/>
+  <block-list:block block-list:abbreviated-name=":μονόκερος:" block-list:name="🦄"/>
+  <block-list:block block-list:abbreviated-name=":μονόκλ:" block-list:name="🧐"/>
+  <block-list:block block-list:abbreviated-name=":μονότροχος:" block-list:name="🚝"/>
+  <block-list:block block-list:abbreviated-name=":μόντεμ:" block-list:name="🖀"/>
+  <block-list:block block-list:abbreviated-name=":μουσείο:" block-list:name="🏛"/>
+  <block-list:block block-list:abbreviated-name=":μουσικά φυσικός:" block-list:name="♮"/>
+  <block-list:block block-list:abbreviated-name=":μουσική δίεση:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":μουσική νότα:" block-list:name="🎵"/>
+  <block-list:block block-list:abbreviated-name=":μουσική ύφεση:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":μουσικό σύμβολο ογδόου νότας:" block-list:name="𝅘𝅥𝅮"/>
+  <block-list:block block-list:abbreviated-name=":μουσικό σύμβολο τετάρτου νότας:" block-list:name="𝅘𝅥"/>
+  <block-list:block block-list:abbreviated-name=":μπάλα ποδοσφαίρου:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":μπάλα ράγκμπι:" block-list:name="🏉"/>
+  <block-list:block block-list:abbreviated-name=":μπαλόνι:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":μπανάνα:" block-list:name="🍌"/>
+  <block-list:block block-list:abbreviated-name=":μπάνιο:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":μπαταρία:" block-list:name="🔋"/>
+  <block-list:block block-list:abbreviated-name=":μπαχτ:" block-list:name="฿"/>
+  <block-list:block block-list:abbreviated-name=":μπέιζμπολ:" block-list:name="⚾"/>
+  <block-list:block block-list:abbreviated-name=":μπέικον:" block-list:name="🥓"/>
+  <block-list:block block-list:abbreviated-name=":μπέντο (γιαπωνέζικο τυποποιημένο γεύμα σε κουτί):" block-list:name="🍱"/>
+  <block-list:block block-list:abbreviated-name=":μπικίνι:" block-list:name="👙"/>
+  <block-list:block block-list:abbreviated-name=":μπιλιάρδο:" block-list:name="🎱"/>
+  <block-list:block block-list:abbreviated-name=":μπιμπερό:" block-list:name="🍼"/>
+  <block-list:block block-list:abbreviated-name=":μπισκότο2:" block-list:name="🥠"/>
+  <block-list:block block-list:abbreviated-name=":μπισκότο:" block-list:name="🍪"/>
+  <block-list:block block-list:abbreviated-name=":μπλούζα:" block-list:name="👕"/>
+  <block-list:block block-list:abbreviated-name=":μπόουλινγκ:" block-list:name="🎳"/>
+  <block-list:block block-list:abbreviated-name=":μπουκέτο2:" block-list:name="🎕"/>
+  <block-list:block block-list:abbreviated-name=":μπουκέτο λουλουδιών:" block-list:name="💐"/>
+  <block-list:block block-list:abbreviated-name=":μπουρίτο:" block-list:name="🌯"/>
+  <block-list:block block-list:abbreviated-name=":μπριζόλα:" block-list:name="🥩"/>
+  <block-list:block block-list:abbreviated-name=":μπρόκολο:" block-list:name="🥦"/>
+  <block-list:block block-list:abbreviated-name=":μπυροπότηρα τσουγκρίσματος:" block-list:name="🍻"/>
+  <block-list:block block-list:abbreviated-name=":μπυροπότηρο:" block-list:name="🍺"/>
+  <block-list:block block-list:abbreviated-name=":μύτη:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":μύτη γουρουνιού:" block-list:name="🐽"/>
+  <block-list:block block-list:abbreviated-name=":μωρό2:" block-list:name="🚼"/>
+  <block-list:block block-list:abbreviated-name=":μωρό3:" block-list:name="🤱"/>
+  <block-list:block block-list:abbreviated-name=":μωρό:" block-list:name="👶"/>
+  <block-list:block block-list:abbreviated-name=":ναι2:" block-list:name="🖒"/>
+  <block-list:block block-list:abbreviated-name=":ναι:" block-list:name="👍"/>
+  <block-list:block block-list:abbreviated-name=":ναυτία:" block-list:name="🤢"/>
+  <block-list:block block-list:abbreviated-name=":νέα σελήνη:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":νέα σελήνη με όψη:" block-list:name="🌚"/>
+  <block-list:block block-list:abbreviated-name=":νεράιδα:" block-list:name="🧚"/>
+  <block-list:block block-list:abbreviated-name=":νεροβούβαλος:" block-list:name="🐃"/>
+  <block-list:block block-list:abbreviated-name=":νησί:" block-list:name="🏝"/>
+  <block-list:block block-list:abbreviated-name=":νι:" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=":Νι:" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=":νιφάδα χιονιού:" block-list:name="❄"/>
+  <block-list:block block-list:abbreviated-name=":νοσοκομείο:" block-list:name="🏥"/>
+  <block-list:block block-list:abbreviated-name=":νότες3:" block-list:name="🎝"/>
+  <block-list:block block-list:abbreviated-name=":νότες4:" block-list:name="🎜"/>
+  <block-list:block block-list:abbreviated-name=":Νοτιοανατολικό βέλος:" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=":Νοτιοανατολικό διπλό βέλος:" block-list:name="⇘"/>
+  <block-list:block block-list:abbreviated-name=":Νοτιοδυτικό βέλος:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":Νοτιοδυτικό διπλό βέλος:" block-list:name="⇙"/>
+  <block-list:block block-list:abbreviated-name=":ντάμα μπαστούνι:" block-list:name="🂭"/>
+  <block-list:block block-list:abbreviated-name=":ντάνγκο:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":ντομάτα:" block-list:name="🍅"/>
+  <block-list:block block-list:abbreviated-name=":ντόνατ:" block-list:name="🍩"/>
+  <block-list:block block-list:abbreviated-name=":ντουζιέρα:" block-list:name="🚿"/>
+  <block-list:block block-list:abbreviated-name=":νυσταλέος:" block-list:name="😪"/>
+  <block-list:block block-list:abbreviated-name=":νύφη με βέλος:" block-list:name="👰"/>
+  <block-list:block block-list:abbreviated-name=":νύχτα με αστέρια:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":ξαναμμένο πρόσωπο:" block-list:name="😳"/>
+  <block-list:block block-list:abbreviated-name=":ξανθομάλλα:" block-list:name="👱"/>
+  <block-list:block block-list:abbreviated-name=":ξεκαρδίζομαι:" block-list:name="🤣"/>
+  <block-list:block block-list:abbreviated-name=":ξενοδοχείο:" block-list:name="🏨"/>
+  <block-list:block block-list:abbreviated-name=":ξι:" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=":Ξι:" block-list:name="Ξ"/>
+  <block-list:block block-list:abbreviated-name=":ξιφομάχος:" block-list:name="🤺"/>
+  <block-list:block block-list:abbreviated-name=":ξυλάκια φαγητού:" block-list:name="🥢"/>
+  <block-list:block block-list:abbreviated-name=":ξυπνητήρι:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":ξωτικό:" block-list:name="🧝"/>
+  <block-list:block block-list:abbreviated-name=":όγδοο νότας:" block-list:name="♪"/>
+  <block-list:block block-list:abbreviated-name=":οθόνη:" block-list:name="🖵"/>
+  <block-list:block block-list:abbreviated-name=":οικογένεια:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":οικοδόμος:" block-list:name="👷"/>
+  <block-list:block block-list:abbreviated-name=":οικόσημο:" block-list:name="☓"/>
+  <block-list:block block-list:abbreviated-name=":ολισθητής:" block-list:name="🎚"/>
+  <block-list:block block-list:abbreviated-name=":ολόκληρη νότα:" block-list:name="𝅝"/>
+  <block-list:block block-list:abbreviated-name=":ολοκλήρωμα:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":ομ:" block-list:name="🕉"/>
+  <block-list:block block-list:abbreviated-name=":όμικρον:" block-list:name="ο"/>
+  <block-list:block block-list:abbreviated-name=":Όμικρον:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":ομίχλη:" block-list:name="🌫"/>
+  <block-list:block block-list:abbreviated-name=":ομιχλώδης:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":ομπρέλα:" block-list:name="☂"/>
+  <block-list:block block-list:abbreviated-name=":ομπρέλα με σταγόνες βροχής:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":ομπρέλα στο έδαφος:" block-list:name="⛱"/>
+  <block-list:block block-list:abbreviated-name=":όντεν (γιαπωνέζικη σούπα):" block-list:name="🍢"/>
+  <block-list:block block-list:abbreviated-name=":οπτικός δίσκος:" block-list:name="💿"/>
+  <block-list:block block-list:abbreviated-name=":ορεινός σιδηρόδρομος:" block-list:name="🚞"/>
+  <block-list:block block-list:abbreviated-name=":ορεινός σιδηρόδρομος με καλώδιο:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":ορθογώνιο τρίγωνο:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":ορθόδοξος σταυρός:" block-list:name="☦"/>
+  <block-list:block block-list:abbreviated-name=":οριζόντιος σηματοδότης:" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":οτσουκίμι (γιαπωνέζικη γιορτή για τη συγκομιδή):" block-list:name="🎑"/>
+  <block-list:block block-list:abbreviated-name=":ουδέτερο πρόσωπο:" block-list:name="😐"/>
+  <block-list:block block-list:abbreviated-name=":ουράνιο τόξο:" block-list:name="🌈"/>
+  <block-list:block block-list:abbreviated-name=":Ουρανός:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":ούφο:" block-list:name="🛸"/>
+  <block-list:block block-list:abbreviated-name=":οφιούχος:" block-list:name="⛎"/>
+  <block-list:block block-list:abbreviated-name=":όχημα αναψυχής:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":οχηματαγωγό:" block-list:name="⛴"/>
+  <block-list:block block-list:abbreviated-name=":όχι2:" block-list:name="🖓"/>
+  <block-list:block block-list:abbreviated-name=":όχι:" block-list:name="👎"/>
+  <block-list:block block-list:abbreviated-name=":όχι ανήλικοι:" block-list:name="🔞"/>
+  <block-list:block block-list:abbreviated-name=":όχι απορρίμματα:" block-list:name="🚯"/>
+  <block-list:block block-list:abbreviated-name=":όχι ίσο:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":όχι υπερσύνολο:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":όχι υποσύνολο:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":οχταπόδι:" block-list:name="🐙"/>
+  <block-list:block block-list:abbreviated-name=":όψη αλόγου:" block-list:name="🐴"/>
+  <block-list:block block-list:abbreviated-name=":όψη αρκούδας:" block-list:name="🐻"/>
+  <block-list:block block-list:abbreviated-name=":όψη βάτραχου:" block-list:name="🐸"/>
+  <block-list:block block-list:abbreviated-name=":όψη γάτας:" block-list:name="🐱"/>
+  <block-list:block block-list:abbreviated-name=":όψη γελάδας:" block-list:name="🐮"/>
+  <block-list:block block-list:abbreviated-name=":όψη γουρουνιού:" block-list:name="🐷"/>
+  <block-list:block block-list:abbreviated-name=":όψη δράκου:" block-list:name="🐲"/>
+  <block-list:block block-list:abbreviated-name=":όψη κουνελιού:" block-list:name="🐰"/>
+  <block-list:block block-list:abbreviated-name=":όψη λύκου:" block-list:name="🐺"/>
+  <block-list:block block-list:abbreviated-name=":όψη μαϊμούς:" block-list:name="🐵"/>
+  <block-list:block block-list:abbreviated-name=":όψη πάντα:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":όψη ποντικιού:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":όψη σκύλου:" block-list:name="🐶"/>
+  <block-list:block block-list:abbreviated-name=":όψη τίγρη:" block-list:name="🐯"/>
+  <block-list:block block-list:abbreviated-name=":όψη χάμστερ:" block-list:name="🐹"/>
+  <block-list:block block-list:abbreviated-name=":πάγος σε κύπελλο:" block-list:name="🍧"/>
+  <block-list:block block-list:abbreviated-name=":παγωτό:" block-list:name="🍨"/>
+  <block-list:block block-list:abbreviated-name=":παιδί:" block-list:name="🧒"/>
+  <block-list:block block-list:abbreviated-name=":παιχνιδοχειριστήριο:" block-list:name="🕹"/>
+  <block-list:block block-list:abbreviated-name=":παλάμες2:" block-list:name="🤲"/>
+  <block-list:block block-list:abbreviated-name=":παλάμη3:" block-list:name="🖑"/>
+  <block-list:block block-list:abbreviated-name=":παλάμη4:" block-list:name="🤚"/>
+  <block-list:block block-list:abbreviated-name=":παλάμη στο πρόσωπο:" block-list:name="🤦"/>
+  <block-list:block block-list:abbreviated-name=":παλέτα ζωγράφου:" block-list:name="🎨"/>
+  <block-list:block block-list:abbreviated-name=":πάλη:" block-list:name="🤼"/>
+  <block-list:block block-list:abbreviated-name=":πανσέληνος:" block-list:name="🌕"/>
+  <block-list:block block-list:abbreviated-name=":πανσέληνος με όψη:" block-list:name="🌝"/>
+  <block-list:block block-list:abbreviated-name=":παντοπωλείο:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":πάνω δεξιό μολύβι:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":πάνω-κάτω βέλος:" block-list:name="↕"/>
+  <block-list:block block-list:abbreviated-name=":Πάνω-κάτω διπλό βέλος:" block-list:name="⇕"/>
+  <block-list:block block-list:abbreviated-name=":πανωφόρι:" block-list:name="🧥"/>
+  <block-list:block block-list:abbreviated-name=":πάπια:" block-list:name="🦆"/>
+  <block-list:block block-list:abbreviated-name=":πάπυρος:" block-list:name="📜"/>
+  <block-list:block block-list:abbreviated-name=":παραγραφος:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":παράθυρο:" block-list:name="🗔"/>
+  <block-list:block block-list:abbreviated-name=":παράλληλος:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":Παρθένος:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":πάρκο:" block-list:name="🏞"/>
+  <block-list:block block-list:abbreviated-name=":παρτιτούρα:" block-list:name="🎼"/>
+  <block-list:block block-list:abbreviated-name=":πασχαλίτσα:" block-list:name="🐞"/>
+  <block-list:block block-list:abbreviated-name=":πατάτα:" block-list:name="🥔"/>
+  <block-list:block block-list:abbreviated-name=":πατημασιά:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":πατημασιές:" block-list:name="👣"/>
+  <block-list:block block-list:abbreviated-name=":πατινάζ:" block-list:name="⛸"/>
+  <block-list:block block-list:abbreviated-name=":πατίνι:" block-list:name="🛴"/>
+  <block-list:block block-list:abbreviated-name=":παύλα:" block-list:name="💨"/>
+  <block-list:block block-list:abbreviated-name=":παύση:" block-list:name="⏸"/>
+  <block-list:block block-list:abbreviated-name=":παύση ημίσεως:" block-list:name="𝄼"/>
+  <block-list:block block-list:abbreviated-name=":παύση ογδόου:" block-list:name="𝄾"/>
+  <block-list:block block-list:abbreviated-name=":παύση ολόκληρου:" block-list:name="𝄻"/>
+  <block-list:block block-list:abbreviated-name=":παύση τετάρτου:" block-list:name="𝄽"/>
+  <block-list:block block-list:abbreviated-name=":πεζοπόρος:" block-list:name="🚶"/>
+  <block-list:block block-list:abbreviated-name=":πειρατής:" block-list:name="🕱"/>
+  <block-list:block block-list:abbreviated-name=":πεντάγραμμο:" block-list:name="⛤"/>
+  <block-list:block block-list:abbreviated-name=":πεπόνι:" block-list:name="🍈"/>
+  <block-list:block block-list:abbreviated-name=":περιέχει ως μέλος:" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=":περιπολικό:" block-list:name="🚓"/>
+  <block-list:block block-list:abbreviated-name=":περιστέρι:" block-list:name="🕊"/>
+  <block-list:block block-list:abbreviated-name=":περιστρεφόμενες καρδιές:" block-list:name="💞"/>
+  <block-list:block block-list:abbreviated-name=":περιστρεφόμενος φάρος περιπολικού:" block-list:name="🚨"/>
+  <block-list:block block-list:abbreviated-name=":πεσμένο φύλλο:" block-list:name="🍂"/>
+  <block-list:block block-list:abbreviated-name=":πέσο:" block-list:name="₱"/>
+  <block-list:block block-list:abbreviated-name=":πεταλούδα:" block-list:name="🦋"/>
+  <block-list:block block-list:abbreviated-name=":πετοσφαίριση:" block-list:name="🏐"/>
+  <block-list:block block-list:abbreviated-name=":πεύκο:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":πι:" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=":Πι:" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name=":πιάνο:" block-list:name="🎹"/>
+  <block-list:block block-list:abbreviated-name=":πιάτο με πιρούνι και μαχαίρι:" block-list:name="🍽"/>
+  <block-list:block block-list:abbreviated-name=":πιγκουίνος:" block-list:name="🐧"/>
+  <block-list:block block-list:abbreviated-name=":πίθηκος με κλεισμένα αυτιά:" block-list:name="🙉"/>
+  <block-list:block block-list:abbreviated-name=":πίθηκος με κλεισμένα μάτια:" block-list:name="🙈"/>
+  <block-list:block block-list:abbreviated-name=":πίθηκος με κλειστό στόμα:" block-list:name="🙊"/>
+  <block-list:block block-list:abbreviated-name=":πινγκ πονγκ:" block-list:name="🏓"/>
+  <block-list:block block-list:abbreviated-name=":πινέζα:" block-list:name="📌"/>
+  <block-list:block block-list:abbreviated-name=":πινέλο:" block-list:name="🖌"/>
+  <block-list:block block-list:abbreviated-name=":πιπέρι:" block-list:name="🌶"/>
+  <block-list:block block-list:abbreviated-name=":πιστωτική κάρτα:" block-list:name="💳"/>
+  <block-list:block block-list:abbreviated-name=":πίτα:" block-list:name="🥙"/>
+  <block-list:block block-list:abbreviated-name=":πίτσα:" block-list:name="🍕"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο2:" block-list:name="🖽"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο ελέγχου4:" block-list:name="🗷"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο ελέγχου5:" block-list:name="🗹"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο ελέγχου:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο ελέγχου με νι:" block-list:name="☑"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο ελέγχου με Χ:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο ελέγχου χ5:" block-list:name="🗵"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο με εικόνα:" block-list:name="🖼"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο με χ:" block-list:name="🖾"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο ομιλίας:" block-list:name="💬"/>
+  <block-list:block block-list:abbreviated-name=":πλαίσιο σκέψης:" block-list:name="💭"/>
+  <block-list:block block-list:abbreviated-name=":πλακίδιο ντόμινο οριζόντιο-06-05:" block-list:name="🁠"/>
+  <block-list:block block-list:abbreviated-name=":πλατύ χαμόγελο:" block-list:name="😀"/>
+  <block-list:block block-list:abbreviated-name=":πλατύ χαμόγελο με χαμογελαστά μάτια:" block-list:name="😁"/>
+  <block-list:block block-list:abbreviated-name=":πληκτρολόγιο2:" block-list:name="🖮"/>
+  <block-list:block block-list:abbreviated-name=":πληκτρολόγιο3:" block-list:name="🖦"/>
+  <block-list:block block-list:abbreviated-name=":πληκτρολόγιο:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":πληροφορία:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":πληροφορίες3:" block-list:name="🛈"/>
+  <block-list:block block-list:abbreviated-name=":πληροφορίες:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":πλοίο2:" block-list:name="🛳"/>
+  <block-list:block block-list:abbreviated-name=":πλοίο:" block-list:name="🚢"/>
+  <block-list:block block-list:abbreviated-name=":πλούσιο γεύμα:" block-list:name="🕃"/>
+  <block-list:block block-list:abbreviated-name=":Πλούτωνας:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":πνευματικά δικαιώματα:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":ποδηλάτης:" block-list:name="🚴"/>
+  <block-list:block block-list:abbreviated-name=":ποδηλάτης βουνών:" block-list:name="🚵"/>
+  <block-list:block block-list:abbreviated-name=":ποδήλατο:" block-list:name="🚲"/>
+  <block-list:block block-list:abbreviated-name=":πόδι πουλερικών:" block-list:name="🍗"/>
+  <block-list:block block-list:abbreviated-name=":πόλη:" block-list:name="🏙"/>
+  <block-list:block block-list:abbreviated-name=":πολλές μουσικές νότες:" block-list:name="🎶"/>
+  <block-list:block block-list:abbreviated-name=":πολυκατάστημα:" block-list:name="🏬"/>
+  <block-list:block block-list:abbreviated-name=":πολύτιμος λίθος:" block-list:name="💎"/>
+  <block-list:block block-list:abbreviated-name=":ποντίκι3:" block-list:name="🖱"/>
+  <block-list:block block-list:abbreviated-name=":ποντίκι4:" block-list:name="🖰"/>
+  <block-list:block block-list:abbreviated-name=":ποντίκι5:" block-list:name="🖯"/>
+  <block-list:block block-list:abbreviated-name=":ποντίκι:" block-list:name="🐁"/>
+  <block-list:block block-list:abbreviated-name=":ποπκορν:" block-list:name="🍿"/>
+  <block-list:block block-list:abbreviated-name=":πορτοκαλί καρδιά:" block-list:name="🧡"/>
+  <block-list:block block-list:abbreviated-name=":πορτοφόλι:" block-list:name="👛"/>
+  <block-list:block block-list:abbreviated-name=":Ποσειδώνας:" block-list:name="♆"/>
+  <block-list:block block-list:abbreviated-name=":πόσιμο νερό:" block-list:name="🚰"/>
+  <block-list:block block-list:abbreviated-name=":ποστόλι:" block-list:name="🔫"/>
+  <block-list:block block-list:abbreviated-name=":ποτήρι:" block-list:name="🍷"/>
+  <block-list:block block-list:abbreviated-name=":ποτήρι κοκτέιλ:" block-list:name="🍸"/>
+  <block-list:block block-list:abbreviated-name=":ποτό2:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":ποτό:" block-list:name="🥤"/>
+  <block-list:block block-list:abbreviated-name=":πουλί:" block-list:name="🐦"/>
+  <block-list:block block-list:abbreviated-name=":πράσινο μήλο:" block-list:name="🍏"/>
+  <block-list:block block-list:abbreviated-name=":πρίγκιπας:" block-list:name="🤴"/>
+  <block-list:block block-list:abbreviated-name=":πριγκίπισσα:" block-list:name="👸"/>
+  <block-list:block block-list:abbreviated-name=":πρόβατο:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":προβολέας:" block-list:name="📽"/>
+  <block-list:block block-list:abbreviated-name=":προειδοποίηση:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":προσοχή:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπα που κλαίει πολύ:" block-list:name="😭"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο γάτας με δάκρυα χαράς:" block-list:name="😹"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο γάτας με πλατύ χαμόγελο και χαμογελαστά μάτια:" block-list:name="😸"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο γάτας με σαρκαστικό χαμόγελο:" block-list:name="😼"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο γάτας που κλαίει:" block-list:name="😿"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο γάτας που φιλάει με κλειστά μάτια:" block-list:name="😽"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με ανοιχτό στόμα:" block-list:name="😮"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με ανοιχτό στόμα και κρύο ιδρώτα:" block-list:name="😰"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με γκριμάτσα:" block-list:name="😬"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με δάκρυα χαράς:" block-list:name="😂"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με ιατρική μάσκα:" block-list:name="😷"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με κλείσιμο ματιού:" block-list:name="😉"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με κρύο ιδρώτα:" block-list:name="😓"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με πεταχτό φιλί:" block-list:name="😘"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με τη γλώσσα έξω:" block-list:name="😛"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με τη γλώσσα έξω και κλείσιμο ματιού:" block-list:name="😜"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο με τη γλώσσα έξω και σφιχτόκλειστα μάτια:" block-list:name="😝"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο που γλείφεται:" block-list:name="😋"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο που κλαίει:" block-list:name="😢"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο που ουρλιάζει από φόβο:" block-list:name="😱"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο που σηκώνει και τα δύο χέρια σε πανηγυρισμό:" block-list:name="🙌"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο που φιλά:" block-list:name="😗"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο που φιλά με κλειστά μάτια:" block-list:name="😚"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο που φιλά με χαμογελαστά μάτια:" block-list:name="😙"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο χωρίς καλή χειρονομία:" block-list:name="🙅"/>
+  <block-list:block block-list:abbreviated-name=":πρόσωπο χωρίς στόμα:" block-list:name="😶"/>
+  <block-list:block block-list:abbreviated-name=":προτομές:" block-list:name="👥"/>
+  <block-list:block block-list:abbreviated-name=":προτομή:" block-list:name="👤"/>
+  <block-list:block block-list:abbreviated-name=":πρόχειρο:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":πρώτος:" block-list:name="′"/>
+  <block-list:block block-list:abbreviated-name=":πρώτο τέταρτο σελήνης:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":πρώτο τέταρτο σελήνης με όψη:" block-list:name="🌛"/>
+  <block-list:block block-list:abbreviated-name=":πύραυλος:" block-list:name="🚀"/>
+  <block-list:block block-list:abbreviated-name=":πύργος του Τόκιο:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":πυροσβεστικό όχημα2:" block-list:name="🛱"/>
+  <block-list:block block-list:abbreviated-name=":πυροσβεστικό όχημα:" block-list:name="🚒"/>
+  <block-list:block block-list:abbreviated-name=":πυροτέχνημα από αστράκια:" block-list:name="🎇"/>
+  <block-list:block block-list:abbreviated-name=":πυροτεχνήματα:" block-list:name="🎆"/>
+  <block-list:block block-list:abbreviated-name=":ράβδος του Ασκληπιού:" block-list:name="⚕"/>
+  <block-list:block block-list:abbreviated-name=":ράβδος του Ερμή:" block-list:name="⚚"/>
+  <block-list:block block-list:abbreviated-name=":ραδιενεργό:" block-list:name="☢"/>
+  <block-list:block block-list:abbreviated-name=":ραδιοπλήκτρο:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":ραδιόφωνο:" block-list:name="📻"/>
+  <block-list:block block-list:abbreviated-name=":ρακέτα και μπάλα αντισφαίρισης:" block-list:name="🎾"/>
+  <block-list:block block-list:abbreviated-name=":ράμεν (γιαπωνέζικα ζυμαρικά):" block-list:name="🍜"/>
+  <block-list:block block-list:abbreviated-name=":ρήγας μπαστούνι:" block-list:name="🂮"/>
+  <block-list:block block-list:abbreviated-name=":ρινόκερος:" block-list:name="🦏"/>
+  <block-list:block block-list:abbreviated-name=":ρίψη απορριμάτων:" block-list:name="🚮"/>
+  <block-list:block block-list:abbreviated-name=":ρο:" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=":Ρο:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":ροδάκινο:" block-list:name="🍑"/>
+  <block-list:block block-list:abbreviated-name=":ρολόι:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":ρόμβος:" block-list:name="◊"/>
+  <block-list:block block-list:abbreviated-name=":ρόμβος με κουκκίδα:" block-list:name="💠"/>
+  <block-list:block block-list:abbreviated-name=":ρομπότ:" block-list:name="🤖"/>
+  <block-list:block block-list:abbreviated-name=":ρόπαλο:" block-list:name="🦇"/>
+  <block-list:block block-list:abbreviated-name=":ρουπία:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":ρύζι με κάρι:" block-list:name="🍛"/>
+  <block-list:block block-list:abbreviated-name=":σαλάτα:" block-list:name="🥗"/>
+  <block-list:block block-list:abbreviated-name=":σαλιάρης:" block-list:name="🤤"/>
+  <block-list:block block-list:abbreviated-name=":σαλιγκάρι:" block-list:name="🐌"/>
+  <block-list:block block-list:abbreviated-name=":σάλπιγγα:" block-list:name="🎺"/>
+  <block-list:block block-list:abbreviated-name=":σάντουιτς:" block-list:name="🥪"/>
+  <block-list:block block-list:abbreviated-name=":σαξόφωνο:" block-list:name="🎷"/>
+  <block-list:block block-list:abbreviated-name=":σάουνα:" block-list:name="🧖"/>
+  <block-list:block block-list:abbreviated-name=":σαύρα:" block-list:name="🦎"/>
+  <block-list:block block-list:abbreviated-name=":σέκελ:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":σελίδα2:" block-list:name="🗏"/>
+  <block-list:block block-list:abbreviated-name=":σελίδα3:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":σελίδα4:" block-list:name="🗟"/>
+  <block-list:block block-list:abbreviated-name=":σελίδα:" block-list:name="📄"/>
+  <block-list:block block-list:abbreviated-name=":σελίδα σημείωσης:" block-list:name="🗉"/>
+  <block-list:block block-list:abbreviated-name=":σελίδες:" block-list:name="🗐"/>
+  <block-list:block block-list:abbreviated-name=":σήκωμα ώμων:" block-list:name="🤷"/>
+  <block-list:block block-list:abbreviated-name=":σήμα γραφής:" block-list:name="✍"/>
+  <block-list:block block-list:abbreviated-name=":σημάδι από φιλί:" block-list:name="💋"/>
+  <block-list:block block-list:abbreviated-name=":σημάδι ελέγχου νι5:" block-list:name="🗸"/>
+  <block-list:block block-list:abbreviated-name=":σημάδι ελέγχου χ4:" block-list:name="🗴"/>
+  <block-list:block block-list:abbreviated-name=":σημάδι επιλογής:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":σημαία2:" block-list:name="🏳"/>
+  <block-list:block block-list:abbreviated-name=":σημαία3:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":σημαία4:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":σημαία:" block-list:name="🏴"/>
+  <block-list:block block-list:abbreviated-name=":σήμα κατατεθέν:" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=":σήμα νίκης2:" block-list:name="🖔"/>
+  <block-list:block block-list:abbreviated-name=":σήμα νίκης:" block-list:name="✌"/>
+  <block-list:block block-list:abbreviated-name=":σημείο βάσης:" block-list:name="‱"/>
+  <block-list:block block-list:abbreviated-name=":σημείο παραπομπής2:" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":σημείο παραπομπής:" block-list:name="†"/>
+  <block-list:block block-list:abbreviated-name=":σημειωματάριο:" block-list:name="📓"/>
+  <block-list:block block-list:abbreviated-name=":σημείωση3:" block-list:name="🗈"/>
+  <block-list:block block-list:abbreviated-name=":σίγαση μεγαφώνου:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":σίγμα:" block-list:name="σ"/>
+  <block-list:block block-list:abbreviated-name=":Σίγμα:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":σίγμα τελικό:" block-list:name="ς"/>
+  <block-list:block block-list:abbreviated-name=":σιδηροδρομική γραμμή:" block-list:name="🛤"/>
+  <block-list:block block-list:abbreviated-name=":σιωπή:" block-list:name="🤫"/>
+  <block-list:block block-list:abbreviated-name=":σκαντζόχοιρος:" block-list:name="🦔"/>
+  <block-list:block block-list:abbreviated-name=":σκεφτικό πρόσωπο:" block-list:name="😔"/>
+  <block-list:block block-list:abbreviated-name=":σκέψη:" block-list:name="🤔"/>
+  <block-list:block block-list:abbreviated-name=":σκι και μπότες σκι:" block-list:name="🎿"/>
+  <block-list:block block-list:abbreviated-name=":σκιουράκι:" block-list:name="🐿"/>
+  <block-list:block block-list:abbreviated-name=":σκληρός δίσκος:" block-list:name="🖴"/>
+  <block-list:block block-list:abbreviated-name=":σκορπιός:" block-list:name="🦂"/>
+  <block-list:block block-list:abbreviated-name=":Σκορπιός:" block-list:name="♏"/>
+  <block-list:block block-list:abbreviated-name=":σκύλος:" block-list:name="🐕"/>
+  <block-list:block block-list:abbreviated-name=":σοκολάτα:" block-list:name="🍫"/>
+  <block-list:block block-list:abbreviated-name=":σούσι:" block-list:name="🍣"/>
+  <block-list:block block-list:abbreviated-name=":σπαγκέτι:" block-list:name="🍝"/>
+  <block-list:block block-list:abbreviated-name=":σπασίκλας:" block-list:name="🤓"/>
+  <block-list:block block-list:abbreviated-name=":σπασμένη καρδιά:" block-list:name="💔"/>
+  <block-list:block block-list:abbreviated-name=":σπινθηροβόλα καρδιά:" block-list:name="💖"/>
+  <block-list:block block-list:abbreviated-name=":σπίτι3:" block-list:name="🏚"/>
+  <block-list:block block-list:abbreviated-name=":σπίτι:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":σπίτια:" block-list:name="🏘"/>
+  <block-list:block block-list:abbreviated-name=":σπίτι με κήπο:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":σταγόνα2:" block-list:name="🌢"/>
+  <block-list:block block-list:abbreviated-name=":σταγόνα:" block-list:name="💧"/>
+  <block-list:block block-list:abbreviated-name=":σταγόνες ιδρώτα:" block-list:name="💦"/>
+  <block-list:block block-list:abbreviated-name=":στάδιο:" block-list:name="🏟"/>
+  <block-list:block block-list:abbreviated-name=":σταθμός:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":στάση:" block-list:name="🚏"/>
+  <block-list:block block-list:abbreviated-name=":σταυρός Μάλτας:" block-list:name="✠"/>
+  <block-list:block block-list:abbreviated-name=":σταυρός της Ιερουσαλήμ:" block-list:name="☩"/>
+  <block-list:block block-list:abbreviated-name=":σταυρός της Λορένης:" block-list:name="☨"/>
+  <block-list:block block-list:abbreviated-name=":σταυρωτές σημαίες:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":σταφύλια:" block-list:name="🍇"/>
+  <block-list:block block-list:abbreviated-name=":στάχυ καλαμποκιού:" block-list:name="🌽"/>
+  <block-list:block block-list:abbreviated-name=":στάχυ ριζιού:" block-list:name="🌾"/>
+  <block-list:block block-list:abbreviated-name=":στέμμα:" block-list:name="👑"/>
+  <block-list:block block-list:abbreviated-name=":στερεοφωνικός:" block-list:name="📾"/>
+  <block-list:block block-list:abbreviated-name=":στερλίνα:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":στιλέτο2:" block-list:name="🗡"/>
+  <block-list:block block-list:abbreviated-name=":στοιχείο ελέγχου:" block-list:name="🎛"/>
+  <block-list:block block-list:abbreviated-name=":στόμα:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":στόχος σε τοξοβολία:" block-list:name="🎯"/>
+  <block-list:block block-list:abbreviated-name=":στρογγυλή πινέζα:" block-list:name="📍"/>
+  <block-list:block block-list:abbreviated-name=":στυλό2:" block-list:name="🖋"/>
+  <block-list:block block-list:abbreviated-name=":στυλό:" block-list:name="🖊"/>
+  <block-list:block block-list:abbreviated-name=":συγκεχυμένο πρόσωπο:" block-list:name="😕"/>
+  <block-list:block block-list:abbreviated-name=":σύγκρουση:" block-list:name="💥"/>
+  <block-list:block block-list:abbreviated-name=":συγχυσμένο πρόσωπο:" block-list:name="😖"/>
+  <block-list:block block-list:abbreviated-name=":σύμβολο απαγόρευσης εισόδου:" block-list:name="🚫"/>
+  <block-list:block block-list:abbreviated-name=":σύμβολο όχι:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":σύμβολο πρώτου τετάρτου σελήνης:" block-list:name="🌓"/>
+  <block-list:block block-list:abbreviated-name=":σύμβολο τελευταίου τετάρτου σελήνης:" block-list:name="🌗"/>
+  <block-list:block block-list:abbreviated-name=":σύμβολο Χ:" block-list:name="❌"/>
+  <block-list:block block-list:abbreviated-name=":συναγωγή:" block-list:name="🕍"/>
+  <block-list:block block-list:abbreviated-name=":συνδετήρας2:" block-list:name="🖇"/>
+  <block-list:block block-list:abbreviated-name=":συνδετήρας:" block-list:name="📎"/>
+  <block-list:block block-list:abbreviated-name=":συνθεσάιζερ:" block-list:name="🎘"/>
+  <block-list:block block-list:abbreviated-name=":συννεφιασμένος2:" block-list:name="🌥"/>
+  <block-list:block block-list:abbreviated-name=":συννεφιασμένος:" block-list:name="🌤"/>
+  <block-list:block block-list:abbreviated-name=":σύννεφο:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":σύννεφο βροντής και βροχή:" block-list:name="⛈"/>
+  <block-list:block block-list:abbreviated-name=":σύννεφο με κεραυνό:" block-list:name="🌩"/>
+  <block-list:block block-list:abbreviated-name=":συνοφρυωμένο άτομο:" block-list:name="🙍"/>
+  <block-list:block block-list:abbreviated-name=":συνοφρυωμένο πρόσωπο με ανοιχτό στόμα:" block-list:name="😦"/>
+  <block-list:block block-list:abbreviated-name=":συντριβάνι:" block-list:name="⛲"/>
+  <block-list:block block-list:abbreviated-name=":σύριγγα:" block-list:name="💉"/>
+  <block-list:block block-list:abbreviated-name=":συρμός τραμ:" block-list:name="🚋"/>
+  <block-list:block block-list:abbreviated-name=":συρόμενο όχημα:" block-list:name="⛐"/>
+  <block-list:block block-list:abbreviated-name=":συσκευασία:" block-list:name="📦"/>
+  <block-list:block block-list:abbreviated-name=":συσκευή τηλεομοιοτυπίας:" block-list:name="📠"/>
+  <block-list:block block-list:abbreviated-name=":σφαίρα ρυζιού:" block-list:name="🍙"/>
+  <block-list:block block-list:abbreviated-name=":σφιγκτήρας:" block-list:name="🗜"/>
+  <block-list:block block-list:abbreviated-name=":σφιγμένος δικέφαλος:" block-list:name="💪"/>
+  <block-list:block block-list:abbreviated-name=":σφυρί:" block-list:name="🔨"/>
+  <block-list:block block-list:abbreviated-name=":σφυρί και αξίνα:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":σφυρί και κλειδί:" block-list:name="🛠"/>
+  <block-list:block block-list:abbreviated-name=":σφυροδρέπανο:" block-list:name="☭"/>
+  <block-list:block block-list:abbreviated-name=":σχεδόν ίσο:" block-list:name="≈"/>
+  <block-list:block block-list:abbreviated-name=":σχολείο:" block-list:name="🏫"/>
+  <block-list:block block-list:abbreviated-name=":σχολική τσάντα:" block-list:name="🎒"/>
+  <block-list:block block-list:abbreviated-name=":σωρός κοπράνων:" block-list:name="💩"/>
+  <block-list:block block-list:abbreviated-name=":τάγμα Αγίου Μάρκου:" block-list:name="🕅"/>
+  <block-list:block block-list:abbreviated-name=":ταινία:" block-list:name="🎞"/>
+  <block-list:block block-list:abbreviated-name=":τάκος:" block-list:name="🌮"/>
+  <block-list:block block-list:abbreviated-name=":ταξί:" block-list:name="🚕"/>
+  <block-list:block block-list:abbreviated-name=":ταραγμένος:" block-list:name="🤯"/>
+  <block-list:block block-list:abbreviated-name=":ταυ:" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=":Τάυ:" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=":Ταύρος:" block-list:name="♉"/>
+  <block-list:block block-list:abbreviated-name=":ταχυδρομική κόρνα:" block-list:name="📯"/>
+  <block-list:block block-list:abbreviated-name=":ταχύπλοο:" block-list:name="🚤"/>
+  <block-list:block block-list:abbreviated-name=":τελευταίο τέταρτο σελήνης:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":τελευταίο τέταρτο σελήνης με όψη:" block-list:name="🌜"/>
+  <block-list:block block-list:abbreviated-name=":τέλος απόδειξης:" block-list:name="∎"/>
+  <block-list:block block-list:abbreviated-name=":τελωνείο:" block-list:name="🛃"/>
+  <block-list:block block-list:abbreviated-name=":τέντα:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":τέρας:" block-list:name="👹"/>
+  <block-list:block block-list:abbreviated-name=":τέρμα2:" block-list:name="🥅"/>
+  <block-list:block block-list:abbreviated-name=":τέταρτη ρίζα:" block-list:name="∜"/>
+  <block-list:block block-list:abbreviated-name=":τέταρτο νότας:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":τετραγωνική ρίζα:" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=":τετράφυλλο τριφύλλι:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":τζαμί:" block-list:name="🕌"/>
+  <block-list:block block-list:abbreviated-name=":τζινς:" block-list:name="👖"/>
+  <block-list:block block-list:abbreviated-name=":τζούντο:" block-list:name="🥋"/>
+  <block-list:block block-list:abbreviated-name=":τηγανητές πατάτες:" block-list:name="🍟"/>
+  <block-list:block block-list:abbreviated-name=":τηγανητή γαρίδα:" block-list:name="🍤"/>
+  <block-list:block block-list:abbreviated-name=":τηγανίτες:" block-list:name="🥞"/>
+  <block-list:block block-list:abbreviated-name=":τηλεβόας2:" block-list:name="🕬"/>
+  <block-list:block block-list:abbreviated-name=":τηλεβόας:" block-list:name="🕫"/>
+  <block-list:block block-list:abbreviated-name=":τηλεειδοποίηση:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":τηλεόραση:" block-list:name="📺"/>
+  <block-list:block block-list:abbreviated-name=":τηλεσκόπιο:" block-list:name="🔭"/>
+  <block-list:block block-list:abbreviated-name=":τηλέφωνο3:" block-list:name="🕾"/>
+  <block-list:block block-list:abbreviated-name=":τηλέφωνο4:" block-list:name="🕿"/>
+  <block-list:block block-list:abbreviated-name=":τηλέφωνο:" block-list:name="✆"/>
+  <block-list:block block-list:abbreviated-name=":τίγρης:" block-list:name="🐅"/>
+  <block-list:block block-list:abbreviated-name=":τοις χιλίοις:" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=":τομή:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":τόξο:" block-list:name="🏹"/>
+  <block-list:block block-list:abbreviated-name=":Τοξότης:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":τουαλέτα:" block-list:name="🚽"/>
+  <block-list:block block-list:abbreviated-name=":τουλίπα:" block-list:name="🌷"/>
+  <block-list:block block-list:abbreviated-name=":Τουρκική λίρα:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=":τούρτα γενεθλίων:" block-list:name="🎂"/>
+  <block-list:block block-list:abbreviated-name=":τραμ:" block-list:name="🚊"/>
+  <block-list:block block-list:abbreviated-name=":τράπεζα:" block-list:name="🏦"/>
+  <block-list:block block-list:abbreviated-name=":τραπέζιο:" block-list:name="⏢"/>
+  <block-list:block block-list:abbreviated-name=":τραπουλόχαρτο:" block-list:name="🎴"/>
+  <block-list:block block-list:abbreviated-name=":τρελός:" block-list:name="🤪"/>
+  <block-list:block block-list:abbreviated-name=":τρενάκι σε λούνα παρκ:" block-list:name="🎢"/>
+  <block-list:block block-list:abbreviated-name=":τρένο:" block-list:name="🚆"/>
+  <block-list:block block-list:abbreviated-name=":τρένο υψηλής ταχύτητας:" block-list:name="🚄"/>
+  <block-list:block block-list:abbreviated-name=":τρένο υψηλής ταχύτητας με κουκκίδα στη μύτη:" block-list:name="🚅"/>
+  <block-list:block block-list:abbreviated-name=":τρίαινα:" block-list:name="🔱"/>
+  <block-list:block block-list:abbreviated-name=":τριαντάφυλλο:" block-list:name="🌹"/>
+  <block-list:block block-list:abbreviated-name=":τριγωνική σημαία:" block-list:name="🚩"/>
+  <block-list:block block-list:abbreviated-name=":τριγωνικός χάρακας:" block-list:name="📐"/>
+  <block-list:block block-list:abbreviated-name=":τρίγωνο3:" block-list:name="🛆"/>
+  <block-list:block block-list:abbreviated-name=":τριπλό ολοκλήρωμα:" block-list:name="∭"/>
+  <block-list:block block-list:abbreviated-name=":τρόλεϊ:" block-list:name="🚎"/>
+  <block-list:block block-list:abbreviated-name=":τρόπαιο:" block-list:name="🏆"/>
+  <block-list:block block-list:abbreviated-name=":τροπικό ψάρι:" block-list:name="🐠"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο a:" block-list:name="ᵃ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο A:" block-list:name="ᴬ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο b:" block-list:name="ᵇ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο B:" block-list:name="ᴮ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο c:" block-list:name="ᶜ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο e:" block-list:name="ᵉ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο E:" block-list:name="ᴱ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο f:" block-list:name="ᶠ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο g:" block-list:name="ᵍ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο G:" block-list:name="ᴳ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο h:" block-list:name="ʰ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο H:" block-list:name="ᴴ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο i:" block-list:name="ⁱ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο I:" block-list:name="ᴵ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο j:" block-list:name="ʲ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο J:" block-list:name="ᴶ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο k:" block-list:name="ᵏ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο K:" block-list:name="ᴷ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο l:" block-list:name="ˡ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο L:" block-list:name="ᴸ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο m:" block-list:name="ᵐ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο M:" block-list:name="ᴹ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο n:" block-list:name="ⁿ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο N:" block-list:name="ᴺ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο o:" block-list:name="ᵒ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο O:" block-list:name="ᴼ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο p:" block-list:name="ᵖ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο P:" block-list:name="ᴾ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο r:" block-list:name="ʳ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο R:" block-list:name="ᴿ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο s:" block-list:name="ˢ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο t:" block-list:name="ᵗ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο T:" block-list:name="ᵀ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο u:" block-list:name="ᵘ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο U:" block-list:name="ᵁ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο v:" block-list:name="ᵛ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο V:" block-list:name="ⱽ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο w:" block-list:name="ʷ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο W:" block-list:name="ᵂ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο x:" block-list:name="ˣ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο y:" block-list:name="ʸ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο z:" block-list:name="ᶻ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο α:" block-list:name="ᵅ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο β:" block-list:name="ᵝ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο γ:" block-list:name="ᵞ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο δ:" block-list:name="ᵟ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο ε:" block-list:name="ᵋ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο θ:" block-list:name="ᶿ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο ι:" block-list:name="ᶥ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο Φ:" block-list:name="ᶲ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο φ:" block-list:name="ᵠ"/>
+  <block-list:block block-list:abbreviated-name=":τροποποιημένο χ:" block-list:name="ᵡ"/>
+  <block-list:block block-list:abbreviated-name=":τροχός μύλου:" block-list:name="🎡"/>
+  <block-list:block block-list:abbreviated-name=":τρύπα:" block-list:name="🕳"/>
+  <block-list:block block-list:abbreviated-name=":τσάντα:" block-list:name="💼"/>
+  <block-list:block block-list:abbreviated-name=":τσαντάκι:" block-list:name="👝"/>
+  <block-list:block block-list:abbreviated-name=":τσίρκο:" block-list:name="🎪"/>
+  <block-list:block block-list:abbreviated-name=":τυλιγμένο δώρο:" block-list:name="🎁"/>
+  <block-list:block block-list:abbreviated-name=":τύμπανο2:" block-list:name="🥁"/>
+  <block-list:block block-list:abbreviated-name=":τυρί:" block-list:name="🧀"/>
+  <block-list:block block-list:abbreviated-name=":υβίσκος:" block-list:name="🌺"/>
+  <block-list:block block-list:abbreviated-name=":υδατοσφαίριση:" block-list:name="🤽"/>
+  <block-list:block block-list:abbreviated-name=":υδράργυρος:" block-list:name="☿"/>
+  <block-list:block block-list:abbreviated-name=":υδρία:" block-list:name="⚱"/>
+  <block-list:block block-list:abbreviated-name=":υδρόγειος Αμερική:" block-list:name="🌎"/>
+  <block-list:block block-list:abbreviated-name=":Υδρόγειος Ασία-Αυστραλία:" block-list:name="🌏"/>
+  <block-list:block block-list:abbreviated-name=":υδρόγειος Ευρώπη-Αφρική:" block-list:name="🌍"/>
+  <block-list:block block-list:abbreviated-name=":υδρόγειος με μεσημβρινούς:" block-list:name="🌐"/>
+  <block-list:block block-list:abbreviated-name=":Υδροχόος:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":υπάρχει:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":υπενθύμιση:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":υπερσύνολο:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":ύπνος:" block-list:name="💤"/>
+  <block-list:block block-list:abbreviated-name=":υπό κατασκευή:" block-list:name="🚧"/>
+  <block-list:block block-list:abbreviated-name=":υπολογιστής2:" block-list:name="🖥"/>
+  <block-list:block block-list:abbreviated-name=":υπολογιστής:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":υποσύνολο:" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=":υψηλή τάση:" block-list:name="⚡"/>
+  <block-list:block block-list:abbreviated-name=":υψηλή φωτεινότητα:" block-list:name="🔆"/>
+  <block-list:block block-list:abbreviated-name=":ύψιλον:" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=":Ύψιλον:" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name=":υψωμένη γροθιά:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":υψωμένη παλάμη:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":φαγητό:" block-list:name="🥘"/>
+  <block-list:block block-list:abbreviated-name=":φαγητό για έξω:" block-list:name="🥡"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος2:" block-list:name="🖃"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος3:" block-list:name="🖂"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος4:" block-list:name="🖆"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος5:" block-list:name="🖄"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος6:" block-list:name="🖅"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος7:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος8:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":φάκελος αρχείων:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":φάλαινα2:" block-list:name="🐋"/>
+  <block-list:block block-list:abbreviated-name=":φάλαινα:" block-list:name="🐳"/>
+  <block-list:block block-list:abbreviated-name=":φανάρι ιζακάγια:" block-list:name="🏮"/>
+  <block-list:block block-list:abbreviated-name=":φανέλα δρομέα με ταινία:" block-list:name="🎽"/>
+  <block-list:block block-list:abbreviated-name=":φάντασμα:" block-list:name="👻"/>
+  <block-list:block block-list:abbreviated-name=":φαξ2:" block-list:name="🖷"/>
+  <block-list:block block-list:abbreviated-name=":Φαρσί:" block-list:name="☫"/>
+  <block-list:block block-list:abbreviated-name=":φέρετρο:" block-list:name="⚰"/>
+  <block-list:block block-list:abbreviated-name=":φερμουάρ:" block-list:name="🤐"/>
+  <block-list:block block-list:abbreviated-name=":φθίνουσα αμφίκυρτος σελήνη:" block-list:name="🌖"/>
+  <block-list:block block-list:abbreviated-name=":φθίνων μηνίσκος σελήνης:" block-list:name="🌘"/>
+  <block-list:block block-list:abbreviated-name=":φι:" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=":Φι:" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=":φιάλη σακέ και κύπελλο:" block-list:name="🍶"/>
+  <block-list:block block-list:abbreviated-name=":φίδι:" block-list:name="🐍"/>
+  <block-list:block block-list:abbreviated-name=":φιλί:" block-list:name="💏"/>
+  <block-list:block block-list:abbreviated-name=":φιστίκια:" block-list:name="🥜"/>
+  <block-list:block block-list:abbreviated-name=":φοβισμένο πρόσωπο:" block-list:name="😨"/>
+  <block-list:block block-list:abbreviated-name=":φοίνικας:" block-list:name="🌴"/>
+  <block-list:block block-list:abbreviated-name=":φόρεμα:" block-list:name="👗"/>
+  <block-list:block block-list:abbreviated-name=":φορτηγό διανομής:" block-list:name="🚚"/>
+  <block-list:block block-list:abbreviated-name=":φουλάρι:" block-list:name="🧣"/>
+  <block-list:block block-list:abbreviated-name=":φράουλα:" block-list:name="🍓"/>
+  <block-list:block block-list:abbreviated-name=":φρουρός:" block-list:name="💂"/>
+  <block-list:block block-list:abbreviated-name=":φρύδι:" block-list:name="🤨"/>
+  <block-list:block block-list:abbreviated-name=":φτάρνισμα:" block-list:name="🤧"/>
+  <block-list:block block-list:abbreviated-name=":φύλαξη αποσκευών:" block-list:name="🛅"/>
+  <block-list:block block-list:abbreviated-name=":φυλλοβόλο δένδρο:" block-list:name="🌳"/>
+  <block-list:block block-list:abbreviated-name=":φύλλο που ανεμίζει στον άνεμο:" block-list:name="🍃"/>
+  <block-list:block block-list:abbreviated-name=":φύλλο σφένδαμου:" block-list:name="🍁"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα10:" block-list:name="🗩"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα2:" block-list:name="🗪"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα3:" block-list:name="🗫"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα4:" block-list:name="🗯"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα5:" block-list:name="🗭"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα6:" block-list:name="🗱"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα7:" block-list:name="🗬"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα8:" block-list:name="🗮"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα9:" block-list:name="🗰"/>
+  <block-list:block block-list:abbreviated-name=":φυσαλίδα:" block-list:name="🗨"/>
+  <block-list:block block-list:abbreviated-name=":φωτιά:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":χαιρετισμός Σποκ:" block-list:name="🖖"/>
+  <block-list:block block-list:abbreviated-name=":χάλκινο:" block-list:name="🥉"/>
+  <block-list:block block-list:abbreviated-name=":Χαλοουίν:" block-list:name="🎃"/>
+  <block-list:block block-list:abbreviated-name=":χαμηλή φωτεινότητα:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":χαμηλωμένο πρόσωπο:" block-list:name="😯"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο γάτας με ανοιχτό στόμα:" block-list:name="😺"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο γάτας με μάτια σε σχήμα καρδιάς:" block-list:name="😻"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο με ανοιχτό στόμα:" block-list:name="😃"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο με ανοιχτό στόμα και κρύο ιδρώτα:" block-list:name="😅"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο με ανοιχτό στόμα και χαμογελαστά μάτια:" block-list:name="😄"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο με κέρατα:" block-list:name="😈"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο με μάτια σε σχήμα καρδιάς:" block-list:name="😍"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο με στέφανο:" block-list:name="😇"/>
+  <block-list:block block-list:abbreviated-name=":χαμογελαστό πρόσωπο με χαμογελαστά μάτια:" block-list:name="😊"/>
+  <block-list:block block-list:abbreviated-name=":χαμόγελο3:" block-list:name="🙂"/>
+  <block-list:block block-list:abbreviated-name=":χαμόγελο4:" block-list:name="🤭"/>
+  <block-list:block block-list:abbreviated-name=":χάμπουργκερ:" block-list:name="🍔"/>
+  <block-list:block block-list:abbreviated-name=":χάπι:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":χάρακας:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":χάρτης4:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":χάρτης5:" block-list:name="🗠"/>
+  <block-list:block block-list:abbreviated-name=":χάρτης:" block-list:name="🗺"/>
+  <block-list:block block-list:abbreviated-name=":χάρτης Ιαπωνίας:" block-list:name="🗾"/>
+  <block-list:block block-list:abbreviated-name=":χαρτί διαρκείας:" block-list:name="♾"/>
+  <block-list:block block-list:abbreviated-name=":χαρτονόμισμα γιέν:" block-list:name="💴"/>
+  <block-list:block block-list:abbreviated-name=":χαρτονόμισμα δολαρίου:" block-list:name="💵"/>
+  <block-list:block block-list:abbreviated-name=":χαρτονόμισμα ευρώ:" block-list:name="💶"/>
+  <block-list:block block-list:abbreviated-name=":χαρτονόμισμα λίρας:" block-list:name="💷"/>
+  <block-list:block block-list:abbreviated-name=":χείλη:" block-list:name="🗢"/>
+  <block-list:block block-list:abbreviated-name=":χειραψία:" block-list:name="🤝"/>
+  <block-list:block block-list:abbreviated-name=":χειροκρότημα:" block-list:name="👏"/>
+  <block-list:block block-list:abbreviated-name=":χειροσφαίριση:" block-list:name="🤾"/>
+  <block-list:block block-list:abbreviated-name=":χελώνα:" block-list:name="🐢"/>
+  <block-list:block block-list:abbreviated-name=":χέρι2:" block-list:name="🖐"/>
+  <block-list:block block-list:abbreviated-name=":χέρι που χαιρετά:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":χι:" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=":Χι:" block-list:name="Χ"/>
+  <block-list:block block-list:abbreviated-name=":χιονάνθρωπος:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":χιονάνθρωπος χωρίς χιόνι:" block-list:name="⛄"/>
+  <block-list:block block-list:abbreviated-name=":χιόνι:" block-list:name="🌨"/>
+  <block-list:block block-list:abbreviated-name=":χιονοδρόμος:" block-list:name="⛷"/>
+  <block-list:block block-list:abbreviated-name=":χι-ρο:" block-list:name="☧"/>
+  <block-list:block block-list:abbreviated-name=":χόκεϊ2:" block-list:name="🏑"/>
+  <block-list:block block-list:abbreviated-name=":χόκεϊ:" block-list:name="🏒"/>
+  <block-list:block block-list:abbreviated-name=":χοντρό δολάριο:" block-list:name="💲"/>
+  <block-list:block block-list:abbreviated-name=":χοντρός ελληνικός σταυρός:" block-list:name="✚"/>
+  <block-list:block block-list:abbreviated-name=":χοντρό Χ πολλαπλασιασμού:" block-list:name="✖"/>
+  <block-list:block block-list:abbreviated-name=":χορευτής2:" block-list:name="🕺"/>
+  <block-list:block block-list:abbreviated-name=":χορευτής:" block-list:name="💃"/>
+  <block-list:block block-list:abbreviated-name=":χόρτο:" block-list:name="🌿"/>
+  <block-list:block block-list:abbreviated-name=":χρήματα2:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":χρήματα3:" block-list:name="🤑"/>
+  <block-list:block block-list:abbreviated-name=":χρήματα με φτερά:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":Χριστούγεννα:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":χρονοδιακόπτης:" block-list:name="⏲"/>
+  <block-list:block block-list:abbreviated-name=":χρονόμετρο:" block-list:name="⏱"/>
+  <block-list:block block-list:abbreviated-name=":χρυσό:" block-list:name="🥇"/>
+  <block-list:block block-list:abbreviated-name=":χωρικό ολοκλήρωμα:" block-list:name="∰"/>
+  <block-list:block block-list:abbreviated-name=":χωρίς πειρατεία:" block-list:name="🕲"/>
+  <block-list:block block-list:abbreviated-name=":ψαλίδι με κατεβασμένο το κάτω σκέλος:" block-list:name="✃"/>
+  <block-list:block block-list:abbreviated-name=":ψαλίδι με σηκωμένο το πάνω σκέλος:" block-list:name="✁"/>
+  <block-list:block block-list:abbreviated-name=":ψάρι:" block-list:name="🐟"/>
+  <block-list:block block-list:abbreviated-name=":ψαροκεφτές:" block-list:name="🍥"/>
+  <block-list:block block-list:abbreviated-name=":ψεύτης:" block-list:name="🤥"/>
+  <block-list:block block-list:abbreviated-name=":ψηλό καπέλο:" block-list:name="🎩"/>
+  <block-list:block block-list:abbreviated-name=":ψηλοτάκουνο γυναικείο παπούτσι:" block-list:name="👠"/>
+  <block-list:block block-list:abbreviated-name=":ψημένες γλυκοπατάτες:" block-list:name="🍠"/>
+  <block-list:block block-list:abbreviated-name=":ψηφιακό χρήμα:" block-list:name="₿"/>
+  <block-list:block block-list:abbreviated-name=":ψι:" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=":Ψι:" block-list:name="Ψ"/>
+  <block-list:block block-list:abbreviated-name=":ψωμί2:" block-list:name="🥖"/>
+  <block-list:block block-list:abbreviated-name=":ψωμί:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":ψώνια:" block-list:name="🛍"/>
+  <block-list:block block-list:abbreviated-name=":ωμέγα:" block-list:name="ω"/>
+  <block-list:block block-list:abbreviated-name=":Ωμέγα:" block-list:name="Ω"/>
 </block-list:block-list>
