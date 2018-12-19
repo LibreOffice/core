@@ -844,10 +844,6 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
     }
     if ( xScriptProvider.is() && mpShell )
     {
-        std::list< TranslateInfo >::const_iterator txInfo =
-            eventInfo_it->second.begin();
-        std::list< TranslateInfo >::const_iterator txInfo_end = eventInfo_it->second.end();
-
         BasicManager* pBasicManager = mpShell->GetBasicManager();
         OUString sProject;
         OUString sScriptCode( evt.ScriptCode );
@@ -871,7 +867,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
         }
         OUString sMacroLoc = sProject + "." + sScriptCode + ".";
 
-        for ( ; txInfo != txInfo_end; ++txInfo )
+        for (const auto& rTxInfo : eventInfo_it->second)
         {
             // If the document is closed, we should not execute macro.
             if (m_bDocClosed)
@@ -879,7 +875,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                 break;
             }
 
-            OUString sTemp = sName.concat( (*txInfo).sVBAName );
+            OUString sTemp = sName.concat( rTxInfo.sVBAName );
             // see if we have a match for the handlerextension
             // where ScriptCode is methodname_handlerextension
             OUString sToResolve = sMacroLoc.concat( sTemp );
@@ -888,16 +884,16 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
             if ( aMacroResolvedInfo.mbFound )
             {
 
-                if (! txInfo->ApproveRule(evt, txInfo->pPara) )
+                if (! rTxInfo.ApproveRule(evt, rTxInfo.pPara) )
                 {
                     continue;
                 }
 
                 // !! translate arguments & emulate events where necessary
                 Sequence< Any > aArguments;
-                if  ( (*txInfo).toVBA )
+                if  ( rTxInfo.toVBA )
                 {
-                    aArguments = (*txInfo).toVBA( evt.Arguments );
+                    aArguments = rTxInfo.toVBA( evt.Arguments );
                 }
                 else
                 {

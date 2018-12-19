@@ -86,40 +86,38 @@ void SAL_CALL CoinMPSolver::solve()
     // set all variables to zero
     //! store old values?
     //! use old values as initial values?
-    std::vector<table::CellAddress>::const_iterator aVarIter;
-    for ( aVarIter = aVariableCells.begin(); aVarIter != aVariableCells.end(); ++aVarIter )
+    for ( const auto& rVarCell : aVariableCells )
     {
-        SolverComponent::SetValue( mxDoc, *aVarIter, 0.0 );
+        SolverComponent::SetValue( mxDoc, rVarCell, 0.0 );
     }
 
     // read initial values from all dependent cells
-    ScSolverCellHashMap::iterator aCellsIter;
-    for ( aCellsIter = aCellsHash.begin(); aCellsIter != aCellsHash.end(); ++aCellsIter )
+    for ( auto& rEntry : aCellsHash )
     {
-        double fValue = SolverComponent::GetValue( mxDoc, aCellsIter->first );
-        aCellsIter->second.push_back( fValue );                         // store as first element, as-is
+        double fValue = SolverComponent::GetValue( mxDoc, rEntry.first );
+        rEntry.second.push_back( fValue );                         // store as first element, as-is
     }
 
     // loop through variables
-    for ( aVarIter = aVariableCells.begin(); aVarIter != aVariableCells.end(); ++aVarIter )
+    for ( const auto& rVarCell : aVariableCells )
     {
-        SolverComponent::SetValue( mxDoc, *aVarIter, 1.0 );      // set to 1 to examine influence
+        SolverComponent::SetValue( mxDoc, rVarCell, 1.0 );      // set to 1 to examine influence
 
         // read value change from all dependent cells
-        for ( aCellsIter = aCellsHash.begin(); aCellsIter != aCellsHash.end(); ++aCellsIter )
+        for ( auto& rEntry : aCellsHash )
         {
-            double fChanged = SolverComponent::GetValue( mxDoc, aCellsIter->first );
-            double fInitial = aCellsIter->second.front();
-            aCellsIter->second.push_back( fChanged - fInitial );
+            double fChanged = SolverComponent::GetValue( mxDoc, rEntry.first );
+            double fInitial = rEntry.second.front();
+            rEntry.second.push_back( fChanged - fInitial );
         }
 
-        SolverComponent::SetValue( mxDoc, *aVarIter, 2.0 );      // minimal test for linearity
+        SolverComponent::SetValue( mxDoc, rVarCell, 2.0 );      // minimal test for linearity
 
-        for ( aCellsIter = aCellsHash.begin(); aCellsIter != aCellsHash.end(); ++aCellsIter )
+        for ( const auto& rEntry : aCellsHash )
         {
-            double fInitial = aCellsIter->second.front();
-            double fCoeff   = aCellsIter->second.back();       // last appended: coefficient for this variable
-            double fTwo     = SolverComponent::GetValue( mxDoc, aCellsIter->first );
+            double fInitial = rEntry.second.front();
+            double fCoeff   = rEntry.second.back();       // last appended: coefficient for this variable
+            double fTwo     = SolverComponent::GetValue( mxDoc, rEntry.first );
 
             bool bLinear = rtl::math::approxEqual( fTwo, fInitial + 2.0 * fCoeff ) ||
                            rtl::math::approxEqual( fInitial, fTwo - 2.0 * fCoeff );
@@ -128,7 +126,7 @@ void SAL_CALL CoinMPSolver::solve()
                 maStatus = SolverComponent::GetResourceString( RID_ERROR_NONLINEAR );
         }
 
-        SolverComponent::SetValue( mxDoc, *aVarIter, 0.0 );      // set back to zero for examining next variable
+        SolverComponent::SetValue( mxDoc, rVarCell, 0.0 );      // set back to zero for examining next variable
     }
 
     xModel->unlockControllers();

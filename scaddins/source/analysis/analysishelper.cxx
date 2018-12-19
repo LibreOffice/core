@@ -2457,10 +2457,9 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
     sal_Int16       nLevelFrom = 0;
     sal_Int16       nLevelTo = 0;
 
-    auto it = maVector.begin();
-    while( it != maVector.end() && ( bSearchFrom || bSearchTo ) )
+    for( const auto& rItem : maVector )
     {
-        ConvertData*    p = it->get();
+        ConvertData*    p = rItem.get();
         if( bSearchFrom )
         {
             sal_Int16   n = p->GetMatchingLevel( rFrom );
@@ -2499,7 +2498,8 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
             }
         }
 
-        ++it;
+        if( !bSearchFrom && !bSearchTo )
+            break;
     }
 
     if( !pFrom || !pTo )

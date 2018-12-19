@@ -266,10 +266,12 @@ namespace basprov
                     aOutParam.realloc( nOutParamCount );
                     sal_Int16* pOutParamIndex = aOutParamIndex.getArray();
                     Any* pOutParam = aOutParam.getArray();
-                    for ( OutParamMap::iterator aIt = aOutParamMap.begin(); aIt != aOutParamMap.end(); ++aIt, ++pOutParamIndex, ++pOutParam )
+                    for ( const auto& rEntry : aOutParamMap )
                     {
-                        *pOutParamIndex = aIt->first;
-                        *pOutParam = aIt->second;
+                        *pOutParamIndex = rEntry.first;
+                        ++pOutParamIndex;
+                        *pOutParam = rEntry.second;
+                        ++pOutParam;
                     }
                 }
             }
