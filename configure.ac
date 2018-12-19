@@ -1348,7 +1348,8 @@ AC_ARG_ENABLE(icecream,
 
 AC_ARG_ENABLE(ld,
     AS_HELP_STRING([--enable-ld=<linker>],
-        [Use the specified linker. Both 'gold' and 'lld' linkers generally use less memory and link faster.]),
+        [Use the specified linker. Both 'gold' and 'lld' linkers generally use less memory and link faster.
+         By default tries to use the best linker possible, use --disable-ld to use the default linker.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(cups,
@@ -3152,48 +3153,6 @@ else
 fi
 AC_SUBST(CROSS_COMPILING)
 
-USE_LD=
-if test -n "$enable_ld" -a "$enable_ld" != "no"; then
-    AC_MSG_CHECKING([for -fuse-ld=$enable_ld linker support])
-    if test "$GCC" = "yes"; then
-        ldflags_save=$LDFLAGS
-        LDFLAGS="$LDFLAGS -fuse-ld=$enable_ld"
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([
-#include <stdio.h>
-            ],[
-printf ("hello world\n");
-            ])], USE_LD=$enable_ld, [])
-        if test -n "$USE_LD"; then
-            AC_MSG_RESULT( yes )
-            LDFLAGS="$ldflags_save -fuse-ld=$enable_ld"
-        else
-            AC_MSG_ERROR( no )
-        fi
-    else
-        AC_MSG_ERROR( not supported )
-    fi
-fi
-AC_SUBST(USE_LD)
-
-HAVE_LD_BSYMBOLIC_FUNCTIONS=
-if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([for -Bsymbolic-functions linker support])
-    bsymbolic_functions_ldflags_save=$LDFLAGS
-    LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([
-#include <stdio.h>
-        ],[
-printf ("hello world\n");
-        ])], HAVE_LD_BSYMBOLIC_FUNCTIONS=TRUE, [])
-    if test "$HAVE_LD_BSYMBOLIC_FUNCTIONS" = "TRUE"; then
-        AC_MSG_RESULT( found )
-    else
-        AC_MSG_RESULT( not found )
-    fi
-    LDFLAGS=$bsymbolic_functions_ldflags_save
-fi
-AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
-
 # Use -isystem (gcc) if possible, to avoid warnings in 3rd party headers.
 # NOTE: must _not_ be used for bundled external libraries!
 ISYSTEM=
@@ -3865,6 +3824,133 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
+
+dnl ===================================================================
+dnl Select the linker to use (gold/lld/ld.bfd).
+dnl This is done only after compiler checks (need to know if Clang is
+dnl used, for different defaults) and after checking if a debug build
+dnl is wanted (non-debug builds get the default linker if not explictly
+dnl specified otherwise).
+dnl All checks for linker features/options should come after this.
+dnl ===================================================================
+check_use_ld()
+{
+    use_ld=$1
+    use_ld_fail_if_error=$2
+    use_ld_ok=
+    AC_MSG_CHECKING([for -fuse-ld=$use_ld linker support])
+    use_ld_ldflags_save="$LDFLAGS"
+    LDFLAGS="$LDFLAGS -fuse-ld=$use_ld"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+        ],[
+printf ("hello world\n");
+        ])], USE_LD=$use_ld, [])
+    if test -n "$USE_LD"; then
+        AC_MSG_RESULT( yes )
+        use_ld_ok=yes
+        dnl For obscure reasons, unxgcc.mk uses the --dynamic-list-cpp-typeinfo linker option
+        dnl if sanitizers are used, and lld doesn't support this option.
+        use_ld_has_sanitizers=
+        for i in $CC; do
+            case $i in
+            -fsanitize=*)
+                use_ld_has_sanitizers=yes
+                break
+                ;;
+            esac
+        done
+        if test -n "$use_ld_has_sanitizers"; then
+            AC_MSG_CHECKING([for --dynamic-list-cpp-typeinfo linker support (-fuse-ld=$use_ld)])
+            use_ld_ldflags_save_2="$LDFLAGS"
+            LDFLAGS="$LDFLAGS -Wl,--dynamic-list-cpp-typeinfo"
+            use_ld_has_cpp_typeinfo=
+            AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+                ],[
+printf ("hello world\n");
+                ])], use_ld_has_cpp_typeinfo=yes, [])
+            LDFLAGS="$use_ld_ldflags_save_2"
+            if test -n "$use_ld_has_cpp_typeinfo"; then
+                AC_MSG_RESULT( yes )
+            else
+                AC_MSG_RESULT( no )
+                use_ld_ok=
+            fi
+        fi
+    else
+        if test -n "$use_ld_fail_if_error"; then
+            AC_MSG_ERROR( no )
+        else
+            AC_MSG_RESULT( no )
+        fi
+    fi
+    if test -n "$use_ld_ok"; then
+        dnl keep the value of LDFLAGS
+        return 0
+    fi
+    LDFLAGS="$use_ld_ldflags_save"
+    return 1
+}
+USE_LD=
+if test "$enable_ld" != "no"; then
+    if test "$GCC" = "yes"; then
+        if test -n "$enable_ld"; then
+            check_use_ld "$enable_ld" fail_if_error
+        elif test -z "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+            dnl non-debug builds default to the default linker
+            true
+        elif test -n "$COM_IS_CLANG"; then
+            check_use_ld lld
+            if test $? -ne 0; then
+                check_use_ld gold
+            fi
+        else
+            check_use_ld gold
+        fi
+        ld_output=$(echo 'int main() { return 0; }' | $CC -Wl,-v -x c - $CFLAGS $LDFLAGS 2>/dev/null)
+        ld_used=$(echo "$ld_output" | grep -E '(^GNU gold|^GNU ld|^LLD)')
+        if test -z "$ld_used"; then
+            ld_used="unknown"
+        fi
+        AC_MSG_CHECKING([for linker that is used])
+        AC_MSG_RESULT([$ld_used])
+        if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+            if echo "$ld_used" | grep -q "^GNU ld"; then
+                if test -n "$COM_IS_CLANG"; then
+                    AC_MSG_WARN([The default GNU linker is slow, consider using the LLD or the GNU gold linker.])
+                    add_warning "The default GNU linker is slow, consider using the LLD or the GNU gold linker."
+                else
+                    AC_MSG_WARN([The default GNU linker is slow, consider using the GNU gold linker.])
+                    add_warning "The default GNU linker is slow, consider using the GNU gold linker."
+                fi
+            fi
+        fi
+    else
+        AC_MSG_ERROR( not supported )
+    fi
+fi
+AC_SUBST(USE_LD)
+
+HAVE_LD_BSYMBOLIC_FUNCTIONS=
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING([for -Bsymbolic-functions linker support])
+    bsymbolic_functions_ldflags_save=$LDFLAGS
+    LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+        ],[
+printf ("hello world\n");
+        ])], HAVE_LD_BSYMBOLIC_FUNCTIONS=TRUE, [])
+    if test "$HAVE_LD_BSYMBOLIC_FUNCTIONS" = "TRUE"; then
+        AC_MSG_RESULT( found )
+    else
+        AC_MSG_RESULT( not found )
+    fi
+    LDFLAGS=$bsymbolic_functions_ldflags_save
+fi
+AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
+
 
 HAVE_GSPLIT_DWARF=
 if test "$enable_split_debug" != no; then
