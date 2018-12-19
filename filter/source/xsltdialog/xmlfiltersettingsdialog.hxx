@@ -105,8 +105,6 @@ public:
 
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
-    bool    isClosable() { return m_bIsClosable;}
-
 private:
     void    initFilterList();
     void    disposeFilterList();
@@ -134,8 +132,6 @@ private:
     VclPtr<PushButton> m_pPBSave;
     VclPtr<PushButton> m_pPBOpen;
     VclPtr<CloseButton> m_pPBClose;
-
-    bool m_bIsClosable;
 
     OUString m_sTemplatePath;
     OUString m_sDocTypePrefix;
