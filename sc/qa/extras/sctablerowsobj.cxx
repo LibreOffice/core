@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/table/xtablerows.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -34,12 +35,14 @@ namespace sc_apitest
 class ScTableRowsObj : public CalcUnoApiTest,
                        public apitest::XElementAccess,
                        public apitest::XEnumerationAccess,
-                       public apitest::XIndexAccess
+                       public apitest::XIndexAccess,
+                       public apitest::XTableRows
 {
 public:
     ScTableRowsObj();
 
     virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<uno::XInterface> getXCellRange() override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -55,6 +58,10 @@ public:
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetCount);
+
+    // XTableRows
+    CPPUNIT_TEST(testInsertByIndex);
+    CPPUNIT_TEST(testRemoveByIndex);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -83,6 +90,20 @@ uno::Reference<uno::XInterface> ScTableRowsObj::init()
     uno::Reference<table::XTableRows> xTR(xCRR->getRows(), uno::UNO_QUERY_THROW);
 
     return xTR;
+}
+
+uno::Reference<uno::XInterface> ScTableRowsObj::getXCellRange()
+{
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xCompoment, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
+
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xNA(xSheets, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet0(xSheets->getByName(xNA->getElementNames()[0]),
+                                                uno::UNO_QUERY_THROW);
+
+    uno::Reference<table::XCellRange> xCR(xSheet0, uno::UNO_QUERY_THROW);
+    return xCR;
 }
 
 void ScTableRowsObj::setUp()
