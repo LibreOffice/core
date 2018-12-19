@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_8198776a",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-19T16:53:13Z",
+      "side": 0,
+      "message": "The reverse_iterator iterator on sorted rows here not only had the benefit that rows were deleted from bottom to top, resulting in less formula expression needing to be adjusted (i.e. the subtotals already deleted), but also ensured that row numbers encountered actually are correct. Deleting in the order of the set would delete wrong rows if higher numbered rows were encountered after lower numbered rows.",
+      "range": {
+        "startLine": 1908,
+        "startChar": 24,
+        "endLine": 1908,
+        "endChar": 40
+      },
+      "revId": "9b39fcd59c251e51c074e90f48924849b6f2f5c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
