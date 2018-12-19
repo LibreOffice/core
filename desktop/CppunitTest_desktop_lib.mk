@@ -55,4 +55,21 @@ $(eval $(call gb_CppunitTest_use_configuration,desktop_lib))
 
 $(eval $(call gb_CppunitTest_use_more_fonts,desktop_lib))
 
+$(eval $(call gb_CppunitTest_use_packages,desktop_lib, \
+    scripting_scriptbindinglib \
+    wizards_basicshare \
+    wizards_basicsrvaccess2base \
+    wizards_basicsrvdepot \
+    wizards_basicsrveuro \
+    wizards_basicsrvform \
+    wizards_basicsrvgimmicks \
+    wizards_basicsrvimport \
+    wizards_basicsrvtemplate \
+    wizards_basicsrvtools \
+))
+
+$(eval $(call gb_CppunitTest_use_uiconfigs,desktop_lib, \
+    modules/swriter \
+))
+
 # vim: set noet sw=4 ts=4:
