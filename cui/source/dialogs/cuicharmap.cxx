@@ -864,12 +864,13 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, weld::Entry&, void)
 
 IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 {
+    rView->GrabFocus();
+
     m_aShowChar.SetText( rView->GetText() );
     m_aShowChar.SetFont(rView->GetFont());
     m_aShowChar.Invalidate();
 
     setFavButtonState(rView->GetText(), rView->GetFont().GetFamilyName());//check state
-    rView->GrabFocus();
 
     // Get the hexadecimal code
     OUString charValue = rView->GetText();
