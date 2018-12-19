@@ -69,6 +69,7 @@
 #include <svl/sharedstringpool.hxx>
 
 #include <memory>
+#include <set>
 #include <unordered_set>
 #include <vector>
 #include <mdds/flat_segment_tree.hpp>
@@ -1864,25 +1865,14 @@ bool ScTable::TestRemoveSubTotals( const ScSubTotalParam& rParam )
 
 namespace {
 
-class RemoveSubTotalsHandler
+struct RemoveSubTotalsHandler
 {
-    std::vector<SCROW> maRemoved;
-public:
+    std::set<SCROW> aRemoved;
 
     void operator() (size_t nRow, const ScFormulaCell* p)
     {
         if (p->IsSubTotal())
-            maRemoved.push_back(nRow);
-    }
-
-    void getRows(std::vector<SCROW>& rRows)
-    {
-        // Sort and remove duplicates.
-        std::sort(maRemoved.begin(), maRemoved.end());
-        std::vector<SCROW>::iterator it = std::unique(maRemoved.begin(), maRemoved.end());
-        maRemoved.erase(it, maRemoved.end());
-
-        maRemoved.swap(rRows);
+            aRemoved.insert(nRow);
     }
 };
 
@@ -1902,10 +1892,9 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
         sc::ParseFormula(rCells.begin(), rCells, nStartRow, nEndRow, aFunc);
     }
 
-    std::vector<SCROW> aRows;
-    aFunc.getRows(aRows);
+    auto& aRows = aFunc.aRemoved;
 
-    std::vector<SCROW>::reverse_iterator it = aRows.rbegin(), itEnd = aRows.rend();
+    auto it = aRows.rbegin(), itEnd = aRows.rend();
     for (; it != itEnd; ++it)
     {
         SCROW nRow = *it;
