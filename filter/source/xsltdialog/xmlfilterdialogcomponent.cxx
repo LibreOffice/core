@@ -249,24 +249,20 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* Event */ )
 {
     ::SolarMutexGuard aGuard;
-
     if (!mpDialog)
         return;
-
-    // we will never give a veto here
-    if (!mpDialog->isClosable())
-    {
-        mpDialog->ToTop();
-        throw TerminationVetoException(
-            "The office cannot be closed while the XMLFilterDialog is running",
-            static_cast<XTerminateListener*>(this));
-    }
-    else
-        mpDialog->Close();
+    mpDialog->ToTop();
 }
 
 void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& /* Event */ )
 {
+    {
+        ::SolarMutexGuard aGuard;
+        if (!mpDialog)
+            return;
+        mpDialog->Close();
+    }
+
     // we are going down, so dispose us!
     dispose();
 }
