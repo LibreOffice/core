@@ -3801,6 +3801,17 @@ void ToolBox::Resize()
     }
 }
 
+namespace
+{
+    bool DispatchableCommand(const OUString& rName)
+    {
+        return rName.startsWith(".uno")  ||
+               rName.startsWith("slot:")  ||
+               rName.startsWith("macro:")  ||
+               rName.startsWith("vnd.sun.star.script");
+    }
+}
+
 const OUString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
@@ -3812,7 +3823,7 @@ const OUString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
         Help* pHelp = Application::GetHelp();
         if ( pHelp )
         {
-            if ( pItem->maCommandStr.getLength() )
+            if (DispatchableCommand(pItem->maCommandStr))
                 pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
             if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
                 pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );

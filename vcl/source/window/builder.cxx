@@ -2123,9 +2123,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                     //TODO: ImplToolItems::size_type -> sal_uInt16!
                 pToolBox->InsertItem(nItemId, extractLabel(rMap), nBits);
                 pToolBox->SetItemCommand(nItemId, aCommand);
-                pToolBox->SetHelpId(nItemId, m_sHelpRoot + id);
             }
 
+            pToolBox->SetHelpId(nItemId, m_sHelpRoot + id);
             OUString sTooltip(extractTooltipText(rMap));
             if (!sTooltip.isEmpty())
                 pToolBox->SetQuickHelpText(nItemId, sTooltip);
