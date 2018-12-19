@@ -70,7 +70,7 @@ private:
 };
 
 ScTableRowsObj::ScTableRowsObj()
-    : CalcUnoApiTest("/sc/qa/extras/testdocuemts")
+    : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<table::XCellRange>::get())
     , XIndexAccess(1048576)
 {
