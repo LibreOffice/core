@@ -87,6 +87,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/menu.hxx>
 #include <unotools/cmdoptions.hxx>
+#include <vcl/threadex.hxx>
 
 using namespace framework;
 
@@ -584,7 +585,17 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL XFrameImpl::loadComponentF
     checkDisposed();
 
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
-    return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
+
+    utl::MediaDescriptor aDescriptor(lArguments);
+    bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+
+    if (bOnMainThread)
+        return vcl::solarthread::syncExecute(std::bind(&LoadEnv::loadComponentFromURL, xThis,
+                                                       m_xContext, sURL, sTargetFrameName,
+                                                       nSearchFlags, lArguments));
+    else
+        return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName,
+                                             nSearchFlags, lArguments);
 }
 
 /*-****************************************************************************************************
