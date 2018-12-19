@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,smd,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,smd,\
-	starmath/source/detreg \
 	starmath/source/smdetect \
 	starmath/source/eqnolefilehdr \
 ))

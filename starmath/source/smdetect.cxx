@@ -21,6 +21,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <sfx2/docfile.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <sal/log.hxx>
@@ -35,7 +36,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using utl::MediaDescriptor;
 
-SmFilterDetect::SmFilterDetect( const Reference < XMultiServiceFactory >& /*xFactory*/ )
+SmFilterDetect::SmFilterDetect()
 {
 }
 
@@ -121,7 +122,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 /* XServiceInfo */
 OUString SAL_CALL SmFilterDetect::getImplementationName()
 {
-    return impl_getStaticImplementationName();
+    return OUString("com.sun.star.comp.math.FormatDetector");
 }
 
 /* XServiceInfo */
@@ -133,25 +134,14 @@ sal_Bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
 {
-    return impl_getStaticSupportedServiceNames();
-}
-
-/* Helper for XServiceInfo */
-Sequence< OUString > SmFilterDetect::impl_getStaticSupportedServiceNames()
-{
     return Sequence< OUString >{ "com.sun.star.frame.ExtendedTypeDetection" };
 }
 
-/* Helper for XServiceInfo */
-OUString SmFilterDetect::impl_getStaticImplementationName()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+math_FormatDetector_get_implementation(uno::XComponentContext* /*pCtx*/,
+                                       uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return OUString("com.sun.star.comp.math.FormatDetector");
-}
-
-/* Helper for registry */
-Reference< XInterface > SmFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
-{
-    return Reference< XInterface >( *new SmFilterDetect( xServiceManager ) );
+    return cppu::acquire(new SmFilterDetect);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

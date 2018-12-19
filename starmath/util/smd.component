@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="smd" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.math.FormatDetector">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.math.FormatDetector"
+    constructor="math_FormatDetector_get_implementation">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
   </implementation>
 </component>
