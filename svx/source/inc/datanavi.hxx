@@ -246,7 +246,7 @@ namespace svxform
         void                        AddChildren(SvTreeListEntry* _pParent,
                                                 const css::uno::Reference< css::xml::dom::XNode >& _xNode);
         bool                        DoToolBoxAction( sal_uInt16 _nToolBoxID );
-        SvTreeListEntry*            AddEntry( ItemNode* _pNewNode, bool _bIsElement );
+        SvTreeListEntry*            AddEntry( std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement );
         SvTreeListEntry*            AddEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
         void                        EditEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
         bool                        RemoveEntry();

@@ -214,14 +214,14 @@ void GalleryThemePopup::Execute(
 {
     if ( rCmdInfo.Dispatch.is() )
     {
-        DispatchInfo *pInfo = new DispatchInfo;
+        std::unique_ptr<DispatchInfo> pInfo(new DispatchInfo);
         pInfo->TargetURL = rCmdInfo.URL;
         pInfo->Arguments = rArguments;
         pInfo->Dispatch = rCmdInfo.Dispatch;
 
         if ( !Application::PostUserEvent(
-                LINK( nullptr, GalleryBrowser2, AsyncDispatch_Impl), pInfo ) )
-            delete pInfo;
+                LINK( nullptr, GalleryBrowser2, AsyncDispatch_Impl), pInfo.get() ) )
+            pInfo.reset();
     }
 }
 
@@ -1076,14 +1076,14 @@ void GalleryBrowser2::DispatchAdd(
     aArgs[0].Name = SVXGALLERYITEM_ARGNAME;
     aArgs[0].Value <<= aSeq;
 
-    DispatchInfo *pInfo = new DispatchInfo;
+    std::unique_ptr<DispatchInfo> pInfo(new DispatchInfo);
     pInfo->TargetURL = aURL;
     pInfo->Arguments = aArgs;
     pInfo->Dispatch = xDispatch;
 
     if ( !Application::PostUserEvent(
-            LINK( nullptr, GalleryBrowser2, AsyncDispatch_Impl), pInfo ) )
-        delete pInfo;
+            LINK( nullptr, GalleryBrowser2, AsyncDispatch_Impl), pInfo.get() ) )
+        pInfo.reset();
 }
 
 void GalleryBrowser2::Execute(const OString &rIdent)
