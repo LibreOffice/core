@@ -87,10 +87,7 @@ public:
     explicit SvxViewChangedHint();
 };
 
-/// Typedefs for a list of SdrPaintWindows
 class SdrPaintWindow;
-typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
-
 
 /**
  * Helper to convert any GDIMetaFile to a good quality BitmapEx,
@@ -150,7 +147,7 @@ protected:
 //  Container                   aPagV;         // List of SdrPageViews
 
     // All windows this view is displayed on
-    SdrPaintWindowVector        maPaintWindows;
+    std::vector< std::unique_ptr<SdrPaintWindow> >  maPaintWindows;
 
     Size                        maGridBig;   // FIXME: We need to get rid of this eventually
     Size                        maGridFin;   // FIXME: We need to get rid of this eventually
@@ -228,7 +225,7 @@ protected:
     Color                           maGridColor;
 
     // Interface to SdrPaintWindow
-    void RemovePaintWindow(SdrPaintWindow& rOld);
+    void DeletePaintWindow(SdrPaintWindow& rOld);
     void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
 public:
