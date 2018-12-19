@@ -403,7 +403,7 @@ Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
     Reference< XResultSet > xRS = pResult;
     OUString aErr;
 
-    m_pParseTree = m_aParser.parseTree(aErr, sql);
+    m_pParseTree = m_aParser.parseTree(aErr, sql).release();
     if (m_pParseTree == nullptr)
         throw SQLException(aErr, *this, aErr, 0, Any());
 
