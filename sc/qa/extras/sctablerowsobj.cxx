@@ -73,7 +73,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<lang::XComponent> m_xCompoment;
+    uno::Reference<lang::XComponent> m_xComponent;
 };
 
 ScTableRowsObj::ScTableRowsObj()
@@ -86,7 +86,7 @@ ScTableRowsObj::ScTableRowsObj()
 
 uno::Reference<uno::XInterface> ScTableRowsObj::init()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xCompoment, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
@@ -102,7 +102,7 @@ uno::Reference<uno::XInterface> ScTableRowsObj::init()
 
 uno::Reference<uno::XInterface> ScTableRowsObj::getXCellRange()
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xCompoment, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
 
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
@@ -117,13 +117,13 @@ uno::Reference<uno::XInterface> ScTableRowsObj::getXCellRange()
 void ScTableRowsObj::setUp()
 {
     CalcUnoApiTest::setUp();
-    m_xCompoment = loadFromDesktop("private:factory/scalc");
-    CPPUNIT_ASSERT_MESSAGE("no component", m_xCompoment.is());
+    m_xComponent = loadFromDesktop("private:factory/scalc");
+    CPPUNIT_ASSERT_MESSAGE("no component", m_xComponent.is());
 }
 
 void ScTableRowsObj::tearDown()
 {
-    closeDocument(m_xCompoment);
+    closeDocument(m_xComponent);
     CalcUnoApiTest::tearDown();
 }
 
