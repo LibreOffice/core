@@ -510,11 +510,11 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 }
                 else
                 {
-                    ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree(aErrorMsg,m_sStatement,m_bGraphicalDesign);
+                    std::unique_ptr<::connectivity::OSQLParseNode> pNode = m_aSqlParser.parseTree(aErrorMsg,m_sStatement,m_bGraphicalDesign);
                     if ( pNode )
                     {
                         delete m_pSqlIterator->getParseTree();
-                        m_pSqlIterator->setParseTree(pNode);
+                        m_pSqlIterator->setParseTree(pNode.release());
                         m_pSqlIterator->traverseAll();
 
                         if ( m_pSqlIterator->hasErrors() )
@@ -539,7 +539,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 // change the view of the data
                                 m_bGraphicalDesign = !m_bGraphicalDesign;
                                 OUString sNewStatement;
-                                pNode->parseNodeToStr( sNewStatement, getConnection() );
+                                m_pSqlIterator->getParseTree()->parseNodeToStr( sNewStatement, getConnection() );
                                 setStatement_fireEvent( sNewStatement );
                                 getContainer()->SaveUIConfig();
                                 m_vTableConnectionData.clear();
@@ -1568,11 +1568,10 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
 
             std::vector< CommentStrip > aComments = getComment( m_sStatement);
 
-            ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
+            std::unique_ptr<::connectivity::OSQLParseNode> pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
             if(pNode)
             {
                 pNode->parseNodeToStr( sTranslatedStmt, getConnection() );
-                delete pNode;
             }
 
             m_xComposer->setQuery(sTranslatedStmt);
