@@ -43,9 +43,9 @@ namespace framework{
 *//*-*************************************************************************************************************/
 enum EWorkingMode
 {
-    E_INIT       ,   // We stand in a init method   -> some calls are accepted - some one are rejected
+    E_INIT       ,   // We stand in an init method  -> some calls are accepted - some ones are rejected
     E_WORK       ,   // Object is ready for working -> all calls are accepted
-    E_BEFORECLOSE,   // We stand in a close method  -> some calls are accepted - some one are rejected
+    E_BEFORECLOSE,   // We stand in a close method  -> some calls are accepted - some ones are rejected
     E_CLOSE          // Object is dead!             -> all calls are rejected!
 };
 
