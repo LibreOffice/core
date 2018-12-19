@@ -138,9 +138,6 @@ public:
     OutputDevice& GetTargetOutputDevice() { if(mpPreRenderDevice) return mpPreRenderDevice->GetPreRenderDevice(); else return *mpOutputDevice.get(); }
 };
 
-// typedefs for a list of SdrPaintWindows
-typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
-
 #endif // INCLUDED_SVX_SDRPAINTWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

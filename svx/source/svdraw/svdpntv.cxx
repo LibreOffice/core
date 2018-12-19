@@ -68,26 +68,22 @@ using namespace ::com::sun::star;
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
 {
     auto a = std::find_if(maPaintWindows.begin(), maPaintWindows.end(),
-        [&rOut](const SdrPaintWindow* pWindow) { return &(pWindow->GetOutputDevice()) == &rOut; });
+        [&rOut](const std::unique_ptr<SdrPaintWindow>& pWindow) { return &(pWindow->GetOutputDevice()) == &rOut; });
     if (a != maPaintWindows.end())
-        return *a;
+        return a->get();
 
     return nullptr;
 }
 
 SdrPaintWindow* SdrPaintView::GetPaintWindow(sal_uInt32 nIndex) const
 {
-    if(nIndex < maPaintWindows.size())
-    {
-        return maPaintWindows[nIndex];
-    }
-
-    return nullptr;
+    return maPaintWindows[nIndex].get();
 }
 
-void SdrPaintView::RemovePaintWindow(SdrPaintWindow& rOld)
+void SdrPaintView::DeletePaintWindow(SdrPaintWindow& rOld)
 {
-    const SdrPaintWindowVector::iterator aFindResult = ::std::find(maPaintWindows.begin(), maPaintWindows.end(), &rOld);
+    auto aFindResult = ::std::find_if(maPaintWindows.begin(), maPaintWindows.end(),
+                            [&](const std::unique_ptr<SdrPaintWindow>& p) { return p.get() == &rOld; });
 
     if(aFindResult != maPaintWindows.end())
     {
@@ -216,11 +212,7 @@ SdrPaintView::~SdrPaintView()
 #endif
 
     // delete existing SdrPaintWindows
-    while(!maPaintWindows.empty())
-    {
-        delete maPaintWindows.back();
-        maPaintWindows.pop_back();
-    }
+    maPaintWindows.clear();
 }
 
 
@@ -424,7 +416,7 @@ void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pWin
 {
     DBG_ASSERT(pNewWin, "SdrPaintView::AddWindowToPaintView: No OutputDevice(!)");
     SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, *pNewWin, pWindow);
-    maPaintWindows.push_back(pNewPaintWindow);
+    maPaintWindows.emplace_back(pNewPaintWindow);
 
     if(mpPageView)
     {
@@ -449,8 +441,7 @@ void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
             mpPageView->RemovePaintWindowFromPageView(*pCandidate);
         }
 
-        RemovePaintWindow(*pCandidate);
-        delete pCandidate;
+        DeletePaintWindow(*pCandidate);
     }
 
 #ifdef DBG_UTIL
