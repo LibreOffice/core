@@ -105,17 +105,17 @@ public:
             }
         }
 
-        std::vector<  Sequence< Reference < browse::XBrowseNode > > >::const_iterator it = seqs.begin();
-        std::vector<  Sequence< Reference < browse::XBrowseNode > > >::const_iterator it_end = seqs.end();
-
         Sequence< Reference < browse::XBrowseNode > > result( numChildren );
-        for ( sal_Int32 index = 0; it != it_end && index < numChildren ; ++it )
+        sal_Int32 index = 0;
+        for ( Sequence< Reference < browse::XBrowseNode > >& children : seqs )
         {
-            Sequence< Reference < browse::XBrowseNode > > children = *it;
             for ( sal_Int32 j = 0; j < children.getLength(); j++ )
             {
                 result[ index++ ] = children[ j ];
             }
+
+            if (index >= numChildren)
+                break;
         }
         return result;
     }
@@ -411,10 +411,11 @@ public:
 
             ::std::sort( aVNodes.begin(), aVNodes.end(), alphaSortForBNodes() );
             Sequence < Reference< browse::XBrowseNode > > children( aVNodes.size() );
-            vXBrowseNodes::const_iterator it = aVNodes.begin();
-            for ( sal_Int32 i=0; it != aVNodes.end() && i<children.getLength(); i++, ++it )
+            sal_Int32 i = 0;
+            for ( const auto& rxNode : aVNodes )
             {
-                children[ i ].set( *it );
+                children[ i ].set( rxNode );
+                i++;
             }
             return children;
         }
@@ -501,10 +502,11 @@ public:
         // no need to sort user, share, doc1...docN
         //::std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
         Sequence < Reference< browse::XBrowseNode > > children( m_vNodes.size() );
-        vXBrowseNodes::const_iterator it = m_vNodes.begin();
-        for ( sal_Int32 i=0; it != m_vNodes.end() && i<children.getLength(); i++, ++it )
+        sal_Int32 i = 0;
+        for ( const auto& rxNode : m_vNodes )
         {
-            children[ i ].set( *it );
+            children[ i ].set( rxNode );
+            i++;
         }
         return children;
     }
