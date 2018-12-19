@@ -67,7 +67,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
     ::ucbhelper::Content aContent;
     if( ::ucbhelper::Content::create( aFolderUrl, xComEnv, comphelper::getProcessComponentContext(), aContent ) )
     {
-        SvStream* pTempStream = nullptr;
+        std::unique_ptr<SvStream> pTempStream;
 
         OUString aTempURL = ::utl::TempFile().GetURL();
         try {
@@ -82,7 +82,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
 
                 if ( !aTempURL.isEmpty() )
                 {
-                    pTempStream = new SvFileStream( aTempURL, StreamMode::STD_READWRITE );
+                    pTempStream.reset(new SvFileStream( aTempURL, StreamMode::STD_READWRITE ));
                     tools::SvRef<SotStorage> aTargetStorage = new SotStorage( true, *pTempStream );
                     aStorage->CopyTo( aTargetStorage.get() );
                     aTargetStorage->Commit();
@@ -116,7 +116,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         }
         catch (const uno::RuntimeException&)
         {
-            delete pTempStream;
+            pTempStream.reset();
 
             if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );
@@ -125,7 +125,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         }
         catch (const io::IOException&)
         {
-            delete pTempStream;
+            pTempStream.reset();
 
             if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );
@@ -136,7 +136,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         {
         }
 
-        delete pTempStream;
+        pTempStream.reset();
 
         if ( !aTempURL.isEmpty() )
             ::utl::UCBContentHelper::Kill( aTempURL );

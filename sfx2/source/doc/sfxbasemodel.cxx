@@ -1951,11 +1951,10 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 utl::TempFile aTmp;
                 aTmp.EnableKillingFile();
                 storeToURL( aTmp.GetURL(), Sequence < beans::PropertyValue >() );
-                SvStream* pStream = aTmp.GetStream( StreamMode::READ );
+                std::unique_ptr<SvStream> pStream(aTmp.GetStream( StreamMode::READ ));
                 const sal_uInt32 nLen = pStream->TellEnd();
                 Sequence< sal_Int8 > aSeq( nLen );
                 pStream->ReadBytes(aSeq.getArray(), nLen);
-                delete pStream;
                 if( aSeq.getLength() )
                     aAny <<= aSeq;
             }
