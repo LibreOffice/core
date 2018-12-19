@@ -939,16 +939,16 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     const SfxSlot *pSlot = nullptr;
     if ( GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false, true ) )
     {
-        SfxRequest* pReq;
+        std::unique_ptr<SfxRequest> pReq;
         if ( pArgs && *pArgs )
         {
             SfxAllItemSet aSet( pShell->GetPool() );
             for ( const SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
                 MappedPut_Impl( aSet, **pArg );
-            pReq = new SfxRequest( nSlot, eCall, aSet );
+            pReq.reset(new SfxRequest( nSlot, eCall, aSet ));
         }
         else
-            pReq =  new SfxRequest( nSlot, eCall, pShell->GetPool() );
+            pReq.reset(new SfxRequest( nSlot, eCall, pShell->GetPool() ));
         pReq->SetModifier( nModi );
         if( pInternalArgs && *pInternalArgs)
         {
@@ -959,7 +959,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
         }
         Execute_( *pShell, *pSlot, *pReq, eCall );
         const SfxPoolItem* pRet = pReq->GetReturnValue();
-        delete pReq; return pRet;
+        return pRet;
     }
     return nullptr;
 }
