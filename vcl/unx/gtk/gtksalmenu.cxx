@@ -226,8 +226,12 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
     if (mbNeedsUpdate)
     {
         mbNeedsUpdate = false;
-        if (mbMenuBar)
+        if (mbMenuBar && maUpdateMenuBarIdle.IsActive())
+        {
             maUpdateMenuBarIdle.Stop();
+            maUpdateMenuBarIdle.Invoke();
+            return;
+        }
     }
 
     Menu* pVCLMenu = mpVCLMenu;
@@ -556,13 +560,17 @@ IMPL_LINK_NOARG(GtkSalMenu, MenuBarHierarchyChangeHandler, Timer *, void)
 void GtkSalMenu::SetNeedsUpdate()
 {
     GtkSalMenu* pMenu = this;
+    // start that the menu and its parents are in need of an update
+    // on the next activation
     while (pMenu && !pMenu->mbNeedsUpdate)
     {
         pMenu->mbNeedsUpdate = true;
-        if (mbMenuBar)
-            maUpdateMenuBarIdle.Start();
         pMenu = pMenu->mpParentSalMenu;
     }
+    // only if a menubar is directly updated do we force in a full
+    // structure update
+    if (mbMenuBar && !maUpdateMenuBarIdle.IsActive())
+        maUpdateMenuBarIdle.Start();
 }
 
 void GtkSalMenu::SetMenuModel(GMenuModel* pMenuModel)
