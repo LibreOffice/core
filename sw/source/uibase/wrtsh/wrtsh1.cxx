@@ -108,17 +108,6 @@
 using namespace sw::mark;
 using namespace com::sun::star;
 
-#define COMMON_INI_LIST \
-        m_fnDrag(&SwWrtShell::BeginDrag),\
-        m_fnSetCursor(&SwWrtShell::SetCursor),\
-        m_fnEndDrag(&SwWrtShell::DefaultEndDrag),\
-        m_fnKillSel(&SwWrtShell::Ignore),\
-        m_pModeStack(nullptr), \
-        m_ePageMove(MV_NO),\
-        m_rView(rShell),\
-        m_aNavigationMgr(*this), \
-        m_bDestOnStack(false)
-
 #define BITFLD_INI_LIST \
         m_bClearMark = \
         m_bIns = true;\
@@ -1632,8 +1621,9 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
 // Some kind of controlled copy ctor
 
 SwWrtShell::SwWrtShell( SwWrtShell& rSh, vcl::Window *_pWin, SwView &rShell )
-    : SwFEShell( rSh, _pWin ),
-     COMMON_INI_LIST
+    : SwFEShell(rSh, _pWin)
+    , m_rView(rShell)
+    , m_aNavigationMgr(*this)
 {
     BITFLD_INI_LIST
     SET_CURR_SHELL( this );
@@ -1650,8 +1640,9 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, vcl::Window *_pWin, SwView &rShell )
 
 SwWrtShell::SwWrtShell( SwDoc& rDoc, vcl::Window *_pWin, SwView &rShell,
                         const SwViewOption *pViewOpt )
-    : SwFEShell( rDoc, _pWin, pViewOpt),
-      COMMON_INI_LIST
+    : SwFEShell(rDoc, _pWin, pViewOpt)
+    , m_rView(rShell)
+    , m_aNavigationMgr(*this)
 {
     BITFLD_INI_LIST
     SET_CURR_SHELL( this );
