@@ -63,7 +63,7 @@ End
 
 File gid_File_Lib_Policy_Cli_Oootypes_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT);
+    Styles = (PACKED, ASSIGNCOMPONENT);
     Name = "cli_oootypes.config";
     Dir = gid_Brand_Dir_Program;
     AssignComponent = gid_File_Lib_Policy_Cli_Oootypes_Assembly;
