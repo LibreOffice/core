@@ -161,7 +161,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
         bCompose = true;
 
       // not to use combined KATAKANA LETTER VU
-      if ( previousChar == 0x30a6 && (nFlags & WIDTHFOLDNIG_DONT_USE_COMBINED_VU) )
+      if ( previousChar == 0x30a6 && (nFlags & WIDTHFOLDING_DONT_USE_COMBINED_VU) )
         bCompose = false;
 
       if( bCompose ){
