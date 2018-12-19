@@ -94,7 +94,7 @@ HandlerCache::HandlerCache()
         m_pHandler.reset(new HandlerHash);
         m_pPattern.reset(new PatternHash);
         m_pConfig.reset(new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER));
-        m_pConfig->read(m_pHandler,m_pPattern);
+        m_pConfig->read(*m_pHandler, *m_pPattern);
         m_pConfig->setCache(this);
     }
 
@@ -183,14 +183,13 @@ HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
     @descr      User use us as a wrapper between configuration api and his internal structures.
                 He give us some pointer to his member and we fill it.
 
-    @param      pHandler
-                pointer to a list of protocol handler infos
+    @param      rHandlerHash
+                list of protocol handler infos
 
-    @param      pPattern
+    @param      rPatternHash
                 reverse map of handler pattern to her uno names
  */
-void HandlerCFGAccess::read( std::unique_ptr<HandlerHash>& ppHandler ,
-                             std::unique_ptr<PatternHash>& ppPattern )
+void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHash )
 {
     // list of all uno implementation names without encoding
     css::uno::Sequence< OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::ConfigNameFormat::LocalPath );
@@ -234,11 +233,11 @@ void HandlerCFGAccess::read( std::unique_ptr<HandlerHash>& ppHandler ,
         // register his pattern into the performance search hash
         for (auto const& item : aHandler.m_lProtocols)
         {
-            (*ppPattern)[item] = lNames[nSource];
+            rPatternHash[item] = lNames[nSource];
         }
 
         // insert the handler info into the normal handler cache
-        (*ppHandler)[lNames[nSource]] = aHandler;
+        rHandlerHash[lNames[nSource]] = aHandler;
         ++nSource;
     }
 }
@@ -248,7 +247,7 @@ void HandlerCFGAccess::Notify(const css::uno::Sequence< OUString >& /*lPropertyN
     std::unique_ptr<HandlerHash> pHandler(new HandlerHash);
     std::unique_ptr<PatternHash> pPattern(new PatternHash);
 
-    read(pHandler, pPattern);
+    read(*pHandler, *pPattern);
     if (m_pCache)
         m_pCache->takeOver(std::move(pHandler), std::move(pPattern));
 }

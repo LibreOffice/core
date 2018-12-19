@@ -137,8 +137,7 @@ class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
     /* interface */
     public:
                  HandlerCFGAccess( const OUString& sPackage  );
-        void     read            (       std::unique_ptr<HandlerHash>& ppHandler ,
-                                         std::unique_ptr<PatternHash>& ppPattern );
+        void     read            ( HandlerHash& rHandlerHash, PatternHash& rPatternHash );
 
         void setCache(HandlerCache* pCache) {m_pCache = pCache;};
         virtual void Notify(const css::uno::Sequence< OUString >& lPropertyNames) override;
