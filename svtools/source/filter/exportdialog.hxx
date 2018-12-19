@@ -54,7 +54,7 @@ private:
     OUString const            msEstimatedSizePix2;
     OUString const            msEstimatedSizeVec;
 
-    OUString const            ms1BitTreshold;
+    OUString const            ms1BitThreshold;
     OUString const            ms1BitDithered;
     OUString const            ms4BitGrayscale;
     OUString const            ms4BitColorPalette;
