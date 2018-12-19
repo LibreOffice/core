@@ -199,11 +199,11 @@ sub get_file_component_name
 
     my $componentname = "";
 
-    # Special handling for files with ASSIGNCOMPOMENT
+    # Special handling for files with ASSIGNCOMPONENT
 
     my $styles = "";
     if ( $fileref->{'Styles'} ) { $styles = $fileref->{'Styles'}; }
-    if ( $styles =~ /\bASSIGNCOMPOMENT\b/ )
+    if ( $styles =~ /\bASSIGNCOMPONENT\b/ )
     {
         $componentname = get_component_from_assigned_file($fileref->{'AssignComponent'}, $filesref);
     }
@@ -333,7 +333,7 @@ sub get_file_component_name
 
 ####################################################################
 # Returning the component name for a defined file gid.
-# This is necessary for files with flag ASSIGNCOMPOMENT
+# This is necessary for files with flag ASSIGNCOMPONENT
 ####################################################################
 
 sub get_component_from_assigned_file

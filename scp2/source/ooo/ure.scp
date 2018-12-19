@@ -110,7 +110,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Ure_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT);
+    Styles = (PACKED, ASSIGNCOMPONENT);
     Name = "cli_ure.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Ure_Assembly;
@@ -144,7 +144,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Basetypes_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT);
+    Styles = (PACKED, ASSIGNCOMPONENT);
     Name = "cli_basetypes.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Basetypes_Assembly;
@@ -178,7 +178,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Uretypes_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT);
+    Styles = (PACKED, ASSIGNCOMPONENT);
     Name = "cli_uretypes.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Uretypes_Assembly;
@@ -212,7 +212,7 @@ End
 
 File gid_File_Lib_Policy_Cli_Cppuhelper_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT);
+    Styles = (PACKED, ASSIGNCOMPONENT);
     Name = "cli_cppuhelper.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Lib_Policy_Cli_Cppuhelper_Assembly;
