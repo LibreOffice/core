@@ -103,7 +103,7 @@ namespace dbtools
         ) const;
 
     private:
-        ::connectivity::OSQLParseNode* implPredicateTree(
+        std::unique_ptr<::connectivity::OSQLParseNode> implPredicateTree(
             OUString& _rErrorMessage,
             const OUString& _rStatement,
             const css::uno::Reference< css::beans::XPropertySet > & _rxField
@@ -115,7 +115,7 @@ namespace dbtools
             sal_Unicode& _rThdSep
         ) const;
 
-        css::uno::Any implParseNode(::connectivity::OSQLParseNode* pParseNode, bool _bForStatementUse) const;
+        css::uno::Any implParseNode(std::unique_ptr<::connectivity::OSQLParseNode> pParseNode, bool _bForStatementUse) const;
     };
 
 

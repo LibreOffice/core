@@ -2897,7 +2897,7 @@ void OQueryDesignView::SaveUIConfig()
         rCtrl.setSplitPos( m_aSplitter->GetSplitPosPixel() );
 }
 
-OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDescRef& pEntry,
+std::unique_ptr<OSQLParseNode> OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDescRef& pEntry,
                                                            const OUString& _sCriteria,
                                                            OUString& _rsErrorMessage,
                                                            Reference<XPropertySet>& _rxColumn) const
@@ -2989,7 +2989,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDesc
     // q itself is query "SELECT aye AS A, bee as B, cee as C FROM t"
     // We are currently treating the entry "C='foo'"
     // Then _rxColumn has Name "C" and RealName "cee". We should *obviously* use "C", not "cee".
-    OSQLParseNode* pParseNode = rParser.predicateTree(  _rsErrorMessage,
+    std::unique_ptr<OSQLParseNode> pParseNode = rParser.predicateTree(  _rsErrorMessage,
                                                         _sCriteria,
                                                         static_cast<OQueryController&>(getController()).getNumberFormatter(),
                                                         _rxColumn,

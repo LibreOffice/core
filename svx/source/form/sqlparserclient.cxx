@@ -37,14 +37,14 @@ namespace svxform
         m_xContext = rxContext;
     }
 
-    std::shared_ptr< ::connectivity::OSQLParseNode > OSQLParserClient::predicateTree(
+    std::unique_ptr< ::connectivity::OSQLParseNode > OSQLParserClient::predicateTree(
             OUString& _rErrorMessage,
             const OUString& _rStatement,
             const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
             const css::uno::Reference< css::beans::XPropertySet >& _rxField
         ) const
     {
-        return std::shared_ptr< OSQLParseNode >(m_pParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField));
+        return m_pParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);
     }
 
 }

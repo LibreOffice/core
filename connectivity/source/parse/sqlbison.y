@@ -4494,10 +4494,10 @@ void setParser(OSQLParser* _pParser)
 	xxx_pGLOBAL_SQLPARSER = _pParser;
 }
 
-void OSQLParser::setParseTree(OSQLParseNode * pNewParseTree)
+void OSQLParser::setParseTree(OSQLParseNode* pNewParseTree)
 {
 	::osl::MutexGuard aGuard(getMutex());
-	m_pParseTree = pNewParseTree;
+	m_pParseTree.reset(pNewParseTree);
 }
 
 
@@ -4561,7 +4561,7 @@ static OUString delComment( const OUString& rQuery )
     return aBuf.makeStringAndClear();
 }
 
-OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
+std::unique_ptr<OSQLParseNode> OSQLParser::parseTree(OUString& rErrorMessage,
                                      const OUString& rStatement,
                                      bool bInternational)
 {
@@ -4609,7 +4609,7 @@ OSQLParseNode* OSQLParser::parseTree(OUString& rErrorMessage,
 
         SAL_WARN_IF(!m_pParseTree, "connectivity.parse",
             "OSQLParser: Parser did not create ParseTree");
-		return m_pParseTree;
+		return std::move(m_pParseTree);
 	}
 }
 

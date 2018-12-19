@@ -367,7 +367,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode const * pColumnRef,
 void OStatement_Base::construct(const OUString& sql)
 {
     OUString aErr;
-    m_pParseTree = m_aParser.parseTree(aErr,sql);
+    m_pParseTree = m_aParser.parseTree(aErr,sql).release();
     if(!m_pParseTree)
         throw SQLException(aErr,*this,OUString(),0,Any());
 
