@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/table/xtablerows.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -36,6 +37,7 @@ class ScTableRowsObj : public CalcUnoApiTest,
                        public apitest::XElementAccess,
                        public apitest::XEnumerationAccess,
                        public apitest::XIndexAccess,
+                       public apitest::XServiceInfo,
                        public apitest::XTableRows
 {
 public:
@@ -59,6 +61,11 @@ public:
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetCount);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     // XTableRows
     CPPUNIT_TEST(testInsertByIndex);
     CPPUNIT_TEST(testRemoveByIndex);
@@ -73,6 +80,7 @@ ScTableRowsObj::ScTableRowsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<table::XCellRange>::get())
     , XIndexAccess(1048576)
+    , XServiceInfo("ScTableRowsObj", "com.sun.star.table.TableRows")
 {
 }
 
