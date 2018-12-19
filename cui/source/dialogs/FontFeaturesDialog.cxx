@@ -123,11 +123,6 @@ void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFe
 
         i++;
     }
-
-    Size aSize(m_xContentWindow->get_preferred_size());
-    Size aMaxSize(std::min<int>(aSize.Width(), m_xContentGrid->get_approximate_digit_width() * 100),
-                  std::min<int>(aSize.Height(), m_xContentGrid->get_text_height() * 20));
-    m_xContentWindow->set_size_request(aMaxSize.Width(), aMaxSize.Height());
 }
 
 void FontFeaturesDialog::updateFontPreview()
