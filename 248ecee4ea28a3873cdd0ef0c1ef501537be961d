@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_09d26d5d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2018-12-19T22:20:22Z",
+      "side": 0,
+      "message": "My bad, we shouldn\u0027t have taken these out. Can you put them back please?",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 35
+      },
+      "revId": "248ecee4ea28a3873cdd0ef0c1ef501537be961d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
