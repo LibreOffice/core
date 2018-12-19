@@ -28,7 +28,7 @@ namespace i18nutil { class oneToOneMapping; }
 
 namespace i18nutil {
 
-#define WIDTHFOLDNIG_DONT_USE_COMBINED_VU 0x01
+#define WIDTHFOLDING_DONT_USE_COMBINED_VU 0x01
 
 class I18NUTIL_DLLPUBLIC widthfolding
 {

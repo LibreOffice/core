@@ -78,7 +78,7 @@ halfwidthToFullwidthLikeJIS::transliterateImpl( const OUString& inStr, sal_Int32
     const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, offset, false);
 
     // Composition: KA + voice-mark --> GA
-    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, useOffset, WIDTHFOLDNIG_DONT_USE_COMBINED_VU );
+    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, useOffset, WIDTHFOLDING_DONT_USE_COMBINED_VU );
 }
 
 
