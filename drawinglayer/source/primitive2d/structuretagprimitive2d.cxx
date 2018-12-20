@@ -30,10 +30,24 @@ namespace drawinglayer
     {
         StructureTagPrimitive2D::StructureTagPrimitive2D(
             const vcl::PDFWriter::StructElement& rStructureElement,
+            bool bBackground,
             const Primitive2DContainer& rChildren)
         :   GroupPrimitive2D(rChildren),
-            maStructureElement(rStructureElement)
+            maStructureElement(rStructureElement),
+            mbBackground(bBackground)
         {
+        }
+
+        bool StructureTagPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(GroupPrimitive2D::operator==(rPrimitive))
+            {
+                const StructureTagPrimitive2D& rCompare = static_cast<const StructureTagPrimitive2D&>(rPrimitive);
+
+                return (isBackground() == rCompare.isBackground());
+            }
+
+            return false;
         }
 
         // provide unique ID
