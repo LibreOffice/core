@@ -1004,7 +1004,7 @@ void SVGFilter::implExportDocumentHeaderWriterOrCalc(sal_Int32 nDocX, sal_Int32 
 
 /// Append aField to aFieldSet if it is not already present in the set and create the field id sFieldId
 template< typename TextFieldType >
-static OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
+static OUString implGenerateFieldId( std::vector< std::unique_ptr<TextField> > & aFieldSet,
                               const TextFieldType & aField,
                               const OUString & sOOOElemField,
                               const Reference< css::drawing::XDrawPage >& xMasterPage )
@@ -1023,7 +1023,7 @@ static OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
     OUString sFieldId(sOOOElemField + "_");
     if( !bFound )
     {
-        aFieldSet.push_back( new TextFieldType( aField ) );
+        aFieldSet.emplace_back( new TextFieldType( aField ) );
     }
     aFieldSet[i]->insertMasterPage( xMasterPage );
     sFieldId += OUString::number( i );
@@ -1094,7 +1094,7 @@ void SVGFilter::implGenerateMetaData()
             SvXMLElementExport    aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
             const OUString                aId( NSPREFIX "meta_slide" );
             const OUString                aElemTextFieldId( aOOOElemTextField );
-            std::vector< TextField* >     aFieldSet;
+            std::vector< std::unique_ptr<TextField> >     aFieldSet;
 
             // dummy slide - used as leaving slide for transition on the first slide
             if( mbPresentation )
@@ -1235,7 +1235,7 @@ void SVGFilter::implGenerateMetaData()
                 }
                 if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
                 {
-                    for(TextField* i : aFieldSet)
+                    for(std::unique_ptr<TextField>& i : aFieldSet)
                     {
                         i->growCharSet( mTextFieldCharSets );
                     }
@@ -1243,10 +1243,7 @@ void SVGFilter::implGenerateMetaData()
             }
 
             // text fields are used only for generating meta info so we don't need them anymore
-            for(TextField* i : aFieldSet)
-            {
-               delete i;
-            }
+            aFieldSet.clear();
         }
     }
 }
