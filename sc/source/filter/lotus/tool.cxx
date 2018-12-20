@@ -447,9 +447,7 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 
 void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& rCRD )
 {
-    OUString aScName = ScfTools::ConvertToScDefinedName(rOrgName);
-
-    Entry aInsert( rOrgName, aScName, rCRD );
+    Entry aInsert( rOrgName, rCRD );
 
     pScTokenArray->Clear();
 
