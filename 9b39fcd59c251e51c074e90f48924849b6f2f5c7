@@ -46,6 +46,30 @@
       "revId": "9b39fcd59c251e51c074e90f48924849b6f2f5c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_6c7a0f25",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-20T16:02:44Z",
+      "side": 0,
+      "message": "Bah, true, I overlooked that set is implicitly sorted. Sorry for fuzz.",
+      "parentUuid": "5f4e5783_4902a5b6",
+      "range": {
+        "startLine": 1908,
+        "startChar": 24,
+        "endLine": 1908,
+        "endChar": 40
+      },
+      "revId": "9b39fcd59c251e51c074e90f48924849b6f2f5c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
