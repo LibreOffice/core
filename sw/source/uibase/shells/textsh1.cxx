@@ -369,6 +369,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OUString sReplacement = aToggle.ReplacementString();
             if( !sReplacement.isEmpty() )
             {
+                if (rWrtSh.HasReadonlySel() && !rWrtSh.CursorInsideInputField())
+                {
+                    // Only break if there's something to do; don't nag with the dialog otherwise
+                    auto xInfo(o3tl::make_unique<weld::GenericDialogController>(
+                        rWrtSh.GetView().GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui",
+                        "InfoReadonlyDialog"));
+                    xInfo->run();
+                    break;
+                }
                 SwRewriter aRewriter;
                 aRewriter.AddRule( UndoArg1, aToggle.StringToReplace() );
                 aRewriter.AddRule( UndoArg2, SwResId(STR_YIELDS) );
