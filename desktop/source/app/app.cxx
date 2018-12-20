@@ -2128,6 +2128,8 @@ void Desktop::OpenClients()
                 aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::IMPRESS );
             else if ( rArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
                 aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::DRAW );
+            else if (rArgs.IsBasicIDE() && aOpt.IsModuleInstalled(SvtModuleOptions::EModule::BASIC))
+                aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::BASIC );
         }
 
         // check for printing disabled
@@ -2439,6 +2441,8 @@ void Desktop::OpenSplashScreen()
             aAppName = "impress";
         else if ( rCmdLine.IsBase() )
             aAppName = "base";
+        else if ( rCmdLine.IsBasicIDE() )
+            aAppName = "basic";
         else if ( rCmdLine.IsGlobal() )
             aAppName = "global";
         else if ( rCmdLine.IsMath() )

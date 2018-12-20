@@ -18,6 +18,9 @@
  */
 
 #include <comphelper/docpasswordhelper.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/request.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -607,11 +610,12 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         return false;
     }
 
-    if (sURL == "private:factory/sbasic")
-    {
-        SfxGetpApp()->ExecuteSlot(SfxRequest(SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool()));
-        return true;
-    }
+    //if (sURL == "private:factory/sbasic")
+    //{
+    //    SfxGetpApp()->ExecuteSlot(SfxRequest(SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool()));
+    //    return true;
+    //}
+
     // prepare the environment
     css::uno::Reference< css::task::XInteractionHandler > xOrgInteraction = getUnpackedValueOrDefault(
         MediaDescriptor::PROP_INTERACTIONHANDLER(),
@@ -634,8 +638,16 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
     css::uno::Reference< css::ucb::XContent > xContent;
     try
     {
+ //       if (sURL == "private:factory/sbasic")
+ //       {
+ //           SfxGetpApp()->ExecuteSlot(SfxRequest(SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool()));
+ //           return true;
+ //       }
+ //       else
+ //       {
         aContent = ::ucbhelper::Content(sURL, xCommandEnv, comphelper::getProcessComponentContext());
         xContent = aContent.get();
+ //       }
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
