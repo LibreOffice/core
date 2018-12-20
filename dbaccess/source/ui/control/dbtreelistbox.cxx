@@ -183,9 +183,7 @@ void DBTreeListBox::EnableExpandHandler(SvTreeListEntry* pEntry)
     // set the flag which allows if the entry can be expanded
     pEntry->SetFlags( (pEntry->GetFlags() & ~SvTLEntryFlags(SvTLEntryFlags::NO_NODEBMP | SvTLEntryFlags::HAD_CHILDREN)) | SvTLEntryFlags::CHILDREN_ON_DEMAND );
     // redraw the entry
-    SvTreeList* myModel = GetModel();
-    if (myModel)
-        myModel->InvalidateEntry( pEntry );
+    GetModel()->InvalidateEntry(pEntry);
 }
 
 IMPL_LINK(DBTreeListBox, OnResetEntryHdl, void*, p, void)
