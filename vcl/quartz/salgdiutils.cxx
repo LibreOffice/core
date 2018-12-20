@@ -152,9 +152,6 @@ bool AquaSalGraphics::CheckContext()
                 const int nBytesPerRow = (nBitmapDepth * mnWidth) / 8;
                 void* pRawData = std::malloc(nBytesPerRow * mnHeight);
                 const int nFlags = kCGImageAlphaNoneSkipFirst;
-#ifndef MACOSX
-                nFlags |= kCGImageByteOrder32Little;
-#endif
                 mrContext = CGBitmapContextCreate(pRawData, mnWidth, mnHeight, 8, nBytesPerRow,
                                                   GetSalData()->mxRGBSpace, nFlags);
                 SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight
