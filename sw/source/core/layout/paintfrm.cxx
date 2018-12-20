@@ -1675,7 +1675,10 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
         *pOut,
         *pGrf,
         pGrf->GetAttr(),
-        aGraphicTransform);
+        aGraphicTransform,
+        OUString(),
+        OUString(),
+        OUString());
 
     if ( bNotInside )
         pOut->Pop();

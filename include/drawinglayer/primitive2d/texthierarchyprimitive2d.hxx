@@ -86,9 +86,21 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC TextHierarchyParagraphPrimitive2D : public GroupPrimitive2D
         {
         private:
+            // outline level of the encapsulated paragraph data.
+            // -1 means no level, >= 0 is the level
+            sal_Int16           mnOutlineLevel;
+
         public:
             /// constructor
-            explicit TextHierarchyParagraphPrimitive2D(const Primitive2DContainer& rChildren);
+            explicit TextHierarchyParagraphPrimitive2D(
+                const Primitive2DContainer& rChildren,
+                sal_Int16 nOutlineLevel = -1);
+
+            /// data read access
+            sal_Int16 getOutlineLevel() const { return mnOutlineLevel; }
+
+            /// compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()

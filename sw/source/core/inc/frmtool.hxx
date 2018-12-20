@@ -92,7 +92,10 @@ void paintGraphicUsingPrimitivesHelper(
     OutputDevice & rOutputDevice,
     GraphicObject const& rGraphicObj,
     GraphicAttr const& rGraphicAttr,
-    const basegfx::B2DHomMatrix& rGraphicTransform);
+    const basegfx::B2DHomMatrix& rGraphicTransform,
+    const OUString& rName,
+    const OUString& rTitle,
+    const OUString& rDescription);
 
 // method to align rectangle.
 // Created declaration here to avoid <extern> declarations
