@@ -416,8 +416,6 @@ public:
                                        const SfxItemSet* rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
-    OUString            GetLevelHelp(sal_uInt16 nLevel) const;
-
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
     void SetFocus2theAllBtn();
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;

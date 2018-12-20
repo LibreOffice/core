@@ -2582,23 +2582,6 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
                                            RES_POOLCHR_IDX_MAIN_ENTRY, OUString()));
 }
 
-OUString SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
-{
-    OUString sRet;
-    SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetTabDialog());
-    const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
-    if( TOX_INDEX == aCurType.eType )
-        SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(1 == nLevel ? RES_POOLCOLL_TOX_IDXBREAK
-                                  : RES_POOLCOLL_TOX_IDX1 + nLevel-2), sRet );
-
-    else if( TOX_AUTHORITIES == aCurType.eType )
-    {
-        //wildcard -> show entry text
-        sRet = "*";
-    }
-    return sRet;
-}
-
 static const char* STR_TOKEN_ARY[] =
 {
     STR_TOKEN_ENTRY_NO,
