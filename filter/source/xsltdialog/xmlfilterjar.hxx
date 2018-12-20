@@ -27,15 +27,13 @@
 
 class filter_info_impl;
 
-typedef std::vector< filter_info_impl* > XMLFilterVector;
-
 class XMLFilterJarHelper
 {
 public:
     explicit XMLFilterJarHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    bool savePackage( const OUString& rPackageURL, const XMLFilterVector& rFilters );
-    void openPackage( const OUString& rPackageURL, XMLFilterVector& rFilters );
+    bool savePackage( const OUString& rPackageURL, const std::vector<filter_info_impl*>& rFilters );
+    void openPackage( const OUString& rPackageURL, std::vector< std::unique_ptr<filter_info_impl> >& rFilters );
 
 private:
     /// @throws css::uno::Exception

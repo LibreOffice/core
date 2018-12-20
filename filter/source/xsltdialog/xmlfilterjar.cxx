@@ -137,7 +137,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > const & xRootFolder, R
     }
 }
 
-bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilterVector& rFilters )
+bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::vector<filter_info_impl*>& rFilters )
 {
     try
     {
@@ -228,7 +228,8 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 }
 
 
-void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVector& rFilters )
+void XMLFilterJarHelper::openPackage( const OUString& rPackageURL,
+                                      std::vector< std::unique_ptr<filter_info_impl> >& rFilters )
 {
     try
     {
@@ -264,21 +265,21 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                 {
                     Reference< XInputStream > xIS( xTypeDetection->getInputStream() );
 
-                    XMLFilterVector aFilters;
+                    std::vector< std::unique_ptr<filter_info_impl> > aFilters;
                     TypeDetectionImporter::doImport( mxContext, xIS, aFilters );
 
                     // copy all files used by the filters imported from the
                     // typedetection to office/user/xslt
-                    for (auto const& filter : aFilters)
+                    for (auto& filter : aFilters)
                     {
-                        if( copyFiles( xIfc, filter ) )
+                        if( copyFiles( xIfc, filter.get() ) )
                         {
-                            rFilters.push_back(filter);
+                            rFilters.push_back(std::move(filter));
                         }
                         else
                         {
                             // failed to copy all files
-                            delete filter;
+                            filter.reset();
                         }
                     }
                 }

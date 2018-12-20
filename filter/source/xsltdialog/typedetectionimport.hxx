@@ -63,7 +63,8 @@ public:
     TypeDetectionImporter();
     virtual ~TypeDetectionImporter() override;
 
-    static void doImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference < css::io::XInputStream >& xOS, XMLFilterVector& rFilters );
+    static void doImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference < css::io::XInputStream >& xOS,
+                          std::vector< std::unique_ptr<filter_info_impl> >& rFilters );
 
     virtual void SAL_CALL startDocument(  ) override;
     virtual void SAL_CALL endDocument(  ) override;
@@ -75,8 +76,8 @@ public:
     virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
 private:
-    void fillFilterVector(  XMLFilterVector& rFilters );
-    filter_info_impl* createFilterForNode( Node * pNode );
+    void fillFilterVector(  std::vector< std::unique_ptr<filter_info_impl> >& rFilters );
+    std::unique_ptr<filter_info_impl> createFilterForNode( Node * pNode );
     Node* findTypeNode( const OUString& rType );
 
     std::stack< ImportState > maStack;
