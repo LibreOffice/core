@@ -3403,6 +3403,10 @@ OUString SwTextNode::GetExpandText(SwRootFrame const*const pLayout,
 
 {
     ExpandMode eMode = ExpandMode::ExpandFields | eAdditionalMode;
+    if (pLayout && pLayout->IsHideRedlines())
+    {
+        eMode |= ExpandMode::HideDeletions;
+    }
 
     ModelToViewHelper aConversionMap(*this, pLayout, eMode);
     const OUString aExpandText = aConversionMap.getViewText();
