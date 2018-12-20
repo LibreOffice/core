@@ -1245,7 +1245,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                     aTempGraphicObject,
                     aGrfAttr,
                     aGraphicTransform,
-                    nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+                    OUString(),
                     rNoTNd.GetTitle(),
                     rNoTNd.GetDescription());
 
