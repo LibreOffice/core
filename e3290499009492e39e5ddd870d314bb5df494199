@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_4cdab317",
+        "filename": "sc/inc/bigrange.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-12-20T17:04:11Z",
+      "side": 0,
+      "message": "Just a nitpick, not hindering the commit.. (commenting because it was the first file in sc/)\n\nIn this case, the unusual indentation actually helps the reader in that the arguments passed align on columns and visually easier point out the difference of 1s vs 2s.\nHowever, such things probably will never be caught automatically.",
+      "revId": "e3290499009492e39e5ddd870d314bb5df494199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
