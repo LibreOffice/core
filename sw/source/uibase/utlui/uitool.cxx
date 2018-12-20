@@ -687,45 +687,6 @@ void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::Combo
     rToFill.insert(nOffset, rEntry, &rId, nullptr, nullptr);
 }
 
-void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
-{
-    const sal_Int32 nOffset = rToFill.GetEntryCount() > 0 ? 1 : 0;
-    SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
-    pPool->SetSearchMask(SfxStyleFamily::Char);
-    SwDoc* pDoc = pDocSh->GetDoc();
-    const SfxStyleSheetBase* pBase = pPool->First();
-    OUString sStandard;
-    SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sStandard );
-    while(pBase)
-    {
-        if(bWithDefault || pBase->GetName() !=  sStandard)
-        {
-            const sal_Int32 nPos = bSorted
-                ? InsertStringSorted(pBase->GetName(), rToFill, nOffset )
-                : rToFill.InsertEntry(pBase->GetName());
-            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), SwGetPoolIdFromName::ChrFmt );
-            rToFill.SetEntryData( nPos, reinterpret_cast<void*>(nPoolId));
-        }
-        pBase = pPool->Next();
-    }
-    // non-pool styles
-    const SwCharFormats* pFormats = pDoc->GetCharFormats();
-    for(size_t i = 0; i < pFormats->size(); ++i)
-    {
-        const SwCharFormat* pFormat = (*pFormats)[i];
-        if(pFormat->IsDefault())
-            continue;
-        const OUString& rName = pFormat->GetName();
-        if(rToFill.GetEntryPos(rName) == LISTBOX_ENTRY_NOTFOUND)
-        {
-            const sal_Int32 nPos = bSorted
-                ? InsertStringSorted(rName, rToFill, nOffset )
-                : rToFill.InsertEntry(rName);
-            rToFill.SetEntryData( nPos, reinterpret_cast<void*>(USHRT_MAX));
-        }
-    }
-};
-
 void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
 {
     const int nOffset = rToFill.get_count() > 0 ? 1 : 0;

@@ -42,7 +42,6 @@ public:
     WelfordRunner() : mfMean(0.0), mfM2(0.0), mnCount(0) {}
     void        update( double fVal );
     sal_uInt64  getCount() const                { return mnCount; }
-    double      getMean() const                 { return mfMean; }
     double      getVarianceSample() const       { return mnCount > 1 ? mfM2 / (mnCount-1) : 0.0; }
     double      getVariancePopulation() const   { return mnCount > 0 ? mfM2 / mnCount : 0.0; }
 

@@ -158,6 +158,8 @@ include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
 include/svl/poolitem.hxx:169
     class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
+include/svx/checklbx.hxx:76
+    void * SvxCheckListBox::SetEntryData(unsigned long,void *)
 include/svx/dlgctrl.hxx:105
     class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:195
@@ -186,8 +188,8 @@ include/tools/config.hxx:38
     _Bool Config::ImplUpdateConfig() const
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
-include/vcl/bitmap.hxx:184
-    _Bool Bitmap::Dither(enum BmpDitherFlags)
+include/vcl/bitmap.hxx:172
+    _Bool Bitmap::Dither()
 include/vcl/bitmapex.hxx:241
     _Bool BitmapEx::Rotate(long,const class Color &)
 include/vcl/fontcharmap.hxx:49
@@ -206,9 +208,9 @@ include/vcl/texteng.hxx:280
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:513
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:377
+include/vcl/weld.hxx:397
     _Bool weld::ComboBox::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:1154
+include/vcl/weld.hxx:1193
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -216,7 +218,9 @@ lotuswordpro/inc/lwpsvstream.hxx:77
     class LwpSvStream & LwpSvStream::ReadUInt16(unsigned short &)
 lotuswordpro/inc/lwpsvstream.hxx:78
     class LwpSvStream & LwpSvStream::ReadUInt32(unsigned int &)
-sc/inc/document.hxx:2108
+sc/inc/document.hxx:1404
+    _Bool ScDocument::GetDataAreaSubrange(class ScRange &) const
+sc/inc/document.hxx:2126
     const struct ScDocumentThreadSpecific & ScDocument::CalculateInColumnInThread(struct ScInterpreterContext &,const class ScAddress &,unsigned long,unsigned int,unsigned int)
 sc/inc/orcusfilters.hxx:44
     _Bool ScOrcusFilters::importODS_Styles(class ScDocument &,class rtl::OUString &) const
@@ -274,11 +278,11 @@ sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
 sw/inc/calc.hxx:114
     class SwSbxValue & SwSbxValue::MakeDouble()
-sw/inc/doc.hxx:1069
+sw/inc/doc.hxx:1070
     _Bool SwDoc::ReplaceNumRule(const struct SwPosition &,const class rtl::OUString &,const class rtl::OUString &)
-sw/inc/doc.hxx:1230
+sw/inc/doc.hxx:1231
     _Bool SwDoc::SetColRowWidthHeight(class SwTableBox &,enum TableChgWidthHeightType,long,long)
-sw/inc/doc.hxx:1255
+sw/inc/doc.hxx:1256
     _Bool SwDoc::SplitTable(const struct SwPosition &,enum SplitTable_HeadlineOption,_Bool)
 sw/inc/editsh.hxx:264
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
@@ -286,7 +290,7 @@ sw/inc/editsh.hxx:636
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
-sw/inc/swcrsr.hxx:156
+sw/inc/swcrsr.hxx:159
     _Bool SwCursor::ExpandToSentenceBorders(const class SwRootFrame *)
 sw/inc/tblafmt.hxx:353
     _Bool SwTableAutoFormatTable::Load(class SvStream &)

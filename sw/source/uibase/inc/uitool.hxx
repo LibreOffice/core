@@ -86,7 +86,6 @@ SW_DLLPUBLIC bool HasCharUnit( bool bWeb );
 void SetApplyCharUnit(bool bApplyChar, bool bWeb);
 
 // fill ListBox with all char style templates, except the standard ones
-SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
 SW_DLLPUBLIC void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
 
 //inserts a string sorted into a ListBox,
