@@ -68,6 +68,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
 
 #include <svx/svdotable.hxx>
 #include <config_features.h>
@@ -196,6 +197,7 @@ public:
     void testTdf118825();
     void testTdf119118();
     void testTdf99213();
+    void testPotxExport();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -275,6 +277,7 @@ public:
     CPPUNIT_TEST(testTdf118825);
     CPPUNIT_TEST(testTdf119118);
     CPPUNIT_TEST(testTdf99213);
+    CPPUNIT_TEST(testPotxExport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2043,6 +2046,26 @@ void SdOOXMLExportTest2::testTdf99213()
     xDocShRef->DoClose();
 }
 
+void SdOOXMLExportTest2::testPotxExport()
+{
+    // Create new document
+    sd::DrawDocShellRef xDocShRef
+        = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Draw);
+    uno::Reference<frame::XLoadable> xLoadable(xDocShRef->GetModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xLoadable.is());
+    xLoadable->initNew();
+
+    // Export as a POTM template
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), POTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Load and check content type
+    xmlDocPtr pContentTypes = parseExport(tempFile, "[Content_Types].xml");
+    CPPUNIT_ASSERT(pContentTypes);
+    assertXPath(pContentTypes, "/ContentType:Types/ContentType:Override[@PartName='/ppt/presentation.xml']",
+        "ContentType", "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml");
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
