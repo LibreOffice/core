@@ -249,10 +249,6 @@ namespace
 }
 sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
 
-// Whether BankSymbol (not CurrencySymbol!) is always at the end (1 $;-1 $) or
-// language dependent.
-#define NF_BANKSYMBOL_FIX_POSITION 1
-
 const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limits<sal_uInt16>::max()-1;
 
@@ -4381,34 +4377,11 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
 
 
 // static
-sal_uInt16 NfCurrencyEntry::GetEffectivePositiveFormat( sal_uInt16 nIntlFormat,
+sal_uInt16 NfCurrencyEntry::GetEffectivePositiveFormat( sal_uInt16 /*nIntlFormat*/,
                                                         sal_uInt16 nCurrFormat, bool bBank )
 {
     if ( bBank )
-    {
-#if NF_BANKSYMBOL_FIX_POSITION
-        (void) nIntlFormat; // avoid warnings
         return 3;
-#else
-        switch ( nIntlFormat )
-        {
-        case 0:                                         // $1
-            nIntlFormat = 2;                            // $ 1
-            break;
-        case 1:                                         // 1$
-            nIntlFormat = 3;                            // 1 $
-            break;
-        case 2:                                         // $ 1
-            break;
-        case 3:                                         // 1 $
-            break;
-        default:
-            SAL_WARN( "svl.numbers", "NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
-            break;
-        }
-        return nIntlFormat;
-#endif
-    }
     else
         return nCurrFormat;
 }
@@ -4504,64 +4477,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
             sal_uInt16 nCurrFormat, bool bBank )
 {
     if ( bBank )
-    {
-#if NF_BANKSYMBOL_FIX_POSITION
         return 8;
-#else
-        switch ( nIntlFormat )
-        {
-        case 0:                                         // ($1)
-//          nIntlFormat = 14;                           // ($ 1)
-            nIntlFormat = 9;                            // -$ 1
-            break;
-        case 1:                                         // -$1
-            nIntlFormat = 9;                            // -$ 1
-            break;
-        case 2:                                         // $-1
-            nIntlFormat = 11;                           // $ -1
-            break;
-        case 3:                                         // $1-
-            nIntlFormat = 12;                           // $ 1-
-            break;
-        case 4:                                         // (1$)
-//          nIntlFormat = 15;                           // (1 $)
-            nIntlFormat = 8;                            // -1 $
-            break;
-        case 5:                                         // -1$
-            nIntlFormat = 8;                            // -1 $
-            break;
-        case 6:                                         // 1-$
-            nIntlFormat = 13;                           // 1- $
-            break;
-        case 7:                                         // 1$-
-            nIntlFormat = 10;                           // 1 $-
-            break;
-        case 8:                                         // -1 $
-            break;
-        case 9:                                         // -$ 1
-            break;
-        case 10:                                        // 1 $-
-            break;
-        case 11:                                        // $ -1
-            break;
-        case 12 :                                       // $ 1-
-            break;
-        case 13 :                                       // 1- $
-            break;
-        case 14 :                                       // ($ 1)
-//          nIntlFormat = 14;                           // ($ 1)
-            nIntlFormat = 9;                            // -$ 1
-            break;
-        case 15 :                                       // (1 $)
-//          nIntlFormat = 15;                           // (1 $)
-            nIntlFormat = 8;                            // -1 $
-            break;
-        default:
-            SAL_WARN( "svl.numbers", "NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
-            break;
-        }
-#endif
-    }
     else if ( nIntlFormat != nCurrFormat )
     {
         switch ( nCurrFormat )
