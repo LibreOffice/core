@@ -169,6 +169,12 @@ namespace drawinglayer
              */
             vcl::PDFExtOutDevData*              mpPDFExtOutDevData;
 
+            // Remember the current OutlineLevel. This is used when tagged PDF export
+            // is used to create/write valid structued list entries using PDF statements
+            // like '/L', '/LI', 'LBody' instead of simple '/P' (Paragraph).
+            // The value -1 means 'no OutlineLevel' and values >= 0 express the level.
+            sal_Int16                           mnCurrentOutlineLevel;
+
         protected:
             /*  the local processor for BasePrimitive2D-Implementation based primitives,
                 called from the common process()-implementation
