@@ -124,6 +124,9 @@ private:
     /// Should we export as .pptm, ie. do we contain macros?
     bool mbPptm;
 
+    // Export as a template
+    bool mbExportTemplate;
+
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
     LayoutInfo mLayoutInfo[EPP_LAYOUT_SIZE];
