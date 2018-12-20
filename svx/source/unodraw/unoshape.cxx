@@ -87,6 +87,7 @@
 #include <svx/extrud3d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 #include <vcl/wmf.hxx>
 
@@ -685,14 +686,35 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
         return aAny;
     }
 
+    // tdf#119180 If we do not ask for Metafile and we access a SdrGrafObj,
+    // and content exists and is a Bitmap, take the shortcut.
+    // Do *not* do this for Metafile - as can be seen, requested in that case
+    // is a byte-sequence of a saved WMF format file (see below)
+    if(!bMetaFile)
+    {
+        const SdrGrafObj* pSdrGrafObj(dynamic_cast<SdrGrafObj*>(GetSdrObject()));
+
+        if(nullptr != pSdrGrafObj)
+        {
+           const Graphic& rGraphic(pSdrGrafObj->GetGraphic());
+
+            if(GraphicType::Bitmap == rGraphic.GetType())
+            {
+                Reference< awt::XBitmap > xBmp( rGraphic.GetXGraphic(), UNO_QUERY );
+                aAny <<= xBmp;
+
+                return aAny;
+            }
+        }
+    }
+
     // tdf#118662 instead of creating an E3dView instance every time to paint
     // a single SdrObject, use the existing SdrObject::SingleObjectPainter to
     // use less resources and runtime
-    ScopedVclPtrInstance< VirtualDevice > pVDev;
-    const tools::Rectangle aBoundRect(GetSdrObject()->GetCurrentBoundRect());
-
     if(bMetaFile)
     {
+        ScopedVclPtrInstance< VirtualDevice > pVDev;
+        const tools::Rectangle aBoundRect(GetSdrObject()->GetCurrentBoundRect());
         GDIMetaFile aMtf;
 
         pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -721,17 +743,44 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     }
     else
     {
-        const drawinglayer::primitive2d::Primitive2DContainer xPrimitives(
+        drawinglayer::primitive2d::Primitive2DContainer xPrimitives(
             GetSdrObject()->GetViewContact().getViewIndependentPrimitive2DContainer());
 
         if(!xPrimitives.empty())
         {
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-            const basegfx::B2DRange aRange(
+            basegfx::B2DRange aRange(
                 xPrimitives.getB2DRange(aViewInformation2D));
 
             if(!aRange.isEmpty())
             {
+                const MapUnit aSourceMapUnit(GetSdrObject()->getSdrModelFromSdrObject().GetScaleUnit());
+
+                if(MapUnit::Map100thMM != aSourceMapUnit)
+                {
+                    // tdf#119180 This is UNO API and thus works in 100th_mm,
+                    // so if the MapMode from the used SdrModel is *not* equal
+                    // to Map100thMM we need to embed the primitives to an adapting
+                    // homogen transformation for correct values
+                    const basegfx::B2DHomMatrix aMapTransform(
+                        OutputDevice::LogicToLogic(
+                            MapMode(aSourceMapUnit),
+                            MapMode(MapUnit::Map100thMM)));
+
+                    // Embed primitives to get them in 100th mm
+                    const drawinglayer::primitive2d::Primitive2DReference xEmbedRef(
+                        new drawinglayer::primitive2d::TransformPrimitive2D(
+                            aMapTransform,
+                            xPrimitives));
+
+                    xPrimitives = drawinglayer::primitive2d::Primitive2DContainer { xEmbedRef };
+
+                    // Update basegfx::B2DRange aRange, too. Here we have the
+                    // choice of transforming the existing value or get newly by
+                    // again using 'xPrimitives.getB2DRange(aViewInformation2D)'
+                    aRange.transform(aMapTransform);
+                }
+
                 const BitmapEx aBmp(
                     convertPrimitive2DSequenceToBitmapEx(
                         xPrimitives,
