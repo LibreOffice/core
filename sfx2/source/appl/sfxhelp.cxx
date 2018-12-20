@@ -872,8 +872,8 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
             path = path.copy(0, i1) + "/runtime/org.libreoffice.LibreOffice.Help/"
                 + path.copy(i2, i3 - i2) + sha + path.copy(i4);
             // Turn <path> into a file URL:
-            OUString url;
-            err = osl::FileBase::getFileURLFromSystemPath(path, url);
+            OUString url_;
+            err = osl::FileBase::getFileURLFromSystemPath(path, url_);
             if (err != osl::FileBase::E_None) {
                 SAL_WARN(
                     "sfx.appl",
@@ -881,7 +881,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                         << err);
                 throw Failure();
             }
-            return url;
+            return url_;
         }();
         *helpRootUrl = url;
         return true;
