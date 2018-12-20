@@ -118,4 +118,12 @@ $(eval $(call gb_Library_add_libs,vclplug_qt5,\
 ))
 endif
 
+# Workaround for clang+icecream (clang's -frewrite-includes
+# doesn't handle Qt5's QT_HAS_INCLUDE that Qt5 uses for <chrono>).
+ifeq ($(COM_IS_CLANG),TRUE)
+$(eval $(call gb_Library_add_defs,vclplug_qt5, \
+    -include chrono \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
