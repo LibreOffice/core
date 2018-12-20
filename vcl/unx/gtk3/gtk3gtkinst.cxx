@@ -3129,6 +3129,7 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pVAdjustment, m_nVAdjustChangedSignalId);
+        g_signal_handler_block(m_pHAdjustment, m_nHAdjustChangedSignalId);
         GtkInstanceContainer::disable_notify_events();
     }
 
@@ -3136,6 +3137,7 @@ public:
     {
         GtkInstanceContainer::enable_notify_events();
         g_signal_handler_unblock(m_pVAdjustment, m_nVAdjustChangedSignalId);
+        g_signal_handler_unblock(m_pHAdjustment, m_nHAdjustChangedSignalId);
     }
 
     virtual ~GtkInstanceScrolledWindow() override
@@ -3161,6 +3163,7 @@ public:
             enable_notify_events();
         }
         g_signal_handler_disconnect(m_pVAdjustment, m_nVAdjustChangedSignalId);
+        g_signal_handler_disconnect(m_pHAdjustment, m_nHAdjustChangedSignalId);
     }
 };
 
