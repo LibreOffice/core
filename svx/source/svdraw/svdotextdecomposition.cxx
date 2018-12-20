@@ -93,7 +93,7 @@ namespace
         void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
         static drawinglayer::primitive2d::BasePrimitive2D* impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo);
         void impFlushTextPortionPrimitivesToLinePrimitives();
-        void impFlushLinePrimitivesToParagraphPrimitives();
+        void impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
         void impHandleDrawPortionInfo(const DrawPortionInfo& rInfo);
         void impHandleDrawBulletInfo(const DrawBulletInfo& rInfo);
 
@@ -482,12 +482,21 @@ namespace
         }
     }
 
-    void impTextBreakupHandler::impFlushLinePrimitivesToParagraphPrimitives()
+    void impTextBreakupHandler::impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara)
     {
         // ALWAYS create a paragraph primitive, even when no content was added. This is done to
         // have the correct paragraph count even with empty paragraphs. Those paragraphs will
         // have an empty sub-PrimitiveSequence.
-        maParagraphPrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(maLinePrimitives));
+        const sal_Int16 nOutlineLevel(nPara >= 0 && nPara < mrOutliner.GetParagraphCount()
+            ? mrOutliner.GetParaAttribs(nPara).Get(EE_PARA_OUTLLEVEL).GetValue()
+            : -1);
+
+        //Z This basically makes OutlineLevel information available in VclMetafileProcessor2D,
+        //Z so may be used similar to 'SetAlternateText' in processGraphicPrimitive2D for PDF export
+        maParagraphPrimitives.push_back(
+            new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(
+                maLinePrimitives,
+                nOutlineLevel));
         maLinePrimitives.clear();
     }
 
@@ -502,7 +511,7 @@ namespace
 
         if(rInfo.mbEndOfParagraph)
         {
-            impFlushLinePrimitivesToParagraphPrimitives();
+            impFlushLinePrimitivesToParagraphPrimitives(rInfo.mnPara);
         }
     }
 
@@ -637,7 +646,7 @@ namespace
         if(!maLinePrimitives.empty())
         {
             // collect non-closed paragraphs
-            impFlushLinePrimitivesToParagraphPrimitives();
+            impFlushLinePrimitivesToParagraphPrimitives(mrOutliner.GetParagraphCount() - 1);
         }
 
         return maParagraphPrimitives;
