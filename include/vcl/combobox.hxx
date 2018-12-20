@@ -83,11 +83,11 @@ public:
     virtual void    SetText( const OUString& rStr ) override;
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection ) override;
 
-    virtual sal_Int32  InsertEntry(const OUString& rStr, sal_Int32  nPos = COMBOBOX_APPEND);
+    sal_Int32       InsertEntry(const OUString& rStr, sal_Int32  nPos = COMBOBOX_APPEND);
     sal_Int32       InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_Int32  nPos = COMBOBOX_APPEND );
 
     void            RemoveEntry( const OUString& rStr );
-    virtual void    RemoveEntryAt(sal_Int32  nPos);
+    void            RemoveEntryAt(sal_Int32  nPos);
 
     void            Clear();
     void            EnableSelectAll();

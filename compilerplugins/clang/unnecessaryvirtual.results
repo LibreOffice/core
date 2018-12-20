@@ -20,8 +20,6 @@ basic/source/comp/codegen.cxx:524
     _Bool BufferTransformer::processParams()
 chart2/source/inc/WeakListenerAdapter.hxx:57
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
-cppcanvas/source/inc/implrenderer.hxx:69
-    void cppcanvas::internal::EMFPObject::~EMFPObject()
 extensions/source/dbpilots/unoautopilot.hxx:99
     class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
 extensions/source/propctrlr/commoncontrol.hxx:127
@@ -112,8 +110,10 @@ include/vbahelper/vbareturntypes.hxx:40
     void ooo::vba::DefaultReturnHelper::setValue(type-parameter-0-0,)
 include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
-include/vcl/tabctrl.hxx:113
-    _Bool TabControl::DeactivatePage()
+include/vcl/combobox.hxx:86
+    int ComboBox::InsertEntry(const class rtl::OUString &,int,)
+include/vcl/combobox.hxx:90
+    void ComboBox::RemoveEntryAt(int,)
 sc/source/core/opencl/formulagroupcl.cxx:1051
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction()const
 sc/source/core/opencl/formulagroupcl.cxx:1059
