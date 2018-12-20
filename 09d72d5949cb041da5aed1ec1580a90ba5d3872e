@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_2c47774e",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4008,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-20T12:25:08Z",
+      "side": 1,
+      "message": "does abort give a nice stacktrace? maybe assert would be better?",
+      "revId": "09d72d5949cb041da5aed1ec1580a90ba5d3872e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
