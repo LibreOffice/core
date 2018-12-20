@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/* not protected, do only include once! */
+#ifndef INCLUDED_POSTWIN_H
+#define INCLUDED_POSTWIN_H
 
 #undef ABSOLUTE
 #undef CompareString
@@ -64,8 +65,6 @@
 #define STRETCH_DELETESCANS     3
 #endif
 
-#if !defined INCLUDED_POSTWIN_H && defined __cplusplus
-#define INCLUDED_POSTWIN_H
-#endif
+#endif // INCLUDED_POSTWIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
