@@ -1150,7 +1150,7 @@ TextFrameIndex MapModelToView(MergedPara const& rMerged, SwTextNode const*const 
         assert(nIndex <= pNode->Len());
         return TextFrameIndex(0);
     }
-    return TextFrameIndex(COMPLETE_STRING);
+    return TextFrameIndex(rMerged.mergedText.getLength());
 }
 
 } // namespace sw
