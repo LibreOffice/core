@@ -92,7 +92,6 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mbCalcFilter(false),
     mbImpressFilter(false),
     mpDefaultSdrPage( nullptr ),
-    mpSdrModel( nullptr ),
     mbPresentation( false ),
     maOldFieldHdl()
 {

@@ -5,9 +5,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /home/noel/libo/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
@@ -76,6 +76,8 @@ cui/source/inc/cuitabarea.hxx:706
     SvxColorTabPage m_xCtlPreviewOld std::unique_ptr<weld::CustomWeld>
 cui/source/inc/cuitabarea.hxx:707
     SvxColorTabPage m_xCtlPreviewNew std::unique_ptr<weld::CustomWeld>
+cui/source/inc/FontFeaturesDialog.hxx:51
+    cui::FontFeaturesDialog m_xContentWindow std::unique_ptr<weld::ScrolledWindow>
 cui/source/inc/FontFeaturesDialog.hxx:53
     cui::FontFeaturesDialog m_xPreviewWindow std::unique_ptr<weld::CustomWeld>
 cui/source/inc/page.hxx:101
@@ -122,6 +124,8 @@ extensions/source/scanner/scanner.hxx:44
     ScannerManager maProtector osl::Mutex
 filter/source/pdf/impdialog.hxx:178
     ImpPDFTabGeneralPage mxSelectedSheets std::unique_ptr<weld::Label>
+filter/source/svg/svgfilter.hxx:224
+    SVGFilter mpSdrModel class SdrModel *
 filter/source/xsltdialog/xmlfiltertabpagebasic.hxx:36
     XMLFilterTabPageBasic m_xContainer std::unique_ptr<weld::Widget>
 filter/source/xsltdialog/xmlfiltertabpagexslt.hxx:48
@@ -149,9 +153,9 @@ include/sfx2/msg.hxx:119
 include/sfx2/msg.hxx:132
     SfxType1 pType const std::type_info *
 include/sfx2/msg.hxx:132
-    SfxType1 nAttribs sal_uInt16
-include/sfx2/msg.hxx:132
     SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+include/sfx2/msg.hxx:132
+    SfxType1 nAttribs sal_uInt16
 include/sfx2/msg.hxx:132
     SfxType1 aAttrib struct SfxTypeAttrib [1]
 include/sfx2/msg.hxx:133
@@ -402,6 +406,8 @@ sc/source/filter/html/htmlpars.cxx:3030
     (anonymous namespace)::CSSHandler::MemStr mp const char *
 sc/source/filter/html/htmlpars.cxx:3031
     (anonymous namespace)::CSSHandler::MemStr mn size_t
+sc/source/filter/inc/namebuff.hxx:79
+    RangeNameBufferWK3::Entry aScAbsName const class rtl::OUString
 sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
 sc/source/ui/inc/crdlg.hxx:32
@@ -474,9 +480,9 @@ sfx2/source/inc/versdlg.hxx:83
     SfxCmisVersionsDialog m_xDeleteButton std::unique_ptr<weld::Button>
 sfx2/source/inc/versdlg.hxx:84
     SfxCmisVersionsDialog m_xCompareButton std::unique_ptr<weld::Button>
-sfx2/source/view/viewfrm.cxx:163
-    (anonymous namespace)::SfxEditDocumentDialog m_xEditDocument std::unique_ptr<weld::Button>
 sfx2/source/view/viewfrm.cxx:164
+    (anonymous namespace)::SfxEditDocumentDialog m_xEditDocument std::unique_ptr<weld::Button>
+sfx2/source/view/viewfrm.cxx:165
     (anonymous namespace)::SfxEditDocumentDialog m_xCancel std::unique_ptr<weld::Button>
 slideshow/source/engine/opengl/TransitionImpl.cxx:1990
     (anonymous namespace)::ThreeFloats z GLfloat
@@ -516,7 +522,7 @@ svtools/source/filter/exportdialog.hxx:125
     ExportDialog mxEncoding std::unique_ptr<weld::Widget>
 svx/source/inc/datanavi.hxx:604
     svxform::AddInstanceDialog m_xURLFT std::unique_ptr<weld::Label>
-sw/source/core/crsr/crbm.cxx:64
+sw/source/core/crsr/crbm.cxx:66
     (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:79
     TableWait m_pWait const std::unique_ptr<SwWait>
@@ -540,6 +546,10 @@ sw/source/ui/inc/mmresultdialogs.hxx:105
     SwMMResultEmailDialog m_xSendAsFT std::unique_ptr<weld::Label>
 sw/source/ui/misc/impfnote.hxx:44
     SwEndNoteOptionPage m_xPosFT std::unique_ptr<weld::Label>
+sw/source/uibase/inc/cption.hxx:56
+    SwCaptionDialog m_xPosText std::unique_ptr<weld::Label>
+sw/source/uibase/inc/cption.hxx:61
+    SwCaptionDialog m_xPreview std::unique_ptr<weld::CustomWeld>
 sw/source/uibase/inc/dbui.hxx:31
     PrintMonitor m_xDocName std::unique_ptr<weld::Label>
 sw/source/uibase/inc/drpcps.hxx:133
@@ -570,6 +580,8 @@ sw/source/uibase/inc/splittbl.hxx:30
     SwSplitTableDlg m_xHorzBox std::unique_ptr<weld::RadioButton>
 sw/source/uibase/inc/splittbl.hxx:31
     SwSplitTableDlg m_xContentCopyRB std::unique_ptr<weld::RadioButton>
+sw/source/uibase/inc/swuicnttab.hxx:262
+    SwTokenWindow m_xContainer std::unique_ptr<weld::Container>
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh const class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
@@ -610,6 +622,8 @@ vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/gtk3/gtk3gtkinst.cxx:2713
     CrippledViewport viewport GtkViewport
+vcl/unx/gtk3/gtk3gtkinst.cxx:2961
+    GtkInstanceScrolledWindow m_nHAdjustChangedSignalId gulong
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43

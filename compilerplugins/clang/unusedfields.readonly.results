@@ -94,7 +94,7 @@ connectivity/source/inc/OColumn.hxx:48
     connectivity::OColumn m_DefinitelyWritable _Bool
 connectivity/source/inc/TConnection.hxx:56
     connectivity::OMetaConnection m_aResources class connectivity::SharedResources
-connectivity/source/inc/writer/WTable.hxx:69
+connectivity/source/inc/writer/WTable.hxx:65
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
 cppcanvas/source/mtfrenderer/textaction.cxx:816
     cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextFillColor const ::Color
@@ -266,7 +266,7 @@ filter/source/graphicfilter/iras/iras.cxx:53
     RASReader mnRepCount sal_uInt8
 filter/source/graphicfilter/itga/itga.cxx:52
     TGAFileFooter nSignature sal_uInt32 [4]
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:143
+filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:139
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
 framework/inc/dispatch/dispatchprovider.hxx:81
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
@@ -366,7 +366,7 @@ include/svx/svdmark.hxx:142
     SdrMarkList maGluePointName class rtl::OUString
 include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
-include/svx/svdpntv.hxx:170
+include/svx/svdpntv.hxx:167
     SdrPaintView maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/test/sheet/xdatapilottable.hxx:31
     apitest::XDataPilotTable xCellForChange css::uno::Reference<css::table::XCell>
@@ -377,7 +377,7 @@ include/test/sheet/xnamedranges.hxx:38
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -463,7 +463,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:126
     ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
 sc/inc/compiler.hxx:127
-    ScRawToken::(anonymous) table const struct (anonymous struct at /home/noel/libo/sc/inc/compiler.hxx:124:9)
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:124:9)
 sc/inc/compiler.hxx:132
     ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
@@ -474,9 +474,9 @@ sc/source/core/inc/adiasync.hxx:42
     ScAddInAsync::(anonymous) pStr class rtl::OUString *
 sc/source/core/inc/interpre.hxx:102
     ScTokenStack pPointer const formula::FormulaToken *[512]
-sc/source/filter/excel/xltoolbar.cxx:34
+sc/source/filter/excel/xltoolbar.cxx:26
     MSOExcelCommandConvertor msoToOOcmd IdToString
-sc/source/filter/excel/xltoolbar.cxx:35
+sc/source/filter/excel/xltoolbar.cxx:27
     MSOExcelCommandConvertor tcidToOOcmd IdToString
 sc/source/filter/inc/autofilterbuffer.hxx:181
     oox::xls::FilterColumn mxSettings std::shared_ptr<FilterSettingsBase>
@@ -950,8 +950,8 @@ vcl/unx/gtk3/gtk3gtkinst.cxx:1157
      out gpointer *
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:78
-    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:80
+    AtkObjectWrapperClass aParentClass const AtkObjectClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

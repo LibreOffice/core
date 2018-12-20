@@ -1801,7 +1801,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rA
     : SfxTabPage(pParent, "modules/swriter/ui/tocentriespage.ui", "TocEntriesPage", &rAttrSet)
     , sDelimStr(SwResId(STR_DELIM))
     , sNoCharStyle(SwResId(STR_NO_CHAR_STYLE))
-    , sNoCharSortKey(SwResId(STR_NOSORTKEY))
     , m_pCurrentForm(nullptr)
     , bInLevelHdl(false)
     , m_xTypeFT(m_xBuilder->weld_label("typeft"))
@@ -1851,6 +1850,8 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(TabPageParent pParent, const SfxItemSet& rA
     , m_xThirdSortDownRB(m_xBuilder->weld_radio_button("down3cb"))
     , m_xTokenWIN(new SwTokenWindow(m_xBuilder->weld_container("token")))
 {
+    const OUString sNoCharSortKey(SwResId(STR_NOSORTKEY));
+
     sAuthTypeStr = m_xTypeFT->get_label();
     sLevelStr = m_xLevelFT->get_label();
     m_xAuthFieldsLB->make_sorted();

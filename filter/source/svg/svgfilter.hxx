@@ -221,7 +221,6 @@ private:
     /// Impress / draw only members
 
     SdrPage*                            mpDefaultSdrPage;
-    SdrModel*                           mpSdrModel;
     bool                                mbPresentation;
     PagePropertySet                     mVisiblePagePropSet;
     OUString                            msClipPathId;

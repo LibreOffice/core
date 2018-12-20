@@ -324,7 +324,6 @@ class SwTOXEntryTabPage : public SfxTabPage
     OUString        sAuthTypeStr;
 
     OUString const  sNoCharStyle;
-    OUString const  sNoCharSortKey;
     SwForm*         m_pCurrentForm;
 
     CurTOXType      aLastTOXType;
