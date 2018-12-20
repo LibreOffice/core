@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/* not protected, do only include once! */
+#ifndef INCLUDED_PREWIN_H
+#define INCLUDED_PREWIN_H
 
 #if defined(_WIN32)
 
@@ -45,5 +46,7 @@
 #include <commctrl.h>
 
 #endif
+
+#endif // INCLUDED_PREWIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

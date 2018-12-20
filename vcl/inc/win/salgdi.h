@@ -33,11 +33,8 @@
 #include <memory>
 #include <unordered_set>
 
-#ifndef INCLUDED_PRE_POST_WIN_H
-#define INCLUDED_PRE_POST_WIN_H
-#  include <prewin.h>
-#  include <postwin.h>
-#endif
+#include <prewin.h>
+#include <postwin.h>
 
 #include <hb-ot.h>
 #include <dwrite.h>
