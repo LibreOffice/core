@@ -466,7 +466,8 @@ template <typename Proc> bool FindProviderAndApply(ProviderCache& rCache, Proc p
             try
             {
                 bResult = p(xCont);
-                break;
+                if (bResult)
+                    break;
             }
             catch (Exception& e)
             {
