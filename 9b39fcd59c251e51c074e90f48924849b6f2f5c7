@@ -22,6 +22,30 @@
       "revId": "9b39fcd59c251e51c074e90f48924849b6f2f5c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_4902a5b6",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2018-12-20T00:40:53Z",
+      "side": 0,
+      "message": "\u003e The reverse_iterator iterator on sorted rows here (...) ensured that row numbers encountered actually are correct.\n\nIIUC, the reverse_iterator has kept the original code\u0027s order.  New aRemoved is ordered as in the original maRemoved when taking the reverse_iterator, because std::set\u003cT\u003e is sorted by std::less\u003cT\u003e all the time and late getRows() did the same sort\u0026uniq\u0027ing.",
+      "parentUuid": "5f4e5783_8198776a",
+      "range": {
+        "startLine": 1908,
+        "startChar": 24,
+        "endLine": 1908,
+        "endChar": 40
+      },
+      "revId": "9b39fcd59c251e51c074e90f48924849b6f2f5c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
