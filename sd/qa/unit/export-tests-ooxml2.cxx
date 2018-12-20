@@ -68,6 +68,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
 
 #include <svx/svdotable.hxx>
 #include <config_features.h>
@@ -147,6 +148,7 @@ public:
     void testTdf104789();
     void testOpenDocumentAsReadOnly();
     void testTdf116350TextEffects();
+    void testPotxExport();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -216,6 +218,7 @@ public:
     CPPUNIT_TEST(testTdf104789);
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
     CPPUNIT_TEST(testTdf116350TextEffects);
+    CPPUNIT_TEST(testPotxExport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1804,6 +1807,27 @@ void SdOOXMLExportTest2::testTdf116350TextEffects()
     assertXPath(pXmlDocContent, "//p:sp[14]/p:spPr/a:solidFill/a:srgbClr", 0);
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testPotxExport()
+{
+    // Create new document
+    sd::DrawDocShellRef xDocShRef
+        = new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Draw);
+    uno::Reference<frame::XLoadable> xLoadable(xDocShRef->GetModel(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xLoadable.is());
+    xLoadable->initNew();
+
+    // Export as a POTM template
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), POTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // Load and check content type
+    xmlDocPtr pContentTypes = parseExport(tempFile, "[Content_Types].xml");
+    CPPUNIT_ASSERT(pContentTypes);
+    assertXPath(pContentTypes, "/ContentType:Types/ContentType:Override[@PartName='/ppt/presentation.xml']",
+        "ContentType", "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
