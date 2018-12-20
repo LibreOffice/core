@@ -219,7 +219,7 @@ ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
     return ScRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
 }
 
-ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
+ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell* pDocShell)
 {
     ScAddress aStart = mInputRange.aStart;
     ScAddress aEnd   = mInputRange.aEnd;
@@ -277,7 +277,7 @@ void ScSamplingDialog::PerformSampling()
 
     if (mpRandomMethodRadio->IsChecked())
     {
-        aModifiedRange = PerformRandomSampling(pDocShell);
+        aModifiedRange = PerformRandomSamplingKeepOrder(pDocShell);
     }
     else if (mpPeriodicMethodRadio->IsChecked())
     {
