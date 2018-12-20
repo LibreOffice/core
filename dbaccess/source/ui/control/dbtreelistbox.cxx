@@ -58,7 +58,8 @@ DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle )
     :SvTreeListBox(pParent,nWinStyle)
     ,m_pDragedEntry(nullptr)
     ,m_pActionListener(nullptr)
-    ,m_pContextMenuProvider( nullptr )
+    ,m_pContextMenuProvider(nullptr)
+    ,m_pResetEvent(nullptr)
 {
     init();
 }
@@ -88,6 +89,11 @@ DBTreeListBox::~DBTreeListBox()
 
 void DBTreeListBox::dispose()
 {
+    if (m_pResetEvent)
+    {
+        RemoveUserEvent(m_pResetEvent);
+        m_pResetEvent = nullptr;
+    }
     implStopSelectionTimer();
     SvTreeListBox::dispose();
 }
@@ -118,11 +124,6 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
     return pEntry;
 }
 
-void DBTreeListBox::EnableExpandHandler(SvTreeListEntry* _pEntry)
-{
-    LINK(this, DBTreeListBox, OnResetEntry).Call(_pEntry);
-}
-
 void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 {
     if (m_aPreExpandHandler.IsSet() && !m_aPreExpandHandler.Call(pParent))
@@ -130,7 +131,7 @@ void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
         // an error occurred. The method calling us will reset the entry flags, so it can't be expanded again.
         // But we want that the user may do a second try (i.e. because he mistypes a password in this try), so
         // we have to reset these flags controlling the expand ability
-        PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent, true);
+        m_pResetEvent = PostUserEvent(LINK(this, DBTreeListBox, OnResetEntryHdl), pParent, true);
     }
 }
 
@@ -176,13 +177,18 @@ void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
         SvTreeListBox::MouseButtonDown(rMEvt);
 }
 
-IMPL_LINK(DBTreeListBox, OnResetEntry, void*, p, void)
+void DBTreeListBox::EnableExpandHandler(SvTreeListEntry* pEntry)
 {
-    SvTreeListEntry* pEntry = static_cast<SvTreeListEntry*>(p);
     // set the flag which allows if the entry can be expanded
     pEntry->SetFlags( (pEntry->GetFlags() & ~SvTLEntryFlags(SvTLEntryFlags::NO_NODEBMP | SvTLEntryFlags::HAD_CHILDREN)) | SvTLEntryFlags::CHILDREN_ON_DEMAND );
     // redraw the entry
     GetModel()->InvalidateEntry( pEntry );
+}
+
+IMPL_LINK(DBTreeListBox, OnResetEntryHdl, void*, p, void)
+{
+    m_pResetEvent = nullptr;
+    EnableExpandHandler(static_cast<SvTreeListEntry*>(p));
 }
 
 void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )

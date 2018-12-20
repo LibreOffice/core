@@ -57,6 +57,7 @@ namespace dbaui
         SvTreeListEntry*            m_pDragedEntry;
         IControlActionListener*     m_pActionListener;
         IContextMenuProvider*       m_pContextMenuProvider;
+        ImplSVEvent*                m_pResetEvent;
         css::uno::Reference<css::frame::XPopupMenuController> m_xMenuController;
 
         Link<SvTreeListEntry*,bool> m_aPreExpandHandler;    // handler to be called before a node is expanded
@@ -69,7 +70,7 @@ namespace dbaui
     private:
         void init();
         DECL_LINK( OnTimeOut, Timer*, void );
-        DECL_LINK( OnResetEntry, void*, void );
+        DECL_LINK( OnResetEntryHdl, void*, void );
         DECL_LINK( ScrollUpHdl, LinkParamNone*, void );
         DECL_LINK( ScrollDownHdl, LinkParamNone*, void );
         DECL_LINK( MenuEventListener, VclMenuEvent&, void );
