@@ -726,9 +726,9 @@ bool isFlatpak() {
 
 bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
     assert(helpRootUrl != nullptr);
-    //TODO: This function for now assumes that the passed-in *helpRootUrl references
+    //TODO: this function for now assumes that the passed-in *helpRootUrl references
     // /app/libreoffice/help (which belongs to the org.libreoffice.LibreOffice.Help
-    // extension); it replaces it with the correpsonding file URL as seen outside the flatpak
+    // extension); it replaces it with the corresponding file URL as seen outside the flatpak
     // sandbox:
     struct Failure: public std::exception {};
     try {
