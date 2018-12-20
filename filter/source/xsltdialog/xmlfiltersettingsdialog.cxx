@@ -883,7 +883,7 @@ void XMLFilterSettingsDialog::onDelete()
 
 void XMLFilterSettingsDialog::onSave()
 {
-    XMLFilterVector aFilters;
+    std::vector<filter_info_impl*> aFilters;
 
     int nFilters = 0;
 
@@ -939,7 +939,7 @@ void XMLFilterSettingsDialog::onSave()
 
 void XMLFilterSettingsDialog::onOpen()
 {
-    XMLFilterVector aFilters;
+    std::vector< std::unique_ptr<filter_info_impl> > aFilters;
 
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
@@ -960,15 +960,15 @@ void XMLFilterSettingsDialog::onOpen()
         aJarHelper.openPackage( aURL, aFilters );
 
         int nFilters = 0;
-        for (auto const& filter : aFilters)
+        for (auto& filter : aFilters)
         {
-            if( insertOrEdit(filter) )
+            if( insertOrEdit(filter.get()) )
             {
                 aFilterName = filter->maFilterName;
                 nFilters++;
             }
 
-            delete filter;
+            filter.reset();
         }
 
         disposeFilterList();

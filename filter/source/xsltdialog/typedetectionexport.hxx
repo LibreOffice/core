@@ -30,7 +30,7 @@ class TypeDetectionExporter
 public:
     explicit TypeDetectionExporter( css::uno::Reference< css::uno::XComponentContext > const & mxContext );
 
-    void doExport(const css::uno::Reference < css::io::XOutputStream >& xOS,  const XMLFilterVector& rFilters );
+    void doExport(const css::uno::Reference < css::io::XOutputStream >& xOS,  const std::vector<filter_info_impl*>& rFilters );
 
 private:
     static void addProperty( const css::uno::Reference< css::xml::sax::XWriter >& xWriter, const OUString& rName, const OUString& rValue );

@@ -73,7 +73,7 @@ static OUString createRelativeURL( const OUString& rFilterName, const OUString& 
     }
 }
 
-void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  const XMLFilterVector& rFilters )
+void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  const std::vector<filter_info_impl*>& rFilters )
 {
     try
     {

@@ -42,7 +42,8 @@ TypeDetectionImporter::~TypeDetectionImporter()
 {
 }
 
-void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& xIS, XMLFilterVector& rFilters )
+void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& xIS,
+                                      std::vector< std::unique_ptr<filter_info_impl> >& rFilters )
 {
     try
     {
@@ -66,14 +67,14 @@ void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxCo
     }
 }
 
-void TypeDetectionImporter::fillFilterVector(  XMLFilterVector& rFilters )
+void TypeDetectionImporter::fillFilterVector(  std::vector< std::unique_ptr<filter_info_impl> >& rFilters )
 {
     // create filter infos from imported filter nodes
     for (auto const& filterNode : maFilterNodes)
     {
-        filter_info_impl* pFilter = createFilterForNode(filterNode.get());
+        std::unique_ptr<filter_info_impl> pFilter = createFilterForNode(filterNode.get());
         if( pFilter )
-            rFilters.push_back( pFilter );
+            rFilters.push_back( std::move(pFilter) );
     }
     maFilterNodes.clear();
 
@@ -123,9 +124,9 @@ Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
     return nullptr;
 }
 
-filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
+std::unique_ptr<filter_info_impl> TypeDetectionImporter::createFilterForNode( Node * pNode )
 {
-    filter_info_impl* pFilter = new filter_info_impl;
+    std::unique_ptr<filter_info_impl> pFilter(new filter_info_impl);
 
     pFilter->maFilterName = pNode->maName;
     pFilter->maInterfaceName = pNode->maPropertyMap["UIName"];
@@ -193,10 +194,7 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
         bOk = false;
 
     if( !bOk )
-    {
-        delete pFilter;
-        pFilter = nullptr;
-    }
+        return nullptr;
 
     return pFilter;
 }
