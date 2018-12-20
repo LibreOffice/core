@@ -60,6 +60,7 @@ struct FileFormat
 #define FODP_FORMAT_TYPE  (SfxFilterFlags::STARONEFILTER | SfxFilterFlags::OWN | SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT)
 #define SXI_FORMAT_TYPE  (SfxFilterFlags::IMPORT | SfxFilterFlags::TEMPLATE | SfxFilterFlags::OWN | SfxFilterFlags::ALIEN | SfxFilterFlags::PREFERED | SfxFilterFlags::ENCRYPTION)
 #define PPTM_FORMAT_TYPE ( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED )
+#define POTX_FORMAT_TYPE ( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::TEMPLATE | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED )
 
 /** List of file formats we support in Impress unit tests.
 
@@ -81,6 +82,7 @@ FileFormat aFileFormats[] =
     { "sxi",  "StarOffice XML (Impress)", "OpenOffice.org 1.0 Presentation", "", SXI_FORMAT_TYPE },
     { "odg",  "draw8", "draw8", "", ODP_FORMAT_TYPE },
     { "pptm", "Impress MS PowerPoint 2007 XML VBA", "MS PowerPoint 2007 XML VBA", "", PPTM_FORMAT_TYPE },
+    { "potx", "Impress Office Open XML Template", "Office Open XML Presentation Template", "", POTX_FORMAT_TYPE },
     { nullptr, nullptr, nullptr, nullptr, SfxFilterFlags::NONE }
 };
 
@@ -94,6 +96,7 @@ FileFormat aFileFormats[] =
 #define SXI  7
 #define ODG  8
 #define PPTM 9
+#define POTX 10
 
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
