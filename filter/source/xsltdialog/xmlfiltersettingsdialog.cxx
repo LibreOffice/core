@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -27,7 +28,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/headbar.hxx>
-#include <unotools/closeveto.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
@@ -132,13 +132,36 @@ void XMLFilterSettingsDialog::dispose()
     ModelessDialog::dispose();
 }
 
+void XMLFilterSettingsDialog::incBusy()
+{
+    // lock any toplevel windows from being closed until busy is over
+    // ensure any dialogs are reset before entering
+    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
+    while (xTopWin)
+    {
+        if (xTopWin != this)
+            xTopWin->IncModalCount();
+        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
+    }
+}
+
+void XMLFilterSettingsDialog::decBusy()
+{
+    // unlock any toplevel windows from being closed until busy is over
+    // ensure any dialogs are reset before entering
+    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
+    while (xTopWin)
+    {
+        if (xTopWin != this)
+            xTopWin->DecModalCount();
+        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
+    }
+}
+
 IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
 {
-    // tdf#122171 block closing libreoffice until the following dialog
-    // is dismissed
-    css::uno::Reference<css::frame::XDesktop2> xDesktop(css::frame::Desktop::create(mxContext));
-    css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getCurrentFrame());
-    utl::CloseVeto aKeepDoc(xFrame);
+    // tdf#122171 block closing libreoffice until the following dialog is dismissed
+    incBusy();
 
     if (m_pPBNew == pButton)
     {
@@ -168,6 +191,8 @@ IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
     {
         Close();
     }
+
+    decBusy();
 }
 
 IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, SvTreeListBox*, void)
