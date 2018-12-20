@@ -1806,7 +1806,17 @@ drawinglayer::primitive2d::Primitive2DContainer ImplRenderPaintProc::createRedir
                     {
                         // embed Primitive2DSequence in a structure tag element for
                         // exactly this purpose (StructureTagPrimitive2D)
-                        const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::StructureTagPrimitive2D(eElement, xRetval));
+
+                        //Z
+                        const SdrPage* pSdrPage(pObject->getSdrPageFromSdrObject());
+                        const bool bBackground(nullptr != pSdrPage && pSdrPage->IsMasterPage());
+
+                        const drawinglayer::primitive2d::Primitive2DReference xReference(
+                            new drawinglayer::primitive2d::StructureTagPrimitive2D(
+                                eElement,
+                                bBackground,
+                                xRetval));
+
                         xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
                     }
                 }

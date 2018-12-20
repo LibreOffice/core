@@ -44,9 +44,24 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        TextHierarchyParagraphPrimitive2D::TextHierarchyParagraphPrimitive2D(const Primitive2DContainer& rChildren)
-        :   GroupPrimitive2D(rChildren)
+        TextHierarchyParagraphPrimitive2D::TextHierarchyParagraphPrimitive2D(
+            const Primitive2DContainer& rChildren,
+            sal_Int16 nOutlineLevel)
+        :   GroupPrimitive2D(rChildren),
+            mnOutlineLevel(nOutlineLevel)
         {
+        }
+
+        bool TextHierarchyParagraphPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(GroupPrimitive2D::operator==(rPrimitive))
+            {
+                const TextHierarchyParagraphPrimitive2D& rCompare = static_cast<const TextHierarchyParagraphPrimitive2D&>(rPrimitive);
+
+                return (getOutlineLevel() == rCompare.getOutlineLevel());
+            }
+
+            return false;
         }
 
         // provide unique ID
