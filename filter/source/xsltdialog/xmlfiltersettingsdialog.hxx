@@ -109,6 +109,9 @@ private:
     void    initFilterList();
     void    disposeFilterList();
 
+    void    incBusy();
+    void    decBusy();
+
     bool    insertOrEdit( filter_info_impl* pNewInfo, const filter_info_impl* pOldInfo = nullptr );
 
     OUString createUniqueFilterName( const OUString& rUIName );
