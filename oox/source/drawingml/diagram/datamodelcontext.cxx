@@ -111,7 +111,7 @@ public:
                 mrPoint.mnDirection = rAttribs.getToken( XML_val, XML_norm );
                 break;
             case DGM_TOKEN( hierBranch ):
-                mrPoint.mnHierarchyBranch = rAttribs.getToken( XML_val, XML_std );
+                mrPoint.moHierarchyBranch = rAttribs.getToken( XML_val );
                 break;
             case DGM_TOKEN( orgChart ):
                 mrPoint.mbOrgChartEnabled = rAttribs.getBool( XML_val, false );

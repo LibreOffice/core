@@ -177,6 +177,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , maDiagramDoms( pSourceShape->maDiagramDoms )
 , mnZOrder(pSourceShape->mnZOrder)
 , mnZOrderOff(pSourceShape->mnZOrderOff)
+, mnDataNodeType(pSourceShape->mnDataNodeType)
 {}
 
 Shape::~Shape()

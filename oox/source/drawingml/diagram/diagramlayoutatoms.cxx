@@ -30,6 +30,7 @@
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textrun.hxx>
 #include <drawingml/customshapeproperties.hxx>
+#include <tools/gen.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -73,31 +74,129 @@ sal_Int32 getConnectorType(const oox::drawingml::LayoutNode* pNode)
     if (!pNode)
         return nType;
 
+    // This is cheaper than visiting the whole sub-tree.
+    if (pNode->getName().startsWith("hierChild"))
+        return oox::XML_bentConnector3;
+
     for (const auto& pChild : pNode->getChildren())
     {
         auto pAlgAtom = dynamic_cast<oox::drawingml::AlgAtom*>(pChild.get());
         if (!pAlgAtom)
             continue;
 
-        if (pAlgAtom->getType() != oox::XML_lin)
-            continue;
-
-        sal_Int32 nDir = oox::XML_fromL;
-        if (pAlgAtom->getMap().count(oox::XML_linDir))
-            nDir = pAlgAtom->getMap().find(oox::XML_linDir)->second;
-
-        switch (nDir)
+        switch (pAlgAtom->getType())
         {
-            case oox::XML_fromL:
-                nType = oox::XML_rightArrow;
+            case oox::XML_lin:
+            {
+                sal_Int32 nDir = oox::XML_fromL;
+                if (pAlgAtom->getMap().count(oox::XML_linDir))
+                    nDir = pAlgAtom->getMap().find(oox::XML_linDir)->second;
+
+                switch (nDir)
+                {
+                    case oox::XML_fromL:
+                        nType = oox::XML_rightArrow;
+                        break;
+                    case oox::XML_fromR:
+                        nType = oox::XML_leftArrow;
+                        break;
+                }
                 break;
-            case oox::XML_fromR:
-                nType = oox::XML_leftArrow;
+            }
+            case oox::XML_hierChild:
+            {
+                // TODO <dgm:param type="connRout" val="..."/> should be able
+                // to customize this.
+                nType = oox::XML_bentConnector3;
                 break;
+            }
         }
     }
 
     return nType;
+}
+
+/**
+ * Determines if pShape is (or contains) a presentation of a data node of type
+ * nType.
+ */
+bool containsDataNodeType(const oox::drawingml::ShapePtr& pShape, sal_Int32 nType)
+{
+    if (pShape->getDataNodeType() == nType)
+        return true;
+
+    for (const auto& pChild : pShape->getChildren())
+    {
+        if (containsDataNodeType(pChild, nType))
+            return true;
+    }
+
+    return false;
+}
+
+/**
+ * Calculates the offset and scaling for pShape (laid out with the hierChild
+ * algorithm) based on the siblings of pParent.
+ */
+void calculateHierChildOffsetScale(const oox::drawingml::ShapePtr& pShape,
+                                   const oox::drawingml::LayoutNode* pParent, sal_Int32& rXOffset,
+                                   double& rWidthScale)
+{
+    if (!pParent)
+        return;
+
+    const std::vector<oox::drawingml::ShapePtr>& rParents = pParent->getNodeShapes();
+    for (size_t nParent = 0; nParent < rParents.size(); ++nParent)
+    {
+        const oox::drawingml::ShapePtr& pParentShape = rParents[nParent];
+        const std::vector<oox::drawingml::ShapePtr>& rChildren = pParentShape->getChildren();
+        auto it = std::find_if(
+            rChildren.begin(), rChildren.end(),
+            [pShape](const oox::drawingml::ShapePtr& pChild) { return pChild == pShape; });
+        if (it == rChildren.end())
+            // This is not our parent.
+            continue;
+
+        if (nParent > 0)
+        {
+            if (rParents[nParent - 1]->getChildren().size() == 1)
+            {
+                // Previous sibling of our parent has no children: can use that
+                // space, so shift to the left and scale up.
+                rWidthScale += 1.0;
+                rXOffset -= pShape->getSize().Width;
+            }
+        }
+        if (nParent < rParents.size() - 1)
+        {
+            if (rParents[nParent + 1]->getChildren().size() == 1)
+                // Next sibling of our parent has no children: can use that
+                // space, so scale up.
+                rWidthScale += 1.0;
+        }
+    }
+}
+
+/// Sets the position and size of a connector inside a hierChild algorithm.
+void setHierChildConnPosSize(const oox::drawingml::ShapePtr& pShape)
+{
+    // Connect to the top center of the child.
+    awt::Point aShapePoint = pShape->getPosition();
+    awt::Size aShapeSize = pShape->getSize();
+    tools::Rectangle aRectangle(Point(aShapePoint.X, aShapePoint.Y),
+                                Size(aShapeSize.Width, aShapeSize.Height));
+    Point aTo = aRectangle.TopCenter();
+
+    // Connect from the bottom center of the parent.
+    Point aFrom = aTo;
+    aFrom.setY(aFrom.getY() - aRectangle.getHeight() * 0.3);
+
+    tools::Rectangle aRect(aFrom, aTo);
+    aRect.Justify();
+    aShapePoint = awt::Point(aRect.Left(), aRect.Top());
+    aShapeSize = awt::Size(aRect.getWidth(), aRect.getHeight());
+    pShape->setPosition(aShapePoint);
+    pShape->setSize(aShapeSize);
 }
 }
 
@@ -285,8 +384,32 @@ bool ConditionAtom::getDecision() const
     case XML_var:
     {
         const dgm::Point* pPoint = getPresNode();
-        if (pPoint && maCond.mnArg == XML_dir)
+        if (!pPoint)
+            break;
+
+        if (maCond.mnArg == XML_dir)
             return compareResult(maCond.mnOp, pPoint->mnDirection, maCond.mnVal);
+        else if (maCond.mnArg == XML_hierBranch)
+        {
+            sal_Int32 nHierarchyBranch = pPoint->moHierarchyBranch.get(XML_std);
+            if (!pPoint->moHierarchyBranch.has())
+            {
+                // If <dgm:hierBranch> is missing in the current presentation
+                // point, ask the parent.
+                OUString aParent = navigate(mrLayoutNode, XML_presParOf, pPoint->msModelId,
+                                            /*bSourceToDestination*/ false);
+                DiagramData::PointNameMap& rPointNameMap
+                    = mrLayoutNode.getDiagram().getData()->getPointNameMap();
+                auto it = rPointNameMap.find(aParent);
+                if (it != rPointNameMap.end())
+                {
+                    const dgm::Point* pParent = it->second;
+                    if (pParent->moHierarchyBranch.has())
+                        nHierarchyBranch = pParent->moHierarchyBranch.get();
+                }
+            }
+            return compareResult(maCond.mnOp, nHierarchyBranch, maCond.mnVal);
+        }
         break;
     }
 
@@ -446,6 +569,12 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
                 rShape->setSubType(nType);
                 rShape->getCustomShapeProperties()->setShapePresetType(nType);
+
+                if (nType == XML_bentConnector3)
+                {
+                    setHierChildConnPosSize(rShape);
+                    break;
+                }
             }
 
             // Parse constraints to adjust the size.
@@ -523,7 +652,81 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
         case XML_hierChild:
         case XML_hierRoot:
+        {
+            // hierRoot is the manager -> employees vertical linear path,
+            // hierChild is the first employee -> last employee horizontal
+            // linear path.
+            const sal_Int32 nDir = mnType == XML_hierRoot ? XML_fromT : XML_fromL;
+            if (rShape->getChildren().empty() || rShape->getSize().Width == 0
+                || rShape->getSize().Height == 0)
+                break;
+
+            sal_Int32 nCount = rShape->getChildren().size();
+
+            if (mnType == XML_hierChild)
+            {
+                // Connectors should not influence the size of non-connect
+                // shapes.
+                nCount = std::count_if(
+                    rShape->getChildren().begin(), rShape->getChildren().end(),
+                    [](const ShapePtr& pShape) { return pShape->getSubType() != XML_conn; });
+            }
+
+            // A manager node's height should be independent from if it has
+            // assistants and employees, compensate for that.
+            bool bTop = mnType == XML_hierRoot && rShape->getInternalName() == "hierRoot1";
+
+            // Add spacing, so connectors have a chance to be visible.
+            double fSpace = (nCount > 1 || bTop) ? 0.3 : 0;
+
+            double fHeightScale = 1.0;
+            if (mnType == XML_hierRoot && nCount < 3 && bTop)
+                fHeightScale = fHeightScale * nCount / 3;
+
+            if (mnType == XML_hierRoot && nCount == 3)
+            {
+                // Order assistant nodes above employee nodes.
+                std::vector<ShapePtr>& rChildren = rShape->getChildren();
+                if (!containsDataNodeType(rChildren[1], XML_asst)
+                    && containsDataNodeType(rChildren[2], XML_asst))
+                    std::swap(rChildren[1], rChildren[2]);
+            }
+
+            sal_Int32 nXOffset = 0;
+            double fWidthScale = 1.0;
+            if (mnType == XML_hierChild)
+                calculateHierChildOffsetScale(rShape, pParent, nXOffset, fWidthScale);
+
+            awt::Size aChildSize = rShape->getSize();
+            if (nDir == XML_fromT)
+            {
+                aChildSize.Height /= (nCount + nCount * fSpace);
+            }
+            else
+                aChildSize.Width /= nCount;
+            aChildSize.Height *= fHeightScale;
+            aChildSize.Width *= fWidthScale;
+
+            awt::Point aChildPos(nXOffset, 0);
+            for (auto& pChild : rShape->getChildren())
+            {
+                pChild->setPosition(aChildPos);
+                pChild->setSize(aChildSize);
+                pChild->setChildSize(aChildSize);
+
+                if (mnType == XML_hierChild && pChild->getSubType() == XML_conn)
+                    // Connectors should not influence the position of
+                    // non-connect shapes.
+                    continue;
+
+                if (nDir == XML_fromT)
+                    aChildPos.Y += aChildSize.Height + aChildSize.Height * fSpace;
+                else
+                    aChildPos.X += aChildSize.Width;
+            }
+
             break;
+        }
 
         case XML_lin:
         {
@@ -928,6 +1131,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
         while( aVecIter != aVecEnd )
         {
             DiagramData::PointNameMap& rMap = mrDgm.getData()->getPointNameMap();
+            // pPresNode is the presentation node of the aDataNode2 data node.
             DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
             if (aDataNode2 == rMap.end())
             {
@@ -935,6 +1139,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 ++aVecIter;
                 continue;
             }
+
+            rShape->setDataNodeType(aDataNode2->second->mnType);
 
             if( aVecIter->second == 0 )
             {
@@ -973,16 +1179,19 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                     rShape->setTextBody(pTextBody);
                 }
 
-                TextParagraph& rPara=pTextBody->addParagraph();
-                if( aVecIter->second != -1 )
-                    rPara.getProperties().setLevel(aVecIter->second);
+                const TextParagraphVector& rSourceParagraphs
+                    = aDataNode2->second->mpShape->getTextBody()->getParagraphs();
+                for (const auto& pSourceParagraph : rSourceParagraphs)
+                {
+                    TextParagraph& rPara = pTextBody->addParagraph();
+                    if (aVecIter->second != -1)
+                        rPara.getProperties().setLevel(aVecIter->second);
 
-                std::shared_ptr<TextParagraph> pSourceParagraph
-                    = aDataNode2->second->mpShape->getTextBody()->getParagraphs().front();
-                for (const auto& pRun : pSourceParagraph->getRuns())
-                    rPara.addRun(pRun);
-                rPara.getProperties().apply(
-                    aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getProperties());
+                    for (const auto& pRun : pSourceParagraph->getRuns())
+                        rPara.addRun(pRun);
+                    const TextBodyPtr& rBody = aDataNode2->second->mpShape->getTextBody();
+                    rPara.getProperties().apply(rBody->getParagraphs().front()->getProperties());
+                }
             }
 
             ++aVecIter;
