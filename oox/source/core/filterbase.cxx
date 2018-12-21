@@ -442,7 +442,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
             }
             else if (rVal.Name == "Flags")
             {
-                sal_Int32 nFlags;
+                sal_Int32 nFlags(0);
                 rVal.Value >>= nFlags;
                 mxImpl->mbExportTemplate = bool(static_cast<SfxFilterFlags>(nFlags) & SfxFilterFlags::TEMPLATE);
             }
