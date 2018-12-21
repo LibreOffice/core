@@ -30,6 +30,7 @@ namespace com { namespace sun { namespace star { namespace linguistic2 { class X
 namespace sw { namespace mark { class IMark; } }
 class SwCharRange;
 class SwTextNode;
+class SwTextAttrEnd;
 class SwTextFormatter;
 class SwTextFormatInfo;
 class SwParaPortion;
@@ -138,6 +139,8 @@ OUString GetExpandTextMerged(SwRootFrame const* pLayout,
         bool bWithSpacesForLevel, ExpandMode i_mode);
 
 bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark);
+bool IsMarkHintHidden(SwRootFrame const& rLayout,
+        SwTextNode const& rNode, SwTextAttrEnd const& rHint);
 
 } // namespace sw
 

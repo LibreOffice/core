@@ -164,7 +164,7 @@ void SwTOXMark::InvalidateTOXMark()
     NotifyClients(&aMsgHint, &aMsgHint);
 }
 
-OUString SwTOXMark::GetText() const
+OUString SwTOXMark::GetText(SwRootFrame const*const pLayout) const
 {
     if( !m_aAltText.isEmpty() )
         return m_aAltText;
@@ -176,7 +176,7 @@ OUString SwTOXMark::GetText() const
         if( pEndIdx )
         {
             const sal_Int32 nStt = m_pTextAttr->GetStart();
-            return m_pTextAttr->GetpTextNd()->GetExpandText(nullptr, nStt, *pEndIdx-nStt);
+            return m_pTextAttr->GetpTextNd()->GetExpandText(pLayout, nStt, *pEndIdx-nStt);
         }
     }
 

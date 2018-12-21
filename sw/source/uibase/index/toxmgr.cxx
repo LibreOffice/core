@@ -440,7 +440,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
         }
 
-        pDoc->ChgTOX(*pTOX, *pNewTOX);
+        pDoc->ChangeTOX(*pTOX, *pNewTOX, *pSh->GetLayout());
 
         pTOX->DisableKeepExpression();
         bRet = pSh->UpdateTableOf(*pTOX, pSet);

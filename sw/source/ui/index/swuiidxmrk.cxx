@@ -406,13 +406,14 @@ void SwIndexMarkPane::InsertUpdate()
         InsertMark();
 
         if ( pTOXMgr->GetCurTOXMark())
-            aRewriter.AddRule(UndoArg1, pTOXMgr->GetCurTOXMark()->GetText());
+            aRewriter.AddRule(UndoArg1,
+                    pTOXMgr->GetCurTOXMark()->GetText(pSh->GetLayout()));
     }
     else if( !pSh->HasReadonlySel() )
     {
         if ( pTOXMgr->GetCurTOXMark())
             aRewriter.AddRule(UndoArg1,
-                              pTOXMgr->GetCurTOXMark()->GetText());
+                    pTOXMgr->GetCurTOXMark()->GetText(pSh->GetLayout()));
 
         if( bDel )
             pTOXMgr->DeleteTOXMark();
@@ -770,7 +771,7 @@ void SwIndexMarkPane::UpdateDialog()
 
     SwViewShell::SetCareWin(&m_rDialog);
 
-    aOrgStr = pMark->GetText();
+    aOrgStr = pMark->GetText(pSh->GetLayout());
     m_pEntryED->SetText(aOrgStr);
 
     // set index type
@@ -788,7 +789,7 @@ void SwIndexMarkPane::UpdateDialog()
         bKeyEnable = true;
         bKey1HasText = bKey2Enable = !pMark->GetPrimaryKey().isEmpty();
         bKey2HasText = !pMark->GetSecondaryKey().isEmpty();
-        bEntryHasText = !pMark->GetText().isEmpty();
+        bEntryHasText = !pMark->GetText(pSh->GetLayout()).isEmpty();
         m_pKey1DCB->SetText( pMark->GetPrimaryKey() );
         m_pKey2DCB->SetText( pMark->GetSecondaryKey() );
         m_pPhoneticED0->SetText( pMark->GetTextReading() );

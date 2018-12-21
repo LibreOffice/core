@@ -257,6 +257,7 @@ public:
     bool    UpdateOrInsertTOX(const SwTOXDescription& rDesc, SwTOXBase** ppBase, const SfxItemSet* pSet);
 
     const SwTOXType*    GetTOXType(TOXTypes eTyp) const;
+    SwWrtShell * GetShell() { return pSh; }
 };
 
 // inlines

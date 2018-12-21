@@ -1727,7 +1727,8 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable )
     }
 }
 
-void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
+void SwDoc::ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew,
+        SwRootFrame const& rLayout)
 {
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1742,7 +1743,7 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 
     if (dynamic_cast<const SwTOXBaseSection*>( &rTOX) !=  nullptr)
     {
-        static_cast<SwTOXBaseSection &>(rTOX).Update();
+        static_cast<SwTOXBaseSection &>(rTOX).Update(nullptr, &rLayout);
         static_cast<SwTOXBaseSection &>(rTOX).UpdatePageNum();
     }
 }

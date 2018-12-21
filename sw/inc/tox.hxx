@@ -41,6 +41,7 @@ class SwTOXType;
 class SwTOXMark;
 class SwTextTOXMark;
 class SwDoc;
+class SwRootFrame;
 
 typedef std::vector<SwTOXMark*> SwTOXMarks;
 
@@ -98,7 +99,7 @@ public:
 
     void InvalidateTOXMark();
 
-    OUString                GetText() const;
+    OUString                GetText(SwRootFrame const* pLayout) const;
 
     inline bool             IsAlternativeText() const;
     inline const OUString&  GetAlternativeText() const;

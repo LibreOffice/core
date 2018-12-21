@@ -1101,32 +1101,36 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
     NotifyClients( pOld, pNew );
 }
 
-static bool
-IsRefMarkHidden(SwRootFrame const& rLayout, SwTextRefMark const& rRefMark)
+namespace sw {
+
+bool IsMarkHintHidden(SwRootFrame const& rLayout,
+        SwTextNode const& rNode, SwTextAttrEnd const& rHint)
 {
     if (!rLayout.IsHideRedlines())
     {
         return false;
     }
-    SwTextNode const& rNode(rRefMark.GetTextNode());
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
         rNode.getLayoutFrame(&rLayout)));
     if (!pFrame)
     {
         return true;
     }
-    sal_Int32 const*const pEnd(const_cast<SwTextRefMark&>(rRefMark).GetEnd());
+    sal_Int32 const*const pEnd(const_cast<SwTextAttrEnd &>(rHint).GetEnd());
     if (pEnd)
     {
-        return pFrame->MapModelToView(&rNode, rRefMark.GetStart())
+        return pFrame->MapModelToView(&rNode, rHint.GetStart())
             == pFrame->MapModelToView(&rNode, *pEnd);
     }
     else
     {
-        return pFrame->MapModelToView(&rNode, rRefMark.GetStart())
-            == pFrame->MapModelToView(&rNode, rRefMark.GetStart() + 1);
+        assert(rHint.HasDummyChar());
+        return pFrame->MapModelToView(&rNode, rHint.GetStart())
+            == pFrame->MapModelToView(&rNode, rHint.GetStart() + 1);
     }
 }
+
+} // namespace sw
 
 SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
@@ -1143,7 +1147,8 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
         {
             const SwFormatRefMark *pRef = pDoc->GetRefMark( rRefMark );
             SwTextRefMark const*const pRefMark(pRef ? pRef->GetTextRefMark() : nullptr);
-            if (pRefMark && (!pLayout || !IsRefMarkHidden(*pLayout, *pRefMark)))
+            if (pRefMark && (!pLayout || !sw::IsMarkHintHidden(*pLayout,
+                                           pRefMark->GetTextNode(), *pRefMark)))
             {
                 pTextNd = const_cast<SwTextNode*>(&pRef->GetTextRefMark()->GetTextNode());
                 *pStt = pRef->GetTextRefMark()->GetStart();
