@@ -1090,7 +1090,7 @@ void SlideShow::StartInPlacePresentation()
             end();
         else
         {
-            if(mpCurrentViewShellBase)
+            if( mpCurrentViewShellBase && ( !mxCurrentSettings.get() || ( mxCurrentSettings.get() && !mxCurrentSettings->mbPreview ) ) )
                 mpCurrentViewShellBase->GetWindow()->GrabFocus();
         }
     }
