@@ -67,6 +67,7 @@ private:
     void GetRangeFromSelection();
     void PerformSampling();
 
+    ScRange PerformRandomSampling(ScDocShell* pDocShell);
     ScRange PerformRandomSamplingKeepOrder(ScDocShell* pDocShell);
     ScRange PerformPeriodicSampling(ScDocShell* pDocShell);
 

@@ -219,6 +219,86 @@ ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
     return ScRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
 }
 
+ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
+{
+    ScAddress aStart = mInputRange.aStart;
+    ScAddress aEnd   = mInputRange.aEnd;
+
+    SCTAB outTab = mOutputAddress.Tab();
+    SCROW outRow = mOutputAddress.Row();
+
+    const sal_Int64 nSampleSize = mpSampleSize->GetValue();
+
+    // This implementation groups by columns. Other options could be grouping
+    // by rows or area.
+    const sal_Int64 nPopulationSize = aEnd.Row() - aStart.Row() + 1;
+
+    /* TODO: the previously existing implementation was WOR, we may want to
+     * additionally offer WR as option. */
+    bool bWithReplacement = false;
+
+    // WOR (WithOutReplacement) can't draw more than population. Catch that in
+    // the caller.
+    assert( bWithReplacement || nSampleSize <= nPopulationSize);
+    if (!bWithReplacement && nSampleSize > nPopulationSize)
+        // Would enter an endless loop below, bail out.
+        return ScRange( mOutputAddress);
+
+    for (SCROW inTab = aStart.Tab(); inTab <= aEnd.Tab(); inTab++)
+    {
+        SCCOL outCol = mOutputAddress.Col();
+        for (SCCOL inCol = aStart.Col(); inCol <= aEnd.Col(); inCol++)
+        {
+            outRow = mOutputAddress.Row();
+            std::vector<bool> vUsed( nPopulationSize, false);
+
+            while ((outRow - mOutputAddress.Row()) < nSampleSize)
+            {
+                // [a,b] *both* inclusive
+                SCROW nRandom = comphelper::rng::uniform_int_distribution( aStart.Row(), aEnd.Row());
+
+                if (!bWithReplacement)
+                {
+                    nRandom -= aStart.Row();
+                    if (vUsed[nRandom])
+                    {
+                        // Find a nearest one, preferring forwards.
+                        // Again: it's essential that the loop is entered only
+                        // if nSampleSize<=nPopulationSize, which is checked
+                        // above.
+                        SCROW nBack = nRandom;
+                        SCROW nForw = nRandom;
+                        do
+                        {
+                            if (nForw < nPopulationSize - 1 && !vUsed[++nForw])
+                            {
+                                nRandom = nForw;
+                                break;
+                            }
+                            if (nBack > 0 && !vUsed[--nBack])
+                            {
+                                nRandom = nBack;
+                                break;
+                            }
+                        }
+                        while (true);
+                    }
+                    vUsed[nRandom] = true;
+                    nRandom += aStart.Row();
+                }
+
+                const double fValue = mDocument->GetValue( ScAddress(inCol, nRandom, inTab) );
+                pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), fValue, true);
+                outRow++;
+            }
+            outCol++;
+        }
+        outTab++;
+    }
+
+    return ScRange(mOutputAddress, ScAddress(outTab, outRow, outTab) );
+}
+
 ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell* pDocShell)
 {
     ScAddress aStart = mInputRange.aStart;
@@ -277,7 +357,7 @@ void ScSamplingDialog::PerformSampling()
 
     if (mpRandomMethodRadio->IsChecked())
     {
-        aModifiedRange = PerformRandomSamplingKeepOrder(pDocShell);
+        aModifiedRange = PerformRandomSampling(pDocShell);
     }
     else if (mpPeriodicMethodRadio->IsChecked())
     {
