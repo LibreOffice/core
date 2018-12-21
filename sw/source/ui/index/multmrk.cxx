@@ -20,6 +20,7 @@
 #include <swtypes.hxx>
 #include <multmrk.hxx>
 #include <toxmgr.hxx>
+#include <wrtsh.hxx>
 
 SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr& rTOXMgr)
     : GenericDialogController(pParent, "modules/swriter/ui/selectindexdialog.ui", "SelectIndexDialog")
@@ -35,7 +36,7 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr& rTOXMgr)
 
     sal_uInt16 nSize = m_rMgr.GetTOXMarkCount();
     for(sal_uInt16 i=0; i < nSize; ++i)
-        m_xTOXLB->append_text(m_rMgr.GetTOXMark(i)->GetText());
+        m_xTOXLB->append_text(m_rMgr.GetTOXMark(i)->GetText(m_rMgr.GetShell()->GetLayout()));
 
     m_xTOXLB->select(0);
     m_xTextFT->set_label(m_rMgr.GetTOXMark(0)->GetTOXType()->GetTypeName());

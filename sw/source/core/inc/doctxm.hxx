@@ -36,14 +36,21 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     std::vector<std::unique_ptr<SwTOXSortTabBase>> aSortArr;
 
     void UpdateMarks( const SwTOXInternational& rIntl,
-                      const SwTextNode* pOwnChapterNode );
-    void UpdateOutline( const SwTextNode* pOwnChapterNode );
-    void UpdateTemplate( const SwTextNode* pOwnChapterNode );
+             const SwTextNode* pOwnChapterNode,
+             SwRootFrame const* pLayout );
+    void UpdateOutline( const SwTextNode* pOwnChapterNode,
+             SwRootFrame const* pLayout );
+    void UpdateTemplate( const SwTextNode* pOwnChapterNode,
+             SwRootFrame const* pLayout );
     void UpdateContent( SwTOXElement eType,
-                      const SwTextNode* pOwnChapterNode );
-    void UpdateTable( const SwTextNode* pOwnChapterNode );
-    void UpdateSequence( const SwTextNode* pOwnChapterNode );
-    void UpdateAuthorities( const SwTOXInternational& rIntl );
+             const SwTextNode* pOwnChapterNode,
+             SwRootFrame const* pLayout );
+    void UpdateTable( const SwTextNode* pOwnChapterNode,
+             SwRootFrame const* pLayout );
+    void UpdateSequence( const SwTextNode* pOwnChapterNode,
+             SwRootFrame const* pLayout );
+    void UpdateAuthorities( const SwTOXInternational& rIntl,
+             SwRootFrame const* pLayout );
 
     // insert sorted into array for creation
     void InsertSorted(std::unique_ptr<SwTOXSortTabBase> pBase);
@@ -73,6 +80,7 @@ public:
     // <_bNewTOX> : distinguish between the creation of a new table-of-content
     //              (true) or an update of a table-of-content (false)
     void Update( const SfxItemSet* pAttr = nullptr,
+                 SwRootFrame const* pLayout = nullptr,
                  const bool        _bNewTOX = false );
     void UpdatePageNum();               // insert page numbering
 
