@@ -447,8 +447,9 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "C5 Envelope" ; PAPERSIZE_C5 ; > ;
         < "C4 Envelope" ; PAPERSIZE_C4 ; > ;
         < "Dia Slide" ; PAPERSIZE_DIA ; > ;
-        < "Screen" ; PAPERSIZE_SCREEN ; > ;
-
+        < "Screen (4:3)" ; PAPERSIZE_SCREEN_4_BY_3 ; > ;
+        < "Screen (16:9)" ; PAPERSIZE_SCREEN_16_BY_9 ; > ;
+        < "Screen (16:10)" ; PAPERSIZE_SCREEN_16_BY_10 ; > ;
     };
 };
 

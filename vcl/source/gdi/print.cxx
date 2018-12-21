@@ -1304,14 +1304,14 @@ rtl::OUString Printer::GetPaperName( Paper ePaper )
                 PAPER_A0, PAPER_A1, PAPER_A2, PAPER_A3, PAPER_A4, PAPER_A5,
                 PAPER_B4_ISO, PAPER_B5_ISO, PAPER_LETTER, PAPER_LEGAL, PAPER_TABLOID,
                 PAPER_USER, PAPER_B6_ISO, PAPER_ENV_C4, PAPER_ENV_C5, PAPER_ENV_C6, PAPER_ENV_C65,
-                PAPER_ENV_DL, PAPER_SLIDE_DIA, PAPER_SCREEN, PAPER_C, PAPER_D, PAPER_E,
-                PAPER_EXECUTIVE, PAPER_FANFOLD_LEGAL_DE, PAPER_ENV_MONARCH, PAPER_ENV_PERSONAL,
-                PAPER_ENV_9, PAPER_ENV_10, PAPER_ENV_11, PAPER_ENV_12, PAPER_KAI16,
+                PAPER_ENV_DL, PAPER_SLIDE_DIA, PAPER_SCREEN_4_BY_3, PAPER_SCREEN_16_BY_9, PAPER_SCREEN_16_BY_10,
+                PAPER_C, PAPER_D, PAPER_E, PAPER_EXECUTIVE, PAPER_FANFOLD_LEGAL_DE, PAPER_ENV_MONARCH,
+                PAPER_ENV_PERSONAL, PAPER_ENV_9, PAPER_ENV_10, PAPER_ENV_11, PAPER_ENV_12, PAPER_KAI16,
                 PAPER_KAI32, PAPER_KAI32BIG, PAPER_B4_JIS, PAPER_B5_JIS, PAPER_B6_JIS
             };
             OSL_ENSURE( sal_uInt32(sizeof(PaperIndex)/sizeof(PaperIndex[0])) == aPaperStrings.Count(), "localized paper name count wrong" );
             for( int i = 0; i < int(sizeof(PaperIndex)/sizeof(PaperIndex[0])); i++ )
-                (*pSVData->mpPaperNames)[PaperIndex[i]] = aPaperStrings.GetString(i);
+            (*pSVData->mpPaperNames)[PaperIndex[i]] = aPaperStrings.GetString(i);
         }
     }
 

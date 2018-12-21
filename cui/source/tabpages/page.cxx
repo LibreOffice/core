@@ -1072,7 +1072,9 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
         {
             // Draw: bei Papierformat soll der Rand 1cm betragen
             long nTmp = 0;
-            sal_Bool bScreen = ( PAPER_SCREEN == ePaper );
+            sal_Bool bScreen = ( PAPER_SCREEN_4_BY_3 == ePaper )  ||
+                               ( PAPER_SCREEN_16_BY_9 == ePaper ) ||
+                               ( PAPER_SCREEN_16_BY_10 == ePaper );
 
             if ( !bScreen )
                 // bei Bildschirm keinen Rand
@@ -1549,7 +1551,9 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     sal_uInt16 nPos = aPaperSizeBox.GetSelectEntryPos();
     Paper ePaper = (Paper)(sal_uLong)aPaperSizeBox.GetEntryData( nPos );
 
-    if ( ePaper != PAPER_SCREEN && IsMarginOutOfRange() )
+    if ( ePaper != PAPER_SCREEN_4_BY_3 && IsMarginOutOfRange()  ||
+         ePaper != PAPER_SCREEN_16_BY_9 && IsMarginOutOfRange() ||
+         ePaper != PAPER_SCREEN_16_BY_10 && IsMarginOutOfRange() )
     {
         if ( QueryBox( this, WB_YES_NO | WB_DEF_NO, aPrintRangeQueryText ).Execute() == RET_NO )
         {

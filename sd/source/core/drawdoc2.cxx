@@ -642,7 +642,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
                 }
                 else
                 {
-                    // The printer is not available.  Use a border of 10mm
+                    // The printer is not available. Use a border of 10mm
                     // on each side instead.
                     // This has to be kept synchronized with the border
                     // width set in the
@@ -653,7 +653,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             else
             {
                 // Impress: stets Bildschirmformat, quer
-                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN, MAP_100TH_MM) );
+                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_4_BY_3, MAP_100TH_MM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
             }
@@ -1545,7 +1545,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     String aNotesPageName = sNotesPageName;
 
     // Gather some information about the standard page and the notes page
-    // that are to be inserted.  This makes sure that there is always one
+    // that are to be inserted. This makes sure that there is always one
     // standard page followed by one notes page.
     if (ePageKind == PK_NOTES)
     {

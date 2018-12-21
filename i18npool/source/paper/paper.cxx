@@ -80,22 +80,22 @@ static PageDesc aDinTab[] =
     { IN2MM100( 8.5 ),   IN2MM100( 11 ),     "Letter",  "Note" },
     { IN2MM100( 8.5 ),   IN2MM100( 14 ),     "Legal",  NULL },
     { IN2MM100( 11 ),    IN2MM100( 17 ),     "Tabloid",  "11x17" },
-    { 0,                 0,                  NULL, NULL }, //User
+    { 0,                 0,                  NULL, NULL }, // User
     { MM2MM100( 125 ),   MM2MM100( 176 ),    "ISOB6",  NULL },
     { MM2MM100( 229 ),   MM2MM100( 324 ),    "EnvC4",  "C4" },
     { MM2MM100( 162 ),   MM2MM100( 229 ),    "EnvC5",  "C5" },
     { MM2MM100( 114 ),   MM2MM100( 162 ),    "EnvC6",  "C6" },
     { MM2MM100( 114 ),   MM2MM100( 229 ),    "EnvC65", NULL },
     { MM2MM100( 110 ),   MM2MM100( 220 ),    "EnvDL",  "DL" },
-    { MM2MM100( 180),    MM2MM100( 270 ),    NULL,  NULL }, //Dia
-    { MM2MM100( 210),    MM2MM100( 280 ),    NULL,  NULL }, //Screen
+    { MM2MM100( 180),    MM2MM100( 270 ),    NULL,  NULL }, // Dia Slide
+    { MM2MM100( 210),    MM2MM100( 280 ),    NULL,  NULL }, // Screen (4:3)
     { IN2MM100( 17 ),    IN2MM100( 22 ),     "AnsiC",  "CSheet" },
     { IN2MM100( 22 ),    IN2MM100( 34 ),     "AnsiD",  "DSheet" },
     { IN2MM100( 34 ),    IN2MM100( 44 ),     "AnsiE",  "ESheet" },
     { IN2MM100( 7.25 ),  IN2MM100( 10.5 ),   "Executive",  NULL },
     //"Folio" is a different size in the PPD documentation than 8.5x11
     //This "FanFoldGermanLegal" is known in the Philippines as
-    //"Legal" paper or "Long Bond Paper".  The "Legal" name causing untold
+    //"Legal" paper or "Long Bond Paper". The "Legal" name causing untold
     //misery, given the differently sized US "Legal" paper
     { IN2MM100( 8.5 ),   IN2MM100( 13 ),     "FanFoldGermanLegal",  NULL },
     { IN2MM100( 3.875 ), IN2MM100( 7.5 ),    "EnvMonarch", "Monarch" },
@@ -104,12 +104,12 @@ static PageDesc aDinTab[] =
     { IN2MM100( 4.125 ), IN2MM100( 9.5 ),    "Env10",  "Comm10" },
     { IN2MM100( 4.5 ),   IN2MM100( 10.375 ), "Env11",  NULL },
     { IN2MM100( 4.75 ),  IN2MM100( 11 ),     "Env12",  NULL },
-    { MM2MM100( 184 ),   MM2MM100( 260 ),    NULL,  NULL }, //Kai16
-    { MM2MM100( 130 ),   MM2MM100( 184 ),    NULL,  NULL }, //Kai32
-    { MM2MM100( 140 ),   MM2MM100( 203 ),    NULL,  NULL }, //BigKai32
-    { MM2MM100( 257 ),   MM2MM100( 364 ),    "B4",  NULL }, //JIS
-    { MM2MM100( 182 ),   MM2MM100( 257 ),    "B5",  NULL }, //JIS
-    { MM2MM100( 128 ),   MM2MM100( 182 ),    "B6",  NULL }, //JIS
+    { MM2MM100( 184 ),   MM2MM100( 260 ),    NULL,  NULL }, // Kai16
+    { MM2MM100( 130 ),   MM2MM100( 184 ),    NULL,  NULL }, // Kai32
+    { MM2MM100( 140 ),   MM2MM100( 203 ),    NULL,  NULL }, // BigKai32
+    { MM2MM100( 257 ),   MM2MM100( 364 ),    "B4",  NULL }, // JIS
+    { MM2MM100( 182 ),   MM2MM100( 257 ),    "B5",  NULL }, // JIS
+    { MM2MM100( 128 ),   MM2MM100( 182 ),    "B6",  NULL }, // JIS
     { IN2MM100( 17 ),    IN2MM100( 11 ),     "Ledger",  NULL },
     { IN2MM100( 5.5 ),   IN2MM100( 8.5 ),    "Statement",  NULL },
     { PT2MM100( 610 ),   PT2MM100( 780 ),    "Quarto",  NULL },
@@ -150,7 +150,9 @@ static PageDesc aDinTab[] =
     { IN2MM100( 12 ),    IN2MM100( 18 ),     "ARCHB",  NULL },
     { IN2MM100( 18 ),    IN2MM100( 24 ),     "ARCHC",  NULL },
     { IN2MM100( 24 ),    IN2MM100( 36 ),     "ARCHD",  NULL },
-    { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  NULL }
+    { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  NULL },
+    { MM2MM100( 157.5),  MM2MM100( 280 ),    NULL,  NULL }, // Screen (16:9)
+    { MM2MM100( 175),    MM2MM100( 280 ),    NULL,  NULL }  // Screen (16:10)
 };
 
 static const size_t nTabSize = sizeof(aDinTab) / sizeof(aDinTab[0]);
@@ -266,17 +268,17 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
                 aPaper = aPaper.trim();
                 static struct { const char *pName; Paper ePaper; } aCustoms [] =
                 {
-                    { "B0",   PAPER_B0_ISO },
-                    { "B1",   PAPER_B1_ISO },
-                    { "B2",   PAPER_B2_ISO },
-                    { "B3",   PAPER_B3_ISO },
-                    { "B4",   PAPER_B4_ISO },
-                    { "B5",   PAPER_B5_ISO },
-                    { "B6",   PAPER_B6_ISO },
-                    { "B7",   PAPER_B7_ISO },
-                    { "B8",   PAPER_B8_ISO },
-                    { "B9",   PAPER_B9_ISO },
-                    { "B10",  PAPER_B10_ISO },
+                    { "B0",    PAPER_B0_ISO },
+                    { "B1",    PAPER_B1_ISO },
+                    { "B2",    PAPER_B2_ISO },
+                    { "B3",    PAPER_B3_ISO },
+                    { "B4",    PAPER_B4_ISO },
+                    { "B5",    PAPER_B5_ISO },
+                    { "B6",    PAPER_B6_ISO },
+                    { "B7",    PAPER_B7_ISO },
+                    { "B8",    PAPER_B8_ISO },
+                    { "B9",    PAPER_B9_ISO },
+                    { "B10",   PAPER_B10_ISO },
                     { "folio", PAPER_FANFOLD_LEGAL_DE },
                     { "flsa",  PAPER_FANFOLD_LEGAL_DE },
                     { "flse",  PAPER_FANFOLD_LEGAL_DE }
@@ -297,7 +299,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
                 if (ePaper == PAPER_USER)
                 {
                     bHalve = !rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
-                        aPaper.getStr(), aPaper.getLength(),  "half", 4, 4);
+                        aPaper.getStr(), aPaper.getLength(), "half", 4, 4);
                     if (bHalve)
                         aPaper = aPaper.copy(4);
                     ePaper = PaperInfo::fromPSName(aPaper);
@@ -323,7 +325,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         w.string = nl_langinfo(_NL_PAPER_WIDTH);
         h.string = nl_langinfo(_NL_PAPER_HEIGHT);
 
-        //glibc stores sizes as integer mm units
+        // glibc stores sizes as integer mm units
         w.word *= 100;
         h.word *= 100;
 
@@ -331,9 +333,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         {
             if (i == PAPER_USER) continue;
 
-            //glibc stores sizes as integer mm units, and so is inaccurate. To
-            //find a standard paper size we calculate the standard paper sizes
-            //into equally inaccurate mm and compare
+            // glibc stores sizes as integer mm units, and so is inaccurate. To
+            // find a standard paper size we calculate the standard paper sizes
+            // into equally inaccurate mm and compare
             long width = (aDinTab[i].m_nWidth + 50) / 100;
             long height = (aDinTab[i].m_nHeight + 50) / 100;
 
@@ -507,4 +509,4 @@ PaperInfo PaperInfo::getDefaultPaperForLocale(
     return eType;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim: set noet sw=4 ts=4: */
