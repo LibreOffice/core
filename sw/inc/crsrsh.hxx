@@ -132,7 +132,7 @@ bool ReplaceImpl(SwPaM & rCursor, OUString const& rReplacement,
         bool const bRegExp, SwDoc & rDoc, SwRootFrame const*const pLayout);
 
 /// Helperfunction to resolve backward references in regular expressions
-OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
+boost::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
         SwPaM* pPam, SwRootFrame const* pLayout );
 
 bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
