@@ -91,8 +91,9 @@ AstExpression::AstExpression(double d)
 
 AstExpression::AstExpression(OString* scopedName)
     : m_combOperator(ExprComb::Symbol)
-    , m_pSymbolicName(scopedName)
 {
+    if (scopedName)
+        m_xSymbolicName = *scopedName;
     fillDefinitionDetails();
 }
 
@@ -877,7 +878,7 @@ std::unique_ptr<AstExprValue> AstExpression::eval_symbol()
     /*
      * Is there a symbol stored?
      */
-    if (m_pSymbolicName == nullptr)
+    if (!m_xSymbolicName)
     {
         ErrorHandler::evalError(this);
         return nullptr;
@@ -889,16 +890,16 @@ std::unique_ptr<AstExprValue> AstExpression::eval_symbol()
         pScope = idlc()->scopes()->topNonNull();
     if ( !pScope )
     {
-        ErrorHandler::lookupError(*m_pSymbolicName);
+        ErrorHandler::lookupError(*m_xSymbolicName);
         return nullptr;
     }
     /*
      * Do lookup
      */
-    pDecl = pScope->lookupByName(*m_pSymbolicName);
+    pDecl = pScope->lookupByName(*m_xSymbolicName);
     if (pDecl == nullptr)
     {
-        ErrorHandler::lookupError(*m_pSymbolicName);
+        ErrorHandler::lookupError(*m_xSymbolicName);
         return nullptr;
     }
     /*
@@ -907,7 +908,7 @@ std::unique_ptr<AstExprValue> AstExpression::eval_symbol()
     if (pDecl->getNodeType() != NT_const &&
         pDecl->getNodeType() != NT_enum_val)
     {
-        ErrorHandler::constantExpected(pDecl, *m_pSymbolicName);
+        ErrorHandler::constantExpected(pDecl, *m_xSymbolicName);
         return nullptr;
     }
     if (!ErrorHandler::checkPublished(pDecl))
@@ -927,7 +928,7 @@ OString AstExpression::toString()
 {
     OString exprStr;
     if ( m_combOperator == ExprComb::Symbol )
-        return m_pSymbolicName ? *m_pSymbolicName : OString("<Undefined Name>");
+        return m_xSymbolicName ? *m_xSymbolicName : OString("<Undefined Name>");
 
     if ( m_exprValue )
     {
