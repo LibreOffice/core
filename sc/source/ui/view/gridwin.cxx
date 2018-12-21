@@ -846,6 +846,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     // Remove old entries.
     aParam.RemoveEntryByField(rPos.Col());
 
+    if( !(eMode == AutoFilterMode::Normal && mpAutoFilterPopup->isAllSelected() ) )
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
