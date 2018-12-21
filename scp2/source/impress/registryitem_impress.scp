@@ -1110,6 +1110,32 @@ CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Pot,  gid_Module_Prg_Impress_MSO_Reg
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potx, gid_Module_Prg_Impress_MSO_Reg, potx, POTX, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potm, gid_Module_Prg_Impress_MSO_Reg, potm, POTM, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
 
+// Registering OOXML MIME content types, to allow OS/applications to redirect such content to LO even if extension is unknown
+
+RegistryItem gid_Regitem_Pptx_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    Name = "Extension";
+    Value = ".pptx";
+End
+
+RegistryItem gid_Regitem_Ppsx_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+    Name = "Extension";
+    Value = ".ppsx";
+End
+
+RegistryItem gid_Regitem_Potx_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.openxmlformats-officedocument.presentationml.template";
+    Name = "Extension";
+    Value = ".potx";
+End
+
 // registering other supported types
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Uop, gid_Module_Prg_Impress_Other_Reg, uop, UOP, UNIFORM_OFFICE_FORMAT_PRESENTATION, 7, simpress.exe, open, Impress )

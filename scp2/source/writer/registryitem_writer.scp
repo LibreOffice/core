@@ -1740,6 +1740,24 @@ CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Dotx, gid_Module_Prg_Wrt_MSO_Reg, do
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Dotm, gid_Module_Prg_Wrt_MSO_Reg, dotm, DOTM, MS_WORD_TEMPLATE, 2, swriter.exe, new, Writer )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Rtf,  gid_Module_Prg_Wrt_MSO_Reg, rtf,  RTF,  MS_RTF_DOCUMENT, 1, swriter.exe, open, Writer )
 
+// Registering OOXML MIME content types, to allow OS/applications to redirect such content to LO even if extension is unknown
+
+RegistryItem gid_Regitem_Docx_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    Name = "Extension";
+    Value = ".docx";
+End
+
+RegistryItem gid_Regitem_Dotx_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.openxmlformats-officedocument.wordprocessingml.template";
+    Name = "Extension";
+    Value = ".dotx";
+End
+
 // registering other supported types
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Uot,  gid_Module_Prg_Wrt_Other_Reg, uot,  UOT,  UNIFORM_OFFICE_FORMAT_TEXT, 1, swriter.exe, open, Writer )
