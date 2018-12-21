@@ -1356,13 +1356,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
     }
 
-    // depending on the break type no page styles should be created
-    // Continuous sections usually create only a section, and not a new page style
-    const bool bTreatAsContinuous = m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextPage
-        && m_nColumnCount > 0
-        && (m_bIsFirstSection || (!HasHeader( m_bTitlePage ) && !HasFooter( m_bTitlePage )) )
-        && (m_bIsFirstSection || m_sFollowPageStyleName.isEmpty() || (m_sFirstPageStyleName.isEmpty() && m_bTitlePage));
-    if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) || bTreatAsContinuous )
+    if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) )
     {
         //todo: insert a section or access the already inserted section
         uno::Reference< beans::XPropertySet > xSection =
@@ -1426,7 +1420,15 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         uno::Reference< text::XTextColumns > xColumns;
         if ( m_nColumnCount > 0 )
-            xColumns = ApplyColumnProperties( xFollowPageStyle, rDM_Impl );
+        {
+            // prefer setting column properties into a section, not a page style if at all possible.
+            if ( !xSection.is() )
+                xSection = rDM_Impl.appendTextSectionAfter( m_xStartingRange );
+            if ( xSection.is() )
+                ApplyColumnProperties( xSection, rDM_Impl );
+            else
+                xColumns = ApplyColumnProperties( xFollowPageStyle, rDM_Impl );
+        }
 
         // these BreakTypes are effectively page-breaks: don't evenly distribute text in columns before a page break;
         SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
