@@ -169,10 +169,6 @@ void FuMorph::DoExecute( SfxRequest& )
                 mpView->BegUndo(aString);
                 ImpInsertPolygons(aPolyPolyList, pDlg->IsAttributeFade(), pObj1, pObj2);
                 mpView->EndUndo();
-
-                for(basegfx::B2DPolyPolygon * p : aPolyPolyList) {
-                    delete p;
-                }
             }
         }
         SdrObject::Free( pCloneObj1 );
@@ -396,7 +392,7 @@ void FuMorph::ImpInsertPolygons(
 
         for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
         {
-            const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *rPolyPolyList3D[ i ];
+            const ::basegfx::B2DPolyPolygon& rPolyPoly3D = rPolyPolyList3D[ i ];
             SdrPathObj* pNewObj = new SdrPathObj(
                 mpView->getSdrModelFromSdrView(),
                 OBJ_POLY,
@@ -446,13 +442,13 @@ void FuMorph::ImpInsertPolygons(
 /**
  * create single morphed PolyPolygon
  */
-::basegfx::B2DPolyPolygon* FuMorph::ImpCreateMorphedPolygon(
+::basegfx::B2DPolyPolygon FuMorph::ImpCreateMorphedPolygon(
     const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
     const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
     double fMorphingFactor
 )
 {
-    ::basegfx::B2DPolyPolygon* pNewPolyPolygon = new ::basegfx::B2DPolyPolygon();
+    ::basegfx::B2DPolyPolygon aNewPolyPolygon;
     const double fFactor = 1.0 - fMorphingFactor;
 
     for(sal_uInt32 a(0); a < rPolyPolyStart.count(); a++)
@@ -470,10 +466,10 @@ void FuMorph::ImpInsertPolygons(
         }
 
         aNewPolygon.setClosed(aPolyStart.isClosed() && aPolyEnd.isClosed());
-        pNewPolyPolygon->append(aNewPolygon);
+        aNewPolyPolygon.append(aNewPolygon);
     }
 
-    return pNewPolyPolygon;
+    return aNewPolyPolygon;
 }
 
 /**
@@ -499,15 +495,15 @@ void FuMorph::ImpMorphPolygons(
         for(sal_uInt16 i(0); i < nSteps; i++)
         {
             fValue += fFactor;
-            ::basegfx::B2DPolyPolygon* pNewPolyPoly2D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
+            ::basegfx::B2DPolyPolygon aNewPolyPoly2D = ImpCreateMorphedPolygon(rPolyPoly1, rPolyPoly2, fValue);
 
-            const ::basegfx::B2DRange aNewPolySize(::basegfx::utils::getRange(*pNewPolyPoly2D));
+            const ::basegfx::B2DRange aNewPolySize(::basegfx::utils::getRange(aNewPolyPoly2D));
             const ::basegfx::B2DPoint aNewS(aNewPolySize.getCenter());
             const ::basegfx::B2DPoint aRealS(aStartCenter + (aDelta * fValue));
             const ::basegfx::B2DPoint aDiff(aRealS - aNewS);
 
-            pNewPolyPoly2D->transform(basegfx::utils::createTranslateB2DHomMatrix(aDiff));
-            rPolyPolyList3D.push_back( pNewPolyPoly2D );
+            aNewPolyPoly2D.transform(basegfx::utils::createTranslateB2DHomMatrix(aDiff));
+            rPolyPolyList3D.push_back( std::move(aNewPolyPoly2D) );
         }
     }
 }
