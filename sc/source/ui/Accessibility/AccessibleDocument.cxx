@@ -92,10 +92,10 @@ using ::std::for_each;
 
 struct ScAccessibleShapeData
 {
-    ScAccessibleShapeData() : pRelationCell(nullptr), bSelected(false), bSelectable(true) {}
+    ScAccessibleShapeData() : bSelected(false), bSelectable(true) {}
     ~ScAccessibleShapeData();
     mutable rtl::Reference< ::accessibility::AccessibleShape > pAccShape;
-    mutable ScAddress*          pRelationCell; // if it is NULL this shape is anchored on the table
+    mutable boost::optional<ScAddress> xRelationCell; // if it is NULL this shape is anchored on the table
     css::uno::Reference< css::drawing::XShape > xShape;
     mutable bool            bSelected;
     bool                    bSelectable;
@@ -299,7 +299,7 @@ private:
     void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
     bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes) const;
 
-    ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
+    boost::optional<ScAddress> GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
     uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScAccessibleShapeData* pData) const;
     void CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape) const;
     void SetAnchor(const uno::Reference<drawing::XShape>& xShape, ScAccessibleShapeData* pData) const;
@@ -903,8 +903,8 @@ struct SetRelation
     void operator() (const ScAccessibleShapeData* pAccShapeData) const
     {
         if (pAccShapeData &&
-            ((!pAccShapeData->pRelationCell && !mpAddress) ||
-            (pAccShapeData->pRelationCell && mpAddress && (*(pAccShapeData->pRelationCell) == *mpAddress))))
+            ((!pAccShapeData->xRelationCell && !mpAddress) ||
+            (pAccShapeData->xRelationCell && mpAddress && (*(pAccShapeData->xRelationCell) == *mpAddress))))
         {
             if (!mpRelationSet)
                 mpRelationSet = new utl::AccessibleRelationSetHelper();
@@ -1136,9 +1136,8 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     return bResult;
 }
 
-ScAddress* ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xShape) const
+boost::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xShape) const
 {
-    ScAddress* pAddress = nullptr;
     if (mpViewShell)
     {
         SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
@@ -1148,12 +1147,12 @@ ScAddress* ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xS
             if (SdrObject *pSdrObj = pShapeImp->GetSdrObject())
             {
                 if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pSdrObj))
-                    return new ScAddress(pAnchor->maStart);
+                    return boost::optional<ScAddress>(pAnchor->maStart);
             }
         }
     }
 
-    return pAddress;
+    return boost::optional<ScAddress>();
 }
 
 uno::Reference<XAccessibleRelationSet> ScChildrenShapes::GetRelationSet(const ScAccessibleShapeData* pData) const
@@ -1163,11 +1162,11 @@ uno::Reference<XAccessibleRelationSet> ScChildrenShapes::GetRelationSet(const Sc
     if (pData && mpAccessibleDocument)
     {
         uno::Reference<XAccessible> xAccessible = mpAccessibleDocument->GetAccessibleSpreadsheet(); // should be the current table
-        if (pData->pRelationCell && xAccessible.is())
+        if (pData->xRelationCell && xAccessible.is())
         {
             uno::Reference<XAccessibleTable> xAccTable (xAccessible->getAccessibleContext(), uno::UNO_QUERY);
             if (xAccTable.is())
-                xAccessible = xAccTable->getAccessibleCellAt(pData->pRelationCell->Row(), pData->pRelationCell->Col());
+                xAccessible = xAccTable->getAccessibleCellAt(pData->xRelationCell->Row(), pData->xRelationCell->Col());
         }
         AccessibleRelation aRelation;
         aRelation.TargetSet.realloc(1);
@@ -1190,17 +1189,14 @@ void ScChildrenShapes::SetAnchor(const uno::Reference<drawing::XShape>& xShape, 
 {
     if (pData)
     {
-        ScAddress* pAddress = GetAnchor(xShape);
-        if ((pAddress && pData->pRelationCell && (*pAddress != *(pData->pRelationCell))) ||
-            (!pAddress && pData->pRelationCell) || (pAddress && !pData->pRelationCell))
+        boost::optional<ScAddress> xAddress = GetAnchor(xShape);
+        if ((xAddress && pData->xRelationCell && (*xAddress != *(pData->xRelationCell))) ||
+            (!xAddress && pData->xRelationCell) || (xAddress && !pData->xRelationCell))
         {
-            delete pData->pRelationCell;
-            pData->pRelationCell = pAddress;
+            pData->xRelationCell = *xAddress;
             if (pData->pAccShape.is())
                 pData->pAccShape->SetRelationSet(GetRelationSet(pData));
         }
-        else
-            delete pAddress;
     }
 }
 
