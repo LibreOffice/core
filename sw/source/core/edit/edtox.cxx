@@ -137,7 +137,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 
     // Insert listing
     const SwTOXBaseSection* pTOX = mxDoc->InsertTableOf(
-                                        *GetCursor()->GetPoint(), rTOX, pSet, true );
+                *GetCursor()->GetPoint(), rTOX, pSet, true, GetLayout() );
     OSL_ENSURE(pTOX, "No current TOx");
 
     // start formatting
@@ -174,7 +174,7 @@ void SwEditShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
         pMyDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::TOXCHANGE, nullptr);
 
         // create listing stub
-        rTOXSect.Update(pSet);
+        rTOXSect.Update(pSet, GetLayout());
 
         // correct Cursor
         if( bInIndex )
@@ -215,7 +215,7 @@ const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
 
 void SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const
 {
-    GetDoc()->GetTOIKeys( eTyp, rArr );
+    GetDoc()->GetTOIKeys( eTyp, rArr, *GetLayout() );
 }
 
 sal_uInt16 SwEditShell::GetTOXCount() const

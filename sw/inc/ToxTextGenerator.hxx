@@ -32,6 +32,7 @@ class SwFormatAutoFormat;
 class SwChapterField;
 class SwChapterFieldType;
 class SwContentFrame;
+class SwRootFrame;
 class SwContentNode;
 class SwDoc;
 class SwForm;
@@ -45,6 +46,7 @@ namespace sw {
 
 class ToxLinkProcessor;
 class ToxTabStopTokenHandler;
+class ToxWhitespaceStripper;
 
 /** This class generates text for the entries of a table of x.
  *
@@ -64,7 +66,8 @@ public:
      */
     void
     GenerateText(SwDoc *doc, const std::vector<std::unique_ptr<SwTOXSortTabBase>>& entries,
-                      sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess);
+        sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess,
+        SwRootFrame const* pLayout);
 
 private:
     const SwForm& mToxForm;
@@ -80,13 +83,23 @@ private:
         std::vector<sal_Int32> startPositions;
         std::vector<sal_Int32> endPositions;
     };
+
+    static void GetAttributesForNode(
+        HandledTextToken & rResult,
+        sal_Int32 & rOffset,
+        SwTextNode const& rNode,
+        ToxWhitespaceStripper const& rStripper,
+        SwAttrPool & rPool,
+        SwRootFrame const*const pLayout);
+
     /** Append text (and selected attributes) to a target node.
      *
      * Will take the text of @p source, and return the text and the attributes which should be added to the
      * target text node. @see CollectAttributesForTox() for the criteria of the attributes which are taken.
      */
     static HandledTextToken
-    HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& attrPool);
+    HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& attrPool,
+            SwRootFrame const*const pLayout);
 
     /** Applies the result of a handled text token to a target node. */
     static void
@@ -124,18 +137,20 @@ private:
      * for details.
      */
     static OUString
-    GetNumStringOfFirstNode(const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel);
+    GetNumStringOfFirstNode(const SwTOXSortTabBase& rBase, bool bUsePrefix,
+            sal_uInt8 nLevel, SwRootFrame const* pLayout);
 
     /** Handle a chapter token.
      */
     OUString
-    HandleChapterToken(const SwTOXSortTabBase& rBase, const SwFormToken& aToken, SwDoc* pDoc) const;
+    HandleChapterToken(const SwTOXSortTabBase& rBase, const SwFormToken& aToken,
+            SwRootFrame const* pLayout) const;
 
     /** Generate the text for a chapter token.
      */
     OUString
     GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwContentFrame* contentFrame,
-            const SwContentNode *contentNode) const;
+            const SwContentNode *contentNode, SwRootFrame const* pLayout) const;
 
     /** Obtain a ChapterField to use for the text generation.
      * @internal
