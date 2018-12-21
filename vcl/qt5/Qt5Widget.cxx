@@ -428,4 +428,43 @@ Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
     setFocusPolicy(Qt::StrongFocus);
 }
 
+void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
+{
+    SolarMutexGuard aGuard;
+    SalExtTextInputEvent aInputEvent;
+
+    if (!pEvent->commitString().isEmpty())
+    {
+        vcl::DeletionListener aDel(m_pFrame);
+        aInputEvent.maText = toOUString(pEvent->commitString());
+        aInputEvent.mnCursorPos = aInputEvent.maText.getLength();
+        m_pFrame->CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+        pEvent->accept();
+        if (!aDel.isDeleted())
+            m_pFrame->CallCallback(SalEvent::EndExtTextInput, nullptr);
+    }
+    else
+    {
+        aInputEvent.maText = toOUString(pEvent->preeditString());
+        m_pFrame->CallCallback(SalEvent::ExtTextInput, &aInputEvent);
+        pEvent->accept();
+    }
+}
+
+QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
+{
+    switch (property)
+    {
+        case Qt::ImCursorRectangle:
+        {
+            SalExtTextInputPosEvent aPosEvent;
+            m_pFrame->CallCallback(SalEvent::ExtTextInputPos, &aPosEvent);
+            return QVariant(
+                QRect(aPosEvent.mnX, aPosEvent.mnY, aPosEvent.mnWidth, aPosEvent.mnHeight));
+        }
+        default:
+            return QWidget::inputMethodQuery(property);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
