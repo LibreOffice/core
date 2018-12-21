@@ -1024,7 +1024,7 @@ yyerrlab:   /* here on detecting error */
       int x, count;
 
       count = 0;
-      /* Start X at -yyn if nec to avoid negative indexes in yycheck.  */
+      /* Start X at -yyn if negative to avoid negative indexes in yycheck.  */
       for (x = ((yyn < 0) ? -yyn : 0);
            x < (sizeof(yytname) / sizeof(char *)); x++)
         if (yycheck[x + yyn] == x)
