@@ -808,15 +808,15 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
 
             Sequence< Any > aArguments( 2 );
 
-            XInputStream_impl* p = new XInputStream_impl( zipFile );
+            std::unique_ptr<XInputStream_impl> p(new XInputStream_impl( zipFile ));
             if( p->CtorSuccess() )
             {
-                Reference< XInputStream > xInputStream( p );
+                Reference< XInputStream > xInputStream( p.release() );
                 aArguments[ 0 ] <<= xInputStream;
             }
             else
             {
-                delete p;
+                p.reset();
                 aArguments[ 0 ] <<= zipFile;
             }
 
