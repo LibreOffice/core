@@ -70,7 +70,7 @@ const char gsBenMagicBytes[] = BEN_MAGIC_BYTES;
 *   @param  pointer to pointer of Bento Container object
 *   @return error code
 */
-sal_uLong BenOpenContainer(LwpSvStream * pStream, LtcBenContainer ** ppContainer)
+sal_uLong BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContainer>* ppContainer)
 {
     *ppContainer = nullptr;
 
@@ -79,14 +79,13 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, LtcBenContainer ** ppContainer
         return BenErr_ContainerWithNoObjects;
     }
 
-    LtcBenContainer * pContainer = new LtcBenContainer(pStream);
+    std::unique_ptr<LtcBenContainer> pContainer(new LtcBenContainer(pStream));
     if (pContainer->Open() != BenErr_OK) // delete two inputs
     {
-        delete pContainer;
         return BenErr_InvalidTOC;
     }
 
-    *ppContainer = pContainer;
+    *ppContainer = std::move(pContainer);
     return BenErr_OK;
 }
 

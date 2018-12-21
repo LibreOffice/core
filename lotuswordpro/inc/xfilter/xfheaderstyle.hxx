@@ -105,7 +105,7 @@ public:
     /**
      * @descr   Set header borders.
      */
-    void    SetBorders(XFBorders *pBorders);
+    void    SetBorders(std::unique_ptr<XFBorders> pBorders);
 
     void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 

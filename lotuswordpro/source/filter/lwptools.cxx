@@ -233,7 +233,7 @@ OUString LwpTools::DateTimeToOUString(const LtTm &dt)
 /**
  * @descr   get the system date format
 */
-XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
+std::unique_ptr<XFDateStyle> LwpTools::GetSystemDateStyle(bool bLongFormat)
 {
     icu::DateFormat::EStyle style;
     if (bLongFormat)
@@ -268,7 +268,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
     // we parse pattern string letter by letter and get the time format.
     UChar cSymbol;
     UChar cTmp;
-    XFDateStyle* pDateStyle = new XFDateStyle;
+    std::unique_ptr<XFDateStyle> pDateStyle(new XFDateStyle);
 
     for (int32_t i=0;i<nLengthNeed;)
     {
@@ -594,7 +594,6 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
             {
                 if ((cSymbol>='A' && cSymbol<='Z') || (cSymbol>='a' && cSymbol<='z') )
                 {
-                    delete pDateStyle;
                     return nullptr;
                 }
                 else//TEXT
@@ -628,7 +627,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
 /**
  * @descr   get the system time format
 */
-XFTimeStyle* LwpTools::GetSystemTimeStyle()
+std::unique_ptr<XFTimeStyle> LwpTools::GetSystemTimeStyle()
 {
     //1 get locale for system
     icu::Locale aLocale( LanguageTagIcu::getIcuLocale( Application::GetSettings().GetLanguageTag()));
@@ -658,7 +657,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
     // for time format ,for there is not date info,we can only parse the letter representing time.
     UChar cSymbol;
     UChar cTmp;
-    XFTimeStyle* pTimeStyle = new XFTimeStyle;
+    std::unique_ptr<XFTimeStyle> pTimeStyle(new XFTimeStyle);
 
     for (int32_t i=0;i<nLengthNeed;)
     {
@@ -817,7 +816,6 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
             {
                 if ((cSymbol>='A' && cSymbol<='Z') || (cSymbol>='a' && cSymbol<='z') )
                 {
-                    delete pTimeStyle;
                     return nullptr;
                 }
                 else//TEXT

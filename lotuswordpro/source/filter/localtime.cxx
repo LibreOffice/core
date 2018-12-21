@@ -56,6 +56,7 @@
 #include <localtime.hxx>
 #include <limits.h>
 #include <unicode/timezone.h>
+#include <memory>
 
 const long DAY_SEC =24 * 60 * 60;
 const long YEAR_SEC = 365 * DAY_SEC;
@@ -174,9 +175,9 @@ bool LtgLocalTime(long rtime,LtTm& rtm)
 
     if ((rtime > 3 * DAY_SEC)&&(rtime < LONG_MAX - 3 * DAY_SEC))
     {
-        icu::TimeZone* pLocalZone = icu::TimeZone::createDefault();
+        std::unique_ptr<icu::TimeZone> pLocalZone(icu::TimeZone::createDefault());
         long offset = (pLocalZone->getRawOffset())/1000;
-        delete pLocalZone;
+        pLocalZone.reset();
         long ltime = rtime + offset;
         return LtgGmTime(ltime,rtm);
     }

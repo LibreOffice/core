@@ -438,7 +438,7 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
     LwpCellLayout * pLeftNeighbour = GetCellByRowCol(nRow, GetLeftColID(nCol), pTableLayout);
     if (pLeftNeighbour)
     {
-        XFBorders * pNeighbourBorders = pLeftNeighbour->GetXFBorders();
+        std::unique_ptr<XFBorders> pNeighbourBorders = pLeftNeighbour->GetXFBorders();
         if (pNeighbourBorders)
         {
             XFBorder& rRightBorder = pNeighbourBorders->GetRight();
@@ -449,7 +449,6 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
                 // we should not ignored it
                 bNoLeftBorder = true;
             }
-            delete pNeighbourBorders;
         }
 
     }
@@ -457,7 +456,7 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
     LwpCellLayout * pBelowNeighbour = GetCellByRowCol(GetBelowRowID(nRow), nCol, pTableLayout);
     if (pBelowNeighbour) //&& (eType == enumRightNotLastCellBorder || eType ==  enumLeftNotLastCellBorder) )
     {
-        XFBorders * pBelowBorders = pBelowNeighbour->GetXFBorders();
+        std::unique_ptr<XFBorders> pBelowBorders = pBelowNeighbour->GetXFBorders();
         if (pBelowBorders)
         {
             XFBorder& rTopBorder = pBelowBorders->GetTop();
@@ -468,7 +467,6 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
                 // we should not ignored it
                 bNoBottomBorder = true;
             }
-            delete pBelowBorders;
         }
     }
 

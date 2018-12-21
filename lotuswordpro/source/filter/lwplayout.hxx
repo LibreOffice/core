@@ -352,7 +352,7 @@ public:
     LwpBackgroundStuff* GetBackgroundStuff();
     LwpLayoutGeometry* GetGeometry();
     enumXFTextDir GetTextDirection();
-    XFBorders* GetXFBorders();
+    std::unique_ptr<XFBorders> GetXFBorders();
     LwpColor* GetBackColor();
     virtual bool IsAutoGrow() override;
     virtual bool IsAutoGrowUp() override;

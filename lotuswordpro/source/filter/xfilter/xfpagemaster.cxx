@@ -106,11 +106,9 @@ void    XFPageMaster::SetMargins(double left, double right,double top, double bo
         m_aMargin.SetBottom(bottom);
 }
 
-void    XFPageMaster::SetBorders(XFBorders *pBorders)
+void    XFPageMaster::SetBorders(std::unique_ptr<XFBorders> pBorders)
 {
-    if( pBorders == m_pBorders.get() )
-        return;
-    m_pBorders.reset( pBorders );
+    m_pBorders = std::move( pBorders );
 }
 
 void    XFPageMaster::SetShadow(XFShadow *pShadow)

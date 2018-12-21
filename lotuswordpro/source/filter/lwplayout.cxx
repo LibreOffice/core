@@ -843,7 +843,7 @@ LwpBackgroundStuff* LwpMiddleLayout::GetBackgroundStuff()
 /**
  * @descr:  create xfborder.
 */
-XFBorders* LwpMiddleLayout::GetXFBorders()
+std::unique_ptr<XFBorders> LwpMiddleLayout::GetXFBorders()
 {
     LwpBorderStuff* pBorderStuff = GetBorderStuff();
     if(pBorderStuff&&pBorderStuff->GetSide() != 0)
@@ -861,7 +861,7 @@ XFBorders* LwpMiddleLayout::GetXFBorders()
                 LwpParaStyle::ApplySubBorder(pBorderStuff, nC, xXFBorders.get());
             }
         }
-        return xXFBorders.release();
+        return xXFBorders;
     }
     return nullptr;
 }

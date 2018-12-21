@@ -103,9 +103,9 @@ void    XFHeaderStyle::SetShadow(XFShadow *pShadow)
     m_pShadow.reset( pShadow );
 }
 
-void    XFHeaderStyle::SetBorders(XFBorders *pBorders)
+void    XFHeaderStyle::SetBorders(std::unique_ptr<XFBorders> pBorders)
 {
-    m_pBorders.reset(pBorders);
+    m_pBorders = std::move(pBorders);
 }
 
 void    XFHeaderStyle::SetBackImage(std::unique_ptr<XFBGImage>& rImage)

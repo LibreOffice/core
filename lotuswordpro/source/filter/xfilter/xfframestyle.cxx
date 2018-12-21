@@ -80,9 +80,9 @@ XFFrameStyle::~XFFrameStyle()
 {
 }
 
-void    XFFrameStyle::SetBorders(XFBorders *pBorders)
+void    XFFrameStyle::SetBorders(std::unique_ptr<XFBorders> pBorders)
 {
-    m_pBorders.reset(pBorders);
+    m_pBorders = std::move(pBorders);
 }
 
 void    XFFrameStyle::SetColumns(XFColumns *pColumns)
