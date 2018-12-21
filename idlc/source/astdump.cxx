@@ -406,14 +406,14 @@ void AstAttribute::dumpExceptions(
 
 const sal_Char* AstSequence::getRelativName() const
 {
-    if ( !m_pRelativName )
+    if ( !m_xRelativName )
     {
-        m_pRelativName.reset( new OString("[]") );
+        m_xRelativName = OString("[]");
         AstDeclaration const * pType = resolveTypedefs( m_pMemberType );
-        *m_pRelativName += pType->getRelativName();
+        *m_xRelativName += pType->getRelativName();
     }
 
-    return m_pRelativName->getStr();
+    return m_xRelativName->getStr();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
