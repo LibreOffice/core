@@ -123,7 +123,7 @@ protected:
 
     typedef ::std::pair<int, MasterPageContainer::Token> UserData;
     UserData* GetUserData (int nIndex) const;
-    void SetUserData (int nIndex, UserData* pData);
+    void SetUserData (int nIndex, std::unique_ptr<UserData> pData);
 
     sal_Int32 GetIndexForToken (MasterPageContainer::Token aToken) const;
     typedef ::std::vector<MasterPageContainer::Token> ItemList;

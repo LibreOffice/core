@@ -450,17 +450,12 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
         return nullptr;
 }
 
-void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
+void MasterPagesSelector::SetUserData (int nIndex, std::unique_ptr<UserData> pData)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (nIndex>0 && static_cast<unsigned int>(nIndex)<=PreviewValueSet::GetItemCount())
-    {
-        UserData* pOldData = GetUserData(nIndex);
-        if (pOldData!=nullptr && pOldData!=pData)
-            delete pOldData;
-        PreviewValueSet::SetItemData(static_cast<sal_uInt16>(nIndex), pData);
-    }
+    delete GetUserData(nIndex);
+    PreviewValueSet::SetItemData(static_cast<sal_uInt16>(nIndex), pData.release());
 }
 
 void MasterPagesSelector::SetItem (
@@ -493,7 +488,7 @@ void MasterPagesSelector::SetItem (
                         mpContainer->GetPageNameForToken(aToken),
                         nIndex);
                 }
-                SetUserData(nIndex, new UserData(nIndex,aToken));
+                SetUserData(nIndex, o3tl::make_unique<UserData>(nIndex,aToken));
 
                 AddTokenToIndexEntry(nIndex,aToken);
             }
