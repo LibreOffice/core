@@ -53,8 +53,8 @@
 #include "cspline.h"
 #include "solver.h"
 
-void NaturalSpline (int N, const double* x, const double* a, double*& b, double*& c,
-    double*& d)
+void NaturalSpline (int N, const double* x, const double* a, std::unique_ptr<double[]>& b, std::unique_ptr<double[]>& c,
+    std::unique_ptr<double[]>& d)
 {
   const double oneThird = 1.0/3.0;
 
@@ -96,9 +96,9 @@ void NaturalSpline (int N, const double* x, const double* a, double*& b, double*
   ell[N] = 1.0;
   z[N] = 0.0;
 
-  b = new double[N];
-  c = new double[N+1];
-  d = new double[N];
+  b.reset(new double[N]);
+  c.reset(new double[N+1]);
+  d.reset(new double[N]);
 
   c[N] = 0.0;
 
@@ -111,8 +111,8 @@ void NaturalSpline (int N, const double* x, const double* a, double*& b, double*
   }
 }
 
-void PeriodicSpline (int N, const double* x, const double* a, double*& b, double*& c,
-    double*& d)
+void PeriodicSpline (int N, const double* x, const double* a, std::unique_ptr<double[]>& b, std::unique_ptr<double[]>& c,
+    std::unique_ptr<double[]>& d)
 {
   std::unique_ptr<double[]> h(new double[N]);
   int i;
@@ -145,11 +145,11 @@ void PeriodicSpline (int N, const double* x, const double* a, double*& b, double
   c[N] = 3.0f*((a[1]-a[0])/h[0] - (a[0]-a[N-1])/h[N-1]);
 
   // solve for c[0] through c[N]
-  mgcLinearSystemD::Solve(N+1,mat,c);
+  mgcLinearSystemD::Solve(N+1,mat,c.get());
 
   const double oneThird = 1.0/3.0;
-  b = new double[N];
-  d = new double[N];
+  b.reset(new double[N]);
+  d.reset(new double[N]);
   for (i = 0; i < N; i++)
   {
     b[i] = (a[i+1]-a[i])/h[i] - oneThird*(c[i+1]+2.0f*c[i])*h[i];

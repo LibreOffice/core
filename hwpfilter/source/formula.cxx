@@ -613,8 +613,6 @@ void Formula::parse()
      if( res ){
           makeMathML( res );
      }
-     for (const auto &node : nodelist)
-         delete node;
      nodelist.clear();
 }
 

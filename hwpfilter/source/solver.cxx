@@ -35,11 +35,9 @@ std::unique_ptr<std::unique_ptr<double[]>[]> mgcLinearSystemD::NewMatrix (int N)
   return A;
 }
 
-double* mgcLinearSystemD::NewVector (int N)
+std::unique_ptr<double[]> mgcLinearSystemD::NewVector (int N)
 {
-  double* B = new double[N];
-  if ( !B )
-    return nullptr;
+  std::unique_ptr<double[]> B(new double[N]);
 
   for (int row = 0; row < N; row++)
     B[row] = 0;

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 #define INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 
-void NaturalSpline (int N, const double* x, const double* a, double*& b, double*& c,
-    double*& d);
-void PeriodicSpline (int N, const double* x, const double* a, double*& b, double*& c,
-    double*& d);
+void NaturalSpline (int N, const double* x, const double* a, std::unique_ptr<double[]>& b, std::unique_ptr<double[]>& c,
+    std::unique_ptr<double[]>& d);
+void PeriodicSpline (int N, const double* x, const double* a, std::unique_ptr<double[]>& b, std::unique_ptr<double[]>& c,
+    std::unique_ptr<double[]>& d);
 
 #endif // INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 

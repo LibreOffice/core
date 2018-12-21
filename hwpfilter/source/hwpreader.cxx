@@ -4360,15 +4360,15 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                               int n, i;
                               n = drawobj->u.freeform.npt;
 
-                              double *xarr = new double[n+1];
-                              double *yarr = new double[n+1];
-                              double *tarr = new double[n+1];
+                              std::unique_ptr<double[]> xarr( new double[n+1] );
+                              std::unique_ptr<double[]> yarr( new double[n+1] );
+                              std::unique_ptr<double[]> tarr( new double[n+1] );
 
-                              double *xb = nullptr;
-                              double *yb = nullptr;
+                              std::unique_ptr<double[]> xb;
+                              std::unique_ptr<double[]> yb;
 
-                              double *carr = nullptr;
-                              double *darr = nullptr;
+                              std::unique_ptr<double[]> carr;
+                              std::unique_ptr<double[]> darr;
 
 
                               for( i = 0 ; i < n ; i++ ){
@@ -4381,22 +4381,18 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                               tarr[n] = n;
 
                               if( !bIsNatural ){
-                                  PeriodicSpline(n, tarr, xarr, xb, carr, darr);
+                                  PeriodicSpline(n, tarr.get(), xarr.get(), xb, carr, darr);
                                   // prevent memory leak
-                                  delete[] carr;
-                                  carr = nullptr;
-                                  delete[] darr;
-                                  darr = nullptr;
-                                  PeriodicSpline(n, tarr, yarr, yb, carr, darr);
+                                  carr.reset();
+                                  darr.reset();
+                                  PeriodicSpline(n, tarr.get(), yarr.get(), yb, carr, darr);
                               }
                               else{
-                                  NaturalSpline(n, tarr, xarr, xb, carr, darr);
+                                  NaturalSpline(n, tarr.get(), xarr.get(), xb, carr, darr);
                                   // prevent memory leak
-                                  delete[] carr;
-                                  carr = nullptr;
-                                  delete[] darr;
-                                  darr = nullptr;
-                                  NaturalSpline(n, tarr, yarr, yb, carr, darr);
+                                  carr.reset();
+                                  darr.reset();
+                                  NaturalSpline(n, tarr.get(), yarr.get(), yb, carr, darr);
                               }
 
                               sprintf(buf, "M%d %dC%d %d", WTSM(xarr[0]), WTSM(yarr[0]),
@@ -4418,15 +4414,6 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                                   oustr.append(ascii(buf));
                               }
-                              delete[] tarr;
-                              delete[] xarr;
-                              delete[] yarr;
-
-                              delete[] xb;
-                              delete[] yb;
-
-                              delete[] carr;
-                              delete[] darr;
                           }
 
                     padd("svg:d", sXML_CDATA, oustr.makeStringAndClear());
