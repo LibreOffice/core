@@ -24,7 +24,7 @@ class mgcLinearSystemD
 {
 public:
   static std::unique_ptr<std::unique_ptr<double[]>[]> NewMatrix (int N);
-  static double* NewVector (int N);
+  static std::unique_ptr<double[]> NewVector (int N);
 
   static bool Solve (int N, std::unique_ptr<std::unique_ptr<double[]>[]>& A, double* b);
   // Input:

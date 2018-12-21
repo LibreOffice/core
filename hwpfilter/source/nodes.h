@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
@@ -94,7 +95,7 @@ public:
      Node *child;
      Node *next;
 };
-extern std::vector<Node *> nodelist;
+extern std::vector<std::unique_ptr<Node>> nodelist;
 
 #endif
 

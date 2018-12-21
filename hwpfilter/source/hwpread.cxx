@@ -307,7 +307,8 @@ bool TxtBox::Read(HWPFile & hwpf)
     hwpf.ReadParaList(caption);
 
     if( type == 0 ){ // if table?
-        TCell* *pArr = ::comphelper::newArray_null<TCell *>(ncell);
+        std::unique_ptr<TCell*[]> pArr(new TCell*[ncell]);
+        std::fill(pArr.get(), pArr.get() + ncell, nullptr);
         if (!pArr) {
               return hwpf.SetState(HWP_InvalidFileFormat);
         }
@@ -356,7 +357,6 @@ bool TxtBox::Read(HWPFile & hwpf)
         tbl->box = this;
         m_pTable = tbl.get();
         hwpf.AddTable(std::move(tbl));
-        delete[] pArr;
     }
     else
         m_pTable = nullptr;
@@ -461,12 +461,12 @@ bool Picture::Read(HWPFile & hwpf)
         if (pictype == PICTYPE_DRAW)
         {
             HIODev* pOldMem = hmem;
-            HMemIODev* pNewMem = new HMemIODev(reinterpret_cast<char *>(follow.data()), follow_block_size);
-            hmem = pNewMem;
+            std::unique_ptr<HMemIODev> pNewMem(new HMemIODev(reinterpret_cast<char *>(follow.data()), follow_block_size));
+            hmem = pNewMem.get();
             LoadDrawingObjectBlock(this);
             style.cell = picinfo.picdraw.hdo;
-            assert(hmem == pNewMem);
-            delete pNewMem;
+            assert(hmem == pNewMem.get());
+            pNewMem.reset();
             hmem = pOldMem;
         }
         else if (follow_block_size >= 4)
