@@ -51,7 +51,6 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
 #include <vcl/treelistentry.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -1138,14 +1137,20 @@ void SfxConfigGroupListBox::SelectMacro( const OUString& rBasic,
          const OUString& rMacro )
 {
     const OUString aBasicName(rBasic + " " + xImp->m_sMacros);
-    const sal_Int32 nCount = comphelper::string::getTokenCount(rMacro, '.');
-    const OUString aMethod( rMacro.copy(rMacro.lastIndexOf('.')+1) );
+    sal_Int32 nIdx {rMacro.lastIndexOf('.')};
+    const OUString aMethod( rMacro.copy(nIdx+1) );
     OUString aLib;
     OUString aModule;
-    if ( nCount > 2 )
+    if ( nIdx>0 )
     {
-        aLib = rMacro.getToken( 0, '.' );
-        aModule = rMacro.getToken( nCount-2, '.' );
+        // string contains at least 2 tokens
+        nIdx = rMacro.lastIndexOf('.', nIdx);
+        if (nIdx>=0)
+        {
+            // string contains at least 3 tokens
+            aLib = rMacro.getToken( 0, '.' );
+            aModule = rMacro.getToken( 0, '.', ++nIdx );
+        }
     }
 
     SvTreeListEntry *pEntry = FirstChild(nullptr);
