@@ -59,7 +59,8 @@ void ShapeCreationVisitor::visit(ForEachAtom& rAtom)
     const std::vector<LayoutAtomPtr>& rChildren=rAtom.getChildren();
 
     sal_Int32 nChildren=1;
-    if( rAtom.iterator().mnPtType == XML_node )
+    // Approximate the non-assistant type with the node type.
+    if (rAtom.iterator().mnPtType == XML_node || rAtom.iterator().mnPtType == XML_nonAsst)
     {
         // count child data nodes - check all child Atoms for "name"
         // attribute that is contained in diagram's

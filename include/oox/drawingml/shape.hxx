@@ -214,6 +214,10 @@ public:
 
     sal_Int32 getZOrderOff() const { return mnZOrderOff; }
 
+    void setDataNodeType(sal_Int32 nDataNodeType) { mnDataNodeType = nDataNodeType; }
+
+    sal_Int32 getDataNodeType() const { return mnDataNodeType; }
+
 protected:
 
     css::uno::Reference< css::drawing::XShape > const &
@@ -333,6 +337,9 @@ private:
 
     /// Z-Order offset.
     sal_Int32 mnZOrderOff = 0;
+
+    /// Type of data node for an in-diagram shape.
+    sal_Int32 mnDataNodeType = 0;
 };
 
 } }
