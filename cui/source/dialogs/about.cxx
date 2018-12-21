@@ -258,8 +258,7 @@ OUString AboutDialog::GetBuildId()
 
     if (!sBuildId.isEmpty())
     {
-        sal_Int32 nIndex = 0;
-        return sBuildId.getToken( 0, '-', nIndex );
+        return sBuildId.getToken( 0, '-' );
     }
 
     OSL_ENSURE( !sBuildId.isEmpty(), "No BUILDID in bootstrap file" );
