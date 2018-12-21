@@ -427,16 +427,24 @@ SAL_IMPLEMENT_MAIN()
 
         if (!aUnoUrl.isEmpty()) // accepting connections
         {
-            sal_Int32 nIndex = 0, nTokens = 0;
-            do { aUnoUrl.getToken( 0, ';', nIndex ); nTokens++; } while( nIndex != -1 );
-            if (nTokens != 3 || aUnoUrl.getLength() < 10 ||
-                !aUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( "uno:" ))
+            if (aUnoUrl.getLength() < 10 || !aUnoUrl.startsWithIgnoreAsciiCase( "uno:" ))
             {
                 throw RuntimeException("illegal uno url given!" );
             }
-            nIndex = 0;
-            OUString aConnectDescr( aUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName
-            OUString aInstanceName( aUnoUrl.getToken( 1, ';', nIndex ) );
+
+            sal_Int32 nIndex = 4; // skip initial "uno:"
+            bool bTooFewTokens {false};
+            const OUString aConnectDescr{ aUnoUrl.getToken( 0, ';', nIndex ) }; // uno:CONNECTDESCR;iiop;InstanceName
+            if (nIndex<0) bTooFewTokens = true;
+            const OUString aUnoUrlToken{ aUnoUrl.getToken( 0, ';', nIndex ) };
+            if (nIndex<0) bTooFewTokens = true;
+            const OUString aInstanceName{ aUnoUrl.getToken( 0, ';', nIndex ) };
+
+            // Exactly 3 tokens are required
+            if (bTooFewTokens || nIndex>0)
+            {
+                throw RuntimeException("illegal uno url given!" );
+            }
 
             Reference< XAcceptor > xAcceptor = Acceptor::create(xContext);
 
@@ -454,8 +462,6 @@ SAL_IMPLEMENT_MAIN()
                 xContext, aImplName, aLocation, aServiceName, aInitParams,
                 bSingleInstance, aInstanceName ) );
 
-            nIndex = 0;
-            OUString aUnoUrlToken( aUnoUrl.getToken( 1, ';', nIndex ) );
             // coverity[loop_top] - not really an infinite loop, we can be instructed to exit via the connection
             for (;;)
             {
