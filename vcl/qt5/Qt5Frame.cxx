@@ -655,9 +655,15 @@ bool Qt5Frame::ShowTooltip(const OUString& rText, const tools::Rectangle& /*rHel
 
 // do we even need it? void Qt5Frame::Flush(const tools::Rectangle& /*rRect*/) {}
 
-void Qt5Frame::SetInputContext(SalInputContext* /*pContext*/)
+void Qt5Frame::SetInputContext(SalInputContext* pContext)
 {
-    // TODO some IM handler setup
+    if (!pContext)
+        return;
+
+    if (!(pContext->mnOptions & InputContextFlags::Text))
+        return;
+
+    m_pQWidget->setAttribute(Qt::WA_InputMethodEnabled);
 }
 
 void Qt5Frame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/)
