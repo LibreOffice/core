@@ -1090,7 +1090,7 @@ std::unique_ptr<SmNode> SmParser::DoRelation()
         std::unique_ptr<SmStructureNode> xSNode(new SmBinHorNode(m_aCurToken));
         auto xSecond = DoOpSubSup();
         auto xThird = DoSum();
-        xSNode->SetSubNodes(xFirst.release(), xSecond.release(), xThird.release());
+        xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond), std::move(xThird));
         xFirst = std::move(xSNode);
     }
     return xFirst;
@@ -1108,7 +1108,7 @@ std::unique_ptr<SmNode> SmParser::DoSum()
         std::unique_ptr<SmStructureNode> xSNode(new SmBinHorNode(m_aCurToken));
         auto xSecond = DoOpSubSup();
         auto xThird = DoProduct();
-        xSNode->SetSubNodes(xFirst.release(), xSecond.release(), xThird.release());
+        xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond), std::move(xThird));
         xFirst = std::move(xSNode);
     }
     return xFirst;
@@ -1189,11 +1189,11 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
         if (bSwitchArgs)
         {
             //! vgl siehe SmBinDiagonalNode::Arrange
-            xSNode->SetSubNodes(xFirst.release(), xArg.release(), xOper.release());
+            xSNode->SetSubNodes(std::move(xFirst), std::move(xArg), std::move(xOper));
         }
         else
         {
-            xSNode->SetSubNodes(xFirst.release(), xOper.release(), xArg.release());
+            xSNode->SetSubNodes(std::move(xFirst), std::move(xOper), std::move(xArg));
         }
         xFirst = std::move(xSNode);
         ++nDepthLimit;
@@ -1371,7 +1371,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
             }
             auto xSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
             std::unique_ptr<SmNode> xError(DoError(SmParseError::RgroupExpected));
-            xSNode->SetSubNodes(pNode.release(), xError.release());
+            xSNode->SetSubNodes(std::move(pNode), std::move(xError));
             return std::unique_ptr<SmNode>(xSNode.release());
         }
 
@@ -1535,7 +1535,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
                 {
                     std::unique_ptr<SmStructureNode> xNode = std::move(aStack.top());
                     aStack.pop();
-                    xNode->SetSubNodes(nullptr, xFirstNode.release());
+                    xNode->SetSubNodes(nullptr, std::move(xFirstNode));
                     xFirstNode = std::move(xNode);
                 }
                 return xFirstNode;
@@ -1605,7 +1605,7 @@ std::unique_ptr<SmOperNode> SmParser::DoOperator()
     // get argument
     auto xArg = DoPower();
 
-    xSNode->SetSubNodes(xOperator.release(), xArg.release());
+    xSNode->SetSubNodes(std::move(xOperator), std::move(xArg));
     return xSNode;
 }
 
@@ -1734,23 +1734,23 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
         std::unique_ptr<SmNode> xLeft(new SmMathSymbolNode(aNodeToken));
         std::unique_ptr<SmNode> xRight(new SmMathSymbolNode(aNodeToken));
 
-        xSNode->SetSubNodes(xLeft.release(), xArg.release(), xRight.release());
+        xSNode->SetSubNodes(std::move(xLeft), std::move(xArg), std::move(xRight));
     }
     else if (eType == TSQRT  ||  eType == TNROOT)
     {
         xSNode.reset(new SmRootNode(aNodeToken));
         xOper.reset(new SmRootSymbolNode(aNodeToken));
-        xSNode->SetSubNodes(xExtra.release(), xOper.release(), xArg.release());
+        xSNode->SetSubNodes(std::move(xExtra), std::move(xOper), std::move(xArg));
     }
     else
     {
         xSNode.reset(new SmUnHorNode(aNodeToken));
         if (bIsPostfix)
-            xSNode->SetSubNodes(xArg.release(), xOper.release());
+            xSNode->SetSubNodes(std::move(xArg), std::move(xOper));
         else
         {
             // prefix operator
-            xSNode->SetSubNodes(xOper.release(), xArg.release());
+            xSNode->SetSubNodes(std::move(xOper), std::move(xArg));
         }
     }
     return xSNode;
@@ -1790,7 +1790,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoAttribut()
 
     NextToken();
 
-    xSNode->SetSubNodes(xAttr.release(), nullptr); // the body will be filled later
+    xSNode->SetSubNodes(std::move(xAttr), nullptr); // the body will be filled later
     xSNode->SetScaleMode(eScaleMode);
     return xSNode;
 }
@@ -2057,7 +2057,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoBrace()
     {
         assert(pLeft);
         assert(pRight);
-        xSNode->SetSubNodes(pLeft.release(), pBody.release(), pRight.release());
+        xSNode->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
         xSNode->SetScaleMode(eScaleMode);
         return xSNode;
     }
@@ -2169,7 +2169,7 @@ std::unique_ptr<SmTableNode> SmParser::DoBinom()
 
     auto xFirst = DoSum();
     auto xSecond = DoSum();
-    xSNode->SetSubNodes(xFirst.release(), xSecond.release());
+    xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond));
     return xSNode;
 }
 
@@ -2321,8 +2321,8 @@ std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
         throw std::range_error("parser depth limit");
 
     auto xSNode = o3tl::make_unique<SmExpressionNode>(m_aCurToken);
-    SmErrorNode     *pErr   = new SmErrorNode(m_aCurToken);
-    xSNode->SetSubNodes(pErr, nullptr);
+    std::unique_ptr<SmErrorNode> pErr(new SmErrorNode(m_aCurToken));
+    xSNode->SetSubNodes(std::move(pErr), nullptr);
 
     AddError(eError, xSNode.get());
 

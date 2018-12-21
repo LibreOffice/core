@@ -682,7 +682,7 @@ void SmXMLContext_Helper::ApplyAttrs()
             else
                 aToken.eType = TNBOLD;
             std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
-            pFontNode->SetSubNodes(nullptr,popOrZero(rNodeStack).release());
+            pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
             rNodeStack.push_front(std::move(pFontNode));
         }
         if (nIsItalic != -1)
@@ -692,7 +692,7 @@ void SmXMLContext_Helper::ApplyAttrs()
             else
                 aToken.eType = TNITALIC;
             std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
-            pFontNode->SetSubNodes(nullptr,popOrZero(rNodeStack).release());
+            pFontNode->SetSubNodes(nullptr,popOrZero(rNodeStack));
             rNodeStack.push_front(std::move(pFontNode));
         }
         if (nFontSize != 0.0)
@@ -713,7 +713,7 @@ void SmXMLContext_Helper::ApplyAttrs()
             else
                 pFontNode->SetSizeParameter(Fraction(nFontSize),FontSizeType::ABSOLUT);
 
-            pFontNode->SetSubNodes(nullptr,popOrZero(rNodeStack).release());
+            pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
             rNodeStack.push_front(std::move(pFontNode));
         }
         if (!sFontFamily.isEmpty())
@@ -730,7 +730,7 @@ void SmXMLContext_Helper::ApplyAttrs()
 
             aToken.aText = sFontFamily;
             std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
-            pFontNode->SetSubNodes(nullptr,popOrZero(rNodeStack).release());
+            pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
             rNodeStack.push_front(std::move(pFontNode));
         }
         if (!sColor.isEmpty())
@@ -744,7 +744,7 @@ void SmXMLContext_Helper::ApplyAttrs()
             {
                 aToken.eType = static_cast<SmTokenType>(tok);
                 std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
-                pFontNode->SetSubNodes(nullptr,popOrZero(rNodeStack).release());
+                pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
                 rNodeStack.push_front(std::move(pFontNode));
             }
         }
@@ -872,7 +872,7 @@ void SmXMLTokenAttrHelper::ApplyAttrs(MathMLMathvariantValue eDefaultMv)
         aToken.cMathChar = '\0';
         aToken.nLevel = 5;
         std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
-        pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack).release());
+        pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
         rNodeStack.push_front(std::move(pFontNode));
     }
 }
@@ -1058,7 +1058,7 @@ void SmXMLPhantomContext_Impl::EndElement()
 
     std::unique_ptr<SmFontNode> pPhantom(new SmFontNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    pPhantom->SetSubNodes(nullptr,popOrZero(rNodeStack).release());
+    pPhantom->SetSubNodes(nullptr, popOrZero(rNodeStack));
     rNodeStack.push_front(std::move(pPhantom));
 }
 
@@ -1120,11 +1120,11 @@ void SmXMLFencedContext_Impl::EndElement()
     aToken.eType = TLPARENT;
     aToken.cMathChar = cBegin;
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(aToken));
-    SmNode *pLeft = new SmMathSymbolNode(aToken);
+    std::unique_ptr<SmNode> pLeft(new SmMathSymbolNode(aToken));
 
     aToken.cMathChar = cEnd;
     aToken.eType = TRPARENT;
-    SmNode *pRight = new SmMathSymbolNode(aToken);
+    std::unique_ptr<SmNode> pRight(new SmMathSymbolNode(aToken));
 
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
@@ -1146,11 +1146,11 @@ void SmXMLFencedContext_Impl::EndElement()
     }
 
     SmToken aDummy;
-    SmStructureNode *pBody = new SmExpressionNode(aDummy);
+    std::unique_ptr<SmStructureNode> pBody(new SmExpressionNode(aDummy));
     pBody->SetSubNodes(std::move(aRelationArray));
 
 
-    pSNode->SetSubNodes(pLeft,pBody,pRight);
+    pSNode->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
     pSNode->SetScaleMode(SmScaleMode::Height);
     GetSmImport().GetNodeStack().push_front(std::move(pSNode));
 }
@@ -1693,17 +1693,17 @@ void SmXMLUnderContext_Impl::HandleAccent()
     aToken.cMathChar = '\0';
     aToken.eType = TUNDERLINE;
 
-    SmNode *pFirst;
+    std::unique_ptr<SmNode> pFirst;
     std::unique_ptr<SmStructureNode> pNode(new SmAttributNode(aToken));
     if ((pTest->GetToken().cMathChar & 0x0FFF) == 0x0332)
     {
-        pFirst = new SmRectangleNode(aToken);
+        pFirst.reset(new SmRectangleNode(aToken));
     }
     else
-        pFirst = pTest.release();
+        pFirst = std::move(pTest);
 
     std::unique_ptr<SmNode> pSecond = popOrZero(rNodeStack);
-    pNode->SetSubNodes(pFirst, pSecond.release());
+    pNode->SetSubNodes(std::move(pFirst), std::move(pSecond));
     pNode->SetScaleMode(SmScaleMode::Width);
     rNodeStack.push_front(std::move(pNode));
 }
@@ -1766,7 +1766,7 @@ void SmXMLOverContext_Impl::HandleAccent()
 
     std::unique_ptr<SmNode> pFirst = popOrZero(rNodeStack);
     std::unique_ptr<SmNode> pSecond = popOrZero(rNodeStack);
-    pNode->SetSubNodes(pFirst.release(), pSecond.release());
+    pNode->SetSubNodes(std::move(pFirst), std::move(pSecond));
     pNode->SetScaleMode(SmScaleMode::Width);
     rNodeStack.push_front(std::move(pNode));
 
@@ -2316,7 +2316,7 @@ void SmXMLDocContext_Impl::EndElement()
 
     SmToken aDummy;
     std::unique_ptr<SmStructureNode> pSNode(new SmLineNode(aDummy));
-    pSNode->SetSubNodes(pContextNode.release(), nullptr);
+    pSNode->SetSubNodes(std::move(pContextNode), nullptr);
     rNodeStack.push_front(std::move(pSNode));
 
     SmNodeArray  LineArray;
@@ -2345,10 +2345,10 @@ void SmXMLFracContext_Impl::EndElement()
     aToken.cMathChar = '\0';
     aToken.eType = TOVER;
     std::unique_ptr<SmStructureNode> pSNode(new SmBinVerNode(aToken));
-    SmNode *pOper = new SmRectangleNode(aToken);
+    std::unique_ptr<SmNode> pOper(new SmRectangleNode(aToken));
     std::unique_ptr<SmNode> pSecond = popOrZero(rNodeStack);
     std::unique_ptr<SmNode> pFirst = popOrZero(rNodeStack);
-    pSNode->SetSubNodes(pFirst.release(), pOper, pSecond.release());
+    pSNode->SetSubNodes(std::move(pFirst), std::move(pOper), std::move(pSecond));
     rNodeStack.push_front(std::move(pSNode));
 }
 
@@ -2364,11 +2364,11 @@ void SmXMLRootContext_Impl::EndElement()
     aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
     aToken.eType = TNROOT;
     std::unique_ptr<SmStructureNode> pSNode(new SmRootNode(aToken));
-    SmNode *pOper = new SmRootSymbolNode(aToken);
+    std::unique_ptr<SmNode> pOper(new SmRootSymbolNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     std::unique_ptr<SmNode> pIndex = popOrZero(rNodeStack);
     std::unique_ptr<SmNode> pBase = popOrZero(rNodeStack);
-    pSNode->SetSubNodes(pIndex.release(), pOper, pBase.release());
+    pSNode->SetSubNodes(std::move(pIndex), std::move(pOper), std::move(pBase));
     rNodeStack.push_front(std::move(pSNode));
 }
 
@@ -2386,9 +2386,9 @@ void SmXMLSqrtContext_Impl::EndElement()
     aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
     aToken.eType = TSQRT;
     std::unique_ptr<SmStructureNode> pSNode(new SmRootNode(aToken));
-    SmNode *pOper = new SmRootSymbolNode(aToken);
+    std::unique_ptr<SmNode> pOper(new SmRootSymbolNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    pSNode->SetSubNodes(nullptr,pOper,popOrZero(rNodeStack).release());
+    pSNode->SetSubNodes(nullptr, std::move(pOper), popOrZero(rNodeStack));
     rNodeStack.push_front(std::move(pSNode));
 }
 
@@ -2434,7 +2434,7 @@ void SmXMLRowContext_Impl::EndElement()
                 aToken.cMathChar = '\0';
 
             aToken.eType = TLPARENT;
-            SmNode *pLeft = new SmMathSymbolNode(aToken);
+            std::unique_ptr<SmNode> pLeft(new SmMathSymbolNode(aToken));
 
             if ((aRelationArray[nSize-1]->GetScaleMode() == SmScaleMode::Height)
                 && (aRelationArray[nSize-1]->GetType() == SmNodeType::Math))
@@ -2446,7 +2446,7 @@ void SmXMLRowContext_Impl::EndElement()
                 aToken.cMathChar = '\0';
 
             aToken.eType = TRPARENT;
-            SmNode *pRight = new SmMathSymbolNode(aToken);
+            std::unique_ptr<SmNode> pRight(new SmMathSymbolNode(aToken));
 
             SmNodeArray aRelationArray2;
 
@@ -2464,10 +2464,10 @@ void SmXMLRowContext_Impl::EndElement()
 
             SmToken aDummy;
             std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(aToken));
-            SmStructureNode *pBody = new SmExpressionNode(aDummy);
+            std::unique_ptr<SmStructureNode> pBody(new SmExpressionNode(aDummy));
             pBody->SetSubNodes(std::move(aRelationArray2));
 
-            pSNode->SetSubNodes(pLeft,pBody,pRight);
+            pSNode->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
             pSNode->SetScaleMode(SmScaleMode::Height);
             rNodeStack.push_front(std::move(pSNode));
 

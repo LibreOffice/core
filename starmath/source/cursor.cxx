@@ -617,13 +617,13 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
         it = FindPositionInLineList(pLineList.get(), mpPosition->CaretPos);
 
     //If there's no selected nodes, create a place node
-    SmNode *pBodyNode;
+    std::unique_ptr<SmNode> pBodyNode;
     SmCaretPos PosAfterInsert;
     if(pSelectedNodesList->empty()) {
-        pBodyNode = new SmPlaceNode();
-        PosAfterInsert = SmCaretPos(pBodyNode, 1);
+        pBodyNode.reset(new SmPlaceNode());
+        PosAfterInsert = SmCaretPos(pBodyNode.get(), 1);
     } else
-        pBodyNode = SmNodeListParser().Parse(pSelectedNodesList.get());
+        pBodyNode.reset(SmNodeListParser().Parse(pSelectedNodesList.get()));
 
     pSelectedNodesList.reset();
 
@@ -631,11 +631,11 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
     SmBraceNode *pBrace = new SmBraceNode(aTok);
     pBrace->SetScaleMode(SmScaleMode::Height);
-    SmNode *pLeft = CreateBracket(eBracketType, true),
-           *pRight = CreateBracket(eBracketType, false);
-    SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
-    pBody->SetSubNodes(pBodyNode, nullptr);
-    pBrace->SetSubNodes(pLeft, pBody, pRight);
+    std::unique_ptr<SmNode> pLeft( CreateBracket(eBracketType, true) ),
+                            pRight( CreateBracket(eBracketType, false) );
+    std::unique_ptr<SmBracebodyNode> pBody(new SmBracebodyNode(SmToken()));
+    pBody->SetSubNodes(std::move(pBodyNode), nullptr);
+    pBrace->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
     pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
 
     //Insert into line
@@ -750,22 +750,22 @@ bool SmCursor::InsertRow() {
         if(pNewLineList->empty())
             pNewLineList->push_front(new SmPlaceNode());
         //Parse new line
-        SmNode *pNewLine = SmNodeListParser().Parse(pNewLineList);
+        std::unique_ptr<SmNode> pNewLine(SmNodeListParser().Parse(pNewLineList));
         delete pNewLineList;
         //Wrap pNewLine in SmLineNode if needed
         if(pLineParent->GetType() == SmNodeType::Line) {
-            SmLineNode *pNewLineNode = new SmLineNode(SmToken(TNEWLINE, '\0', "newline"));
-            pNewLineNode->SetSubNodes(pNewLine, nullptr);
-            pNewLine = pNewLineNode;
+            std::unique_ptr<SmLineNode> pNewLineNode(new SmLineNode(SmToken(TNEWLINE, '\0', "newline")));
+            pNewLineNode->SetSubNodes(std::move(pNewLine), nullptr);
+            pNewLine = std::move(pNewLineNode);
         }
         //Get position
-        PosAfterInsert = SmCaretPos(pNewLine, 0);
+        PosAfterInsert = SmCaretPos(pNewLine.get(), 0);
         //Move other nodes if needed
         for( int i = pTable->GetNumSubNodes(); i > nTableIndex + 1; i--)
             pTable->SetSubNode(i, pTable->GetSubNode(i-1));
 
         //Insert new line
-        pTable->SetSubNode(nTableIndex + 1, pNewLine);
+        pTable->SetSubNode(nTableIndex + 1, pNewLine.get());
 
         //Check if we need to change token type:
         if(pTable->GetNumSubNodes() > 2 && pTable->GetToken().eType == TBINOM) {
@@ -835,16 +835,16 @@ void SmCursor::InsertFraction() {
 
     //Create pNum, and pDenom
     bool bEmptyFraction = pSelectedNodesList->empty();
-    SmNode *pNum = bEmptyFraction
+    std::unique_ptr<SmNode> pNum( bEmptyFraction
         ? new SmPlaceNode()
-        : SmNodeListParser().Parse(pSelectedNodesList.get());
-    SmNode *pDenom = new SmPlaceNode();
+        : SmNodeListParser().Parse(pSelectedNodesList.get()) );
+    std::unique_ptr<SmNode> pDenom(new SmPlaceNode());
     pSelectedNodesList.reset();
 
     //Create new fraction
     SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TG::Product, 0));
-    SmNode *pRect = new SmRectangleNode(SmToken());
-    pFrac->SetSubNodes(pNum, pRect, pDenom);
+    std::unique_ptr<SmNode> pRect(new SmRectangleNode(SmToken()));
+    pFrac->SetSubNodes(std::move(pNum), std::move(pRect), std::move(pDenom));
 
     //Insert in pLineList
     SmNodeList::iterator patchIt = pLineList->insert(it, pFrac);
@@ -852,7 +852,7 @@ void SmCursor::InsertFraction() {
     PatchLineList(pLineList.get(), it);
 
     //Finish editing
-    SmNode *pSelectedNode = bEmptyFraction ? pNum : pDenom;
+    SmNode *pSelectedNode = bEmptyFraction ? pFrac->GetSubNode(0) : pFrac->GetSubNode(2);
     FinishEdit(std::move(pLineList), pLineParent, nParentIndex, SmCaretPos(pSelectedNode, 1));
 }
 
@@ -1223,7 +1223,7 @@ void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
 
     //Parse list of nodes to a tree
     SmNodeListParser parser;
-    SmNode* pLine = parser.Parse(pLineList.get());
+    std::unique_ptr<SmNode> pLine(parser.Parse(pLineList.get()));
     pLineList.reset();
 
     //Check if we're making the body of a subsup node bigger than one
@@ -1232,15 +1232,15 @@ void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
        entries > 1) {
         //Wrap pLine in scalable round brackets
         SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
-        SmBraceNode *pBrace = new SmBraceNode(aTok);
+        std::unique_ptr<SmBraceNode> pBrace(new SmBraceNode(aTok));
         pBrace->SetScaleMode(SmScaleMode::Height);
-        SmNode *pLeft  = CreateBracket(SmBracketType::Round, true),
-               *pRight = CreateBracket(SmBracketType::Round, false);
-        SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
-        pBody->SetSubNodes(pLine, nullptr);
-        pBrace->SetSubNodes(pLeft, pBody, pRight);
+        std::unique_ptr<SmNode> pLeft(  CreateBracket(SmBracketType::Round, true) ),
+                                pRight( CreateBracket(SmBracketType::Round, false) );
+        std::unique_ptr<SmBracebodyNode> pBody(new SmBracebodyNode(SmToken()));
+        pBody->SetSubNodes(std::move(pLine), nullptr);
+        pBrace->SetSubNodes(std::move(pLeft), std::move(pBody), std::move(pRight));
         pBrace->Prepare(mpDocShell->GetFormat(), *mpDocShell, 0);
-        pLine = pBrace;
+        pLine = std::move(pBrace);
         //TODO: Consider the following alternative behavior:
         //Consider the line: A + {B + C}^D lsub E
         //Here pLineList is B, + and C and pParent is a subsup node with
@@ -1257,10 +1257,10 @@ void SmCursor::FinishEdit(std::unique_ptr<SmNodeList> pLineList,
 
     //Set pStartLine if NULL
     if(!pStartLine)
-        pStartLine = pLine;
+        pStartLine = pLine.get();
 
     //Insert it back into the parent
-    pParent->SetSubNode(nParentIndex, pLine);
+    pParent->SetSubNode(nParentIndex, pLine.release());
 
     //Rebuild graph of caret position
     mpAnchor = nullptr;
@@ -1441,53 +1441,53 @@ SmNode* SmNodeListParser::Expression(){
 
 SmNode* SmNodeListParser::Relation(){
     //Read a sum
-    SmNode* pLeft = Sum();
+    std::unique_ptr<SmNode> pLeft(Sum());
     //While we have tokens and the next is a relation
     while(Terminal() && IsRelationOperator(Terminal()->GetToken())){
         //Take the operator
-        SmNode* pOper = Take();
+        std::unique_ptr<SmNode> pOper(Take());
         //Find the right side of the relation
-        SmNode* pRight = Sum();
+        std::unique_ptr<SmNode> pRight(Sum());
         //Create new SmBinHorNode
-        SmStructureNode* pNewNode = new SmBinHorNode(SmToken());
-        pNewNode->SetSubNodes(pLeft, pOper, pRight);
-        pLeft = pNewNode;
+        std::unique_ptr<SmStructureNode> pNewNode(new SmBinHorNode(SmToken()));
+        pNewNode->SetSubNodes(std::move(pLeft), std::move(pOper), std::move(pRight));
+        pLeft = std::move(pNewNode);
     }
-    return pLeft;
+    return pLeft.release();
 }
 
 SmNode* SmNodeListParser::Sum(){
     //Read a product
-    SmNode* pLeft = Product();
+    std::unique_ptr<SmNode> pLeft(Product());
     //While we have tokens and the next is a sum
     while(Terminal() && IsSumOperator(Terminal()->GetToken())){
         //Take the operator
-        SmNode* pOper = Take();
+        std::unique_ptr<SmNode> pOper(Take());
         //Find the right side of the sum
-        SmNode* pRight = Product();
+        std::unique_ptr<SmNode> pRight(Product());
         //Create new SmBinHorNode
-        SmStructureNode* pNewNode = new SmBinHorNode(SmToken());
-        pNewNode->SetSubNodes(pLeft, pOper, pRight);
-        pLeft = pNewNode;
+        std::unique_ptr<SmStructureNode> pNewNode(new SmBinHorNode(SmToken()));
+        pNewNode->SetSubNodes(std::move(pLeft), std::move(pOper), std::move(pRight));
+        pLeft = std::move(pNewNode);
     }
-    return pLeft;
+    return pLeft.release();
 }
 
 SmNode* SmNodeListParser::Product(){
     //Read a Factor
-    SmNode* pLeft = Factor();
+    std::unique_ptr<SmNode> pLeft(Factor());
     //While we have tokens and the next is a product
     while(Terminal() && IsProductOperator(Terminal()->GetToken())){
         //Take the operator
-        SmNode* pOper = Take();
+        std::unique_ptr<SmNode> pOper(Take());
         //Find the right side of the operation
-        SmNode* pRight = Factor();
+        std::unique_ptr<SmNode> pRight(Factor());
         //Create new SmBinHorNode
-        SmStructureNode* pNewNode = new SmBinHorNode(SmToken());
-        pNewNode->SetSubNodes(pLeft, pOper, pRight);
-        pLeft = pNewNode;
+        std::unique_ptr<SmStructureNode> pNewNode(new SmBinHorNode(SmToken()));
+        pNewNode->SetSubNodes(std::move(pLeft), std::move(pOper), std::move(pRight));
+        pLeft = std::move(pNewNode);
     }
-    return pLeft;
+    return pLeft.release();
 }
 
 SmNode* SmNodeListParser::Factor(){
@@ -1498,15 +1498,15 @@ SmNode* SmNodeListParser::Factor(){
     else if(IsUnaryOperator(Terminal()->GetToken()))
     {
         SmStructureNode *pUnary = new SmUnHorNode(SmToken());
-        SmNode *pOper = Terminal(),
-               *pArg;
+        std::unique_ptr<SmNode> pOper(Terminal()),
+                                pArg;
 
         if(Next())
-            pArg = Factor();
+            pArg.reset(Factor());
         else
-            pArg = Error();
+            pArg.reset(Error());
 
-        pUnary->SetSubNodes(pOper, pArg);
+        pUnary->SetSubNodes(std::move(pOper), std::move(pArg));
         return pUnary;
     }
     return Postfix();
@@ -1515,20 +1515,20 @@ SmNode* SmNodeListParser::Factor(){
 SmNode* SmNodeListParser::Postfix(){
     if(!Terminal())
         return Error();
-    SmNode *pArg = nullptr;
+    std::unique_ptr<SmNode> pArg;
     if(IsPostfixOperator(Terminal()->GetToken()))
-        pArg = Error();
+        pArg.reset(Error());
     else if(IsOperator(Terminal()->GetToken()))
         return Error();
     else
-        pArg = Take();
+        pArg.reset(Take());
     while(Terminal() && IsPostfixOperator(Terminal()->GetToken())) {
-        SmStructureNode *pUnary = new SmUnHorNode(SmToken());
-        SmNode *pOper = Take();
-        pUnary->SetSubNodes(pArg, pOper);
-        pArg = pUnary;
+        std::unique_ptr<SmStructureNode> pUnary(new SmUnHorNode(SmToken()) );
+        std::unique_ptr<SmNode> pOper(Take());
+        pUnary->SetSubNodes(std::move(pArg), std::move(pOper));
+        pArg = std::move(pUnary);
     }
-    return pArg;
+    return pArg.release();
 }
 
 SmNode* SmNodeListParser::Error(){
