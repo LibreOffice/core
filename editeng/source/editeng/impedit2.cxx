@@ -108,7 +108,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bFirstWordCapitalization(true),
     mbLastTryMerge(false),
     mbReplaceLeadingSingleQuotationMark(true),
-    mbHoriAlignIgnoreTrailingWhitespace(false),
     mbNbspRunNext(false)
 {
     pEditEngine         = pEE;
@@ -3165,7 +3164,7 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
     return (sal_uInt32)nMaxWidth;
 }
 
-sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, bool bIgnoreExtraSpace, bool bIgnoreTrailingWhiteSpaces )
+sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, bool bIgnoreExtraSpace )
 {
     sal_Int32 nPara = GetEditDoc().GetPos( pPortion->GetNode() );
 
@@ -3194,7 +3193,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
             break;
             case PortionKind::TEXT:
             {
-                if ( (( eJustification != SvxAdjust::Block ) || ( !bIgnoreExtraSpace )) && !bIgnoreTrailingWhiteSpaces )
+                if ( ( eJustification != SvxAdjust::Block ) || ( !bIgnoreExtraSpace ) )
                 {
                     nWidth += rTextPortion.GetSize().Width();
                 }
@@ -3204,10 +3203,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
                     SeekCursor( pPortion->GetNode(), nPos+1, aTmpFont );
                     aTmpFont.SetPhysFont( GetRefDevice() );
                     ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
-                    if (bIgnoreTrailingWhiteSpaces)
-                        nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString().trim(), nPos, rTextPortion.GetLen() ).Width();
-                    else
-                        nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nPos, rTextPortion.GetLen() ).Width();
+                    nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nPos, rTextPortion.GetLen() ).Width();
                 }
             }
             break;

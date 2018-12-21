@@ -620,10 +620,6 @@ public:
     sal_Int32 GetOverflowingLineNum() const;
     void ClearOverflowingParaNum();
     bool IsPageOverflow();
-
-    // tdf#115639 compatibility flag
-    void SetHoriAlignIgnoreTrailingWhitespace(bool bEnabled);
-    bool IsHoriAlignIgnoreTrailingWhitespace() const;
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX
