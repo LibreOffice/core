@@ -22,9 +22,13 @@
 #include <QtWidgets/QWidget>
 #include <rtl/ustring.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
+
 class Qt5Frame;
 class Qt5Object;
 class QFocusEvent;
+class QInputMethodEvent;
 class QKeyEvent;
 class QMouseEvent;
 class QMoveEvent;
@@ -32,6 +36,7 @@ class QPaintEvent;
 class QResizeEvent;
 class QShowEvent;
 class QWheelEvent;
+class QVariant;
 
 class Qt5Widget : public QWidget
 {
@@ -56,6 +61,9 @@ class Qt5Widget : public QWidget
     virtual void showEvent(QShowEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
     virtual void closeEvent(QCloseEvent*) override;
+
+    void inputMethodEvent(QInputMethodEvent*) override;
+    QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
 
     const QString m_InternalMimeType = "application/x-libreoffice-dnditem";
 
