@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "idlc.hxx"
+#include <boost/optional.hpp>
 
 // Enum to define all the different operators to combine expressions
 enum class ExprComb
@@ -133,8 +134,8 @@ private:
                     m_subExpr2;
     std::unique_ptr<AstExprValue>
                     m_exprValue;
-    std::unique_ptr<OString>
-                    m_pSymbolicName;
+    boost::optional<OString>
+                    m_xSymbolicName;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTEXPRESSION_HXX
