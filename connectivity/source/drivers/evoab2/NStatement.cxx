@@ -442,7 +442,7 @@ void OCommonStatement::parseSql( const OUString& sql, QueryData& _out_rQueryData
     _out_rQueryData.eFilterType = eFilterOther;
 
     OUString aErr;
-    m_pParseTree = m_aParser.parseTree( aErr, sql );
+    m_pParseTree = m_aParser.parseTree( aErr, sql ).release();
     m_aSQLIterator.setParseTree( m_pParseTree );
     m_aSQLIterator.traverseAll();
 
