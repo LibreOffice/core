@@ -1263,6 +1263,24 @@ CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, x
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 4, scalc.exe, new, Calc )
 
+// Registering OOXML MIME content types, to allow OS/applications to redirect such content to LO even if extension is unknown
+
+RegistryItem gid_Regitem_Xlsx_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    Name = "Extension";
+    Value = ".xlsx";
+End
+
+RegistryItem gid_Regitem_Xltx_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.openxmlformats-officedocument.spreadsheetml.template";
+    Name = "Extension";
+    Value = ".xltx";
+End
+
 // registering other supported types
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Uos, gid_Module_Prg_Calc_Other_Reg, uos, UOS, UNIFORM_OFFICE_FORMAT_SPREADSHEET, 3, scalc.exe, open, Calc )
