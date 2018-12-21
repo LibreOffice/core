@@ -1636,8 +1636,19 @@ WW8FlyPara::WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc /* = 0 */)
         memcpy( this, pSrc, sizeof( WW8FlyPara ) ); // Copy-Ctor
     else
     {
-        memset( this, 0, sizeof( WW8FlyPara ) );    // Default-Ctor
+        nSp26 = 0;
+        nSp27 = 0;
+        nSp45 = 0;
+        nSp28 = 0;
+        nLeMgn = 0;
+        nRiMgn = 0;
+        nUpMgn = 0;
+        nLoMgn = 0;
+        nSp29 = 0;
         nSp37 = 2;                                  // Default: wrapping
+        bBorderLines = false;
+        bGrafApo = false;
+        mbVertSet = false;
     }
     bVer67 = bIsVer67;
 }
