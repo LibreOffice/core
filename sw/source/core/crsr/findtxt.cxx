@@ -941,11 +941,11 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             const_cast<SwPaM&>(rRegion).GetRingContainer().merge( m_rCursor.GetRingContainer() );
         }
 
-        std::unique_ptr<OUString> pRepl( bRegExp
-                ? sw::ReplaceBackReferences(m_rSearchOpt, &rCursor, m_pLayout)
-                : nullptr );
+        boost::optional<OUString> xRepl;
+        if (bRegExp)
+            xRepl = sw::ReplaceBackReferences(m_rSearchOpt, &rCursor, m_pLayout);
         bool const bReplaced = sw::ReplaceImpl(rCursor,
-                pRepl ? *pRepl : m_rSearchOpt.replaceString,
+                xRepl ? *xRepl : m_rSearchOpt.replaceString,
                 bRegExp, *m_rCursor.GetDoc(), m_pLayout);
 
         m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );
@@ -1084,17 +1084,17 @@ bool ReplaceImpl(
     return bReplaced;
 }
 
-OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
+boost::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
         SwPaM *const pPam, SwRootFrame const*const pLayout)
 {
-    OUString *pRet = nullptr;
+    boost::optional<OUString> xRet;
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms2::REGEXP == rSearchOpt.AlgorithmType2 )
     {
         const SwContentNode* pTextNode = pPam->GetContentNode();
         if (!pTextNode || !pTextNode->IsTextNode())
         {
-            return pRet;
+            return xRet;
         }
         SwTextFrame const*const pFrame(pLayout
             ? static_cast<SwTextFrame const*>(pTextNode->getLayoutFrame(pLayout))
@@ -1135,11 +1135,11 @@ OUString *ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
                 }
                 OUString aReplaceStr( rSearchOpt.replaceString );
                 aSText.ReplaceBackReferences( aReplaceStr, rStr, aResult );
-                pRet = new OUString( aReplaceStr );
+                xRet = aReplaceStr;
             }
         }
     }
-    return pRet;
+    return xRet;
 }
 
 } // namespace sw
