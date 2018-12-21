@@ -523,26 +523,32 @@ bool PDFDict::emit( EmitContext& rWriteContext ) const
     return rWriteContext.write( "\n>>\n", 4 );
 }
 
-void PDFDict::insertValue( const OString& rName, PDFEntry* pValue )
+void PDFDict::insertValue( const OString& rName, std::unique_ptr<PDFEntry> pValue )
 {
     if( ! pValue )
         eraseValue( rName );
 
+    auto pValueTmp = pValue.get();
     std::unordered_map<OString,PDFEntry*>::iterator it = m_aMap.find( rName );
     if( it == m_aMap.end() )
     {
         // new name/value, pair, append it
         m_aSubElements.emplace_back(o3tl::make_unique<PDFName>(rName));
-        m_aSubElements.emplace_back( pValue );
+        m_aSubElements.emplace_back( std::move(pValue) );
     }
     else
     {
         unsigned int nSub = m_aSubElements.size();
-        for( unsigned int i = 0; i < nSub; i++ )
+        bool bFound = false;
+        for( unsigned int i = 0; i < nSub && !bFound; i++ )
             if( m_aSubElements[i].get() == it->second )
-                m_aSubElements[i].reset(pValue);
+            {
+                m_aSubElements[i] = std::move(pValue);
+                bFound = true;
+                break;
+            }
     }
-    m_aMap[ rName ] = pValue;
+    m_aMap[ rName ] = pValueTmp;
 }
 
 void PDFDict::eraseValue( const OString& rName )
@@ -833,10 +839,10 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
             if( nOutBytes )
             {
                 // clone this object
-                PDFObject* pClone = static_cast<PDFObject*>(clone());
+                std::unique_ptr<PDFObject> pClone(static_cast<PDFObject*>(clone()));
                 // set length in the dictionary to new stream length
-                PDFNumber* pNewLen = new PDFNumber( double(nOutBytes) );
-                pClone->m_pStream->m_pDict->insertValue( "Length", pNewLen );
+                std::unique_ptr<PDFNumber> pNewLen(new PDFNumber( double(nOutBytes) ));
+                pClone->m_pStream->m_pDict->insertValue( "Length", std::move(pNewLen) );
 
                 if( bDeflate && rWriteContext.m_bDeflate )
                 {
@@ -871,7 +877,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                     if( pClone->m_aSubElements[i].get() != pClone->m_pStream )
                         bRet = pClone->m_aSubElements[i]->emit( rWriteContext );
                 }
-                delete pClone;
+                pClone.reset();
                 // write stream
                 if( bRet )
                     bRet = rWriteContext.write("stream\n", 7)

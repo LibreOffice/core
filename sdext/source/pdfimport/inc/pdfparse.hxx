@@ -191,7 +191,7 @@ struct PDFDict : public PDFContainer
 
     // inserting a value of NULL will remove rName and the previous value
     // from the dictionary
-    void insertValue( const OString& rName, PDFEntry* pValue );
+    void insertValue( const OString& rName, std::unique_ptr<PDFEntry> pValue );
     // removes a name/value pair from the dict
     void eraseValue( const OString& rName );
     // builds new map as of sub elements
