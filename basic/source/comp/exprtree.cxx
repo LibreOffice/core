@@ -191,7 +191,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
     OUString aSym( (pKeywordSymbolInfo == nullptr) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
     SbxDataType eType = (pKeywordSymbolInfo == nullptr) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
     SbiExprListPtr pPar;
-    SbiExprListVector* pvMoreParLcl = nullptr;
+    std::unique_ptr<SbiExprListVector> pvMoreParLcl;
     // are there parameters following?
     SbiToken eNextTok = pParser->Peek();
     // is it a known parameter?
@@ -224,7 +224,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         {
             if( pvMoreParLcl == nullptr )
             {
-                pvMoreParLcl = new SbiExprListVector;
+                pvMoreParLcl.reset(new SbiExprListVector);
             }
             SbiExprListPtr pAddPar = SbiExprList::ParseParameters( pParser );
             bError = bError || !pAddPar->IsValid();
@@ -289,7 +289,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         if( pConst )
         {
             pPar = nullptr;
-            delete pvMoreParLcl;
+            pvMoreParLcl.reset();
             if( pConst->GetType() == SbxSTRING )
             {
                 return o3tl::make_unique<SbiExprNode>( pConst->GetString() );
@@ -353,7 +353,7 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         pPar = SbiExprList::ParseParameters( pParser,false,false );
     }
     pNd->aVar.pPar = pPar.release();
-    pNd->aVar.pvMorePar = pvMoreParLcl;
+    pNd->aVar.pvMorePar = pvMoreParLcl.release();
     if( bObj )
     {
         // from 8.1.95: Object may also be of the type SbxVARIANT
