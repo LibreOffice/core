@@ -18,6 +18,23 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+/// Gets one child of xShape, which one is specified by nIndex.
+uno::Reference<drawing::XShape> getChildShape(const uno::Reference<drawing::XShape>& xShape, sal_Int32 nIndex)
+{
+    uno::Reference<container::XIndexAccess> xGroup(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    CPPUNIT_ASSERT(xGroup->getCount() > nIndex);
+
+    uno::Reference<drawing::XShape> xRet(xGroup->getByIndex(nIndex), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xRet.is());
+
+    return xRet;
+}
+}
+
 class SdImportTestSmartArt : public SdModelTestBase
 {
 public:
@@ -48,6 +65,7 @@ public:
     void testTableList();
     void testAccentProcess();
     void testContinuousBlockProcess();
+    void testOrgChart();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -78,6 +96,7 @@ public:
     CPPUNIT_TEST(testTableList);
     CPPUNIT_TEST(testAccentProcess);
     CPPUNIT_TEST(testContinuousBlockProcess);
+    CPPUNIT_TEST(testOrgChart);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -663,6 +682,46 @@ void SdImportTestSmartArt::testContinuousBlockProcess()
     // need to divide that to 1, 0.5, 1, 0.5 and 1 units), while the old value
     // was 4703 and the new one is 5461.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(5000), xAShape->getSize().Width);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testOrgChart()
+{
+    // Simple org chart with 1 manager and 1 employee only.
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-org-chart.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    uno::Reference<text::XText> xManager(
+        getChildShape(getChildShape(getChildShape(xGroup, 0), 0), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xManager.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Manager"), xManager->getString());
+
+    uno::Reference<drawing::XShape> xManagerShape(xManager, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xManagerShape.is());
+
+    awt::Point aManagerPos = xManagerShape->getPosition();
+
+    uno::Reference<text::XText> xEmployee(
+        getChildShape(
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 0), 0), 0),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployee.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Employee"), xEmployee->getString());
+
+    uno::Reference<drawing::XShape> xEmployeeShape(xEmployee, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployeeShape.is());
+
+    awt::Point aEmployeePos = xEmployeeShape->getPosition();
+
+    CPPUNIT_ASSERT_EQUAL(aManagerPos.X, aEmployeePos.X);
+
+    // Without the accompanying fix in place, this test would have failed: the
+    // two shapes were overlapping, i.e. "manager" was not above "employee".
+    CPPUNIT_ASSERT_GREATER(aManagerPos.Y, aEmployeePos.Y);
 
     xDocShRef->DoClose();
 }

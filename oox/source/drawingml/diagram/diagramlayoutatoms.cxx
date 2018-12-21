@@ -523,7 +523,27 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
         case XML_hierChild:
         case XML_hierRoot:
+        {
+            if (rShape->getChildren().empty() || rShape->getSize().Width == 0
+                || rShape->getSize().Height == 0)
+                break;
+
+            sal_Int32 nCount = rShape->getChildren().size();
+
+            awt::Size aChildSize = rShape->getSize();
+            aChildSize.Height /= nCount;
+
+            awt::Point aChildPos(0, 0);
+            for (auto& pChild : rShape->getChildren())
+            {
+                pChild->setPosition(aChildPos);
+                pChild->setSize(aChildSize);
+                pChild->setChildSize(aChildSize);
+                aChildPos.Y += aChildSize.Height;
+            }
+
             break;
+        }
 
         case XML_lin:
         {
