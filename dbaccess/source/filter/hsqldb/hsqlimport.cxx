@@ -338,10 +338,20 @@ void HsqlImporter::importHsqlDatabase()
     // data
     for (const auto& tableIndex : parser.getTableIndexes())
     {
-        std::vector<ColumnDefinition> aColTypes = parser.getTableColumnTypes(tableIndex.first);
         try
         {
+            std::vector<ColumnDefinition> aColTypes = parser.getTableColumnTypes(tableIndex.first);
             parseTableRows(tableIndex.second, aColTypes, tableIndex.first);
+        }
+        catch (const std::out_of_range& e)
+        {
+            std::unique_ptr<SQLException> ex(new SQLException);
+            const char* msg = e.what();
+            ex->SQLState = OUString(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
+            // chain errors and keep going
+            if (pException)
+                ex->NextException <<= *pException;
+            pException = std::move(ex);
         }
         catch (SQLException& ex)
         {
