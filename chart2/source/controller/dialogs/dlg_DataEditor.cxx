@@ -22,15 +22,10 @@
 #include <comphelper/stl_types.hxx>
 
 #include <osl/diagnose.h>
-#include <sfx2/dispatch.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <svtools/miscopt.hxx>
-#include <unotools/pathoptions.hxx>
-#include <svl/eitem.hxx>
-#include <vcl/edit.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

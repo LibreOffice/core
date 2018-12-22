@@ -20,7 +20,11 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_TITLES_HXX
 
 #include "TitleDialogData.hxx"
-#include <vcl/weld.hxx>
+
+template <typename Arg, typename Ret> class Link;
+namespace weld { class Builder; }
+namespace weld { class Entry; }
+namespace weld { class Label; }
 
 namespace chart
 {

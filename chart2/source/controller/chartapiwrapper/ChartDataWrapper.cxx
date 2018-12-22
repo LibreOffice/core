@@ -20,33 +20,14 @@
 #include "ChartDataWrapper.hxx"
 #include <DiagramHelper.hxx>
 #include <DataSourceHelper.hxx>
-#include <servicenames_charttypes.hxx>
-#include <CommonFunctors.hxx>
 #include <ChartModelHelper.hxx>
-#include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include "Chart2ModelContact.hxx"
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
-#include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
-#include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
-#include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
-#include <CharacterProperties.hxx>
-#include <FillProperties.hxx>
-
 #include <float.h>
-#include <map>
-#include <algorithm>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 

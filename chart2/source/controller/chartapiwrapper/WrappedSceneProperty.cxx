@@ -20,7 +20,6 @@
 #include "WrappedSceneProperty.hxx"
 #include "Chart2ModelContact.hxx"
 #include <DiagramHelper.hxx>
-#include <servicenames_charttypes.hxx>
 #include <BaseGFXHelper.hxx>
 
 using namespace ::com::sun::star;

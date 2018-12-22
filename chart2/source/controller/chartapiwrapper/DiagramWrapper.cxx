@@ -21,9 +21,7 @@
 #include <servicenames_charttypes.hxx>
 #include "DataSeriesPointWrapper.hxx"
 #include "AxisWrapper.hxx"
-#include <AxisHelper.hxx>
 #include "Chart2ModelContact.hxx"
-#include <PositionAndSizeHelper.hxx>
 #include "WallFloorWrapper.hxx"
 #include "MinMaxLineWrapper.hxx"
 #include "UpDownBarWrapper.hxx"
@@ -38,9 +36,7 @@
 #include "WrappedSplineProperties.hxx"
 #include "WrappedStockProperties.hxx"
 #include "WrappedSceneProperty.hxx"
-#include <RelativePositionHelper.hxx>
 #include <ControllerLockGuard.hxx>
-#include <ModifyListenerHelper.hxx>
 #include <DisposeHelper.hxx>
 #include "WrappedAutomaticPositionProperties.hxx"
 #include <CommonConverters.hxx>
@@ -49,7 +45,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -65,7 +60,6 @@
 
 #include <algorithm>
 #include <map>
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <tools/diagnose_ex.h>

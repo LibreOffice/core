@@ -22,7 +22,6 @@
 #include <LegendHelper.hxx>
 #include <ChartModel.hxx>
 
-#include <svtools/controldims.hxx>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 
@@ -31,7 +30,7 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/builder.hxx>
+#include <vcl/weld.hxx>
 
 namespace chart
 {

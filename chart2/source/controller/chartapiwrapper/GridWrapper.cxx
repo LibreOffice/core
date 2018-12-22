@@ -21,7 +21,6 @@
 #include <AxisHelper.hxx>
 #include "Chart2ModelContact.hxx"
 #include <AxisIndexDefines.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
@@ -30,8 +29,6 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

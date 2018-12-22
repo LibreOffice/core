@@ -34,7 +34,6 @@ class TabPage;
 namespace chart
 {
 
-class DataSourceTabControl;
 class RangeChooserTabPage;
 class DataSourceTabPage;
 class ChartTypeTemplateProvider;

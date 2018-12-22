@@ -19,6 +19,7 @@
 
 #include "WrappedAddInProperty.hxx"
 #include <ChartDocumentWrapper.hxx>
+#include <com/sun/star/util/XRefreshable.hpp>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;

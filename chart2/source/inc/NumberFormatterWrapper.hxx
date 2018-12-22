@@ -30,8 +30,6 @@ class Color;
 namespace chart
 {
 
-class FixedNumberFormatter;
-
 class OOO_DLLPUBLIC_CHARTTOOLS NumberFormatterWrapper final
 {
 public:

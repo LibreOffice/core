@@ -19,23 +19,19 @@
 
 #include "DialogModel.hxx"
 #include <RangeSelectionHelper.hxx>
-#include <PropertyHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <ContainerHelper.hxx>
-#include <CommonFunctors.hxx>
 #include <ControllerLockGuard.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <ChartModel.hxx>
 
-#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>

@@ -18,7 +18,6 @@
  */
 
 #include "tp_Trendline.hxx"
-#include "TabPageIds.h"
 #include <vcl/settings.hxx>
 
 namespace chart

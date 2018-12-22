@@ -20,11 +20,9 @@
 #include "dlg_NumberFormat.hxx"
 
 #include <svl/itemset.hxx>
-#include <svx/numinf.hxx>
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/tabdlg.hxx>
-#include <svl/zforlist.hxx>
+#include <sfx2/sfxdlg.hxx>
 
 namespace chart
 {

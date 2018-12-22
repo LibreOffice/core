@@ -25,7 +25,6 @@
 #include "tp_3D_SceneAppearance.hxx"
 #include "tp_3D_SceneIllumination.hxx"
 #include <ChartModelHelper.hxx>
-#include <ControllerLockGuard.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace chart

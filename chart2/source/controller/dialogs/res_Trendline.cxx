@@ -21,14 +21,10 @@
 #include <bitmaps.hlst>
 #include <chartview/ChartSfxItemIds.hxx>
 
-#include <editeng/sizeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
-#include <sfx2/tabdlg.hxx>
-
-#include <vector>
-#include <algorithm>
+#include <vcl/weld.hxx>
 
 namespace chart
 {

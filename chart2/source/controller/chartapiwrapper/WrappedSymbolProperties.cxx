@@ -29,9 +29,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <vcl/GraphicLoader.hxx>
 
-#include <editeng/unoprnms.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>

@@ -20,10 +20,10 @@
 #include <res_ErrorBar.hxx>
 #include <bitmaps.hlst>
 #include <RangeSelectionHelper.hxx>
-#include <TabPageNotifiable.hxx>
 #include <helpids.h>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <vcl/dialog.hxx>
 
 #include <rtl/math.hxx>
 #include <sal/log.hxx>

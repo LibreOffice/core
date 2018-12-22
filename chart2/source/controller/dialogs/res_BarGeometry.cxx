@@ -18,7 +18,6 @@
  */
 
 #include "res_BarGeometry.hxx"
-#include <vcl/builder.hxx>
 #include <ResId.hxx>
 #include <chart.hrc>
 

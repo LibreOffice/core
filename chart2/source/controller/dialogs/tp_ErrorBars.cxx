@@ -18,8 +18,6 @@
  */
 
 #include "tp_ErrorBars.hxx"
-#include "TabPageIds.h"
-#include <TabPageNotifiable.hxx>
 #include <vcl/settings.hxx>
 
 using namespace ::com::sun::star;

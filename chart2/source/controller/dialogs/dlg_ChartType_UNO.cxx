@@ -21,7 +21,6 @@
 #include <dlg_ChartType.hxx>
 #include <servicenames.hxx>
 #include <osl/mutex.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 

@@ -17,19 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <dlg_DataSource.hxx>
-#include <strings.hrc>
-#include <ResId.hxx>
 #include "ChartTypeTemplateProvider.hxx"
 #include <DiagramHelper.hxx>
-#include <ChartModel.hxx>
 #include "DialogModel.hxx"
 
 #include "tp_RangeChooser.hxx"
 #include "tp_DataSource.hxx"
-
-#include <vcl/layout.hxx>
-#include <vcl/tabctrl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

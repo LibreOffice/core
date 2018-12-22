@@ -24,7 +24,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <comphelper/sequence.hxx>
 
 #include <LinePropertiesHelper.hxx>

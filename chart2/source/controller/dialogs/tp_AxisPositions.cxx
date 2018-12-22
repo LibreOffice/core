@@ -19,20 +19,12 @@
 
 #include "tp_AxisPositions.hxx"
 
-#include "TabPageIds.h"
 #include <chartview/ChartSfxItemIds.hxx>
 #include <AxisHelper.hxx>
 
-#include <svx/svxids.hrc>
 #include <rtl/math.hxx>
 #include <svx/chrtitem.hxx>
-#include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/zformat.hxx>
-#include <svtools/controldims.hxx>
-
-#include <com/sun/star/chart/ChartAxisPosition.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
 
 using namespace ::com::sun::star;
 

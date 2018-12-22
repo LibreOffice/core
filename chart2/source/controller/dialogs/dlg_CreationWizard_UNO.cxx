@@ -21,16 +21,13 @@
 #include <dlg_CreationWizard.hxx>
 #include <servicenames.hxx>
 #include <TimerTriggeredControllerLock.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace chart

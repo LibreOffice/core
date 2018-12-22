@@ -19,9 +19,15 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_CHARTSFXITEMIDS_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_CHARTSFXITEMIDS_HXX
 
-#include <svl/ilstitem.hxx>
-#include <svx/chrtitem.hxx>
-#include <editeng/brushitem.hxx>
+class SvxSizeItem;
+class SfxIntegerListItem;
+class SfxBoolItem;
+class SfxStringItem;
+class SfxInt32Item;
+class SfxUInt32Item;
+class SvxChartIndicateItem;
+class SvxDoubleItem;
+class SvxBrushItem;
 
 // SCHATTR
 

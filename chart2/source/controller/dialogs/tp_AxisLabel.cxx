@@ -19,7 +19,6 @@
 
 #include "tp_AxisLabel.hxx"
 
-#include "TabPageIds.h"
 #include <chartview/ChartSfxItemIds.hxx>
 #include <TextDirectionListBox.hxx>
 

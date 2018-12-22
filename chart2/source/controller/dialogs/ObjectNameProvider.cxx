@@ -26,7 +26,6 @@
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <TitleHelper.hxx>
-#include <AxisIndexDefines.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <CommonConverters.hxx>
 #include <NumberFormatterWrapper.hxx>

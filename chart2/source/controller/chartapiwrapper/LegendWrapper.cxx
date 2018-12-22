@@ -19,17 +19,14 @@
 
 #include "LegendWrapper.hxx"
 #include "Chart2ModelContact.hxx"
-#include <LegendHelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <CharacterProperties.hxx>
 #include <LinePropertiesHelper.hxx>
@@ -42,7 +39,6 @@
 #include "WrappedScaleTextProperties.hxx"
 
 #include <algorithm>
-#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;

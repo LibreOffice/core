@@ -22,8 +22,6 @@
 
 #include <svx/frmdirlbox.hxx>
 
-namespace vcl { class Window; }
-
 namespace chart
 {
 

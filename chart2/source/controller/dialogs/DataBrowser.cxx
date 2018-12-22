@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/zformat.hxx>
 #include <svl/zforlist.hxx>
 
 #include "DataBrowser.hxx"
@@ -25,7 +24,6 @@
 #include <strings.hrc>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <CommonConverters.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -47,10 +45,8 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
 
 #include <algorithm>
-#include <functional>
 
 
 using namespace ::com::sun::star;
