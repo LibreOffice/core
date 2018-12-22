@@ -250,6 +250,12 @@ CPDManager* CPDManager::tryLoadCPD()
     static const char* pEnv = getenv("SAL_DISABLE_CPD");
 
     if (!pEnv || !*pEnv) {
+        // interface description XML files are needed in 'onNameAcquired()'
+        if (!g_file_test(FRONTEND_INTERFACE, G_FILE_TEST_IS_REGULAR) ||
+                !g_file_test(BACKEND_INTERFACE, G_FILE_TEST_IS_REGULAR)) {
+            return nullptr;
+        }
+
         GDir *dir;
         const gchar *filename;
         dir = g_dir_open(BACKEND_DIR, 0, nullptr);
