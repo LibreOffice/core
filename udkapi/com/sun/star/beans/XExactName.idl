@@ -47,7 +47,7 @@ published interface XExactName: com::sun::star::uno::XInterface
             the exact name for a given aprroximate name.
 
         <p>For example "getExactName" could be returned for "GETEXACTNAME"
-        when "GETEXACTNAME" was used by a case insesitive scripting language. </p>
+        when "GETEXACTNAME" was used by a case insensitive scripting language. </p>
      */
     string getExactName( [in] string aApproximateName );
 
