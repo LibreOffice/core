@@ -1543,7 +1543,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         if ( pParaPortion->IsSimpleInvalid() )
         {
             // Change through simple Text changes...
-            // Do mot cancel formatting since Portions possibly have to be split
+            // Do not cancel formatting since Portions possibly have to be split
             // again! If at some point cancelable, then validate the following
             // line! But if applicable, mark as valid, so there is less output...
             if ( pLine->GetEnd() < nInvalidStart )
