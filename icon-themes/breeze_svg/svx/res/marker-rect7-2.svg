@@ -1,1 +1,5 @@
-<svg height="7" viewBox="0 0 7 7" width="7" xmlns="http://www.w3.org/2000/svg"><path d="m0 295.14789h1.852083v1.852083h-1.852083z" fill="#fdbc4b" transform="matrix(3.7795275 0 0 3.7795541 0 -1115.5275)"/></svg>
+<svg viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg">
+  <path
+     d="M 0 0 L 0 7 L 7 7 L 7 0 L 0 0 z "
+     style="fill:#fdbc4b;opacity:0.8" />
+</svg>

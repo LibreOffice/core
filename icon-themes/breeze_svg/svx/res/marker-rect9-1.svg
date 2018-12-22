@@ -1,1 +1,8 @@
-<svg height="9" viewBox="0 0 9 9" width="9" xmlns="http://www.w3.org/2000/svg"><g transform="matrix(3.7795276 0 0 3.7795276 0 -1113.5196)"><path d="m .26458333 294.88332v1.85209h1.85208337v-1.85209z" fill="#1d99f3"/><path d="m0 294.61874v2.11667.26458h2.1166667.2645833v-2.38125h-.2645833-1.85208337zm.26458333.26458h1.85208337v1.85209h-1.85208337z" fill="#fff"/></g></svg>
+<svg viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
+  <path
+     d="M 1 1 L 1 8 L 8 8 L 8 1 L 1 1 z "
+     style="fill:#1d99f3;opacity:0.8" />
+  <path
+     d="M 0 0 L 0 8 L 0 9 L 8 9 L 9 9 L 9 0 L 8 0 L 1 0 L 0 0 z M 1 1 L 8 1 L 8 8 L 1 8 L 1 1 z "
+     style="fill:#fff;opacity:0.8" />
+</svg>
