@@ -10,7 +10,7 @@
 
 usage()
 {
-    echo "Helper script to unpack the LO source tarbals"
+    echo "Helper script to unpack the LO source tarballs"
     echo
     echo "Usage: ${0##*/} [--help] start-dir tarball..."
     echo
