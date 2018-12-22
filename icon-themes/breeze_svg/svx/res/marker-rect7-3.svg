@@ -1,1 +1,5 @@
-<svg height="7" viewBox="0 0 7 7" width="7" xmlns="http://www.w3.org/2000/svg"><path d="m0 .000009722592h6.999998815991v6.999998815991h-6.999998815991z" fill="#27ae60"/></svg>
+<svg viewBox="0 0 7 7" xmlns="http://www.w3.org/2000/svg">
+  <path
+     d="M 0 0 L 0 7 L 7 7 L 7 0 L 0 0 z "
+     style="fill:#27ae60;opacity:0.8" />
+</svg>
