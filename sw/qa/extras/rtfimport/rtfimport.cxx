@@ -1438,7 +1438,7 @@ DECLARE_RTFIMPORT_TEST(testTdf104016, "tdf104016.rtf")
 {
     uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
     // This was beans::PropertyState_DIRECT_VALUE, leading to lack of
-    // interitance from numbering.
+    // inheritance from numbering.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
                          xParagraph->getPropertyState("ParaLeftMargin"));
 }
