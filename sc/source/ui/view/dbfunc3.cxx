@@ -1119,10 +1119,8 @@ void ScDBFunc::GroupDataPilot()
     // (empty groups are removed, too)
     if ( pGroupDimension )
     {
-        ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-        for (; it != itEnd; ++it)
+        for (const OUString& aEntryName : aEntries)
         {
-            const OUString& aEntryName = *it;
             if ( pBaseGroupDim )
             {
                 // for each selected (intermediate) group, remove all its items
@@ -1176,10 +1174,8 @@ void ScDBFunc::GroupDataPilot()
 
     OUString aGroupName = pGroupDimension->CreateGroupName(ScResId(STR_PIVOT_GROUP));
     ScDPSaveGroupItem aGroup( aGroupName );
-    ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-    for (; it != itEnd; ++it)
+    for (const OUString& aEntryName : aEntries)
     {
-        const OUString& aEntryName = *it;
         if ( pBaseGroupDim )
         {
             // for each selected (intermediate) group, add all its items
@@ -1259,9 +1255,8 @@ void ScDBFunc::UngroupDataPilot()
 
     if ( pGroupDim )
     {
-        ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-        for (; it != itEnd; ++it)
-            pGroupDim->RemoveGroup(*it);
+        for (const auto& rEntry : aEntries)
+            pGroupDim->RemoveGroup(rEntry);
 
         // remove group dimension if empty
         bool bEmptyDim = pGroupDim->IsEmpty();
@@ -1681,10 +1676,8 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
         vector<OUString> aMembers;
         std::unordered_set<OUString> aMemberSet;
         size_t nMemberCount = 0;
-        for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
-              itr != itrEnd; ++itr)
+        for (ScDPSaveMember* pMem : rDimMembers)
         {
-            ScDPSaveMember* pMem = *itr;
             aMembers.push_back(pMem->GetName());
             aMemberSet.insert(pMem->GetName());
             ++nMemberCount;
@@ -1834,9 +1827,8 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
                     if ( !bInserted && aMemberNames[nMemberPos] == aDestData.MemberName )
                     {
                         // insert dragged items before this item
-                        for ( std::vector<OUString>::const_iterator aIter = aMembersVector.begin();
-                              aIter != aMembersVector.end(); ++aIter )
-                            lcl_MoveToEnd( *pDim, *aIter );
+                        for ( const auto& rMember : aMembersVector )
+                            lcl_MoveToEnd( *pDim, rMember );
                         bInserted = true;
                     }
 
@@ -1845,9 +1837,8 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
                 }
                 // insert dragged item at end if dest wasn't found (for example, empty)
                 if ( !bInserted )
-                    for ( std::vector<OUString>::const_iterator aIter = aMembersVector.begin();
-                          aIter != aMembersVector.end(); ++aIter )
-                        lcl_MoveToEnd( *pDim, *aIter );
+                    for ( const auto& rMember : aMembersVector )
+                        lcl_MoveToEnd( *pDim, rMember );
 
                 // Items that were in SaveData, but not in the source, end up at the start of the list.
 
@@ -1969,19 +1960,16 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName
                     ScDPUniqueStringSet aVisibleEntries;
                     pDPObj->GetMemberResultNames( aVisibleEntries, nSelectDimension );
 
-                    ScDPUniqueStringSet::const_iterator it = aVisibleEntries.begin(), itEnd = aVisibleEntries.end();
-                    for (; it != itEnd; ++it)
+                    for (const OUString& aVisName : aVisibleEntries)
                     {
-                        const OUString& aVisName = *it;
                         ScDPSaveMember* pMember = pDim->GetMemberByName( aVisName );
                         pMember->SetShowDetails( false );
                     }
                 }
 
-                ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-                for (; it != itEnd; ++it)
+                for (const auto& rEntry : aEntries)
                 {
-                    ScDPSaveMember* pMember = pDim->GetMemberByName(*it);
+                    ScDPSaveMember* pMember = pDim->GetMemberByName(rEntry);
                     pMember->SetShowDetails( bShow );
                 }
 

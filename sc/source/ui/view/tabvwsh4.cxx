@@ -1579,16 +1579,8 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             if ( pDBColl )
             {
                 const ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
-                ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-                for (; itr != itrEnd; ++itr)
-                {
-                    if ((*itr)->IsStripData() && (*itr)->HasImportParam()
-                        && !(*itr)->HasImportSelection())
-                    {
-                        bReImport = true;
-                        break;
-                    }
-                }
+                bReImport = std::any_of(rDBs.begin(), rDBs.end(),
+                    [](const std::unique_ptr<ScDBData>& rxDB) { return rxDB->IsStripData() && rxDB->HasImportParam() && !rxDB->HasImportSelection(); });
             }
             if (bReImport)
             {

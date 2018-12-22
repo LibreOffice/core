@@ -952,9 +952,8 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
 
 void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
 {
-    std::vector< SCTAB >::iterator it_end = rvTabs.end();
-    for ( std::vector< SCTAB >::iterator it = rvTabs.begin(); it != it_end; ++it )
-        CreateTabData(*it);
+    for ( const auto& rTab : rvTabs )
+        CreateTabData(rTab);
 }
 
 void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
@@ -975,11 +974,8 @@ void ScViewData::SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs )
     }
     else
     {
-        std::vector< SCTAB >::iterator it_end = tabs.end();
-        std::vector< SCTAB >::iterator it = tabs.begin();
-        for ( ; it != it_end; ++it )
+        for ( const SCTAB& i : tabs )
         {
-            SCTAB i = *it;
             if ( i < static_cast<SCTAB>(maTabData.size()) && maTabData[i] )
                 maTabData[i]->eZoomType = eNew;
         }
@@ -1040,11 +1036,8 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vec
     }
     else
     {
-        std::vector< SCTAB >::iterator it_end = tabs.end();
-        std::vector< SCTAB >::iterator it = tabs.begin();
-        for ( ; it != it_end; ++it )
+        for ( const SCTAB& i : tabs )
         {
-            SCTAB i = *it;
             if ( i < static_cast<SCTAB>(maTabData.size()) && maTabData[i] )
             {
                 if ( bPagebreak )
@@ -1964,9 +1957,8 @@ void ScViewData::CreateTabData( SCTAB nNewTab )
 
 void ScViewData::CreateSelectedTabData()
 {
-    ScMarkData::iterator itr = mpMarkData->begin(), itrEnd = mpMarkData->end();
-    for (; itr != itrEnd; ++itr)
-        CreateTabData(*itr);
+    for (const auto& rTab : *mpMarkData)
+        CreateTabData(rTab);
 }
 
 void ScViewData::EnsureTabDataSize(size_t nSize)

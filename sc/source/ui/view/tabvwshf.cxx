@@ -604,10 +604,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         if (pDPs)
                         {
                             const ScMarkData::MarkedTabsType& rSelectedTabs = rViewData.GetMarkData().GetSelectedTabs();
-                            for (ScMarkData::MarkedTabsType::const_iterator iterator = rSelectedTabs.begin();
-                                    iterator != rSelectedTabs.end() && !bTabWithPivotTable; ++iterator )
+                            for (const SCTAB nSelTab : rSelectedTabs)
                             {
-                                const SCTAB nSelTab = *iterator;
                                 const size_t nCount = pDPs->GetCount();
                                 for (size_t i = 0; i < nCount; ++i)
                                 {
@@ -616,6 +614,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                     if (pSheetSourceDesc && pSheetSourceDesc->GetSourceRange().aStart.Tab() == nSelTab)
                                         bTabWithPivotTable = true;
                                 }
+                                if (bTabWithPivotTable)
+                                    break;
                             }
                         }
                     }
@@ -699,9 +699,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OUString aUndo = ScResId( STR_UNDO_TAB_RTL );
                     pUndoManager->EnterListAction( aUndo, aUndo, 0, rViewData.GetViewShell()->GetViewShellId() );
 
-                    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-                    for (; itr != itrEnd; ++itr)
-                        rFunc.SetLayoutRTL( *itr, bSet );
+                    for (const auto& rTab : rMark)
+                        rFunc.SetLayoutRTL( rTab, bSet );
 
                     pUndoManager->LeaveListAction();
                 }
@@ -748,12 +747,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         std::unique_ptr<ScUndoTabColorInfo::List>
                             pTabColorList(new ScUndoTabColorInfo::List);
-                        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-                        for (; itr != itrEnd; ++itr)
+                        for (const auto& rTab : rMark)
                         {
-                            if ( !pDoc->IsTabProtected(*itr) )
+                            if ( !pDoc->IsTabProtected(rTab) )
                             {
-                                ScUndoTabColorInfo aTabColorInfo(*itr);
+                                ScUndoTabColorInfo aTabColorInfo(rTab);
                                 aTabColorInfo.maNewTabBgColor = aColor;
                                 pTabColorList->push_back(aTabColorInfo);
                             }
@@ -793,12 +791,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 pTabColorList(new ScUndoTabColorInfo::List);
                             if ( nTabSelCount > 1 )
                             {
-                                ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-                                for (; itr != itrEnd; ++itr)
+                                for (const auto& rTab : rMark)
                                 {
-                                    if ( !pDoc->IsTabProtected(*itr) )
+                                    if ( !pDoc->IsTabProtected(rTab) )
                                     {
-                                        ScUndoTabColorInfo aTabColorInfo(*itr);
+                                        ScUndoTabColorInfo aTabColorInfo(rTab);
                                         aTabColorInfo.maNewTabBgColor = aSelectedColor;
                                         pTabColorList->push_back(aTabColorInfo);
                                     }

@@ -1966,11 +1966,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool bContainsExistingCondFormat = false;
                 if(bContainsCondFormat)
                 {
-                    for (std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin(), itrEnd = rCondFormats.end();
-                                            itr != itrEnd; ++itr)
+                    for (const auto& rCondFormat : rCondFormats)
                     {
                         // check if at least one existing conditional format has the same range
-                        pCondFormat = pList->GetFormat(*itr);
+                        pCondFormat = pList->GetFormat(rCondFormat);
                         if(!pCondFormat)
                             continue;
 
@@ -2176,10 +2175,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 if (!aNames.empty())
                                 {
                                     OUStringBuffer aBuffer;
-                                    for (std::vector<OUString>::const_iterator itr = aNames.begin();
-                                            itr != aNames.end(); ++itr)
+                                    for (const auto& rName : aNames)
                                     {
-                                        aBuffer.append(*itr).append(' ');
+                                        aBuffer.append(rName).append(' ');
                                     }
                                     pHdl->InsertFunction( aBuffer.makeStringAndClear(), false );       // without "()"
                                 }
@@ -2373,10 +2371,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                  OUString aUndo = ScResId( bShowNote ? STR_UNDO_SHOWALLNOTES : STR_UNDO_HIDEALLNOTES );
                  pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pData->GetViewShell()->GetViewShellId() );
 
-                 for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
-                     itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+                 for(const auto& rNote : aNotes)
                  {
-                     const ScAddress& rAdr = itr->maPos;
+                     const ScAddress& rAdr = rNote.maPos;
                      pData->GetDocShell()->GetDocFunc().ShowNote( rAdr, bShowNote );
                  }
 

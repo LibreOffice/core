@@ -238,10 +238,8 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, const ScDocument* pDoc )
     SCROW nEndRow = aMultiArea.aEnd.Row();
 
     bool bChanged = false;
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd; ++itr)
+    for (const SCTAB& nTab : rMark)
     {
-        SCTAB nTab = *itr;
         for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
         {
             SCROW nLastRow = nRow;

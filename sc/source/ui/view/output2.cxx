@@ -2186,9 +2186,8 @@ static void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
         rEngine.GetPortions( nPar, aPortions );
 
         sal_Int32 nStart = 0;
-        for ( std::vector<sal_Int32>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
+        for ( const sal_Int32 nEnd : aPortions )
         {
-            sal_Int32 nEnd = *it;
             ESelection aSel( nPar, nStart, nPar, nEnd );
             SfxItemSet aAttribs = rEngine.GetAttribs( aSel );
 

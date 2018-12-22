@@ -254,17 +254,16 @@ void getOleSourceRanges(const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneO
         return;
 
     // Compile all range representation strings into ranges.
-    std::vector<OUString>::const_iterator it = aRangeReps.begin(), itEnd = aRangeReps.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rRangeRep : aRangeReps)
     {
         ScRangeList aRange;
         ScAddress aAddr;
-        if (aRange.Parse(*it, pDoc, pDoc->GetAddressConvention()) & ScRefFlags::VALID)
+        if (aRange.Parse(rRangeRep, pDoc, pDoc->GetAddressConvention()) & ScRefFlags::VALID)
         {
             for(size_t i = 0; i < aRange.size(); ++i)
                 pRanges->push_back(aRange[i]);
         }
-        else if (aAddr.Parse(*it, pDoc, pDoc->GetAddressConvention()) & ScRefFlags::VALID)
+        else if (aAddr.Parse(rRangeRep, pDoc, pDoc->GetAddressConvention()) & ScRefFlags::VALID)
             pRanges->push_back(aAddr);
     }
 

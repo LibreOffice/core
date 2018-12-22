@@ -476,10 +476,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     if (!aNames.empty())
                     {
                         OUStringBuffer aBuffer;
-                        for (std::vector<OUString>::const_iterator itr = aNames.begin();
-                                itr != aNames.end(); ++itr)
+                        for (const auto& rName : aNames)
                         {
-                            aBuffer.append(*itr).append(' ');
+                            aBuffer.append(rName).append(' ');
                         }
                         pTableView->InsertText(aBuffer.toString());
                         if (pTopView)

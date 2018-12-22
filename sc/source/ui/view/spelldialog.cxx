@@ -225,13 +225,12 @@ void ScSpellDialogChildWindow::Init()
 
     if ( rMarkData.GetSelectCount() > 1 )
     {
-        ScMarkData::iterator itr = rMarkData.begin(), itrEnd = rMarkData.end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rTab : rMarkData)
         {
-            if( *itr != nTab )
+            if( rTab != nTab )
             {
-                mxUndoDoc->AddUndoTab( *itr, *itr );
-                mxRedoDoc->AddUndoTab( *itr, *itr );
+                mxUndoDoc->AddUndoTab( rTab, rTab );
+                mxRedoDoc->AddUndoTab( rTab, rTab );
             }
         }
     }

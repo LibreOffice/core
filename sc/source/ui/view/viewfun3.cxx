@@ -821,11 +821,8 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 static bool lcl_SelHasAttrib( const ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         const ScMarkData& rTabSelection, HasAttrFlags nMask )
 {
-    ScMarkData::const_iterator itr = rTabSelection.begin(), itrEnd = rTabSelection.end();
-    for (; itr != itrEnd; ++itr)
-        if ( pDoc->HasAttrib( nCol1, nRow1, *itr, nCol2, nRow2, *itr, nMask ) )
-            return true;
-    return false;
+    return std::any_of(rTabSelection.begin(), rTabSelection.end(),
+        [&](const SCTAB& rTab) { return pDoc->HasAttrib( nCol1, nRow1, rTab, nCol2, nRow2, rTab, nMask ); });
 }
 
 //  paste into sheet:
@@ -837,17 +834,18 @@ namespace {
 bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument* pDoc, const ScMarkData& rMark, weld::Window* pParentWnd)
 {
     bool bIsEmpty = true;
-    ScMarkData::const_iterator itrTab = rMark.begin(), itrTabEnd = rMark.end();
     size_t nRangeSize = rDestRanges.size();
-    for (; itrTab != itrTabEnd && bIsEmpty; ++itrTab)
+    for (const auto& rTab : rMark)
     {
         for (size_t i = 0; i < nRangeSize && bIsEmpty; ++i)
         {
             const ScRange& rRange = rDestRanges[i];
             bIsEmpty = pDoc->IsBlockEmpty(
-                *itrTab, rRange.aStart.Col(), rRange.aStart.Row(),
+                rTab, rRange.aStart.Col(), rRange.aStart.Row(),
                 rRange.aEnd.Col(), rRange.aEnd.Row());
         }
+        if (!bIsEmpty)
+            break;
     }
 
     if (!bIsEmpty)
@@ -1801,12 +1799,11 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
     for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
     {
         const ScRange& r = rPasteRanges[i];
-        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rTab : rMark)
         {
             ScRange aChangeRange(r);
-            aChangeRange.aStart.SetTab(*itr);
-            aChangeRange.aEnd.SetTab(*itr);
+            aChangeRange.aStart.SetTab(rTab);
+            aChangeRange.aEnd.SetTab(rTab);
             aChangeRanges.push_back(aChangeRange);
         }
     }

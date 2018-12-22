@@ -727,9 +727,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     {
                         std::vector<OUString> aList;
                         const ScDBCollection::NamedDBs& rDBs = pDBCol->getNamedDBs();
-                        ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-                        for (; itr != itrEnd; ++itr)
-                            aList.push_back((*itr)->GetName());
+                        for (const auto& rxDB : rDBs)
+                            aList.push_back(rxDB->GetName());
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 

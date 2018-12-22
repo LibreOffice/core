@@ -648,23 +648,28 @@ bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
         ++nRangeIndex;
     }
 
-    const ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
-    ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-    for (; !bSubTotal && itr != itrEnd; ++itr)
+    if (!bSubTotal)
     {
-        const ScDBData& rDB = **itr;
-        if (!rDB.HasAutoFilter())
-            continue;
-
-        nRangeIndex = 0;
-        while (!bSubTotal && nRangeIndex < nRangeCount)
+        const ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
+        for (const auto& rxDB : rDBs)
         {
-            const ScRange & rRange = (*pRangeList)[nRangeIndex];
-            ScRange aDBArea;
-            rDB.GetArea(aDBArea);
-            if (aDBArea.Intersects(rRange))
-                bSubTotal = true;
-            ++nRangeIndex;
+            const ScDBData& rDB = *rxDB;
+            if (!rDB.HasAutoFilter())
+                continue;
+
+            nRangeIndex = 0;
+            while (!bSubTotal && nRangeIndex < nRangeCount)
+            {
+                const ScRange & rRange = (*pRangeList)[nRangeIndex];
+                ScRange aDBArea;
+                rDB.GetArea(aDBArea);
+                if (aDBArea.Intersects(rRange))
+                    bSubTotal = true;
+                ++nRangeIndex;
+            }
+
+            if (bSubTotal)
+                break;
         }
     }
     return bSubTotal;
