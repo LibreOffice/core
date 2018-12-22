@@ -703,17 +703,18 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         {
                             std::unique_ptr<ScUndoApplyPageStyle> pUndoAction;
                             SCTAB nTabCount = rDoc.GetTableCount();
-                            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-                            for (; itr != itrEnd && *itr < nTabCount; ++itr)
+                            for (const auto& rTab : rMark)
                             {
-                                OUString aOldName = rDoc.GetPageStyle( *itr );
+                                if (rTab >= nTabCount)
+                                    break;
+                                OUString aOldName = rDoc.GetPageStyle( rTab );
                                 if ( aOldName != aStyleName )
                                 {
-                                    rDoc.SetPageStyle( *itr, aStyleName );
-                                    ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(true), *itr ).UpdatePages();
+                                    rDoc.SetPageStyle( rTab, aStyleName );
+                                    ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(true), rTab ).UpdatePages();
                                     if( !pUndoAction )
                                         pUndoAction.reset(new ScUndoApplyPageStyle( pDocSh, aStyleName ));
-                                    pUndoAction->AddSheetAction( *itr, aOldName );
+                                    pUndoAction->AddSheetAction( rTab, aOldName );
                                 }
                             }
                             if( pUndoAction )

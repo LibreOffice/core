@@ -96,10 +96,10 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
 
     ScDocument& rDoc = pDocSh->GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && (*itr) < nTabCount; ++itr)
+    for (SCTAB nTab : rMark)
     {
-        SCTAB nTab = *itr;
+        if (nTab >= nTabCount)
+            break;
         ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
         aFunc.SetRenderFlag( true );
 
@@ -131,14 +131,12 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
 
 bool ScPrintFuncCache::FindLocation( const ScAddress& rCell, ScPrintPageLocation& rLocation ) const
 {
-    for ( std::vector<ScPrintPageLocation>::const_iterator aIter(aLocations.begin()), aEnd(aLocations.end());
-          aIter != aEnd; ++aIter )
+    auto aIter = std::find_if(aLocations.begin(), aLocations.end(),
+        [&rCell](const ScPrintPageLocation& rLoc) { return rLoc.aCellRange.In(rCell); });
+    if (aIter != aLocations.end())
     {
-        if ( aIter->aCellRange.In( rCell ) )
-        {
-            rLocation = *aIter;
-            return true;
-        }
+        rLocation = *aIter;
+        return true;
     }
     return false;   // not found
 }

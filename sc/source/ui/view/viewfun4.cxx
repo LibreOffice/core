@@ -219,10 +219,9 @@ void ScViewFunc::DoRefConversion()
 
         if ( rMark.GetSelectCount() > 1 )
         {
-            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd; ++itr)
-                if ( *itr != nTab )
-                    pUndoDoc->AddUndoTab( *itr, *itr );
+            for (const auto& rTab : rMark)
+                if ( rTab != nTab )
+                    pUndoDoc->AddUndoTab( rTab, rTab );
         }
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
@@ -234,10 +233,8 @@ void ScViewFunc::DoRefConversion()
     GetViewData().GetMultiArea( xRanges );
     size_t nCount = xRanges->size();
 
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd; ++itr)
+    for (const SCTAB& i : rMark)
     {
-        SCTAB i = *itr;
         for (size_t j = 0; j < nCount; ++j)
         {
             ScRange aRange = (*xRanges)[j];
@@ -289,10 +286,9 @@ void ScViewFunc::DoRefConversion()
 
         if ( rMark.GetSelectCount() > 1 )
         {
-            itr = rMark.begin();
-            for (; itr != itrEnd; ++itr)
-                if ( *itr != nTab )
-                    pRedoDoc->AddUndoTab( *itr, *itr );
+            for (const auto& rTab : rMark)
+                if ( rTab != nTab )
+                    pRedoDoc->AddUndoTab( rTab, rTab );
         }
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
@@ -496,12 +492,11 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
 
         if ( rMark.GetSelectCount() > 1 )
         {
-            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd; ++itr)
-                if ( *itr != nTab )
+            for (const auto& rTab : rMark)
+                if ( rTab != nTab )
                 {
-                    pUndoDoc->AddUndoTab( *itr, *itr );
-                    pRedoDoc->AddUndoTab( *itr, *itr );
+                    pUndoDoc->AddUndoTab( rTab, rTab );
+                    pRedoDoc->AddUndoTab( rTab, rTab );
                 }
         }
     }

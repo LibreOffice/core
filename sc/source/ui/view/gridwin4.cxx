@@ -259,16 +259,15 @@ static void lcl_DrawHighlight( ScOutputData& rOutputData, const ScViewData* pVie
                         const std::vector<ScHighlightEntry>& rHighlightRanges )
 {
     SCTAB nTab = pViewData->GetTabNo();
-    std::vector<ScHighlightEntry>::const_iterator pIter;
-    for ( pIter = rHighlightRanges.begin(); pIter != rHighlightRanges.end(); ++pIter)
+    for ( const auto& rHighlightRange : rHighlightRanges)
     {
-        ScRange aRange = pIter->aRef;
+        ScRange aRange = rHighlightRange.aRef;
         if ( nTab >= aRange.aStart.Tab() && nTab <= aRange.aEnd.Tab() )
         {
             rOutputData.DrawRefMark(
                                 aRange.aStart.Col(), aRange.aStart.Row(),
                                 aRange.aEnd.Col(), aRange.aEnd.Row(),
-                                pIter->aColor, false );
+                                rHighlightRange.aColor, false );
         }
     }
 }

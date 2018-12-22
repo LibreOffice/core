@@ -138,17 +138,14 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 
     sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
     bool bAnyChanged = false;
-    ScMarkData::iterator itr = pMarkData->begin(), itrEnd = pMarkData->end();
-    for (; itr != itrEnd; ++itr)
+    for (const SCTAB& nTab : *pMarkData)
     {
-        SCTAB nTab = *itr;
         bool bChanged = false;
         SCROW nPaintY = 0;
-        std::vector<sc::ColRowSpan>::const_iterator itRows = aMarkedRows.begin(), itRowsEnd = aMarkedRows.end();
-        for (; itRows != itRowsEnd; ++itRows)
+        for (const auto& rRow : aMarkedRows)
         {
-            SCROW nStartNo = itRows->mnStart;
-            SCROW nEndNo = itRows->mnEnd;
+            SCROW nStartNo = rRow.mnStart;
+            SCROW nEndNo = rRow.mnEnd;
             ScAddress aTopLeft(0, nStartNo, nTab);
             rDoc.UpdateScriptTypes(aTopLeft, MAXCOLCOUNT, nEndNo-nStartNo+1);
             if (rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab))
@@ -947,17 +944,14 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
     ScDocument& rDoc    = pDocSh->GetDocument();
     ScMarkData& rMark   = GetViewData().GetMarkData();
-    SCTAB nTab;
     bool bUndo (rDoc.IsUndoEnabled());
 
     std::unique_ptr<ScPrintRangeSaver> pOldRanges = rDoc.CreatePrintRangeSaver();
 
     ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
 
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd; ++itr)
+    for (const SCTAB& nTab : rMark)
     {
-        nTab = *itr;
         ScRange aRange( 0,0,nTab );
 
         //  print ranges
@@ -1039,9 +1033,8 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
 
     //  update page breaks
 
-    itr = rMark.begin();
-    for (; itr != itrEnd; ++itr)
-        ScPrintFunc( pDocSh, pDocSh->GetPrinter(), *itr ).UpdatePages();
+    for (const auto& rTab : rMark)
+        ScPrintFunc( pDocSh, pDocSh->GetPrinter(), rTab ).UpdatePages();
 
     SfxBindings& rBindings = GetViewData().GetBindings();
     rBindings.Invalidate( SID_DELETE_PRINTAREA );
@@ -1114,10 +1107,8 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
     // Check for the contents of all selected tables.
     bool bAskDialog = false;
     ScCellMergeOption aMergeOption(nStartCol, nStartRow, nEndCol, nEndRow, bCenter);
-    ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd; ++itr)
+    for (const SCTAB& i : rMark)
     {
-        SCTAB i = *itr;
         aMergeOption.maTabs.insert(i);
 
         sc::MultiDataCellState aState = rDoc.HasMultipleDataCells(aMergeOption.getSingleRange(i));
@@ -1254,10 +1245,8 @@ bool ScViewFunc::RemoveMerge()
         do
         {
             bExtended = false;
-            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd; ++itr)
+            for (const SCTAB& i : rMark)
             {
-                SCTAB i = *itr;
                 aOption.maTabs.insert(i);
                 aExtended.aStart.SetTab(i);
                 aExtended.aEnd.SetTab(i);
@@ -1565,11 +1554,9 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, nTab, nTab );
 
-        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-        for (; itr != itrEnd; ++itr)
-            if (*itr != nTab )
+        for (const SCTAB& i : rMark)
+            if (i != nTab )
             {
-                SCTAB i = *itr;
                 pUndoDoc->AddUndoTab( i, i );
                 aMarkRange.aStart.SetTab( i );
                 aMarkRange.aEnd.SetTab( i );
@@ -1918,9 +1905,8 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         for (SCTAB i = 0; i <= nEndTab; ++i)
             rMark.SelectTable(i, false);
 
-        std::set<SCTAB>::const_iterator itr = aOldSelectedTables.begin(), itrEnd = aOldSelectedTables.end();
-        for (; itr != itrEnd; ++itr)
-            rMark.SelectTable(*itr, true);
+        for (const auto& rTab : aOldSelectedTables)
+            rMark.SelectTable(rTab, true);
 
         if ( bFound )
         {   // if a table is selected as a "match" it remains selected.
@@ -2994,14 +2980,12 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
     bool bUndo(rDoc.IsUndoEnabled());
 
     std::vector<SCTAB> undoTabs;
-    OUString aName;
     SCTAB nPos = 0;
 
     bool bFound(false);
 
-    for (std::vector<OUString>::const_iterator itr=rNames.begin(), itrEnd = rNames.end(); itr!=itrEnd; ++itr)
+    for (const OUString& aName : rNames)
     {
-        aName = *itr;
         if (rDoc.GetTable(aName, nPos))
         {
             rDoc.SetVisible( nPos, true );
@@ -3041,15 +3025,12 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
 
     if (nVisible > nTabSelCount)
     {
-        SCTAB nTab;
-        ScMarkData::MarkedTabsType::const_iterator it;
         std::vector<SCTAB> undoTabs;
 
         // need to take a copy of selectedtabs since it is modified in the loop
         const ScMarkData::MarkedTabsType selectedTabs = rMark.GetSelectedTabs();
-        for (it=selectedTabs.begin(); it!=selectedTabs.end(); ++it)
+        for (const SCTAB& nTab : selectedTabs)
         {
-            nTab = *it;
             if (rDoc.IsVisible( nTab ))
             {
                 rDoc.SetVisible( nTab, false );

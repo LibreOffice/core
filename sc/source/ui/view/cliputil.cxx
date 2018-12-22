@@ -101,11 +101,10 @@ bool ScClipUtil::CheckDestRanges(
     {
         ScRange aTest = rDest[i];
         // Check for filtered rows in all selected sheets.
-        ScMarkData::const_iterator itrTab = rMark.begin(), itrTabEnd = rMark.end();
-        for (; itrTab != itrTabEnd; ++itrTab)
+        for (const auto& rTab : rMark)
         {
-            aTest.aStart.SetTab(*itrTab);
-            aTest.aEnd.SetTab(*itrTab);
+            aTest.aStart.SetTab(rTab);
+            aTest.aEnd.SetTab(rTab);
             if (ScViewUtil::HasFiltered(aTest, pDoc))
             {
                 // I don't know how to handle pasting into filtered rows yet.

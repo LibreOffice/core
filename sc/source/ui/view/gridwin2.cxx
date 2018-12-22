@@ -560,33 +560,31 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     // Build a map of layout names to original names.
     const ScDPLabelData& rLabelData = pDPData->maLabels;
     MemNameMapType aMemNameMap;
-    for (vector<ScDPLabelData::Member>::const_iterator itr = rLabelData.maMembers.begin(), itrEnd = rLabelData.maMembers.end();
-           itr != itrEnd; ++itr)
-        aMemNameMap.emplace(itr->maLayoutName, itr->maName);
+    for (const auto& rMember : rLabelData.maMembers)
+        aMemNameMap.emplace(rMember.maLayoutName, rMember.maName);
 
     // The raw result may contain a mixture of layout names and original names.
     ScCheckListMenuWindow::ResultType aRawResult;
     mpDPFieldPopup->getResult(aRawResult);
 
     std::unordered_map<OUString, bool> aResult;
-    ScCheckListMenuWindow::ResultType::const_iterator itr = aRawResult.begin(), itrEnd = aRawResult.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rItem : aRawResult)
     {
-        MemNameMapType::const_iterator itrNameMap = aMemNameMap.find(itr->aName);
+        MemNameMapType::const_iterator itrNameMap = aMemNameMap.find(rItem.aName);
         if (itrNameMap == aMemNameMap.end())
         {
             // This is an original member name.  Use it as-is.
-            OUString aName = itr->aName;
+            OUString aName = rItem.aName;
             if (aName == ScResId(STR_EMPTYDATA))
                 // Translate the special empty name into an empty string.
                 aName.clear();
 
-            aResult.emplace(aName, itr->bValid);
+            aResult.emplace(aName, rItem.bValid);
         }
         else
         {
             // This is a layout name.  Get the original member name and use it.
-            aResult.emplace(itrNameMap->second, itr->bValid);
+            aResult.emplace(itrNameMap->second, rItem.bValid);
         }
     }
     pDim->UpdateMemberVisibility(aResult);

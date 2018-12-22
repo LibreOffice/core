@@ -1061,13 +1061,12 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         ScRangeList aRanges = *aRangesRef;
                         std::vector<sc::NoteEntry> aNotes;
                         pDoc->GetNotesInRange(aRanges, aNotes);
-                        for(std::vector<sc::NoteEntry>::const_iterator itr = aNotes.begin(),
-                                itrEnd = aNotes.end(); itr != itrEnd; ++itr)
+                        for(const auto& rNote : aNotes)
                         {
-                            const ScAddress& rAdr = itr->maPos;
+                            const ScAddress& rAdr = rNote.maPos;
                             if( pDoc->IsBlockEditable( rAdr.Tab(), rAdr.Col(), rAdr.Row(), rAdr.Col(), rAdr.Row() ))
                             {
-                                if (itr->mpNote->IsCaptionShown() != bSearchForHidden)
+                                if (rNote.mpNote->IsCaptionShown() != bSearchForHidden)
                                 {
                                     bEnable = true;
                                     break;

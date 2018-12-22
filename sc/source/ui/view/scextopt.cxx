@@ -113,8 +113,8 @@ SCTAB ScExtTabSettingsCont::GetLastTab() const
 void ScExtTabSettingsCont::CopyFromMap( const ScExtTabSettingsMap& rMap )
 {
     maMap.clear();
-    for( ScExtTabSettingsMap::const_iterator aIt = rMap.begin(), aEnd = rMap.end(); aIt != aEnd; ++aIt )
-        maMap[ aIt->first ].reset( new ScExtTabSettings( *aIt->second ) );
+    for( const auto& [rTab, rxSettings] : rMap )
+        maMap[ rTab ].reset( new ScExtTabSettings( *rxSettings ) );
 }
 
 /** Implementation struct for ScExtDocOptions containing all members. */
