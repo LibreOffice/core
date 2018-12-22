@@ -45,6 +45,8 @@ private:
     VclPtr<NumericField>       mpPeriod;
 
     VclPtr<RadioButton>        mpRandomMethodRadio;
+    VclPtr<CheckBox>           mpWithReplacement;
+    VclPtr<CheckBox>           mpKeepOrder;
     VclPtr<RadioButton>        mpPeriodicMethodRadio;
 
     VclPtr<OKButton>           mpButtonOk;
@@ -61,11 +63,16 @@ private:
 
     ScAddress const           mCurrentAddress;
 
+    sal_Int64                 mnLastSampleSizeValue;
+    sal_Int64                 mnLastPeriodValue;
+
     bool                mDialogLostFocus;
 
     void Init();
     void GetRangeFromSelection();
     void PerformSampling();
+    sal_Int64 GetPopulationSize() const;
+    void LimitSampleSizeAndPeriod();
 
     ScRange PerformRandomSampling(ScDocShell* pDocShell);
     ScRange PerformRandomSamplingKeepOrder(ScDocShell* pDocShell);
@@ -75,8 +82,10 @@ private:
     DECL_LINK( GetFocusHandler, Control&, void );
     DECL_LINK( LoseFocusHandler, Control&, void );
     DECL_LINK( SamplingSizeValueModified, Edit&, void );
+    DECL_LINK( PeriodValueModified, Edit&, void );
     DECL_LINK( ToggleSamplingMethod, RadioButton&, void );
     DECL_LINK( RefInputModifyHandler, Edit&, void );
+    DECL_LINK( CheckHdl, Button*, void );
     void ToggleSamplingMethod();
 };
 

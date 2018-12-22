@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -21,6 +21,9 @@
     <property name="title" translatable="yes" context="samplingdialog|SamplingDialog">Sampling</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -109,10 +112,10 @@
                       <object class="GtkLabel" id="input-range-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="samplingdialog|input-range-label">Input range:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">input-range-edit</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -147,10 +150,10 @@
                       <object class="GtkLabel" id="output-range-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="samplingdialog|output-range-label">Results to:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">output-range-edit</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -227,9 +230,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="text" translatable="no">0</property>
+                        <property name="text">1</property>
                         <property name="adjustment">sample-size-adjustment</property>
                         <property name="update_policy">if-valid</property>
+                        <property name="value">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -242,12 +246,12 @@
                         <property name="can_focus">False</property>
                         <property name="margin_left">12</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="samplingdialog|label1">Sample size:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
                         <property name="mnemonic_widget">sample-size-spin</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -284,7 +288,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">4</property>
                         <property name="width">2</property>
                       </packing>
                     </child>
@@ -293,13 +297,14 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="text" translatable="no">1</property>
+                        <property name="text">1</property>
                         <property name="adjustment">period-adjustment</property>
+                        <property name="update_policy">if-valid</property>
                         <property name="value">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
+                        <property name="top_attach">5</property>
                       </packing>
                     </child>
                     <child>
@@ -308,15 +313,47 @@
                         <property name="can_focus">False</property>
                         <property name="margin_left">12</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="xpad">12</property>
                         <property name="label" translatable="yes" context="samplingdialog|label3">Period:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">period-spin</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="with-replacement">
+                        <property name="label" translatable="yes" context="samplingdialog|with-replacement">With replacement</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="keep-order">
+                        <property name="label" translatable="yes" context="samplingdialog|keep-order">Keep order</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                   </object>

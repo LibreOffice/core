@@ -35,6 +35,8 @@ ScSamplingDialog::ScSamplingDialog(
     mAddressDetails ( mDocument->GetAddressConvention(), 0, 0 ),
     mOutputAddress  ( ScAddress::INITIALIZE_INVALID ),
     mCurrentAddress ( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() ),
+    mnLastSampleSizeValue(1),
+    mnLastPeriodValue(1),
     mDialogLostFocus( false )
 {
     get(mpInputRangeLabel,  "input-range-label");
@@ -53,6 +55,8 @@ ScSamplingDialog::ScSamplingDialog(
     get(mpPeriod,     "period-spin");
 
     get(mpRandomMethodRadio,   "random-method-radio");
+    get(mpWithReplacement,     "with-replacement");
+    get(mpKeepOrder,           "keep-order");
     get(mpPeriodicMethodRadio, "periodic-method-radio");
 
     get(mpButtonOk,     "ok");
@@ -77,6 +81,8 @@ void ScSamplingDialog::dispose()
     mpSampleSize.clear();
     mpPeriod.clear();
     mpRandomMethodRadio.clear();
+    mpWithReplacement.clear();
+    mpKeepOrder.clear();
     mpPeriodicMethodRadio.clear();
     mpButtonOk.clear();
     mpActiveEdit.clear();
@@ -105,12 +111,13 @@ void ScSamplingDialog::Init()
     mpOutputRangeEdit->SetModifyHdl( aLink2);
 
     mpSampleSize->SetModifyHdl( LINK( this, ScSamplingDialog, SamplingSizeValueModified ));
+    mpPeriod->SetModifyHdl( LINK( this, ScSamplingDialog, PeriodValueModified ));
 
     mpPeriodicMethodRadio->SetToggleHdl( LINK( this, ScSamplingDialog, ToggleSamplingMethod ) );
     mpRandomMethodRadio->SetToggleHdl( LINK( this, ScSamplingDialog, ToggleSamplingMethod ) );
 
-    mpSampleSize->SetMin( 0 );
-    mpSampleSize->SetMax( SAL_MAX_INT64 );
+    mpWithReplacement->SetClickHdl( LINK( this, ScSamplingDialog, CheckHdl));
+    mpKeepOrder->SetClickHdl( LINK( this, ScSamplingDialog, CheckHdl));
 
     mpOutputRangeEdit->GrabFocus();
     mpPeriodicMethodRadio->Check();
@@ -159,6 +166,8 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
             mInputRange = rReferenceRange;
             aReferenceString = mInputRange.Format(ScRefFlags::RANGE_ABS_3D, pDocument, mAddressDetails);
             mpInputRangeEdit->SetRefString( aReferenceString );
+
+            LimitSampleSizeAndPeriod();
         }
         else if ( mpActiveEdit == mpOutputRangeEdit )
         {
@@ -179,8 +188,11 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
     }
 
     // Enable OK if both, input range and output address are set.
+    // Disable if at least one is invalid.
     if (mInputRange.IsValid() && mOutputAddress.IsValid())
         mpButtonOk->Enable();
+    else
+        mpButtonOk->Enable(false);
 }
 
 ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
@@ -233,9 +245,7 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
     // by rows or area.
     const sal_Int64 nPopulationSize = aEnd.Row() - aStart.Row() + 1;
 
-    /* TODO: the previously existing implementation was WOR, we may want to
-     * additionally offer WR as option. */
-    bool bWithReplacement = false;
+    const bool bWithReplacement = mpWithReplacement->IsEnabled() && mpWithReplacement->IsChecked();
 
     // WOR (WithOutReplacement) can't draw more than population. Catch that in
     // the caller.
@@ -357,7 +367,10 @@ void ScSamplingDialog::PerformSampling()
 
     if (mpRandomMethodRadio->IsChecked())
     {
-        aModifiedRange = PerformRandomSampling(pDocShell);
+        if (mpKeepOrder->IsEnabled() && mpKeepOrder->IsChecked())
+            aModifiedRange = PerformRandomSamplingKeepOrder(pDocShell);
+        else
+            aModifiedRange = PerformRandomSampling(pDocShell);
     }
     else if (mpPeriodicMethodRadio->IsChecked())
     {
@@ -368,35 +381,66 @@ void ScSamplingDialog::PerformSampling()
     pDocShell->PostPaint(aModifiedRange, PaintPartFlags::Grid);
 }
 
+sal_Int64 ScSamplingDialog::GetPopulationSize() const
+{
+    return mInputRange.IsValid() ? mInputRange.aEnd.Row() - mInputRange.aStart.Row() + 1 : 0;
+}
+
+void ScSamplingDialog::LimitSampleSizeAndPeriod()
+{
+    // Limit sample size (for WOR methods) and period if population is smaller
+    // than last known value. When enlargening the input population range the
+    // values will be adjusted up to the last known value again.
+    const sal_Int64 nPopulationSize = GetPopulationSize();
+    if (nPopulationSize <= mnLastSampleSizeValue && !mpWithReplacement->IsChecked())
+        mpSampleSize->SetValue( nPopulationSize);
+    if (nPopulationSize <= mnLastPeriodValue)
+        mpPeriod->SetValue( nPopulationSize);
+}
+
+IMPL_LINK_NOARG(ScSamplingDialog, SamplingSizeValueModified, Edit&, void)
+{
+    if (!mpWithReplacement->IsChecked())
+    {
+        // For all WOR methods limit sample size to population size.
+        const sal_Int64 nPopulationSize = GetPopulationSize();
+        if (mpSampleSize->GetValue() > nPopulationSize)
+            mpSampleSize->SetValue(nPopulationSize);
+    }
+    mnLastSampleSizeValue = mpSampleSize->GetValue();
+}
+
+IMPL_LINK_NOARG(ScSamplingDialog, PeriodValueModified, Edit&, void)
+{
+    // Limit period to population size.
+    const sal_Int64 nPopulationSize = GetPopulationSize();
+    if (mpPeriod->GetValue() > nPopulationSize)
+        mpPeriod->SetValue(nPopulationSize);
+    mnLastPeriodValue = mpPeriod->GetValue();
+}
+
+IMPL_LINK( ScSamplingDialog, GetFocusHandler, Control&, rCtrl, void )
+{
+    if (     (&rCtrl == static_cast<Control*>(mpInputRangeEdit))  || (&rCtrl == static_cast<Control*>(mpInputRangeButton)))
+        mpActiveEdit = mpInputRangeEdit;
+    else if ((&rCtrl == static_cast<Control*>(mpOutputRangeEdit)) || (&rCtrl == static_cast<Control*>(mpOutputRangeButton)))
+        mpActiveEdit = mpOutputRangeEdit;
+    else
+        mpActiveEdit = nullptr;
+
+    if (mpActiveEdit)
+        mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
+}
+
 IMPL_LINK_NOARG( ScSamplingDialog, OkClicked, Button*, void )
 {
     PerformSampling();
     Close();
 }
 
-IMPL_LINK( ScSamplingDialog, GetFocusHandler, Control&, rCtrl, void )
-{
-    mpActiveEdit = nullptr;
-
-    if(      (&rCtrl == static_cast<Control*>(mpInputRangeEdit))  || (&rCtrl == static_cast<Control*>(mpInputRangeButton)) )
-        mpActiveEdit = mpInputRangeEdit;
-    else if( (&rCtrl == static_cast<Control*>(mpOutputRangeEdit)) || (&rCtrl == static_cast<Control*>(mpOutputRangeButton)) )
-        mpActiveEdit = mpOutputRangeEdit;
-
-    if( mpActiveEdit )
-        mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
-}
-
 IMPL_LINK_NOARG(ScSamplingDialog, LoseFocusHandler, Control&, void)
 {
     mDialogLostFocus = !IsActive();
-}
-
-IMPL_LINK_NOARG(ScSamplingDialog, SamplingSizeValueModified, Edit&, void)
-{
-    sal_Int64 aPopulationSize = mInputRange.aEnd.Row() - mInputRange.aStart.Row() + 1;
-    if (mpSampleSize->GetValue() > aPopulationSize)
-        mpSampleSize->SetValue(aPopulationSize);
 }
 
 IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod, RadioButton&, void)
@@ -410,11 +454,49 @@ void ScSamplingDialog::ToggleSamplingMethod()
     {
         mpPeriod->Enable(false);
         mpSampleSize->Enable();
+        mpWithReplacement->Enable();
+        mpKeepOrder->Enable();
     }
     else if (mpPeriodicMethodRadio->IsChecked())
     {
+        // WOR keeping order.
         mpPeriod->Enable();
         mpSampleSize->Enable(false);
+        mpWithReplacement->Check(false);
+        mpWithReplacement->Enable(false);
+        mpKeepOrder->Check();
+        mpKeepOrder->Enable(false);
+    }
+}
+
+IMPL_LINK( ScSamplingDialog, CheckHdl, Button*, pBtn, void )
+{
+    // Keep both checkboxes enabled so user can easily switch between the three
+    // possible combinations (one or the other or none), just uncheck the other
+    // one if one is checked. Otherwise the other checkbox would had to be
+    // disabled until user unchecks the enabled one again, which would force
+    // user to two clicks to switch.
+    if (pBtn == mpWithReplacement)
+    {
+        if (static_cast<const CheckBox*>(pBtn)->IsChecked())
+        {
+            // For WR can't keep order.
+            mpKeepOrder->Check(false);
+        }
+        else
+        {
+            // For WOR limit sample size to population size.
+            SamplingSizeValueModified(*mpSampleSize);
+        }
+    }
+    else if (pBtn == mpKeepOrder)
+    {
+        if (static_cast<const CheckBox*>(pBtn)->IsChecked())
+        {
+            // Keep order is always WOR.
+            mpWithReplacement->Check(false);
+            SamplingSizeValueModified(*mpSampleSize);
+        }
     }
 }
 
@@ -432,6 +514,8 @@ IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, Edit&, void)
                 mInputRange = *pRange;
                 // Highlight the resulting range.
                 mpInputRangeEdit->StartUpdateData();
+
+                LimitSampleSizeAndPeriod();
             }
             else
             {
