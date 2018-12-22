@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_b2b622d9",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-22T15:35:39Z",
+      "side": 1,
+      "message": "I dislike this name (although it\u0027s indeed raii). HBRUSHUniquePtr.hxx - or GDISmartPtr - seems better; it has the benefit to be unique enough to not provoke duplicate names if someone decides to follow this track and introduce a \"raii.hxx\" in a different place. In not a single occasion, I had to do several attempts when looked for a file with relevant functionality, when all I knew was its name, but not its location (e.g., it still happens for me working on PVS Studio report).",
+      "range": {
+        "startLine": 23,
+        "startChar": 10,
+        "endLine": 23,
+        "endChar": 18
+      },
+      "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_92cb2652",
+        "filename": "vcl/win/gdi/gdiimpl.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 1586,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-22T15:35:39Z",
+      "side": 1,
+      "message": "Is this a pointer actually? Yes, it\u0027s implemented as a unique_ptr; and in C WinAPI, it\u0027s declared as a pointer; but IMO, it\u0027s an implementation detail (actually it\u0027s an opaque data of INT_PTR size). So - maybe something like BRUSHScopedHdl / ScopedHBRUSH?",
+      "range": {
+        "startLine": 1586,
+        "startChar": 16,
+        "endLine": 1586,
+        "endChar": 19
+      },
+      "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_72c8aa54",
+        "filename": "vcl/win/gdi/raii.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-22T15:35:39Z",
+      "side": 1,
+      "message": "This is quite trivial, so I\u0027d move it to the header. But possibly there\u0027s some compiler problem with that?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
