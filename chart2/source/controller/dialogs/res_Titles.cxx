@@ -19,8 +19,7 @@
 
 #include <res_Titles.hxx>
 #include <TitleDialogData.hxx>
-#include <svtools/controldims.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/weld.hxx>
 
 namespace chart
 {

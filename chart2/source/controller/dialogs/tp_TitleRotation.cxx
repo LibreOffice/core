@@ -19,7 +19,6 @@
 
 #include "tp_TitleRotation.hxx"
 
-#include "TabPageIds.h"
 #include <chartview/ChartSfxItemIds.hxx>
 #include <TextDirectionListBox.hxx>
 

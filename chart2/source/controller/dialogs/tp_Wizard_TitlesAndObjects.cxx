@@ -22,7 +22,6 @@
 #include <res_LegendPosition.hxx>
 #include <ChartModelHelper.hxx>
 #include <AxisHelper.hxx>
-#include <LegendHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 

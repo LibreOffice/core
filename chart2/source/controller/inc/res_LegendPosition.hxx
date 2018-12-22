@@ -19,11 +19,15 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_LEGENDPOSITION_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_LEGENDPOSITION_HXX
 
-#include <vcl/weld.hxx>
 #include <svl/itemset.hxx>
+#include <tools/link.hxx>
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace weld { class Builder; }
+namespace weld { class CheckButton; }
+namespace weld { class RadioButton; }
+namespace weld { class ToggleButton; }
 
 namespace chart
 {

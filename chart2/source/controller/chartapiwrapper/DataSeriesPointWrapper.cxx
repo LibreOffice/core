@@ -18,11 +18,9 @@
  */
 
 #include "DataSeriesPointWrapper.hxx"
-#include <RegressionCurveHelper.hxx>
 #include "Chart2ModelContact.hxx"
 #include <ChartTypeHelper.hxx>
 #include <DiagramHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <CharacterProperties.hxx>
@@ -39,7 +37,6 @@
 #include "WrappedTextRotationProperty.hxx"
 #include <unonames.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
 #include <algorithm>
@@ -48,9 +45,6 @@
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

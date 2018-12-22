@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/zforlist.hxx>
 #include <dlg_ObjectProperties.hxx>
-#include "TabPageIds.h"
 #include <strings.hrc>
 #include "tp_AxisLabel.hxx"
 #include "tp_DataLabel.hxx"
@@ -39,7 +37,6 @@
 #include <ObjectNameProvider.hxx>
 #include <DiagramHelper.hxx>
 #include <NumberFormatterWrapper.hxx>
-#include <AxisIndexDefines.hxx>
 #include <AxisHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <ChartModel.hxx>
@@ -48,8 +45,6 @@
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <svl/intitem.hxx>
 #include <svl/languageoptions.hxx>
 
@@ -61,13 +56,15 @@
 
 #include <svx/dialogs.hrc>
 #include <editeng/flstitem.hxx>
-#include <svx/tabline.hxx>
 
 #include <svx/flagsdef.hxx>
 #include <svx/numinf.hxx>
 
 #include <svl/cjkoptions.hxx>
 #include <tools/diagnose_ex.h>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
 
 namespace chart
 {

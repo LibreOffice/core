@@ -20,13 +20,25 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_ERRORBAR_HXX
 
 #include <memory>
-#include <vcl/weld.hxx>
-#include <sfx2/tabdlg.hxx>
+#include <tools/link.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
+#include <vcl/tabpage.hxx>
 #include "RangeSelectionListener.hxx"
 
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace weld { class Builder; }
+namespace weld { class Button; }
+namespace weld { class CheckButton; }
+namespace weld { class ComboBox; }
+namespace weld { class Entry; }
+namespace weld { class Frame; }
+namespace weld { class Image; }
+namespace weld { class Label; }
+namespace weld { class MetricSpinButton; }
+namespace weld { class RadioButton; }
+namespace weld { class ToggleButton; }
+namespace weld { class Widget; }
 
 namespace chart
 {

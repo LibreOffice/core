@@ -18,10 +18,8 @@
  */
 
 #include <dlg_ChartType.hxx>
-#include "TabPageIds.h"
 #include "tp_ChartType.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <vcl/layout.hxx>
 
 
 namespace chart

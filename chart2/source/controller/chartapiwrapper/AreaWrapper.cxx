@@ -20,7 +20,6 @@
 #include "AreaWrapper.hxx"
 #include "Chart2ModelContact.hxx"
 #include <WrappedDirectStateProperty.hxx>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>

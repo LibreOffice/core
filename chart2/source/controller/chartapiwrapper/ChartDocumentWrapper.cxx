@@ -23,7 +23,6 @@
 #include <TitleHelper.hxx>
 #include <LegendHelper.hxx>
 #include <ControllerLockGuard.hxx>
-#include <ModifyListenerHelper.hxx>
 #include <DisposeHelper.hxx>
 #include "DataSeriesPointWrapper.hxx"
 #include <chartview/ExplicitValueProvider.hxx>
@@ -46,27 +45,20 @@
 #include "WrappedAddInProperty.hxx"
 #include <WrappedIgnoreProperty.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/chart2/XTitled.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <com/sun/star/drawing/ShapeCollection.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 #include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
-#include <functional>
 #include <map>
-#include <o3tl/functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;

@@ -19,10 +19,8 @@
 
 #include <dlg_ShapeFont.hxx>
 #include <ViewElementListProvider.hxx>
-#include "TabPageIds.h"
 
 #include <svl/intitem.hxx>
-#include <sfx2/objsh.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 #include <editeng/flstitem.hxx>

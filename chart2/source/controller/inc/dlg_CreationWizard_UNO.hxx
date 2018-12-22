@@ -30,6 +30,7 @@
 
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
+#include "dlg_CreationWizard.hxx"
 
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
@@ -40,7 +41,6 @@ class VclWindowEvent;
 namespace chart
 {
 
-class CreationWizard;
 class CreationWizardUnoDlg : public MutexContainer
                             , public ::cppu::OComponentHelper
                             , public css::ui::dialogs::XExecutableDialog

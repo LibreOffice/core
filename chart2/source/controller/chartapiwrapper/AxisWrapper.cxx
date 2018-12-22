@@ -42,13 +42,10 @@
 #include "WrappedTextRotationProperty.hxx"
 #include "WrappedGapwidthProperty.hxx"
 #include "WrappedScaleProperty.hxx"
-#include <WrappedDefaultProperty.hxx>
 #include "WrappedNumberFormatProperty.hxx"
 #include "WrappedScaleTextProperties.hxx"
 
 #include <algorithm>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

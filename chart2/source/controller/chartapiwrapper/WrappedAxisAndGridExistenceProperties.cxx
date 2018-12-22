@@ -20,7 +20,6 @@
 #include "WrappedAxisAndGridExistenceProperties.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <AxisHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"
 #include <TitleHelper.hxx>

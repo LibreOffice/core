@@ -21,12 +21,9 @@
 
 #include <chartview/ChartSfxItemIds.hxx>
 
-#include <editeng/sizeitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
-#include <svtools/controldims.hxx>
-#include <svx/chrtitem.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 

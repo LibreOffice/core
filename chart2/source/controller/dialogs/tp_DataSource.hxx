@@ -21,10 +21,6 @@
 
 #include <svtools/wizardmachine.hxx>
 
-#include <vcl/fixed.hxx>
-#include <vcl/svtabbx.hxx>
-#include <vcl/treelistbox.hxx>
-
 #include <RangeSelectionListener.hxx>
 
 namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }

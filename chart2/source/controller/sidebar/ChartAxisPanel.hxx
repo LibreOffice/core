@@ -16,7 +16,6 @@
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/edit.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
@@ -24,6 +23,7 @@
 namespace com { namespace sun { namespace star { namespace util { class XModifyListener; } } } }
 namespace com { namespace sun { namespace star { namespace view { class XSelectionChangeListener; } } } }
 
+class Edit;
 class ListBox;
 class MetricField;
 

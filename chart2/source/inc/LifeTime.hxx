@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star { namespace util { class XCloseab
 namespace apphelper
 {
 
-class LifeTimeGuard;
 class OOO_DLLPUBLIC_CHARTTOOLS LifeTimeManager
 {
 friend class LifeTimeGuard;

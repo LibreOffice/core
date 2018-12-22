@@ -19,8 +19,6 @@
 
 #include "tp_DataLabel.hxx"
 
-#include "TabPageIds.h"
-
 namespace chart
 {
 

@@ -21,23 +21,22 @@
 #include "WrappedSeriesOrDiagramProperty.hxx"
 #include <FastPropertyIdRanges.hxx>
 #include <RegressionCurveHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <ErrorBar.hxx>
 #include <StatisticsHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
 #include <com/sun/star/chart/ChartRegressionCurveType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <utility>
+
+namespace com { namespace sun { namespace star { namespace chart2 { namespace data { class XDataProvider; } } } } }
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;

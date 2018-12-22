@@ -27,10 +27,6 @@
 #include <AxisHelper.hxx>
 #include <ObjectNameProvider.hxx>
 
-#include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <vcl/settings.hxx>
-
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

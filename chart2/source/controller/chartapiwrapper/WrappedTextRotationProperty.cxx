@@ -18,7 +18,8 @@
  */
 
 #include "WrappedTextRotationProperty.hxx"
-#include <com/sun/star/beans/XPropertyState.hpp>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertyState; } } } }
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;

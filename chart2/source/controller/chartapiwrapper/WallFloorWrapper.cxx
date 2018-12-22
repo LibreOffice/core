@@ -21,9 +21,6 @@
 #include "Chart2ModelContact.hxx"
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
 #include <FillProperties.hxx>
@@ -32,8 +29,6 @@
 #include <WrappedDirectStateProperty.hxx>
 
 #include <algorithm>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

@@ -28,16 +28,10 @@
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/chart2/PieChartOffsetMode.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-#include <svtools/controldims.hxx>
 #include <svtools/valueset.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/image.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

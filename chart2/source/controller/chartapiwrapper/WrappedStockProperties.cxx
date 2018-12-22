@@ -21,7 +21,6 @@
 #include "Chart2ModelContact.hxx"
 #include <FastPropertyIdRanges.hxx>
 #include <DiagramHelper.hxx>
-#include <ChartModelHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <WrappedProperty.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

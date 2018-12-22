@@ -19,9 +19,18 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TRENDLINE_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TRENDLINE_HXX
 
+#include <tools/link.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
-#include <vcl/weld.hxx>
+
+namespace weld { class Builder; }
+namespace weld { class CheckButton; }
+namespace weld { class Entry; }
+namespace weld { class FormattedSpinButton; }
+namespace weld { class Image; }
+namespace weld { class RadioButton; }
+namespace weld { class SpinButton; }
+namespace weld { class ToggleButton; }
 
 class SvNumberFormatter;
 

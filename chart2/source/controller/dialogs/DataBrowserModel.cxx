@@ -22,7 +22,6 @@
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <DataSeriesHelper.hxx>
-#include <PropertyHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <StatisticsHelper.hxx>
 #include <ChartTypeHelper.hxx>
@@ -33,13 +32,11 @@
 #include <unonames.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
-#include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>

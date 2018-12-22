@@ -25,14 +25,12 @@
 #include <AxisHelper.hxx>
 
 #include <svx/svxids.hrc>
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <svx/chrtitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/weld.hxx>
 #include <svl/zformat.hxx>
-#include <svtools/controldims.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 

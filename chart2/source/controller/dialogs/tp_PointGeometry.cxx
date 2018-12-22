@@ -18,7 +18,6 @@
  */
 
 #include "tp_PointGeometry.hxx"
-#include "TabPageIds.h"
 #include "res_BarGeometry.hxx"
 
 #include <chartview/ChartSfxItemIds.hxx>

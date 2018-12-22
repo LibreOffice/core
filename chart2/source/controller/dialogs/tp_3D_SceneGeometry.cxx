@@ -19,13 +19,10 @@
 
 #include "tp_3D_SceneGeometry.hxx"
 
-#include <BaseGFXHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <ControllerLockGuard.hxx>
-#include <rtl/math.hxx>
-#include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>

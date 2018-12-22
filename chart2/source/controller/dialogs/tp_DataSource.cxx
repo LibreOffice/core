@@ -20,7 +20,6 @@
 #include "tp_DataSource.hxx"
 #include <strings.hrc>
 #include <ResId.hxx>
-#include <chartview/ChartSfxItemIds.hxx>
 #include "ChartTypeTemplateProvider.hxx"
 #include <RangeSelectionHelper.hxx>
 #include <DataSeriesHelper.hxx>
@@ -28,20 +27,12 @@
 #include <DataSourceHelper.hxx>
 #include "DialogModel.hxx"
 #include <TabPageNotifiable.hxx>
-#include <com/sun/star/sheet/XRangeSelection.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 
-#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <functional>
-#include <algorithm>
-#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
