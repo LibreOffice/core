@@ -41,6 +41,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bSaveAsShown = true;    // "true" if not in string (after CSV import)
     bQuoteAllText = false;
+    bSaveNumberAsSuch = true;
     bSaveFormulas = false;
     bRemoveSpace = false;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
@@ -67,6 +68,8 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
             // look at the same positions as in ScAsciiOptions
             if ( nTokenCount >= 7 )
                 bQuoteAllText = rStr.getToken(6, ',') == "true";
+            if ( nTokenCount >= 8 )
+                bSaveNumberAsSuch = rStr.getToken(7, ',') == "true";
             if ( nTokenCount >= 9 )
                 bSaveAsShown = rStr.getToken(8, ',') == "true";
             if ( nTokenCount >= 10 )
@@ -89,7 +92,9 @@ OUString ScImportOptions::BuildString() const
                                                  // use the same string format as ScAsciiOptions:
             ",1,,0," +                           // first row, no column info, default language
             OUString::boolean( bQuoteAllText ) + // same as "quoted field as text" in ScAsciiOptions
-            ",true," +                           // "detect special numbers"
+            "," +
+            OUString::boolean( bSaveNumberAsSuch ) + // "save number as such": not in ScAsciiOptions
+            "," +
             OUString::boolean( bSaveAsShown ) +  // "save as shown": not in ScAsciiOptions
             "," +
             OUString::boolean( bSaveFormulas ) +  // "save formulas": not in ScAsciiOptions
