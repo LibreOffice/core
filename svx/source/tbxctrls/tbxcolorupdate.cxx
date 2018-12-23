@@ -55,6 +55,7 @@ namespace svx
             case SID_ATTR_CHAR_COLOR_BACKGROUND:
             case SID_ATTR_CHAR_BACK_COLOR:
             case SID_BACKGROUND_COLOR:
+            case SID_TABLE_CELL_BACKGROUND_COLOR:
                 Update(NamedColor(COL_DEFAULT_HIGHLIGHT, SvxResId(RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT)));
                 break;
             case SID_ATTR_LINE_COLOR:

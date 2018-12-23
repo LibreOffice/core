@@ -2202,7 +2202,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     SelectionType nSelType(rSh.GetSelectionType());
     SvxBrushItem aBrushItem(RES_BACKGROUND);
 
-    if( SelectionType::TableCell & nSelType )
+    if( nWhich == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
         rSh.GetBoxBackground( aBrushItem );
     }
@@ -2230,6 +2230,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
         switch(nWhich)
         {
             case SID_BACKGROUND_COLOR:
+            case SID_TABLE_CELL_BACKGROUND_COLOR:
             {
                 SvxColorItem aColorItem(aBrushItem.GetColor(),SID_BACKGROUND_COLOR);
                 rSet.Put(aColorItem);
@@ -2255,14 +2256,14 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSlot(rReq.GetSlot());
 
-    if (!pArgs && nSlot != SID_BACKGROUND_COLOR)
+    if (!pArgs && ( nSlot != SID_BACKGROUND_COLOR || nSlot != SID_TABLE_CELL_BACKGROUND_COLOR ) )
     {
         return;
     }
 
     SvxBrushItem aBrushItem(RES_BACKGROUND);
 
-    if( SelectionType::TableCell & nSelType )
+    if ( nSlot == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
         rSh.GetBoxBackground( aBrushItem );
     }
@@ -2288,12 +2289,13 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     switch(nSlot)
     {
         case SID_BACKGROUND_COLOR:
+        case SID_TABLE_CELL_BACKGROUND_COLOR:
         {
             aBrushItem.SetGraphicPos(GPOS_NONE);
 
             if(pArgs)
             {
-                const SvxColorItem& rNewColorItem = pArgs->Get(SID_BACKGROUND_COLOR);
+                const SvxColorItem& rNewColorItem = pArgs->Get(nSlot == SID_BACKGROUND_COLOR ? SID_BACKGROUND_COLOR : SID_TABLE_CELL_BACKGROUND_COLOR );
                 const Color& rNewColor = rNewColorItem.GetValue();
                 aBrushItem.SetColor(rNewColor);
                 GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
@@ -2322,7 +2324,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         }
     }
 
-    if( SelectionType::TableCell & nSelType )
+    if ( nSlot == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
         rSh.SetBoxBackground( aBrushItem );
     }

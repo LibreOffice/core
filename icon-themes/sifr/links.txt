@@ -77,6 +77,8 @@ cmd/sc_closepreview.png cmd/sc_exitsearch.png
 # Colors (fontcolor is used in writer's formatting toolbar)
 cmd/lc_fontcolor.png cmd/lc_color.png
 cmd/sc_fontcolor.png cmd/sc_color.png
+cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
+cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
 
 # Vertical Text Alignment (cellvert* is used in writer and align* is used in calc)
 cmd/lc_cellverttop.png cmd/lc_aligntop.png

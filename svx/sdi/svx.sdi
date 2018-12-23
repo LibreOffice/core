@@ -425,6 +425,23 @@ SvxColorItem BackgroundColor SID_BACKGROUND_COLOR
     GroupId = SfxGroupId::Format;
 ]
 
+SvxColorItem TableCellBackgroundColor SID_TABLE_CELL_BACKGROUND_COLOR
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
 
 SvxBrushItem BackgroundPattern SID_ATTR_BRUSH
 

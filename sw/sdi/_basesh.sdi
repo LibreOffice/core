@@ -206,6 +206,14 @@ interface BaseTextSelection
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_TABLE_CELL_BACKGROUND_COLOR
+    [
+        ExecMethod = ExecBckCol ;
+        StateMethod = GetBckColState ;
+        AutoUpdate ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_BACKGROUND_COLOR // status()
     [
         ExecMethod = ExecBckCol ;

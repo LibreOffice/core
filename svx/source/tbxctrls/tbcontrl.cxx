@@ -1294,6 +1294,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         case SID_BACKGROUND_COLOR:
         case SID_ATTR_CHAR_BACK_COLOR:
+        case SID_TABLE_CELL_BACKGROUND_COLOR:
         {
             mpButtonAutoColor->SetText( SvxResId( RID_SVXSTR_NOFILL ) );
             break;
@@ -1409,6 +1410,7 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         case SID_BACKGROUND_COLOR:
         case SID_ATTR_CHAR_BACK_COLOR:
+        case SID_TABLE_CELL_BACKGROUND_COLOR:
         {
             mxButtonAutoColor->set_label( SvxResId( RID_SVXSTR_NOFILL ) );
             break;
@@ -1545,6 +1547,7 @@ namespace
             case SID_ATTR_CHAR_COLOR_BACKGROUND:
             case SID_BACKGROUND_COLOR:
             case SID_ATTR_CHAR_BACK_COLOR:
+            case SID_TABLE_CELL_BACKGROUND_COLOR:
                 aColor = COL_TRANSPARENT;
                 sColorName = SvxResId(RID_SVXSTR_NOFILL);
                 break;
@@ -3032,6 +3035,8 @@ sal_uInt16 MapCommandToSlotId(const OUString& rCommand)
         return SID_ATTR_CHAR_BACK_COLOR;
     else if (rCommand == ".uno:BackgroundColor")
         return SID_BACKGROUND_COLOR;
+    else if (rCommand == ".uno:TableCellBackgroundColor")
+        return SID_TABLE_CELL_BACKGROUND_COLOR;
     else if (rCommand == ".uno:Extrusion3DColor")
         return SID_EXTRUSION_3D_COLOR;
     else if (rCommand == ".uno:XLineColor")

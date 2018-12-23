@@ -1902,6 +1902,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AlignRight"),
         OUString(".uno:BackColor"),
         OUString(".uno:BackgroundColor"),
+        OUString(".uno:TableCellBackgroundColor"),
         OUString(".uno:Bold"),
         OUString(".uno:CenterPara"),
         OUString(".uno:CharBackColor"),
