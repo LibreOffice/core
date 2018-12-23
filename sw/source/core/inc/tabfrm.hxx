@@ -111,7 +111,7 @@ protected:
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
 public:
-    SwTabFrame( SwTable &, SwFrame* );  // calling Regist Flys always after creation _and_pasting!
+    SwTabFrame( SwTable &, SwFrame* );  // calling RegistFlys always after creation _and_pasting!
     SwTabFrame( SwTabFrame & ); // _only_ for the creation of follows
 
     void JoinAndDelFollows();   // for DelFrames of the TableNodes!
