@@ -40,7 +40,7 @@
 
 namespace desktop
 {
-    // to be able to display the help nicely in a dialog box with propotional font,
+    // To be able to display the help nicely in a dialog box with proportional font,
     // we need to split it in chunks...
     //  ___HEAD___
     //  LEFT RIGHT
@@ -80,12 +80,12 @@ namespace desktop
         "keep startup bitmap minimized.\n"\
         "no startup screen, no default document and no UI.\n"\
         "suppress restart/restore after fatal errors.\n"\
-        "starts the quickstart service (only available on windows and OS/2 platform)\n"\
+        "starts the quickstart service (only available on Windows and OS/2)\n"\
         "don't show startup screen.\n"\
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\
-        "like invisible but no userinteraction at all.\n"\
-        "enable further optimization for document conversion, includes enabled headless mode.\n"\
+        "like invisible but no user interaction at all.\n"\
+        "enable further optimization for document conversion, includes headless mode.\n"\
         "show this message and exit.\n"\
         "create new text document.\n"\
         "create new spreadsheet document.\n"\
