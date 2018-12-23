@@ -217,7 +217,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="select_persona">
-                        <property name="label" translatable="yes" context="personalization_tab|select_persona">Select Theme</property>
+                        <property name="label" translatable="yes" context="personalization_tab|select_persona">Load Firefox theme</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
