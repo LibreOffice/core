@@ -1010,6 +1010,32 @@ namespace
     }
 }
 
+void SfxHelp::incBusy(const vcl::Window* pParent)
+{
+    // lock any toplevel windows from being closed until busy is over
+    // ensure any dialogs are reset before entering
+    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
+    while (xTopWin)
+    {
+        if (xTopWin != pParent)
+            xTopWin->IncModalCount();
+        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
+    }
+}
+
+void SfxHelp::decBusy(const vcl::Window* pParent)
+{
+    // unlock any toplevel windows from being closed until busy is over
+    // ensure any dialogs are reset before entering
+    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
+    while (xTopWin)
+    {
+        if (xTopWin != pParent)
+            xTopWin->DecModalCount();
+        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
+    }
+}
+
 bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword)
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
@@ -1118,6 +1144,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
             if(bShowOfflineHelpPopUp)
             {
+                incBusy(pWindow);
                 std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWindow ? pWindow->GetFrameWeld() : nullptr, "sfx/ui/helpmanual.ui"));
                 std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("onlinehelpmanual"));
                 std::unique_ptr<weld::CheckButton> m_xHideOfflineHelpCB(xBuilder->weld_check_button("hidedialog"));
@@ -1128,6 +1155,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                 short OnlineHelpBox = xQueryBox->run();
                 bShowOfflineHelpPopUp = OnlineHelpBox != RET_OK;
                 aHelpOptions.SetOfflineHelpPopUp(!m_xHideOfflineHelpCB->get_state());
+                decBusy(pWindow);
             }
             if(!bShowOfflineHelpPopUp)
             {
@@ -1135,8 +1163,10 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                     return true;
                 else
                 {
+                    incBusy(pWindow);
                     NoHelpErrorBox aErrBox(pWindow ? pWindow->GetFrameWeld() : nullptr);
                     aErrBox.run();
+                    decBusy(pWindow);
                     return false;
                 }
             }
