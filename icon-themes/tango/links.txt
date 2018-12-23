@@ -533,6 +533,8 @@ cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
+cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
+cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
 
 # Toggle graphics visibility in Writer
 cmd/sc_showgraphics.png cmd/sc_insertgraphic.png

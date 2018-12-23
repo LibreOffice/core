@@ -292,6 +292,7 @@ cmd/32/starshapes.png cmd/32/starshapes.star5.png
 cmd/32/stylewatercanmode cmd/32/styleapply.png
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/32/symbolshapes.png cmd/32/symbolshapes.smiley.png
+cmd/32/tablecellbackgroundcolor.png cmd/32/backgroundcolor.png
 cmd/32/tableevents.png cmd/32/animationeffects.png
 cmd/32/tableselectall.png cmd/32/selecttable.png
 cmd/32/tablesort.png cmd/32/datasort.png
@@ -619,6 +620,7 @@ cmd/lc_starshapes.png cmd/lc_starshapes.star5.png
 cmd/lc_stylewatercanmode cmd/lc_styleapply.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
+cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
 cmd/lc_tableevents.png cmd/lc_animationeffects.png
 cmd/lc_tableselectall.png cmd/lc_selecttable.png
 cmd/lc_tablesort.png cmd/lc_datasort.png
@@ -911,6 +913,7 @@ cmd/sc_starshapes.png cmd/sc_starshapes.star5.png
 cmd/sc_stylewatercanmode cmd/sc_styleapply.png
 cmd/sc_symbolcatalogue.png cmd/sc_insertsymbol.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
+cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
 cmd/sc_tableselectall.png cmd/sc_selecttable.png
 cmd/sc_tablesort.png cmd/sc_datasort.png

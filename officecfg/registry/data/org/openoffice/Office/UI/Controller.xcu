@@ -1299,6 +1299,17 @@
           <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="TableCellBackgroundColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TableCellBackgroundColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="ColorToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:Color</value>

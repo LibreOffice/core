@@ -975,9 +975,11 @@ class SfxStringItem;
 #define SID_TABLE_OPTIMAL_COLUMN_WIDTH                  ( SID_SVX_START + 1187 )
 #define SID_TABLE_OPTIMAL_ROW_HEIGHT                    ( SID_SVX_START + 1188 )
 
+#define SID_TABLE_CELL_BACKGROUND_COLOR                 TypedWhichId<SvxColorItem>( SID_SVX_START + 1189 )
+
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_TABLE_OPTIMAL_ROW_HEIGHT + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1189 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

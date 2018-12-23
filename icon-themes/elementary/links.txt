@@ -877,18 +877,21 @@ cmd/32/characterbackgroundpattern.png cmd/32/backcolor.png
 cmd/32/fontcolor.png cmd/32/color.png
 cmd/32/formatarea.png cmd/32/backgroundcolor.png
 cmd/32/settabbgcolor.png cmd/32/backgroundcolor.png
+cmd/32/tablecellbackgroundcolor.png cmd/32/backgroundcolor.png
 
 cmd/lc_backgroundpatterncontroller.png cmd/lc_backgroundcolor.png
 cmd/lc_characterbackgroundpattern.png cmd/lc_backcolor.png
 cmd/lc_fontcolor.png cmd/lc_color.png
 cmd/lc_formatarea.png cmd/lc_backgroundcolor.png
 cmd/lc_settabbgcolor.png cmd/lc_backgroundcolor.png
+cmd/lc_tablecellbackgroundcolor.png cmd/lc_backgroundcolor.png
 
 cmd/sc_backgroundpatterncontroller.png cmd/sc_backgroundcolor.png
 cmd/sc_characterbackgroundpattern.png cmd/sc_backcolor.png
 cmd/sc_fontcolor.png cmd/sc_color.png
 cmd/sc_formatarea.png cmd/sc_backgroundcolor.png
 cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
+cmd/sc_tablecellbackgroundcolor.png cmd/sc_backgroundcolor.png
 
 # Paragraph Alignment
 cmd/32/leftpara.png cmd/32/alignleft.png
