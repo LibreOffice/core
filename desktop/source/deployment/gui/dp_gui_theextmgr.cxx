@@ -442,6 +442,7 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     }
     else
     {
+        clearModified();
         if ( m_pExtMgrDialog )
             m_pExtMgrDialog->Close();
         if ( m_pUpdReqDialog )
