@@ -132,7 +132,7 @@ namespace dbaui
         void                ScrollAllAggregates();
 
         bool                isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
-        void                Contruct();
+        void                Construct();
         VclPtr<OPropNumericEditCtrl> CreateNumericControl(const char* pHelpId, short _nProperty, const OString& _sHelpId);
         VclPtr<FixedText>   CreateText(const char* pTextRes);
         void                InitializeControl(Control* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
