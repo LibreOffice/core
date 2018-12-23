@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_d213de65",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-23T19:00:33Z",
+      "side": 0,
+      "message": "this looks like a bug introduced in\n\n    commit 8ff0331bff9db9206e27558aca3958b65afb044b\n    Author: Kohei Yoshida \u003ckohei.yoshida@suse.com\u003e\n    Date:   Wed Feb 8 15:08:29 2012 -0500\n    Move away from TypedScStrCollection in favor of STL\u0027s.\n\nwhere it should have been using std::lower_bound, not std::find_if",
+      "revId": "2ee85baac60dde5238e42483d610edf28fcffc6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
