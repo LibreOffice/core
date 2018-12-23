@@ -1942,6 +1942,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     sal_Unicode cStrDelim = rAsciiOpt.nTextSepCode;
     rtl_TextEncoding eCharSet      = rAsciiOpt.eCharSet;
     bool bFixedWidth      = rAsciiOpt.bFixedWidth;
+    bool bSaveNumberAsSuch = rAsciiOpt.bSaveNumberAsSuch;
     bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
     bool bShowFormulas    = rAsciiOpt.bSaveFormulas;
 
@@ -2072,6 +2073,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                       pProtAttr->GetHideFormula() ) )
                 eType = CELLTYPE_NONE;  // hide
         }
+        bool bForceQuotes = false;
         bool bString;
         switch ( eType )
         {
@@ -2104,7 +2106,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         else
                         {
                             ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter, &m_aDocument);
-                            bString = false;
+                            bString = bForceQuotes = !bSaveNumberAsSuch;
                         }
                     }
                     else
@@ -2154,7 +2156,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     else
                     {
                         ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter, &m_aDocument);
-                        bString = false;
+                        bString = bForceQuotes = !bSaveNumberAsSuch;
                     }
                 }
                 break;
@@ -2197,10 +2199,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         escapeTextSep<OUString, OUStringBuffer>(
                             nPos, OUString(cStrDelim), aUniString);
 
-                        if ( bNeedQuotes )
+                        if ( bNeedQuotes || bForceQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                         write_uInt16s_FromOUString(rStream, aUniString);
-                        if ( bNeedQuotes )
+                        if ( bNeedQuotes || bForceQuotes )
                             rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                     }
                     else
@@ -2235,10 +2237,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                                 nPos, aStrDelimDecoded, aStrDec);
 
                             // write byte re-encoded
-                            if ( bNeedQuotes )
+                            if ( bNeedQuotes || bForceQuotes )
                                 rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                             rStream.WriteUnicodeOrByteText( aStrDec, eCharSet );
-                            if ( bNeedQuotes )
+                            if ( bNeedQuotes || bForceQuotes )
                                 rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
                         }
                         else
@@ -2254,11 +2256,11 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                                 nPos, aStrDelimEncoded, aStrEnc);
 
                             // write byte encoded
-                            if ( bNeedQuotes )
+                            if ( bNeedQuotes || bForceQuotes )
                                 rStream.WriteBytes(
                                     aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                             rStream.WriteBytes(aStrEnc.getStr(), aStrEnc.getLength());
-                            if ( bNeedQuotes )
+                            if ( bNeedQuotes || bForceQuotes )
                                 rStream.WriteBytes(
                                     aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                         }

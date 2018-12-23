@@ -31,23 +31,11 @@ public:
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
-            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false),
-            bRemoveSpace(false)
+            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false),
+            bSaveNumberAsSuch(true), bSaveFormulas(false), bRemoveSpace(false)
         { SetTextEncoding( nEnc ); }
 
-    ScImportOptions& operator=( const ScImportOptions& rCpy )
-                        {
-                            nFieldSepCode   = rCpy.nFieldSepCode;
-                            nTextSepCode    = rCpy.nTextSepCode;
-                            aStrFont        = rCpy.aStrFont;
-                            eCharSet        = rCpy.eCharSet;
-                            bFixedWidth     = rCpy.bFixedWidth;
-                            bSaveAsShown    = rCpy.bSaveAsShown;
-                            bQuoteAllText   = rCpy.bQuoteAllText;
-                            bSaveFormulas   = rCpy.bSaveFormulas;
-                            bRemoveSpace    = rCpy.bRemoveSpace;
-                            return *this;
-                        }
+    ScImportOptions& operator=( const ScImportOptions& rCpy ) = default;
 
     OUString  BuildString() const;
 
@@ -60,6 +48,7 @@ public:
     bool        bFixedWidth;
     bool        bSaveAsShown;
     bool        bQuoteAllText;
+    bool        bSaveNumberAsSuch;
     bool        bSaveFormulas;
     bool        bRemoveSpace;
 };
