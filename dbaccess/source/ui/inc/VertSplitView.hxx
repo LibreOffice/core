@@ -30,9 +30,11 @@ namespace dbaui
         VclPtr<Splitter>                m_pSplitter;
         VclPtr<vcl::Window>             m_pLeft;
         VclPtr<vcl::Window>             m_pRight;
+        ImplSVEvent *m_pResizeId;
 
         void ImplInitSettings();
-        DECL_LINK( SplitHdl, Splitter*, void );
+        DECL_LINK(SplitHdl, Splitter*, void);
+        DECL_LINK(ResizeHdl, void*, void);
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:

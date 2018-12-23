@@ -32,6 +32,7 @@ OSplitterView::OSplitterView(vcl::Window* _pParent) : Window(_pParent,WB_DIALOGC
     ,m_pSplitter( nullptr )
     ,m_pLeft(nullptr)
     ,m_pRight(nullptr)
+    ,m_pResizeId(nullptr)
 {
     ImplInitSettings();
 }
@@ -43,6 +44,11 @@ OSplitterView::~OSplitterView()
 
 void OSplitterView::dispose()
 {
+    if (m_pResizeId)
+    {
+        RemoveUserEvent(m_pResizeId);
+        m_pResizeId = nullptr;
+    }
     m_pSplitter.clear();
     m_pLeft.clear();
     m_pRight.clear();
@@ -102,9 +108,10 @@ void OSplitterView::GetFocus()
         m_pRight->GrabFocus();
 }
 
-void OSplitterView::Resize()
+IMPL_LINK_NOARG(OSplitterView, ResizeHdl, void*, void)
 {
-    Window::Resize();
+    m_pResizeId = nullptr;
+
     OSL_ENSURE( m_pRight, "No init called!");
 
     Point   aSplitPos;
@@ -142,7 +149,14 @@ void OSplitterView::Resize()
         m_pRight->setPosSizePixel( aSplitPos.X(), aPlaygroundPos.Y() + aSplitPos.Y() + aSplitSize.Height(),
                                aPlaygroundSize.Width() , aPlaygroundSize.Height() - aSplitSize.Height() - aSplitPos.Y());
     }
+}
 
+void OSplitterView::Resize()
+{
+    Window::Resize();
+    if (m_pResizeId)
+        RemoveUserEvent(m_pResizeId);
+    m_pResizeId = PostUserEvent(LINK(this, OSplitterView, ResizeHdl), this, true);
 }
 
 void OSplitterView::set(vcl::Window* _pRight,Window* _pLeft)
