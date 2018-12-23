@@ -2157,11 +2157,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             {
                 sal_uInt16 nNumElemMemVert = 0;
                 rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
+                // If this value is 0xFFF0 then this record is an array of truncated 8 byte elements. Only the 4
+                // low-order bytes are recorded
+                if (nElemSizeVert == 0xFFF0)
+                    nElemSizeVert = 4;
             }
-            if (nElemSizeVert != 8)
-                nElemSizeVert = 4;
             //sanity check that the stream is long enough to fulfill nNumElem * nElemSize;
-            bool bImport = rIn.remainingSize() / nElemSizeVert >= nNumElemVert;
+            bool bImport = nElemSizeVert && (rIn.remainingSize() / nElemSizeVert >= nNumElemVert);
             if (bImport)
             {
                 aCoordinates.realloc( nNumElemVert );
@@ -2390,15 +2392,16 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             sal_uInt16 nElemSizeVert = 8;
 
             if ( SeekToContent( DFF_Prop_connectorPoints, rIn ) )
-                rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
-
-            bool bImport = false;
-            if (nNumElemVert && nElemSizeVert)
             {
-                //sanity check that the stream is long enough to fulfill nNumElemVert * nElemSizeVert;
-                bImport = rIn.remainingSize() / nElemSizeVert >= nNumElemVert;
+                rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
+                // If this value is 0xFFF0 then this record is an array of truncated 8 byte elements. Only the 4
+                // low-order bytes are recorded
+                if (nElemSizeVert == 0xFFF0)
+                    nElemSizeVert = 4;
             }
 
+            // sanity check that the stream is long enough to fulfill nNumElemVert * nElemSizeVert;
+            bool bImport = nElemSizeVert && (rIn.remainingSize() / nElemSizeVert >= nNumElemVert);
             if (bImport)
             {
                 aGluePoints.realloc( nNumElemVert );
@@ -5513,13 +5516,15 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
         {
             pTextImpRec->pWrapPolygon.reset();
-            sal_uInt16 nNumElemVert(0), nNumElemMemVert(0), nElemSizeVert(0);
+            sal_uInt16 nNumElemVert(0), nNumElemMemVert(0), nElemSizeVert(8);
             rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
-            bool bOk = false;
-            if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
-            {
-                bOk = rSt.remainingSize() / nElemSizeVert >= nNumElemVert;
-            }
+            // If this value is 0xFFF0 then this record is an array of truncated 8 byte elements. Only the 4
+            // low-order bytes are recorded
+            if (nElemSizeVert == 0xFFF0)
+                nElemSizeVert = 4;
+
+            // sanity check that the stream is long enough to fulfill nNumElemVert * nElemSizeVert;
+            bool bOk = nElemSizeVert && (rSt.remainingSize() / nElemSizeVert >= nNumElemVert);
             if (bOk)
             {
                 pTextImpRec->pWrapPolygon.reset(new tools::Polygon(nNumElemVert));
