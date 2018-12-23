@@ -1105,7 +1105,7 @@ IA2_STATE_INVALID_ENTRY =           0x40,
   descendants   scheme can't be used.  Instead the active child object has to fire
   MSAA's EVENT_OBJECT_FOCUS.  In a future release a new event mechanism may be
   added to provide for event specific data to be passed with the event.  At that
-  time the IA2_EVENT_ACTIVE_DECENDENT_CHANGED event and
+  time the IA2_EVENT_ACTIVE_DESCENDENT_CHANGED event and
   IA2_STATE_MANAGES_DESCENDANTS state would be useful.
 */
 IA2_STATE_MANAGES_DESCENDANTS =     0x80,
@@ -5016,7 +5016,7 @@ enum IA2EventID {
     removed in a later version. Please use the correctly spelled version which
     follows.
   */
-  IA2_EVENT_ACTIVE_DECENDENT_CHANGED,
+  IA2_EVENT_ACTIVE_DESCENDENT_CHANGED,
 
   /** The active descendant of a component has changed.  The active descendant
     is used in objects with transient children.
@@ -5026,10 +5026,10 @@ enum IA2EventID {
     descendants scheme can't be used.  Instead the active child object has to fire
     MSAA's EVENT_OBJECT_FOCUS.  In a future release a new event mechanism may be
     added to provide for event specific data to be passed with the event.  At that
-    time the IA2_EVENT_ACTIVE_DECENDENT_CHANGED event and
+    time the IA2_EVENT_ACTIVE_DESCENDENT_CHANGED event and
     IA2_STATE_MANAGES_DESCENDANTS state would be useful.
   */
-  IA2_EVENT_ACTIVE_DESCENDANT_CHANGED = IA2_EVENT_ACTIVE_DECENDENT_CHANGED,
+  IA2_EVENT_ACTIVE_DESCENDANT_CHANGED = IA2_EVENT_ACTIVE_DESCENDENT_CHANGED,
 
   /** The document wide attributes of the document object have changed.
   */
