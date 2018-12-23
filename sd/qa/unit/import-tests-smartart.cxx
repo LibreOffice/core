@@ -60,8 +60,8 @@ public:
     void testEquation();
     void testSegmentedCycle();
     void testBaseRtoL();
-    void testVertialBoxList();
-    void testVertialBracketList();
+    void testVerticalBoxList();
+    void testVerticalBracketList();
     void testTableList();
     void testAccentProcess();
     void testContinuousBlockProcess();
@@ -91,8 +91,8 @@ public:
     CPPUNIT_TEST(testEquation);
     CPPUNIT_TEST(testSegmentedCycle);
     CPPUNIT_TEST(testBaseRtoL);
-    CPPUNIT_TEST(testVertialBoxList);
-    CPPUNIT_TEST(testVertialBracketList);
+    CPPUNIT_TEST(testVerticalBoxList);
+    CPPUNIT_TEST(testVerticalBracketList);
     CPPUNIT_TEST(testTableList);
     CPPUNIT_TEST(testAccentProcess);
     CPPUNIT_TEST(testContinuousBlockProcess);
@@ -481,10 +481,10 @@ void SdImportTestSmartArt::testBaseRtoL()
     xDocShRef->DoClose();
 }
 
-void SdImportTestSmartArt::testVertialBoxList()
+void SdImportTestSmartArt::testVerticalBoxList()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(
-        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-vertial-box-list.pptx"), PPTX);
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-vertical-box-list.pptx"), PPTX);
     uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef),
                                                  uno::UNO_QUERY_THROW);
     // Without the accompanying fix in place, this test would have failed with
@@ -517,7 +517,7 @@ void SdImportTestSmartArt::testVertialBoxList()
     xDocShRef->DoClose();
 }
 
-void SdImportTestSmartArt::testVertialBracketList()
+void SdImportTestSmartArt::testVerticalBracketList()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(
         m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/vertical-bracket-list.pptx"), PPTX);
