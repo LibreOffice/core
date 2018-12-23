@@ -156,7 +156,10 @@ void ScInterpreter::ScGetSec()
     sal_uInt16 nHour, nMinute, nSecond;
     double fFractionOfSecond;
     tools::Time::GetClock( GetDouble(), nHour, nMinute, nSecond, fFractionOfSecond, 0);
-    PushDouble( nSecond);
+    if ( fFractionOfSecond >= 0.5 )
+        nSecond = ( nSecond + 1 ) % 60;
+    PushDouble( nSecond );
+
 }
 
 void ScInterpreter::ScGetHour()
