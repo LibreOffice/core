@@ -2635,7 +2635,6 @@ void DesktopLOKTest::testComplexSelection()
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_COMPLEX), pDocument->pClass->getSelectionType(pDocument));
 }
 
-
 void DesktopLOKTest::testInsertCertificatePEM()
 {
     comphelper::LibreOfficeKit::setActive();
@@ -2717,6 +2716,9 @@ void DesktopLOKTest::testInsertCertificatePEM()
                             aPrivateKey.data(), int(aPrivateKey.size()));
         CPPUNIT_ASSERT(bResult);
     }
+
+    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    CPPUNIT_ASSERT_EQUAL(int(1), nState);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

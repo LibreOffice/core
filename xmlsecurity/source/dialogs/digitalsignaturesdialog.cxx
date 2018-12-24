@@ -36,7 +36,6 @@
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
@@ -242,26 +241,6 @@ void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed
 
     maSignatureManager.mxStore = rxStore;
     maSignatureManager.maSignatureHelper.SetStorage( maSignatureManager.mxStore, m_sODFVersion);
-
-    Reference < css::packages::manifest::XManifestReader > xReader =
-        css::packages::manifest::ManifestReader::create(mxCtx);
-
-    uno::Reference<container::XNameAccess> xNameAccess(rxStore, uno::UNO_QUERY);
-    if (!xNameAccess.is())
-        return;
-
-    if (xNameAccess->hasByName("META-INF"))
-    {
-        //Get the manifest.xml
-        Reference < css::embed::XStorage > xSubStore(rxStore->openStorageElement(
-                    "META-INF", css::embed::ElementModes::READ), UNO_QUERY_THROW);
-
-        Reference< css::io::XInputStream > xStream(
-            xSubStore->openStreamElement("manifest.xml", css::embed::ElementModes::READ),
-            UNO_QUERY_THROW);
-
-        maSignatureManager.m_manifest = xReader->readManifestSequence(xStream);
-    }
 }
 
 void DigitalSignaturesDialog::SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream )
