@@ -2755,6 +2755,12 @@ void ScFiltersTest::testFormulaDependency()
 
 void ScFiltersTest::testMiscRowHeights()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (Application::GetDefaultDevice()->GetDPIX() != 96
+        || Application::GetDefaultDevice()->GetDPIY() != 96)
+        return;
+
     static const TestParam::RowData DfltRowData[] =
     {
         // check rows at the beginning and end of document
@@ -2793,6 +2799,12 @@ void ScFiltersTest::testMiscRowHeights()
 
 void ScFiltersTest::testOptimalHeightReset()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (Application::GetDefaultDevice()->GetDPIX() != 96
+        || Application::GetDefaultDevice()->GetDPIY() != 96)
+        return;
+
     ScDocShellRef xDocSh = loadDoc("multilineoptimal.", FORMAT_ODS, true);
     SCTAB nTab = 0;
     SCROW nRow = 0;
