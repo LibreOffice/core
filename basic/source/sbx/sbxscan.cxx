@@ -884,11 +884,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
 
         }
         else
-        {
-            OUString aTmpString( rRes );
-            ImpCvtNum( GetDouble(), nComma, aTmpString );
-            rRes = aTmpString;
-        }
+            ImpCvtNum( GetDouble(), nComma, rRes );
         break;
     case SbxSTRING:
         if( pFmt )
