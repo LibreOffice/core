@@ -2992,9 +2992,7 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
 
         if (bNoPageBreak)
         {
-            if (SfxItemState::SET != pSet->GetItemState(RES_BREAK, true, &pI))
-                bNoPageBreak = true;
-            else
+            if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, true, &pI))
             {
                 SvxBreak eBreak = static_cast<const SvxFormatBreakItem*>(pI)->GetBreak();
                 switch (eBreak)
