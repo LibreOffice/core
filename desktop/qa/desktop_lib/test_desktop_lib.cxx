@@ -2371,6 +2371,9 @@ void DesktopLOKTest::testInsertCertificate()
         CPPUNIT_ASSERT(bResult);
     }
 
+    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    CPPUNIT_ASSERT_EQUAL(int(1), nState);
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
@@ -2456,6 +2459,9 @@ void DesktopLOKTest::testInsertCertificatePEM()
                             aPrivateKey.data(), int(aPrivateKey.size()));
         CPPUNIT_ASSERT(bResult);
     }
+
+    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    CPPUNIT_ASSERT_EQUAL(int(1), nState);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

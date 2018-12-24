@@ -29,6 +29,8 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/packages/manifest/ManifestReader.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -119,6 +121,40 @@ bool DocumentSignatureManager::IsXAdESRelevant()
 }
 #endif
 
+bool DocumentSignatureManager::readManifest()
+{
+    // Check if manifest was already read
+    if (m_manifest.getLength() > 0)
+        return true;
+
+    if (!mxContext.is())
+        return false;
+
+    if (!mxStore.is())
+        return false;
+
+    uno::Reference<packages::manifest::XManifestReader> xReader
+        = packages::manifest::ManifestReader::create(mxContext);
+
+    uno::Reference<container::XNameAccess> xNameAccess(mxStore, uno::UNO_QUERY);
+    if (!xNameAccess.is())
+        return false;
+
+    if (xNameAccess->hasByName("META-INF"))
+    {
+        //Get the manifest.xml
+        uno::Reference<embed::XStorage> xSubStore(
+            mxStore->openStorageElement("META-INF", embed::ElementModes::READ), uno::UNO_QUERY_THROW);
+
+        uno::Reference<io::XInputStream> xStream(
+            xSubStore->openStreamElement("manifest.xml", css::embed::ElementModes::READ),
+            uno::UNO_QUERY_THROW);
+
+        m_manifest = xReader->readManifestSequence(xStream);
+    }
+    return true;
+}
+
 /* Using the zip storage, we cannot get the properties "MediaType" and "IsEncrypted"
     We use the manifest to find out if a file is xml and if it is encrypted.
     The parameter is an encoded uri. However, the manifest contains paths. Therefore
@@ -134,27 +170,30 @@ bool DocumentSignatureManager::isXML(const OUString& rURI)
     const OUString sPropMediaType("MediaType");
     const OUString sPropDigest("Digest");
 
-    for (int i = 0; i < m_manifest.getLength(); i++)
+    if (readManifest())
     {
-        const uno::Sequence<beans::PropertyValue>& entry = m_manifest[i];
-        OUString sPath, sMediaType;
-        bool bEncrypted = false;
-        for (int j = 0; j < entry.getLength(); j++)
+        for (int i = 0; i < m_manifest.getLength(); i++)
         {
-            const beans::PropertyValue& prop = entry[j];
+            const uno::Sequence<beans::PropertyValue>& entry = m_manifest[i];
+            OUString sPath, sMediaType;
+            bool bEncrypted = false;
+            for (int j = 0; j < entry.getLength(); j++)
+            {
+                const beans::PropertyValue& prop = entry[j];
 
-            if (prop.Name == sPropFullPath)
-                prop.Value >>= sPath;
-            else if (prop.Name == sPropMediaType)
-                prop.Value >>= sMediaType;
-            else if (prop.Name == sPropDigest)
-                bEncrypted = true;
-        }
-        if (DocumentSignatureHelper::equalsReferenceUriManifestPath(rURI, sPath))
-        {
-            bIsXML = sMediaType == "text/xml" && ! bEncrypted;
-            bPropsAvailable = true;
-            break;
+                if (prop.Name == sPropFullPath)
+                    prop.Value >>= sPath;
+                else if (prop.Name == sPropMediaType)
+                    prop.Value >>= sMediaType;
+                else if (prop.Name == sPropDigest)
+                    bEncrypted = true;
+            }
+            if (DocumentSignatureHelper::equalsReferenceUriManifestPath(rURI, sPath))
+            {
+                bIsXML = sMediaType == "text/xml" && !bEncrypted;
+                bPropsAvailable = true;
+                break;
+            }
         }
     }
     if (!bPropsAvailable)
