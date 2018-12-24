@@ -120,15 +120,32 @@ template <class... StrType> void WriteLog(MSIHANDLE hInst, const StrType&... ele
     WriteLogElem(hInst, hRec, sTemplate, 1, elements...);
 }
 
-void ShowWarning(MSIHANDLE hInst, const std::wstring& sErrNo, const char* sMessage)
+// Show a warning message box. This will be automatically suppressed in unattended installation.
+void ShowWarning(MSIHANDLE hInst, const std::wstring& sKBNo, const char* sMessage)
 {
-    PMSIHANDLE hRec = MsiCreateRecord(2);
+    // Error table's message #25000: "Installing a pre-requisite [2] failed.
+    // You might need to manually install it from Microsoft site to be able to run the product.[3]"
+    PMSIHANDLE hRec = MsiCreateRecord(3);
     // To show a message from Error table, record's Field 0 must be null
-    MsiRecordSetStringW(hRec, 1, sErrNo.c_str());
+    MsiRecordSetInteger(hRec, 1, 25000);
+    MsiRecordSetStringW(hRec, 2, sKBNo.c_str());
     std::string s("\n");
     s += sMessage;
-    MsiRecordSetStringA(hRec, 2, s.c_str());
+    MsiRecordSetStringA(hRec, 3, s.c_str());
     MsiProcessMessage(hInst, INSTALLMESSAGE_WARNING, hRec);
+}
+
+// Set custom action description visible in progress dialog
+void SetStatusText(MSIHANDLE hInst, const std::wstring& sKBNo)
+{
+    PMSIHANDLE hRec = MsiCreateRecord(3);
+    // For INSTALLMESSAGE_ACTIONSTART, record's Field 0 must be null
+    std::wstring s(sKBNo + L" installation");
+    MsiRecordSetStringW(hRec, 1, s.c_str()); // Field 1: Action name - must be non-null
+    s = L"Installing " + sKBNo;
+    MsiRecordSetStringW(hRec, 2, s.c_str()); // Field 2: Action description - displayed in dialog
+    // Let Field 3 stay null - no action template
+    MsiProcessMessage(hInst, INSTALLMESSAGE_ACTIONSTART, hRec);
 }
 
 typedef std::unique_ptr<void, decltype(&CloseHandle)> CloseHandleGuard;
@@ -349,13 +366,13 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
         DWORD nCCh = sizeof(sInstMSUBinary) / sizeof(*sInstMSUBinary);
         CheckWin32Error("MsiGetPropertyW",
                         MsiGetPropertyW(hInstall, L"InstMSUBinary", sInstMSUBinary, &nCCh));
-        WriteLog(hInstall,
-                 "Got InstMSUBinary value:", sInstMSUBinary); // 123|Windows61-KB2999226-x64msu
+        WriteLog(hInstall, "Got InstMSUBinary value:",
+                 sInstMSUBinary); // KB2999226|Windows61-KB2999226-x64msu
         const wchar_t* sBinaryName = wcschr(sInstMSUBinary, L'|');
         if (!sBinaryName)
-            throw std::exception("No error code in InstMSUBinary!");
-        // "123" - # of the message in Error table to be shown on failure
-        const std::wstring sErrNo(sInstMSUBinary, sBinaryName - sInstMSUBinary);
+            throw std::exception("No KB number in InstMSUBinary!");
+        // "KB2999226"
+        const std::wstring sKBNo(sInstMSUBinary, sBinaryName - sInstMSUBinary);
         ++sBinaryName;
 
         PMSIHANDLE hDatabase = MsiGetActiveDatabase(hInstall);
@@ -413,7 +430,7 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
 
             WriteLog(hInstall, "Successfully wrote", Num2Dec(nTotal), "bytes");
         }
-        const std::wstring s_inst_msu = sErrNo + L"|" + sBinary;
+        const std::wstring s_inst_msu = sKBNo + L"|" + sBinary;
         CheckWin32Error("MsiSetPropertyW",
                         MsiSetPropertyW(hInstall, L"inst_msu", s_inst_msu.c_str()));
 
@@ -432,24 +449,25 @@ extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hI
 // "CustomActionData" property, and runs wusa.exe to install it. Waits for it and checks exit code.
 extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
 {
-    std::wstring sErrNo; // "123" - # of the message in Error table to be shown on failure
+    std::wstring sKBNo; // "KB2999226"
     try
     {
         sLogPrefix = "InstallMSU:";
         WriteLog(hInstall, "started");
 
         WriteLog(hInstall, "Checking value of CustomActionData");
-        wchar_t sCustomActionData[MAX_PATH + 10]; // "123|C:\Temp\binary.tmp"
+        wchar_t sCustomActionData[MAX_PATH + 10]; // "KB2999226|C:\Temp\binary.tmp"
         DWORD nCCh = sizeof(sCustomActionData) / sizeof(*sCustomActionData);
         CheckWin32Error("MsiGetPropertyW",
                         MsiGetPropertyW(hInstall, L"CustomActionData", sCustomActionData, &nCCh));
         WriteLog(hInstall, "Got CustomActionData value:", sCustomActionData);
         const wchar_t* sBinaryName = wcschr(sCustomActionData, L'|');
         if (!sBinaryName)
-            throw std::exception("No error code in CustomActionData!");
-        sErrNo = std::wstring(sCustomActionData, sBinaryName - sCustomActionData);
+            throw std::exception("No KB number in CustomActionData!");
+        sKBNo = std::wstring(sCustomActionData, sBinaryName - sCustomActionData);
         ++sBinaryName;
         auto aDeleteFileGuard(Guard(sBinaryName));
+        SetStatusText(hInstall, sKBNo);
 
         // In case the Windows Update service is disabled, we temporarily enable it here
         WUServiceEnabler aWUServiceEnabler(hInstall);
@@ -504,7 +522,7 @@ extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
     catch (std::exception& e)
     {
         WriteLog(hInstall, e.what());
-        ShowWarning(hInstall, sErrNo, e.what());
+        ShowWarning(hInstall, sKBNo, e.what());
     }
     return ERROR_SUCCESS; // Do not break on MSU installation errors
 }
