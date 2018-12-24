@@ -1439,7 +1439,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
                 if( pStyleSheetPool )
                 {
                     OUString aStr = GetSelectedEntry();
-                    if( !aStr.isEmpty() && pStyleSheetPool )
+                    if (!aStr.isEmpty())
                     {
                         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
                         if( !pItem ) break;

@@ -1367,7 +1367,7 @@ SCROW lcl_LastVisible( const ScViewData& rViewData )
 
 void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY )
 {
-    if ( !pRowBar[SC_SPLIT_BOTTOM] || MAXROW < 10000 )
+    if (!pRowBar[SC_SPLIT_BOTTOM])
         return;
 
     SCROW nEndPos = MAXROW;

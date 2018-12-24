@@ -300,7 +300,7 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
                 {
                     const SwLayoutFrame *pCell = pRow->FirstCell();
 
-                    while( bTableIsValid && pCell && pRow->IsAnLower( pCell ) )
+                    while (pCell && pRow->IsAnLower(pCell))
                     {
                         if( !pCell->isFrameAreaDefinitionValid() && nLoopMax )
                         {
@@ -513,7 +513,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                 {
                     const SwLayoutFrame *pCell = pRow->FirstCell();
 
-                    while( bValidChartSel && bTableIsValid && pCell && pRow->IsAnLower( pCell ) )
+                    while (pCell && pRow->IsAnLower(pCell))
                     {
                         if( !pCell->isFrameAreaDefinitionValid() && nLoopMax  )
                         {

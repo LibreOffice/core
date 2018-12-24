@@ -1143,7 +1143,7 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
 
     while( nPos )
     {
-        if(pTableData->GetColumns()[i].bVisible && nPos)
+        if(pTableData->GetColumns()[i].bVisible)
             nPos--;
         i++;
     }
@@ -1160,7 +1160,7 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
     sal_uInt16 i=0;
     while( nPos )
     {
-        if(pTableData->GetColumns()[i].bVisible && nPos)
+        if(pTableData->GetColumns()[i].bVisible)
             nPos--;
         i++;
     }
