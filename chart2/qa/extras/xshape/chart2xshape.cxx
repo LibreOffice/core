@@ -21,6 +21,8 @@
 
 #include <test/xmldiff.hxx>
 #include <test/xmltesttools.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 #include <fstream>
 
@@ -121,6 +123,12 @@ void Chart2XShapeTest::testPropertyMappingBarChart()
 
 void Chart2XShapeTest::testPieChartLabels1()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (Application::GetDefaultDevice()->GetDPIX() != 96
+        || Application::GetDefaultDevice()->GetDPIY() != 96)
+        return;
+
     // inside placement for the best fit case
     load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-1.xlsx");
     compareAgainstReference("tdf90839-1.xml");
@@ -128,6 +136,12 @@ void Chart2XShapeTest::testPieChartLabels1()
 
 void Chart2XShapeTest::testPieChartLabels2()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (Application::GetDefaultDevice()->GetDPIX() != 96
+        || Application::GetDefaultDevice()->GetDPIY() != 96)
+        return;
+
     // text wrap: wrap all text labels except one
     load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-2.xlsx");
     compareAgainstReference("tdf90839-2.xml");
@@ -135,6 +149,12 @@ void Chart2XShapeTest::testPieChartLabels2()
 
 void Chart2XShapeTest::testPieChartLabels3()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (Application::GetDefaultDevice()->GetDPIX() != 96
+        || Application::GetDefaultDevice()->GetDPIY() != 96)
+        return;
+
     // text wrap: wrap no text label except one
     load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-3.xlsx");
     compareAgainstReference("tdf90839-3.xml");
@@ -142,6 +162,12 @@ void Chart2XShapeTest::testPieChartLabels3()
 
 void Chart2XShapeTest::testPieChartLabels4()
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (Application::GetDefaultDevice()->GetDPIX() != 96
+        || Application::GetDefaultDevice()->GetDPIY() != 96)
+        return;
+
     // data value and percent value are centered horizontally
     load("chart2/qa/extras/xshape/data/ods/", "tdf90839-4.ods");
     compareAgainstReference("tdf90839-4.xml");
