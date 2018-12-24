@@ -4974,87 +4974,40 @@ namespace {
           mbUpdateListCount( false )
     {
         bool bRemoveFromList( false );
-        if ( nWhich2 != 0 && nWhich2 > nWhich1 )
+        if ( nWhich2 < nWhich1 )
+            nWhich2 = nWhich1
+
+        if ( nWhich1 <= RES_PARATR_NUMRULE && RES_PARATR_NUMRULE <= nWhich2 )
         {
-            // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
-            if ( nWhich1 <= RES_PARATR_NUMRULE && RES_PARATR_NUMRULE <= nWhich2 )
-            {
-                bRemoveFromList = mrTextNode.GetNumRule() != nullptr;
-                mbListStyleOrIdReset = true;
-            }
-            else if ( nWhich1 <= RES_PARATR_LIST_ID && RES_PARATR_LIST_ID <= nWhich2 )
-            {
-                bRemoveFromList = mrTextNode.GetpSwAttrSet() &&
-                    mrTextNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, false ) == SfxItemState::SET;
-                // #i92898#
-                mbListStyleOrIdReset = true;
-            }
-
-            if ( !bRemoveFromList )
-            {
-                // RES_PARATR_LIST_LEVEL
-                mbUpdateListLevel = ( nWhich1 <= RES_PARATR_LIST_LEVEL &&
-                                      RES_PARATR_LIST_LEVEL <= nWhich2 &&
-                                      mrTextNode.HasAttrListLevel() );
-
-                // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
-                mbUpdateListRestart =
-                    ( nWhich1 <= RES_PARATR_LIST_ISRESTART && RES_PARATR_LIST_ISRESTART <= nWhich2 &&
-                      mrTextNode.IsListRestart() ) ||
-                    ( nWhich1 <= RES_PARATR_LIST_RESTARTVALUE && RES_PARATR_LIST_RESTARTVALUE <= nWhich2 &&
-                      mrTextNode.HasAttrListRestartValue() );
-
-                // RES_PARATR_LIST_ISCOUNTED
-                mbUpdateListCount =
-                    ( nWhich1 <= RES_PARATR_LIST_ISCOUNTED && RES_PARATR_LIST_ISCOUNTED <= nWhich2 &&
-                      !mrTextNode.IsCountedInList() );
-            }
-
-            // #i70748#
-            // RES_PARATR_OUTLINELEVEL
-            if ( nWhich1 <= RES_PARATR_OUTLINELEVEL && RES_PARATR_OUTLINELEVEL <= nWhich2 )
-            {
-                mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-            }
+            bRemoveFromList = mrTextNode.GetNumRule() != nullptr;
+            mbListStyleOrIdReset = true;
         }
-        else
+        else if ( nWhich1 <= RES_PARATR_LIST_ID && RES_PARATR_LIST_ID <= nWhich2 )
         {
-            // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
-            if ( nWhich1 == RES_PARATR_NUMRULE )
-            {
-                bRemoveFromList = mrTextNode.GetNumRule() != nullptr;
-                mbListStyleOrIdReset = true;
-            }
-            else if ( nWhich1 == RES_PARATR_LIST_ID )
-            {
-                bRemoveFromList = mrTextNode.GetpSwAttrSet() &&
-                    mrTextNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, false ) == SfxItemState::SET;
-                // #i92898#
-                mbListStyleOrIdReset = true;
-            }
-            // #i70748#
-            // RES_PARATR_OUTLINELEVEL
-            else if ( nWhich1 == RES_PARATR_OUTLINELEVEL )
-            {
-                mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-            }
+            bRemoveFromList = mrTextNode.GetpSwAttrSet() &&
+                mrTextNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, false ) == SfxItemState::SET;
+            // #i92898#
+            mbListStyleOrIdReset = true;
+        }
+        else if ( nWhich1 <= RES_PARATR_OUTLINELEVEL && RES_PARATR_OUTLINELEVEL <= nWhich2 )
+            mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
 
-            if ( !bRemoveFromList )
-            {
-                // RES_PARATR_LIST_LEVEL
-                mbUpdateListLevel = nWhich1 == RES_PARATR_LIST_LEVEL &&
-                                    mrTextNode.HasAttrListLevel();
 
-                // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
-                mbUpdateListRestart = ( nWhich1 == RES_PARATR_LIST_ISRESTART &&
-                                        mrTextNode.IsListRestart() ) ||
-                                      ( nWhich1 == RES_PARATR_LIST_RESTARTVALUE &&
-                                        mrTextNode.HasAttrListRestartValue() );
+        if ( !bRemoveFromList )
+        {
+            mbUpdateListLevel = ( nWhich1 <= RES_PARATR_LIST_LEVEL &&
+                                  RES_PARATR_LIST_LEVEL <= nWhich2 &&
+                                  mrTextNode.HasAttrListLevel() );
 
-                // RES_PARATR_LIST_ISCOUNTED
-                mbUpdateListCount = nWhich1 == RES_PARATR_LIST_ISCOUNTED &&
-                                    !mrTextNode.IsCountedInList();
-            }
+            mbUpdateListRestart =
+                ( nWhich1 <= RES_PARATR_LIST_ISRESTART && RES_PARATR_LIST_ISRESTART <= nWhich2 &&
+                  mrTextNode.IsListRestart() ) ||
+                ( nWhich1 <= RES_PARATR_LIST_RESTARTVALUE && RES_PARATR_LIST_RESTARTVALUE <= nWhich2 &&
+                  mrTextNode.HasAttrListRestartValue() );
+
+            mbUpdateListCount =
+                ( nWhich1 <= RES_PARATR_LIST_ISCOUNTED && RES_PARATR_LIST_ISCOUNTED <= nWhich2 &&
+                  !mrTextNode.IsCountedInList() );
         }
 
         if ( bRemoveFromList && mrTextNode.IsInList() )
