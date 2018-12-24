@@ -16,6 +16,24 @@
       "revId": "2ee85baac60dde5238e42483d610edf28fcffc6b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_7dccfb88",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-12-24T21:21:46Z",
+      "side": 0,
+      "message": "I\u0027m a little confused. Should I wait for Kohei\u0027s review before changing std::find_if to std::lower_bound?",
+      "parentUuid": "5f4e5783_d213de65",
+      "revId": "2ee85baac60dde5238e42483d610edf28fcffc6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
