@@ -462,7 +462,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
     long nMaxLineWidth  = 0;
     rLineInfo.Clear();
-    if ( !rStr.isEmpty() && (nWidth > 0) )
+    if (!rStr.isEmpty())
     {
         const bool bHyphenate = (nStyle & DrawTextFlags::WordBreakHyphenation) == DrawTextFlags::WordBreakHyphenation;
         css::uno::Reference< css::linguistic2::XHyphenator > xHyph;
@@ -2177,7 +2177,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
 
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
-        if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector
+        if (!(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics)
             && accel && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
             if ( nMnemonicPos != -1 )
@@ -2213,7 +2213,7 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayoutGlyphs
     {
         if ( nMnemonicPos < nIndex )
             nIndex--;
-        else if ( (nMnemonicPos >= nIndex) && (static_cast<sal_uLong>(nMnemonicPos) < static_cast<sal_uLong>(nIndex+nLen)) )
+        else if (static_cast<sal_uLong>(nMnemonicPos) < static_cast<sal_uLong>(nIndex+nLen))
             nLen--;
     }
     return GetTextWidth( aStr, nIndex, nLen, nullptr, pGlyphs );
