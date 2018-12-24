@@ -83,6 +83,8 @@ public:
      * differently when they are signed (c14n transformation)
      */
     bool isXML(const OUString& rURI);
+    bool readManifest();
+
     SignatureStreamHelper ImplOpenSignatureStream(sal_Int32 nStreamOpenMode, bool bTempStream);
     /// Add a new signature, using xCert as a signing certificate, and rDescription as description.
     bool add(const css::uno::Reference<css::security::XCertificate>& xCert,
