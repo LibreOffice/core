@@ -54,6 +54,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
+#include <comphelper/sequence.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -312,11 +313,6 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
 
     for (auto const & aDispatchRequest: aDispatchRequestsList)
     {
-        // create parameter array
-        sal_Int32 nCount = 4;
-        if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
-            nCount++;
-
         // Set Input Filter
         if ( aDispatchRequest.aRequestType == REQUEST_INFILTER )
         {
@@ -326,55 +322,13 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
             continue;
         }
 
-        // we need more properties for a print/print to request
-        if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
-             aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
-             aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
-             aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT ||
-             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT)
-            nCount++;
-
-        Sequence < PropertyValue > aArgs( nCount );
+        // create parameter array
+        std::vector<PropertyValue> aArgs;
 
         // mark request as user interaction from outside
-        aArgs[0].Name = "Referer";
-        aArgs[0].Value <<= OUString("private:OpenEvent");
+        aArgs.emplace_back("Referer", 0, Any(OUString("private:OpenEvent")),
+                           PropertyState_DIRECT_VALUE);
 
-        if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
-             aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
-             aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
-             aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT ||
-             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT)
-        {
-            aArgs[1].Name = "ReadOnly";
-            aArgs[2].Name = "OpenNewView";
-            aArgs[3].Name = "Hidden";
-            aArgs[4].Name = "Silent";
-        }
-        else
-        {
-            Reference < XInteractionHandler2 > xInteraction(
-                InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), nullptr) );
-
-            aArgs[1].Name = "InteractionHandler";
-            aArgs[1].Value <<= xInteraction;
-
-            aArgs[2].Name = "MacroExecutionMode";
-            aArgs[2].Value <<= css::document::MacroExecMode::USE_CONFIG;
-
-            aArgs[3].Name = "UpdateDocMode";
-            aArgs[3].Value <<= css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
-        }
-
-        if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
-        {
-            aArgs[nCount-1].Name = utl::MediaDescriptor::PROP_DOCUMENTSERVICE();
-            aArgs[nCount-1].Value <<= aDispatchRequest.aPreselectedFactory;
-        }
-
-        OUString aName( GetURL_Impl( aDispatchRequest.aURL, aDispatchRequest.aCwdUrl ) );
         OUString aTarget("_default");
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
@@ -382,24 +336,47 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
              aDispatchRequest.aRequestType == REQUEST_CAT ||
-             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT )
+             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT)
         {
-            // documents opened for printing are opened readonly because they must be opened as a new document and this
-            // document could be open already
-            aArgs[1].Value <<= true;
-
+            // documents opened for printing are opened readonly because they must be opened as a
+            // new document and this document could be open already
+            aArgs.emplace_back("ReadOnly", 0, Any(true), PropertyState_DIRECT_VALUE);
             // always open a new document for printing, because it must be disposed afterwards
-            aArgs[2].Value <<= true;
-
+            aArgs.emplace_back("OpenNewView", 0, Any(true), PropertyState_DIRECT_VALUE);
             // printing is done in a hidden view
-            aArgs[3].Value <<= true;
-
+            aArgs.emplace_back("Hidden", 0, Any(true), PropertyState_DIRECT_VALUE);
             // load document for printing without user interaction
-            aArgs[4].Value <<= true;
+            aArgs.emplace_back("Silent", 0, Any(true), PropertyState_DIRECT_VALUE);
 
             // hidden documents should never be put into open tasks
             aTarget = "_blank";
         }
+        else
+        {
+            Reference < XInteractionHandler2 > xInteraction(
+                InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), nullptr) );
+
+            aArgs.emplace_back("InteractionHandler", 0, Any(xInteraction),
+                               PropertyState_DIRECT_VALUE);
+
+            aArgs.emplace_back("MacroExecutionMode", 0,
+                               Any(css::document::MacroExecMode::USE_CONFIG),
+                               PropertyState_DIRECT_VALUE);
+
+            aArgs.emplace_back("UpdateDocMode", 0,
+                               Any(css::document::UpdateDocMode::ACCORDING_TO_CONFIG),
+                               PropertyState_DIRECT_VALUE);
+        }
+
+        if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
+        {
+            aArgs.emplace_back(utl::MediaDescriptor::PROP_DOCUMENTSERVICE(), 0,
+                               Any(aDispatchRequest.aPreselectedFactory),
+                               PropertyState_DIRECT_VALUE);
+        }
+
+        OUString aName( GetURL_Impl( aDispatchRequest.aURL, aDispatchRequest.aCwdUrl ) );
+
         // load the document ... if they are loadable!
         // Otherwise try to dispatch it ...
         Reference < XPrintable > xDoc;
@@ -487,58 +464,43 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
             if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW ||
                  aDispatchRequest.aRequestType == REQUEST_FORCEOPEN     )
             {
-                sal_Int32 nIndex = aArgs.getLength();
-                aArgs.realloc( nIndex+1 );
-                aArgs[nIndex].Name = "AsTemplate";
-                if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW )
-                    aArgs[nIndex].Value <<= true;
-                else
-                    aArgs[nIndex].Value <<= false;
+                aArgs.emplace_back("AsTemplate", 0,
+                                   Any(aDispatchRequest.aRequestType == REQUEST_FORCENEW),
+                                   PropertyState_DIRECT_VALUE);
             }
 
             // if we are called in viewmode, open document read-only
             if(aDispatchRequest.aRequestType == REQUEST_VIEW) {
-                sal_Int32 nIndex = aArgs.getLength();
-                aArgs.realloc(nIndex+1);
-                aArgs[nIndex].Name = "ReadOnly";
-                aArgs[nIndex].Value <<= true;
+                aArgs.emplace_back("ReadOnly", 0, Any(true), PropertyState_DIRECT_VALUE);
             }
 
             // if we are called with -start set Start in mediadescriptor
             if(aDispatchRequest.aRequestType == REQUEST_START) {
-                sal_Int32 nIndex = aArgs.getLength();
-                aArgs.realloc(nIndex+1);
-                aArgs[nIndex].Name = "StartPresentation";
-                aArgs[nIndex].Value <<= true;
+                aArgs.emplace_back("StartPresentation", 0, Any(true), PropertyState_DIRECT_VALUE);
             }
 
             // Force input filter, if possible
             if( bSetInputFilter )
             {
-                sal_Int32 nIndex = aArgs.getLength();
-                aArgs.realloc(nIndex+1);
-                aArgs[nIndex].Name = "FilterName";
+                sal_Int32 nFilterOptionsIndex = 0;
+                aArgs.emplace_back("FilterName", 0,
+                                   Any(aForcedInputFilter.getToken(0, ':', nFilterOptionsIndex)),
+                                   PropertyState_DIRECT_VALUE);
 
-                sal_Int32 nFilterOptionsIndex = aForcedInputFilter.indexOf( ':' );
-                if( 0 < nFilterOptionsIndex )
+                if (0 < nFilterOptionsIndex)
                 {
-                    aArgs[nIndex].Value <<= aForcedInputFilter.copy( 0, nFilterOptionsIndex );
-
-                    nIndex = aArgs.getLength();
-                    aArgs.realloc(nIndex+1);
-                    aArgs[nIndex].Name = "FilterOptions";
-                    aArgs[nIndex].Value <<= aForcedInputFilter.copy( nFilterOptionsIndex+1 );
-                }
-                else
-                {
-                    aArgs[nIndex].Value <<= aForcedInputFilter;
+                    aArgs.emplace_back("FilterOptions", 0,
+                                       Any(aForcedInputFilter.copy(nFilterOptionsIndex)),
+                                       PropertyState_DIRECT_VALUE);
                 }
             }
 
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
             try
             {
-                xDoc.set( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, aArgs ), UNO_QUERY );
+                xDoc.set(comphelper::SynchronousDispatch::dispatch(
+                             xDesktop, aName, aTarget, comphelper::containerToSequence(aArgs)),
+                         UNO_QUERY);
             }
             catch (const css::lang::IllegalArgumentException& iae)
             {
