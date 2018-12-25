@@ -818,7 +818,6 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
     if ( bEmpty && !bNoTerminate /*m_aRequestContainer.empty()*/ )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
-        aGuard.clear();
         Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY );
 
         if ( !xList->hasElements() )
