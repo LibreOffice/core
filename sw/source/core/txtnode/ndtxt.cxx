@@ -5031,6 +5031,8 @@ namespace {
                 }
                 else if ( rWhich == RES_PARATR_OUTLINELEVEL )
                     mrTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                else if ( rWhich == RES_BACKGROUND )
+                    mrTextNode.ResetAttr( XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
                 if ( !bRemoveFromList )
                 {
