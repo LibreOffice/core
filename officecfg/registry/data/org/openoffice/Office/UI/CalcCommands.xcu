@@ -799,7 +799,7 @@
           <value xml:lang="en-US">Fill ~Down</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Down</value>
+          <value xml:lang="en-US">Fill ~Down</value>
         </prop>
       </node>
       <node oor:name=".uno:FillRight" oor:op="replace">
@@ -807,7 +807,7 @@
           <value xml:lang="en-US">Fill ~Right</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Right</value>
+          <value xml:lang="en-US">Fill ~Right</value>
         </prop>
       </node>
       <node oor:name=".uno:FillUp" oor:op="replace">
@@ -815,7 +815,7 @@
           <value xml:lang="en-US">Fill ~Up</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Up</value>
+          <value xml:lang="en-US">Fill ~Up</value>
         </prop>
       </node>
       <node oor:name=".uno:FillLeft" oor:op="replace">
@@ -823,7 +823,7 @@
           <value xml:lang="en-US">Fill ~Left</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Left</value>
+          <value xml:lang="en-US">Fill ~Left</value>
         </prop>
       </node>
       <node oor:name=".uno:FillSingleEdit" oor:op="replace">
@@ -839,7 +839,7 @@
           <value xml:lang="en-US">Fill ~Sheets...</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Sheets...</value>
+          <value xml:lang="en-US">Fill ~Sheets...</value>
         </prop>
       </node>
       <node oor:name=".uno:FillSeries" oor:op="replace">
@@ -847,7 +847,7 @@
           <value xml:lang="en-US">Fill S~eries...</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">S~eries...</value>
+          <value xml:lang="en-US">Fill S~eries...</value>
         </prop>
       </node>
       <node oor:name=".uno:RandomNumberGeneratorDialog" oor:op="replace">
@@ -855,7 +855,7 @@
           <value xml:lang="en-US">Fill R~andom Number...</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">R~andom Number...</value>
+          <value xml:lang="en-US">Fill R~andom Number...</value>
         </prop>
       </node>
       <node oor:name=".uno:StatisticsMenu" oor:op="replace">
