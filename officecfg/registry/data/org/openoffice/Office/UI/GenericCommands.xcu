@@ -4963,7 +4963,7 @@
           <value xml:lang="en-US">Export Directly as PDF</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Export as PDF</value>
+          <value xml:lang="en-US">Export Directly as PDF</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
