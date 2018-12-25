@@ -980,6 +980,8 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
             aCmdLineArgs->getCwdUrl());
         m_handler->cProcessed.reset();
         pRequest->pcProcessed = &m_handler->cProcessed;
+        m_handler->mbSucces = false;
+        pRequest->mpbSuccess = &m_handler->mbSucces;
 
         // Print requests are not dependent on the --invisible cmdline argument as they are
         // loaded with the "hidden" flag! So they are always checked.
@@ -1178,17 +1180,24 @@ void PipeIpcThread::execute()
 
             // we don't need the mutex any longer...
             aGuard.clear();
+            bool bSuccess = true;
             // wait for processing to finish
             if (waitProcessed)
+            {
                 m_handler->cProcessed.wait();
-            // processing finished, inform the requesting end:
-            SAL_INFO("desktop.app", "writing <" << PROCESSING_DONE << ">");
-            n = aStreamPipe.write(
-                PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
+                bSuccess = m_handler->mbSucces;
+            }
+            if (bSuccess)
+            {
+                // processing finished, inform the requesting end:
+                SAL_INFO("desktop.app", "writing <" << PROCESSING_DONE << ">");
+                n = aStreamPipe.write(PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
                 // incl. terminating NUL
-            if (n != SAL_N_ELEMENTS(PROCESSING_DONE)) {
-                SAL_WARN("desktop.app", "short write: " << n);
-                continue;
+                if (n != SAL_N_ELEMENTS(PROCESSING_DONE))
+                {
+                    SAL_WARN("desktop.app", "short write: " << n);
+                    continue;
+                }
             }
         }
         else
@@ -1350,6 +1359,8 @@ bool RequestHandler::ExecuteCmdLineRequests(
 
         // Execute dispatch requests
         bShutdown = dispatchWatcher->executeDispatchRequests( aTempList, noTerminate);
+        if (aRequest.mpbSuccess)
+            *aRequest.mpbSuccess = true; // signal that we have actually succeeded
     }
 
     return bShutdown;
