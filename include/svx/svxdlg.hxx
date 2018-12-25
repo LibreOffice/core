@@ -295,6 +295,7 @@ public:
     virtual bool IsHorizontal() const = 0;
     virtual bool IsProportional() const = 0;
     virtual long GetCount() const = 0;
+    virtual void SetSplitVerticalByDefault() = 0;
 };
 
 class SvxAbstractNewTableDialog : public VclAbstractDialog

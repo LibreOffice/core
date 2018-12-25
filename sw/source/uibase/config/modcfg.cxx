@@ -1075,7 +1075,8 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
         "Change/Effect",                //  4
         "Input/NumberRecognition",      //  5
         "Input/NumberFormatRecognition",//  6
-        "Input/Alignment"               //  7
+        "Input/Alignment",              //  7
+        "Input/SplitVerticalByDefault"  //  8
     };
     return aNames;
 }
@@ -1091,6 +1092,7 @@ SwTableConfig::SwTableConfig(bool bWeb)
     , m_bInsTableFormatNum(false)
     , m_bInsTableChangeNumFormat(false)
     , m_bInsTableAlignNum(false)
+    , m_bSplitVerticalByDefault(false)
 {
     Load();
 }
@@ -1119,6 +1121,7 @@ void SwTableConfig::ImplCommit()
             case 5 : pValues[nProp] <<= m_bInsTableFormatNum; break;  //"Input/NumberRecognition",
             case 6 : pValues[nProp] <<= m_bInsTableChangeNumFormat; break;  //"Input/NumberFormatRecognition",
             case 7 : pValues[nProp] <<= m_bInsTableAlignNum; break;  //"Input/Alignment"
+            case 8 : pValues[nProp] <<= m_bSplitVerticalByDefault; break;  //"Input/SplitVerticalByDefault"
         }
     }
     PutProperties(aNames, aValues);
@@ -1145,6 +1148,7 @@ void SwTableConfig::Load()
                 case 5 : m_bInsTableFormatNum = *o3tl::doAccess<bool>(pValues[nProp]);  break;  //"Input/NumberRecognition",
                 case 6 : m_bInsTableChangeNumFormat = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/NumberFormatRecognition",
                 case 7 : m_bInsTableAlignNum = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/Alignment"
+                case 8 : m_bSplitVerticalByDefault = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/SplitVerticalByDefault"
             }
         }
     }
