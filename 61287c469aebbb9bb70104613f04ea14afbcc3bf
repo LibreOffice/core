@@ -140,6 +140,30 @@
       "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_1db867c6",
+        "filename": "vcl/win/gdi/raii.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-25T08:33:34Z",
+      "side": 1,
+      "message": "In this case, hiding this detail seems odd: we don\u0027t hide the quite irrelevant detail that we implement the smart object using unique_ptr (and that\u0027s OK to keep the overhead as little as possible), but hide the *relevant* detail that it calls DeleteBrush (this might be much more interesting to users to know how the housekeeping is performed :-)).\n\nBy the way: can\u0027t we just use the WinAPI function pointer as the deleter, without introducing a wrapper around it?",
+      "parentUuid": "5f4e5783_3d744335",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
