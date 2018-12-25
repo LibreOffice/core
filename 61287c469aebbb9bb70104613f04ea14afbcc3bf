@@ -164,6 +164,30 @@
       "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_ddb1afe3",
+        "filename": "vcl/win/gdi/raii.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-25T08:37:55Z",
+      "side": 1,
+      "message": "Or will use of the function ptr increase the unique_ptr actually? It was just a guess from my side, not necessarily a good one - please feel free to reject if it\u0027s wrong.",
+      "parentUuid": "5f4e5783_1db867c6",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
