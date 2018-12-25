@@ -1160,9 +1160,18 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
             else
                 pNew.reset(new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard));
 
-            auto it = std::find_if(aStrings.begin(), aStrings.end(), FindTypedStrData(*pNew, true));
-            if (it != aStrings.end())
-                nSelPos = static_cast<sal_Int32>(std::distance(aStrings.begin(), it));
+            if (pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING)
+            {
+                auto it = std::lower_bound(aStrings.begin(), aStrings.end(), *pNew, ScTypedStrData::LessCaseSensitive());
+                if (it != aStrings.end() && ScTypedStrData::EqualCaseSensitive()(*it, *pNew))
+                    nSelPos = static_cast<sal_Int32>(std::distance(aStrings.begin(), it));
+            }
+            else
+            {
+                auto it = std::find_if(aStrings.begin(), aStrings.end(), FindTypedStrData(*pNew, true));
+                if (it != aStrings.end())
+                    nSelPos = static_cast<sal_Int32>(std::distance(aStrings.begin(), it));
+            }
         }
     }
 
