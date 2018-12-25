@@ -869,6 +869,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="SplitVerticalByDefault" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether cells should be split vertically by default.</desc>
+            <label>Split vertically by default</label>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
     </group>
     <group oor:name="Insert">

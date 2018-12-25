@@ -83,4 +83,10 @@ short SvxSplitTableDlg::Execute()
     return run();
 }
 
+void SvxSplitTableDlg::SetSplitVerticalByDefault()
+{
+    if( mnMaxVertical >= 2 )
+        m_xVertBox->set_active(true); // tdf#60242
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

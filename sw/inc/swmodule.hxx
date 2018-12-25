@@ -191,6 +191,8 @@ public:
     bool            IsInsTableFormatNum(bool bHTML) const;
     bool            IsInsTableChangeNumFormat(bool bHTML) const;
     bool            IsInsTableAlignNum(bool bHTML) const;
+    bool            IsSplitVerticalByDefault(bool bHTML) const;
+    void            SetSplitVerticalByDefault(bool bHTML, bool value);
 
     // Redlining.
     std::size_t         GetRedlineAuthor();
