@@ -1051,6 +1051,7 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxIte
     get(m_pFixRB,"fix");
     get(m_pFixPropRB,"fixprop");
     get(m_pVarRB,"var");
+    get(m_pSplitVerticalByDefaultCB,"splitverticalbydefault");
 
     Link<Button*,void> aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
     m_pNumFormattingCB->SetClickHdl(aLnk);
@@ -1079,6 +1080,7 @@ void SwTableOptionsTabPage::dispose()
     m_pFixRB.clear();
     m_pFixPropRB.clear();
     m_pVarRB.clear();
+    m_pSplitVerticalByDefaultCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -1172,6 +1174,12 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
         bRet = true;
     }
 
+    if (m_pSplitVerticalByDefaultCB->IsValueChangedFromSaved())
+    {
+        pModOpt->SetSplitVerticalByDefault(m_bHTMLMode, m_pSplitVerticalByDefaultCB->IsChecked());
+        bRet = true;
+    }
+
     return bRet;
 }
 
@@ -1223,6 +1231,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     m_pNumFormattingCB->Check(pModOpt->IsInsTableFormatNum(m_bHTMLMode));
     m_pNumFormatFormattingCB->Check(pModOpt->IsInsTableChangeNumFormat(m_bHTMLMode));
     m_pNumAlignmentCB->Check(pModOpt->IsInsTableAlignNum(m_bHTMLMode));
+    m_pSplitVerticalByDefaultCB->Check(pModOpt->IsSplitVerticalByDefault(m_bHTMLMode));
 
     m_pHeaderCB->SaveValue();
     m_pRepeatHeaderCB->SaveValue();
@@ -1231,6 +1240,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     m_pNumFormattingCB->SaveValue();
     m_pNumFormatFormattingCB->SaveValue();
     m_pNumAlignmentCB->SaveValue();
+    m_pSplitVerticalByDefaultCB->SaveValue();
 
     CheckBoxHdl(nullptr);
 }

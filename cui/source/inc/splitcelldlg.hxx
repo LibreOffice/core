@@ -43,6 +43,7 @@ public:
     virtual long GetCount() const override;
 
     virtual short Execute() override;
+    virtual void SetSplitVerticalByDefault() override;
 };
 
 #endif

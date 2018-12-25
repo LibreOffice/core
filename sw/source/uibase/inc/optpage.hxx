@@ -193,6 +193,7 @@ class SwTableOptionsTabPage : public SfxTabPage
     VclPtr<CheckBox>    m_pNumFormattingCB;
     VclPtr<CheckBox>    m_pNumFormatFormattingCB;
     VclPtr<CheckBox>    m_pNumAlignmentCB;
+    VclPtr<CheckBox>    m_pSplitVerticalByDefaultCB;
 
     VclPtr<MetricField> m_pRowMoveMF;
     VclPtr<MetricField> m_pColMoveMF;

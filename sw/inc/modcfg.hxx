@@ -155,6 +155,7 @@ class SwTableConfig : public utl::ConfigItem
     bool    m_bInsTableFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
     bool    m_bInsTableChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
     bool    m_bInsTableAlignNum;        // Table/Input/Alignment                // Align numbers.
+    bool    m_bSplitVerticalByDefault;  // Table/Input/SplitVerticalByDefault   // Split vertical by default.
 
     static const css::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -302,6 +303,13 @@ public:
                     auto & config = bHTML ? m_aWebInsertConfig : m_aInsertConfig;
                     config.m_aInsTableOpts = rOpts;
                     config.SetModified();}
+
+    bool        IsSplitVerticalByDefault(bool bHTML) const
+                    { return bHTML ? m_aWebTableConfig.m_bSplitVerticalByDefault : m_aTableConfig.m_bSplitVerticalByDefault; }
+    void        SetSplitVerticalByDefault(bool bHTML, bool b)
+                    { auto & config = bHTML ? m_aWebTableConfig : m_aTableConfig;
+                      config.m_bSplitVerticalByDefault = b;
+                      config.SetModified();}
 
     const InsCaptionOpt* GetCapOption(bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
     bool        SetCapOption(bool bHTML, const InsCaptionOpt* pOpt);

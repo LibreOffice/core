@@ -572,6 +572,11 @@ bool SwModule::IsInsTableAlignNum(bool bHTML) const
     return m_pModuleConfig->IsInsTableAlignNum(bHTML);
 }
 
+bool SwModule::IsSplitVerticalByDefault(bool bHTML) const
+{
+    return m_pModuleConfig->IsSplitVerticalByDefault(bHTML);
+}
+
 const Color &SwModule::GetRedlineMarkColor()
 {
     return m_pModuleConfig->GetMarkAlignColor();

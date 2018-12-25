@@ -115,6 +115,8 @@ public:
     void EndDrag      (const Point* pPt, bool bProp) { (this->*m_fnEndDrag)(pPt, bProp); }
     long KillSelection(const Point* pPt, bool bProp) { return (this->*m_fnKillSel)(pPt, bProp); }
 
+    bool IsSplitVerticalByDefault() const;
+
     // reset all selections
     long ResetSelect( const Point *, bool );
 

@@ -363,6 +363,11 @@ long SwWrtShell::ResetSelect(const Point *,bool)
     return 1;
 }
 
+bool SwWrtShell::IsSplitVerticalByDefault() const
+{
+    return GetDoc()->IsSplitVerticalByDefault();
+}
+
 // Do nothing
 
 long SwWrtShell::Ignore(const Point *, bool ) {

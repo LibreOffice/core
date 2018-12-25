@@ -1701,6 +1701,11 @@ bool SwDoc::IsInsTableAlignNum() const
     return SW_MOD()->IsInsTableAlignNum(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
 }
 
+bool SwDoc::IsSplitVerticalByDefault() const
+{
+    return SW_MOD()->IsSplitVerticalByDefault(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
+}
+
 /// Set up the InsertDB as Undo table
 void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable )
 {

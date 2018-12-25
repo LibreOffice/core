@@ -1182,6 +1182,7 @@ public:
     bool IsInsTableFormatNum() const;
     bool IsInsTableChangeNumFormat() const;
     bool IsInsTableAlignNum() const;
+    bool IsSplitVerticalByDefault() const;
 
     // From FEShell (for Undo and BModified).
     static void GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame );
