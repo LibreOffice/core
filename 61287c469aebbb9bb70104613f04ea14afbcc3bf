@@ -188,6 +188,29 @@
       "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_9dcb3752",
+        "filename": "vcl/win/gdi/raii.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-12-25T08:39:02Z",
+      "side": 1,
+      "message": "What is this for btw?",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 27
+      },
+      "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
