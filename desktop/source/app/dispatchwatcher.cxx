@@ -341,6 +341,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         aArgs[0].Name = "Referer";
         aArgs[0].Value <<= OUString("private:OpenEvent");
 
+        OUString aTarget("_default");
+
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
@@ -348,10 +350,22 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
              aDispatchRequest.aRequestType == REQUEST_CAT ||
              aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT)
         {
+            // documents opened for printing are opened readonly because they must be opened as a
+            // new document and this document could be open already
             aArgs[1].Name = "ReadOnly";
+            aArgs[1].Value <<= true;
+            // always open a new document for printing, because it must be disposed afterwards
             aArgs[2].Name = "OpenNewView";
+            aArgs[2].Value <<= true;
+            // printing is done in a hidden view
             aArgs[3].Name = "Hidden";
+            aArgs[3].Value <<= true;
+            // load document for printing without user interaction
             aArgs[4].Name = "Silent";
+            aArgs[4].Value <<= true;
+
+            // hidden documents should never be put into open tasks
+            aTarget = "_blank";
         }
         else
         {
@@ -375,31 +389,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         }
 
         OUString aName( GetURL_Impl( aDispatchRequest.aURL, aDispatchRequest.aCwdUrl ) );
-        OUString aTarget("_default");
 
-        if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
-             aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
-             aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
-             aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT ||
-             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT )
-        {
-            // documents opened for printing are opened readonly because they must be opened as a new document and this
-            // document could be open already
-            aArgs[1].Value <<= true;
-
-            // always open a new document for printing, because it must be disposed afterwards
-            aArgs[2].Value <<= true;
-
-            // printing is done in a hidden view
-            aArgs[3].Value <<= true;
-
-            // load document for printing without user interaction
-            aArgs[4].Value <<= true;
-
-            // hidden documents should never be put into open tasks
-            aTarget = "_blank";
-        }
         // load the document ... if they are loadable!
         // Otherwise try to dispatch it ...
         Reference < XPrintable > xDoc;
