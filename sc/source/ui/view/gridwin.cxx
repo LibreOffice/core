@@ -1160,7 +1160,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
             else
                 pNew.reset(new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard));
 
-            auto it = std::find_if(aStrings.begin(), aStrings.end(), FindTypedStrData(*pNew, true));
+            bool bSortList = pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING;
+            auto it = bSortList ?
+                std::lower_bound(aStrings.begin(), aStrings.end(), *pNew, ScTypedStrData::LessCaseSensitive()) :
+                std::find_if(aStrings.begin(), aStrings.end(), FindTypedStrData(*pNew, true));
             if (it != aStrings.end())
                 nSelPos = static_cast<sal_Int32>(std::distance(aStrings.begin(), it));
         }
