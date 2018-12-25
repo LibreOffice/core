@@ -985,6 +985,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 const long nMaxVert = rSh.GetAnyCurRect( CurRectType::Frame ).Width() / MINLAY;
                 ScopedVclPtr<SvxAbstractSplitTableDialog> pDlg(pFact->CreateSvxSplitTableDialog(GetView().GetFrameWeld(), rSh.IsTableVertical(), nMaxVert));
+                if(rSh.IsSplitVerticalByDefault())
+                    pDlg->SetSplitVerticalByDefault();
                 if( pDlg->Execute() == RET_OK )
                 {
                     nCount = pDlg->GetCount();
@@ -993,6 +995,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     rReq.AppendItem( SfxInt32Item( FN_TABLE_SPLIT_CELLS, nCount ) );
                     rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bHorizontal ) );
                     rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bProportional ) );
+
+                    // tdf#60242: remember choice for next time
+                    bool bVerticalWasChecked = !pDlg->IsHorizontal();
+                    rSh.SetSplitVerticalByDefault(bVerticalWasChecked);
                 }
             }
 
