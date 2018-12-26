@@ -20,6 +20,7 @@
 #include <TableDesignHelpBar.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 #include <helpids.h>
 #include <memory>
 using namespace dbaui;

@@ -32,6 +32,7 @@
 #include <comphelper/types.hxx>
 #include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 
 namespace pcr

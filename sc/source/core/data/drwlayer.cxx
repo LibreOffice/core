@@ -46,6 +46,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/globname.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

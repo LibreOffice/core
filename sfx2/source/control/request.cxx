@@ -29,6 +29,7 @@
 #include <svl/itemiter.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <svl/itempool.hxx>
 #include <itemdel.hxx>

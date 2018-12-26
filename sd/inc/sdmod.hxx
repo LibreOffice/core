@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <sfx2/module.hxx>
 #include <sal/types.h>
+#include <vcl/virdev.hxx>
 #include <map>
 #include <memory>
 

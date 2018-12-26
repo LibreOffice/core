@@ -27,6 +27,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdcrtv.hxx>
+#include <vcl/event.hxx>
 #include <unotools/options.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

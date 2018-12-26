@@ -32,6 +32,7 @@
 #include <framework/fwedllapi.h>
 
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 

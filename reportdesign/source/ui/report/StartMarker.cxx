@@ -24,6 +24,7 @@
 #include <ReportDefines.hxx>
 #include <SectionWindow.hxx>
 #include <helpids.h>
+#include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>

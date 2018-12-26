@@ -18,7 +18,9 @@
  */
 
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/listctrl.hxx>
+#include <vcl/settings.hxx>
 
 ListControl::ListControl(vcl::Window* pParent, WinBits nBits):
     Control(pParent, nBits),
