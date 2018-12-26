@@ -706,7 +706,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     if (GetOutput() != EXC_OUTPUT_BINARY && rItems.size() > 1)
     {
         AddMultiValueEntry(rEntry);
-        return true;
+        return false;
     }
 
     bool bConflict = false;
