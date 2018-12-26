@@ -41,6 +41,7 @@
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/textwindowpeer.hxx>

@@ -19,7 +19,9 @@
 
 
 #include <svtools/svmedit.hxx>
+#include <vcl/event.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <vcl/txtattr.hxx>

@@ -32,6 +32,7 @@
 #include <vcl/imappoly.hxx>
 #include <svl/urihelper.hxx>
 #include <rtl/character.hxx>
+#include <tools/debug.hxx>
 
 #include <sstream>
 

@@ -23,6 +23,7 @@
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

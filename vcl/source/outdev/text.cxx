@@ -28,6 +28,7 @@
 #include <osl/file.h>
 #include <sal/log.hxx>
 #include <tools/lineend.hxx>
+#include <tools/debug.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/textrectinfo.hxx>

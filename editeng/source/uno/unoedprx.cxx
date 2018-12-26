@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 
 
 // Project-local header

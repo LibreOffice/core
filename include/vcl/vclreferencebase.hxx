@@ -20,12 +20,7 @@
 #define INCLUDED_VCL_Reference_HXX
 
 #include <vcl/dllapi.h>
-#include <tools/debug.hxx>
 #include <osl/interlck.h>
-
-#include <cassert>
-
-class VclReferenceBase;
 
 class VCL_DLLPUBLIC VclReferenceBase
 {

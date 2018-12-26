@@ -28,6 +28,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <tools/debug.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/unoprnms.hxx>

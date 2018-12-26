@@ -19,6 +19,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
+#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>
 #include <unotools/charclass.hxx>

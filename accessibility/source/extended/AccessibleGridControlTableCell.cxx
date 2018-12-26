@@ -20,6 +20,7 @@
 #include <extended/AccessibleGridControlTableCell.hxx>
 #include <vcl/accessibletable.hxx>
 #include <tools/gen.hxx>
+#include <tools/debug.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 namespace accessibility
