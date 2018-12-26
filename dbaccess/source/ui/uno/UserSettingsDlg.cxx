@@ -23,6 +23,7 @@
 #include <UserAdminDlg.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace dbaui;
 

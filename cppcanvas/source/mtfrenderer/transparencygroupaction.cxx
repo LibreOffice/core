@@ -22,6 +22,7 @@
 #include <utility>
 
 #include <tools/gen.hxx>
+#include <tools/debug.hxx>
 
 #include <canvas/canvastools.hxx>
 

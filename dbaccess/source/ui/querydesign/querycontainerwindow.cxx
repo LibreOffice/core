@@ -26,6 +26,7 @@
 #include <stringconstants.hxx>
 #include <strings.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <UITools.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

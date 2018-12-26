@@ -24,6 +24,7 @@
 #include <bitmaps.hlst>
 
 #include <vcl/decoview.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <tools/wintypes.hxx>
 #include <unotools/charclass.hxx>

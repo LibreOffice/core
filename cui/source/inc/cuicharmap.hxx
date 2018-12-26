@@ -21,6 +21,7 @@
 
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/virdev.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/itemset.hxx>
 #include <svx/charmap.hxx>

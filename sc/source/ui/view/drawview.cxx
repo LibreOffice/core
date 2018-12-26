@@ -42,6 +42,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrpagewindow.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <drawview.hxx>
 #include <global.hxx>

@@ -21,14 +21,8 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/texteng.hxx>
-#include <vcl/textview.hxx>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace util {
-    struct SearchOptions;
-}}}}
+namespace i18nutil { struct SearchOptions; }
 
 class VCL_DLLPUBLIC ExtTextEngine : public TextEngine
 {

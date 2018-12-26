@@ -27,6 +27,8 @@
 #include <calcconfig.hxx>
 #include <docoptio.hxx>
 
+class Edit;
+
 class ScTpFormulaOptions : public SfxTabPage
 {
     friend class VclPtr<ScTpFormulaOptions>;

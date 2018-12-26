@@ -35,6 +35,7 @@
 
 #include <osl/process.h>
 
+#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vclpluginapi.h>
 #include <vcl/svapp.hxx>
@@ -43,6 +44,7 @@
 #include <vcl/svmain.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 
 #include <osx/saldata.hxx>
 #include <osx/salinst.h>

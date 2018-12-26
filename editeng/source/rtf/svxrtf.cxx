@@ -25,6 +25,7 @@
 #include <svtools/rtftoken.h>
 #include <svl/itempool.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/debug.hxx>
 
 #include <comphelper/string.hxx>
 
