@@ -20,6 +20,7 @@
 #include <smmod.hxx>
 #include "tmpdevice.hxx"
 
+#include <svtools/colorcfg.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 

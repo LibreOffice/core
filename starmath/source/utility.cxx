@@ -18,6 +18,7 @@
  */
 
 #include <strings.hrc>
+#include <smmod.hxx>
 #include <utility.hxx>
 #include <dialog.hxx>
 #include <view.hxx>

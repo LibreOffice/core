@@ -20,6 +20,7 @@ module
 StarMath
 [
     SlotIdFile ( "starmath.hrc" )
+    SlotIdFile ( "editeng/memberids.h" )
     SlotIdFile ( "editeng/editids.hrc" )
     SlotIdFile ( "sfx2/sfxsids.hrc" )
     SlotIdFile ( "svx/svxids.hrc" )

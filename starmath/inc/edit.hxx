@@ -20,11 +20,9 @@
 #define INCLUDED_STARMATH_INC_EDIT_HXX
 
 #include <vcl/window.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
 #include <editeng/editdata.hxx>
-#include <svtools/colorcfg.hxx>
 #include <memory>
 
 class SmDocShell;
@@ -35,10 +33,12 @@ class EditStatus;
 class ScrollBar;
 class ScrollBarBox;
 class DataChangedEvent;
-class Menu;
 class SmCmdBoxWindow;
 class SmEditAccessible;
 class CommandEvent;
+class Timer;
+
+namespace svtools { class ColorConfig; }
 
 void SmGetLeftSelectionPart(const ESelection &rSelection, sal_Int32 &nPara, sal_uInt16 &nPos);
 

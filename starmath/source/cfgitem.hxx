@@ -24,14 +24,14 @@
 
 #include <vector>
 
-#include <com/sun/star/uno/Sequence.hxx>
-
 #include <rtl/ustring.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <unotools/configitem.hxx>
 
 #include <types.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 class SmSym;
 class SmSymbolManager;

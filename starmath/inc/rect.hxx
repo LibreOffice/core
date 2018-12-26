@@ -24,9 +24,8 @@
 #include <sal/log.hxx>
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/metric.hxx>
 
-#include "format.hxx"
+class SmFormat;
 
 
 inline long SmFromTo(long nFrom, long nTo, double fRelDist)

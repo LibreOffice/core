@@ -43,6 +43,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/transfer.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/whiter.hxx>
 #include <svx/zoomslideritem.hxx>
@@ -64,6 +65,7 @@
 #include <document.hxx>
 #include <starmath.hrc>
 #include <strings.hrc>
+#include <smmod.hxx>
 #include "mathmlimport.hxx"
 #include <cursor.hxx>
 #include "accessibility.hxx"

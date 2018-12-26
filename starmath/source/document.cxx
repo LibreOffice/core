@@ -62,6 +62,7 @@
 #include <format.hxx>
 #include <starmath.hrc>
 #include <strings.hrc>
+#include <smmod.hxx>
 #include <symbol.hxx>
 #include <unomodel.hxx>
 #include <utility.hxx>

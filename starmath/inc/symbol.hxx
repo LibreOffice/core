@@ -20,16 +20,11 @@
 #ifndef INCLUDED_STARMATH_INC_SYMBOL_HXX
 #define INCLUDED_STARMATH_INC_SYMBOL_HXX
 
-#include <vcl/font.hxx>
-#include <svl/lstner.hxx>
-
 #include <map>
 #include <vector>
 #include <set>
 
-#include "unomodel.hxx"
 #include "utility.hxx"
-#include "smmod.hxx"
 
 
 #define SYMBOL_NONE     0xFFFF

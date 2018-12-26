@@ -32,6 +32,7 @@
 #include <vcl/wall.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svx/charmap.hxx>
 #include <svx/ucsubset.hxx>
 
 #include <dialog.hxx>

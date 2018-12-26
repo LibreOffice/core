@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
+#include <node.hxx>
 #include <parse.hxx>
 #include <strings.hrc>
 #include <smmod.hxx>

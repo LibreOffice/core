@@ -39,6 +39,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/stream.hxx>
 
 #include <unomodel.hxx>
 #include <document.hxx>
@@ -46,6 +47,7 @@
 #include <symbol.hxx>
 #include <starmath.hrc>
 #include <strings.hrc>
+#include <smmod.hxx>
 #include "cfgitem.hxx"
 
 using namespace ::cppu;

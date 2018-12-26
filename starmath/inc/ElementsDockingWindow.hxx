@@ -21,7 +21,6 @@
 #define INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 
 #include <sfx2/dockwin.hxx>
-#include <svx/dlgctrl.hxx>
 #include <vcl/scrbar.hxx>
 
 #include "format.hxx"

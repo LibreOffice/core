@@ -35,6 +35,7 @@
 #include <smmod.hrc>
 #include <starmath.hrc>
 #include <svx/modctrl.hxx>
+#include <svtools/colorcfg.hxx>
 
 
 #define ShellClass_SmModule

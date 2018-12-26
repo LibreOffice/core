@@ -33,8 +33,10 @@
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/AccessibleTextHelper.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <edit.hxx>
+#include <smmod.hxx>
 #include <view.hxx>
 #include <document.hxx>
 #include "cfgitem.hxx"

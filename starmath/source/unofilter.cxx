@@ -11,6 +11,7 @@
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <sot/storage.hxx>
 
 #include <document.hxx>
 #include "mathtype.hxx"

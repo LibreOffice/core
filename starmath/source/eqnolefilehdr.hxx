@@ -21,7 +21,9 @@
 #define INCLUDED_STARMATH_SOURCE_EQNOLEFILEHDR_HXX
 
 #include <sal/types.h>
-#include <sot/storage.hxx>
+#include <tools/stream.hxx>
+
+class SotStorage;
 
 #define EQNOLEFILEHDR_SIZE 28
 

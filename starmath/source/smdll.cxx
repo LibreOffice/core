@@ -28,6 +28,7 @@
 #include <sfx2/app.hxx>
 
 #include <smdll.hxx>
+#include <smmod.hxx>
 #include <document.hxx>
 #include <view.hxx>
 
