@@ -61,6 +61,8 @@ public:
     {
     }
 
+    void readFileIntoByteVector(OUString const & sFilename, std::vector<sal_uInt8> & rByteVector);
+
     virtual void setUp() override
     {
         UnoApiTest::setUp();
@@ -121,8 +123,8 @@ public:
     void testExtractParameter();
     void testGetSignatureState_NonSigned();
     void testGetSignatureState_Signed();
-    void testInsertCertificate();
-    void testInsertCertificatePEM();
+    void testInsertCertificate_DER_ODT();
+    void testInsertCertificate_PEM_ODT();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -168,8 +170,8 @@ public:
     CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST(testGetSignatureState_Signed);
     CPPUNIT_TEST(testGetSignatureState_NonSigned);
-    CPPUNIT_TEST(testInsertCertificate);
-    CPPUNIT_TEST(testInsertCertificatePEM);
+    CPPUNIT_TEST(testInsertCertificate_DER_ODT);
+    CPPUNIT_TEST(testInsertCertificate_PEM_ODT);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2251,6 +2253,16 @@ void DesktopLOKTest::testExtractParameter()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+void DesktopLOKTest::readFileIntoByteVector(OUString const & sFilename, std::vector<unsigned char> & rByteVector)
+{
+    rByteVector.clear();
+    OUString aURL;
+    createFileURL(sFilename, aURL);
+    SvFileStream aStream(aURL, StreamMode::READ);
+    rByteVector.resize(aStream.remainingSize());
+    aStream.ReadBytes(rByteVector.data(), aStream.remainingSize());
+}
+
 void DesktopLOKTest::testGetSignatureState_Signed()
 {
     comphelper::LibreOfficeKit::setActive();
@@ -2260,28 +2272,16 @@ void DesktopLOKTest::testGetSignatureState_Signed()
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
     CPPUNIT_ASSERT_EQUAL(int(4), nState);
 
+    std::vector<unsigned char> aCertificate;
     {
-        OUString aCertificateURL;
-        createFileURL("rootCA.der", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
-
+        readFileIntoByteVector("rootCA.der", aCertificate);
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
     }
 
     {
-        OUString aCertificateURL;
-        createFileURL("intermediateRootCA.der", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
-
-
+        readFileIntoByteVector("intermediateRootCA.der", aCertificate);
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
         CPPUNIT_ASSERT(bResult);
@@ -2304,7 +2304,7 @@ void DesktopLOKTest::testGetSignatureState_NonSigned()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
-void DesktopLOKTest::testInsertCertificate()
+void DesktopLOKTest::testInsertCertificate_DER_ODT()
 {
     comphelper::LibreOfficeKit::setActive();
 
@@ -2323,13 +2323,11 @@ void DesktopLOKTest::testInsertCertificate()
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     Scheduler::ProcessEventsToIdle();
 
+    std::vector<unsigned char> aCertificate;
+    std::vector<unsigned char> aPrivateKey;
+
     {
-        OUString aCertificateURL;
-        createFileURL("rootCA.der", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
+        readFileIntoByteVector("rootCA.der", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2337,13 +2335,7 @@ void DesktopLOKTest::testInsertCertificate()
     }
 
     {
-        OUString aCertificateURL;
-        createFileURL("intermediateRootCA.der", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
-
+        readFileIntoByteVector("intermediateRootCA.der", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2351,20 +2343,8 @@ void DesktopLOKTest::testInsertCertificate()
     }
 
     {
-        OUString aCertificateURL;
-        createFileURL("certificate.der", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
-
-
-        OUString aPrivateKeyURL;
-        createFileURL("certificatePrivateKey.der", aPrivateKeyURL);
-        SvFileStream aPrivateKeyStream(aPrivateKeyURL, StreamMode::READ);
-        std::vector<unsigned char> aPrivateKey;
-        aPrivateKey.resize(aPrivateKeyStream.remainingSize());
-        aPrivateKeyStream.ReadBytes(aPrivateKey.data(), aPrivateKeyStream.remainingSize());
+        readFileIntoByteVector("certificate.der", aCertificate);
+        readFileIntoByteVector("certificatePrivateKey.der", aPrivateKey);
 
         bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
                             aCertificate.data(), int(aCertificate.size()),
@@ -2379,7 +2359,7 @@ void DesktopLOKTest::testInsertCertificate()
 }
 
 
-void DesktopLOKTest::testInsertCertificatePEM()
+void DesktopLOKTest::testInsertCertificate_PEM_ODT()
 {
     comphelper::LibreOfficeKit::setActive();
 
@@ -2398,13 +2378,11 @@ void DesktopLOKTest::testInsertCertificatePEM()
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     Scheduler::ProcessEventsToIdle();
 
+    std::vector<unsigned char> aCertificate;
+    std::vector<unsigned char> aPrivateKey;
+
     {
-        OUString aCertificateURL;
-        createFileURL("test-cert-chain-1.pem", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
+        readFileIntoByteVector("test-cert-chain-1.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2412,13 +2390,7 @@ void DesktopLOKTest::testInsertCertificatePEM()
     }
 
     {
-        OUString aCertificateURL;
-        createFileURL("test-cert-chain-2.pem", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
-
+        readFileIntoByteVector("test-cert-chain-2.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2426,13 +2398,7 @@ void DesktopLOKTest::testInsertCertificatePEM()
     }
 
     {
-        OUString aCertificateURL;
-        createFileURL("test-cert-chain-3.pem", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
-
+        readFileIntoByteVector("test-cert-chain-3.pem", aCertificate);
 
         bool bResult = pDocument->m_pDocumentClass->addCertificate(
                             pDocument, aCertificate.data(), int(aCertificate.size()));
@@ -2440,20 +2406,8 @@ void DesktopLOKTest::testInsertCertificatePEM()
     }
 
     {
-        OUString aCertificateURL;
-        createFileURL("test-cert-signing.pem", aCertificateURL);
-        SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
-        std::vector<unsigned char> aCertificate;
-        aCertificate.resize(aCertificateStream.remainingSize());
-        aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
-
-
-        OUString aPrivateKeyURL;
-        createFileURL("test-PK-signing.pem", aPrivateKeyURL);
-        SvFileStream aPrivateKeyStream(aPrivateKeyURL, StreamMode::READ);
-        std::vector<unsigned char> aPrivateKey;
-        aPrivateKey.resize(aPrivateKeyStream.remainingSize());
-        aPrivateKeyStream.ReadBytes(aPrivateKey.data(), aPrivateKeyStream.remainingSize());
+        readFileIntoByteVector("test-cert-signing.pem", aCertificate);
+        readFileIntoByteVector("test-PK-signing.pem", aPrivateKey);
 
         bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument,
                             aCertificate.data(), int(aCertificate.size()),
