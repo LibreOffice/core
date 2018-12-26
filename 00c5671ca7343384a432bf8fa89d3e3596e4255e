@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_9db1f792",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-26T07:13:26Z",
+      "side": 1,
+      "message": "when using lower_bound, it\u0027s not enough to only compare against the end iterator, we also need to use the comparison function to detect if the element we have found is \u003d\u003d the one we want",
+      "revId": "00c5671ca7343384a432bf8fa89d3e3596e4255e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
