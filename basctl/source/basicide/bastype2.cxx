@@ -26,6 +26,7 @@
 #include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 #include <svtools/imagemgr.hxx>
 #include <vcl/treelistentry.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>

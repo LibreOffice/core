@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 
+#include <cppuhelper/weakref.hxx>
 #include <vcl/weld.hxx>
 #include <svl/poolitem.hxx>
 

@@ -14,6 +14,7 @@
 
 class TemplateViewItem;
 class PopupMenu;
+class Menu;
 
 class TemplateSearchView final : public ThumbnailView
 {

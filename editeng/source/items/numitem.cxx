@@ -44,6 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
+#include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 #include <libxml/xmlwriter.h>
 #include <editeng/unonrule.hxx>

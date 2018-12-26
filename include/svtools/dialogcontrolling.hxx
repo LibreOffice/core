@@ -24,6 +24,7 @@
 
 #include <tools/link.hxx>
 #include <vcl/button.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <memory>
 #include <vector>

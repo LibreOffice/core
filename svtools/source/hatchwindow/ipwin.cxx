@@ -19,6 +19,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

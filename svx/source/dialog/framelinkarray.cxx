@@ -23,6 +23,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrframeborderprimitive2d.hxx>
