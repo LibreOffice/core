@@ -18,7 +18,6 @@
  */
 
 #include <salhelper/dynload.hxx>
-#include <rtl/ustrbuf.hxx>
 
 namespace salhelper
 {
