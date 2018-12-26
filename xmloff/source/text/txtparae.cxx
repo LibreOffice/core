@@ -1941,8 +1941,10 @@ void XMLTextParagraphExport::exportParagraph(
                 }
             }
 
-            OUString sAutoStyle( sStyle );
+            OUString sAutoStyle;
             sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet, sStyle );
+            if ( sAutoStyle.isEmpty() )
+                sAutoStyle = sStyle;
             if( !sAutoStyle.isEmpty() )
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                               GetExport().EncodeStyleName( sAutoStyle ) );
