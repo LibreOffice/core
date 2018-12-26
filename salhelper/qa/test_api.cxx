@@ -30,14 +30,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <memory>
 
-namespace salhelper {
-    class Condition;
-    class ConditionModifier;
-    class ConditionWaiter;
-    class ORealDynamicLoader;
-    class SimpleReferenceObject;
-}
-
 namespace {
 
 std::type_info const & getConditionTypeInfo()
