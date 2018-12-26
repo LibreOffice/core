@@ -91,6 +91,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <sal/log.hxx>
 #include <svx/unoshape.hxx>
 

@@ -26,6 +26,7 @@
 #include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
 #include <tools/stream.hxx>
+#include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
 
 #include <sfx2/frmhtmlw.hxx>

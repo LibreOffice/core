@@ -38,6 +38,7 @@
 #include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
 #include <sfx2/objface.hxx>
+#include <o3tl/make_unique.hxx>
 #include <drawview.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>

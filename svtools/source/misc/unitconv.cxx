@@ -18,6 +18,7 @@
  */
 
 #include <svtools/unitconv.hxx>
+#include <tools/debug.hxx>
 
 void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
 {

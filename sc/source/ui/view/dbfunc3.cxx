@@ -26,6 +26,7 @@
 #include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>

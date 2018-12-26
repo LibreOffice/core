@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/supportsservice.hxx>

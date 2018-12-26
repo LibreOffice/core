@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::accessibility::XAccessible;

@@ -43,6 +43,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <sddllapi.h>
 
 namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }

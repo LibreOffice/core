@@ -31,6 +31,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/languageoptions.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <editeng/postitem.hxx>
 #include <editeng/fhgtitem.hxx>

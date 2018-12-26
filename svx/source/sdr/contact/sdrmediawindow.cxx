@@ -24,6 +24,7 @@
 #include <sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <vcl/window.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 
 namespace sdr { namespace contact {
 
