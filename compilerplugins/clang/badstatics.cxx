@@ -194,7 +194,7 @@ public:
                 || name == "g_aWindowList"
                     //vcl/unx/gtk/a11y/atkutil.cxx, asserted empty at exit
                 || name == "aLogger" // FormulaLogger& FormulaLogger::get() in sc/source/core/tool/formulalogger.cxx
-                || name == "m_aUncommitedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
+                || name == "m_aUncommittedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
                 || (loplugin::DeclCheck(pVarDecl).Var("maThreadSpecific")

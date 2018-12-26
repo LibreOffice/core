@@ -254,7 +254,7 @@ class SW_DLLPUBLIC SwDBManager
     OUString     m_sEmbeddedName;
 
     /// Store last registrations to revoke or commit
-    static std::vector<std::pair<SwDocShell*, OUString>> m_aUncommitedRegistrations;
+    static std::vector<std::pair<SwDocShell*, OUString>> m_aUncommittedRegistrations;
 
     /// Not used connections.
     std::vector<OUString> m_aNotUsedConnections;
