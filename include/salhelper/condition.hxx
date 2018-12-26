@@ -29,9 +29,6 @@ namespace osl { class Mutex; }
 
 namespace salhelper
 {
-    class ConditionModifier;
-    class ConditionWaiter;
-
 
     class SALHELPER_DLLPUBLIC Condition
     {
