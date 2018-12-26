@@ -28,6 +28,7 @@
 
 #include <svtools/extensionlistbox.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <unotools/collatorwrapper.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>

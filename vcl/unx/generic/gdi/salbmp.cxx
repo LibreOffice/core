@@ -32,6 +32,7 @@
 #include <sal/log.hxx>
 
 #include <tools/helpers.hxx>
+#include <tools/debug.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>

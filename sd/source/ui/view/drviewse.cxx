@@ -61,6 +61,7 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <DrawViewShell.hxx>
 #include <slideshow.hxx>

@@ -22,6 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 
+#include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/timer.hxx>

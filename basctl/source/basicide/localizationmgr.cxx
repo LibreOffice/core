@@ -29,6 +29,7 @@
 #include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <sfx2/dispatch.hxx>
+#include <tools/debug.hxx>
 
 namespace basctl
 {

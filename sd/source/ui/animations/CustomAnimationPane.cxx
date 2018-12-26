@@ -45,6 +45,7 @@
 #include <createcustomanimationpanel.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/scrbar.hxx>

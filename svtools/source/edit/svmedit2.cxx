@@ -20,6 +20,7 @@
 
 #include <svtools/svmedit2.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 
 ExtMultiLineEdit::ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle ) :
     MultiLineEdit( pParent, nWinStyle )

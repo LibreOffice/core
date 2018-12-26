@@ -37,6 +37,7 @@
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 #include <osl/diagnose.h>
+#include <vcl/event.hxx>
 
 namespace frm
 {
