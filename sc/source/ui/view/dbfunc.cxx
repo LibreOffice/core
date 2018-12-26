@@ -22,6 +22,7 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

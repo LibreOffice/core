@@ -91,6 +91,7 @@
 #include <vcl/dockingarea.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>

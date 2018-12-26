@@ -20,6 +20,7 @@
 #include <memory>
 #include <tools/IconCache.hxx>
 
+#include <tools/debug.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 #include <unordered_map>

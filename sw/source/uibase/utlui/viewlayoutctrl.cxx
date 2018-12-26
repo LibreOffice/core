@@ -19,6 +19,7 @@
 
 #include <viewlayoutctrl.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
 #include <svl/eitem.hxx>

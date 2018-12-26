@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/objsh.hxx>
+#include <o3tl/make_unique.hxx>
 #include "sddlgfact.hxx"
 #include <BreakDlg.hxx>
 #include <copydlg.hxx>

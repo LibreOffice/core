@@ -26,6 +26,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <vcl/pngread.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

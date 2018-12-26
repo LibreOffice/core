@@ -22,6 +22,7 @@
 #include <svtools/svtresid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
+#include <vcl/event.hxx>
 #include <sal/log.hxx>
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,

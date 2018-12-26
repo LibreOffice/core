@@ -28,6 +28,7 @@
 #include <comphelper/sequence.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <printdlg.hxx>
 #include <svdata.hxx>

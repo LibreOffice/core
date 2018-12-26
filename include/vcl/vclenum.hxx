@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_VCLENUM_HXX
 
 #include <sal/types.h>
-#include <tools/fontenum.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 enum class SelectionMode { NONE, Single, Range, Multiple };
 

@@ -30,6 +30,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>

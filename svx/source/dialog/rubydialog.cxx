@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <sal/config.h>
+#include <tools/debug.hxx>
 
 #include <osl/diagnose.h>
 #include <o3tl/any.hxx>

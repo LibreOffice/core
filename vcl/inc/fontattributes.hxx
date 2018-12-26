@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 
 /* The following class is extraordinarily similar to ImplFont. */

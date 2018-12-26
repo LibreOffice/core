@@ -22,6 +22,7 @@
 
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

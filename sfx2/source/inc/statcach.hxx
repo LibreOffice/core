@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <tools/debug.hxx>
 
 #include <sfx2/bindings.hxx>
 
