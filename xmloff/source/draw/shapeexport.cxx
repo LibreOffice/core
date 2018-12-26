@@ -4571,7 +4571,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                 {
                                     case EAS_SubViewSize:
                                     {
-                                        // export draw:display (do not export in ODF 1.2 or older)
+                                        // export draw:sub-view-size (do not export in ODF 1.2 or older)
                                         if (rExport.getDefaultVersion() <= SvtSaveOptions::ODFVER_012)
                                         {
                                             continue;
