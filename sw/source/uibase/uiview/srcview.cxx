@@ -27,6 +27,7 @@
 #include <vcl/print.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/textview.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>

@@ -56,6 +56,7 @@
 #include <sfx2/dispatch.hxx>
 #include <comphelper/extract.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/debug.hxx>
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>

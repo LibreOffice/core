@@ -29,6 +29,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/debug.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <comphelper/processfactory.hxx>

@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 

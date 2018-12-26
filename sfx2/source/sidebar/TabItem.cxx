@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/Tools.hxx>
 
 #include <sfx2/sidebar/Theme.hxx>
+#include <vcl/event.hxx>
 
 using namespace css;
 using namespace css::uno;

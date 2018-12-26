@@ -25,6 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <vcl/wmf.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <vcl/virdev.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>

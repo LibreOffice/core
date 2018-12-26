@@ -33,6 +33,7 @@
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <document.hxx>
 #include <table.hxx>

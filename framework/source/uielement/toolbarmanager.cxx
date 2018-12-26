@@ -69,6 +69,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <tools/debug.hxx>
 
 #include <svtools/menuoptions.hxx>
 

@@ -21,6 +21,7 @@
 #include "propertyeditor.hxx"
 #include <helpids.h>
 #include <propctrlr.h>
+#include <vcl/event.hxx>
 #include <vcl/tabpage.hxx>
 #include <memory>
 

@@ -31,6 +31,7 @@
 
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
+#include <o3tl/make_unique.hxx>
 
 
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )

@@ -22,6 +22,7 @@
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/hint.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <app.hrc>
 

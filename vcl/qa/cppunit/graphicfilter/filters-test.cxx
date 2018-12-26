@@ -17,6 +17,7 @@
 
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace ::com::sun::star;
 

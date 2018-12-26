@@ -35,6 +35,7 @@
 
 #include <osl/process.h>
 
+#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vclpluginapi.h>
 #include <vcl/svapp.hxx>

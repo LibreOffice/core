@@ -21,13 +21,14 @@
 #define INCLUDED_VCL_VECTORGRAPHICDATA_HXX
 
 #include <basegfx/range/b2drange.hxx>
-#include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/wmfexternal.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>
 #include <memory>
 
+namespace com { namespace sun { namespace star { namespace graphic { class XPrimitive2D; } } } }
+struct WmfExternal;
 
 typedef css::uno::Sequence<sal_Int8> VectorGraphicDataArray;
 
