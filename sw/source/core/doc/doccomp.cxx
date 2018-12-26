@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <rtl/character.hxx>
 #include <vcl/vclenum.hxx>
+#include <o3tl/make_unique.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>

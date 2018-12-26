@@ -21,6 +21,7 @@
 
 #include <vcl/split.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 #include <osl/diagnose.h>
 
 #define SPLITTER_WIDTH  80

@@ -21,6 +21,7 @@
 #include <core_resource.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 
 namespace dbaui
 {

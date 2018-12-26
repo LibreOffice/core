@@ -21,6 +21,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/poly.hxx>
+#include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>

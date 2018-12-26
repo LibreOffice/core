@@ -28,6 +28,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace dbaui;
 using namespace dbtools;

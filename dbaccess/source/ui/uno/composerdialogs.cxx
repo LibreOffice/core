@@ -31,6 +31,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <o3tl/make_unique.hxx>
 
 extern "C" void createRegistryInfo_ComposerDialogs()
 {

@@ -57,6 +57,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewsh.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 

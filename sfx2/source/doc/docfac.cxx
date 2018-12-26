@@ -45,6 +45,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <tools/globname.hxx>
 
 #include <assert.h>

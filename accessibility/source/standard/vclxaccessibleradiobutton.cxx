@@ -32,6 +32,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/window.hxx>
 #include <vcl/button.hxx>
+#include <vcl/event.hxx>
+#include <vcl/vclevent.hxx>
 #include <strings.hxx>
 
 using namespace ::com::sun::star;

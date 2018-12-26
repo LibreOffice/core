@@ -20,6 +20,7 @@
 #include <tools/lineend.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/window.hxx>
 #include <runtime.hxx>
 #include <stdobj.hxx>
 #include <rtlproto.hxx>

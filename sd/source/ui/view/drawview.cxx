@@ -36,6 +36,7 @@
 #include <editeng/numitem.hxx>
 #include <svl/whiter.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>

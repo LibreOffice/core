@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
+#include <vcl/keycod.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <limits>
@@ -38,6 +39,7 @@ class Timer;
 struct ImplToolItem;
 struct ImplToolBoxPrivateData;
 class  PopupMenu;
+class VclMenuEvent;
 
 #define TOOLBOX_STYLE_FLAT          (sal_uInt16(0x0004))
 

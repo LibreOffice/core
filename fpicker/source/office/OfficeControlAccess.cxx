@@ -28,6 +28,7 @@
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/debug.hxx>
 
 #include <algorithm>
 #include <functional>

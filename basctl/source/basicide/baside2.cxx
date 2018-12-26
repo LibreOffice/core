@@ -52,6 +52,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cassert>
 

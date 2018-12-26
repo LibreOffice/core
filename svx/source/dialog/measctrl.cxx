@@ -22,6 +22,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/measctrl.hxx>
 #include <svx/dlgutil.hxx>
+#include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <memory>

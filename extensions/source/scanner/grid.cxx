@@ -27,6 +27,7 @@
 
 #include "grid.hxx"
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 
 #include <algorithm>
 #include <limits>

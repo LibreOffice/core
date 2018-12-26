@@ -51,6 +51,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/opengrf.hxx>
 #include <rtl/ustring.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <strings.hrc>
 #include <sdpage.hxx>

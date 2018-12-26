@@ -58,6 +58,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/make_unique.hxx>
 #include <tools/svlibrary.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>

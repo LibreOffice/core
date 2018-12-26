@@ -20,6 +20,7 @@
 #include <vcl/event.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <spin.hxx>
 

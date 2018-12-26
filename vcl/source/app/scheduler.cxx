@@ -30,6 +30,7 @@
 #include <sal/types.h>
 #include <svdata.hxx>
 #include <tools/time.hxx>
+#include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/idle.hxx>

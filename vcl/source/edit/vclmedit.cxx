@@ -22,10 +22,12 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <svl/undo.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/uitest/uiobject.hxx>

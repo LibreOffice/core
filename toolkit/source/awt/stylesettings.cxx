@@ -26,6 +26,7 @@
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/event.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

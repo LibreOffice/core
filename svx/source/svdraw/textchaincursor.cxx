@@ -21,6 +21,7 @@
 #include <svx/textchaincursor.hxx>
 #include <svx/svdedxv.hxx>
 #include <svx/svdoutl.hxx>
+#include <vcl/event.hxx>
 
 // XXX: Possible duplication of code in behavior with stuff in ImpEditView (or ImpEditEngine) and OutlinerView
 

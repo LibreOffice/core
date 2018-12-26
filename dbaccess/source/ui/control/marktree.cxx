@@ -21,6 +21,7 @@
 #include <vcl/treelistentry.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 
 namespace dbaui
 {

@@ -22,6 +22,7 @@
 #include <extended/accessibletabbarpagelist.hxx>
 #endif
 #include <svtools/tabbar.hxx>
+#include <vcl/vclevent.hxx>
 
 
 namespace accessibility

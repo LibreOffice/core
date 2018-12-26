@@ -36,6 +36,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>

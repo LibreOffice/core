@@ -24,6 +24,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/multisel.hxx>
+#include <vcl/event.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>

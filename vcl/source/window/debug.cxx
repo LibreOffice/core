@@ -19,6 +19,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/outdev.hxx>
+#include <tools/debug.hxx>
 
 #include <window.h>
 

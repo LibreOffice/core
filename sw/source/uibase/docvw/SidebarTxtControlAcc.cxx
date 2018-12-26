@@ -34,6 +34,7 @@
 #include <svx/AccessibleTextHelper.hxx>
 #include <editeng/outliner.hxx>
 #include <o3tl/make_unique.hxx>
+#include <vcl/vclevent.hxx>
 
 namespace sw { namespace sidebarwindows {
 

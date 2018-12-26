@@ -31,6 +31,7 @@
 
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <editeng/eeitem.hxx>
 

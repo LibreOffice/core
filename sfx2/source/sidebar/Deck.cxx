@@ -28,6 +28,7 @@
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/commandevent.hxx>

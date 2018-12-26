@@ -14,6 +14,7 @@
 #include <vcl/menubtn.hxx>
 #include <boost/optional.hpp>
 
+class Menu;
 class SwPageFrame;
 
 /** Class for the page break control window.

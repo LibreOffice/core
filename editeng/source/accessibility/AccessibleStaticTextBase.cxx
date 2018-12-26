@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <functional>
 #include <osl/mutex.hxx>
+#include <tools/debug.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <tools/gen.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>

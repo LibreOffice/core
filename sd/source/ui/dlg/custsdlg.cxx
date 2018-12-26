@@ -31,6 +31,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/treelistentry.hxx>
 #include <unotools/charclass.hxx>
+#include <tools/debug.hxx>
 
 // SdCustomShowDlg
 SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc)

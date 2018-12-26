@@ -35,6 +35,7 @@
 #include <unx/helper.hxx>
 
 #include <vcl/inputtypes.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <salwtype.hxx>
 #include <sal/macros.h>

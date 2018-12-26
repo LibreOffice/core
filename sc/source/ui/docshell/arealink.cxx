@@ -24,6 +24,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <arealink.hxx>
 

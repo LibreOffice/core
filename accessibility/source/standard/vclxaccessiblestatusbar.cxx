@@ -23,6 +23,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/status.hxx>
+#include <vcl/vclevent.hxx>
 
 
 using namespace ::com::sun::star;

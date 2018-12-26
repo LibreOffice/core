@@ -26,6 +26,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include "sanedlg.hxx"
 #include "grid.hxx"
 #include <math.h>

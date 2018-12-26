@@ -15,6 +15,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>

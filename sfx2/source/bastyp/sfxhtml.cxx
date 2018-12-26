@@ -19,6 +19,7 @@
 
 
 #include <tools/urlobj.hxx>
+#include <tools/debug.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>

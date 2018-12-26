@@ -32,6 +32,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/event.hxx>
 #include <unotools/historyoptions.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>

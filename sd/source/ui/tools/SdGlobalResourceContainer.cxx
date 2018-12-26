@@ -29,6 +29,7 @@
 #include <o3tl/deleter.hxx>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 #include <algorithm>
 #include <memory>

@@ -18,6 +18,7 @@
  */
 
 #include <vcl/wmfexternal.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 // formally known as WMF_EXTERNALHEADER
 WmfExternal::WmfExternal() :

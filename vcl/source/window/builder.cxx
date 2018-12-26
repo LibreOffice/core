@@ -60,6 +60,7 @@
 #include <strings.hrc>
 #include <tools/svlibrary.h>
 #include <tools/diagnose_ex.h>
+#include <o3tl/make_unique.hxx>
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>

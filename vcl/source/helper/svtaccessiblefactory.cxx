@@ -23,6 +23,7 @@
 #include <vcl/accessiblefactory.hxx>
 
 #include <tools/svlibrary.h>
+#include <tools/debug.hxx>
 
 #include <osl/module.h>
 #include <osl/diagnose.h>

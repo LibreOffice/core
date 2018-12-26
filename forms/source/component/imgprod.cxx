@@ -21,6 +21,7 @@
 #include <services.hxx>
 
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>

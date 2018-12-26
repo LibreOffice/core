@@ -22,6 +22,7 @@
 #include <svx/svditer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <o3tl/make_unique.hxx>
 #include <Outliner.hxx>
 
 #include <drawdoc.hxx>

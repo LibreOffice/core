@@ -27,6 +27,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <svl/solar.hrc>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>

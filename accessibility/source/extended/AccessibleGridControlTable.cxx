@@ -20,6 +20,7 @@
 #include <extended/AccessibleGridControlTable.hxx>
 #include <extended/AccessibleGridControlTableCell.hxx>
 #include <vcl/accessibletable.hxx>
+#include <tools/debug.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

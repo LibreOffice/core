@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/event.hxx>
 
 
 #define CORNER_SPACE    5

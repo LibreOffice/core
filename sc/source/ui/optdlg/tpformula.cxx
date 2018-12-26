@@ -29,6 +29,7 @@
 #include <scresid.hxx>
 #include <formula/grammar.hxx>
 #include "calcoptionsdlg.hxx"
+#include <vcl/edit.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 

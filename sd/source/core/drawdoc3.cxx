@@ -38,6 +38,7 @@
 #include <vcl/weld.hxx>
 #include <sot/formats.hxx>
 #include <xmloff/autolayout.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <strings.hrc>
 #include <drawdoc.hxx>

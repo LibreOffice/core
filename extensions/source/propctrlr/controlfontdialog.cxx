@@ -20,6 +20,7 @@
 
 #include "controlfontdialog.hxx"
 #include <cppuhelper/typeprovider.hxx>
+#include <o3tl/make_unique.hxx>
 #include "fontdialog.hxx"
 #include "formstrings.hxx"
 #include "pcrcommon.hxx"

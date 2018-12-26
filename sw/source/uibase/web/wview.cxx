@@ -30,6 +30,7 @@
 #include <svx/fmshell.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <vcl/inputctx.hxx>
 
 #include <sfx2/objface.hxx>
 #include <swmodule.hxx>

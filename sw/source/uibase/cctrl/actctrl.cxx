@@ -19,6 +19,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <actctrl.hxx>
+#include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 
 bool NumEditAction::EventNotify( NotifyEvent& rNEvt )

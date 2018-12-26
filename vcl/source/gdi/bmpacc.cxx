@@ -28,6 +28,7 @@
 
 #include <string.h>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             mpBuffer        ( nullptr ),

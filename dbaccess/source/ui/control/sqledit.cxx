@@ -34,6 +34,7 @@
 #include <QueryDesignView.hxx>
 #include <vcl/settings.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/event.hxx>
 
 using namespace dbaui;
 

@@ -46,6 +46,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
+#include <tools/debug.hxx>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {

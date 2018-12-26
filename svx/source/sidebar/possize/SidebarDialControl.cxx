@@ -19,6 +19,7 @@
 #include <svx/sidebar/SidebarDialControl.hxx>
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

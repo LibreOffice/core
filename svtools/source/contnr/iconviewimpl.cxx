@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/iconview.hxx>
 #include <iconviewimpl.hxx>
+#include <tools/debug.hxx>
 
 IconViewImpl::IconViewImpl( SvTreeListBox* pTreeListBox, SvTreeList* pTreeList, WinBits nWinStyle )
 : SvImpLBox( pTreeListBox, pTreeList, nWinStyle )

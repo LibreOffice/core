@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <osl/diagnose.h>
 
+#include <tools/debug.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>

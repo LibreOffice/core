@@ -19,6 +19,7 @@
 #include <ColorListener.hxx>
 #include <svl/hint.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 
 #include <strings.hxx>
 

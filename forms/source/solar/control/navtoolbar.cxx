@@ -27,11 +27,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/commandinfoprovider.hxx>
 
 #include <sal/macros.h>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #define LID_RECORD_LABEL    1000
 #define LID_RECORD_FILLER   1001

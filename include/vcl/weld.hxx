@@ -11,20 +11,45 @@
 #define INCLUDED_VCL_WELD_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/time.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/field.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/virdev.hxx>
-#include <o3tl/make_unique.hxx>
+#include <vcl/font.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/uitest/factory.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
+
+#include <vector>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace awt
+{
+class XWindow;
+}
+}
+}
+}
 
 typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 
 class SvNumberFormatter;
+class KeyEvent;
+class MouseEvent;
+class OutputDevice;
+class VirtualDevice;
+struct SystemEnvData;
 
 namespace vcl
 {

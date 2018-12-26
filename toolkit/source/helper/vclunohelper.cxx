@@ -19,6 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/event.hxx>
 #include <vcl/window.hxx>
 #include <vcl/unohelp.hxx>
 #include <sal/macros.h>

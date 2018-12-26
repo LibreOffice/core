@@ -20,6 +20,7 @@
 #include <svtools/fileurlbox.hxx>
 #include <osl/file.h>
 #include <svl/filenotation.hxx>
+#include <vcl/event.hxx>
 
 
 namespace svt

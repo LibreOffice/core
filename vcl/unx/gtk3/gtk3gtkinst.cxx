@@ -41,6 +41,8 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/event.hxx>
 #include <window.h>
 #include <numeric>
 

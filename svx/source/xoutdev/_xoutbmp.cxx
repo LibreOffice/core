@@ -22,6 +22,7 @@
 
 #include <comphelper/base64.hxx>
 #include <comphelper/graphicmimetype.hxx>
+#include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/virdev.hxx>

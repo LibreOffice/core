@@ -19,6 +19,7 @@
 
 #include <sb.hxx>
 #include <tools/stream.hxx>
+#include <tools/debug.hxx>
 #include <vcl/errinf.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <basic/sbx.hxx>

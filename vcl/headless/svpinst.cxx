@@ -27,6 +27,7 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 
+#include <vcl/virdev.hxx>
 #include <vcl/inputtypes.hxx>
 #ifndef LIBO_HEADLESS
 # include <vcl/opengl/OpenGLContext.hxx>

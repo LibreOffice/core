@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>

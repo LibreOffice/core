@@ -41,6 +41,7 @@
 #include <svx/clipfmtitem.hxx>
 #include <svx/contdlg.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/inputctx.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/itemiter.hxx>

@@ -9,6 +9,7 @@
 
 #include <svtools/autocmpledit.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
 
 AutocompleteEdit::AutocompleteEdit( vcl::Window* pParent )
     : Edit( pParent )

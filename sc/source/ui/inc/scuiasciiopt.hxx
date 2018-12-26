@@ -31,6 +31,7 @@ class CheckBox;
 class Edit;
 class FixedText;
 class RadioButton;
+class NumericField;
 
 class ScCsvTableBox;
 class SvxTextEncodingBox;

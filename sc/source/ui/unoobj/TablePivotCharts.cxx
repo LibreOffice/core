@@ -29,6 +29,7 @@
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <TablePivotChart.hxx>
 #include <TablePivotCharts.hxx>

@@ -31,6 +31,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <core_resource.hxx>
 #include <listviewitems.hxx>
+#include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>

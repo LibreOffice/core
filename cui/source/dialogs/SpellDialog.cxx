@@ -30,6 +30,7 @@
 #include <svl/undo.hxx>
 #include <unotools/lingucfg.hxx>
 #include <vcl/textdata.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/splwrap.hxx>

@@ -27,6 +27,7 @@
 #include <vcl/builderfactory.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/debug.hxx>
 
 #define HYPH_POS_CHAR       '='
 

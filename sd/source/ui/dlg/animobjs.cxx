@@ -27,6 +27,7 @@
 #include <sfx2/progress.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/virdev.hxx>
 
 #include <anminfo.hxx>
 #include <animobjs.hxx>

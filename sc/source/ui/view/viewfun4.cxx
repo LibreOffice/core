@@ -43,6 +43,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <comphelper/storagehelper.hxx>
 

@@ -12,6 +12,7 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/settings.hxx>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace ui { class XContextChangeEventListener; } } } }

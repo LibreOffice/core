@@ -21,6 +21,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
 
 #include <bitmaps.hlst>
 

@@ -37,6 +37,7 @@
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <editeng/edtdlg.hxx>
 #include <editeng/unolingu.hxx>

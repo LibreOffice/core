@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/TitleBar.hxx>
 #include <vcl/button.hxx>
+#include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 

@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 
 #include <formula/funcutl.hxx>

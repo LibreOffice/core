@@ -33,6 +33,7 @@
 #include <authfld.hxx>
 #include <dbmgr.hxx>
 #include <unotools/syslocale.hxx>
+#include <vcl/keycod.hxx>
 
 #include <unomid.h>
 

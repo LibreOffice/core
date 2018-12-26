@@ -26,6 +26,7 @@
 #include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <tools/svborder.hxx>
+#include <vcl/event.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

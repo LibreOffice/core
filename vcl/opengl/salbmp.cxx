@@ -21,6 +21,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 

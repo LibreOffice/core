@@ -30,6 +30,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
 #include <vcl/vclptr.hxx>
 #include <vcl/graph.hxx>
 
@@ -42,6 +43,7 @@ namespace com { namespace sun { namespace star { namespace drawing { class XMast
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPages; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XDrawPagesSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }

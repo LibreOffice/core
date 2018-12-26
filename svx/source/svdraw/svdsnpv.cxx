@@ -32,6 +32,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <tools/debug.hxx>
 
 
 class ImplPageOriginOverlay

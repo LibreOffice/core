@@ -48,6 +48,7 @@
 #include <svx/sxcecitm.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

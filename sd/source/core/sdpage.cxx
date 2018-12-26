@@ -60,6 +60,7 @@
 #include <sal/log.hxx>
 #include <basegfx/utils/tools.hxx>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/make_unique.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <Outliner.hxx>

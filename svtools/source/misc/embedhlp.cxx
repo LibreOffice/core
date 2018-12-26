@@ -52,6 +52,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 #include <memory>
 
 using namespace com::sun::star;

@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/vclevent.hxx>
 #include <strings.hxx>
 
 using namespace ::com::sun::star;

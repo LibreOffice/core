@@ -22,6 +22,7 @@
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/inputctx.hxx>
 #include "textdoc.hxx"
 #include "textdat2.hxx"
 #include "textundo.hxx"

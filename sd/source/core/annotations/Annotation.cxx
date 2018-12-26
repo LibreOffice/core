@@ -33,6 +33,7 @@
 
 #include <unotools/datetime.hxx>
 #include <tools/datetime.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <sfx2/viewsh.hxx>
 #include <svx/svdundo.hxx>

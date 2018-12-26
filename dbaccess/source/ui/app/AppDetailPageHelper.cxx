@@ -61,6 +61,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>

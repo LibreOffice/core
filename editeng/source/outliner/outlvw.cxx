@@ -41,6 +41,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/numitem.hxx>
 #include <vcl/window.hxx>
+#include <vcl/event.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editstat.hxx>

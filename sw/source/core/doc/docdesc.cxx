@@ -65,6 +65,7 @@
 #include <svx/swframetypes.hxx>
 #include <svx/svxids.hrc>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 

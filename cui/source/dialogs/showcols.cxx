@@ -23,6 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/types.hxx>
+#include <tools/debug.hxx>
 
 #define CUIFM_PROP_HIDDEN "Hidden"
 #define CUIFM_PROP_LABEL  "Label"

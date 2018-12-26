@@ -43,6 +43,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/hatch.hxx>
+#include <vcl/inputctx.hxx>
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>

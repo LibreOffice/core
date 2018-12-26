@@ -22,6 +22,9 @@
 
 #include <svx/framelinkarray.hxx>
 #include <scdllapi.h>
+#include <vcl/window.hxx>
+
+namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
 
 class ScAutoFormatData;
 class SvxBoxItem;

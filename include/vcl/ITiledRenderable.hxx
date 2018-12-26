@@ -19,6 +19,8 @@
 #include <vcl/ptrstyle.hxx>
 #include <map>
 
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+
 namespace vcl
 {
     /*

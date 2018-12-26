@@ -44,6 +44,7 @@ struct ScDPNumGroupInfo;
 class ScTabViewShell;
 class ScConditionalFormat;
 class ScConditionalFormatList;
+class Date;
 enum class CreateNameFlags;
 enum class CellShiftDisabledFlags;
 

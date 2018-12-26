@@ -23,6 +23,7 @@
 #include <editeng/bulletitem.hxx>
 
 #include <tools/tenccvt.hxx>
+#include <tools/debug.hxx>
 #include <vcl/dibtools.hxx>
 
 #define BULITEM_VERSION     (sal_uInt16(2))

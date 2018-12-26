@@ -20,6 +20,7 @@
 #include "swfwriter.hxx"
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/debug.hxx>
 
 #include <math.h>
 

@@ -20,6 +20,7 @@
 
 #include <memory>
 
+class Menu;
 class ScDocument;
 class ScDataProviderBaseControl;
 class ScDBData;

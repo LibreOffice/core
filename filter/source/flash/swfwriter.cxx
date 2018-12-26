@@ -21,6 +21,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::swf;
 using namespace ::com::sun::star::uno;

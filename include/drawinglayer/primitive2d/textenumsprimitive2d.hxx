@@ -24,6 +24,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 
 namespace drawinglayer

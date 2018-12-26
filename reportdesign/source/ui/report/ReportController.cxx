@@ -129,6 +129,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <osl/mutex.hxx>
 #include <PropertyForward.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/settings.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svtools/scriptedtext.hxx>

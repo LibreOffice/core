@@ -23,7 +23,12 @@
 #include <vcl/dllapi.h>
 
 #include <vector>
-#include <vcl/window.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/vclptr.hxx>
+
+class KeyEvent;
+
+namespace vcl { class Window; }
 
 class VCL_DLLPUBLIC TaskPaneList
 {

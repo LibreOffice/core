@@ -22,6 +22,7 @@
 #include <comphelper/classids.hxx>
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
+#include <tools/fontenum.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/svxenum.hxx>

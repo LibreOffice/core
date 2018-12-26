@@ -35,6 +35,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 
 #include <list>
 #include <vector>

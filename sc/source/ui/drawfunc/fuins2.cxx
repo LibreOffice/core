@@ -44,6 +44,7 @@
 #include <svx/charthelper.hxx>
 #include <scmod.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>

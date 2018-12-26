@@ -32,6 +32,7 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/wmfexternal.hxx>
 
 using namespace ::com::sun::star;
 

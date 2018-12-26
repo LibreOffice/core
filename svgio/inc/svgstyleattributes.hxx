@@ -23,6 +23,7 @@
 #include "svgpaint.hxx"
 #include "svgnode.hxx"
 #include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 

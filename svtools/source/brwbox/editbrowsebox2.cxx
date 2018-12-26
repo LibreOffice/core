@@ -26,6 +26,7 @@
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 namespace svt
 {

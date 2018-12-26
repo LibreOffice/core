@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 
+#include <vcl/event.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

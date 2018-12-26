@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/debug.hxx>
 #include <unotools/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
 #include "optjsearch.hxx"

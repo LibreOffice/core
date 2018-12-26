@@ -25,6 +25,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/treelistentry.hxx>

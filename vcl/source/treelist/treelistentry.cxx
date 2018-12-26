@@ -22,6 +22,7 @@
 #include <vcl/treelist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <tools/debug.hxx>
 
 #include <limits>
 

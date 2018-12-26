@@ -43,6 +43,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 

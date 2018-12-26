@@ -27,6 +27,7 @@
 #include <svl/style.hxx>
 
 #include <svx/unoprov.hxx>
+#include <tools/debug.hxx>
 
 #include <strings.hrc>
 #include <stlfamily.hxx>

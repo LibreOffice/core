@@ -49,6 +49,7 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

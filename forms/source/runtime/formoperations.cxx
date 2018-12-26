@@ -63,6 +63,7 @@
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 
 namespace frm

@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <tools/debug.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <opengl/zone.hxx>

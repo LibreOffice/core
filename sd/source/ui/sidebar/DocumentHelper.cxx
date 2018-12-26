@@ -38,6 +38,7 @@
 #include <tools/diagnose_ex.h>
 #include <xmloff/autolayout.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 

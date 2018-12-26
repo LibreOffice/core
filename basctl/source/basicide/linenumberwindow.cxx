@@ -9,6 +9,7 @@
 
 #include "baside2.hxx"
 
+#include <vcl/textview.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 

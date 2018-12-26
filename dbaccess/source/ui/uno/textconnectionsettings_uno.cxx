@@ -35,6 +35,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace dbaui
 {

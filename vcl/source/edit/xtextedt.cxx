@@ -20,6 +20,7 @@
 #include <i18nutil/searchopt.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/textsearch.hxx>

@@ -46,6 +46,7 @@
 
 #include "saltimer.h"
 #include <salframe.hxx>
+#include <tools/debug.hxx>
 
 union RuninmainResult
 {

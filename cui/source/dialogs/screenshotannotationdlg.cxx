@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salgtype.hxx>

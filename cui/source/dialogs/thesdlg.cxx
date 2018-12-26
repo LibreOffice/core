@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <dialmgr.hxx>
 
+#include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svlbitm.hxx>

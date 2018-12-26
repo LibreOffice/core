@@ -32,6 +32,7 @@
 #include <vcl/treelistentry.hxx>
 #include <vcl/builderfactory.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 namespace pcr
 {

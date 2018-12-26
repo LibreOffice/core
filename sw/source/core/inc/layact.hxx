@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <vcl/inputtypes.hxx>
+
 #include <ctime>
 
 #include <swtypes.hxx>

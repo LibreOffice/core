@@ -55,7 +55,9 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
+#include <o3tl/make_unique.hxx>
 
 SalFrame::SalFrame()
     : m_pWindow(nullptr)

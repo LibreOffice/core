@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <vcl/toolbox.hxx>
+#include <vcl/vclevent.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>

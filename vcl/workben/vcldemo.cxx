@@ -38,6 +38,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/button.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/floatwin.hxx>

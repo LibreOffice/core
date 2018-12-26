@@ -35,6 +35,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/fmpage.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

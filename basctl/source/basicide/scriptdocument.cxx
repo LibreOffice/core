@@ -54,6 +54,7 @@
 #include <unotools/collatorwrapper.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>

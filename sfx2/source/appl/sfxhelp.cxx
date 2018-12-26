@@ -47,6 +47,7 @@
 #include <svtools/helpopt.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/debug.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/byteseq.hxx>

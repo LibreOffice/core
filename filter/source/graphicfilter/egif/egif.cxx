@@ -19,6 +19,7 @@
 
 
 #include <tools/stream.hxx>
+#include <tools/debug.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

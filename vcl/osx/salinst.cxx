@@ -43,6 +43,7 @@
 #include <vcl/svmain.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 
 #include <osx/saldata.hxx>
 #include <osx/salinst.h>

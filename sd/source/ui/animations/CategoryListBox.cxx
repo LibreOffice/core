@@ -20,6 +20,8 @@
 #include "CategoryListBox.hxx"
 #include <vcl/builderfactory.hxx>
 
+#include <vcl/event.hxx>
+
 namespace sd {
 
 CategoryListBox::CategoryListBox( vcl::Window* pParent )

@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 #include <sfx2/lokhelper.hxx>
 

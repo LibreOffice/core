@@ -22,9 +22,7 @@
 
 #include <sal/config.h>
 
-#include <config_global.h>
 #include <rtl/ref.hxx>
-#include <vcl/vclreferencebase.hxx>
 
 #include <utility>
 #include <type_traits>
@@ -34,6 +32,8 @@
 #include <vcl/vclmain.hxx>
 #endif
 #endif
+
+class VclReferenceBase;
 
 namespace vcl { namespace detail {
 

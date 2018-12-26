@@ -72,6 +72,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <utility>
 #include <vector>

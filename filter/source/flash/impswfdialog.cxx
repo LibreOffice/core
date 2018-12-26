@@ -19,6 +19,7 @@
 
 
 #include "impswfdialog.hxx"
+#include <tools/solar.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

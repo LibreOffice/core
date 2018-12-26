@@ -20,6 +20,7 @@
 #define INCLUDED_EDITENG_WGHTITEM_HXX
 
 #include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 

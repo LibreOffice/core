@@ -24,6 +24,7 @@
 #include <objc/objc-runtime.h>
 
 #include <rtl/ustrbuf.hxx>
+#include <tools/debug.hxx>
 
 #include <vcl/commandevent.hxx>
 #include <vcl/floatwin.hxx>

@@ -50,6 +50,8 @@
 #include <vcl/window.hxx>
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
+#include <tools/debug.hxx>
+#include <vcl/event.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/tabpage.hxx>

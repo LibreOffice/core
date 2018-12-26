@@ -46,6 +46,7 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/historyoptions.hxx>

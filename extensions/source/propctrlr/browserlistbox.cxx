@@ -33,6 +33,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

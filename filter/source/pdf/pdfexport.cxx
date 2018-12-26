@@ -19,6 +19,7 @@
 
 
 #include <osl/file.hxx>
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
 #include <tools/poly.hxx>

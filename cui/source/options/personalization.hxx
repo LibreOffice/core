@@ -21,6 +21,7 @@
 #define MAX_RESULTS 9           // Maximum number of search results
 #define MAX_DEFAULT_PERSONAS 6  // Maximum number of default personas
 
+class Edit;
 class FixedText;
 class FixedHyperlink;
 class SearchAndParseThread;

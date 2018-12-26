@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace dbaui
 {

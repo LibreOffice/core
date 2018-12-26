@@ -22,6 +22,7 @@
 #include <FieldDescriptions.hxx>
 #include <strings.hrc>
 #include <TableDesignHelpBar.hxx>
+#include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
 #include <helpids.h>

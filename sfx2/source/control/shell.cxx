@@ -43,6 +43,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sidebar/ContextChangeBroadcaster.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
+#include <tools/debug.hxx>
 
 #include <memory>
 #include <vector>

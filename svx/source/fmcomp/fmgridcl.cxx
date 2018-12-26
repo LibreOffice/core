@@ -62,6 +62,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/fmtfield.hxx>
 #include <svl/numuno.hxx>
+#include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/help.hxx>

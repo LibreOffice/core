@@ -37,6 +37,7 @@
 #include <tools/globname.hxx>
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <ChartTools.hxx>
 #include <chartuno.hxx>

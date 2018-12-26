@@ -39,6 +39,7 @@
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <vcl/weld.hxx>
+#include <tools/date.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/CertificateKind.hpp>
