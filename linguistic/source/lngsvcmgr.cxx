@@ -33,6 +33,7 @@
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 #include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 
+#include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>

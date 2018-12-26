@@ -37,6 +37,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <rtl/uri.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <vcl/settings.hxx>
 

@@ -21,6 +21,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
+#include <tools/debug.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/make_unique.hxx>

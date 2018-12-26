@@ -23,6 +23,8 @@
 #include <vcl/treelistbox.hxx>
 #include <vcl/accessibletableprovider.hxx>
 
+#include <tools/debug.hxx>
+
 #include <memory>
 #include <vector>
 

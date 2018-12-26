@@ -23,6 +23,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xoutbmp.hxx>
+#include <tools/date.hxx>
 #include <tools/stream.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/streamwrap.hxx>

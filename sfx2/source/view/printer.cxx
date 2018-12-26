@@ -21,6 +21,7 @@
 #include <vcl/metric.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
+#include <tools/debug.hxx>
 
 #include <utility>
 #include <vector>

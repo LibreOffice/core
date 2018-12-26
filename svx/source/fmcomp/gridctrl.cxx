@@ -42,6 +42,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/menu.hxx>

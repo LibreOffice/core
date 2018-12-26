@@ -27,6 +27,10 @@
 #include <memory>
 #include <vector>
 
+class DataChangedEvent;
+class HelpEvent;
+class MouseEvent;
+class UserDrawEvent;
 struct ImplStatusItem;
 
 void VCL_DLLPUBLIC DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,

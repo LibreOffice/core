@@ -39,6 +39,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/event.hxx>
 
 #include <memory>
 #include <o3tl/make_unique.hxx>

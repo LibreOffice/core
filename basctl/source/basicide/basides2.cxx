@@ -27,6 +27,7 @@
 #include "baside2.hxx"
 #include "basdoc.hxx"
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <com/sun/star/container/XNamed.hpp>

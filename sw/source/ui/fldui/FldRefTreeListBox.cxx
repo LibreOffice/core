@@ -20,6 +20,7 @@
 #include "FldRefTreeListBox.hxx"
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <vcl/help.hxx>
 
 SwFieldRefTreeListBox::SwFieldRefTreeListBox(vcl::Window* pParent, WinBits nStyle)

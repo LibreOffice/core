@@ -34,6 +34,7 @@
 #include <svx/unopage.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/editeng.hxx>
+#include <tools/debug.hxx>
 
 #include <svx/unoapi.hxx>
 #include <memory>

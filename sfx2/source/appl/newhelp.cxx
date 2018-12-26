@@ -32,6 +32,7 @@
 #include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>
