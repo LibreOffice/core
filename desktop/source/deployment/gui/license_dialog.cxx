@@ -28,6 +28,7 @@
 #include <svtools/svmedit.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/threadex.hxx>
 #include <vcl/builderfactory.hxx>

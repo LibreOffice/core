@@ -26,6 +26,7 @@
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star::uno;
 

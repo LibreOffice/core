@@ -19,6 +19,7 @@
 
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>

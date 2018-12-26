@@ -21,7 +21,9 @@
 #include <sal/log.hxx>
 
 #include <tools/helpers.hxx>
+#include <tools/debug.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 

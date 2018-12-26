@@ -69,6 +69,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
+#include <tools/debug.hxx>
 
 #include <cassert>
 #include <set>

@@ -34,6 +34,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/virdev.hxx>
 
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>

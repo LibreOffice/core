@@ -29,6 +29,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/debug.hxx>
 
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxsids.hrc>

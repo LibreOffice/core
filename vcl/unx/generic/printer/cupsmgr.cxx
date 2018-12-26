@@ -37,6 +37,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/window.hxx>
 
 #include <algorithm>
 

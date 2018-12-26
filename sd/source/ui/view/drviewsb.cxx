@@ -36,6 +36,7 @@
 #include <svx/dialogs.hrc>
 #include <unotools/useroptions.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/make_unique.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>

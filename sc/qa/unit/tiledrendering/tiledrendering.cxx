@@ -30,6 +30,7 @@
 #include <svx/svdpage.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/virdev.hxx>
 #include <sc.hrc>
 
 #include <chrono>

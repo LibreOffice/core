@@ -33,6 +33,7 @@
 #include <com/sun/star/script/XScriptListener.hpp>
 
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/processfactory.hxx>

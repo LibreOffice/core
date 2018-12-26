@@ -18,6 +18,7 @@
  */
 
 
+#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

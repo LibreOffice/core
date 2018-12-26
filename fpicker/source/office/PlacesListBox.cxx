@@ -11,6 +11,7 @@
 #include <svtools/PlaceEditDialog.hxx>
 
 #include <vcl/headbar.hxx>
+#include <vcl/event.hxx>
 #include <bitmaps.hlst>
 
 #define COLUMN_NAME     1

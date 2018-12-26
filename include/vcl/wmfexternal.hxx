@@ -21,9 +21,9 @@
 #define INCLUDED_VCL_WMFEXTERNAL_HXX
 
 #include <vcl/dllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 
 struct VCL_DLLPUBLIC WmfExternal
 {
