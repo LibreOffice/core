@@ -34,6 +34,7 @@ class SwUiWriterTest2 : public SwModelTestBase
 public:
     void testRedlineMoveInsertInDelete();
     void testRedlineInHiddenSection();
+    void testTdf47471_paraStyleBackground();
     void testTdf101534();
     void testTdf54819();
     void testTdf108687_tabstop();
@@ -45,6 +46,7 @@ public:
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
     CPPUNIT_TEST(testRedlineInHiddenSection);
+    CPPUNIT_TEST(testTdf47471_paraStyleBackground);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf54819);
     CPPUNIT_TEST(testTdf108687_tabstop);
@@ -85,6 +87,39 @@ SwDoc* SwUiWriterTest2::createDoc(const char* pName)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     return pTextDoc->GetDocShell()->GetDoc();
+}
+
+void SwUiWriterTest2::testTdf47471_paraStyleBackground()
+{
+    SwDoc* pDoc = createDoc("tdf47471_paraStyleBackground.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14729933), getProperty<sal_Int32>(getParagraph(2), "FillColor"));
+
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    lcl_dispatchCommand(mxComponent, ".uno:ResetAttributes", {});
+
+    // the background color should revert to the color for 00Background style
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(14605542), getProperty<sal_Int32>(getParagraph(2), "FillColor"));
+    // the paragraph style should not be reset
+    CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+
+    // Save it and load it back.
+    reload("writer8", "tdf47471_paraStyleBackgroundRT.odt");
+
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(14605542), getProperty<sal_Int32>(getParagraph(2), "FillColor"));
+    // on round-trip, the paragraph style name was lost
+    CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
 }
 
 void SwUiWriterTest2::testTdf101534()
