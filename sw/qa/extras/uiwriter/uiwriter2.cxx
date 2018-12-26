@@ -118,8 +118,8 @@ void SwUiWriterTest2::testTdf47471_paraStyleBackground()
     // on round-trip, the paragraph style name was lost
     CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
-    //CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
-    //                     getProperty<OUString>(getParagraph(3), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
+                         getProperty<OUString>(getParagraph(3), "ParaStyleName"));
 }
 
 void SwUiWriterTest2::testTdf101534()
