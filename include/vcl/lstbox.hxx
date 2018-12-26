@@ -25,6 +25,10 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 
+class DataChangedEvent;
+class NotifyEvent;
+class UserDrawEvent;
+
 #define LISTBOX_APPEND              (SAL_MAX_INT32)
 #define LISTBOX_ENTRY_NOTFOUND      (SAL_MAX_INT32)
 #define LISTBOX_MAX_ENTRIES         (SAL_MAX_INT32 - 1)

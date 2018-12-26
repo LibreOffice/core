@@ -25,7 +25,6 @@
 class FilterConfigItem;
 class GDIMetaFile;
 class SvStream;
-struct WmfExternal;
 
 VCL_DLLPUBLIC bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF );
 

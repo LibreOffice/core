@@ -27,6 +27,7 @@
 #include <vcl/cursor.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <global.hxx>
 #include <drwlayer.hxx>

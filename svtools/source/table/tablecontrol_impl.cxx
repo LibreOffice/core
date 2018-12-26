@@ -38,6 +38,7 @@
 #include <rtl/ref.hxx>
 #include <vcl/image.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 
 #include <cstdlib>
 #include <functional>

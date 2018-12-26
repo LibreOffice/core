@@ -26,6 +26,7 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/gen.hxx>
+#include <tools/fontenum.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/vcllayout.hxx>
 

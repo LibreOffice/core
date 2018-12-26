@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/builderfactory.hxx>

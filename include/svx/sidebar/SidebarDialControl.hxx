@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SIDEBAR_SIDEBARDIALCONTROL_HXX
 
 #include <svx/dialcontrol.hxx>
+#include <vcl/field.hxx>
 
 namespace svx { namespace sidebar {
 

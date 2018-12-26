@@ -29,6 +29,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 
 #include <cmdid.h>
 #include <AnnotationWin.hxx>

@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>

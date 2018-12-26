@@ -76,6 +76,7 @@
 #include <svx/dialogs.hrc>
 #include <sfx2/sfxdlg.hxx>
 #include <conditio.hxx>
+#include <o3tl/make_unique.hxx>
 
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);

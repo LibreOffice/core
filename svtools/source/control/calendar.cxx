@@ -26,6 +26,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 #include <vcl/commandevent.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/calendarwrapper.hxx>

@@ -20,6 +20,7 @@
 #include <vcl/treelist.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>
+#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 

@@ -28,7 +28,6 @@
 #include <memory>
 
 class ImpVclMEdit;
-class Timer;
 class ExtTextEngine;
 class TextView;
 

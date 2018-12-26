@@ -34,6 +34,7 @@
 #include <sfx2/ipclient.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <o3tl/make_unique.hxx>
 
 #include <document.hxx>
 #include <viewfunc.hxx>
