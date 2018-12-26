@@ -875,6 +875,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="has_entry">True</property>
+                                    <property name="hexpand">True</property>
                                     <child internal-child="entry">
                                       <object class="GtkEntry" id="combobox-entry">
                                         <property name="can_focus">False</property>
