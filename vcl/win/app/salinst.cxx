@@ -27,6 +27,7 @@
 #include <tools/time.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <vcl/inputtypes.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>

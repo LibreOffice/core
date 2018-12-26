@@ -24,6 +24,7 @@
 #include <svl/hint.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
+#include <tools/debug.hxx>
 
 #include <unchss.hxx>
 

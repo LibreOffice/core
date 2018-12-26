@@ -280,3 +280,10 @@ blacklist:
     - com/sun/star/frame/XTerminateListener.hpp
     - com/sun/star/datatransfer/dnd/XDragGestureListener.hpp
     - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
+    include/vcl/vclstatuslistener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp
+    include/vcl/weld.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleRelationSet.hpp
+    - com/sun/star/accessibility/XAccessible.hpp

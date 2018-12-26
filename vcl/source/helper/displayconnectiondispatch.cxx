@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
 
 #include <displayconnectiondispatch.hxx>
 #include <svdata.hxx>

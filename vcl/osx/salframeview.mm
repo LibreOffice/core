@@ -22,6 +22,8 @@
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
 
+#include <vcl/event.hxx>
+#include <vcl/inputctx.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

@@ -43,6 +43,7 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
+#include <vcl/event.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>

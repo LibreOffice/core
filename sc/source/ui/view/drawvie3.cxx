@@ -21,6 +21,7 @@
 #include <svx/svdoole2.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <strings.hrc>
 #include <scresid.hxx>

@@ -32,6 +32,7 @@
 #include <vcl/graphictools.hxx>
 #include <sal/log.hxx>
 #include <tools/helpers.hxx>
+#include <tools/debug.hxx>
 
 #include <zlib.h>
 

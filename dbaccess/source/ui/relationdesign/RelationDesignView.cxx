@@ -22,6 +22,7 @@
 #include <RelationController.hxx>
 #include <svl/undo.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
 #include <browserids.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>

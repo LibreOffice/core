@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.h>
 #include <sal/macros.h>
+#include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>
 

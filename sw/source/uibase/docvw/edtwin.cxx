@@ -31,6 +31,7 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
+#include <vcl/inputctx.hxx>
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/weld.hxx>

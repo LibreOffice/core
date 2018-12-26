@@ -18,6 +18,7 @@
  */
 
 #include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/propertysequence.hxx>

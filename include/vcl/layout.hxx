@@ -17,6 +17,8 @@
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/event.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/IContext.hxx>
 #include <vcl/commandevent.hxx>
