@@ -166,7 +166,7 @@ void lcl_emitEvent(SfxEventHintId nEventId, sal_Int32 nStrId, SfxObjectShell* pD
 
 }
 
-std::vector<std::pair<SwDocShell*, OUString>> SwDBManager::m_aUncommitedRegistrations;
+std::vector<std::pair<SwDocShell*, OUString>> SwDBManager::m_aUncommittedRegistrations;
 
 enum class SwDBNextRecord { NEXT, FIRST };
 static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action = SwDBNextRecord::NEXT );
@@ -2926,7 +2926,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
         }
         sFind = LoadAndRegisterDataSource_Impl( type, DBConnURIType::FLAT == type ? &aSettings : nullptr, aURL, nullptr, pDocShell );
 
-        m_aUncommitedRegistrations.push_back(std::pair<SwDocShell*, OUString>(pDocShell, sFind));
+        m_aUncommittedRegistrations.push_back(std::pair<SwDocShell*, OUString>(pDocShell, sFind));
     }
     return sFind;
 }
@@ -3005,7 +3005,7 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
 
     // temp file - don't remember connection
     if (rData.sDataSource.isEmpty())
-        m_aUncommitedRegistrations.push_back(std::pair<SwDocShell*, OUString>(nullptr, sDataSource));
+        m_aUncommittedRegistrations.push_back(std::pair<SwDocShell*, OUString>(nullptr, sDataSource));
 }
 
 void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
@@ -3318,7 +3318,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView cons
 
 void SwDBManager::RevokeLastRegistrations()
 {
-    if (!m_aUncommitedRegistrations.empty())
+    if (!m_aUncommittedRegistrations.empty())
     {
         SwView* pView = ( m_pDoc && m_pDoc->GetDocShell() ) ? m_pDoc->GetDocShell()->GetView() : nullptr;
         if (pView)
@@ -3331,12 +3331,12 @@ void SwDBManager::RevokeLastRegistrations()
             }
         }
 
-        for (auto it = m_aUncommitedRegistrations.begin(); it != m_aUncommitedRegistrations.end();)
+        for (auto it = m_aUncommittedRegistrations.begin(); it != m_aUncommittedRegistrations.end();)
         {
             if ((m_pDoc && it->first == m_pDoc->GetDocShell()) || it->first == nullptr)
             {
                 RevokeDataSource(it->second);
-                it = m_aUncommitedRegistrations.erase(it);
+                it = m_aUncommittedRegistrations.erase(it);
             }
             else
                 ++it;
@@ -3346,12 +3346,12 @@ void SwDBManager::RevokeLastRegistrations()
 
 void SwDBManager::CommitLastRegistrations()
 {
-    for (auto aIt = m_aUncommitedRegistrations.begin(); aIt != m_aUncommitedRegistrations.end();)
+    for (auto aIt = m_aUncommittedRegistrations.begin(); aIt != m_aUncommittedRegistrations.end();)
     {
         if (aIt->first == m_pDoc->GetDocShell() || aIt->first == nullptr)
         {
             m_aNotUsedConnections.push_back(aIt->second);
-            aIt = m_aUncommitedRegistrations.erase(aIt);
+            aIt = m_aUncommittedRegistrations.erase(aIt);
         }
         else
             aIt++;
