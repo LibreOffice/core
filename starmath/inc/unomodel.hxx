@@ -19,8 +19,6 @@
 #ifndef INCLUDED_STARMATH_INC_UNOMODEL_HXX
 #define INCLUDED_STARMATH_INC_UNOMODEL_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 

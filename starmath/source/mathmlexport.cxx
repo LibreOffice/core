@@ -36,6 +36,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <osl/diagnose.h>
 #include <unotools/saveopt.hxx>
+#include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <comphelper/fileformat.h>
@@ -57,6 +58,7 @@
 
 #include "mathmlexport.hxx"
 #include <strings.hrc>
+#include <smmod.hxx>
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <utility.hxx>

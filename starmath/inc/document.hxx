@@ -24,27 +24,25 @@
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
-#include <sot/storage.hxx>
 #include <svl/lstner.hxx>
-#include <vcl/jobset.hxx>
-#include <vcl/virdev.hxx>
 #include <sax/fshelper.hxx>
 #include <unotools/lingucfg.hxx>
 #include <oox/core/filterbase.hxx>
-#include <oox/mathml/import.hxx>
 #include <oox/export/utils.hxx>
 
 #include <memory>
 #include <set>
 
 #include "format.hxx"
+#include "node.hxx"
 #include "parse.hxx"
-#include "smmod.hxx"
 #include "smdllapi.hxx"
 
 class SfxPrinter;
 class Printer;
 class SmCursor;
+
+namespace oox { namespace formulaimport { class XmlStream; } }
 
 #define STAROFFICE_XML  "StarOffice XML (Math)"
 #define MATHML_XML      "MathML XML (Math)"

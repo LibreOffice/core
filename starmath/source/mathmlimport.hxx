@@ -21,11 +21,12 @@
 #define INCLUDED_STARMATH_SOURCE_MATHMLIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
+#include <vcl/errcode.hxx>
 
-#include <node.hxx>
 #include <deque>
 #include <memory>
 
+class SmNode;
 class SfxMedium;
 namespace com { namespace sun { namespace star {
     namespace beans {

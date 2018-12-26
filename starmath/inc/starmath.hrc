@@ -21,8 +21,6 @@
 #define INCLUDED_STARMATH_INC_STARMATH_HRC
 
 #include <svl/solar.hrc>
-#include <sfx2/sfxsids.hrc>
-#include <editeng/memberids.h>
 
 #define SID_NEXTERR                 (SID_SMA_START + 1)
 #define SID_PREVERR                 (SID_SMA_START + 2)

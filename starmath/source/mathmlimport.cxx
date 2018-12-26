@@ -46,6 +46,7 @@ one go*/
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <osl/diagnose.h>
+#include <sot/storage.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>

@@ -21,7 +21,6 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
 #include <o3tl/typed_flags_set.hxx>
 
 // TokenGroups

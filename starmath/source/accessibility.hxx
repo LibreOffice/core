@@ -36,7 +36,6 @@
 #include <memory>
 
 class SmGraphicWindow;
-class SmEditWindow;
 class SmDocShell;
 
 namespace accessibility { class AccessibleTextHelper; }
@@ -142,10 +141,8 @@ public:
 
 class SmEditAccessible;
 class SmEditSource;
-class EditEngine;
 class EditView;
 class SvxFieldItem;
-struct ESelection;
 
 
 class SmViewForwarder :

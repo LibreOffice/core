@@ -59,6 +59,7 @@
 #include <view.hxx>
 #include <o3tl/make_unique.hxx>
 #include <strings.hrc>
+#include <smmod.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;

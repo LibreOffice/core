@@ -20,17 +20,16 @@
 #define INCLUDED_STARMATH_INC_DIALOG_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/charmap.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/ctrlbox.hxx>
-#include <svtools/ctrltool.hxx>
-#include "utility.hxx"
-#include "format.hxx"
+#include <vcl/customweld.hxx>
 #include "symbol.hxx"
 #include <memory>
 
 class SubsetMap;
+class SmFormat;
+class FontList;
+class SvxShowCharSet;
+
 #define CATEGORY_NONE   0xFFFF
 
 /**************************************************************************/

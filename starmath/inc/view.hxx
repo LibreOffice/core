@@ -29,18 +29,17 @@
 #include <svtools/scrwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/timer.hxx>
-#include <svtools/colorcfg.hxx>
 #include "document.hxx"
 #include "edit.hxx"
-#include "node.hxx"
 
-class SmDocShell;
 class SmViewShell;
 class SmPrintUIOptions;
 class SmGraphicAccessible;
+class SmNode;
+
+namespace svtools { class ColorConfig; }
 
 class SmGraphicWindow final : public ScrollableWindow
 {

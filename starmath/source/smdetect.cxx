@@ -25,6 +25,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <sal/log.hxx>
+#include <sot/storage.hxx>
 
 #include "eqnolefilehdr.hxx"
 

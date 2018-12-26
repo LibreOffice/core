@@ -1,0 +1,15 @@
+---
+assumeFilename: starmath/source/document.cxx
+blacklist:
+    starmath/source/accessibility.hxx:
+    # Base class needs complete type
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessibleText.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    starmath/source/smdetect.hxx:
+    # Base class needs complete type
+    - com/sun/star/document/XExtendedFilterDetection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp

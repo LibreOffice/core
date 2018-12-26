@@ -20,13 +20,12 @@
 #ifndef INCLUDED_STARMATH_INC_SMMOD_HXX
 #define INCLUDED_STARMATH_INC_SMMOD_HXX
 
-#include <svl/lstner.hxx>
-#include <svtools/colorcfg.hxx>
-
 #include <sfx2/module.hxx>
 
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace svtools { class ColorConfig; }
 
 class SfxObjectFactory;
 class SmSymbolManager;

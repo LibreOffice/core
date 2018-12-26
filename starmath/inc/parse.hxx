@@ -24,10 +24,19 @@
 #include <set>
 #include <vector>
 
-#include "types.hxx"
 #include "token.hxx"
 #include "error.hxx"
-#include "node.hxx"
+
+class SmBlankNode;
+class SmBracebodyNode;
+class SmExpressionNode;
+class SmGlyphSpecialNode;
+class SmNode;
+class SmOperNode;
+class SmSpecialNode;
+class SmStructureNode;
+class SmTableNode;
+class SmTextNode;
 
 #define DEPTH_LIMIT 1024
 
