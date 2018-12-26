@@ -13,6 +13,7 @@
 
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <vcl/event.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <svdata.hxx>

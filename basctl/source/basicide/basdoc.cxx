@@ -33,6 +33,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svxids.hrc>
 #include <tools/globname.hxx>
+#include <tools/debug.hxx>
 
 namespace basctl
 {

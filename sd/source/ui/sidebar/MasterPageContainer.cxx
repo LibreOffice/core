@@ -53,6 +53,7 @@
 #include <osl/mutex.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <xmloff/autolayout.hxx>
+#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

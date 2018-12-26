@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/virdev.hxx>
 #include <svl/stritem.hxx>
 #include <o3tl/make_unique.hxx>
 #include <officecfg/Office/Common.hxx>

@@ -59,6 +59,7 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <vcl/outdev.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 

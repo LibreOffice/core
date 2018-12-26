@@ -29,6 +29,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/event.hxx>
 #include <svx/dialogs.hrc>
 
 #include <linguistic/misc.hxx>

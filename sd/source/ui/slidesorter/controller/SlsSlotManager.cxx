@@ -83,6 +83,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 

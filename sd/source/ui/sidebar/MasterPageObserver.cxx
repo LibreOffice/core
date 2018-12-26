@@ -30,6 +30,7 @@
 #include <svl/lstner.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
+#include <tools/debug.hxx>
 
 namespace sd {
 

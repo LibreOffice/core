@@ -34,6 +34,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/textdata.hxx>

@@ -23,6 +23,7 @@
 #include "commontypes.hxx"
 
 #include <vcl/weld.hxx>
+#include <vcl/timer.hxx>
 
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

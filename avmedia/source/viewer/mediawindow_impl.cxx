@@ -35,6 +35,7 @@
 #include <unotools/securityoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
