@@ -93,7 +93,7 @@ struct BitmapSystemData
     #if defined(_WIN32)
     void* pDIB; // device independent byte buffer
     #elif defined( MACOSX ) || defined( IOS )
-    void* rImageContext;     //Image context (CGContextRef)
+    // Nothing needed, apparently
     #else
     void* aPixmap;
     #endif
