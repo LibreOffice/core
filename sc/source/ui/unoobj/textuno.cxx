@@ -34,6 +34,7 @@
 #include <editeng/unofored.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/make_unique.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

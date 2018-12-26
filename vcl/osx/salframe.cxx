@@ -26,6 +26,8 @@
 
 #include <osl/file.h>
 
+#include <vcl/event.hxx>
+#include <vcl/inputctx.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>

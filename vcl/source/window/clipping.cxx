@@ -21,6 +21,7 @@
 #include <vcl/virdev.hxx>
 
 #include <sal/types.h>
+#include <tools/debug.hxx>
 
 #include <salobj.hxx>
 #include <window.h>

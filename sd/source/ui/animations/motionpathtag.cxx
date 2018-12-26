@@ -44,6 +44,7 @@
 #include <svx/svxids.hrc>
 #include <svx/polypolygoneditor.hxx>
 #include <svx/svddrgmt.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include "CustomAnimationPane.hxx"
 #include <View.hxx>

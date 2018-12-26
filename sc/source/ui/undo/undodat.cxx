@@ -48,6 +48,7 @@
 #include <markdata.hxx>
 
 #include <sfx2/lokhelper.hxx>
+#include <o3tl/make_unique.hxx>
 
 // Show or hide outline groups
 

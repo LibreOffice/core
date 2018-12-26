@@ -69,6 +69,7 @@
 #include <memory>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/make_unique.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>

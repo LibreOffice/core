@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_WRKWIN_HXX
 #define INCLUDED_VCL_WRKWIN_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <o3tl/typed_flags_set.hxx>

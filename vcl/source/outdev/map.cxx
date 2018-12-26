@@ -18,6 +18,8 @@
  */
 
 #include <tools/bigint.hxx>
+#include <tools/debug.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>

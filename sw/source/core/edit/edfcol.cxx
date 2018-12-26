@@ -60,6 +60,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/virdev.hxx>
 
 #include <hintids.hxx>
 #include <doc.hxx>

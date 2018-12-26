@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 #include <svl/style.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 
