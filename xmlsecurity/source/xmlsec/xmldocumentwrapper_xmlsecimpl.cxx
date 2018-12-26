@@ -51,7 +51,7 @@ namespace cssxw = com::sun::star::xml::wrapper;
 /* used by the recursiveDelete method */
 #define NODE_REMOVED    0
 #define NODE_NOTREMOVED 1
-#define NODE_STOPED     2
+#define NODE_STOPPED     2
 
 XMLDocumentWrapper_XmlSecImpl::XMLDocumentWrapper_XmlSecImpl()
     : m_nCurrentPosition(0)
@@ -421,7 +421,7 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
  *   RESULT
  *  result -    the result of the deletion process, can be one of following
  *          values:
- *          NODE_STOPED - the process is interrupted by meeting the
+ *          NODE_STOPPED - the process is interrupted by meeting the
  *              m_pStopAtNode
  *          NODE_NOTREMOVED - the pNode is not completely removed
  *              because there is its descendant in the
@@ -436,7 +436,7 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
 {
     if (pNode == m_pStopAtNode)
     {
-        return NODE_STOPED;
+        return NODE_STOPPED;
     }
 
     if (pNode != m_pCurrentReservedNode)
@@ -454,8 +454,8 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
 
             switch (nResult)
             {
-            case NODE_STOPED:
-                return NODE_STOPED;
+            case NODE_STOPPED:
+                return NODE_STOPPED;
             case NODE_NOTREMOVED:
                 bIsRemoved = false;
                 break;
