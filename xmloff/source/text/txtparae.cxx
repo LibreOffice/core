@@ -2913,10 +2913,14 @@ void XMLTextParagraphExport::_exportTextFrame(
         rPropSet->getPropertyValue( gsFrameStyleName ) >>= sStyle;
     }
 
-    OUString sAutoStyle( sStyle );
+    OUString sAutoStyle;
     OUString aMinHeightValue;
     OUString sMinWidthValue;
     sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
+SAL_WARN("xmloff","assert AutoStyle["<<sAutoStyle<<"] or empty style["<<sStyle<<"]");
+assert( !sAutoStyle.isEmpty() || sStyle.isEmpty() || sStyle == "Standard");
+    if ( sAutoStyle.isEmpty() )
+        sAutoStyle = sStyle;
     if( !sAutoStyle.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                               GetExport().EncodeStyleName( sAutoStyle ) );
@@ -3075,8 +3079,12 @@ void XMLTextParagraphExport::_exportTextGraphic(
         rPropSet->getPropertyValue( gsFrameStyleName ) >>= sStyle;
     }
 
-    OUString sAutoStyle( sStyle );
+    OUString sAutoStyle;
     sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
+SAL_WARN("xmloff","assert AutoStyle["<<sAutoStyle<<"] or empty style["<<sStyle<<"]");
+assert( !sAutoStyle.isEmpty() || sStyle.isEmpty() || sStyle == "Standard");
+    if ( sAutoStyle.isEmpty() )
+        sAutoStyle = sStyle;
     if( !sAutoStyle.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                                   GetExport().EncodeStyleName( sAutoStyle ) );
