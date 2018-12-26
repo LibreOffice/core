@@ -77,50 +77,50 @@ namespace desktop
         "-o              \n"\
         "-n              \n";
     const char *aCmdLineHelp_right =
-        "keep startup bitmap minimized.\n"\
-        "no startup screen, no default document and no UI.\n"\
-        "suppress restart/restore after fatal errors.\n"\
-        "starts the quickstart service (only available on Windows and OS/2)\n"\
-        "don't show startup screen.\n"\
-        "don't check for remote instances using the installation\n"\
-        "don't start with an empty document\n"\
-        "like invisible but no user interaction at all.\n"\
-        "enable further optimization for document conversion, includes headless mode.\n"\
-        "show this message and exit.\n"\
-        "create new text document.\n"\
-        "create new spreadsheet document.\n"\
-        "create new drawing.\n"\
-        "create new presentation.\n"\
-        "create new database.\n"\
-        "create new formula.\n"\
-        "create new global document.\n"\
-        "create new HTML document.\n"\
-        "open documents regardless whether they are templates or not.\n"\
-        "always open documents as new files (use as template).\n";
+        "Keep startup screen minimized.\n"\
+        "No startup screen, no default document and no UI.\n"\
+        "Suppress restart/restore after fatal errors.\n"\
+        "Start the quickstart service (only available on Windows and OS/2).\n"\
+        "Don't show startup screen.\n"\
+        "Don't check for remote instances using the installation.\n"\
+        "Don't start with an empty document.\n"\
+        "Like invisible but no user interaction at all.\n"\
+        "Enable further optimization for document conversion, incl. headless mode.\n"\
+        "Show this message.\n"\
+        "Create new text document.\n"\
+        "Create new spreadsheet document.\n"\
+        "Create new drawing.\n"\
+        "Create new presentation.\n"\
+        "Create new database.\n"\
+        "Create new formula.\n"\
+        "Create new global document.\n"\
+        "Create new HTML document.\n"\
+        "Open documents regardless whether they are templates or not.\n"\
+        "Always open documents as new files (use as template).\n";
     const char *aCmdLineHelp_bottom =
         "-display <display>\n"\
         "      Specify X-Display to use in Unix/X11 versions.\n"
         "-p <documents...>\n"\
-        "      print the specified documents on the default printer.\n"\
+        "      Print the specified documents on the default printer.\n"\
         "-pt <printer> <documents...>\n"\
-        "      print the specified documents on the specified printer.\n"\
+        "      Print the specified documents on the specified printer.\n"\
         "-view <documents...>\n"\
-        "      open the specified documents in viewer-(readonly-)mode.\n"\
+        "      Open the specified documents in viewer-(readonly-)mode.\n"\
         "-show <presentation>\n"\
-        "      open the specified presentation and start it immediately\n"\
+        "      Open the specified presentation and start it immediately.\n"\
         "-accept=<accept-string>\n"\
         "      Specify an UNO connect-string to create an UNO acceptor through which\n"\
-        "      other programs can connect to access the API\n"\
+        "      other programs can connect to access the API.\n"\
         "-unaccept=<accept-string>\n"\
         "      Close an acceptor that was created with -accept=<accept-string>\n"\
-        "      Use -unnaccept=all to close all open acceptors\n"\
+        "      Use -unnaccept=all to close all open acceptors.\n"\
         "Remaining arguments will be treated as filenames or URLs of documents to open.\n";
 
     void ReplaceStringHookProc( UniString& rStr );
 
     void displayCmdlineHelp()
     {
-        // if you put variables in other chunks don't forget to call the replace routines
+        // If you put variables in other chunks don't forget to call the replace routines
         // for those chunks...
         String aHelpMessage_head(aCmdLineHelp_head, RTL_TEXTENCODING_ASCII_US);
         String aHelpMessage_left(aCmdLineHelp_left, RTL_TEXTENCODING_ASCII_US);
@@ -132,10 +132,9 @@ namespace desktop
         aHelpMessage_head.SearchAndReplaceAscii( "%BUILDID", aVerId );
         aHelpMessage_head.SearchAndReplaceAscii( "%CMDNAME", String( "soffice", RTL_TEXTENCODING_ASCII_US) );
 #ifdef UNX
-        // on unix use console for output
-        fprintf(stderr, "%s\n", ByteString(aHelpMessage_head,
-                    RTL_TEXTENCODING_ASCII_US).GetBuffer());
-        // merge left and right column
+        // On Unix use console for output
+        fprintf(stderr, "%s\n", ByteString(aHelpMessage_head, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        // Merge left and right column
         int n = aHelpMessage_left.GetTokenCount ('\n');
         ByteString bsLeft(aHelpMessage_left, RTL_TEXTENCODING_ASCII_US);
         ByteString bsRight(aHelpMessage_right, RTL_TEXTENCODING_ASCII_US);
@@ -144,10 +143,9 @@ namespace desktop
             fprintf(stderr, "%s", bsLeft.GetToken(i, '\n').GetBuffer());
             fprintf(stderr, "%s\n", bsRight.GetToken(i, '\n').GetBuffer());
         }
-        fprintf(stderr, "%s", ByteString(aHelpMessage_bottom,
-                    RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        fprintf(stderr, "%s", ByteString(aHelpMessage_bottom, RTL_TEXTENCODING_ASCII_US).GetBuffer());
 #else
-        // rest gets a dialog box
+        // All other get a dialog box
         CmdlineHelpDialog aDlg;
         aDlg.m_ftHead.SetText(aHelpMessage_head);
         aDlg.m_ftLeft.SetText(aHelpMessage_left);
