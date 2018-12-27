@@ -36,7 +36,6 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -422,7 +421,7 @@ void ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagr
     for( sal_Int32 i=0; i<aNewSeriesSeq.getLength(); ++i )
     {
         const sal_Int32 nNumSeries = aNewSeriesSeq[i].getLength();
-        for( sal_Int32 j=0; j<nNumSeries; ++j )
+        for( sal_Int32 j=0; j<nNumSeries; ++j )        
             applyStyle( aNewSeriesSeq[i][j], i, j, nNumSeries );
     }
 
