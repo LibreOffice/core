@@ -25,11 +25,12 @@
 #include <memory>
 
 #include <sal/types.h>
-#include <rtl/ref.hxx>
 
 #include <store/types.h>
-#include "storbase.hxx"
 #include "object.hxx"
+
+namespace rtl { template <class reference_type> class Reference; }
+namespace store { struct PageData; }
 
 namespace store
 {

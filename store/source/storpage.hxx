@@ -21,9 +21,9 @@
 #define INCLUDED_STORE_SOURCE_STORPAGE_HXX
 
 #include <sal/types.h>
+#include <rtl/string.h>
 
 #include "object.hxx"
-#include "lockbyte.hxx"
 
 #include "storbase.hxx"
 #include "storbios.hxx"
@@ -32,6 +32,7 @@
 namespace store
 {
 
+class ILockBytes;
 struct OStoreDirectoryPageData;
 class  OStoreDirectoryPageObject;
 

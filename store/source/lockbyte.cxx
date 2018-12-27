@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include <osl/file.h>
 #include <osl/process.h>
-#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 

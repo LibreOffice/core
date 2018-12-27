@@ -26,13 +26,13 @@
 
 #include <store/types.h>
 #include "object.hxx"
-#include "lockbyte.hxx"
 #include "storbase.hxx"
-#include "storcach.hxx"
 
 namespace store
 {
 
+class ILockBytes;
+class PageCache;
 struct SuperBlockPage;
 
 class OStorePageBIOS : public store::OStoreObject
