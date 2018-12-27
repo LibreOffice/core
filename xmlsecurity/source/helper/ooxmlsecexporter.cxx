@@ -10,13 +10,13 @@
 #include "ooxmlsecexporter.hxx"
 
 #include <algorithm>
+#include <memory>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
 #include <comphelper/ofopxmlhelper.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <svx/xoutbmp.hxx>
@@ -463,7 +463,7 @@ OOXMLSecExporter::OOXMLSecExporter(const uno::Reference<uno::XComponentContext>&
                                    const uno::Reference<embed::XStorage>& xRootStorage,
                                    const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
                                    const SignatureInformation& rInformation)
-    : m_pImpl(o3tl::make_unique<Impl>(xComponentContext, xRootStorage, xDocumentHandler, rInformation))
+    : m_pImpl(std::make_unique<Impl>(xComponentContext, xRootStorage, xDocumentHandler, rInformation))
 {
 }
 

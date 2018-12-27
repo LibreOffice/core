@@ -37,7 +37,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/datetime.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <certificate.hxx>
 #include <biginteger.hxx>
@@ -45,6 +44,8 @@
 #include <xmlsec/xmlsec_init.hxx>
 
 #include <pdfsignaturehelper.hxx>
+
+#include <memory>
 
 using namespace css;
 using namespace css::graphic;
@@ -99,7 +100,7 @@ PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
     SAL_WARN_IF(!bInit, "xmlsecurity.comp", "Error initializing security context!");
 
     if (!mpPDFSignatureHelper)
-        mpPDFSignatureHelper = o3tl::make_unique<PDFSignatureHelper>();
+        mpPDFSignatureHelper = std::make_unique<PDFSignatureHelper>();
 
     return *mpPDFSignatureHelper;
 }
