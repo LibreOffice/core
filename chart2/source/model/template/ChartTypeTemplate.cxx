@@ -385,6 +385,8 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
     {
         try
         {
+            //this will reset the colors of the Column or Bubble charts tdf#108080
+            xSeries->resetAllDataPoints();
             StackMode eStackMode = getStackMode( nChartTypeIndex );
             const uno::Any aPropValue = uno::Any(
                 ( (eStackMode == StackMode::YStacked) ||
