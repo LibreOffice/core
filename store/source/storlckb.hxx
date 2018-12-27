@@ -22,16 +22,16 @@
 
 #include <sal/types.h>
 
-#include <rtl/ustring.h>
+#include <rtl/string.h>
 #include <rtl/ref.hxx>
 
 #include "object.hxx"
 #include "storbase.hxx"
-#include "storpage.hxx"
 
 namespace store
 {
 
+class OStorePageManager;
 struct OStoreDataPageData;
 struct OStoreDirectoryPageData;
 

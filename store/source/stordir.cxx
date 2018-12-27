@@ -23,11 +23,11 @@
 
 #include <rtl/textcvt.h>
 #include <rtl/ref.hxx>
+#include <rtl/ustring.h>
 
 #include <osl/mutex.hxx>
 
 #include <store/types.h>
-#include "object.hxx"
 
 #include "storbase.hxx"
 #include "stordata.hxx"
