@@ -124,8 +124,8 @@ private:
     sal_uInt8           mnCompressionType;
     sal_uInt8           mnFilterType;
     sal_uInt8           mnInterlaceType;
-    BitmapColor         mcTranspColor;  // transparency mask's transparency "color"
-    BitmapColor         mcOpaqueColor;  // transparency mask's opaque "color"
+    const BitmapColor   mcTranspColor;  // transparency mask's transparency "color"
+    const BitmapColor   mcOpaqueColor;  // transparency mask's opaque "color"
     bool                mbTransparent : 1;  // graphic includes an tRNS Chunk or an alpha Channel
     bool                mbAlphaChannel : 1; // is true for ColorType 4 and 6
     bool                mbRGBTriple : 1;
@@ -204,6 +204,8 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mnCompressionType( 0 ),
     mnFilterType    ( 0 ),
     mnInterlaceType ( 0 ),
+    mcOpaqueColor   ( BitmapColor( 0x00 )),
+    mcTranspColor   ( BitmapColor( 0xFF )),
     mbTransparent( false ),
     mbAlphaChannel( false ),
     mbRGBTriple( false ),
@@ -800,8 +802,6 @@ bool PNGReaderImpl::ImplReadTransparent()
         mbTransparent = (mpMaskAcc != nullptr);
         if( !mbTransparent )
             return false;
-        mcOpaqueColor = BitmapColor( 0x00 );
-        mcTranspColor = BitmapColor( 0xFF );
         mpMaskAcc->Erase( Color(0,0,0) );
     }
 
