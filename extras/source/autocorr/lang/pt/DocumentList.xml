@@ -85,6 +85,7 @@
 <block-list:block block-list:abbreviated-name="afrodesendente" block-list:name="afrodescendente"/>
 <block-list:block block-list:abbreviated-name="afrodesendentes" block-list:name="afrodescendentes"/>
 <block-list:block block-list:abbreviated-name="agaxar" block-list:name="agachar"/>
+<block-list:block block-list:abbreviated-name="ageitar" block-list:name="ajeitar"/>
 <block-list:block block-list:abbreviated-name="agrícula" block-list:name="agrícola"/>
 <block-list:block block-list:abbreviated-name="aguém" block-list:name="alguém"/>
 <block-list:block block-list:abbreviated-name="agunia" block-list:name="agonia"/>
@@ -391,6 +392,8 @@
 <block-list:block block-list:abbreviated-name="cassifos" block-list:name="cacifos"/>
 <block-list:block block-list:abbreviated-name="cataclisma" block-list:name="cataclismo"/>
 <block-list:block block-list:abbreviated-name="cataclismas" block-list:name="cataclismos"/>
+<block-list:block block-list:abbreviated-name="catastrofico" block-list:name="catastrófico"/>
+<block-list:block block-list:abbreviated-name="catastroficos" block-list:name="catastróficos"/>
 <block-list:block block-list:abbreviated-name="catra" block-list:name="carta"/>
 <block-list:block block-list:abbreviated-name="catrapácio" block-list:name="cartapácio"/>
 <block-list:block block-list:abbreviated-name="catras" block-list:name="cartas"/>
@@ -440,6 +443,11 @@
 <block-list:block block-list:abbreviated-name="charope" block-list:name="xarope"/>
 <block-list:block block-list:abbreviated-name="chatiado" block-list:name="chateado"/>
 <block-list:block block-list:abbreviated-name="chatiados" block-list:name="chateados"/>
+<block-list:block block-list:abbreviated-name="chatiar" block-list:name="chatear"/>
+<block-list:block block-list:abbreviated-name="chatiava" block-list:name="chateava"/>
+<block-list:block block-list:abbreviated-name="chatiavas" block-list:name="chateavas"/>
+<block-list:block block-list:abbreviated-name="chatisse" block-list:name="chatice"/>
+<block-list:block block-list:abbreviated-name="chatisses" block-list:name="chatices"/>
 <block-list:block block-list:abbreviated-name="chaveco" block-list:name="xaveco"/>
 <block-list:block block-list:abbreviated-name="chavecos" block-list:name="xavecos"/>
 <block-list:block block-list:abbreviated-name="cherife" block-list:name="xerife"/>
@@ -456,6 +464,8 @@
 <block-list:block block-list:abbreviated-name="cinseros" block-list:name="sinceros"/>
 <block-list:block block-list:abbreviated-name="cinsseridade" block-list:name="sinceridade"/>
 <block-list:block block-list:abbreviated-name="ckaro" block-list:name="claro"/>
+<block-list:block block-list:abbreviated-name="classico" block-list:name="clássico"/>
+<block-list:block block-list:abbreviated-name="classicos" block-list:name="clássicos"/>
 <block-list:block block-list:abbreviated-name="cliche" block-list:name="cliché"/>
 <block-list:block block-list:abbreviated-name="clorófila" block-list:name="clorofila"/>
 <block-list:block block-list:abbreviated-name="cmo" block-list:name="como"/>
@@ -501,8 +511,12 @@
 <block-list:block block-list:abbreviated-name="con" block-list:name="com"/>
 <block-list:block block-list:abbreviated-name="concertesa" block-list:name="com certeza"/>
 <block-list:block block-list:abbreviated-name="concerteza" block-list:name="com certeza"/>
+<block-list:block block-list:abbreviated-name="concluimos" block-list:name="concluímos"/>
+<block-list:block block-list:abbreviated-name="condeça" block-list:name="condessa"/>
+<block-list:block block-list:abbreviated-name="condeças" block-list:name="condessas"/>
 <block-list:block block-list:abbreviated-name="congreço" block-list:name="congresso"/>
 <block-list:block block-list:abbreviated-name="congreso" block-list:name="congresso"/>
+<block-list:block block-list:abbreviated-name="conhecêmos" block-list:name="conhecemos"/>
 <block-list:block block-list:abbreviated-name="conhecessemos" block-list:name="conhecêssemos"/>
 <block-list:block block-list:abbreviated-name="conhecidência" block-list:name="coincidência"/>
 <block-list:block block-list:abbreviated-name="conhecidências" block-list:name="coincidências"/>
@@ -988,6 +1002,7 @@
 <block-list:block block-list:abbreviated-name="ezercícios" block-list:name="exercícios"/>
 <block-list:block block-list:abbreviated-name="ezigente" block-list:name="exigente"/>
 <block-list:block block-list:abbreviated-name="ezigentes" block-list:name="exigentes"/>
+<block-list:block block-list:abbreviated-name="fáçamos" block-list:name="façamos"/>
 <block-list:block block-list:abbreviated-name="fachina" block-list:name="faxina"/>
 <block-list:block block-list:abbreviated-name="fácilmente" block-list:name="facilmente"/>
 <block-list:block block-list:abbreviated-name="faciu" block-list:name="fácil"/>
@@ -1014,6 +1029,7 @@
 <block-list:block block-list:abbreviated-name="fassa" block-list:name="faça"/>
 <block-list:block block-list:abbreviated-name="fassínio" block-list:name="fascínio"/>
 <block-list:block block-list:abbreviated-name="fasso" block-list:name="faço"/>
+<block-list:block block-list:abbreviated-name="faulha" block-list:name="faúlha"/>
 <block-list:block block-list:abbreviated-name="feiche" block-list:name="feixe"/>
 <block-list:block block-list:abbreviated-name="feiro" block-list:name="feito"/>
 <block-list:block block-list:abbreviated-name="feitisera" block-list:name="feiticeira"/>
@@ -1099,7 +1115,10 @@
 <block-list:block block-list:abbreviated-name="garsa" block-list:name="garça"/>
 <block-list:block block-list:abbreviated-name="garsas" block-list:name="garças"/>
 <block-list:block block-list:abbreviated-name="geito" block-list:name="jeito"/>
+<block-list:block block-list:abbreviated-name="geitosa" block-list:name="jeitosa"/>
+<block-list:block block-list:abbreviated-name="geitosas" block-list:name="jeitosas"/>
 <block-list:block block-list:abbreviated-name="gêlo" block-list:name="gelo"/>
+<block-list:block block-list:abbreviated-name="geneceu" block-list:name="gineceu"/>
 <block-list:block block-list:abbreviated-name="geneológica" block-list:name="genealógica"/>
 <block-list:block block-list:abbreviated-name="genjivas" block-list:name="gengivas"/>
 <block-list:block block-list:abbreviated-name="gibóia" block-list:name="jibóia"/>
@@ -1158,6 +1177,7 @@
 <block-list:block block-list:abbreviated-name="hidro viário" block-list:name="hidroviário"/>
 <block-list:block block-list:abbreviated-name="hidro viários" block-list:name="hidroviários"/>
 <block-list:block block-list:abbreviated-name="hidro vias" block-list:name="hidrovias"/>
+<block-list:block block-list:abbreviated-name="hidroterápia" block-list:name="hidroterapia"/>
 <block-list:block block-list:abbreviated-name="hierarqui" block-list:name="hierarquia"/>
 <block-list:block block-list:abbreviated-name="hirarquica" block-list:name="hierárquica"/>
 <block-list:block block-list:abbreviated-name="hifem" block-list:name="hífen"/>
@@ -1279,6 +1299,7 @@
 <block-list:block block-list:abbreviated-name="iso" block-list:name="isso"/>
 <block-list:block block-list:abbreviated-name="isot" block-list:name="isto"/>
 <block-list:block block-list:abbreviated-name="issu" block-list:name="isso"/>
+<block-list:block block-list:abbreviated-name="ítem" block-list:name="item"/>
 <block-list:block block-list:abbreviated-name="itenerário" block-list:name="itinerário"/>
 <block-list:block block-list:abbreviated-name="ítens" block-list:name="itens"/>
 <block-list:block block-list:abbreviated-name="itiqueta" block-list:name="etiqueta"/>
@@ -1292,6 +1313,8 @@
 <block-list:block block-list:abbreviated-name="jesticular" block-list:name="gesticular"/>
 <block-list:block block-list:abbreviated-name="jesto" block-list:name="gesto"/>
 <block-list:block block-list:abbreviated-name="jestos" block-list:name="gestos"/>
+<block-list:block block-list:abbreviated-name="jineceu" block-list:name="gineceu"/>
+<block-list:block block-list:abbreviated-name="jineceus" block-list:name="gineceus"/>
 <block-list:block block-list:abbreviated-name="juíz" block-list:name="juiz"/>
 <block-list:block block-list:abbreviated-name="júniores" block-list:name="juniores"/>
 <block-list:block block-list:abbreviated-name="junot" block-list:name="junto"/>
@@ -1379,6 +1402,7 @@
 <block-list:block block-list:abbreviated-name="masi" block-list:name="mais"/>
 <block-list:block block-list:abbreviated-name="mãso" block-list:name="mãos"/>
 <block-list:block block-list:abbreviated-name="matemáica" block-list:name="matemática"/>  
+<block-list:block block-list:abbreviated-name="matematizavel" block-list:name="matematizável"/>
 <block-list:block block-list:abbreviated-name="matéria prima" block-list:name="matéria-prima"/>
 <block-list:block block-list:abbreviated-name="matérias primas" block-list:name="matérias-primas"/>
 <block-list:block block-list:abbreviated-name="maximo" block-list:name="máximo"/>
