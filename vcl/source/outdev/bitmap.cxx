@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -643,6 +643,12 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
         // #i83087# Naturally, system alpha blending cannot work with
         // separate alpha VDev
+
+        // Not clear how the above comment relates to the following declaration and initialisation
+        // of bTryDirectPaint. Does bTryDirectPaint being true mean that we can use "system alpha
+        // blending"? Or that we can't? Or are the two not related at all, and should the above
+        // comment actually be better located below, before the "if (mpAlphaVDev)" test?
+
         bool bTryDirectPaint(!pDisableNative && !bHMirr && !bVMirr);
 
         if (bTryDirectPaint)
