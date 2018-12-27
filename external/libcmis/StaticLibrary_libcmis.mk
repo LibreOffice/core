@@ -13,21 +13,9 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,libcmis))
 
 ifeq ($(COM_IS_CLANG),TRUE)
 # Avoid narrowing conversion error (even though the option is technically a warning)
-# caused by boost, and avoid -Wdynamic-exception-spec errors.
+# caused by boost
 $(eval $(call gb_StaticLibrary_add_cxxflags,libcmis,\
     -Wno-error=c++11-narrowing \
-    -Wno-error=dynamic-exception-spec \
-))
-endif
-
-# Build as C++14 if necessary to avoid GCC C++17 "error: ISO C++1z does not
-# allow dynamic exception specifications", until upstream libcmis is ported to
-# C++17:
-ifeq ($(COM)-$(COM_IS_CLANG),GCC-)
-$(eval $(call gb_StaticLibrary_add_cxxflags,libcmis, \
-    $(if $(filter -std=gnu++2a -std=c++2a -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
-            $(CXXFLAGS_CXX11)), \
-        -std=gnu++14) \
 ))
 endif
 
@@ -36,6 +24,7 @@ $(eval $(call gb_StaticLibrary_add_defs,libcmis, \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,libcmis, \
+    -I$(call gb_UnpackedTarball_get_dir,libcmis/inc) \
     -I$(call gb_UnpackedTarball_get_dir,libcmis/src/libcmis) \
     $$(INCLUDE) \
 ))
