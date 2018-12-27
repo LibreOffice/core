@@ -1247,7 +1247,7 @@ bool SwFlowFrame::HasParaSpaceAtPages( bool bSct ) const
                 ( pTmp->IsFootnoteFrame() && !static_cast<const SwFootnoteFrame*>(pTmp)->GetMaster() ) )
                 return true;
             if( pTmp->IsPageFrame() )
-                return !( pTmp->GetPrev() && !IsPageBreak(true) );
+                return !pTmp->GetPrev() || IsPageBreak(true);
             if( pTmp->IsColumnFrame() && pTmp->GetPrev() )
                 return IsColBreak( true );
             if( pTmp->IsSctFrame() && ( !bSct || pTmp->GetPrev() ) )
