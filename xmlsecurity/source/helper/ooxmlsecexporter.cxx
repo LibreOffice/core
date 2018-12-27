@@ -16,7 +16,6 @@
 #include <com/sun/star/beans/StringPair.hpp>
 
 #include <comphelper/ofopxmlhelper.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <svx/xoutbmp.hxx>
@@ -26,6 +25,8 @@
 
 #include <documentsignaturehelper.hxx>
 #include <xsecctl.hxx>
+
+#include <memory>
 
 using namespace com::sun::star;
 using namespace css::xml::sax;
@@ -463,7 +464,7 @@ OOXMLSecExporter::OOXMLSecExporter(const uno::Reference<uno::XComponentContext>&
                                    const uno::Reference<embed::XStorage>& xRootStorage,
                                    const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
                                    const SignatureInformation& rInformation)
-    : m_pImpl(o3tl::make_unique<Impl>(xComponentContext, xRootStorage, xDocumentHandler, rInformation))
+    : m_pImpl(std::make_unique<Impl>(xComponentContext, xRootStorage, xDocumentHandler, rInformation))
 {
 }
 
