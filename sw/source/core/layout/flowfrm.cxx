@@ -1248,8 +1248,10 @@ bool SwFlowFrame::HasParaSpaceAtPages( bool bSct ) const
                 return true;
             if( pTmp->IsPageFrame() )
                 return !pTmp->GetPrev() || IsPageBreak(true);
+            if( pTmp->IsColumnFrame() && IsColBreak(true) )
+                return !bSct;
             if( pTmp->IsColumnFrame() && pTmp->GetPrev() )
-                return IsColBreak( true );
+                return false;
             if( pTmp->IsSctFrame() && ( !bSct || pTmp->GetPrev() ) )
                 return false;
             pTmp = pTmp->GetUpper();
