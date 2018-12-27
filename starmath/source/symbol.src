@@ -23,12 +23,6 @@
 
 #include <starmath.hrc>
 
-
-/////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////
-
 Resource RID_LOCALIZED_NAMES
 {
     StringArray RID_FRENCH_50_NAMES
@@ -187,11 +181,11 @@ Resource RID_LOCALIZED_NAMES
     };
     StringArray RID_UI_SYMBOLSET_NAMES
     {
-    ItemList [ en-US ] =
-    {
-             < "Greek" ; > ;
-        < "Special" ; > ;
-    };
+        ItemList [ en-US ] =
+        {
+            < "Greek" ; > ;
+            < "Special" ; > ;
+        };
     };
 
     StringArray RID_EXPORT_SYMBOL_NAMES
@@ -268,74 +262,74 @@ Resource RID_LOCALIZED_NAMES
     };
     StringArray RID_UI_SYMBOL_NAMES
     {
-    ItemList [ en-US ] =
-    {
-        < "alpha" ; > ;
-        < "ALPHA" ; > ;
-        < "beta" ; > ;
-        < "BETA" ; > ;
-        < "gamma" ; > ;
-        < "GAMMA" ; > ;
-        < "delta" ; > ;
-        < "DELTA" ; > ;
-        < "epsilon" ; > ;
-        < "EPSILON" ; > ;
-        < "zeta" ; > ;
-        < "ZETA" ; > ;
-        < "eta" ; > ;
-        < "ETA" ; > ;
-        < "theta" ; > ;
-        < "THETA" ; > ;
-        < "iota" ; > ;
-        < "IOTA" ; > ;
-        < "kappa" ; > ;
-        < "KAPPA" ; > ;
-        < "lambda" ; > ;
-        < "LAMBDA" ; > ;
-        < "mu" ; > ;
-        < "MU" ; > ;
-        < "nu" ; > ;
-        < "NU" ; > ;
-        < "xi" ; > ;
-        < "XI" ; > ;
-        < "omicron" ; > ;
-        < "OMICRON" ; > ;
-        < "pi" ; > ;
-        < "PI" ; > ;
-        < "rho" ; > ;
-        < "RHO" ; > ;
-        < "sigma" ; > ;
-        < "SIGMA" ; > ;
-        < "tau" ; > ;
-        < "TAU" ; > ;
-        < "upsilon" ; > ;
-        < "UPSILON" ; > ;
-        < "phi" ; > ;
-        < "PHI" ; > ;
-        < "chi" ; > ;
-        < "CHI" ; > ;
-        < "psi" ; > ;
-        < "PSI" ; > ;
-        < "omega" ; > ;
-        < "OMEGA" ; > ;
-        < "varepsilon" ; > ;
-        < "vartheta" ; > ;
-        < "varpi" ; > ;
-        < "varrho" ; > ;
-        < "varsigma" ; > ;
-        < "varphi" ; > ;
-        < "element" ; > ;
-        < "noelement" ; > ;
-        < "strictlylessthan" ; > ;
-        < "strictlygreaterthan" ; > ;
-        < "notequal" ; > ;
-        < "identical" ; > ;
-        < "tendto" ; > ;
-        < "infinite" ; > ;
-        < "angle" ; > ;
-        < "perthousand" ; > ;
-        < "and" ; > ;
-        < "or" ; > ;
-    };
+        ItemList [ en-US ] =
+        {
+            < "alpha" ; > ;
+            < "ALPHA" ; > ;
+            < "beta" ; > ;
+            < "BETA" ; > ;
+            < "gamma" ; > ;
+            < "GAMMA" ; > ;
+            < "delta" ; > ;
+            < "DELTA" ; > ;
+            < "epsilon" ; > ;
+            < "EPSILON" ; > ;
+            < "zeta" ; > ;
+            < "ZETA" ; > ;
+            < "eta" ; > ;
+            < "ETA" ; > ;
+            < "theta" ; > ;
+            < "THETA" ; > ;
+            < "iota" ; > ;
+            < "IOTA" ; > ;
+            < "kappa" ; > ;
+            < "KAPPA" ; > ;
+            < "lambda" ; > ;
+            < "LAMBDA" ; > ;
+            < "mu" ; > ;
+            < "MU" ; > ;
+            < "nu" ; > ;
+            < "NU" ; > ;
+            < "xi" ; > ;
+            < "XI" ; > ;
+            < "omicron" ; > ;
+            < "OMICRON" ; > ;
+            < "pi" ; > ;
+            < "PI" ; > ;
+            < "rho" ; > ;
+            < "RHO" ; > ;
+            < "sigma" ; > ;
+            < "SIGMA" ; > ;
+            < "tau" ; > ;
+            < "TAU" ; > ;
+            < "upsilon" ; > ;
+            < "UPSILON" ; > ;
+            < "phi" ; > ;
+            < "PHI" ; > ;
+            < "chi" ; > ;
+            < "CHI" ; > ;
+            < "psi" ; > ;
+            < "PSI" ; > ;
+            < "omega" ; > ;
+            < "OMEGA" ; > ;
+            < "varepsilon" ; > ;
+            < "vartheta" ; > ;
+            < "varpi" ; > ;
+            < "varrho" ; > ;
+            < "varsigma" ; > ;
+            < "varphi" ; > ;
+            < "element" ; > ;
+            < "noelement" ; > ;
+            < "strictlylessthan" ; > ;
+            < "strictlygreaterthan" ; > ;
+            < "notequal" ; > ;
+            < "identical" ; > ;
+            < "tendto" ; > ;
+            < "infinite" ; > ;
+            < "angle" ; > ;
+            < "perthousand" ; > ;
+            < "and" ; > ;
+            < "or" ; > ;
+        };
     };
 };
