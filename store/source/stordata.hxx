@@ -25,14 +25,16 @@
 #include <memory>
 
 #include <sal/types.h>
-#include <sal/macros.h>
 #include <rtl/string.h>
 
 #include <store/types.h>
 #include "storbase.hxx"
+#include <string.h>
 
 namespace store
 {
+
+class OStorePageBIOS;
 
 constexpr sal_uInt32 STORE_MAGIC_DATAPAGE(0x94190310);
 

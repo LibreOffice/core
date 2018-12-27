@@ -25,18 +25,14 @@
 
 #include <sal/types.h>
 
-#include <rtl/alloc.h>
 #include <rtl/crc.h>
 #include <rtl/ref.hxx>
 
 #include <osl/diagnose.h>
-#include <osl/endian.h>
 
 #include <store/types.h>
 
 #include <memory>
-#include <stddef.h>
-#include <string.h>
 #include <utility>
 
 /** @file store common internals.
@@ -517,8 +513,6 @@ public:
         return pImpl->verify();
     }
 };
-
-class OStorePageBIOS;
 
 class OStorePageObject
 {

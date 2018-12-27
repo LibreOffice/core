@@ -28,11 +28,11 @@
 
 #include "object.hxx"
 #include "storbase.hxx"
-#include "storpage.hxx"
 
 namespace store
 {
 
+class OStorePageManager;
 struct OStoreDirectoryPageData;
 
 class OStoreDirectory_Impl : public store::OStoreObject
