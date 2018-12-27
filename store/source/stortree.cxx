@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <string.h>
 
 #include "stortree.hxx"
 
