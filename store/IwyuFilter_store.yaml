@@ -1,0 +1,17 @@
+---
+assumeFilename: store/source/storbase.cxx
+blacklist:
+    store/source/storbase.hxx:
+    # Needed for OSL_BIGENDIAN macro
+    - osl/endian.h
+    store/source/stordir.hxx:
+    # Checking other file gives this
+    - namespace store { struct OStoreDirectoryPageData; }
+    store/source/storlckb.hxx:
+    # Checking other file gives this
+    - namespace store { struct OStoreDataPageData; }
+    - namespace store { struct OStoreDirectoryPageData; }
+    store/source/storpage.hxx:
+    # Checking other file gives this
+    - namespace store { struct OStoreDirectoryPageData; }
+    - namespace store { class OStoreDirectoryPageObject; }
