@@ -230,12 +230,12 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
     if ( !aUserData.isEmpty() )
     {
         HeaderBar &rBar = m_pPathBox->GetTheHeaderBar();
-
+        sal_Int32 nIdx {0};
         // restore column width
-        rBar.SetItemSize( ITEMID_TYPE, aUserData.getToken(0, ';').toInt32() );
+        rBar.SetItemSize( ITEMID_TYPE, aUserData.getToken(0, ';', nIdx).toInt32() );
         HeaderEndDrag_Impl( &rBar );
         // restore sort direction
-        bool bUp = aUserData.getToken(1, ';').toInt32() != 0;
+        bool bUp = aUserData.getToken(0, ';', nIdx).toInt32() != 0;
         HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
