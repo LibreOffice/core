@@ -36,7 +36,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-
+#include <stdio.h>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -416,6 +416,8 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
 
 void ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagram )
 {
+    //Getting the default ColorSchemes
+    Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
     // apply chart-type specific styles, like "symbols on" for example
     Sequence< Sequence< Reference< XDataSeries > > > aNewSeriesSeq(
         DiagramHelper::getDataSeriesGroups( xDiagram ));
@@ -423,7 +425,44 @@ void ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagr
     {
         const sal_Int32 nNumSeries = aNewSeriesSeq[i].getLength();
         for( sal_Int32 j=0; j<nNumSeries; ++j )
+        {
+            //this will reset the colors of the Column or Bubble charts tdf#108080
+            OUString aChartTypeName = getChartTypeForIndex(i)->getChartType();
+            if( aChartTypeName != "com.sun.star.chart2.PieChartType" )
+                {
+                    Reference< beans::XPropertySet > xProp( aNewSeriesSeq[i][j], uno::UNO_QUERY_THROW );
+                    //get AttributedDataPoints
+                    uno::Sequence< sal_Int32 > DataPointIndexList;
+                    xProp->getPropertyValue( "AttributedDataPoints" ) >>= DataPointIndexList ;
+                    sal_Int32 CustomDataPoints[ DataPointIndexList.getLength() ];
+                    for(sal_Int32 k=0; k<DataPointIndexList.getLength();k++)
+                    {
+                         uno::Reference<beans::XPropertySet> xPropDP(aNewSeriesSeq[i][j]->getDataPointByIndex(DataPointIndexList[k]), uno::UNO_QUERY_THROW);
+                         if(xPropDP.is())
+                        {
+                                   sal_Int32 nBackgroundColorofDataSeries;
+                                   sal_Int32 nBackgroundColorofDatapoint;
+                                   xProp->getPropertyValue("FillColor") >>= nBackgroundColorofDataSeries;
+                                   xPropDP->getPropertyValue("FillColor") >>= nBackgroundColorofDatapoint;
+                                   xPropDP->setPropertyValue("FillColor", uno::Any(xColorScheme->getColorByIndex( DataPointIndexList[j]) ) );
+                                   if ( nBackgroundColorofDataSeries != nBackgroundColorofDatapoint && xColorScheme->getColorByIndex( DataPointIndexList[k]) != nBackgroundColorofDatapoint )
+                                        CustomDataPoints[k] = nBackgroundColorofDatapoint;
+                                   else CustomDataPoints[k] = NULL;
+                        }
+                    }
+                    for(sal_Int32 k=0; k<DataPointIndexList.getLength();k++)
+                    {
+                         uno::Reference<beans::XPropertySet> xPropDP( aNewSeriesSeq[i][j]->getDataPointByIndex( DataPointIndexList[k] ), uno::UNO_QUERY_THROW);
+                         if(xPropDP.is())
+                        {
+                             xPropDP->setPropertyValue("FillColor", uno::Any(xColorScheme->getColorByIndex( DataPointIndexList[j]) ) );
+                            if(CustomDataPoints[k]!=NULL)
+                             xPropDP->setPropertyValue("FillColor", uno::Any(CustomDataPoints[k]) );
+                        }
+                    }
+                }
             applyStyle( aNewSeriesSeq[i][j], i, j, nNumSeries );
+        }
     }
 
     //ensure valid empty cell handling (for first chart type...)
