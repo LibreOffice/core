@@ -277,7 +277,10 @@ void Qt5Menu::CheckItem(unsigned nPos, bool bChecked)
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nPos);
         QAction* pAction = pSalMenuItem->getAction();
         if (pAction)
+        {
+            pAction->setCheckable(true);
             pAction->setChecked(bChecked);
+        }
     }
 }
 
