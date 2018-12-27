@@ -51,6 +51,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;
@@ -582,6 +583,16 @@ awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
 //XPropertyState
 beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OUString& rPropertyName )
 {
+  /*
+  if( rPropertyName == "FillColor" )
+        {
+   SAL_DEBUG("----getPropertyState    "<<rPropertyName);
+     Reference< chart2::XDiagram > xDiag( m_spChart2ModelContact->getChart2Diagram() );
+    Reference< chart2::XChartType > xChartType3( DiagramHelper::getChartTypeOfSeries( xDiag, getDataSeries()) );
+              OUString aChartTypeName3 = xChartType3->getChartType();
+                            SAL_DEBUG("---- VARY CHType: "<<aChartTypeName3);
+                          }
+                          */
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
     try
     {
@@ -816,28 +827,55 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
 
 Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rPropertyName )
 {
-    if( m_eType == DATA_POINT )
+
+    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    if( xDiagram.is() )
     {
-        if( rPropertyName == "FillColor" )
-        {
-            Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
-            bool bVaryColorsByPoint = false;
-            if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
-                && bVaryColorsByPoint )
+        Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, getDataSeries()) );
+        OUString aChartTypeName = xChartType->getChartType();
+        if( m_eType == DATA_POINT )
             {
-                uno::Reference< beans::XPropertyState > xPointState( DataSeriesPointWrapper::getDataPointProperties(), uno::UNO_QUERY );
-                if( xPointState.is() && xPointState->getPropertyState("Color") == beans::PropertyState_DEFAULT_VALUE )
-                {
-                    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-                    if( xDiagram.is() )
-                    {
-                        Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
-                        if( xColorScheme.is() )
-                            return uno::Any( xColorScheme->getColorByIndex( m_nPointIndex ) );
-                    }
-                }
+              if( rPropertyName == "FillColor" )
+                  {
+                    Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
+                    bool bVaryColorsByPoint = false;
+                    if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
+                        && bVaryColorsByPoint && aChartTypeName != "com.sun.star.chart2.ColumnChartType" )
+                        {
+                          uno::Reference< beans::XPropertyState > xPointState( DataSeriesPointWrapper::getDataPointProperties(), uno::UNO_QUERY );
+                          if( xPointState.is() && xPointState->getPropertyState("Color") == beans::PropertyState_DEFAULT_VALUE )
+                              {
+                                Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
+                                if( xColorScheme.is() )
+                                    return uno::Any( xColorScheme->getColorByIndex( m_nPointIndex ) );
+                              }
+                        }
+                        else
+                        {
+                          uno::Sequence< sal_Int32 > DataPointIndexList;
+                          Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
+                          if( xColorScheme.is() )
+                              {
+                                if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= DataPointIndexList )
+                                    {
+                                      if( m_nPointIndex >-1 && m_nPointIndex < DataPointIndexList.getLength() )
+                                          {
+                                            uno::Reference<beans::XPropertySet> xPropDP(getDataSeries()->getDataPointByIndex(m_nPointIndex), uno::UNO_QUERY_THROW);
+                                            if( xPropDP.is() )
+                                                {
+                                                  if ( !( xPropDP->getPropertyValue("FillColor") != xSeriesProp->getPropertyValue("FillColor")
+                                                       && xPropDP->getPropertyValue("FillColor") != xColorScheme->getColorByIndex( m_nPointIndex ) ))
+                                                              {
+                                                                xPropDP->setPropertyValue("FillColor", uno::Any( xSeriesProp->getPropertyValue("FillColor") ) );
+                                                                return uno::Any( xSeriesProp->getPropertyValue("FillColor") );
+                                                              }
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+                  }
             }
-        }
     }
     return WrappedPropertySet::getPropertyValue( rPropertyName );
 }
