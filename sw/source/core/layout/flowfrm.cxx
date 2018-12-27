@@ -1248,8 +1248,18 @@ bool SwFlowFrame::HasParaSpaceAtPages( bool bSct ) const
                 return true;
             if( pTmp->IsPageFrame() )
                 return !pTmp->GetPrev() || IsPageBreak(true);
-            if( pTmp->IsColumnFrame() && pTmp->GetPrev() )
-                return IsColBreak( true );
+            if( pTmp->IsColumnFrame() )
+            {
+                if ( IsColBreak(true) )  // column break in any column
+                    return !bSct;
+                else if ( pTmp->GetPrev() ) // non-first columns without a column break
+                    return false;
+                else if ( IsPageBreak(true) ) // page break same as column break for first column
+                    return !bSct;
+                // first column in a section
+                else if ( pTmp->GetUpper() && pTmp->GetUpper()->IsSctFrame() && !static_cast<const SwSectionFrame*>(pTmp->GetUpper())->GetPrecede() )
+                    return !bSct;
+            }
             if( pTmp->IsSctFrame() && ( !bSct || pTmp->GetPrev() ) )
                 return false;
             pTmp = pTmp->GetUpper();

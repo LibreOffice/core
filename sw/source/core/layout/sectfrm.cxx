@@ -1342,7 +1342,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
     {
         PROTOCOL( this, PROT::PrintArea, DbgAction::NONE, nullptr )
         setFramePrintAreaValid(true);
-        SwTwips nUpper = CalcUpperSpace();
+        SwTwips nUpper = 0;
 
         // #109700# LRSpace for sections
         const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
