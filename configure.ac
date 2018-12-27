@@ -3475,14 +3475,8 @@ if test "$_os" = "WINNT"; then
     dnl Save the true MSVC cl.exe for use when CC/CXX is actually clang-cl,
     dnl needed when building CLR code:
     if test -z "$MSVC_CXX"; then
-        if test "$BITNESS_OVERRIDE" = ""; then
-            if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
-                MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
-            fi
-        else
-            if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
-                MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
-            fi
+        if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
+            MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
         fi
 
         # This gives us a posix path with 8.3 filename restrictions
