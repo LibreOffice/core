@@ -816,29 +816,51 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
 
 Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rPropertyName )
 {
-    if( m_eType == DATA_POINT )
-    {
-        if( rPropertyName == "FillColor" )
+    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+        if( xDiagram.is() )
         {
-            Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
-            bool bVaryColorsByPoint = false;
-            if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
-                && bVaryColorsByPoint )
+            Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, getDataSeries()) );
+            OUString aChartTypeName = xChartType->getChartType();
+            Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
+            if( xColorScheme.is() )
             {
-                uno::Reference< beans::XPropertyState > xPointState( DataSeriesPointWrapper::getDataPointProperties(), uno::UNO_QUERY );
-                if( xPointState.is() && xPointState->getPropertyState("Color") == beans::PropertyState_DEFAULT_VALUE )
+                if( m_eType == DATA_POINT )
                 {
-                    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-                    if( xDiagram.is() )
+                    if( rPropertyName == "FillColor" )
                     {
-                        Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
-                        if( xColorScheme.is() )
-                            return uno::Any( xColorScheme->getColorByIndex( m_nPointIndex ) );
+                        Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
+                        bool bVaryColorsByPoint = false;
+                        if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
+                            && bVaryColorsByPoint && aChartTypeName != "com.sun.star.chart2.ColumnChartType" )
+                        {
+                            uno::Reference< beans::XPropertyState > xPointState( DataSeriesPointWrapper::getDataPointProperties(), uno::UNO_QUERY );
+                            if( xPointState.is() && xPointState->getPropertyState("Color") == beans::PropertyState_DEFAULT_VALUE )
+                                return uno::Any( xColorScheme->getColorByIndex( m_nPointIndex ) );
+                        }
+                        else
+                        {
+                            uno::Sequence< sal_Int32 > DataPointIndexList;
+                            if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= DataPointIndexList )
+                            {
+                                if( m_nPointIndex >-1 && m_nPointIndex < DataPointIndexList.getLength() )
+                                {
+                                    uno::Reference<beans::XPropertySet> xPropDP(getDataSeries()->getDataPointByIndex(m_nPointIndex), uno::UNO_QUERY_THROW);
+                                    if( xPropDP.is() )
+                                    {
+                                        if ( !( xPropDP->getPropertyValue("FillColor") != xSeriesProp->getPropertyValue("FillColor")
+                                             && xPropDP->getPropertyValue("FillColor") != xColorScheme->getColorByIndex( m_nPointIndex ) ))
+                                        {
+                                            xPropDP->setPropertyValue("FillColor", uno::Any( xSeriesProp->getPropertyValue("FillColor") ) );
+                                                     return uno::Any( xSeriesProp->getPropertyValue("FillColor") );
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-    }
     return WrappedPropertySet::getPropertyValue( rPropertyName );
 }
 
