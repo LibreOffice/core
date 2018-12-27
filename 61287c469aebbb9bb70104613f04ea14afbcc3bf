@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "5f4e5783_b8af2193",
+        "filename": "vcl/win/gdi/raii.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001994
+      },
+      "writtenOn": "2018-12-27T09:46:56Z",
+      "side": 1,
+      "message": "As discussed privately:\n\n* using function pointer increase the unique_ptr size [1].\n* raii.hxx will be renamed to scoped_gdi.hxx.\n* HBRUSHUniquePtr will be renamed to ScopedHBRUSH.\n\n[1] http://coliru.stacked-crooked.com/a/fba00470515f857b",
+      "parentUuid": "5f4e5783_ddb1afe3",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "61287c469aebbb9bb70104613f04ea14afbcc3bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4e5783_9dcb3752",
         "filename": "vcl/win/gdi/raii.hxx",
         "patchSetId": 19
