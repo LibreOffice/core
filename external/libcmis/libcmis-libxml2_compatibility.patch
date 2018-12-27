@@ -9,6 +9,6 @@
 +#define HTML_PARSE_RECOVER 0
 +#endif
 +
- string OAuth2Providers::OAuth2Gdrive( HttpSession* session, const string& authUrl,
-                                       const string& username, const string& password )
- {
+ namespace {
+ 
+ // Encodes the given data according to the application/x-www-form-urlencoded format, see

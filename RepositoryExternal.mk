@@ -678,7 +678,7 @@ else # !SYSTEM_LIBCMIS
 
 define gb_LinkTarget__use_libcmis
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,libcmis)/src \
+	-I$(call gb_UnpackedTarball_get_dir,libcmis)/inc \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\

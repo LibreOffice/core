@@ -1,0 +1,69 @@
+From 219e6d6586c8280dfd9c4851cee0d14d68b6ad65 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Fri, 28 Dec 2018 15:26:28 +0100
+Subject: [PATCH] rename class GetObject to avoid name clash on Windows
+
+---
+ src/libcmis/ws-objectservice.cxx | 2 +-
+ src/libcmis/ws-requests.cxx      | 2 +-
+ src/libcmis/ws-requests.hxx      | 7 +++----
+ 3 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/src/libcmis/ws-objectservice.cxx b/src/libcmis/ws-objectservice.cxx
+index 9e40085..d57f3cc 100644
+--- a/src/libcmis/ws-objectservice.cxx
++++ b/src/libcmis/ws-objectservice.cxx
+@@ -71,7 +71,7 @@ libcmis::ObjectPtr ObjectService::getObject( string repoId, string id )
+ {
+     libcmis::ObjectPtr object;
+ 
+-    class GetObject request( repoId, id );
++    GetObjectRequest request( repoId, id );
+     vector< SoapResponsePtr > responses = m_session->soapRequest( m_url, request );
+     if ( responses.size( ) == 1 )
+     {
+diff --git a/src/libcmis/ws-requests.cxx b/src/libcmis/ws-requests.cxx
+index f8bc245..408d053 100644
+--- a/src/libcmis/ws-requests.cxx
++++ b/src/libcmis/ws-requests.cxx
+@@ -269,7 +269,7 @@ SoapResponsePtr GetTypeChildrenResponse::create( xmlNodePtr node, RelatedMultipa
+     return SoapResponsePtr( response );
+ }
+ 
+-void GetObject::toXml( xmlTextWriterPtr writer )
++void GetObjectRequest::toXml( xmlTextWriterPtr writer )
+ {
+     xmlTextWriterStartElement( writer, BAD_CAST( "cmism:getObject" ) );
+     xmlTextWriterWriteAttribute( writer, BAD_CAST( "xmlns:cmis" ), BAD_CAST( NS_CMIS_URL ) );
+diff --git a/src/libcmis/ws-requests.hxx b/src/libcmis/ws-requests.hxx
+index 2c4ae92..534d9a4 100644
+--- a/src/libcmis/ws-requests.hxx
++++ b/src/libcmis/ws-requests.hxx
+@@ -203,21 +203,20 @@ class GetTypeChildrenResponse : public SoapResponse
+         std::vector< libcmis::ObjectTypePtr > getChildren( ) { return m_children; }
+ };
+ 
+-#undef GetObject
+-class GetObject : public SoapRequest
++class GetObjectRequest : public SoapRequest
+ {
+     private:
+         std::string m_repositoryId;
+         std::string m_id;
+ 
+     public:
+-        GetObject( std::string repoId, std::string id ) :
++        GetObjectRequest( std::string repoId, std::string id ) :
+             m_repositoryId( repoId ),
+             m_id( id )
+         {
+         }
+ 
+-        ~GetObject( ) { }
++        ~GetObjectRequest( ) { }
+ 
+         void toXml( xmlTextWriterPtr writer );
+ };
+-- 
+2.19.2
+

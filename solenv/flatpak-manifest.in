@@ -200,10 +200,10 @@
                     "dest-filename": "external/tarballs/libcdr-0.1.4.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libcmis-0.5.1.tar.gz",
-                    "sha256": "6acbdf22ecdbaba37728729b75bfc085ee5a4b49a6024757cfb86ccd3da27b0e",
+                    "url": "https://dev-www.libreoffice.org/src/libcmis-0.5.2.tar.xz",
+                    "sha256": "d7b18d9602190e10d437f8a964a32e983afd57e2db316a07d87477a79f5000a2",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libcmis-0.5.1.tar.gz"
+                    "dest-filename": "external/tarballs/libcmis-0.5.2.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libe-book-0.1.3.tar.xz",
