@@ -28,11 +28,10 @@
 #include <osl/diagnose.h>
 
 #include <store/types.h>
-#include "object.hxx"
 #include "storbase.hxx"
 
 #include <memory>
-#include <stddef.h>
+#include <string.h>
 
 using namespace store;
 
