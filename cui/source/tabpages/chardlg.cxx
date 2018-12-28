@@ -2682,10 +2682,11 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
 
     if ( !sUser.isEmpty() )
     {
-        m_nSuperEsc = static_cast<short>(sUser.getToken( 0, ';' ).toInt32());
-        m_nSubEsc = static_cast<short>(sUser.getToken( 1, ';' ).toInt32());
-        m_nSuperProp = static_cast<sal_uInt8>(sUser.getToken( 2, ';' ).toInt32());
-        m_nSubProp = static_cast<sal_uInt8>(sUser.getToken( 3, ';' ).toInt32());
+        sal_Int32 nIdx {0};
+        m_nSuperEsc = static_cast<short>(sUser.getToken( 0, ';', nIdx ).toInt32());
+        m_nSubEsc = static_cast<short>(sUser.getToken( 0, ';', nIdx ).toInt32());
+        m_nSuperProp = static_cast<sal_uInt8>(sUser.getToken( 0, ';', nIdx ).toInt32());
+        m_nSubProp = static_cast<sal_uInt8>(sUser.getToken( 0, ';', nIdx ).toInt32());
 
         //fdo#75307 validate all the entries and discard all of them if any are
         //out of range
