@@ -3600,6 +3600,28 @@ if test "$_os" = "WINNT"; then
     # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
     AC_SUBST(CXX_X64_BINARY)
     AC_SUBST(LINK_X64_BINARY)
+
+    BUILD_X86=
+    CXX_X86_BINARY=
+    LINK_X86_BINARY=
+
+    if test "$BITNESS_OVERRIDE" = "64"; then
+        AC_MSG_CHECKING([for a x86 compiler and libraries for 32-bit binaries required for TWAIN support])
+        if "$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe" -? </dev/null >/dev/null 2>&1; then
+            BUILD_X86=TRUE
+            CXX_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/cl.exe -arch:SSE"
+            LINK_X86_BINARY="$VC_PRODUCT_DIR/Tools/MSVC/$vcbuildnumber/bin/HostX86/x86/link.exe"
+            AC_MSG_RESULT([found])
+        else
+            AC_MSG_RESULT([not found])
+            AC_MSG_WARN([Installation set will not contain 32-bit binaries required for TWAIN support])
+        fi
+    fi
+    AC_SUBST(BUILD_X86)
+
+    # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
+    AC_SUBST(CXX_X86_BINARY)
+    AC_SUBST(LINK_X86_BINARY)
 fi
 AC_SUBST(VCVER)
 AC_SUBST(DEVENV)

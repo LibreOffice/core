@@ -13,10 +13,6 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,twain_dsm,\
     UnpackedTarball_twain_dsm \
-    $(if $(filter X86_64,$(CPUNAME)), \
-        ExternalProject_twain_dsm \
-        ExternalPackage_twain_dsm \
-    ) \
 ))
 
 endif

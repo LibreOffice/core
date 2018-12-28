@@ -20,6 +20,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	$(if $(filter WNT,$(OS)),Library_WinUserInfoBe) \
 	Library_log \
 	Library_scn \
+	$(if $(filter WNT,$(OS)),Executable_twain32shim) \
 	UIConfig_sabpilot \
 	UIConfig_scanner \
 ))

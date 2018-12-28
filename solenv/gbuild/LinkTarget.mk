@@ -711,6 +711,7 @@ $(WORKDIR)/Headers/% :
 # - TARGETTYPE is the type of linktarget as some platforms need very different
 #   command to link different targettypes.
 # - LIBRARY_X64 is only relevant for building a x64 library on windows.
+# - PE_X86 is only relevant for building a x86 binaries on Windows.
 #
 # Since most variables are set on the linktarget and not on the object, the
 # object learns about these setting via GNU makes scoping of target variables.
@@ -780,6 +781,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJNOEX :=
+$(call gb_LinkTarget_get_target,$(1)) : PE_X86 :=
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : TARGETGUI :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
@@ -1432,6 +1434,12 @@ endef
 # call gb_LinkTarget_set_x64,linktarget,boolean
 define gb_LinkTarget_set_x64
 $(call gb_LinkTarget_get_target,$(1)) : LIBRARY_X64 := $(2)
+
+endef
+
+# call gb_LinkTarget_set_x86,linktarget,boolean
+define gb_LinkTarget_set_x86
+$(call gb_LinkTarget_get_target,$(1)) : PE_X86 := $(2)
 
 endef
 
