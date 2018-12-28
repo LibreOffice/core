@@ -160,8 +160,7 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
         {
             Reference< XContent > xContent;
             OUString sName = xId->getContentIdentifier();
-            sal_Int32 nIndex = sName.lastIndexOf('/') + 1;
-            sName = sName.getToken(0,'/',nIndex);
+            sName = sName.copy(sName.lastIndexOf('/')+1);
 
             m_pImpl->m_aResults[ _nIndex ]->xContent = m_pImpl->m_xContent->getContent(sName);
 
