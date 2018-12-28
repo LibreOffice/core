@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_831e360a",
+        "filename": "sc/inc/stringutil.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-12-28T12:30:48Z",
+      "side": 0,
+      "message": "Does it mean it\u0027s in public API and so shouldn\u0027t be removed?",
+      "range": {
+        "startLine": 154,
+        "startChar": 21,
+        "endLine": 154,
+        "endChar": 33
+      },
+      "revId": "c314cc9f66f91caf61b8e5ca8f58844c8be38ec7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
