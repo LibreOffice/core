@@ -105,9 +105,7 @@ void OApplicationController::convertToView(const OUString& _sName)
 
         Reference< XDatabaseMetaData  > xMeta = xConnection->getMetaData();
 
-        OUString aName = DBA_RES(STR_TBL_TITLE);
-        aName = aName.getToken(0,' ');
-        OUString aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
+        const OUString aDefaultName = ::dbaui::createDefaultName(xMeta, xTables, DBA_RES(STR_TBL_TITLE).getToken(0, ' '));
 
         DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
         ScopedVclPtrInstance< OSaveAsDlg > aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker, SADFlags::NONE );
