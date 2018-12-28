@@ -120,6 +120,7 @@ gb_Executable_add_defs = $(call gb_Executable__forward_to_Linktarget,$(subst gb_
 gb_Executable_set_include = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
 gb_Executable_add_ldflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
 gb_Executable_set_ldflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_set_x86 = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
 gb_Executable_add_libs = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
 gb_Executable_disable_standard_system_libs = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
 gb_Executable_use_system_darwin_frameworks = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))

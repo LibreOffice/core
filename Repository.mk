@@ -151,6 +151,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 		unoinfo \
 		unopkg \
 		unopkg_com \
+		twain32shim \
 	) \
 ))
 
@@ -957,7 +958,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	)) \
 	sfx2_classification \
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
-    $(if $(and $(filter WNT,$(OS)), $(filter X86_64,$(CPUNAME))),twain_dsm) \
 	$(if $(ENABLE_HTMLHELP),\
 		helpcontent2_html_dynamic \
 		helpcontent2_html_media \
