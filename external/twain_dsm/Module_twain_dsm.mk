@@ -10,15 +10,11 @@
 $(eval $(call gb_Module_Module,twain_dsm))
 
 ifeq ($(OS),WNT)
-
+ifeq ($(BUILD_X86),TRUE)
 $(eval $(call gb_Module_add_targets,twain_dsm,\
     UnpackedTarball_twain_dsm \
-    $(if $(filter X86_64,$(CPUNAME)), \
-        ExternalProject_twain_dsm \
-        ExternalPackage_twain_dsm \
-    ) \
 ))
-
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

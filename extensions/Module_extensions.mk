@@ -17,9 +17,12 @@ ifneq ($(filter-out iOS ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_abp \
 	Library_ldapbe2 \
-	$(if $(filter WNT,$(OS)),Library_WinUserInfoBe) \
 	Library_log \
 	Library_scn \
+	$(if $(filter WNT,$(OS)), \
+		Library_WinUserInfoBe \
+		$(if $(filter TRUE,$(BUILD_X86)),Executable_twain32shim) \
+	) \
 	UIConfig_sabpilot \
 	UIConfig_scanner \
 ))
