@@ -19,9 +19,7 @@
 
 #include "xmlstyle.hxx"
 #include "xmlexprt.hxx"
-#include "xmlimprt.hxx"
 
-#include "XMLConverter.hxx"
 #include <rangeutl.hxx>
 #include <unonames.hxx>
 
@@ -29,10 +27,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/xmlnumfe.hxx>
-#include <xmloff/xmlnumfi.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <sax/tools/converter.hxx>

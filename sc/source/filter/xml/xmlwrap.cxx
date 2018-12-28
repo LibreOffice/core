@@ -18,7 +18,6 @@
  */
 
 #include <vcl/errinf.hxx>
-#include <svl/style.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sot/storage.hxx>
@@ -26,7 +25,6 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <unotools/streamwrap.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/xmlgrhlp.hxx>
@@ -41,7 +39,6 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -55,7 +52,6 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <svx/xmleohlp.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/saveopt.hxx>
 
@@ -63,7 +59,6 @@
 #include <xmlwrap.hxx>
 #include "xmlimprt.hxx"
 #include "xmlexprt.hxx"
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scerrors.hxx>

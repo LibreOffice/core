@@ -37,7 +37,6 @@
 #include <dpshttab.hxx>
 #include <dpsdbtab.hxx>
 #include <dpdimsave.hxx>
-#include <dpgroup.hxx>
 #include <dputil.hxx>
 #include <rangeutl.hxx>
 #include <queryentry.hxx>

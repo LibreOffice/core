@@ -20,14 +20,12 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <appluno.hxx>
 #include "xmlexprt.hxx"
 #include "XMLConverter.hxx"
 #include "xmlstyle.hxx"
 #include <unonames.hxx>
 #include <document.hxx>
 #include <olinetab.hxx>
-#include <cellsuno.hxx>
 #include <formulacell.hxx>
 #include <rangenam.hxx>
 #include "XMLTableMasterPageExport.hxx"
@@ -49,10 +47,8 @@
 #include <scitems.hxx>
 #include <docpool.hxx>
 #include <userdat.hxx>
-#include <dociter.hxx>
 #include <chgtrack.hxx>
 #include <rangeutl.hxx>
-#include <convuno.hxx>
 #include <postit.hxx>
 #include <externalrefmgr.hxx>
 #include <editutil.hxx>
@@ -109,23 +105,15 @@
 #include <rtl/ustring.hxx>
 
 #include <tools/color.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
-#include <editeng/outlobj.hxx>
-#include <svx/svditer.hxx>
-#include <svx/svdpage.hxx>
 #include <svtools/miscopt.hxx>
 
-#include <officecfg/Office/Common.hxx>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -139,6 +127,8 @@
 #include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.hpp>
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
+#include <com/sun/star/sheet/XSheetCellCursor.hpp>
+#include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -160,6 +150,8 @@
 #include <memory>
 #include <vector>
 #include <vbahelper/vbaaccesshelper.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 
 

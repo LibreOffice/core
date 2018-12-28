@@ -23,12 +23,8 @@
 #include <tools/datetime.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <rangelst.hxx>
 #include <rangeutl.hxx>
 #include <docuno.hxx>
-#include <convuno.hxx>
-#include <document.hxx>
-#include <ftools.hxx>
 #include <generalfunction.hxx>
 
 using namespace ::com::sun::star;

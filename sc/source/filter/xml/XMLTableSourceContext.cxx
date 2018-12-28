@@ -24,7 +24,6 @@
 #include <tablink.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 

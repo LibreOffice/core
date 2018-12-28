@@ -20,14 +20,10 @@
 #include "xmldrani.hxx"
 #include "xmlsorti.hxx"
 #include "xmlimprt.hxx"
-#include <docuno.hxx>
 #include <convuno.hxx>
-#include "XMLConverter.hxx"
 #include <unonames.hxx>
 #include <rangeutl.hxx>
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 

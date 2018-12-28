@@ -697,3 +697,12 @@ blacklist:
     sc/source/filter/oox/worksheethelper.cxx:
     # Needed for implicit dtor
     - editeng/editobj.hxx
+    sc/source/filter/xml/XMLExportIterator.cxx:
+    # Needed for direct member access
+    - com/sun/star/table/XCellRange.hpp
+    sc/source/filter/xml/xmlimprt.cxx:
+    # Needed to avoid loplugin:unreffun error
+    - appluno.hxx
+    sc/source/filter/xml/xmlsubti.cxx:
+    # Needed for direct member access
+    - com/sun/star/sheet/XSpreadsheet.hpp

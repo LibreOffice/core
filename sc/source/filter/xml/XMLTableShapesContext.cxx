@@ -20,7 +20,6 @@
 #include "XMLTableShapesContext.hxx"
 #include "XMLTableShapeImportHelper.hxx"
 #include "xmlimprt.hxx"
-#include <document.hxx>
 
 using namespace com::sun::star;
 
