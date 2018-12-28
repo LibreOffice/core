@@ -366,7 +366,7 @@ namespace dbaui
         else
         {
             sExtension = m_xOwnExtension->get_text();
-            if ( sExtension.getToken(0,'.') == "*" )
+            if ( sExtension.startsWith("*.") )
                 sExtension = sExtension.copy(2);
         }
         return sExtension;
