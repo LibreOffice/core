@@ -18,10 +18,8 @@
  */
 
 #include "XMLChangeTrackingImportHelper.hxx"
-#include "XMLConverter.hxx"
 #include <formulacell.hxx>
 #include <document.hxx>
-#include <chgviset.hxx>
 #include <rangeutl.hxx>
 #include <tools/datetime.hxx>
 #include <osl/diagnose.h>

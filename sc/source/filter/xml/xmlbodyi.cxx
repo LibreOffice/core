@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdio>
-
 #include <document.hxx>
 #include <docuno.hxx>
 #include <sheetdata.hxx>
@@ -30,7 +28,6 @@
 #include "xmlimprt.hxx"
 #include "xmldpimp.hxx"
 #include "xmlcvali.hxx"
-#include "xmlstyli.hxx"
 #include "xmllabri.hxx"
 #include "xmlmappingi.hxx"
 #include "XMLConsolidationContext.hxx"
@@ -45,13 +42,10 @@
 #include "datastreamimport.hxx"
 #include <sax/fastattribs.hxx>
 
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 
 #include <comphelper/base64.hxx>
-#include <sax/tools/converter.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
 

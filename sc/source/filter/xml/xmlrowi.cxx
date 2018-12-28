@@ -20,7 +20,6 @@
 #include "xmlrowi.hxx"
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
-#include <global.hxx>
 #include "xmlstyli.hxx"
 #include <document.hxx>
 #include <docuno.hxx>
@@ -29,8 +28,6 @@
 #include <documentimport.hxx>
 #include <unonames.hxx>
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmltoken.hxx>

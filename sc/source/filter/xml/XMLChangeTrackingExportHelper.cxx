@@ -22,7 +22,6 @@
 #include "XMLConverter.hxx"
 #include <document.hxx>
 #include <chgtrack.hxx>
-#include <chgviset.hxx>
 #include <formulacell.hxx>
 #include <textuno.hxx>
 #include <rangeutl.hxx>
@@ -33,8 +32,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <sax/tools/converter.hxx>
-#include <com/sun/star/util/DateTime.hpp>
-#include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 #include <sal/log.hxx>

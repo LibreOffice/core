@@ -10,7 +10,6 @@
 #include <memory>
 #include "xmlcondformat.hxx"
 #include "xmlimprt.hxx"
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <sal/log.hxx>
@@ -22,7 +21,6 @@
 #include <sax/tools/converter.hxx>
 #include <rangelst.hxx>
 #include <rangeutl.hxx>
-#include <docfunc.hxx>
 #include "XMLConverter.hxx"
 #include <stylehelper.hxx>
 #include <tokenarray.hxx>

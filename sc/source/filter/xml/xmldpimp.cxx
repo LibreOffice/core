@@ -20,14 +20,11 @@
 #include "xmldpimp.hxx"
 #include "xmlimprt.hxx"
 #include "xmlfilti.hxx"
-#include "xmlsorti.hxx"
 #include <document.hxx>
-#include <docuno.hxx>
 #include <dpshttab.hxx>
 #include <dpsdbtab.hxx>
 #include <attrib.hxx>
 #include "XMLConverter.hxx"
-#include <dpgroup.hxx>
 #include <dpdimsave.hxx>
 #include <rangeutl.hxx>
 #include <dpoutputgeometry.hxx>
@@ -35,12 +32,9 @@
 
 #include "pivotsource.hxx"
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>

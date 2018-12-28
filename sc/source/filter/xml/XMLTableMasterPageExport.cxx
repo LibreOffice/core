@@ -21,13 +21,14 @@
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include "XMLTableMasterPageExport.hxx"
 #include <comphelper/extract.hxx>
 #include <rtl/ref.hxx>
+#include <osl/diagnose.h>
 
 #include <unonames.hxx>
 #include "xmlexprt.hxx"
-#include <textuno.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
