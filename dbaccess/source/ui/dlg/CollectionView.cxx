@@ -241,8 +241,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView, SvTreeListBox*, bool)
         if ( xNameAccess.is() )
         {
             OUString sSubFolder = m_pView->GetCurrentURL();
-            sal_Int32 nIndex = sSubFolder.lastIndexOf('/') + 1;
-            sSubFolder = sSubFolder.getToken(0,'/',nIndex);
+            sSubFolder = sSubFolder.copy(sSubFolder.lastIndexOf('/') + 1);
             if ( !sSubFolder.isEmpty() )
             {
                 Reference< XContent> xContent;
