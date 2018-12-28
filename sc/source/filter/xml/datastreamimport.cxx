@@ -12,7 +12,6 @@
 
 #include <rangeutl.hxx>
 #include <importfilterdata.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <formula/grammar.hxx>

@@ -18,11 +18,9 @@
  */
 
 #include "XMLTableShapeResizer.hxx"
-#include <unonames.hxx>
 #include <document.hxx>
 #include "xmlimprt.hxx"
 #include <chartlis.hxx>
-#include "XMLConverter.hxx"
 #include <rangeutl.hxx>
 #include <compiler.hxx>
 #include <reftokenhelper.hxx>

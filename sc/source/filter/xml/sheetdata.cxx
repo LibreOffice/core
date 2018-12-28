@@ -20,7 +20,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/families.hxx>
-#include <xmloff/xmlaustp.hxx>
 #include <xmloff/nmspmap.hxx>
 
 #include <sheetdata.hxx>

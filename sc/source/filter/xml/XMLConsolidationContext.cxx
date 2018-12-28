@@ -22,7 +22,6 @@
 #include <rangeutl.hxx>
 #include "xmlimprt.hxx"
 #include "XMLConverter.hxx"
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 

@@ -23,8 +23,6 @@
 #include <scmatrix.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <sax/tools/converter.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

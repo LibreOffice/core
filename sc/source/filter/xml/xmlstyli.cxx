@@ -26,11 +26,9 @@
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <comphelper/extract.hxx>
 #include <xmloff/xmlprcon.hxx>
-#include <xmloff/xmluconv.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include "XMLConverter.hxx"
 #include "XMLTableShapeImportHelper.hxx"
@@ -44,14 +42,7 @@
 #include <unonames.hxx>
 #include <document.hxx>
 #include <conditio.hxx>
-#include <svl/intitem.hxx>
 #include <rangelst.hxx>
-#include <rangeutl.hxx>
-#include <docfunc.hxx>
-#include <markdata.hxx>
-#include <docpool.hxx>
-#include <scitems.hxx>
-#include <patattr.hxx>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1

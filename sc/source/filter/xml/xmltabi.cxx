@@ -27,7 +27,6 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <olinetab.hxx>
-#include "XMLConverter.hxx"
 #include "XMLTableShapesContext.hxx"
 #include "XMLTableSourceContext.hxx"
 #include "XMLStylesImportHelper.hxx"
@@ -37,7 +36,6 @@
 #include "xmlcondformat.hxx"
 
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>

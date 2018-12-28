@@ -21,17 +21,14 @@
 #include <sal/log.hxx>
 
 #include <svl/zforlist.hxx>
-#include <sal/macros.h>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/i18nmap.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/streamwrap.hxx>
-#include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
@@ -40,9 +37,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include <sax/tools/converter.hxx>
-
-#include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/editstat.hxx>
 #include <formula/errorcodes.hxx>
@@ -53,13 +47,11 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <docuno.hxx>
-#include <nameuno.hxx>
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
 #include <ViewSettingsSequenceDefines.hxx>
 
 #include <compiler.hxx>
-#include <patattr.hxx>
 
 #include "XMLConverter.hxx"
 #include "XMLDetectiveContext.hxx"
@@ -69,7 +61,6 @@
 #include "XMLStylesImportHelper.hxx"
 #include <sheetdata.hxx>
 #include <rangeutl.hxx>
-#include <postit.hxx>
 #include <formulaparserpool.hxx>
 #include <externalrefmgr.hxx>
 #include <editutil.hxx>
@@ -91,7 +82,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/util/MalformedNumberFormatException.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

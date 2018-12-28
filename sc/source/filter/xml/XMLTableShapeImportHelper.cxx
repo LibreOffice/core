@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include "XMLTableShapeImportHelper.hxx"
 #include "xmlimprt.hxx"
-#include "XMLConverter.hxx"
 #include <drwlayer.hxx>
 #include "xmlannoi.hxx"
 #include <rangeutl.hxx>
@@ -32,7 +30,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/svdobj.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 

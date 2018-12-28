@@ -11,11 +11,8 @@
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
 
-#include <xmloff/nmspmap.hxx>
 #include <comphelper/string.hxx>
 #include <xmloff/xmlnmspe.hxx>
-
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

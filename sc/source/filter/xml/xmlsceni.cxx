@@ -20,13 +20,9 @@
 #include <document.hxx>
 #include "xmlimprt.hxx"
 #include "xmlsceni.hxx"
-#include <docuno.hxx>
 #include <attrib.hxx>
-#include "XMLConverter.hxx"
 #include <rangeutl.hxx>
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 
