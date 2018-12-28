@@ -81,11 +81,10 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
     }
     if ( !m_sHREF.isEmpty() && !m_sName.isEmpty() && _xParentContainer.is() )
     {
-        sal_Int32 nIndex = m_sHREF.lastIndexOf('/')+1;
         Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
         {
             {PROPERTY_NAME, Any(m_sName)}, // set as folder
-            {PROPERTY_PERSISTENT_NAME, Any(m_sHREF.getToken(0,'/',nIndex))},
+            {PROPERTY_PERSISTENT_NAME, Any(m_sHREF.copy(m_sHREF.lastIndexOf('/')+1))},
             {PROPERTY_AS_TEMPLATE, Any(m_bAsTemplate)},
         }));
         try
