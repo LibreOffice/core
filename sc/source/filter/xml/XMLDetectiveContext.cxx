@@ -20,15 +20,11 @@
 #include "XMLDetectiveContext.hxx"
 
 #include <sax/tools/converter.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <convuno.hxx>
 #include "xmlimprt.hxx"
 #include "XMLConverter.hxx"
 #include <rangeutl.hxx>
-
-#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;

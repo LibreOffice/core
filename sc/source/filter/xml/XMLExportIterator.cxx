@@ -20,16 +20,12 @@
 #include <com/sun/star/table/XCellRange.hpp>
 
 #include "XMLExportIterator.hxx"
-#include <xmloff/xmlnmspe.hxx>
 #include <dociter.hxx>
-#include <convuno.hxx>
 #include "xmlexprt.hxx"
 #include "XMLExportSharedData.hxx"
 #include "XMLStylesExportHelper.hxx"
 #include <document.hxx>
 #include <osl/diagnose.h>
-
-#include <algorithm>
 
 using namespace ::com::sun::star;
 

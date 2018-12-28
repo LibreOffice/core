@@ -18,7 +18,6 @@
  */
 
 #include "xmllabri.hxx"
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmlimprt.hxx"
 #include <xmloff/xmlnmspe.hxx>
