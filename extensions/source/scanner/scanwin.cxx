@@ -18,49 +18,22 @@
  */
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/util/XCloseBroadcaster.hpp>
-#include <com/sun/star/util/XCloseListener.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <comphelper/processfactory.hxx>
 
-#include <prewin.h>
-#include <postwin.h>
-#include <math.h>
+#include "twain32shim.hxx"
+
+#include <config_folders.h>
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <osl/conditn.hxx>
+#include <osl/file.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/bootstrap.hxx>
+#include <salhelper/thread.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
-#include <osl/mutex.hxx>
-#include <osl/module.hxx>
-#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/sysdata.hxx>
 #include "scanner.hxx"
 
-#include <twain/twain.h>
-
 using namespace ::com::sun::star;
-
-#define TWAIN_EVENT_NONE        0x00000000UL
-#define TWAIN_EVENT_QUIT        0x00000001UL
-#define TWAIN_EVENT_SCANNING    0x00000002UL
-#define TWAIN_EVENT_XFER        0x00000004UL
-
-#define PFUNC                   (*pDSM)
-#define PTWAINMSG               MSG*
-#define FIXTODOUBLE( nFix )     (static_cast<double>(nFix.Whole)+static_cast<double>(nFix.Frac)/65536.)
-#define FIXTOLONG( nFix )       (static_cast<long>(floor(FIXTODOUBLE(nFix)+0.5)))
-#define TWAIN_FUNCNAME          "DSM_Entry"
-
-#if defined(TWH_64BIT)
-#    define TWAIN_LIBNAME "TWAINDSM.DLL"
-#else
-#    define TWAIN_LIBNAME "TWAIN_32.DLL"
-#endif
 
 enum TwainState
 {
@@ -70,849 +43,534 @@ enum TwainState
     TWAIN_STATE_CANCELED = 3
 };
 
-static LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam );
-
-class ImpTwain : public ::cppu::WeakImplHelper< util::XCloseListener >
+struct HANDLEDeleter
 {
-    friend LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam );
-
-    uno::Reference< uno::XInterface >           mxSelfRef;
-    uno::Reference< scanner::XScannerManager >  mxMgr;
-    ScannerManager&                             mrMgr;
-    TW_IDENTITY                                 aAppIdent;
-    TW_IDENTITY                                 aSrcIdent;
-    Link<unsigned long,void>                    aNotifyLink;
-    DSMENTRYPROC                                pDSM;
-    osl::Module*                                pMod;
-    ULONG_PTR                                   nCurState;
-    HWND                                        hTwainWnd;
-    HHOOK                                       hTwainHook;
-    bool                                        mbCloseFrameOnExit;
-
-    bool                                        ImplHandleMsg( void* pMsg );
-    void                                        ImplOpenSourceManager();
-    void                                        ImplOpenSource();
-    bool                                        ImplEnableSource();
-    void                                        ImplXfer();
-    void                                        ImplFallback( ULONG_PTR nEvent );
-    void                                        ImplDeregisterCloseListener();
-    void                                        ImplRegisterCloseListener();
-
-                                                DECL_LINK( ImplFallbackHdl, void*, void );
-                                                DECL_LINK( ImplDestroyHdl, void*, void );
-
-    // from util::XCloseListener
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) override;
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) override;
-
-    // from lang::XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
-
-public:
-
-                                                ImpTwain( ScannerManager& rMgr, const Link<unsigned long,void>& rNotifyLink );
-                                                ~ImpTwain() override;
-
-    void                                        Destroy();
-
-    bool                                        SelectSource();
-    bool                                        InitXfer();
+    using pointer = HANDLE;
+    void operator()(HANDLE h) { CloseHandle(h); }
 };
 
-static ImpTwain* pImpTwainInstance = nullptr;
-
-static LRESULT CALLBACK TwainWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
-{
-    return DefWindowProcW( hWnd, nMsg, nPar1, nPar2 );
-}
-
-LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
-{
-    MSG* pMsg = reinterpret_cast<MSG*>(lParam);
-
-    if( ( nCode < 0 ) || ( pImpTwainInstance->hTwainWnd != pMsg->hwnd ) || !pImpTwainInstance->ImplHandleMsg( reinterpret_cast<void*>(lParam) ) )
-    {
-        return CallNextHookEx( pImpTwainInstance->hTwainHook, nCode, wParam, lParam );
-    }
-    else
-    {
-        pMsg->message = WM_USER;
-        pMsg->lParam = 0;
-
-        return 0;
-    }
-}
-
-namespace {
-
-uno::Reference< frame::XFrame > ImplGetActiveFrame()
-{
-    try
-    {
-        // query desktop instance
-        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-
-        uno::Reference< frame::XFrame > xActiveFrame = xDesktop->getActiveFrame();
-
-        if( xActiveFrame.is() )
-        {
-            return xActiveFrame;
-        }
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    OSL_FAIL("ImpTwain::ImplGetActiveFrame: Could not determine active frame!");
-    return uno::Reference< frame::XFrame >();
-}
-
-uno::Reference< util::XCloseBroadcaster > ImplGetActiveFrameCloseBroadcaster()
-{
-    try
-    {
-        return uno::Reference< util::XCloseBroadcaster >( ImplGetActiveFrame(), uno::UNO_QUERY );
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    OSL_FAIL("ImpTwain::ImplGetActiveFrameCloseBroadcaster: Could determine close broadcaster on active frame!");
-    return uno::Reference< util::XCloseBroadcaster >();
-}
-
-void ImplSendCloseEvent()
-{
-    try
-    {
-        uno::Reference< util::XCloseable > xCloseable( ImplGetActiveFrame(), uno::UNO_QUERY );
-
-        if( xCloseable.is() )
-            xCloseable->close( true );
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    OSL_FAIL("ImpTwain::ImplSendCloseEvent: Could not send required close broadcast!");
-}
-
-}
-
-// #107835# hold reference to ScannerManager, to prevent premature death
-ImpTwain::ImpTwain( ScannerManager& rMgr, const Link<unsigned long,void>& rNotifyLink ) :
-            mxMgr( uno::Reference< scanner::XScannerManager >( static_cast< OWeakObject* >( &rMgr ), uno::UNO_QUERY) ),
-            mrMgr( rMgr ),
-            aNotifyLink( rNotifyLink ),
-            pDSM( nullptr ),
-            pMod( nullptr ),
-            nCurState( 1 ),
-            hTwainWnd( nullptr ),
-            hTwainHook( nullptr ),
-            mbCloseFrameOnExit( false )
-{
-    // setup TWAIN window
-    pImpTwainInstance = this;
-
-    aAppIdent.Id = 0;
-    aAppIdent.Version.MajorNum = 1;
-    aAppIdent.Version.MinorNum = 0;
-    aAppIdent.Version.Language = TWLG_USA;
-    aAppIdent.Version.Country = TWCY_USA;
-    aAppIdent.ProtocolMajor = TWON_PROTOCOLMAJOR;
-    aAppIdent.ProtocolMinor = TWON_PROTOCOLMINOR;
-    aAppIdent.SupportedGroups = DG_IMAGE | DG_CONTROL;
-    strncpy( aAppIdent.Version.Info, "8.0", 32 );
-    aAppIdent.Version.Info[32] = aAppIdent.Version.Info[33] = 0;
-    strncpy( aAppIdent.Manufacturer, "Sun Microsystems", 32 );
-    aAppIdent.Manufacturer[32] = aAppIdent.Manufacturer[33] = 0;
-    strncpy( aAppIdent.ProductFamily,"Office", 32 );
-    aAppIdent.ProductFamily[32] = aAppIdent.ProductFamily[33] = 0;
-    strncpy( aAppIdent.ProductName, "Office", 32 );
-    aAppIdent.ProductName[32] = aAppIdent.ProductName[33] = 0;
-
-    WNDCLASSW aWc = { 0, &TwainWndProc, 0, sizeof( WNDCLASSW ), GetModuleHandleW( nullptr ), nullptr, nullptr, nullptr, nullptr, L"TwainClass" };
-    RegisterClassW( &aWc );
-
-    hTwainWnd = CreateWindowExW( WS_EX_TOPMOST, aWc.lpszClassName, L"TWAIN", 0, 0, 0, 0, 0, HWND_DESKTOP, nullptr, aWc.hInstance, nullptr );
-    hTwainHook = SetWindowsHookExW( WH_GETMESSAGE, &TwainMsgProc, nullptr, GetCurrentThreadId() );
-
-    // block destruction until ImplDestroyHdl is called
-    mxSelfRef = static_cast< ::cppu::OWeakObject* >( this );
-}
-
-ImpTwain::~ImpTwain()
-{
-    // are we responsible for application shutdown?
-    if( mbCloseFrameOnExit )
-        ImplSendCloseEvent();
-}
-
-void ImpTwain::Destroy()
-{
-    ImplFallback( TWAIN_EVENT_NONE );
-    Application::PostUserEvent( LINK( this, ImpTwain, ImplDestroyHdl ) );
-}
-
-bool ImpTwain::SelectSource()
-{
-    TW_UINT16 nRet = TWRC_FAILURE;
-
-    ImplOpenSourceManager();
-
-    if( 3 == nCurState )
-    {
-        TW_IDENTITY aIdent;
-
-        aIdent.Id = 0;
-        aIdent.ProductName[ 0 ] = '\0';
-        aNotifyLink.Call( TWAIN_EVENT_SCANNING );
-        nRet = PFUNC( &aAppIdent, nullptr, DG_CONTROL, DAT_IDENTITY, MSG_USERSELECT, &aIdent );
-    }
-
-    ImplFallback( TWAIN_EVENT_QUIT );
-
-    return( TWRC_SUCCESS == nRet );
-}
-
-bool ImpTwain::InitXfer()
-{
-    bool bRet = false;
-
-    ImplOpenSourceManager();
-
-    if( 3 == nCurState )
-    {
-        ImplOpenSource();
-
-        if( 4 == nCurState )
-            bRet = ImplEnableSource();
-    }
-
-    if( !bRet )
-        ImplFallback( TWAIN_EVENT_QUIT );
-
-    return bRet;
-}
-
-void ImpTwain::ImplOpenSourceManager()
-{
-    if( 1 == nCurState )
-    {
-        pMod = new ::osl::Module( OUString() );
-
-        if( pMod->load( TWAIN_LIBNAME ) )
-        {
-            nCurState = 2;
-
-            pDSM = reinterpret_cast<DSMENTRYPROC>(pMod->getSymbol(TWAIN_FUNCNAME));
-            if (pDSM &&
-                ( PFUNC( &aAppIdent, nullptr, DG_CONTROL, DAT_PARENT, MSG_OPENDSM, &hTwainWnd ) == TWRC_SUCCESS ) )
-            {
-                nCurState = 3;
-            }
-        }
-        else
-        {
-            delete pMod;
-            pMod = nullptr;
-        }
-    }
-}
-
-void ImpTwain::ImplOpenSource()
-{
-    if( 3 == nCurState )
-    {
-        if( ( PFUNC( &aAppIdent, nullptr, DG_CONTROL, DAT_IDENTITY, MSG_GETDEFAULT, &aSrcIdent ) == TWRC_SUCCESS ) &&
-            ( PFUNC( &aAppIdent, nullptr, DG_CONTROL, DAT_IDENTITY, MSG_OPENDS, &aSrcIdent ) == TWRC_SUCCESS ) )
-        {
-            TW_CAPABILITY   aCap = { CAP_XFERCOUNT, TWON_ONEVALUE, GlobalAlloc( GHND, sizeof( TW_ONEVALUE ) ) };
-            TW_ONEVALUE*    pVal = static_cast<TW_ONEVALUE*>(GlobalLock( aCap.hContainer ));
-
-            pVal->ItemType = TWTY_INT16;
-            pVal->Item = 1;
-            GlobalUnlock( aCap.hContainer );
-            PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_CAPABILITY, MSG_SET, &aCap );
-            GlobalFree( aCap.hContainer );
-            nCurState = 4;
-        }
-    }
-}
-
-bool ImpTwain::ImplEnableSource()
-{
-    bool bRet = false;
-
-    if( 4 == nCurState )
-    {
-        TW_USERINTERFACE aUI = { true, true, hTwainWnd };
-
-        aNotifyLink.Call( TWAIN_EVENT_SCANNING );
-        nCurState = 5;
-
-        // register as vetoable close listener, to prevent application to die under us
-        ImplRegisterCloseListener();
-
-        if( PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_USERINTERFACE, MSG_ENABLEDS, &aUI ) == TWRC_SUCCESS )
-        {
-            bRet = true;
-        }
-        else
-        {
-            nCurState = 4;
-
-            // deregister as vetoable close listener, dialog failed
-            ImplDeregisterCloseListener();
-        }
-    }
-
-    return bRet;
-}
-
-bool ImpTwain::ImplHandleMsg( void* pMsg )
-{
-    TW_UINT16   nRet;
-    PTWAINMSG   pMess = static_cast<PTWAINMSG>(pMsg);
-    TW_EVENT    aEvt = { pMess, MSG_NULL };
-
-    if (pDSM)
-        nRet = PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_EVENT, MSG_PROCESSEVENT, &aEvt );
-    else
-        nRet = TWRC_NOTDSEVENT;
-
-    if( aEvt.TWMessage != MSG_NULL )
-    {
-        switch( aEvt.TWMessage )
-        {
-            case MSG_XFERREADY:
-            {
-                ULONG_PTR nEvent = TWAIN_EVENT_QUIT;
-
-                if( 5 == nCurState )
-                {
-                    nCurState = 6;
-                    ImplXfer();
-
-                    if( mrMgr.GetData() )
-                        nEvent = TWAIN_EVENT_XFER;
-                }
-                else if( 7 == nCurState && mrMgr.GetData() )
-                {
-                    // Already sent TWAIN_EVENT_XFER; not processed yet;
-                    // duplicate event - avoid deleting mpImpTwain
-                    nEvent = TWAIN_EVENT_NONE;
-                }
-
-                ImplFallback( nEvent );
-            }
-            break;
-
-            case MSG_CLOSEDSREQ:
-                ImplFallback( TWAIN_EVENT_QUIT );
-            break;
-
-            default:
-            break;
-        }
-    }
-    else
-        nRet = TWRC_NOTDSEVENT;
-
-    return( TWRC_DSEVENT == nRet );
-}
-
-void ImpTwain::ImplXfer()
-{
-    if( nCurState == 6 )
-    {
-        TW_IMAGEINFO    aInfo;
-        HANDLE          hDIB = nullptr;
-        long            nWidth, nHeight, nXRes, nYRes;
-
-        if( PFUNC( &aAppIdent, &aSrcIdent, DG_IMAGE, DAT_IMAGEINFO, MSG_GET, &aInfo ) == TWRC_SUCCESS )
-        {
-            nWidth = aInfo.ImageWidth;
-            nHeight = aInfo.ImageLength;
-            nXRes = FIXTOLONG( aInfo.XResolution );
-            nYRes = FIXTOLONG( aInfo.YResolution );
-        }
-        else
-            nWidth = nHeight = nXRes = nYRes = -1;
-
-        switch( PFUNC( &aAppIdent, &aSrcIdent, DG_IMAGE, DAT_IMAGENATIVEXFER, MSG_GET, &hDIB ) )
-        {
-            case TWRC_CANCEL:
-                nCurState = 7;
-            break;
-
-            case TWRC_XFERDONE:
-            {
-                if( hDIB )
-                {
-                    if( ( nXRes != -1 ) && ( nYRes != - 1 ) && ( nWidth != - 1 ) && ( nHeight != - 1 ) )
-                    {
-                        // set resolution of bitmap
-                        BITMAPINFOHEADER*   pBIH = static_cast<BITMAPINFOHEADER*>(GlobalLock( static_cast<HGLOBAL>(hDIB) ));
-                        static const double fFactor = 100.0 / 2.54;
-
-                        pBIH->biXPelsPerMeter = FRound( fFactor * nXRes );
-                        pBIH->biYPelsPerMeter = FRound( fFactor * nYRes );
-
-                        GlobalUnlock( static_cast<HGLOBAL>(hDIB) );
-                    }
-
-                    mrMgr.SetData( static_cast<void*>(hDIB) );
-                }
-                else
-                    GlobalFree( static_cast<HGLOBAL>(hDIB) );
-
-                nCurState = 7;
-            }
-            break;
-
-            default:
-            break;
-        }
-    }
-}
-
-void ImpTwain::ImplFallback( ULONG_PTR nEvent )
-{
-    Application::PostUserEvent( LINK( this, ImpTwain, ImplFallbackHdl ), reinterpret_cast<void*>(nEvent) );
-}
-
-IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData, void )
-{
-    const sal_uIntPtr nEvent = reinterpret_cast<sal_uIntPtr>(pData);
-    bool        bFallback = true;
-
-    switch( nCurState )
-    {
-        case 7:
-        case 6:
-        {
-            TW_PENDINGXFERS aXfers;
-
-            if( PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_PENDINGXFERS, MSG_ENDXFER, &aXfers ) == TWRC_SUCCESS )
-            {
-                if( aXfers.Count != 0 )
-                    PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_PENDINGXFERS, MSG_RESET, &aXfers );
-            }
-
-            nCurState = 5;
-        }
-        break;
-
-        case 5:
-        {
-            TW_USERINTERFACE aUI = { true, true, hTwainWnd };
-
-            PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_USERINTERFACE, MSG_DISABLEDS, &aUI );
-            nCurState = 4;
-
-            // deregister as vetoable close listener
-            ImplDeregisterCloseListener();
-        }
-        break;
-
-        case 4:
-        {
-            PFUNC( &aAppIdent, nullptr, DG_CONTROL, DAT_IDENTITY, MSG_CLOSEDS, &aSrcIdent );
-            nCurState = 3;
-        }
-        break;
-
-        case 3:
-        {
-            PFUNC( &aAppIdent, nullptr, DG_CONTROL, DAT_PARENT, MSG_CLOSEDSM, &hTwainWnd );
-            nCurState = 2;
-        }
-        break;
-
-        case 2:
-        {
-            delete pMod;
-            pMod = nullptr;
-            nCurState = 1;
-        }
-        break;
-
-        default:
-        {
-            if( nEvent != TWAIN_EVENT_NONE )
-                aNotifyLink.Call( nEvent );
-
-            bFallback = false;
-        }
-        break;
-    }
-
-    if( bFallback )
-        ImplFallback( nEvent );
-}
-
-IMPL_LINK_NOARG( ImpTwain, ImplDestroyHdl, void*, void )
-{
-    if( hTwainWnd )
-        DestroyWindow( hTwainWnd );
-
-    if( hTwainHook )
-        UnhookWindowsHookEx( hTwainHook );
-
-    // permit destruction of ourselves (normally, refcount
-    // should drop to zero exactly here)
-    mxSelfRef = nullptr;
-    pImpTwainInstance = nullptr;
-}
-
-void ImpTwain::ImplRegisterCloseListener()
-{
-    try
-    {
-        uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( ImplGetActiveFrameCloseBroadcaster() );
-
-        if( xCloseBroadcaster.is() )
-        {
-            xCloseBroadcaster->addCloseListener(this);
-            return; // successfully registered as a close listener
-        }
-        else
-        {
-            // interface unknown. don't register, then
-            OSL_FAIL("ImpTwain::ImplRegisterCloseListener: XFrame has no XCloseBroadcaster!");
-            return;
-        }
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    OSL_FAIL("ImpTwain::ImplRegisterCloseListener: Could not register as close listener!");
-}
-
-void ImpTwain::ImplDeregisterCloseListener()
-{
-    try
-    {
-        uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster(
-            ImplGetActiveFrameCloseBroadcaster() );
-
-        if( xCloseBroadcaster.is() )
-        {
-            xCloseBroadcaster->removeCloseListener(this);
-            return; // successfully deregistered as a close listener
-        }
-        else
-        {
-            // interface unknown. don't deregister, then
-            OSL_FAIL("ImpTwain::ImplDeregisterCloseListener: XFrame has no XCloseBroadcaster!");
-            return;
-        }
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    OSL_FAIL("ImpTwain::ImplDeregisterCloseListener: Could not deregister as close listener!");
-}
-
-void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& /*Source*/, sal_Bool GetsOwnership )
-{
-    // shall we re-send the close query later on?
-    mbCloseFrameOnExit = GetsOwnership;
-
-    // the sole purpose of this listener is to forbid closing of the listened-at frame
-    throw util::CloseVetoException();
-}
-
-void SAL_CALL ImpTwain::notifyClosing( const lang::EventObject& /*Source*/ )
-{
-    // should not happen
-    OSL_FAIL("ImpTwain::notifyClosing called, but we vetoed the closing before!");
-}
-
-void SAL_CALL ImpTwain::disposing( const lang::EventObject& /*Source*/ )
-{
-    // we're not holding any references to the frame, thus noop
-}
+using ScopedHANDLE = std::unique_ptr<HANDLE, HANDLEDeleter>;
 
 class Twain
 {
-    uno::Reference< lang::XEventListener >      mxListener;
-    uno::Reference< scanner::XScannerManager >  mxMgr;
-    const ScannerManager*                       mpCurMgr;
-    ImpTwain*                                   mpImpTwain;
-    TwainState                                  meState;
+    friend class ShimListenerThread;
+    class ShimListenerThread : public salhelper::Thread
+    {
+    public:
+        ShimListenerThread(Twain& rOwner)
+            : salhelper::Thread("TWAINShimListenerThread")
+            , mrOwner(rOwner)
+        {
+        }
+        void execute() override;
+        const OUString& getError() { return msErrorReported; }
 
-    DECL_LINK( ImpNotifyHdl, unsigned long, void );
+        // These methods are executed outside of own thread
+        bool WaitInitialization();
+        bool WaitRequestResult();
+        void DontNotify() { mbDontNotify = true; }
+        void RequestDestroy();
+        bool RequestSelectSource();
+        bool RequestInitXfer();
+
+    private:
+        Twain& mrOwner;
+        bool mbDontNotify = false;
+        HWND mhWndShim = nullptr; // shim main window handle
+        OUString msErrorReported;
+        osl::Condition mcInitCompleted; // initially not set
+        bool mbInitSucceeded = false;
+        osl::Condition mcGotRequestResult;
+        bool mbRequestResult = false;
+
+        void SendShimRequest(WPARAM nRequest);
+        bool SendShimRequestWithResult(WPARAM nRequest);
+        void NotificationHdl(WPARAM nEvent, LPARAM lParam);
+        void NotifyOwner(WPARAM nEvent);
+        void NotifyXFerOwner(LPARAM nHandle);
+    };
+    uno::Reference<lang::XEventListener> mxListener;
+    uno::Reference<scanner::XScannerManager> mxMgr;
+    ScannerManager* mpCurMgr = nullptr;
+    TwainState meState = TWAIN_STATE_NONE;
+    rtl::Reference<ShimListenerThread> mpThread;
+    osl::Mutex maMutex;
+
+    DECL_LINK(ImpNotifyHdl, void*, void);
+    DECL_LINK(ImpNotifyXferHdl, void*, void);
+    void Notify(WPARAM nEvent); // called by shim communication thread to notify me
+    void NotifyXFer(LPARAM nHandle); // called by shim communication thread to notify me
+
+    bool InitializeNewShim(ScannerManager& rMgr);
+
+    void Reset(); // cleanup thread and manager
 
 public:
+    Twain();
+    ~Twain();
 
-                                    Twain();
-                                    ~Twain();
+    bool SelectSource(ScannerManager& rMgr);
+    bool PerformTransfer(ScannerManager& rMgr,
+                         const uno::Reference<lang::XEventListener>& rxListener);
 
-    bool                            SelectSource( ScannerManager& rMgr );
-    bool                            PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::XEventListener >& rxListener );
-
-    TwainState                      GetState() const { return meState; }
+    TwainState GetState() const { return meState; }
 };
 
-Twain::Twain() :
-        mpCurMgr( nullptr ),
-        mpImpTwain( nullptr ),
-        meState( TWAIN_STATE_NONE )
+bool Twain::ShimListenerThread::WaitInitialization()
 {
+    mcInitCompleted.wait();
+    return mbInitSucceeded;
 }
+
+bool Twain::ShimListenerThread::WaitRequestResult()
+{
+    mcGotRequestResult.wait();
+    return mbRequestResult;
+}
+
+void Twain::ShimListenerThread::RequestDestroy() { SendShimRequest(TWAIN_REQUEST_QUIT); }
+
+bool Twain::ShimListenerThread::RequestSelectSource()
+{
+    assert(mbInitSucceeded);
+    return SendShimRequestWithResult(TWAIN_REQUEST_SELECTSOURCE);
+}
+
+bool Twain::ShimListenerThread::RequestInitXfer()
+{
+    assert(mbInitSucceeded);
+    return SendShimRequestWithResult(TWAIN_REQUEST_INITXFER);
+}
+
+void Twain::ShimListenerThread::SendShimRequest(WPARAM nRequest)
+{
+    if (mhWndShim)
+        PostMessageW(mhWndShim, WM_TWAIN_REQUEST, nRequest, 0);
+}
+
+bool Twain::ShimListenerThread::SendShimRequestWithResult(WPARAM nRequest)
+{
+    mcGotRequestResult.reset();
+    mbRequestResult = false;
+    SendShimRequest(nRequest);
+    return WaitRequestResult();
+}
+
+void Twain::ShimListenerThread::NotifyOwner(WPARAM nEvent)
+{
+    if (!mbDontNotify)
+        mrOwner.Notify(nEvent);
+}
+
+void Twain::ShimListenerThread::NotifyXFerOwner(LPARAM nHandle)
+{
+    if (!mbDontNotify)
+        mrOwner.NotifyXFer(nHandle);
+}
+
+// May only be called from the own thread, so no threading issues modifying self
+void Twain::ShimListenerThread::NotificationHdl(WPARAM nEvent, LPARAM lParam)
+{
+    switch (nEvent)
+    {
+        case TWAIN_EVENT_NOTIFYHWND: // shim reported its main HWND for communications
+            if (!mcInitCompleted.check()) // only if not yet initialized!
+            {
+                // Owner is still waiting mcInitCompleted in its Twain::InitializeNewShim,
+                // holding its access mutex
+                mhWndShim = reinterpret_cast<HWND>(lParam);
+
+                mbInitSucceeded = lParam != 0;
+                mcInitCompleted.set();
+            }
+            break;
+        case TWAIN_EVENT_SCANNING:
+            NotifyOwner(nEvent);
+            break;
+        case TWAIN_EVENT_XFER:
+            NotifyXFerOwner(lParam);
+            break;
+        case TWAIN_EVENT_REQUESTRESULT:
+            mbRequestResult = lParam;
+            mcGotRequestResult.set();
+            break;
+            // We don't handle TWAIN_EVENT_QUIT notification from shim, because we send it ourselves
+            // in the end of execute()
+    }
+}
+
+// Spawn a separate 32-bit process to use TWAIN on Windows, and listen for its notifications
+void Twain::ShimListenerThread::execute()
+{
+    MSG msg;
+    // Initialize thread message queue before launching shim process
+    PeekMessageW(&msg, 0, 0, 0, PM_NOREMOVE);
+
+    try
+    {
+        ScopedHANDLE hShimProcess;
+        {
+            // Determine twain32shim executable URL:
+            OUString shimURL("$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/twain32shim.exe");
+            rtl::Bootstrap::expandMacros(shimURL);
+
+            OUString sCmdLine;
+            if (osl::FileBase::getSystemPathFromFileURL(shimURL, sCmdLine) != osl_File_E_None)
+                throw std::exception("getSystemPathFromFileURL failed!");
+
+            HANDLE hDup;
+            if (!DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(),
+                                 &hDup, SYNCHRONIZE | THREAD_QUERY_LIMITED_INFORMATION, TRUE, 0))
+                ThrowLastError("DuplicateHandle");
+            // we will not need our copy as soon as shim has its own inherited one
+            ScopedHANDLE hScopedDup(hDup);
+            DWORD nDup = reinterpret_cast<DWORD>(hDup);
+            if (reinterpret_cast<HANDLE>(nDup) != hDup)
+                throw std::exception("HANDLE does not fit to 32 bit - cannot pass to shim!");
+
+            // Send this thread handle as the first parameter
+            sCmdLine = "\"" + sCmdLine + "\" " + OUString::number(nDup);
+
+            // We need a WinAPI HANDLE of the process to be able to wait on it and detect the process
+            // termination; so use WinAPI to start the process, not osl_executeProcess.
+
+            STARTUPINFOW si{}; // null-initialize
+            si.cb = sizeof(si);
+            si.dwFlags = STARTF_USESHOWWINDOW;
+            si.wShowWindow = SW_HIDE;
+
+            PROCESS_INFORMATION pi;
+
+            if (!CreateProcessW(nullptr, const_cast<LPWSTR>(o3tl::toW(sCmdLine.getStr())), nullptr,
+                                nullptr, TRUE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
+                ThrowLastError("CreateProcessW");
+
+            CloseHandle(pi.hThread);
+            hShimProcess.reset(pi.hProcess);
+        }
+        HANDLE h = hShimProcess.get();
+        while (true)
+        {
+            DWORD nWaitResult = MsgWaitForMultipleObjects(1, &h, FALSE, INFINITE,
+                                                          QS_ALLPOSTMESSAGE | QS_SENDMESSAGE);
+            // Process any messages in queue before checking if we need to break, to not loose
+            // possible pending notifications
+            while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE))
+            {
+                // process it here
+                if (msg.message == WM_TWAIN_EVENT)
+                {
+                    NotificationHdl(msg.wParam, msg.lParam);
+                }
+            }
+            if (nWaitResult == WAIT_OBJECT_0)
+            {
+                // shim process exited - return
+                break;
+            }
+            if (nWaitResult == WAIT_FAILED)
+            {
+                // Some Win32 error - report and return
+                ThrowLastError("MsgWaitForMultipleObjects");
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        msErrorReported = OUString(e.what(), strlen(e.what()), RTL_TEXTENCODING_UTF8);
+        // allow owner to resume (in case the condition isn't set yet)
+        mcInitCompleted.set(); // let mbInitSucceeded keep its (maybe false) value!
+    }
+    // allow owner to resume (in case the conditions isn't set yet)
+    mcGotRequestResult.set();
+    NotifyOwner(TWAIN_EVENT_QUIT);
+}
+
+Twain::Twain() {}
 
 Twain::~Twain()
 {
-    if( mpImpTwain )
-        mpImpTwain->Destroy();
+    osl::MutexGuard aGuard(maMutex);
+    if (mpThread)
+    {
+        mpThread->DontNotify();
+        mpThread->RequestDestroy();
+        mpThread->join();
+        mpThread.clear();
+    }
 }
 
-bool Twain::SelectSource( ScannerManager& rMgr )
+void Twain::Reset()
 {
-    bool bRet;
+    mpThread->join();
+    if (!mpThread->getError().isEmpty())
+        SAL_WARN("extensions.scanner", mpThread->getError());
+    mpThread.clear();
+    mpCurMgr = nullptr;
+    mxMgr.clear();
+}
 
-    if( !mpImpTwain )
+bool Twain::InitializeNewShim(ScannerManager& rMgr)
+{
+    osl::MutexGuard aGuard(maMutex);
+    if (mpThread)
+        return false; // Have a shim for another task already!
+
+    // hold reference to ScannerManager, to prevent premature death
+    mxMgr.set(static_cast<OWeakObject*>(const_cast<ScannerManager*>(mpCurMgr = &rMgr)),
+              uno::UNO_QUERY);
+
+    mpThread.set(new ShimListenerThread(*this));
+    mpThread->launch();
+    const bool bSuccess = mpThread->WaitInitialization();
+    if (!bSuccess)
+        Reset();
+
+    return bSuccess;
+}
+
+void Twain::Notify(WPARAM nEvent)
+{
+    Application::PostUserEvent(LINK(this, Twain, ImpNotifyHdl), reinterpret_cast<void*>(nEvent));
+}
+
+void Twain::NotifyXFer(LPARAM nHandle)
+{
+    Application::PostUserEvent(LINK(this, Twain, ImpNotifyXferHdl),
+                               reinterpret_cast<void*>(nHandle));
+}
+
+bool Twain::SelectSource(ScannerManager& rMgr)
+{
+    osl::MutexGuard aGuard(maMutex);
+    bool bRet = false;
+
+    if (InitializeNewShim(rMgr))
     {
-        // hold reference to ScannerManager, to prevent premature death
-        mxMgr.set( static_cast< OWeakObject* >( const_cast< ScannerManager* >( mpCurMgr = &rMgr ) ),
-                   uno::UNO_QUERY );
-
         meState = TWAIN_STATE_NONE;
-        mpImpTwain = new ImpTwain( rMgr, LINK( this, Twain, ImpNotifyHdl ) );
-        bRet = mpImpTwain->SelectSource();
+        bRet = mpThread->RequestSelectSource();
     }
-    else
-        bRet = false;
 
     return bRet;
 }
 
-bool Twain::PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::XEventListener >& rxListener )
+bool Twain::PerformTransfer(ScannerManager& rMgr,
+                            const uno::Reference<lang::XEventListener>& rxListener)
 {
-    bool bRet;
+    osl::MutexGuard aGuard(maMutex);
+    bool bRet = false;
 
-    if( !mpImpTwain )
+    if (InitializeNewShim(rMgr))
     {
-        // hold reference to ScannerManager, to prevent premature death
-        mxMgr.set( static_cast< OWeakObject* >( const_cast< ScannerManager* >( mpCurMgr = &rMgr ) ),
-                   uno::UNO_QUERY );
-
         mxListener = rxListener;
         meState = TWAIN_STATE_NONE;
-        mpImpTwain = new ImpTwain( rMgr, LINK( this, Twain, ImpNotifyHdl ) );
-        bRet = mpImpTwain->InitXfer();
+        bRet = mpThread->RequestInitXfer();
     }
-    else
-        bRet = false;
 
     return bRet;
 }
 
-IMPL_LINK( Twain, ImpNotifyHdl, unsigned long, nEvent, void )
+IMPL_LINK(Twain, ImpNotifyHdl, void*, pParam, void)
 {
-    switch( nEvent )
+    osl::MutexGuard aGuard(maMutex);
+    WPARAM nEvent = reinterpret_cast<WPARAM>(pParam);
+    switch (nEvent)
     {
         case TWAIN_EVENT_SCANNING:
             meState = TWAIN_STATE_SCANNING;
-        break;
+            break;
 
         case TWAIN_EVENT_QUIT:
         {
-            if( meState != TWAIN_STATE_DONE )
+            if (meState != TWAIN_STATE_DONE)
                 meState = TWAIN_STATE_CANCELED;
 
-            if( mpImpTwain )
+            lang::EventObject event(mxMgr); // mxMgr will be cleared below
+
+            if (mpThread)
+                Reset();
+
+            if (mxListener.is())
             {
-                mpImpTwain->Destroy();
-                mpImpTwain = nullptr;
-                mpCurMgr = nullptr;
+                mxListener->disposing(event);
+                mxListener.clear();
             }
-
-            if( mxListener.is() )
-                mxListener->disposing( lang::EventObject( mxMgr ) );
-
-            mxListener = nullptr;
-        }
-        break;
-
-        case TWAIN_EVENT_XFER:
-        {
-            if( mpImpTwain )
-            {
-                meState = ( mpCurMgr->GetData() ? TWAIN_STATE_DONE : TWAIN_STATE_CANCELED );
-
-                mpImpTwain->Destroy();
-                mpImpTwain = nullptr;
-                mpCurMgr = nullptr;
-
-                if( mxListener.is() )
-                    mxListener->disposing( lang::EventObject( mxMgr ) );
-            }
-
-            mxListener = nullptr;
         }
         break;
 
         default:
-        break;
+            break;
     }
+}
+
+IMPL_LINK(Twain, ImpNotifyXferHdl, void*, pParam, void)
+{
+    osl::MutexGuard aGuard(maMutex);
+    if (mpThread)
+    {
+        mpCurMgr->SetData(pParam);
+        meState = pParam ? TWAIN_STATE_DONE : TWAIN_STATE_CANCELED;
+
+        lang::EventObject event(mxMgr); // mxMgr will be cleared below
+
+        Reset();
+
+        if (mxListener.is())
+            mxListener->disposing(lang::EventObject(mxMgr));
+    }
+
+    mxListener.clear();
 }
 
 static Twain aTwain;
 
-void ScannerManager::AcquireData()
-{
-}
+void ScannerManager::AcquireData() {}
 
 void ScannerManager::ReleaseData()
 {
-    if( mpData )
+    if (mpData)
     {
-        GlobalFree( static_cast<HGLOBAL>(mpData) );
+        CloseHandle(static_cast<HANDLE>(mpData));
         mpData = nullptr;
     }
 }
 
 awt::Size ScannerManager::getSize()
 {
-    awt::Size   aRet;
-    HGLOBAL     hDIB = static_cast<HGLOBAL>(mpData);
+    awt::Size aRet;
 
-    if( hDIB )
+    if (mpData)
     {
-        BITMAPINFOHEADER* pBIH = static_cast<BITMAPINFOHEADER*>(GlobalLock( hDIB ));
-
-        if( pBIH )
+        HANDLE hMap = static_cast<HANDLE>(mpData);
+        // map full size
+        const sal_Int8* pMap = static_cast<sal_Int8*>(MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0));
+        if (pMap)
         {
+            const BITMAPINFOHEADER* pBIH = reinterpret_cast<const BITMAPINFOHEADER*>(pMap + 4);
             aRet.Width = pBIH->biWidth;
             aRet.Height = pBIH->biHeight;
-        }
-        else
-            aRet.Width = aRet.Height = 0;
 
-        GlobalUnlock( hDIB );
+            UnmapViewOfFile(pMap);
+        }
     }
-    else
-        aRet.Width = aRet.Height = 0;
 
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > ScannerManager::getDIB()
+uno::Sequence<sal_Int8> ScannerManager::getDIB()
 {
-    uno::Sequence< sal_Int8 > aRet;
+    uno::Sequence<sal_Int8> aRet;
 
-    if( mpData )
+    if (mpData)
     {
-        HGLOBAL             hDIB = static_cast<HGLOBAL>(mpData);
-        const sal_uInt32    nDIBSize = GlobalSize( hDIB );
-        BITMAPINFOHEADER*   pBIH = static_cast<BITMAPINFOHEADER*>(GlobalLock( hDIB ));
-
-        if( pBIH )
+        HANDLE hMap = static_cast<HANDLE>(mpData);
+        // map full size
+        const sal_Int8* pMap = static_cast<sal_Int8*>(MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0));
+        if (pMap)
         {
-            sal_uInt32  nColEntries;
+            DWORD nDIBSize;
+            memcpy(&nDIBSize, pMap, 4); // size of the following DIB
 
-            switch( pBIH->biBitCount )
+            const BITMAPINFOHEADER* pBIH = reinterpret_cast<const BITMAPINFOHEADER*>(pMap + 4);
+
+            sal_uInt32 nColEntries = 0;
+
+            switch (pBIH->biBitCount)
             {
                 case 1:
                 case 4:
                 case 8:
-                    nColEntries = pBIH->biClrUsed ? pBIH->biClrUsed : ( 1 << pBIH->biBitCount );
-                break;
+                    nColEntries = pBIH->biClrUsed ? pBIH->biClrUsed : (1 << pBIH->biBitCount);
+                    break;
 
                 case 24:
                     nColEntries = pBIH->biClrUsed ? pBIH->biClrUsed : 0;
-                break;
+                    break;
 
                 case 16:
                 case 32:
-                {
                     nColEntries = pBIH->biClrUsed;
-
-                    if( pBIH->biCompression == BI_BITFIELDS )
+                    if (pBIH->biCompression == BI_BITFIELDS)
                         nColEntries += 3;
-                }
-                break;
-
-                default:
-                    nColEntries = 0;
-                break;
+                    break;
             }
 
-            aRet = uno::Sequence< sal_Int8 >( sizeof( BITMAPFILEHEADER ) + nDIBSize );
+            aRet = uno::Sequence<sal_Int8>(sizeof(BITMAPFILEHEADER) + nDIBSize);
 
-            sal_Int8*       pBuf = aRet.getArray();
-            SvMemoryStream* pMemStm = new SvMemoryStream( pBuf, sizeof( BITMAPFILEHEADER ), StreamMode::WRITE );
+            sal_Int8* pBuf = aRet.getArray();
+            SvMemoryStream* pMemStm
+                = new SvMemoryStream(pBuf, sizeof(BITMAPFILEHEADER), StreamMode::WRITE);
 
-            pMemStm->WriteChar( 'B' ).WriteChar( 'M' ).WriteUInt32( 0 ).WriteUInt32( 0 );
-            pMemStm->WriteUInt32( sizeof( BITMAPFILEHEADER ) + pBIH->biSize + ( nColEntries * sizeof( RGBQUAD ) ) );
+            pMemStm->WriteChar('B').WriteChar('M').WriteUInt32(0).WriteUInt32(0);
+            pMemStm->WriteUInt32(sizeof(BITMAPFILEHEADER) + pBIH->biSize
+                                 + (nColEntries * sizeof(RGBQUAD)));
 
             delete pMemStm;
-            memcpy( pBuf + sizeof( BITMAPFILEHEADER ), pBIH, nDIBSize );
+            memcpy(pBuf + sizeof(BITMAPFILEHEADER), pBIH, nDIBSize);
+
+            UnmapViewOfFile(pMap);
         }
 
-        GlobalUnlock( hDIB );
         ReleaseData();
     }
 
     return aRet;
 }
 
-uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners()
+uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners()
 {
-    osl::MutexGuard aGuard( maProtector );
-    uno::Sequence< ScannerContext >   aRet( 1 );
+    osl::MutexGuard aGuard(maProtector);
+    uno::Sequence<ScannerContext> aRet(1);
 
-    aRet.getArray()[0].ScannerName = "TWAIN" ;
+    aRet.getArray()[0].ScannerName = "TWAIN";
     aRet.getArray()[0].InternalData = 0;
 
     return aRet;
 }
 
-sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rContext, const uno::Reference< lang::XEventListener >& )
+sal_Bool SAL_CALL ScannerManager::configureScannerAndScan(
+    ScannerContext& rContext, const uno::Reference<lang::XEventListener>&)
 {
-    osl::MutexGuard aGuard( maProtector );
-    uno::Reference< XScannerManager >   xThis( this );
+    osl::MutexGuard aGuard(maProtector);
+    uno::Reference<XScannerManager> xThis(this);
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != "TWAIN" )
-        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
+    if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
+        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
 
     ReleaseData();
 
-    return aTwain.SelectSource( *this );
+    return aTwain.SelectSource(*this);
 }
 
-void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const uno::Reference< lang::XEventListener >& rxListener )
+void SAL_CALL ScannerManager::startScan(const ScannerContext& rContext,
+                                        const uno::Reference<lang::XEventListener>& rxListener)
 {
-    osl::MutexGuard aGuard( maProtector );
-    uno::Reference< XScannerManager >   xThis( this );
+    osl::MutexGuard aGuard(maProtector);
+    uno::Reference<XScannerManager> xThis(this);
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != "TWAIN" )
-        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
+    if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
+        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
 
     ReleaseData();
-    aTwain.PerformTransfer( *this, rxListener );
+    aTwain.PerformTransfer(*this, rxListener);
 }
 
-ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
+ScanError SAL_CALL ScannerManager::getError(const ScannerContext& rContext)
 {
-    osl::MutexGuard aGuard( maProtector );
-    uno::Reference< XScannerManager >   xThis( this );
+    osl::MutexGuard aGuard(maProtector);
+    uno::Reference<XScannerManager> xThis(this);
 
-    if( rContext.InternalData != 0 || rContext.ScannerName != "TWAIN" )
-        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext );
+    if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
+        throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
 
-    return( ( aTwain.GetState() == TWAIN_STATE_CANCELED ) ? ScanError_ScanCanceled : ScanError_ScanErrorNone );
+    return ((aTwain.GetState() == TWAIN_STATE_CANCELED) ? ScanError_ScanCanceled
+                                                        : ScanError_ScanErrorNone);
 }
 
-uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const ScannerContext& /*rContext*/ )
+uno::Reference<awt::XBitmap> SAL_CALL ScannerManager::getBitmap(const ScannerContext& /*rContext*/)
 {
-    osl::MutexGuard aGuard( maProtector );
-    return uno::Reference< awt::XBitmap >( this );
+    osl::MutexGuard aGuard(maProtector);
+    return uno::Reference<awt::XBitmap>(this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
