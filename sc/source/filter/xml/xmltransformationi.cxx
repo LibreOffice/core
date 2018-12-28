@@ -10,16 +10,11 @@
 #include "xmlimprt.hxx"
 #include "xmltransformationi.hxx"
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlerror.hxx>
 
 #include <datamapper.hxx>
 #include <document.hxx>
-#include <dbdata.hxx>
-#include <sax/tools/converter.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

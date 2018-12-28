@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlimp.hxx>
 #include "xmlsubti.hxx"
-#include <global.hxx>
 #include <formula/grammar.hxx>
 #include <dociter.hxx>
 

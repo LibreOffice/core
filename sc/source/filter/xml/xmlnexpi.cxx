@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustrbuf.hxx>
-
 #include "xmlnexpi.hxx"
 #include "xmlimprt.hxx"
-#include "xmlcelli.hxx"
-#include <docuno.hxx>
 #include <document.hxx>
 
 #include <xmloff/xmlnmspe.hxx>

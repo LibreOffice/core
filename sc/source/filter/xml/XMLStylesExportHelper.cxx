@@ -18,10 +18,8 @@
  */
 
 #include "XMLStylesExportHelper.hxx"
-#include <global.hxx>
 #include <tools/lineend.hxx>
 #include <unonames.hxx>
-#include "XMLConverter.hxx"
 #include "xmlexprt.hxx"
 #include <document.hxx>
 #include <rangeutl.hxx>
@@ -38,8 +36,6 @@
 #include <sfx2/app.hxx>
 #include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
-
-#include <algorithm>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

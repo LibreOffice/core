@@ -20,18 +20,13 @@
 #include <memory>
 #include "xmlcelli.hxx"
 #include "xmlimprt.hxx"
-#include "xmltabi.hxx"
-#include "xmlstyli.hxx"
 #include "xmlannoi.hxx"
 #include <global.hxx>
 #include <cellvalue.hxx>
 #include <document.hxx>
-#include <cellsuno.hxx>
 #include <docuno.hxx>
-#include <unonames.hxx>
 #include <postit.hxx>
 #include <sheetdata.hxx>
-#include <docsh.hxx>
 #include <cellform.hxx>
 #include <validat.hxx>
 #include <patattr.hxx>
@@ -45,33 +40,26 @@
 
 #include <arealink.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <convuno.hxx>
-#include "XMLConverter.hxx"
 #include <scerrors.hxx>
 #include <editutil.hxx>
 #include <formulacell.hxx>
 #include "editattributemap.hxx"
-#include <stringutil.hxx>
 #include <tokenarray.hxx>
 #include <scmatrix.hxx>
 #include <documentimport.hxx>
-#include <datastream.hxx>
-#include <rangeutl.hxx>
+#include <externalrefmgr.hxx>
 
 #include <xmloff/maptype.hxx>
-#include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/numehelp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/prstylei.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>
-#include <editeng/editobj.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -91,21 +79,17 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/unoapi.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <svtools/miscopt.hxx>
 #include <sax/tools/converter.hxx>
 #include <sax/fastattribs.hxx>
 
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/Date.hpp>
 
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/date.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/make_unique.hxx>
 

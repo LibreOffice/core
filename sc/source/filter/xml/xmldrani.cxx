@@ -23,23 +23,17 @@
 #include "xmlsorti.hxx"
 #include <document.hxx>
 #include <globalnames.hxx>
-#include <docuno.hxx>
 #include <dbdata.hxx>
 #include <datauno.hxx>
 #include <attrib.hxx>
 #include <unonames.hxx>
-#include <convuno.hxx>
 #include "XMLConverter.hxx"
 #include <rangeutl.hxx>
-#include <queryentry.hxx>
 #include <dputil.hxx>
 #include <sortparam.hxx>
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlerror.hxx>
 
 #include <sax/tools/converter.hxx>
 

@@ -21,17 +21,12 @@
 #include "xmlimprt.hxx"
 #include "xmldrani.hxx"
 #include "xmldpimp.hxx"
-#include <docuno.hxx>
-#include <convuno.hxx>
-#include "XMLConverter.hxx"
 #include <rangeutl.hxx>
 #include <queryentry.hxx>
 #include <document.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 

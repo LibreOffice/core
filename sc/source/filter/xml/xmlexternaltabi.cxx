@@ -22,12 +22,10 @@
 #include "xmltabi.hxx"
 #include "xmlstyli.hxx"
 
-#include <token.hxx>
 #include <document.hxx>
 #include <documentimport.hxx>
 
 #include <svl/sharedstringpool.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
