@@ -22,6 +22,30 @@
       "revId": "c314cc9f66f91caf61b8e5ca8f58844c8be38ec7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a3e6d215",
+        "filename": "sc/inc/stringutil.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-12-28T12:38:18Z",
+      "side": 0,
+      "message": "no, this is not part of the stable URE interface; it can be changed just fine",
+      "parentUuid": "5f4e5783_831e360a",
+      "range": {
+        "startLine": 154,
+        "startChar": 21,
+        "endLine": 154,
+        "endChar": 33
+      },
+      "revId": "c314cc9f66f91caf61b8e5ca8f58844c8be38ec7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
