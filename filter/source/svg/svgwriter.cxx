@@ -1648,7 +1648,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             mapCurShape->maShapePolyPoly = aStartArrow;
 
-                            if( pElementId ) // #i124825# pElementId is optinal, may be zero
+                            if( pElementId ) // #i124825# pElementId is optional, may be zero
                             {
                                 mapCurShape->maId = *pElementId + B2UCONST("_") + ::rtl::OUString::valueOf(nEntryCount++);
                             }
@@ -1660,7 +1660,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             mapCurShape->maShapePolyPoly = aEndArrow;
 
-                            if( pElementId ) // #i124825# pElementId is optinal, may be zero
+                            if( pElementId ) // #i124825# pElementId is optional, may be zero
                             {
                                 mapCurShape->maId = *pElementId + B2UCONST("_") + ::rtl::OUString::valueOf(nEntryCount++);
                             }
