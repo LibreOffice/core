@@ -40,9 +40,10 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), \
-		$(if $(filter %.c,$(3)), $(gb_CC), \
-			$(if $(filter -clr,$(2)), \
-				$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX)))) \
+		$(if $(filter YES,$(PE_X86)), $(CXX_X86_BINARY), \
+			$(if $(filter %.c,$(3)), $(gb_CC), \
+				$(if $(filter -clr,$(2)), \
+					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX))))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(2) \
@@ -57,6 +58,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(COMPILER_TEST),,$(gb_COMPILERDEPFLAGS)) \
 		$(INCLUDE) \
 		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
+		$(if $(filter YES,$(PE_X86)), -D_X86_ -U_AMD64_,) \
 		-c $(3) \
 		-Fo$(1)) $(if $(filter $(true),$(gb_SYMBOL)),/link /DEBUG:FASTLINK) \
 		$(if $(COMPILER_TEST),,$(call gb_create_deps,$(4),$(1),$(3)))
@@ -172,11 +174,17 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter YES,$(LIBRARY_X64)),,$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS$(MSC_SUBSYSTEM_VERSION), -SUBSYSTEM:CONSOLE$(MSC_SUBSYSTEM_VERSION))) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64) \
+		$(if $(filter YES,$(PE_X86)), -MACHINE:X86) \
 		$(if $(filter YES,$(LIBRARY_X64)), \
 			-LIBPATH:$(COMPATH)/lib/$(if $(filter 140,$(VCVER)),amd64,x64) \
 			-LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64 \
 			-LIBPATH:$(UCRTSDKDIR)lib/$(UCRTVERSION)/ucrt/x64 \
 		    $(if $(filter 80 81 10,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/$(WINDOWS_SDK_LIB_SUBDIR)/um/x64)) \
+		$(if $(filter YES,$(PE_X86)), \
+			-LIBPATH:$(COMPATH)/lib/x86 \
+			-LIBPATH:$(WINDOWS_SDK_HOME)/lib/x86 \
+			-LIBPATH:$(UCRTSDKDIR)lib/$(UCRTVERSION)/ucrt/x86 \
+			$(if $(filter 80 81 10,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/$(WINDOWS_SDK_LIB_SUBDIR)/um/x86)) \
 		$(T_LDFLAGS) \
 		$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),/NATVIS:$(SRCDIR)/solenv/vs/LibreOffice.natvis) \
 		@$${RESPONSEFILE} \
