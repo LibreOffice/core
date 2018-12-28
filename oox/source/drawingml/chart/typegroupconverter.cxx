@@ -277,7 +277,7 @@ Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
 Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
 {
     Reference< XLabeledDataSequence > xLabeledSeq;
-    /*  Find first existing category sequence. The bahaviour of Excel 2007 is
+    /*  Find first existing category sequence. The behaviour of Excel 2007 is
         different to Excel 2003, which always used the category sequence of the
         first series, even if it was empty. */
     for( TypeGroupModel::SeriesVector::iterator aIt = mrModel.maSeries.begin(), aEnd = mrModel.maSeries.end(); !xLabeledSeq.is() && (aIt != aEnd); ++aIt )
