@@ -1088,5 +1088,27 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf121168, "section_ps.odt", "4_v01.ods", "Tabe
     }
 }
 
+DECLARE_FILE_MAILMERGE_TEST(testTdf81782_file, "tdf78611.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    executeMailMerge(true);
+    for (int doc = 0; doc < 10; ++doc)
+    {
+        loadMailMergeDocument( doc );
+
+        // get document properties
+        uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
+
+        // check if properties were set
+        uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aKeywords.getLength());
+        CPPUNIT_ASSERT_EQUAL(OUString("one two"), aKeywords[0]);
+
+        // check title and subject
+        CPPUNIT_ASSERT_EQUAL(OUString("my title"), xDocumentProperties->getTitle());
+        CPPUNIT_ASSERT_EQUAL(OUString("my subject"), xDocumentProperties->getSubject());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
