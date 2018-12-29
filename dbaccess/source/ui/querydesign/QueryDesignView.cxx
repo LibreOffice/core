@@ -2918,13 +2918,10 @@ std::unique_ptr<OSQLParseNode> OQueryDesignView::getPredicateTreeFromEntry(const
         // we have a function here so we have to distinguish the type of return vOUalue
         OUString sFunction;
         if ( pEntry->isNumericOrAggreateFunction() )
-            sFunction = pEntry->GetFunction();
+            sFunction = pEntry->GetFunction().getToken(0, '(');
 
         if ( sFunction.isEmpty() )
-            sFunction = pEntry->GetField();
-
-        if (sFunction.indexOf('(')>=0) // sFunctions has at least 2 tokens
-            sFunction = sFunction.getToken(0,'('); // this should be the name of the function
+            sFunction = pEntry->GetField().getToken(0, '(');
 
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunction,&rParser.getContext());
         if ( nType == DataType::OTHER || (sFunction.isEmpty() && pEntry->isNumericOrAggreateFunction()) )
