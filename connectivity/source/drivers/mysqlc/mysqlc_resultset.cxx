@@ -614,6 +614,7 @@ sal_Bool SAL_CALL OResultSet::last()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureResultFetched();
     m_nRowPosition = m_nRowCount - 1;
 
     return true;
