@@ -1516,8 +1516,7 @@ namespace
                 aDragLeft->SetFunctionType(nFunctionType);
                 if ( bHaving )
                     aDragLeft->SetGroupBy(true);
-                sal_Int32 nIndex = 0;
-                aDragLeft->SetFunction(aColumnName.getToken(0,'(',nIndex));
+                aDragLeft->SetFunction(aColumnName.getToken(0, '('));
             }
             else
             {
