@@ -739,9 +739,12 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
         case SID_BASICIDE_MANAGE_LANG:
         {
-            ScopedVclPtrInstance< ManageLanguageDialog > aDlg(pCurWin, m_pCurLocalizationMgr);
-            aDlg->Execute();
-            rReq.Done();
+            std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+            rReq.Ignore(); // the 'old' request is not relevant any more
+            auto pDlg = VclPtr<ManageLanguageDialog>::Create(pCurWin, m_pCurLocalizationMgr);
+            pDlg->StartExecuteAsync([=](sal_Int32 /*nResult*/){
+                    pRequest->Done();
+                });
         }
         break;
 
