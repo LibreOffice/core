@@ -45,6 +45,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
+#include <sal/macros.h>
+
 static std::string wild("%");
 
 static void lcl_setRows_throw(const Reference<XResultSet>& _xResultSet, sal_Int32 _nType,

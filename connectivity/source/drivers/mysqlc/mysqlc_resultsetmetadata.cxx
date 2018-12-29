@@ -23,41 +23,61 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 using namespace connectivity::mysqlc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-MYSQL_FIELD* OResultSetMetaData::getField(sal_Int32 column) const
+OResultSetMetaData::OResultSetMetaData(OConnection& rConn, MYSQL_RES* pResult)
+    : m_rConnection(rConn)
 {
-    return mysql_fetch_field_direct(m_pRes, column - 1);
+    MYSQL_FIELD* fields = mysql_fetch_field(pResult);
+    unsigned nFieldCount = mysql_num_fields(pResult);
+    for (unsigned i = 0; i < nFieldCount; ++i)
+    {
+        MySqlFieldInfo fieldInfo{
+            OUString{ fields[i].name, static_cast<sal_Int32>(fields[i].name_length),
+                      m_rConnection.getConnectionEncoding() }, // column name
+            static_cast<sal_Int32>(fields[i].length), // length
+            mysqlc_sdbc_driver::mysqlToOOOType(fields[i].type, fields[i].charsetnr), // type
+            fields[i].type, // mysql_type
+            fields[i].charsetnr, // charset number
+            fields[i].flags,
+            OUString{ fields[i].db, static_cast<sal_Int32>(fields[i].db_length),
+                      m_rConnection.getConnectionEncoding() }, // schema name
+            OUString{ fields[i].table, static_cast<sal_Int32>(fields[i].table_length),
+                      m_rConnection.getConnectionEncoding() }, // table name
+            OUString{ fields[i].catalog, static_cast<sal_Int32>(fields[i].catalog_length),
+                      m_rConnection.getConnectionEncoding() }, // catalog
+            static_cast<sal_Int32>(fields[i].decimals),
+            static_cast<sal_Int32>(fields[i].max_length)
+        };
+        m_fields.push_back(std::move(fieldInfo));
+    }
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize(sal_Int32 column)
 {
-    MYSQL_FIELD* pField = getField(column);
-    return pField->length;
+    checkColumnIndex(column);
+    return m_fields.at(column - 1).length;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-
-    return mysqlc_sdbc_driver::mysqlToOOOType(pField->type, pField->charsetnr);
+    return m_fields.at(column - 1).type;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount() { return mysql_num_fields(m_pRes); }
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount() { return m_fields.size(); }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
 {
-    checkColumnIndex(column);
     //   MYSQL_FIELD::charsetnr is the collation identifier
     //   _ci postfix means it's insensitive
-    MYSQL_FIELD* pField = getField(column);
     OUStringBuffer sql{ "SHOW COLLATION WHERE Id =" };
-    sql.append(OUString::number(pField->charsetnr));
+    sql.append(OUString::number(m_fields.at(column - 1).charsetNumber));
 
     Reference<XStatement> stmt = m_rConnection.createStatement();
     Reference<XResultSet> rs = stmt->executeQuery(sql.makeStringAndClear());
@@ -74,54 +94,43 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
 OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-
-    return OStringToOUString(pField->db, m_rConnection.getConnectionEncoding());
+    return m_fields.at(column - 1).schemaName;
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    MYSQL_FIELD* pField = getField(column);
-    return OStringToOUString(pField->name, m_rConnection.getConnectionEncoding());
+    return m_fields.at(column - 1).columnName;
 }
 
 OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-    return OStringToOUString(pField->table, m_rConnection.getConnectionEncoding());
+    return m_fields.at(column - 1).tableName;
 }
 
 OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-    return OStringToOUString(pField->catalog, m_rConnection.getConnectionEncoding());
+    return m_fields.at(column - 1).catalogName;
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-
-    return mysqlc_sdbc_driver::mysqlTypeToStr(pField);
+    return mysqlc_sdbc_driver::mysqlTypeToStr(m_fields.at(column - 1).mysql_type,
+                                              m_fields.at(column - 1).flags);
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-    return OStringToOUString(pField->name, m_rConnection.getConnectionEncoding());
+    return getColumnName(column);
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
+OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 /*column*/)
 {
-    checkColumnIndex(column);
-
-    OUString aRet = OUString();
-    return aRet;
+    return OUString{};
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 /*column*/)
@@ -132,47 +141,43 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 /*column*/)
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    MYSQL_FIELD* pField = getField(column);
-    return (pField->flags & AUTO_INCREMENT_FLAG) != 0;
+    return (m_fields.at(column - 1).flags & AUTO_INCREMENT_FLAG) != 0;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
 {
     checkColumnIndex(column);
-
-    MYSQL_FIELD* pField = getField(column);
-    return !(pField->flags & UNSIGNED_FLAG);
+    return !(m_fields.at(column - 1).flags & UNSIGNED_FLAG);
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-    return pField->max_length - pField->decimals;
+    return m_fields.at(column - 1).max_length - m_fields.at(column - 1).decimals;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-    return pField->decimals;
+    return m_fields.at(column - 1).decimals;
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-    return (pField->flags & NOT_NULL_FLAG) ? 0 : 1;
+    return (m_fields.at(column - 1).flags & NOT_NULL_FLAG) ? 0 : 1;
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 /*column*/) { return true; }
+sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
+{
+    checkColumnIndex(column);
+    return true;
+}
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
 {
     checkColumnIndex(column);
-    MYSQL_FIELD* pField = getField(column);
-    return !(pField->db && strlen(pField->db));
+    return m_fields.at(column - 1).schemaName.isEmpty();
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
@@ -189,7 +194,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
 {
-    unsigned nColCount = mysql_num_fields(m_pRes);
+    auto nColCount = m_fields.size();
     if (columnIndex < 1 || columnIndex > static_cast<sal_Int32>(nColCount))
     {
         OUStringBuffer buf;
