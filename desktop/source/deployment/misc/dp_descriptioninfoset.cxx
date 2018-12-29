@@ -473,8 +473,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlatforms() const
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aToken = value.getToken( 0, ',', nIndex );
-        aToken = aToken.trim();
+        const OUString aToken = value.getToken( 0, ',', nIndex ).trim();
         if (!aToken.isEmpty())
             vec.push_back(aToken);
 
