@@ -734,12 +734,10 @@ cmd/lc_hyphenation.png cmd/lc_hyphenate.png
 cmd/sc_hyphenation.png cmd/sc_hyphenate.png
 
 # Currency
-cmd/lc_currencyfield.png cmd/lc_formattedfield.png
-cmd/sc_currencyfield.png cmd/sc_formattedfield.png
-cmd/lc_numberformatcurrency.png cmd/lc_formattedfield.png
-cmd/sc_numberformatcurrency.png cmd/sc_formattedfield.png
-cmd/lc_numberformatcurrencysimple.png cmd/lc_formattedfield.png
-cmd/sc_numberformatcurrencysimple.png cmd/sc_formattedfield.png
+cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
+cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
+cmd/lc_numberformatcurrencysimple.png cmd/lc_currencyfield.png
+cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
 
 # Fontwork
 cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
