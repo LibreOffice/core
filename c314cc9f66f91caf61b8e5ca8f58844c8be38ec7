@@ -46,6 +46,23 @@
       "revId": "c314cc9f66f91caf61b8e5ca8f58844c8be38ec7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_9e3b2dd0",
+        "filename": "sc/source/filter/excel/xicontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-29T06:22:01Z",
+      "side": 0,
+      "message": "surely the exit condition of the loop will need to move to after this line now?",
+      "revId": "c314cc9f66f91caf61b8e5ca8f58844c8be38ec7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

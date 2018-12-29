@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_7e3871d2",
+        "filename": "sc/source/ui/dbgui/validate.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-29T06:22:01Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "37e2983aaea52f65efdd72b8cc3254066a3e8845",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
