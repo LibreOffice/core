@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libwpd))
 $(eval $(call gb_UnpackedTarball_add_patches,libwpd,\
 	external/libwpd/libwpd-vs2013.patch.1 \
 	$(if $(SYSTEM_REVENGE),,external/libwpd/rpath.patch) \
+	external/libwpd/0001-fix-build-with-gcc-4.8.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)
