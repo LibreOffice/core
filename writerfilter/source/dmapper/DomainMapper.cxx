@@ -2883,6 +2883,7 @@ void DomainMapper::lcl_endSectionGroup()
             if (m_pImpl->GetIsDummyParaAddedForTableInSection())
                 m_pImpl->RemoveDummyParaForTableInSection();
         }
+        m_pImpl->SetIsTextFrameInserted( false );
         m_pImpl->PopProperties(CONTEXT_SECTION);
     }
 }

@@ -604,8 +604,11 @@ public:
     bool GetIsFirstParagraphInShape() { return m_bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
     bool GetIsDummyParaAddedForTableInSection() { return m_bDummyParaAddedForTableInSection;}
+
+    /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );
     bool GetIsTextFrameInserted() { return m_bTextFrameInserted;}
+
     void SetIsPreviousParagraphFramed( bool bIsFramed ) { m_bIsPreviousParagraphFramed = bIsFramed; }
     bool GetIsPreviousParagraphFramed() { return m_bIsPreviousParagraphFramed; }
     void SetParaSectpr(bool bParaSectpr);
