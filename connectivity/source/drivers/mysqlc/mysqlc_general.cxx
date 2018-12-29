@@ -109,8 +109,8 @@ void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum,
 {
     OString errorMsg{ msg };
     // TODO error code?
-    throw SQLException(OStringToOUString(errorMsg, encoding), _context, OUString(), errorNum,
-                       Any());
+    throw SQLException(rtl::OStringToOUString(errorMsg, encoding), _context, rtl::OUString(),
+                       errorNum, Any());
 }
 
 sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
@@ -225,11 +225,13 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
     return css::sdbc::DataType::VARCHAR;
 }
 
-OUString mysqlTypeToStr(MYSQL_FIELD* field)
+OUString mysqlTypeToStr(MYSQL_FIELD* field) { return mysqlTypeToStr(field->type, field->flags); }
+
+OUString mysqlTypeToStr(unsigned type, unsigned flags)
 {
-    bool isUnsigned = (field->flags & UNSIGNED_FLAG) != 0;
-    bool isZerofill = (field->flags & ZEROFILL_FLAG) != 0;
-    switch (field->type)
+    bool isUnsigned = (flags & UNSIGNED_FLAG) != 0;
+    bool isZerofill = (flags & ZEROFILL_FLAG) != 0;
+    switch (type)
     {
         case MYSQL_TYPE_BIT:
             return OUString{ "BIT" };
@@ -294,21 +296,21 @@ OUString mysqlTypeToStr(MYSQL_FIELD* field)
         }
         case MYSQL_TYPE_VARCHAR:
         case MYSQL_TYPE_VAR_STRING:
-            if (field->flags & ENUM_FLAG)
+            if (flags & ENUM_FLAG)
             {
                 return OUString{ "ENUM" };
             }
-            if (field->flags & SET_FLAG)
+            if (flags & SET_FLAG)
             {
                 return OUString{ "SET" };
             }
             return OUString{ "VARCHAR" };
         case MYSQL_TYPE_STRING:
-            if (field->flags & ENUM_FLAG)
+            if (flags & ENUM_FLAG)
             {
                 return OUString{ "ENUM" };
             }
-            if (field->flags & SET_FLAG)
+            if (flags & SET_FLAG)
             {
                 return OUString{ "SET" };
             }
@@ -322,9 +324,9 @@ OUString mysqlTypeToStr(MYSQL_FIELD* field)
     }
 }
 
-OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
+rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
 {
-    return OUString(_string.c_str(), _string.size(), encoding);
+    return rtl::OUString(_string.c_str(), _string.size(), encoding);
 }
 
 } /* namespace */
