@@ -18,9 +18,12 @@
  */
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include "twain32shim.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <config_folders.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/conditn.hxx>
@@ -28,12 +31,15 @@
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
 #include <salhelper/thread.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include "scanner.hxx"
 
-using namespace ::com::sun::star;
+namespace
+{
 
 enum TwainState
 {
@@ -53,15 +59,23 @@ using ScopedHANDLE = std::unique_ptr<HANDLE, HANDLEDeleter>;
 
 class Twain
 {
+public:
+    Twain();
+    ~Twain();
+
+    bool SelectSource(ScannerManager& rMgr);
+    bool PerformTransfer(ScannerManager& rMgr,
+                         const css::uno::Reference<css::lang::XEventListener>& rxListener);
+
+    TwainState GetState() const { return meState; }
+
+private:
     friend class ShimListenerThread;
     class ShimListenerThread : public salhelper::Thread
     {
     public:
-        ShimListenerThread(Twain& rOwner)
-            : salhelper::Thread("TWAINShimListenerThread")
-            , mrOwner(rOwner)
-        {
-        }
+        ShimListenerThread();
+        ~ShimListenerThread() override;
         void execute() override;
         const OUString& getError() { return msErrorReported; }
 
@@ -74,7 +88,7 @@ class Twain
         bool RequestInitXfer();
 
     private:
-        Twain& mrOwner;
+        VclPtr<vcl::Window> mxTopWindow; // the window that we made modal
         bool mbDontNotify = false;
         HWND mhWndShim = nullptr; // shim main window handle
         OUString msErrorReported;
@@ -89,8 +103,8 @@ class Twain
         void NotifyOwner(WPARAM nEvent);
         void NotifyXFerOwner(LPARAM nHandle);
     };
-    uno::Reference<lang::XEventListener> mxListener;
-    uno::Reference<scanner::XScannerManager> mxMgr;
+    css::uno::Reference<css::lang::XEventListener> mxListener;
+    css::uno::Reference<css::scanner::XScannerManager> mxMgr;
     ScannerManager* mpCurMgr = nullptr;
     TwainState meState = TWAIN_STATE_NONE;
     rtl::Reference<ShimListenerThread> mpThread;
@@ -104,17 +118,47 @@ class Twain
     bool InitializeNewShim(ScannerManager& rMgr);
 
     void Reset(); // cleanup thread and manager
-
-public:
-    Twain();
-    ~Twain();
-
-    bool SelectSource(ScannerManager& rMgr);
-    bool PerformTransfer(ScannerManager& rMgr,
-                         const uno::Reference<lang::XEventListener>& rxListener);
-
-    TwainState GetState() const { return meState; }
 };
+
+static Twain aTwain;
+
+css::uno::Reference<css::frame::XFrame> ImplGetActiveFrame()
+{
+    try
+    {
+        // query desktop instance
+        css::uno::Reference<css::frame::XDesktop2> xDesktop
+            = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+        if (css::uno::Reference<css::frame::XFrame> xActiveFrame = xDesktop->getActiveFrame())
+            return xActiveFrame;
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
+    SAL_WARN("extensions.scanner", "ImplGetActiveFrame: Could not determine active frame!");
+    return css::uno::Reference<css::frame::XFrame>();
+}
+
+Twain::ShimListenerThread::ShimListenerThread()
+    : salhelper::Thread("TWAINShimListenerThread")
+{
+    if (css::uno::Reference<css::frame::XFrame> xTopFrame = ImplGetActiveFrame())
+    {
+        mxTopWindow = VCLUnoHelper::GetWindow(xTopFrame->getComponentWindow());
+        if (mxTopWindow)
+        {
+            mxTopWindow->IncModalCount(); // the operation is modal to the frame
+        }
+    }
+}
+
+Twain::ShimListenerThread::~ShimListenerThread()
+{
+    if (mxTopWindow)
+    {
+        mxTopWindow->DecModalCount(); // unblock the frame
+    }
+}
 
 bool Twain::ShimListenerThread::WaitInitialization()
 {
@@ -126,20 +170,6 @@ bool Twain::ShimListenerThread::WaitRequestResult()
 {
     mcGotRequestResult.wait();
     return mbRequestResult;
-}
-
-void Twain::ShimListenerThread::RequestDestroy() { SendShimRequest(TWAIN_REQUEST_QUIT); }
-
-bool Twain::ShimListenerThread::RequestSelectSource()
-{
-    assert(mbInitSucceeded);
-    return SendShimRequestWithResult(TWAIN_REQUEST_SELECTSOURCE);
-}
-
-bool Twain::ShimListenerThread::RequestInitXfer()
-{
-    assert(mbInitSucceeded);
-    return SendShimRequestWithResult(TWAIN_REQUEST_INITXFER);
 }
 
 void Twain::ShimListenerThread::SendShimRequest(WPARAM nRequest)
@@ -156,16 +186,30 @@ bool Twain::ShimListenerThread::SendShimRequestWithResult(WPARAM nRequest)
     return WaitRequestResult();
 }
 
+void Twain::ShimListenerThread::RequestDestroy() { SendShimRequest(TWAIN_REQUEST_QUIT); }
+
+bool Twain::ShimListenerThread::RequestSelectSource()
+{
+    assert(mbInitSucceeded);
+    return SendShimRequestWithResult(TWAIN_REQUEST_SELECTSOURCE);
+}
+
+bool Twain::ShimListenerThread::RequestInitXfer()
+{
+    assert(mbInitSucceeded);
+    return SendShimRequestWithResult(TWAIN_REQUEST_INITXFER);
+}
+
 void Twain::ShimListenerThread::NotifyOwner(WPARAM nEvent)
 {
     if (!mbDontNotify)
-        mrOwner.Notify(nEvent);
+        aTwain.Notify(nEvent);
 }
 
 void Twain::ShimListenerThread::NotifyXFerOwner(LPARAM nHandle)
 {
     if (!mbDontNotify)
-        mrOwner.NotifyXFer(nHandle);
+        aTwain.NotifyXFer(nHandle);
 }
 
 // May only be called from the own thread, so no threading issues modifying self
@@ -234,11 +278,7 @@ void Twain::ShimListenerThread::execute()
             // We need a WinAPI HANDLE of the process to be able to wait on it and detect the process
             // termination; so use WinAPI to start the process, not osl_executeProcess.
 
-            STARTUPINFOW si{}; // null-initialize
-            si.cb = sizeof(si);
-            si.dwFlags = STARTF_USESHOWWINDOW;
-            si.wShowWindow = SW_HIDE;
-
+            STARTUPINFOW si{ sizeof(si) }; // null-initialize all but cb
             PROCESS_INFORMATION pi;
 
             if (!CreateProcessW(nullptr, const_cast<LPWSTR>(o3tl::toW(sCmdLine.getStr())), nullptr,
@@ -317,9 +357,9 @@ bool Twain::InitializeNewShim(ScannerManager& rMgr)
 
     // hold reference to ScannerManager, to prevent premature death
     mxMgr.set(static_cast<OWeakObject*>(const_cast<ScannerManager*>(mpCurMgr = &rMgr)),
-              uno::UNO_QUERY);
+              css::uno::UNO_QUERY);
 
-    mpThread.set(new ShimListenerThread(*this));
+    mpThread.set(new ShimListenerThread());
     mpThread->launch();
     const bool bSuccess = mpThread->WaitInitialization();
     if (!bSuccess)
@@ -354,7 +394,7 @@ bool Twain::SelectSource(ScannerManager& rMgr)
 }
 
 bool Twain::PerformTransfer(ScannerManager& rMgr,
-                            const uno::Reference<lang::XEventListener>& rxListener)
+                            const css::uno::Reference<css::lang::XEventListener>& rxListener)
 {
     osl::MutexGuard aGuard(maMutex);
     bool bRet = false;
@@ -384,7 +424,7 @@ IMPL_LINK(Twain, ImpNotifyHdl, void*, pParam, void)
             if (meState != TWAIN_STATE_DONE)
                 meState = TWAIN_STATE_CANCELED;
 
-            lang::EventObject event(mxMgr); // mxMgr will be cleared below
+            css::lang::EventObject event(mxMgr); // mxMgr will be cleared below
 
             if (mpThread)
                 Reset();
@@ -410,18 +450,18 @@ IMPL_LINK(Twain, ImpNotifyXferHdl, void*, pParam, void)
         mpCurMgr->SetData(pParam);
         meState = pParam ? TWAIN_STATE_DONE : TWAIN_STATE_CANCELED;
 
-        lang::EventObject event(mxMgr); // mxMgr will be cleared below
+        css::lang::EventObject event(mxMgr); // mxMgr will be cleared below
 
         Reset();
 
         if (mxListener.is())
-            mxListener->disposing(lang::EventObject(mxMgr));
+            mxListener->disposing(css::lang::EventObject(mxMgr));
     }
 
     mxListener.clear();
 }
 
-static Twain aTwain;
+} // namespace
 
 void ScannerManager::AcquireData() {}
 
@@ -434,9 +474,9 @@ void ScannerManager::ReleaseData()
     }
 }
 
-awt::Size ScannerManager::getSize()
+css::awt::Size ScannerManager::getSize()
 {
-    awt::Size aRet;
+    css::awt::Size aRet;
 
     if (mpData)
     {
@@ -456,9 +496,9 @@ awt::Size ScannerManager::getSize()
     return aRet;
 }
 
-uno::Sequence<sal_Int8> ScannerManager::getDIB()
+css::uno::Sequence<sal_Int8> ScannerManager::getDIB()
 {
-    uno::Sequence<sal_Int8> aRet;
+    css::uno::Sequence<sal_Int8> aRet;
 
     if (mpData)
     {
@@ -494,7 +534,7 @@ uno::Sequence<sal_Int8> ScannerManager::getDIB()
                     break;
             }
 
-            aRet = uno::Sequence<sal_Int8>(sizeof(BITMAPFILEHEADER) + nDIBSize);
+            aRet = css::uno::Sequence<sal_Int8>(sizeof(BITMAPFILEHEADER) + nDIBSize);
 
             sal_Int8* pBuf = aRet.getArray();
             SvMemoryStream* pMemStm
@@ -516,10 +556,10 @@ uno::Sequence<sal_Int8> ScannerManager::getDIB()
     return aRet;
 }
 
-uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners()
+css::uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners()
 {
     osl::MutexGuard aGuard(maProtector);
-    uno::Sequence<ScannerContext> aRet(1);
+    css::uno::Sequence<ScannerContext> aRet(1);
 
     aRet.getArray()[0].ScannerName = "TWAIN";
     aRet.getArray()[0].InternalData = 0;
@@ -528,10 +568,10 @@ uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners()
 }
 
 sal_Bool SAL_CALL ScannerManager::configureScannerAndScan(
-    ScannerContext& rContext, const uno::Reference<lang::XEventListener>&)
+    ScannerContext& rContext, const css::uno::Reference<css::lang::XEventListener>&)
 {
     osl::MutexGuard aGuard(maProtector);
-    uno::Reference<XScannerManager> xThis(this);
+    css::uno::Reference<XScannerManager> xThis(this);
 
     if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
         throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
@@ -542,10 +582,10 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan(
 }
 
 void SAL_CALL ScannerManager::startScan(const ScannerContext& rContext,
-                                        const uno::Reference<lang::XEventListener>& rxListener)
+                          const css::uno::Reference<css::lang::XEventListener>& rxListener)
 {
     osl::MutexGuard aGuard(maProtector);
-    uno::Reference<XScannerManager> xThis(this);
+    css::uno::Reference<XScannerManager> xThis(this);
 
     if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
         throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
@@ -557,7 +597,7 @@ void SAL_CALL ScannerManager::startScan(const ScannerContext& rContext,
 ScanError SAL_CALL ScannerManager::getError(const ScannerContext& rContext)
 {
     osl::MutexGuard aGuard(maProtector);
-    uno::Reference<XScannerManager> xThis(this);
+    css::uno::Reference<XScannerManager> xThis(this);
 
     if (rContext.InternalData != 0 || rContext.ScannerName != "TWAIN")
         throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
@@ -566,10 +606,11 @@ ScanError SAL_CALL ScannerManager::getError(const ScannerContext& rContext)
                                                         : ScanError_ScanErrorNone);
 }
 
-uno::Reference<awt::XBitmap> SAL_CALL ScannerManager::getBitmap(const ScannerContext& /*rContext*/)
+ css::uno::Reference<css::awt::XBitmap>
+    SAL_CALL ScannerManager::getBitmap(const ScannerContext& /*rContext*/)
 {
     osl::MutexGuard aGuard(maProtector);
-    return uno::Reference<awt::XBitmap>(this);
+    return css::uno::Reference<css::awt::XBitmap>(this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

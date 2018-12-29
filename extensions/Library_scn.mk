@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,scn,\
 	sal \
 	$(if $(filter WNT,$(OS)),salhelper) \
 	svt \
+	$(if $(filter WNT,$(OS)),tk) \
 	tl \
 	utl \
 	vcl \
