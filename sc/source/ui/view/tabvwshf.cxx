@@ -164,7 +164,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             ShowTable( sTables );
                             pReq->Done();
                         }
-                        pDlg->disposeOnce();
                     });
                     rReq.Ignore();
                 }

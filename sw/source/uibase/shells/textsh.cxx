@@ -524,9 +524,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         VclPtr<VclAbstractDialog> pColDlg(pFact->CreateSwColumnDialog(GetView().GetFrameWeld(), rSh));
-        pColDlg->StartExecuteAsync([=](sal_Int32 /*nResult*/){
-            pColDlg->disposeOnce();
-        });
+        pColDlg->StartExecuteAsync(nullptr);
     }
     break;
 

@@ -100,8 +100,6 @@ void FuLine::DoExecute( SfxRequest& rReq )
 
         // deferred until the dialog ends
         mpViewShell->Cancel();
-
-        pDlg->disposeOnce();
     });
 }
 

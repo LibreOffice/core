@@ -564,8 +564,6 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
             pRequest->Done(*pOutSet);
         }
-
-        pDlg->disposeOnce();
     });
 }
 

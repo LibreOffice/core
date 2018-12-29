@@ -81,7 +81,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     SfxItemSet aSet( mpView->GetGeoAttrFromMarked() );
     VclPtr<SfxAbstractTabDialog> pDlg;
 
-    bool bWelded = false;
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     if( rMarkList.GetMarkCount() == 1 &&
@@ -105,7 +104,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         pDlg.reset(pFact->CreateSvxTransformTabDialog(mpViewShell->GetFrameWeld(), &aSet, mpView));
-        bWelded = true;
     }
 
     if (!pDlg)
@@ -114,7 +112,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
     rReq.Ignore(); // the 'old' request is not relevant any more
 
-    pDlg->StartExecuteAsync([bWelded, pDlg, pRequest, this](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, pRequest, this](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
             pRequest->Done(*(pDlg->GetOutputItemSet()));
@@ -124,8 +122,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         // deferred until the dialog ends
         mpViewShell->Invalidate(SID_RULER_OBJECT);
         mpViewShell->Cancel();
-        if (bWelded)
-            pDlg->disposeOnce();
     });
 }
 

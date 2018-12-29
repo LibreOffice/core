@@ -614,8 +614,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     rBindings.Update(SID_ATTR_TABSTOP);
                     rBindings.Update(SID_RULER_BORDERS_VERTICAL);
                     rBindings.Update(SID_ATTR_TABSTOP_VERTICAL);
-
-                    pDlg->disposeOnce();
                 });
             }
             else

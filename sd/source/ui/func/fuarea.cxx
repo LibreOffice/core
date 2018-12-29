@@ -84,8 +84,6 @@ void FuArea::DoExecute( SfxRequest& rReq )
 
         // deferred until the dialog ends
         mpViewShell->Cancel();
-
-        pDlg->disposeOnce();
     });
 }
 
