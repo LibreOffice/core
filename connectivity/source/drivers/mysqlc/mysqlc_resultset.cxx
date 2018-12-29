@@ -125,7 +125,7 @@ OResultSet::OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* p
     , m_pResult(pResult)
     , m_encoding(_encoding)
 {
-    m_xMetaData = new OResultSetMetaData(m_rConnection, m_pResult, m_encoding);
+    m_xMetaData = new OResultSetMetaData(m_rConnection, m_pResult);
 }
 
 void OResultSet::ensureResultFetched()
