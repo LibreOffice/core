@@ -63,6 +63,24 @@
       "revId": "c314cc9f66f91caf61b8e5ca8f58844c8be38ec7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_5e4ff5bc",
+        "filename": "sc/source/filter/excel/xicontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2018-12-29T21:41:04Z",
+      "side": 0,
+      "message": "IMHO the exit condition should not be moved, otherwise last token would not be processed:GetQuotedToken behaves like O(U)String::getToken(): nStringIx is set to -1 if no more tokens are available after current one.",
+      "parentUuid": "5f4e5783_9e3b2dd0",
+      "revId": "c314cc9f66f91caf61b8e5ca8f58844c8be38ec7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
