@@ -87,16 +87,6 @@ void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize)
     }
 }
 
-/// Use this intead of mysql_real_escape_string, because that one also escapes
-/// single quote ('), which should not be escaped
-rtl::OString escapeSql(const rtl::OString& from)
-{
-    rtl::OString sRet = from.replaceAll("\\", "\\\\");
-    sRet = sRet.replaceAll("\"", "\\\"");
-    sRet = sRet.replaceAll("`", "\\`");
-    return sRet;
-}
-
 void throwFeatureNotImplementedException(const sal_Char* _pAsciiFeatureName,
                                          const css::uno::Reference<XInterface>& _rxContext)
 {
@@ -121,13 +111,6 @@ void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum,
     // TODO error code?
     throw SQLException(rtl::OStringToOUString(errorMsg, encoding), _context, rtl::OUString(),
                        errorNum, Any());
-}
-
-rtl::OUString getStringFromAny(const Any& _rAny)
-{
-    rtl::OUString nReturn;
-    OSL_VERIFY(_rAny >>= nReturn);
-    return nReturn;
 }
 
 sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
@@ -242,11 +225,13 @@ sal_Int32 mysqlStrToOOOType(const rtl::OUString& sType)
     return css::sdbc::DataType::VARCHAR;
 }
 
-rtl::OUString mysqlTypeToStr(MYSQL_FIELD* field)
+OUString mysqlTypeToStr(MYSQL_FIELD* field) { return mysqlTypeToStr(field->type, field->flags); }
+
+OUString mysqlTypeToStr(unsigned type, unsigned flags)
 {
-    bool isUnsigned = (field->flags & UNSIGNED_FLAG) != 0;
-    bool isZerofill = (field->flags & ZEROFILL_FLAG) != 0;
-    switch (field->type)
+    bool isUnsigned = (flags & UNSIGNED_FLAG) != 0;
+    bool isZerofill = (flags & ZEROFILL_FLAG) != 0;
+    switch (type)
     {
         case MYSQL_TYPE_BIT:
             return OUString{ "BIT" };
@@ -311,21 +296,21 @@ rtl::OUString mysqlTypeToStr(MYSQL_FIELD* field)
         }
         case MYSQL_TYPE_VARCHAR:
         case MYSQL_TYPE_VAR_STRING:
-            if (field->flags & ENUM_FLAG)
+            if (flags & ENUM_FLAG)
             {
                 return OUString{ "ENUM" };
             }
-            if (field->flags & SET_FLAG)
+            if (flags & SET_FLAG)
             {
                 return OUString{ "SET" };
             }
             return OUString{ "VARCHAR" };
         case MYSQL_TYPE_STRING:
-            if (field->flags & ENUM_FLAG)
+            if (flags & ENUM_FLAG)
             {
                 return OUString{ "ENUM" };
             }
-            if (field->flags & SET_FLAG)
+            if (flags & SET_FLAG)
             {
                 return OUString{ "SET" };
             }
@@ -342,11 +327,6 @@ rtl::OUString mysqlTypeToStr(MYSQL_FIELD* field)
 rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
 {
     return rtl::OUString(_string.c_str(), _string.size(), encoding);
-}
-
-::std::string convert(const rtl::OUString& _string, const rtl_TextEncoding encoding)
-{
-    return ::std::string(rtl::OUStringToOString(_string, encoding).getStr());
 }
 
 } /* namespace */

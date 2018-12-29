@@ -110,8 +110,7 @@ Reference<XResultSetMetaData> SAL_CALL OPreparedStatement::getMetaData()
     {
         MYSQL_RES* pRes = mysql_stmt_result_metadata(m_pStmt);
         // TODO warning or error if no meta data.
-        m_xMetaData = new OResultSetMetaData(*m_xConnection.get(), pRes,
-                                             getOwnConnection()->getConnectionEncoding());
+        m_xMetaData = new OResultSetMetaData(*m_xConnection.get(), pRes);
     }
     return m_xMetaData;
 }
