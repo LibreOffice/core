@@ -251,12 +251,24 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode )
 {
     m_nHeadersFootersInSection = 1;
+
+    // document setting indicating the requirement of EVEN and ODD for both headers and footers
+    if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
+        m_aSettings.evenAndOddHeaders = true;
+
     // Turn ON flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( true );
 
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
         WriteHeaderFooter( &rLeftFormat, true, "even" );
+    else if ( m_aSettings.evenAndOddHeaders )
+    {
+        if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_ODD )
+            WriteHeaderFooter( &rFormat, true, "even" );
+        else if ( m_bHasHdr && nBreakCode == 2 )
+            WriteHeaderFooter( nullptr, true, "even" );
+    }
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_ODD )
         WriteHeaderFooter( &rFormat, true, "default" );
@@ -274,6 +286,13 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     // footers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_EVEN )
         WriteHeaderFooter( &rLeftFormat, false, "even" );
+    else if ( m_aSettings.evenAndOddHeaders )
+    {
+        if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_ODD )
+           WriteHeaderFooter( &rFormat, false, "even" );
+        else if ( m_bHasFtr && nBreakCode == 2 )
+            WriteHeaderFooter( nullptr, false, "even");
+    }
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_ODD )
         WriteHeaderFooter( &rFormat, false, "default" );
@@ -287,14 +306,8 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
             && m_bHasFtr && nBreakCode == 2 ) // 2: nexPage
         WriteHeaderFooter( nullptr, false, "default");
 
-    if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
-        m_aSettings.evenAndOddHeaders = true;
-
     // Turn OFF flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( false );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
-#endif
 }
 
 void DocxExport::OutputField( const SwField* pField, ww::eField eFieldType, const OUString& rFieldCmd, FieldFlags nMode )
