@@ -980,8 +980,8 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
             aCmdLineArgs->getCwdUrl());
         m_handler->cProcessed.reset();
         pRequest->pcProcessed = &m_handler->cProcessed;
-        m_handler->mbSucces = false;
-        pRequest->mpbSuccess = &m_handler->mbSucces;
+        m_handler->mbSuccess = false;
+        pRequest->mpbSuccess = &m_handler->mbSuccess;
 
         // Print requests are not dependent on the --invisible cmdline argument as they are
         // loaded with the "hidden" flag! So they are always checked.
@@ -1185,7 +1185,7 @@ void PipeIpcThread::execute()
             if (waitProcessed)
             {
                 m_handler->cProcessed.wait();
-                bSuccess = m_handler->mbSucces;
+                bSuccess = m_handler->mbSuccess;
             }
             if (bSuccess)
             {
