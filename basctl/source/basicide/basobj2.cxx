@@ -72,7 +72,7 @@ void Organize( sal_Int16 tabId )
             aDesc = pCurWin->CreateEntryDescriptor();
 
     vcl::Window* pParent = Application::GetDefDialogParent();
-    ScopedVclPtrInstance<OrganizeDialog>(pParent, tabId, aDesc)->Execute();
+    VclPtr<OrganizeDialog>::Create(pParent, tabId, aDesc)->StartExecuteAsync(nullptr);
 }
 
 bool IsValidSbxName( const OUString& rName )

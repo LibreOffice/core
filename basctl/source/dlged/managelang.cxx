@@ -145,19 +145,21 @@ void ManageLanguageDialog::ClearLanguageBox()
 
 IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, Button*, void)
 {
-    ScopedVclPtrInstance< SetDefaultLanguageDialog > aDlg( this, m_xLocalizationMgr );
-    if ( aDlg->Execute() == RET_OK )
-    {
-        // add new locales
-        Sequence< Locale > aLocaleSeq = aDlg->GetLocales();
-        m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
-        // update listbox
-        ClearLanguageBox();
-        FillLanguageBox();
+    VclPtr< SetDefaultLanguageDialog > pDlg = VclPtr<SetDefaultLanguageDialog>::Create(this, m_xLocalizationMgr);
+    pDlg->StartExecuteAsync([pDlg,this](sal_Int32 nResult)
+        {
+            if (!nResult )
+                return;
+            // add new locales
+            Sequence< Locale > aLocaleSeq = pDlg->GetLocales();
+            m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
+            // update listbox
+            ClearLanguageBox();
+            FillLanguageBox();
 
-        if (SfxBindings* pBindings = GetBindingsPtr())
-            pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
-    }
+            if (SfxBindings* pBindings = GetBindingsPtr())
+                pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
+        });
 }
 
 IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, Button*, void)
