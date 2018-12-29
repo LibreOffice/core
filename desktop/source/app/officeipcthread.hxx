@@ -93,7 +93,7 @@ class RequestHandler: public salhelper::SimpleReferenceObject
     /* condition to be set when the request has been processed */
     ::osl::Condition cProcessed;
     /* receives if the processing was successful (may be false e.g. when shutting down) */
-    bool mbSucces = false;
+    bool mbSuccess = false;
 
     /* condition to be set when the main event loop is ready
        otherwise an error dialogs event loop could eat away
