@@ -902,19 +902,17 @@ void OQueryController::onLoadedMenu(const Reference< css::frame::XLayoutManager 
 
 OUString OQueryController::getPrivateTitle( ) const
 {
-    OUString sName = m_sName;
-    if ( sName.isEmpty() )
+    if ( m_sName.isEmpty() )
     {
         if ( !editingCommand() )
         {
             SolarMutexGuard aSolarGuard;
             ::osl::MutexGuard aGuard( getMutex() );
             OUString aDefaultName = DBA_RES(editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE);
-            sName = aDefaultName.getToken(0,' ');
-            sName += OUString::number(getCurrentStartNumber());
+            return aDefaultName.getToken(0, ' ') + OUString::number(getCurrentStartNumber());
         }
     }
-    return sName;
+    return m_sName;
 }
 
 void OQueryController::setQueryComposer()
@@ -1205,8 +1203,7 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
         else
         {
             OUString sName = DBA_RES(editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE);
-            aDefaultName = sName.getToken(0,' ');
-            aDefaultName = ::dbtools::createUniqueName(_xElements,aDefaultName);
+            aDefaultName = ::dbtools::createUniqueName(_xElements, sName.getToken(0, ' '));
         }
 
         DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
