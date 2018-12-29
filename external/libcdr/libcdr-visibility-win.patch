@@ -1,0 +1,11 @@
+--- configure.dt	2018-12-29 16:23:02.355271146 +0100
++++ configure	2018-12-29 16:23:21.644060142 +0100
+@@ -19116,6 +19116,8 @@
+ 
+ 
+ if test $platform_win32 = yes; then :
++  HAVE_VISIBILITY_TRUE='#'
++  HAVE_VISIBILITY_FALSE=
+ 
+ else
+ 
