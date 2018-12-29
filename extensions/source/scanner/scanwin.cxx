@@ -251,8 +251,7 @@ void Twain::ShimListenerThread::execute()
         HANDLE h = hShimProcess.get();
         while (true)
         {
-            DWORD nWaitResult = MsgWaitForMultipleObjects(1, &h, FALSE, INFINITE,
-                                                          QS_ALLPOSTMESSAGE | QS_SENDMESSAGE);
+            DWORD nWaitResult = MsgWaitForMultipleObjects(1, &h, FALSE, INFINITE, QS_POSTMESSAGE);
             // Process any messages in queue before checking if we need to break, to not loose
             // possible pending notifications
             while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE))
