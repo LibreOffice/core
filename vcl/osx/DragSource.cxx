@@ -146,6 +146,7 @@ DragSource::DragSource():
   mView(nullptr),
   mpFrame(nullptr),
   mLastMouseEventBeforeStartDrag(nil),
+  mDragSourceHelper(nil),
   m_MouseButton(0)
 {
 }
