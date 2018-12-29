@@ -92,12 +92,10 @@ void resetSqlVar(void** target, T* pValue, enum_field_types type, sal_Int32 nSiz
 
 void allocateSqlVar(void** mem, enum_field_types eType, unsigned nSize = 0);
 
-/// @throws css::sdbc::SQLException
 void throwFeatureNotImplementedException(
     const sal_Char* _pAsciiFeatureName,
     const css::uno::Reference<css::uno::XInterface>& _rxContext);
 
-/// @throws css::sdbc::SQLException
 void throwInvalidArgumentException(const sal_Char* _pAsciiFeatureName,
                                    const css::uno::Reference<css::uno::XInterface>& _rxContext);
 
@@ -108,6 +106,8 @@ void throwSQLExceptionWithMsg(const char* msg, unsigned int errorNum,
 sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept;
 
 OUString mysqlTypeToStr(MYSQL_FIELD* pField);
+
+OUString mysqlTypeToStr(unsigned mysql_type, unsigned mysql_flags);
 
 sal_Int32 mysqlStrToOOOType(const OUString& sType);
 
