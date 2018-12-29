@@ -97,7 +97,6 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 
     bool isWindow() const;
     QWindow* windowHandle() const;
-    QScreen* screen() const;
     bool isMinimized() const;
     bool isMaximized() const;
 
@@ -117,6 +116,7 @@ public:
 
     QWidget* GetQWidget() const { return m_pQWidget; }
     Qt5MainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
+    QScreen* screen() const;
 
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;

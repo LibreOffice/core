@@ -32,6 +32,7 @@
 #include <QtGui/QGlyphRun>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QRawFont>
+#include <QtGui/QScreen>
 #include <QtCore/QStringList>
 
 void Qt5Graphics::SetTextColor(Color nColor) { m_aTextColor = nColor; }
@@ -177,10 +178,20 @@ std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFall
 
 void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    const Qt5Font* pFont = static_cast<const Qt5Font*>(&rLayout.GetFont());
-    assert(pFont);
-    QRawFont aRawFont(QRawFont::fromFont(*pFont));
+    const Qt5Font* pQt5Font = static_cast<const Qt5Font*>(&rLayout.GetFont());
+    assert(pQt5Font);
 
+    // since we can't manage screen dependent fonts in LO, switch the size
+    // before actually using it. Since the font itself is const, we copy it.
+    QFont pFont(*pQt5Font);
+    QScreen* pScreen = m_pFrame ? m_pFrame->screen() : nullptr;
+    if (pScreen)
+    {
+        const FontSelectPattern& rFSP = pQt5Font->GetFontSelectPattern();
+        pFont.setPointSizeF(rFSP.mfExactHeight * 72.0 / pScreen->logicalDotsPerInch());
+    }
+
+    QRawFont aRawFont(QRawFont::fromFont(pFont));
     QVector<quint32> glyphIndexes;
     QVector<QPointF> positions;
 
