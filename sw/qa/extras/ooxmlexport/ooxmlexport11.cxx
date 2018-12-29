@@ -462,6 +462,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113258_noBeforeAutospacing, "tdf113258_noBeforeA
                          getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf120511_eatenSection, "tdf120511_eatenSection.docx")
+{
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nHeight = getXPath(pXmlDoc, "/root/page[1]/infos/prtBounds", "height").toInt32();
+    sal_Int32 nWidth  = getXPath(pXmlDoc, "/root/page[1]/infos/prtBounds", "width").toInt32();
+    CPPUNIT_ASSERT_MESSAGE( "Page1 is portrait", nWidth < nHeight );
+    nHeight = getXPath(pXmlDoc, "/root/page[2]/infos/prtBounds", "height").toInt32();
+    nWidth  = getXPath(pXmlDoc, "/root/page[2]/infos/prtBounds", "width").toInt32();
+    CPPUNIT_ASSERT_MESSAGE( "Page2 is landscape", nWidth > nHeight );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf104354, "tdf104354.docx")
 {
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
