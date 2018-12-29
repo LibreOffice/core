@@ -192,6 +192,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,wpd,\
 	UnpackedTarball/libwpd/src/lib/WPXContentListener \
 	UnpackedTarball/libwpd/src/lib/WPXEncryption \
 	UnpackedTarball/libwpd/src/lib/WPXHeader \
+	UnpackedTarball/libwpd/src/lib/WPXHeaderFooter \
 	UnpackedTarball/libwpd/src/lib/WPXListener \
 	UnpackedTarball/libwpd/src/lib/WPXMemoryStream \
 	UnpackedTarball/libwpd/src/lib/WPXPageSpan \
@@ -199,6 +200,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,wpd,\
 	UnpackedTarball/libwpd/src/lib/WPXStylesListener \
 	UnpackedTarball/libwpd/src/lib/WPXSubDocument \
 	UnpackedTarball/libwpd/src/lib/WPXTable \
+	UnpackedTarball/libwpd/src/lib/WPXTableList \
 	UnpackedTarball/libwpd/src/lib/libwpd_internal \
 	UnpackedTarball/libwpd/src/lib/libwpd_math \
 ))
