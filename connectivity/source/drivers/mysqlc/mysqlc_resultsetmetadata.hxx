@@ -37,6 +37,21 @@ using ::com::sun::star::sdbc::SQLException;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::RuntimeException;
 
+struct MySqlFieldInfo
+{
+    OUString columnName;
+    sal_Int32 length = 0;
+    sal_Int32 type = 0;
+    unsigned mysql_type = 0;
+    unsigned charsetNumber = 0;
+    unsigned flags = 0;
+    OUString schemaName;
+    OUString tableName;
+    OUString catalogName;
+    sal_Int32 decimals;
+    sal_Int32 max_length;
+};
+
 //************ Class: ResultSetMetaData
 
 typedef ::cppu::WeakImplHelper1<css::sdbc::XResultSetMetaData> OResultSetMetaData_BASE;
@@ -45,17 +60,13 @@ class OResultSetMetaData final : public OResultSetMetaData_BASE
 {
 private:
     OConnection& m_rConnection;
-    MYSQL_RES* m_pRes;
+    std::vector<MySqlFieldInfo> m_fields;
 
+    void checkColumnIndex(sal_Int32 columnIndex);
     virtual ~OResultSetMetaData() override = default;
-    MYSQL_FIELD* getField(sal_Int32 column) const;
 
 public:
-    OResultSetMetaData(OConnection& rConn, MYSQL_RES* pResult)
-        : m_rConnection(rConn)
-        , m_pRes(pResult)
-    {
-    }
+    OResultSetMetaData(OConnection& rConn, MYSQL_RES* pResult);
 
     sal_Int32 SAL_CALL getColumnCount() override;
 
@@ -89,10 +100,6 @@ public:
     sal_Bool SAL_CALL isDefinitelyWritable(sal_Int32 column) override;
 
     OUString SAL_CALL getColumnServiceName(sal_Int32 column) override;
-
-    /// @throws SQLException
-    /// @throws RuntimeException
-    void checkColumnIndex(sal_Int32 columnIndex);
 };
 }
 }
