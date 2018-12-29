@@ -458,22 +458,12 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
 {
     //split up the uri and path into segments. Both are separated by '/'
     std::vector<OUString> vUriSegments;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        OUString aToken = rUri.getToken( 0, '/', nIndex );
-        vUriSegments.push_back(aToken);
-    }
-    while (nIndex >= 0);
+    for (sal_Int32 nIndex = 0; nIndex >= 0; )
+        vUriSegments.push_back(rUri.getToken( 0, '/', nIndex ));
 
     std::vector<OUString> vPathSegments;
-    nIndex = 0;
-    do
-    {
-        OUString aToken = rPath.getToken( 0, '/', nIndex );
-        vPathSegments.push_back(aToken);
-    }
-    while (nIndex >= 0);
+    for (sal_Int32 nIndex = 0; nIndex >= 0; )
+        vPathSegments.push_back(rPath.getToken( 0, '/', nIndex ));
 
     if (vUriSegments.size() != vPathSegments.size())
         return false;
