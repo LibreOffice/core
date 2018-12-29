@@ -1874,10 +1874,7 @@ XMLParaContext::XMLParaContext(
     if( !aCondStyleName.isEmpty() )
         sStyleName = aCondStyleName;
     else if( !sClassNames.isEmpty() )
-    {
-        sal_Int32 nDummy = 0;
-        sStyleName = sClassNames.getToken( 0, ' ', nDummy );
-    }
+        sStyleName = sClassNames.getToken( 0, ' ' );
 }
 
 void XMLParaContext::EndElement()
