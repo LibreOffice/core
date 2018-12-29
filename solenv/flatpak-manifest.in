@@ -398,10 +398,10 @@
                     "dest-filename": "external/tarballs/libepubgen-0.1.1.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libqxp-0.0.1.tar.xz",
-                    "sha256": "8c257f6184ff94aefa7c9fa1cfae82083d55a49247266905c71c53e013f95c73",
+                    "url": "https://dev-www.libreoffice.org/src/libqxp-0.0.2.tar.xz",
+                    "sha256": "e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libqxp-0.0.1.tar.xz"
+                    "dest-filename": "external/tarballs/libqxp-0.0.2.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/alef-1.001.tar.gz",
