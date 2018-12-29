@@ -1708,7 +1708,7 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
      && (rVisualItem.mnEndCharPos <= mnEndCharPos ) )
         return true;
 
-    // get glyph range from char range by looking at cluster boundries
+    // get glyph range from char range by looking at cluster boundaries
     // TODO: optimize for case that LTR/RTL correspond to monotonous glyph indexes
     rMinGlyphPos = rVisualItem.mnEndGlyphPos;
     int nMaxGlyphPos = 0;
