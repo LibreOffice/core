@@ -561,8 +561,8 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
         MSG msg;
         while (true)
         {
-            DWORD nWaitResult = MsgWaitForMultipleObjects(1, &hParentThread, FALSE, INFINITE,
-                                                          QS_ALLPOSTMESSAGE | QS_SENDMESSAGE);
+            DWORD nWaitResult
+                = MsgWaitForMultipleObjects(1, &hParentThread, FALSE, INFINITE, QS_ALLINPUT);
             if (nWaitResult == WAIT_OBJECT_0)
                 return 5; // Parent process' thread died before we exited
             if (nWaitResult == WAIT_FAILED)
