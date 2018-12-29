@@ -217,7 +217,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113849_evenAndOddHeaders, "tdf113849_evenAndOddH
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer5 text", OUString(""), parseDump("/root/page[5]/footer/txt"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Footer6 text", OUString(""), parseDump("/root/page[6]/footer/txt"));
 
-    //CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages", 6, getPages() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages", 6, getPages() );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118361_RTLfootnoteSeparator, "tdf118361_RTLfootnoteSeparator.docx")
