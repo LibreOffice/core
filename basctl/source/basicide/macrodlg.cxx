@@ -742,20 +742,19 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
         m_xBasicBox->get_selected(m_xBasicBoxIter.get());
         EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
         VclPtrInstance< OrganizeDialog > pDlg( nullptr, 0, aDesc ); //TODO
-        sal_uInt16 nRet = pDlg->Execute();
-        pDlg.reset();
+        pDlg->StartExecuteAsync([=](sal_Int32 nRet){
+                if ( nRet ) // not only closed
+                {
+                    m_xDialog->response(Macro_Edit);
+                    return;
+                }
 
-        if ( nRet ) // not only closed
-        {
-            m_xDialog->response(Macro_Edit);
-            return;
-        }
+                Shell* pShell = GetShell();
+                if ( pShell && pShell->IsAppBasicModified() )
+                    bForceStoreBasic = true;
 
-        Shell* pShell = GetShell();
-        if ( pShell && pShell->IsAppBasicModified() )
-            bForceStoreBasic = true;
-
-        m_xBasicBox->UpdateEntries();
+                m_xBasicBox->UpdateEntries();
+            });
     }
 }
 
