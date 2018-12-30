@@ -46,6 +46,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -662,8 +663,18 @@ QAccessibleInterface* Qt5AccessibleWidget::childAt(int x, int y) const
 {
     if (!m_xAccessible.is())
         return nullptr;
-    Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
-                                                         UNO_QUERY);
+
+    Reference<XAccessibleContext> xAc;
+    try
+    {
+        xAc = m_xAccessible->getAccessibleContext();
+    }
+    catch (css::lang::DisposedException /*ex*/)
+    {
+        return nullptr;
+    }
+
+    Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
     return QAccessible::queryAccessibleInterface(
         new Qt5XAccessible(xAccessibleComponent->getAccessibleAtPoint(awt::Point(x, y))));
 }
