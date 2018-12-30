@@ -193,14 +193,7 @@ bool IsPaletteColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
 
 bool IsExtraColor(BYTE nRed, BYTE nGreen, BYTE nBlue)
 {
-    static PALETTEENTRY aImplExtraColor1 =
-    {
-        0, 184, 255, 0
-    };
-
-    return aImplExtraColor1.peRed == nRed &&
-           aImplExtraColor1.peGreen == nGreen &&
-           aImplExtraColor1.peBlue == nBlue;
+    return (nRed == 0) && (nGreen == 184) && (nBlue == 255);
 }
 
 bool ImplIsPaletteEntry(BYTE nRed, BYTE nGreen, BYTE nBlue)
