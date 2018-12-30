@@ -888,10 +888,8 @@ OUString Bridge::getName() {
 }
 
 OUString Bridge::getDescription() {
-    OUStringBuffer b(name_);
-    b.append(':');
-    b.append(connection_->getDescription());
-    return b.makeStringAndClear();
+    OUString b = name_ + ":" + connection_->getDescription();
+    return b;
 }
 
 void Bridge::dispose() {
