@@ -31,6 +31,11 @@ chart2/res/selectrange.png formula/res/refinp1.png
 # cmd
 # ==============================================
 
+# Label
+cmd/32/addname.png cmd/32/label.png
+cmd/lc_addname.png cmd/lc_label.png
+cmd/sc_addname.png cmd/sc_label.png
+
 # Add
 cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_addons.png cmd/lc_insertplugin.png
@@ -1720,6 +1725,8 @@ cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
+cmd/sc_toolprotectiondocument.png cmd/sc_protect.png
+cmd/lc_toolprotectiondocument.png cmd/lc_protect.png
 
 # writer
 # ===============================================
@@ -1733,6 +1740,20 @@ cmd/lc_masterpage.png cmd/lc_slidemasterpage.png
 cmd/sc_pagemode.png cmd/sc_normalmultipanegui.png
 cmd/lc_pagemode.png cmd/lc_normalmultipanegui.png
 
+# calc context menu sheettab
+# ==============================================
+cmd/sc_tableselectall.png cmd/sc_selecttable.png
+cmd/sc_tabledeselectall.png cmd/sc_dbviewtablenames.png
+cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
+cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
+cmd/sc_tableevents.png cmd/sc_animationeffects.png
+
+cmd/lc_tableselectall.png cmd/lc_selecttable.png
+cmd/lc_tabledeselectall.png cmd/lc_dbviewtablenames.png
+cmd/lc_settabbgcolor.png cmd/lc_backgroundcolor.png
+cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
+cmd/lc_tableevents.png cmd/lc_animationeffects.png
+
 # calc context menu rowheader
 # ==============================================
 cmd/sc_rowheight.png cmd/sc_setminimalrowheight.png
@@ -1740,6 +1761,32 @@ cmd/sc_columnwidth.png cmd/sc_setminimalcolumnwidth.png
 
 cmd/lc_rowheight.png cmd/lc_setminimalrowheight.png
 cmd/lc_columnwidth.png cmd/lc_setminimalcolumnwidth.png
+
+# calc toolbar previewbar
+# ==============================================
+cmd/sc_margins.png cmd/sc_pagemargin.png
+cmd/sc_exportasgraphic.png cmd/sc_gallery.png
+cmd/sc_namegroup.png cmd/sc_label.png
+cmd/lc_namegroup.png cmd/lc_label.png
+
+cmd/lc_margins.png cmd/lc_pagemargin.png
+cmd/lc_exportasgraphic.png cmd/lc_gallery.png
+
+# calc toolbar draw
+# ===============================================
+cmd/sc_assignmacro.png cmd/sc_choosemacro.png
+cmd/sc_editshapehyperlink.png cmd/sc_inserthyperlink.png
+cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
+cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
+
+cmd/lc_assignmacro.png cmd/lc_choosemacro.png
+cmd/lc_editshapehyperlink.png cmd/lc_inserthyperlink.png
+cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
+cmd/lc_openhyperlinkoncursor.png cmd/lc_inserthyperlink.png
+
+cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png
+cmd/sc_mirrormenu.png cmd/sc_rotateleft.png
+cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
 
 # Macro
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
