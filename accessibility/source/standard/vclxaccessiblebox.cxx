@@ -508,7 +508,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
     }
     else if (m_aBoxType == LISTBOX && m_bIsDropDownBox)
     {
-        sal_Int32 nSelectedEntryCount = 0;
+        sal_Int32 nSelectedEntryCount;
         VclPtr< ListBox > pListBox = GetAs< ListBox >();
         if (pListBox != nullptr && pListBox->GetEntryCount() > 0)
         {
