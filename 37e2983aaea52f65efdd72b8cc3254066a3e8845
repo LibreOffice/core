@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f4e5783_de6c050a",
+        "filename": "sc/source/filter/excel/xicontent.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-12-30T06:49:04Z",
+      "side": 1,
+      "message": "ah, I see now, you don\u0027t need it because you\u0027re checking for empty here",
+      "revId": "37e2983aaea52f65efdd72b8cc3254066a3e8845",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f4e5783_7e3871d2",
         "filename": "sc/source/ui/dbgui/validate.cxx",
         "patchSetId": 1
