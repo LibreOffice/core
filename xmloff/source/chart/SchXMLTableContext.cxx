@@ -997,9 +997,8 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                                     if( xLabel.is() )
                                     {
                                         aRange = xLabel->getSourceRangeRepresentation();
-                                        sal_Int32 nSearchIndex = 0;
-                                        OUString aSecondToken = aRange.getToken( 1, ' ', nSearchIndex );
-                                        if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), aSecondToken.toInt32() ) == rTable.aHiddenColumns.end() )
+                                        const sal_Int32 nId {aRange.getToken(1, ' ').toInt32()};
+                                        if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), nId ) == rTable.aHiddenColumns.end() )
                                             bHasUnhiddenColumns = true;
                                     }
                                 }
@@ -1039,8 +1038,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                                 if( xLabel.is() )
                                 {
                                     aRange = xLabel->getSourceRangeRepresentation();
-                                    sal_Int32 nSearchIndex = 0;
-                                    OUString aSecondToken = aRange.getToken( 1, ' ', nSearchIndex );
+                                    OUString aSecondToken = aRange.getToken(1, ' ');
                                     if( !aSecondToken.isEmpty() )
                                         aUsageMap[aSecondToken.toInt32()] = true;
                                 }
