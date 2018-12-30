@@ -48,6 +48,7 @@
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -320,24 +321,6 @@ static bool isTime( const OUString& rValue )
     return (nLength == 0) || ((*pStr == 's' || *pStr == 'S') && (nLength == 1));
 }
 
-static sal_Int32 count_codes( const OUString& rString, sal_Unicode nCode )
-{
-    sal_Int32 nCount = 0;
-    sal_Int32 fromIndex = 0;
-
-    while(true)
-    {
-        fromIndex = rString.indexOf( nCode, fromIndex );
-        if( fromIndex == -1 )
-            break;
-
-        fromIndex++;
-        nCount++;
-    }
-
-    return nCount;
-}
-
 Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
 {
     try
@@ -466,11 +449,9 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
 {
     Sequence< Any > aValues;
 
-    // do we have any value at all?
-    if( !rValue.isEmpty() )
+    const sal_Int32 nElements { comphelper::string::getTokenCount(rValue, ';') };
+    if ( nElements>0 )
     {
-        sal_Int32 nElements = count_codes( rValue, ';') + 1; // a non empty string has at least one value
-
         // prepare the sequence
         aValues.realloc( nElements );
 
@@ -487,12 +468,9 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
 {
     Any aAny;
 
-    // do we have any value at all?
-    if( !rValue.isEmpty() )
+    const sal_Int32 nElements { comphelper::string::getTokenCount(rValue, ';') };
+    if ( nElements>0 )
     {
-        // count the values
-        sal_Int32 nElements = count_codes( rValue, ';' ) + 1; // a non empty string has at least one value
-
         if( nElements == 1 )
         {
             if( IsXMLToken( rValue, XML_MEDIA ) )
@@ -564,10 +542,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
 
 Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& rValue )
 {
-    sal_Int32 nElements = 0;
-
-    if( !rValue.isEmpty() )
-        nElements = count_codes( rValue, ';' ) + 1; // a non empty string has at least one value
+    const sal_Int32 nElements { comphelper::string::getTokenCount(rValue, ';') };
 
     Sequence< double > aKeyTimes( nElements );
 
@@ -583,10 +558,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& 
 
 Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const OUString& rValue )
 {
-    sal_Int32 nElements = 0;
-
-    if( !rValue.isEmpty() )
-        nElements = count_codes( rValue, ';' ) + 1; // a non empty string has at least one value
+    const sal_Int32 nElements { comphelper::string::getTokenCount(rValue, ';') };
 
     Sequence< TimeFilterPair > aTimeFilter( nElements );
 
