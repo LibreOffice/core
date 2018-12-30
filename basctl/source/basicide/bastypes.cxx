@@ -710,10 +710,8 @@ LibInfo::Item::~Item ()
 
 static bool QueryDel(const OUString& rName, const OUString &rStr, weld::Widget* pParent)
 {
-    OUStringBuffer aNameBuf( rName );
-    aNameBuf.append('\'');
-    aNameBuf.insert(0, '\'');
-    OUString aQuery = rStr.replaceAll("XX", aNameBuf.makeStringAndClear());
+    OUString aName = "\'" + rName + "\'";
+    OUString aQuery = rStr.replaceAll("XX", aName);
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParent,
                                                    VclMessageType::Question, VclButtonsType::YesNo, aQuery));
     return (xQueryBox->run() == RET_YES);
