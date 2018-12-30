@@ -476,11 +476,8 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
 
         // fill the sequence
         Any* pValues = aValues.getArray();
-        sal_Int32 nIndex;
-        for( nIndex = 0; nElements && (nIndex >= 0); nElements-- )
-        {
+        for (sal_Int32 nIndex = 0; nIndex >= 0; )
             *pValues++ = convertValue( eAttributeName, rValue.getToken( 0, ';', nIndex ) );
-        }
     }
 
     return aValues;
@@ -556,8 +553,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
             // fill the sequence
             Sequence< Any > aValues( nElements );
             Any* pValues = aValues.getArray();
-            sal_Int32 nIndex = 0;
-            while( (nElements--) && (nIndex >= 0) )
+            for (sal_Int32 nIndex = 0; nIndex >= 0; )
                 *pValues++ = convertTiming( rValue.getToken( 0, ';', nIndex ) );
 
             aAny <<= aValues;
@@ -578,8 +574,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& 
     if( nElements )
     {
         double* pValues = aKeyTimes.getArray();
-        sal_Int32 nIndex = 0;
-        while( (nElements--) && (nIndex >= 0) )
+        for (sal_Int32 nIndex = 0; nIndex >= 0; )
             *pValues++ = rValue.getToken( 0, ';', nIndex ).toDouble();
     }
 
@@ -598,8 +593,7 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const 
     if( nElements )
     {
         TimeFilterPair* pValues = aTimeFilter.getArray();
-        sal_Int32 nIndex = 0;
-        while( (nElements--) && (nIndex >= 0) )
+        for (sal_Int32 nIndex = 0; nIndex >= 0; )
         {
             const OUString aToken( rValue.getToken( 0, ';', nIndex ) );
 
