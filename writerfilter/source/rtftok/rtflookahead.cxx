@@ -35,6 +35,7 @@ namespace rtftok
 RTFLookahead::RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart)
     : m_rStream(rStream)
     , m_bHasTable(false)
+    , m_bHasColumns(false)
 {
     sal_uInt64 const nPos = m_rStream.Tell();
     m_rStream.Seek(nGroupStart);
@@ -62,8 +63,10 @@ RTFError RTFLookahead::dispatchToggle(RTFKeyword /*nKeyword*/, bool /*bParam*/, 
     return RTFError::OK;
 }
 
-RTFError RTFLookahead::dispatchValue(RTFKeyword /*nKeyword*/, int /*nParam*/)
+RTFError RTFLookahead::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
+    if (nKeyword == RTF_COLS && nParam >= 2)
+        m_bHasColumns = true;
     return RTFError::OK;
 }
 

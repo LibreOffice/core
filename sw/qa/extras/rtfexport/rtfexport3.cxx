@@ -193,6 +193,12 @@ DECLARE_RTFEXPORT_TEST(testTdf112520, "tdf112520.docx")
                          getProperty<text::TextContentAnchorType>(getShape(3), "AnchorType"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf121623, "tdf121623.rtf")
+{
+    // This was 2, multicolumn section was ignored at the table.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
