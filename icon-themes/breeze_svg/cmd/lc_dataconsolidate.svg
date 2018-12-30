@@ -1,0 +1,10 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path
+     style="fill:#4d4d4d"
+     d="M 10,4 V 8.09375 H 4 V 4 Z m 8,1 V 6 8 H 17 V 6 H 11 V 5 Z M 9,5 H 5 v 2 h 4 z m 1,5 v 4.09375 H 4 V 10 Z M 9,11 H 5 v 2 h 4 z m 9,4 V 17 17.09375 18 h -7 v -1 h 6 v -2 z m -8,1 v 4.09375 H 4 V 16 Z M 9,17 H 5 v 2 h 4 z"
+     />
+  <path
+     style="fill:#da4453"
+     d="m 14,10 v 4 h 6 v -4 z m 1,1 h 4 v 2 h -4 z"
+     />
+</svg>
