@@ -1202,7 +1202,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         }
 
         Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xNewDoc->getDataProvider(), uno::UNO_QUERY);
-        if (xPivotTableDataProvider.is())
+        if (xPivotTableDataProvider.is() && nCurrentODFVersion > SvtSaveOptions::ODFVER_012)
         {
             OUString sPivotTableName = xPivotTableDataProvider->getPivotTableName();
             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_PILOT_SOURCE, sPivotTableName);
