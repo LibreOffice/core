@@ -493,6 +493,7 @@ void ScXMLExportDataPilot::WriteLevels(const ScDPSaveDimension* pDim)
         ::sax::Converter::convertBool(sBuffer, pDim->GetShowEmpty());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_EMPTY, sBuffer.makeStringAndClear());
     }
+    if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
     {
         OUStringBuffer sBuffer;
         ::sax::Converter::convertBool(sBuffer, pDim->GetRepeatItemLabels());
