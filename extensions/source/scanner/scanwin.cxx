@@ -24,6 +24,7 @@
 #include "twain32shim.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <config_folders.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/conditn.hxx>
@@ -63,9 +64,11 @@ public:
     Twain();
     ~Twain();
 
-    bool SelectSource(ScannerManager& rMgr);
+    bool SelectSource(ScannerManager& rMgr, const VclPtr<vcl::Window>& xTopWindow);
     bool PerformTransfer(ScannerManager& rMgr,
-                         const css::uno::Reference<css::lang::XEventListener>& rxListener);
+                         const css::uno::Reference<css::lang::XEventListener>& rxListener,
+                         const VclPtr<vcl::Window>& xTopWindow);
+    void WaitReadyForNextTask();
 
     TwainState GetState() const { return meState; }
 
@@ -74,7 +77,7 @@ private:
     class ShimListenerThread : public salhelper::Thread
     {
     public:
-        ShimListenerThread();
+        ShimListenerThread(const VclPtr<vcl::Window>& xTopWindow);
         ~ShimListenerThread() override;
         void execute() override;
         const OUString& getError() { return msErrorReported; }
@@ -115,40 +118,20 @@ private:
     void Notify(WPARAM nEvent); // called by shim communication thread to notify me
     void NotifyXFer(LPARAM nHandle); // called by shim communication thread to notify me
 
-    bool InitializeNewShim(ScannerManager& rMgr);
+    bool InitializeNewShim(ScannerManager& rMgr, const VclPtr<vcl::Window>& xTopWindow);
 
     void Reset(); // cleanup thread and manager
 };
 
 static Twain aTwain;
 
-css::uno::Reference<css::frame::XFrame> ImplGetActiveFrame()
-{
-    try
-    {
-        // query desktop instance
-        css::uno::Reference<css::frame::XDesktop2> xDesktop
-            = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-        if (css::uno::Reference<css::frame::XFrame> xActiveFrame = xDesktop->getActiveFrame())
-            return xActiveFrame;
-    }
-    catch (const css::uno::Exception&)
-    {
-    }
-    SAL_WARN("extensions.scanner", "ImplGetActiveFrame: Could not determine active frame!");
-    return css::uno::Reference<css::frame::XFrame>();
-}
-
-Twain::ShimListenerThread::ShimListenerThread()
+Twain::ShimListenerThread::ShimListenerThread(const VclPtr<vcl::Window>& xTopWindow)
     : salhelper::Thread("TWAINShimListenerThread")
+    , mxTopWindow(xTopWindow)
 {
-    if (css::uno::Reference<css::frame::XFrame> xTopFrame = ImplGetActiveFrame())
+    if (mxTopWindow)
     {
-        mxTopWindow = VCLUnoHelper::GetWindow(xTopFrame->getComponentWindow());
-        if (mxTopWindow)
-        {
-            mxTopWindow->IncModalCount(); // the operation is modal to the frame
-        }
+        mxTopWindow->IncModalCount(); // the operation is modal to the frame
     }
 }
 
@@ -349,7 +332,7 @@ void Twain::Reset()
     mxMgr.clear();
 }
 
-bool Twain::InitializeNewShim(ScannerManager& rMgr)
+bool Twain::InitializeNewShim(ScannerManager& rMgr, const VclPtr<vcl::Window>& xTopWindow)
 {
     osl::MutexGuard aGuard(maMutex);
     if (mpThread)
@@ -359,7 +342,7 @@ bool Twain::InitializeNewShim(ScannerManager& rMgr)
     mxMgr.set(static_cast<OWeakObject*>(const_cast<ScannerManager*>(mpCurMgr = &rMgr)),
               css::uno::UNO_QUERY);
 
-    mpThread.set(new ShimListenerThread());
+    mpThread.set(new ShimListenerThread(xTopWindow));
     mpThread->launch();
     const bool bSuccess = mpThread->WaitInitialization();
     if (!bSuccess)
@@ -379,12 +362,12 @@ void Twain::NotifyXFer(LPARAM nHandle)
                                reinterpret_cast<void*>(nHandle));
 }
 
-bool Twain::SelectSource(ScannerManager& rMgr)
+bool Twain::SelectSource(ScannerManager& rMgr, const VclPtr<vcl::Window>& xTopWindow)
 {
     osl::MutexGuard aGuard(maMutex);
     bool bRet = false;
 
-    if (InitializeNewShim(rMgr))
+    if (InitializeNewShim(rMgr, xTopWindow))
     {
         meState = TWAIN_STATE_NONE;
         bRet = mpThread->RequestSelectSource();
@@ -394,12 +377,13 @@ bool Twain::SelectSource(ScannerManager& rMgr)
 }
 
 bool Twain::PerformTransfer(ScannerManager& rMgr,
-                            const css::uno::Reference<css::lang::XEventListener>& rxListener)
+                            const css::uno::Reference<css::lang::XEventListener>& rxListener,
+                            const VclPtr<vcl::Window>& xTopWindow)
 {
     osl::MutexGuard aGuard(maMutex);
     bool bRet = false;
 
-    if (InitializeNewShim(rMgr))
+    if (InitializeNewShim(rMgr, xTopWindow))
     {
         mxListener = rxListener;
         meState = TWAIN_STATE_NONE;
@@ -407,6 +391,17 @@ bool Twain::PerformTransfer(ScannerManager& rMgr,
     }
 
     return bRet;
+}
+
+void Twain::WaitReadyForNextTask()
+{
+    while ([&]() {
+        osl::MutexGuard aGuard(maMutex);
+        return bool(mpThread);
+    }())
+    {
+        Application::Reschedule(true);
+    }
 }
 
 IMPL_LINK(Twain, ImpNotifyHdl, void*, pParam, void)
@@ -459,6 +454,23 @@ IMPL_LINK(Twain, ImpNotifyXferHdl, void*, pParam, void)
     }
 
     mxListener.clear();
+}
+
+VclPtr<vcl::Window> ImplGetActiveFrameWindow()
+{
+    try
+    {
+        // query desktop instance
+        css::uno::Reference<css::frame::XDesktop2> xDesktop
+            = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+        if (css::uno::Reference<css::frame::XFrame> xActiveFrame = xDesktop->getActiveFrame())
+            return VCLUnoHelper::GetWindow(xActiveFrame->getComponentWindow());
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
+    SAL_WARN("extensions.scanner", "ImplGetActiveFrame: Could not determine active frame!");
+    return nullptr;
 }
 
 } // namespace
@@ -568,7 +580,7 @@ css::uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners
 }
 
 sal_Bool SAL_CALL ScannerManager::configureScannerAndScan(
-    ScannerContext& rContext, const css::uno::Reference<css::lang::XEventListener>&)
+    ScannerContext& rContext, const css::uno::Reference<css::lang::XEventListener>& rxListener)
 {
     osl::MutexGuard aGuard(maProtector);
     css::uno::Reference<XScannerManager> xThis(this);
@@ -578,10 +590,26 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan(
 
     ReleaseData();
 
-    return aTwain.SelectSource(*this);
+    VclPtr<vcl::Window> xTopWindow = ImplGetActiveFrameWindow();
+    if (xTopWindow)
+        xTopWindow->IncModalCount(); // to avoid changes between the two operations that each
+                                     // block the window
+    comphelper::ScopeGuard aModalGuard([xTopWindow]() {
+        if (xTopWindow)
+            xTopWindow->DecModalCount();
+    });
+
+    const bool bSelected = aTwain.SelectSource(*this, xTopWindow);
+    if (bSelected)
+    {
+        aTwain.WaitReadyForNextTask();
+        aTwain.PerformTransfer(*this, rxListener, xTopWindow);
+    }
+    return bSelected;
 }
 
-void SAL_CALL ScannerManager::startScan(const ScannerContext& rContext,
+void SAL_CALL
+ScannerManager::startScan(const ScannerContext& rContext,
                           const css::uno::Reference<css::lang::XEventListener>& rxListener)
 {
     osl::MutexGuard aGuard(maProtector);
@@ -591,7 +619,7 @@ void SAL_CALL ScannerManager::startScan(const ScannerContext& rContext,
         throw ScannerException("Scanner does not exist", xThis, ScanError_InvalidContext);
 
     ReleaseData();
-    aTwain.PerformTransfer(*this, rxListener);
+    aTwain.PerformTransfer(*this, rxListener, ImplGetActiveFrameWindow());
 }
 
 ScanError SAL_CALL ScannerManager::getError(const ScannerContext& rContext)
@@ -606,7 +634,7 @@ ScanError SAL_CALL ScannerManager::getError(const ScannerContext& rContext)
                                                         : ScanError_ScanErrorNone);
 }
 
- css::uno::Reference<css::awt::XBitmap>
+css::uno::Reference<css::awt::XBitmap>
     SAL_CALL ScannerManager::getBitmap(const ScannerContext& /*rContext*/)
 {
     osl::MutexGuard aGuard(maProtector);
