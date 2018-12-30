@@ -48,11 +48,13 @@ public:
     void finishSubstream() override;
     bool isSubstream() const override;
     bool hasTable() { return m_bHasTable; }
+    bool hasColumns() { return m_bHasColumns; }
 
 private:
     tools::SvRef<RTFTokenizer> m_pTokenizer;
     SvStream& m_rStream;
     bool m_bHasTable;
+    bool m_bHasColumns;
 };
 } // namespace rtftok
 } // namespace writerfilter
