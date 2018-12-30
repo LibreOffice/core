@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_727d451b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-12-30T22:34:09Z",
+      "side": 1,
+      "message": "This \"563-Variable\" is useless here. 563 has only a temporary meaning in the cppcheck report. Also the \"fix\" word in the end is kind a redundant, since it\u0027s expected the patch is a fix.\nSo a better commit message:\ncppcheck: \u0027nSelectedEntryCount\u0027 is assigned a value that is never used\nos simpliy \ncppcheck: redundantAssignment",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 12
+      },
+      "revId": "cef55c60722c00f9fed3fd9593c0c3258493338b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_3277cd3d",
+        "filename": "accessibility/source/standard/vclxaccessiblebox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2018-12-30T22:34:09Z",
+      "side": 1,
+      "message": "Can you move this in the for loop? The general solution for redundant assignment is to move the variable declaration to the place where it gets the actually used value.\nHaving this variable declared inside the loop makes clear that it used only in it.",
+      "range": {
+        "startLine": 511,
+        "startChar": 18,
+        "endLine": 511,
+        "endChar": 37
+      },
+      "revId": "cef55c60722c00f9fed3fd9593c0c3258493338b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
