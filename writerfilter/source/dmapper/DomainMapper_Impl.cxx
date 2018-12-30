@@ -2813,8 +2813,7 @@ static OUString lcl_ExctractVariableAndHint( const OUString& rCommand, OUString&
         ++nIndex;
     OUString sShortCommand( rCommand.copy( nIndex ) ); //cut off the " ASK "
 
-    nIndex = 0;
-    sShortCommand = sShortCommand.getToken( 0, '\\', nIndex);
+    sShortCommand = sShortCommand.getToken(0, '\\');
     nIndex = 0;
     OUString sRet = sShortCommand.getToken( 0, ' ', nIndex);
     if( nIndex > 0)
@@ -3813,8 +3812,7 @@ void DomainMapper_Impl::handleToc
 //                  \t  Builds a table of contents by using style names other than the standard outline styles
     if( lcl_FindInCommand( pContext->GetCommand(), 't', sValue ))
     {
-        sal_Int32 nPos = 0;
-        OUString sToken = sValue.getToken( 1, '"', nPos);
+        OUString sToken = sValue.getToken(1, '"');
         sTemplate = sToken.isEmpty() ? sValue : sToken;
     }
 //                  \u  Builds a table of contents by using the applied paragraph outline level
@@ -4339,12 +4337,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     break;
                     case FIELD_FILLIN       :
-                    {
-                        sal_Int32 nIndex = 0;
                         if (xFieldProperties.is())
                             xFieldProperties->setPropertyValue(
-                                    getPropertyName(PROP_HINT), uno::makeAny( pContext->GetCommand().getToken( 1, '\"', nIndex)));
-                    }
+                                    getPropertyName(PROP_HINT), uno::makeAny( pContext->GetCommand().getToken(1, '\"')));
                     break;
                     case FIELD_FILENAME:
                     {
