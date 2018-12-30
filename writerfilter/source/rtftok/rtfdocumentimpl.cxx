@@ -41,6 +41,7 @@
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"
 #include "rtftokenizer.hxx"
+#include "rtflookahead.hxx"
 
 using namespace com::sun::star;
 
@@ -255,6 +256,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_aDefaultState(this)
     , m_bSkipUnknown(false)
     , m_bFirstRun(true)
+    , m_bFirstRunException(false)
     , m_bNeedPap(true)
     , m_bNeedCr(false)
     , m_bNeedCrOrig(false)
@@ -374,7 +376,7 @@ void RTFDocumentImpl::checkFirstRun()
         outputSettingsTable();
         // start initial paragraph
         m_bFirstRun = false;
-        assert(!m_bNeedSect);
+        assert(!m_bNeedSect || m_bFirstRunException);
         setNeedSect(true); // first call that succeeds
 
         // set the requested default font, if there are none
@@ -394,8 +396,18 @@ void RTFDocumentImpl::setNeedPar(bool bNeedPar) { m_bNeedPar = bNeedPar; }
 
 void RTFDocumentImpl::setNeedSect(bool bNeedSect)
 {
+    if (m_bFirstRun)
+    {
+        RTFLookahead aLookahead(Strm(), m_pTokenizer->getGroupStart());
+        if (aLookahead.hasTable() && aLookahead.hasColumns())
+        {
+            m_bFirstRunException = true;
+        }
+    }
+
     // ignore setting before checkFirstRun - every keyword calls setNeedSect!
-    if (!m_bNeedSect && bNeedSect && !m_bFirstRun)
+    // except the case of a table in a multicolumn section
+    if (!m_bNeedSect && bNeedSect && (!m_bFirstRun || m_bFirstRunException))
     {
         if (!m_pSuperstream) // no sections in header/footer!
         {
