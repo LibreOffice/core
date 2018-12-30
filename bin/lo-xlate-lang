@@ -111,7 +111,7 @@ print $LanguageMap->{$LanguageCode}, "\n";
 # keep third column names here with openoffice-dir/share/*/<long lang name>/
 
 __DATA__
-:be:belarussian
+:be:belarusian
 :bg:bulgarian
 :bn:bengali
 :bs:bosnian
