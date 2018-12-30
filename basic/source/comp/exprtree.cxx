@@ -140,9 +140,8 @@ static SbiSymDef* AddSym ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExp
             // generate dummy parameters
             for( sal_Int32 n = 1; n <= pPar->GetSize(); n++ )
             {
-                OUStringBuffer aPar("PAR");
-                aPar.append(n);
-                pProc->GetParams().AddSym( aPar.makeStringAndClear() );
+                OUString aPar = "PAR" + OUString::number( n );
+                pProc->GetParams().AddSym( aPar );
             }
         }
     }
