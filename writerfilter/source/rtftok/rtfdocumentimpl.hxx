@@ -570,7 +570,10 @@ private:
     std::map<int, Id> m_aStyleTypes;
     /// Color index <-> RGB color value map
     std::vector<Color> m_aColorTable;
+    /// to start initial paragraph / section after font/style tables
     bool m_bFirstRun;
+    /// except in the case of tables in initial multicolumn section (global for assertion)
+    bool m_bFirstRunException;
     /// If paragraph properties should be emitted on next run.
     bool m_bNeedPap;
     /// If we need to emit a CR at the end of substream.
