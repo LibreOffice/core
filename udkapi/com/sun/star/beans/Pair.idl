@@ -20,29 +20,35 @@
  *************************************************************/
 
 
-
 #ifndef __com_sun_star_beans_Pair_idl__
 #define __com_sun_star_beans_Pair_idl__
+
+
+//=============================================================================
 
 module com {  module sun {  module star {  module beans {
 
 //=============================================================================
+
 /** A tuple, or pair.
 
-    <p>
-    This structure allows for conveniently packing together two values of
-    any type, and could be useful as the result type of methods.
-    </p>
+    <p> This structure allows for conveniently packing together two values of
+        any type, and could be useful as the result type of methods.</p>
 
     @since OpenOffice 3.0
  */
-published struct Pair<T, U> {
+published struct Pair<T, U>
+{
+    //-------------------------------------------------------------------------
 
-    /// first object.
+    // first object
     T First;
 
-    /// second object.
+    // second object
     U Second;
+
+    //-------------------------------------------------------------------------
+
 };
 
 //=============================================================================

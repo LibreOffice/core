@@ -59,20 +59,20 @@ module com {  module sun {  module star {  module beans {
 
     <p> Usually an object that implements this interface
         also implements <type>XPropertySet</type> and at
-        least some of the properties have subproperties.  </p>
+        least some of the properties have subproperties.</p>
 
     <p> This interface allows direct access to subsubproperties, ...
         up to an arbitrary nesting depth. Often the intermediate
-        elements of the hierarchy implement <type>XProperty</type>.  </p>
+        elements of the hierarchy implement <type>XProperty</type>.</p>
 
     <p> Each implementation specifies how the
         hierarchical property names, that are
         used to access the elements of the hierarchy,
-        are formed.  </p>
+        are formed.</p>
 
     <p> Commonly a notation similar to filesystem paths
         (separated by '/' slashes) or nested module names
-        (separated by dots '.' or '::') is used.  </p>
+        (separated by dots '.' or '::') is used.</p>
 
  */
 published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
@@ -82,14 +82,14 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
     /** retrieve information about the hierarchy of properties
 
         @returns
-                the <type>XHierarchicalPropertySetInfo</type> interface,
-                which describes the property hierarchy of the object which
-                supplies this interface.
+            the <type>XHierarchicalPropertySetInfo</type> interface,
+            which describes the property hierarchy of the object which
+            supplies this interface.
 
         @returns
-                <NULL/> if the implementation cannot or will
-                not provide information about the properties; otherwise the
-                interface <type>XHierarchicalPropertySetInfo</type> is returned.
+            <NULL/> if the implementation cannot or will
+            not provide information about the properties; otherwise the
+            interface <type>XHierarchicalPropertySetInfo</type> is returned.
      */
     com::sun::star::beans::XHierarchicalPropertySetInfo
                 getHierarchicalPropertySetInfo();
@@ -133,7 +133,9 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    /** @returns
+    /** gets the value of the property with the specified nested name.
+
+        @returns
                 the value of the property with the specified nested name.
 
         @param  aHierarchicalPropertyName
@@ -145,7 +147,7 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
         @throws com::sun::star::uno::lang::IllegalArgumentException
                 if <var>aHierarchicalPropertyName</var> is not a well-formed
                 nested name for this hierarchy.
-                   An implementation is not required to detect this
+                An implementation is not required to detect this
                 condition.
 
         @throws com::sun::star::lang::WrappedTargetException

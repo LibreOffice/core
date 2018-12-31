@@ -38,11 +38,11 @@ module com {  module sun {  module star {  module beans {
     an approximate name to an existing name.
 
     <p> One field of application is the conversion of case-insensitive
-    names to the existing names.  </p>
+        names to the existing names.</p>
 
-    <p>Example: A basic interpreter ignores the case of the names. So
-    it must query the <type>XExactName</type> interface and then call
-    the method. </p>
+    <p> Example: A basic interpreter ignores the case of the names. So
+        it must query the <type>XExactName</type> interface and then call
+        the method.</p>
 
     @see com::sun::star::beans::XPropertySet
     @see com::sun::star::beans::XIntrospectionAccess
@@ -53,12 +53,14 @@ published interface XExactName: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** @returns
-            the exact name for a given aprroximate name.
+            the exact name for a given approximate name.
 
-        <p>For example "getExactName" could be returned for "GETEXACTNAME"
-        when "GETEXACTNAME" was used by a case insesitive scripting language. </p>
+        <p> For example "getExactName" could be returned for "GETEXACTNAME"
+            when "GETEXACTNAME" was used by a case insensitive scripting language.</p>
      */
     string getExactName( [in] string aApproximateName );
+
+    //-------------------------------------------------------------------------
 
 };
 

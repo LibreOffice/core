@@ -36,7 +36,6 @@ module com {  module sun {  module star {  module beans {
 
 /** This structure describes a property.
 
-
     <dl>There are three types of properties:
         <dt>- bound properties</dt>
         <dt>- constrained properties</dt>
@@ -45,10 +44,12 @@ module com {  module sun {  module star {  module beans {
  */
 published struct Property
 {
+    //-------------------------------------------------------------------------
+
     /** specifies the name of the property.
 
-        <p>The name is unique within an <type>XPropertySet</type>.
-        Upper and lower case are distinguished.</p>
+        <p> The name is unique within an <type>XPropertySet</type>.
+            Upper and lower case are distinguished.</p>
      */
     string Name;
 
@@ -56,19 +57,18 @@ published struct Property
 
     /** contains an implementation-specific handle for the property.
 
-        <p>It may be -1 if the implementation has no handle. You can use
-        this handle to get values from the <type>XFastPropertySet</type>.</p>
+        <p> It may be -1 if the implementation has no handle. You can use
+            this handle to get values from the <type>XFastPropertySet</type>.</p>
      */
     long Handle;
 
     //-------------------------------------------------------------------------
 
-    /** contains an object that identifies the declared type for
-        the property.
+    /** contains an object that identifies the declared type for the property.
 
-        <p>If the property has multiple types or the type is not
-        known, <strong>but not an <atom>any</atom></strong>, then
-        <const>void</const> must be returned.</p>
+        <p> If the property has multiple types or the type is not
+            known, <strong>but not an <atom>any</atom></strong>, then
+            <const>void</const> must be returned.</p>
      */
     type Type;
 
@@ -78,6 +78,8 @@ published struct Property
         <type>PropertyAttribute</type> constants group.
      */
     short Attributes;
+
+    //-------------------------------------------------------------------------
 
 };
 
