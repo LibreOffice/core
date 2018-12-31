@@ -26,17 +26,11 @@
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <cppuhelper/weakagg.hxx>
 #include <osl/mutex.hxx>
-#include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
-#include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>

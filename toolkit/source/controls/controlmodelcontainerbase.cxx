@@ -25,6 +25,7 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/controls/geometrycontrolmodel.hxx>
+#include <toolkit/controls/geometrycontrolmodel_impl.hxx>
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/formattedcontrol.hxx>
 #include <toolkit/controls/roadmapcontrol.hxx>

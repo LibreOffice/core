@@ -23,8 +23,6 @@
 
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
-#include <toolkit/helper/servicenames.hxx>
-#include <toolkit/controls/roadmapentry.hxx>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>

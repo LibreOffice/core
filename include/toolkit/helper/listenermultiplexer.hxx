@@ -41,7 +41,6 @@
 #include <com/sun/star/awt/tree/XTreeExpansionListener.hpp>
 #include <com/sun/star/awt/tree/XTreeEditListener.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <com/sun/star/util/VetoException.hpp>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <toolkit/helper/mutexhelper.hxx>

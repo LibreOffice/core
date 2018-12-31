@@ -25,6 +25,7 @@
 #include <osl/module.h>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <tools/svlibrary.h>
 
 #include <helper/accessibilityclient.hxx>

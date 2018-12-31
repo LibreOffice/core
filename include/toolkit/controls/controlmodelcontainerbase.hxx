@@ -28,7 +28,6 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/weak.hxx>
@@ -37,12 +36,12 @@
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <tools/gen.hxx>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace resource { class XStringResourceResolver; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 //  class ControlModelContainerBase
 
