@@ -70,6 +70,7 @@ namespace svt
 }
 
 namespace vcl { class Window; }
+namespace weld {class Window; }
 class ToolBox;
 namespace vcl { class Font; }
 class SvNumberFormatter;

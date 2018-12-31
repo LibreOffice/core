@@ -26,10 +26,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 
-#include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <toolkit/helper/servicenames.hxx>
 
 #include <cppuhelper/implbase4.hxx>
 #include <memory>

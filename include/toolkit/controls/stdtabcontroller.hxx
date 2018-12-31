@@ -23,14 +23,14 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XTabController.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/mutex.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <toolkit/helper/servicenames.hxx>
 
+
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace awt { class XControl; } } } }
+namespace com { namespace sun { namespace star { namespace awt { class XControlContainer; } } } }
 
 class StdTabController final : public css::awt::XTabController,
                             public css::lang::XServiceInfo,

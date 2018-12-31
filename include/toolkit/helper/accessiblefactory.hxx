@@ -21,7 +21,6 @@
 #define INCLUDED_TOOLKIT_HELPER_ACCESSIBLEFACTORY_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {

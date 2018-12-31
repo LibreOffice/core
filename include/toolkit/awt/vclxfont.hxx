@@ -23,12 +23,15 @@
 #include <memory>
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XFont2.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/metric.hxx>
+#include <vcl/font.hxx>
+
+namespace com { namespace sun { namespace star { namespace awt { class XDevice; } } } }
+
+class FontMetric;
 
 
 //  class VCLXFont

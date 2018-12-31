@@ -28,6 +28,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>

@@ -48,6 +48,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <unotools/streamhelper.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/property.hxx>

@@ -42,23 +42,21 @@
 #include <com/sun/star/awt/XPatternField.hpp>
 #include <com/sun/star/awt/XProgressBar.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
-#include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/helper/macros.hxx>
-#include <toolkit/helper/servicenames.hxx>
-#include <vcl/bitmapex.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
+#include <tools/gen.hxx>
 
-#include <list>
 #include <memory>
 #include <vector>
 
 namespace boost { template <class T> class optional; }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphicObject; } } } }
 
 class ImageHelper
 {

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_TOOLKIT_CONTROLS_EVENTCONTAINER_HXX
 #define INCLUDED_TOOLKIT_CONTROLS_EVENTCONTAINER_HXX
 
-#include <osl/diagnose.h>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 

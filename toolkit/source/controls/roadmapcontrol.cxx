@@ -19,7 +19,9 @@
 
 
 #include <toolkit/controls/roadmapcontrol.hxx>
+#include <toolkit/controls/roadmapentry.hxx>
 #include <toolkit/helper/property.hxx>
+#include <toolkit/helper/servicenames.hxx>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

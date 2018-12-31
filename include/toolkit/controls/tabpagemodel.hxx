@@ -21,14 +21,8 @@
 #define INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
-#include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <toolkit/helper/servicenames.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <list>
 #include <cppuhelper/implbase2.hxx>
 
 class UnoControlTabPageModel :  public ControlModelContainerBase

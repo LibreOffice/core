@@ -26,6 +26,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/mutex.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

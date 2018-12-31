@@ -24,15 +24,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weakagg.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <toolkit/helper/servicenames.hxx>
 #include <osl/mutex.hxx>
 
-#include <tools/gen.hxx>
 #include <vector>
 
 struct UnoControlModelEntry;

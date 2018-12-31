@@ -22,6 +22,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <rtl/uuid.h>
 
 #include <vcl/svapp.hxx>

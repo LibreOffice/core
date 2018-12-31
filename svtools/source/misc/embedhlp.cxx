@@ -21,6 +21,7 @@
 #include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/outdev.hxx>
 #include <bitmaps.hlst>
 
 #include <sal/log.hxx>

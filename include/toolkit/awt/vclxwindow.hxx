@@ -22,36 +22,30 @@
 
 #include <toolkit/dllapi.h>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <toolkit/helper/listenermultiplexer.hxx>
 #include <vcl/window.hxx>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XView.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 
-#include <stdarg.h>
 #include <memory>
 #include <vector>
 #include <functional>
 
+namespace comphelper { class OInterfaceContainerHelper2; }
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleContext; } } } }
 
-class VclSimpleEvent;
 class VclWindowEvent;
-struct SystemParentData;
 
 namespace toolkit
 {

@@ -32,6 +32,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/image.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/metric.hxx>
 #include <tools/debug.hxx>
 
 using namespace com::sun::star;
