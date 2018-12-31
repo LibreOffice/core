@@ -101,6 +101,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokcharthelper.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
