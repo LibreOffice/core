@@ -228,14 +228,9 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
 
     OUString ouStr(o3tl::toU(*attributes));
 
-    sal_Int32 nIndex = 0;
     vector< OUString > vecAttr;
-    do
-    {
-        OUString ouToken = ouStr.getToken(0, ';', nIndex);
-        vecAttr.push_back(ouToken);
-    }
-    while(nIndex >= 0);
+    for (sal_Int32 nIndex {0}; nIndex >= 0; )
+        vecAttr.push_back(ouStr.getToken(0, ';', nIndex));
 
     Sequence< PropertyValue > beanSeq(vecAttr.size());
     for(std::vector<OUString>::size_type i = 0; i < vecAttr.size(); i ++)
