@@ -37,6 +37,7 @@ public:
     void testTdf47471_paraStyleBackground();
     void testTdf101534();
     void testTdf54819();
+    void testTdf64242_optimizeTable();
     void testTdf108687_tabstop();
     void testTdf119571();
     void testTdf119019();
@@ -49,6 +50,7 @@ public:
     CPPUNIT_TEST(testTdf47471_paraStyleBackground);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf54819);
+    CPPUNIT_TEST(testTdf64242_optimizeTable);
     CPPUNIT_TEST(testTdf108687_tabstop);
     CPPUNIT_TEST(testTdf119571);
     CPPUNIT_TEST(testTdf119019);
@@ -275,6 +277,48 @@ void SwUiWriterTest2::testTdf54819()
     // remaining paragraph keeps its original style
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
                          getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+}
+
+void SwUiWriterTest2::testTdf64242_optimizeTable()
+{
+    SwDoc* pDoc = createDoc("tdf64242_optimizeTable.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+
+    double origWidth = getProperty<double>(xTextTable, "Width");
+    sal_Int32 nToleranceW = origWidth * .01;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Width", double(17013), origWidth, nToleranceW);
+
+    pWrtShell->SelTable(); //select the whole table
+
+    lcl_dispatchCommand(mxComponent, ".uno:SetOptimalColumnWidth", {});
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Width: optimize", origWidth,
+                                         getProperty<double>(xTextTable, "Width"), nToleranceW);
+
+    lcl_dispatchCommand(mxComponent, ".uno:SetMinimalColumnWidth", {});
+    CPPUNIT_ASSERT_MESSAGE("Table Width: minimized",
+                           (origWidth - nToleranceW) > getProperty<double>(xTextTable, "Width"));
+
+    double origRowHeight = getProperty<double>(xTableRows->getByIndex(2), "Height");
+    sal_Int32 nToleranceH = origRowHeight * .01;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Row Height", double(3441), origRowHeight, nToleranceH);
+
+    lcl_dispatchCommand(mxComponent, ".uno:SetOptimalRowHeight", {});
+    double optimalRowHeight = getProperty<double>(xTableRows->getByIndex(2), "Height");
+    CPPUNIT_ASSERT_MESSAGE("Row Height: optimized",
+                           (origRowHeight - nToleranceH) > optimalRowHeight);
+
+    lcl_dispatchCommand(mxComponent, ".uno:SetMinimalRowHeight", {});
+    double minimalRowHeight = getProperty<double>(xTableRows->getByIndex(2), "Height");
+    CPPUNIT_ASSERT_MESSAGE("Row Height: minimized",
+                           (optimalRowHeight - nToleranceH) > minimalRowHeight);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Row set to auto-height", double(0), minimalRowHeight);
 }
 
 void SwUiWriterTest2::testTdf108687_tabstop()
