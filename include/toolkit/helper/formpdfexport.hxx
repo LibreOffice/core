@@ -22,11 +22,12 @@
 
 #include <toolkit/dllapi.h>
 
-#include <com/sun/star/awt/XControl.hpp>
-
 #include <vcl/pdfwriter.hxx>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace awt { class XControl; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 
 namespace vcl
 {

@@ -22,17 +22,11 @@
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
-#include <com/sun/star/graphic/XGraphicObject.hpp>
-#include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>
-#include <toolkit/controls/unocontrolcontainer.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <list>
+
+namespace com { namespace sun { namespace star { namespace awt { class XTopWindowListener; } } } }
 
 typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
                                             ,   css::awt::XUnoControlDialog

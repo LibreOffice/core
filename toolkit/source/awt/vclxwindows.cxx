@@ -36,6 +36,8 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
+#include <com/sun/star/awt/TextAlign.hpp>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/log.hxx>

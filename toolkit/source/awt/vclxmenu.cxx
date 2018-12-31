@@ -36,6 +36,7 @@
 #include <vcl/image.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <com/sun/star/awt/KeyModifier.hpp>
 

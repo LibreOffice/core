@@ -21,11 +21,6 @@
 #define INCLUDED_TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX
 
 #include <toolkit/dllapi.h>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/accimplaccess.hxx>
@@ -35,9 +30,10 @@
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+
 namespace vcl { class Window; }
 class VCLXWindow;
-class VclSimpleEvent;
 class VclWindowEvent;
 
 namespace utl {

@@ -22,6 +22,7 @@
 #include <vcl/event.hxx>
 #include <vcl/window.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/metric.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>

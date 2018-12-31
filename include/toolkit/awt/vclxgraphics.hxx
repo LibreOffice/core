@@ -22,7 +22,6 @@
 
 
 #include <com/sun/star/awt/XGraphics2.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
@@ -36,6 +35,7 @@
 
 class OutputDevice;
 namespace vcl { class Region; }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
 
 
 enum class InitOutDevFlags

@@ -20,6 +20,7 @@
 #include <toolkit/controls/geometrycontrolmodel.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <comphelper/sequence.hxx>

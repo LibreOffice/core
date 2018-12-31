@@ -36,6 +36,7 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/util/VetoException.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/types.hxx>

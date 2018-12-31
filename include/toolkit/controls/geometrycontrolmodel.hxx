@@ -24,21 +24,14 @@
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
-#include <com/sun/star/resource/XStringResourceResolver.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/IdPropArrayHelper.hxx>
 
+namespace com { namespace sun { namespace star { namespace resource { class XStringResourceResolver; } } } }
+
 namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
-    }
-    namespace script {
-        class XNameContainer;
-    }
     namespace uno {
         class XComponentContext;
     }

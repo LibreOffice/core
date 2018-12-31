@@ -18,6 +18,7 @@
  */
 
 
+#include <stdarg.h>
 #include <memory>
 #include <com/sun/star/awt/WindowEvent.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
@@ -60,6 +61,7 @@
 #include <vcl/commandevent.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <comphelper/flagguard.hxx>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/profilezone.hxx>
 #include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
