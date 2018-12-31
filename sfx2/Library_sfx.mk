@@ -195,6 +195,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/tplpitem \
     sfx2/source/dialog/versdlg \
     sfx2/source/doc/DocumentMetadataAccess \
+    sfx2/source/doc/DocumentSigner \
     sfx2/source/doc/Metadatable \
     sfx2/source/doc/QuerySaveDocument \
     sfx2/source/doc/SfxDocumentMetaData \

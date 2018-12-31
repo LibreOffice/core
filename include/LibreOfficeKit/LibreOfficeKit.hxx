@@ -826,6 +826,18 @@ public:
     {
         return mpThis->pClass->runMacro( mpThis, pURL );
     }
+
+    /**
+     * Exports the document and signes its content.
+     */
+    bool signDocument(const char* pURL,
+                       const unsigned char* pCertificateBinary, const int nCertificateBinarySize,
+                       const unsigned char* pPrivateKeyBinary, const int nPrivateKeyBinarySize)
+    {
+        return mpThis->pClass->signDocument(mpThis, pURL,
+                                            pCertificateBinary, nCertificateBinarySize,
+                                            pPrivateKeyBinary, nPrivateKeyBinarySize);
+    }
 };
 
 /// Factory method to create a lok::Office instance.

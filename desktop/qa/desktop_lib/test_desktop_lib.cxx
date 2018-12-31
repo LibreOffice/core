@@ -120,7 +120,10 @@ public:
     void testExtractParameter();
     void testGetSignatureState_NonSigned();
     void testGetSignatureState_Signed();
-    void testInsertCertificate();
+    void testInsertCertificate_DER_ODT();
+    void testInsertCertificate_PEM_ODT();
+    void testInsertCertificate_PEM_DOCX();
+    void testSignDocument_PEM_PDF();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -166,7 +169,10 @@ public:
     CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST(testGetSignatureState_Signed);
     CPPUNIT_TEST(testGetSignatureState_NonSigned);
-    CPPUNIT_TEST(testInsertCertificate);
+    CPPUNIT_TEST(testInsertCertificate_DER_ODT);
+    CPPUNIT_TEST(testInsertCertificate_PEM_ODT);
+    CPPUNIT_TEST(testInsertCertificate_PEM_DOCX);
+    CPPUNIT_TEST(testSignDocument_PEM_PDF);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2390,6 +2396,66 @@ void DesktopLOKTest::testInsertCertificate()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+void DesktopLOKTest::testSignDocument_PEM_PDF()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load the document, save it into a temp file and load that file again
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(mxComponent.is());
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
+
+    std::vector<unsigned char> aCertificate;
+    std::vector<unsigned char> aPrivateKey;
+
+    {
+        readFileIntoByteVector("test-cert-chain-1.pem", aCertificate);
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    {
+        readFileIntoByteVector("test-cert-chain-2.pem", aCertificate);
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    {
+        readFileIntoByteVector("test-cert-chain-3.pem", aCertificate);
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "pdf", nullptr));
+
+    closeDoc();
+
+    Scheduler::ProcessEventsToIdle();
+
+    readFileIntoByteVector("test-cert-signing.pem", aCertificate);
+    readFileIntoByteVector("test-PK-signing.pem", aPrivateKey);
+
+    LibLibreOffice_Impl aOffice;
+    bool bResult = aOffice.m_pOfficeClass->signDocument(&aOffice, aTempFile.GetURL().toUtf8().getStr(),
+                                         aCertificate.data(), int(aCertificate.size()),
+                                         aPrivateKey.data(), int(aPrivateKey.size()));
+
+    CPPUNIT_ASSERT(bResult);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
 namespace {
 
 constexpr size_t documentClassOffset(int i)
@@ -2402,6 +2468,19 @@ constexpr size_t documentClassOffset(int i)
 void DesktopLOKTest::testABI()
 {
     // STABLE ABI, NEVER CHANGE (unless there's a very good reason, agreed by ESC, etc.)
+    CPPUNIT_ASSERT_EQUAL(classOffset(0), offsetof(struct _LibreOfficeKitClass, destroy));
+    CPPUNIT_ASSERT_EQUAL(classOffset(1), offsetof(struct _LibreOfficeKitClass, documentLoad));
+    CPPUNIT_ASSERT_EQUAL(classOffset(2), offsetof(struct _LibreOfficeKitClass, getError));
+    CPPUNIT_ASSERT_EQUAL(classOffset(3), offsetof(struct _LibreOfficeKitClass, documentLoadWithOptions));
+    CPPUNIT_ASSERT_EQUAL(classOffset(4), offsetof(struct _LibreOfficeKitClass, freeError));
+    CPPUNIT_ASSERT_EQUAL(classOffset(5), offsetof(struct _LibreOfficeKitClass, registerCallback));
+    CPPUNIT_ASSERT_EQUAL(classOffset(6), offsetof(struct _LibreOfficeKitClass, getFilterTypes));
+    CPPUNIT_ASSERT_EQUAL(classOffset(7), offsetof(struct _LibreOfficeKitClass, setOptionalFeatures));
+    CPPUNIT_ASSERT_EQUAL(classOffset(8), offsetof(struct _LibreOfficeKitClass, setDocumentPassword));
+    CPPUNIT_ASSERT_EQUAL(classOffset(9), offsetof(struct _LibreOfficeKitClass, getVersionInfo));
+    CPPUNIT_ASSERT_EQUAL(classOffset(10), offsetof(struct _LibreOfficeKitClass, runMacro));
+    CPPUNIT_ASSERT_EQUAL(classOffset(11), offsetof(struct _LibreOfficeKitClass, signDocument));
+
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(struct _LibreOfficeKitDocumentClass, destroy));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(struct _LibreOfficeKitDocumentClass, saveAs));
 
