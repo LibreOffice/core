@@ -214,11 +214,13 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
                 {
                     aSetBitmapSize.setWidth( -nWidthPercent );
                     aSetBitmapSize.setHeight( -nHeightPercent );
+                    rAttrs->Put( XFillBmpSizeLogItem(false) );
                 }
                 else if (!m_bLogicalSize)
                 {
                     aSetBitmapSize.setWidth( GetCoreValue(*m_xBitmapWidth, mePoolUnit) );
                     aSetBitmapSize.setHeight( GetCoreValue(*m_xBitmapHeight, mePoolUnit) );
+                    rAttrs->Put( XFillBmpSizeLogItem(true) );
                 }
                 else
                 {
