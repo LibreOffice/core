@@ -32,6 +32,8 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
+#include <unotools/tempfile.hxx>
+#include <salhelper/singletonref.hxx>
 
 #include "seinitializer_nssimpl.hxx"
 
@@ -40,6 +42,7 @@
 #include "ciphercontext.hxx"
 
 #include <memory>
+#include <vector>
 
 #include <nspr.h>
 #include <cert.h>
@@ -63,6 +66,97 @@ static void nsscrypto_finalize();
 
 namespace
 {
+
+class InitNSSPrivate
+{
+private:
+    std::unique_ptr<utl::TempFile> m_pTempFileDatabaseDirectory;
+
+    static void scanDirsAndFiles(OUString const & rDirURL, std::vector<OUString> & rDirs, std::vector<OUString> & rFiles)
+    {
+        if (rDirURL.isEmpty())
+            return;
+        osl::Directory aDirectory(rDirURL);
+
+        if (osl::FileBase::E_None != aDirectory.open())
+            return;
+
+        osl::DirectoryItem aDirectoryItem;
+
+        while (osl::FileBase::E_None == aDirectory.getNextItem(aDirectoryItem))
+        {
+            osl::FileStatus aFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
+
+            if (osl::FileBase::E_None == aDirectoryItem.getFileStatus(aFileStatus))
+            {
+                if (aFileStatus.isDirectory())
+                {
+                    const OUString aFileName(aFileStatus.getFileName());
+                    if (!aFileName.isEmpty())
+                        rDirs.push_back(aFileName);
+                }
+                else if (aFileStatus.isRegular())
+                {
+                    const OUString aFileName(aFileStatus.getFileName());
+                    if (!aFileName.isEmpty())
+                        rFiles.push_back(aFileName);
+
+                }
+            }
+        }
+    }
+
+    static bool deleteDirRecursively(OUString const & rDirURL)
+    {
+        std::vector<OUString> aDirs;
+        std::vector<OUString> aFiles;
+        bool bError(false);
+
+        scanDirsAndFiles(rDirURL, aDirs, aFiles);
+
+        for (const auto& sDir : aDirs)
+        {
+            const OUString aNewDirURL(rDirURL + "/" + sDir);
+            bError |= deleteDirRecursively(aNewDirURL);
+        }
+
+        for (const auto& sFile : aFiles)
+        {
+            OUString aNewFileURL(rDirURL + "/" + sFile);
+            bError |= (osl::FileBase::E_None != osl::File::remove(aNewFileURL));
+        }
+
+        bError |= (osl::FileBase::E_None != osl::Directory::remove(rDirURL));
+
+        return bError;
+    }
+
+public:
+    OUString getTempDatabasePath()
+    {
+        if (!m_pTempFileDatabaseDirectory)
+        {
+            m_pTempFileDatabaseDirectory.reset(new utl::TempFile(nullptr, true));
+            m_pTempFileDatabaseDirectory->EnableKillingFile();
+        }
+        return m_pTempFileDatabaseDirectory->GetFileName();
+    }
+
+    void reset()
+    {
+        if (m_pTempFileDatabaseDirectory)
+        {
+            deleteDirRecursively(m_pTempFileDatabaseDirectory->GetURL());
+            m_pTempFileDatabaseDirectory.reset();
+        }
+    }
+};
+
+salhelper::SingletonRef<InitNSSPrivate>* getInitNSSPrivate()
+{
+    static salhelper::SingletonRef<InitNSSPrivate> aInitNSSPrivate;
+    return &aInitNSSPrivate;
+}
 
 bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init );
 
@@ -230,7 +324,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
 //return true - whole initialization was successful
 //param out_nss_init = true: at least the NSS initialization (NSS_InitReadWrite
 //was successful and therefore NSS_Shutdown should be called when terminating.
-bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init )
+bool nsscrypto_initialize(css::uno::Reference<css::uno::XComponentContext> const & rxContext, bool & out_nss_init)
 {
     // this method must be called only once, no need for additional lock
     OString sCertDir;
@@ -244,9 +338,9 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
 
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
-    bool bSuccess = true;
+    bool bSuccess = false;
     // there might be no profile
-    if ( !sCertDir.isEmpty() )
+    if (!sCertDir.isEmpty())
     {
         if (sCertDir.indexOf(':') == -1) //might be env var with explicit prefix
         {
@@ -262,26 +356,31 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
                 sCertDir = "dbm:" + sCertDir;
             }
         }
-        if( NSS_InitReadWrite( sCertDir.getStr() ) != SECSuccess )
+        if (NSS_InitReadWrite(sCertDir.getStr()) != SECSuccess)
         {
             SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS with profile failed.");
             int errlen = PR_GetErrorTextLength();
-            if(errlen > 0)
+            if (errlen > 0)
             {
                 std::unique_ptr<char[]> const error(new char[errlen + 1]);
                 PR_GetErrorText(error.get());
                 SAL_INFO("xmlsecurity.xmlsec", error.get());
             }
-            bSuccess = false;
+        }
+        else
+        {
+            bSuccess = true;
         }
     }
 
-    if( sCertDir.isEmpty() || !bSuccess )
+    if (!bSuccess) // Try to create a database in temp dir
     {
-        SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS without profile.");
-        if ( NSS_NoDB_Init(nullptr) != SECSuccess )
+        SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS with a temporary profile.");
+        OUString rString = (*getInitNSSPrivate())->getTempDatabasePath();
+
+        if (NSS_InitReadWrite(rString.toUtf8().getStr()) != SECSuccess)
         {
-            SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS without profile failed.");
+            SAL_INFO("xmlsecurity.xmlsec", "Initializing NSS with a temporary profile.");
             int errlen = PR_GetErrorTextLength();
             if(errlen > 0)
             {
@@ -289,7 +388,15 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
                 PR_GetErrorText(error.get());
                 SAL_INFO("xmlsecurity.xmlsec", error.get());
             }
-            return false ;
+            return false;
+        }
+        // Initialize and set empty password if needed
+        PK11SlotInfo* pSlot = PK11_GetInternalKeySlot();
+        if (pSlot)
+        {
+            if (PK11_NeedUserInit(pSlot))
+                PK11_InitPin(pSlot, nullptr, nullptr);
+            PK11_FreeSlot(pSlot);
         }
     }
     out_nss_init = true;
@@ -383,6 +490,8 @@ extern "C" void nsscrypto_finalize()
     }
     PK11_LogoutAll();
     (void)NSS_Shutdown();
+
+    (*getInitNSSPrivate())->reset();
 }
 
 ONSSInitializer::ONSSInitializer(
