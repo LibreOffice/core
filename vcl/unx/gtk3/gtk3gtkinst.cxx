@@ -110,6 +110,27 @@ namespace
     };
 }
 
+namespace
+{
+    bool matchToken(const OUString &rStr, const OUStringLiteral &rCmp, const char cSep, sal_Int32 &rIndex)
+    {
+        if (rIndex<0)
+            return false;
+        if (!rStr.match(rCmp, rIndex))
+            return false;
+        const sal_Int32 nCmpEndPos {rIndex+rCmp.size};
+        if (rStr.getLength()==nCmpEndPos)
+        {
+            rIndex = -1;
+            return true;
+        }
+        if (rStr[nCmpEndPos]!=cSep)
+            return false;
+        rIndex=nCmpEndPos+1;
+        return true;
+    }
+}
+
 std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets)
 {
     std::vector<css::datatransfer::DataFlavor> aVector;
@@ -156,11 +177,10 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
         aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
         sal_Int32 nIndex(0);
-        if (aFlavor.MimeType.getToken(0, ';', nIndex) == "text/plain")
+        if (matchToken(aFlavor.MimeType, "text/plain", ';', nIndex))
         {
             bHaveText = true;
-            OUString aToken(aFlavor.MimeType.getToken(0, ';', nIndex));
-            if (aToken == "charset=utf-16")
+            if (matchToken(aFlavor.MimeType, "charset=utf-16", ';', nIndex))
             {
                 bHaveUTF16 = true;
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
@@ -581,14 +601,10 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
         const css::datatransfer::DataFlavor& rFlavor = rFormats[i];
 
         sal_Int32 nIndex(0);
-        if (rFlavor.MimeType.getToken(0, ';', nIndex) == "text/plain")
+        if (matchToken(rFlavor.MimeType, "text/plain", ';', nIndex))
         {
             bHaveText = true;
-            OUString aToken(rFlavor.MimeType.getToken(0, ';', nIndex));
-            if (aToken == "charset=utf-8")
-            {
-                bHaveUTF8 = true;
-            }
+            bHaveUTF8 = matchToken(rFlavor.MimeType, "charset=utf-8", ';', nIndex);
         }
         GtkTargetEntry aEntry(makeGtkTargetEntry(rFlavor));
         aGtkTargets.push_back(aEntry);
