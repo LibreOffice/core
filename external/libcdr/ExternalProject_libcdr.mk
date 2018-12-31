@@ -35,6 +35,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
+			$(if $(filter WNT,$(OS_FOR_BUILD)),MKDIR_P="$(shell cygpath -m /usr/bin/mkdir) -p") \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
