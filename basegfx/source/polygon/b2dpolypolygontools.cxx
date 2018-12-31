@@ -174,15 +174,7 @@ namespace basegfx
             }
             else
             {
-                sal_Int32 nInsideCount(0);
-
-                for(auto const& rPolygon : rCandidate)
-                {
-                    if(isInside(rPolygon, rPoint, bWithBorder))
-                    {
-                        nInsideCount++;
-                    }
-                }
+                sal_Int32 nInsideCount = std::count_if(rCandidate.begin(), rCandidate.end(), [rPoint, bWithBorder](B2DPolygon polygon){ return isInside(polygon, rPoint, bWithBorder); });
 
                 return (nInsideCount % 2);
             }
