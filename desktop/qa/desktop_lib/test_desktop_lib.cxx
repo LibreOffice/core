@@ -125,6 +125,7 @@ public:
     void testInsertCertificate_DER_ODT();
     void testInsertCertificate_PEM_ODT();
     void testInsertCertificate_PEM_DOCX();
+    void testSignDocument_PEM_PDF();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -173,6 +174,7 @@ public:
     CPPUNIT_TEST(testInsertCertificate_DER_ODT);
     CPPUNIT_TEST(testInsertCertificate_PEM_ODT);
     CPPUNIT_TEST(testInsertCertificate_PEM_DOCX);
+    CPPUNIT_TEST(testSignDocument_PEM_PDF);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2480,6 +2482,66 @@ void DesktopLOKTest::testInsertCertificate_PEM_DOCX()
 
     int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
     CPPUNIT_ASSERT_EQUAL(int(5), nState);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testSignDocument_PEM_PDF()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load the document, save it into a temp file and load that file again
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(mxComponent.is());
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
+
+    std::vector<unsigned char> aCertificate;
+    std::vector<unsigned char> aPrivateKey;
+
+    {
+        readFileIntoByteVector("test-cert-chain-1.pem", aCertificate);
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    {
+        readFileIntoByteVector("test-cert-chain-2.pem", aCertificate);
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    {
+        readFileIntoByteVector("test-cert-chain-3.pem", aCertificate);
+
+        bool bResult = pDocument->m_pDocumentClass->addCertificate(
+                            pDocument, aCertificate.data(), int(aCertificate.size()));
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "pdf", nullptr));
+
+    closeDoc();
+
+    Scheduler::ProcessEventsToIdle();
+
+    readFileIntoByteVector("test-cert-signing.pem", aCertificate);
+    readFileIntoByteVector("test-PK-signing.pem", aPrivateKey);
+
+    LibLibreOffice_Impl aOffice;
+    bool bResult = aOffice.m_pOfficeClass->signDocument(&aOffice, aTempFile.GetURL().toUtf8().getStr(),
+                                         aCertificate.data(), int(aCertificate.size()),
+                                         aPrivateKey.data(), int(aPrivateKey.size()));
+
+    CPPUNIT_ASSERT(bResult);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
