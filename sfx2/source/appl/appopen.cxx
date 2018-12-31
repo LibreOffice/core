@@ -675,9 +675,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             // intercept all incoming interactions and provide useful information
             // later if the following transaction was finished.
 
-            ::sfx2::PreventDuplicateInteraction*                 pHandler       = new ::sfx2::PreventDuplicateInteraction(::comphelper::getProcessComponentContext());
-            css::uno::Reference< css::task::XInteractionHandler >     xHandler       (static_cast< css::task::XInteractionHandler* >(pHandler), css::uno::UNO_QUERY);
-            css::uno::Reference< css::task::XInteractionHandler >     xWrappedHandler;
+            sfx2::PreventDuplicateInteraction* pHandler = new sfx2::PreventDuplicateInteraction(comphelper::getProcessComponentContext());
+            uno::Reference<task::XInteractionHandler> xHandler(static_cast< css::task::XInteractionHandler* >(pHandler), css::uno::UNO_QUERY);
+            uno::Reference<task::XInteractionHandler> xWrappedHandler;
 
             // wrap existing handler or create new UUI handler
             const SfxUnoAnyItem* pInteractionItem = rReq.GetArg<SfxUnoAnyItem>(SID_INTERACTIONHANDLER);
@@ -693,8 +693,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHandler)) );
 
             // define rules for this handler
-            css::uno::Type                                            aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
-            ::sfx2::PreventDuplicateInteraction::InteractionInfo aRule        (aInteraction, 1);
+            css::uno::Type aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
+            ::sfx2::PreventDuplicateInteraction::InteractionInfo aRule(aInteraction, 1);
             pHandler->addInteractionRule(aRule);
 
             if (!aDocService.isEmpty())
@@ -816,9 +816,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     // Mark without URL cannot be handled by hyperlink code
     if ( bHyperlinkUsed && !aFileName.isEmpty() && aFileName[0] != '#' )
     {
-        Reference< css::document::XTypeDetection > xTypeDetection( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                       "com.sun.star.document.TypeDetection"),
-                                                                   UNO_QUERY );
+        uno::Reference<document::XTypeDetection> xTypeDetection(
+            comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"), UNO_QUERY);
+
         if ( xTypeDetection.is() )
         {
             URL             aURL;
