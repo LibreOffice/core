@@ -22,19 +22,20 @@
 
 
 #include <com/sun/star/awt/XPrinterPropertySet.hpp>
-#include <com/sun/star/awt/XPrinter.hpp>
 #include <com/sun/star/awt/XPrinterServer.hpp>
 #include <com/sun/star/awt/XInfoPrinter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <cppuhelper/weak.hxx>
 
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/jobset.hxx>
 
-#include <vcl/oldprintadaptor.hxx>
+namespace com { namespace sun { namespace star { namespace awt { class XPrinter; } } } }
+namespace vcl { class OldStylePrintAdaptor; }
+class Printer;
 
 // relevant properties for the printer:
 /*

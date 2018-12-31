@@ -39,7 +39,6 @@
 
 class Menu;
 class MenuBar;
-class VclSimpleEvent;
 class PopupMenu;
 class VclMenuEvent;
 

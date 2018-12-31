@@ -19,6 +19,7 @@
 
 #include <toolkit/controls/tkscrollbar.hxx>
 #include <toolkit/helper/property.hxx>
+#include <toolkit/helper/servicenames.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>

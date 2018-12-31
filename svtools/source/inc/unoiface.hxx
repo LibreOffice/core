@@ -26,9 +26,11 @@
 
 #include <cppuhelper/typeprovider.hxx>
 
+#include <com/sun/star/awt/XProgressBar.hpp>
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <svtools/svmedit.hxx>
 #include <vcl/fmtfield.hxx>
 

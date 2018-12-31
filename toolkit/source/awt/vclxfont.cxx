@@ -28,6 +28,7 @@
 #include <rtl/uuid.h>
 #include <rtl/ustring.h>
 
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 

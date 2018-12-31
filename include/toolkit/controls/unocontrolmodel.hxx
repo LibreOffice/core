@@ -25,23 +25,22 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/weakagg.hxx>
 
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/ref.hxx>
 
 #include <vector>
 #include <map>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 typedef std::map<sal_uInt16, css::uno::Any> ImplPropertyTable;
 

@@ -287,3 +287,143 @@ blacklist:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleRelationSet.hpp
     - com/sun/star/accessibility/XAccessible.hpp
+    include/toolkit/awt/vclxaccessiblecomponent.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/toolkit/awt/animatedimagespeer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XAnimation.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    - toolkit/awt/vclxwindow.hxx
+    include/toolkit/awt/vclxpointer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XPointer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    include/toolkit/awt/vclxspinbutton.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XSpinValue.hpp
+    include/toolkit/awt/vclxprinter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XPrinterPropertySet.hpp
+    - com/sun/star/awt/XInfoPrinter.hpp
+    - com/sun/star/awt/XPrinterPropertySet.hpp
+    - com/sun/star/awt/XPrinterServer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/toolkit/awt/vclxtopwindow.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XTopWindow2.hpp
+    - com/sun/star/awt/XSystemDependentWindowPeer.hpp
+    include/toolkit/awt/vclxtabpagecontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/tab/XTabPageContainer.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    - toolkit/awt/vclxcontainer.hxx
+    include/toolkit/awt/vclxwindow.hxx:
+    # base class has to be a complete type
+    - toolkit/awt/vclxdevice.hxx
+    - com/sun/star/awt/XWindow2.hpp
+    - com/sun/star/awt/XVclWindowPeer.hpp
+    - com/sun/star/awt/XLayoutConstrains.hpp
+    - com/sun/star/awt/XView.hpp
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/awt/XDockableWindow.hpp
+    - com/sun/star/awt/XStyleSettingsSupplier.hpp
+    include/toolkit/awt/vclxwindows.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XListBox.hpp
+    - com/sun/star/awt/XToggleButton.hpp
+    - com/sun/star/awt/XComboBox.hpp
+    - com/sun/star/awt/XItemListListener.hpp
+    include/toolkit/controls/accessiblecontrolcontext.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XEventListener.hpp
+    include/toolkit/controls/animatedimages.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XAnimatedImages.hpp
+    - toolkit/controls/unocontrolmodel.hxx
+    include/toolkit/controls/controlmodelcontainerbase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/tab/XTabPageModel.hpp
+    - com/sun/star/awt/XTabControllerModel.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/util/XChangesListener.hpp
+    - com/sun/star/util/XChangesNotifier.hpp
+    - toolkit/controls/unocontrolcontainer.hxx
+    include/toolkit/controls/dialogcontrol.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/UnoControlDialog.hpp
+    include/toolkit/controls/eventcontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    include/toolkit/controls/geometrycontrolmodel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/script/XScriptEventsSupplier.hpp
+    - com/sun/star/util/XCloneable.hpp
+    # Needed for template classes
+    - toolkit/controls/geometrycontrolmodel_impl.hxx
+    include/toolkit/controls/roadmapcontrol.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XItemEventBroadcaster.hpp
+    - com/sun/star/awt/XItemListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/container/XContainerListener.hpp
+    include/toolkit/controls/roadmapentry.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/toolkit/controls/tabpagecontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/tab/XTabPageContainer.hpp
+    - toolkit/controls/controlmodelcontainerbase.hxx
+    include/toolkit/controls/tabpagemodel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/tab/XTabPage.hpp
+    - toolkit/controls/unocontrolcontainer.hxx
+    include/toolkit/controls/unocontrol.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XControl.hpp
+    - com/sun/star/awt/XWindow2.hpp
+    - com/sun/star/awt/XView.hpp
+    - com/sun/star/beans/XPropertiesChangeListener.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/awt/XUnitConversion.hpp
+    - com/sun/star/awt/XStyleSettingsSupplier.hpp
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/util/XModeChangeBroadcaster.hpp
+    include/toolkit/controls/unocontrolcontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XControlContainer.hpp
+    - com/sun/star/awt/XUnoControlContainer.hpp
+    - com/sun/star/container/XContainer.hpp
+    - com/sun/star/container/XIdentifierContainer.hpp
+    - toolkit/controls/unocontrolbase.hxx
+    include/toolkit/controls/unocontrolmodel.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XControlModel.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/io/XPersistObject.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/util/XCloneable.hpp
+    include/toolkit/controls/unocontrols.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XTextComponent.hpp
+    - com/sun/star/awt/XTextListener.hpp
+    - com/sun/star/awt/XTextLayoutConstrains.hpp
+    - com/sun/star/awt/XButton.hpp
+    - com/sun/star/awt/XToggleButton.hpp
+    - com/sun/star/awt/XRadioButton.hpp
+    - com/sun/star/awt/XCheckBox.hpp
+    - com/sun/star/awt/XListBox.hpp
+    - com/sun/star/awt/XItemList.hpp
+    include/toolkit/helper/macros.hxx:
+    # Needed for macros
+    - comphelper/servicehelper.hxx

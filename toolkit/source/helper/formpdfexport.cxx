@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/form/FormSubmitMethod.hpp>

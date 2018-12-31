@@ -20,12 +20,9 @@
 #define INCLUDED_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
 
 #include <toolkit/controls/unocontrolmodel.hxx>
-#include <toolkit/helper/servicenames.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <com/sun/star/awt/XScrollBar.hpp>
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
-#include <com/sun/star/awt/AdjustmentType.hpp>
 
 
 namespace toolkit
