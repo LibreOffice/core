@@ -490,17 +490,17 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
 
 OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
 {
-    return OUString(  "documentsignatures.xml"  );
+    return OUString("documentsignatures.xml");
 }
 
 OUString DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName()
 {
-    return OUString(  "macrosignatures.xml"  );
+    return OUString("macrosignatures.xml");
 }
 
 OUString DocumentSignatureHelper::GetPackageSignatureDefaultStreamName()
 {
-    return OUString(  "packagesignatures.xml"  );
+    return OUString("packagesignatures.xml");
 }
 
 void DocumentSignatureHelper::writeDigestMethod(
