@@ -245,7 +245,7 @@ gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 # * Cap the number of threads unittests use:
 gb_TEST_ENV_VARS := MAX_CONCURRENCY=4
 # * Disable searching for certificates by default:
-gb_TEST_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=0
+gb_TEST_ENV_VARS += MOZILLA_CERTIFICATE_FOLDER=
 # Avoid hanging if the cups daemon requests a password:
 gb_TEST_ENV_VARS += SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
 ifeq (,$(SAL_USE_VCLPLUGIN))
