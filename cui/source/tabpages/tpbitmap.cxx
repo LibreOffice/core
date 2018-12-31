@@ -328,8 +328,6 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
             m_xTsbScale->set_state(TRISTATE_TRUE);
             m_bLogicalSize = false;
         }
-
-        ClickScaleHdl(*m_xTsbScale);
     }
     else
         m_xTsbScale->set_state(TRISTATE_INDET);
@@ -359,6 +357,8 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         }
     }
     m_xTsbScale->set_state(eRelative);
+    ClickScaleHdl(*m_xTsbScale);
+
 
     if(rBitmapSize.Width() > 0 && rBitmapSize.Height() > 0)
     {
