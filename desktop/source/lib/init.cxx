@@ -95,6 +95,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/DocumentSigner.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
@@ -1445,6 +1446,13 @@ static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
 static char*                   lo_getVersionInfo(LibreOfficeKit* pThis);
 static int                     lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
 
+static bool lo_signDocument(LibreOfficeKit* pThis,
+                                   const char* pUrl,
+                                   const unsigned char* pCertificateBinary,
+                                   const int nCertificateBinarySize,
+                                   const unsigned char* pPrivateKeyBinary,
+                                   const int nPrivateKeyBinarySize);
+
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -1467,6 +1475,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->setDocumentPassword = lo_setDocumentPassword;
         m_pOfficeClass->getVersionInfo = lo_getVersionInfo;
         m_pOfficeClass->runMacro = lo_runMacro;
+        m_pOfficeClass->signDocument = lo_signDocument;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -1697,6 +1706,75 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
     }
 
     return false;
+}
+
+static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
+                                       const char* pURL,
+                                       const unsigned char* pCertificateBinary,
+                                       const int nCertificateBinarySize,
+                                       const unsigned char* pPrivateKeyBinary,
+                                       const int nPrivateKeyBinarySize)
+{
+    OUString aURL(getAbsoluteURL(pURL));
+    if (aURL.isEmpty())
+       return false;
+
+    if (!xContext.is())
+        return false;
+
+    uno::Sequence<sal_Int8> aCertificateSequence;
+
+    std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
+    std::string aCertificateBase64String = extractCertificate(aCertificateString);
+    if (!aCertificateBase64String.empty())
+    {
+        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String.c_str());
+        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
+    }
+    else
+    {
+        aCertificateSequence.realloc(nCertificateBinarySize);
+        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+    }
+
+    uno::Sequence<sal_Int8> aPrivateKeySequence;
+    std::string aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeyBinarySize);
+    std::string aPrivateKeyBase64String = extractPrivateKey(aPrivateKeyString);
+    if (!aPrivateKeyBase64String.empty())
+    {
+        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String.c_str());
+        comphelper::Base64::decode(aPrivateKeySequence, aBase64OUString);
+    }
+    else
+    {
+        aPrivateKeySequence.realloc(nPrivateKeyBinarySize);
+        std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeyBinarySize, aPrivateKeySequence.begin());
+    }
+
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext;
+    xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    if (!xSecurityContext.is())
+        return false;
+
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
+    xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
+
+    if (!xCertificateCreator.is())
+        return false;
+
+    uno::Reference<security::XCertificate> xCertificate;
+    xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
+
+    if (!xCertificate.is())
+        return false;
+
+    sfx2::DocumentSigner aDocumentSigner(aURL);
+    if (!aDocumentSigner.signDocument(xCertificate))
+        return false;
+
+    return true;
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
