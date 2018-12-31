@@ -122,10 +122,8 @@ VclPtr<DialogWindow> Shell::FindDlgWin (
 
 sal_uInt16 Shell::GetWindowId(const BaseWindow* pWin) const
 {
-    for (auto const& window : aWindowTable)
-        if ( window.second == pWin )
-            return window.first;
-    return 0;
+    WindowTable::value_type win = *std::find_if(aWindowTable.begin(), aWindowTable.end(), [pWin](const WindowTable::value_type & window) -> bool { return window.second == pWin; });
+    return win.first;
 }
 
 SdrView* Shell::GetCurDlgView() const
