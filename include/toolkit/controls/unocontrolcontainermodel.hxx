@@ -22,8 +22,6 @@
 
 
 #include <toolkit/controls/unocontrolmodel.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <toolkit/helper/servicenames.hxx>
 
 
 //  class css::awt::UnoControlContainerModel

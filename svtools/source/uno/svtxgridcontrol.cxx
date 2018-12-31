@@ -64,7 +64,6 @@ using css::awt::grid::XGridColumn;
 using css::container::ContainerEvent;
 using css::awt::grid::GridDataEvent;
 using css::awt::grid::GridInvalidModelException;
-using css::util::VetoException;
 
 namespace AccessibleEventId = css::accessibility::AccessibleEventId;
 namespace AccessibleStateType = css::accessibility::AccessibleStateType;

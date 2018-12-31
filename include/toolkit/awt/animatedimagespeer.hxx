@@ -21,6 +21,7 @@
 #define INCLUDED_TOOLKIT_AWT_ANIMATEDIMAGESPEER_HXX
 
 #include <toolkit/awt/vclxwindow.hxx>
+#include <com/sun/star/container/XContainerListener.hpp>
 
 #include <com/sun/star/awt/XAnimation.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

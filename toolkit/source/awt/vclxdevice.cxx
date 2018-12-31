@@ -20,6 +20,7 @@
 #include <com/sun/star/awt/DeviceCapability.hpp>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/awt/vclxfont.hxx>
@@ -38,7 +39,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
-
+#include <vcl/metric.hxx>
 
 //  class VCLXDevice
 

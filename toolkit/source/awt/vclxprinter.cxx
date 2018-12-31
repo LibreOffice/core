@@ -27,6 +27,7 @@
 
 #include <vcl/print.hxx>
 #include <vcl/jobset.hxx>
+#include <vcl/oldprintadaptor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 

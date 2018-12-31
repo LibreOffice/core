@@ -24,11 +24,12 @@
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySetInfo; } } } }
 
 namespace toolkit
 {

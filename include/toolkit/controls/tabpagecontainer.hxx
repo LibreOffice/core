@@ -22,16 +22,16 @@
 
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
 #include <com/sun/star/awt/tab/XTabPageContainerModel.hpp>
-#include <com/sun/star/awt/tab/XTabPageContainerListener.hpp>
-#include <com/sun/star/awt/tab/XTabPage.hpp>
-#include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
-#include <toolkit/helper/servicenames.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
+
+namespace com { namespace sun { namespace star { namespace awt { namespace tab { class XTabPage; } } } } }
+namespace com { namespace sun { namespace star { namespace awt { namespace tab { class XTabPageContainerListener; } } } } }
+namespace com { namespace sun { namespace star { namespace awt { namespace tab { class XTabPageModel; } } } } }
 
 //  class css::awt::tab::UnoControlTabPageContainerModel
 

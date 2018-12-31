@@ -22,49 +22,20 @@
 
 #include <toolkit/dllapi.h>
 
-#include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <com/sun/star/beans/PropertyStateChangeEvent.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/awt/XFileDialog.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
-#include <com/sun/star/awt/XProgressMonitor.hpp>
-#include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/XScrollBar.hpp>
-#include <com/sun/star/awt/XVclContainerPeer.hpp>
-#include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XMessageBox.hpp>
 #include <com/sun/star/awt/XTextEditField.hpp>
-#include <com/sun/star/awt/Style.hpp>
 #include <com/sun/star/awt/XTimeField.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XSpinField.hpp>
-#include <com/sun/star/awt/XUnoControlContainer.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <com/sun/star/awt/XNumericField.hpp>
 #include <com/sun/star/awt/XMetricField.hpp>
 #include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/awt/XToggleButton.hpp>
-#include <com/sun/star/awt/XPointer.hpp>
-#include <com/sun/star/awt/XTextArea.hpp>
-#include <com/sun/star/awt/XImageButton.hpp>
 #include <com/sun/star/awt/XFixedHyperlink.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XCurrencyField.hpp>
@@ -73,7 +44,6 @@
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XItemListListener.hpp>
-#include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -82,24 +52,13 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <vcl/pointr.hxx>
 #include <vcl/image.hxx>
-#include <vcl/tabctrl.hxx>
 
-class Button;
-class CheckBox;
-class RadioButton;
-class ListBox;
-class ScrollBar;
-class Edit;
-class Menu;
-class ComboBox;
 class FormatterBase;
-class SpinField;
-class ToolBox;
-class VclSimpleEvent;
-class VclMenuEvent;
+class TabControl;
+class TabPage;
 
 
 //  class VCLXGraphicControl

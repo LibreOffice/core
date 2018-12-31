@@ -22,20 +22,19 @@
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
 
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
 #include <vcl/bitmapex.hxx>
+#include <vcl/font.hxx>
 #include <vcl/region.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/poly.hxx>
 
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;
@@ -49,7 +48,6 @@ namespace com { namespace sun { namespace star { namespace awt {
     class XGraphics;
     class XRegion;
     class XDevice;
-    class XPointer;
     class XToolkit;
     class XFont;
     class XControlContainer;
@@ -62,6 +60,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 }}}}
 
 
+class FontMetric;
 class OutputDevice;
 class MouseEvent;
 class KeyEvent;
