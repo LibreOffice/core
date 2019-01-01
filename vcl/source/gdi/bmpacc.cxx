@@ -348,7 +348,7 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
 }
 
 void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
-                                      ScanlineFormat nSrcScanlineFormat, sal_uLong nSrcScanlineSize )
+                                      ScanlineFormat nSrcScanlineFormat, sal_uInt32 nSrcScanlineSize )
 {
     const ScanlineFormat nFormat = RemoveScanline( nSrcScanlineFormat );
 

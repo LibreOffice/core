@@ -30,7 +30,7 @@ public:
 
     void CopyScanline(long nY, const BitmapReadAccess& rReadAcc);
     void CopyScanline(long nY, ConstScanline aSrcScanline, ScanlineFormat nSrcScanlineFormat,
-                      sal_uLong nSrcScanlineSize);
+                      sal_uInt32 nSrcScanlineSize);
 
     void CopyBuffer(const BitmapReadAccess& rReadAcc);
 
