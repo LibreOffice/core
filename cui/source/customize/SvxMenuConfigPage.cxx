@@ -499,6 +499,12 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, ResetMenuHdl, Button *, void )
 {
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
+    if (pMenuData == nullptr)
+    {
+        SAL_WARN("cui.customize", "RHB top level selection is null. A menu must be selected to reset!");
+        return;
+    }
+
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU)));

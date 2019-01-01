@@ -1599,8 +1599,9 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
     SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
 {
     OUString aURL = GetScriptURL();
+    SvxConfigEntry* pParent = GetTopLevelSelection();
 
-    if ( aURL.isEmpty() )
+    if ( aURL.isEmpty() || pParent == nullptr )
     {
         return nullptr;
     }
@@ -1623,8 +1624,6 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
         pNewEntryData->SetName( GetSelectedDisplayName() );
 
     // check that this function is not already in the menu
-    SvxConfigEntry* pParent = GetTopLevelSelection();
-
     if ( !bAllowDuplicates )
     {
         for (auto const& entry : *pParent->GetEntries())
@@ -1648,8 +1647,13 @@ SvTreeListEntry* SvxConfigPage::InsertEntry(
     SvTreeListEntry* pTarget,
     bool bFront )
 {
+    SvxConfigEntry* pTopLevelSelection = GetTopLevelSelection();
+
+    if (pTopLevelSelection == nullptr)
+        return nullptr;
+
     // Grab the entries list for the currently selected menu
-    SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
+    SvxEntries* pEntries = pTopLevelSelection->GetEntries();
 
     SvTreeListEntry* pNewEntry = nullptr;
     SvTreeListEntry* pCurEntry =
