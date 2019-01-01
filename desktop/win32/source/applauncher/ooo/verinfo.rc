@@ -25,7 +25,7 @@
 #define LG_D 					// generate always german version
 #endif
 
-#define VER_FIRSTYEAR	2009
+#define VER_FIRSTYEAR	2000
 
 #include <windows.h>
 #include "version.hrc"
