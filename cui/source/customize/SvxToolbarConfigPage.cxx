@@ -855,9 +855,17 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
 void SvxToolbarConfigPage::AddFunction(
     SvTreeListEntry* pTarget, bool bFront )
 {
+    SvxConfigEntry* pToolbar = GetTopLevelSelection();
+
+    if (pToolbar == nullptr)
+        return;
+
     // Add the command to the contents listbox of the selected toolbar
     SvTreeListEntry* pNewLBEntry =
         SvxConfigPage::AddFunction( pTarget, bFront, true/*bAllowDuplicates*/ );
+
+    if (pNewLBEntry == nullptr)
+        return;
 
     SvxConfigEntry* pEntry = static_cast<SvxConfigEntry*>(pNewLBEntry->GetUserData());
 
@@ -877,8 +885,6 @@ void SvxToolbarConfigPage::AddFunction(
     // TODO: Figure out a way to show the changes on the toolbar, but revert if
     //       the dialog is closed by pressing "Cancel"
     // get currently selected toolbar and apply change
-    SvxConfigEntry* pToolbar = GetTopLevelSelection();
-
     if ( pToolbar != nullptr )
     {
         static_cast<ToolbarSaveInData*>( GetSaveInData() )->ApplyToolbar( pToolbar );
