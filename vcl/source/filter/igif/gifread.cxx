@@ -561,9 +561,9 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
                     if( ( nMinY > nLastImageY ) && ( nLastImageY < ( nImageHeight - 1 ) ) )
                     {
                         sal_uInt8*  pScanline8 = pAcc8->GetScanline( nYAcc );
-                        sal_uLong   nSize8 = pAcc8->GetScanlineSize();
+                        sal_uInt32  nSize8 = pAcc8->GetScanlineSize();
                         sal_uInt8*  pScanline1 = nullptr;
-                        sal_uLong   nSize1 = 0;
+                        sal_uInt32  nSize1 = 0;
 
                         if( bGCTransparent )
                         {

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_BMPACC_HXX
 #define INCLUDED_VCL_BMPACC_HXX
 
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
@@ -71,11 +70,11 @@ public:
         return mpBuffer ? RemoveScanline(mpBuffer->mnFormat) : ScanlineFormat::NONE;
     }
 
-    sal_uLong GetScanlineSize() const
+    sal_uInt32 GetScanlineSize() const
     {
         assert(mpBuffer && "Access is not valid!");
 
-        return mpBuffer ? mpBuffer->mnScanlineSize : 0UL;
+        return mpBuffer ? mpBuffer->mnScanlineSize : 0;
     }
 
     sal_uInt16 GetBitCount() const

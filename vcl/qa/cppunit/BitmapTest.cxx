@@ -347,11 +347,11 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
 #if defined MACOSX || defined IOS
         //it would be nice to find and change the stride for quartz to be the same as everyone else
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(10), pReadAccess->GetScanlineSize());
 #else
 #if HAVE_FEATURE_OPENGL
         if (!OpenGLHelper::isVCLOpenGLEnabled())
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(12), pReadAccess->GetScanlineSize());
 #endif
 #endif
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
@@ -370,18 +370,18 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
 
 #if defined LINUX || defined FREEBSD
-        CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
 #else
 #if defined(_WIN32)
         if (!OpenGLHelper::isVCLOpenGLEnabled())
         {
             // GDI Scanlines padded to DWORD multiples, it seems
-            CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(32), pReadAccess->GetScanlineSize());
         }
         else
 #endif
         {
-            CPPUNIT_ASSERT_EQUAL(sal_uLong(30), pReadAccess->GetScanlineSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt32(30), pReadAccess->GetScanlineSize());
         }
 #endif
 
