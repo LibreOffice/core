@@ -39,6 +39,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,wpg,\
 	UnpackedTarball/libwpg/src/lib/WPGColor \
 	UnpackedTarball/libwpg/src/lib/WPGDashArray \
 	UnpackedTarball/libwpg/src/lib/WPGHeader \
+	UnpackedTarball/libwpg/src/lib/WPGTextDataHandler \
 	UnpackedTarball/libwpg/src/lib/WPGXParser \
 	UnpackedTarball/libwpg/src/lib/WPGraphics \
 	UnpackedTarball/libwpg/src/lib/libwpg_utils \

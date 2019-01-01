@@ -1,11 +1,10 @@
 --- src/lib/Makefile.in.orig	2015-08-06 21:30:41.615633795 +0200
 +++ src/lib/Makefile.in	2015-08-06 21:31:03.764633415 +0200
-@@ -357,7 +357,7 @@
- AM_CXXFLAGS = -I$(top_srcdir)/inc $(REVENGE_CFLAGS) $(WPD_CFLAGS) $(DEBUG_CXXFLAGS) -DLIBWPG_BUILD=1
+@@ -357,6 +357,6 @@
  libwpg_@WPG_MAJOR_VERSION@_@WPG_MINOR_VERSION@_la_LIBADD = $(WPD_LIBS) $(REVENGE_LIBS) @LIBWPG_WIN32_RESOURCE@
  libwpg_@WPG_MAJOR_VERSION@_@WPG_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPG_WIN32_RESOURCE@
 -libwpg_@WPG_MAJOR_VERSION@_@WPG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined
 +libwpg_@WPG_MAJOR_VERSION@_@WPG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined -release lo
  libwpg_@WPG_MAJOR_VERSION@_@WPG_MINOR_VERSION@_la_SOURCES = \
- 	WPGraphics.cpp \
- 	WPGDashArray.cpp \
+ 	WPG1Parser.cpp \
+ 	WPG1Parser.h \
