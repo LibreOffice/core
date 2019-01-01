@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_f52d9f46",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 8
+      },
+      "lineNbr": 3189,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-01-01T03:56:14Z",
+      "side": 1,
+      "message": "This change is good…",
+      "revId": "ef2c75f00cfa3f522972110d02a060a65d405930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_d532a3a7",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 8
+      },
+      "lineNbr": 6575,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-01-01T03:56:14Z",
+      "side": 1,
+      "message": "… but this one is not.",
+      "revId": "ef2c75f00cfa3f522972110d02a060a65d405930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_b5272765",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 8
+      },
+      "lineNbr": 6580,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-01-01T03:56:14Z",
+      "side": 1,
+      "message": "“To” should be lower case",
+      "revId": "ef2c75f00cfa3f522972110d02a060a65d405930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_952c2b48",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 8
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-01-01T03:56:14Z",
+      "side": 1,
+      "message": "In compound words, the component after a hyphen may stay in lower case",
+      "revId": "ef2c75f00cfa3f522972110d02a060a65d405930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_7521af4d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 8
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2019-01-01T03:56:14Z",
+      "side": 1,
+      "message": "I would change all of “e-mail” into “email”; nobody spells this term with a hyphen anymore",
+      "revId": "ef2c75f00cfa3f522972110d02a060a65d405930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
