@@ -224,7 +224,7 @@
                         <property name="margin_left">12</property>
                         <property name="margin_right">12</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes" context="aboutdialog|copyright">Copyright © 2000–2018 LibreOffice contributors.</property>
+                        <property name="label" translatable="yes" context="aboutdialog|copyright">Copyright © 2000–2019 LibreOffice contributors.</property>
                         <property name="justify">center</property>
                         <property name="wrap">True</property>
                       </object>
