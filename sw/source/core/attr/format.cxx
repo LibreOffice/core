@@ -40,8 +40,7 @@ using namespace com::sun::star;
 
 SwFormat::SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
               const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame,
-              sal_uInt16 nFormatWhich )
-    : SwModify( pDrvdFrame ),
+              sal_uInt16 nFormatWhich ) :
     m_aFormatName( OUString::createFromAscii(pFormatNm) ),
     m_aSet( rPool, pWhichRanges ),
     m_nWhichId( nFormatWhich ),
@@ -54,13 +53,15 @@ SwFormat::SwFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
     m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrame )
+    {
+        pDrvdFrame->Add(this);
         m_aSet.SetParent( &pDrvdFrame->m_aSet );
+    }
 }
 
 SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
               const sal_uInt16* pWhichRanges, SwFormat* pDrvdFrame,
-              sal_uInt16 nFormatWhich )
-    : SwModify( pDrvdFrame ),
+              sal_uInt16 nFormatWhich ) :
     m_aFormatName( rFormatNm ),
     m_aSet( rPool, pWhichRanges ),
     m_nWhichId( nFormatWhich ),
@@ -73,11 +74,13 @@ SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
     m_bFormatInDTOR = m_bHidden = false;
 
     if( pDrvdFrame )
+    {
+        pDrvdFrame->Add(this);
         m_aSet.SetParent( &pDrvdFrame->m_aSet );
+    }
 }
 
-SwFormat::SwFormat( const SwFormat& rFormat )
-    : SwModify( rFormat.DerivedFrom() ),
+SwFormat::SwFormat( const SwFormat& rFormat ) :
     m_aFormatName( rFormat.m_aFormatName ),
     m_aSet( rFormat.m_aSet ),
     m_nWhichId( rFormat.m_nWhichId ),
@@ -90,8 +93,11 @@ SwFormat::SwFormat( const SwFormat& rFormat )
     m_bHidden = rFormat.m_bHidden;
     m_bAutoUpdateFormat = rFormat.m_bAutoUpdateFormat;
 
-    if( rFormat.DerivedFrom() )
-        m_aSet.SetParent( &rFormat.DerivedFrom()->m_aSet );
+    if( auto pDerived = rFormat.DerivedFrom() )
+    {
+        pDerived->Add(this);
+        m_aSet.SetParent( &pDerived->m_aSet );
+    }
     // a few special treatments for attributes
     m_aSet.SetModifyAtAttr( this );
 }

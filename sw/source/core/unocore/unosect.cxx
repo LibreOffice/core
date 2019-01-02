@@ -910,6 +910,14 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
 
     lcl_UpdateSection(pFormat, pSectionData, pItemSet, bLinkModeChanged,
         bLinkMode);
+    // If we lose our core object by updating, reconnect to the core format.
+    // Although: If we lose our core object, its likely dead and gone and we
+    // should not trust our old (invalid) pFormat pointer?
+    if(!m_pFormat && pFormat)
+    {
+        m_pFormat = pFormat;
+        StartListening(m_pFormat->GetNotifier());
+    }
 }
 
 void SAL_CALL
@@ -952,7 +960,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
     SwSectionFormat *const pFormat = GetSectionFormat();
     if (!pFormat && !m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException( "non-descriptor section without format");
     }
 
     uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());
