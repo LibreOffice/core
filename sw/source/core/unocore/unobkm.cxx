@@ -584,17 +584,17 @@ sal_Bool SwXFieldmarkParameters::hasElements()
     return !getCoreParameters()->empty();
 }
 
-void SwXFieldmarkParameters::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
+void SwXFieldmarkParameters::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
+    if(rHint.GetId() == SfxHintId::Dying)
+        m_pFieldmark = nullptr;
 }
 
 IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
 {
-    const IFieldmark* pFieldmark = dynamic_cast< const IFieldmark* >(GetRegisteredIn());
-    if(!pFieldmark)
+    if(!m_pFieldmark)
         throw uno::RuntimeException();
-    return const_cast< IFieldmark* >(pFieldmark)->GetParameters();
+    return m_pFieldmark->GetParameters();
 }
 
 void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTextRange )

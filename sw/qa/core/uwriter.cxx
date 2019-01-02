@@ -120,6 +120,7 @@ public:
     void testFormulas();
     void testIntrusiveRing();
     void testClientModify();
+    void testBroadcastingModify();
     void testWriterMultiListener();
     void test64kPageDescs();
     void testTdf92308();
@@ -157,6 +158,7 @@ public:
     CPPUNIT_TEST(testFormulas);
     CPPUNIT_TEST(testIntrusiveRing);
     CPPUNIT_TEST(testClientModify);
+    CPPUNIT_TEST(testBroadcastingModify);
     CPPUNIT_TEST(testWriterMultiListener);
     CPPUNIT_TEST(test64kPageDescs);
     CPPUNIT_TEST(testTdf92308);
@@ -1844,6 +1846,15 @@ namespace
         virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) override
             { ++m_nModifyCount; }
     };
+    struct TestListener : SvtListener
+    {
+        int m_nNotifyCount;
+        TestListener() : m_nNotifyCount(0) {};
+        virtual void Notify( const SfxHint& ) override
+        {
+            ++m_nNotifyCount;
+        }
+    };
 }
 void SwDocTest::testClientModify()
 {
@@ -1944,6 +1955,20 @@ void SwDocTest::testClientModify()
     CPPUNIT_ASSERT_EQUAL(2,aClient2.m_nModifyCount);
     CPPUNIT_ASSERT_EQUAL(1,aClient1.m_nNotifyCount);
     CPPUNIT_ASSERT_EQUAL(1,aClient2.m_nNotifyCount);
+}
+void SwDocTest::testBroadcastingModify()
+{
+    sw::BroadcastingModify aMod;
+    TestClient aClient;
+    TestListener aListener;
+
+    aMod.Add(&aClient);
+    aListener.StartListening(aMod.GetNotifier());
+
+    aMod.ModifyBroadcast(nullptr, nullptr);
+    CPPUNIT_ASSERT_EQUAL(1,aClient.m_nModifyCount);
+    CPPUNIT_ASSERT_EQUAL(1,aClient.m_nModifyCount);
+    CPPUNIT_ASSERT_EQUAL(1,aListener.m_nNotifyCount);
 }
 void SwDocTest::testWriterMultiListener()
 {
