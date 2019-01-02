@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_687d521b",
+        "filename": "basic/source/comp/exprtree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2019-01-02T20:50:42Z",
+      "side": 1,
+      "message": "Please respect the styling/spacing of the surrounding code.",
+      "range": {
+        "startLine": 143,
+        "startChar": 16,
+        "endLine": 143,
+        "endChar": 59
+      },
+      "revId": "0e2edff80d86799b389cce84e701ea64e0040661",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
