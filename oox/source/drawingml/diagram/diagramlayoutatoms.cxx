@@ -524,6 +524,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
         case XML_hierChild:
         case XML_hierRoot:
         {
+            // hierRoot is the manager -> employees vertical linear path,
+            // hierChild is the first employee -> last employee horizontal
+            // linear path.
+            const sal_Int32 nDir = mnType == XML_hierRoot ? XML_fromT : XML_fromL;
             if (rShape->getChildren().empty() || rShape->getSize().Width == 0
                 || rShape->getSize().Height == 0)
                 break;
@@ -531,7 +535,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             sal_Int32 nCount = rShape->getChildren().size();
 
             awt::Size aChildSize = rShape->getSize();
-            aChildSize.Height /= nCount;
+            if (nDir == XML_fromT)
+                aChildSize.Height /= nCount;
+            else
+                aChildSize.Width /= nCount;
 
             awt::Point aChildPos(0, 0);
             for (auto& pChild : rShape->getChildren())
@@ -539,7 +546,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 pChild->setPosition(aChildPos);
                 pChild->setSize(aChildSize);
                 pChild->setChildSize(aChildSize);
-                aChildPos.Y += aChildSize.Height;
+                if (nDir == XML_fromT)
+                    aChildPos.Y += aChildSize.Height;
+                else
+                    aChildPos.X += aChildSize.Width;
             }
 
             break;
