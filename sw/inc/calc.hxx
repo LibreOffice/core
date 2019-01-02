@@ -102,22 +102,22 @@ enum class SwCalcError
 
 class SwSbxValue : public SbxValue
 {
-    bool bVoid;
-    bool bDBvalue;
+    bool m_bVoid;
+    bool m_bDBvalue;
 public:
     // always default to a number. otherwise it will become a SbxEMPTY
-    SwSbxValue( long n = 0 ) : bVoid(false), bDBvalue(false)  { PutLong( n ); }
-    SwSbxValue( const double& rD ) : bVoid(false), bDBvalue(false) { PutDouble( rD ); }
+    SwSbxValue( long n = 0 ) : m_bVoid(false), m_bDBvalue(false)  { PutLong( n ); }
+    SwSbxValue( const double& rD ) : m_bVoid(false), m_bDBvalue(false) { PutDouble( rD ); }
 
     bool GetBool() const;
     double GetDouble() const;
     SwSbxValue& MakeDouble();
 
-    bool IsVoidValue() {return bVoid;}
-    void SetVoidValue(bool bSet) {bVoid = bSet;}
+    bool IsVoidValue() {return m_bVoid;}
+    void SetVoidValue(bool bSet) {m_bVoid = bSet;}
 
-    bool IsDBvalue() {return bDBvalue;}
-    void SetDBvalue(bool bSet) {bDBvalue = bSet;}
+    bool IsDBvalue() {return m_bDBvalue;}
+    void SetDBvalue(bool bSet) {m_bDBvalue = bSet;}
 };
 
 // Calculate HashTables for VarTable and Operations
@@ -142,16 +142,16 @@ struct SwCalcExp : public SwHash
 template<class T>
 class SwHashTable
 {
-    std::vector<std::unique_ptr<T>> aData;
+    std::vector<std::unique_ptr<T>> m_aData;
 public:
-    SwHashTable(size_t nSize) : aData(nSize) {}
-    std::unique_ptr<T> & operator[](size_t idx) { return aData[idx]; }
-    std::unique_ptr<T> const & operator[](size_t idx) const { return aData[idx]; }
-    void resize(size_t nSize) { aData.resize(nSize); }
+    SwHashTable(size_t nSize) : m_aData(nSize) {}
+    std::unique_ptr<T> & operator[](size_t idx) { return m_aData[idx]; }
+    std::unique_ptr<T> const & operator[](size_t idx) const { return m_aData[idx]; }
+    void resize(size_t nSize) { m_aData.resize(nSize); }
 
     T* Find( const OUString& rStr, sal_uInt16* pPos = nullptr ) const
     {
-        size_t nTableSize = aData.size();
+        size_t nTableSize = m_aData.size();
         sal_uLong ii = 0;
         for( sal_Int32 n = 0; n < rStr.getLength(); ++n )
         {
@@ -162,7 +162,7 @@ public:
         if( pPos )
             *pPos = static_cast<sal_uInt16>(ii);
 
-        for( T* pEntry = aData[ii].get(); pEntry; pEntry = static_cast<T*>(pEntry->pNext.get()) )
+        for( T* pEntry = m_aData[ii].get(); pEntry; pEntry = static_cast<T*>(pEntry->pNext.get()) )
         {
             if( rStr == pEntry->aStr )
             {
