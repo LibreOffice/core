@@ -831,7 +831,7 @@ void LibPage::InsertLib()
     if ( aExtension != aLibExtension && aExtension != aContExtension )
         pLibDlg->EnableReference(false);
 
-    pLibDlg->StartExecuteAsync([=](sal_Int32 nResult)
+    pLibDlg->StartExecuteAsync([aContExtension, aDlgURLObj, aExtension, aLibExtension, aModURLObj, pLibDlg, xDlgLibContImport, xModLibContImp, xModLibContImport, this](sal_Int32 nResult)
         {
             if (!nResult )
                 return;
