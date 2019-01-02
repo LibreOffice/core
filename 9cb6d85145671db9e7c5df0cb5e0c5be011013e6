@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_e8dca219",
+        "filename": "sw/source/core/unocore/unosect.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-01-02T23:05:47Z",
+      "side": 1,
+      "message": "So without this the core object gets lost as follows in the unoapi test:\n\n #0  0x00007fffca54d731 in SwXTextSection::Impl::Notify(SfxHint const\u0026) (this\u003d0x555557bf72b0, rHint\u003d...) at /home/bjoern/checkouts/libreoffice/sw/source/core/unocore/unosect.cxx:177\n #1  0x00007ffff3620239 in SvtBroadcaster::Broadcast(SfxHint const\u0026) () at /home/bjoern/checkouts/libreoffice/instdir/program/libsvllo.so\n #2  0x00007fffca146077 in SwSectionFormat::DelFrames() (this\u003d0x5555580cc540) at /home/bjoern/checkouts/libreoffice/sw/source/core/docnode/section.cxx:687\n #3  0x00007fffca145478 in SwSection::ImplSetHiddenFlag(bool, bool) (this\u003dthis@entry\u003d0x555557fc41a0, bTmpHidden\u003d\u003coptimized out\u003e, bCondition\u003d\u003coptimized out\u003e)\n    at /home/bjoern/checkouts/libreoffice/sw/source/core/docnode/section.cxx:319\n #4  0x00007fffca147101 in SwSection::SetSectionData(SwSectionData const\u0026) (this\u003dthis@entry\u003d0x555557fc41a0, rData\u003d...)\n    at /home/bjoern/checkouts/libreoffice/sw/source/core/docnode/section.cxx:280\n #5  0x00007fffca10aee2 in SwDoc::UpdateSection(unsigned long, SwSectionData\u0026, SfxItemSet const*, bool) (this\u003dthis@entry\u003d0x5555576ebce0, nPos\u003dnPos@entry\u003d0, rNewData\u003d..., pAttr\u003dpAttr@entry\u003d0x0, bPreventLinkUpdate\u003dbPreventLinkUpdate@entry\u003dfalse) at /home/bjoern/checkouts/libreoffice/sw/source/core/docnode/ndsect.cxx:703\n #6  0x00007fffca54fff6 in lcl_UpdateSection(SwSectionFormat*, std::unique_ptr\u003cSwSectionData, std::default_delete\u003cSwSectionData\u003e \u003e const\u0026, std::unique_ptr\u003cSfxItemSet, std::default_delete\u003cSfxItemSet\u003e \u003e const\u0026, bool, bool) (pFormat\u003dpFormat@entry\u003d0x5555580cc540, pSectionData\u003dstd::unique_ptr\u003cSwSectionData\u003e \u003d {...}, pItemSet\u003dstd::unique_ptr\u003cSfxItemSet\u003e \u003d {...}, bLinkModeChanged\u003dbLinkModeChanged@entry\u003dfalse, bLinkUpdateAlways\u003dbLinkUpdateAlways@entry\u003dfalse) at /home/bjoern/checkouts/libreoffice/sw/source/core/unocore/unosect.cxx:538\n #7  0x00007fffca5509ab in SwXTextSection::Impl::SetPropertyValues_Impl(com::sun::star::uno::Sequence\u003crtl::OUString\u003e const\u0026, com::sun::star::uno::Sequence\u003ccom::sun::star::uno::Any\u003e const\u0026) (this\u003d0x5555588a2b90, rPropertyNames\u003d..., rValues\u003d...) at /home/bjoern/checkouts/libreoffice/sw/source/core/unocore/unosect.cxx:911\n #8  0x00007fffca55209c in SwXTextSection::setPropertyValue(rtl::OUString const\u0026, com::sun::star::uno::Any const\u0026) (this\u003d0x5555588a2840, rPropertyName\u003d..., rValue\u003d...)\n    at /home/bjoern/checkouts/libreoffice/sw/source/core/unocore/unosect.cxx:945\n\nWhen toggling WID_SECT_VISIBLE. That actually kinda makes sense. I assume though that the old implementation just called ClientModify(...) which type-unsafe rehooked the uno section to a random other frame format, and since the old GetSectionFormat(...) static_cast\u003c\u003eed all doubts away, that worked for the unittest (not in the real work though).",
+      "range": {
+        "startLine": 913,
+        "startChar": 0,
+        "endLine": 920,
+        "endChar": 5
+      },
+      "revId": "9cb6d85145671db9e7c5df0cb5e0c5be011013e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
