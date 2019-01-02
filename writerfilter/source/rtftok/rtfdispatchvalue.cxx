@@ -1033,10 +1033,14 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                    NS_ooxml::LN_CT_LineNumber_distance, pIntValue);
             break;
         case RTF_LINESTARTS:
+        {
+            // OOXML <w:lnNumType w:start="..."/> is 0-based, RTF is 1-based.
+            auto pStart = tools::make_ref<RTFValue>(nParam - 1);
             putNestedAttribute(m_aStates.top().aSectionSprms,
                                NS_ooxml::LN_EG_SectPrContents_lnNumType,
-                               NS_ooxml::LN_CT_LineNumber_start, pIntValue);
-            break;
+                               NS_ooxml::LN_CT_LineNumber_start, pStart);
+        }
+        break;
         case RTF_REVAUTH:
         case RTF_REVAUTHDEL:
         {

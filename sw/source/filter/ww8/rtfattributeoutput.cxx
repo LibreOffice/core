@@ -1200,7 +1200,7 @@ void RtfAttributeOutput::SectionFormProtection(bool bProtected)
     m_aSectionBreaks.append(static_cast<sal_Int32>(!bProtected));
 }
 
-void RtfAttributeOutput::SectionLineNumbering(sal_uLong /*nRestartNo*/,
+void RtfAttributeOutput::SectionLineNumbering(sal_uLong nRestartNo,
                                               const SwLineNumberInfo& rLnNumInfo)
 {
     m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LINEMOD);
@@ -1209,6 +1209,12 @@ void RtfAttributeOutput::SectionLineNumbering(sal_uLong /*nRestartNo*/,
     m_rExport.OutLong(rLnNumInfo.GetPosFromLeft());
     if (!rLnNumInfo.IsRestartEachPage())
         m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LINECONT);
+
+    if (nRestartNo > 0)
+    {
+        m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_LINESTARTS);
+        m_rExport.OutLong(nRestartNo);
+    }
 }
 
 void RtfAttributeOutput::SectionTitlePage()

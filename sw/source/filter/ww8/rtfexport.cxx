@@ -852,7 +852,13 @@ ErrCode RtfExport::ExportDocument_Impl()
     // line numbering
     const SwLineNumberInfo& rLnNumInfo = m_pDoc->GetLineNumberInfo();
     if (rLnNumInfo.IsPaintLineNumbers())
-        AttrOutput().SectionLineNumbering(0, rLnNumInfo);
+    {
+        sal_uLong nLnNumRestartNo = 0;
+        if (const WW8_SepInfo* pSectionInfo = m_pSections->CurrentSectionInfo())
+            nLnNumRestartNo = pSectionInfo->nLnNumRestartNo;
+
+        AttrOutput().SectionLineNumbering(nLnNumRestartNo, rLnNumInfo);
+    }
 
     {
         // write the footnotes and endnotes-out Info
