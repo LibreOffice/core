@@ -36,6 +36,8 @@ namespace tools { class PolyPolygon; }
 class SwFlyDrawContact;
 class SwFormat;
 class SwViewShell;
+class SwFEShell;
+class SwWrtShell;
 
 
 /** search an anchor for paragraph bound frames starting from pOldAnch
@@ -266,6 +268,13 @@ public:
     Point& ContentPos() { return m_aContentPos; }
 
     void InvalidateContentPos();
+
+    void SelectionHasChanged(SwFEShell* pShell);
+
+private:
+    bool IsShowUnfloatButton(SwWrtShell* pWrtSh) const;
+    void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
+    void PaintDecorators() const;
 };
 #endif
 
