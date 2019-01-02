@@ -10,6 +10,7 @@
 #include <test/mtfxmldump.hxx>
 #include <test/xmltesttools.hxx>
 #include <tools/XmlWriter.hxx>
+#include<tools/fract.hxx>
 
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
@@ -341,6 +342,38 @@ OUString convertBitmapExTransparentType(TransparentType eType)
         case TransparentType::Bitmap: return OUString("bitmap");
         case TransparentType::Color:  return OUString("color");
     }
+}
+
+OUString convertMapUnitToString(MapUnit eUnit)
+{
+    switch (eUnit)
+    {
+        default:
+        case MapUnit::LASTENUMDUMMY:    return OUString("LASTENUMDUMMY");
+        case MapUnit::Map1000thInch:    return OUString("Map1000thInch");
+        case MapUnit::Map100thInch:     return OUString("Map100thInch");
+        case MapUnit::Map100thMM:       return OUString("Map100thMM");
+        case MapUnit::Map10thInch:      return OUString("Map10thInch");
+        case MapUnit::Map10thMM:        return OUString("Map10thMM");
+        case MapUnit::MapAppFont:       return OUString("MapAppFont");
+        case MapUnit::MapCM:            return OUString("MapCM");
+        case MapUnit::MapInch:          return OUString("MapInch");
+        case MapUnit::MapMM:            return OUString("MapMM");
+        case MapUnit::MapPixel:         return OUString("MapPixel");
+        case MapUnit::MapPoint:         return OUString("MapPoint");
+        case MapUnit::MapRelative:      return OUString("MapRelative");
+        case MapUnit::MapSysFont:       return OUString("MapSysFont");
+        case MapUnit::MapTwip:          return OUString("MapTwip");
+    }
+}
+
+OUString convertFractionToString(const Fraction& aFraction)
+{
+    std::stringstream ss;
+
+    ss << aFraction;
+
+    return OUString::createFromAscii(ss.str().c_str());
 }
 
 
@@ -1000,6 +1033,19 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("srcheight", pMeta->GetSrcSize().Height());
                 rWriter.attribute("crc", hex32(pMeta->GetBitmap().GetChecksum()));
                 rWriter.attribute("color", convertColorToString(pMeta->GetColor()));
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::MAPMODE:
+            {
+                const MetaMapModeAction* pMeta = static_cast<MetaMapModeAction*>(pAction);
+                MapMode aMapMode = pMeta->GetMapMode();
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("mapunit", convertMapUnitToString( aMapMode.GetMapUnit() ));
+                writePoint(rWriter, aMapMode.GetOrigin());
+                rWriter.attribute("scalex", convertFractionToString(aMapMode.GetScaleX()));
+                rWriter.attribute("scaley", convertFractionToString(aMapMode.GetScaleY()));
                 rWriter.endElement();
             }
             break;
