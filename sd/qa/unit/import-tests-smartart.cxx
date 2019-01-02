@@ -705,6 +705,14 @@ void SdImportTestSmartArt::testOrgChart()
 
     awt::Point aManagerPos = xManagerShape->getPosition();
 
+    // Make sure that the manager has 2 employees.
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 2; Actual  : 1'.
+    uno::Reference<drawing::XShapes> xEmployees(getChildShape(getChildShape(xGroup, 0), 1),
+                                                uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployees.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xEmployees->getCount());
+
     uno::Reference<text::XText> xEmployee(
         getChildShape(
             getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 0), 0), 0),
@@ -722,6 +730,22 @@ void SdImportTestSmartArt::testOrgChart()
     // Without the accompanying fix in place, this test would have failed: the
     // two shapes were overlapping, i.e. "manager" was not above "employee".
     CPPUNIT_ASSERT_GREATER(aManagerPos.Y, aEmployeePos.Y);
+
+    // Make sure that the second employee is on the right of the first one.
+    // Without the accompanying fix in place, this test would have failed, as
+    // the second employee was below the first one.
+    uno::Reference<text::XText> xEmployee2(
+        getChildShape(
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 1), 0), 0),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployee2.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Employee2"), xEmployee2->getString());
+
+    uno::Reference<drawing::XShape> xEmployee2Shape(xEmployee2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xEmployee2Shape.is());
+
+    awt::Point aEmployee2Pos = xEmployee2Shape->getPosition();
+    CPPUNIT_ASSERT_GREATER(aEmployeePos.X, aEmployee2Pos.X);
 
     xDocShRef->DoClose();
 }
