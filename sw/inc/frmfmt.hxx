@@ -56,7 +56,6 @@ class SwFrameFormats;
 /// Style of a layout element.
 class SW_DLLPUBLIC SwFrameFormat
     : public SwFormat
-    , public sw::BroadcasterMixin
 {
     friend class SwDoc;
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
