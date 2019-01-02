@@ -32,28 +32,28 @@ class SwServerObject final : public ::sfx2::SvLinkSource
 {
     using sfx2::SvLinkSource::SendDataChanged;
 
-    enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } eType;
+    enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } m_eType;
     union {
         ::sw::mark::IMark* pBkmk;
         SwTableNode* pTableNd;
         SwSectionNode* pSectNd;
-    } CNTNT_TYPE;
+    } m_CNTNT_TYPE;
 
 public:
     SwServerObject( ::sw::mark::IMark& rBookmark )
-        : eType( BOOKMARK_SERVER )
+        : m_eType( BOOKMARK_SERVER )
     {
-        CNTNT_TYPE.pBkmk = &rBookmark;
+        m_CNTNT_TYPE.pBkmk = &rBookmark;
     }
     SwServerObject( SwTableNode& rTableNd )
-        : eType( TABLE_SERVER )
+        : m_eType( TABLE_SERVER )
     {
-        CNTNT_TYPE.pTableNd = &rTableNd;
+        m_CNTNT_TYPE.pTableNd = &rTableNd;
     }
     SwServerObject( SwSectionNode& rSectNd )
-        : eType( SECTION_SERVER )
+        : m_eType( SECTION_SERVER )
     {
-        CNTNT_TYPE.pSectNd = &rSectNd;
+        m_CNTNT_TYPE.pSectNd = &rSectNd;
     }
     virtual ~SwServerObject() override;
 
