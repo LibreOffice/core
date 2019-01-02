@@ -20,6 +20,8 @@
 #include <txtfrm.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
+#include <IDocumentState.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -100,12 +102,23 @@ void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
     if (pTableNode == nullptr)
         return;
 
+    SwDoc& rDoc = pTextFrame->GetDoc();
+
+    // Move the table outside of the text frame
     SwNodeRange aRange(*pTableNode, 0, *pTableNode->EndOfSectionNode(), 1);
-    pTableNode->getIDocumentContentOperations().MoveNodeRange(aRange, aInsertPos,
-                                                              SwMoveFlags::DEFAULT);
+    rDoc.getIDocumentContentOperations().MoveNodeRange(aRange, aInsertPos, SwMoveFlags::DEFAULT);
 
     // Remove the floating table's frame
     SwFrame::DestroyFrame(pFlyFrame);
+
+    rDoc.getIDocumentState().SetModified();
+
+    // Undoing MoveNodeRange() is not working correctly in case of tables, it crashes some times
+    // So don't allow to undo after unfloating (similar to MakeFlyAndMove() method)
+    if (rDoc.GetIDocumentUndoRedo().DoesUndo())
+    {
+        rDoc.GetIDocumentUndoRedo().DelAllUndoObj();
+    }
 }
 
 void FloatingTableButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
