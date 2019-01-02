@@ -582,8 +582,6 @@ public:
     /// Respect the Follows
     inline bool IsInside(TextFrameIndex nPos) const;
 
-    const SwBodyFrame   *FindBodyFrame()   const;
-
     /// DropCaps and selections
     bool GetDropRect( SwRect &rRect ) const
     { return HasPara() && GetDropRect_( rRect ); }
