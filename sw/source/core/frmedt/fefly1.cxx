@@ -266,6 +266,9 @@ void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
 
         pImpl->GetDrawView()->MarkObj( rFrame.GetVirtDrawObj(),
                                       pImpl->GetPageView() );
+
+        rFrame.SelectionHasChanged(this);
+
         KillPams();
         ClearMark();
         SelFlyGrabCursor();

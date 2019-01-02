@@ -235,7 +235,11 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
             }
         }
         if ( bUnmark )
+        {
             pDView->UnmarkAll();
+            if (pOldSelFly)
+                pOldSelFly->SelectionHasChanged(this);
+        }
     }
     else
     {
@@ -273,6 +277,13 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                 break;
             }
         }
+    }
+
+    if ( rMrkList.GetMarkCount() == 1 )
+    {
+        SwFlyFrame *pSelFly = ::GetFlyFromMarked( &rMrkList, this );
+        if (pSelFly)
+            pSelFly->SelectionHasChanged(this);
     }
 
     if (!(nFlag & SW_ALLOW_TEXTBOX))
