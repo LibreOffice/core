@@ -13,6 +13,14 @@
 #include <vcl/builder.hxx>
 #include <vcl/menubtn.hxx>
 
+class SwFrameButtonPainter
+{
+public:
+
+    static void PaintButton(drawinglayer::primitive2d::Primitive2DContainer& rSeq,
+                            const tools::Rectangle& rRect, bool bOnTop);
+};
+
 /** Class for the header and footer separator control window.
 
     This control is showing the header / footer style name and provides

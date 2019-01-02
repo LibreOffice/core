@@ -248,7 +248,8 @@ enum FrameControlType
 {
     PageBreak,
     Header,
-    Footer
+    Footer,
+    FloatingTable
 };
 
 #endif
