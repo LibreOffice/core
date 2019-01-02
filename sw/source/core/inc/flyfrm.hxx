@@ -267,6 +267,13 @@ public:
     Point& ContentPos() { return m_aContentPos; }
 
     void InvalidateContentPos();
+
+    void SelectionHasChanged(SwFEShell* pShell);
+
+private:
+    bool IsShowUnfloatButton(SwWrtShell* pWrtSh) const;
+    void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
+    void PaintDecorators() const;
 };
 #endif
 
