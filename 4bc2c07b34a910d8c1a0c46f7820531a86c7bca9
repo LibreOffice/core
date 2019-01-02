@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_28919a9a",
+        "filename": "xmlsecurity/source/helper/ooxmlsecexporter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-02T16:02:55Z",
+      "side": 1,
+      "message": "probably cleaner to group this include with the existing block of standard header includes above (#include \u003calgorithm\u003e)",
+      "revId": "4bc2c07b34a910d8c1a0c46f7820531a86c7bca9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
