@@ -4088,10 +4088,22 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     // have to paint frame borders added in heaven layer here...
     ProcessPrimitives(gProp.pBLines->GetBorderLines_Clear());
 
+    PaintDecorators();
+
     rRenderContext.Pop();
 
     if ( gProp.pSProgress && pNoText )
         SfxProgress::Reschedule();
+}
+
+void SwFlyFrame::PaintDecorators() const
+{
+    // Show the un-float button
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( gProp.pSGlobalShell );
+    if ( pWrtSh )
+    {
+        UpdateUnfloatButton(pWrtSh, IsShowUnfloatButton(pWrtSh));
+    }
 }
 
 void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const

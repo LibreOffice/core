@@ -68,6 +68,12 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <bodyfrm.hxx>
+#include <FrameControlsManager.hxx>
+
 using namespace ::com::sun::star;
 
 static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame );
@@ -279,6 +285,9 @@ void SwFlyFrame::DestroyImpl()
     FinitDrawObj();
 
     SwLayoutFrame::DestroyImpl();
+
+    SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(getRootFrame()->GetCurrShell());
+    UpdateUnfloatButton(pWrtSh, false);
 }
 
 SwFlyFrame::~SwFlyFrame()
@@ -1762,6 +1771,93 @@ void SwFlyFrame::InvalidateContentPos()
 {
     m_bValidContentPos = false;
     Invalidate_();
+}
+
+void SwFlyFrame::SelectionHasChanged(SwFEShell* pShell)
+{
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >(pShell);
+    if (pWrtSh == nullptr)
+        return;
+
+    UpdateUnfloatButton(pWrtSh, IsShowUnfloatButton(pWrtSh));
+}
+
+bool SwFlyFrame::IsShowUnfloatButton(SwWrtShell* pWrtSh) const
+{
+    if (pWrtSh == nullptr)
+        return false;
+
+    // In read only mode we don't allow unfloat operation
+    if (pWrtSh->GetViewOptions()->IsReadonly())
+        return false;
+
+    const SdrObject *pObj = GetFrameFormat().FindRealSdrObject();
+    if (pObj == nullptr)
+        return false;
+
+    // SwFlyFrame itself can mean images, ole objects, etc, but we interested in actual text frames
+    if (SwFEShell::GetObjCntType(*pObj) != OBJCNT_FLY)
+        return false;
+
+    // We show the button only for the selected text frame
+    SwDrawView *pView = pWrtSh->Imp()->GetDrawView();
+    if (pView == nullptr)
+        return false;
+
+    // Fly frame can be selected only alone
+    if (pView->GetMarkedObjectList().GetMarkCount() != 1)
+        return false;
+
+    if(!pView->IsObjMarked(pObj))
+        return false;
+
+    // A frame is a floating table if there is only one table (and maybe some whitespaces) inside it
+    int nTableCount = 0;
+    const SwFrame* pLower = GetLower();
+    const SwTabFrame* pTable = nullptr;
+    while (pLower)
+    {
+        if (pLower->IsTabFrame())
+        {
+            pTable = static_cast<const SwTabFrame*>(pLower);
+            ++nTableCount;
+            if (nTableCount > 1 || pTable == nullptr)
+                return false;
+        }
+
+        if (pLower->IsTextFrame())
+        {
+            const SwTextFrame* pTextFrame = static_cast<const SwTextFrame*>(pLower);
+            if (!pTextFrame->GetText().trim().isEmpty())
+                return false;
+        }
+        pLower = pLower->GetNext();
+    }
+
+    if (nTableCount != 1 || pTable == nullptr)
+        return false;
+
+    // Show the unfold button only for multipage tables
+    const SwBodyFrame *pBody = GetAnchorFrame()->FindBodyFrame();
+    if (pBody == nullptr)
+        return false;
+
+    long nBodyHeight = pBody->getFrameArea().Height();
+    long nTableHeight = pTable->getFrameArea().Height();
+    long nFrameOffset = std::abs(GetAnchorFrame()->getFrameArea().Top() - pBody->getFrameArea().Top());
+
+    return nBodyHeight < nTableHeight + nFrameOffset;
+}
+
+void SwFlyFrame::UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const
+{
+    if (pWrtSh == nullptr)
+        return;
+
+    SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+    SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+    Point aBottomRightPixel = rEditWin.LogicToPixel( getFrameArea().BottomRight() );
+    rMngr.SetFloatingTableButton(this, bShow,  aBottomRightPixel);
 }
 
 SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
