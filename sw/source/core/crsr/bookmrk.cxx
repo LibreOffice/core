@@ -27,6 +27,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <swserv.hxx>
+#include <svl/listener.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <swtypes.hxx>
 #include <UndoBookmark.hxx>
@@ -150,8 +151,7 @@ namespace sw { namespace mark
 {
     MarkBase::MarkBase(const SwPaM& aPaM,
         const OUString& rName)
-        : SwModify(nullptr)
-        , m_pPos1(new SwPosition(*(aPaM.GetPoint())))
+        : m_pPos1(new SwPosition(*(aPaM.GetPoint())))
         , m_aName(rName)
     {
         m_pPos1->nContent.SetMark(this);

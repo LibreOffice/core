@@ -202,7 +202,7 @@ public:
         { CallSwClientNotify( sw::LegacyModifyHint{ pOldValue, pNewValue } ); };
 
     // a more universal broadcasting mechanism
-    inline void CallSwClientNotify( const SfxHint& rHint ) const;
+    virtual void CallSwClientNotify( const SfxHint& rHint ) const;
 
     virtual ~SwModify() override;
 
@@ -230,6 +230,15 @@ template<typename TElementType, typename TSource, sw::IteratorMode eMode> class 
 
 namespace sw
 {
+    // this class is part of the migration: it still forwards the "old"
+    // SwModify events and announces them both to the old SwClients still
+    // registered and also to the new SvtListeners.
+    // Still: in the long run the SwClient/SwModify interface should not be
+    // used anymore, in which case a BroadcasterMixin should be enough instead
+    // then.
+    class SW_DLLPUBLIC BroadcastingModify : public SwModify, public BroadcasterMixin {
+        virtual void CallSwClientNotify(const SfxHint& rHint) const override;
+    };
     // this should be hidden but sadly SwIterator template needs it...
     class ListenerEntry final : public SwClient
     {
@@ -438,12 +447,6 @@ SwClient::SwClient( SwModify* pToRegisterIn )
         pToRegisterIn->Add(this);
 }
 
-void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
-{
-    SwIterator<SwClient,SwModify> aIter(*this);
-    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
-        pClient->SwClientNotify( *this, rHint );
-}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

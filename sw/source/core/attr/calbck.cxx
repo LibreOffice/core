@@ -365,4 +365,17 @@ void sw::WriterMultiListener::EndListeningAll()
 }
 
 sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
+
+void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
+{
+    SwIterator<SwClient,SwModify> aIter(*this);
+    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
+        pClient->SwClientNotify( *this, rHint );
+}
+
+void sw::BroadcastingModify::CallSwClientNotify(const SfxHint& rHint) const
+{
+    SwModify::CallSwClientNotify(rHint);
+    const_cast<BroadcastingModify*>(this)->GetNotifier().Broadcast(rHint);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

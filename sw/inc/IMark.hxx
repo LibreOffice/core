@@ -36,9 +36,8 @@ namespace sw { namespace mark
     };
 
     class SW_DLLPUBLIC IMark
-        : virtual public SwModify // inherited as interface
+        : virtual public sw::BroadcastingModify // inherited as interface
         , public ::boost::totally_ordered<IMark>
-        , virtual public sw::BroadcasterMixin
     {
         protected:
             IMark() = default;
