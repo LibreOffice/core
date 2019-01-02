@@ -199,6 +199,15 @@ DECLARE_RTFEXPORT_TEST(testTdf121623, "tdf121623.rtf")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf66543, "tdf66543.rtf")
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 2; Actual  : 3' after import (off-by-one), then with
+    // 'Expected: 2; Actual  : 0' (export not implemented).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
+                         getProperty<sal_Int32>(getParagraph(1), "ParaLineNumberStartValue"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
