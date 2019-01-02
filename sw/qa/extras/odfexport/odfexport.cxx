@@ -976,6 +976,13 @@ DECLARE_ODFEXPORT_TEST(testTdf103091, "tdf103091.fodt")
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Header left")), conditions[27].Value);
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf115457_hfBackground, "tdf115457_hfBackground.odt")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xPageStyle, "FooterBackGraphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+}
+
 DECLARE_ODFEXPORT_TEST(testTextframeTransparentShadow, "textframe-transparent-shadow.odt")
 {
     uno::Reference<drawing::XShape> xPicture = getShape(1);

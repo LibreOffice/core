@@ -94,7 +94,6 @@ namespace
             aSet.insert("HeaderBackColorRGB");
             aSet.insert("HeaderBackTransparent");
             aSet.insert("HeaderBackColorTransparency");
-            aSet.insert("HeaderBackGraphic");
             aSet.insert("HeaderBackGraphicFilter");
             aSet.insert("HeaderBackGraphicLocation");
             aSet.insert("HeaderBackGraphicTransparency");
@@ -110,7 +109,6 @@ namespace
             aSet.insert("FooterBackColorRGB");
             aSet.insert("FooterBackTransparent");
             aSet.insert("FooterBackColorTransparency");
-            aSet.insert("FooterBackGraphic");
             aSet.insert("FooterBackGraphicFilter");
             aSet.insert("FooterBackGraphicLocation");
             aSet.insert("FooterBackGraphicTransparency");
