@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_a8ffca65",
+        "filename": "sc/IwyuFilter_sc.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2019-01-03T00:26:18Z",
+      "side": 1,
+      "message": "I don\u0027t really understand why did that error happen. \nMaybe this deserves a better explanation.",
+      "range": {
+        "startLine": 704,
+        "startChar": 6,
+        "endLine": 704,
+        "endChar": 45
+      },
+      "revId": "a796aa21f765bc05a2073db31d3727e66ea9d941",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
