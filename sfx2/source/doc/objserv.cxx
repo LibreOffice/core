@@ -108,6 +108,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <guisaveas.hxx>
 #include <saveastemplatedlg.hxx>
