@@ -81,7 +81,7 @@ class SwEditWin final : public vcl::Window,
     Point           m_aStartPos;
     Point           m_aMovePos;
     Point           m_aRszMvHdlPt;
-    Idle            m_aTemplateIdle;
+    Timer           m_aTemplateTimer;
 
     // type/object where the mouse pointer is
     SwCallMouseEvent m_aSaveCallEvent;
