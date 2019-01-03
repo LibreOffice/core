@@ -197,6 +197,9 @@ public:
 
     void            UseCanvas( bool _bUseCanvas );
     bool            GetUseCanvas() const { return m_bUseCanvas; }
+
+    /// Dumps the meta actions as XML in metafile.xml.
+    void dumpAsXml() const;
 };
 
 #endif // INCLUDED_VCL_GDIMTF_HXX
