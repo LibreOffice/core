@@ -7,10 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/mtfxmldump.hxx>
-#include <test/xmltesttools.hxx>
+#include <vcl/mtfxmldump.hxx>
 #include <tools/XmlWriter.hxx>
-#include<tools/fract.hxx>
+#include <tools/fract.hxx>
 
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
@@ -19,6 +18,7 @@
 
 #include <memory>
 #include <numeric>
+#include <sstream>
 
 namespace
 {
@@ -449,16 +449,9 @@ void MetafileXmlDump::filterAllActionTypes()
     maFilter.fill(true);
 }
 
-xmlDocPtr MetafileXmlDump::dumpAndParse(const GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
+void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream)
 {
-    std::unique_ptr<SvStream> pStream;
-
-    if (rTempStreamName.isEmpty())
-        pStream.reset(new SvMemoryStream());
-    else
-        pStream.reset(new SvFileStream(rTempStreamName, StreamMode::STD_READWRITE | StreamMode::TRUNC));
-
-    tools::XmlWriter aWriter(pStream.get());
+    tools::XmlWriter aWriter(&rStream);
     aWriter.startDocument();
     aWriter.startElement("metafile");
 
@@ -466,12 +459,6 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(const GDIMetaFile& rMetaFile, const OUSt
 
     aWriter.endElement();
     aWriter.endDocument();
-
-    pStream->Seek(STREAM_SEEK_TO_BEGIN);
-
-    xmlDocPtr pDoc = XmlTestTools::parseXmlStream(pStream.get());
-
-    return pDoc;
 }
 
 void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter)

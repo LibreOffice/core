@@ -10,7 +10,6 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <test/mtfxmldump.hxx>
 #include <test/xmltesttools.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
@@ -86,7 +85,7 @@ void PictFilterTest::testDontClipTooMuch()
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
     dumper.filterActionType(MetaActionType::CLIPREGION, false);
-    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+    xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 

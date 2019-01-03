@@ -35,7 +35,6 @@
 #include <charatr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <unotools/streamwrap.hxx>
-#include <test/mtfxmldump.hxx>
 #include <unocrsr.hxx>
 #include <unocrsrhelper.hxx>
 #include <unotbl.hxx>
@@ -1704,7 +1703,7 @@ void SwUiWriterTest::testFdo87448()
     ReadGraphic(aStream, aGraphic);
     const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(rMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, rMetaFile);
 
     // The first polyline in the document has a number of points to draw arcs,
     // the last one jumps back to the start, so we call "end" the last but one.

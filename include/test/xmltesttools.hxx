@@ -22,6 +22,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/tempfile.hxx>
+#include <vcl/mtfxmldump.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -32,6 +33,8 @@ class OOO_DLLPUBLIC_TEST XmlTestTools
 public:
     /// Return xmlDocPtr representation of the XML stream read from pStream.
     static xmlDocPtr parseXmlStream(SvStream* pStream);
+
+    static xmlDocPtr dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile);
 
 protected:
     XmlTestTools();

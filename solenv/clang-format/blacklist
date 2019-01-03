@@ -7578,7 +7578,6 @@ include/test/container/xnamecontainer.hxx
 include/test/container/xnamed.hxx
 include/test/container/xnamereplace.hxx
 include/test/htmltesttools.hxx
-include/test/mtfxmldump.hxx
 include/test/primitive2dxmldump.hxx
 include/test/screenshot_test.hxx
 include/test/setupvcl.hxx
@@ -7984,6 +7983,7 @@ include/vcl/metric.hxx
 include/vcl/mnemonic.hxx
 include/vcl/mnemonicengine.hxx
 include/vcl/msgbox.hxx
+include/vcl/mtfxmldump.hxx
 include/vcl/notebookbar.hxx
 include/vcl/oldprintadaptor.hxx
 include/vcl/opengl/GLMHelper.hxx
@@ -16571,7 +16571,6 @@ test/source/container/xnamereplace.cxx
 test/source/diff/diff.cxx
 test/source/htmltesttools.cxx
 test/source/isheadless.hxx
-test/source/mtfxmldump.cxx
 test/source/primitive2dxmldump.cxx
 test/source/screenshot_test.cxx
 test/source/setupvcl.cxx
@@ -18080,6 +18079,7 @@ vcl/source/gdi/jobset.cxx
 vcl/source/gdi/lineinfo.cxx
 vcl/source/gdi/mapmod.cxx
 vcl/source/gdi/metaact.cxx
+vcl/source/gdi/mtfxmldump.cxx
 vcl/source/gdi/octree.cxx
 vcl/source/gdi/oldprintadaptor.cxx
 vcl/source/gdi/pdfextoutdevdata.cxx
