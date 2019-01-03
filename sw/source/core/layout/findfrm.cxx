@@ -30,6 +30,7 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <txtfrm.hxx>
+#include <bodyfrm.hxx>
 #include <calbck.hxx>
 #include <viewopt.hxx>
 
@@ -469,6 +470,18 @@ SwSectionFrame* SwFrame::ImplFindSctFrame()
             return nullptr;
     }
     return static_cast<SwSectionFrame*>(pRet);
+}
+
+const SwBodyFrame* SwFrame::ImplFindBodyFrame() const
+{
+    const SwFrame *pRet = this;
+    while ( !pRet->IsBodyFrame() )
+    {
+        pRet = pRet->GetUpper();
+        if ( !pRet )
+            return nullptr;
+    }
+    return static_cast<const SwBodyFrame*>(pRet);
 }
 
 SwFootnoteFrame *SwFrame::ImplFindFootnoteFrame()
