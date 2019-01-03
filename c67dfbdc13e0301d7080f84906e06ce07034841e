@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_884ace7d",
+        "filename": "svx/sdi/svx.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2019-01-03T11:53:13Z",
+      "side": 1,
+      "message": "I can add the new command to the main menu (likely also to context menus) and assign a shortcut. Both make no sense and I wonder why it\u0027s possible at all since those two vars are false. Maxim, any idea?\n\n(Wouldn\u0027t put too much effort in the solution, the patch works now perfectly.)",
+      "range": {
+        "startLine": 440,
+        "startChar": 1,
+        "endLine": 441,
+        "endChar": 23
+      },
+      "revId": "c67dfbdc13e0301d7080f84906e06ce07034841e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
