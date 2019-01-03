@@ -463,8 +463,6 @@ public:
     /// Respect the Follows
     inline bool IsInside( const sal_Int32 nPos ) const;
 
-    const SwBodyFrame   *FindBodyFrame()   const;
-
     /// DropCaps and selections
     bool GetDropRect( SwRect &rRect ) const
     { return HasPara() && GetDropRect_( rRect ); }

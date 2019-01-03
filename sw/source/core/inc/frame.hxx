@@ -35,6 +35,7 @@
 class SwLayoutFrame;
 class SwRootFrame;
 class SwPageFrame;
+class SwBodyFrame;
 class SwFlyFrame;
 class SwSectionFrame;
 class SwFootnoteFrame;
@@ -644,6 +645,7 @@ public:
     SwFootnoteFrame       *ImplFindFootnoteFrame();
     SwFlyFrame            *ImplFindFlyFrame();
     SwSectionFrame        *ImplFindSctFrame();
+    const SwBodyFrame     *ImplFindBodyFrame() const;
     SwFrame               *FindFooterOrHeader();
     SwFrame               *GetLower();
     const SwFrame         *GetNext()  const { return mpNext; }
@@ -666,6 +668,7 @@ public:
     inline const SwFootnoteFrame  *FindFootnoteFrame() const;
     inline const SwFlyFrame  *FindFlyFrame() const;
     inline const SwSectionFrame *FindSctFrame() const;
+    inline const SwBodyFrame    *FindBodyFrame() const;
     inline const SwFrame     *FindNext() const;
     // #i27138# - add parameter <_bInSameFootnote>
     const SwContentFrame* FindNextCnt( const bool _bInSameFootnote = false ) const;
@@ -1070,6 +1073,11 @@ inline SwFlyFrame *SwFrame::FindFlyFrame()
 inline SwSectionFrame *SwFrame::FindSctFrame()
 {
     return IsInSct() ? ImplFindSctFrame() : nullptr;
+}
+
+inline const SwBodyFrame *SwFrame::FindBodyFrame() const
+{
+    return IsInDocBody() ? ImplFindBodyFrame() : nullptr;
 }
 
 inline const SwTabFrame *SwFrame::FindTabFrame() const
