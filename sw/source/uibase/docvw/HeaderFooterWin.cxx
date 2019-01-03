@@ -79,7 +79,7 @@ namespace
         return basegfx::utils::hsl2rgb( aHslDark );
     }
 
-    B2DPolygon lcl_GetPolygon( const ::tools::Rectangle& rRect, bool bHeader )
+    B2DPolygon lcl_GetPolygon( const ::tools::Rectangle& rRect, bool bOnTop )
     {
         const double nRadius = 3;
         const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
@@ -111,7 +111,7 @@ namespace
 
         aPolygon.append( B2DPoint( rRect.Right(), rRect.Top() ) );
 
-        if ( !bHeader )
+        if ( !bOnTop )
         {
             B2DRectangle aBRect( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() );
             B2DHomMatrix aRotation = createRotateAroundPoint(
@@ -121,6 +121,42 @@ namespace
 
         return aPolygon;
     }
+}
+
+void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DContainer& rSeq,
+                                       const tools::Rectangle& rRect, bool bOnTop)
+{
+    rSeq.clear();
+    B2DPolygon aPolygon = lcl_GetPolygon(rRect, bOnTop);
+
+    // Colors
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    basegfx::BColor aFillColor = lcl_GetFillColor(aLineColor);
+    basegfx::BColor aLighterColor = lcl_GetLighterGradientColor(aFillColor);
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if (rSettings.GetHighContrastMode())
+    {
+        aFillColor = rSettings.GetDialogColor().getBColor();
+        aLineColor = rSettings.GetDialogTextColor().getBColor();
+
+        rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
+                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aFillColor)));
+    }
+    else
+    {
+        B2DRectangle aGradientRect(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
+        double nAngle = M_PI;
+        if (bOnTop)
+            nAngle = 0;
+        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle, aLighterColor, aFillColor, 10);
+        rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
+                            new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, aFillAttrs)));
+    }
+
+    // Create the border lines primitive
+    rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
+                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPolygon, aLineColor)));
 }
 
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader ) :
@@ -254,42 +290,13 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
 {
     // Use pixels for the rest of the drawing
     SetMapMode(MapMode(MapUnit::MapPixel));
-
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
     const ::tools::Rectangle aRect(::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(3);
 
-    B2DPolygon aPolygon = lcl_GetPolygon(aRect, m_bIsHeader);
-
-    // Colors
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-    basegfx::BColor aFillColor = lcl_GetFillColor(aLineColor);
-    basegfx::BColor aLighterColor = lcl_GetLighterGradientColor(aFillColor);
-
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    if (rSettings.GetHighContrastMode())
-    {
-        aFillColor = rSettings.GetDialogColor().getBColor();
-        aLineColor = rSettings.GetDialogTextColor().getBColor();
-
-        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aFillColor));
-    }
-    else
-    {
-        B2DRectangle aGradientRect(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
-        double nAngle = M_PI;
-        if (m_bIsHeader)
-            nAngle = 0;
-        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle, aLighterColor, aFillColor, 10);
-        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
-                    new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, aFillAttrs));
-    }
-
-    // Create the border lines primitive
-    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference(
-                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPolygon, aLineColor));
+    SwFrameButtonPainter::PaintButton(aSeq, aRect, m_bIsHeader);
 
     // Create the text primitive
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     B2DVector aFontSize;
     FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, rRenderContext.GetFont(), false, false);
 
@@ -301,10 +308,10 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
                                             aFontSize.getX(), aFontSize.getY(),
                                             double(aTextPos.X()), double(aTextPos.Y())));
 
-    aSeq[2] = drawinglayer::primitive2d::Primitive2DReference(
+    aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_sLabel, 0, m_sLabel.getLength(),
-                        std::vector<double>(), aFontAttr, css::lang::Locale(), aLineColor));
+                        std::vector<double>(), aFontAttr, css::lang::Locale(), aLineColor)));
 
     // Create the 'plus' or 'arrow' primitive
     B2DRectangle aSignArea(B2DPoint(aRect.Right() - BUTTON_WIDTH, 0.0),
