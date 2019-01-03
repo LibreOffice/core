@@ -46,6 +46,15 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of Sections", sal_Int32(0), xSections->getCount());
     }
 
+DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
+{
+    uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
+    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName("Default Style"), uno::UNO_QUERY);
+    bool headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    CPPUNIT_ASSERT(headerIsOn);
+}
+
+
 DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);

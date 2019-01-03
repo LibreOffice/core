@@ -1555,7 +1555,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         }
 
         if ( reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)) == rSepInfo.pSectionFormat )
-            bEnsureHeaderFooterWritten |= !rSepInfo.pPDNd && GetExportFormat() == ExportFormat::DOCX;
+            bEnsureHeaderFooterWritten |= !rSepInfo.pPDNd && GetExportFormat() != ExportFormat::RTF;
         else
         {
             if ( nBreakCode == 0 )
