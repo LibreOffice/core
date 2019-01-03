@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_084c9ec5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-03T09:57:22Z",
+      "side": 1,
+      "message": "OK - my terminology (and understanding) here is probably TERRIBLE. What I mean is that Area seems to add a name property, but the backgroundsDlg doesn\u0027t. That is the only difference I see when exporting to .ODT.",
+      "range": {
+        "startLine": 16,
+        "startChar": 27,
+        "endLine": 16,
+        "endChar": 44
+      },
+      "revId": "1deb5dff0657aed923cf8070a7dbabbbaef2b271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_284f5abe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-03T09:57:22Z",
+      "side": 1,
+      "message": "LO 4.3 actually.",
+      "range": {
+        "startLine": 18,
+        "startChar": 47,
+        "endLine": 18,
+        "endChar": 54
+      },
+      "revId": "1deb5dff0657aed923cf8070a7dbabbbaef2b271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_e8c6e216",
+        "filename": "xmloff/source/style/prstylei.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-03T09:57:22Z",
+      "side": 1,
+      "message": "I don\u0027t know if these other ones are old duplicates or not. They definitely were SET and deactivated. They easily could be duplicates because image type (tiled/scaled/placed) still works(probably replaced by FooterFillBitmapMode).",
+      "range": {
+        "startLine": 97,
+        "startChar": 11,
+        "endLine": 98,
+        "endChar": 53
+      },
+      "revId": "1deb5dff0657aed923cf8070a7dbabbbaef2b271",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
