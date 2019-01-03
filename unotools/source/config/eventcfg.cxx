@@ -293,7 +293,7 @@ Type const & GlobalEventConfig_Impl::getElementType(  )
 
 bool GlobalEventConfig_Impl::hasElements() const
 {
-    return m_eventBindingHash.empty();
+    return !m_eventBindingHash.empty();
 }
 
 // and now the wrapper
