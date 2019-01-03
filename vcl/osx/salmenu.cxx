@@ -116,19 +116,12 @@ static void initAppMenu()
     static bool bInitialized = false;
     if (bInitialized)
         return;
-
-    // get the main menu
-    NSMenu* pMainMenu = [NSApp mainMenu];
-    assert(pMainMenu == nil);
-    if (pMainMenu != nil)
-        return;
-
     bInitialized = true;
 
     NSMenu* pAppMenu = nil;
     NSMenuItem* pNewItem = nil;
 
-    pMainMenu = [[[NSMenu alloc] initWithTitle: @"Main Menu"] autorelease];
+    NSMenu* pMainMenu = [[[NSMenu alloc] initWithTitle: @"Main Menu"] autorelease];
     pNewItem = [pMainMenu addItemWithTitle: @"Application"
         action: nil
         keyEquivalent: @""];

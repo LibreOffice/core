@@ -91,6 +91,7 @@ public:
     virtual ~AquaSalInstance() override;
 
     virtual void AfterAppInit() override;
+    virtual bool SVMainHook(int *) override;
 
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
     virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
@@ -145,7 +146,7 @@ public:
     void endedPrintJob() { mnActivePrintJobs--; }
 
     // event subtypes for NSApplicationDefined events
-    static const short AppEndLoopEvent    = 1;
+    static const short AppExecuteSVMain   = 1;
     static const short AppStartTimerEvent = 10;
     static const short YieldWakeupEvent   = 20;
     static const short DispatchTimerEvent = 30;
