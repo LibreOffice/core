@@ -4761,12 +4761,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     rSh.EnterStdMode();
                     rSh.SetVisibleCursor(aDocPt);
                     bCallBase = false;
-                    m_aTemplateIdle.Stop();
+                    m_aTemplateTimer.Stop();
                 }
                 else if(rMEvt.GetClicks() == 1)
                 {
                     // no selection -> so turn off watering can
-                    m_aTemplateIdle.Start();
+                    m_aTemplateTimer.Start();
                 }
             }
         }
@@ -5007,9 +5007,9 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_aKeyInputFlushTimer.SetInvokeHandler(LINK(this, SwEditWin, KeyInputFlushHandler));
 
     // TemplatePointer for colors should be resetted without
-    // selection after single click
-    m_aTemplateIdle.SetPriority(TaskPriority::LOWEST);
-    m_aTemplateIdle.SetInvokeHandler(LINK(this, SwEditWin, TemplateTimerHdl));
+    // selection after single click, but not after double-click (tdf#122442)
+    m_aTemplateTimer.SetTimeout(GetSettings().GetMouseSettings().GetDoubleClickTime());
+    m_aTemplateTimer.SetInvokeHandler(LINK(this, SwEditWin, TemplateTimerHdl));
 
     // temporary solution!!! Should set the font of the current
     // insert position at every cursor movement!
