@@ -6,3 +6,4 @@ INSTALLLOCATION	installuser_
 INSTALLLOCATION	installmachine
 INSTALLLOCATION	installmachine_
 WIN81S14	win81s14
+WINMAJORVER	WinMajorVer

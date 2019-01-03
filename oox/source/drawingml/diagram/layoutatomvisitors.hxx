@@ -33,6 +33,8 @@ class ShapeCreationVisitor : public LayoutAtomVisitor
     ShapePtr mpParentShape;
     const Diagram& mrDgm;
     sal_Int32 mnCurrIdx;
+    sal_Int32 mnCurrStep = 0;
+    sal_Int32 mnCurrCnt = 0;
     const dgm::Point* mpCurrentNode;
 
     void defaultVisit(LayoutAtom const & rAtom);

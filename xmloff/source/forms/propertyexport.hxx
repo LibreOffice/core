@@ -35,7 +35,8 @@ enum class BoolAttrFlags {
     DefaultFalse          = 0x00,
     DefaultTrue           = 0x01,
     DefaultVoid           = 0x02,
-    DefaultMask           = 0x03,
+    DefaultValueMask      = 0x01,
+    DefaultVoidMask       = 0x02,
     InverseSemantics      = 0x04,
 };
 namespace o3tl {

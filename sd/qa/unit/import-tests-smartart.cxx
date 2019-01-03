@@ -14,6 +14,8 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 
+#include <comphelper/sequenceashashmap.hxx>
+
 using namespace ::com::sun::star;
 
 class SdImportTestSmartArt : public SdModelTestBase
@@ -29,6 +31,8 @@ public:
     void testVertialBoxList();
     void testVertialBracketList();
     void testTableList();
+    void testAccentProcess();
+    void testContinuousBlockProcess();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -42,6 +46,8 @@ public:
     CPPUNIT_TEST(testVertialBoxList);
     CPPUNIT_TEST(testVertialBracketList);
     CPPUNIT_TEST(testTableList);
+    CPPUNIT_TEST(testAccentProcess);
+    CPPUNIT_TEST(testContinuousBlockProcess);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -272,6 +278,126 @@ void SdImportTestSmartArt::testTableList()
     // 'Expected less than: 100, Actual  : 22014', i.e. the second child was
     // shifted to the right too much.
     CPPUNIT_ASSERT_LESS(100, abs(nChild2Right - nParentRight));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testAccentProcess()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-accent-process.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+    // 3 children: first pair, connector, second pair.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xGroup->getCount());
+    uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroupShape.is());
+
+    // The pair is a parent (shape + text) and a child, so 3 shapes in total.
+    // The order is importent, first is at the back, last is at the front.
+    uno::Reference<drawing::XShapes> xFirstPair(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstPair.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xFirstPair->getCount());
+
+    uno::Reference<text::XText> xFirstParentText(xFirstPair->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstParentText.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xFirstParentText->getString());
+    uno::Reference<drawing::XShape> xFirstParent(xFirstParentText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstParent.is());
+    int nFirstParentTop = xFirstParent->getPosition().Y;
+
+    uno::Reference<text::XText> xFirstChildText(xFirstPair->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstChildText.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xFirstChildText->getString());
+    uno::Reference<drawing::XShape> xFirstChild(xFirstChildText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstChildText.is());
+
+    {
+        uno::Reference<container::XEnumerationAccess> xParasAccess(xFirstChildText, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParas = xParasAccess->createEnumeration();
+        uno::Reference<beans::XPropertySet> xPara(xParas->nextElement(), uno::UNO_QUERY);
+        // Without the accompanying fix in place, this test would have failed
+        // with 'Expected: 0; Actual  : 1270', i.e. there was a large
+        // unexpected left margin.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                             xPara->getPropertyValue("ParaLeftMargin").get<sal_Int32>());
+
+        uno::Reference<container::XIndexAccess> xRules(xPara->getPropertyValue("NumberingRules"),
+                                                       uno::UNO_QUERY);
+        comphelper::SequenceAsHashMap aRule(xRules->getByIndex(1));
+        CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(u8"•"), aRule["BulletChar"].get<OUString>());
+    }
+
+    int nFirstChildTop = xFirstChild->getPosition().Y;
+    int nFirstChildRight = xFirstChild->getPosition().X + xFirstChild->getSize().Width;
+
+    // First child is below the first parent.
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected less than: 3881, Actual  : 3881', i.e. xFirstChild was not
+    // below xFirstParent (a good position is 9081).
+    CPPUNIT_ASSERT_LESS(nFirstChildTop, nFirstParentTop);
+
+    // Make sure that we have an arrow shape between the two pairs.
+    uno::Reference<beans::XPropertySet> xArrow(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xArrow.is());
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(
+        xArrow->getPropertyValue("CustomShapeGeometry"));
+    // Without the accompanying fix in place, this test would have failed, i.e.
+    // the custom shape lacked a type -> arrow was not visible.
+    CPPUNIT_ASSERT(aCustomShapeGeometry["Type"].has<OUString>());
+    OUString aType = aCustomShapeGeometry["Type"].get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("ooxml-rightArrow"), aType);
+
+    // Make sure that height of the arrow is less than its width.
+    uno::Reference<drawing::XShape> xArrowShape(xArrow, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xArrowShape.is());
+    awt::Size aArrowSize = xArrowShape->getSize();
+    CPPUNIT_ASSERT_LESS(aArrowSize.Width, aArrowSize.Height);
+
+    uno::Reference<drawing::XShapes> xSecondPair(xGroup->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSecondPair.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xSecondPair->getCount());
+    uno::Reference<text::XText> xSecondParentText(xSecondPair->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFirstParentText.is());
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: cc; Actual  : c', i.e. non-first runs on data points were ignored.
+    CPPUNIT_ASSERT_EQUAL(OUString("cc"), xSecondParentText->getString());
+    uno::Reference<drawing::XShape> xSecondParent(xSecondParentText, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSecondParent.is());
+    int nSecondParentLeft = xSecondParent->getPosition().X;
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected less than: 12700; Actual  : 18540', i.e. the "b" and "c"
+    // shapes overlapped.
+    CPPUNIT_ASSERT_LESS(nSecondParentLeft, nFirstChildRight);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testContinuousBlockProcess()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-continuous-block-process.pptx"),
+        PPTX);
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+    // 2 children: background, foreground.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
+
+    uno::Reference<drawing::XShapes> xLinear(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xLinear.is());
+    // 3 children: A, B and C.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xLinear->getCount());
+
+    uno::Reference<text::XText> xA(xLinear->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xA.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), xA->getString());
+    uno::Reference<drawing::XShape> xAShape(xA, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAShape.is());
+    // Without the accompanying fix in place, this test would have failed: the
+    // theoretically correct value is 5462 mm100 (16933 is the total width, and
+    // need to divide that to 1, 0.5, 1, 0.5 and 1 units), while the old value
+    // was 4703 and the new one is 5461.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(5000), xAShape->getSize().Width);
 
     xDocShRef->DoClose();
 }

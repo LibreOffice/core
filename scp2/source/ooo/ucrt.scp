@@ -111,7 +111,7 @@ WindowsCustomAction gid_Customaction_check_win81x64_ucrt
 	Source = "InstMSUBinary";
 	Target = "Windows81-KB2999226-x64msu";
 	Inbinarytable = 0;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And VersionNT64", "check_win8x64_ucrt");
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And (Not WINMAJORVER Or WINMAJORVER = \"#6\") And VersionNT64", "check_win8x64_ucrt");
 	Styles = "NO_FILE";
 End
 
@@ -147,7 +147,7 @@ WindowsCustomAction gid_Customaction_check_win81x32_ucrt
 	Source = "InstMSUBinary";
 	Target = "Windows81-KB2999226-x86msu";
 	Inbinarytable = 0;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And Not VersionNT64", "check_win8x32_ucrt");
+	Assignment1 = ("InstallExecuteSequence", "Not Installed And VersionNT = 603 And (Not WINMAJORVER Or WINMAJORVER = \"#6\") And Not VersionNT64", "check_win8x32_ucrt");
 	Styles = "NO_FILE";
 End
 

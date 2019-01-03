@@ -265,7 +265,6 @@ void SAL_CALL XMLFilterDialogComponent::queryTermination( const EventObject& /* 
         mpDialog->Close();
 }
 
-
 void SAL_CALL XMLFilterDialogComponent::notifyTermination( const EventObject& /* Event */ )
 {
     // we are going down, so dispose us!
@@ -276,34 +275,40 @@ void SAL_CALL XMLFilterDialogComponent::disposing( const EventObject& /* Source 
 {
 }
 
-
 void SAL_CALL XMLFilterDialogComponent::setTitle( const OUString& /* _rTitle */ )
 {
 }
 
-
-sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  )
+sal_Int16 SAL_CALL XMLFilterDialogComponent::execute()
 {
     ::SolarMutexGuard aGuard;
 
-    if( nullptr == mpDialog )
+    bool bLaunch = false;
+    if (!mpDialog)
     {
         Reference< XComponent > xComp( this );
         if (mxParent.is())
             mpDialog = VclPtr<XMLFilterSettingsDialog>::Create(VCLUnoHelper::GetWindow(mxParent), mxContext);
         else
             mpDialog = VclPtr<XMLFilterSettingsDialog>::Create(nullptr, mxContext, Dialog::InitFlag::NoParent);
-        mpDialog->Execute();
+        bLaunch = true;
     }
-    else if( !mpDialog->IsVisible() )
+
+    mpDialog->UpdateWindow();
+
+    if (!bLaunch)
     {
-        mpDialog->Execute();
+        mpDialog->ToTop();
+        return 0;
     }
-    mpDialog->ToTop();
+
+    mpDialog->StartExecuteAsync([this](sal_Int32)
+    {
+        mpDialog.reset();
+    });
 
     return 0;
 }
-
 
 void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArguments )
 {
@@ -319,7 +324,6 @@ void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArgu
         }
     }
 }
-
 
 extern "C"
 {
