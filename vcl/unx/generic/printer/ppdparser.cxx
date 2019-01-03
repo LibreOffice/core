@@ -1512,18 +1512,16 @@ void PPDParser::getResolutionFromString(
                                         const OUString& rString,
                                         int& rXRes, int& rYRes )
 {
-    sal_Int32 nDPIPos;
-
     rXRes = rYRes = 300;
 
-    nDPIPos = rString.indexOf( "dpi" );
+    const sal_Int32 nDPIPos {rString.indexOf( "dpi" )};
     if( nDPIPos != -1 )
     {
-        sal_Int32 nPos = 0;
-        if( ( nPos = rString.indexOf( 'x' ) ) != -1 )
+        const sal_Int32 nPos {rString.indexOf( 'x' )};
+        if( nPos >=0 )
         {
             rXRes = rString.copy( 0, nPos ).toInt32();
-            rYRes = rString.getToken( 1, 'x' ).copy(0, nDPIPos - nPos - 1).toInt32();
+            rYRes = rString.copy(nPos+1, nDPIPos - nPos - 1).toInt32();
         }
         else
             rXRes = rYRes = rString.copy( 0, nDPIPos ).toInt32();
