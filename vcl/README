@@ -88,13 +88,9 @@ GDIMetafile is a vector drawing representation that corresponds directly
 to the SVM (StarView Metafile) format; it is extremely important as
 an intermediate format in all sorts of drawing and printing operations.
 
-There is a class MetafileXmlDump in include/test/mtfxmldump.hxx that
+There is a class MetafileXmlDump in include/vcl/mtfxmldump.hxx that
 can store a GDIMetafile as XML, which makes debugging much easier
 since you can just use "diff" to see changes.
-
-To use it you need to link against "test" library and then (because
-"test" is not part of the installation) run with:
-LD_LIBRARY_PATH=workdir/LinkTarget/Library:workdir/UnpackedTarball/cppunit/src/cppunit/.libs instdir/program/soffice
 
 == EMF+ ==
 

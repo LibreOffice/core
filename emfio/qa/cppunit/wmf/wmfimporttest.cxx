@@ -18,7 +18,6 @@
  */
 
 #include <test/xmltesttools.hxx>
-#include <test/mtfxmldump.hxx>
 #include <test/setupvcl.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/wmf.hxx>
@@ -74,7 +73,7 @@ void WmfTest::testNonPlaceableWmf()
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
     dumper.filterActionType(MetaActionType::POLYLINE, false);
-    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+    xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -103,7 +102,7 @@ void WmfTest::testSine()
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
     dumper.filterActionType(MetaActionType::ISECTRECTCLIPREGION, false);
-    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+    xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -119,7 +118,7 @@ void WmfTest::testEmfProblem()
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
     dumper.filterActionType(MetaActionType::ISECTRECTCLIPREGION, false);
-    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+    xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -139,7 +138,7 @@ void WmfTest::testEmfLineStyles()
     dumper.filterAllActionTypes();
     dumper.filterActionType(MetaActionType::LINE, false);
     dumper.filterActionType(MetaActionType::LINECOLOR, false);
-    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+    xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -198,7 +197,7 @@ void WmfTest::testWorldTransformFontSize()
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
     dumper.filterActionType(MetaActionType::FONT, false);
-    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+    xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -226,7 +225,7 @@ void WmfTest::testTdf93750()
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
     MetafileXmlDump dumper;
-    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+    xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -265,7 +264,7 @@ void WmfTest::testTdf39894()
         ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
         MetafileXmlDump dumper;
-        xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+        xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
         CPPUNIT_ASSERT(pDoc);
 
@@ -286,7 +285,7 @@ void WmfTest::testETO_PDY()
         ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
         MetafileXmlDump dumper;
-        xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+        xmlDocPtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
 
         CPPUNIT_ASSERT(pDoc);
 

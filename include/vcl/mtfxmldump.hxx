@@ -7,12 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_TEST_MTFXMLDUMP_HXX
-#define INCLUDED_TEST_MTFXMLDUMP_HXX
+#ifndef INCLUDED_VCL_MTFXMLDUMP_HXX
+#define INCLUDED_VCL_MTFXMLDUMP_HXX
 
 #include <sal/config.h>
-#include <test/testdllapi.hxx>
-#include <libxml/tree.h>
+#include <vcl/dllapi.h>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <o3tl/enumarray.hxx>
@@ -21,7 +20,7 @@ namespace tools { class XmlWriter; }
 
 enum class MetaActionType;
 
-class OOO_DLLPUBLIC_TEST MetafileXmlDump final
+class VCL_DLLPUBLIC MetafileXmlDump final
 {
     o3tl::enumarray<MetaActionType, bool> maFilter;
 
@@ -35,13 +34,8 @@ public:
     void filterAllActionTypes();
 
     /** The actual result that will be used for testing.
-
-        This function normally uses a SvMemoryStream for its operation; but
-        can use a physical file when a filename is specified in
-        pTempStreamName - this is useful when creating the test, to dump the
-        file for examination.
     */
-    xmlDocPtr dumpAndParse(const GDIMetaFile& rMetaFile, const OUString& rTempStreamName = OUString());
+    void dump(const GDIMetaFile& rMetaFile, SvStream& rStream);
 };
 
 #endif
