@@ -849,10 +849,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
 
                     if ( sToken.lastIndexOf( ';' ) != -1 )
                     {
-                        sal_Int32 nZero = 0;
-                        OUString aCurrentToken = sToken.getToken( 0, ';', nZero);
-
-                        sToken = aCurrentToken;
+                        sToken = sToken.getToken(0, ';');
                         break;
                     }
                 }
