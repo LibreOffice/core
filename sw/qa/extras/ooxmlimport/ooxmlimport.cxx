@@ -63,7 +63,6 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <test/mtfxmldump.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -1288,7 +1287,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
     ReadGraphic(aStream, aGraphic);
     const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(rMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, rMetaFile);
 
     // Get first polyline rightside x coordinate
     sal_Int32 nFirstEnd = getXPath(pXmlDoc, "(//polyline)[1]/point[2]", "x").toInt32();

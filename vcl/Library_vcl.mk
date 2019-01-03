@@ -260,6 +260,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/embeddedfontshelper \
     vcl/source/gdi/extoutdevdata \
     vcl/source/gdi/gdimtf \
+    vcl/source/gdi/mtfxmldump \
     vcl/source/gdi/gdimetafiletools \
     vcl/source/gdi/gfxlink \
     vcl/source/gdi/gradient \

@@ -11,6 +11,8 @@
 
 #include <memory>
 
+#include <vcl/mtfxmldump.hxx>
+
 namespace {
 
 OUString convert(xmlChar const * string) {
@@ -47,6 +49,14 @@ xmlDocPtr XmlTestTools::parseXmlStream(SvStream* pStream)
     pStream->ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
     return xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));
+}
+
+xmlDocPtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)
+{
+    SvMemoryStream aStream;
+    rDumper.dump(rGDIMetaFile, aStream);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    return XmlTestTools::parseXmlStream(&aStream);
 }
 
 xmlXPathObjectPtr XmlTestTools::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)

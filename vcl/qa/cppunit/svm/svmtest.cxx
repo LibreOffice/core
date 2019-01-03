@@ -10,7 +10,6 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
-#include <test/mtfxmldump.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>
@@ -27,7 +26,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }*/
 
-    xmlDocPtr dumpMeta(const GDIMetaFile& rMetaFile, const OUString& rFileUrl = OUString());
+    xmlDocPtr dumpMeta(const GDIMetaFile& rMetaFile);
 
     void checkVirtualDevice(xmlDocPtr pDoc);
     void checkErase(xmlDocPtr pDoc);
@@ -188,10 +187,10 @@ static GDIMetaFile writeAndRead(GDIMetaFile& rMetaFile, const OUString& sUrl)
     }
 }
 
-xmlDocPtr SvmTest::dumpMeta(const GDIMetaFile& rMetaFile, const OUString& rFileUrl)
+xmlDocPtr SvmTest::dumpMeta(const GDIMetaFile& rMetaFile)
 {
     MetafileXmlDump dumper;
-    xmlDocPtr pDoc = dumper.dumpAndParse(rMetaFile, rFileUrl);
+    xmlDocPtr pDoc = dumpAndParse(dumper, rMetaFile);
     CPPUNIT_ASSERT (pDoc);
 
     checkVirtualDevice(pDoc);

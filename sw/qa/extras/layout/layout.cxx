@@ -9,7 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <test/mtfxmldump.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <officecfg/Office/Common.hxx>
@@ -2290,7 +2289,7 @@ void SwLayoutWriter::testTdf116830()
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Assert that the yellow rectangle (cell background) is painted after the
@@ -2317,7 +2316,7 @@ void SwLayoutWriter::testTdf114163()
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(
@@ -2335,7 +2334,7 @@ void SwLayoutWriter::testTdf108021()
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(
@@ -2353,7 +2352,7 @@ void SwLayoutWriter::testTdf116925()
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(pXmlDoc,
@@ -2373,7 +2372,7 @@ void SwLayoutWriter::testTdf117028()
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
     // The only polypolygon in the rendering result was the white background we
@@ -2395,7 +2394,7 @@ void SwLayoutWriter::testTdf106390()
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nBottom = getXPath(pXmlDoc, "//sectrectclipregion", "bottom").toInt32();
 
@@ -2413,7 +2412,7 @@ void SwLayoutWriter::testTableExtrusion1()
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nRight = getXPath(pXmlDoc, "//sectrectclipregion", "right").toInt32();
     sal_Int32 nLeft = static_cast<sal_Int32>(nRight * 0.95);
@@ -2433,7 +2432,7 @@ void SwLayoutWriter::testTableExtrusion2()
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
-    xmlDocPtr pXmlDoc = dumper.dumpAndParse(*xMetaFile);
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // End point position of the outer table.
     sal_Int32 nX = getXPath(pXmlDoc, "(//polyline[1]/point)[2]", "x").toInt32();
