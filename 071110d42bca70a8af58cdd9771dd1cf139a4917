@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_88ee4e86",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-03T11:14:27Z",
+      "side": 1,
+      "message": "I\u0027m talking here about an inability to write a unit test, although a followup commit does cover this with a unit test.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 38
+      },
+      "revId": "071110d42bca70a8af58cdd9771dd1cf139a4917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_68031244",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4216,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-03T11:14:27Z",
+      "side": 1,
+      "message": "what if there was also a color defined, even though fillstyle is NONE?  The final result would probably depend on which one of these came last. If I remember correctly, fillStyle followed formatBackground. But in normal cases, a NONE fillstyle will not coexist with a BrushItem I think.",
+      "range": {
+        "startLine": 4216,
+        "startChar": 13,
+        "endLine": 4216,
+        "endChar": 61
+      },
+      "revId": "071110d42bca70a8af58cdd9771dd1cf139a4917",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
