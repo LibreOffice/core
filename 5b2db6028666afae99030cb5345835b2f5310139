@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_c8668652",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-03T09:37:36Z",
+      "side": 1,
+      "message": "I think this is probably an autostyle bug actually, and not something that \"intentionally\" worked.",
+      "range": {
+        "startLine": 10,
+        "startChar": 42,
+        "endLine": 10,
+        "endChar": 47
+      },
+      "revId": "5b2db6028666afae99030cb5345835b2f5310139",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_a85b4a85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-03T09:37:36Z",
+      "side": 1,
+      "message": "perhaps there are not a lot of places where concept of \"reset attribute\" would ever happen. So this very well might be the best place in the end.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 37
+      },
+      "revId": "5b2db6028666afae99030cb5345835b2f5310139",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_88608e34",
+        "filename": "sw/source/core/txtnode/ndtxt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5035,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-03T09:37:36Z",
+      "side": 1,
+      "message": "For this particular bug/test, this could be reduced to FILLSTYLE, FILLCOLOR, but from what I\u0027ve seen, the whole range ought to be treated as a unit, right?",
+      "range": {
+        "startLine": 5035,
+        "startChar": 41,
+        "endLine": 5035,
+        "endChar": 75
+      },
+      "revId": "5b2db6028666afae99030cb5345835b2f5310139",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
