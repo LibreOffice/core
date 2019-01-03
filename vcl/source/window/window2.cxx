@@ -280,10 +280,6 @@ void Window::EndTracking( TrackingEventFlags nFlags )
 
     if ( pSVData->maWinData.mpTrackWin.get() == this )
     {
-        // due to DbgChkThis in brackets, as the window could be destroyed
-        // in the handler
-        {
-
         if ( pSVData->maWinData.mpTrackTimer )
         {
             delete pSVData->maWinData.mpTrackTimer;
@@ -293,7 +289,6 @@ void Window::EndTracking( TrackingEventFlags nFlags )
         pSVData->maWinData.mpTrackWin    = nullptr;
         pSVData->maWinData.mnTrackFlags  = StartTrackingFlags::NONE;
         ReleaseMouse();
-        }
 
         // call EndTracking if required
         {
