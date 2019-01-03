@@ -52,6 +52,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			CC="$(CC)$(if $(filter ANDROID,$(OS)), -D_PR_NO_LARGE_FILES=1 -DSQLITE_DISABLE_LFS=1)" CCC="$(CXX)" \
 			$(if $(CROSS_COMPILING),NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 			$(if $(filter ANDROID,$(OS)),OS_TARGET=Android OS_TARGET_RELEASE=14 ARCHFLAG="" DEFAULT_COMPILER=clang ANDROID_NDK=$(ANDROID_NDK_HOME) ANDROID_TOOLCHAIN_VERSION=$(ANDROID_GCC_TOOLCHAIN_VERSION) ANDROID_PREFIX=$(HOST_PLATFORM) ANDROID_SYSROOT=$(SYSBASE) ANDROID_TOOLCHAIN=$(ANDROID_BINUTILS_PREBUILT_ROOT)) \
+			NSS_DISABLE_GTESTS=1 \
 			nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),\
