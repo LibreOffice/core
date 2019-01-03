@@ -190,7 +190,11 @@ int ImplSVMain()
 
     int nReturn = EXIT_FAILURE;
 
-    bool bInit = isInitVCL() || InitVCL();
+    const bool bWasInitVCL = isInitVCL();
+    const bool bInit = bWasInitVCL || InitVCL();
+    int nRet = 0;
+    if (!bWasInitVCL && bInit && pSVData->mpDefInst->SVMainHook(&nRet))
+        return nRet;
 
     if( bInit )
     {
