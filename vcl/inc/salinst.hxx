@@ -89,6 +89,7 @@ public:
 
     //called directly after Application::Init
     virtual void            AfterAppInit() {}
+    virtual bool            SVMainHook(int*) { return false; }
 
     // Frame
     // DisplayName for Unix ???

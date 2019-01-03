@@ -62,6 +62,22 @@
 -(void)applicationDidFinishLaunching:(NSNotification*)pNotification
 {
     (void)pNotification;
+
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+                               location: NSZeroPoint
+                               modifierFlags: 0
+                               timestamp: [[NSProcessInfo processInfo] systemUptime]
+                               windowNumber: 0
+                               context: nil
+                               subtype: AquaSalInstance::AppExecuteSVMain
+                               data1: 0
+                               data2: 0 ];
+SAL_WNODEPRECATED_DECLARATIONS_POP
+    assert( pEvent );
+    [NSApp postEvent: pEvent atStart: NO];
+
     if( [NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)] )
     {
         [NSWindow setAllowsAutomaticWindowTabbing:NO];
