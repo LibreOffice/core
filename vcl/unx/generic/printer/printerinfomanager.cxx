@@ -234,10 +234,11 @@ void PrinterInfoManager::initialize()
             aValue = aConfig.ReadKey( "MarginAdjust" );
             if (!aValue.isEmpty())
             {
-                m_aGlobalDefaults.m_nLeftMarginAdjust = aValue.getToken(0, ',').toInt32();
-                m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.getToken(1, ',').toInt32();
-                m_aGlobalDefaults.m_nTopMarginAdjust = aValue.getToken(2, ',').toInt32();
-                m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.getToken(3, ',').toInt32();
+                sal_Int32 nIdx {0};
+                m_aGlobalDefaults.m_nLeftMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.getToken(0, ',', nIdx).toInt32();
+                m_aGlobalDefaults.m_nTopMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
             }
 
             aValue = aConfig.ReadKey( "ColorDepth", "24" );
@@ -417,10 +418,11 @@ void PrinterInfoManager::initialize()
                 aValue = aConfig.ReadKey( "MarginAdjust" );
                 if (!aValue.isEmpty())
                 {
-                    aPrinter.m_aInfo.m_nLeftMarginAdjust = aValue.getToken(0, ',' ).toInt32();
-                    aPrinter.m_aInfo.m_nRightMarginAdjust = aValue.getToken(1, ',' ).toInt32();
-                    aPrinter.m_aInfo.m_nTopMarginAdjust = aValue.getToken(2, ',' ).toInt32();
-                    aPrinter.m_aInfo.m_nBottomMarginAdjust = aValue.getToken(3, ',' ).toInt32();
+                    sal_Int32 nIdx {0};
+                    aPrinter.m_aInfo.m_nLeftMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                    aPrinter.m_aInfo.m_nRightMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                    aPrinter.m_aInfo.m_nTopMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                    aPrinter.m_aInfo.m_nBottomMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
                 }
 
                 aValue = aConfig.ReadKey( "ColorDepth" );
@@ -563,9 +565,7 @@ bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const 
     while( nIndex != -1 )
     {
         OUString aOuterToken = rPrinterInfo.m_aFeatures.getToken( 0, ',', nIndex );
-        sal_Int32 nInnerIndex = 0;
-        OUString aInnerToken = aOuterToken.getToken( 0, '=', nInnerIndex );
-        if( aInnerToken.equalsIgnoreAsciiCaseAscii( pToken ) )
+        if( aOuterToken.getToken( 0, '=' ).equalsIgnoreAsciiCaseAscii( pToken ) )
             return true;
     }
     return false;
