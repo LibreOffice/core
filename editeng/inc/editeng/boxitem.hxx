@@ -139,7 +139,7 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
     SvxBorderLine* pHori;   //innere horizontale Linie
     SvxBorderLine* pVert;   //innere vertikale Linie
 
-    bool                mbEnableHor;   /// true = Enable inner horizonal line.
+    bool                mbEnableHor;   /// true = Enable inner horizontal line.
     bool                mbEnableVer;   /// true = Enable inner vertical line.
 
     /*

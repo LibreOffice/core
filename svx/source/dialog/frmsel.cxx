@@ -470,7 +470,7 @@ void FrameSelectorImpl::InitBorderGeometry()
         {
             for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
             {
-                // the usable area between horizonal/vertical frame borders of current quadrant
+                // the usable area between horizontal/vertical frame borders of current quadrant
                 Rectangle aRect( maArray.GetCellRect( nCol, nRow ) );
                 aRect.Left() += nClV + 1;
                 aRect.Right() -= nClV + 1;

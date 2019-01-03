@@ -211,7 +211,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         short nIndent = 0;
         GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
 
-        // Horizonale Ausrichtung und Umlauf bestimmen.
+        // Horizontale Ausrichtung und Umlauf bestimmen.
         sal_Int16 eHoriRel;
         SwSurround eSurround;
         switch( eHoriOri )

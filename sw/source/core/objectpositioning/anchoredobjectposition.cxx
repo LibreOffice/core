@@ -819,7 +819,7 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
     SwTwips nRelPosX = nOffset;
     if ( _rHoriOrient.GetHoriOrient() == text::HoriOrientation::NONE )
     {
-        // 'manual' horizonal position
+        // 'manual' horizontal position
         const bool bR2L = rAnchorFrm.IsRightToLeft();
         if( IsAnchoredToChar() && text::RelOrientation::CHAR == eRelOrient )
         {

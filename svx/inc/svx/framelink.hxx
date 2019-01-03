@@ -405,7 +405,7 @@ long GetTRDiagOffset( long nVerOffs, long nDiagOffs, double fAngle );
     drawn with only one call of a border drawing function. This means, the two
     frame borders must have equal style and color, and none of the other
     vertical and diagonal frame borders break the lines of the two borders in
-    any way (i.e. two vertical double frame borders would break the horizonal
+    any way (i.e. two vertical double frame borders would break the horizontal
     frame borders). Of course this function can be used for vertical frame
     borders as well.
 
