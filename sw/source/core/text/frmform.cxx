@@ -172,18 +172,6 @@ bool SwTextFrame::GetDropRect_( SwRect &rRect ) const
     return false;
 }
 
-const SwBodyFrame *SwTextFrame::FindBodyFrame() const
-{
-    if ( IsInDocBody() )
-    {
-        const SwFrame *pFrame = GetUpper();
-        while( pFrame && !pFrame->IsBodyFrame() )
-            pFrame = pFrame->GetUpper();
-        return static_cast<const SwBodyFrame*>(pFrame);
-    }
-    return nullptr;
-}
-
 bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
