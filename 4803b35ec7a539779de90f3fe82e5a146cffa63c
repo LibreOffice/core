@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_e84b8284",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_resultsetmetadata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-03T11:52:53Z",
+      "side": 0,
+      "message": "I think you should keep this method (and call it) otherwise badly written script code that uses MYSQL will crash instead of generating a useful error message",
+      "revId": "4803b35ec7a539779de90f3fe82e5a146cffa63c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
