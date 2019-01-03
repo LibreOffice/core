@@ -237,11 +237,11 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         else if (aLine.startsWith(margindajustmentEquals))
         {
             bMargin = true;
-            OString aValues(aLine.copy(RTL_CONSTASCII_LENGTH(margindajustmentEquals)));
-            rJobData.m_nLeftMarginAdjust = aValues.getToken(0, ',').toInt32();
-            rJobData.m_nRightMarginAdjust = aValues.getToken(1, ',').toInt32();
-            rJobData.m_nTopMarginAdjust = aValues.getToken(2, ',').toInt32();
-            rJobData.m_nBottomMarginAdjust = aValues.getToken(3, ',').toInt32();
+            sal_Int32 nIdx {RTL_CONSTASCII_LENGTH(margindajustmentEquals)};
+            rJobData.m_nLeftMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
+            rJobData.m_nRightMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
+            rJobData.m_nTopMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
+            rJobData.m_nBottomMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
         }
         else if (aLine.startsWith(colordepthEquals))
         {
