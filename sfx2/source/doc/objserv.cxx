@@ -555,7 +555,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             sal_Int16 nPage = 1;
 
             ::Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
-            ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage);
+            ::Point aLogicPos;
+            ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos);
             // FIXME: This is a temporary hack. Need to figure out a proper way to derive this scale factor.
             ::Size aTargetSize(aDocumentSizePixel.Width() * 1.23, aDocumentSizePixel.Height() * 1.23);
 
@@ -567,6 +568,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // will be correct in MM.
             MapMode aMapMode;
             aMapMode.SetMapUnit(MapUnit::Map100thMM);
+            aMapMode.SetOrigin(::Point(-aLogicPos.getX(), -aLogicPos.getY()));
             rGDIMetaFile.SetPrefMapMode(aMapMode);
             rGDIMetaFile.SetPrefSize(aLogic);
 
