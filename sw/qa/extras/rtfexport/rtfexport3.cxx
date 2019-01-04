@@ -199,6 +199,16 @@ DECLARE_RTFEXPORT_TEST(testTdf121623, "tdf121623.rtf")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf122424_textOutsideCellInATableRow, "tdf122424.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("cell3"), xCell->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
