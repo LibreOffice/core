@@ -281,7 +281,8 @@ public class SQLQueryComposer
                 StringBuilder fromClause = getFromClause();
                 String sSelectClause = getSelectClause(_baddAliasFieldNames);
                 StringBuilder queryclause = new StringBuilder(sSelectClause).append(" ").append(fromClause);
-                m_xQueryAnalyzer.setQuery(queryclause.toString());
+                // TDF#122461: Clean SQL string
+                m_xQueryAnalyzer.setQuery(queryclause.toString().replace("\n", "").replace("\r", ""));
                 if (CurDBMetaData.getFilterConditions() != null && CurDBMetaData.getFilterConditions().length > 0)
                 {
                     CurDBMetaData.setFilterConditions(replaceConditionsByAlias(CurDBMetaData.getFilterConditions()));
