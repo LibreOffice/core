@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <osl/diagnose.h>
 #include <unotools/charclass.hxx>
 #include <editsh.hxx>
 #include <fldbas.hxx>

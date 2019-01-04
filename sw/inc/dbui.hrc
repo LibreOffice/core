@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_DBUI_HRC
 #define INCLUDED_SW_INC_DBUI_HRC
 
-#include "rcid.hrc"
+#include <utility>
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 

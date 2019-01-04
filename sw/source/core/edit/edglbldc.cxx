@@ -31,6 +31,7 @@
 #include <doctxm.hxx>
 #include <edglbldc.hxx>
 #include <o3tl/make_unique.hxx>
+#include <osl/diagnose.h>
 
 bool SwEditShell::IsGlobalDoc() const
 {

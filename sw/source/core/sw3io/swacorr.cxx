@@ -24,6 +24,7 @@
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <sot/storage.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

@@ -30,6 +30,8 @@
 #include <docfld.hxx>
 #include <ndtxt.hxx>
 
+#include <osl/diagnose.h>
+
 // sort input values
 
 SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )

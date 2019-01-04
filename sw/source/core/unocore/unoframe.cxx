@@ -41,6 +41,7 @@
 #include <editeng/memberids.h>
 #include <swtypes.hxx>
 #include <cmdid.h>
+#include <unomid.h>
 #include <memory>
 #include <utility>
 #include <hints.hxx>

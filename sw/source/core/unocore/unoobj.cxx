@@ -27,6 +27,7 @@
 #include <swtypes.hxx>
 #include <hintids.hxx>
 #include <cmdid.h>
+#include <unomid.h>
 #include <hints.hxx>
 #include <IMark.hxx>
 #include <frmfmt.hxx>

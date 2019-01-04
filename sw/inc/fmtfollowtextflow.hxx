@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_FMTFOLLOWTEXTFLOW_HXX
 #define INCLUDED_SW_INC_FMTFOLLOWTEXTFLOW_HXX
 
-#include <sal/log.hxx>
 #include <svl/eitem.hxx>
 #include "hintids.hxx"
 #include "format.hxx"

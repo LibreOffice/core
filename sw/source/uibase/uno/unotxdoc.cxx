@@ -61,6 +61,7 @@
 #include <unotxdoc.hxx>
 #include <svl/numuno.hxx>
 #include <fldbas.hxx>
+#include <unomap.hxx>
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
