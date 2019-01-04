@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_2b1cf468",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-04T05:07:25Z",
+      "side": 1,
+      "message": "This here should be the answer to my earlier questions. Normally there should NOT be a RES_BACKGROUND attribute if there is a FillStyle. Thus formatBackground is only called IF FillStyle_SOLID. I tried to change this to (_NONE || _SOLID) but ran into DOCX problems since it creates a \"virtual\" property that doesn\u0027t exist in all necessary contexts.",
+      "range": {
+        "startLine": 311,
+        "startChar": 35,
+        "endLine": 311,
+        "endChar": 90
+      },
+      "revId": "e173bc799cc37b1b2aae96dfd76a21f93d0af49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
