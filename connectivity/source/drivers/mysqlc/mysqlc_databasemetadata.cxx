@@ -829,14 +829,37 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTables(const Any& /*catalog*/,
                                                             const OUString& schemaPattern,
                                                             const OUString& tableNamePattern,
-                                                            const Sequence<OUString>& /*types */)
+                                                            const Sequence<OUString>& types)
 {
-    OUString query(
+    OUStringBuffer buffer{
         "SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS TABLE_SCHEM, TABLE_NAME,"
         "IF(STRCMP(TABLE_TYPE,'BASE TABLE'), TABLE_TYPE, 'TABLE') AS TABLE_TYPE, TABLE_COMMENT AS "
         "REMARKS "
         "FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA  LIKE '?' AND TABLE_NAME LIKE '?' "
-        "ORDER BY TABLE_TYPE, TABLE_SCHEMA, TABLE_NAME");
+    };
+
+    if (types.getLength() == 1)
+    {
+        buffer.append("AND TABLE_TYPE LIKE '");
+        buffer.append(types[0]);
+        buffer.append("'");
+    }
+    else if (types.getLength() > 1)
+    {
+        buffer.append("AND (TABLE_TYPE LIKE '");
+        buffer.append(types[0]);
+        buffer.append("'");
+        for (sal_Int32 i = 1; i < types.getLength(); ++i)
+        {
+            buffer.append(" OR TABLE_TYPE LIKE '");
+            buffer.append(types[i]);
+            buffer.append("'");
+        }
+        buffer.append(")");
+    }
+
+    buffer.append(" ORDER BY TABLE_TYPE, TABLE_SCHEMA, TABLE_NAME");
+    OUString query = buffer.makeStringAndClear();
 
     // TODO use prepared stmt instead
     // TODO escape schema, table name ?
@@ -905,18 +928,23 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
                                          "org.openoffice.comp.helper.DatabaseMetaDataResultSet"),
                                      UNO_QUERY);
 
-    OUString query(
-        "SELECT refi.CONSTRAINT_CATALOG, k.COLUMN_NAME, "
-        " refi.UNIQUE_CONSTRAINT_CATALOG, "
-        " refi.UNIQUE_CONSTRAINT_SCHEMA, refi.REFERENCED_TABLE_NAME, k.REFERENCED_COLUMN_NAME, "
-        " refi.UPDATE_RULE, refi.DELETE_RULE, refi.CONSTRAINT_NAME "
-        " FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS as refi"
-        " INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE as k ON k.CONSTRAINT_NAME = "
-        "refi.CONSTRAINT_NAME "
-        " and k.TABLE_NAME = refi.TABLE_NAME "
-        " WHERE refi.CONSTRAINT_SCHEMA LIKE "
-        "'?' AND refi.TABLE_NAME='?'"); // TODO
-    query = query.replaceFirst("?", schema);
+    OUString query("SELECT refi.CONSTRAINT_CATALOG," // 1: foreign catalog
+                   " k.COLUMN_NAME," // 2: foreign column name
+                   " refi.UNIQUE_CONSTRAINT_CATALOG," // 3: primary catalog FIXME
+                   " k.REFERENCED_TABLE_SCHEMA," // 4: primary schema
+                   " refi.REFERENCED_TABLE_NAME," // 5: primary table name
+                   " k.REFERENCED_COLUMN_NAME," // 6: primary column name
+                   " refi.UPDATE_RULE, refi.DELETE_RULE," // 7,8: update, delete rule
+                   " refi.CONSTRAINT_NAME, " // 9: name of constraint itself
+                   " refi.TABLE_NAME, " // 10: foreign table name
+                   " refi.CONSTRAINT_SCHEMA " // 11: foreign schema name FIXME
+                   " FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS as refi"
+                   " INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE as k ON k.CONSTRAINT_NAME = "
+                   "refi.CONSTRAINT_NAME "
+                   " and k.TABLE_NAME = refi.TABLE_NAME "
+                   " WHERE k.REFERENCED_TABLE_SCHEMA LIKE "
+                   "'?' AND refi.TABLE_NAME='?'");
+    query = query.replaceFirst("?", schema); // TODO what if schema is NULL?
     query = query.replaceFirst("?", table);
 
     std::vector<std::vector<Any>> aRows;
@@ -929,22 +957,22 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
         std::vector<Any> aRow{ Any() }; // 0. element is unused
 
         // primary key catalog
-        aRow.push_back(makeAny(xRow->getString(1)));
+        aRow.push_back(makeAny(xRow->getString(3)));
         // primary key schema
-        aRow.push_back(makeAny(schema));
+        aRow.push_back(makeAny(xRow->getString(4)));
         // primary key table
-        aRow.push_back(makeAny(table));
+        aRow.push_back(makeAny(xRow->getString(5)));
         // primary column name
-        aRow.push_back(makeAny(xRow->getString(2)));
+        aRow.push_back(makeAny(xRow->getString(6)));
 
         // fk table catalog
-        aRow.push_back(makeAny(xRow->getString(3)));
+        aRow.push_back(makeAny(xRow->getString(1)));
         // fk schema
-        aRow.push_back(makeAny(xRow->getString(4)));
+        aRow.push_back(makeAny(xRow->getString(11)));
         // fk table
-        aRow.push_back(makeAny(xRow->getString(5)));
+        aRow.push_back(makeAny(xRow->getString(10)));
         // fk column name
-        aRow.push_back(makeAny(xRow->getString(6)));
+        aRow.push_back(makeAny(xRow->getString(2)));
         // KEY_SEQ
         aRow.push_back(makeAny(sal_Int32{ 0 })); // TODO
         // update rule
@@ -952,7 +980,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
         // delete rule
         aRow.push_back(makeAny(xRow->getShort(8)));
         // foreign key name
-        aRow.push_back(makeAny(xRow->getShort(9)));
+        aRow.push_back(makeAny(xRow->getString(9)));
         // primary key name
         aRow.push_back(makeAny(OUString{})); // TODO
         // deferrability
