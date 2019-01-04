@@ -274,6 +274,9 @@ public:
     void SelectionHasChanged(SwFEShell* pShell);
     bool IsShowUnfloatButton(SwWrtShell* pWrtSh) const;
 
+    // For testing only (see uiwriter)
+    void ActiveUnfloatButton(SwWrtShell* pWrtSh);
+
 private:
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
     void PaintDecorators() const;
