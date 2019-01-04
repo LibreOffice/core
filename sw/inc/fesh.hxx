@@ -227,8 +227,6 @@ private:
 
     SAL_DLLPRIVATE bool ImpEndCreate();
 
-    SAL_DLLPRIVATE static ObjCntType GetObjCntType( const SdrObject& rObj );
-
     /// Methods for copying of draw objects.
     SAL_DLLPRIVATE bool CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                                 const Point& rInsPt, bool bIsMove,
@@ -311,6 +309,7 @@ public:
      * drag&drop of controls into header */
     bool IsSelContainsControl() const;
 
+    static ObjCntType GetObjCntType( const SdrObject& rObj );
     ObjCntType GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const;
     ObjCntType GetObjCntTypeOfSelection() const;
 

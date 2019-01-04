@@ -1,0 +1,117 @@
+﻿/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <FloatingTableButton.hxx>
+#include <HeaderFooterWin.hxx>
+
+#include <edtwin.hxx>
+#include <strings.hrc>
+#include <vcl/metric.hxx>
+#include <viewopt.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+
+#define TEXT_PADDING 3
+#define BOX_DISTANCE 3
+#define BUTTON_WIDTH 12
+
+FloatingTableButton::FloatingTableButton(SwEditWin* pEditWin, const SwFrame* pFrame)
+    : SwFrameMenuButtonBase(pEditWin, pFrame)
+    , m_sLabel(SwResId(STR_UNFLOAT_TABLE))
+{
+}
+
+FloatingTableButton::~FloatingTableButton() { disposeOnce(); }
+
+void FloatingTableButton::SetOffset(Point aBottomRightPixel)
+{
+    // Compute the text size and get the box position & size from it
+    tools::Rectangle aTextRect;
+    GetTextBoundRect(aTextRect, m_sLabel);
+    tools::Rectangle aTextPxRect = LogicToPixel(aTextRect);
+    FontMetric aFontMetric = GetFontMetric(GetFont());
+    Size aBoxSize(aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
+                  aFontMetric.GetLineHeight() + TEXT_PADDING * 2);
+
+    Point aBoxPos(aBottomRightPixel.X() - aBoxSize.Width() - BOX_DISTANCE,
+                  aBottomRightPixel.Y() - aBoxSize.Height());
+
+    if (AllSettings::GetLayoutRTL())
+    {
+        aBoxPos.setX(aBottomRightPixel.X() + BOX_DISTANCE);
+    }
+
+    // Set the position & Size of the window
+    SetPosSizePixel(aBoxPos, aBoxSize);
+}
+
+void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
+{
+    // Move the table outside of the frame
+}
+
+void FloatingTableButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    SetMapMode(MapMode(MapUnit::MapPixel));
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
+    const ::tools::Rectangle aRect(
+        ::tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+
+    // Create button
+    SwFrameButtonPainter::PaintButton(aSeq, aRect, false);
+
+    // Create the text primitive
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    basegfx::B2DVector aFontSize;
+    drawinglayer::attribute::FontAttribute aFontAttr
+        = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+            aFontSize, rRenderContext.GetFont(), false, false);
+
+    FontMetric aFontMetric = rRenderContext.GetFontMetric(rRenderContext.GetFont());
+    double nTextOffsetY = aFontMetric.GetAscent() + TEXT_PADDING;
+    double nTextOffsetX = std::abs(aRect.GetWidth() - rRenderContext.GetTextWidth(m_sLabel)) / 2.0;
+    Point aTextPos(nTextOffsetX, nTextOffsetY);
+
+    basegfx::B2DHomMatrix aTextMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
+        aFontSize.getX(), aFontSize.getY(), static_cast<double>(aTextPos.X()),
+        static_cast<double>(aTextPos.Y())));
+
+    aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
+        new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+            aTextMatrix, m_sLabel, 0, m_sLabel.getLength(), std::vector<double>(), aFontAttr,
+            css::lang::Locale(), aLineColor)));
+
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext,
+                                                                         aNewViewInfos));
+
+    pProcessor->process(aSeq);
+}
+
+void FloatingTableButton::ShowAll(bool bShow) { Show(bShow); }
+
+bool FloatingTableButton::Contains(const Point& rDocPt) const
+{
+    ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
+    if (aRect.IsInside(rDocPt))
+        return true;
+
+    return false;
+}
+
+void FloatingTableButton::SetReadonly(bool bReadonly) { ShowAll(!bReadonly); }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

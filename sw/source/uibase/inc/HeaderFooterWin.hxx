@@ -12,6 +12,16 @@
 #include "FrameControl.hxx"
 #include <vcl/builder.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/timer.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+
+class SwFrameButtonPainter
+{
+public:
+
+    static void PaintButton(drawinglayer::primitive2d::Primitive2DContainer& rSeq,
+                            const tools::Rectangle& rRect, bool bOnTop);
+};
 
 /** Class for the header and footer separator control window.
 
