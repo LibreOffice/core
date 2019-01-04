@@ -20,19 +20,14 @@
 #define INCLUDED_SW_INC_UNOSTYLE_HXX
 
 #include <svl/style.hxx>
-#include <svl/lstner.hxx>
 #include "unocoll.hxx"
-#include "unomap.hxx"
+#include "tblafmt.hxx"
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/document/XEventsSupplier.hpp>
 #include "calbck.hxx"
 
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
@@ -43,17 +38,11 @@
 #include <memory>
 #include <map>
 
+namespace com { namespace sun { namespace star { namespace document { class XEventsSupplier; } } } }
+
 class SwDocShell;
-class SfxItemPropertySet;
-class SwXStyle;
-class SwStyleProperties_Impl;
 class SwAutoStylesEnumImpl;
-class IStyleAccess;
 class SfxItemSet;
-namespace sw
-{
-    class XStyleFamily;
-};
 
 class SwXStyleFamilies :  public cppu::WeakImplHelper
 <
@@ -240,7 +229,6 @@ protected:
 
 };
 
-class SwTableAutoFormat;
 typedef std::map<OUString, sal_Int32> CellStyleNameMap;
 
 /// A text table style is a uno api wrapper for a SwTableAutoFormat
@@ -336,7 +324,6 @@ public:
     static css::uno::Reference<css::style::XStyle> CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
 };
 
-class SwBoxAutoFormat;
 /// A text cell style is a uno api wrapper for a SwBoxAutoFormat core class
 class SwXTextCellStyle : public cppu::WeakImplHelper
 <

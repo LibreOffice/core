@@ -41,12 +41,6 @@ blacklist:
     - utility
     sw/inc/shellid.hxx:
     - sfx2/shell.hxx
-    sw/inc/unosett.hxx:
-    # sw::UnoImplPtr typedef
-    - unobaseclass.hxx
-    sw/inc/unotxdoc.hxx:
-    # sw::UnoImplPtr typedef
-    - unobaseclass.hxx
     sw/inc/breakit.hxx:
     # std::unique_ptr dtor requires complete type
     - com/sun/star/i18n/ForbiddenCharacters.hpp
@@ -242,3 +236,26 @@ blacklist:
     - vector
     sw/inc/shellio.hxx:
     - o3tl/deleter.hxx
+    sw/inc/unostyle.hxx:
+    # Base class needs complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/style/XAutoStyle.hpp
+    - com/sun/star/style/XAutoStyleFamily.hpp
+    - com/sun/star/style/XAutoStyles.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/style/XStyle.hpp
+    - com/sun/star/style/XStyleLoader.hpp
+    sw/inc/unotextrange.hxx:
+    # Base class needs complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/container/XIndexAccess.hpp
+    - com/sun/star/container/XEnumerationAccess.hpp
+    - com/sun/star/container/XContentEnumerationAccess.hpp
+    - com/sun/star/text/XTextRange.hpp
+    - com/sun/star/text/XRedline.hpp
+    # sw::UnoImplPtr typedef
+    - unobaseclass.hxx

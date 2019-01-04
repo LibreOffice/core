@@ -21,5 +21,6 @@
 #include <svx/svxids.hrc>
 #include "globals.hrc"
 #include "cmdid.h"
+#include "unomid.h"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

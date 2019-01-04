@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <svl/urihelper.hxx>

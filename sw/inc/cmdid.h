@@ -21,7 +21,7 @@
 #define INCLUDED_SW_INC_CMDID_H
 
 #include <sfx2/sfxsids.hrc>
-#include "unomid.h"
+#include <svl/solar.hrc>
 
 #define FN_FILE                 SID_SW_START
 #define FN_EDIT                 (SID_SW_START +  100)

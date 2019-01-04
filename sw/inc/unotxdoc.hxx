@@ -55,7 +55,6 @@
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
 #include <svx/fmdmod.hxx>
@@ -85,6 +84,8 @@ class SfxItemPropertySet;
 namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
 namespace com { namespace sun { namespace star { namespace frame { class XController; } } } }
 namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XAggregation; } } } }
+
 namespace com { namespace sun { namespace star { namespace util { class XReplaceDescriptor; } } } }
 
 typedef cppu::WeakImplHelper

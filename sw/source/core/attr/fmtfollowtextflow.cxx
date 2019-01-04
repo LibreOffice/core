@@ -20,6 +20,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <unomid.h>
 
+#include <sal/log.hxx>
 
 
 SfxPoolItem*    SwFormatFollowTextFlow::Clone( SfxItemPool * ) const

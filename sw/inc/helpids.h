@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SW_INC_HELPIDS_H
 #define INCLUDED_SW_INC_HELPIDS_H
 
-#include "swcommands.h"
-#include <svx/svxcommands.h>
-
 #define HID_EDIT_WIN                                            "SW_HID_EDIT_WIN"
 
 #define HID_NAVI_DRAG_HYP                                       "SW_HID_NAVI_DRAG_HYP"

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_INC_SWERROR_H
 #define INCLUDED_SW_INC_SWERROR_H
 
-#include <vcl/errcode.hxx>
-
 // Import & Export
 #define ERR_SWG_FILE_FORMAT_ERROR       ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 1 )
 #define ERR_SWG_READ_ERROR              ErrCode(ErrCodeArea::Sw, ErrCodeClass::Read, 2 )
