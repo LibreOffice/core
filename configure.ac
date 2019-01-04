@@ -2862,17 +2862,15 @@ dnl ===================================================================
 
 if test $_os = iOS; then
     AC_MSG_CHECKING([what iOS SDK to use])
-    current_sdk_ver=12.1
+    current_sdks_ver="12.1 11.2"
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
-        versionmin=-mios-simulator-version-min=$current_sdk_ver
     else
         platform=iPhoneOS
-        versionmin=-miphoneos-version-min=11.0
     fi
     xcode_developer=`xcode-select -print-path`
 
-    for sdkver in $current_sdk_ver; do
+    for sdkver in $current_sdks_ver; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
             ios_sdk=$sdkver
@@ -2881,14 +2879,20 @@ if test $_os = iOS; then
         fi
     done
 
+    if test "$enable_ios_simulator" = "yes"; then
+        versionmin=-mios-simulator-version-min=$ios_sdk
+    else
+        versionmin=-miphoneos-version-min=11.0
+    fi
+
     if test -z "$sysroot"; then
-        AC_MSG_ERROR([Could not find iOS SDK, expected something like $xcode_developer/Platforms/$platform.platform/Developer/SDKs/${platform}${current_sdk_ver}.sdk])
+        AC_MSG_ERROR([Could not find iOS SDK, expected something like $xcode_developer/Platforms/$platform.platform/Developer/SDKs/${platform}(${current_sdks_ver}).sdk])
     fi
 
     AC_MSG_RESULT($sysroot)
 
     IOS_SDK=`echo $platform | tr A-Z a-z`$ios_sdk
-    IOS_DEPLOYMENT_VERSION=$current_sdk_ver
+    IOS_DEPLOYMENT_VERSION=$ios_sdk
 
     # LTO is not really recommended for iOS builds,
     # the link time will be astronomical
