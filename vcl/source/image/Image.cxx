@@ -129,7 +129,6 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
     if (!mpImplData || (!pOutDev->IsDeviceOutputNecessary() && pOutDev->GetConnectMetaFile() == nullptr))
         return;
 
-    const Point aSrcPos(0, 0);
     Size aBitmapSizePixel = mpImplData->getSizePixel();
 
     Size aOutSize = pSize ? *pSize : pOutDev->PixelToLogic(aBitmapSizePixel);
