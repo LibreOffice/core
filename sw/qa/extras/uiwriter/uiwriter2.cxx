@@ -11,20 +11,36 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
+#include <redline.hxx>
+#include <flyfrms.hxx>
+#include <UndoManager.hxx>
+#include <edtwin.hxx>
+#include <view.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <FrameControlsManager.hxx>
+#include <FloatingTableButton.hxx>
 
 namespace
 {
 char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data2/";
-}
+char const FLOATING_TABLE_DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data/floating_table/";
+} // namespace
 
 /// Second set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest2 : public SwModelTestBase
 {
 public:
     void testTdf101534();
+    void testUnfloatButtonSmallTable();
+    void testUnfloatButton();
+    void testUnfloatButtonReadOnlyMode();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testTdf101534);
+    CPPUNIT_TEST(testUnfloatButtonSmallTable);
+    CPPUNIT_TEST(testUnfloatButton);
+    CPPUNIT_TEST(testUnfloatButtonReadOnlyMode);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -53,6 +69,106 @@ void SwUiWriterTest2::testTdf101534()
     pWrtShell->GetCurAttr(aSet);
     // This failed, direct formatting was lost.
     CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
+}
+
+void SwUiWriterTest2::testUnfloatButtonSmallTable()
+{
+    // The floating table in the test document is too small, so we don't provide an unfloat button
+    load(FLOATING_TABLE_DATA_DIRECTORY, "small_floating_table.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    const SwSortedObjs* pAnchored
+        = pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs();
+    CPPUNIT_ASSERT(pAnchored);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnchored->size());
+    SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
+
+    SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+    CPPUNIT_ASSERT(pFlyFrame);
+    CPPUNIT_ASSERT(!pFlyFrame->IsShowUnfloatButton(pWrtShell));
+
+    SdrObject* pObj = pFlyFrame->GetFormat()->FindRealSdrObject();
+    CPPUNIT_ASSERT(pObj);
+    pWrtShell->SelectObj(Point(), 0, pObj);
+    CPPUNIT_ASSERT(!pFlyFrame->IsShowUnfloatButton(pWrtShell));
+}
+
+void SwUiWriterTest2::testUnfloatButton()
+{
+    // Different use cases where unfloat button should be visible
+    const std::vector<OUString> aTestFiles = {
+        "unfloatable_floating_table.odt", // Typical use case of multipage floating table
+        "unfloatable_floating_table.docx", // Need to test the DOCX import whether we detect the floating table correctly
+        "unfloatable_floating_table.doc", // Also the DOC import
+        "unfloatable_small_floating_table.docx" // Atypical use case, when the table is small, but because of it's position is it broken to two pages
+    };
+
+    for (const OUString& aTestFile : aTestFiles)
+    {
+        OString sTestFileName = OUStringToOString(aTestFile, RTL_TEXTENCODING_UTF8);
+        OString sFailureMessage = OString("Failure in the test file: ") + sTestFileName;
+
+        load(FLOATING_TABLE_DATA_DIRECTORY, sTestFileName.getStr());
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pTextDoc);
+        SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pWrtShell);
+
+        const SwSortedObjs* pAnchored;
+        if (sTestFileName == "unfloatable_small_floating_table.docx")
+            pAnchored = pWrtShell->GetLayout()
+                            ->GetLower()
+                            ->GetLower()
+                            ->GetLower()
+                            ->GetNext()
+                            ->GetDrawObjs();
+        else
+            pAnchored = pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs();
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pAnchored);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailureMessage.getStr(), static_cast<size_t>(1),
+                                     pAnchored->size());
+        SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
+
+        // The unfloat button is not visible until it gets selected
+        SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pFlyFrame);
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(),
+                               !pFlyFrame->IsShowUnfloatButton(pWrtShell));
+
+        SdrObject* pObj = pFlyFrame->GetFormat()->FindRealSdrObject();
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pObj);
+        pWrtShell->SelectObj(Point(), 0, pObj);
+        CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pFlyFrame->IsShowUnfloatButton(pWrtShell));
+    }
+}
+
+void SwUiWriterTest2::testUnfloatButtonReadOnlyMode()
+{
+    // In read only mode we don't show the unfloat button even if we have a multipage floating table
+    load(FLOATING_TABLE_DATA_DIRECTORY, "unfloatable_floating_table.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    pWrtShell->SetReadonlyOption(true);
+
+    const SwSortedObjs* pAnchored
+        = pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower()->GetDrawObjs();
+    CPPUNIT_ASSERT(pAnchored);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnchored->size());
+    SwAnchoredObject* pAnchoredObj = (*pAnchored)[0];
+
+    SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+    CPPUNIT_ASSERT(pFlyFrame);
+    CPPUNIT_ASSERT(!pFlyFrame->IsShowUnfloatButton(pWrtShell));
+
+    SdrObject* pObj = pFlyFrame->GetFormat()->FindRealSdrObject();
+    CPPUNIT_ASSERT(pObj);
+    pWrtShell->SelectObj(Point(), 0, pObj);
+    CPPUNIT_ASSERT(!pFlyFrame->IsShowUnfloatButton(pWrtShell));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);

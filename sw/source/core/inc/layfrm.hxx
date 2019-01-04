@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_LAYFRM_HXX
 
 #include "frame.hxx"
+#include <swdllapi.h>
 
 class SwAnchoredObject;
 class SwContentFrame;
@@ -31,7 +32,7 @@ class SwBorderAttrs;
 class SwFormatFrameSize;
 class SwCellFrame;
 
-class SwLayoutFrame: public SwFrame
+class SW_DLLPUBLIC SwLayoutFrame: public SwFrame
 {
     // The SwFrame in disguise
     friend class SwFlowFrame;
