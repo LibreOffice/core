@@ -548,29 +548,37 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if(!xCursor.is())
                 return;
 
+            xCursor->jumpToLastPage();
+            sal_Int16 nPages = xCursor->getPage();
+
             uno::Reference< lang::XComponent > xSourceDoc( xModel );
             DocumentToGraphicRenderer aRenderer(xSourceDoc, /*bSelectionOnly=*/false);
 
-            // Only take the first page for now
-            sal_Int16 nPage = 1;
+            std::vector< GDIMetaFile > aMetaFiles;
 
-            ::Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
-            ::Point aLogicPos;
-            ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos);
-            // FIXME: This is a temporary hack. Need to figure out a proper way to derive this scale factor.
-            ::Size aTargetSize(aDocumentSizePixel.Width() * 1.23, aDocumentSizePixel.Height() * 1.23);
+            for (sal_Int32 nPage = 1; nPage <= nPages; ++nPage)
+            {
+                ::Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nPage);
+                ::Point aLogicPos;
+                ::Size aLogic = aRenderer.getDocumentSizeIn100mm(nPage, &aLogicPos);
+                // FIXME: This is a temporary hack. Need to figure out a proper way to derive this scale factor.
+                ::Size aTargetSize(aDocumentSizePixel.Width() * 1.23, aDocumentSizePixel.Height() * 1.23);
 
-            Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aTargetSize, COL_TRANSPARENT,
-                                                         /*bExtOutDevData=*/true);
-            auto& rGDIMetaFile = const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile());
+                Graphic aGraphic = aRenderer.renderToGraphic(nPage, aDocumentSizePixel, aTargetSize, COL_TRANSPARENT,
+                                                             true);
+                auto& rGDIMetaFile = const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile());
 
-            // Set preferred map unit and size on the metafile, so the Shape size
-            // will be correct in MM.
-            MapMode aMapMode;
-            aMapMode.SetMapUnit(MapUnit::Map100thMM);
-            aMapMode.SetOrigin(::Point(-aLogicPos.getX(), -aLogicPos.getY()));
-            rGDIMetaFile.SetPrefMapMode(aMapMode);
-            rGDIMetaFile.SetPrefSize(aLogic);
+                // Set preferred map unit and size on the metafile, so the Shape size
+                // will be correct in MM.
+                MapMode aMapMode;
+                aMapMode.SetMapUnit(MapUnit::Map100thMM);
+                // FIXME: This is a temporary hack. Need to figure out a proper way to derive these magic numbers.
+                aMapMode.SetOrigin(::Point(-(aLogicPos.getX() - 512) * 1.53, -((aLogicPos.getY() - 501)* 1.53 + (nPage-1)*740 )));
+                rGDIMetaFile.SetPrefMapMode(aMapMode);
+                rGDIMetaFile.SetPrefSize(aLogic);
+
+                aMetaFiles.push_back(rGDIMetaFile);
+            }
 
             // Create an empty Draw component.
             uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
@@ -580,21 +588,32 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // Access the draw pages
             uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
             uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
-            uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
 
-            uno::Reference<graphic::XGraphic> xGraph = aGraphic.GetXGraphic();
-
-            // Create and insert the shape
             uno::Reference<css::lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY);
-            uno::Reference<drawing::XShape> xShape(
-                    xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
-            xShapeProperySet->setPropertyValue("Graphic", uno::Any( xGraph ));
 
-            // Set size and position
-            xShape->setSize(awt::Size(rGDIMetaFile.GetPrefSize().Width(),rGDIMetaFile.GetPrefSize().Height()) );
+            for (sal_Int32 nPage = 0; nPage < nPages; ++nPage)
+            {
+                GDIMetaFile rGDIMetaFile = aMetaFiles[nPage];
+                Graphic aGraphic(rGDIMetaFile);
 
-            xPage->add(xShape);
+                uno::Reference<graphic::XGraphic> xGraph = aGraphic.GetXGraphic();
+                uno::Reference< drawing::XDrawPage > xPage = xDrawPages->insertNewByIndex(nPage);
+
+                // Create and insert the shape
+                uno::Reference<drawing::XShape> xShape(
+                        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xShapeProperySet(xShape, uno::UNO_QUERY);
+                xShapeProperySet->setPropertyValue("Graphic", uno::Any( xGraph ));
+
+                // Set size and position
+                xShape->setSize(awt::Size(rGDIMetaFile.GetPrefSize().Width(),rGDIMetaFile.GetPrefSize().Height()) );
+
+                xPage->add(xShape);
+            }
+
+            // Remove the extra page at the beginning
+            uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
+            xDrawPages->remove( xPage );
 
             return;
         }
@@ -692,6 +711,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         xParentWindow = xCtrl->getFrame()->getContainerWindow();
 
                     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+
                     uno::Reference< task::XInteractionHandler2 > xInteract(
                         task::InteractionHandler::createWithParent(xContext, xParentWindow) );
 
