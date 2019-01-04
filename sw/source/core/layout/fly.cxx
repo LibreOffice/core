@@ -1849,6 +1849,17 @@ bool SwFlyFrame::IsShowUnfloatButton(SwWrtShell* pWrtSh) const
     return nBodyHeight < nTableHeight + nFrameOffset;
 }
 
+void SwFlyFrame::ActiveUnfloatButton(SwWrtShell* pWrtSh)
+{
+    SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+    SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+    SwFrameControlPtr pControl = rMngr.GetControl(FloatingTable, this);
+    if (pControl.get() || pControl->GetWindow())
+    {
+        pControl->GetWindow()->MouseButtonDown(MouseEvent());
+    }
+}
+
 void SwFlyFrame::UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const
 {
     if (pWrtSh == nullptr)
