@@ -14,6 +14,12 @@
 #include <strings.hrc>
 #include <vcl/metric.hxx>
 #include <viewopt.hxx>
+#include <frame.hxx>
+#include <flyfrm.hxx>
+#include <tabfrm.hxx>
+#include <txtfrm.hxx>
+#include <ndindex.hxx>
+#include <swtable.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -21,6 +27,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <DocumentContentOperationsManager.hxx>
 
 #define TEXT_PADDING 3
 #define BOX_DISTANCE 3
@@ -58,7 +65,47 @@ void FloatingTableButton::SetOffset(Point aBottomRightPixel)
 
 void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
 {
-    // Move the table outside of the frame
+    assert(GetFrame()->IsFlyFrame());
+    // const_cast is needed because of bad design of ISwFrameControl and derived classes
+    SwFlyFrame* pFlyFrame = const_cast<SwFlyFrame*>(static_cast<const SwFlyFrame*>(GetFrame()));
+
+    // Find the table inside the text frame
+    SwTabFrame* pTableFrame = nullptr;
+    SwFrame* pLower = pFlyFrame->GetLower();
+    while (pLower)
+    {
+        if (pLower->IsTabFrame())
+        {
+            pTableFrame = static_cast<SwTabFrame*>(pLower);
+            break;
+        }
+        pLower = pLower->GetNext();
+    }
+
+    if (pTableFrame == nullptr)
+        return;
+
+    // Insert the table at the position of the text node which has the frame anchored to
+    SwFrame* pAnchoreFrame = pFlyFrame->AnchorFrame();
+    if (pAnchoreFrame == nullptr || !pAnchoreFrame->IsTextFrame())
+        return;
+
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pAnchoreFrame);
+    if (pTextFrame->GetTextNodeFirst() == nullptr)
+        return;
+
+    SwNodeIndex aInsertPos((*pTextFrame->GetTextNodeFirst()));
+
+    SwTableNode* pTableNode = pTableFrame->GetTable()->GetTableNode();
+    if (pTableNode == nullptr)
+        return;
+
+    SwNodeRange aRange(*pTableNode, 0, *pTableNode->EndOfSectionNode(), 1);
+    pTableNode->getIDocumentContentOperations().MoveNodeRange(aRange, aInsertPos,
+                                                              SwMoveFlags::DEFAULT);
+
+    // Remove the floating table's frame
+    SwFrame::DestroyFrame(pFlyFrame);
 }
 
 void FloatingTableButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
