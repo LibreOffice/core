@@ -54,6 +54,13 @@ DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
     CPPUNIT_ASSERT(headerIsOn);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf122460_header, "tdf122460_header.odt")
+{
+    uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
+    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName("Default Style"), uno::UNO_QUERY);
+    bool headerIsOn = getProperty<bool>(pageStyle, "HeaderIsOn");
+    CPPUNIT_ASSERT(headerIsOn);
+}
 
 DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
 {
