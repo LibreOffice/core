@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <vector>
+#include <swdllapi.h>
 
 class SwAnchoredObject;
 
@@ -45,7 +46,7 @@ class SwAnchoredObject;
     If one of the sort criteria attributes of an anchored object changes,
     the sorting has to be updated - use method <Update(..)>
 */
-class SwSortedObjs
+class SW_DLLPUBLIC SwSortedObjs
 {
     private:
         std::vector< SwAnchoredObject* > maSortedObjLst;
