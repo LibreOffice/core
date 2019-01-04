@@ -41,6 +41,7 @@
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
+#include <vcl/commandevent.hxx>
 
 void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 {
@@ -449,6 +450,10 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
     {
         aInputEvent.maText = toOUString(pEvent->preeditString());
         aInputEvent.mnCursorPos = 0;
+        sal_Int32 nLength = aInputEvent.maText.getLength();
+        std::vector<ExtTextInputAttr> aTextAttrs(nLength, ExtTextInputAttr::Underline);
+        if (nLength)
+            aInputEvent.mpTextAttr = &aTextAttrs[0];
         m_pFrame->CallCallback(SalEvent::ExtTextInput, &aInputEvent);
         pEvent->accept();
     }
