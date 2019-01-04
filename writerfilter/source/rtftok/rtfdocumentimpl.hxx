@@ -720,6 +720,10 @@ private:
 
     /// Are we after a \cell, but before a \row?
     bool m_bAfterCellBeforeRow;
+    /// cells in row, to ignore extra text content of the row
+    int m_nCellsInRow;
+    /// actual cell in row
+    int m_nActualCellInRow;
 };
 } // namespace rtftok
 } // namespace writerfilter
