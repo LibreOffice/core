@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="SlideDesignDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="slidedesigndialog|SlideDesignDialog">Slide Design</property>
+    <property name="title" translatable="yes" context="slidedesigndialog|SlideDesignDialog">Available Master Slides</property>
     <property name="modal">True</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>

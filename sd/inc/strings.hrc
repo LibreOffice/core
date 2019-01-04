@@ -151,7 +151,7 @@
 #define STR_INSERT_TEXT                                 NC_("STR_INSERT_TEXT", "Insert Text")
 #define STR_SLIDE_SINGULAR                              NC_("STR_SLIDE_SINGULAR", " Slide")
 #define STR_SLIDE_PLURAL                                NC_("STR_SLIDE_PLURAL", " Slides")
-#define STR_LOAD_PRESENTATION_LAYOUT                    NC_("STR_LOAD_PRESENTATION_LAYOUT", "Load Slide Design")
+#define STR_LOAD_PRESENTATION_LAYOUT                    NC_("STR_LOAD_PRESENTATION_LAYOUT", "Load Master Slide")
 #define STR_DRAGTYPE_URL                                NC_("STR_DRAGTYPE_URL", "Insert as Hyperlink")
 #define STR_DRAGTYPE_EMBEDDED                           NC_("STR_DRAGTYPE_EMBEDDED", "Insert as Copy")
 #define STR_DRAGTYPE_LINK                               NC_("STR_DRAGTYPE_LINK", "Insert as Link")
