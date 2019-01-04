@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_ab3a24e4",
+        "filename": "offapi/com/sun/star/document/Settings.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-04T15:30:19Z",
+      "side": 1,
+      "message": "it looks odd that this and the following properties are of type short not boolean; what is the meaning of the values?",
+      "revId": "eb6ff07605a55675e7007ac0cb5604fb13a9ddf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
