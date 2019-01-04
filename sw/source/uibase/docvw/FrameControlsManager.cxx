@@ -11,7 +11,9 @@
 #include <FrameControlsManager.hxx>
 #include <HeaderFooterWin.hxx>
 #include <PageBreakWin.hxx>
+#include <FloatingTableButton.hxx>
 #include <pagefrm.hxx>
+#include <flyfrm.hxx>
 #include <viewopt.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -153,6 +155,39 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
         pControl->ShowAll( true );
 }
 
+void SwFrameControlsManager::SetFloatingTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aBottomRightPixel )
+{
+    if(pFlyFrame == nullptr)
+        return;
+
+    // Check if we already have the control
+    SwFrameControlPtr pControl;
+
+    SwFrameControlPtrMap& rControls = m_aControls[FloatingTable];
+
+    SwFrameControlPtrMap::iterator lb = rControls.lower_bound(pFlyFrame);
+    if (lb != rControls.end() && !(rControls.key_comp()(pFlyFrame, lb->first)))
+        pControl = lb->second;
+    else if (!bShow) // Do not create the control when it's not shown
+        return;
+    else
+    {
+        SwFrameControlPtr pNewControl( new SwFrameControl(
+                VclPtr<FloatingTableButton>::Create( m_pEditWin, pFlyFrame ).get() ) );
+        const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
+        pNewControl->SetReadonly( pViewOpt->IsReadonly() );
+
+        rControls.insert(lb, make_pair(pFlyFrame, pNewControl));
+
+        pControl.swap( pNewControl );
+    }
+
+    FloatingTableButton* pButton = dynamic_cast<FloatingTableButton*>(pControl->GetWindow());
+    assert(pButton != nullptr);
+    pButton->SetOffset(aBottomRightPixel);
+    pControl->ShowAll( bShow );
+}
+
 SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame* pFrame ) :
     MenuButton( pEditWin, WB_DIALOGCONTROL ),
     m_pEditWin( pEditWin ),
@@ -162,7 +197,13 @@ SwFrameMenuButtonBase::SwFrameMenuButtonBase( SwEditWin* pEditWin, const SwFrame
 
 const SwPageFrame* SwFrameMenuButtonBase::GetPageFrame()
 {
-    return static_cast< const SwPageFrame * >( m_pFrame );
+    if (m_pFrame->IsPageFrame())
+        return static_cast<const SwPageFrame*>( m_pFrame );
+
+    if (m_pFrame->IsFlyFrame())
+        return static_cast<const SwFlyFrame*>(m_pFrame)->GetAnchorFrame()->FindPageFrame();
+
+    return m_pFrame->FindPageFrame();
 }
 
 void SwFrameMenuButtonBase::dispose()
