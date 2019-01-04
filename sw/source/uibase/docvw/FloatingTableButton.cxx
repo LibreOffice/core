@@ -113,7 +113,7 @@ void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
 
     rDoc.getIDocumentState().SetModified();
 
-    // Undoing MoveNodeRange() is not working correctly in case of tables, it crashes some times
+    // Undoing MoveNodeRange() is not working correctly in case of tables, it crashes sometimes
     // So don't allow to undo after unfloating (similar to MakeFlyAndMove() method)
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
