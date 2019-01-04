@@ -282,7 +282,7 @@
                             <child>
                               <object class="GtkDrawingArea" id="CTL_ANGLE">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                                 <property name="tooltip_text" translatable="yes" context="rotationtabpage|CTL_ANGLE|tooltip_text">Rotation Angle</property>
                               </object>
