@@ -277,10 +277,10 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
 IMPL_LINK_NOARG(SchAxisLabelTabPage, StackedToggleHdl, weld::ToggleButton&, void)
 {
     bool bActive = m_xCbStacked->get_active() && m_xCbStacked->get_sensitive();
-    m_xNfRotate->set_sensitive(bActive);
-    m_xCtrlDial->set_sensitive(bActive);
+    m_xNfRotate->set_sensitive(!bActive);
+    m_xCtrlDial->set_sensitive(!bActive);
     m_aCtrlDial.StyleUpdated();
-    m_xFtRotate->set_sensitive(bActive);
+    m_xFtRotate->set_sensitive(!bActive);
 }
 
 IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel, weld::ToggleButton&, void)
