@@ -75,6 +75,7 @@ public:
     void testChartHatchFillXLSX();
     void testAxisTextRotationXLSX();
     // void testTextCanOverlapXLSX(); // TODO : temporarily disabled.
+    void testTextBreakXLSX();
     void testNumberFormatsXLSX();
 
     void testTransparentBackground(OUString const & filename);
@@ -158,6 +159,7 @@ public:
     CPPUNIT_TEST(testChartHatchFillXLSX);
     CPPUNIT_TEST(testAxisTextRotationXLSX);
     // CPPUNIT_TEST(testTextCanOverlapXLSX); // TODO : temporarily disabled.
+    CPPUNIT_TEST(testTextBreakXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2007XLSX);
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2013XLSX);
@@ -1012,6 +1014,25 @@ void Chart2ImportTest::testTextCanOverlapXLSX()
     CPPUNIT_ASSERT(bTextCanOverlap);
 }
 */
+
+void Chart2ImportTest::testTextBreakXLSX()
+{
+    // tdf#122091: To check textbreak value is true in case of 0° degree of Axis label rotation.
+    load("/chart2/qa/extras/data/xlsx/", "chart_label_text_break.xlsx");
+    uno::Reference< chart::XDiagram > mxDiagram;
+    uno::Reference< beans::XPropertySet > xAxisProp;
+    bool textBreak = false;
+    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    mxDiagram.set(xChartDoc->getDiagram());
+    CPPUNIT_ASSERT(mxDiagram.is());
+    uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xAxisXSupp.is());
+    xAxisProp = xAxisXSupp->getXAxis();
+    xAxisProp->getPropertyValue("TextBreak") >>= textBreak;
+    // Expected value of 'TextBreak' is true
+    CPPUNIT_ASSERT(textBreak);
+}
 
 void Chart2ImportTest::testNumberFormatsXLSX()
 {
