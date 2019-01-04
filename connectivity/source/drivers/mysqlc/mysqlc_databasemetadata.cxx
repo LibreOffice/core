@@ -952,7 +952,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
         // delete rule
         aRow.push_back(makeAny(xRow->getShort(8)));
         // foreign key name
-        aRow.push_back(makeAny(xRow->getShort(9)));
+        aRow.push_back(makeAny(xRow->getString(9)));
         // primary key name
         aRow.push_back(makeAny(OUString{})); // TODO
         // deferrability
