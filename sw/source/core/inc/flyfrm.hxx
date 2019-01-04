@@ -24,6 +24,7 @@
 #include <vector>
 #include <frmfmt.hxx>
 #include <anchoredobject.hxx>
+#include <swdllapi.h>
 
 class SwPageFrame;
 class SwFormatFrameSize;
@@ -57,7 +58,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove = true );
 
     #i26791# - inherit also from <SwAnchoredFlyFrame>
 */
-class SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
+class SW_DLLPUBLIC SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
 {
     // is allowed to lock, implemented in frmtool.cxx
     friend void AppendObjs   ( const SwFrameFormats *, sal_uLong, SwFrame *, SwPageFrame *, SwDoc* );
@@ -270,9 +271,9 @@ public:
     void InvalidateContentPos();
 
     void SelectionHasChanged(SwFEShell* pShell);
+    bool IsShowUnfloatButton(SwWrtShell* pWrtSh) const;
 
 private:
-    bool IsShowUnfloatButton(SwWrtShell* pWrtSh) const;
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
     void PaintDecorators() const;
 };
