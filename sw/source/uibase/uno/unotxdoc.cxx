@@ -2802,6 +2802,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         }
 
         awt::Size aPageSize;
+        awt::Point aPagePos;
         awt::Size aPreferredPageSize;
         Size aTmpSize;
         if (bIsSwSrcView || bPrintProspect)
@@ -2858,14 +2859,18 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
             aPageSize = awt::Size ( convertTwipToMm100( aTmpSize.Width() ),
                                     convertTwipToMm100( aTmpSize.Height() ));
+            Point aPoint = pVwSh->GetPagePos(nPage);
+            aPagePos = awt::Point(convertTwipToMm100(aPoint.X()), convertTwipToMm100(aPoint.Y()));
         }
 
-        sal_Int32 nLen = 2;
-        aRenderer.realloc(2);
+        sal_Int32 nLen = 3;
+        aRenderer.realloc(3);
         aRenderer[0].Name  = "PageSize";
         aRenderer[0].Value <<= aPageSize;
         aRenderer[1].Name  = "PageIncludesNonprintableArea";
         aRenderer[1].Value <<= true;
+        aRenderer[2].Name = "PagePos";
+        aRenderer[2].Value <<= aPagePos;
         if (aPreferredPageSize.Width && aPreferredPageSize.Height)
         {
             ++nLen;
