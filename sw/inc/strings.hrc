@@ -1189,6 +1189,8 @@
 #define STR_DELETE_FOOTER                       NC_("STR_DELETE_FOOTER", "Delete Footer...")
 #define STR_FORMAT_FOOTER                       NC_("STR_FORMAT_FOOTER", "Format Footer...")
 
+#define STR_UNFLOAT_TABLE                       NC_("STR_UNFLOAT_TABLE", "Un-float Table")
+
 #define STR_GRFILTER_OPENERROR                  NC_("STR_GRFILTER_OPENERROR", "Image file cannot be opened")
 #define STR_GRFILTER_IOERROR                    NC_("STR_GRFILTER_IOERROR", "Image file cannot be read")
 #define STR_GRFILTER_FORMATERROR                NC_("STR_GRFILTER_FORMATERROR", "Unknown image format")
