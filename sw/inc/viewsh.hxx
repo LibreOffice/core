@@ -72,7 +72,6 @@ namespace vcl
 {
     typedef OutputDevice RenderContext;
 }
-namespace weld { class Dialog; }
 
 // Define for flags needed in ctor or layers below.
 // Currently the Preview flag is needed for DrawPage.

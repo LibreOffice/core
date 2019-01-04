@@ -21,6 +21,7 @@
 #include <editeng/memberids.h>
 #include <swtypes.hxx>
 #include <cmdid.h>
+#include <unomid.h>
 #include <hintids.hxx>
 #include <strings.hrc>
 #include <poolfmt.hxx>

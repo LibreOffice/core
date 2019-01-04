@@ -21,11 +21,12 @@
 
 #include <config_features.h>
 
-#include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/cursor.hxx>
 #include "swcrsr.hxx"
 #include "swrect.hxx"
 #include "swregion.hxx"
+
+namespace sdr { namespace overlay { class OverlayObject; } }
 
 class SwCursorShell;
 class SfxViewShell;

@@ -22,6 +22,7 @@
 #include <unodraw.hxx>
 #include <unotextrange.hxx>
 #include <cmdid.h>
+#include <unomid.h>
 #include <unoprnms.hxx>
 #include <mvsave.hxx>
 #include <fmtsrnd.hxx>

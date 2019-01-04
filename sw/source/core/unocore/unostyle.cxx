@@ -44,6 +44,8 @@
 #include <docary.hxx>
 #include <charfmt.hxx>
 #include <cmdid.h>
+#include <unomid.h>
+#include <unomap.hxx>
 #include <unostyle.hxx>
 #include <unosett.hxx>
 #include <docsh.hxx>
@@ -69,6 +71,7 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #include <istyleaccess.hxx>
 #include <GetMetricVal.hxx>
 #include <fmtfsize.hxx>
@@ -100,6 +103,9 @@
 #include <memory>
 #include <set>
 #include <limits>
+
+class SwXStyle;
+class SwStyleProperties_Impl;
 
 namespace
 {

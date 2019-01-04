@@ -24,8 +24,6 @@
 #include <vcl/commandevent.hxx>
 #include <vector>
 
-class CommandExtTextInputData;
-
 class SwExtTextInput : public SwPaM
 {
     std::vector<ExtTextInputAttr> aAttrs;

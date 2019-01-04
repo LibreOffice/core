@@ -43,6 +43,7 @@
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 #include <vector>

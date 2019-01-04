@@ -21,6 +21,7 @@
 
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>

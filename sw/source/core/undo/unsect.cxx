@@ -20,6 +20,7 @@
 #include <memory>
 #include <UndoSection.hxx>
 
+#include <osl/diagnose.h>
 #include <sfx2/linkmgr.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>

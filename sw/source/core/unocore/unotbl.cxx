@@ -30,6 +30,8 @@
 #include <float.h>
 #include <swtypes.hxx>
 #include <cmdid.h>
+#include <unomid.h>
+#include <unomap.hxx>
 #include <unotbl.hxx>
 #include <unostyle.hxx>
 #include <section.hxx>

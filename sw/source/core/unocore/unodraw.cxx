@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 
 #include <cmdid.h>
+#include <unomid.h>
 
 #include <drawdoc.hxx>
 #include <unodraw.hxx>

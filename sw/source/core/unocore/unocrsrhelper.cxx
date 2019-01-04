@@ -37,6 +37,7 @@
 #include <unodraw.hxx>
 #include <unofootnote.hxx>
 #include <unobookmark.hxx>
+#include <unomap.hxx>
 #include <unorefmark.hxx>
 #include <unostyle.hxx>
 #include <unoidx.hxx>
