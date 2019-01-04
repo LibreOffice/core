@@ -69,7 +69,7 @@ public:
 
     Size getDocumentSizeInPixels( sal_Int32 nCurrentPage );
 
-    Size getDocumentSizeIn100mm( sal_Int32 nCurrentPage );
+    Size getDocumentSizeIn100mm(sal_Int32 nCurrentPage, Point* pDocumentPosition = nullptr);
 
     Graphic renderToGraphic( sal_Int32 nCurrentPage, Size aDocumentSizePixel,
                             Size aTargetSizePixel, Color aPageColor);
