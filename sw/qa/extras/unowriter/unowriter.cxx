@@ -15,6 +15,12 @@
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
 
+#include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/awt/XToolkit.hpp>
+#include <comphelper/propertyvalue.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <ndtxt.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -318,6 +324,47 @@ DECLARE_UNOAPI_TEST(testXURI)
     CPPUNIT_ASSERT_THROW_MESSAGE("We expect an exception on invalid URI",
                                  rdf::URI::createNS(xContext, OUString(), OUString()),
                                  lang::IllegalArgumentException);
+}
+
+DECLARE_UNOAPI_TEST_FILE(testRenderablePagePosition, "renderable-page-position.odt")
+{
+    // Make sure that the document has 2 pages.
+    uno::Reference<view::XRenderable> xRenderable(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Any aSelection = uno::makeAny(mxComponent);
+
+    uno::Reference<awt::XToolkit> xToolkit = VCLUnoHelper::CreateToolkit();
+    uno::Reference<awt::XDevice> xDevice(xToolkit->createScreenCompatibleDevice(32, 32));
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XController> xController = xModel->getCurrentController();
+
+    beans::PropertyValues aRenderOptions = {
+        comphelper::makePropertyValue("IsPrinter", true),
+        comphelper::makePropertyValue("RenderDevice", xDevice),
+        comphelper::makePropertyValue("View", xController),
+        comphelper::makePropertyValue("RenderToGraphic", true),
+    };
+
+    sal_Int32 nPages = xRenderable->getRendererCount(aSelection, aRenderOptions);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), nPages);
+
+    // Make sure that the first page has some offset.
+    comphelper::SequenceAsHashMap aRenderer1(
+        xRenderable->getRenderer(0, aSelection, aRenderOptions));
+    // Without the accompanying fix in place, this test would have failed: i.e.
+    // there was no PagePos key in this map.
+    awt::Point aPosition1 = aRenderer1["PagePos"].get<awt::Point>();
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aPosition1.X);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aPosition1.Y);
+
+    // Make sure that the second page is below the first one.
+    comphelper::SequenceAsHashMap aRenderer2(
+        xRenderable->getRenderer(1, aSelection, aRenderOptions));
+    awt::Point aPosition2 = aRenderer2["PagePos"].get<awt::Point>();
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aPosition2.X);
+    CPPUNIT_ASSERT_GREATER(aPosition1.Y, aPosition2.Y);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
