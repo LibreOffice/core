@@ -270,19 +270,19 @@ published service Settings
 
         @since LibreOffice 6.2
      */
-    [optional, property] short EmbedLatinScriptFonts;
+    [optional, property] boolean EmbedLatinScriptFonts;
 
     /** Whether to embed Asian script fonts.
 
         @since LibreOffice 6.2
      */
-    [optional, property] short EmbedAsianScriptFonts;
+    [optional, property] boolean EmbedAsianScriptFonts;
 
     /** Whether to embed Complex script fonts.
 
         @since LibreOffice 6.2
      */
-    [optional, property] short EmbedComplexScriptFonts;
+    [optional, property] boolean EmbedComplexScriptFonts;
 };
 
 
