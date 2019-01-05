@@ -10,17 +10,15 @@
 #include <charttest.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <editeng/unoprnms.hxx>
 #include <test/xmltesttools.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
 #include <fstream>
