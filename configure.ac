@@ -12619,8 +12619,8 @@ to install a pre-compiled binary make for Win32
 
  mkdir -p /opt/lo/bin
  cd /opt/lo/bin
- wget https://dev-www.libreoffice.org/bin/cygwin/make-85047eb-msvc.exe
- cp make-85047eb-msvc.exe make
+ wget https://dev-www.libreoffice.org/bin/cygwin/make-4.2.1-msvc.exe
+ cp make-4.2.1-msvc.exe make
  chmod +x make
 
 to install from source:
