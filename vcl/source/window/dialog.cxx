@@ -892,6 +892,19 @@ bool Dialog::ImplStartExecute()
             std::abort();
         }
 
+    if (bKitActive)
+    {
+        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("type", "dialog");
+            aItems.emplace_back("size", GetSizePixel().toString());
+            if (!GetText().isEmpty())
+                aItems.emplace_back("title", GetText().toUtf8());
+            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+        }
+    }
+
 #ifdef DBG_UTIL
         vcl::Window* pParent = GetParent();
         if ( pParent )
@@ -949,19 +962,6 @@ bool Dialog::ImplStartExecute()
         UITestLogger::getInstance().log("ModalDialogExecuted Id:" + get_id());
     else
         UITestLogger::getInstance().log("ModelessDialogExecuted Id:" + get_id());
-
-    if (bKitActive)
-    {
-        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        {
-            std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back("type", "dialog");
-            aItems.emplace_back("size", GetSizePixel().toString());
-            if (!GetText().isEmpty())
-                aItems.emplace_back("title", GetText().toUtf8());
-            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-        }
-    }
 
     return true;
 }
