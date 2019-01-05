@@ -24,7 +24,7 @@
 
 class SwPagePreviewPrtData
 {
-    sal_uLong nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
+    sal_uInt64 nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
             nHorzSpace, nVertSpace;
     sal_uInt8 nRow, nCol;
     bool bLandscape : 1;
@@ -35,23 +35,23 @@ public:
             bLandscape(false)
     {}
 
-    sal_uLong GetLeftSpace() const          { return nLeftSpace; }
-    void SetLeftSpace( sal_uLong n )        { nLeftSpace = n; }
+   sal_uInt64 GetLeftSpace() const          { return nLeftSpace; }
+    void SetLeftSpace( sal_uInt64 n )        { nLeftSpace = n; }
 
-    sal_uLong GetRightSpace() const         { return nRightSpace; }
-    void SetRightSpace( sal_uLong n )       { nRightSpace = n; }
+    sal_uInt64 GetRightSpace() const         { return nRightSpace; }
+    void SetRightSpace( sal_uInt64 n )       { nRightSpace = n; }
 
-    sal_uLong GetTopSpace() const           { return nTopSpace; }
-    void SetTopSpace( sal_uLong n )         { nTopSpace = n; }
+   sal_uInt64 GetTopSpace() const           { return nTopSpace; }
+    void SetTopSpace( sal_uInt64 n )         { nTopSpace = n; }
 
-    sal_uLong GetBottomSpace() const        { return nBottomSpace; }
-    void SetBottomSpace( sal_uLong n )      { nBottomSpace = n; }
+    sal_uInt64 GetBottomSpace() const        { return nBottomSpace; }
+    void SetBottomSpace(sal_uInt64 n )      { nBottomSpace = n; }
 
-    sal_uLong GetHorzSpace() const          { return nHorzSpace; }
-    void SetHorzSpace( sal_uLong n )        { nHorzSpace = n; }
+    sal_uInt64 GetHorzSpace() const          { return nHorzSpace; }
+    void SetHorzSpace( sal_uInt64 n )        { nHorzSpace = n; }
 
-    sal_uLong GetVertSpace() const          { return nVertSpace; }
-    void SetVertSpace( sal_uLong n )        { nVertSpace = n; }
+    sal_uInt64 GetVertSpace() const          { return nVertSpace; }
+    void SetVertSpace( sal_uInt64 n )        { nVertSpace = n; }
 
     sal_uInt8 GetRow() const                { return nRow; }
     void SetRow(sal_uInt8 n )               { nRow = n; }
@@ -60,7 +60,7 @@ public:
     void SetCol( sal_uInt8 n )              { nCol = n; }
 
     bool GetLandscape() const               { return bLandscape; }
-    void SetLandscape( bool b )         { bLandscape = b; }
+    void SetLandscape( bool b )             { bLandscape = b; }
 };
 
 #endif
