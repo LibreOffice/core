@@ -8,14 +8,7 @@
  */
 
 #include <charttest.hxx>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/chart2/CurveStyle.hpp>
-#include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart/XChartData.hpp>
-#include <com/sun/star/chart2/XInternalDataProvider.hpp>
-#include <com/sun/star/chart/XChartDataArray.hpp>
 
 #include <com/sun/star/qa/XDumper.hpp>
 
