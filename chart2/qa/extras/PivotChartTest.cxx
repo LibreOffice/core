@@ -19,22 +19,17 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/table/XTablePivotChart.hpp>
 #include <com/sun/star/table/XTablePivotCharts.hpp>
-#include <com/sun/star/table/XTablePivotChartsSupplier.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 
-#include <rtl/strbuf.hxx>
-
-#include <algorithm>
+namespace com { namespace sun { namespace star { namespace table { class XCellRange; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
 
 class PivotChartTest : public ChartTest
 {
