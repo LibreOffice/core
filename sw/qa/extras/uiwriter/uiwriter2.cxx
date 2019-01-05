@@ -671,7 +671,7 @@ void SwUiWriterTest2::testUnfloating()
     // Push the unfloat button
     pFlyFrame->ActiveUnfloatButton(pWrtShell);
 
-    // After unfloating we have two pages with one tablre frame on each page
+    // After unfloating we have two pages with one table frame on each page
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->GetLower()->GetNext());
     CPPUNIT_ASSERT_EQUAL(SwFrameType::Page,
                          pWrtShell->GetLayout()->GetLower()->GetNext()->GetType());
