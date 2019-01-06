@@ -971,8 +971,6 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+\t RectData: " << dx << "," << dy << " " << dw << "x" << dh);
                         startAngle = basegfx::deg2rad(startAngle);
                         sweepAngle = basegfx::deg2rad(sweepAngle);
-                        ::basegfx::B2DPoint mappedCenter(Map(dx + dw / 2, dy + dh / 2));
-                        ::basegfx::B2DSize mappedSize(MapSize(dw / 2, dh / 2));
                         float endAngle = startAngle + sweepAngle;
                         startAngle = fmodf(startAngle, static_cast<float>(M_PI * 2));
 
@@ -980,14 +978,12 @@ namespace emfplushelper
                         {
                             startAngle += static_cast<float>(M_PI * 2.0);
                         }
-
                         endAngle = fmodf(endAngle, static_cast<float>(M_PI * 2.0));
 
                         if (endAngle < 0.0)
                         {
                             endAngle += static_cast<float>(M_PI * 2.0);
                         }
-
                         if (sweepAngle < 0)
                         {
                             std::swap(endAngle, startAngle);
@@ -996,17 +992,18 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+\t adjusted angles: start " <<
                             basegfx::rad2deg(startAngle) << ", end: " << basegfx::rad2deg(endAngle) <<
                             " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
-
-                        ::basegfx::B2DPolygon polygon = basegfx::utils::createPolygonFromEllipseSegment(
-                            mappedCenter, mappedSize.getX(), mappedSize.getY(), startAngle, endAngle);
-
+                        const ::basegfx::B2DPoint centerPoint(dx + 0.5 * dw, dy + 0.5 * dh);
+                        ::basegfx::B2DPolygon polygon(
+                            ::basegfx::utils::createPolygonFromEllipseSegment(centerPoint,
+                                                                              0.5 * dw, 0.5 * dh,
+                                                                              startAngle, endAngle));
                         if (type != EmfPlusRecordTypeDrawArc)
                         {
-                            polygon.append(mappedCenter);
+                            polygon.append(centerPoint);
                             polygon.setClosed(true);
                         }
-
                         ::basegfx::B2DPolyPolygon polyPolygon(polygon);
+                        polyPolygon.transform(maMapTransform);
                         if (type == EmfPlusRecordTypeFillPie)
                             EMFPPlusFillPolygon(polyPolygon, flags & 0x8000, brushIndexOrColor);
                         else
@@ -1054,15 +1051,15 @@ namespace emfplushelper
                         float dx, dy, dw, dh;
                         ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
                         SAL_INFO("drawinglayer", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
-                        ::basegfx::B2DPoint mappedCenter(Map(dx + dw / 2, dy + dh / 2));
-                        ::basegfx::B2DSize mappedSize(MapSize(dw / 2, dh / 2));
                         ::basegfx::B2DPolyPolygon polyPolygon(
-                                ::basegfx::utils::createPolygonFromEllipse(mappedCenter, mappedSize.getX(), mappedSize.getY()));
-
+                            ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(dx + 0.5 * dw, dy + 0.5 * dh),
+                                                                       0.5 * dw, 0.5 * dh));
+                        polyPolygon.transform(maMapTransform);
                         if (type == EmfPlusRecordTypeFillEllipse)
                             EMFPPlusFillPolygon(polyPolygon, flags & 0x8000, brushIndexOrColor);
                         else
                             EMFPPlusDrawPolygon(polyPolygon, flags & 0xff);
+
                     }
                     break;
                     case EmfPlusRecordTypeFillRects:
@@ -1518,7 +1515,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeSetWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ SetWorldTransform, Post multiply: " << (flags & 0x2000));
+                        SAL_INFO("drawinglayer", "EMF+ SetWorldTransform, Post multiply: " << bool(flags & 0x2000));
                         readXForm(rMS, maWorldTransform);
                         mappingChanged();
                         SAL_INFO("drawinglayer", "EMF+\t: " << maWorldTransform);
@@ -1536,7 +1533,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeMultiplyWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ MultiplyWorldTransform, post multiply: " << (flags & 0x2000));
+                        SAL_INFO("drawinglayer", "EMF+ MultiplyWorldTransform, post multiply: " << bool(flags & 0x2000));
                         basegfx::B2DHomMatrix transform;
                         readXForm(rMS, transform);
 
@@ -1563,7 +1560,7 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeTranslateWorldTransform:
                     {
-                        SAL_INFO("drawinglayer", "EMF+ TranslateWorldTransform, Post multiply: " << (flags & 0x2000));
+                        SAL_INFO("drawinglayer", "EMF+ TranslateWorldTransform, Post multiply: " << bool(flags & 0x2000));
 
                         basegfx::B2DHomMatrix transform;
                         float eDx, eDy;
@@ -1601,7 +1598,7 @@ namespace emfplushelper
                         transform.set(1, 1, eSy);
 
                         SAL_INFO("drawinglayer", "EMF+ ScaleWorldTransform Sx: " << eSx <<
-                                 " Sy: " << eSy << ", Post multiply:" << (flags & 0x2000));
+                                 " Sy: " << eSy << ", Post multiply:" << bool(flags & 0x2000));
                         SAL_INFO("drawinglayer",
                                  "EMF+\t World transform matrix: " << maWorldTransform);
 
@@ -1630,7 +1627,7 @@ namespace emfplushelper
                         rMS.ReadFloat(eAngle);
 
                         SAL_INFO("drawinglayer", "EMF+ RotateWorldTransform Angle: " << eAngle <<
-                                 ", post multiply: " << (flags & 0x2000));
+                                 ", post multiply: " << bool(flags & 0x2000));
                         // Skipping flags & 0x2000
                         // For rotation transformation there is no difference between post and pre multiply
                         maWorldTransform.rotate(basegfx::deg2rad(eAngle));
