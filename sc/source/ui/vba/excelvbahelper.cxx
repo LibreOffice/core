@@ -357,20 +357,18 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                     sDocModuleNames.push_back( aName );
                 }
 
-                std::vector<OUString>::iterator it_end = sDocModuleNames.end();
-
-                for ( std::vector<OUString>::iterator it = sDocModuleNames.begin(); it != it_end; ++it )
+                for ( const auto& rName : sDocModuleNames )
                 {
                     script::ModuleInfo sModuleInfo;
 
-                    uno::Any aName= xVBACodeNamedObjectAccess->getByName( *it );
+                    uno::Any aName= xVBACodeNamedObjectAccess->getByName( rName );
                     sModuleInfo.ModuleObject.set( aName, uno::UNO_QUERY );
                     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
-                    xVBAModuleInfo->insertModuleInfo( *it, sModuleInfo );
-                    if( xLib->hasByName( *it ) )
-                        xLib->replaceByName( *it, uno::makeAny( OUString( "Option VBASupport 1\n") ) );
+                    xVBAModuleInfo->insertModuleInfo( rName, sModuleInfo );
+                    if( xLib->hasByName( rName ) )
+                        xLib->replaceByName( rName, uno::makeAny( OUString( "Option VBASupport 1\n") ) );
                     else
-                        xLib->insertByName( *it, uno::makeAny( OUString( "Option VBASupport 1\n" ) ) );
+                        xLib->insertByName( rName, uno::makeAny( OUString( "Option VBASupport 1\n" ) ) );
                 }
             }
         }

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/sequence.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -1529,14 +1530,10 @@ Sequence< OUString > SAL_CALL ScExternalDocLinkObj::getElementNames()
 
     // #i116940# be consistent with getByName: include only table names which have a cache already
     vector<OUString> aValidNames;
-    for (vector<OUString>::iterator aIter = aTabNames.begin(); aIter != aTabNames.end(); ++aIter)
-        if (mpRefMgr->getCacheTable(mnFileId, *aIter, false))
-            aValidNames.push_back(*aIter);
+    std::copy_if(aTabNames.begin(), aTabNames.end(), std::back_inserter(aValidNames),
+        [&](const OUString& rTabName) { return mpRefMgr->getCacheTable(mnFileId, rTabName, false); });
 
-    size_t n = aValidNames.size();
-    Sequence<OUString> aSeq(n);
-    for (size_t i = 0; i < n; ++i)
-        aSeq[i] = aValidNames[i];
+    Sequence<OUString> aSeq(comphelper::containerToSequence(aValidNames));
     return aSeq;
 }
 

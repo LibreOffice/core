@@ -333,10 +333,11 @@ uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
     uno::Sequence<OUString> aSeq(pFormats->size());
     OUString* pAry = aSeq.getArray();
-    ScAutoFormat::const_iterator it = pFormats->begin(), itEnd = pFormats->end();
-    for (size_t i = 0; it != itEnd; ++it, ++i)
+    size_t i = 0;
+    for (const auto& rEntry : *pFormats)
     {
-        pAry[i] = it->second->GetName();
+        pAry[i] = rEntry.second->GetName();
+        ++i;
     }
     return aSeq;
 }

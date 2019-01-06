@@ -1177,14 +1177,11 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const 
     if ( vNames.empty() )
         vNames.push_back( sName );
 
-    std::vector< OUString >::iterator it = vNames.begin();
-    std::vector< OUString >::iterator it_end = vNames.end();
-    for ( ; it != it_end; ++it )
+    for ( const auto& rName : vNames )
     {
-
         formula::FormulaGrammar::AddressConvention eConv = aConv;
         // spaces are illegal ( but the user of course can enter them )
-        OUString sAddress = (*it).trim();
+        OUString sAddress = rName.trim();
         // if a local name ( on the active sheet ) exists this will
         // take precedence over a global with the same name
         if ( !xNameAccess->hasByName( sAddress ) )
@@ -2440,9 +2437,10 @@ ScVbaRange::setMergeCells( const uno::Any& aIsMerged )
         {
             uno::Reference< sheet::XCellRangeAddressable > xRangeAddr( mxRanges->getByIndex( nIndex ), uno::UNO_QUERY_THROW );
             table::CellRangeAddress aAddress = xRangeAddr->getRangeAddress();
-            for( ::std::vector< table::CellRangeAddress >::const_iterator aIt = aList.begin(), aEnd = aList.end(); aIt != aEnd; ++aIt )
-                if( ScUnoConversion::Intersects( *aIt, aAddress ) )
-                    return;
+            if (std::any_of(aList.begin(), aList.end(),
+                    [&aAddress](const table::CellRangeAddress& rAddress)
+                    { return ScUnoConversion::Intersects( rAddress, aAddress ); }))
+                return;
             aList.push_back( aAddress );
         }
 
@@ -5405,12 +5403,10 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
                     }
                 }
                 ScRangeList aCellRanges;
-                std::vector< table::CellRangeAddress >::iterator it = rangeResults.begin();
-                std::vector< table::CellRangeAddress >::iterator it_end = rangeResults.end();
-                for ( ; it != it_end; ++ it )
+                for ( const auto& rRangeResult : rangeResults )
                 {
                     ScRange refRange;
-                    ScUnoConversion::FillScRange( refRange, *it );
+                    ScUnoConversion::FillScRange( refRange, rRangeResult );
                     aCellRanges.push_back( refRange );
                 }
                 // Single range

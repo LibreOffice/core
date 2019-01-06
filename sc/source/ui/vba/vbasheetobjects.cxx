@@ -222,9 +222,10 @@ uno::Any ScVbaObjectContainer::createCollectionObject( const uno::Any& rSource )
 
 uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex )
 {
-    for( ShapeVector::iterator aIt = maShapes.begin(), aEnd = maShapes.end(); aIt != aEnd; ++aIt )
-        if( rIndex == implGetShapeName( *aIt ) )
-            return createCollectionObject( uno::Any( *aIt ) );
+    auto aIt = std::find_if(maShapes.begin(), maShapes.end(),
+        [&rIndex, this](const ShapeVector::value_type& rxShape) { return rIndex == implGetShapeName( rxShape ); });
+    if (aIt != maShapes.end())
+        return createCollectionObject( uno::Any( *aIt ) );
     throw uno::RuntimeException();
 }
 

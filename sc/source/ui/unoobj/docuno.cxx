@@ -2092,11 +2092,9 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         //  iterate over the hyperlinks that were output for this page
 
         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFData->GetBookmarks();
-        std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIter = rBookmarks.begin();
-        std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIEnd = rBookmarks.end();
-        while ( aIter != aIEnd )
+        for ( const auto& rBookmark : rBookmarks )
         {
-            OUString aBookmark = aIter->aBookmark;
+            OUString aBookmark = rBookmark.aBookmark;
             if ( aBookmark.toChar() == '#' )
             {
                 //  try to resolve internal link
@@ -2161,15 +2159,14 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                     }
 
                     if ( nPage >= 0 )
-                        pPDFData->SetLinkDest( aIter->nLinkId, pPDFData->CreateDest( aArea, nPage ) );
+                        pPDFData->SetLinkDest( rBookmark.nLinkId, pPDFData->CreateDest( aArea, nPage ) );
                 }
             }
             else
             {
                 //  external link, use as-is
-                pPDFData->SetLinkURL( aIter->nLinkId, aBookmark );
+                pPDFData->SetLinkURL( rBookmark.nLinkId, aBookmark );
             }
-            ++aIter;
         }
         rBookmarks.clear();
     }
@@ -3078,10 +3075,10 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
         aMarkData.MarkFromRangeList( rRanges, false );
         ScDocument& rDoc = pDocShell->GetDocument();
         SCTAB nTabCount = rDoc.GetTableCount();
-        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
-        for (; itr != itrEnd && *itr < nTabCount; ++itr)
+        for (const SCTAB& nTab : aMarkData)
         {
-            SCTAB nTab = *itr;
+            if (nTab >= nTabCount)
+                break;
             const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
             if (pEvents)
             {

@@ -148,13 +148,12 @@ ScVbaFont::setFontStyle( const uno::Any& aValue )
         aTokens.push_back( aToken );
     }while( nIndex >= 0 );
 
-    std::vector< OUString >::iterator it;
-    for( it = aTokens.begin(); it != aTokens.end(); ++it )
+    for( const auto& rToken : aTokens )
     {
-        if( (*it).equalsIgnoreAsciiCase("Bold") )
+        if( rToken.equalsIgnoreAsciiCase("Bold") )
             bBold = true;
 
-        if( (*it).equalsIgnoreAsciiCase("Italic") )
+        if( rToken.equalsIgnoreAsciiCase("Italic") )
             bItalic = true;
     }
 

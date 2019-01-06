@@ -1275,13 +1275,13 @@ uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilt
             const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
             size_t nItemCount = rItems.size();
             aField.Values.realloc(nItemCount);
-            ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
-            for (size_t j = 0; itr != itrEnd; ++itr, ++j)
+            size_t j = 0;
+            for (const auto& rItem : rItems)
             {
-                aField.Values[j].IsNumeric = itr->meType != ScQueryEntry::ByString;
-                aField.Values[j].StringValue = itr->maString.getString();
-                aField.Values[j].NumericValue = itr->mfVal;
-
+                aField.Values[j].IsNumeric = rItem.meType != ScQueryEntry::ByString;
+                aField.Values[j].StringValue = rItem.maString.getString();
+                aField.Values[j].NumericValue = rItem.mfVal;
+                ++j;
             }
         }
 
@@ -2277,9 +2277,12 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
         {
             const ScDBCollection::NamedDBs& rDBs = pNames->getNamedDBs();
             uno::Sequence<OUString> aSeq(rDBs.size());
-            ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-            for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-                aSeq[i] = (*itr)->GetName();
+            size_t i = 0;
+            for (const auto& rDB : rDBs)
+            {
+                aSeq[i] = rDB->GetName();
+                ++i;
+            }
 
             return aSeq;
         }
