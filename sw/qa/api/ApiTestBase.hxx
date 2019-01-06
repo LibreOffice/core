@@ -11,6 +11,9 @@
 #define INCLUDED_SW_QA_CORE_APITESTBASE_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <unordered_map>
 
@@ -19,6 +22,32 @@ namespace apitest
 class ApiTestBase
 {
 protected:
+    static bool extstsProperty(css::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
+                               OUString const& rPropertyName)
+    {
+        css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
+            rxPropertySet->getPropertySetInfo());
+        return xPropertySetInfo->hasPropertyByName(rPropertyName);
+    }
+
+    static bool
+    isPropertyReadOnly(css::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
+                       OUString const& rPropertyName)
+    {
+        css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
+            rxPropertySet->getPropertySetInfo());
+        css::uno::Sequence<css::beans::Property> xProperties = xPropertySetInfo->getProperties();
+
+        for (auto const& rProperty : xProperties)
+        {
+            if (rProperty.Name == rPropertyName)
+                return (rProperty.Attributes & com::sun::star::beans::PropertyAttribute::READONLY)
+                       != 0;
+        }
+
+        return false;
+    }
+
     virtual ~ApiTestBase() {}
 
     virtual std::unordered_map<OUString, css::uno::Reference<css::uno::XInterface>> init() = 0;
