@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([Collabora Office],[6.0.10.18],[],[],[https://collaboraoffice.com/])
+AC_INIT([Collabora Office],[6.0.10.19],[],[],[https://collaboraoffice.com/])
 
 AC_PREREQ([2.59])
 
