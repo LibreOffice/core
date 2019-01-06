@@ -118,6 +118,52 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     return lReturn;
 }
 
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation2(sal_Int16 nCommandGroup, sal_uInt32 nSlotMode)
+{
+    css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame);
+    if (!xFrame.is())
+        return css::uno::Sequence< css::frame::DispatchInformation  >();
+
+    std::unordered_map<OUString, css::frame::DispatchInformation> lInfos;
+
+    try
+    {
+        css::uno::Reference< css::frame::XDispatchInformationProvider2 > xProvider(xFrame->getController(), css::uno::UNO_QUERY);
+
+        if (xProvider.is())
+        {
+
+            const css::uno::Sequence< css::frame::DispatchInformation > lProviderInfos = xProvider->getConfigurableDispatchInformation2(nCommandGroup, nSlotMode);
+            sal_Int32 c2 = lProviderInfos.getLength();
+            sal_Int32 i2 = 0;
+            for (i2=0; i2<c2; ++i2)
+            {
+                const css::frame::DispatchInformation& rInfo = lProviderInfos[i2];
+                auto pInfo = lInfos.find(rInfo.Command);
+                if (pInfo == lInfos.end())
+                    lInfos[rInfo.Command] = rInfo;
+            }
+        }
+    }
+    catch(const css::uno::RuntimeException&)
+    { throw; }
+    catch(const css::uno::Exception&)
+    { }
+
+    sal_Int32 c1 = static_cast<sal_Int32>(lInfos.size());
+    sal_Int32 i1 = 0;
+
+    css::uno::Sequence< css::frame::DispatchInformation > lReturn(c1);
+    for (auto pStepp  = lInfos.begin();
+         pStepp != lInfos.end() && i1<c1;
+         ++pStepp, ++i1)
+    {
+        lReturn[i1] = pStepp->second;
+    }
+
+    return lReturn;
+}
+
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()
 {
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame);
