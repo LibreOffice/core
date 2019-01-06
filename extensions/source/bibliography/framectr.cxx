@@ -277,7 +277,7 @@ uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedComma
     return aDispatchInfo;
 }
 
-uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::getConfigurableDispatchInformation( ::sal_Int16 nCommandGroup )
+uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::getConfigurableDispatchInformation( ::sal_Int16 nCommandGroup, ::sal_uInt32 )
 {
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 

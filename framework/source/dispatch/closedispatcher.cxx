@@ -96,7 +96,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGro
     return lGroups;
 }
 
-css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup, sal_uInt32)
 {
     if (nCommandGroup == css::frame::CommandGroup::VIEW)
     {

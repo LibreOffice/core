@@ -109,7 +109,7 @@ public:
 
                                 // css::frame::XDispatchInformationProvider
     virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups(  ) override;
-    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) override;
+    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 CommandGroup, ::sal_uInt32 ) override;
  };
 
 #endif

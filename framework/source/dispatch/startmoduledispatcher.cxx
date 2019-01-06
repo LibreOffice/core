@@ -80,7 +80,7 @@ css::uno::Sequence< ::sal_Int16 > SAL_CALL StartModuleDispatcher::getSupportedCo
     return css::uno::Sequence< ::sal_Int16 >();
 }
 
-css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL StartModuleDispatcher::getConfigurableDispatchInformation(::sal_Int16 /*nCommandGroup*/)
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL StartModuleDispatcher::getConfigurableDispatchInformation(::sal_Int16 /*nCommandGroup*/, ::sal_uInt32 /*nSlotMode*/)
 {
     return css::uno::Sequence< css::frame::DispatchInformation >();
 }

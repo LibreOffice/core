@@ -71,7 +71,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     return ::comphelper::containerToSequence(lGroups);
 }
 
-css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup, sal_uInt32 nSlotMode)
 {
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
     sal_Int32                                                                             c1        = lProvider.getLength();
@@ -88,7 +88,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
             if (!xProvider.is())
                 continue;
 
-            const css::uno::Sequence< css::frame::DispatchInformation > lProviderInfos = xProvider->getConfigurableDispatchInformation(nCommandGroup);
+            const css::uno::Sequence< css::frame::DispatchInformation > lProviderInfos = xProvider->getConfigurableDispatchInformation(nCommandGroup, nSlotMode);
                   sal_Int32                                             c2             = lProviderInfos.getLength();
                   sal_Int32                                             i2             = 0;
             for (i2=0; i2<c2; ++i2)

@@ -1214,7 +1214,7 @@ namespace
     };
 }
 
-Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup )
+Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup, ::sal_uInt32 )
 {
     std::vector< DispatchInformation > aInformationVector;
     DispatchInformation aDispatchInfo;
