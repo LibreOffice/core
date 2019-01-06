@@ -37,23 +37,29 @@ OResultSetMetaData::OResultSetMetaData(OConnection& rConn, MYSQL_RES* pResult)
     unsigned nFieldCount = mysql_num_fields(pResult);
     for (unsigned i = 0; i < nFieldCount; ++i)
     {
-        MySqlFieldInfo fieldInfo{
-            OUString{ fields[i].name, static_cast<sal_Int32>(fields[i].name_length),
-                      m_rConnection.getConnectionEncoding() }, // column name
-            static_cast<sal_Int32>(fields[i].length), // length
-            mysqlc_sdbc_driver::mysqlToOOOType(fields[i].type, fields[i].charsetnr), // type
-            fields[i].type, // mysql_type
-            fields[i].charsetnr, // charset number
-            fields[i].flags,
-            OUString{ fields[i].db, static_cast<sal_Int32>(fields[i].db_length),
-                      m_rConnection.getConnectionEncoding() }, // schema name
-            OUString{ fields[i].table, static_cast<sal_Int32>(fields[i].table_length),
-                      m_rConnection.getConnectionEncoding() }, // table name
-            OUString{ fields[i].catalog, static_cast<sal_Int32>(fields[i].catalog_length),
-                      m_rConnection.getConnectionEncoding() }, // catalog
-            static_cast<sal_Int32>(fields[i].decimals),
-            static_cast<sal_Int32>(fields[i].max_length)
-        };
+        MySqlFieldInfo fieldInfo;
+        {
+            fieldInfo.columnName
+                = OUString{ fields[i].name, static_cast<sal_Int32>(fields[i].name_length),
+                            m_rConnection.getConnectionEncoding() };
+            fieldInfo.length = static_cast<sal_Int32>(fields[i].length);
+            fieldInfo.type
+                = mysqlc_sdbc_driver::mysqlToOOOType(fields[i].type, fields[i].charsetnr);
+            fieldInfo.mysql_type = fields[i].type;
+            fieldInfo.charsetNumber = fields[i].charsetnr;
+            fieldInfo.flags = fields[i].flags;
+            fieldInfo.schemaName
+                = OUString{ fields[i].db, static_cast<sal_Int32>(fields[i].db_length),
+                            m_rConnection.getConnectionEncoding() };
+            fieldInfo.tableName
+                = OUString{ fields[i].table, static_cast<sal_Int32>(fields[i].table_length),
+                            m_rConnection.getConnectionEncoding() };
+            fieldInfo.catalogName
+                = OUString{ fields[i].catalog, static_cast<sal_Int32>(fields[i].catalog_length),
+                            m_rConnection.getConnectionEncoding() };
+            fieldInfo.decimals = static_cast<sal_Int32>(fields[i].decimals);
+            fieldInfo.max_length = static_cast<sal_Int32>(fields[i].max_length);
+        }
         m_fields.push_back(std::move(fieldInfo));
     }
 }
