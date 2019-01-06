@@ -1,0 +1,36 @@
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <path
+     style="fill:#808080"
+     d="M 6 1 L 6 2 L 14.5 2 C 14.777 2 15 1.777 15 1.5 C 15 1.223 14.777 1 14.5 1 L 6 1 z M 1.5 7 C 1.223 7 1 7.223 1 7.5 C 1 7.777 1.223 8 1.5 8 L 5.5 8 C 5.777 8 6 7.777 6 7.5 C 6 7.223 5.777 7 5.5 7 L 1.5 7 z M 1.5 10 C 1.223 10 1 10.223 1 10.5 C 1 10.777 1.223 11 1.5 11 L 5.5 11 C 5.777 11 6 10.777 6 10.5 C 6 10.223 5.777 10 5.5 10 L 1.5 10 z M 1.5 14 C 1.223 14 1 14.223 1 14.5 C 1 14.777 1.223 15 1.5 15 L 14.5 15 C 14.777 15 15 14.777 15 14.5 C 15 14.223 14.777 14 14.5 14 L 1.5 14 z "
+     id="rect2" />
+  <g
+     style="fill:#eac282"
+     >
+    <path
+       style="fill-rule:evenodd;stroke:#eac282;stroke-linecap:round;stroke-linejoin:round"
+       d="m 0.4999293,4.5000003 4,-3.99999998 V 4.5000003 Z"
+       />
+    <rect
+       y="0"
+       x="0"
+       height="1"
+       ry="0.5"
+       width="3"
+       id="rect10-3" />
+    <rect
+       y="0"
+       x="0"
+       height="3"
+       rx="0.5"
+       width="1"
+       id="rect12" />
+  </g>
+  <rect
+     style="fill:#4d82b8"
+     height="10"
+     ry="1"
+     width="8"
+     x="7"
+     y="3"
+     id="rect14" />
+</svg>
