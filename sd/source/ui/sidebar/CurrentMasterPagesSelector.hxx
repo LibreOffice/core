@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_CURRENTMASTERPAGESSELECTOR_HXX
 
 #include "MasterPagesSelector.hxx"
-#include <com/sun/star/lang/XComponent.hpp>
 
 
 namespace sd { namespace tools { class EventMultiplexerEvent; } }

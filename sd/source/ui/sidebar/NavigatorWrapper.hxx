@@ -21,8 +21,8 @@
 
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <vcl/ctrl.hxx>
-#include <navigatr.hxx>
 
+class SdNavigatorWin;
 class SfxBindings;
 namespace sd { class ViewShellBase; }
 

@@ -20,24 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSQUEUEPROCESSOR_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSQUEUEPROCESSOR_HXX
 
-#include <cache/SlsPageCache.hxx>
+#include <cache/SlsCacheContext.hxx>
 #include "SlsRequestPriorityClass.hxx"
 #include "SlsBitmapFactory.hxx"
-#include <view/SlideSorterView.hxx>
-#include <tools/IdleDetection.hxx>
-#include "SlsBitmapCache.hxx"
-#include <sdpage.hxx>
-#include <Window.hxx>
 
-#include <svx/svdpagv.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-
-#include <functional>
-
-namespace sd { namespace slidesorter { namespace view {
-class SlideSorterView;
-} } }
 
 namespace sd { namespace slidesorter { namespace cache {
 

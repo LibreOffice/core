@@ -23,6 +23,8 @@
 #include "MasterPageContainer.hxx"
 #include "MasterPageDescriptor.hxx"
 
+#include <vcl/timer.hxx>
+
 #include <memory>
 
 namespace sd { namespace sidebar {

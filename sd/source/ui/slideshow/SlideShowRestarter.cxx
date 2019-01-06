@@ -18,6 +18,8 @@
  */
 
 #include <DrawController.hxx>
+#include <ViewShellBase.hxx>
+#include <slideshow.hxx>
 #include "SlideShowRestarter.hxx"
 #include <framework/ConfigurationController.hxx>
 #include <framework/FrameworkHelper.hxx>

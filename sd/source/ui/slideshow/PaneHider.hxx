@@ -20,8 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESHOW_PANEHIDER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESHOW_PANEHIDER_HXX
 
-#include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfiguration; } } } } }
+namespace com { namespace sun { namespace star { namespace drawing { namespace framework { class XConfigurationController; } } } } }
 
 namespace sd {
 

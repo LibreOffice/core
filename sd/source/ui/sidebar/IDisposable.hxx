@@ -19,11 +19,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_IDISPOSABLE_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_IDISPOSABLE_HXX
 
-#include <tools/gen.hxx>
-#include <sal/types.h>
-
-namespace vcl { class Window; }
-
 namespace sd { namespace sidebar {
 
 class IDisposable

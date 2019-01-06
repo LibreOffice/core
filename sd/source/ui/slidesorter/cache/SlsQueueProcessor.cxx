@@ -20,7 +20,9 @@
 #include "SlsQueueProcessor.hxx"
 #include "SlsCacheConfiguration.hxx"
 #include "SlsRequestQueue.hxx"
+#include "SlsBitmapCache.hxx"
 
+#include <sdpage.hxx>
 #include <comphelper/profilezone.hxx>
 
 namespace sd { namespace slidesorter { namespace cache {
