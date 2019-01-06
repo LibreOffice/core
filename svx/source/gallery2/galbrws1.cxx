@@ -410,8 +410,9 @@ void GalleryBrowser1::Resize()
 void GalleryBrowser1::GetFocus()
 {
     Control::GetFocus();
-    if( mpThemes )
-        mpThemes->GrabFocus();
+    if( maNewTheme->IsEnabled() )
+        maNewTheme->GrabFocus();
+    else mpThemes->GrabFocus();
 }
 
 void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
