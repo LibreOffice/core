@@ -417,8 +417,6 @@ cmd/sc_removefilter.png cmd/sc_removefiltersort.png
 # Bullets
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
-cmd/lc_romanliststyle.png cmd/lc_defaultnumbering.png
-cmd/sc_romanliststyle.png cmd/sc_defaultnumbering.png
 cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
 cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 
