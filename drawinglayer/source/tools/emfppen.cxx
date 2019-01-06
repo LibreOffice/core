@@ -173,6 +173,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataTransform)
         {
             EmfPlusHelperData::readXForm(s, pen_transformation);
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataTransform: " << pen_transformation);
         }
 
         if (penDataFlags & PenDataStartCap)
@@ -198,6 +199,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataJoin)
         {
             s.ReadInt32(lineJoin);
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataJoin: 0x" << std::hex << lineJoin);
         }
         else
         {
@@ -207,6 +209,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataMiterLimit)
         {
             s.ReadFloat(mitterLimit);
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataMiterLimit: 0x" << std::hex << mitterLimit);
         }
         else
         {
@@ -226,6 +229,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataDashedLineCap)
         {
             s.ReadInt32(dashCap);
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataDashedLineCap: 0x" << std::hex << dashCap);
         }
         else
         {
@@ -235,6 +239,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataDashedLineOffset)
         {
             s.ReadFloat(dashOffset);
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataDashedLineOffset: 0x" << std::hex << dashOffset);
         }
         else
         {
@@ -266,6 +271,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataNonCenter)
         {
             s.ReadInt32(alignment);
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataNonCenter: 0x" << std::hex << alignment);
         }
         else
         {
@@ -288,6 +294,7 @@ namespace emfplushelper
             {
                 s.ReadFloat(compoundArray[i]);
             }
+            SAL_WARN("drawinglayer", "EMF+\t\t TODO PenDataCompoundLine: 0x");
         }
 
         if (penDataFlags & PenDataCustomStartCap)
