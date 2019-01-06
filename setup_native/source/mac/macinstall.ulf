@@ -1,5 +1,5 @@
 [OKLabel]
-en-US = "Ok"
+en-US = "OK"
 
 [InstallLabel]
 en-US = "Install"
@@ -59,10 +59,10 @@ en-US = "No, abort installation"
 en-US = "Installation failed."
 
 [InstallCompleteText]
-en-US = "Installation of [PRODUCTNAME] language pack completed." 
+en-US = "Installation of [PRODUCTNAME] language pack completed."
 
 [InstallCompleteText2]
-en-US = "Call '[PRODUCTNAME]-Preferences-Language Settings-Languages' to change the user interface language."
+en-US = "Call '[PRODUCTNAME] - Preferences - Language Settings - Languages' to change the user interface language."
 
 [InstallCompleteTextPatch]
 en-US = "Installation of [FULLPRODUCTNAME] completed"
