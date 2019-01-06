@@ -127,6 +127,19 @@ void testLongProperty(uno::Reference<beans::XPropertySet> const& xPropertySet, c
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nValue, nPropertySet);
 }
 
+void testLongOptionalProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                              const OUString& rName, const sal_Int32& rValue)
+{
+    try
+    {
+        testLongProperty(xPropertySet, rName, rValue);
+    }
+    catch (const css::beans::UnknownPropertyException& /*ex*/)
+    {
+        // ignore if the property is unknown as it is optional
+    }
+}
+
 void testLongReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
                               const OUString& name, const sal_Int32& nValue)
 {
@@ -164,6 +177,19 @@ void testShortProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
     OString msgSet
         = "Unable to set PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(msgSet.getStr(), nValue, nPropertySet);
+}
+
+void testShortOptionalProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
+                               const OUString& rName, const sal_Int16& rValue)
+{
+    try
+    {
+        testShortProperty(xPropertySet, rName, rValue);
+    }
+    catch (const css::beans::UnknownPropertyException& /*ex*/)
+    {
+        // ignore if the property is unknown as it is optional
+    }
 }
 
 void testShortReadonlyProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
