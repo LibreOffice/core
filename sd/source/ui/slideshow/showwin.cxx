@@ -20,6 +20,7 @@
 #include <com/sun/star/awt/Key.hpp>
 
 #include "showwindow.hxx"
+#include "slideshowimpl.hxx"
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -27,6 +28,7 @@
 
 
 #include <slideshow.hxx>
+#include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <sdresid.hxx>
 #include <helpids.h>

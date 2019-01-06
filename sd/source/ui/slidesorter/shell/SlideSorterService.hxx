@@ -20,18 +20,14 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_SHELL_SLIDESORTERSERVICE_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_SHELL_SLIDESORTERSERVICE_HXX
 
-#include <SlideSorter.hxx>
-
-#include <tools/PropertySet.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/drawing/SlideSorter.hpp>
-#include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/drawing/framework/XView.hpp>
+#include <com/sun/star/drawing/XSlideSorterBase.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/propshlp.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 
 namespace sd { namespace slidesorter {
 
@@ -40,6 +36,8 @@ typedef ::cppu::WeakComponentImplHelper <
     css::lang::XInitialization,
     css::awt::XWindowListener
 > SlideSorterServiceInterfaceBase;
+
+class SlideSorter;
 
 /** Implementation of the com.sun.star.drawing.SlideSorter service.
 */

@@ -21,19 +21,8 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <rtl/ref.hxx>
-#include <framework/Pane.hxx>
 
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-
-#include <map>
-#include <memory>
-
-namespace sd {
-    class ViewShellBase;
-}
 
 namespace sd { namespace sidebar {
 

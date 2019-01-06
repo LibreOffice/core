@@ -22,69 +22,36 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/propertysetmixin.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <com/sun/star/awt/XActivateListener.hpp>
-#include <com/sun/star/presentation/XSlideShow.hpp>
+#include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
-#include <com/sun/star/awt/WindowEvent.hpp>
-#include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/awt/XPaintListener.hpp>
-#include <com/sun/star/awt/XPointer.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/presentation/ClickAction.hpp>
-#include <com/sun/star/media/XManager.hpp>
-#include <com/sun/star/media/XPlayer.hpp>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/utils/canvastools.hxx>
-#include <vcl/help.hxx>
-#include <unotools/pathoptions.hxx>
-#include <unotools/saveopt.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <basic/sbstar.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/fmshell.hxx>
-
-#include <svx/svxids.hrc>
-#include <sdmod.hxx>
-#include <cusshow.hxx>
-#include <ViewShellBase.hxx>
-#include <PresentationViewShell.hxx>
-#include <ViewShell.hxx>
-#include <drawview.hxx>
 #include <drawdoc.hxx>
 
 #include "showwindow.hxx"
 
-#include <optsitem.hxx>
-#include <FrameView.hxx>
-#include <DrawDocShell.hxx>
-
-#include <app.hrc>
-
 #include <slideshow.hxx>
 
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace media { class XPlayer; } } } }
+namespace sd { class DrawDocShell; }
+namespace sd { class ViewShell; }
+
+class SfxBindings;
+class SfxDispatcher;
 class SfxViewFrame;
-class SfxRequest;
+class StarBASIC;
 
 namespace sd
 {
 class SlideShowView;
 class AnimationSlideController;
 class PaneHider;
-class ShowWindow;
 
 struct PresentationSettingsEx : public PresentationSettings
 {

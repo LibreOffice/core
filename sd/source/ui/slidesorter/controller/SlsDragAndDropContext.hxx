@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CONTROLLER_SLSDRAGANDDROPCONTEXT_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CONTROLLER_SLSDRAGANDDROPCONTEXT_HXX
 
-#include <tools/gen.hxx>
-
-#include <model/SlsSharedPageDescriptor.hxx>
 #include <controller/SlsInsertionIndicatorHandler.hxx>
-#include <vector>
+
+class Point;
 
 namespace sd { namespace slidesorter {
 class SlideSorter;

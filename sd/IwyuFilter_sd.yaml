@@ -260,3 +260,52 @@ blacklist:
     sd/source/ui/remotecontrol/Listener.hxx:
     # base class has to be a complete type
     - com/sun/star/presentation/XSlideShowListener.hpp
+    sd/source/ui/sidebar/PanelFactory.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ui/XUIElementFactory.hpp
+    sd/source/ui/slideshow/slideshowimpl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/presentation/XShapeEventListener.hpp
+    - com/sun/star/presentation/XSlideShowController.hpp
+    - com/sun/star/presentation/XSlideShowListener.hpp
+    sd/source/ui/slideshow/slideshowviewimpl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XPaintListener.hpp
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/presentation/XSlideShowView.hpp
+    - com/sun/star/util/XModifyListener.hpp
+    sd/source/ui/slidesorter/controller/SlsListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XEventListener.hpp
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    - com/sun/star/accessibility/XAccessibleEventListener.hpp
+    - com/sun/star/frame/XFrameActionListener.hpp
+    sd/source/ui/slidesorter/shell/SlideSorterService.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XWindowListener.hpp
+    - com/sun/star/drawing/XSlideSorterBase.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    sd/source/ui/unoidl/sddetect.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XExtendedFilterDetection.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/unoidl/unolayer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XLayer.hpp
+    - com/sun/star/drawing/XLayerManager.hpp
+    sd/source/ui/unoidl/unocpres.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XIndexContainer.hpp
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    sd/source/ui/unoidl/unopback.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+

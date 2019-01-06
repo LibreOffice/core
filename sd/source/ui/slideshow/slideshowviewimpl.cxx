@@ -20,17 +20,23 @@
 #include "slideshowviewimpl.hxx"
 #include "slideshowimpl.hxx"
 #include <sdpage.hxx>
+
 #include <osl/mutex.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/Pointer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <basegfx/utils/canvastools.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>

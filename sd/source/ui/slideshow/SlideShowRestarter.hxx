@@ -20,11 +20,14 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWRESTARTER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWRESTARTER_HXX
 
-#include <slideshow.hxx>
-#include <ViewShellBase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
 #include <memory>
+
+namespace sd { class SlideShow; }
+namespace sd { class ViewShellBase; }
+class SfxDispatcher;
+struct ImplSVEvent;
 
 namespace sd {
 

@@ -20,24 +20,15 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_LAYOUTMENU_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_LAYOUTMENU_HXX
 
-#include "IDisposable.hxx"
-#include "ISidebarReceiver.hxx"
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 
-#include <com/sun/star/frame/XStatusListener.hpp>
-
-#include <glob.hxx>
-#include <pres.hxx>
-
-#include <vcl/ctrl.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/transfer.hxx>
 #include <sfx2/shell.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include <com/sun/star/ui/XSidebar.hpp>
-
-class SfxModule;
+namespace com { namespace sun { namespace star { namespace frame { class XStatusListener; } } } }
+namespace com { namespace sun { namespace star { namespace ui { class XSidebar; } } } }
 
 
 namespace sd {
@@ -50,9 +41,6 @@ class EventMultiplexerEvent;
 } }
 
 namespace sd { namespace sidebar {
-
-class ControlFactory;
-class SidebarViewShell;
 
 class LayoutMenu
     : public ValueSet,

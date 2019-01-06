@@ -19,11 +19,14 @@
 
 #include "MasterPageContainer.hxx"
 
+#include "MasterPageContainerProviders.hxx"
 #include "MasterPageDescriptor.hxx"
 #include "MasterPageContainerFiller.hxx"
 #include "MasterPageContainerQueue.hxx"
 #include <TemplateScanner.hxx>
+#include <PreviewRenderer.hxx>
 #include <tools/AsynchronousTask.hxx>
+#include <tools/SdGlobalResourceContainer.hxx>
 #include <strings.hrc>
 #include <algorithm>
 #include <list>
