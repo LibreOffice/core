@@ -117,10 +117,11 @@ public:
         sheets.reserve( nTabCount );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadSheet( m_xModel, uno::UNO_QUERY_THROW );
         uno::Reference <container::XIndexAccess> xIndex( xSpreadSheet->getSheets(), uno::UNO_QUERY_THROW );
-        ScMarkData::const_iterator itr = rMarkData.begin(), itrEnd = rMarkData.end();
-        for (; itr != itrEnd && *itr < nTabCount; ++itr)
+        for (const auto& rTab : rMarkData)
         {
-            uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex( *itr ), uno::UNO_QUERY_THROW );
+            if (rTab >= nTabCount)
+                break;
+            uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex( rTab ), uno::UNO_QUERY_THROW );
             uno::Reference< container::XNamed > xNamed( xSheet, uno::UNO_QUERY_THROW );
             sheets.push_back( xSheet );
             namesToIndices[ xNamed->getName() ] = nIndex++;

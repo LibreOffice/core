@@ -587,9 +587,8 @@ sal_Int32 SAL_CALL ScNamedRangesObj::getCount()
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames)
         {
-            ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
-            for (; itr != itrEnd; ++itr)
-                if (lcl_UserVisibleName(*itr->second))
+            for (const auto& rName : *pNames)
+                if (lcl_UserVisibleName(*rName.second))
                     ++nRet;
         }
     }
@@ -669,11 +668,10 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
             uno::Sequence<OUString> aSeq(nVisCount);
             OUString* pAry = aSeq.getArray();
             sal_uInt16 nVisPos = 0;
-            ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
-            for (; itr != itrEnd; ++itr)
+            for (const auto& rName : *pNames)
             {
-                if (lcl_UserVisibleName(*itr->second))
-                    pAry[nVisPos++] = itr->second->GetName();
+                if (lcl_UserVisibleName(*rName.second))
+                    pAry[nVisPos++] = rName.second->GetName();
             }
             return aSeq;
         }
@@ -798,14 +796,13 @@ ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex
     if (!pNames)
         return nullptr;
 
-    ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
     sal_uInt16 nPos = 0;
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rName : *pNames)
     {
-        if (lcl_UserVisibleName(*itr->second))
+        if (lcl_UserVisibleName(*rName.second))
         {
             if (nPos == nIndex)
-                return new ScNamedRangeObj(this, pDocShell, itr->second->GetName());
+                return new ScNamedRangeObj(this, pDocShell, rName.second->GetName());
         }
         ++nPos;
     }
@@ -864,14 +861,13 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
     if (!pNames)
         return nullptr;
 
-    ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
     sal_uInt16 nPos = 0;
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rName : *pNames)
     {
-        if (lcl_UserVisibleName(*itr->second))
+        if (lcl_UserVisibleName(*rName.second))
         {
             if (nPos == nIndex)
-                return new ScNamedRangeObj(this, pDocShell, itr->second->GetName(), mxSheet);
+                return new ScNamedRangeObj(this, pDocShell, rName.second->GetName(), mxSheet);
         }
         ++nPos;
     }

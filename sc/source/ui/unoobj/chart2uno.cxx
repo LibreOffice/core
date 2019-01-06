@@ -541,10 +541,9 @@ void Chart2Positioner::glueState()
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
-    for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end()
-         ; itr != itrEnd; ++itr)
+    for (const auto& rxToken : mrRefTokens)
     {
-        ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
+        ScRefTokenHelper::getDoubleRefDataFromToken(aData, rxToken);
         SCCOLROW n1 = aData.Ref1.Col();
         SCCOLROW n2 = aData.Ref2.Col();
         if (n1 > MAXCOL)
@@ -614,11 +613,10 @@ void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
     vector<State> aCellStates(nCR, Hole);
 
     // Mark all referenced cells "occupied".
-    for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
-          itr != itrEnd; ++itr)
+    for (const auto& rxToken : mrRefTokens)
     {
         ScComplexRefData aData;
-        ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
+        ScRefTokenHelper::getDoubleRefDataFromToken(aData, rxToken);
         SCCOL nCol1 = aData.Ref1.Col() - mnStartCol;
         SCCOL nCol2 = aData.Ref2.Col() - mnStartCol;
         SCROW nRow1 = aData.Ref1.Row() - mnStartRow;
@@ -721,11 +719,8 @@ void Chart2Positioner::createPositionMap()
     bool bNoGlue = (meGlue == GLUETYPE_NONE);
     FormulaTokenMapMap aCols;
     SCROW nNoGlueRow = 0;
-    for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
-          itr != itrEnd; ++itr)
+    for (const ScTokenRef& pToken : mrRefTokens)
     {
-        const ScTokenRef& pToken = *itr;
-
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
         svl::SharedString aTabName = svl::SharedString::getEmptyString();
@@ -733,7 +728,7 @@ void Chart2Positioner::createPositionMap()
             aTabName = pToken->GetString();
 
         ScComplexRefData aData;
-        if( !ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr) )
+        if( !ScRefTokenHelper::getDoubleRefDataFromToken(aData, pToken) )
             break;
         const ScSingleRefData& s = aData.Ref1;
         const ScSingleRefData& e = aData.Ref2;
@@ -798,12 +793,12 @@ void Chart2Positioner::createPositionMap()
         if (bNoGlue)
         {
             FormulaTokenMap& rFirstCol = aCols.begin()->second;
-            for (FormulaTokenMap::iterator it1 = rFirstCol.begin(); it1 != rFirstCol.end(); ++it1)
+            for (const auto& rFirstColEntry : rFirstCol)
             {
-                SCROW nKey = it1->first;
-                for (FormulaTokenMapMap::iterator it2 = aCols.begin(); it2 != aCols.end(); ++it2)
+                SCROW nKey = rFirstColEntry.first;
+                for (auto& rEntry : aCols)
                 {
-                    FormulaTokenMap& rCol = it2->second;
+                    FormulaTokenMap& rCol = rEntry.second;
                     if (rCol.find(nKey) == rCol.end())
                         rCol[ nKey ] = nullptr;
                 }
@@ -1229,15 +1224,14 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     // 2) The three adjacent cells of that corner cell are included.
 
     bool bRight = false, bBottom = false, bDiagonal = false;
-    for (itr = rRefTokens.begin(); itr != itrEnd; ++itr)
+    for (const auto& rxToken : rRefTokens)
     {
-        pToken = *itr;
-        switch (pToken->GetType())
+        switch (rxToken->GetType())
         {
             case svSingleRef:
             case svExternalSingleRef:
             {
-                const ScSingleRefData& rData = *pToken->GetSingleRef();
+                const ScSingleRefData& rData = *rxToken->GetSingleRef();
                 if (rData.Col() == nMinCol && rData.Row() == nMinRow)
                     // The corner cell is contained.
                     return false;
@@ -1255,7 +1249,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             case svDoubleRef:
             case svExternalDoubleRef:
             {
-                const ScComplexRefData& rData = *pToken->GetDoubleRef();
+                const ScComplexRefData& rData = *rxToken->GetDoubleRef();
                 const ScSingleRefData& r1 = rData.Ref1;
                 const ScSingleRefData& r2 = rData.Ref2;
                 if (r1.Col() <= nMinCol && nMinCol <= r2.Col() &&
@@ -1452,13 +1446,12 @@ ScChart2DataProvider::createDataSource(
     if(bTimeBased)
     {
         // limit to first sheet
-        for(vector<ScTokenRef>::iterator itr = aRefTokens.begin(),
-                itrEnd = aRefTokens.end(); itr != itrEnd; ++itr)
+        for(const auto& rxToken : aRefTokens)
         {
-            if ((*itr)->GetType() != svDoubleRef)
+            if (rxToken->GetType() != svDoubleRef)
                 continue;
 
-            ScComplexRefData& rData = *(*itr)->GetDoubleRef();
+            ScComplexRefData& rData = *rxToken->GetDoubleRef();
             ScSingleRefData& s = rData.Ref1;
             ScSingleRefData& e = rData.Ref2;
 
@@ -1555,16 +1548,12 @@ ScChart2DataProvider::createDataSource(
         }
     }
 
-    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorItr( aSeqVector.begin() );
-    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorEndItr( aSeqVector.end() );
-    while(aVectorItr != aVectorEndItr)
+    for(const uno::Reference< chart2::data::XLabeledDataSequence >& xSeq : aSeqVector)
     {
-        uno::Reference< chart2::data::XLabeledDataSequence > xSeq( *aVectorItr );
         if ( xSeq.is() )
         {
             pDS->AddLabeledSequence( xSeq );
         }
-        ++aVectorItr;
     }
 
     xResult.set( pDS );
@@ -1648,10 +1637,8 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
     }
     mbEmpty=false;
 
-    vector<ScTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
-    for (; itr != itrEnd ; ++itr)
+    for (const ScTokenRef& aRefToken : rTokens)
     {
-        ScTokenRef aRefToken = *itr;
         StackVar eVar = aRefToken->GetType();
         if (eVar == svDoubleRef || eVar == svExternalDoubleRef)
         {
@@ -1794,12 +1781,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     ScRefTokenHelper::compileRangeRepresentation(
                         aTokens, xLabel->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar(), true);
                     aLabel.initRangeAnalyzer(aTokens);
-                    vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
-                    for (; itr != itrEnd; ++itr)
+                    for (const auto& rxToken : aTokens)
                     {
-                        ScRefTokenHelper::join(aAllTokens, *itr, ScAddress());
+                        ScRefTokenHelper::join(aAllTokens, rxToken, ScAddress());
                         if(!bThisIsCategories)
-                            ScRefTokenHelper::join(aAllSeriesLabelTokens, *itr, ScAddress());
+                            ScRefTokenHelper::join(aAllSeriesLabelTokens, rxToken, ScAddress());
                     }
                     if(bThisIsCategories)
                         bHasCategoriesLabels=true;
@@ -1813,12 +1799,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     ScRefTokenHelper::compileRangeRepresentation(
                         aTokens, xValues->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar(), true);
                     aValues.initRangeAnalyzer(aTokens);
-                    vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
-                    for (; itr != itrEnd; ++itr)
+                    for (const auto& rxToken : aTokens)
                     {
-                        ScRefTokenHelper::join(aAllTokens, *itr, ScAddress());
+                        ScRefTokenHelper::join(aAllTokens, rxToken, ScAddress());
                         if(bThisIsCategories)
-                            ScRefTokenHelper::join(aAllCategoriesValuesTokens, *itr, ScAddress());
+                            ScRefTokenHelper::join(aAllCategoriesValuesTokens, rxToken, ScAddress());
                     }
                 }
                 //detect row source
@@ -2439,11 +2424,10 @@ void ScChart2DataSequence::RefChanged()
                     pCLC->EndListeningHiddenRange(m_pHiddenListener.get());
             }
 
-            vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
-            for (; itr != itrEnd; ++itr)
+            for (const auto& rxToken : m_aTokens)
             {
                 ScRange aRange;
-                if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
+                if (!ScRefTokenHelper::getRangeFromToken(aRange, rxToken, ScAddress()))
                     continue;
 
                 m_pDocument->StartListeningArea(aRange, false, m_pValueListener.get());
@@ -2466,17 +2450,16 @@ void ScChart2DataSequence::BuildDataCache()
     ::std::vector<sal_Int32> aHiddenValues;
     sal_Int32 nDataCount = 0;
 
-    for (vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
-          itr != itrEnd; ++itr)
+    for (const auto& rxToken : m_aTokens)
     {
-        if (ScRefTokenHelper::isExternalRef(*itr))
+        if (ScRefTokenHelper::isExternalRef(rxToken))
         {
-            nDataCount += FillCacheFromExternalRef(*itr);
+            nDataCount += FillCacheFromExternalRef(rxToken);
         }
         else
         {
             ScRange aRange;
-            if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
+            if (!ScRefTokenHelper::getRangeFromToken(aRange, rxToken, ScAddress()))
                 continue;
 
             SCCOL nLastCol = -1;
@@ -2682,10 +2665,9 @@ void ScChart2DataSequence::StopListeningToAllExternalRefs()
         return;
 
     const std::unordered_set<sal_uInt16>& rFileIds = m_pExtRefListener->getAllFileIds();
-    std::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
     ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
-    for (; itr != itrEnd; ++itr)
-        pRefMgr->removeLinkListener(*itr, m_pExtRefListener.get());
+    for (const auto& rFileId : rFileIds)
+        pRefMgr->removeLinkListener(rFileId, m_pExtRefListener.get());
 
     m_pExtRefListener.reset();
 }
@@ -2715,11 +2697,10 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
         ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
         m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
         const std::unordered_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
-        std::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rFileId : rFileIds)
         {
-            pRefMgr->addLinkListener(*itr, m_pExtRefListener.get());
-            m_pExtRefListener->addFileId(*itr);
+            pRefMgr->addLinkListener(rFileId, m_pExtRefListener.get());
+            m_pExtRefListener->addFileId(rFileId);
         }
     }
 }
@@ -3173,10 +3154,9 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
     // Clone tokens.
     vector<ScTokenRef> aTokensNew;
     aTokensNew.reserve(m_aTokens.size());
-    vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rxToken : m_aTokens)
     {
-        ScTokenRef p((*itr)->Clone());
+        ScTokenRef p(rxToken->Clone());
         aTokensNew.push_back(p);
     }
 
@@ -3211,11 +3191,10 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
         if( m_pDocument )
         {
             ScChartListenerCollection* pCLC = m_pDocument->GetChartListenerCollection();
-            vector<ScTokenRef>::const_iterator itr = m_aTokens.begin(), itrEnd = m_aTokens.end();
-            for (; itr != itrEnd; ++itr)
+            for (const auto& rxToken : m_aTokens)
             {
                 ScRange aRange;
-                if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
+                if (!ScRefTokenHelper::getRangeFromToken(aRange, rxToken, ScAddress()))
                     continue;
 
                 m_pDocument->StartListeningArea( aRange, false, m_pValueListener.get() );
@@ -3389,13 +3368,12 @@ sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
         return false;
     }
 
-    for(vector<ScTokenRef>::iterator itr = m_aTokens.begin(),
-            itrEnd = m_aTokens.end(); itr != itrEnd; ++itr)
+    for(const auto& rxToken : m_aTokens)
     {
-        if ((*itr)->GetType() != svDoubleRef)
+        if (rxToken->GetType() != svDoubleRef)
             continue;
 
-        ScComplexRefData& rData = *(*itr)->GetDoubleRef();
+        ScComplexRefData& rData = *rxToken->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 
@@ -3423,13 +3401,12 @@ sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
         return false;
 
     SCTAB nTab = mnTimeBasedStart + nPoint;
-    for(vector<ScTokenRef>::iterator itr = m_aTokens.begin(),
-            itrEnd = m_aTokens.end(); itr != itrEnd; ++itr)
+    for(const auto& rxToken : m_aTokens)
     {
-        if ((*itr)->GetType() != svDoubleRef)
+        if (rxToken->GetType() != svDoubleRef)
             continue;
 
-        ScComplexRefData& rData = *(*itr)->GetDoubleRef();
+        ScComplexRefData& rData = *rxToken->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 

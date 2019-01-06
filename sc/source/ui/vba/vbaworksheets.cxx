@@ -100,13 +100,12 @@ public:
     {
         uno::Sequence< OUString > sNames( mSheetMap.size() );
         OUString* pString = sNames.getArray();
-        SheetMap::iterator it = mSheetMap.begin();
-        SheetMap::iterator it_end = mSheetMap.end();
 
-        for ( ; it != it_end; ++it, ++pString )
+        for ( const auto& rItem : mSheetMap )
         {
-            uno::Reference< container::XNamed > xName( *it, uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNamed > xName( rItem, uno::UNO_QUERY_THROW );
             *pString = xName->getName();
+            ++pString;
         }
         return sNames;
     }

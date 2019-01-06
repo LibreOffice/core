@@ -4004,10 +4004,13 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
 
                 SCTAB nTabCount = rDoc.GetTableCount();
                 bool bProtected = !pDocShell->IsEditable();
-                ScMarkData::iterator itr = aMark.begin(), itrEnd = aMark.end();
-                for (; itr != itrEnd && *itr < nTabCount; ++itr)
-                    if ( rDoc.IsTabProtected(*itr) )
+                for (const auto& rTab : aMark)
+                {
+                    if (rTab >= nTabCount)
+                        break;
+                    if ( rDoc.IsTabProtected(rTab) )
                         bProtected = true;
+                }
                 if (bProtected)
                 {
                     //! Exception, or what?
@@ -4025,10 +4028,13 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
                         pUndoDoc->InitUndo( &rDoc, nTab, nTab );
                     }
-                    itr = aMark.begin();
-                    for (; itr != itrEnd && *itr < nTabCount; ++itr)
-                        if ( *itr != nTab && bUndo)
-                            pUndoDoc->AddUndoTab( *itr, *itr );
+                    for (const auto& rTab : aMark)
+                    {
+                        if (rTab >= nTabCount)
+                            break;
+                        if (rTab != nTab && bUndo)
+                            pUndoDoc->AddUndoTab( rTab, rTab );
+                    }
                     std::unique_ptr<ScMarkData> pUndoMark;
                     if (bUndo)
                         pUndoMark.reset(new ScMarkData(aMark));
@@ -9317,9 +9323,8 @@ const ScRangeList& ScUniqueFormatsEntry::GetRanges()
 
     // move remaining entries from aJoinedRanges to aCompletedRanges
 
-    ScRowRangeHashMap::const_iterator aJoinedEnd = aJoinedRanges.end();
-    for ( ScRowRangeHashMap::const_iterator aJoinedIter = aJoinedRanges.begin(); aJoinedIter != aJoinedEnd; ++aJoinedIter )
-        aCompletedRanges.push_back( aJoinedIter->second );
+    for ( const auto& rEntry : aJoinedRanges )
+        aCompletedRanges.push_back( rEntry.second );
     aJoinedRanges.clear();
 
     // sort all ranges for a predictable API result
@@ -9329,9 +9334,8 @@ const ScRangeList& ScUniqueFormatsEntry::GetRanges()
     // fill and return ScRangeList
 
     aReturnRanges = new ScRangeList;
-    ScRangeVector::const_iterator aCompEnd( aCompletedRanges.end() );
-    for ( ScRangeVector::const_iterator aCompIter( aCompletedRanges.begin() ); aCompIter != aCompEnd; ++aCompIter )
-        aReturnRanges->push_back( *aCompIter );
+    for ( const auto& rCompletedRange : aCompletedRanges )
+        aReturnRanges->push_back( rCompletedRange );
     aCompletedRanges.clear();
 
     return *aReturnRanges;
@@ -9382,15 +9386,12 @@ ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange
     // Fill the vector aRangeLists with the range lists from the hash map
 
     aRangeLists.reserve( aHashMap.size() );
-    ScUniqueFormatsHashMap::iterator aMapIter( aHashMap.begin() );
-    ScUniqueFormatsHashMap::iterator aMapEnd( aHashMap.end() );
-    while ( aMapIter != aMapEnd )
+    for ( auto& rMapEntry : aHashMap )
     {
-        ScUniqueFormatsEntry& rEntry = aMapIter->second;
+        ScUniqueFormatsEntry& rEntry = rMapEntry.second;
         const ScRangeList& rRanges = rEntry.GetRanges();
         aRangeLists.push_back( rRanges );       // copy ScRangeList
         rEntry.Clear();                         // free memory, don't hold both copies of all ranges
-        ++aMapIter;
     }
 
     // Sort the vector by first range's start position, to avoid random shuffling

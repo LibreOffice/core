@@ -2852,8 +2852,11 @@ Sequence< OUString > SAL_CALL ScDataPilotFieldGroupsObj::getElementNames()
     {
         aSeq.realloc( static_cast< sal_Int32 >( maGroups.size() ) );
         OUString* pName = aSeq.getArray();
-        for( ScFieldGroups::iterator aIt = maGroups.begin(), aEnd = maGroups.end(); aIt != aEnd; ++aIt, ++pName )
-            *pName = aIt->maName;
+        for( const auto& rGroup : maGroups )
+        {
+            *pName = rGroup.maName;
+            ++pName;
+        }
     }
     return aSeq;
 }
@@ -2989,10 +2992,8 @@ void ScDataPilotFieldGroupsObj::renameFieldGroup( const OUString& rOldName, cons
 
 ScFieldGroups::iterator ScDataPilotFieldGroupsObj::implFindByName( const OUString& rName )
 {
-    for( ScFieldGroups::iterator aIt = maGroups.begin(), aEnd = maGroups.end(); aIt != aEnd; ++aIt )
-        if( aIt->maName == rName )
-            return aIt;
-    return maGroups.end();
+    return std::find_if(maGroups.begin(), maGroups.end(),
+        [&rName](const ScFieldGroup& rGroup) { return rGroup.maName == rName; });
 }
 
 namespace {

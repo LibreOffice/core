@@ -1124,19 +1124,19 @@ void lclIntersectRanges( ListOfScRange& rList, const uno::Any& rArg )
         // join ranges from passed argument
         lclJoinRanges( aList2 );
         // calculate intersection of the ranges in both lists
-        for( ListOfScRange::const_iterator aOuterIt = aList1.begin(), aOuterEnd = aList1.end(); aOuterIt != aOuterEnd; ++aOuterIt )
+        for( const auto& rOuterItem : aList1 )
         {
-            for( ListOfScRange::const_iterator aInnerIt = aList2.begin(), aInnerEnd = aList2.end(); aInnerIt != aInnerEnd; ++aInnerIt )
+            for( const auto& rInnerItem : aList2 )
             {
-                if( aOuterIt->Intersects( *aInnerIt ) )
+                if( rOuterItem.Intersects( rInnerItem ) )
                 {
                     ScRange aIsectRange(
-                        std::max( aOuterIt->aStart.Col(), aInnerIt->aStart.Col() ),
-                        std::max( aOuterIt->aStart.Row(), aInnerIt->aStart.Row() ),
-                        std::max( aOuterIt->aStart.Tab(), aInnerIt->aStart.Tab() ),
-                        std::min( aOuterIt->aEnd.Col(),   aInnerIt->aEnd.Col() ),
-                        std::min( aOuterIt->aEnd.Row(),   aInnerIt->aEnd.Row() ),
-                        std::min( aOuterIt->aEnd.Tab(),   aInnerIt->aEnd.Tab() ) );
+                        std::max( rOuterItem.aStart.Col(), rInnerItem.aStart.Col() ),
+                        std::max( rOuterItem.aStart.Row(), rInnerItem.aStart.Row() ),
+                        std::max( rOuterItem.aStart.Tab(), rInnerItem.aStart.Tab() ),
+                        std::min( rOuterItem.aEnd.Col(),   rInnerItem.aEnd.Col() ),
+                        std::min( rOuterItem.aEnd.Row(),   rInnerItem.aEnd.Row() ),
+                        std::min( rOuterItem.aEnd.Tab(),   rInnerItem.aEnd.Tab() ) );
                     rList.push_back( aIsectRange );
                 }
             }
@@ -1159,8 +1159,8 @@ uno::Reference< excel::XRange > lclCreateVbaRange(
     if( !pDocShell ) throw uno::RuntimeException();
 
     ScRangeList aCellRanges;
-    for( ListOfScRange::const_iterator aIt = rList.begin(), aEnd = rList.end(); aIt != aEnd; ++aIt )
-        aCellRanges.push_back( *aIt );
+    for( const auto& rItem : rList )
+        aCellRanges.push_back( rItem );
 
     if( aCellRanges.size() == 1 )
     {
