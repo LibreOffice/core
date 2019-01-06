@@ -214,7 +214,7 @@ void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
     // tell the style about it's events (if applicable)
     if( xEventContext.is() )
     {
-        // set event suppplier and release reference to context
+        // set event supplier and release reference to context
         Reference<XEventsSupplier> xEventsSupplier(xStyle, UNO_QUERY);
         static_cast<XMLEventsImportContext *>(xEventContext.get())->SetEvents(xEventsSupplier);
         xEventContext = nullptr;
