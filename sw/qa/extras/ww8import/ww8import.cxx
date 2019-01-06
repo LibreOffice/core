@@ -190,6 +190,72 @@ DECLARE_WW8IMPORT_TEST(testTdf121734, "tdf121734.doc")
     }
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf122425_1, "tdf122425_1.doc")
+{
+    // This is for header text in case we use a hack for fixed-height headers
+    // (see SwWW8ImplReader::Read_HdFtTextAsHackedFrame)
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
+    // There are two fly frames in the document: for first page's header, and for other pages'
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPosFlyFrames.size());
+    for (const auto& rPosFlyFrame : aPosFlyFrames)
+    {
+        const SwFrameFormat& rFormat = rPosFlyFrame->GetFormat();
+        const SfxPoolItem* pItem = nullptr;
+
+        // The LR and UL spacings and borders must all be set explicitly;
+        // spacings and border distances must be 0; borders must be absent
+
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_LR_SPACE, false, &pItem));
+        auto pLR = static_cast<const SvxLRSpaceItem*>(pItem);
+        CPPUNIT_ASSERT(pLR);
+        CPPUNIT_ASSERT_EQUAL(long(0), pLR->GetLeft());
+        CPPUNIT_ASSERT_EQUAL(long(0), pLR->GetRight());
+
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_UL_SPACE, false, &pItem));
+        auto pUL = static_cast<const SvxULSpaceItem*>(pItem);
+        CPPUNIT_ASSERT(pUL);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetUpper());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetLower());
+
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_BOX, false, &pItem));
+        auto pBox = static_cast<const SvxBoxItem*>(pItem);
+        CPPUNIT_ASSERT(pBox);
+        for (auto eLine : { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM,
+                            SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT })
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pBox->GetDistance(eLine));
+            CPPUNIT_ASSERT(!pBox->GetLine(eLine));
+        }
+    }
+}
+
+DECLARE_WW8IMPORT_TEST(testTdf122425_2, "tdf122425_2.doc")
+{
+    // This is for graphic objects in headers/footers
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
+    // There is one fly frame in the document: the text box
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPosFlyFrames.size());
+    for (const auto& rPosFlyFrame : aPosFlyFrames)
+    {
+        const SwFrameFormat& rFormat = rPosFlyFrame->GetFormat();
+        const SfxPoolItem* pItem = nullptr;
+
+        // Check for correct explicitly-set values of UL spacings. Previously this was "DEFAULT",
+        // and resulted in inherited values (114 = 2 mm) used.
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_UL_SPACE, false, &pItem));
+        auto pUL = static_cast<const SvxULSpaceItem*>(pItem);
+        CPPUNIT_ASSERT(pUL);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetUpper());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pUL->GetLower());
+    }
+}
+
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
