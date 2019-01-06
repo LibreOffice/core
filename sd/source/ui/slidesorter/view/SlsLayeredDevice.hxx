@@ -21,15 +21,17 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_VIEW_SLSLAYEREDDEVICE_HXX
 
 #include <view/SlsILayerPainter.hxx>
-#include <SlideSorter.hxx>
 
-#include <vcl/region.hxx>
-#include <vcl/virdev.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/mapmod.hxx>
 
 #include <memory>
-#include <vector>
 
+namespace sd { class Window; }
 namespace tools { class Rectangle; }
+namespace vcl { class Region; }
+
+class VirtualDevice;
 
 namespace sd { namespace slidesorter { namespace view {
 

@@ -24,6 +24,7 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include "MasterPageContainer.hxx"
+#include "MasterPageContainerProviders.hxx"
 #include "MasterPageDescriptor.hxx"
 #include <EventMultiplexer.hxx>
 #include <app.hrc>

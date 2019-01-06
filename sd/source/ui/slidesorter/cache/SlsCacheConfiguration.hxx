@@ -22,8 +22,9 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <vcl/timer.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
 
 namespace sd { namespace slidesorter { namespace cache {
 

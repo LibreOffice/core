@@ -71,6 +71,7 @@
 
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svl/itemset.hxx>
 
 using namespace ::com::sun::star;

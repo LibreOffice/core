@@ -31,6 +31,7 @@
 #include <svx/svdpool.hxx>
 #include <svl/itemprop.hxx>
 
+#include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/unoprov.hxx>
@@ -43,13 +44,19 @@
 #include <slideshow.hxx>
 #include "slideshowimpl.hxx"
 #include <sdattr.hrc>
+#include <sdmod.hxx>
 #include <FactoryIds.hxx>
+#include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include "SlideShowRestarter.hxx"
 #include <DrawController.hxx>
+#include <PresentationViewShell.hxx>
 #include <customshowlist.hxx>
 #include <unopage.hxx>
 #include <sdpage.hxx>
+#include <cusshow.hxx>
+#include <optsitem.hxx>
 
 using ::com::sun::star::presentation::XSlideShowController;
 using ::sd::framework::FrameworkHelper;

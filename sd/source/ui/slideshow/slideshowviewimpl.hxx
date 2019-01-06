@@ -24,44 +24,21 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/listenernotification.hxx>
-#include <com/sun/star/awt/WindowEvent.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
-#include <com/sun/star/awt/XPointer.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/utils/canvastools.hxx>
 #include <cppcanvas/spritecanvas.hxx>
-#include <vcl/help.hxx>
-#include <unotools/pathoptions.hxx>
-#include <unotools/saveopt.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <basic/sbstar.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/fmshell.hxx>
+#include <tools/gen.hxx>
 
-#include <svx/svxids.hrc>
-#include <sdmod.hxx>
-#include <cusshow.hxx>
-#include <ViewShellBase.hxx>
-#include <PresentationViewShell.hxx>
-#include <ViewShell.hxx>
-#include <drawview.hxx>
 #include <slideshow.hxx>
-#include <drawdoc.hxx>
-#include "showwindow.hxx"
-#include <optsitem.hxx>
-#include <FrameView.hxx>
-#include <DrawDocShell.hxx>
 
-#include <app.hrc>
+namespace com { namespace sun { namespace star { namespace awt { class XPointer; } } } }
+namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace awt { class XWindowPeer; } } } }
+namespace com { namespace sun { namespace star { namespace awt { struct WindowEvent; } } } }
+namespace com { namespace sun { namespace star { namespace rendering { class XSpriteCanvas; } } } }
+class SdDrawDocument;
 
 namespace sd
 {

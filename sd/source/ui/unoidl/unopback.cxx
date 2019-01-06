@@ -28,6 +28,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/unoshprp.hxx>
 
 #include "unopback.hxx"
 #include <drawdoc.hxx>

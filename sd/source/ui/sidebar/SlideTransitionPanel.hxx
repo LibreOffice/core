@@ -20,7 +20,8 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDETRANSITIONPANEL_HXX
 
 #include "PanelBase.hxx"
-#include <sfx2/sidebar/ControlFactory.hxx>
+
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 
 namespace sd { namespace sidebar {
 

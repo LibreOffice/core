@@ -23,6 +23,9 @@
 #include "MasterPageContainer.hxx"
 #include <memory>
 
+namespace sd { class PreviewRenderer; }
+class SdDrawDocument;
+
 namespace sd { namespace sidebar {
 
 class PageObjectProvider;
