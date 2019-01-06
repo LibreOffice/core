@@ -2157,7 +2157,12 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     m_pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
     m_pPaM->GetPoint()->nContent.Assign(m_pPaM->GetContentNode(), 0);
 
-    SwFlyFrameFormat *pFrame = m_rDoc.MakeFlySection(RndStdIds::FLY_AT_PARA, m_pPaM->GetPoint());
+    // tdf#122425: Explicitly remove borders and spacing
+    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
+    Reader::ResetFrameFormatAttrs(aFlySet);
+
+    SwFlyFrameFormat* pFrame
+        = m_rDoc.MakeFlySection(RndStdIds::FLY_AT_PARA, m_pPaM->GetPoint(), &aFlySet);
 
     SwFormatAnchor aAnch( pFrame->GetAnchor() );
     aAnch.SetType( RndStdIds::FLY_AT_PARA );
