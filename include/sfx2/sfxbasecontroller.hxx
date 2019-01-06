@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider2.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XControllerBorder.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -70,7 +70,7 @@ typedef ::cppu::WeakImplHelper  <   css::frame::XController2
                                 ,   css::task::XStatusIndicatorSupplier
                                 ,   css::ui::XContextMenuInterception
                                 ,   css::awt::XUserInputInterception
-                                ,   css::frame::XDispatchInformationProvider
+                                ,   css::frame::XDispatchInformationProvider2
                                 ,   css::frame::XTitle
                                 ,   css::frame::XTitleChangeBroadcaster
                                 ,   css::lang::XInitialization
@@ -164,6 +164,7 @@ public:
     //  XDispatchInformationProvider
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
     virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) override;
+    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation2( sal_Int16 nCommandGroup, sal_uInt32 nSlotMode = 0 ) override;
 
     // css::frame::XTitle
     virtual OUString SAL_CALL getTitle(  ) override;

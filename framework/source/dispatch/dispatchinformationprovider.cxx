@@ -42,7 +42,7 @@ DispatchInformationProvider::~DispatchInformationProvider()
 
 css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupportedCommandGroups()
 {
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
+    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider2 > > lProvider = implts_getAllSubProvider();
     sal_Int32                                                                             c1        = lProvider.getLength();
     sal_Int32                                                                             i1        = 0;
 
@@ -51,7 +51,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     for (i1=0; i1<c1; ++i1)
     {
         // ignore controller, which doesn't implement the right interface
-        css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider = lProvider[i1];
+        css::uno::Reference< css::frame::XDispatchInformationProvider2 > xProvider = lProvider[i1];
         if (!xProvider.is())
             continue;
 
@@ -73,7 +73,12 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
 
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
 {
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
+    return getConfigurableDispatchInformation2(nCommandGroup);
+}
+
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation2(sal_Int16 nCommandGroup, sal_uInt32 nSlotMode)
+{
+    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider2 > > lProvider = implts_getAllSubProvider();
     sal_Int32                                                                             c1        = lProvider.getLength();
     sal_Int32                                                                             i1        = 0;
 
@@ -84,11 +89,11 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
         try
         {
             // ignore controller, which doesn't implement the right interface
-            css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider = lProvider[i1];
+            css::uno::Reference< css::frame::XDispatchInformationProvider2 > xProvider = lProvider[i1];
             if (!xProvider.is())
                 continue;
 
-            const css::uno::Sequence< css::frame::DispatchInformation > lProviderInfos = xProvider->getConfigurableDispatchInformation(nCommandGroup);
+            const css::uno::Sequence< css::frame::DispatchInformation > lProviderInfos = xProvider->getConfigurableDispatchInformation2(nCommandGroup, nSlotMode);
                   sal_Int32                                             c2             = lProviderInfos.getLength();
                   sal_Int32                                             i2             = 0;
             for (i2=0; i2<c2; ++i2)
@@ -118,19 +123,19 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     return lReturn;
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider2 > > DispatchInformationProvider::implts_getAllSubProvider()
 {
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame);
     if (!xFrame.is())
-        return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
+        return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider2 > >();
 
     CloseDispatcher* pCloser = new CloseDispatcher(m_xContext, xFrame, "_self"); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
     css::uno::Reference< css::uno::XInterface > xCloser(static_cast< css::frame::XDispatch* >(pCloser), css::uno::UNO_QUERY);
 
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher = css::frame::AppDispatchProvider::create(m_xContext);
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider(3);
+    css::uno::Reference< css::frame::XDispatchInformationProvider2 > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XDispatchInformationProvider2 > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XDispatchInformationProvider2 > xAppDispatcher = css::frame::AppDispatchProvider::create(m_xContext);
+    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider2 > > lProvider(3);
     lProvider[0] = xController;
     lProvider[1] = xCloseDispatch;
     lProvider[2] = xAppDispatcher;

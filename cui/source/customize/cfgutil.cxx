@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider2.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
@@ -930,7 +930,7 @@ void SfxConfigGroupListBox::GroupSelected()
     {
         case SfxCfgKind::GROUP_ALLFUNCTIONS:
         {
-            css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider( m_xFrame, UNO_QUERY );
+            css::uno::Reference< css::frame::XDispatchInformationProvider2 > xProvider( m_xFrame, UNO_QUERY );
             SvTreeListEntry *pCurrEntry = First();
             while( pCurrEntry )
             {
@@ -940,7 +940,7 @@ void SfxConfigGroupListBox::GroupSelected()
                     css::uno::Sequence< css::frame::DispatchInformation > lCommands;
                     try
                     {
-                        lCommands = xProvider->getConfigurableDispatchInformation( pCurrentInfo->nUniqueID );
+                        lCommands = xProvider->getConfigurableDispatchInformation2( pCurrentInfo->nUniqueID, sal_uInt32(pFunctionListBox->GetSlotMode()) );
                         FillFunctionsList( lCommands );
                     }
                     catch ( container::NoSuchElementException& )
@@ -955,8 +955,8 @@ void SfxConfigGroupListBox::GroupSelected()
         case SfxCfgKind::GROUP_FUNCTION :
         {
             sal_uInt16                                                          nGroup    = pInfo->nUniqueID;
-            css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
-            css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup);
+            css::uno::Reference< css::frame::XDispatchInformationProvider2 > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
+            css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation2(nGroup, sal_uInt32(pFunctionListBox->GetSlotMode()));
             FillFunctionsList( lCommands );
             break;
         }
