@@ -186,10 +186,10 @@ bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt )
         if( !rKEvt.GetKeyCode().IsShift() )
         {
             if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
-                mpBrowser2->GetViewWindow()->GrabFocus();
-            else if( mpBrowser2->GetViewWindow()->HasFocus() )
                 mpBrowser2->maViewBox->GrabFocus();
             else if( mpBrowser2->maViewBox->HasFocus() )
+                mpBrowser2->GetViewWindow()->GrabFocus();
+            else if( mpBrowser2->GetViewWindow()->HasFocus() )
                 mpBrowser1->maNewTheme->GrabFocus();
             else
                 mpBrowser1->mpThemes->GrabFocus();
@@ -199,9 +199,9 @@ bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt )
             if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
                 mpBrowser1->maNewTheme->GrabFocus();
             else if( mpBrowser1->maNewTheme->HasFocus() )
-                mpBrowser2->maViewBox->GrabFocus();
-            else if( mpBrowser2->maViewBox->HasFocus() )
                 mpBrowser2->GetViewWindow()->GrabFocus();
+            else if( mpBrowser2->GetViewWindow()->HasFocus() )
+                mpBrowser2->maViewBox->GrabFocus();
             else
                 mpBrowser1->mpThemes->GrabFocus();
         }
