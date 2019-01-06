@@ -28,16 +28,18 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <svx/unoshprp.hxx>
-#include <editeng/unoipset.hxx>
-
+#include <svl/lstner.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
-const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 class SdDrawDocument;
+class SdrModel;
 class SfxItemSet;
+class SvxItemPropertySet;
+struct SfxItemPropertySimpleEntry;
+
+const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 
 class SdUnoPageBackground final : public ::cppu::WeakImplHelper<
                                     css::beans::XPropertySet,

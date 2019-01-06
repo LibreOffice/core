@@ -20,12 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGECONTAINER_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGECONTAINER_HXX
 
-#include "MasterPageContainerProviders.hxx"
-
 #include <vcl/image.hxx>
-#include <PreviewRenderer.hxx>
-#include <vcl/timer.hxx>
-#include <tools/SdGlobalResourceContainer.hxx>
 
 #include <memory>
 

@@ -19,8 +19,10 @@
 
 #include <memory>
 #include "MasterPageDescriptor.hxx"
+#include "MasterPageContainerProviders.hxx"
 
 #include "DocumentHelper.hxx"
+#include <PreviewRenderer.hxx>
 #include <sdpage.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>

@@ -21,34 +21,27 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDEBACKGROUND_HXX
 
 #include <memory>
-#include <vcl/ctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/field.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <svx/pagectrl.hxx>
-#include <ViewShellBase.hxx>
 #include <svx/itemwin.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <com/sun/star/drawing/XDrawView.hpp>
-#include <fupage.hxx>
-#include <editeng/sizeitem.hxx>
 #include <svx/papersizelistbox.hxx>
-#include <svx/rulritem.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xgrad.hxx>
-#include <svx/xflgrit.hxx>
-#include <svx/xbitmap.hxx>
-#include <svx/xflbckit.hxx>
-#include <svx/xbtmpit.hxx>
-#include <svx/xflhtit.hxx>
-#include <EventMultiplexer.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+
+namespace sd { class ViewShellBase; }
+namespace sd { namespace tools { class EventMultiplexerEvent; } }
 
 class SvxColorListBox;
 class SvxPageItem;
+class SvxLongLRSpaceItem;
+class SvxLongULSpaceItem;
+class XFillColorItem;
+class XGradient;
+class XFillGradientItem;
+class XFillBitmapItem;
+class XFillHatchItem;
 
 static const long MINBODY = 284;
 

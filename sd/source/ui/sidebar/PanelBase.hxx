@@ -25,8 +25,6 @@
 
 #include <vcl/ctrl.hxx>
 
-#include <memory>
-
 
 namespace sd {
     class ViewShellBase;

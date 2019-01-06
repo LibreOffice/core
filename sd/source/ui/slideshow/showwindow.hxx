@@ -27,8 +27,6 @@
 
 #include <Window.hxx>
 
-#include "slideshowimpl.hxx"
-
 namespace sd {
 
 class SlideshowImpl;
