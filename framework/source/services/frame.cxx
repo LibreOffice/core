@@ -205,7 +205,7 @@ public:
     //  XDispatchInformationProvider
 
     virtual css::uno::Sequence < sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
-    virtual css::uno::Sequence < css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup) override;
+    virtual css::uno::Sequence < css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup, sal_uInt32 nSlotMode) override;
 
     //  XWindowListener
     //  Attention: windowResized() and windowShown() are implement only! All other are empty!
@@ -2415,9 +2415,9 @@ css::uno::Sequence< sal_Int16 > SAL_CALL XFrameImpl::getSupportedCommandGroups()
 }
 
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL XFrameImpl::getConfigurableDispatchInformation(
-        sal_Int16 nCommandGroup)
+        sal_Int16 nCommandGroup, sal_uInt32 nSlotMode)
 {
-    return m_xDispatchInfoHelper->getConfigurableDispatchInformation(nCommandGroup);
+    return m_xDispatchInfoHelper->getConfigurableDispatchInformation(nCommandGroup, nSlotMode);
 }
 
 /*-****************************************************************************************************

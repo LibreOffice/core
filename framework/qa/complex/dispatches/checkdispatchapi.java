@@ -325,7 +325,7 @@ public class checkdispatchapi
         for (i1 = 0; i1 < c1; ++i1)
         {
             short nGroup = lGroups[i1];
-            DispatchInformation[] lInfos = xInfoProvider.getConfigurableDispatchInformation(nGroup);
+            DispatchInformation[] lInfos = xInfoProvider.getConfigurableDispatchInformation(nGroup, 0);
             int c2 = lInfos.length;
             int i2 = 0;
 

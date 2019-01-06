@@ -940,7 +940,7 @@ void SfxConfigGroupListBox::GroupSelected()
                     css::uno::Sequence< css::frame::DispatchInformation > lCommands;
                     try
                     {
-                        lCommands = xProvider->getConfigurableDispatchInformation( pCurrentInfo->nUniqueID );
+                        lCommands = xProvider->getConfigurableDispatchInformation( pCurrentInfo->nUniqueID, sal_uInt32(pFunctionListBox->GetSlotMode()) );
                         FillFunctionsList( lCommands );
                     }
                     catch ( container::NoSuchElementException& )
@@ -956,7 +956,7 @@ void SfxConfigGroupListBox::GroupSelected()
         {
             sal_uInt16                                                          nGroup    = pInfo->nUniqueID;
             css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
-            css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup);
+            css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup, sal_uInt32(pFunctionListBox->GetSlotMode()));
             FillFunctionsList( lCommands );
             break;
         }
@@ -1622,7 +1622,7 @@ void CuiConfigGroupListBox::GroupSelected()
                     css::uno::Sequence< css::frame::DispatchInformation > lCommands;
                     try
                     {
-                        lCommands = xProvider->getConfigurableDispatchInformation( pCurrentInfo->nUniqueID );
+                        lCommands = xProvider->getConfigurableDispatchInformation( pCurrentInfo->nUniqueID, 0 );
                         FillFunctionsList( lCommands );
                     }
                     catch ( container::NoSuchElementException& )
@@ -1638,7 +1638,7 @@ void CuiConfigGroupListBox::GroupSelected()
         {
             sal_uInt16                                                          nGroup    = pInfo->nUniqueID;
             css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
-            css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup);
+            css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup, 0);
             FillFunctionsList( lCommands );
             break;
         }

@@ -85,7 +85,7 @@ public:
 
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
 
-    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 ) override;
+    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16, sal_uInt32) override;
 };
 
 void SfxAppDispatchProvider::initialize(
@@ -200,14 +200,18 @@ Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups
     return comphelper::containerToSequence( aGroupList );
 }
 
-Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
+Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation(sal_Int16 nCmdGroup, sal_uInt32 nSlotMode)
 {
     std::vector< frame::DispatchInformation > aCmdVector;
 
     SolarMutexGuard aGuard;
     SfxSlotPool& rAppSlotPool = SfxGetpApp()->GetAppSlotPool_Impl();
 
-    const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
+    SfxSlotMode nMode;
+    if ( nSlotMode == 0 )
+        nMode = SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG;
+    else
+        nMode = SfxSlotMode( nSlotMode );
 
     // Select group ( group 0 is internal )
     for (sal_uInt16 i=0; i< rAppSlotPool.GetGroupCount(); ++i)
@@ -221,7 +225,7 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
             {
                 while ( pSfxSlot )
                 {
-                    if ( pSfxSlot->GetMode() & nMode )
+                    if ( pSfxSlot->IsMode( nMode ) )
                     {
                         frame::DispatchInformation aCmdInfo;
                         aCmdInfo.Command = ".uno:" + OUString::createFromAscii(pSfxSlot->GetUnoName());

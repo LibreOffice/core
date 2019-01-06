@@ -61,7 +61,7 @@ published interface XDispatchInformationProvider: com::sun::star::uno::XInterfac
             name and group name of every command supported. A group ID which is
             not supported returns an empty com::sun::star::uno::Sequence.
     */
-    sequence < DispatchInformation > getConfigurableDispatchInformation( [in] short CommandGroup );
+    sequence < DispatchInformation > getConfigurableDispatchInformation( [in] short CommandGroup, [in] unsigned long SlotMode );
 };
 
 

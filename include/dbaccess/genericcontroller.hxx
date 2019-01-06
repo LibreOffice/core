@@ -487,7 +487,7 @@ namespace dbaui
 
         // XDispatchInformationProvider
         virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
-        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 ) override;
+        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16, ::sal_uInt32 ) override;
 
         // XTitle
         virtual OUString SAL_CALL getTitle(  ) override;

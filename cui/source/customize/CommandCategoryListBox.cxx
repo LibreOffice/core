@@ -300,7 +300,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                     try
                     {
                         lCommands = xProvider->getConfigurableDispatchInformation(
-                                        pCurrentInfo->nUniqueID );
+                                        pCurrentInfo->nUniqueID, sal_uInt32(pFunctionListBox->GetSlotMode()));
                         FillFunctionsList( lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData );
                     }
                     catch( css::container::NoSuchElementException& )
@@ -317,7 +317,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
             css::uno::Reference< css::frame::XDispatchInformationProvider >
                 xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
             css::uno::Sequence< css::frame::DispatchInformation > lCommands =
-                xProvider->getConfigurableDispatchInformation(nGroup);
+                xProvider->getConfigurableDispatchInformation(nGroup, sal_uInt32(pFunctionListBox->GetSlotMode()));
             FillFunctionsList( lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData );
             break;
         }

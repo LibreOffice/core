@@ -7378,7 +7378,7 @@ module com {
     published interface XDispatchInformationProvider {
      interface ::com::sun::star::uno::XInterface;
      sequence< short > getSupportedCommandGroups();
-     sequence< ::com::sun::star::frame::DispatchInformation > getConfigurableDispatchInformation([in] short CommandGroup);
+     sequence< ::com::sun::star::frame::DispatchInformation > getConfigurableDispatchInformation([in] short CommandGroup, [in] unsigned long SlotMode);
     };
     published service Bibliography: ::com::sun::star::container::XNameAccess;
     published constants CommandGroup {
