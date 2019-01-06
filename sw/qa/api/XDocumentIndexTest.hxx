@@ -25,12 +25,16 @@
 
 namespace apitest
 {
+/**
+ * Testing <code>com.sun.star.text.XDocumentIndex</code>
+ *
+ * @see com.sun.star.text.XDocumentIndex
+ */
 class XDocumentIndexTest : public ApiTestBase
 {
 public:
     /**
-     * Test calls the method. <p>
-     * Has <b> OK </b> status if the returned service name
+     * Has <b>OK</b> status if the returned service name
      * is equal to 'com.sun.star.text.DocumentIndex'.
      */
     void testGetServiceName()
