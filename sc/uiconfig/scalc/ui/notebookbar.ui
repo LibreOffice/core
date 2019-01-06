@@ -9881,10 +9881,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Image-AlignDown">
+                                      <object class="GtkToolButton" id="Image-AlignMiddle">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:AlignDown</property>
+                                        <property name="action_name">.uno:AlignMiddle</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -9892,10 +9892,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Image-AlignMiddle">
+                                      <object class="GtkToolButton" id="Image-AlignDown">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:AlignMiddle</property>
+                                        <property name="action_name">.uno:AlignDown</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10824,10 +10824,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Image-AlignDown1">
+                                      <object class="GtkToolButton" id="Image-AlignMiddle">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:AlignDown</property>
+                                        <property name="action_name">.uno:AlignMiddle</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10835,10 +10835,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Image-AlignMiddle1">
+                                      <object class="GtkToolButton" id="Image-AlignDown">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:AlignMiddle</property>
+                                        <property name="action_name">.uno:AlignDown</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -11900,10 +11900,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Object-AlignDown">
+                                      <object class="GtkToolButton" id="Object-AlignMiddle">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:AlignDown</property>
+                                        <property name="action_name">.uno:AlignMiddle</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -11911,10 +11911,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Object-AlignMiddle">
+                                      <object class="GtkToolButton" id="Object-AlignDown">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:AlignMiddle</property>
+                                        <property name="action_name">.uno:AlignDown</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -12519,10 +12519,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Media-AlignDown">
+                                      <object class="GtkToolButton" id="Media-AlignMiddle">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:AlignDown</property>
+                                        <property name="action_name">.uno:AlignMiddle</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -12530,10 +12530,10 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Media-AlignMiddle">
+                                      <object class="GtkToolButton" id="Media-AlignDown">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="action_name">.uno:AlignMiddle</property>
+                                        <property name="action_name">.uno:AlignDown</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
