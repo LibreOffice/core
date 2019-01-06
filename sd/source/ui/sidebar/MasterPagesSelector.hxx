@@ -24,19 +24,11 @@
 #include "MasterPageContainer.hxx"
 #include <SlideSorterViewShell.hxx>
 #include "PreviewValueSet.hxx"
-#include "ISidebarReceiver.hxx"
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 
-#include <pres.hxx>
-#include <sfx2/shell.hxx>
-#include <vcl/image.hxx>
-#include <glob.hxx>
 #include <osl/mutex.hxx>
-#include <com/sun/star/ui/XSidebar.hpp>
 
-#include <queue>
-
-
+namespace com { namespace sun { namespace star { namespace ui { class XSidebar; } } } }
 class MouseEvent;
 class SdDrawDocument;
 class SdPage;
@@ -46,8 +38,6 @@ class ViewShellBase;
 }
 
 namespace sd { namespace sidebar {
-
-class PreviewValueSet;
 
 /** Base class of a menu that lets the user select from a list of
     templates or designs that are loaded from files.

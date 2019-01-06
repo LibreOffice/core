@@ -39,11 +39,14 @@
 #include <com/sun/star/presentation/SlideShow.hpp>
 #include <svl/aeitem.hxx>
 #include <svl/urihelper.hxx>
+#include <unotools/saveopt.hxx>
+#include <basic/sbstar.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <sfx2/infobar.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <svx/unoapi.hxx>
@@ -56,6 +59,7 @@
 #include <svx/bmpmask.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
+#include <svx/svxids.hrc>
 #include <AnimationChildWindow.hxx>
 #include <notifydocumentevent.hxx>
 #include "slideshowimpl.hxx"
@@ -76,10 +80,17 @@
 #include <canvas/elapsedtime.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/colrdlg.hxx>
+#include <DrawDocShell.hxx>
+#include <ViewShellBase.hxx>
+#include <PresentationViewShell.hxx>
 #include <RemoteServer.hxx>
 #include <customshowlist.hxx>
 #include <unopage.hxx>
 #include <sdpage.hxx>
+#include <sdmod.hxx>
+#include <app.hrc>
+#include <cusshow.hxx>
+#include <optsitem.hxx>
 
 #define CM_SLIDES       21
 

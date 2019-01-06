@@ -22,7 +22,6 @@
 
 #include "SlsRequestPriorityClass.hxx"
 #include <cache/SlsCacheContext.hxx>
-#include <drawdoc.hxx>
 #include <osl/mutex.hxx>
 #include <svx/sdrpageuser.hxx>
 

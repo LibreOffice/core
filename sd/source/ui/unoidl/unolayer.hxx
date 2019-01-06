@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNOLAYER_HXX
 #define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOLAYER_HXX
 
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
 
@@ -31,7 +30,6 @@
 
 class SdrLayer;
 class SdLayerManager;
-class SdXImpressDocument;
 class SvUnoWeakContainer;
 
 namespace sd {

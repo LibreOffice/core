@@ -22,12 +22,9 @@
 
 #include <tools/SdGlobalResourceContainer.hxx>
 #include <tools/link.hxx>
-#include <vcl/image.hxx>
 #include <vector>
 
-#include <DrawDocShell.hxx>
 #include "MasterPageContainer.hxx"
-#include <com/sun/star/uno/XInterface.hpp>
 
 namespace sd {
 class MasterPageObserverEvent;

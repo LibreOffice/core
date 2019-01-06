@@ -21,6 +21,7 @@
 #include <ViewShellBase.hxx>
 
 #include <sfx2/sidebar/Theme.hxx>
+#include <navigatr.hxx>
 
 
 namespace sd { namespace sidebar {

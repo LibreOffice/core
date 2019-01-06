@@ -18,6 +18,7 @@
  */
 
 #include "RecentlyUsedMasterPages.hxx"
+#include "MasterPageContainerProviders.hxx"
 #include <MasterPageObserver.hxx>
 #include "MasterPagesSelector.hxx"
 #include "MasterPageDescriptor.hxx"

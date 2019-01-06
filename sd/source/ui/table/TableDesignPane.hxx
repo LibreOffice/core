@@ -20,17 +20,13 @@
 #ifndef INCLUDED_SD_SOURCE_UI_TABLE_TABLEDESIGNPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_TABLE_TABLEDESIGNPANE_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/ui/XUIElement.hpp>
-#include <com/sun/star/ui/LayoutSize.hpp>
-#include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-
 #include <svtools/valueset.hxx>
 #include <vcl/button.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
-#include <memory>
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XIndexAccess; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawView; } } } }
 
 namespace sd
 {

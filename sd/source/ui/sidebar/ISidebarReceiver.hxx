@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_ISIDEBARRECEIVER_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_ISIDEBARRECEIVER_HXX
 
-#include <com/sun/star/ui/XSidebar.hpp>
-
 namespace sd { namespace sidebar {
 
 class ISidebarReceiver
