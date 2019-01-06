@@ -22,6 +22,30 @@
       "revId": "c67dfbdc13e0301d7080f84906e06ce07034841e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_c1a4210b",
+        "filename": "svx/sdi/svx.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-01-06T17:45:24Z",
+      "side": 1,
+      "message": "From looking at the code I don\u0027t see that this has ever worked as expected. I have put not too much effort into a patch. Is there a bug report to submit under?",
+      "parentUuid": "5f4e5783_884ace7d",
+      "range": {
+        "startLine": 440,
+        "startChar": 1,
+        "endLine": 441,
+        "endChar": 23
+      },
+      "revId": "c67dfbdc13e0301d7080f84906e06ce07034841e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
