@@ -50,6 +50,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider2.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
@@ -115,7 +116,7 @@ class XFrameImpl:
         css::document::XActionLockable, css::util::XCloseable,
         css::frame::XComponentLoader, css::frame::XTitle,
         css::frame::XTitleChangeBroadcaster, css::beans::XPropertySet,
-        css::beans::XPropertySetInfo>
+        css::beans::XPropertySetInfo, css::frame::XDispatchInformationProvider2>
 {
 public:
 
@@ -206,6 +207,7 @@ public:
 
     virtual css::uno::Sequence < sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
     virtual css::uno::Sequence < css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup) override;
+    virtual css::uno::Sequence < css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation2(sal_Int16 nCommandGroup, sal_uInt32 nSlotMode = 0) override;
 
     //  XWindowListener
     //  Attention: windowResized() and windowShown() are implement only! All other are empty!
@@ -416,7 +418,7 @@ private:
     bool                                                                    m_bDocHidden = false;
     /// is used to layout the child windows of the frame.
     css::uno::Reference< css::frame::XLayoutManager2 >                      m_xLayoutManager;
-    css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper;
+    css::uno::Reference< css::frame::XDispatchInformationProvider2 >        m_xDispatchInfoHelper;
     css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper;
 
     std::unique_ptr<WindowCommandDispatch>                                  m_pWindowCommandDispatch;
@@ -2418,6 +2420,12 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL XFrameImpl::getCo
         sal_Int16 nCommandGroup)
 {
     return m_xDispatchInfoHelper->getConfigurableDispatchInformation(nCommandGroup);
+}
+
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL XFrameImpl::getConfigurableDispatchInformation2(
+        sal_Int16 nCommandGroup, sal_uInt32 nSlotMode)
+{
+    return m_xDispatchInfoHelper->getConfigurableDispatchInformation2(nCommandGroup, nSlotMode);
 }
 
 /*-****************************************************************************************************

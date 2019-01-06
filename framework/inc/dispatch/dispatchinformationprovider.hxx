@@ -24,7 +24,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider2.hpp>
 
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
@@ -36,7 +36,7 @@ namespace framework{
 /*-************************************************************************************************************
     @short          a helper to merge dispatch information of different sources together.
 *//*-*************************************************************************************************************/
-class DispatchInformationProvider : public  ::cppu::WeakImplHelper< css::frame::XDispatchInformationProvider >
+class DispatchInformationProvider : public  ::cppu::WeakImplHelper< css::frame::XDispatchInformationProvider2 >
 {
 
     // member
@@ -56,11 +56,12 @@ class DispatchInformationProvider : public  ::cppu::WeakImplHelper< css::frame::
         virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
 
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup) override;
+        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation2(sal_Int16 nCommandGroup, sal_uInt32 nSlotMode = 0) override;
 
     // helper
     private:
 
-        css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > implts_getAllSubProvider();
+        css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider2 > > implts_getAllSubProvider();
 
 }; // class DispatchInformationProvider
 

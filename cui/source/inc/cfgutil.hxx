@@ -36,6 +36,8 @@
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 
+#include <sfx2/msg.hxx>
+
 class Button;
 class SaveInData;
 class SfxMacroInfoItem;
@@ -109,6 +111,8 @@ class SfxConfigFunctionListBox : public SvTreeListBox
     friend class SfxConfigGroupListBox;
     SfxGroupInfoArr_Impl aArr;
 
+    SfxSlotMode aSlotMode;
+
     virtual void  MouseMove( const MouseEvent& rMEvt ) override;
 
 public:
@@ -121,6 +125,8 @@ public:
     OUString      GetCurCommand();
     OUString      GetCurLabel();
     OUString      GetHelpText( bool bConsiderParent = true );
+    void          SetSlotMode( SfxSlotMode SlotMode ) { aSlotMode = SlotMode; }
+    SfxSlotMode   GetSlotMode() { return aSlotMode; }
 };
 
 class CuiConfigFunctionListBox

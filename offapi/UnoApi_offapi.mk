@@ -2600,6 +2600,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XDispatch \
 	XDispatchHelper \
 	XDispatchInformationProvider \
+        XDispatchInformationProvider2 \
 	XDispatchProvider \
 	XDispatchProviderInterception \
 	XDispatchProviderInterceptor \

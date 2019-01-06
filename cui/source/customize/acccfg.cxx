@@ -911,6 +911,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
     m_pGroupLBox->set_width_request(aSize.Width());
     m_pGroupLBox->set_height_request(aSize.Height());
     get(m_pFunctionBox, "function");
+    m_pFunctionBox->SetSlotMode(SfxSlotMode::ACCELCONFIG);
     aSize = LogicToPixel(Size(88, 91), MapMode(MapUnit::MapAppFont));
     m_pFunctionBox->set_width_request(aSize.Width());
     m_pFunctionBox->set_height_request(aSize.Height());

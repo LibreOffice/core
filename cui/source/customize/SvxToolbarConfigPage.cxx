@@ -102,6 +102,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 {
     SetHelpId( HID_SVX_CONFIG_TOOLBAR );
 
+    m_pFunctions->SetSlotMode(SfxSlotMode::TOOLBOXCONFIG);
+
     m_pContentsListBox = VclPtr<SvxToolbarEntriesListBox>::Create(m_pEntries, this);
     m_pContentsListBox->set_grid_left_attach(0);
     m_pContentsListBox->set_grid_top_attach(0);

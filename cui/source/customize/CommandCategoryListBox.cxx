@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider2.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
@@ -285,7 +285,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
     {
         case SfxCfgKind::GROUP_ALLFUNCTIONS:
         {
-            css::uno::Reference< css::frame::XDispatchInformationProvider >
+            css::uno::Reference< css::frame::XDispatchInformationProvider2 >
                 xProvider( m_xFrame, css::uno::UNO_QUERY );
             sal_Int32 nEntryCount = GetEntryCount();
 
@@ -299,8 +299,8 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                     css::uno::Sequence< css::frame::DispatchInformation > lCommands;
                     try
                     {
-                        lCommands = xProvider->getConfigurableDispatchInformation(
-                                        pCurrentInfo->nUniqueID );
+                        lCommands = xProvider->getConfigurableDispatchInformation2(
+                                        pCurrentInfo->nUniqueID, sal_uInt32(pFunctionListBox->GetSlotMode()));
                         FillFunctionsList( lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData );
                     }
                     catch( css::container::NoSuchElementException& )
@@ -314,10 +314,10 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
         case SfxCfgKind::GROUP_FUNCTION:
         {
             sal_uInt16 nGroup = pInfo->nUniqueID;
-            css::uno::Reference< css::frame::XDispatchInformationProvider >
+            css::uno::Reference< css::frame::XDispatchInformationProvider2 >
                 xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
             css::uno::Sequence< css::frame::DispatchInformation > lCommands =
-                xProvider->getConfigurableDispatchInformation(nGroup);
+                xProvider->getConfigurableDispatchInformation2(nGroup, sal_uInt32(pFunctionListBox->GetSlotMode()));
             FillFunctionsList( lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData );
             break;
         }

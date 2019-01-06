@@ -119,6 +119,11 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
     return css::uno::Sequence< css::frame::DispatchInformation >();
 }
 
+css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation2(sal_Int16 nCommandGroup, sal_uInt32)
+{
+    return getConfigurableDispatchInformation(nCommandGroup);
+}
+
 void SAL_CALL CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                  const css::util::URL&                                     /*aURL*/     )
 {

@@ -101,6 +101,8 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     : SvxConfigPage(pParent, rSet)
     , m_bIsMenuBar( bIsMenuBar )
 {
+    m_pFunctions->SetSlotMode(SfxSlotMode::MENUCONFIG);
+
     m_pContentsListBox = VclPtr<SvxMenuEntriesListBox>::Create(m_pEntries, this);
     m_pContentsListBox->set_grid_left_attach(0);
     m_pContentsListBox->set_grid_top_attach(0);
