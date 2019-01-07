@@ -678,17 +678,18 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     int         nDstWidth = static_cast<int>(aPosAry.mnDestWidth);
     int         nDstHeight = static_cast<int>(aPosAry.mnDestHeight);
     HDC         hDC = mrParent.getHDC();
-    HBITMAP     hMemBitmap = nullptr;
-    HBITMAP     hMaskBitmap = nullptr;
+
+    ScopedHBITMAP hMemBitmap;
+    ScopedHBITMAP hMaskBitmap;
 
     if( ( nDstWidth > CACHED_HDC_DEFEXT ) || ( nDstHeight > CACHED_HDC_DEFEXT ) )
     {
-        hMemBitmap = CreateCompatibleBitmap( hDC, nDstWidth, nDstHeight );
-        hMaskBitmap = CreateCompatibleBitmap( hDC, nDstWidth, nDstHeight );
+        hMemBitmap.reset(CreateCompatibleBitmap(hDC, nDstWidth, nDstHeight));
+        hMaskBitmap.reset(CreateCompatibleBitmap(hDC, nDstWidth, nDstHeight));
     }
 
-    HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1, hMemBitmap );
-    HDC hMaskDC = ImplGetCachedDC( CACHED_HDC_2, hMaskBitmap );
+    HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1, hMemBitmap.get() );
+    HDC hMaskDC = ImplGetCachedDC( CACHED_HDC_2, hMaskBitmap.get() );
 
     aPosAry.mnDestX = aPosAry.mnDestY = 0;
     BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hDC, nDstX, nDstY, SRCCOPY );
@@ -729,13 +730,6 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
 
     ImplReleaseCachedDC( CACHED_HDC_1 );
     ImplReleaseCachedDC( CACHED_HDC_2 );
-
-    // hMemBitmap != 0 ==> hMaskBitmap != 0
-    if( hMemBitmap )
-    {
-        DeleteObject( hMemBitmap );
-        DeleteObject( hMaskBitmap );
-    }
 }
 
 bool WinSalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,

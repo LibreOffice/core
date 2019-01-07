@@ -29,6 +29,7 @@ using ScopedHRGN = ScopedGDI<HRGN, DeleteRegion>;
 using ScopedHDC = ScopedGDI<HDC, DeleteDC>;
 using ScopedHPEN = ScopedGDI<HPEN, DeletePen>;
 using ScopedHFONT = ScopedGDI<HFONT, DeleteFont>;
+using ScopedHBITMAP = ScopedGDI<HBITMAP, DeleteBitmap>;
 
 template <typename ScopedH, auto SelectorFunc> class ScopedSelectedGDI
 {
