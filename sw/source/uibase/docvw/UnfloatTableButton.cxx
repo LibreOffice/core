@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <FloatingTableButton.hxx>
+#include <UnfloatTableButton.hxx>
 #include <HeaderFooterWin.hxx>
 
 #include <edtwin.hxx>
@@ -36,15 +36,15 @@
 #define BOX_DISTANCE 3
 #define BUTTON_WIDTH 12
 
-FloatingTableButton::FloatingTableButton(SwEditWin* pEditWin, const SwFrame* pFrame)
+UnfloatTableButton::UnfloatTableButton(SwEditWin* pEditWin, const SwFrame* pFrame)
     : SwFrameMenuButtonBase(pEditWin, pFrame)
     , m_sLabel(SwResId(STR_UNFLOAT_TABLE))
 {
 }
 
-FloatingTableButton::~FloatingTableButton() { disposeOnce(); }
+UnfloatTableButton::~UnfloatTableButton() { disposeOnce(); }
 
-void FloatingTableButton::SetOffset(Point aBottomRightPixel)
+void UnfloatTableButton::SetOffset(Point aBottomRightPixel)
 {
     // Compute the text size and get the box position & size from it
     tools::Rectangle aTextRect;
@@ -66,7 +66,7 @@ void FloatingTableButton::SetOffset(Point aBottomRightPixel)
     SetPosSizePixel(aBoxPos, aBoxSize);
 }
 
-void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
+void UnfloatTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
 {
     assert(GetFrame()->IsFlyFrame());
     // const_cast is needed because of bad design of ISwFrameControl and derived classes
@@ -122,7 +122,7 @@ void FloatingTableButton::MouseButtonDown(const MouseEvent& /*rMEvt*/)
     }
 }
 
-void FloatingTableButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void UnfloatTableButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     SetMapMode(MapMode(MapUnit::MapPixel));
     drawinglayer::primitive2d::Primitive2DContainer aSeq;
@@ -162,9 +162,9 @@ void FloatingTableButton::Paint(vcl::RenderContext& rRenderContext, const tools:
     pProcessor->process(aSeq);
 }
 
-void FloatingTableButton::ShowAll(bool bShow) { Show(bShow); }
+void UnfloatTableButton::ShowAll(bool bShow) { Show(bShow); }
 
-bool FloatingTableButton::Contains(const Point& rDocPt) const
+bool UnfloatTableButton::Contains(const Point& rDocPt) const
 {
     ::tools::Rectangle aRect(GetPosPixel(), GetSizePixel());
     if (aRect.IsInside(rDocPt))
@@ -173,6 +173,6 @@ bool FloatingTableButton::Contains(const Point& rDocPt) const
     return false;
 }
 
-void FloatingTableButton::SetReadonly(bool bReadonly) { ShowAll(!bReadonly); }
+void UnfloatTableButton::SetReadonly(bool bReadonly) { ShowAll(!bReadonly); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
