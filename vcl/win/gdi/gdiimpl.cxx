@@ -296,9 +296,8 @@ void MakeInvisibleArea(const RECT& rSrcRect,
         rhInvalidateRgn = CreateRectRgnIndirect(&rSrcRect);
     }
 
-    HRGN hTempRgn = CreateRectRgn(nLeft, nTop, nRight, nBottom);
-    CombineRgn(rhInvalidateRgn, rhInvalidateRgn, hTempRgn, RGN_DIFF);
-    DeleteRegion(hTempRgn);
+    ScopedHRGN hTempRgn(CreateRectRgn(nLeft, nTop, nRight, nBottom));
+    CombineRgn(rhInvalidateRgn, rhInvalidateRgn, hTempRgn.get(), RGN_DIFF);
 }
 
 void ImplCalcOutSideRgn( const RECT& rSrcRect,
@@ -1259,9 +1258,8 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
                     for( sal_uLong n = 1; n < pHeader.nCount; n++, pRect++ )
                     {
-                        HRGN hRgn = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
-                        CombineRgn( mrParent.mhRegion, mrParent.mhRegion, hRgn, RGN_OR );
-                        DeleteRegion( hRgn );
+                        ScopedHRGN hRgn(CreateRectRgn(pRect->left, pRect->top, pRect->right, pRect->bottom));
+                        CombineRgn( mrParent.mhRegion, mrParent.mhRegion, hRgn.get(), RGN_OR );
                     }
                 }
             }
