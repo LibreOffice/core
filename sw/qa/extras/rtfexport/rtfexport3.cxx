@@ -218,6 +218,12 @@ DECLARE_RTFEXPORT_TEST(testTdf122424_textOutsideCellInATableRow, "tdf122424.rtf"
     CPPUNIT_ASSERT_EQUAL(OUString("cell3"), xCell->getString());
 }
 
+DECLARE_RTFEXPORT_TEST(testUlw, "ulw.rtf")
+{
+    // Test underlying in individual words mode.
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(1), 1), "CharWordMode"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
