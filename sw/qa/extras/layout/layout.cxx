@@ -2391,7 +2391,7 @@ void SwLayoutWriter::testTdf108021()
 
     assertXPath(
         pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='17']",
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='22']",
         8);
     // This failed, if the textarray length of the first axis label not 17.
 }
