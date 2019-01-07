@@ -42,6 +42,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 
+#include <o3tl/make_unique.hxx>
 #include <vclpluginapi.h>
 #include <sal/log.hxx>
 #include <osl/process.h>

@@ -42,6 +42,7 @@
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
 
 void Qt5Widget::paintEvent(QPaintEvent* pEvent)
 {

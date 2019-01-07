@@ -22,6 +22,7 @@
 #include <Qt5Font.hxx>
 #include <Qt5Painter.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
