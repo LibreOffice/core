@@ -310,7 +310,7 @@ Reference< awt::XFont > OAccessibleMenuComponent::getFont(  )
             {
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                 VCLXFont* pVCLXFont = new VCLXFont;
-                pVCLXFont->Init( *xDev.get(), rStyleSettings.GetMenuFont() );
+                pVCLXFont->Init( *xDev, rStyleSettings.GetMenuFont() );
                 xFont = pVCLXFont;
             }
         }
