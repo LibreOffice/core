@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_c159c1fe",
+        "filename": "svx/source/gallery2/GalleryControl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-01-07T01:36:15Z",
+      "side": 1,
+      "message": "The forward tab logic may be easier to follow by beginning with a has focus check for maNewTheme and then continuing the logic in expected tab order. This should result in the last else block containing a check for maNewTheme enabled and grabbing focus to it or grabbing focus to mpThemes.\n\nA check for maNewTheme enabled is needed for any logic order used here.",
+      "revId": "d3cabb678d7580be9a0fbe32c291b1bd3bebc96f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_6170cd73",
+        "filename": "svx/source/gallery2/GalleryControl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-01-07T01:36:15Z",
+      "side": 1,
+      "message": "Beginning with check if GetViewWindow has focus and working backwards in tab order might make the logic a bit clearer.\n\nCheck for maNewTheme enabled is also needed in reverse tab order logic block.",
+      "revId": "d3cabb678d7580be9a0fbe32c291b1bd3bebc96f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_e164bdbb",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-01-07T01:36:15Z",
+      "side": 1,
+      "message": "If maNewTheme isn\u0027t enabled we should grab focus to next in tab order (mpThemes).",
+      "revId": "d3cabb678d7580be9a0fbe32c291b1bd3bebc96f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
