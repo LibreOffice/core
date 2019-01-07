@@ -26,6 +26,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/settings.hxx>
