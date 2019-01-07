@@ -733,8 +733,8 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     // hMemBitmap != 0 ==> hMaskBitmap != 0
     if( hMemBitmap )
     {
-        DeleteObject( hMemBitmap );
-        DeleteObject( hMaskBitmap );
+        DeleteBitmap( hMemBitmap );
+        DeleteBitmap( hMaskBitmap );
     }
 }
 
