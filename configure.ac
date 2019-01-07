@@ -10602,17 +10602,30 @@ elif test "$_os" = "Linux" -o "$_os" = "Darwin" -o "$_os" = "WINNT" ; then
       if test -d /run/user/$uid; then
         AC_MSG_RESULT([yes])
         AC_PATH_PROG(GPGCONF, gpgconf)
-        AC_MSG_CHECKING([for gpgconf --create-socketdir... ])
-        if $GPGCONF --dump-options > /dev/null ; then
-          if $GPGCONF --dump-options | grep -q create-socketdir ; then
-	    AC_MSG_RESULT([yes])
-            AC_DEFINE([HAVE_GPGCONF_SOCKETDIR])
-            AC_DEFINE_UNQUOTED([GPGME_GPGCONF], ["$GPGCONF"])
+
+        # Older versions of gpgconf are not working as expected, since
+        # `gpgconf --remove-socketdir` fails to exit any gpg-agent daemon operating
+        # on that socket dir that has (indirectly) been started by the tests in xmlsecurity/qa/unit/signing/signing.cxx
+        # (see commit message of f0305ec0a7d199e605511844d9d6af98b66d4bfd%5E )
+        AC_MSG_CHECKING([whether version of gpgconf is suitable ... ])
+        GPGCONF_VERSION=`"$GPGCONF" --version | "$AWK" '/^gpgconf \(GnuPG\)/{print $3}'`
+        GPGCONF_NUMVER=`echo $GPGCONF_VERSION | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+        if test "$GPGCONF_VERSION" = "2.2_OOo" -o "$GPGCONF_NUMVER" -ge "020200"; then
+          AC_MSG_RESULT([yes, $GPGCONF_VERSION])
+          AC_MSG_CHECKING([for gpgconf --create-socketdir... ])
+          if $GPGCONF --dump-options > /dev/null ; then
+            if $GPGCONF --dump-options | grep -q create-socketdir ; then
+              AC_MSG_RESULT([yes])
+              AC_DEFINE([HAVE_GPGCONF_SOCKETDIR])
+              AC_DEFINE_UNQUOTED([GPGME_GPGCONF], ["$GPGCONF"])
+            else
+              AC_MSG_RESULT([no])
+            fi
           else
-            AC_MSG_RESULT([no])
+            AC_MSG_RESULT([no. missing or broken gpgconf?])
           fi
         else
-	  AC_MSG_RESULT([no. missing or broken gpgconf?])
+          AC_MSG_RESULT([no, $GPGCONF_VERSION])
         fi
       else
         AC_MSG_RESULT([no])
