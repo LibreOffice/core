@@ -39,52 +39,52 @@ typedef std::vector< SwTabColsEntry > SwTabColsEntries;
 
 class SW_DLLPUBLIC SwTabCols
 {
-    long nLeftMin,      // Leftmost border (reference point) for
+    long m_nLeftMin,      // Leftmost border (reference point) for
                         // document coordinates.
                         // All other values are relative to this point!
-            nLeft,      // Left border of table.
-           nRight,      // Right border of table.
-           nRightMax;   // Maximum right border of table.
+            m_nLeft,      // Left border of table.
+           m_nRight,      // Right border of table.
+           m_nRightMax;   // Maximum right border of table.
 
-    bool bLastRowAllowedToChange;       // If the last row of the table frame
+    bool m_bLastRowAllowedToChange;       // If the last row of the table frame
                                         // is split across pages, it may not
                                         // change its size.
 
-    SwTabColsEntries aData;
+    SwTabColsEntries m_aData;
 
     //For the CopyCTor.
-    const SwTabColsEntries& GetData() const { return aData; }
+    const SwTabColsEntries& GetData() const { return m_aData; }
 
 public:
     SwTabCols( sal_uInt16 nSize = 0 );
     SwTabCols( const SwTabCols& );
     SwTabCols &operator=( const SwTabCols& );
-    long& operator[]( size_t nPos ) { return aData[nPos].nPos; }
-    long operator[]( size_t nPos ) const { return aData[nPos].nPos; }
-    size_t Count() const { return aData.size(); }
+    long& operator[]( size_t nPos ) { return m_aData[nPos].nPos; }
+    long operator[]( size_t nPos ) const { return m_aData[nPos].nPos; }
+    size_t Count() const { return m_aData.size(); }
 
-    bool IsHidden( size_t nPos ) const         { return aData[nPos].bHidden; }
-    void SetHidden( size_t nPos, bool bValue ) { aData[nPos].bHidden = bValue; }
+    bool IsHidden( size_t nPos ) const         { return m_aData[nPos].bHidden; }
+    void SetHidden( size_t nPos, bool bValue ) { m_aData[nPos].bHidden = bValue; }
 
     void Insert( long nValue, bool bValue, size_t nPos );
     void Insert( long nValue, long nMin, long nMax, bool bValue, size_t nPos );
     void Remove( size_t nPos, size_t nCount = 1 );
 
-    const SwTabColsEntry& GetEntry( size_t nPos ) const { return aData[nPos]; }
-          SwTabColsEntry& GetEntry( size_t nPos )  { return aData[nPos]; }
+    const SwTabColsEntry& GetEntry( size_t nPos ) const { return m_aData[nPos]; }
+          SwTabColsEntry& GetEntry( size_t nPos )  { return m_aData[nPos]; }
 
-    long GetLeftMin() const { return nLeftMin; }
-    long GetLeft()  const { return nLeft;    }
-    long GetRight() const { return nRight;   }
-    long GetRightMax()const { return nRightMax;}
+    long GetLeftMin() const { return m_nLeftMin; }
+    long GetLeft()  const { return m_nLeft;    }
+    long GetRight() const { return m_nRight;   }
+    long GetRightMax()const { return m_nRightMax;}
 
-    void SetLeftMin ( long nNew )   { nLeftMin = nNew; }
-    void SetLeft    ( long nNew )   { nLeft = nNew;    }
-    void SetRight   ( long nNew )   { nRight = nNew;   }
-    void SetRightMax( long nNew )   { nRightMax = nNew;}
+    void SetLeftMin ( long nNew )   { m_nLeftMin = nNew; }
+    void SetLeft    ( long nNew )   { m_nLeft = nNew;    }
+    void SetRight   ( long nNew )   { m_nRight = nNew;   }
+    void SetRightMax( long nNew )   { m_nRightMax = nNew;}
 
-    bool IsLastRowAllowedToChange() const { return bLastRowAllowedToChange; }
-    void SetLastRowAllowedToChange( bool bNew ) { bLastRowAllowedToChange = bNew; }
+    bool IsLastRowAllowedToChange() const { return m_bLastRowAllowedToChange; }
+    void SetLastRowAllowedToChange( bool bNew ) { m_bLastRowAllowedToChange = bNew; }
 };
 
 class SwTable;

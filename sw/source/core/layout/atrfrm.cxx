@@ -585,15 +585,15 @@ void SwFormatContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwFormatPageDesc::SwFormatPageDesc( const SwFormatPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( const_cast<SwPageDesc*>(rCpy.GetPageDesc()) ),
-    oNumOffset( rCpy.oNumOffset ),
-    pDefinedIn( nullptr )
+    m_oNumOffset( rCpy.m_oNumOffset ),
+    m_pDefinedIn( nullptr )
 {
 }
 
 SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( const_cast<SwPageDesc*>(pDesc) ),
-    pDefinedIn( nullptr )
+    m_pDefinedIn( nullptr )
 {
 }
 
@@ -601,8 +601,8 @@ SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)
 {
     if (rCpy.GetPageDesc())
         RegisterToPageDesc(*const_cast<SwPageDesc*>(rCpy.GetPageDesc()));
-    oNumOffset = rCpy.oNumOffset;
-    pDefinedIn = nullptr;
+    m_oNumOffset = rCpy.m_oNumOffset;
+    m_pDefinedIn = nullptr;
 
     return *this;
 }
@@ -617,8 +617,8 @@ bool SwFormatPageDesc::KnowsPageDesc() const
 bool SwFormatPageDesc::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return  ( pDefinedIn == static_cast<const SwFormatPageDesc&>(rAttr).pDefinedIn ) &&
-            ( oNumOffset == static_cast<const SwFormatPageDesc&>(rAttr).oNumOffset ) &&
+    return  ( m_pDefinedIn == static_cast<const SwFormatPageDesc&>(rAttr).m_pDefinedIn ) &&
+            ( m_oNumOffset == static_cast<const SwFormatPageDesc&>(rAttr).m_oNumOffset ) &&
             ( GetPageDesc() == static_cast<const SwFormatPageDesc&>(rAttr).GetPageDesc() );
 }
 
@@ -662,7 +662,7 @@ void SwFormatPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
 
 void SwFormatPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    if( !pDefinedIn )
+    if( !m_pDefinedIn )
         return;
 
     const sal_uInt16 nWhichId = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -671,15 +671,15 @@ void SwFormatPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
         case RES_OBJECTDYING:
                 //The Pagedesc where I'm registered dies, therefore I unregister
                 //from that format. During this I get deleted!
-            if( typeid(SwFormat) == typeid( pDefinedIn ))
+            if( typeid(SwFormat) == typeid( m_pDefinedIn ))
             {
                 bool const bResult =
-                    static_cast<SwFormat*>(pDefinedIn)->ResetFormatAttr(RES_PAGEDESC);
+                    static_cast<SwFormat*>(m_pDefinedIn)->ResetFormatAttr(RES_PAGEDESC);
                 OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
             }
-            else if( typeid(SwContentNode) == typeid( pDefinedIn ))
+            else if( typeid(SwContentNode) == typeid( m_pDefinedIn ))
             {
-                bool const bResult = static_cast<SwContentNode*>(pDefinedIn)
+                bool const bResult = static_cast<SwContentNode*>(m_pDefinedIn)
                         ->ResetAttr(RES_PAGEDESC);
                 OSL_ENSURE( bResult, "FormatPageDesc not deleted" );
             }
@@ -768,8 +768,8 @@ void SwFormatPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatPageDesc"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    if (oNumOffset)
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("oNumOffset"), BAD_CAST(OString::number(*oNumOffset).getStr()));
+    if (m_oNumOffset)
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("oNumOffset"), BAD_CAST(OString::number(*m_oNumOffset).getStr()));
     else
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("oNumOffset"), BAD_CAST("none"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("pPageDesc"), "%p", GetPageDesc());

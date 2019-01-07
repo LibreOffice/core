@@ -34,8 +34,8 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatPageDesc : public SfxPoolItem, public SwClient
 {
-    ::boost::optional<sal_uInt16> oNumOffset;          ///< Offset page number.
-    SwModify* pDefinedIn;       /**< Points to the object in which the
+    ::boost::optional<sal_uInt16> m_oNumOffset;          ///< Offset page number.
+    SwModify* m_pDefinedIn;       /**< Points to the object in which the
                                  attribute was set (ContentNode/Format). */
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
@@ -62,12 +62,12 @@ public:
           SwPageDesc *GetPageDesc() { return static_cast<SwPageDesc*>(GetRegisteredIn()); }
     const SwPageDesc *GetPageDesc() const { return static_cast<const SwPageDesc*>(GetRegisteredIn()); }
 
-    const ::boost::optional<sal_uInt16>&  GetNumOffset() const        { return oNumOffset; }
-    void    SetNumOffset( const ::boost::optional<sal_uInt16>& oNum ) { oNumOffset = oNum; }
+    const ::boost::optional<sal_uInt16>&  GetNumOffset() const        { return m_oNumOffset; }
+    void    SetNumOffset( const ::boost::optional<sal_uInt16>& oNum ) { m_oNumOffset = oNum; }
 
     /// Query / set where attribute is anchored.
-    const SwModify* GetDefinedIn() const { return pDefinedIn; }
-    void ChgDefinedIn( const SwModify* pNew ) { pDefinedIn = const_cast<SwModify*>(pNew); }
+    const SwModify* GetDefinedIn() const { return m_pDefinedIn; }
+    void ChgDefinedIn( const SwModify* pNew ) { m_pDefinedIn = const_cast<SwModify*>(pNew); }
     void RegisterToPageDesc( SwPageDesc& );
     bool KnowsPageDesc() const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
