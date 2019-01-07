@@ -1801,3 +1801,6 @@ cmd/sc_basicideappear.png cmd/sc_toolsmacroedit.png
 cmd/sc_macrosmenu.png res/im30821.png
 cmd/sc_macrodialog.png cmd/sc_scriptorganizer.png
 cmd/lc_macrodialog.png cmd/lc_scriptorganizer.png
+
+cmd/lc_donation.png cmd/lc_currencyfield.png
+cmd/sc_donation.png cmd/sc_currencyfield.png
