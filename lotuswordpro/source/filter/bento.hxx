@@ -59,6 +59,7 @@
 #include <sal/config.h>
 
 #include <cstring>
+#include <memory>
 #include <string>
 #include <vector>
 #include <lwpsvstream.hxx>
@@ -136,7 +137,7 @@ typedef sal_uInt32 BenContainerPos;
 typedef sal_uInt32 BenObjectID;
 typedef sal_uInt32 BenGeneration;
 
-sal_uLong BenOpenContainer(LwpSvStream * pStream, LtcBenContainer ** ppContainer);
+sal_uLong BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContainer>* ppContainer);
 
 class CBenIDListElmt : public CUtListElmt
 {
