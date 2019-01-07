@@ -319,7 +319,7 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     unsigned char recType(0);
     m_pStream->ReadUChar(recType);
 
-    LwpDrawObj* pDrawObj = nullptr;
+    std::unique_ptr<LwpDrawObj> pDrawObj;
     XFFrame* pRetObjct = nullptr;
 
     switch(recType)
@@ -327,52 +327,52 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     case OT_PERPLINE://fall-through
     case OT_LINE:
     {
-        pDrawObj = new LwpDrawLine(m_pStream, &m_aTransformData);
+        pDrawObj.reset(new LwpDrawLine(m_pStream, &m_aTransformData));
         break;
     }
     case OT_POLYLINE:
     {
-        pDrawObj = new LwpDrawPolyLine(m_pStream, &m_aTransformData);
+        pDrawObj.reset(new LwpDrawPolyLine(m_pStream, &m_aTransformData));
         break;
     }
     case OT_POLYGON:
     {
-        pDrawObj = new LwpDrawPolygon(m_pStream, &m_aTransformData);
+        pDrawObj.reset(new LwpDrawPolygon(m_pStream, &m_aTransformData));
         pDrawObj->SetObjectType(OT_POLYGON);
         break;
     }
     case OT_SQUARE://fall-through
     case OT_RECT:
     {
-        pDrawObj = new LwpDrawRectangle(m_pStream, &m_aTransformData);
+        pDrawObj.reset(new LwpDrawRectangle(m_pStream, &m_aTransformData));
         break;
     }
     case OT_RNDSQUARE://fall-through
     case OT_RNDRECT:
     {
-        pDrawObj = new LwpDrawRectangle(m_pStream, &m_aTransformData);
+        pDrawObj.reset(new LwpDrawRectangle(m_pStream, &m_aTransformData));
         pDrawObj->SetObjectType(OT_RNDRECT);
         break;
     }
     case OT_CIRCLE://fall-through
     case OT_OVAL:
     {
-        pDrawObj = new LwpDrawEllipse(m_pStream, &m_aTransformData);
+        pDrawObj.reset(new LwpDrawEllipse(m_pStream, &m_aTransformData));
         break;
     }
     case OT_ARC:
     {
-        pDrawObj = new LwpDrawArc(m_pStream, &m_aTransformData);
+        pDrawObj.reset(new LwpDrawArc(m_pStream, &m_aTransformData));
         break;
     }
     case OT_TEXT:
     {
-        pDrawObj = new LwpDrawTextBox(m_pStream);
+        pDrawObj.reset(new LwpDrawTextBox(m_pStream));
         break;
     }
     case OT_TEXTART:
     {
-        pDrawObj = new LwpDrawTextArt(m_pStream, &m_aTransformData);
+        pDrawObj.reset(new LwpDrawTextArt(m_pStream, &m_aTransformData));
         pDrawObj->SetObjectType(OT_TEXTART);
         break;
     }
@@ -380,7 +380,7 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     {
         m_pStream->SeekRel(2);
         // read out the object header
-        pDrawObj = new LwpDrawGroup(m_pStream);
+        pDrawObj.reset(new LwpDrawGroup(m_pStream));
 
         pRetObjct = CreateDrawGroupObject();
 
@@ -396,7 +396,7 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
         break;
     }
     case OT_BITMAP:
-        pDrawObj = new LwpDrawBitmap(m_pStream);
+        pDrawObj.reset(new LwpDrawBitmap(m_pStream));
         pDrawObj->SetObjectType(OT_BITMAP);
         break;
     }
@@ -405,12 +405,6 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
     if (pDrawObj && recType != OT_GROUP)
     {
         pRetObjct = pDrawObj->CreateXFDrawObject();
-    }
-
-    if (pDrawObj)
-    {
-        delete pDrawObj;
-        pDrawObj = nullptr;
     }
 
     return pRetObjct;

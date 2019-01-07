@@ -90,7 +90,7 @@ public:
 
     void    SetPageUsage(enumXFPageUsage usage);
 
-    void    SetBorders(XFBorders *pBorders);
+    void    SetBorders(std::unique_ptr<XFBorders> pBorders);
 
     void    SetShadow(XFShadow *pShadow);
 

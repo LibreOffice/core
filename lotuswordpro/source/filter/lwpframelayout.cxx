@@ -346,10 +346,10 @@ void LwpFrame::ApplyPadding(XFFrameStyle *pFrameStyle)
 */
 void LwpFrame::ApplyBorders(XFFrameStyle *pFrameStyle)
 {
-    XFBorders* pBordres = m_pLayout->GetXFBorders();
+    std::unique_ptr<XFBorders> pBordres = m_pLayout->GetXFBorders();
     if(pBordres)
     {
-        pFrameStyle->SetBorders(pBordres);
+        pFrameStyle->SetBorders(std::move(pBordres));
     }
 }
 /**

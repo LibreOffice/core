@@ -100,7 +100,7 @@ public:
     /**
      * @descr:  set the border property of the frame.
      */
-    void    SetBorders(XFBorders *pBorders);
+    void    SetBorders(std::unique_ptr<XFBorders> pBorders);
 
     /**
      * @descr:  set the column property of the frame.

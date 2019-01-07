@@ -271,23 +271,21 @@ CBenTOCReader::ReadTOC()
 
                     #define STACK_BUFFER_SIZE 256
                     char sStackBuffer[STACK_BUFFER_SIZE];
-                    char * sAllocBuffer;
+                    std::unique_ptr<char[]> sAllocBuffer;
                     char * sBuffer;
                     if (Length > STACK_BUFFER_SIZE)
                     {
-                        sBuffer = new char[Length];
-                        sAllocBuffer = sBuffer;
+                        sAllocBuffer.reset(new char[Length]);
+                        sBuffer = sAllocBuffer.get();
                     }
                     else
                     {
                         sBuffer = sStackBuffer;
-                        sAllocBuffer = nullptr;
                     }
 
                     if ((Err = cpContainer->ReadKnownSize(sBuffer, Length)) !=
                       BenErr_OK)
                     {
-                        delete[] sAllocBuffer;
                         return Err;
                     }
 
@@ -297,7 +295,6 @@ CBenTOCReader::ReadTOC()
                     if (FindNamedObject(&cpContainer->GetNamedObjects(),
                       sName, &pPrevNamedObjectListElmt) != nullptr)
                     {
-                        delete[] sAllocBuffer;
                         return BenErr_DuplicateName;
                     }
 
@@ -305,11 +302,10 @@ CBenTOCReader::ReadTOC()
 
                     if (PropertyID == BEN_PROPID_GLOBAL_PROPERTY_NAME)
                         pObject = new CBenPropertyName(cpContainer, ObjectID,
-                          pPrevObject, sName, pPrevNamedObjectListElmt);
-                    else pObject = new CBenTypeName(cpContainer, ObjectID,
-                      pPrevObject, sName, pPrevNamedObjectListElmt);
-
-                    delete[] sAllocBuffer;
+                           pPrevObject, sName, pPrevNamedObjectListElmt);
+                    else
+                        pObject = new CBenTypeName(cpContainer, ObjectID,
+                           pPrevObject, sName, pPrevNamedObjectListElmt);
                 }
                 else if (PropertyID == BEN_PROPID_OBJ_REFERENCES)
                 {
