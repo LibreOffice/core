@@ -31,105 +31,105 @@ ModelessDialog RID_SVXDLG_RUBY
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_RUBY_DIALOG;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 227 , 195 ) ;
+    Pos = MAP_APPFONT ( 0, 0 ) ;
+    Size = MAP_APPFONT ( 227, 195 ) ;
     Text [ en-US ] = "Asian Phonetic Guide" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     CheckBox CB_AUTO_DETECT
     {
-        HelpID = "svx:CheckBox:RID_SVXDLG_RUBY:CB_AUTO_DETECT";
+        HelpID = "svx:CheckBox:RID_SVXDLG_RUBY:CB_AUTO_DETECT" ;
         Pos = MAP_APPFONT ( 6, 6 ) ;
-        Size = MAP_APPFONT ( 186 , 12 ) ;
-        Text [ en-US ] = "Automatic detection";
+        Size = MAP_APPFONT ( 186, 12 ) ;
+        Text [ en-US ] = "Automatic detection" ;
     };
     FixedText FT_LEFT
     {
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ en-US ] = "Base text";
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT ( 80, 8 ) ;
+        Text [ en-US ] = "Base text" ;
     };
     FixedText FT_RIGHT
     {
-        Pos = MAP_APPFONT ( 109 , 17 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ en-US ] = "Ruby text";
+        Pos = MAP_APPFONT ( 109, 17 ) ;
+        Size = MAP_APPFONT ( 80, 8 ) ;
+        Text [ en-US ] = "Ruby text" ;
     };
     Edit ED_LEFT_1
     {
-        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_1";
-        Pos = MAP_APPFONT ( 6 , 30 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_1" ;
+        Pos = MAP_APPFONT ( 6, 30 ) ;
+        Size = MAP_APPFONT ( 102, 12 ) ;
         Hide = False;
         Border = TRUE;
     };
     Edit ED_RIGHT_1
     {
-        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_1";
-        Pos = MAP_APPFONT ( 109 , 30 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_1" ;
+        Pos = MAP_APPFONT ( 109, 30 ) ;
+        Size = MAP_APPFONT ( 102, 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_2
     {
-        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_2";
-        Pos = MAP_APPFONT ( 6 ,  42) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_2" ;
+        Pos = MAP_APPFONT ( 6,  42) ;
+        Size = MAP_APPFONT ( 102, 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_2
     {
-        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_2";
-        Pos = MAP_APPFONT ( 109 , 42 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_2" ;
+        Pos = MAP_APPFONT ( 109, 42 ) ;
+        Size = MAP_APPFONT ( 102, 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_3
     {
-        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_3";
-        Pos = MAP_APPFONT ( 6 , 54 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_3" ;
+        Pos = MAP_APPFONT ( 6, 54 ) ;
+        Size = MAP_APPFONT ( 102, 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_3
     {
-        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_3";
-        Pos = MAP_APPFONT ( 109 , 54 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_3" ;
+        Pos = MAP_APPFONT ( 109, 54 ) ;
+        Size = MAP_APPFONT ( 102, 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_4
     {
-        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_4";
-        Pos = MAP_APPFONT ( 6 , 66 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_LEFT_4" ;
+        Pos = MAP_APPFONT ( 6, 66 ) ;
+        Size = MAP_APPFONT ( 102, 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_4
     {
-        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_4";
-        Pos = MAP_APPFONT ( 109 , 66 ) ;
-        Size = MAP_APPFONT ( 102 , 12 ) ;
+        HelpID = "svx:Edit:RID_SVXDLG_RUBY:ED_RIGHT_4" ;
+        Pos = MAP_APPFONT ( 109, 66 ) ;
+        Size = MAP_APPFONT ( 102, 12 ) ;
         Border = TRUE;
     };
     ScrollBar SB_SCROLL
     {
-        Pos = MAP_APPFONT ( 213 , 30 ) ;
-        Size = MAP_APPFONT ( 8 , 48 ) ;
+        Pos = MAP_APPFONT ( 213, 30 ) ;
+        Size = MAP_APPFONT ( 8, 48 ) ;
         VScroll = TRUE ;
         Drag = TRUE ;
     };
     FixedText FT_ADJUST
     {
-        Pos = MAP_APPFONT ( 6 , 82 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ en-US ] = "Alignment";
+        Pos = MAP_APPFONT ( 6, 82 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
+        Text [ en-US ] = "Alignment" ;
     };
     ListBox LB_ADJUST
     {
-        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_ADJUST";
-        Pos = MAP_APPFONT ( 6 , 93) ;
-        Size = MAP_APPFONT ( 35 , 60 ) ;
+        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_ADJUST" ;
+        Pos = MAP_APPFONT ( 6, 93) ;
+        Size = MAP_APPFONT ( 35, 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
     StringList [ en-US ] =
@@ -143,15 +143,15 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 43 , 82 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ en-US ] = "Position";
+        Pos = MAP_APPFONT ( 43, 82 ) ;
+        Size = MAP_APPFONT ( 35, 8 ) ;
+        Text [ en-US ] = "Position" ;
     };
     ListBox LB_POSITION
     {
-        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_POSITION";
-        Pos = MAP_APPFONT ( 43 , 93) ;
-        Size = MAP_APPFONT ( 35 , 60 ) ;
+        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_POSITION" ;
+        Pos = MAP_APPFONT ( 43, 93) ;
+        Size = MAP_APPFONT ( 35, 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
     StringList [ en-US ] =
@@ -162,56 +162,57 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     FixedText FT_CHAR_STYLE
     {
-        Pos = MAP_APPFONT ( 80 , 82 ) ;
-        Size = MAP_APPFONT ( 141 , 8 ) ;
-        Text [ en-US ] = "Character Style for ruby text";
+        Pos = MAP_APPFONT ( 80, 82 ) ;
+        Size = MAP_APPFONT ( 141, 8 ) ;
+        Text [ en-US ] = "Character Style for ruby text" ;
     };
     ListBox LB_CHAR_STYLE
     {
-        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_CHAR_STYLE";
-        Pos = MAP_APPFONT ( 80 , 93) ;
-        Size = MAP_APPFONT ( 89 , 60 ) ;
+        HelpID = "svx:ListBox:RID_SVXDLG_RUBY:LB_CHAR_STYLE" ;
+        Pos = MAP_APPFONT ( 80, 93) ;
+        Size = MAP_APPFONT ( 89, 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
         Sort = TRUE;
     };
     PushButton PB_STYLIST
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_RUBY:PB_STYLIST";
-        Pos = MAP_APPFONT ( 171 , 92 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "Styles";
+        HelpID = "svx:PushButton:RID_SVXDLG_RUBY:PB_STYLIST" ;
+        Pos = MAP_APPFONT ( 171, 92 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        Text [ en-US ] = "Styles" ;
     };
     FixedText FT_PREVIEW
     {
         Pos = MAP_APPFONT ( 6, 110 ) ;
-        Size = MAP_APPFONT ( 195 , 8 ) ;
-        Text [ en-US ] = "Preview:";
+        Size = MAP_APPFONT ( 195, 8 ) ;
+        Text [ en-US ] = "Preview:" ;
     };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 6 , 121 ) ;
-        Size = MAP_APPFONT ( 215 , 50 ) ;
+        Pos = MAP_APPFONT ( 6, 121 ) ;
+        Size = MAP_APPFONT ( 215, 50 ) ;
         Border = TRUE ;
     };
     OKButton PB_APPLY
     {
         DefButton = TRUE;
-        Pos = MAP_APPFONT ( 65 , 175 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Apply";
+        Pos = MAP_APPFONT ( 65, 175 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        Text [ en-US ] = "~Apply" ;
     };
     PushButton PB_CLOSE
     {
-        HelpID = "svx:PushButton:RID_SVXDLG_RUBY:PB_CLOSE";
+        HelpID = "svx:PushButton:RID_SVXDLG_RUBY:PB_CLOSE" ;
         Pos = MAP_APPFONT (  118, 175 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Close";
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        Text [ en-US ] = "~Close" ;
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 171 , 175 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 171, 175 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
     };
 };
 
+// ********************************************************************** EOF
