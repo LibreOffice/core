@@ -146,7 +146,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocForecast_ETS_STA, {{ ForceArray, ForceArray, ForceArray, Value, Value, Value        }, 0, Value }},
     { ocForecast_ETS_STM, {{ ForceArray, ForceArray, ForceArray, Value, Value, Value        }, 0, Value }},
     { ocFormula,         {{ Reference                                            }, 0, Value }},
-    { ocFrequency,       {{ Reference, Reference                                 }, 0, Value }},
+    { ocFrequency,       {{ ReferenceOrForceArray, ReferenceOrForceArray         }, 0, Value }},
     { ocGCD,             {{ Reference                                            }, 1, Value }},
     { ocGeoMean,         {{ Reference                                            }, 1, Value }},
     { ocGreater,         {{ Array, Array                                         }, 0, Value }},
