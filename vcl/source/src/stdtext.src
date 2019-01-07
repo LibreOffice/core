@@ -27,52 +27,52 @@
 
 String SV_STDTEXT_SERVICENOTAVAILABLE
 {
-    Text [ en-US ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option.";
+    Text [ en-US ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option." ;
 };
 
 String SV_STDTEXT_DONTHINTAGAIN
 {
-    Text [ en-US ] = "Do not show this information again.";
+    Text [ en-US ] = "Do not show this information again." ;
 };
 
 String SV_STDTEXT_DONTASKAGAIN
 {
-    Text [ en-US ] = "Do not show this question again.";
+    Text [ en-US ] = "Do not show this question again." ;
 };
 
 String SV_STDTEXT_DONTWARNAGAIN
 {
-    Text [ en-US ] = "Do not show warning again.";
+    Text [ en-US ] = "Do not show this warning again." ;
 };
 
 String SV_ACCESSERROR_WRONG_VERSION
 {
-    Text [ en-US ] = "Wrong Version";
+    Text [ en-US ] = "Wrong Version" ;
 };
 
 String SV_ACCESSERROR_BRIDGE_MSG
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility." ;
 };
 
 String SV_ACCESSERROR_OK_CANCEL_MSG
 {
-    Text [ en-US ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
+    Text [ en-US ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION." ;
 };
 
 String SV_ACCESSERROR_MISSING_BRIDGE
 {
-    Text [ en-US ] = "No Java Access Bridge";
+    Text [ en-US ] = "No Java Access Bridge" ;
 };
 
 String SV_ACCESSERROR_FAULTY_JAVA
 {
-    Text [ en-US ] = "Faulty Java Installation";
+    Text [ en-US ] = "Faulty Java Installation" ;
 };
 
 String SV_ACCESSERROR_JAVA_MSG
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires Java 1.4.0_02 or later version to support accessibility.";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires Java 1.4.0_02 or later version to support accessibility." ;
 };
 
 String SV_ACCESSERROR_MISSING_JAVA
@@ -97,30 +97,32 @@ String SV_ACCESSERROR_TURNAROUND_MSG
 
 String SV_ACCESSERROR_NO_FONTS
 {
-    Text [ en-US ] = "No fonts could be found on the system.";
+    Text [ en-US ] = "No fonts could be found on the system." ;
 };
 
 String SV_STDTEXT_ABOUT
 {
-    Text [ en-US ] = "About %PRODUCTNAME";
+    Text [ en-US ] = "About %PRODUCTNAME" ;
 };
 
 String SV_STDTEXT_PREFERENCES
 {
-    Text [ en-US ] = "Preferences...";
+    Text [ en-US ] = "Preferences..." ;
 };
 
-WarningBox  SV_EDIT_WARNING_BOX
+WarningBox SV_EDIT_WARNING_BOX
 {
-    Message [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
+    Message [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated." ;
 };
 
 String SV_MAC_SCREENNNAME
 {
-    Text [en-US] = "Screen %d";
+    Text [en-US] = "Screen %d" ;
 };
 
 String SV_STDTEXT_ALLFILETYPES
 {
-    Text [en-US] = "Any type";
+    Text [en-US] = "Any type" ;
 };
+
+// ********************************************************************** EOF
