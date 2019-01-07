@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Code-Review+1: Eike Rathke <erack@redhat.com>
+Code-Review+2: Kohei Yoshida <libreoffice@kohei.us>
+Code-Review+2: Katarina Behrens <Katarina.Behrens@cib.de>
+Submitted-by: Katarina Behrens <Katarina.Behrens@cib.de>
+Submitted-at: Mon, 07 Jan 2019 10:13:31 +0100
+Reviewed-on: https://gerrit.libreoffice.org/65329
+Project: core
+Branch: refs/heads/master
