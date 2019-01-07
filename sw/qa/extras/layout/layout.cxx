@@ -2321,6 +2321,24 @@ void SwLayoutWriter::testTdf114163()
     // This failed, if the legend first label is not "Data3".
 }
 
+void SwLayoutWriter::testTdf108021()
+{
+    SwDoc* pDoc = createDoc("tdf108021.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='22']",
+        8);
+    // This failed, if the textarray length of the first axis label not 22.
+}
+
 void SwLayoutWriter::testTdf116925()
 {
     SwDoc* pDoc = createDoc("tdf116925.docx");
