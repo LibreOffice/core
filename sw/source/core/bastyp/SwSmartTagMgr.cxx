@@ -26,16 +26,16 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-SwSmartTagMgr* SwSmartTagMgr::mpTheSwSmartTagMgr = nullptr;
+SwSmartTagMgr* SwSmartTagMgr::spTheSwSmartTagMgr = nullptr;
 
 SwSmartTagMgr& SwSmartTagMgr::Get()
 {
-    if ( !mpTheSwSmartTagMgr )
+    if ( !spTheSwSmartTagMgr )
     {
-        mpTheSwSmartTagMgr = new SwSmartTagMgr( SwDocShell::Factory().GetModuleName() );
-        mpTheSwSmartTagMgr->Init("Writer");
+        spTheSwSmartTagMgr = new SwSmartTagMgr( SwDocShell::Factory().GetModuleName() );
+        spTheSwSmartTagMgr->Init("Writer");
     }
-    return *mpTheSwSmartTagMgr;
+    return *spTheSwSmartTagMgr;
 }
 
 SwSmartTagMgr::SwSmartTagMgr( const OUString& rModuleName ) :

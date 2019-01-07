@@ -21,36 +21,36 @@
 #include <limits.h>
 
 SwTabCols::SwTabCols( sal_uInt16 nSize ) :
-    nLeftMin( 0 ),
-    nLeft( 0 ),
-    nRight( 0 ),
-    nRightMax( 0 ),
-    bLastRowAllowedToChange( true )
+    m_nLeftMin( 0 ),
+    m_nLeft( 0 ),
+    m_nRight( 0 ),
+    m_nRightMax( 0 ),
+    m_bLastRowAllowedToChange( true )
 {
     if ( nSize )
-        aData.reserve( nSize );
+        m_aData.reserve( nSize );
 }
 
 SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
-    nLeftMin( rCpy.GetLeftMin() ),
-    nLeft( rCpy.GetLeft() ),
-    nRight( rCpy.GetRight() ),
-    nRightMax( rCpy.GetRightMax() ),
-    bLastRowAllowedToChange( rCpy.IsLastRowAllowedToChange() ),
-    aData( rCpy.GetData() )
+    m_nLeftMin( rCpy.GetLeftMin() ),
+    m_nLeft( rCpy.GetLeft() ),
+    m_nRight( rCpy.GetRight() ),
+    m_nRightMax( rCpy.GetRightMax() ),
+    m_bLastRowAllowedToChange( rCpy.IsLastRowAllowedToChange() ),
+    m_aData( rCpy.GetData() )
 {
 }
 
 SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
 {
-    nLeftMin = rCpy.GetLeftMin();
-    nLeft    = rCpy.GetLeft();
-    nRight   = rCpy.GetRight();
-    nRightMax= rCpy.GetRightMax();
-    bLastRowAllowedToChange = rCpy.IsLastRowAllowedToChange();
+    m_nLeftMin = rCpy.GetLeftMin();
+    m_nLeft    = rCpy.GetLeft();
+    m_nRight   = rCpy.GetRight();
+    m_nRightMax= rCpy.GetRightMax();
+    m_bLastRowAllowedToChange = rCpy.IsLastRowAllowedToChange();
 
     Remove( 0, Count() );
-    aData = rCpy.GetData();
+    m_aData = rCpy.GetData();
 
     return *this;
 }
@@ -63,7 +63,7 @@ void SwTabCols::Insert( long nValue, long nMin, long nMax,
     aEntry.nMin = nMin;
     aEntry.nMax = nMax;
     aEntry.bHidden = bValue;
-    aData.insert( aData.begin() + nPos, aEntry );
+    m_aData.insert( m_aData.begin() + nPos, aEntry );
 }
 
 void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
@@ -73,7 +73,7 @@ void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
     aEntry.nMin = 0;
     aEntry.nMax = LONG_MAX;
     aEntry.bHidden = bValue;
-    aData.insert( aData.begin() + nPos, aEntry );
+    m_aData.insert( m_aData.begin() + nPos, aEntry );
 
 #if OSL_DEBUG_LEVEL > 1
     for ( const auto& rPos : aData )
@@ -85,8 +85,8 @@ void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
 
 void SwTabCols::Remove( size_t nPos, size_t nCount )
 {
-    SwTabColsEntries::iterator aStart = aData.begin() + nPos;
-    aData.erase( aStart, aStart + nCount );
+    SwTabColsEntries::iterator aStart = m_aData.begin() + nPos;
+    m_aData.erase( aStart, aStart + nCount );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

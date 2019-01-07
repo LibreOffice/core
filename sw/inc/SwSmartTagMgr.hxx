@@ -26,7 +26,7 @@
 class SwSmartTagMgr : public SmartTagMgr
 {
 private:
-    static SwSmartTagMgr* mpTheSwSmartTagMgr;
+    static SwSmartTagMgr* spTheSwSmartTagMgr;
 
     SwSmartTagMgr( const OUString& rModuleName );
     virtual ~SwSmartTagMgr() override;
