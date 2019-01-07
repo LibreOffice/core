@@ -286,7 +286,7 @@ void LwpGraphicObject::CreateDrawObjects()
     // if small file, use the compressed stream for BENTO
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
-    OpenStormBento::LtcBenContainer* pBentoContainer;
+    std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
     if (ulRet != OpenStormBento::BenErr_OK)
         return;
@@ -334,9 +334,7 @@ std::vector<sal_uInt8> LwpGraphicObject::GetRawGrafData()
 
     std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     {
-        OpenStormBento::LtcBenContainer* pTmp(nullptr);
-        sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pTmp);
-        pBentoContainer.reset(pTmp);
+        sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
         if (ulRet != OpenStormBento::BenErr_OK)
             return aGrafData;
     }
@@ -361,7 +359,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(std::unique_ptr<sal_uInt8[]>& pGrafData
     // if small file, use the compressed stream for BENTO
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
-    OpenStormBento::LtcBenContainer* pBentoContainer;
+    std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
     if (ulRet != OpenStormBento::BenErr_OK)
         return 0;
@@ -379,7 +377,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(std::unique_ptr<sal_uInt8[]>& pGrafData
     // get bento stream by the name
     pGrafStream = pBentoContainer->FindValueStreamWithPropertyName(sDName);
 
-    SvMemoryStream* pMemGrafStream = static_cast<SvMemoryStream*>(pGrafStream);
+    std::unique_ptr<SvMemoryStream> pMemGrafStream(static_cast<SvMemoryStream*>(pGrafStream));
 
     if (pMemGrafStream)
     {
@@ -388,9 +386,6 @@ sal_uInt32 LwpGraphicObject::GetGrafData(std::unique_ptr<sal_uInt8[]>& pGrafData
 
         pGrafData.reset(new sal_uInt8 [nDataLen]);
         pMemGrafStream->ReadBytes(pGrafData.get(), nDataLen);
-
-        delete pMemGrafStream;
-        pMemGrafStream = nullptr;
 
         return nDataLen;
     }
