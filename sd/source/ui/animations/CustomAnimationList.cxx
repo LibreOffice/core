@@ -602,11 +602,13 @@ sal_Int8 CustomAnimationList::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
         ret = DND_ACTION_MOVE;
     }
 
+    // NOTE: Don't call SvTreeListBox::ExecuteDrop(...) because all required
+    //       move operations have been completed here to update the model.
     return ret;
 }
 
-// D'n'D #5: Cleanup (regardless of if we were target of drop or not)
-void CustomAnimationList::DragFinished( sal_Int8 nDropAction )
+// D'n'D #6: Cleanup (regardless of if we were target of drop or not)
+void CustomAnimationList::DragFinished( sal_Int8 /*nDropAction*/ )
 {
     mpDndEffectDragging = nullptr;
     mpDndEffectInsertBefore = nullptr;
@@ -615,7 +617,9 @@ void CustomAnimationList::DragFinished( sal_Int8 nDropAction )
     // Can hit this without running ExecuteDrop(...) when drag canceled.
     mpMainSequence->rebuild();
 
-    SvTreeListBox::DragFinished( nDropAction );
+    // Note: Don't call SvTreeListBox::DragFinished(...) because we don't call
+    //       SvTreeListBox::ExecuteDrop(...) which sets variables that are
+    //       needed in its DragFinished(...) method.
 }
 
 VCL_BUILDER_FACTORY(CustomAnimationList)
