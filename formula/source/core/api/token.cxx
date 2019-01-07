@@ -151,7 +151,7 @@ bool FormulaToken::IsInForceArray() const
 {
     ParamClass eParam = GetInForceArray();
     return eParam == ParamClass::ForceArray || eParam == ParamClass::ReferenceOrForceArray
-        || eParam == ParamClass::ReferenceOrRefArray;
+        || eParam == ParamClass::ReferenceOrRefArray || eParam == ParamClass::ForceArrayReturn;
 }
 
 bool FormulaToken::operator==( const FormulaToken& rToken ) const
