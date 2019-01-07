@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_c1e661e9",
+        "filename": "sw/source/uibase/inc/FloatingTableButton.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-07T08:50:12Z",
+      "side": 1,
+      "message": "Add a one-liner doxygen comment to describe what this class does.",
+      "revId": "f992b286616dd52ca80bebe5292da598d2d3161d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
