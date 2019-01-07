@@ -292,9 +292,9 @@ static void ImplPostForeignAppEvent( ApplicationEvent* pEvent )
     Application::PostUserEvent( LINK( nullptr, ProcessEventsClass_Impl, CallEvent ), pEvent );
 }
 
-static void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
+static void ImplPostProcessDocumentsEvent( std::unique_ptr<ProcessDocumentsRequest> pEvent )
 {
-    Application::PostUserEvent( LINK( nullptr, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent );
+    Application::PostUserEvent( LINK( nullptr, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent.release() );
 }
 
 oslSignalAction SalMainPipeExchangeSignal_impl(SAL_UNUSED_PARAMETER void* /*pData*/, oslSignalInfo* pInfo)
@@ -976,8 +976,8 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
             ImplPostForeignAppEvent( pAppEvent );
         }
 
-        ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
-            aCmdLineArgs->getCwdUrl());
+        std::unique_ptr<ProcessDocumentsRequest> pRequest(new ProcessDocumentsRequest(
+            aCmdLineArgs->getCwdUrl()));
         m_handler->cProcessed.reset();
         pRequest->pcProcessed = &m_handler->cProcessed;
         m_handler->mbSuccess = false;
@@ -1108,13 +1108,12 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
                     pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::DRAW );
             }
 
-            ImplPostProcessDocumentsEvent( pRequest );
+            ImplPostProcessDocumentsEvent( std::move(pRequest) );
         }
         else
         {
             // delete not used request again
-            delete pRequest;
-            pRequest = nullptr;
+            pRequest.reset();
         }
         if (aCmdLineArgs->IsEmpty())
         {
