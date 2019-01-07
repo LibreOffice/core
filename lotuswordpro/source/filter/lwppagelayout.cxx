@@ -189,10 +189,10 @@ void LwpPageLayout::ParseColumns(XFPageMaster * pm1)
 */
 void LwpPageLayout::ParseBorders(XFPageMaster *pm1)
 {
-    XFBorders* pBordres = GetXFBorders();
+    std::unique_ptr<XFBorders> pBordres = GetXFBorders();
     if(pBordres)
     {
-        pm1->SetBorders(pBordres);
+        pm1->SetBorders(std::move(pBordres));
     }
 }
 
@@ -813,10 +813,10 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
 
 void LwpHeaderLayout::ParseBorder(XFHeaderStyle* pHeaderStyle)
 {
-    XFBorders* pBordres = GetXFBorders();
+    std::unique_ptr<XFBorders> pBordres = GetXFBorders();
     if(pBordres)
     {
-        pHeaderStyle->SetBorders(pBordres);
+        pHeaderStyle->SetBorders(std::move(pBordres));
     }
 }
 
@@ -975,10 +975,10 @@ void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
 
 void LwpFooterLayout::ParseBorder(XFFooterStyle* pFooterStyle)
 {
-    XFBorders* pBordres = GetXFBorders();
+    std::unique_ptr<XFBorders> pBordres = GetXFBorders();
     if(pBordres)
     {
-        pFooterStyle->SetBorders(pBordres);
+        pFooterStyle->SetBorders(std::move(pBordres));
     }
 }
 
