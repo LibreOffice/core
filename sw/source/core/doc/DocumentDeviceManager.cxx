@@ -302,7 +302,7 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
 
     VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
     const_cast<DocumentDeviceManager*>(this)->setPrinter( pNewPrt, true, true );
-    return *mpPrt.get();
+    return *mpPrt;
 }
 
 void DocumentDeviceManager::PrtDataChanged()

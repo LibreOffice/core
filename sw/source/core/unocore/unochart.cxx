@@ -408,7 +408,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
                 pUnoCursor->Move( fnMoveForward, GoInNode );
                 SwUnoTableCursor& rCursor =
-                    dynamic_cast<SwUnoTableCursor&>(*pUnoCursor.get());
+                    dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
                 // HACK: remove pending actions for old style tables
                 UnoActionRemoveContext aRemoveContext(rCursor);
                 rCursor.MakeBoxSels();

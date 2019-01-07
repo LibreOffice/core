@@ -1037,7 +1037,7 @@ void ScCsvGrid::ImplRedraw()
             ImplDrawBackgrDev();
             ImplDrawGridDev();
         }
-        DrawOutDev( Point(), maWinSize, Point(), maWinSize, *mpGridDev.get() );
+        DrawOutDev( Point(), maWinSize, Point(), maWinSize, *mpGridDev );
         ImplDrawTrackingRect( GetFocusColumn() );
     }
 }
@@ -1142,7 +1142,7 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     if( !IsVisibleColumn( nColIndex ) )
         return;
 
-    ImplSetColumnClipRegion( *mpBackgrDev.get(), nColIndex );
+    ImplSetColumnClipRegion( *mpBackgrDev, nColIndex );
 
     // grid
     mpBackgrDev->SetLineColor();
@@ -1179,7 +1179,7 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     }
 
     // header
-    ImplDrawColumnHeader( *mpBackgrDev.get(), nColIndex, maHeaderBackColor );
+    ImplDrawColumnHeader( *mpBackgrDev, nColIndex, maHeaderBackColor );
 
     mpBackgrDev->SetClipRegion();
 }
@@ -1240,8 +1240,8 @@ void ScCsvGrid::ImplDrawBackgrDev()
 void ScCsvGrid::ImplDrawColumnSelection( sal_uInt32 nColIndex )
 {
     ImplInvertCursor( GetRulerCursorPos() );
-    ImplSetColumnClipRegion( *mpGridDev.get(), nColIndex );
-    mpGridDev->DrawOutDev( Point(), maWinSize, Point(), maWinSize, *mpBackgrDev.get() );
+    ImplSetColumnClipRegion( *mpGridDev, nColIndex );
+    mpGridDev->DrawOutDev( Point(), maWinSize, Point(), maWinSize, *mpBackgrDev );
 
     if( IsSelected( nColIndex ) )
     {
@@ -1253,7 +1253,7 @@ void ScCsvGrid::ImplDrawColumnSelection( sal_uInt32 nColIndex )
         mpGridDev->SetLineColor();
         if( maHeaderBackColor.IsDark() )
             // redraw with light gray background in dark mode
-            ImplDrawColumnHeader( *mpGridDev.get(), nColIndex, COL_LIGHTGRAY );
+            ImplDrawColumnHeader( *mpGridDev, nColIndex, COL_LIGHTGRAY );
         else
         {
             // use transparent active color
@@ -1263,7 +1263,7 @@ void ScCsvGrid::ImplDrawColumnSelection( sal_uInt32 nColIndex )
 
         // column selection
         aRect = tools::Rectangle( nX1, GetHdrHeight() + 1, nX2, GetY( GetLastVisLine() + 1 ) - 1 );
-        ImplInvertRect( *mpGridDev.get(), aRect );
+        ImplInvertRect( *mpGridDev, aRect );
     }
 
     mpGridDev->SetClipRegion();
@@ -1348,10 +1348,10 @@ void ScCsvGrid::ImplInvertCursor( sal_Int32 nPos )
     {
         sal_Int32 nX = GetX( nPos ) - 1;
         tools::Rectangle aRect( Point( nX, 0 ), Size( 3, GetHdrHeight() ) );
-        ImplInvertRect( *mpGridDev.get(), aRect );
+        ImplInvertRect( *mpGridDev, aRect );
         aRect.SetTop( GetHdrHeight() + 1 );
         aRect.SetBottom( GetY( GetLastVisLine() + 1 ) );
-        ImplInvertRect( *mpGridDev.get(), aRect );
+        ImplInvertRect( *mpGridDev, aRect );
     }
 }
 

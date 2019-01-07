@@ -335,7 +335,7 @@ public:
 
     /** Return a pointer to the tab control for pages.
     */
-    TabControl& GetPageTabControl() { return *maTabControl.get(); }
+    TabControl& GetPageTabControl() { return *maTabControl; }
 
     /** Return a pointer to the tab control for layers.
     */

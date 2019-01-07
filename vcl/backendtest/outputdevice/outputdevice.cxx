@@ -23,7 +23,7 @@ Bitmap OutputDeviceTestAnotherOutDev::setupDrawOutDev()
 
     initialSetup(13, 13, constBackgroundColor);
 
-    mpVirtualDevice->DrawOutDev(Point(2, 2), aSourceSize, Point(), aSourceSize, *pSourceDev.get());
+    mpVirtualDevice->DrawOutDev(Point(2, 2), aSourceSize, Point(), aSourceSize, *pSourceDev);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }

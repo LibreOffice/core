@@ -395,18 +395,18 @@ void SwLabPage::DisplayFormat()
 {
     ScopedVclPtrInstance< MetricField > aField(this, WinBits(0));
     FieldUnit aMetric = ::GetDfltMetric(false);
-    SetMetric(*aField.get(), aMetric);
+    SetMetric(*aField, aMetric);
     aField->SetDecimalDigits(2);
     aField->SetMin         (0);
     aField->SetMax         (LONG_MAX);
 
     SwLabRec* pRec = GetSelectedEntryPos();
     aItem.m_aLstType = pRec->m_aType;
-    SETFLDVAL(*aField.get(), pRec->m_nWidth);
+    SETFLDVAL(*aField, pRec->m_nWidth);
     aField->Reformat();
     const OUString aWString = aField->GetText();
 
-    SETFLDVAL(*aField.get(), pRec->m_nHeight);
+    SETFLDVAL(*aField, pRec->m_nHeight);
     aField->Reformat();
 
     OUString aText = pRec->m_aType + ": " + aWString +

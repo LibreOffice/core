@@ -1525,7 +1525,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     PaintEmphasis(aTextRect, bSelected, rRenderContext);
 
     if ( bShowSelection )
-        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView.get(), CalcFocusRect(pEntry),
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pView, CalcFocusRect(pEntry),
                                                   bActiveSelection ? 1 : 2, false, true, false);
 
 

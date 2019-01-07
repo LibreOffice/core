@@ -256,7 +256,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
                 mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
         }
 
-        mpView->ApplyFormatPaintBrush( *mxItemSet.get(), bNoCharacterFormats, bNoParagraphFormats );
+        mpView->ApplyFormatPaintBrush( *mxItemSet, bNoCharacterFormats, bNoParagraphFormats );
 
         if( pObj )
         {

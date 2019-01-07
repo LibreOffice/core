@@ -536,7 +536,7 @@ void ScCsvRuler::ImplRedraw()
             ImplDrawBackgrDev();
             ImplDrawRulerDev();
         }
-        DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maRulerDev.get() );
+        DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maRulerDev );
         /* Draws directly tracking rectangle to the column with the specified index. */
         if( HasFocus() )
             InvertTracking( tools::Rectangle( 0, 0, GetWidth() - 1, GetHeight() - 2 ),
@@ -619,14 +619,14 @@ void ScCsvRuler::ImplEraseSplit( sal_Int32 nPos )
         ImplInvertCursor( GetRulerCursorPos() );
         Point aPos( GetX( nPos ) - mnSplitSize / 2, 0 );
         Size aSize( mnSplitSize, GetHeight() );
-        maRulerDev->DrawOutDev( aPos, aSize, aPos, aSize, *maBackgrDev.get() );
+        maRulerDev->DrawOutDev( aPos, aSize, aPos, aSize, *maBackgrDev );
         ImplInvertCursor( GetRulerCursorPos() );
     }
 }
 
 void ScCsvRuler::ImplDrawRulerDev()
 {
-    maRulerDev->DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maBackgrDev.get() );
+    maRulerDev->DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maBackgrDev );
     ImplInvertCursor( GetRulerCursorPos() );
 
     sal_uInt32 nFirst = maSplits.LowerBound( GetFirstVisPos() );
@@ -640,7 +640,7 @@ void ScCsvRuler::ImplInvertCursor( sal_Int32 nPos )
 {
     if( IsVisibleSplitPos( nPos ) )
     {
-        ImplInvertRect( *maRulerDev.get(), tools::Rectangle( Point( GetX( nPos ) - 1, 0 ), Size( 3, GetHeight() - 1 ) ) );
+        ImplInvertRect( *maRulerDev, tools::Rectangle( Point( GetX( nPos ) - 1, 0 ), Size( 3, GetHeight() - 1 ) ) );
         if( HasSplit( nPos ) )
             ImplDrawSplit( nPos );
     }

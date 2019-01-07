@@ -4239,7 +4239,7 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
     PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
 
-    SfxItemSet& rSet = *mpSet.get();
+    SfxItemSet& rSet = *mpSet;
     SfxItemIter aIter(rSet);
     const SfxPoolItem* pItem = aIter.FirstItem();
 
@@ -4391,7 +4391,7 @@ void SwXTextTableStyle::SetPhysical()
                 uno::Reference<style::XStyle> xCellStyle(pOldBoxFormat->GetXObject(), uno::UNO_QUERY);
                 if (!xCellStyle.is())
                     continue;
-                SwXTextCellStyle& rStyle = dynamic_cast<SwXTextCellStyle&>(*xCellStyle.get());
+                SwXTextCellStyle& rStyle = dynamic_cast<SwXTextCellStyle&>(*xCellStyle);
                 SwBoxAutoFormat& rNewBoxFormat = pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
                 rStyle.SetBoxFormat(&rNewBoxFormat);
                 rNewBoxFormat.SetXObject(xCellStyle);

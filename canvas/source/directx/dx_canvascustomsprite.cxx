@@ -55,7 +55,7 @@ namespace dxcanvas
                 rRenderModule,
                 true));
 
-        maCanvasHelper.setDevice( *rRefDevice.get() );
+        maCanvasHelper.setDevice( *rRefDevice );
         maCanvasHelper.setTarget( mpSurface );
 
         maSpriteHelper.init( rSpriteSize,

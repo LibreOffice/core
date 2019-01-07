@@ -186,10 +186,10 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
     // Draw arrow
     // FIXME consistence of button colors. https://opengrok.libreoffice.org/xref/core/vcl/source/control/button.cxx#785
     Color aArrowColor = GetFadedColor(COL_BLACK, rStyleSettings.GetShadowColor());
-    ImplDrawArrow(*maVirDev.get(), aArrowPos.X(), aArrowPos.Y(), aArrowColor, bArrowToRight);
+    ImplDrawArrow(*maVirDev, aArrowPos.X(), aArrowPos.Y(), aArrowColor, bArrowToRight);
 
     // Blit comment control
-    rRenderContext.DrawOutDev(aControlRect.TopLeft(), aControlRect.GetSize(), Point(), aControlRect.GetSize(), *maVirDev.get());
+    rRenderContext.DrawOutDev(aControlRect.TopLeft(), aControlRect.GetSize(), Point(), aControlRect.GetSize(), *maVirDev);
 }
 
 // Just accept double-click outside comment control

@@ -161,7 +161,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
         mpOutputDevice->DrawOutDev(
             aTopLeft, aSize,
             aTopLeft, aSize,
-            *mpPreRenderDevice.get());
+            *mpPreRenderDevice);
 
 #ifdef DBG_UTIL
         // #i74769#

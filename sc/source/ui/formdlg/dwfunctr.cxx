@@ -84,7 +84,7 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css
 
     aCatBox->SelectEntryPos(0);
 
-    SelHdl(*aCatBox.get());
+    SelHdl(*aCatBox);
 }
 
 /*************************************************************************

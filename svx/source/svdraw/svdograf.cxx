@@ -855,7 +855,7 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedVectorGraphicData() const
         pOut->EnableOutput(false);
         pOut->SetMapMode(aMap);
         aRetval.Record(pOut);
-        SingleObjectPainter(*pOut.get());
+        SingleObjectPainter(*pOut);
         aRetval.Stop();
         aRetval.WindStart();
         aRetval.Move(-aBoundRect.Left(), -aBoundRect.Top());

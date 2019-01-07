@@ -2553,8 +2553,7 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
             else
                 mxStyleSheet->PresetFollow( OUString() );
 
-            Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified,
-                                            *(mxStyleSheet.get()) ) );
+            Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *mxStyleSheet ) );
         }
     }
 

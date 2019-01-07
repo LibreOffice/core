@@ -121,8 +121,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     mpLbAxisCol->SelectEntry(rData.maAxisColor);
     mpCbOnlyBar->Check(rData.mbOnlyBar);
 
-    TypeSelectHdl(*mpLbTypeMin.get());
-    PosSelectHdl(*mpLbTypeMin.get());
+    TypeSelectHdl(*mpLbTypeMin);
+    PosSelectHdl(*mpLbTypeMin);
 }
 
 ScDataBarSettingsDlg::~ScDataBarSettingsDlg()

@@ -2058,7 +2058,7 @@ namespace drawinglayer
                             getViewInformation2D().getViewTime(),
                             getViewInformation2D().getExtendedInformationSequence());
 
-                        VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice.get());
+                        VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
 
                         // draw content using pixel renderer
                         aBufferProcessor.process(rContent);

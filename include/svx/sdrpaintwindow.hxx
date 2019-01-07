@@ -59,7 +59,7 @@ public:
     void PreparePreRenderDevice();
     void OutputPreRenderDevice(const vcl::Region& rExpandedRegion);
 
-    OutputDevice& GetPreRenderDevice() { return *mpPreRenderDevice.get(); }
+    OutputDevice& GetPreRenderDevice() { return *mpPreRenderDevice; }
 };
 
 class SVX_DLLPUBLIC SdrPaintWindow
@@ -96,7 +96,7 @@ public:
 
     // data read accesses
     SdrPaintView& GetPaintView() const { return mrPaintView; }
-    OutputDevice& GetOutputDevice() const { return *mpOutputDevice.get(); }
+    OutputDevice& GetOutputDevice() const { return *mpOutputDevice; }
     vcl::Window* GetWindow() const { return mpWindow; }
 
     // OVERLAYMANAGER
@@ -135,7 +135,7 @@ public:
     void setTemporaryTarget(bool bNew) { mbTemporaryTarget = bNew; }
 
     // #i72889# get target output device, take into account output buffering
-    OutputDevice& GetTargetOutputDevice() { if(mpPreRenderDevice) return mpPreRenderDevice->GetPreRenderDevice(); else return *mpOutputDevice.get(); }
+    OutputDevice& GetTargetOutputDevice() { if(mpPreRenderDevice) return mpPreRenderDevice->GetPreRenderDevice(); else return *mpOutputDevice; }
 };
 
 #endif // INCLUDED_SVX_SDRPAINTWINDOW_HXX

@@ -171,7 +171,7 @@ void ScColRowNameRangesDlg::Init()
     pEdAssign->GrabFocus();
     pRbAssign->Enable();
 
-    Range1SelectHdl( *pLbRange.get() );
+    Range1SelectHdl( *pLbRange );
 }
 
 // set data range of a labeled range to default values and set the
@@ -577,7 +577,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
             pEdAssign2->SetText( EMPTY_OUSTRING );
             theCurArea = ScRange();
             theCurData = theCurArea;
-            Range1SelectHdl( *pLbRange.get() );
+            Range1SelectHdl( *pLbRange );
         }
         else
         {
@@ -643,7 +643,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
             pBtnColHead->Check();
             pBtnRowHead->Check( false );
             pEdAssign2->SetText( EMPTY_OUSTRING );
-            Range1SelectHdl( *pLbRange.get() );
+            Range1SelectHdl( *pLbRange );
         }
     }
 }

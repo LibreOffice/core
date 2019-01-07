@@ -1024,7 +1024,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
             {
                 MetaGradientAction* pAct = static_cast<MetaGradientAction*>(pAction);
 
-                ImplAddGradientEx( aMtf, *aMapVDev.get(),
+                ImplAddGradientEx( aMtf, *aMapVDev,
                                    ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ),
                                    pAct->GetGradient() );
             }
@@ -1056,7 +1056,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                         {
                             // Add rotated gradientex
                             MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
-                            ImplAddGradientEx( aMtf, *aMapVDev.get(),
+                            ImplAddGradientEx( aMtf, *aMapVDev,
                                                ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
                                                pAct->GetGradient() );
                         }

@@ -118,7 +118,7 @@ namespace vclcanvas
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( vcl::unotools::sizeFromIntegerSize2D(size),
                               false,
-                              *rDevice.get(),
+                              *rDevice,
                               mpOutDev ) );
     }
 
@@ -139,7 +139,7 @@ namespace vclcanvas
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( vcl::unotools::sizeFromIntegerSize2D(size),
                               true,
-                              *rDevice.get(),
+                              *rDevice,
                               mpOutDev ) );
     }
 

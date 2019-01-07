@@ -400,7 +400,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         }
 
         //  window at the bottom right
-        lcl_SetPosSize( *aScrollBarBox.get(), Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
+        lcl_SetPosSize( *aScrollBarBox, Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
                         nTotalWidth, bLayoutRTL );
 
         if (bHScroll) // Scrollbars horizontal
@@ -464,39 +464,39 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             {
                 Point aTabPoint(nPosX, nPosY + nSizeY);
                 Size aTabSize(nTabSize, nBarY);
-                lcl_SetPosSize(*pTabControl.get(), aTabPoint, aTabSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL);
                 pTabControl->SetSheetLayoutRTL(bLayoutRTL);
 
                 Point aHScrollLeftPoint(nPosX + nTabSize, nPosY + nSizeY);
                 Size aHScrollLeftSize(nSizeLt, nBarY);
-                lcl_SetPosSize(*aHScrollLeft.get(), aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL);
 
                 Point aHSplitterPoint(nPosX + nTabSize + nSizeLt, nPosY + nSizeY);
                 Size aHSplitterSize(nSizeSp, nBarY);
-                lcl_SetPosSize(*pHSplitter.get(), aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
 
                 Point aHScrollRightPoint(nPosX + nTabSize + nSizeLt + nSizeSp, nPosY + nSizeY);
                 Size aHScrollRightSize(nSizeRt, nBarY);
-                lcl_SetPosSize(*aHScrollRight.get(), aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL);
             }
             else
             {
                 Point aTabPoint(nPosX, nPosY + nSizeY + nScrollBarSize);
                 Size aTabSize(nSizeX, nTabWidth);
-                lcl_SetPosSize(*pTabControl.get(), aTabPoint, aTabSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL);
                 pTabControl->SetSheetLayoutRTL(bLayoutRTL);
 
                 Point aHScrollLeftPoint(nPosX, nPosY + nSizeY);
                 Size aHScrollLeftSize(nSizeLt, nScrollBarSize);
-                lcl_SetPosSize(*aHScrollLeft.get(), aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL);
 
                 Point aHSplitterPoint(nPosX + nSizeLt, nPosY + nSizeY);
                 Size aHSplitterSize(nSizeSp, nScrollBarSize);
-                lcl_SetPosSize(*pHSplitter.get(), aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
 
                 Point aHScrollRightPoint(nPosX + nSizeLt + nSizeSp, nPosY + nSizeY);
                 Size aHScrollRightSize(nSizeRt, nScrollBarSize);
-                lcl_SetPosSize(*aHScrollRight.get(), aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL);
+                lcl_SetPosSize(*aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL);
             }
             //  SetDragRectPixel is done below
         }
@@ -524,11 +524,11 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             }
             nSizeDn = nSizeY - nSizeUp - nSizeSp;
 
-            lcl_SetPosSize( *aVScrollTop.get(), Point(nPosX + nSizeX, nPosY),
+            lcl_SetPosSize( *aVScrollTop, Point(nPosX + nSizeX, nPosY),
                                             Size(nBarX, nSizeUp), nTotalWidth, bLayoutRTL );
             lcl_SetPosSize( *pVSplitter, Point( nPosX + nSizeX, nPosY+nSizeUp ),
                                             Size( nBarX, nSizeSp ), nTotalWidth, bLayoutRTL );
-            lcl_SetPosSize( *aVScrollBottom.get(), Point(nPosX + nSizeX,
+            lcl_SetPosSize( *aVScrollBottom, Point(nPosX + nSizeX,
                                                 nPosY + nSizeUp + nSizeSp),
                                             Size(nBarX, nSizeDn), nTotalWidth, bLayoutRTL );
 
@@ -554,10 +554,10 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         long nTabSize = nSize1;
         if (nTabSize < 0) nTabSize = 0;
 
-        lcl_SetPosSize( *pTabControl.get(), Point(nPosX, nPosY+nSizeY-nBarY),
+        lcl_SetPosSize( *pTabControl, Point(nPosX, nPosY+nSizeY-nBarY),
                                         Size(nTabSize, nBarY), nTotalWidth, bLayoutRTL );
         nSizeY -= nBarY;
-        lcl_SetPosSize( *aScrollBarBox.get(), Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
+        lcl_SetPosSize( *aScrollBarBox, Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
                                         nTotalWidth, bLayoutRTL );
 
         if( bVScroll )
@@ -678,7 +678,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     }
     if (bHOutline && bVOutline)
     {
-        lcl_SetPosSize( *aTopButton.get(), Point(nOutPosX,nOutPosY), Size(nOutlineX,nOutlineY), nTotalWidth, bLayoutRTL );
+        lcl_SetPosSize( *aTopButton, Point(nOutPosX,nOutPosY), Size(nOutlineX,nOutlineY), nTotalWidth, bLayoutRTL );
         aTopButton->Show();
     }
     else
@@ -698,7 +698,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         lcl_SetPosSize( *pRowBar[SC_SPLIT_BOTTOM],
             Point(nPosX-nBarX,nSplitPosY), Size(nBarX,nBottomSize), nTotalWidth, bLayoutRTL );
 
-        lcl_SetPosSize( *aCornerButton.get(), Point(nPosX-nBarX,nPosY-nBarY), Size(nBarX,nBarY), nTotalWidth, bLayoutRTL );
+        lcl_SetPosSize( *aCornerButton, Point(nPosX-nBarX,nPosY-nBarY), Size(nBarX,nBarY), nTotalWidth, bLayoutRTL );
         aCornerButton->Show();
         pColBar[SC_SPLIT_LEFT]->Show();
         pRowBar[SC_SPLIT_BOTTOM]->Show();

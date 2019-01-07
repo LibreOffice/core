@@ -945,7 +945,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             {
                 // more effective way to paint a vector of SdrObjects. Hand over the processed page
                 // to have it in the
-                sdr::contact::ObjectContactOfObjListPainter aMultiObjectPainter(*aOut.get(), aShapes, mpCurrentPage);
+                sdr::contact::ObjectContactOfObjListPainter aMultiObjectPainter(*aOut, aShapes, mpCurrentPage);
                 ImplExportCheckVisisbilityRedirector aCheckVisibilityRedirector(mpCurrentPage);
                 aMultiObjectPainter.SetViewObjectContactRedirector(&aCheckVisibilityRedirector);
 

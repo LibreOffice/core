@@ -580,7 +580,7 @@ uno::Any SAL_CALL Content::execute(
             xResAccess->DESTROY( Environment );
             {
                 osl::Guard< osl::Mutex > aGuard( m_aMutex );
-                m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+                m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
             }
         }
         catch ( DAVException const & e )
@@ -768,7 +768,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
         DAVResourceAccess::abort();
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+            m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
     }
     catch ( DAVException const & )
@@ -846,7 +846,7 @@ void Content::addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
         xResAccess->PROPPATCH( aProppatchValues, xEnv );
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+            m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
 
         // Notify propertyset info change listeners.
@@ -952,7 +952,7 @@ void Content::removeProperty( const OUString& Name,
         xResAccess->PROPPATCH( aProppatchValues, xEnv );
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+            m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
 
         // Notify propertyset info change listeners.
@@ -1274,7 +1274,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
 
             // use the cached ContentProperties instance
-            xProps.reset( new ContentProperties( *xCachedProps.get() ) );
+            xProps.reset( new ContentProperties( *xCachedProps ) );
         }
     }
 
@@ -1306,7 +1306,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 }
 
                 // use the cached ContentProperties instance
-                xProps.reset( new ContentProperties( *xCachedProps.get() ) );
+                xProps.reset( new ContentProperties( *xCachedProps ) );
             }
 
             if ( !bHasAll )
@@ -1554,11 +1554,11 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !m_xCachedProps.get() )
-            m_xCachedProps.reset( new CachableContentProperties( *xProps.get() ) );
+            m_xCachedProps.reset( new CachableContentProperties( *xProps ) );
         else
-            m_xCachedProps->addProperties( *xProps.get() );
+            m_xCachedProps->addProperties( *xProps );
 
-        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         m_aEscapedTitle = SerfUri::escapeSegment( aUnescapedTitle );
     }
 
@@ -1961,7 +1961,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
 
     return aRet;
@@ -2055,7 +2055,7 @@ uno::Any Content::open(
                         m_xCachedProps->addProperties( ContentProperties( aResource ) );
 
                     m_xResAccess.reset(
-                        new DAVResourceAccess( *xResAccess.get() ) );
+                        new DAVResourceAccess( *xResAccess ) );
                 }
             }
             catch ( DAVException const & e )
@@ -2100,7 +2100,7 @@ uno::Any Content::open(
                                 aResource.properties );
 
                         m_xResAccess.reset(
-                            new DAVResourceAccess( *xResAccess.get() ) );
+                            new DAVResourceAccess( *xResAccess ) );
                     }
 
                     xDataSink->setInputStream( xIn );
@@ -2157,7 +2157,7 @@ void Content::post(
             {
                  osl::MutexGuard aGuard( m_aMutex );
                  m_xResAccess.reset(
-                     new DAVResourceAccess( *xResAccess.get() ) );
+                     new DAVResourceAccess( *xResAccess ) );
             }
 
             xSink->setInputStream( xResult );
@@ -2191,7 +2191,7 @@ void Content::post(
                 {
                     osl::MutexGuard aGuard( m_aMutex );
                     m_xResAccess.reset(
-                        new DAVResourceAccess( *xResAccess.get() ) );
+                        new DAVResourceAccess( *xResAccess ) );
                 }
             }
             catch ( DAVException const & e )
@@ -2426,7 +2426,7 @@ void Content::insert(
                         {
                             osl::Guard< osl::Mutex > aGuard( m_aMutex );
                             m_xResAccess.reset(
-                                new DAVResourceAccess( *xResAccess.get() ) );
+                                new DAVResourceAccess( *xResAccess ) );
                         }
 
                         // Success!
@@ -2500,7 +2500,7 @@ void Content::insert(
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
 }
 
@@ -2752,7 +2752,7 @@ void Content::transfer(
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
 }
 
@@ -2833,7 +2833,7 @@ void Content::lock(
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+            m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
     }
     catch ( DAVException const & e )
@@ -2860,7 +2860,7 @@ void Content::unlock(
 
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+            m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
         }
     }
     catch ( DAVException const & e )
@@ -3288,7 +3288,7 @@ Content::ResourceType Content::getResourceType(
     const Content::ResourceType & ret = getResourceType( xEnv, xResAccess );
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );
     }
     return ret;
 }

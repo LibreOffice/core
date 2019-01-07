@@ -56,8 +56,8 @@ public:
     virtual         ~FileControl() override;
     virtual void    dispose() override;
 
-    Edit&           GetEdit() { return *maEdit.get(); }
-    PushButton&     GetButton() { return *maButton.get(); }
+    Edit&           GetEdit() { return *maEdit; }
+    PushButton&     GetButton() { return *maButton; }
 
     void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
 

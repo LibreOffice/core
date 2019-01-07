@@ -2282,7 +2282,7 @@ uno::Reference<table::XCellRange> GetRangeByName(
     pUnoCursor->SetMark();
     pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
     pUnoCursor->Move( fnMoveForward, GoInNode );
-    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor.get());
+    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
     // HACK: remove pending actions for selecting old style tables
     UnoActionRemoveContext aRemoveContext(rCursor);
     rCursor.MakeBoxSels();
@@ -3359,7 +3359,7 @@ SwXCellRange::getCellRangeByPosition(
                     pUnoCursor->SetMark();
                     pUnoCursor->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCursor->Move( fnMoveForward, GoInNode );
-                    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor.get());
+                    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
                     // HACK: remove pending actions for selecting old style tables
                     UnoActionRemoveContext aRemoveContext(rCursor);
                     rCursor.MakeBoxSels();
@@ -4048,7 +4048,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCursor->SetMark();
     pUnoCursor->GetPoint()->nNode = *pBLBox->GetSttNd();
     pUnoCursor->Move(fnMoveForward, GoInNode);
-    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor.get());
+    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
     {
         // HACK: remove pending actions for selecting old style tables
         UnoActionRemoveContext aRemoveContext(rCursor);
@@ -4205,7 +4205,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCursor->SetMark();
     pUnoCursor->GetPoint()->nNode = *pTRBox->GetSttNd();
     pUnoCursor->Move(fnMoveForward, GoInNode);
-    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor.get());
+    SwUnoTableCursor& rCursor = dynamic_cast<SwUnoTableCursor&>(*pUnoCursor);
     {
         // HACK: remove pending actions for selecting old style tables
         UnoActionRemoveContext aRemoveContext(rCursor);

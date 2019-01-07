@@ -2902,7 +2902,7 @@ namespace cppcanvas
             sal_Int32 nCurrActions(0);
             ActionFactoryParameters aParms(aStateStack,
                                            rCanvas,
-                                           *aVDev.get(),
+                                           *aVDev,
                                            rParams,
                                            nCurrActions );
 
@@ -2916,7 +2916,7 @@ namespace cppcanvas
                                                      1.0 / aMtfSizePix.Height() );
 
             tools::calcLogic2PixelAffineTransform( aStateStack.getState().mapModeTransform,
-                                                   *aVDev.get() );
+                                                   *aVDev );
 
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();

@@ -582,7 +582,7 @@ bool TBCBSpecific::Read( SvStream &rS)
     if ( bFlags & 0x10 )
     {
         iBtnFace.reset( new sal_uInt16 );
-        rS.ReadUInt16( *iBtnFace.get() );
+        rS.ReadUInt16( *iBtnFace );
     }
     // if bFlags.fAccelerator equals 1 ( 0x04 )
     if ( bFlags & 0x04 )
@@ -618,7 +618,7 @@ void TBCBSpecific::Print( FILE* fp )
     }
     if ( iBtnFace.get() )
     {
-        indent_printf( fp, "  iBtnFace 0x%x\n", *(iBtnFace.get()) );
+        indent_printf( fp, "  iBtnFace 0x%x\n", *iBtnFace );
     }
     bResult = ( wstrAcc.get() != NULL );
     indent_printf( fp, "  option string present? %s ->%s<-\n", bResult ? "true" : "false", bResult ? OUStringToOString( wstrAcc->getString(), RTL_TEXTENCODING_UTF8 ).getStr() : "N/A" );

@@ -1917,7 +1917,7 @@ public:
         pDev->DrawWallpaper(aSubRect, aWallpaper );
 
         rRenderContext.DrawOutDev(aExclude.TopLeft(), aExclude.GetSize(),
-                   Point( 0, 0 ), aExclude.GetSize(), *pDev.get() );
+                   Point( 0, 0 ), aExclude.GetSize(), *pDev );
     }
 };
 

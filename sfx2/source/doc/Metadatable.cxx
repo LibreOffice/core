@@ -1218,7 +1218,7 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
         CreateClipboard( isContentFile(i_rReference.First)) );
     m_pImpl->m_XmlIdReverseMap.insert(::std::make_pair(&i_rCopy,
         RMapEntry(i_rReference.First, i_rReference.Second, xLink)));
-    return *xLink.get();
+    return *xLink;
 }
 
 MetadatableClipboard const*

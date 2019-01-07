@@ -49,8 +49,8 @@ namespace drawinglayer
                         basegfx::utils::createPolygonFromRect(
                             maLastPaintRange)),
                         maLastDefineRange,
-                    maFillAttribute.get() ? *maFillAttribute.get() : drawinglayer::attribute::SdrFillAttribute(),
-                    maFillGradientAttribute.get() ? *maFillGradientAttribute.get() : drawinglayer::attribute::FillGradientAttribute());
+                    maFillAttribute.get() ? *maFillAttribute : drawinglayer::attribute::SdrFillAttribute(),
+                    maFillGradientAttribute.get() ? *maFillGradientAttribute : drawinglayer::attribute::FillGradientAttribute());
             }
         }
 
@@ -122,7 +122,7 @@ namespace drawinglayer
                 const_cast< SdrAllFillAttributesHelper* >(this)->maFillAttribute.reset(new drawinglayer::attribute::SdrFillAttribute());
             }
 
-            return *maFillAttribute.get();
+            return *maFillAttribute;
         }
 
         const drawinglayer::attribute::FillGradientAttribute& SdrAllFillAttributesHelper::getFillGradientAttribute() const
@@ -132,7 +132,7 @@ namespace drawinglayer
                 const_cast< SdrAllFillAttributesHelper* >(this)->maFillGradientAttribute.reset(new drawinglayer::attribute::FillGradientAttribute());
             }
 
-            return *maFillGradientAttribute.get();
+            return *maFillGradientAttribute;
         }
 
         const drawinglayer::primitive2d::Primitive2DContainer& SdrAllFillAttributesHelper::getPrimitive2DSequence(

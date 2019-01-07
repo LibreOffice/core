@@ -2791,9 +2791,9 @@ void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredP
     VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/rowsmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
-    PreExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu.get() );
+    PreExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu );
     aContextMenu->RemoveDisabledEntries( true, true );
-    PostExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu.get(), aContextMenu->Execute( this, _rPreferredPos ) );
+    PostExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu, aContextMenu->Execute( this, _rPreferredPos ) );
 }
 
 void DbGridControl::Command(const CommandEvent& rEvt)

@@ -121,7 +121,7 @@ public:
     void            SetCommandHdl( const Link<SvSimpleTable*,void>& rLink ) { aCommandLink = rLink; }
 
     void            SetHeaderBarClickHdl( const Link<SvSimpleTable*,void>& rLink ) { aHeaderBarClickLink = rLink; }
-    HeaderBar&      GetTheHeaderBar() { return *aHeaderBar.get(); }
+    HeaderBar&      GetTheHeaderBar() { return *aHeaderBar; }
 };
 
 

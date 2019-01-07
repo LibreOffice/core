@@ -517,7 +517,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
     sal_Int16 cmdId = 0;
     if  ( cid.get() )
     {
-        const sal_uInt32 nCid = ( *( cid.get() ) & 0xFFFF );
+        const sal_uInt32 nCid = ( *cid & 0xFFFF );
 
         const sal_uInt8 cmt = static_cast<sal_uInt8>( nCid & 0x7 );
         const sal_Int16 arg2 = static_cast<sal_Int16>( nCid >> 3 );

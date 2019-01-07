@@ -412,7 +412,7 @@ void ModelState::update( const Reference< frame::XModel > & xModel )
     bIsThreeD = (nDimensionCount == 3);
     if (xChartDoc.is())
     {
-        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc.get());
+        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc);
         bHasOwnData = rModel.hasInternalDataProvider();
         bHasDataFromPivotTable = !bHasOwnData && rModel.isDataFromPivotTable();
     }
@@ -551,7 +551,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
         OSL_ENSURE(xChartDoc.is(), "Invalid XChartDocument");
         if ( xChartDoc.is() )
         {
-            ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc.get());
+            ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc);
             Reference< lang::XServiceInfo > xParentServiceInfo(rModel.getParent(), uno::UNO_QUERY);
             OSL_ENSURE(xParentServiceInfo.is(), "Invalid XServiceInfo");
             if ( xParentServiceInfo.is() )

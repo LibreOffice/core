@@ -1301,7 +1301,7 @@ void ScTiledRenderingTest::testInsertGraphicInvalidations()
     std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer.data());
-    pModelObj->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    pModelObj->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
     // insert an image in view and see if both views are invalidated
@@ -1343,7 +1343,7 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
     std::vector<unsigned char> aBuffer1(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice1(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
     pDevice1->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer1.data());
-    pModelObj->paintTile(*pDevice1.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    pModelObj->paintTile(*pDevice1, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
     // Create a new view
@@ -1352,7 +1352,7 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
     std::vector<unsigned char> aBuffer2(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice2(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
     pDevice2->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer2.data());
-    pModelObj->paintTile(*pDevice2.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    pModelObj->paintTile(*pDevice2, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
     // Check that the tiles actually have the same content
