@@ -241,7 +241,7 @@ void SvmTest::testPixel()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->DrawPixel(Point(8, 1), COL_GREEN);
     pVirtualDev->DrawPixel(Point(1, 8), COL_BLUE);
@@ -262,7 +262,7 @@ void SvmTest::testPoint()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->DrawPixel(Point(4, 4));
 
@@ -304,7 +304,7 @@ void SvmTest::testLine()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->DrawLine(Point(1, 1), Point(8, 8));
     LineInfo aLineInfo(LineStyle::Dash, 7);
@@ -338,7 +338,7 @@ void SvmTest::testRect()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
@@ -366,7 +366,7 @@ void SvmTest::testRoundRect()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
@@ -393,7 +393,7 @@ void SvmTest::testEllipse()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
@@ -423,7 +423,7 @@ void SvmTest::testArc()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
@@ -453,7 +453,7 @@ void SvmTest::testPie()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
@@ -483,7 +483,7 @@ void SvmTest::testChord()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetLineColor(Color(0x123456));
     pVirtualDev->SetFillColor(Color(0x654321));
@@ -526,7 +526,7 @@ void SvmTest::testPolyLine()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     tools::Polygon aPolygon(3);
     aPolygon.SetPoint(Point(1, 8), 0);
@@ -578,7 +578,7 @@ void SvmTest::testPolygon()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     tools::Polygon aPolygon(3);
     aPolygon.SetPoint(Point(1, 8), 0);
@@ -621,7 +621,7 @@ void SvmTest::testPolyPolygon()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     tools::Polygon aPolygon(3);
     aPolygon.SetPoint(Point(1, 8), 0);
@@ -663,7 +663,7 @@ void SvmTest::testText()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->DrawText(Point(4,6), "xABC", 1, 2);
 
@@ -685,7 +685,7 @@ void SvmTest::testTextArray()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     long const aDX[] = { 10, 15, 20, 25, 30, 35 };
     pVirtualDev->DrawTextArray(Point(4,6), "123456", aDX, 1, 4);
 
@@ -707,7 +707,7 @@ void SvmTest::testStrechText()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     pVirtualDev->DrawStretchText(Point(4,6), 10, "123456", 1, 4);
 
     checkStrechText(writeAndRead(aGDIMetaFile, "strecthtext.svm"));
@@ -728,7 +728,7 @@ void SvmTest::testTextRect()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     pVirtualDev->DrawText(tools::Rectangle(Point(0,0), Size(5,5)), "123456", DrawTextFlags::Center);
 
     checkTextRect(writeAndRead(aGDIMetaFile, "textrectangle.svm"));
@@ -748,7 +748,7 @@ void SvmTest::testTextLine()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
     pVirtualDev->DrawTextLine(Point(4,6), 10, STRIKEOUT_SINGLE, LINESTYLE_SINGLE, LINESTYLE_SINGLE);
 
     checkTextLine(writeAndRead(aGDIMetaFile, "textline.svm"));
@@ -785,7 +785,7 @@ void SvmTest::testBitmaps()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     Bitmap aBitmap1(Size(4,4), 24);
     {
@@ -846,7 +846,7 @@ void SvmTest::testBitmapExs()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     Bitmap aBitmap1(Size(4,4), 24);
     {
@@ -902,7 +902,7 @@ void SvmTest::testMasks()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     Bitmap aBitmap1(Size(4,4), 24);
     {
@@ -948,7 +948,7 @@ void SvmTest::testPushPop()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetLineColor(COL_YELLOW);
     pVirtualDev->Push();
@@ -977,7 +977,7 @@ void SvmTest::testTextColor()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetTextColor(Color(0x123456));
 
@@ -997,7 +997,7 @@ void SvmTest::testTextFillColor()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetTextFillColor(Color(0x234567));
 
@@ -1017,7 +1017,7 @@ void SvmTest::testTextLineColor()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->SetTextLineColor(Color(0x345678));
 

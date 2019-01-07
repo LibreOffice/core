@@ -2745,7 +2745,7 @@ void SvtValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
     Point aDefPos;
     Size aSize = maVirDev->GetOutputSizePixel();
 
-    rRenderContext.DrawOutDev(aDefPos, aSize, aDefPos, aSize, *maVirDev.get());
+    rRenderContext.DrawOutDev(aDefPos, aSize, aDefPos, aSize, *maVirDev);
 
     // draw parting line to the Namefield
     if (GetStyle() & WB_NAMEFIELD)

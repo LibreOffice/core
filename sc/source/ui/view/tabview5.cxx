@@ -111,10 +111,10 @@ void ScTabView::Init()
         explicitly because the parent frame window is already RTL disabled. */
     pTabControl->EnableRTL( AllSettings::GetLayoutRTL() );
 
-    InitScrollBar( *aHScrollLeft.get(),    MAXCOL+1 );
-    InitScrollBar( *aHScrollRight.get(),   MAXCOL+1 );
-    InitScrollBar( *aVScrollTop.get(),     MAXROW+1 );
-    InitScrollBar( *aVScrollBottom.get(),  MAXROW+1 );
+    InitScrollBar( *aHScrollLeft,    MAXCOL+1 );
+    InitScrollBar( *aHScrollRight,   MAXCOL+1 );
+    InitScrollBar( *aVScrollTop,     MAXROW+1 );
+    InitScrollBar( *aVScrollBottom,  MAXROW+1 );
     /*  #i97900# scrollbars remain in correct RTL mode, needed mirroring etc.
         is now handled correctly at the respective places. */
 

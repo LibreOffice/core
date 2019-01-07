@@ -170,7 +170,7 @@ Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
     nSize(0),
     aSplitter(VclPtr<Splitter>::Create(pParent, bVertical ? WB_HSCROLL : WB_VSCROLL))
 {
-    InitSplitter(*aSplitter.get());
+    InitSplitter(*aSplitter);
 }
 
 void Layout::SplittedSide::dispose()

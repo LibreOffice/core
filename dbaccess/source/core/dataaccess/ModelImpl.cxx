@@ -496,7 +496,7 @@ namespace
 
             if ( rPersistentName.isEmpty() )
             {   // it's a logical sub folder used to organize the real objects
-                const ODefinitionContainer_Impl& rSubFoldersObjectDefinitions( dynamic_cast< const ODefinitionContainer_Impl& >( *rDefinition.get() ) );
+                const ODefinitionContainer_Impl& rSubFoldersObjectDefinitions( dynamic_cast< const ODefinitionContainer_Impl& >( *rDefinition ) );
                 bSomeDocHasMacros = lcl_hasObjectWithMacros_throw( rSubFoldersObjectDefinitions, _rxContainerStorage );
                 if (bSomeDocHasMacros)
                     break;

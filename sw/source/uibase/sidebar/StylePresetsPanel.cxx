@@ -107,18 +107,18 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
 
     {
         tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
-        renderPreview(pStyleManager, *pVirtualDev.get(), "Title", nTitleHeight, aRenderRect);
+        renderPreview(pStyleManager, *pVirtualDev, "Title", nTitleHeight, aRenderRect);
         y += nTitleHeight;
     }
 
     {
         tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
-        renderPreview(pStyleManager, *pVirtualDev.get(), "Heading 1", nHeadingHeight, aRenderRect);
+        renderPreview(pStyleManager, *pVirtualDev, "Heading 1", nHeadingHeight, aRenderRect);
         y += nHeadingHeight;
     }
     {
         tools::Rectangle aRenderRect(Point(nMargin, y), aSize);
-        renderPreview(pStyleManager, *pVirtualDev.get(), "Text Body", nTextBodyHeight, aRenderRect);
+        renderPreview(pStyleManager, *pVirtualDev, "Text Body", nTextBodyHeight, aRenderRect);
     }
 
     return pVirtualDev->GetBitmapEx(Point(), aSize);

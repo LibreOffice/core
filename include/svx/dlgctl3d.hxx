@@ -159,7 +159,7 @@ public:
     void CheckSelection();
 
     // bring further settings to the outside world
-    Svx3DLightControl& GetSvx3DLightControl() { return *maLightControl.get(); }
+    Svx3DLightControl& GetSvx3DLightControl() { return *maLightControl; }
 
     // register user callback
     void SetUserInteractiveChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserInteractiveChangeCallback = aNew; }

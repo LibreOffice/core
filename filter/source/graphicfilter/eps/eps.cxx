@@ -417,7 +417,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     {
         ImplWriteProlog( ( mnPreview & EPS_PREVIEW_EPSI ) ? &rGraphic : nullptr );
         mnCursorPos = 0;
-        ImplWriteActions( *pMTF, *pVDev.get() );
+        ImplWriteActions( *pMTF, *pVDev );
         ImplWriteEpilog();
         if ( mnPreview & EPS_PREVIEW_TIFF )
         {

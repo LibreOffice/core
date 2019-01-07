@@ -432,7 +432,7 @@ public:
 
             rRenderContext.DrawOutDev(Point(), mpVDev->GetOutputSizePixel(),
                                       Point(), mpVDev->GetOutputSizePixel(),
-                                      *mpVDev.get());
+                                      *mpVDev);
             rRenderContext.SetTextColor(COL_LIGHTRED);
             rRenderContext.DrawText(Point(10, 10), "FPS: " + OUString::number(int(fps)));
             return;

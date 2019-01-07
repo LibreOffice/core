@@ -1670,7 +1670,7 @@ SwXText::convertToTextFrame(
 
     const uno::Reference<text::XTextFrame> xNewFrame(
             SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, nullptr));
-    SwXTextFrame& rNewFrame = dynamic_cast<SwXTextFrame&>(*xNewFrame.get());
+    SwXTextFrame& rNewFrame = dynamic_cast<SwXTextFrame&>(*xNewFrame);
     rNewFrame.SetSelection( aStartPam );
     try
     {
@@ -2207,7 +2207,7 @@ SwXText::convertToTable(
 
     assert(SwTable::FindTable(pTable->GetFrameFormat()) == pTable);
     assert(pTable->GetFrameFormat() ==
-            dynamic_cast<SwXTextTable&>(*xRet.get()).GetFrameFormat());
+            dynamic_cast<SwXTextTable&>(*xRet).GetFrameFormat());
     return xRet;
 }
 

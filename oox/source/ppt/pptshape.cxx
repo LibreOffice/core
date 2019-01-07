@@ -328,7 +328,7 @@ void PPTShape::addShape(
                 {
                     aMasterTextListStyle = isOther ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getMasterPersist()->getDefaultTextStyle();
                     if (aSlideStyle.get())
-                        aMasterTextListStyle->apply( *aSlideStyle.get() );
+                        aMasterTextListStyle->apply( *aSlideStyle );
                 }
                 else
                 {
@@ -339,7 +339,7 @@ void PPTShape::addShape(
             if( aMasterTextListStyle.get() && getTextBody().get() ) {
                 TextListStylePtr aCombinedTextListStyle (new TextListStyle());
 
-                aCombinedTextListStyle->apply( *aMasterTextListStyle.get() );
+                aCombinedTextListStyle->apply( *aMasterTextListStyle );
 
                 if( mpPlaceholder.get() && mpPlaceholder->getTextBody().get() )
                     aCombinedTextListStyle->apply( mpPlaceholder->getTextBody()->getTextListStyle() );

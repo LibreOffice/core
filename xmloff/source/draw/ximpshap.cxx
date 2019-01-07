@@ -3448,7 +3448,7 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
 
         if(getSupportsMultipleContents() && dynamic_cast< SdXMLGraphicObjectShapeContext* >(xContext.get()))
         {
-            addContent(*mxImplContext.get());
+            addContent(*mxImplContext);
         }
     }
     else if(getSupportsMultipleContents() && XML_NAMESPACE_DRAW == nPrefix && IsXMLToken(rLocalName, XML_IMAGE))
@@ -3460,7 +3460,7 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
 
         if(dynamic_cast< SdXMLGraphicObjectShapeContext* >(xContext.get()))
         {
-            addContent(*mxImplContext.get());
+            addContent(*mxImplContext);
         }
     }
     else if( mbSupportsReplacement && !mxReplImplContext.is() &&

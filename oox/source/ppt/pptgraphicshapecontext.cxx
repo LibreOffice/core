@@ -164,7 +164,7 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                         case XML_pic :
                             bUseText = false;
                     }
-                    mpShapePtr->applyShapeReference( *pPlaceholder.get(), bUseText );
+                    mpShapePtr->applyShapeReference( *pPlaceholder, bUseText );
                     PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                     if ( pPPTShape )
                         pPPTShape->setReferenced( true );

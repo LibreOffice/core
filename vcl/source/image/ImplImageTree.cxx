@@ -163,7 +163,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
     else if (rPath.endsWith(".svg"))
     {
         rParameters.mbWriteImageToCache = true; // We always want to cache a SVG image
-        vcl::bitmap::loadFromSvg(*xStream.get(), rPath, rParameters.mrBitmap, aScalePercentage / 100.0);
+        vcl::bitmap::loadFromSvg(*xStream, rPath, rParameters.mrBitmap, aScalePercentage / 100.0);
 
         if (bConvertToDarkTheme)
             BitmapFilter::Filter(rParameters.mrBitmap, BitmapLightenFilter());

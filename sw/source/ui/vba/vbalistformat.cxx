@@ -62,7 +62,7 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
     if (!xEnum->hasMoreElements())
         return;
 
-    SwVbaListTemplate& rListTemplate = dynamic_cast<SwVbaListTemplate&>(*ListTemplate.get());
+    SwVbaListTemplate& rListTemplate = dynamic_cast<SwVbaListTemplate&>(*ListTemplate);
 
     bool isFirstElement = true;
     do

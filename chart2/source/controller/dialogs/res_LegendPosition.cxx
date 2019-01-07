@@ -122,7 +122,7 @@ void LegendPositionResources::writeToModel( const css::uno::Reference< frame::XM
     try
     {
         bool bShowLegend = m_xCbxShow && m_xCbxShow->get_active();
-        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartModel.get());
+        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartModel);
         uno::Reference< beans::XPropertySet > xProp(LegendHelper::getLegend(rModel, m_xCC, bShowLegend), uno::UNO_QUERY);
         if( xProp.is() )
         {

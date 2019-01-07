@@ -40,12 +40,12 @@ public:
 
     SvHeaderTabListBox& GetListBox()
     {
-        return *maListBox.get();
+        return *maListBox;
     }
 
     HeaderBar& GetHeaderBar()
     {
-        return *maHeaderBar.get();
+        return *maHeaderBar;
     }
 
     void                        ConnectElements();/**< should be called after all manipulations on elements are done

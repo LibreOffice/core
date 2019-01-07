@@ -479,7 +479,7 @@ public:
     void                    ToggleIndex( bool bOn );
     void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
-    ToolBox&         GetToolBox() { return *aToolBox.get(); }
+    ToolBox&         GetToolBox() { return *aToolBox; }
     void                    CloseFrame();
     void                    DoSearch();
 };

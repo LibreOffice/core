@@ -424,7 +424,7 @@ void MediaWindowImpl::onURLChanged()
     if (!mpChildWindow)
         return;
     mpChildWindow->SetHelpId(HID_AVMEDIA_PLAYERWINDOW);
-    mxEvents = new MediaEventListenersImpl(*mpChildWindow.get());
+    mxEvents = new MediaEventListenersImpl(*mpChildWindow);
 
     if (mxPlayer.is())
     {

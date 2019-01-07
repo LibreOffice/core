@@ -73,7 +73,7 @@ void VPolarCoordinateSystem::createVAxisList(
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
     // a leak from VPolarAxis due to cyclic reference
     uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
-        dynamic_cast<ChartModel&>(*xChartDoc.get()).getNumberFormatsSupplier());
+        dynamic_cast<ChartModel&>(*xChartDoc).getNumberFormatsSupplier());
 
     m_aAxisMap.clear();
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();

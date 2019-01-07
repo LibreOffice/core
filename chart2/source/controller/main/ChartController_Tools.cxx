@@ -819,7 +819,7 @@ void ChartController::executeDispatch_ToggleLegend()
     Reference< frame::XModel > xModel( getModel() );
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_LEGEND ), m_xUndoManager );
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*xModel.get());
+    ChartModel& rModel = dynamic_cast<ChartModel&>(*xModel);
     Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(rModel), uno::UNO_QUERY );
     bool bChanged = false;
     if( xLegendProp.is())

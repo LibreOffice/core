@@ -1650,7 +1650,7 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
             UScriptCode eScript = getScript(aFontCapabilities);
 
             if (nScriptType == css::i18n::ScriptType::ASIAN)
-                eScript = attemptToDisambiguateHan(eScript, *aDevice.get());
+                eScript = attemptToDisambiguateHan(eScript, *aDevice);
 
             sRet = makeRepresentativeTextForScript(eScript);
         }

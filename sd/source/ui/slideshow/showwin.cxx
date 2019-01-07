@@ -508,7 +508,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
             aText += aLocaleData.getDuration( ::tools::Time( 0, 0, mnPauseTimeout ) );
             aText += " )";
             pVDev->DrawText( Point( aOffset.Width(), 0 ), aText );
-            DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, *pVDev.get() );
+            DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, *pVDev );
             bDrawn = true;
         }
     }

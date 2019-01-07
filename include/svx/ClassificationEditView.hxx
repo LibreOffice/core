@@ -51,7 +51,7 @@ public:
 
     const ClassificationEditEngine& getEditEngine()
     {
-        return *pEdEngine.get();
+        return *pEdEngine;
     }
 
     void SetModifyHdl(const Link<LinkParamNone*,void>& rLink)

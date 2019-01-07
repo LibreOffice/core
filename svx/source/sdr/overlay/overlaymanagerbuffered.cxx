@@ -142,7 +142,7 @@ namespace sdr
                 getOutputDevice().DrawOutDev(
                     aTopLeft, aSize, // destination
                     aTopLeft, aSize, // source
-                    *mpBufferDevice.get());
+                    *mpBufferDevice);
             }
 
             // restore MapModes
@@ -294,7 +294,7 @@ namespace sdr
                         mpOutputBufferDevice->DrawOutDev(
                             aTopLeft, aSize, // destination
                             aTopLeft, aSize, // source
-                            *mpBufferDevice.get());
+                            *mpBufferDevice);
 
                         // restore MapModes
                         mpBufferDevice->EnableMapMode(bMapModeWasEnabledDest);
@@ -303,7 +303,7 @@ namespace sdr
                     // paint overlay content for remembered region, use
                     // method from base class directly
                     mpOutputBufferDevice->EnableMapMode();
-                    OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, *mpOutputBufferDevice.get());
+                    OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, *mpOutputBufferDevice);
                     mpOutputBufferDevice->EnableMapMode(false);
 
                     // copy to output
@@ -314,7 +314,7 @@ namespace sdr
                         getOutputDevice().DrawOutDev(
                             aTopLeft, aSize, // destination
                             aTopLeft, aSize, // source
-                            *mpOutputBufferDevice.get());
+                            *mpOutputBufferDevice);
 
                         // debug
                         /*getOutputDevice().SetLineCOL_RED);

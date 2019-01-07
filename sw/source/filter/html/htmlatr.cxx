@@ -1669,7 +1669,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                 const SwFormatAutoFormat& rAutoFormat = static_cast<const SwFormatAutoFormat&>(rItem);
                 const std::shared_ptr<SfxItemSet>& pSet = rAutoFormat.GetStyleHandle();
                 if( pSet.get() )
-                    Insert( *pSet.get(), nStart, nEnd, rFormatInfos, true, bParaAttrs );
+                    Insert( *pSet, nStart, nEnd, rFormatInfos, true, bParaAttrs );
             }
             break;
 

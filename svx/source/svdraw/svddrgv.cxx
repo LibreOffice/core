@@ -829,7 +829,7 @@ void SdrDragView::ShowDragObj()
                     if(xOverlayManager.is())
                     {
                         mpCurrentSdrDragMethod->CreateOverlayGeometry(
-                            *xOverlayManager.get(),
+                            *xOverlayManager,
                             rPageWindow.GetObjectContact());
 
                         // #i101679# Force changed overlay to be shown

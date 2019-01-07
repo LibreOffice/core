@@ -1350,7 +1350,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
             XclExpExtRef pParent = xExtLst->GetItem( XclExpExtDataBarType );
             if( !pParent.get() )
             {
-                xExtLst->AddRecord( XclExpExtRef(new XclExpExtCondFormat( *xExtLst.get() )) );
+                xExtLst->AddRecord( XclExpExtRef(new XclExpExtCondFormat( *xExtLst )) );
                 pParent = xExtLst->GetItem( XclExpExtDataBarType );
             }
             static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ).get())->AddRecord(

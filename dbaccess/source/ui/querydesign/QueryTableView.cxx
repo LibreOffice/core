@@ -173,7 +173,7 @@ namespace
             ScopedVclPtrInstance< OQueryTableConnection > aNewConn(_pView, aNewConnData);
             // referring to the local variable is not important, as NotifyQueryTabConn creates a new copy
             // to add me (if not existent)
-            _pView->NotifyTabConnection(*aNewConn.get(), false);
+            _pView->NotifyTabConnection(*aNewConn, false);
                 // don't create an Undo-Action for the new connection : the connection is
                 // covered by the Undo-Action for the tabwin, as the "Undo the insert" will
                 // automatically remove all connections adjacent to the win.
@@ -564,7 +564,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
         pNewConnectionData->AppendConnLine( aSourceFieldName,aDestFieldName );
 
         ScopedVclPtrInstance< OQueryTableConnection > aNewConnection(this, aNewConnectionData);
-        NotifyTabConnection(*aNewConnection.get());
+        NotifyTabConnection(*aNewConnection);
         // As usual with NotifyTabConnection, using a local variable is fine because a copy is made
     }
     else

@@ -228,7 +228,7 @@ IMPL_LINK_NOARG(FileControl, ButtonHdl, Button*, void)
                 if ( aObj.GetProtocol() == INetProtocol::File )
                     aNewText = aObj.PathToFileName();
                 SetText( aNewText );
-                maEdit->GetModifyHdl().Call( *maEdit.get() );
+                maEdit->GetModifyHdl().Call( *maEdit );
             }
         }
     }

@@ -386,7 +386,7 @@ void BackingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     rRenderContext.DrawOutDev(maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
                               Point(0, 0), maStartCentButtons.GetSize(),
-                              *pVDev.get());
+                              *pVDev);
 }
 
 bool BackingWindow::PreNotify(NotifyEvent& rNEvt)

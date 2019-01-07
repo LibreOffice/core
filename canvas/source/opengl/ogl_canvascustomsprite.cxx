@@ -44,7 +44,7 @@ namespace oglcanvas
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         ::canvas::tools::setIdentityAffineMatrix2D(maTransformation);
-        maCanvasHelper.init( *rRefDevice.get(),
+        maCanvasHelper.init( *rRefDevice,
                              rDeviceHelper );
     }
 

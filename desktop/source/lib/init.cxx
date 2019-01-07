@@ -2298,7 +2298,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
                 pBuffer);
 
-    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
+    pDoc->paintTile(*pDevice, nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
     static bool bDebug = getenv("LOK_DEBUG_TILES") != nullptr;
@@ -2355,7 +2355,7 @@ static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
 
     pDevice->SetOutputSizePixel(Size(nCanvasWidth, nCanvasHeight));
 
-    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
+    pDoc->paintTile(*pDevice, nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
 }

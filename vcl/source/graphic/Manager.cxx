@@ -146,7 +146,7 @@ void Manager::unregisterGraphic(ImpGraphic* pImpGraphic)
 
 std::shared_ptr<ImpGraphic> Manager::copy(std::shared_ptr<ImpGraphic> const& rImpGraphicPtr)
 {
-    auto pReturn = std::make_shared<ImpGraphic>(*rImpGraphicPtr.get());
+    auto pReturn = std::make_shared<ImpGraphic>(*rImpGraphicPtr);
     registerGraphic(pReturn, "Copy");
     return pReturn;
 }

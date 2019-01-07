@@ -819,7 +819,7 @@ void SwDocShell::Edit(
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(),
-                                                    *(xTmp.get()), nFamily, sPage, pCurrShell, bNew));
+                                                    *xTmp, nFamily, sPage, pCurrShell, bNew));
         std::shared_ptr<ApplyStyle> pApplyStyleHelper(new ApplyStyle(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified));
         pDlg->SetApplyHdl(LINK(pApplyStyleHelper.get(), ApplyStyle, ApplyHdl));
 
