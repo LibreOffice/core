@@ -607,7 +607,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/docvw/AnnotationWin2 \
     sw/source/uibase/docvw/DashedLine \
     sw/source/uibase/docvw/FrameControlsManager \
-    sw/source/uibase/docvw/FloatingTableButton \
+    sw/source/uibase/docvw/UnfloatTableButton \
     sw/source/uibase/docvw/PageBreakWin \
     sw/source/uibase/docvw/OverlayRanges \
     sw/source/uibase/docvw/PostItMgr \
