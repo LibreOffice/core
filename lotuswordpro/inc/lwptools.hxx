@@ -101,8 +101,8 @@ public:
     static OUString convertToFileUrl(const OString& fileName);
     static OUString    DateTimeToOUString(const LtTm& dt);
 
-    static XFDateStyle* GetSystemDateStyle(bool bLongFormat);
-    static XFTimeStyle* GetSystemTimeStyle();
+    static std::unique_ptr<XFDateStyle> GetSystemDateStyle(bool bLongFormat);
+    static std::unique_ptr<XFTimeStyle> GetSystemTimeStyle();
 };
 
 inline double LwpTools::ConvertFromUnits(sal_Int32 nUnits)
