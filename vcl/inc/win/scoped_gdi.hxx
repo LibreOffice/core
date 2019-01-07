@@ -45,11 +45,18 @@ struct HFONTDeleter
     void operator()(HFONT hFont) { DeleteFont(hFont); }
 };
 
+struct HBITMAPDeleter
+{
+    using pointer = HBITMAP;
+    void operator()(HBITMAP hBitmap) { DeleteBitmap(hBitmap); }
+};
+
 using ScopedHBRUSH = std::unique_ptr<HBRUSH, HBRUSHDeleter>;
 using ScopedHRGN = std::unique_ptr<HRGN, HRGNDeleter>;
 using ScopedHDC = std::unique_ptr<HDC, HDCDeleter>;
 using ScopedHPEN = std::unique_ptr<HPEN, HPENDeleter>;
 using ScopedHFONT = std::unique_ptr<HFONT, HFONTDeleter>;
+using ScopedHBITMAP = std::unique_ptr<HBITMAP, HBITMAPDeleter>;
 
 class ScopedSelectedHPEN
 {
