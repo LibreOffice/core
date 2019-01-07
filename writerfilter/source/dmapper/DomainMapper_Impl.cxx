@@ -3401,6 +3401,15 @@ void DomainMapper_Impl::handleFieldFormula
      uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
     OUString command = pContext->GetCommand().trim();
+
+    //  Remove number formatting from \# to end of command
+    //  TODO: handle custom number formatting
+    sal_Int32 delimPos = command.indexOf("\\#");
+    if (delimPos != -1)
+    {
+        command = command.replaceAt(delimPos, command.getLength() - delimPos, "");
+    }
+
     // command must contains = and at least another char
     if (command.getLength() < 2)
         return;
