@@ -28,7 +28,6 @@
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/builderfactory.hxx>
-#include <vcl/virdev.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace svx {
