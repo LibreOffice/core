@@ -398,11 +398,11 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
     {
         if (sFormula == "%FLSystemShortDate")
         {
-            pDateStyle.reset( LwpTools::GetSystemDateStyle(false) );
+            pDateStyle = LwpTools::GetSystemDateStyle(false);
         }
         else if (sFormula == "%FLSystemLongDate")
         {
-            pDateStyle.reset( LwpTools::GetSystemDateStyle(true) );
+            pDateStyle = LwpTools::GetSystemDateStyle(true);
         }
         else if (sFormula == "%FLISODate1" || sFormula == "%FLYYYY/MM/DD" )
         {
@@ -868,7 +868,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
     //TIME
         else if (sFormula == "%FLSystemTime")
         {
-            pTimeStyle.reset(LwpTools::GetSystemTimeStyle());
+            pTimeStyle = LwpTools::GetSystemTimeStyle();
         }
         else if (sFormula == "%FLISOTime1" || sFormula == "%FLH:mm:SS")
         {
@@ -1018,7 +1018,7 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
     {
         if (sFormula == "%Da")
         {
-            pDateStyle.reset(LwpTools::GetSystemDateStyle(false));
+            pDateStyle = LwpTools::GetSystemDateStyle(false);
         }
         else if (sFormula == "%DB" || sFormula == "%Db")
         {
