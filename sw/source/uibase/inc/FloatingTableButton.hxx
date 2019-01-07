@@ -13,6 +13,16 @@
 #include "FrameControl.hxx"
 #include <vcl/menubtn.hxx>
 
+
+/** Class for unfloat table button
+ *
+ * This unfloat button is used to convert a floating table into a default, text like writer table.
+ * This unfloat oparation is usefull typically for documents imported from MSO file formats containing
+ * multi-page floating tables. In case of a multi-page table the text frame cuts off the table because
+ * the frame can't span across multiple pages. With unfloating we can get a multi-page table without
+ * floating properties.
+ *
+ */
 class FloatingTableButton : public SwFrameMenuButtonBase
 {
     OUString m_sLabel;
