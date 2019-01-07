@@ -700,6 +700,17 @@ void SdImportTestSmartArt::testOrgChart()
     CPPUNIT_ASSERT(xManager.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Manager"), xManager->getString());
 
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xManager, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xPara, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nActualColor = xRun->getPropertyValue("CharColor").get<sal_Int32>();
+    // Without the accompanying fix in place, this test would have failed: the
+    // "Manager" font color was black, not white.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nActualColor);
+
     uno::Reference<drawing::XShape> xManagerShape(xManager, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xManagerShape.is());
 

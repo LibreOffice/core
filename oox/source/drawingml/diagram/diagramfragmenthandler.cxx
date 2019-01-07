@@ -111,7 +111,7 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
     const AttributeList& rAttribs,
     ShapeStyleRef& o_rStyle )
 {
-    o_rStyle.mnThemedIdx = (nElement == DGM_TOKEN(fontRef)) ?
+    o_rStyle.mnThemedIdx = (nElement == A_TOKEN(fontRef)) ?
         rAttribs.getToken( XML_idx, XML_none ) : rAttribs.getInteger( XML_idx, 0 );
     return new ColorContext( *this, o_rStyle.maPhClr );
 }
