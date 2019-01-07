@@ -11,7 +11,7 @@
 #include <FrameControlsManager.hxx>
 #include <HeaderFooterWin.hxx>
 #include <PageBreakWin.hxx>
-#include <FloatingTableButton.hxx>
+#include <UnfloatTableButton.hxx>
 #include <pagefrm.hxx>
 #include <flyfrm.hxx>
 #include <viewopt.hxx>
@@ -139,7 +139,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
         pControl->ShowAll( true );
 }
 
-void SwFrameControlsManager::SetFloatingTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aBottomRightPixel )
+void SwFrameControlsManager::SetUnfloatTableButton( const SwFlyFrame* pFlyFrame, bool bShow, Point aBottomRightPixel )
 {
     if(pFlyFrame == nullptr)
         return;
@@ -157,7 +157,7 @@ void SwFrameControlsManager::SetFloatingTableButton( const SwFlyFrame* pFlyFrame
     else
     {
         SwFrameControlPtr pNewControl( new SwFrameControl(
-                VclPtr<FloatingTableButton>::Create( m_pEditWin, pFlyFrame ).get() ) );
+                VclPtr<UnfloatTableButton>::Create( m_pEditWin, pFlyFrame ).get() ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
 
@@ -166,7 +166,7 @@ void SwFrameControlsManager::SetFloatingTableButton( const SwFlyFrame* pFlyFrame
         pControl.swap( pNewControl );
     }
 
-    FloatingTableButton* pButton = dynamic_cast<FloatingTableButton*>(pControl->GetWindow());
+    UnfloatTableButton* pButton = dynamic_cast<UnfloatTableButton*>(pControl->GetWindow());
     assert(pButton != nullptr);
     pButton->SetOffset(aBottomRightPixel);
     pControl->ShowAll( bShow );

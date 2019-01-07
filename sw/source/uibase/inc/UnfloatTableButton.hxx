@@ -7,12 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_FLOATINGTABLEBUTTON_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_DOCVW_FLOATINGTABLEBUTTON_HXX
+#ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_UNFLOATTABLEBUTTON_HXX
+#define INCLUDED_SW_SOURCE_UIBASE_DOCVW_UNFLOATTABLEBUTTON_HXX
 
 #include "FrameControl.hxx"
 #include <vcl/menubtn.hxx>
-
 
 /** Class for unfloat table button
  *
@@ -23,13 +22,13 @@
  * floating properties.
  *
  */
-class FloatingTableButton : public SwFrameMenuButtonBase
+class UnfloatTableButton : public SwFrameMenuButtonBase
 {
     OUString m_sLabel;
 
 public:
-    FloatingTableButton(SwEditWin* pEditWin, const SwFrame* pFrame);
-    virtual ~FloatingTableButton() override;
+    UnfloatTableButton(SwEditWin* pEditWin, const SwFrame* pFrame);
+    virtual ~UnfloatTableButton() override;
 
     void SetOffset(Point aBottomRightPixel);
 
