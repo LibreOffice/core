@@ -295,6 +295,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf115094v2, "tdf115094v2.docx")
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Grafik 19"), "IsLayoutInCell"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf122224, "tdf122224.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY_THROW);
+    // This was "** Expression is faulty **", because of the unnecessary DOCX number format string
+    CPPUNIT_ASSERT_EQUAL(OUString("2000"), xCell->getString());
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
