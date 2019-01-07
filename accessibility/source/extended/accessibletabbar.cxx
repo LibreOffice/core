@@ -471,7 +471,7 @@ namespace accessibility
                 else
                     aFont = m_pTabBar->GetFont();
                 VCLXFont* pVCLXFont = new VCLXFont;
-                pVCLXFont->Init( *xDev.get(), aFont );
+                pVCLXFont->Init( *xDev, aFont );
                 xFont = pVCLXFont;
             }
         }

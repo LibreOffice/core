@@ -421,6 +421,16 @@ public:
         return castFromXInterface(_pInterface);
     }
 
+    /** Indirection operator.
+
+        @since LibreOffice 6.3
+        @return UNacquired interface reference
+    */
+    interface_type & SAL_CALL operator * () const {
+        assert(_pInterface != NULL);
+        return *castFromXInterface(_pInterface);
+    }
+
     /** Gets interface pointer. This call does not acquire the interface.
 
         @return UNacquired interface pointer
