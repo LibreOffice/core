@@ -156,7 +156,7 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 
     // create processor and draw primitives
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
-        *pVirtualDevice.get(),
+        *pVirtualDevice,
         aNewViewInformation2D));
 
     if(pProcessor2D)

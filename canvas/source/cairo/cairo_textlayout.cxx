@@ -161,7 +161,7 @@ namespace cairocanvas
         // relative to baseline
         const ::FontMetric& aMetric( pVDev->GetFontMetric() );
 
-        setupLayoutMode( *pVDev.get(), mnTextDirection );
+        setupLayoutMode( *pVDev, mnTextDirection );
 
         const sal_Int32 nAboveBaseline( -aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );

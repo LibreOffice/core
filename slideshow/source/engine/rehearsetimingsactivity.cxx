@@ -192,7 +192,7 @@ std::shared_ptr<RehearseTimingsActivity> RehearseTimingsActivity::create(
         new RehearseTimingsActivity( rContext ));
 
     pActivity->mpMouseHandler.reset(
-        new MouseHandler(*pActivity.get()) );
+        new MouseHandler(*pActivity) );
     pActivity->mpWakeUpEvent.reset(
         new WakeupEvent( rContext.mrEventQueue.getTimer(),
                          pActivity,

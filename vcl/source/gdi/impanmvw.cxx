@@ -182,7 +182,7 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
     if (xOldClip)
         pRenderContext->SetClipRegion( maClip );
 
-    pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *aVDev.get() );
+    pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *aVDev );
     if (pGuard)
         pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 

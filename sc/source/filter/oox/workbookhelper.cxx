@@ -131,7 +131,7 @@ public:
 
     ScEditEngineDefaulter& getEditEngine() const
     {
-        return *mxEditEngine.get();
+        return *mxEditEngine;
     }
 
     ScDocument& getScDocument() { return *mpDoc; }

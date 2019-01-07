@@ -1670,7 +1670,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // open font file
     sal_uInt32 nFaceNum = 0;
-    if( !*xRawFontData.get() )  // TTC candidate
+    if( !*xRawFontData )  // TTC candidate
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
@@ -1786,7 +1786,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
 
     // open font file
     sal_uInt32 nFaceNum = 0;
-    if( !*xRawFontData.get() )  // TTC candidate
+    if( !*xRawFontData )  // TTC candidate
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;

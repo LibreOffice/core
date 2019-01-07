@@ -1315,7 +1315,7 @@ void ChartController::executeDispatch_SourceData()
 
     // If there is a data table we should ask user if we really want to destroy it
     // and switch to data ranges.
-    ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc.get());
+    ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartDoc);
     if ( rModel.hasInternalDataProvider() )
     {
         // Check if we will able to create data provider later

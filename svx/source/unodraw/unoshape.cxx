@@ -720,7 +720,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
         pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
         pVDev->EnableOutput(false);
         aMtf.Record(pVDev);
-        GetSdrObject()->SingleObjectPainter(*pVDev.get());
+        GetSdrObject()->SingleObjectPainter(*pVDev);
         aMtf.Stop();
         aMtf.WindStart();
         aMtf.Move(-aBoundRect.Left(), -aBoundRect.Top());

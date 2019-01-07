@@ -663,7 +663,7 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
                                vcl::Window *pParent) :
     SfxDockingWindow(pBindings_, pChildWindow, pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE),
     aEdit       (VclPtr<SmEditWindow>::Create(*this)),
-    aController (*(aEdit.get()), SID_TEXT, *pBindings_),
+    aController (*aEdit, SID_TEXT, *pBindings_),
     bExiting    (false)
 {
     SetHelpId( HID_SMA_COMMAND_WIN );
@@ -1907,7 +1907,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     : SfxViewShell(pFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS)
     , mpImpl(new SmViewShell_Impl)
     , mpGraphic(VclPtr<SmGraphicWindow>::Create(this))
-    , maGraphicController(*mpGraphic.get(), SID_GAPHIC_SM, pFrame_->GetBindings())
+    , maGraphicController(*mpGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
     , mbPasteState(false)
     , mbInsertIntoEditWindow(false)
 {

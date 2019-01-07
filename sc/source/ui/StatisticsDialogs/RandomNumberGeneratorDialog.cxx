@@ -129,7 +129,7 @@ void ScRandomNumberGeneratorDialog::Init()
     mpEnableSeed->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
     mpEnableRounding->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
 
-    DistributionChanged(*mpDistributionCombo.get());
+    DistributionChanged(*mpDistributionCombo);
     CheckChanged(*mpEnableSeed);
 }
 

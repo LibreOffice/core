@@ -79,7 +79,7 @@ VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const
 
                 // new dialog window
                 if (!pDialogLayout)
-                    pDialogLayout.reset(VclPtr<DialogWindowLayout>::Create(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
+                    pDialogLayout.reset(VclPtr<DialogWindowLayout>::Create(&GetViewFrame()->GetWindow(), *aObjectCatalog));
                 pWin = VclPtr<DialogWindow>::Create(pDialogLayout.get(), rDocument, aLibName, aDlgName, xDialogModel);
                 nKey = InsertWindowInTable( pWin );
             }

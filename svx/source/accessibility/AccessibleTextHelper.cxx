@@ -1129,7 +1129,7 @@ namespace accessibility
             ::std::unique_ptr< SfxHint > pHint( maEventQueue.PopFront() );
             if (pHint)
             {
-                const SfxHint& rHint = *(pHint.get());
+                const SfxHint& rHint = *pHint;
 
                 // determine hint type
                 const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );

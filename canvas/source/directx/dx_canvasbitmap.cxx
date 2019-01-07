@@ -43,7 +43,7 @@ namespace dxcanvas
         ENSURE_OR_THROW( mpDevice.is() && mpBitmap,
                          "CanvasBitmap::CanvasBitmap(): Invalid surface or device" );
 
-        maCanvasHelper.setDevice( *mpDevice.get() );
+        maCanvasHelper.setDevice( *mpDevice );
         maCanvasHelper.setTarget( mpBitmap );
     }
 

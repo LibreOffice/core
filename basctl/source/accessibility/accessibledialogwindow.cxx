@@ -802,7 +802,7 @@ Reference< awt::XFont > AccessibleDialogWindow::getFont(  )
             else
                 aFont = m_pDialogWindow->GetFont();
             VCLXFont* pVCLXFont = new VCLXFont;
-            pVCLXFont->Init( *xDev.get(), aFont );
+            pVCLXFont->Init( *xDev, aFont );
             xFont = pVCLXFont;
         }
     }

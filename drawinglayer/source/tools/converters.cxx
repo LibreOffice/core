@@ -81,7 +81,7 @@ namespace drawinglayer
             // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
             // not wanted, change after this call as needed
             std::unique_ptr<processor2d::BaseProcessor2D> pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
-                *pContent.get(),
+                *pContent,
                 rViewInformation2D);
 
             if(pContentProcessor)

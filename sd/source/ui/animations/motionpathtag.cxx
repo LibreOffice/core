@@ -295,7 +295,7 @@ void SdPathHdl::CreateB2dIAObject()
                             insertNewlyCreatedOverlayObjectForSdrHdl(
                                 std::move(pNew),
                                 rPageWindow.GetObjectContact(),
-                                *xManager.get());
+                                *xManager);
                         }
                     }
                 }

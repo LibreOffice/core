@@ -630,7 +630,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
         ScopedVclPtrInstance< MetricField > aFld(this, WB_HIDE);
-        SetFieldUnit( *aFld.get(), eMetric );
+        SetFieldUnit( *aFld, eMetric );
         aFld->SetDecimalDigits(m_xWidthMF->get_digits());
         aFld->SetMax( LONG_MAX - 1 );
 

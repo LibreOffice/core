@@ -306,7 +306,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
         aVDev->SetMapMode( aMapMode );
 
         // draw bitmap content
-        if( ImplRenderTempTile( *aVDev.get(), nNumTilesInCacheX,
+        if( ImplRenderTempTile( *aVDev, nNumTilesInCacheX,
                                 nNumTilesInCacheY, rSizePixel, pAttr ) )
         {
             BitmapEx aTileBitmap( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) );
@@ -321,7 +321,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
                 else
                     aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
 
-                if( aAlphaGraphic.ImplRenderTempTile( *aVDev.get(), nNumTilesInCacheX,
+                if( aAlphaGraphic.ImplRenderTempTile( *aVDev, nNumTilesInCacheX,
                                                       nNumTilesInCacheY, rSizePixel, pAttr ) )
                 {
                     // Combine bitmap and alpha/mask

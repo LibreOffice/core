@@ -465,7 +465,7 @@ OUString escape(const OUString& rStr)
 OUString WindowUIObject::dumpState() const
 {
     OUStringBuffer aStateString = "{\"name\":\"" + mxWindow->get_id() + "\"";
-    aStateString.append(", \"ImplementationName\":\"").appendAscii(typeid(*mxWindow.get()).name()).append("\"");
+    aStateString.append(", \"ImplementationName\":\"").appendAscii(typeid(*mxWindow).name()).append("\"");
     StringMap aState = const_cast<WindowUIObject*>(this)->get_state();
     for (auto const& elem : aState)
     {

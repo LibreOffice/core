@@ -284,13 +284,13 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
 
     // select field reference type
     mxLbTypeWrp->SetControlValue( rFuncData.maFieldRef.ReferenceType );
-    SelectHdl( *mpLbType.get() );         // enables base field/item list boxes
+    SelectHdl( *mpLbType );         // enables base field/item list boxes
 
     // select base field
     mpLbBaseField->SelectEntry(aSelectedEntry);
     if( mpLbBaseField->GetSelectedEntryPos() >= mpLbBaseField->GetEntryCount() )
         mpLbBaseField->SelectEntryPos( 0 );
-    SelectHdl( *mpLbBaseField.get() );    // fills base item list, selects base item
+    SelectHdl( *mpLbBaseField );    // fills base item list, selects base item
 
     // select base item
     switch( rFuncData.maFieldRef.ReferenceItemType )

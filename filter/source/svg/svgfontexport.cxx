@@ -237,7 +237,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
                     }
                     for (auto const& glyph : rGlyphSet)
                     {
-                        implEmbedGlyph( *pVDev.get(), glyph);
+                        implEmbedGlyph( *pVDev, glyph);
                     }
                 }
             }

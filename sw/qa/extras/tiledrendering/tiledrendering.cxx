@@ -1712,7 +1712,7 @@ void SwTiledRenderingTest::testPaintCallbacks()
     // Make sure that painting a tile in the second view doesn't invoke
     // callbacks on the first view.
     aView1.m_bCalled = false;
-    pXTextDocument->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     CPPUNIT_ASSERT(!aView1.m_bCalled);
 
     mxComponent->dispose();

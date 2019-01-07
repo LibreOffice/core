@@ -254,7 +254,7 @@ void ImageButtonHdl::CreateB2dIAObject()
                         insertNewlyCreatedOverlayObjectForSdrHdl(
                             std::move(pOverlayObject),
                             rPageWindow.GetObjectContact(),
-                            *xManager.get());
+                            *xManager);
                     }
                 }
             }

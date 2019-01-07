@@ -52,12 +52,12 @@ namespace vclcanvas
 
     OutputDevice& BackBuffer::getOutDev()
     {
-        return *maVDev.get();
+        return *maVDev;
     }
 
     const OutputDevice& BackBuffer::getOutDev() const
     {
-        return *maVDev.get();
+        return *maVDev;
     }
 
     void BackBuffer::setSize( const ::Size& rNewSize )

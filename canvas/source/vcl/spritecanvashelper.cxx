@@ -263,7 +263,7 @@ namespace vclcanvas
 
             // repaint all active sprites on top of background into
             // VDev.
-            OutputDevice& rTmpOutDev( *maVDev.get() );
+            OutputDevice& rTmpOutDev( *maVDev );
             mpRedrawManager->forEachSprite(
                     [&rTmpOutDev]( const ::canvas::Sprite::Reference& rSprite )
                     { spriteRedraw( rTmpOutDev, rSprite ); }
@@ -534,7 +534,7 @@ namespace vclcanvas
                         rSpriteScreenPos - vcl::unotools::b2DPointFromPoint(aOutputPosition)
                         );
 
-                pSprite->redraw( *maVDev.get(), rSpriteRenderPos, true );
+                pSprite->redraw( *maVDev, rSpriteRenderPos, true );
             }
         }
 

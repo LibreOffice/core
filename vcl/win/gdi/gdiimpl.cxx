@@ -2436,7 +2436,7 @@ bool WinSalGraphicsImpl::TryDrawBitmapGDIPlus(const SalTwoRect& rTR, const SalBi
             paintToGdiPlus(
                 aGraphics,
                 rTR,
-                *aARGB.get());
+                *aARGB);
 
             return true;
         }
@@ -2489,7 +2489,7 @@ bool WinSalGraphicsImpl::drawAlphaBitmap(
             paintToGdiPlus(
                 aGraphics,
                 rTR,
-                *aARGB.get());
+                *aARGB);
 
             return true;
         }

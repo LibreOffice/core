@@ -104,7 +104,7 @@ namespace vclcanvas
         ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont( mpFont->getVCLFont() );
 
-        setupLayoutMode( *pVDev.get(), mnTextDirection );
+        setupLayoutMode( *pVDev, mnTextDirection );
 
         const rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
@@ -152,7 +152,7 @@ namespace vclcanvas
         ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont( mpFont->getVCLFont() );
 
-        setupLayoutMode( *pVDev.get(), mnTextDirection );
+        setupLayoutMode( *pVDev, mnTextDirection );
 
         const rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
@@ -229,7 +229,7 @@ namespace vclcanvas
         // relative to baseline
         const ::FontMetric& aMetric( pVDev->GetFontMetric() );
 
-        setupLayoutMode( *pVDev.get(), mnTextDirection );
+        setupLayoutMode( *pVDev, mnTextDirection );
 
         const sal_Int32 nAboveBaseline( -aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );

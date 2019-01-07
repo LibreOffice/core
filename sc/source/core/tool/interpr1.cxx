@@ -8687,14 +8687,14 @@ void ScInterpreter::ScAreas()
             case svSingleRef:
                 {
                     FormulaConstTokenRef xT = PopToken();
-                    ValidateRef( *xT.get()->GetSingleRef());
+                    ValidateRef( *xT->GetSingleRef());
                     ++nCount;
                 }
                 break;
             case svDoubleRef:
                 {
                     FormulaConstTokenRef xT = PopToken();
-                    ValidateRef( *xT.get()->GetDoubleRef());
+                    ValidateRef( *xT->GetDoubleRef());
                     ++nCount;
                 }
                 break;

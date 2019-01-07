@@ -177,7 +177,7 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 insertNewlyCreatedOverlayObjectForSdrHdl(
                                     std::move(pOverlayObject),
                                     rPageWindow.GetObjectContact(),
-                                    *xManager.get());
+                                    *xManager);
                             }
 
                             if(aInvisible.count())
@@ -191,7 +191,7 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 insertNewlyCreatedOverlayObjectForSdrHdl(
                                     std::move(pOverlayObject),
                                     rPageWindow.GetObjectContact(),
-                                    *xManager.get());
+                                    *xManager);
                             }
                         }
                     }
@@ -302,7 +302,7 @@ void TableBorderHdl::CreateB2dIAObject()
                     insertNewlyCreatedOverlayObjectForSdrHdl(
                         std::move(pOverlayObject),
                         rPageWindow.GetObjectContact(),
-                        *xManager.get());
+                        *xManager);
                 }
             }
         }

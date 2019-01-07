@@ -2036,7 +2036,7 @@ void SvxRuler::ApplyMargins()
         nId = SID_ATTR_LONG_ULSPACE;
 
 #ifdef DEBUGLIN
-        Debug_Impl(pEditWin,*mxULSpaceItem.get());
+        Debug_Impl(pEditWin,*mxULSpaceItem);
 #endif // DEBUGLIN
 
     }
@@ -2290,7 +2290,7 @@ void SvxRuler::ApplyBorders()
     }
 
 #ifdef DEBUGLIN
-        Debug_Impl(pEditWin,*mxColumnItem.get());
+        Debug_Impl(pEditWin,*mxColumnItem);
 #endif // DEBUGLIN
 
     SfxBoolItem aFlag(SID_RULER_ACT_LINE_ONLY,

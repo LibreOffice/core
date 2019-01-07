@@ -187,7 +187,7 @@ public:
 
     SmEditWindow& GetEditWindow()
     {
-        return *aEdit.get();
+        return *aEdit;
     }
     SmViewShell* GetView();
 };
@@ -273,11 +273,11 @@ public:
 
     SmGraphicWindow& GetGraphicWindow()
     {
-        return *mpGraphic.get();
+        return *mpGraphic;
     }
     const SmGraphicWindow& GetGraphicWindow() const
     {
-        return *mpGraphic.get();
+        return *mpGraphic;
     }
 
     void        SetStatusText(const OUString& rText);

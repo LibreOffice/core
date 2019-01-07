@@ -47,11 +47,11 @@ public:
 
     ToolBox& GetToolBox()
     {
-        return *maToolBox.get();
+        return *maToolBox;
     }
     const ToolBox& GetToolBox() const
     {
-        return *maToolBox.get();
+        return *maToolBox;
     }
 
 protected:

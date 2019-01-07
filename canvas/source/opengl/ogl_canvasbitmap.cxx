@@ -28,7 +28,7 @@ namespace oglcanvas
         ENSURE_OR_THROW( mpDevice.is(),
                          "CanvasBitmap::CanvasBitmap(): Invalid surface or device" );
 
-        maCanvasHelper.init( *mpDevice.get(), rDeviceHelper, rSize );
+        maCanvasHelper.init( *mpDevice, rDeviceHelper, rSize );
     }
 
     CanvasBitmap::CanvasBitmap( const CanvasBitmap& rSrc ) :

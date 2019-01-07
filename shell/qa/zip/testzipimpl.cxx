@@ -49,7 +49,7 @@ TestZipImpl::~TestZipImpl()
 bool TestZipImpl::test_directory()
 {
     ZipFile::DirectoryPtr_t contents = zipFile.GetDirectory();
-    vector<string> &stringVector = *contents.get();
+    vector<string> &stringVector = *contents;
     sort(stringVector.begin(), stringVector.end());
     return expectedContents == stringVector;
 }

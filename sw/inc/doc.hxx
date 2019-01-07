@@ -1225,8 +1225,8 @@ public:
     // Change (replace) a table style named rName. Tracked by undo.
     void ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFormat);
 
-    const SwCellStyleTable& GetCellStyles() const  { return *mpCellStyles.get(); }
-          SwCellStyleTable& GetCellStyles()        { return *mpCellStyles.get(); }
+    const SwCellStyleTable& GetCellStyles() const  { return *mpCellStyles; }
+          SwCellStyleTable& GetCellStyles()        { return *mpCellStyles; }
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 

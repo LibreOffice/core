@@ -198,7 +198,7 @@ ShapeContextHandler::getDrawingShapeContext()
     else
     {
         // Reset the handler if fragment path has changed
-        OUString sHandlerFragmentPath = dynamic_cast<ContextHandler&>(*mxDrawingFragmentHandler.get()).getFragmentPath();
+        OUString sHandlerFragmentPath = dynamic_cast<ContextHandler&>(*mxDrawingFragmentHandler).getFragmentPath();
         if ( msRelationFragmentPath != sHandlerFragmentPath )
         {
             mxDrawingFragmentHandler.clear();
@@ -458,7 +458,7 @@ ShapeContextHandler::getShape()
         }
         else if (mxLockedCanvasContext.is())
         {
-            ShapePtr pShape = dynamic_cast<LockedCanvasContext&>(*mxLockedCanvasContext.get()).getShape();
+            ShapePtr pShape = dynamic_cast<LockedCanvasContext&>(*mxLockedCanvasContext).getShape();
             if (pShape)
             {
                 basegfx::B2DHomMatrix aMatrix;
@@ -486,7 +486,7 @@ ShapeContextHandler::getShape()
         }
         else if (mxWpsContext.is())
         {
-            ShapePtr pShape = dynamic_cast<WpsContext&>(*mxWpsContext.get()).getShape();
+            ShapePtr pShape = dynamic_cast<WpsContext&>(*mxWpsContext).getShape();
             if (pShape)
             {
                 basegfx::B2DHomMatrix aMatrix;
@@ -499,7 +499,7 @@ ShapeContextHandler::getShape()
         }
         else if (mxWpgContext.is())
         {
-            ShapePtr pShape = dynamic_cast<WpgContext&>(*mxWpgContext.get()).getShape();
+            ShapePtr pShape = dynamic_cast<WpgContext&>(*mxWpgContext).getShape();
             if (pShape)
             {
                 basegfx::B2DHomMatrix aMatrix;

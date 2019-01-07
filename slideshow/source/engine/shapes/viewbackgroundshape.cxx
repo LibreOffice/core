@@ -113,7 +113,7 @@ namespace slideshow
                 ::cppcanvas::RendererSharedPtr pRenderer(
                     ::cppcanvas::VCLFactory::createRenderer(
                         pBitmapCanvas,
-                        *rMtf.get(),
+                        *rMtf,
                         ::cppcanvas::Renderer::Parameters() ) );
 
                 ENSURE_OR_RETURN_FALSE( pRenderer,

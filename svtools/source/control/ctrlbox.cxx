@@ -466,13 +466,13 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     aVirDev->SetFillColor( aColor1 );
 
     double y1 = double( n1 ) / 2;
-    svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
+    svtools::DrawLine( *aVirDev, basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
 
     if ( n2 )
     {
         double y2 =  n1 + nDist + double( n2 ) / 2;
         aVirDev->SetFillColor( aColor2 );
-        svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
+        svtools::DrawLine( *aVirDev, basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
     }
     rBmp = aVirDev->GetBitmapEx( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
 }
@@ -1789,13 +1789,13 @@ void SvtLineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     aVirDev->SetFillColor( aColor1 );
 
     double y1 = double( n1 ) / 2;
-    svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
+    svtools::DrawLine( *aVirDev, basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
 
     if ( n2 )
     {
         double y2 =  n1 + nDist + double( n2 ) / 2;
         aVirDev->SetFillColor( aColor2 );
-        svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
+        svtools::DrawLine( *aVirDev, basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
     }
     rBmp = aVirDev->GetBitmapEx( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
 }

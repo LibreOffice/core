@@ -426,7 +426,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
 
     // a special listener ?
     if ( xListener.is() )
-        lcl_notifyMultipleStates( *xListener.get(), aEvent, aStates );
+        lcl_notifyMultipleStates( *xListener, aEvent, aStates );
     else
     {   // no -> iterate through all listeners responsible for the URL
         std::set<OUString> aFeatureCommands;

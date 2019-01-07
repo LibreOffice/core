@@ -49,7 +49,7 @@ namespace vcl
         static vcl::DeleteOnDeinit< BitmapEx > aBmp( new BitmapEx( ... ) );
 
         if( aBmp.get() ) // check whether DeInitVCL has been called already
-            DrawBitmapEx( Point( 10, 10 ), *aBmp.get() );
+            DrawBitmapEx( Point( 10, 10 ), *aBmp );
     }
     */
 

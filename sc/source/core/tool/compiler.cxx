@@ -5251,7 +5251,7 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
 
 bool ScCompiler::HandleColRowName()
 {
-    ScSingleRefData& rRef = *mpToken.get()->GetSingleRef();
+    ScSingleRefData& rRef = *mpToken->GetSingleRef();
     const ScAddress aAbs = rRef.toAbs(aPos);
     if (!ValidAddress(aAbs))
     {

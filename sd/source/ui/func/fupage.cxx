@@ -390,7 +390,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
             {
                 mpDocSh->GetUndoManager()->AddUndoAction(o3tl::make_unique<StyleSheetUndoAction>(
                     mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), &(*pTempSet)));
-                pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
+                pStyleSheet->GetItemSet().Put( *pTempSet );
                 sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
                 pStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
             }
@@ -422,7 +422,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
                 "MasterPage without StyleSheet detected (!)");
         }
 
-        aNewAttr.Put(*(pTempSet.get()));
+        aNewAttr.Put(*pTempSet);
         mrReq.Done( aNewAttr );
 
         return mrReq.GetArgs();

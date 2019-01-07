@@ -155,7 +155,7 @@ namespace slideshow
                 }
 
                 io_rCacheEntry.mpRenderer = ::cppcanvas::VCLFactory::createRenderer( rDestinationCanvas,
-                                                                                     *rMtf.get(),
+                                                                                     *rMtf,
                                                                                      aParms );
 
                 io_rCacheEntry.mpMtf               = rMtf;

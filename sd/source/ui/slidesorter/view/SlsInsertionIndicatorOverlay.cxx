@@ -140,9 +140,9 @@ void InsertionIndicatorOverlay::Create (
 
     pContent->SetFillColor();
     pContent->SetLineColor(pTheme->GetColor(Theme::Color_PreviewBorder));
-    const Point aOffset = PaintRepresentatives(*pContent.get(), aPreviewSize, nOffset, rRepresentatives);
+    const Point aOffset = PaintRepresentatives(*pContent, aPreviewSize, nOffset, rRepresentatives);
 
-    PaintPageCount(*pContent.get(), nSelectionCount, aPreviewSize, aOffset);
+    PaintPageCount(*pContent, nSelectionCount, aPreviewSize, aOffset);
 
     maIcon = pContent->GetBitmapEx(Point(0,0), aIconSize);
     maIcon.Scale(aIconSize);

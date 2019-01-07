@@ -619,7 +619,7 @@ void SdrHdl::CreateB2dIAObject()
                         insertNewlyCreatedOverlayObjectForSdrHdl(
                             std::move(pNewOverlayObject),
                             rPageWindow.GetObjectContact(),
-                            *xManager.get());
+                            *xManager);
                     }
                 }
             }
@@ -1159,7 +1159,7 @@ void SdrHdlColor::CreateB2dIAObject()
                             insertNewlyCreatedOverlayObjectForSdrHdl(
                                 std::move(pNewOverlayObject),
                                 rPageWindow.GetObjectContact(),
-                                *xManager.get());
+                                *xManager);
                         }
                     }
                 }
@@ -1322,7 +1322,7 @@ void SdrHdlGradient::CreateB2dIAObject()
                             insertNewlyCreatedOverlayObjectForSdrHdl(
                                 std::move(pNewOverlayObject),
                                 rPageWindow.GetObjectContact(),
-                                *xManager.get());
+                                *xManager);
 
                             // arrowhead
                             Point aLeft(aMidPoint.X() + static_cast<sal_Int32>(aPerpend.getX() * fHalfArrowWidth),
@@ -1346,7 +1346,7 @@ void SdrHdlGradient::CreateB2dIAObject()
                             insertNewlyCreatedOverlayObjectForSdrHdl(
                                 std::move(pNewOverlayObject),
                                 rPageWindow.GetObjectContact(),
-                                *xManager.get());
+                                *xManager);
                         }
                     }
                 }
@@ -1476,7 +1476,7 @@ void SdrHdlLine::CreateB2dIAObject()
                             insertNewlyCreatedOverlayObjectForSdrHdl(
                                 std::move(pNewOverlayObject),
                                 rPageWindow.GetObjectContact(),
-                                *xManager.get());
+                                *xManager);
                         }
                     }
                 }
@@ -1539,7 +1539,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
                                 insertNewlyCreatedOverlayObjectForSdrHdl(
                                     std::move(pNewOverlayObject),
                                     rPageWindow.GetObjectContact(),
-                                    *xManager.get());
+                                    *xManager);
                             }
                         }
                     }
@@ -1587,7 +1587,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
                             insertNewlyCreatedOverlayObjectForSdrHdl(
                                 std::move(pNewOverlayObject),
                                 rPageWindow.GetObjectContact(),
-                                *xManager.get());
+                                *xManager);
                         }
                     }
                 }
@@ -1651,7 +1651,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
                                 insertNewlyCreatedOverlayObjectForSdrHdl(
                                     std::move(pNewOverlayObject),
                                     rPageWindow.GetObjectContact(),
-                                    *xManager.get());
+                                    *xManager);
                             }
                         }
                     }
@@ -1766,7 +1766,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
                             insertNewlyCreatedOverlayObjectForSdrHdl(
                                 std::move(pNewOverlayObject),
                                 rPageWindow.GetObjectContact(),
-                                *xManager.get());
+                                *xManager);
                         }
                     }
                 }
@@ -1839,7 +1839,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                             insertNewlyCreatedOverlayObjectForSdrHdl(
                                 std::move(pNewOverlayObject),
                                 rPageWindow.GetObjectContact(),
-                                *xManager.get());
+                                *xManager);
                         }
                     }
                 }
@@ -2450,7 +2450,7 @@ void SdrCropHdl::CreateB2dIAObject()
                     insertNewlyCreatedOverlayObjectForSdrHdl(
                         std::move(pOverlayObject),
                         rPageWindow.GetObjectContact(),
-                        *xManager.get());
+                        *xManager);
                 }
             }
         }
@@ -2666,7 +2666,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
                 insertNewlyCreatedOverlayObjectForSdrHdl(
                     std::move(pNew),
                     rPageWindow.GetObjectContact(),
-                    *xManager.get());
+                    *xManager);
             }
         }
     }

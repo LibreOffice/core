@@ -545,7 +545,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
             aMtf.Clear();
             aMtf.Record(pOut);
 
-            DrawMarkedObj(*pOut.get());
+            DrawMarkedObj(*pOut);
 
             aMtf.Stop();
             aMtf.WindStart();
@@ -632,7 +632,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
         pOut->EnableOutput(false);
         pOut->SetMapMode(aMap);
         aMtf.Record(pOut);
-        rSdrObject.SingleObjectPainter(*pOut.get());
+        rSdrObject.SingleObjectPainter(*pOut);
         aMtf.Stop();
         aMtf.WindStart();
 

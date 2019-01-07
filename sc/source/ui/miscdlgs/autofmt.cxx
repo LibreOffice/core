@@ -517,7 +517,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
     aVD->SetOutputSize(aWndSize);
     aVD->DrawRect(aRect);
 
-    PaintCells(*aVD.get());
+    PaintCells(*aVD);
 
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(aBackCol);
@@ -526,7 +526,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
     Point aPos((aWndSize.Width() - aPrvSize.Width()) / 2, (aWndSize.Height() - aPrvSize.Height()) / 2);
     if (AllSettings::GetLayoutRTL())
        aPos.setX( -aPos.X() );
-    rRenderContext.DrawOutDev(aPos, aWndSize, Point(), aWndSize, *aVD.get());
+    rRenderContext.DrawOutDev(aPos, aWndSize, Point(), aWndSize, *aVD);
     aVD->SetDrawMode(nOldDrawMode);
 }
 

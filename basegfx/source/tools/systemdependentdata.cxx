@@ -150,7 +150,7 @@ namespace basegfx
 
     void SystemDependentDataHolder::addOrReplaceSystemDependentData(basegfx::SystemDependentData_SharedPtr& rData)
     {
-        const size_t hash_code(typeid(*rData.get()).hash_code());
+        const size_t hash_code(typeid(*rData).hash_code());
         auto result(maSystemDependentReferences.find(hash_code));
 
         if(result != maSystemDependentReferences.end())
