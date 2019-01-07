@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_a1afe592",
+        "filename": "xmlsecurity/source/xmlsec/saxhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2019-01-07T07:00:22Z",
+      "side": 1,
+      "message": "responsibility would be correct",
+      "range": {
+        "startLine": 58,
+        "startChar": 27,
+        "endLine": 58,
+        "endChar": 41
+      },
+      "revId": "11eddfe94c3df15a124ceb4ea0017925de226711",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
