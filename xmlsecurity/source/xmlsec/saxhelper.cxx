@@ -32,8 +32,8 @@ namespace cssxs = com::sun::star::xml::sax;
 namespace cssxcsax = com::sun::star::xml::csax;
 
 /**
- * The return value is NULL terminated. The application has the responsibilty to
- * deallocte the return value.
+ * The return value is NULL terminated. The application has the responsibility to
+ * deallocate the return value.
  */
 static xmlChar* ous_to_xmlstr( const OUString& oustr )
 {
@@ -42,8 +42,8 @@ static xmlChar* ous_to_xmlstr( const OUString& oustr )
 }
 
 /**
- * The return value is NULL terminated. The application has the responsibilty to
- * deallocte the return value.
+ * The return value is NULL terminated. The application has the responsibility to
+ * deallocate the return value.
  */
 static xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
 {
@@ -55,7 +55,7 @@ static xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
 
 /**
  * The return value and the referenced value must be NULL terminated.
- * The application has the responsibilty to deallocte the return value.
+ * The application has the responsibility to deallocate the return value.
  */
 static const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
 {
