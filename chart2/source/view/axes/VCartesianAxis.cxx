@@ -730,6 +730,15 @@ bool VCartesianAxis::createTextShapes(
                 nReduce = 1;
             nLimitedSpaceForText -= nReduce;
         }
+
+        // recalculate the nLimitedSpaceForText in case of 90 and 270 degree if the text break is true
+        if( ( rAxisLabelProperties.fRotationAngleDegree == 90.0 || rAxisLabelProperties.fRotationAngleDegree == 270.0 ) &&
+            ( rAxisLabelProperties.m_aFontReferenceSize.Height - rAxisLabelProperties.m_aMaximumSpaceForLabels.Height != 2 * rAxisLabelProperties.m_aMaximumSpaceForLabels.Y ) )
+        {
+            const sal_Int32 nFullHeight = rAxisLabelProperties.m_aFontReferenceSize.Height;
+            sal_Int32 nMaxLabelsHeight = nFullHeight - ( rAxisLabelProperties.m_aMaximumSpaceForLabels.Height + rAxisLabelProperties.m_aMaximumSpaceForLabels.Y );
+            nLimitedSpaceForText = nMaxLabelsHeight;
+        }
     }
 
      // Stores an array of text label strings in case of a normal
