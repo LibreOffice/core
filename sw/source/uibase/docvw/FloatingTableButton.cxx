@@ -13,6 +13,7 @@
 #include <edtwin.hxx>
 #include <strings.hrc>
 #include <vcl/metric.hxx>
+#include <vcl/settings.hxx>
 #include <viewopt.hxx>
 #include <frame.hxx>
 #include <flyfrm.hxx>
