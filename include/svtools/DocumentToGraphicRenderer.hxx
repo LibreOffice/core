@@ -66,6 +66,7 @@ public:
     ~DocumentToGraphicRenderer();
 
     sal_Int32 getCurrentPage();
+    sal_Int32 getPageCount();
 
     Size getDocumentSizeInPixels( sal_Int32 nCurrentPage );
 
