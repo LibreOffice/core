@@ -1098,11 +1098,8 @@ void ScUndoShowHideTab::DoChange( bool bShowP ) const
     ScDocument& rDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    SCTAB nTab;
-
-    for(std::vector<SCTAB>::const_iterator itr = undoTabs.begin(), itrEnd = undoTabs.end(); itr != itrEnd; ++itr)
+    for(const SCTAB& nTab : undoTabs)
     {
-        nTab = *itr;
         rDoc.SetVisible( nTab, bShowP );
         if (pViewShell)
             pViewShell->SetTabNo(nTab,true);

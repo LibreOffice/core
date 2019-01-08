@@ -37,11 +37,9 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell )
     ScDocument& rDoc = pShell->GetDocument();
     std::map<OUString, ScRangeName*> aCopyMap;
     rDoc.GetRangeNameMap(aCopyMap);
-    std::map<OUString, ScRangeName*>::iterator itr = aCopyMap.begin(), itrEnd = aCopyMap.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& [aTemp, pName] : aCopyMap)
     {
-        OUString aTemp(itr->first);
-        m_RangeMap.insert(std::make_pair(aTemp, o3tl::make_unique<ScRangeName>(*itr->second)));
+        m_RangeMap.insert(std::make_pair(aTemp, o3tl::make_unique<ScRangeName>(*pName)));
     }
 
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -87,10 +85,9 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton, void )
     else if( pButton == m_pBtnPaste )
     {
         std::vector<ScRangeNameLine> aSelectedLines = mpTable->GetSelectedEntries();
-        for (std::vector<ScRangeNameLine>::const_iterator itr = aSelectedLines.begin();
-                itr != aSelectedLines.end(); ++itr)
+        for (const auto& rLine : aSelectedLines)
         {
-            maSelectedNames.push_back(itr->aName);
+            maSelectedNames.push_back(rLine.aName);
         }
         EndDialog( BTN_PASTE_NAME );
     }

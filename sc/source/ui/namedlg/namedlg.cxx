@@ -83,12 +83,9 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent
     {
         std::map<OUString, ScRangeName*> aRangeMap;
         mpDoc->GetRangeNameMap(aRangeMap);
-        std::map<OUString, ScRangeName*>::iterator itr = aRangeMap.begin(), itrEnd = aRangeMap.end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& [aTemp, pRangeName] : aRangeMap)
         {
-            OUString aTemp(itr->first);
-            m_RangeMap.insert(std::make_pair(aTemp,
-                    o3tl::make_unique<ScRangeName>(*itr->second)));
+            m_RangeMap.insert(std::make_pair(aTemp, o3tl::make_unique<ScRangeName>(*pRangeName)));
         }
     }
     else
@@ -352,10 +349,10 @@ void ScNameDlg::RemovePushed()
 {
     std::vector<ScRangeNameLine> aEntries = m_pRangeManagerTable->GetSelectedEntries();
     m_pRangeManagerTable->DeleteSelectedEntries();
-    for (std::vector<ScRangeNameLine>::iterator itr = aEntries.begin(); itr != aEntries.end(); ++itr)
+    for (const auto& rEntry : aEntries)
     {
-        ScRangeName* pRangeName = GetRangeName(itr->aScope);
-        ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(itr->aName));
+        ScRangeName* pRangeName = GetRangeName(rEntry.aScope);
+        ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(rEntry.aName));
         OSL_ENSURE(pData, "table and model should be in sync");
         // be safe and check for possible problems
         if (pData)

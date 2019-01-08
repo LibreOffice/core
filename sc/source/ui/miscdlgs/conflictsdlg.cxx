@@ -102,17 +102,16 @@ void ScConflictsListHelper::Transform_Impl( std::vector<sal_uLong>& rActionList,
 void ScConflictsListHelper::TransformConflictsList( ScConflictsList& rConflictsList,
     ScChangeActionMergeMap* pSharedMap, ScChangeActionMergeMap* pOwnMap )
 {
-    ScConflictsList::iterator aEnd = rConflictsList.end();
-    for ( ScConflictsList::iterator aItr = rConflictsList.begin(); aItr != aEnd; ++aItr )
+    for ( auto& rConflictEntry : rConflictsList )
     {
         if ( pSharedMap )
         {
-            ScConflictsListHelper::Transform_Impl( aItr->maSharedActions, pSharedMap );
+            ScConflictsListHelper::Transform_Impl( rConflictEntry.maSharedActions, pSharedMap );
         }
 
         if ( pOwnMap )
         {
-            ScConflictsListHelper::Transform_Impl( aItr->maOwnActions, pOwnMap );
+            ScConflictsListHelper::Transform_Impl( rConflictEntry.maOwnActions, pOwnMap );
         }
     }
 }
@@ -628,17 +627,15 @@ IMPL_LINK_NOARG(ScConflictsDlg, KeepAllOthersHandle, Button*, void)
 
 void ScConflictsDlg::UpdateView()
 {
-    ScConflictsList::iterator aEndItr = mrConflictsList.end();
-    for ( ScConflictsList::iterator aItr = mrConflictsList.begin(); aItr != aEndItr; ++aItr )
+    for ( ScConflictsListEntry& rConflictEntry : mrConflictsList )
     {
-        ScConflictsListEntry& rConflictEntry = *aItr;
         if (rConflictEntry.meConflictAction == SC_CONFLICT_ACTION_NONE)
         {
             RedlinData* pRootUserData = new RedlinData();
             pRootUserData->pData = static_cast<void*>(&rConflictEntry);
-            SvTreeListEntry* pRootEntry = m_pLbConflicts->InsertEntry( GetConflictString( *aItr ), pRootUserData );
+            SvTreeListEntry* pRootEntry = m_pLbConflicts->InsertEntry( GetConflictString( rConflictEntry ), pRootUserData );
 
-            for ( auto& aSharedAction : aItr->maSharedActions )
+            for ( auto& aSharedAction : rConflictEntry.maSharedActions )
             {
                 ScChangeAction* pAction = mpSharedTrack ? mpSharedTrack->GetAction(aSharedAction) : nullptr;
                 if ( pAction )
@@ -647,7 +644,7 @@ void ScConflictsDlg::UpdateView()
                     if ( pAction->GetType() == SC_CAT_CONTENT )
                     {
                         ScChangeActionContent* pNextContent = dynamic_cast<ScChangeActionContent&>(*pAction).GetNextContent();
-                        if ( pNextContent && aItr->HasSharedAction( pNextContent->GetActionNumber() ) )
+                        if ( pNextContent && rConflictEntry.HasSharedAction( pNextContent->GetActionNumber() ) )
                         {
                             continue;
                         }
@@ -658,7 +655,7 @@ void ScConflictsDlg::UpdateView()
                 }
             }
 
-            for ( auto& aOwnAction : aItr->maOwnActions )
+            for ( auto& aOwnAction : rConflictEntry.maOwnActions )
             {
                 ScChangeAction* pAction = mpOwnTrack ? mpOwnTrack->GetAction(aOwnAction) : nullptr;
                 if ( pAction )
@@ -667,7 +664,7 @@ void ScConflictsDlg::UpdateView()
                     if ( pAction->GetType() == SC_CAT_CONTENT )
                     {
                         ScChangeActionContent* pNextContent = dynamic_cast<ScChangeActionContent&>(*pAction).GetNextContent();
-                        if ( pNextContent && aItr->HasOwnAction( pNextContent->GetActionNumber() ) )
+                        if ( pNextContent && rConflictEntry.HasOwnAction( pNextContent->GetActionNumber() ) )
                         {
                             continue;
                         }

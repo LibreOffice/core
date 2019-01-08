@@ -246,13 +246,14 @@ void ScUndoFillTable::SetChangeTrack()
         ScRange aWorkRange(aRange);
         nStartChangeAction = 0;
         sal_uLong nTmpAction;
-        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
-        for (; itr != itrEnd && *itr < nTabCount; ++itr)
+        for (const auto& rTab : aMarkData)
         {
-            if (*itr != nSrcTab)
+            if (rTab >= nTabCount)
+                break;
+            if (rTab != nSrcTab)
             {
-                aWorkRange.aStart.SetTab(*itr);
-                aWorkRange.aEnd.SetTab(*itr);
+                aWorkRange.aStart.SetTab(rTab);
+                aWorkRange.aEnd.SetTab(rTab);
                 pChangeTrack->AppendContentRange( aWorkRange, pUndoDoc.get(),
                     nTmpAction, nEndChangeAction );
                 if ( !nStartChangeAction )
@@ -274,18 +275,21 @@ void ScUndoFillTable::DoChange( const bool bUndo )
     {
         SCTAB nTabCount = rDoc.GetTableCount();
         ScRange aWorkRange(aRange);
-        ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
-        for (; itr != itrEnd && *itr < nTabCount; ++itr)
-            if (*itr != nSrcTab)
+        for (const auto& rTab : aMarkData)
+        {
+            if (rTab >= nTabCount)
+                break;
+            if (rTab != nSrcTab)
             {
-                aWorkRange.aStart.SetTab(*itr);
-                aWorkRange.aEnd.SetTab(*itr);
+                aWorkRange.aStart.SetTab(rTab);
+                aWorkRange.aEnd.SetTab(rTab);
                 if (bMulti)
-                    rDoc.DeleteSelectionTab( *itr, InsertDeleteFlags::ALL, aMarkData );
+                    rDoc.DeleteSelectionTab( rTab, InsertDeleteFlags::ALL, aMarkData );
                 else
                     rDoc.DeleteAreaTab( aWorkRange, InsertDeleteFlags::ALL );
                 pUndoDoc->CopyToDocument(aWorkRange, InsertDeleteFlags::ALL, bMulti, rDoc, &aMarkData);
             }
+        }
 
         ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
         if ( pChangeTrack )
@@ -527,12 +531,13 @@ void ScUndoAutoFill::Undo()
     ScDocument& rDoc = pDocShell->GetDocument();
 
     SCTAB nTabCount = rDoc.GetTableCount();
-    ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
-    for (; itr != itrEnd && *itr < nTabCount; ++itr)
+    for (const auto& rTab : aMarkData)
     {
+        if (rTab >= nTabCount)
+            break;
         ScRange aWorkRange = aBlockRange;
-        aWorkRange.aStart.SetTab(*itr);
-        aWorkRange.aEnd.SetTab(*itr);
+        aWorkRange.aStart.SetTab(rTab);
+        aWorkRange.aEnd.SetTab(rTab);
 
         sal_uInt16 nExtFlags = 0;
         pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
@@ -669,10 +674,8 @@ void ScUndoMerge::DoChange( bool bUndo ) const
     ScRange aCurRange = maOption.getSingleRange(ScDocShell::GetCurTab());
     ScUndoUtil::MarkSimpleBlock(pDocShell, aCurRange);
 
-    for (set<SCTAB>::const_iterator itr = maOption.maTabs.begin(), itrEnd = maOption.maTabs.end();
-          itr != itrEnd; ++itr)
+    for (const SCTAB nTab : maOption.maTabs)
     {
-        SCTAB nTab = *itr;
         ScRange aRange = maOption.getSingleRange(nTab);
 
         if (bUndo)

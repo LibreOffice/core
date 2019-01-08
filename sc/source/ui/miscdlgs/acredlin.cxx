@@ -202,9 +202,8 @@ void ScAcceptChgDlg::Init()
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         pTPFilter->ClearAuthors();
         const std::set<OUString>& rUserColl = pChanges->GetUserCollection();
-        std::set<OUString>::const_iterator it = rUserColl.begin(), itEnd = rUserColl.end();
-        for (; it != itEnd; ++it)
-            pTPFilter->InsertAuthor(*it);
+        for (const auto& rItem : rUserColl)
+            pTPFilter->InsertAuthor(rItem);
     }
 
     ScChangeViewSettings* pViewSettings=pDoc->GetChangeViewSettings();
@@ -1124,13 +1123,8 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
     }
     SvTreeListEntry* pEntry=nullptr;
 
-    ScChangeActionMap::iterator itChangeAction = pActionMap->begin();
-    while( itChangeAction != pActionMap->end() )
-    {
-        if( itChangeAction->second->GetState()==SC_CAS_VIRGIN )
-            break;
-        ++itChangeAction;
-    }
+    ScChangeActionMap::iterator itChangeAction = std::find_if(pActionMap->begin(), pActionMap->end(),
+        [](const std::pair<sal_uLong, ScChangeAction*>& rEntry) { return rEntry.second->GetState() == SC_CAS_VIRGIN; });
 
     if( itChangeAction == pActionMap->end() )
         return true;
@@ -1215,11 +1209,10 @@ bool ScAcceptChgDlg::InsertChildren(ScChangeActionMap* pActionMap,SvTreeListEntr
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bool bTheTestFlag = true;
-    ScChangeActionMap::iterator itChangeAction;
 
-    for( itChangeAction = pActionMap->begin(); itChangeAction != pActionMap->end(); ++itChangeAction )
+    for( const auto& rChangeAction : *pActionMap )
     {
-        SvTreeListEntry* pEntry=AppendChangeAction( itChangeAction->second, pParent, false, true );
+        SvTreeListEntry* pEntry=AppendChangeAction( rChangeAction.second, pParent, false, true );
 
         if(pEntry!=nullptr)
         {
@@ -1230,8 +1223,8 @@ bool ScAcceptChgDlg::InsertChildren(ScChangeActionMap* pActionMap,SvTreeListEntr
             pEntryData->bIsAcceptable=false;
             pEntryData->bDisabled=true;
 
-            if( itChangeAction->second->IsDialogParent() )
-                Expand( pChanges, itChangeAction->second, pEntry );
+            if( rChangeAction.second->IsDialogParent() )
+                Expand( pChanges, rChangeAction.second, pEntry );
         }
     }
     return bTheTestFlag;
@@ -1243,15 +1236,14 @@ bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bool bTheTestFlag = true;
     SvTreeListEntry* pEntry=nullptr;
-    ScChangeActionMap::iterator itChangeAction;
 
-    for( itChangeAction = pActionMap->begin(); itChangeAction != pActionMap->end(); ++itChangeAction )
+    for( const auto& rChangeAction : *pActionMap )
     {
 
-        if( pScChangeAction != itChangeAction->second )
-            pEntry = AppendChangeAction( itChangeAction->second, pParent, false, true );
+        if( pScChangeAction != rChangeAction.second )
+            pEntry = AppendChangeAction( rChangeAction.second, pParent, false, true );
         else
-            pEntry = AppendChangeAction( itChangeAction->second, pParent, true, true );
+            pEntry = AppendChangeAction( rChangeAction.second, pParent, true, true );
 
         if(pEntry!=nullptr)
         {
@@ -1262,8 +1254,8 @@ bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction
 
             bTheTestFlag=false;
 
-            if( itChangeAction->second->IsDialogParent() )
-                Expand( pChanges, itChangeAction->second, pEntry );
+            if( rChangeAction.second->IsDialogParent() )
+                Expand( pChanges, rChangeAction.second, pEntry );
         }
     }
     return bTheTestFlag;
@@ -1546,22 +1538,21 @@ void ScAcceptChgDlg::UpdateEntrys(const ScChangeTrack* pChgTrack, sal_uLong nSta
 
 IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
 {
-    ScChangeTrackMsgQueue::iterator iter;
     ScChangeTrackMsgQueue& aMsgQueue= rChgTrack.GetMsgQueue();
 
     sal_uLong   nStartAction;
     sal_uLong   nEndAction;
 
-    for (iter = aMsgQueue.begin(); iter != aMsgQueue.end(); ++iter)
+    for (const auto& pMsg : aMsgQueue)
     {
-        nStartAction=(*iter)->nStartAction;
-        nEndAction=(*iter)->nEndAction;
+        nStartAction = pMsg->nStartAction;
+        nEndAction = pMsg->nEndAction;
 
         if(!bIgnoreMsg)
         {
             bNoSelection=true;
 
-            switch((*iter)->eMsgType)
+            switch(pMsg->eMsgType)
             {
                 case SC_CTM_APPEND: AppendChanges(&rChgTrack,nStartAction,nEndAction);
                                     break;
@@ -1577,7 +1568,7 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
                 }
             }
         }
-        delete *iter;
+        delete pMsg;
     }
 
     aMsgQueue.clear();

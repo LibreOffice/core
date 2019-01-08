@@ -217,10 +217,10 @@ void ScDataFormDlg::dispose()
     m_pBtnClose.clear();
     m_pSlider.clear();
     m_pFixedText.clear();
-    for ( auto aFTIter = maFixedTexts.begin(); aFTIter != maFixedTexts.end(); ++aFTIter )
-        aFTIter->disposeAndClear();
-    for ( auto aEditIter = maEdits.begin(); aEditIter != maEdits.end(); ++aEditIter )
-        aEditIter->disposeAndClear();
+    for ( auto& rxFTIter : maFixedTexts )
+        rxFTIter.disposeAndClear();
+    for ( auto& rxEdit : maEdits )
+        rxEdit.disposeAndClear();
     maFixedTexts.clear();
     maEdits.clear();
     m_pGrid.clear();
@@ -269,15 +269,8 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, Button*, void)
     ScDocShell* pDocSh = rViewData.GetDocShell();
     if ( pDoc )
     {
-        bool bHasData = false;
-        auto itr = maEdits.begin(), itrEnd = maEdits.end();
-        for(; itr != itrEnd; ++itr)
-            if ((*itr) != nullptr)
-                if ( !(*itr)->GetText().isEmpty() )
-                {
-                    bHasData = true;
-                    break;
-                }
+        bool bHasData = std::any_of(maEdits.begin(), maEdits.end(),
+            [](const VclPtr<Edit>& rxEdit) { return (rxEdit != nullptr) && (!rxEdit->GetText().isEmpty()); });
 
         if ( bHasData )
         {

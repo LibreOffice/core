@@ -724,22 +724,20 @@ void ScUndoDeleteMulti::Undo()
     ScDocument& rDoc = pDocShell->GetDocument();
 
     // reverse delete -> forward insert
-    std::vector<sc::ColRowSpan>::const_iterator it = maSpans.begin(), itEnd = maSpans.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rSpan : maSpans)
     {
-        SCCOLROW nStart = it->mnStart;
-        SCCOLROW nEnd = it->mnEnd;
+        SCCOLROW nStart = rSpan.mnStart;
+        SCCOLROW nEnd = rSpan.mnEnd;
         if (mbRows)
             rDoc.InsertRow( 0,nTab, MAXCOL,nTab, nStart,static_cast<SCSIZE>(nEnd-nStart+1) );
         else
             rDoc.InsertCol( 0,nTab, MAXROW,nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd-nStart+1) );
     }
 
-    it = maSpans.begin();
-    for (; it != itEnd; ++it)
+    for (const auto& rSpan : maSpans)
     {
-        SCCOLROW nStart = it->mnStart;
-        SCCOLROW nEnd = it->mnEnd;
+        SCCOLROW nStart = rSpan.mnStart;
+        SCCOLROW nEnd = rSpan.mnEnd;
         if (mbRows)
             pRefUndoDoc->CopyToDocument(0, nStart, nTab, MAXCOL, nEnd, nTab, InsertDeleteFlags::ALL, false, rDoc);
         else
@@ -1028,14 +1026,16 @@ void ScUndoPaste::DoChange(bool bUndo)
             aRange.aStart.SetTab(nFirstSelected);
             aRange.aEnd.SetTab(nFirstSelected);
             pRedoDoc->UndoToDocument(aRange, nUndoFlags, false, rDoc);
-            ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
-            for (; itr != itrEnd && *itr < nTabCount; ++itr)
+            for (const auto& rTab : aMarkData)
             {
-                if (*itr == nFirstSelected)
+                if (rTab >= nTabCount)
+                    break;
+
+                if (rTab == nFirstSelected)
                     continue;
 
-                aRange.aStart.SetTab(*itr);
-                aRange.aEnd.SetTab(*itr);
+                aRange.aStart.SetTab(rTab);
+                aRange.aEnd.SetTab(rTab);
                 pRedoDoc->CopyToDocument(aRange, nUndoFlags, false, rDoc);
             }
         }
@@ -1057,11 +1057,12 @@ void ScUndoPaste::DoChange(bool bUndo)
         for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
         {
             ScRange aRange = maBlockRanges[i];
-            ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
-            for (; itr != itrEnd && *itr < nTabCount; ++itr)
+            for (const auto& rTab : aMarkData)
             {
-                aRange.aStart.SetTab(*itr);
-                aRange.aEnd.SetTab(*itr);
+                if (rTab >= nTabCount)
+                    break;
+                aRange.aStart.SetTab(rTab);
+                aRange.aEnd.SetTab(rTab);
                 pUndoDoc->UndoToDocument(aRange, nUndoFlags, false, rDoc);
             }
         }
@@ -2263,21 +2264,20 @@ void ScUndoRemoveMerge::Undo()
     ScDocument& rDoc = pDocShell->GetDocument();
     for (const auto & rOption : maOptions)
     {
-        for (set<SCTAB>::const_iterator itr = rOption.maTabs.begin(), itrEnd = rOption.maTabs.end();
-                itr != itrEnd; ++itr)
+        for (const auto& rTab : rOption.maTabs)
         {
             OSL_ENSURE(pUndoDoc, "NULL pUndoDoc!");
             if (!pUndoDoc)
                 continue;
             // There is no need to extend merge area because it's already been extended.
-            ScRange aRange = rOption.getSingleRange(*itr);
+            ScRange aRange = rOption.getSingleRange(rTab);
             rDoc.DeleteAreaTab(aRange, InsertDeleteFlags::ATTRIB);
             pUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ATTRIB, false, rDoc);
 
             bool bDidPaint = false;
             if ( pViewShell )
             {
-                pViewShell->SetTabNo(*itr);
+                pViewShell->SetTabNo(rTab);
                 bDidPaint = pViewShell->AdjustRowHeight(rOption.mnStartRow, rOption.mnEndRow);
             }
             if (!bDidPaint)
@@ -2300,10 +2300,8 @@ void ScUndoRemoveMerge::Redo()
 
     for (const auto & rOption : maOptions)
     {
-        for (set<SCTAB>::const_iterator itr = rOption.maTabs.begin(), itrEnd = rOption.maTabs.end();
-                itr != itrEnd; ++itr)
+        for (const SCTAB nTab : rOption.maTabs)
         {
-            SCTAB nTab = *itr;
             // There is no need to extend merge area because it's already been extended.
             ScRange aRange = rOption.getSingleRange(nTab);
 

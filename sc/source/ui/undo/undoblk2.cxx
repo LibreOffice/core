@@ -99,26 +99,28 @@ void ScUndoWidthOrHeight::Undo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     SCTAB nTabCount = rDoc.GetTableCount();
-    ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
-    for (; itr != itrEnd && *itr < nTabCount; ++itr)
+    for (const auto& rTab : aMarkData)
     {
+        if (rTab >= nTabCount)
+            break;
+
         if (pViewShell)
             pViewShell->OnLOKSetWidthOrHeight(nStart, bWidth);
 
         if (bWidth) // Width
         {
-            pUndoDoc->CopyToDocument(static_cast<SCCOL>(nStart), 0, *itr,
-                                     static_cast<SCCOL>(nEnd), MAXROW, *itr, InsertDeleteFlags::NONE,
+            pUndoDoc->CopyToDocument(static_cast<SCCOL>(nStart), 0, rTab,
+                                     static_cast<SCCOL>(nEnd), MAXROW, rTab, InsertDeleteFlags::NONE,
                                      false, rDoc);
-            rDoc.UpdatePageBreaks( *itr );
-            pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, *itr,
-                    MAXCOL, MAXROW, *itr, PaintPartFlags::Grid | PaintPartFlags::Top );
+            rDoc.UpdatePageBreaks( rTab );
+            pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, rTab,
+                    MAXCOL, MAXROW, rTab, PaintPartFlags::Grid | PaintPartFlags::Top );
         }
         else        // Height
         {
-            pUndoDoc->CopyToDocument(0, nStart, *itr, MAXCOL, nEnd, *itr, InsertDeleteFlags::NONE, false, rDoc);
-            rDoc.UpdatePageBreaks( *itr );
-            pDocShell->PostPaint( 0, nPaintStart, *itr, MAXCOL, MAXROW, *itr, PaintPartFlags::Grid | PaintPartFlags::Left );
+            pUndoDoc->CopyToDocument(0, nStart, rTab, MAXCOL, nEnd, rTab, InsertDeleteFlags::NONE, false, rDoc);
+            rDoc.UpdatePageBreaks( rTab );
+            pDocShell->PostPaint( 0, nPaintStart, rTab, MAXCOL, MAXROW, rTab, PaintPartFlags::Grid | PaintPartFlags::Left );
         }
     }
 

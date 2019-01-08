@@ -153,12 +153,11 @@ void ScRangeManagerTable::Init()
             aLine.aScope = maGlobalString;
         else
             aLine.aScope = itr.first;
-        for (ScRangeName::const_iterator it = pLocalRangeName->begin();
-                it != pLocalRangeName->end(); ++it)
+        for (const auto& rEntry : *pLocalRangeName)
         {
-            if (!it->second->HasType(ScRangeData::Type::Database))
+            if (!rEntry.second->HasType(ScRangeData::Type::Database))
             {
-                aLine.aName = it->second->GetName();
+                aLine.aName = rEntry.second->GetName();
                 addEntry(aLine, false);
             }
         }

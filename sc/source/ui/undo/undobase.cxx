@@ -212,10 +212,9 @@ void ScSimpleUndo::BroadcastChanges( const DataSpansType& rSpans )
     ScDocument& rDoc = pDocShell->GetDocument();
     SpanBroadcaster aBroadcaster(rDoc);
 
-    DataSpansType::const_iterator it = rSpans.begin(), itEnd = rSpans.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rEntry : rSpans)
     {
-        const sc::ColumnSpanSet& rSet = *it->second;
+        const sc::ColumnSpanSet& rSet = *rEntry.second;
         rSet.executeColumnAction(rDoc, aBroadcaster);
     }
 }
