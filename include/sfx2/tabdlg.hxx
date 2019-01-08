@@ -96,7 +96,7 @@ friend class SfxTabDialogUIObject;
     DECL_DLLPRIVATE_LINK(BaseFmtHdl, Button*, void);
     DECL_DLLPRIVATE_LINK(UserHdl, Button*, void);
     DECL_DLLPRIVATE_LINK(CancelHdl, Button*, void);
-    SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag);
+    SAL_DLLPRIVATE void Init_Impl();
 
 protected:
     virtual short               Ok();
