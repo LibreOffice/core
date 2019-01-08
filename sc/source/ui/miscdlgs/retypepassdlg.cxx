@@ -64,9 +64,9 @@ void ScRetypePassDlg::dispose()
 
 void ScRetypePassDlg::DeleteSheets()
 {
-    for(auto it = maSheets.begin(); it != maSheets.end(); ++it)
+    for(auto& rxSheet : maSheets)
     {
-        VclPtr<vcl::Window> pWindow = (*it);
+        VclPtr<vcl::Window> pWindow = rxSheet;
         vcl::Window *pChild = pWindow->GetWindow(GetWindowType::FirstChild);
         while (pChild)
         {

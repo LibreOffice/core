@@ -29,9 +29,8 @@ ScSelEntryDlg::ScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> 
                             m_xLb->get_height_rows(8));
     m_xLb->connect_row_activated(LINK(this, ScSelEntryDlg, DblClkHdl));
 
-    std::vector<OUString>::const_iterator pIter;
-    for (pIter = rEntryList.begin(); pIter != rEntryList.end(); ++pIter)
-        m_xLb->append_text(*pIter);
+    for (const auto& rEntry : rEntryList)
+        m_xLb->append_text(rEntry);
 
     if (m_xLb->n_children() > 0)
         m_xLb->select(0);

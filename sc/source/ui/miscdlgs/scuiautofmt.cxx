@@ -128,9 +128,8 @@ void ScAutoFormatDlg::Init()
     m_pBtnRename->SetClickHdl ( LINK( this, ScAutoFormatDlg, RenameHdl ) );
     m_pLbFormat->SetDoubleClickHdl( LINK( this, ScAutoFormatDlg, DblClkHdl ) );
 
-    ScAutoFormat::const_iterator it = pFormat->begin(), itEnd = pFormat->end();
-    for (; it != itEnd; ++it)
-        m_pLbFormat->InsertEntry(it->second->GetName());
+    for (const auto& rEntry : *pFormat)
+        m_pLbFormat->InsertEntry(rEntry.second->GetName());
 
     if (pFormat->size() == 1)
         m_pBtnRemove->Disable();

@@ -868,17 +868,16 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     uno::Sequence<sheet::SolverConstraint> aConstraints;
     sal_Int32 nConstrPos = 0;
-    for ( std::vector<ScOptConditionRow>::const_iterator aConstrIter = maConditions.begin();
-          aConstrIter != maConditions.end(); ++aConstrIter )
+    for ( const auto& rConstr : maConditions )
     {
-        if ( !aConstrIter->aLeftStr.isEmpty() )
+        if ( !rConstr.aLeftStr.isEmpty() )
         {
             sheet::SolverConstraint aConstraint;
             // order of list box entries must match enum values
-            aConstraint.Operator = static_cast<sheet::SolverConstraintOperator>(aConstrIter->nOperator);
+            aConstraint.Operator = static_cast<sheet::SolverConstraintOperator>(rConstr.nOperator);
 
             ScRange aLeftRange;
-            if ( !ParseRef( aLeftRange, aConstrIter->aLeftStr, true ) )
+            if ( !ParseRef( aLeftRange, rConstr.aLeftStr, true ) )
             {
                 ShowError( true, nullptr );
                 return false;
@@ -886,7 +885,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
             bool bIsRange = false;
             ScRange aRightRange;
-            if ( ParseRef( aRightRange, aConstrIter->aRightStr, true ) )
+            if ( ParseRef( aRightRange, rConstr.aRightStr, true ) )
             {
                 if ( aRightRange.aStart == aRightRange.aEnd )
                     aConstraint.Right <<= table::CellAddress( aRightRange.aStart.Tab(),
@@ -904,7 +903,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             {
                 sal_uInt32 nFormat = 0;     //! explicit language?
                 double fValue = 0.0;
-                if ( mrDoc.GetFormatTable()->IsNumberFormat( aConstrIter->aRightStr, nFormat, fValue ) )
+                if ( mrDoc.GetFormatTable()->IsNumberFormat( rConstr.aRightStr, nFormat, fValue ) )
                     aConstraint.Right <<= fValue;
                 else if ( aConstraint.Operator != sheet::SolverConstraintOperator_INTEGER &&
                           aConstraint.Operator != sheet::SolverConstraintOperator_BINARY )

@@ -890,11 +890,10 @@ void ScContentTree::GetAreaNames()
     ScRange aDummy;
     std::set<OUString> aSet;
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-    ScRangeName::const_iterator itrBeg = pRangeNames->begin(), itrEnd = pRangeNames->end();
-    for (ScRangeName::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
+    for (const auto& rEntry : *pRangeNames)
     {
-        if (itr->second->IsValidReference(aDummy))
-            aSet.insert(itr->second->GetName());
+        if (rEntry.second->IsValidReference(aDummy))
+            aSet.insert(rEntry.second->GetName());
     }
     for (SCTAB i = 0; i < pDoc->GetTableCount(); ++i)
     {
@@ -903,18 +902,17 @@ void ScContentTree::GetAreaNames()
         {
             OUString aTableName;
             pDoc->GetName(i, aTableName);
-            for (ScRangeName::const_iterator itr = pLocalRangeName->begin(); itr != pLocalRangeName->end(); ++itr)
+            for (const auto& rEntry : *pLocalRangeName)
             {
-                if (itr->second->IsValidReference(aDummy))
-                    aSet.insert(createLocalRangeName(itr->second->GetName(), aTableName));
+                if (rEntry.second->IsValidReference(aDummy))
+                    aSet.insert(createLocalRangeName(rEntry.second->GetName(), aTableName));
             }
         }
     }
 
-    for (std::set<OUString>::iterator itr = aSet.begin();
-            itr != aSet.end(); ++itr)
+    for (const auto& rItem : aSet)
     {
-        InsertContent(ScContentId::RANGENAME, *itr);
+        InsertContent(ScContentId::RANGENAME, rItem);
     }
 }
 
@@ -929,10 +927,9 @@ void ScContentTree::GetDbNames()
 
     ScDBCollection* pDbNames = pDoc->GetDBCollection();
     const ScDBCollection::NamedDBs& rDBs = pDbNames->getNamedDBs();
-    ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rxDB : rDBs)
     {
-        const OUString& aStrName = (*itr)->GetName();
+        const OUString& aStrName = rxDB->GetName();
         InsertContent(ScContentId::DBAREA, aStrName);
     }
 }
@@ -1095,9 +1092,8 @@ void ScContentTree::GetNoteStrings()
     // loop over cell notes
     std::vector<sc::NoteEntry> aEntries;
     pDoc->GetAllNoteEntries(aEntries);
-    std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-    for (; it != itEnd; ++it)
-        InsertContent(ScContentId::NOTE, lcl_NoteString(*it->mpNote));
+    for (const auto& rEntry : aEntries)
+        InsertContent(ScContentId::NOTE, lcl_NoteString(*rEntry.mpNote));
 }
 
 ScAddress ScContentTree::GetNotePos( sal_uLong nIndex )
@@ -1123,10 +1119,9 @@ bool ScContentTree::NoteStringsChanged()
 
     std::vector<sc::NoteEntry> aEntries;
     pDoc->GetAllNoteEntries(aEntries);
-    std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-    for (; it != itEnd; ++it)
+    for (const auto& rEntry : aEntries)
     {
-        const ScPostIt* pNote = it->mpNote;
+        const ScPostIt* pNote = rEntry.mpNote;
         if (!pEntry)
             return true;
 

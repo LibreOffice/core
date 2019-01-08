@@ -240,10 +240,10 @@ OUString ScUndoApplyPageStyle::GetComment() const
 void ScUndoApplyPageStyle::Undo()
 {
     BeginUndo();
-    for( ApplyStyleVec::const_iterator aIt = maEntries.begin(), aEnd = maEntries.end(); aIt != aEnd; ++aIt )
+    for( const auto& rEntry : maEntries )
     {
-        pDocShell->GetDocument().SetPageStyle( aIt->mnTab, aIt->maOldStyle );
-        ScPrintFunc( pDocShell, pDocShell->GetPrinter(), aIt->mnTab ).UpdatePages();
+        pDocShell->GetDocument().SetPageStyle( rEntry.mnTab, rEntry.maOldStyle );
+        ScPrintFunc( pDocShell, pDocShell->GetPrinter(), rEntry.mnTab ).UpdatePages();
     }
     EndUndo();
 }
@@ -251,10 +251,10 @@ void ScUndoApplyPageStyle::Undo()
 void ScUndoApplyPageStyle::Redo()
 {
     BeginRedo();
-    for( ApplyStyleVec::const_iterator aIt = maEntries.begin(), aEnd = maEntries.end(); aIt != aEnd; ++aIt )
+    for( const auto& rEntry : maEntries )
     {
-        pDocShell->GetDocument().SetPageStyle( aIt->mnTab, maNewStyle );
-        ScPrintFunc( pDocShell, pDocShell->GetPrinter(), aIt->mnTab ).UpdatePages();
+        pDocShell->GetDocument().SetPageStyle( rEntry.mnTab, maNewStyle );
+        ScPrintFunc( pDocShell, pDocShell->GetPrinter(), rEntry.mnTab ).UpdatePages();
     }
     EndRedo();
 }
