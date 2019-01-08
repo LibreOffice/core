@@ -10399,6 +10399,7 @@ sc/source/core/tool/interpr8.cxx
 sc/source/core/tool/jumpmatrix.cxx
 sc/source/core/tool/listenerquery.cxx
 sc/source/core/tool/lookupcache.cxx
+sc/source/core/tool/math.cxx
 sc/source/core/tool/matrixoperators.cxx
 sc/source/core/tool/navicfg.cxx
 sc/source/core/tool/numformat.cxx
