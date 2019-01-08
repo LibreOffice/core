@@ -253,6 +253,29 @@ sal_Int32 DocumentToGraphicRenderer::getCurrentPage()
     return 1;
 }
 
+sal_Int32 DocumentToGraphicRenderer::getPageCount()
+{
+    Reference< awt::XDevice > xDevice(mxToolkit->createScreenCompatibleDevice( 32, 32 ) );
+
+    uno::Any selection( getSelection() );
+
+    PropertyValues renderProperties;
+
+    renderProperties.realloc( 4 );
+    renderProperties[0].Name = "IsPrinter";
+    renderProperties[0].Value <<= true;
+    renderProperties[1].Name = "RenderDevice";
+    renderProperties[1].Value <<= xDevice;
+    renderProperties[2].Name = "View";
+    renderProperties[2].Value <<= mxController;
+    renderProperties[3].Name = "RenderToGraphic";
+    renderProperties[3].Value <<= true;
+
+    sal_Int32 nPages = mxRenderable->getRendererCount( selection, renderProperties );
+
+    return nPages;
+}
+
 sal_Int32 DocumentToGraphicRenderer::getCurrentPageWriter()
 {
     Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(mxModel->getCurrentController(), UNO_QUERY);

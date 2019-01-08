@@ -538,21 +538,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if(!xModel.is())
                 return;
 
-            uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
-                        xModel->getCurrentController(), uno::UNO_QUERY);
-            if(!xTextViewCursorSupplier.is())
-                return;
-
-            uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
-                                                      uno::UNO_QUERY);
-            if(!xCursor.is())
-                return;
-
-            xCursor->jumpToLastPage();
-            sal_Int16 nPages = xCursor->getPage();
-
             uno::Reference< lang::XComponent > xSourceDoc( xModel );
+
             DocumentToGraphicRenderer aRenderer(xSourceDoc, /*bSelectionOnly=*/false);
+
+            sal_Int32 nPages = aRenderer.getPageCount();
 
             std::vector< GDIMetaFile > aMetaFiles;
 
