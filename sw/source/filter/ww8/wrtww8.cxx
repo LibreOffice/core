@@ -2777,6 +2777,10 @@ void MSWordExportBase::WriteText()
                     {
                         bNeedExportBreakHere = false;
                     }
+                    // No need to create a "fake" section if this is the end of the document,
+                    // except to emulate balanced columns.
+                    else if ( nColumnCount < 2 && aIdx == m_pDoc->GetNodes().GetEndOfContent() )
+                        bNeedExportBreakHere = false;
                 }
 
                 if (bNeedExportBreakHere)  //#120140# End of check
