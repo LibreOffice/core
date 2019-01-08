@@ -1891,145 +1891,6 @@ public:
     }
 };
 
-class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
-{
-protected:
-    OString m_sActivated;
-
-private:
-    virtual void signal_activate(GtkMenuItem* pItem) override
-    {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
-        m_sActivated = OString(pStr, pStr ? strlen(pStr) : 0);
-    }
-
-public:
-    GtkInstanceMenu(GtkMenu* pMenu, bool bTakeOwnership)
-        : MenuHelper(pMenu, bTakeOwnership)
-    {
-    }
-
-    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect) override
-    {
-        m_sActivated.clear();
-
-        GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
-        assert(pGtkWidget);
-
-        GtkWidget* pWidget = pGtkWidget->getWidget();
-        gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
-
-        //run in a sub main loop because we need to keep vcl PopupMenu alive to use
-        //it during DispatchCommand, returning now to the outer loop causes the
-        //launching PopupMenu to be destroyed, instead run the subloop here
-        //until the gtk menu is destroyed
-        GMainLoop* pLoop = g_main_loop_new(nullptr, true);
-        gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
-
-#if GTK_CHECK_VERSION(3,22,0)
-        if (gtk_check_version(3, 22, 0) == nullptr)
-        {
-            GdkRectangle aRect{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
-                               static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
-            if (AllSettings::GetLayoutRTL())
-                aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
-            gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
-        }
-        else
-#else
-        (void) rRect;
-#endif
-        {
-            guint nButton;
-            guint32 nTime;
-
-            //typically there is an event, and we can then distinguish if this was
-            //launched from the keyboard (gets auto-mnemoniced) or the mouse (which
-            //doesn't)
-            GdkEvent *pEvent = gtk_get_current_event();
-            if (pEvent)
-            {
-                gdk_event_get_button(pEvent, &nButton);
-                nTime = gdk_event_get_time(pEvent);
-            }
-            else
-            {
-                nButton = 0;
-                nTime = GtkSalFrame::GetLastInputEventTime();
-            }
-
-            gtk_menu_popup(m_pMenu, nullptr, nullptr, nullptr, nullptr, nButton, nTime);
-        }
-
-        if (g_main_loop_is_running(pLoop))
-        {
-            gdk_threads_leave();
-            g_main_loop_run(pLoop);
-            gdk_threads_enter();
-        }
-        g_main_loop_unref(pLoop);
-        g_signal_handler_disconnect(m_pMenu, nSignalId);
-
-        return m_sActivated;
-    }
-
-    virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
-    {
-        set_item_sensitive(rIdent, bSensitive);
-    }
-
-    virtual void set_active(const OString& rIdent, bool bActive) override
-    {
-        set_item_active(rIdent, bActive);
-    }
-
-    virtual void show(const OString& rIdent, bool bShow) override
-    {
-        show_item(rIdent, bShow);
-    }
-
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSufface,
-                        bool bCheck) override
-    {
-        GtkWidget* pImage = nullptr;
-        if (pIconName)
-        {
-            GdkPixbuf* pixbuf = load_icon_by_name(*pIconName);
-            if (!pixbuf)
-            {
-                pImage = gtk_image_new_from_pixbuf(pixbuf);
-                g_object_unref(pixbuf);
-            }
-        }
-        else if (pImageSufface)
-            pImage = gtk_image_new_from_surface(get_underlying_cairo_surface(*pImageSufface));
-
-        GtkWidget *pItem;
-        if (pImage)
-        {
-            GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-            GtkWidget *pLabel = gtk_label_new(MapToGtkAccelerator(rStr).getStr());
-            pItem = bCheck ? gtk_check_menu_item_new() : gtk_menu_item_new();
-            gtk_container_add(GTK_CONTAINER(pBox), pImage);
-            gtk_container_add(GTK_CONTAINER(pBox), pLabel);
-            gtk_container_add(GTK_CONTAINER(pItem), pBox);
-            gtk_widget_show_all(pItem);
-        }
-        else
-        {
-            pItem = bCheck ? gtk_check_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr())
-                           : gtk_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr());
-        }
-        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
-        gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
-        gtk_widget_show(pItem);
-        add_to_map(GTK_MENU_ITEM(pItem));
-        if (pos != -1)
-            gtk_menu_reorder_child(m_pMenu, pItem, pos);
-    }
-};
-
 class GtkInstanceSizeGroup : public weld::SizeGroup
 {
 private:
@@ -4163,6 +4024,190 @@ public:
             g_signal_handler_disconnect(m_pMenuButton, m_nSignalId);
             gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
         }
+    }
+};
+
+class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
+{
+protected:
+    OString m_sActivated;
+    GtkInstanceMenuButton* m_pTopLevelMenuButton;
+
+private:
+    virtual void signal_activate(GtkMenuItem* pItem) override
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
+        m_sActivated = OString(pStr, pStr ? strlen(pStr) : 0);
+    }
+
+public:
+    GtkInstanceMenu(GtkMenu* pMenu, bool bTakeOwnership)
+        : MenuHelper(pMenu, bTakeOwnership)
+        , m_pTopLevelMenuButton(nullptr)
+    {
+        // tdf#122527 if we're welding a submenu of a menu of a MenuButton,
+        // then find that MenuButton parent so that when adding items to this
+        // menu we can inform the MenuButton of their addition
+        GtkMenu* pTopLevelMenu = pMenu;
+        while (true)
+        {
+            GtkWidget* pAttached = gtk_menu_get_attach_widget(pTopLevelMenu);
+            if (!pAttached || !GTK_IS_MENU_ITEM(pAttached))
+                break;
+            GtkWidget* pParent = gtk_widget_get_parent(pAttached);
+            if (!pParent || !GTK_IS_MENU(pParent))
+                break;
+            pTopLevelMenu = GTK_MENU(pParent);
+        }
+        if (pTopLevelMenu != pMenu)
+        {
+            GtkWidget* pAttached = gtk_menu_get_attach_widget(pTopLevelMenu);
+            if (pAttached && GTK_IS_MENU_BUTTON(pAttached))
+            {
+                void* pData = g_object_get_data(G_OBJECT(pAttached), "g-lo-GtkInstanceButton");
+                m_pTopLevelMenuButton = dynamic_cast<GtkInstanceMenuButton*>(static_cast<GtkInstanceButton*>(pData));
+            }
+        }
+    }
+
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle &rRect) override
+    {
+        m_sActivated.clear();
+
+        GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
+        assert(pGtkWidget);
+
+        GtkWidget* pWidget = pGtkWidget->getWidget();
+        gtk_menu_attach_to_widget(m_pMenu, pWidget, nullptr);
+
+        //run in a sub main loop because we need to keep vcl PopupMenu alive to use
+        //it during DispatchCommand, returning now to the outer loop causes the
+        //launching PopupMenu to be destroyed, instead run the subloop here
+        //until the gtk menu is destroyed
+        GMainLoop* pLoop = g_main_loop_new(nullptr, true);
+        gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+
+#if GTK_CHECK_VERSION(3,22,0)
+        if (gtk_check_version(3, 22, 0) == nullptr)
+        {
+            GdkRectangle aRect{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
+                               static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
+            if (AllSettings::GetLayoutRTL())
+                aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
+            gtk_menu_popup_at_rect(m_pMenu, gtk_widget_get_window(pWidget), &aRect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
+        }
+        else
+#else
+        (void) rRect;
+#endif
+        {
+            guint nButton;
+            guint32 nTime;
+
+            //typically there is an event, and we can then distinguish if this was
+            //launched from the keyboard (gets auto-mnemoniced) or the mouse (which
+            //doesn't)
+            GdkEvent *pEvent = gtk_get_current_event();
+            if (pEvent)
+            {
+                gdk_event_get_button(pEvent, &nButton);
+                nTime = gdk_event_get_time(pEvent);
+            }
+            else
+            {
+                nButton = 0;
+                nTime = GtkSalFrame::GetLastInputEventTime();
+            }
+
+            gtk_menu_popup(m_pMenu, nullptr, nullptr, nullptr, nullptr, nButton, nTime);
+        }
+
+        if (g_main_loop_is_running(pLoop))
+        {
+            gdk_threads_leave();
+            g_main_loop_run(pLoop);
+            gdk_threads_enter();
+        }
+        g_main_loop_unref(pLoop);
+        g_signal_handler_disconnect(m_pMenu, nSignalId);
+
+        return m_sActivated;
+    }
+
+    virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        set_item_sensitive(rIdent, bSensitive);
+    }
+
+    virtual void set_active(const OString& rIdent, bool bActive) override
+    {
+        set_item_active(rIdent, bActive);
+    }
+
+    virtual void show(const OString& rIdent, bool bShow) override
+    {
+        show_item(rIdent, bShow);
+    }
+
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pIconName, VirtualDevice* pImageSufface,
+                        bool bCheck) override
+    {
+        GtkWidget* pImage = nullptr;
+        if (pIconName)
+        {
+            GdkPixbuf* pixbuf = load_icon_by_name(*pIconName);
+            if (!pixbuf)
+            {
+                pImage = gtk_image_new_from_pixbuf(pixbuf);
+                g_object_unref(pixbuf);
+            }
+        }
+        else if (pImageSufface)
+        {
+            cairo_surface_t* surface = get_underlying_cairo_surface(*pImageSufface);
+
+            Size aSize(pImageSufface->GetOutputSizePixel());
+            cairo_surface_t* target = cairo_surface_create_similar(surface,
+                                                                    cairo_surface_get_content(surface),
+                                                                    aSize.Width(),
+                                                                    aSize.Height());
+
+            cairo_t* cr = cairo_create(target);
+            cairo_set_source_surface(cr, surface, 0, 0);
+            cairo_paint(cr);
+            cairo_destroy(cr);
+
+            pImage = gtk_image_new_from_surface(target);
+
+            cairo_surface_destroy(target);
+        }
+
+        GtkWidget *pItem;
+        if (pImage)
+        {
+            GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+            GtkWidget *pLabel = gtk_label_new(MapToGtkAccelerator(rStr).getStr());
+            pItem = bCheck ? gtk_check_menu_item_new() : gtk_menu_item_new();
+            gtk_container_add(GTK_CONTAINER(pBox), pImage);
+            gtk_container_add(GTK_CONTAINER(pBox), pLabel);
+            gtk_container_add(GTK_CONTAINER(pItem), pBox);
+            gtk_widget_show_all(pItem);
+        }
+        else
+        {
+            pItem = bCheck ? gtk_check_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr())
+                           : gtk_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr());
+        }
+        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
+        gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
+        gtk_widget_show(pItem);
+        GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
+        add_to_map(pMenuItem);
+        if (m_pTopLevelMenuButton)
+            m_pTopLevelMenuButton->add_to_map(pMenuItem);
+        if (pos != -1)
+            gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
 };
 
