@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_fc890426",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-01-08T00:14:00Z",
+      "side": 1,
+      "message": "It is advised to blend in with the code style local habits.\nIn this case: new line after \u0027else\u0027",
+      "revId": "dd38d60b398b68a5ca4e3bb569e7ae0b8226fb42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
