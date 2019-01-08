@@ -27,8 +27,15 @@ struct HRGNDeleter
     void operator()(HRGN hRgn) { DeleteRegion(hRgn); }
 };
 
+struct HDCDeleter
+{
+    using pointer = HDC;
+    void operator()(HDC hDC) { DeleteDC(hDC); }
+};
+
 using ScopedHBRUSH = std::unique_ptr<HBRUSH, HBRUSHDeleter>;
 using ScopedHRGN = std::unique_ptr<HRGN, HRGNDeleter>;
+using ScopedHDC = std::unique_ptr<HDC, HDCDeleter>;
 
 #endif // INCLUDED_VCL_WIN_GDI_SCOPED_GDI_HXX
 

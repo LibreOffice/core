@@ -38,7 +38,7 @@
 
 #include <sft.hxx>
 #include <sallayout.hxx>
-#include <win/ScopedHDC.hxx>
+#include "scoped_gdi.hxx"
 
 #include <cstdio>
 #include <cstdlib>
