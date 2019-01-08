@@ -68,11 +68,14 @@ public:
     ~DocumentToGraphicRenderer();
 
     sal_Int32 getCurrentPage();
+
     /**
      * Get list of chapter names for a page, current page is set by
      * renderToGraphic().
      */
     const std::vector<OUString>& getChapterNames() const;
+
+    sal_Int32 getPageCount();
 
     Size getDocumentSizeInPixels( sal_Int32 nCurrentPage );
 
