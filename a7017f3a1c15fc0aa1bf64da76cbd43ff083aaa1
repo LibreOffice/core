@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_3c767c08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2019-01-08T07:43:49Z",
+      "side": 1,
+      "message": "Here is a review comment made on a patch of mine: \n\n\"no need to describe the changes from every single patch set here (in the commit message), just add a generic description what this patch does.\"\n\nSince receiving this advice I\u0027ve used the reply button to explain the purpose of each patch set :-)",
+      "revId": "a7017f3a1c15fc0aa1bf64da76cbd43ff083aaa1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
