@@ -55,6 +55,7 @@ char const DATA_DIRECTORY[] = "/xmlsecurity/qa/unit/signing/data/";
 /// Testsuite for the document signing feature.
 class SigningTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
+protected:
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
@@ -70,96 +71,7 @@ public:
     virtual void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 
-    void testDescription();
-    void testECDSA();
-    void testECDSAOOXML();
-    void testECDSAPDF();
-    /// Test a typical ODF where all streams are signed.
-    void testODFGood();
-    /// Test a typical broken ODF signature where one stream is corrupted.
-    void testODFBroken();
-    /// Document has a signature stream, but no actual signatures.
-    void testODFNo();
-    /// Test a typical OOXML where a number of (but not all) streams are signed.
-    void testOOXMLPartial();
-    /// Test a typical broken OOXML signature where one stream is corrupted.
-    void testOOXMLBroken();
-    void testOOXMLDescription();
-    /// Test appending a new signature next to an existing one.
-    void testOOXMLAppend();
-    /// Test removing a signature from existing ones.
-    void testOOXMLRemove();
-    /// Test removing all signatures from a document.
-    void testOOXMLRemoveAll();
-#if HAVE_FEATURE_PDFIMPORT
-    /// Test a typical PDF where the signature is good.
-    void testPDFGood();
-    /// Test a typical PDF where the signature is bad.
-    void testPDFBad();
-    /// Test a typical PDF which is not signed.
-    void testPDFNo();
-#endif
-    void test96097Calc();
-    void test96097Doc();
-    /// Creates a XAdES signature from scratch.
-    void testXAdES();
-    /// Works with an existing good XAdES signature.
-    void testXAdESGood();
-    /// Test importing of signature line
-    void testSignatureLineOOXML();
-    void testSignatureLineODF();
-#if HAVE_FEATURE_GPGVERIFY
-    /// Test a typical ODF where all streams are GPG-signed.
-    void testODFGoodGPG();
-    /// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
-    void testODFUntrustedGoodGPG();
-    /// Test a typical broken ODF signature where one stream is corrupted.
-    void testODFBrokenStreamGPG();
-    /// Test a typical broken ODF signature where the XML dsig hash is corrupted.
-    void testODFBrokenDsigGPG();
-#if HAVE_GPGCONF_SOCKETDIR
-    /// Test loading an encrypted ODF document
-    void testODFEncryptedGPG();
-#endif
-#endif
-    CPPUNIT_TEST_SUITE(SigningTest);
-    CPPUNIT_TEST(testDescription);
-    CPPUNIT_TEST(testECDSA);
-    CPPUNIT_TEST(testECDSAOOXML);
-    CPPUNIT_TEST(testECDSAPDF);
-    CPPUNIT_TEST(testODFGood);
-    CPPUNIT_TEST(testODFBroken);
-    CPPUNIT_TEST(testODFNo);
-    CPPUNIT_TEST(testODFBroken);
-    CPPUNIT_TEST(testOOXMLPartial);
-    CPPUNIT_TEST(testOOXMLBroken);
-    CPPUNIT_TEST(testOOXMLDescription);
-    CPPUNIT_TEST(testOOXMLAppend);
-    CPPUNIT_TEST(testOOXMLRemove);
-    CPPUNIT_TEST(testOOXMLRemoveAll);
-#if HAVE_FEATURE_PDFIMPORT
-    CPPUNIT_TEST(testPDFGood);
-    CPPUNIT_TEST(testPDFBad);
-    CPPUNIT_TEST(testPDFNo);
-#endif
-    CPPUNIT_TEST(test96097Calc);
-    CPPUNIT_TEST(test96097Doc);
-    CPPUNIT_TEST(testXAdES);
-    CPPUNIT_TEST(testXAdESGood);
-    CPPUNIT_TEST(testSignatureLineOOXML);
-    CPPUNIT_TEST(testSignatureLineODF);
-#if HAVE_FEATURE_GPGVERIFY
-    CPPUNIT_TEST(testODFGoodGPG);
-    CPPUNIT_TEST(testODFUntrustedGoodGPG);
-    CPPUNIT_TEST(testODFBrokenStreamGPG);
-    CPPUNIT_TEST(testODFBrokenDsigGPG);
-#if HAVE_GPGCONF_SOCKETDIR
-    CPPUNIT_TEST(testODFEncryptedGPG);
-#endif
-#endif
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+protected:
     void createDoc(const OUString& rURL);
     void createCalc(const OUString& rURL);
     uno::Reference<security::XCertificate>
@@ -278,7 +190,7 @@ SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager,
     return uno::Reference<security::XCertificate>();
 }
 
-void SigningTest::testDescription()
+CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     createDoc("");
@@ -315,7 +227,7 @@ void SigningTest::testDescription()
     CPPUNIT_ASSERT_EQUAL(aDescription, rInformations[0].ouDescription);
 }
 
-void SigningTest::testECDSA()
+CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     createDoc("");
@@ -355,7 +267,7 @@ void SigningTest::testECDSA()
                          rInformations[0].nStatus);
 }
 
-void SigningTest::testECDSAOOXML()
+CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     createDoc("");
@@ -396,7 +308,7 @@ void SigningTest::testECDSAOOXML()
                          rInformations[0].nStatus);
 }
 
-void SigningTest::testECDSAPDF()
+CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 {
     // Create an empty document and store it to a tempfile, finally load it as
     // a stream.
@@ -437,7 +349,7 @@ void SigningTest::testECDSAPDF()
                          rInformations[0].nStatus);
 }
 
-void SigningTest::testOOXMLDescription()
+CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
     createDoc("");
@@ -474,7 +386,8 @@ void SigningTest::testOOXMLDescription()
     CPPUNIT_ASSERT_EQUAL(aDescription, rInformations[0].ouDescription);
 }
 
-void SigningTest::testOOXMLAppend()
+/// Test appending a new signature next to an existing one.
+CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
 {
     // Copy the test document to a temporary file, as it'll be modified.
     utl::TempFile aTempFile;
@@ -510,7 +423,8 @@ void SigningTest::testOOXMLAppend()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 }
 
-void SigningTest::testOOXMLRemove()
+/// Test removing a signature from existing ones.
+CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemove)
 {
     // Load the test document as a storage and read its signatures: purpose1 and purpose2.
     DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
@@ -544,7 +458,8 @@ void SigningTest::testOOXMLRemove()
     CPPUNIT_ASSERT_EQUAL(OUString("purpose1"), rInformations[0].ouDescription);
 }
 
-void SigningTest::testOOXMLRemoveAll()
+/// Test removing all signatures from a document.
+CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
 {
     // Copy the test document to a temporary file, as it'll be modified.
     utl::TempFile aTempFile;
@@ -594,7 +509,8 @@ void SigningTest::testOOXMLRemoveAll()
         }));
 }
 
-void SigningTest::testODFGood()
+/// Test a typical ODF where all streams are signed.
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFGood)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -609,7 +525,8 @@ void SigningTest::testODFGood()
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
-void SigningTest::testODFBroken()
+/// Test a typical broken ODF signature where one stream is corrupted.
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFBroken)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -620,7 +537,8 @@ void SigningTest::testODFBroken()
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
-void SigningTest::testODFNo()
+// Document has a signature stream, but no actual signatures.
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFNo)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "no.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -631,7 +549,8 @@ void SigningTest::testODFNo()
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
-void SigningTest::testOOXMLPartial()
+/// Test a typical OOXML where a number of (but not all) streams are signed.
+CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLPartial)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.docx");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -649,7 +568,8 @@ void SigningTest::testOOXMLPartial()
          || nActual == SignatureState::PARTIAL_OK));
 }
 
-void SigningTest::testOOXMLBroken()
+/// Test a typical broken OOXML signature where one stream is corrupted.
+CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLBroken)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.docx");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -663,7 +583,8 @@ void SigningTest::testOOXMLBroken()
 
 #if HAVE_FEATURE_PDFIMPORT
 
-void SigningTest::testPDFGood()
+/// Test a typical PDF where the signature is good.
+CPPUNIT_TEST_FIXTURE(SigningTest, testPDFGood)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -678,7 +599,8 @@ void SigningTest::testPDFGood()
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
-void SigningTest::testPDFBad()
+/// Test a typical PDF where the signature is bad.
+CPPUNIT_TEST_FIXTURE(SigningTest, testPDFBad)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -689,7 +611,8 @@ void SigningTest::testPDFBad()
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
-void SigningTest::testPDFNo()
+/// Test a typical PDF which is not signed.
+CPPUNIT_TEST_FIXTURE(SigningTest, testPDFNo)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "no.pdf");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -702,7 +625,7 @@ void SigningTest::testPDFNo()
 
 #endif
 
-void SigningTest::test96097Calc()
+CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
 {
     createCalc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf96097.ods");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -742,7 +665,7 @@ void SigningTest::test96097Calc()
     }
 }
 
-void SigningTest::test96097Doc()
+CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf96097.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -781,7 +704,8 @@ void SigningTest::test96097Doc()
     }
 }
 
-void SigningTest::testXAdES()
+/// Creates a XAdES signature from scratch.
+CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 {
     // Create an empty document, store it to a tempfile and load it as a storage.
     createDoc(OUString());
@@ -843,7 +767,8 @@ void SigningTest::testXAdES()
                 "Type", "http://uri.etsi.org/01903#SignedProperties");
 }
 
-void SigningTest::testXAdESGood()
+/// Works with an existing good XAdES signature.
+CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESGood)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-xades.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -858,7 +783,8 @@ void SigningTest::testXAdESGood()
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
 }
 
-void SigningTest::testSignatureLineOOXML()
+/// Test importing of signature line
+CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineOOXML)
 {
     // Given: A document (docx) with a signature line and a valid signature
     uno::Reference<security::XDocumentDigitalSignatures> xSignatures(
@@ -884,7 +810,7 @@ void SigningTest::testSignatureLineOOXML()
     CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
 }
 
-void SigningTest::testSignatureLineODF()
+CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "signatureline.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -903,7 +829,8 @@ void SigningTest::testSignatureLineODF()
 }
 
 #if HAVE_FEATURE_GPGVERIFY
-void SigningTest::testODFGoodGPG()
+/// Test a typical ODF where all streams are GPG-signed.
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "goodGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -919,7 +846,8 @@ void SigningTest::testODFGoodGPG()
         SignatureState::OK, nActual);
 }
 
-void SigningTest::testODFUntrustedGoodGPG()
+/// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "untrustedGoodGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -936,7 +864,8 @@ void SigningTest::testODFUntrustedGoodGPG()
         SignatureState::NOTVALIDATED, nActual);
 }
 
-void SigningTest::testODFBrokenStreamGPG()
+/// Test a typical broken ODF signature where one stream is corrupted.
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenStreamGPG)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "badStreamGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -947,7 +876,8 @@ void SigningTest::testODFBrokenStreamGPG()
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
-void SigningTest::testODFBrokenDsigGPG()
+/// Test a typical broken ODF signature where the XML dsig hash is corrupted.
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenDsigGPG)
 {
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "badDsigGPG.odt");
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -960,7 +890,8 @@ void SigningTest::testODFBrokenDsigGPG()
 
 #if HAVE_GPGCONF_SOCKETDIR
 
-void SigningTest::testODFEncryptedGPG()
+/// Test loading an encrypted ODF document
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
 {
     // ODF1.2 + loext flavour
     createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY) + "encryptedGPG.odt");
@@ -989,8 +920,6 @@ void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://www.w3.org/2000/09/xmldsig#"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xd"), BAD_CAST("http://uri.etsi.org/01903/v1.3.2#"));
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SigningTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
