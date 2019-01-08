@@ -614,7 +614,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
     const uno::Reference<frame::XModel>& xModel, const uno::Reference<xml::sax::XWriter>& xWriter,
     const uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
     const OUString& sMediaType, const OUString& sComponentName,
-    const uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
+    const uno::Sequence<uno::Any>& aArgs, std::unique_ptr<ScMySharedData>& pSharedData)
 {
     bool bRet(false);
     uno::Reference<io::XOutputStream> xOut;
@@ -667,7 +667,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
     if ( xFilter.is() )
     {
         ScXMLExport* pExport = static_cast<ScXMLExport*>(SvXMLExport::getImplementation(xFilter));
-        pExport->SetSharedData(pSharedData);
+        pExport->SetSharedData(std::move(pSharedData));
 
         // if there are sheets to copy, get the source stream
         if ( sName == "content.xml" && lcl_HasValidStream(rDoc) && ( pExport->getExportFlags() & SvXMLExportFlags::OASIS ) )
@@ -715,7 +715,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
         else
             bRet = xFilter->filter( aDescriptor );
 
-        pSharedData = pExport->GetSharedData();
+        pSharedData = pExport->ReleaseSharedData();
     }
 
     return bRet;
@@ -817,7 +817,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         bool bStylesRet (false);
         bool bDocRet(false);
         bool bSettingsRet(false);
-        ScMySharedData* pSharedData = nullptr;
+        std::unique_ptr<ScMySharedData> pSharedData;
 
         bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
@@ -956,7 +956,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "settings export end" );
         }
 
-        delete pSharedData;
+        pSharedData.reset();
 
         if (xStatusIndicator.is())
             xStatusIndicator->end();

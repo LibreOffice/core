@@ -343,7 +343,6 @@ ScXMLExport::ScXMLExport(
         rContext, implementationName, XML_SPREADSHEET, nExportFlag ),
     pDoc(nullptr),
     nSourceStreamPos(0),
-    pSharedData(nullptr),
     aTableStyles(),
     pCurrentCell(nullptr),
     nOpenRow(-1),
@@ -489,7 +488,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
 
     nTableCount = xIndex->getCount();
     if (!pSharedData)
-        pSharedData = new ScMySharedData(nTableCount);
+        pSharedData.reset(new ScMySharedData(nTableCount));
 
     pCellStyles->AddNewTable(nTableCount - 1);
 
@@ -5417,4 +5416,7 @@ void ScXMLExport::DisposingModel()
     xCurrentTable = nullptr;
 }
 
+void ScXMLExport::SetSharedData(std::unique_ptr<ScMySharedData> pTemp) { pSharedData = std::move(pTemp); }
+
+std::unique_ptr<ScMySharedData> ScXMLExport::ReleaseSharedData() { return std::move(pSharedData); }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
