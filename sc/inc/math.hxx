@@ -21,6 +21,9 @@
 #define INCLUDED_SC_INC_MATH_HXX
 
 #include <formula/errorcodes.hxx>
+#include <rtl/math.hxx>
+#include <cmath>
+#include <cerrno>
 
 namespace sc {
 
@@ -63,6 +66,44 @@ inline double divide( const double& fNumerator, const double& fDenominator )
         return fVal;
     }
     return fNumerator / fDenominator;
+}
+
+inline double errno_pow( const double& fVal1, const double& fVal2 )
+{
+    // pow() is expected to set range error or pole error or return NaN or Inf.
+    assert(math_errhandling & MATH_ERRNO);
+    errno = 0;
+    return pow( fVal1, fVal2);
+}
+
+inline double power( const double& fVal1, const double& fVal2 )
+{
+    double fPow;
+    if (fVal1 < 0 && fVal2 != 0.0)
+    {
+        const double f = 1.0 / fVal2 + ((fVal2 < 0.0) ? -0.5 : 0.5);
+        if (f < SAL_MIN_INT64 || f > SAL_MAX_INT64)
+        {
+            // Casting to int would be undefined behaviour.
+            fPow = errno_pow( fVal1, fVal2);
+        }
+        else
+        {
+            const sal_Int64 i = static_cast<sal_Int64>(f);
+            if (i % 2 != 0 && rtl::math::approxEqual(1 / static_cast<double>(i), fVal2))
+                fPow = -errno_pow( -fVal1, fVal2);
+            else
+                fPow = errno_pow( fVal1, fVal2);
+        }
+    }
+    else
+    {
+        fPow = errno_pow( fVal1, fVal2);
+    }
+    // The pow() call must had been the last call before this to check errno.
+    if (errno == EDOM || errno == ERANGE || !rtl::math::isFinite(fPow))
+        fPow = CreateDoubleError( FormulaError::IllegalFPOperation);
+    return fPow;
 }
 
 }
