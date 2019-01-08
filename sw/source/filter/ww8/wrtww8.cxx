@@ -57,6 +57,7 @@
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
 #include <frmatr.hxx>
+#include <../../core/inc/rootfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -3356,7 +3357,8 @@ ErrCode WW8Export::ExportDocument_Impl()
     pDop = new WW8Dop;
 
     pDop->fRevMarking = bool( RedlineFlags::On & m_nOrigRedlineFlags );
-    pDop->fRMView = bool( RedlineFlags::ShowDelete & m_nOrigRedlineFlags );
+    SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    pDop->fRMView = pLayout == nullptr || !pLayout->IsHideRedlines();
     pDop->fRMPrint = pDop->fRMView;
 
     // set AutoHyphenation flag if found in default para style

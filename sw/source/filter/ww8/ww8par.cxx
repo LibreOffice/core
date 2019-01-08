@@ -82,6 +82,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentExternalData.hxx>
+#include <../../core/inc/DocumentRedlineManager.hxx>
 #include <docufld.hxx>
 #include <swfltopt.hxx>
 #include <viewsh.hxx>
@@ -4987,7 +4988,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     SwNodeIndex aSttNdIdx( m_rDoc.GetNodes() );
     SwRelNumRuleSpaces aRelNumRule(m_rDoc, m_bNewDoc);
 
-    RedlineFlags eMode = RedlineFlags::ShowInsert;
+    RedlineFlags eMode = RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
 
     m_xSprmParser.reset(new wwSprmParser(*m_xWwFib));
 
@@ -5287,12 +5288,13 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         }
     }
 
+    bool isHideRedlines(false);
+
     if (m_bNewDoc)
     {
         if( m_xWDop->fRevMarking )
             eMode |= RedlineFlags::On;
-        if( m_xWDop->fRMView )
-            eMode |= RedlineFlags::ShowDelete;
+        isHideRedlines = !m_xWDop->fRMView;
     }
 
     m_aInsertedTables.DelAndMakeTableFrames();
@@ -5425,6 +5427,9 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
       m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(eMode);
 
     UpdatePageDescs(m_rDoc, nPageDescOffset);
+
+    // can't set it on the layout or view shell because it doesn't exist yet
+    m_rDoc.GetDocumentRedlineManager().SetHideRedlines(isHideRedlines);
 
     return ERRCODE_NONE;
 }
