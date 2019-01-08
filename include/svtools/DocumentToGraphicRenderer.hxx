@@ -68,6 +68,7 @@ public:
     ~DocumentToGraphicRenderer();
 
     sal_Int32 getCurrentPage();
+    sal_Int32 getPageCount();
     /**
      * Get list of chapter names for a page, current page is set by
      * renderToGraphic().
