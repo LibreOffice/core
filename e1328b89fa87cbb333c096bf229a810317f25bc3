@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_fc190488",
+        "filename": "i18npool/source/breakiterator/data/README",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-08T10:57:04Z",
+      "side": 1,
+      "message": "this is apparently quoting external material; I do not think it is appropriate to \"fix typos\" in such quoted material (and I also don\u0027t think it would be worth it or helpful to mark typos in such quoted material, e.g., via \"[sic]\")",
+      "revId": "e1328b89fa87cbb333c096bf229a810317f25bc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
