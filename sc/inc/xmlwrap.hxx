@@ -79,7 +79,7 @@ class ScXMLImportWrapper
         const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor,
         const OUString& sName, const OUString& sMediaType, const OUString& sComponentName,
         const css::uno::Sequence<css::uno::Any>& aArgs,
-        ScMySharedData*& pSharedData);
+        std::unique_ptr<ScMySharedData>& pSharedData);
 
 public:
 

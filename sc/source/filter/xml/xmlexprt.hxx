@@ -94,7 +94,7 @@ class ScXMLExport : public SvXMLExport
     std::unique_ptr<XMLNumberFormatAttributesExportHelper> pNumberFormatAttributesExportHelper;
     typedef std::unordered_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
     NumberFormatIndexMap                aNumFmtIndexMap;
-    ScMySharedData*                     pSharedData;
+    std::unique_ptr<ScMySharedData>                     pSharedData;
     std::unique_ptr<ScColumnStyles>                     pColumnStyles;
     std::unique_ptr<ScRowStyles>                        pRowStyles;
     std::unique_ptr<ScFormatRangeStyles>                pCellStyles;
@@ -253,8 +253,9 @@ public:
 
     virtual void exportAnnotationMeta( const css::uno::Reference < css::drawing::XShape >& xShape) override;
 
-    void SetSharedData(ScMySharedData* pTemp) { pSharedData = pTemp; }
-    ScMySharedData* GetSharedData() { return pSharedData; }
+    void SetSharedData(std::unique_ptr<ScMySharedData> pTemp);
+    ScMySharedData* GetSharedData() { return pSharedData.get(); }
+    std::unique_ptr<ScMySharedData> ReleaseSharedData() { return std::move(pSharedData); }
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
 
     // Export the document.
