@@ -262,6 +262,9 @@ private:
 
     void DontBalanceTextColumns();
 
+    /// Apply section-specific properties: only valid to use after PageStyle has been determined by InheritOrFinalizePageStyles
+    void ApplySectionProperties( css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
+
     /// Check if document is protected. If so, ensure a section exists, and apply its protected value.
     void ApplyProtectionProperties( css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
 

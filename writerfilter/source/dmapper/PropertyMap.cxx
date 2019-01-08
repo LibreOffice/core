@@ -682,6 +682,38 @@ void SectionPropertyMap::DontBalanceTextColumns()
     }
 }
 
+void SectionPropertyMap::ApplySectionProperties( uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
+{
+    try
+    {
+        if ( xSection.is() )
+        {
+            // Margins only valid if page style is already determined.
+            // Take some care not to create an automatic page style (with GetPageStyle) if it isn't already created.
+            if ( !m_aFollowPageStyle.is() && !m_sFollowPageStyleName.isEmpty() )
+                GetPageStyle( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), false );
+            if ( m_aFollowPageStyle.is()  )
+            {
+                sal_Int32 nPageMargin = 0;
+                m_aFollowPageStyle->getPropertyValue( getPropertyName( PROP_LEFT_MARGIN ) ) >>= nPageMargin;
+                xSection->setPropertyValue( "SectionLeftMargin",  uno::makeAny(m_nLeftMargin - nPageMargin) );
+
+                nPageMargin = 0;
+                m_aFollowPageStyle->getPropertyValue( getPropertyName( PROP_RIGHT_MARGIN ) ) >>= nPageMargin;
+                xSection->setPropertyValue( "SectionRightMargin", uno::makeAny(m_nRightMargin - nPageMargin) );
+            }
+
+            boost::optional< PropertyMap::Property > pProp = getProperty( PROP_WRITING_MODE );
+            if ( pProp )
+                xSection->setPropertyValue( "WritingMode", pProp->second );
+        }
+    }
+    catch ( uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "Exception in SectionPropertyMap::ApplySectionProperties");
+    }
+}
+
 void SectionPropertyMap::ApplyProtectionProperties( uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
 {
     try
@@ -1398,6 +1430,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         try
         {
             InheritOrFinalizePageStyles( rDM_Impl );
+            ApplySectionProperties( xSection, rDM_Impl );  //depends on InheritOrFinalizePageStyles
             OUString aName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
             uno::Reference< beans::XPropertySet > xRangeProperties( lcl_GetRangeProperties( m_bIsFirstSection, rDM_Impl, m_xStartingRange ) );
             if ( m_bIsFirstSection && !aName.isEmpty() && xRangeProperties.is() )
