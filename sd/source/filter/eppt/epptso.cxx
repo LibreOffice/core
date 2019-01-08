@@ -1665,8 +1665,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     bool bSecOutl = false;
     sal_uInt32 nPObjects = 0;
 
-    SvMemoryStream* pClientTextBox = nullptr;
-    SvMemoryStream* pClientData = nullptr;
+    std::unique_ptr<SvMemoryStream> pClientTextBox;
+    std::unique_ptr<SvMemoryStream> pClientData;
 
     while( GetNextGroupEntry() )
     {
@@ -2687,7 +2687,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         mpExEmbed->SeekRel( nSize );
 
                         if ( !pClientData )
-                            pClientData = new SvMemoryStream( 0x200, 0x200 );
+                            pClientData.reset(new SvMemoryStream( 0x200, 0x200 ));
                         pClientData->WriteUInt16( 0 )
                                     .WriteUInt16( EPP_ExObjRefAtom )
                                     .WriteUInt32( 4 )
@@ -2759,7 +2759,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
                     if ( !pClientData )
-                        pClientData = new SvMemoryStream( 0x200, 0x200 );
+                        pClientData.reset(new SvMemoryStream( 0x200, 0x200 ));
 
                     pClientData->WriteUInt32( EPP_OEPlaceholderAtom << 16 ).WriteUInt32( 8 )
                                 .WriteInt32( nPlacementID )                // PlacementID
@@ -2770,7 +2770,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( nOlePictureId )
                 {
                     if ( !pClientData )
-                        pClientData = new SvMemoryStream( 0x200, 0x200 );
+                        pClientData.reset(new SvMemoryStream( 0x200, 0x200 ));
 
                     pClientData->WriteUInt32( EPP_ExObjRefAtom << 16 ).WriteUInt32( 4 )
                                 .WriteUInt32( nOlePictureId );
@@ -2778,20 +2778,20 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 if ( bEffect && !pClientData )
                 {
-                    pClientData = new SvMemoryStream( 0x200, 0x200 );
+                    pClientData.reset(new SvMemoryStream( 0x200, 0x200 ));
                 }
 
                 if ( eCa != css::presentation::ClickAction_NONE )
                 {
                     if ( !pClientData )
-                        pClientData = new SvMemoryStream( 0x200, 0x200 );
+                        pClientData.reset(new SvMemoryStream( 0x200, 0x200 ));
                     ImplWriteClickAction( *pClientData, eCa, bMediaClickAction );
                 }
             }
             if ( ( mnTextStyle == EPP_TEXTSTYLE_TITLE ) || ( mnTextStyle == EPP_TEXTSTYLE_BODY ) )
             {
                 if ( !pClientTextBox )
-                    pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
+                    pClientTextBox.reset(new SvMemoryStream( 0x200, 0x200 ));
 
                 if ( !mbEmptyPresObj )
                 {
@@ -2823,8 +2823,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         if ( aExtBu.Tell() )
                         {
                             if ( !pClientData )
-                                pClientData = new SvMemoryStream( 0x200, 0x200 );
-                            ImplProgTagContainer( pClientData, &aExtBu );
+                                pClientData.reset(new SvMemoryStream( 0x200, 0x200 ));
+                            ImplProgTagContainer( pClientData.get(), &aExtBu );
                         }
                     }
                 }
@@ -2842,21 +2842,21 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             nInstance2 = EPP_TEXTTYPE_Other;     // Text in a Shape
 
                         if ( !pClientTextBox )
-                            pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
+                            pClientTextBox.reset(new SvMemoryStream( 0x200, 0x200 ));
 
                         SvMemoryStream  aExtBu( 0x200, 0x200 );
                         ImplWriteTextStyleAtom( *pClientTextBox, nInstance2, 0, nullptr, aExtBu, &aPropOpt );
                         if ( aExtBu.Tell() )
                         {
                             if ( !pClientData )
-                                pClientData = new SvMemoryStream( 0x200, 0x200 );
-                            ImplProgTagContainer( pClientData, &aExtBu );
+                                pClientData.reset(new SvMemoryStream( 0x200, 0x200 ));
+                            ImplProgTagContainer( pClientData.get(), &aExtBu );
                         }
                     }
                     else if ( nPlaceHolderAtom >= 19 )
                     {
                         if ( !pClientTextBox )
-                            pClientTextBox = new SvMemoryStream( 12 );
+                            pClientTextBox.reset(new SvMemoryStream( 12 ));
 
                         pClientTextBox->WriteUInt32( EPP_TextHeaderAtom << 16 ).WriteUInt32( 4 )
                                        .WriteUInt32( 7 );
@@ -2881,8 +2881,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                        .WriteUInt32( pClientData->Tell() );
 
                 mpStrm->WriteBytes(pClientData->GetData(), pClientData->Tell());
-                delete pClientData;
-                pClientData = nullptr;
+                pClientData.reset();
             }
             if ( pClientTextBox )
             {
@@ -2890,8 +2889,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                        .WriteUInt32( pClientTextBox->Tell() );
 
                 mpStrm->WriteBytes(pClientTextBox->GetData(), pClientTextBox->Tell());
-                delete pClientTextBox;
-                pClientTextBox = nullptr;
+                pClientTextBox.reset();
             }
             mpPptEscherEx->CloseContainer();      // ESCHER_SpContainer
         }
@@ -2940,7 +2938,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 // mpPptEscherEx->SetGroupLogicRect( nGroupLevel, maRect );
             }
             if ( !pClientTextBox )
-                pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
+                pClientTextBox.reset(new SvMemoryStream( 0x200, 0x200 ));
 
             SvMemoryStream  aExtBu( 0x200, 0x200 );
             ImplWriteTextStyleAtom( *pClientTextBox, EPP_TEXTTYPE_Other, 0, nullptr, aExtBu, &aPropOpt );
@@ -2956,8 +2954,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                    .WriteUInt32( pClientTextBox->Tell() );
 
             mpStrm->WriteBytes(pClientTextBox->GetData(), pClientTextBox->Tell());
-            delete pClientTextBox;
-            pClientTextBox = nullptr;
+            pClientTextBox.reset();
 
             mpPptEscherEx->CloseContainer();  // ESCHER_SpContainer
 
@@ -3197,14 +3194,12 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
                         // need write client data for extend bullet
                         if ( aExtBu.Tell() )
                         {
-                            SvMemoryStream* pClientData = new SvMemoryStream( 0x200, 0x200 );
-                            ImplProgTagContainer( pClientData, &aExtBu );
+                            std::unique_ptr<SvMemoryStream> pClientData(new SvMemoryStream( 0x200, 0x200 ));
+                            ImplProgTagContainer( pClientData.get(), &aExtBu );
                             mpStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
                                .WriteUInt32( pClientData->Tell() );
 
                             mpStrm->WriteBytes(pClientData->GetData(), pClientData->Tell());
-                            delete pClientData;
-                            pClientData = nullptr;
                         }
 
                         aPropOptSp.Commit( *mpStrm );

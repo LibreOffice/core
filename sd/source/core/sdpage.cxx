@@ -2447,21 +2447,21 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
                 aString += rString;
 
                 // check if we need to add a text field
-                SvxFieldData* pData = nullptr;
+                std::unique_ptr<SvxFieldData> pData;
 
                 switch( eObjKind )
                 {
                 case PRESOBJ_HEADER:
-                    pData = new SvxHeaderField();
+                    pData.reset(new SvxHeaderField());
                     break;
                 case PRESOBJ_FOOTER:
-                    pData = new SvxFooterField();
+                    pData .reset(new SvxFooterField());
                     break;
                 case PRESOBJ_SLIDENUMBER:
-                    pData = new SvxPageField();
+                    pData.reset(new SvxPageField());
                     break;
                 case PRESOBJ_DATETIME:
-                    pData = new SvxDateTimeField();
+                    pData.reset(new SvxDateTimeField());
                     break;
                 default:
                     break;
@@ -2472,7 +2472,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
                     ESelection e;
                     SvxFieldItem aField( *pData, EE_FEATURE_FIELD );
                     pOutl->QuickInsertField(aField,e);
-                    delete pData;
                 }
             }
             break;

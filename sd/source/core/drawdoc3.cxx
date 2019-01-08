@@ -1042,7 +1042,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
     if (pBMView)
     {
         // Insert selected objects
-        ::sd::View* pView = new ::sd::View(*this, nullptr);
+        std::unique_ptr<::sd::View> pView(new ::sd::View(*this, nullptr));
         pView->EndListening(*this);
 
         // Look for the page into which the objects are supposed to be inserted
@@ -1100,7 +1100,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
         if (!bOLEObjFound)
             delete pTmpDoc;         // Would otherwise be destroyed by DocShell
 
-        delete pView;
+        pView.reset();
 
         // Get number of objects after inserting.
         const size_t nCount = pPage->GetObjCount();
@@ -1471,19 +1471,17 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if (pSourceDoc != this)
         {
             // #i121863# clone masterpages, they are from another model (!)
-            SdPage* pNewNotesMaster = dynamic_cast< SdPage* >(pNotesMaster->CloneSdrPage(*this));
-            SdPage* pNewMaster = dynamic_cast< SdPage* >(pMaster->CloneSdrPage(*this));
+            std::unique_ptr<SdPage> pNewNotesMaster(dynamic_cast< SdPage* >(pNotesMaster->CloneSdrPage(*this)));
+            std::unique_ptr<SdPage> pNewMaster(dynamic_cast< SdPage* >(pMaster->CloneSdrPage(*this)));
 
             if(!pNewNotesMaster || !pNewMaster)
             {
-                delete pNewNotesMaster;
-                delete pNewMaster;
                 OSL_FAIL("SdDrawDocument::SetMasterPage() cloning of MasterPage/NoteAmsterPage failed!" );
                 return;
             }
 
-            pNotesMaster = pNewNotesMaster;
-            pMaster = pNewMaster;
+            pNotesMaster = pNewNotesMaster.release();
+            pMaster = pNewMaster.release();
 
             // layout name needs to be unique
             aTargetNewLayoutName = pMaster->GetLayoutName();

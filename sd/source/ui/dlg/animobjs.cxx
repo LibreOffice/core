@@ -278,14 +278,14 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
     }
 
     // StatusBarManager from 1 second
-    SfxProgress* pProgress = nullptr;
+    std::unique_ptr<SfxProgress> pProgress;
     if( nFullTime >= 1000 )
     {
         bDisableCtrls = true;
         m_pBtnStop->Enable();
         m_pBtnStop->Update();
         OUString const aStr("Animator:"); // here we should think about something smart
-        pProgress = new SfxProgress( nullptr, aStr, nFullTime );
+        pProgress.reset(new SfxProgress( nullptr, aStr, nFullTime ));
     }
 
     sal_uLong nTmpTime = 0;
@@ -310,12 +310,12 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
             m_pTimeField->SetTime( rTime );
             sal_uLong nTime = rTime.GetMSFromTime();
 
-            WaitInEffect( nTime, nTmpTime, pProgress );
+            WaitInEffect( nTime, nTmpTime, pProgress.get() );
             nTmpTime += nTime;
         }
         else
         {
-            WaitInEffect( 100, nTmpTime, pProgress );
+            WaitInEffect( 100, nTmpTime, pProgress.get() );
             nTmpTime += 100;
         }
         if( bReverse )
@@ -353,7 +353,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, Button *, p, void )
 
     if( pProgress )
     {
-        delete pProgress;
+        pProgress.reset();
         m_pBtnStop->Disable();
     }
 
