@@ -392,13 +392,22 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
+    weld::Window* pDialogParent = rReq.GetFrameWeld();
+    if (!pDialogParent)
+    {
+        SfxViewFrame* pFrame = GetFrame();
+        if (!pFrame)
+            pFrame = SfxViewFrame::GetFirst(this);
+        if (pFrame)
+            pDialogParent = pFrame->GetWindow().GetFrameWeld();
+    }
 
     sal_uInt16 nId = rReq.GetSlot();
 
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
         if ( QueryHiddenInformation( HiddenWarningFact::WhenSigning, nullptr ) == RET_YES )
-            ( SID_SIGNATURE == nId ) ? SignDocumentContent(rReq.GetFrameWeld()) : SignScriptingContent(rReq.GetFrameWeld());
+            ( SID_SIGNATURE == nId ) ? SignDocumentContent(pDialogParent) : SignScriptingContent(pDialogParent);
         return;
     }
 
@@ -425,7 +434,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !IsOwnStorageFormat( *GetMedium() ) )
                 return;
 
-            SfxVersionDialog aDlg(rReq.GetFrameWeld(), pFrame, IsSaveVersionOnClose());
+            SfxVersionDialog aDlg(pDialogParent, pFrame, IsSaveVersionOnClose());
             aDlg.run();
             SetSaveVersionOnClose(aDlg.IsSaveVersionOnClose());
             rReq.Done();
@@ -713,7 +722,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( lErr != ERRCODE_IO_ABORT )
             {
                 SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
-                ErrorHandler::HandleError(lErr, rReq.GetFrameWeld());
+                ErrorHandler::HandleError(lErr, pDialogParent);
             }
 
             if ( nId == SID_EXPORTDOCASPDF )
@@ -802,7 +811,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             SetModified( false );
             ErrCode lErr = GetErrorCode();
-            ErrorHandler::HandleError(lErr, rReq.GetFrameWeld());
+            ErrorHandler::HandleError(lErr, pDialogParent);
 
             rReq.SetReturnValue( SfxBoolItem(0, true) );
             rReq.Done();
@@ -815,7 +824,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            SfxSaveAsTemplateDialog aDlg(rReq.GetFrameWeld(), GetModel());
+            SfxSaveAsTemplateDialog aDlg(pDialogParent, GetModel());
             (void)aDlg.run();
             break;
         }
