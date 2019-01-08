@@ -89,16 +89,15 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
     if (pActualPage)
     {
-        SdOutliner* pOutl =
-              new SdOutliner( mpDoc, OutlinerMode::OutlineObject );
-        pOutl->SetUpdateMode(false);
-        pOutl->EnableUndo(false);
+        SdOutliner aOutliner( mpDoc, OutlinerMode::OutlineObject );
+        aOutliner.SetUpdateMode(false);
+        aOutliner.EnableUndo(false);
 
         if (mpDocSh)
-            pOutl->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+            aOutliner.SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
-        pOutl->SetDefTab( mpDoc->GetDefaultTabulator() );
-        pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
+        aOutliner.SetDefTab( mpDoc->GetDefaultTabulator() );
+        aOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
         SdrLayerIDSet aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
         sal_uInt16 nActualPageNum = pActualPage->GetPageNum();
@@ -114,25 +113,25 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
             // set current structuring-object into outliner
             OutlinerParaObject* pParaObj = pActualOutline->GetOutlinerParaObject();
-            pOutl->SetText(*pParaObj);
+            aOutliner.SetText(*pParaObj);
 
             // remove hard paragraph- and character attributes
             SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
-            sal_Int32 nParaCount1 = pOutl->GetParagraphCount();
+            sal_Int32 nParaCount1 = aOutliner.GetParagraphCount();
 
             for (sal_Int32 nPara = 0; nPara < nParaCount1; nPara++)
             {
-                pOutl->RemoveCharAttribs(nPara);
-                pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
+                aOutliner.RemoveCharAttribs(nPara);
+                aOutliner.SetParaAttribs(nPara, aEmptyEEAttr);
             }
 
             sal_uInt16 nPos = 2;
-            Paragraph* pPara = pOutl->GetParagraph( 0 );
+            Paragraph* pPara = aOutliner.GetParagraph( 0 );
 
             while (pPara)
             {
-                sal_Int32 nParaPos = pOutl->GetAbsPos( pPara );
-                sal_Int16 nDepth = pOutl->GetDepth( nParaPos );
+                sal_Int32 nParaPos = aOutliner.GetAbsPos( pPara );
+                sal_Int16 nDepth = aOutliner.GetDepth( nParaPos );
                 if ( nDepth == 0 )
                 {
                     // page with title & structuring!
@@ -186,7 +185,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     if (!pTextObj)
                         continue;
 
-                    std::unique_ptr<OutlinerParaObject> pOutlinerParaObject = pOutl->CreateParaObject( nParaPos, 1);
+                    std::unique_ptr<OutlinerParaObject> pOutlinerParaObject = aOutliner.CreateParaObject( nParaPos, 1);
                     pOutlinerParaObject->SetOutlinerMode(OutlinerMode::TitleObject);
 
                     if( pOutlinerParaObject->GetDepth(0) != -1 )
@@ -210,13 +209,13 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     pTextObj->NbcSetStyleSheet(pSheet, false);
 
                     SdrTextObj* pOutlineObj = nullptr;
-                    sal_Int32 nChildCount = pOutl->GetChildCount(pPara);
+                    sal_Int32 nChildCount = aOutliner.GetChildCount(pPara);
                     if (nChildCount > 0)
                         pOutlineObj = static_cast<SdrTextObj*>( pPage->GetPresObj(PRESOBJ_OUTLINE) );
                     if (pOutlineObj)
                     {
                         // create structuring text objects
-                        std::unique_ptr<OutlinerParaObject> pOPO = pOutl->CreateParaObject(++nParaPos, nChildCount);
+                        std::unique_ptr<OutlinerParaObject> pOPO = aOutliner.CreateParaObject(++nParaPos, nChildCount);
 
                         std::unique_ptr<SdrOutliner> pTempOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *mpDoc);
                         pTempOutl->SetText( *pOPO );
@@ -244,14 +243,12 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     }
                 }
 
-                pPara = pOutl->GetParagraph( ++nParaPos );
+                pPara = aOutliner.GetParagraph( ++nParaPos );
             }
 
             if( bUndo )
                 mpView->EndUndo();
         }
-
-        delete pOutl;
 
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE_PAGE, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
     }

@@ -87,7 +87,7 @@ bool SdPPTFilter::Import()
             xDualStorage = pStorage->OpenSotStorage( sDualStorage, StreamMode::STD_READ );
             pStorage = xDualStorage;
         }
-        SvStream* pDocStream = pStorage->OpenSotStream( "PowerPoint Document" , StreamMode::STD_READ );
+        std::unique_ptr<SvStream> pDocStream(pStorage->OpenSotStream( "PowerPoint Document" , StreamMode::STD_READ ));
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
@@ -110,8 +110,6 @@ bool SdPPTFilter::Import()
                 if ( !bRet )
                     mrMedium.SetError(SVSTREAM_WRONGVERSION);
             }
-
-            delete pDocStream;
         }
     }
 

@@ -104,12 +104,12 @@ struct ImpRememberOrigAndClone
     SdrObject*      pClone;
 };
 
-static SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContainer, SdrObject const * pConnObj)
+static SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone>& aConnectorContainer, SdrObject const * pConnObj)
 {
-    for(ImpRememberOrigAndClone* p : aConnectorContainer)
+    for(ImpRememberOrigAndClone& rImp : aConnectorContainer)
     {
-        if(pConnObj == p->pOrig)
-            return p->pClone;
+        if(pConnObj == rImp.pOrig)
+            return rImp.pClone;
     }
     return nullptr;
 }
@@ -458,7 +458,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 pMarkList->ForceSort();
 
                                 // stuff to remember originals and clones
-                                std::vector<ImpRememberOrigAndClone*> aConnectorContainer;
+                                std::vector<ImpRememberOrigAndClone> aConnectorContainer;
                                 size_t nConnectorCount = 0;
                                 Point       aCurPos;
 
@@ -500,10 +500,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                             EndUndo();
                                         }
 
-                                        ImpRememberOrigAndClone* pRem = new ImpRememberOrigAndClone;
-                                        pRem->pOrig = pM->GetMarkedSdrObj();
-                                        pRem->pClone = pObj;
-                                        aConnectorContainer.push_back(pRem);
+                                        ImpRememberOrigAndClone aRem;
+                                        aRem.pOrig = pM->GetMarkedSdrObj();
+                                        aRem.pClone = pObj;
+                                        aConnectorContainer.push_back(aRem);
 
                                         if(dynamic_cast< SdrEdgeObj *>( pObj ) !=  nullptr)
                                             nConnectorCount++;
@@ -515,7 +515,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 {
                                     for(size_t a = 0; a < aConnectorContainer.size(); ++a)
                                     {
-                                        ImpRememberOrigAndClone* pRem = aConnectorContainer[a];
+                                        ImpRememberOrigAndClone* pRem = &aConnectorContainer[a];
 
                                         if(dynamic_cast< const SdrEdgeObj *>( pRem->pClone ) !=  nullptr)
                                         {
@@ -588,10 +588,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                         }
                                     }
                                 }
-
-                                // cleanup remember classes
-                                for(ImpRememberOrigAndClone* p : aConnectorContainer)
-                                    delete p;
 
                                 if( pMarkList != mpDragSrcMarkList.get() )
                                     delete pMarkList;

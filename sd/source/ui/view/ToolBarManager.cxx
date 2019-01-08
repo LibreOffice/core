@@ -804,12 +804,8 @@ void ToolBarManager::Implementation::Update (
                 mrBase.GetViewShellManager());
 
             // 3) Unlock the ViewShellManager::UpdateLock.  This updates the
-            // shell stack.  We have to be carefully here.  The deletion of
-            // the lock may end in a synchronous call to LockUpdate(). When
-            // at this time the lock has been deleted but the unique_ptr has
-            // not yet been reset then the lock is deleted a second time.
-            ViewShellManager::UpdateLock* pLock = mpViewShellManagerLock.release();
-            delete pLock;
+            // shell stack.
+            mpViewShellManagerLock.reset();
 
             // 4) Make the UNO tool bars visible.  The outstanding call to
             // PostUpdate() is done via PostUserEvent() so that it is
@@ -833,11 +829,7 @@ void ToolBarManager::Implementation::Update (
         }
         else
         {
-            //do this in two steps, first clear mpViewShellManagerLock to be NULL
-            ViewShellManager::UpdateLock* pLock = mpViewShellManagerLock.release();
-            //now delete the lock so reentry to this method triggered by this
-            //delete will encounter an empty mpViewShellManagerLock
-            delete pLock;
+            mpViewShellManagerLock.reset();
             pLocalLayouterLock.reset();
         }
     }

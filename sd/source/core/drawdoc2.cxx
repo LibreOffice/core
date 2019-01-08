@@ -1047,7 +1047,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject const * pObj,
         if ( auto pGrafObj = dynamic_cast< const SdrGrafObj *>( pObj ) ) // simple graphics object
         {
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
-            SdrGrafObjGeoData*  pGeoData = static_cast<SdrGrafObjGeoData*>( pGrafObj->GetGeoData() );
+            std::unique_ptr<SdrGrafObjGeoData> pGeoData(static_cast<SdrGrafObjGeoData*>( pGrafObj->GetGeoData() ));
 
             // Undo rotation
             if ( rGeo.nRotationAngle )
@@ -1067,7 +1067,6 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject const * pObj,
                 aGraphSize = OutputDevice::LogicToLogic( pGrafObj->GetGrafPrefSize(),
                                                          pGrafObj->GetGrafPrefMapMode(), aMap100 );
 
-            delete pGeoData;
             bObjSupported = true;
         }
         else if ( auto pOleObj = dynamic_cast<const SdrOle2Obj* >(pObj) ) // OLE object
