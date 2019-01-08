@@ -992,7 +992,6 @@ include/sfx2/sidebar/SidebarToolBox.hxx:55
     1
 include/sfx2/tabdlg.hxx:99
     void SfxTabDialog::Init_Impl(_Bool)
-    _Bool bFmtFlag
     0
 include/sfx2/thumbnailview.hxx:225
     void ThumbnailView::ShowTooltips(_Bool)
