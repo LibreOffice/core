@@ -47,7 +47,7 @@ $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
 	postgresql \
 	$(if $(filter-out MSC,$(COM)), \
 		openssl \
-		openldap \
+		$(if $(ENABLE_LDAP),openldap) \
 		nss3 \
 		plc4 \
 		ssl3 \

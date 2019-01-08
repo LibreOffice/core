@@ -16,7 +16,6 @@ $(eval $(call gb_Module_add_l10n_targets,extensions,\
 ifneq ($(filter-out iOS ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_abp \
-	Library_ldapbe2 \
 	Library_log \
 	Library_scn \
 	$(if $(filter WNT,$(OS)), \
@@ -25,6 +24,12 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	) \
 	UIConfig_sabpilot \
 	UIConfig_scanner \
+))
+endif
+
+ifeq ($(ENABLE_LDAP),TRUE)
+$(eval $(call gb_Module_add_targets,extensions,\
+	Library_ldapbe2 \
 ))
 endif
 

@@ -295,7 +295,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	desktop/source/offacc/offacc \
 	$(if $(DISABLE_GUI),,desktop/source/splash/spl) \
 	extensions/source/abpilot/abp \
-	extensions/source/config/ldap/ldapbe2 \
+	$(if $(ENABLE_LDAP),extensions/source/config/ldap/ldapbe2) \
 	$(if $(filter WNT,$(OS)),\
 		extensions/source/config/WinUserInfo/WinUserInfoBe \
 	) \

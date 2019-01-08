@@ -1509,6 +1509,11 @@ libo_FUZZ_ARG_ENABLE(formula-logger,
     )
 )
 
+AC_ARG_ENABLE(ldap,
+    AS_HELP_STRING([--disable-ldap],
+        [Disable LDAP support.]),
+,enable_ldap=yes)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -9061,12 +9066,29 @@ else
 fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
 
+dnl ===================================================================
+dnl Enable LDAP support in Base
+dnl ===================================================================
+
+if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android"; then
+AC_MSG_CHECKING([whether to enable LDAP support])
+    if test "$enable_ldap" != "yes"; then
+        AC_MSG_RESULT([no])
+        ENABLE_LDAP=""
+        enable_ldap=no
+    else
+        AC_MSG_RESULT([yes])
+        ENABLE_LDAP="TRUE"
+        AC_DEFINE(HAVE_FEATURE_LDAP)
+    fi
+fi
+AC_SUBST(ENABLE_LDAP)
 
 dnl ===================================================================
 dnl Check for system openldap
 dnl ===================================================================
 
-if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android"; then
+if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android" -a "$ENABLE_LDAP" != ""; then
 AC_MSG_CHECKING([which openldap library to use])
 if test "$with_system_openldap" = "yes"; then
     AC_MSG_RESULT([external])
