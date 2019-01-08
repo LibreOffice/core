@@ -15,52 +15,41 @@
 
 #include <memory>
 
-struct HBRUSHDeleter
+template <typename H, auto DeleterFunc> struct GDIDeleter
 {
-    using pointer = HBRUSH;
-    void operator()(HBRUSH hBrush) { DeleteBrush(hBrush); }
+    using pointer = H;
+    void operator()(H h) { DeleterFunc(h); }
 };
 
-struct HRGNDeleter
-{
-    using pointer = HRGN;
-    void operator()(HRGN hRgn) { DeleteRegion(hRgn); }
-};
+template <typename H, auto DeleterFunc>
+using ScopedGDI = std::unique_ptr<H, GDIDeleter<H, DeleterFunc>>;
 
-struct HDCDeleter
-{
-    using pointer = HDC;
-    void operator()(HDC hDC) { DeleteDC(hDC); }
-};
+using ScopedHBRUSH = ScopedGDI<HBRUSH, DeleteBrush>;
+using ScopedHRGN = ScopedGDI<HRGN, DeleteRegion>;
+using ScopedHDC = ScopedGDI<HDC, DeleteDC>;
+using ScopedHPEN = ScopedGDI<HPEN, DeletePen>;
+using ScopedHFONT = ScopedGDI<HFONT, DeleteFont>;
 
-struct HPENDeleter
-{
-    using pointer = HPEN;
-    void operator()(HPEN hPen) { DeletePen(hPen); }
-};
-
-using ScopedHBRUSH = std::unique_ptr<HBRUSH, HBRUSHDeleter>;
-using ScopedHRGN = std::unique_ptr<HRGN, HRGNDeleter>;
-using ScopedHDC = std::unique_ptr<HDC, HDCDeleter>;
-using ScopedHPEN = std::unique_ptr<HPEN, HPENDeleter>;
-
-class ScopedSelectedHPEN
+template <typename ScopedH, auto SelectorFunc> class ScopedSelectedGDI
 {
 public:
-    ScopedSelectedHPEN(HDC hDC, HPEN hPen)
+    ScopedSelectedGDI(HDC hDC, typename ScopedH::pointer h)
         : m_hDC(hDC)
-        , m_hOrigPen(SelectPen(hDC, hPen))
-        , m_hSelectedPen(hPen)
+        , m_hSelectedH(h)
+        , m_hOrigH(SelectorFunc(hDC, h))
     {
     }
 
-    ~ScopedSelectedHPEN() { SelectPen(m_hDC, m_hOrigPen); }
+    ~ScopedSelectedGDI() { SelectorFunc(m_hDC, m_hOrigH); }
 
 private:
     HDC m_hDC;
-    HPEN m_hOrigPen;
-    ScopedHPEN m_hSelectedPen;
+    ScopedH m_hSelectedH;
+    typename ScopedH::pointer m_hOrigH;
 };
+
+using ScopedSelectedHPEN = ScopedSelectedGDI<ScopedHPEN, SelectPen>;
+using ScopedSelectedHFONT = ScopedSelectedGDI<ScopedHFONT, SelectFont>;
 
 #endif // INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
 
