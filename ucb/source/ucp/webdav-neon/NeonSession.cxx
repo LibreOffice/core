@@ -725,13 +725,23 @@ void NeonSession::Init()
             m_aProxyName = rProxyCfg.aName;
             m_nProxyPort = rProxyCfg.nPort;
 
+            bCreateNewSession = true;
+        }
+
+        if (m_bNeedNewSession) // Something happened that could invalidate m_pHttpSession
+        {
+            bCreateNewSession = true;
+            m_bNeedNewSession = false;
+        }
+
+        if (bCreateNewSession)
+        {
             // new session needed, destroy old first
             {
-                osl::Guard< osl::Mutex > theGlobalGuard(getGlobalNeonMutex());
-                ne_session_destroy( m_pHttpSession );
+                osl::Guard<osl::Mutex> theGlobalGuard(getGlobalNeonMutex());
+                ne_session_destroy(m_pHttpSession);
             }
             m_pHttpSession = nullptr;
-            bCreateNewSession = true;
         }
     }
 
@@ -1966,6 +1976,12 @@ void NeonSession::HandleError( int nError,
                                     m_aHostName, m_nPort ) );
 
         case NE_AUTH:         // User authentication failed on server
+            // m_pHttpSession could get invalidated, e.g., as result of clean_session called in
+            // ah_post_send in case when auth_challenge failed, which invalidates the auth_session
+            // which we established in Init(): the auth_session's sspi_host gets disposed, and
+            // following attempt to authenticate using sspi would crash in continue_sspi trying to
+            // dereference it
+            m_bNeedNewSession = true;
             throw DAVException( DAVException::DAV_HTTP_AUTH,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
