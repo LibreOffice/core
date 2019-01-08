@@ -1586,12 +1586,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         if ( eType == DAV )
         {
-            //xProps.reset(
-            //    new ContentProperties( aUnescapedTitle ) );
-            xProps->addProperty(
-                "Title",
-                uno::makeAny( aUnescapedTitle ),
-                true );
+            if (!xProps)
+                xProps.reset(new ContentProperties(aUnescapedTitle));
+            else
+                xProps->addProperty("Title", uno::makeAny(aUnescapedTitle), true);
         }
         else
         {
