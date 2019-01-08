@@ -1092,6 +1092,8 @@ DECLARE_RTFEXPORT_TEST(testTdf94043, "tdf94043.rtf")
     // This was 0, the separator line was not visible due to 0 width.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2),
                          getProperty<sal_Int32>(xTextColumns, "SeparatorLineWidth"));
+
+    CPPUNIT_ASSERT_EQUAL(7, getParagraphs());
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf94377, "tdf94377.rtf")
