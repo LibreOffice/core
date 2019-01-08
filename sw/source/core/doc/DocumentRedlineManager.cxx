@@ -839,6 +839,25 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             CheckAnchoredFlyConsistency(m_rDoc);
             CHECK_REDLINE( *this )
 
+            std::set<SwRootFrame *> hiddenLayouts;
+            if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
+            {
+                // sw_redlinehide: the problem here is that MoveFromSection
+                // creates the frames wrongly (non-merged), because its own
+                // SwRangeRedline has wrong positions until after the nodes
+                // are all moved, so fix things up by force by re-creating
+                // all merged frames from scratch.
+                std::set<SwRootFrame *> const layouts(m_rDoc.GetAllLayouts());
+                for (SwRootFrame *const pLayout : layouts)
+                {
+                    if (pLayout->IsHideRedlines())
+                    {
+                        pLayout->SetHideRedlines(false);
+                        hiddenLayouts.insert(pLayout);
+                    }
+                }
+            }
+
             for (sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop)
                 for (size_t i = 0; i < mpRedlineTable->size(); ++i)
                 {
@@ -857,24 +876,13 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
 
             CheckAnchoredFlyConsistency(m_rDoc);
             CHECK_REDLINE( *this )
-            m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
-            if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
+
+            for (SwRootFrame *const pLayout : hiddenLayouts)
             {
-                // sw_redlinehide: the problem here is that MoveFromSection
-                // creates the frames wrongly (non-merged), because its own
-                // SwRangeRedline has wrong positions until after the nodes
-                // are all moved, so fix things up by force by re-creating
-                // all merged frames from scratch.
-                std::set<SwRootFrame *> const layouts(m_rDoc.GetAllLayouts());
-                for (SwRootFrame *const pLayout : layouts)
-                {
-                    if (pLayout->IsHideRedlines())
-                    {
-                        pLayout->SetHideRedlines(false);
-                        pLayout->SetHideRedlines(true);
-                    }
-                }
+                pLayout->SetHideRedlines(true);
             }
+
+            m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
         }
         meRedlineFlags = eMode;
         m_rDoc.getIDocumentState().SetModified();
