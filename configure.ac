@@ -10455,7 +10455,7 @@ dnl =================================================
 dnl Check whether to build with dconf support.
 dnl =================================================
 
-if test "$enable_dconf" != no; then
+if test $_os != Android -a $_os != iOS -a "$enable_dconf" != no; then
     PKG_CHECK_MODULES([DCONF], [dconf >= 0.15.2], [], [
         if test "$enable_dconf" = yes; then
             AC_MSG_ERROR([dconf not found])
@@ -10464,7 +10464,7 @@ if test "$enable_dconf" != no; then
         fi])
 fi
 AC_MSG_CHECKING([whether to enable dconf])
-if test "$enable_dconf" = no; then
+if test $_os = Android -o $_os = iOS -o "$enable_dconf" = no; then
     DCONF_CFLAGS=
     DCONF_LIBS=
     ENABLE_DCONF=
