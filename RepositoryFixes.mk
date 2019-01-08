@@ -75,11 +75,7 @@ gb_Library_FILENAMES := $(patsubst store:libuno_store%,store:libstore%,$(gb_Libr
 gb_Library_FILENAMES := $(patsubst sunjavaplugin:libsunjavaplugin%,sunjavaplugin:sunjavaplugin%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jurt:libjpipe.dylib%,jurt:libjpipe.jnilib%,$(gb_Library_FILENAMES))
 
-ifneq ($(MACOSX_DEPLOYMENT_TARGET),10.4) # default to use libc++
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libc++.dylib,$(gb_Library_FILENAMES))
-else # use libstdc++ instead on ancient MacOSX targets
-gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.dylib,$(gb_Library_FILENAMES))
-endif
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
 
 endif # ifeq ($(OS),MACOSX)
