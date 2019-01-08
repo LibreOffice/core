@@ -1763,7 +1763,9 @@ void SectionPropertyMap::ApplyProperties_( const uno::Reference< beans::XPropert
 
         for ( beans::PropertyValue* pIter = vPropVals.begin(); pIter != vPropVals.end(); ++pIter )
         {
-            if ( pIter != pCharGrabBag && pIter != pParaGrabBag )
+            if ( pIter != pCharGrabBag && pIter != pParaGrabBag
+                 && pIter->Name != "IsProtected" //section-only property
+               )
             {
                 vNames.push_back( pIter->Name );
                 vValues.push_back( pIter->Value );
