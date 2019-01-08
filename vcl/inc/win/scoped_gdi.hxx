@@ -39,10 +39,17 @@ struct HPENDeleter
     void operator()(HPEN hPen) { DeletePen(hPen); }
 };
 
+struct HFONTDeleter
+{
+    using pointer = HFONT;
+    void operator()(HFONT hFont) { DeleteFont(hFont); }
+};
+
 using ScopedHBRUSH = std::unique_ptr<HBRUSH, HBRUSHDeleter>;
 using ScopedHRGN = std::unique_ptr<HRGN, HRGNDeleter>;
 using ScopedHDC = std::unique_ptr<HDC, HDCDeleter>;
 using ScopedHPEN = std::unique_ptr<HPEN, HPENDeleter>;
+using ScopedHFONT = std::unique_ptr<HFONT, HFONTDeleter>;
 
 class ScopedSelectedHPEN
 {
@@ -60,6 +67,24 @@ private:
     HDC m_hDC;
     HPEN m_hOrigPen;
     ScopedHPEN m_hSelectedPen;
+};
+
+class ScopedSelectedHFONT
+{
+public:
+    ScopedSelectedHFONT(HDC hDC, HFONT hFont)
+        : m_hDC(hDC)
+        , m_hOrigFont(SelectFont(hDC, hFont))
+        , m_hSelectedFont(hFont)
+    {
+    }
+
+    ~ScopedSelectedHFONT() { SelectFont(m_hDC, m_hOrigFont); }
+
+private:
+    HDC m_hDC;
+    HFONT m_hOrigFont;
+    ScopedHFONT m_hSelectedFont;
 };
 
 #endif // INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
