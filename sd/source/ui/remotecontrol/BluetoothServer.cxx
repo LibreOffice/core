@@ -90,14 +90,13 @@ struct sd::BluetoothServer::Impl {
     // the glib mainloop running in the thread
     GMainContext *mpContext;
     DBusConnection *mpConnection;
-    DBusObject *mpService;
+    std::unique_ptr<DBusObject> mpService;
     enum class BluezVersion { BLUEZ4, BLUEZ5, UNKNOWN };
     BluezVersion maBluezVersion;
 
     Impl()
         : mpContext( g_main_context_new() )
         , mpConnection( nullptr )
-        , mpService( nullptr )
         , maBluezVersion( BluezVersion::UNKNOWN )
     { }
 
@@ -853,17 +852,15 @@ setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscov
     }
 }
 
-static DBusObject *
+static std::unique_ptr<DBusObject>
 registerWithDefaultAdapter( DBusConnection *pConnection )
 {
-    DBusObject *pService;
-    pService = bluez4GetDefaultService( pConnection );
+    std::unique_ptr<DBusObject> pService(bluez4GetDefaultService( pConnection ));
     if( pService )
     {
-        if( !bluez4RegisterServiceRecord( pConnection, pService,
+        if( !bluez4RegisterServiceRecord( pConnection, pService.get(),
                                      bluetooth_service_record ) )
         {
-            delete pService;
             return nullptr;
         }
     }
