@@ -10,7 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,postgresql))
 
 $(eval $(call gb_ExternalProject_use_externals,postgresql,\
-	openldap \
+	$(if $(ENABLE_LDAP),openldap) \
 	openssl \
 	zlib \
 ))
@@ -64,9 +64,10 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			$(if $(DISABLE_OPENSSL),,--with-openssl \
 				$(if $(WITH_KRB5), --with-krb5) \
 				$(if $(WITH_GSSAPI),--with-gssapi)) \
+				$(if $(ENABLE_LDAP),,--with-ldap=no) \
 			CPPFLAGS="$(postgresql_CPPFLAGS)" \
 			LDFLAGS="$(postgresql_LDFLAGS)" \
-			EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4" \
+			$(if $(ENABLE_LDAP),EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4") \
 		&& cd src/interfaces/libpq \
 		&& MAKEFLAGS= && $(MAKE) all-static-lib)
 
