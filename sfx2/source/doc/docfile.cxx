@@ -3068,7 +3068,7 @@ void SfxMedium::CloseAndReleaseStreams_Impl()
             pImpl->m_xLockingStream.clear();
     }
 
-    // The probably exsisting SvStream wrappers should be closed first
+    // The probably existing SvStream wrappers should be closed first
     CloseStreams_Impl();
 
     // in case of salvage mode the storage is based on the streams
