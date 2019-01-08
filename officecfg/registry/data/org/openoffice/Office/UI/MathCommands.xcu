@@ -172,7 +172,7 @@
             </node>
             <node oor:name=".uno:View50" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">0.5</value>
+                    <value xml:lang="en-US">Zoom 50%</value>
                 </prop>
             </node>
         </node>
