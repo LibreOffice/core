@@ -555,7 +555,11 @@ void PDFOutDev::processLink(Link* link, Catalog*)
     LinkAction* pAction = link->getAction();
     if (pAction && pAction->getKind() == actionURI)
     {
+#if POPPLER_CHECK_VERSION(0, 72, 0)
+        const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->c_str();
+#else
         const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->getCString();
+#endif
 
         std::vector<char> aEsc( lcl_escapeLineFeeds(pURI) );
 
@@ -757,7 +761,11 @@ void PDFOutDev::updateFont(GfxState *state)
 
             aFont = it->second;
 
+#if POPPLER_CHECK_VERSION(0, 72, 0)
+            std::vector<char> aEsc( lcl_escapeLineFeeds(aFont.familyName.c_str()) );
+#else
             std::vector<char> aEsc( lcl_escapeLineFeeds(aFont.familyName.getCString()) );
+#endif
             printf( " %d %d %d %d %f %d %s",
                     aFont.isEmbedded,
                     aFont.isBold,
