@@ -388,7 +388,7 @@ SfxTabDialog::SfxTabDialog
     , m_bStandardPushed(false)
     , m_pExampleSet(nullptr)
 {
-    Init_Impl(/*bEditFmt*/false);
+    Init_Impl();
 
     sal_uInt16 nPageCount = m_pTabCtrl->GetPageCount();
     for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
@@ -466,7 +466,7 @@ void SfxTabDialog::dispose()
     TabDialog::dispose();
 }
 
-void SfxTabDialog::Init_Impl(bool bFmtFlag)
+void SfxTabDialog::Init_Impl()
 /*  [Description]
 
     internal initialization of the dialogue
@@ -537,14 +537,6 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     {
         m_pUserBtn->SetClickHdl( LINK( this, SfxTabDialog, UserHdl ) );
         m_pUserBtn->Show();
-    }
-
-    if ( bFmtFlag )
-    {
-        m_pBaseFmtBtn->SetText( SfxResId( STR_STANDARD_SHORTCUT ) );
-        m_pBaseFmtBtn->SetClickHdl( LINK( this, SfxTabDialog, BaseFmtHdl ) );
-        m_pBaseFmtBtn->SetHelpId( HID_TABDLG_STANDARD_BTN );
-        m_pBaseFmtBtn->Show();
     }
 
     if ( m_pSet )
