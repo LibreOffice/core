@@ -44,6 +44,8 @@
 #include <win/svsys.h>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
+#include <win/scoped_gdi.hxx>
+#include <win/scoped_selected_gdi.hxx>
 
 #include <uxtheme.h>
 #include <vssym32.h>
@@ -52,6 +54,7 @@
 #include <string>
 #include <boost/optional.hpp>
 #include <ControlCacheKey.hxx>
+
 using namespace std;
 
 typedef map< wstring, HTHEME > ThemeMap;
@@ -457,20 +460,15 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
         GdiGradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
         // and a darker horizontal line under that
-        HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
-        HPEN hOrigPen = static_cast<HPEN>(SelectObject(hDC, hpen));
+        ScopedSelectedHPEN(hDC, CreatePen(PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0)));
 
         MoveToEx( hDC, rc.left, gradient_bottom, nullptr );
         LineTo( hDC, rc.right, gradient_bottom );
-
-        SelectObject(hDC, hOrigPen);
-        DeleteObject(hpen);
     }
     else
     {
-        HBRUSH hbrush = CreateSolidBrush( RGB( 0xf0, 0xf0, 0xf0 ) );
-        FillRect( hDC, &rc, hbrush );
-        DeleteObject( hbrush );
+        ScopedHBRUSH hbrush(CreateSolidBrush(RGB(0xf0, 0xf0, 0xf0)));
+        FillRect(hDC, &rc, hbrush.get());
 
         // darker line to distinguish the toolbar and viewshell
         // it is drawn only for the horizontal toolbars; it did not look well
@@ -483,14 +481,10 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
             to_x = rc.right;
             from_y = to_y = rc.top;
 
-            HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
-            HPEN hOrigPen = static_cast<HPEN>(SelectObject(hDC, hpen));
+            ScopedSelectedHPEN(hDC, CreatePen(PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0)));
 
             MoveToEx( hDC, from_x, from_y, nullptr );
             LineTo( hDC, to_x, to_y );
-
-            SelectObject(hDC, hOrigPen);
-            DeleteObject(hpen);
         }
     }
 }
