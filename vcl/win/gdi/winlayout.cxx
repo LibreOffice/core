@@ -235,7 +235,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
     HDC hDC)
 {
     HFONT hFont = static_cast<HFONT>(GetCurrentObject( hDC, OBJ_FONT ));
-    HFONT hAltFont = nullptr;
+    ScopedHFONT hAltFont;
     bool bUseAltFont = false;
     bool bShift = false;
     if (rLayout.GetFont().GetFontSelectPattern().mbVertical)
@@ -246,14 +246,14 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
         {
             memmove(&aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1],
                 sizeof(aLogFont.lfFaceName)-sizeof(aLogFont.lfFaceName[0]));
-            hAltFont = CreateFontIndirectW(&aLogFont);
+            hAltFont.reset(CreateFontIndirectW(&aLogFont));
         }
         else
         {
             bShift = true;
             aLogFont.lfEscapement += 2700;
             aLogFont.lfOrientation = aLogFont.lfEscapement;
-            hAltFont = CreateFontIndirectW(&aLogFont);
+            hAltFont.reset(CreateFontIndirectW(&aLogFont));
         }
     }
 
@@ -267,7 +267,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
         if (hAltFont && pGlyph->IsVertical() == bUseAltFont)
         {
             bUseAltFont = !bUseAltFont;
-            SelectFont(hDC, bUseAltFont ? hAltFont : hFont);
+            SelectFont(hDC, bUseAltFont ? hAltFont.get() : hFont);
         }
         if (bShift && pGlyph->IsVertical())
             SetTextAlign(hDC, TA_TOP|TA_LEFT);
@@ -281,7 +281,6 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
     {
         if (bUseAltFont)
             SelectFont(hDC, hFont);
-        DeleteObject(hAltFont);
     }
 
     return true;
@@ -366,12 +365,11 @@ hb_font_t* WinFontInstance::ImplInitHbFont()
 
         // Get the font metrics.
         HDC hDC = m_pGraphics->getHDC();
-        HFONT hNewFont = CreateFontIndirectW(&aLogFont);
-        HGDIOBJ hOrigFont = SelectObject(hDC, hNewFont);
+        ScopedHFONT hNewFont(CreateFontIndirectW(&aLogFont));
+        HGDIOBJ hOrigFont = SelectObject(hDC, hNewFont.get());
         TEXTMETRICW aFontMetric;
         GetTextMetricsW(hDC, &aFontMetric);
         SelectObject(hDC, hOrigFont);
-        DeleteObject(hNewFont);
 
         SetAverageWidthFactor(nUPEM / aFontMetric.tmAveCharWidth);
     }
