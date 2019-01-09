@@ -47,6 +47,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <basic/sbstar.hxx>
 #include <uno/mapping.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1367,13 +1368,15 @@ void SfxBaseController::ShowInfoBars( )
         return;
 
     // CMIS verifications
-    Reference< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
-    if ( !xCmisDoc.is( ) || !xCmisDoc->canCheckOut( ) )
+    auto pModel
+        = dynamic_cast<SfxBaseModel*>(m_pData->m_pViewShell->GetObjectShell()->GetModel().get());
+    if (!pModel || !pModel->canCheckOut())
         return;
 
-    uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
+//    Reference< document::XCmisDocument > xCmisDoc(m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY);
+    uno::Sequence<document::CmisProperty> aCmisProperties = pModel->getCmisProperties();
 
-    if ( !(xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( )) )
+    if (!(pModel->isVersionable() && aCmisProperties.hasElements()))
         return;
 
     // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut

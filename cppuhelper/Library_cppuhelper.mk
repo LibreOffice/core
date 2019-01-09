@@ -45,6 +45,7 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/defaultbootstrap \
 	cppuhelper/source/exc_thrower \
 	cppuhelper/source/factory \
+	cppuhelper/source/fileutil \
 	cppuhelper/source/implbase \
 	cppuhelper/source/implbase_ex \
 	cppuhelper/source/implementationentry \
@@ -61,6 +62,11 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/typeprovider \
 	cppuhelper/source/unourl \
 	cppuhelper/source/weak \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,cppuhelper,\
+	mpr \
+	netapi32 \
 ))
 
 # vim: set noet sw=4 ts=4:

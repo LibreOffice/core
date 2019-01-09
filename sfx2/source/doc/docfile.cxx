@@ -76,8 +76,8 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <cppuhelper/fileutil.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/fileutil.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/fileurl.hxx>
@@ -242,7 +242,7 @@ bool IsFileMovable(const INetURLObject& rURL)
     if (buf.st_nlink > 1 || S_ISLNK(buf.st_mode))
         return false;
 #elif defined _WIN32
-    if (tools::IsMappedWebDAVPath(rURL))
+    if (cppuhelper::IsMappedWebDAVPath(rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE)))
         return false;
 #endif
 
@@ -1382,7 +1382,8 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                                 }
                                 catch (const uno::Exception&)
                                 {
-                                    if (tools::IsMappedWebDAVPath(GetURLObject()))
+                                    if (cppuhelper::IsMappedWebDAVPath(GetURLObject().GetMainURL(
+                                            INetURLObject::DecodeMechanism::NONE)))
                                     {
                                         // This is a path that redirects to a WebDAV resource;
                                         // so failure creating lockfile is not an error here.
