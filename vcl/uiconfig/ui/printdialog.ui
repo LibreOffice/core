@@ -74,16 +74,16 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes" context="printdialog|liststore2">left to right, then down</col>
+        <col id="0" translatable="yes" context="printdialog|liststore2">Left to right, then down</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="printdialog|liststore2">top to bottom, then right</col>
+        <col id="0" translatable="yes" context="printdialog|liststore2">Top to bottom, then right</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="printdialog|liststore2">top to bottom, then left</col>
+        <col id="0" translatable="yes" context="printdialog|liststore2">Top to bottom, then left</col>
       </row>
       <row>
-        <col id="0" translatable="yes" context="printdialog|liststore2">right to left, then down</col>
+        <col id="0" translatable="yes" context="printdialog|liststore2">Right to left, then down</col>
       </row>
     </data>
   </object>
