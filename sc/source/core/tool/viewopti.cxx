@@ -156,9 +156,9 @@ bool ScViewOptions::operator==( const ScViewOptions& rOpt ) const
     return bEqual;
 }
 
-SvxGridItem* ScViewOptions::CreateGridItem() const
+std::unique_ptr<SvxGridItem> ScViewOptions::CreateGridItem() const
 {
-    SvxGridItem* pItem = new SvxGridItem( SID_ATTR_GRID_OPTIONS );
+    std::unique_ptr<SvxGridItem> pItem(new SvxGridItem( SID_ATTR_GRID_OPTIONS ));
 
     pItem->SetFieldDrawX      ( aGridOpt.GetFieldDrawX() );
     pItem->SetFieldDivisionX  ( aGridOpt.GetFieldDivisionX() );

@@ -1965,9 +1965,9 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
         pRet->Put( ScTpPrintItem( GetPrintOptions() ) );
 
         // TP_GRID
-        SvxGridItem* pSvxGridItem = aViewOpt.CreateGridItem();
+        std::unique_ptr<SvxGridItem> pSvxGridItem = aViewOpt.CreateGridItem();
         pRet->Put( *pSvxGridItem );
-        delete pSvxGridItem;
+        pSvxGridItem.reset();
 
         // TP_USERLISTS
         if ( pUL )
