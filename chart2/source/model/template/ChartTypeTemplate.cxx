@@ -711,7 +711,7 @@ void ChartTypeTemplate::createAxes(
 void ChartTypeTemplate::adaptAxes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
 {
-    //adapt properties of exsisting axes and remove superfluous axes
+    //adapt properties of existing axes and remove superfluous axes
 
     if( rCoordSys.getLength() > 0 )
     {
