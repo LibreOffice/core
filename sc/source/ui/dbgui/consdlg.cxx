@@ -426,7 +426,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
         if ( !pEdDataArea->GetText().isEmpty() )
         {
             OUString    aNewEntry( pEdDataArea->GetText() );
-            ScArea**    ppAreas = nullptr;
+            std::unique_ptr<ScArea[]> ppAreas;
             sal_uInt16      nAreaCount = 0;
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
@@ -438,24 +438,17 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
 
                 for ( sal_uInt16 i=0; i<nAreaCount; i++ )
                 {
-                    OUString aNewArea;
+                    const ScArea& rArea = ppAreas[i];
+                    OUString aNewArea = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
+                            rArea.nColEnd, rArea.nRowEnd, rArea.nTab
+                            ).Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
 
-                    if ( ppAreas[i] )
+                    if ( pLbConsAreas->GetEntryPos( aNewArea )
+                         == LISTBOX_ENTRY_NOTFOUND )
                     {
-                        const ScArea& rArea = *(ppAreas[i]);
-                        aNewArea = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
-                                rArea.nColEnd, rArea.nRowEnd, rArea.nTab
-                                ).Format(ScRefFlags::RANGE_ABS_3D, pDoc, eConv);
-
-                        if ( pLbConsAreas->GetEntryPos( aNewArea )
-                             == LISTBOX_ENTRY_NOTFOUND )
-                        {
-                            pLbConsAreas->InsertEntry( aNewArea );
-                        }
-                        delete ppAreas[i];
+                        pLbConsAreas->InsertEntry( aNewArea );
                     }
                 }
-                delete [] ppAreas;
             }
             else if ( VerifyEdit( pEdDataArea ) )
             {

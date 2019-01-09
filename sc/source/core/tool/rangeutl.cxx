@@ -86,7 +86,7 @@ void ScRangeUtil::CutPosString( const OUString&   theAreaStr,
 
 bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
                                 const ScDocument* pDoc,
-                                ScArea***       pppAreas,
+                                std::unique_ptr<ScArea[]>*  ppAreas,
                                 sal_uInt16*         pAreaCount,
                                 bool            /* bAcceptCellRef */,
                                 ScAddress::Details const & rDetails )
@@ -143,12 +143,12 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
 
                 bStrOk = true;
 
-                if ( pppAreas && pAreaCount ) // Array returned ?
+                if ( ppAreas && pAreaCount ) // Array returned ?
                 {
                     SCTAB       nStartTab   = aStartPos.Tab();
                     SCTAB       nEndTab     = aEndPos.Tab();
                     sal_uInt16      nTabCount   = static_cast<sal_uInt16>(nEndTab-nStartTab+1);
-                    ScArea**    theAreas    = new ScArea*[nTabCount];
+                    ppAreas->reset(new ScArea[nTabCount]);
                     SCTAB       nTab        = 0;
                     sal_uInt16      i           = 0;
                     ScArea      theArea( 0, aStartPos.Col(), aStartPos.Row(),
@@ -157,11 +157,10 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
                     nTab = nStartTab;
                     for ( i=0; i<nTabCount; i++ )
                     {
-                        theAreas[i] = new ScArea( theArea );
-                        theAreas[i]->nTab = nTab;
+                        (*ppAreas)[i] = theArea;
+                        (*ppAreas)[i].nTab = nTab;
                         nTab++;
                     }
-                    *pppAreas   = theAreas;
                     *pAreaCount = nTabCount;
                 }
             }
