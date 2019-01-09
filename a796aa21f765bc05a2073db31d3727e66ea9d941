@@ -22,6 +22,30 @@
       "revId": "a796aa21f765bc05a2073db31d3727e66ea9d941",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_b7d047cb",
+        "filename": "sc/IwyuFilter_sc.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-09T07:44:50Z",
+      "side": 1,
+      "message": "If you have a function definition f() which is externally visible (not static, not in an anonymous namespace) and it\u0027s not declared in a header (so actually other translation units could conveniently use it), that\u0027s suspicious. So not removing the include and filtering this hint out looks correct to me. (Usually you don\u0027t hit this because most of the code is in classes, and not in free functions.)",
+      "parentUuid": "5f4e5783_a8ffca65",
+      "range": {
+        "startLine": 704,
+        "startChar": 6,
+        "endLine": 704,
+        "endChar": 45
+      },
+      "revId": "a796aa21f765bc05a2073db31d3727e66ea9d941",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
