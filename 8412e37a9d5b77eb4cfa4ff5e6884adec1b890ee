@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_d77d03e8",
+        "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-09T06:10:58Z",
+      "side": 1,
+      "message": "this is a published interface, which means we can\u0027t change it.\nI suspect you will need to create an XDispatchInformationProvider2 interface which extends XDispatchInformationProvider and make the relevant bits implement XDispatchInformationProvider2",
+      "revId": "8412e37a9d5b77eb4cfa4ff5e6884adec1b890ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
