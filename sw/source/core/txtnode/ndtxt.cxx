@@ -200,8 +200,6 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 
 SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
 :   SwContentNode( rWhere, SwNodeType::Text, pTextColl ),
-    mpNodeNum( nullptr ),
-    mpNodeNumRLHidden(nullptr),
     m_Text(),
     m_pParaIdleData_Impl(nullptr),
     m_bContainsHiddenChars(false),
@@ -3976,20 +3974,19 @@ const SwNodeNum* SwTextNode::GetNum(SwRootFrame const*const pLayout) const
 {
     // invariant: it's only in list in Hide mode if it's in list in normal mode
     assert(mpNodeNum || !mpNodeNumRLHidden);
-    return pLayout && pLayout->IsHideRedlines() ? mpNodeNumRLHidden : mpNodeNum;
+    return pLayout && pLayout->IsHideRedlines() ? mpNodeNumRLHidden.get() : mpNodeNum.get();
 }
 
 void SwTextNode::DoNum(std::function<void (SwNodeNum &)> const& rFunc)
 {
     // temp. clear because GetActualListLevel() may be called and the assert
     // there triggered during update, which is unhelpful
-    SwNodeNum * pBackup(mpNodeNumRLHidden);
-    mpNodeNumRLHidden = nullptr;
+    std::unique_ptr<SwNodeNum> pBackup = std::move(mpNodeNumRLHidden);
     assert(mpNodeNum);
     rFunc(*mpNodeNum);
     if (pBackup)
     {
-        mpNodeNumRLHidden = pBackup;
+        mpNodeNumRLHidden = std::move(pBackup);
         rFunc(*mpNodeNumRLHidden);
     }
 }
@@ -4289,7 +4286,7 @@ void SwTextNode::AddToList()
     if (pList && GetNodes().IsDocNodes()) // not for undo nodes
     {
         assert(!mpNodeNum);
-        mpNodeNum = new SwNodeNum(this, false);
+        mpNodeNum.reset(new SwNodeNum(this, false));
         pList->InsertListItem(*mpNodeNum, false, GetAttrListLevel());
         // iterate all frames & if there's one with hidden layout...
         SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> iter(*this);
@@ -4320,7 +4317,7 @@ void SwTextNode::AddToListRLHidden()
     if (pList)
     {
         assert(!mpNodeNumRLHidden);
-        mpNodeNumRLHidden = new SwNodeNum(this, true);
+        mpNodeNumRLHidden.reset(new SwNodeNum(this, true));
         pList->InsertListItem(*mpNodeNumRLHidden, true, GetAttrListLevel());
     }
 }
@@ -4332,8 +4329,7 @@ void SwTextNode::RemoveFromList()
     if ( IsInList() )
     {
         SwList::RemoveListItem( *mpNodeNum );
-        delete mpNodeNum;
-        mpNodeNum = nullptr;
+        mpNodeNum.reset();
 
         SetWordCountDirty( true );
     }
@@ -4345,8 +4341,7 @@ void SwTextNode::RemoveFromListRLHidden()
     {
         assert(mpNodeNumRLHidden->GetParent() || !GetNodes().IsDocNodes());
         SwList::RemoveListItem(*mpNodeNumRLHidden);
-        delete mpNodeNumRLHidden;
-        mpNodeNumRLHidden = nullptr;
+        mpNodeNumRLHidden.reset();
 
         SetWordCountDirty( true );
     }
