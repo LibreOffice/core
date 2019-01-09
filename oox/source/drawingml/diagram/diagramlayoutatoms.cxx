@@ -99,6 +99,24 @@ sal_Int32 getConnectorType(const oox::drawingml::LayoutNode* pNode)
 
     return nType;
 }
+
+/**
+ * Determines if pShape is (or contains) a presentation of a data node of type
+ * nType.
+ */
+bool containsDataNodeType(const oox::drawingml::ShapePtr& pShape, sal_Int32 nType)
+{
+    if (pShape->getDataNodeType() == nType)
+        return true;
+
+    for (const auto& pChild : pShape->getChildren())
+    {
+        if (containsDataNodeType(pChild, nType))
+            return true;
+    }
+
+    return false;
+}
 }
 
 namespace oox { namespace drawingml {
@@ -533,6 +551,15 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 break;
 
             sal_Int32 nCount = rShape->getChildren().size();
+
+            if (mnType == XML_hierRoot && nCount == 3)
+            {
+                // Order assistant nodes above employee nodes.
+                std::vector<ShapePtr>& rChildren = rShape->getChildren();
+                if (!containsDataNodeType(rChildren[1], XML_asst)
+                    && containsDataNodeType(rChildren[2], XML_asst))
+                    std::swap(rChildren[1], rChildren[2]);
+            }
 
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromT)
@@ -972,6 +999,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
         while( aVecIter != aVecEnd )
         {
             DiagramData::PointNameMap& rMap = mrDgm.getData()->getPointNameMap();
+            // pPresNode is the presentation node of the aDataNode2 data node.
             DiagramData::PointNameMap::const_iterator aDataNode2 = rMap.find(aVecIter->first);
             if (aDataNode2 == rMap.end())
             {
@@ -979,6 +1007,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 ++aVecIter;
                 continue;
             }
+
+            rShape->setDataNodeType(aDataNode2->second->mnType);
 
             if( aVecIter->second == 0 )
             {
