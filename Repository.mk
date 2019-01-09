@@ -44,6 +44,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
+    regsingleton \
+    sp2bv \
     spadmin.bin \
 ))
 
@@ -58,8 +60,10 @@ $(eval $(call gb_Helper_register_executables,SDK, \
 
 $(eval $(call gb_Helper_register_executables,UREBIN, \
     javaldx \
+    regcomp \
     regmerge \
     regview \
+    uno \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \

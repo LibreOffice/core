@@ -19,31 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJNAME=bridges
-TARGET=java_uno
-PACKAGE=com$/sun$/star$/bridges$/jni_uno
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-JARFILES=jurt.jar ridl.jar
-JAVAFILES=$(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_proxy.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_info_holder.class
-
-JARCLASSDIRS=$(PACKAGE)
-JARTARGET=$(TARGET).jar
-JARCOMPRESS=TRUE
-JARCLASSPATH = $(JARFILES) ../../lib/ ../bin/
-CUSTOMMANIFESTFILE = manifest
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

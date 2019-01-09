@@ -1,7 +1,2 @@
 pt	cpputools	:	cppuhelper offapi LIBXML2:libxml2 NULL
-pt	cpputools								usr1	-	all	pt_mkout NULL
-pt	cpputools\prj							get		-	all	pt_prj NULL
-pt	cpputools\source\registercomponent		nmake	-	all	pt_regcomp NULL
-pt	cpputools\source\regsingleton				nmake	-	all	pt_regsingleton NULL
-pt	cpputools\source\unoexe					nmake	-	all	pt_unoexe NULL
-pt	cpputools\source\sp2bv					nmake	-	all	pt_sp2bv NULL
+pt	cpputools\prj							nmake		-	all	pt_prj NULL

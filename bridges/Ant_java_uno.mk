@@ -20,30 +20,8 @@
 #**************************************************************
 
 
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
 
-PRJNAME=bridges
-TARGET=java_uno
-PACKAGE=com$/sun$/star$/bridges$/jni_uno
+$(eval $(call gb_Ant_Ant,java_uno,$(SRCDIR)/bridges/java/java_uno/build.xml))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-JARFILES=jurt.jar ridl.jar
-JAVAFILES=$(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_proxy.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_info_holder.class
-
-JARCLASSDIRS=$(PACKAGE)
-JARTARGET=$(TARGET).jar
-JARCOMPRESS=TRUE
-JARCLASSPATH = $(JARFILES) ../../lib/ ../bin/
-CUSTOMMANIFESTFILE = manifest
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:
 

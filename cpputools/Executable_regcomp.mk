@@ -20,30 +20,32 @@
 #**************************************************************
 
 
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
 
-PRJNAME=bridges
-TARGET=java_uno
-PACKAGE=com$/sun$/star$/bridges$/jni_uno
+$(eval $(call gb_Executable_Executable,regcomp))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Executable_add_linked_libs,regcomp,\
+	cppu \
+	cppuhelper \
+	sal \
+	stl \
+    $(gb_STDLIBS) \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Executable_set_private_extract_of_public_api,regcomp,$(OUTDIR)/bin/udkapi.rdb,\
+	com.sun.star.uno.TypeClass \
+	com.sun.star.lang.XMultiServiceFactory \
+	com.sun.star.lang.XSingleServiceFactory \
+	com.sun.star.lang.XMultiComponentFactory \
+	com.sun.star.lang.XSingleComponentFactory \
+	com.sun.star.lang.XComponent \
+	com.sun.star.container.XContentEnumerationAccess \
+	com.sun.star.container.XSet \
+	com.sun.star.loader.CannotActivateFactoryException \
+	com.sun.star.registry.XImplementationRegistration2 \
+))
 
-JARFILES=jurt.jar ridl.jar
-JAVAFILES=$(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
+$(eval $(call gb_Executable_add_exception_objects,regcomp,\
+	cpputools/source/registercomponent/registercomponent \
+))
 
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_proxy.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_info_holder.class
-
-JARCLASSDIRS=$(PACKAGE)
-JARTARGET=$(TARGET).jar
-JARCOMPRESS=TRUE
-JARCLASSPATH = $(JARFILES) ../../lib/ ../bin/
-CUSTOMMANIFESTFILE = manifest
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

@@ -20,30 +20,23 @@
 #**************************************************************
 
 
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
 
-PRJNAME=bridges
-TARGET=java_uno
-PACKAGE=com$/sun$/star$/bridges$/jni_uno
+$(eval $(call gb_Module_Module,cpputools))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_add_targets,cpputools,\
+	Executable_regcomp \
+	Executable_regsingleton \
+	Executable_sp2bv \
+	Executable_uno \
+))
 
-.INCLUDE :  settings.mk
+ifeq ($(GUIBASE),WIN)
+else ifeq ($(GUIBASE),OS2)
+else
+$(eval $(call gb_Module_add_targets,cpputools,\
+	Package_bin \
+))
+endif
 
-JARFILES=jurt.jar ridl.jar
-JAVAFILES=$(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_proxy.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_info_holder.class
-
-JARCLASSDIRS=$(PACKAGE)
-JARTARGET=$(TARGET).jar
-JARCOMPRESS=TRUE
-JARCLASSPATH = $(JARFILES) ../../lib/ ../bin/
-CUSTOMMANIFESTFILE = manifest
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

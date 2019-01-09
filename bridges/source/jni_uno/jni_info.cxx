@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_bridges.hxx"
+#include "precompiled_bridges_java_uno.hxx"
 #include "jni_bridge.h"
 
 #include "com/sun/star/uno/RuntimeException.hpp"

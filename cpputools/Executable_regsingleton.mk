@@ -20,30 +20,35 @@
 #**************************************************************
 
 
-PRJ=..$/..$/..$/..$/..$/..$/..$/..
 
-PRJNAME=bridges
-TARGET=java_uno
-PACKAGE=com$/sun$/star$/bridges$/jni_uno
+$(eval $(call gb_Executable_Executable,regsingleton))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Executable_add_linked_libs,regsingleton,\
+	cppu \
+	cppuhelper \
+	sal \
+	stl \
+    $(gb_STDLIBS) \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Executable_set_private_extract_of_public_api,regsingleton,$(OUTDIR)/bin/udkapi.rdb,\
+ 	com.sun.star.uno.TypeClass \
+ 	com.sun.star.uno.XAggregation \
+ 	com.sun.star.uno.XWeak \
+ 	com.sun.star.uno.XComponentContext \
+ 	com.sun.star.lang.XTypeProvider \
+ 	com.sun.star.lang.XComponent \
+ 	com.sun.star.lang.XSingleServiceFactory \
+ 	com.sun.star.lang.XSingleComponentFactory \
+ 	com.sun.star.lang.XMultiServiceFactory \
+ 	com.sun.star.lang.XMultiComponentFactory \
+ 	com.sun.star.container.XHierarchicalNameAccess \
+	com.sun.star.registry.XSimpleRegistry \
+	com.sun.star.registry.XRegistryKey \
+))
 
-JARFILES=jurt.jar ridl.jar
-JAVAFILES=$(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
+$(eval $(call gb_Executable_add_exception_objects,regsingleton,\
+	cpputools/source/regsingleton/regsingleton \
+))
 
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_proxy.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/JNI_info_holder.class
-
-JARCLASSDIRS=$(PACKAGE)
-JARTARGET=$(TARGET).jar
-JARCOMPRESS=TRUE
-JARCLASSPATH = $(JARFILES) ../../lib/ ../bin/
-CUSTOMMANIFESTFILE = manifest
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:
