@@ -22,13 +22,13 @@
 #include <cassert>
 #include <cstddef>
 #include <limits>
+#include <string_view>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <o3tl/string_view.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <rtl/string.h>
@@ -60,7 +60,7 @@ class Components;
 
 namespace {
 
-OString convertToUtf8(o3tl::u16string_view text) {
+OString convertToUtf8(std::u16string_view text) {
     OString s;
     assert(text.size() <= sal_uInt32(std::numeric_limits<sal_Int32>::max()));
     if (!rtl_convertUStringToString(
@@ -140,7 +140,7 @@ oslFileError TempFile::flush() {
     return e;
 }
 
-void TempFile::writeString(o3tl::string_view text) {
+void TempFile::writeString(std::string_view text) {
     buffer.append(text.data(), text.size());
     if (buffer.getLength() > 0x10000)
         flush();
@@ -186,8 +186,8 @@ void writeValueContent_(
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
             'D', 'E', 'F' };
         handle.writeString(
-            o3tl::string_view(hexDigit + ((value[i] >> 4) & 0xF), 1));
-        handle.writeString(o3tl::string_view(hexDigit + (value[i] & 0xF), 1));
+            std::string_view(hexDigit + ((value[i] >> 4) & 0xF), 1));
+        handle.writeString(std::string_view(hexDigit + (value[i] & 0xF), 1));
     }
 }
 
@@ -281,7 +281,7 @@ void writeValue(TempFile &handle, Type type, css::uno::Any const & value) {
 
 void writeNode(
     Components & components, TempFile &handle,
-    rtl::Reference< Node > const & parent, o3tl::u16string_view name,
+    rtl::Reference< Node > const & parent, std::u16string_view name,
     rtl::Reference< Node > const & node)
 {
     static xmlreader::Span const typeNames[] = {
@@ -316,7 +316,7 @@ void writeNode(
                 if (type != TYPE_NIL) {
                     handle.writeString(" oor:type=\"");
                     handle.writeString(
-                        o3tl::string_view(
+                        std::string_view(
                             typeNames[type].begin, typeNames[type].length));
                     handle.writeString("\"");
                 }
@@ -359,7 +359,7 @@ void writeNode(
                 if (type != TYPE_NIL) {
                     handle.writeString(" oor:type=\"");
                     handle.writeString(
-                        o3tl::string_view(
+                        std::string_view(
                             typeNames[type].begin, typeNames[type].length));
                     handle.writeString("\"");
                 }
@@ -479,7 +479,7 @@ void writeModifications(
 
 }
 
-void writeAttributeValue(TempFile &handle, o3tl::u16string_view value) {
+void writeAttributeValue(TempFile &handle, std::u16string_view value) {
     std::size_t i = 0;
     std::size_t j = i;
     for (; j != value.size(); ++j) {
@@ -524,7 +524,7 @@ void writeAttributeValue(TempFile &handle, o3tl::u16string_view value) {
     handle.writeString(convertToUtf8(value.substr(i, j - i)));
 }
 
-void writeValueContent(TempFile &handle, o3tl::u16string_view value) {
+void writeValueContent(TempFile &handle, std::u16string_view value) {
     std::size_t i = 0;
     std::size_t j = i;
     for (; j != value.size(); ++j) {

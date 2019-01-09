@@ -28,6 +28,10 @@
 #include <ostream>
 #include <string.h>
 
+#if defined LIBO_INTERNAL_ONLY
+#include <string_view>
+#endif
+
 #include "rtl/textenc.h"
 #include "rtl/string.h"
 #include "rtl/stringutils.hxx"
@@ -1787,6 +1791,9 @@ public:
         return number(d);
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    operator std::string_view() const { return {getStr(), sal_uInt32(getLength())}; }
+#endif
 };
 
 /* ======================================================================= */

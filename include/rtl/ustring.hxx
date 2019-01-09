@@ -27,6 +27,10 @@
 #include <new>
 #include <ostream>
 
+#if defined LIBO_INTERNAL_ONLY
+#include <string_view>
+#endif
+
 #include "rtl/ustring.h"
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
@@ -3543,6 +3547,10 @@ public:
         rtl_uString_newFromAscii( &pNew, value );
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    operator std::u16string_view() const { return {getStr(), sal_uInt32(getLength())}; }
+#endif
 
 private:
     OUString & internalAppend( rtl_uString* pOtherData )

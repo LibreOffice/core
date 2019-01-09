@@ -22,7 +22,8 @@
 
 #include <sal/config.h>
 
-#include <o3tl/string_view.hxx>
+#include <string_view>
+
 #include <rtl/strbuf.hxx>
 
 namespace configmgr {
@@ -43,15 +44,15 @@ struct TempFile {
 #ifdef _WIN32
     oslFileError closeWithoutUnlink();
 #endif
-    void writeString(o3tl::string_view text);
+    void writeString(std::string_view text);
 
 private:
     TempFile(const TempFile&) = delete;
     TempFile& operator=(const TempFile&) = delete;
 };
 
-void writeAttributeValue(TempFile &handle, o3tl::u16string_view value);
-void writeValueContent(TempFile &handle, o3tl::u16string_view value);
+void writeAttributeValue(TempFile &handle, std::u16string_view value);
+void writeValueContent(TempFile &handle, std::u16string_view value);
 
 void writeModFile(
     Components & components, OUString const & url, Data const & data);
