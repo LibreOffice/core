@@ -548,11 +548,11 @@ public:
         SfxStyleFamily nFamily, SfxAbstractApplyTabDialog *pDlg,
         rtl::Reference< SfxStyleSheetBasePool > const & xBasePool,
         bool bModified)
-        : m_rDocSh(rDocSh)
+        : m_pDlg(pDlg)
+        , m_rDocSh(rDocSh)
         , m_bNew(bNew)
         , m_xTmp(xTmp)
         , m_nFamily(nFamily)
-        , m_pDlg(pDlg)
         , m_xBasePool(xBasePool)
         , m_bModified(bModified)
     {
@@ -562,12 +562,12 @@ public:
     {
         ApplyHdl(nullptr);
     }
+    VclPtr<SfxAbstractApplyTabDialog> m_pDlg;
 private:
     SwDocShell &m_rDocSh;
     bool const m_bNew;
     rtl::Reference< SwDocStyleSheet > m_xTmp;
     SfxStyleFamily const m_nFamily;
-    VclPtr<SfxAbstractApplyTabDialog> m_pDlg;
     rtl::Reference< SfxStyleSheetBasePool > m_xBasePool;
     bool const m_bModified;
 };
@@ -818,7 +818,7 @@ void SwDocShell::Edit(
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(),
+        VclPtr<SfxAbstractApplyTabDialog> pDlg(pFact->CreateTemplateDialog(GetView()->GetViewFrame()->GetWindow().GetFrameWeld(),
                                                     *xTmp, nFamily, sPage, pCurrShell, bNew));
         std::shared_ptr<ApplyStyle> pApplyStyleHelper(new ApplyStyle(*this, bNew, xTmp, nFamily, pDlg.get(), m_xBasePool, bModified));
         pDlg->SetApplyHdl(LINK(pApplyStyleHelper.get(), ApplyStyle, ApplyHdl));
@@ -863,6 +863,7 @@ void SwDocShell::Edit(
                 pShell->SetWatermark(aWatermark);
             }
 
+            pApplyStyleHelper->m_pDlg.disposeAndClear();
             if (pRequest)
                 pRequest->Done();
         });
