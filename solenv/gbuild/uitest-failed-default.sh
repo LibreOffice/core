@@ -21,8 +21,11 @@ where
     Class - is the name in the "class Class" declaration
 
 Or to do interactive debugging, run two shells with:
-    make debugrun
+    SAL_USE_VCLPLUGIN=gtk make debugrun
     make gb_UITest_DEBUGRUN=T UITest_$2
+
+The SAL_USE_VCLPLUGIN part is unnecessary if you are running on a kde desktop.
+(The default gtk3 backend has issues with some uitests).
 
 Failing that, put a
     time.sleep(60)
