@@ -99,7 +99,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="queryfilterdialog|label2">Operator</property>
-                        <property name="ellipsize">end</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -112,7 +111,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="queryfilterdialog|label5">Field name</property>
-                        <property name="ellipsize">end</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -124,7 +122,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="queryfilterdialog|label6">Condition</property>
-                        <property name="ellipsize">end</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -135,7 +132,7 @@
                       <object class="GtkComboBoxText" id="field1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="active">0</property>
                         <items>
                           <item translatable="yes" context="queryfilterdialog|field1">- none -</item>
                         </items>
@@ -150,6 +147,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <property name="active">0</property>
                         <items>
                           <item translatable="yes" context="queryfilterdialog|cond1">=</item>
                           <item translatable="yes" context="queryfilterdialog|cond1">&lt;&gt;</item>
@@ -172,7 +170,7 @@
                       <object class="GtkComboBoxText" id="field2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="active">0</property>
                         <items>
                           <item translatable="yes" context="queryfilterdialog|field2">- none -</item>
                         </items>
@@ -186,7 +184,7 @@
                       <object class="GtkComboBoxText" id="field3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="active">0</property>
                         <items>
                           <item translatable="yes" context="queryfilterdialog|field3">- none -</item>
                         </items>
@@ -201,6 +199,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <property name="active">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -212,6 +211,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <property name="active">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -223,7 +223,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="queryfilterdialog|label7">Value</property>
-                        <property name="ellipsize">end</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -234,6 +233,7 @@
                       <object class="GtkEntry" id="value1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -245,6 +245,7 @@
                       <object class="GtkEntry" id="value2">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -256,6 +257,7 @@
                       <object class="GtkEntry" id="value3">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>
@@ -267,7 +269,7 @@
                       <object class="GtkComboBoxText" id="op2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="active">0</property>
                         <items>
                           <item translatable="yes" context="queryfilterdialog|op2">AND</item>
                           <item translatable="yes" context="queryfilterdialog|op2">OR</item>
@@ -282,7 +284,7 @@
                       <object class="GtkComboBoxText" id="op3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="active">0</property>
                         <items>
                           <item translatable="yes" context="queryfilterdialog|op3">AND</item>
                           <item translatable="yes" context="queryfilterdialog|op3">OR</item>
