@@ -51,7 +51,7 @@ public:
 
     static bool IsAbsTabArea    ( const OUString&   rAreaStr,
                                   const ScDocument* pDoc,
-                                  ScArea***         pppAreas,
+                                  std::unique_ptr<ScArea[]>* ppAreas,
                                   sal_uInt16*       pAreaCount,
                                   bool              bAcceptCellRef = false,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 );
