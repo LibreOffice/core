@@ -68,7 +68,7 @@ void TextFinit();
 // about printer changes. Thereby saving loading a lot of objects (luckily all foreign
 // objects are mapped to one ID).
 // Initialisation and deinitialisation can be found in init.cxx
-extern std::vector<SvGlobalName*> *pGlobalOLEExcludeList;
+extern std::vector<SvGlobalName> *pGlobalOLEExcludeList;
 
 #endif
 
