@@ -1377,7 +1377,8 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
            || SignatureState::NOTVALIDATED == nDocumentSignatureState
            || SignatureState::PARTIAL_OK == nDocumentSignatureState)
         {
-            std::unique_ptr<weld::MessageDialog> xMessageBox(Application::CreateMessageDialog(nullptr,
+            vcl::Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
+            std::unique_ptr<weld::MessageDialog> xMessageBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
                                                              VclMessageType::Question, VclButtonsType::YesNo, SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE)));
             if (xMessageBox->run() != RET_YES)
             {
