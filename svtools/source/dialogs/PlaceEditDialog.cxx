@@ -223,11 +223,6 @@ void PlaceEditDialog::InitDetails( )
     xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSshDetails);
 
-    // Create Windows Share control
-    std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
-    xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xSmbDetails);
-
     // Set default to first value
     m_xLBServerType->set_active(0);
 

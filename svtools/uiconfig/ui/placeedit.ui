@@ -127,7 +127,6 @@
                   <item translatable="yes" context="placeedit|liststore1">WebDAV</item>
                   <item translatable="yes" context="placeedit|liststore1">FTP</item>
                   <item translatable="yes" context="placeedit|liststore1">SSH</item>
-                  <item translatable="yes" context="placeedit|liststore1">Windows Share</item>
                 </items>
               </object>
               <packing>
