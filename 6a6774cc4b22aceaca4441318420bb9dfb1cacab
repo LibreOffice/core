@@ -16,6 +16,24 @@
       "revId": "6a6774cc4b22aceaca4441318420bb9dfb1cacab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_97ac2a8d",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-09T14:01:52Z",
+      "side": 0,
+      "message": "Hm, yes, I don\u0027t see why that was not recorded as a \"use\". In this particular case nowadays bin/find-unneeded-includes would just leave this headers alone, recognizing this is part of the stable URE headers. So first let\u0027s just revert it; I\u0027ll try to find time to make this a standalone minimal reproducer and report it to the IWYU issue tracker.\n\n(I\u0027ll do the partial revert in a moment.)",
+      "parentUuid": "5f4e5783_d71e236f",
+      "revId": "6a6774cc4b22aceaca4441318420bb9dfb1cacab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
