@@ -975,6 +975,11 @@ SwIndexMarkModalDlg::SwIndexMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh,
     m_aContent.ReInitDlg(rSh, pCurTOXMark);
 }
 
+SwIndexMarkModalDlg::~SwIndexMarkModalDlg()
+{
+    SwViewShell::SetCareDialog(nullptr);
+}
+
 short SwIndexMarkModalDlg::run()
 {
     short nRet = SfxDialogController::run();

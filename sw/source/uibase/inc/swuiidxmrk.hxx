@@ -153,6 +153,7 @@ class SwIndexMarkModalDlg : public SfxDialogController
     SwIndexMarkPane m_aContent;
 public:
     SwIndexMarkModalDlg(weld::Window *pParent, SwWrtShell& rSh, SwTOXMark const * pCurTOXMark);
+    virtual ~SwIndexMarkModalDlg() override;
     virtual short int run() override;
 };
 
