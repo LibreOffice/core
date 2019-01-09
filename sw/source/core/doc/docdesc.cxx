@@ -725,7 +725,7 @@ void SwDoc::PrtOLENotify( bool bAll )
 
         mbOLEPrtNotifyPending = mbAllOLENotify = false;
 
-        SwOLENodes *pNodes = SwContentNode::CreateOLENodesArray( *GetDfltGrfFormatColl(), !bAll );
+        std::unique_ptr<SwOLENodes> pNodes = SwContentNode::CreateOLENodesArray( *GetDfltGrfFormatColl(), !bAll );
         if ( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
@@ -768,7 +768,7 @@ void SwDoc::PrtOLENotify( bool bAll )
                         pGlobalOLEExcludeList->push_back( new SvGlobalName( aName ) );
                 }
             }
-            delete pNodes;
+            pNodes.reset();
             getIDocumentLayoutAccess().GetCurrentLayout()->EndAllAction();
             ::EndProgress( GetDocShell() );
         }
@@ -782,7 +782,7 @@ IMPL_LINK_NOARG( SwDoc, DoUpdateModifiedOLE, Timer *, void )
     {
         mbOLEPrtNotifyPending = mbAllOLENotify = false;
 
-        SwOLENodes *pNodes = SwContentNode::CreateOLENodesArray( *GetDfltGrfFormatColl(), true );
+        std::unique_ptr<SwOLENodes> pNodes = SwContentNode::CreateOLENodesArray( *GetDfltGrfFormatColl(), true );
         if( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
@@ -806,7 +806,6 @@ IMPL_LINK_NOARG( SwDoc, DoUpdateModifiedOLE, Timer *, void )
             }
             getIDocumentLayoutAccess().GetCurrentLayout()->EndAllAction();
             ::EndProgress( GetDocShell() );
-            delete pNodes;
         }
     }
 }

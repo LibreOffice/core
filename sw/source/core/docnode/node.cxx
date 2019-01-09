@@ -2010,9 +2010,9 @@ SvxFrameDirection SwContentNode::GetTextDirection( const SwPosition& rPos,
     return nRet;
 }
 
-SwOLENodes* SwContentNode::CreateOLENodesArray( const SwFormatColl& rColl, bool bOnlyWithInvalidSize )
+std::unique_ptr<SwOLENodes> SwContentNode::CreateOLENodesArray( const SwFormatColl& rColl, bool bOnlyWithInvalidSize )
 {
-    SwOLENodes *pNodes = nullptr;
+    std::unique_ptr<SwOLENodes> pNodes;
     SwIterator<SwContentNode,SwFormatColl> aIter( rColl );
     for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
@@ -2020,7 +2020,7 @@ SwOLENodes* SwContentNode::CreateOLENodesArray( const SwFormatColl& rColl, bool 
         if ( pONd && (!bOnlyWithInvalidSize || pONd->IsOLESizeInvalid()) )
         {
             if ( !pNodes  )
-                pNodes = new SwOLENodes;
+                pNodes.reset(new SwOLENodes);
             pNodes->push_back( pONd );
         }
     }
