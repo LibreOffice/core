@@ -78,7 +78,6 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/tools/zoomtools \
     basegfx/source/tuple/b2dtuple \
     basegfx/source/tuple/b2i64tuple \
-    basegfx/source/tuple/b2ituple \
     basegfx/source/tuple/b3dtuple \
     basegfx/source/tuple/b3ituple \
     basegfx/source/vector/b2dvector \
