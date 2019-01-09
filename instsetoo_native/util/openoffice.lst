@@ -6,8 +6,8 @@ Globals
         {
             APACHEPROJECTNAME Apache OpenOffice
             OOOBASEVERSION 4.2
-            OOOPACKAGEVERSION 4.2.0
-            UREPACKAGEVERSION 4.2.0
+            OOOPACKAGEVERSION 4.5.0
+            UREPACKAGEVERSION 4.5.0
             URELAYERVERSION 1
             BASISROOTNAME OpenOffice
             UNIXBASISROOTNAME openoffice
@@ -59,7 +59,7 @@ Apache_OpenOffice
         {
             FULLPRODUCTNAME Apache OpenOffice
             PRODUCTNAME OpenOffice
-            PRODUCTVERSION 4.2.0
+            PRODUCTVERSION 4.5.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
             SHORT_PRODUCTEXTENSION 
@@ -67,15 +67,15 @@ Apache_OpenOffice
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.2.0
-            BASEPRODUCTVERSION 4.2
+            ABOUTBOXPRODUCTVERSION 4.5.0
+            BASEPRODUCTVERSION 4.5
             PCPFILENAME openoffice.pcp
             UPDATEURL https://ooo-updates.apache.org/aoonext/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             EVAL
-            PACKAGEVERSION 4.2.0
+            PACKAGEVERSION 4.5.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -120,7 +120,7 @@ Apache_OpenOffice_Dev
         {
             FULLPRODUCTNAME AOO-Developer-Build
             PRODUCTNAME AOO-Developer-Build
-            PRODUCTVERSION 4.2.0
+            PRODUCTVERSION 4.5.0
             PRODUCTEXTENSION 
             LONG_PRODUCTEXTENSION 
             SHORT_PRODUCTEXTENSION 
@@ -130,8 +130,8 @@ Apache_OpenOffice_Dev
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.2.0
-            BASEPRODUCTVERSION 4.2
+            ABOUTBOXPRODUCTVERSION 4.5.0
+            BASEPRODUCTVERSION 4.5
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX aoodev
             UREPACKAGEPREFIX aoodev
@@ -140,7 +140,7 @@ Apache_OpenOffice_Dev
             UPDATEURL https://ooo-updates.apache.org/aoonextdev/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
             EVAL
-            PACKAGEVERSION 4.2.0
+            PACKAGEVERSION 4.5.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             GLOBALFILEGID gid_File_Lib_Vcl
@@ -191,14 +191,14 @@ Apache_OpenOffice_SDK
             FULLPRODUCTNAME Apache OpenOffice
             PRODUCTNAME OpenOffice
 			PRODUCTDIRNAME OpenOffice_SDK
-            PRODUCTVERSION 4.2.0
+            PRODUCTVERSION 4.5.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4
-            PACKAGEVERSION 4.2.0
+            PACKAGEVERSION 4.5.0
             PACKAGEREVISION {milestone}
             PACK_INSTALLED 1
             POOLPRODUCT 0
@@ -239,13 +239,13 @@ Apache_OpenOffice_Beta_SDK
             FULLPRODUCTNAME Apache OpenOffice Beta
             PRODUCTNAME OpenOffice Beta
             PRODUCTDIRNAME OpenOffice_SDK_Beta
-            PRODUCTVERSION 4.2.0
+            PRODUCTVERSION 4.5.0
             PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4
-            PACKAGEVERSION 4.2.0
+            PACKAGEVERSION 4.5.0
             PACKAGEREVISION {milestone}
             PACK_INSTALLED 1
             POOLPRODUCT 0
@@ -285,7 +285,7 @@ Apache_OpenOffice_Dev_SDK
         {
             FULLPRODUCTNAME AOO-Developer-Build
             PRODUCTNAME AOO-Developer-Build
-            PRODUCTVERSION 4.2.0
+            PRODUCTVERSION 4.5.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
@@ -294,7 +294,7 @@ Apache_OpenOffice_Dev_SDK
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4
-            PACKAGEVERSION 4.2.0
+            PACKAGEVERSION 4.5.0
             PACKAGEREVISION {milestone}
             BASISPACKAGEPREFIX aoodev
             UREPACKAGEPREFIX aoodev
@@ -338,7 +338,7 @@ Apache_OpenOffice_Beta
         {
             FULLPRODUCTNAME Apache OpenOffice Beta
             PRODUCTNAME OpenOffice Beta
-            PRODUCTVERSION 4.2.0
+            PRODUCTVERSION 4.5.0
             PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
             BASISROOTNAME AOOBeta
@@ -348,14 +348,14 @@ Apache_OpenOffice_Beta
             POSTVERSIONEXTENSION
             BRANDPACKAGEVERSION 4
             USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.2.0
-            BASEPRODUCTVERSION 4.2
+            ABOUTBOXPRODUCTVERSION 4.5.0
+            BASEPRODUCTVERSION 4.5
             UPDATEURL https://ooo-updates.apache.org/aoonextbeta/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 0
             EVAL
-            PACKAGEVERSION 4.2.0
+            PACKAGEVERSION 4.5.0
             PACKAGEREVISION {milestone}
             LICENSENAME ALv2
             GLOBALFILEGID gid_File_Lib_Vcl

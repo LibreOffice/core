@@ -22,7 +22,7 @@
 
 
 # used for sdk common files
-PRODUCT_RELEASE=4.2.0
+PRODUCT_RELEASE=4.5.0
 OFFICENAME=OpenOffice
 .IF "$(GUI)"=="WNT"
 SDKDIRNAME=OpenOffice_$(PRODUCT_RELEASE)_SDK

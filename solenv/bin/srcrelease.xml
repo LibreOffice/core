@@ -27,7 +27,7 @@
   <property name="out.dir" value="."/>
   <property name="aoo.name" value="apache-openoffice"/>
   <property name="aoo.short.name" value="aoo"/>
-  <property name="aoo.ver" value="4.2.0"/>
+  <property name="aoo.ver" value="4.5.0"/>
 
   <property name="excludes.list" value="configure, moz/zipped/*.zip, **/.svn **/.gitignore, **/.git, warn, set_soenv, solver/**, makefile.mk, config.log, config.parms, config.status, bootstrap, autom4te.cache/**, LinuxX86Env.*, LinuxX86-64Env.*, MacOSXX86Env.*, MacOSXX64Env.*, winmingw.*, winenv.*, external/unowinreg/unowinreg.dll" />
   <property name="excludes.executables" value="solenv/bin/macosx-create-bundle, solenv/bin/linkoo, solenv/bin/localize, solenv/bin/createpdbrelocators, solenv/bin/langwrap, solenv/bin/makedepn, solenv/bin/packmodule, solenv/bin/rpm-wrapper, solenv/bin/relocate, solenv/bin/receditor, solenv/bin/subsequenttests, **/*.sh, **/*.bat, **/*.exe, configure.cmd, oowintool, config.sub, config.guess, **/*.pl"/>
