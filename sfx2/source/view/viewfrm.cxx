@@ -2483,7 +2483,17 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         return;
 
     SfxApplication* pSfxApp = SfxGetpApp();
-    SfxRequest aReq( SID_BASICCHOOSER, SfxCallMode::SYNCHRON, pSfxApp->GetPool() );
+    SfxItemPool& rPool = pSfxApp->GetPool();
+    SfxRequest aReq(SID_BASICCHOOSER, SfxCallMode::SYNCHRON, rPool);
+
+    //seen in tdf#122598, no parent for subsequent dialog
+    SfxAllItemSet aSet(rPool);
+    css::uno::Reference< css::frame::XFrame > xFrame(
+            GetFrame().GetFrameInterface(),
+            css::uno::UNO_QUERY);
+    aSet.Put(SfxUnoFrameItem(SID_FILLFRAME, xFrame));
+    aReq.SetInternalArgs_Impl(aSet);
+
     aReq.AppendItem( SfxBoolItem(SID_RECORDMACRO,true) );
     const SfxPoolItem* pRet = SfxGetpApp()->ExecuteSlot( aReq );
     OUString aScriptURL;
