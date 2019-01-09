@@ -9,24 +9,40 @@
 
 #include <tools/fileutil.hxx>
 #if defined _WIN32
-#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
-#include <string.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#include <davclnt.h>
 #endif
+
+namespace
+{
+#if defined _WIN32
+OUString UNCToDavURL(LPCWSTR sUNC)
+{
+    DWORD nSize = 1024;
+    auto bufURL(std::make_unique<wchar_t[]>(nSize));
+    DWORD nResult = DavGetHTTPFromUNCPath(sUNC, bufURL.get(), &nSize);
+    if (nResult == ERROR_INSUFFICIENT_BUFFER)
+    {
+        bufURL = std::make_unique<wchar_t[]>(nSize);
+        nResult = DavGetHTTPFromUNCPath(sUNC, bufURL.get(), &nSize);
+    }
+    return nResult == ERROR_SUCCESS ? o3tl::toU(bufURL.get()) : OUString();
+}
+#endif
+}
 
 namespace tools
 {
-bool IsMappedWebDAVPath(const INetURLObject& aURL)
+bool IsMappedWebDAVPath([[maybe_unused]] const OUString& rURL, [[maybe_unused]] OUString* pRealURL)
 {
 #if defined _WIN32
-    if (aURL.GetProtocol() == INetProtocol::File)
+    if (rURL.startsWithIgnoreAsciiCase("file:"))
     {
-        OUString sURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         OUString aSystemPath;
-        if (osl::FileBase::getSystemPathFromFileURL(sURL, aSystemPath) == osl::FileBase::E_None)
+        if (osl::FileBase::getSystemPathFromFileURL(rURL, aSystemPath) == osl::FileBase::E_None)
         {
             DWORD nSize = MAX_PATH;
             auto bufUNC(std::make_unique<char[]>(nSize));
@@ -61,13 +77,15 @@ bool IsMappedWebDAVPath(const INetURLObject& aURL)
                 {
                     LPNETRESOURCEW pInfo = reinterpret_cast<LPNETRESOURCEW>(bufInfo.get());
                     if (wcscmp(pInfo->lpProvider, L"Web Client Network") == 0)
+                    {
+                        if (pRealURL)
+                            *pRealURL = UNCToDavURL(aReq.lpRemoteName);
                         return true;
+                    }
                 }
             }
         }
     }
-#else
-    (void)aURL;
 #endif
     return false;
 }
