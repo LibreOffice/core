@@ -424,7 +424,7 @@ void PivotChartTest::testChangePivotTable()
     }
 
     // Modify the pivot table, move "Group Segment" to Column fields,
-    // add "Servie Month" to Row fields, remove "Rev." Data field
+    // add "Service Month" to Row fields, remove "Rev." Data field
     {
         uno::Reference<sheet::XDataPilotDescriptor> xDataPilotDescriptor(xDataPilotTable, UNO_QUERY_THROW);
 
