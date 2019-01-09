@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <new>
 #include <ostream>
+#include <utility>
 
 #if defined LIBO_INTERNAL_ONLY
 #include <string_view>

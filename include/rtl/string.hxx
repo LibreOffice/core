@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <new>
 #include <ostream>
+#include <utility>
 #include <string.h>
 
 #if defined LIBO_INTERNAL_ONLY
