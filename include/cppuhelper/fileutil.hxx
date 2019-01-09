@@ -10,16 +10,15 @@
 #ifndef INCLUDED_TOOLS_FILEUTIL_HXX
 #define INCLUDED_TOOLS_FILEUTIL_HXX
 
-#include <tools/toolsdllapi.h>
+#include <cppuhelper/cppuhelperdllapi.h>
+#include <rtl/ustring.hxx>
 
-class INetURLObject;
-
-namespace tools
+namespace cppuhelper
 {
 // Tests if the path is a UNC or local (drive-based) path that redirects to
 // a WebDAV resource (e.g., using redirectors on Windows).
 // Currently only implemented for Windows; on other platforms, returns false.
-TOOLS_DLLPUBLIC bool IsMappedWebDAVPath(const INetURLObject& aURL);
+CPPUHELPER_DLLPUBLIC bool IsMappedWebDAVPath(const OUString& rURL, OUString* pRealURL = nullptr);
 }
 
 #endif // INCLUDED_TOOLS_FILEUTIL_HXX

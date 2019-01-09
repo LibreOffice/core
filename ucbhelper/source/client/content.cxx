@@ -25,6 +25,7 @@
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <cppuhelper/fileutil.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
@@ -298,8 +299,12 @@ Content::Content( const OUString& rURL,
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create( rCtx ) );
 
+    OUString aRealURL;
+    if (!cppuhelper::IsMappedWebDAVPath(rURL, &aRealURL))
+        aRealURL = rURL;
+
     Reference< XContentIdentifier > xId
-        = getContentIdentifierThrow(pBroker, rURL);
+        = getContentIdentifierThrow(pBroker, aRealURL);
 
     Reference< XContent > xContent = getContentThrow(pBroker, xId);
 
