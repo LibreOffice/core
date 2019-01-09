@@ -240,7 +240,9 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper co
         case VML_TOKEN( group ):
             return new GroupShapeContext( rParent, rShapes.createShape< GroupShape >(), rAttribs );
         case VML_TOKEN( shape ):
-            if (rAttribs.hasAttribute(XML_path))
+            if (rAttribs.hasAttribute(XML_path) &&
+                    // tdf#122563 skip in the case of empty path
+                    !rAttribs.getString(XML_path, "").isEmpty())
                 return new ShapeContext( rParent, rShapes.createShape< BezierShape >(), rAttribs );
             else
                 return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
