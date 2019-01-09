@@ -213,7 +213,7 @@ protected:
      */
     virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension );
 
-    /** adapt properties of exsisting axes and remove superfluous axes
+    /** adapt properties of existing axes and remove superfluous axes
     */
     virtual void adaptAxes(
         const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > & rCoordSys );
