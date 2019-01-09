@@ -589,6 +589,8 @@ private:
     /// Number of cells from the table definition, by depth.
     std::map<sal_uInt32, sal_uInt32> m_aCells;
 
+    bool m_bIsBeforeFirstParagraph;
+
     /// If we're in a paragraph that has a single empty run only.
     bool m_bSingleEmptyRun;
 
