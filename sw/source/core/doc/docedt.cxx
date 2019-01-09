@@ -286,9 +286,9 @@ void SaveRedlEndPosForRestore::Restore()
 }
 
 /// Convert list of ranges of whichIds to a corresponding list of whichIds
-static std::vector<sal_uInt16> * lcl_RangesToVector(const sal_uInt16 * pRanges)
+static std::vector<sal_uInt16> lcl_RangesToVector(const sal_uInt16 * pRanges)
 {
-    std::vector<sal_uInt16> * pResult = new std::vector<sal_uInt16>;
+    std::vector<sal_uInt16> aResult;
 
     int i = 0;
     while (pRanges[i] != 0)
@@ -296,12 +296,12 @@ static std::vector<sal_uInt16> * lcl_RangesToVector(const sal_uInt16 * pRanges)
         OSL_ENSURE(pRanges[i+1] != 0, "malformed ranges");
 
         for (sal_uInt16 j = pRanges[i]; j < pRanges[i+1]; j++)
-            pResult->push_back(j);
+            aResult.push_back(j);
 
         i += 2;
     }
 
-    return pResult;
+    return aResult;
 }
 
 void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
@@ -441,10 +441,9 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                    first resetting all character attributes in first
                    paragraph (pTextNd).
                 */
-                std::vector<sal_uInt16> * pShorts =
+                std::vector<sal_uInt16> aShorts =
                     lcl_RangesToVector(aCharFormatSetRange);
-                pTextNd->ResetAttr(*pShorts);
-                delete pShorts;
+                pTextNd->ResetAttr(aShorts);
 
                 if( pDelNd->HasSwAttrSet() )
                 {

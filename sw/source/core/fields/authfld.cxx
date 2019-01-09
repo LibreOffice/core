@@ -109,7 +109,7 @@ void    SwAuthorityFieldType::RemoveField(sal_IntPtr nHandle)
 sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
 {
     sal_IntPtr nRet = 0;
-    SwAuthEntry* pEntry = new SwAuthEntry;
+    std::unique_ptr<SwAuthEntry> pEntry(new SwAuthEntry);
     for( sal_Int32 i = 0; i < AUTH_FIELD_END; ++i )
         pEntry->SetAuthorField( static_cast<ToxAuthorityField>(i),
                         rFieldContents.getToken( i, TOX_STYLE_DELIMITER ));
@@ -118,7 +118,6 @@ sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
     {
         if (*rpTemp == *pEntry)
         {
-            delete pEntry;
             nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(rpTemp.get()));
             rpTemp->AddRef();
             return nRet;
@@ -126,10 +125,10 @@ sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
     }
 
     //if it is a new Entry - insert
-    nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(pEntry));
+    nRet = reinterpret_cast<sal_IntPtr>(static_cast<void*>(pEntry.get()));
     // FIXME: what is this ref-counting madness on a object owned by the container?
     pEntry->AddRef();
-    m_DataArr.push_back(std::unique_ptr<SwAuthEntry>(pEntry));
+    m_DataArr.push_back(std::move(pEntry));
     //re-generate positions of the fields
     DelSequenceArray();
     return nRet;

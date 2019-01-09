@@ -3454,19 +3454,19 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
 
     // Both Tables are present; we can start
     SwUndoMergeTable* pUndo = nullptr;
-    SwHistory* pHistory = nullptr;
+    std::unique_ptr<SwHistory> pHistory;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoMergeTable( *pTableNd, *pDelTableNd, bWithPrev, nMode );
         GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
-        pHistory = new SwHistory;
+        pHistory.reset(new SwHistory);
     }
 
     // Adapt all "TableFormulas"
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
     aMsgHint.m_aData.pDelTable = &pDelTableNd->GetTable();
     aMsgHint.m_eFlags = TBL_MERGETBL;
-    aMsgHint.m_pHistory = pHistory;
+    aMsgHint.m_pHistory = pHistory.get();
     getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
     // The actual merge
@@ -3477,7 +3477,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     {
         if( pHistory->Count() )
             pUndo->SaveFormula( *pHistory );
-        delete pHistory;
+        pHistory.reset();
     }
     if( bRet )
     {

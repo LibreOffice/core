@@ -72,8 +72,8 @@ class SwListImpl
             std::unique_ptr<SwNodeNum> pRootRLHidden;
             /// top-level SwNodes section
             std::unique_ptr<SwPaM> pSection;
-            tListTreeForRange(SwNodeNum *const p1, SwNodeNum *const p2, SwPaM *const p3)
-                : pRoot(p1), pRootRLHidden(p2), pSection(p3) {}
+            tListTreeForRange(std::unique_ptr<SwNodeNum> p1, std::unique_ptr<SwNodeNum> p2, std::unique_ptr<SwPaM> p3)
+                : pRoot(std::move(p1)), pRootRLHidden(std::move(p2)), pSection(std::move(p3)) {}
         };
         typedef std::vector<tListTreeForRange> tListTrees;
         tListTrees maListTrees;
@@ -97,10 +97,10 @@ SwListImpl::SwListImpl( const OUString& sListId,
     {
         SwPaM aPam( *pNode, *pNode->EndOfSectionNode() );
 
-        SwNodeNum* pNumberTreeRootNode = new SwNodeNum( &rDefaultListStyle );
-        SwNodeNum* pNumberTreeRootNodeRL = new SwNodeNum( &rDefaultListStyle );
-        SwPaM* pPam = new SwPaM( *(aPam.Start()), *(aPam.End()) );
-        maListTrees.emplace_back(pNumberTreeRootNode, pNumberTreeRootNodeRL, pPam);
+        maListTrees.emplace_back(
+            std::make_unique<SwNodeNum>( &rDefaultListStyle ),
+            std::make_unique<SwNodeNum>( &rDefaultListStyle ),
+            std::make_unique<SwPaM>( *(aPam.Start()), *(aPam.End()) ));
 
         pNode = pNode->EndOfSectionNode();
         if (pNode != &rNodes.GetEndOfContent())
