@@ -6348,6 +6348,7 @@ class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchable
 private:
     GtkComboBox* m_pComboBox;
     GtkTreeModel* m_pTreeModel;
+    GtkCellRenderer* m_pTextRenderer;
     GtkMenu* m_pMenu;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
@@ -6660,23 +6661,19 @@ public:
         if (!g_list_length(cells))
         {
             //Always use the same text column renderer layout
-            GtkCellRenderer* text_renderer = gtk_cell_renderer_text_new();
-            gtk_cell_layout_pack_end(GTK_CELL_LAYOUT(m_pComboBox), text_renderer, true);
-            gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(m_pComboBox), text_renderer, "text", 0, nullptr);
-            g_object_set(G_OBJECT(text_renderer), "ellipsize", PANGO_ELLIPSIZE_MIDDLE, nullptr);
+            m_pTextRenderer = gtk_cell_renderer_text_new();
+            gtk_cell_layout_pack_end(GTK_CELL_LAYOUT(m_pComboBox), m_pTextRenderer, true);
+            gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(m_pComboBox), m_pTextRenderer, "text", 0, nullptr);
         }
         else
         {
-            // this bit isn't great, I really want to be able to ellipse the text in the comboboxtext itself and let
-            // the popup menu render them in full, in the interim allow the text to wrap in both cases
-            GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
-            g_object_set(G_OBJECT(cell), "ellipsize", PANGO_ELLIPSIZE_MIDDLE, nullptr);
+            m_pTextRenderer = static_cast<GtkCellRenderer*>(cells->data);
             if (g_list_length(cells) == 2)
             {
                 //The ComboBox is always going to show the column associated with
                 //the entry when there is one, left to its own devices this image
                 //column will be after it, but we want it before
-                gtk_cell_layout_reorder(GTK_CELL_LAYOUT(m_pComboBox), cell, 1);
+                gtk_cell_layout_reorder(GTK_CELL_LAYOUT(m_pComboBox), m_pTextRenderer, 1);
             }
         }
         g_list_free(cells);
@@ -6723,7 +6720,18 @@ public:
         GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
         GtkRequisition size;
         gtk_cell_renderer_get_preferred_size(cell, m_pWidget, &size, nullptr);
-        gtk_cell_renderer_set_fixed_size(cell, nWidth, size.height);
+        if (nWidth < size.width)
+        {
+            // this bit isn't great, I really want to be able to ellipse the text in the comboboxtext itself and let
+            // the popup menu render them in full, in the interim ellipse both
+            g_object_set(G_OBJECT(m_pTextRenderer), "ellipsize", PANGO_ELLIPSIZE_MIDDLE, nullptr);
+            gtk_cell_renderer_set_fixed_size(cell, nWidth, size.height);
+        }
+        else
+        {
+            g_object_set(G_OBJECT(m_pTextRenderer), "ellipsize", PANGO_ELLIPSIZE_NONE, nullptr);
+            gtk_cell_renderer_set_fixed_size(cell, size.width, size.height);
+        }
         g_list_free(cells);
 
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
