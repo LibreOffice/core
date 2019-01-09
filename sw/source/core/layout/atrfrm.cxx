@@ -3393,12 +3393,7 @@ OUString SwDrawFrameFormat::GetDescription() const
     {
         if (pSdrObj != m_pSdrObjectCached)
         {
-            SdrObject * pSdrObjCopy(pSdrObj->CloneSdrObject(pSdrObj->getSdrModelFromSdrObject()));
-            SdrUndoNewObj * pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
-            m_sSdrObjectCachedComment = pSdrUndo->GetComment();
-
-            delete pSdrUndo;
-
+            m_sSdrObjectCachedComment = SdrUndoNewObj::GetComment(*pSdrObj);
             m_pSdrObjectCached = pSdrObj;
         }
 
