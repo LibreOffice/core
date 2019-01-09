@@ -3111,6 +3111,7 @@ private:
     gulong m_nSwitchPageSignalId;
     gulong m_nOverFlowSwitchPageSignalId;
     gulong m_nSizeAllocateSignalId;
+    guint m_nLaunchSplitTimeoutId;
     bool m_bOverFlowBoxActive;
     bool m_bOverFlowBoxIsStart;
     int m_nStartTabCount;
@@ -3436,6 +3437,7 @@ private:
         int nCurrentPage = pThis->get_current_page();
         pThis->split_notebooks();
         pThis->set_current_page(nCurrentPage);
+        pThis->m_nLaunchSplitTimeoutId = 0;
         return false;
     }
 
@@ -3446,7 +3448,7 @@ private:
     // tabs in a single row when they would fit
     void signal_notebook_size_allocate()
     {
-        if (m_bOverFlowBoxActive)
+        if (m_bOverFlowBoxActive || m_nLaunchSplitTimeoutId)
             return;
         disable_notify_events();
         gint nPages = gtk_notebook_get_n_pages(m_pNotebook);
@@ -3457,7 +3459,7 @@ private:
                 GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook, gtk_notebook_get_nth_page(m_pNotebook, i));
                 if (!gtk_widget_get_child_visible(pTabWidget))
                 {
-                    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(launch_split_notebooks), this, nullptr);
+                    m_nLaunchSplitTimeoutId = g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(launch_split_notebooks), this, nullptr);
                     break;
                 }
             }
@@ -3479,6 +3481,7 @@ public:
         , m_pOverFlowNotebook(GTK_NOTEBOOK(gtk_notebook_new()))
         , m_nSwitchPageSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
         , m_nOverFlowSwitchPageSignalId(g_signal_connect(m_pOverFlowNotebook, "switch-page", G_CALLBACK(signalOverFlowSwitchPage), this))
+        , m_nLaunchSplitTimeoutId(0)
         , m_bOverFlowBoxActive(false)
         , m_bOverFlowBoxIsStart(false)
         , m_nStartTabCount(0)
