@@ -1345,7 +1345,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     SwPageFrame *pPage = pLay->FindPageFrame();
     const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
     SwFrame       *pFrame = nullptr;
-    SwActualSection *pActualSection = nullptr;
+    std::unique_ptr<SwActualSection> pActualSection;
     SwLayHelper *pPageMaker;
 
     //If the layout will be created (bPages == true) we do head on the progress
@@ -1383,7 +1383,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         if( ( !pLay->IsInFootnote() || pSct->IsInFootnote() ) &&
             ( !pLay->IsInTab() || pSct->IsInTab() ) )
         {
-            pActualSection = new SwActualSection( nullptr, pSct, nullptr );
+            pActualSection.reset(new SwActualSection( nullptr, pSct, nullptr ));
             OSL_ENSURE( !pLay->Lower() || !pLay->Lower()->IsColumnFrame(),
                 "InsertCnt_: Wrong Call" );
         }
@@ -1548,8 +1548,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             else
             {
                 pFrame = pNode->MakeFrame( pLay );
-                pActualSection = new SwActualSection( pActualSection,
-                                                static_cast<SwSectionFrame*>(pFrame), pNode );
+                pActualSection.reset( new SwActualSection( pActualSection.release(),
+                                                static_cast<SwSectionFrame*>(pFrame), pNode ) );
                 if ( pActualSection->GetUpper() )
                 {
                     //Insert behind the Upper, the "Follow" of the Upper will be
@@ -1638,10 +1638,10 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
 
             //Close the section, where appropriate activate the surrounding
             //section again.
-            SwActualSection *pTmp = pActualSection ? pActualSection->GetUpper() : nullptr;
-            delete pActualSection;
+            SwActualSection *pActualSectionUpper1 = pActualSection ? pActualSection->GetUpper() : nullptr;
+            pActualSection.reset(pActualSectionUpper1);
             pLay = pLay->FindSctFrame();
-            if ( nullptr != (pActualSection = pTmp) )
+            if ( pActualSection )
             {
                 //Could be, that the last SectionFrame remains empty.
                 //Then now is the time to remove them.
@@ -1734,7 +1734,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             pLay->RemoveFromLayout();
             SwFrame::DestroyFrame(pLay);
         }
-        delete pActualSection;
+        pActualSection.reset();
     }
 
     if ( bPages ) // let the Flys connect to each other

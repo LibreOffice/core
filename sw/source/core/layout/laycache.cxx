@@ -515,7 +515,7 @@ bool sanityCheckLayoutCache(SwLayCacheImpl const& rCache,
  * a guess, but a guess with statistical background.
  */
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
-                          SwLayoutFrame* &rpL, SwActualSection* &rpA,
+                          SwLayoutFrame* &rpL, std::unique_ptr<SwActualSection> &rpA,
                           sal_uLong nNodeIndex, bool bCache )
     : mrpFrame( rpF )
     , mrpPrv( rpP )
