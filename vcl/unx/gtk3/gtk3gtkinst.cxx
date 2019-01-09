@@ -1747,6 +1747,35 @@ namespace
         cairo_surface_get_device_scale(surface, &m_fXScale, &m_fYScale);
         return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width() * m_fXScale, aSize.Height() * m_fYScale);
     }
+
+    GtkWidget* image_new_from_virtual_device(VirtualDevice& rImageSurface)
+    {
+        GtkWidget* pImage = nullptr;
+        if (gtk_check_version(3, 20, 0) == nullptr)
+        {
+            cairo_surface_t* surface = get_underlying_cairo_surface(rImageSurface);
+
+            Size aSize(rImageSurface.GetOutputSizePixel());
+            cairo_surface_t* target = cairo_surface_create_similar(surface,
+                                                                   cairo_surface_get_content(surface),
+                                                                   aSize.Width(),
+                                                                   aSize.Height());
+
+            cairo_t* cr = cairo_create(target);
+            cairo_set_source_surface(cr, surface, 0, 0);
+            cairo_paint(cr);
+            cairo_destroy(cr);
+            pImage = gtk_image_new_from_surface(target);
+            cairo_surface_destroy(target);
+        }
+        else
+        {
+            GdkPixbuf* pixbuf = load_icon_from_surface(rImageSurface);
+            pImage = gtk_image_new_from_pixbuf(pixbuf);
+            g_object_unref(pixbuf);
+        }
+        return pImage;
+    }
 }
 
 class MenuHelper
@@ -1809,7 +1838,7 @@ public:
     }
 
     void insert_item(int pos, const OUString& rId, const OUString& rStr,
-                     const OUString* pIconName, VirtualDevice* pImageSufface,
+                     const OUString* pIconName, VirtualDevice* pImageSurface,
                      bool bCheck)
     {
         GtkWidget* pImage = nullptr;
@@ -1822,8 +1851,8 @@ public:
                 g_object_unref(pixbuf);
             }
         }
-        else if (pImageSufface)
-            pImage = gtk_image_new_from_surface(get_underlying_cairo_surface(*pImageSufface));
+        else if (pImageSurface)
+            pImage = image_new_from_virtual_device(*pImageSurface);
 
         GtkWidget *pItem;
         if (pImage)
@@ -3625,7 +3654,7 @@ public:
         gtk_button_set_always_show_image(m_pButton, true);
         gtk_button_set_image_position(m_pButton, GTK_POS_LEFT);
         if (pDevice)
-            gtk_button_set_image(m_pButton, gtk_image_new_from_surface(get_underlying_cairo_surface(*pDevice)));
+            gtk_button_set_image(m_pButton, image_new_from_virtual_device(*pDevice));
         else
             gtk_button_set_image(m_pButton, nullptr);
     }
@@ -4014,9 +4043,9 @@ public:
     }
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSufface, bool bCheck) override
+                        const OUString* pIconName, VirtualDevice* pImageSurface, bool bCheck) override
     {
-        MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSufface, bCheck);
+        MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, bCheck);
     }
 
     virtual void set_item_active(const OString& rIdent, bool bActive) override
@@ -4220,7 +4249,7 @@ public:
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSufface,
+                        const OUString* pIconName, VirtualDevice* pImageSurface,
                         bool bCheck) override
     {
         GtkWidget* pImage = nullptr;
@@ -4233,24 +4262,9 @@ public:
                 g_object_unref(pixbuf);
             }
         }
-        else if (pImageSufface)
+        else if (pImageSurface)
         {
-            cairo_surface_t* surface = get_underlying_cairo_surface(*pImageSufface);
-
-            Size aSize(pImageSufface->GetOutputSizePixel());
-            cairo_surface_t* target = cairo_surface_create_similar(surface,
-                                                                    cairo_surface_get_content(surface),
-                                                                    aSize.Width(),
-                                                                    aSize.Height());
-
-            cairo_t* cr = cairo_create(target);
-            cairo_set_source_surface(cr, surface, 0, 0);
-            cairo_paint(cr);
-            cairo_destroy(cr);
-
-            pImage = gtk_image_new_from_surface(target);
-
-            cairo_surface_destroy(target);
+            pImage = image_new_from_virtual_device(*pImageSurface);
         }
 
         GtkWidget *pItem;
