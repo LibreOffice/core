@@ -81,7 +81,7 @@
               <object class="GtkImage" id="handle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="pixbuf">extensions/source/scanner/handle.png</property>
+                <property name="pixbuf">extensions/res/scanner/handle.png</property>
               </object>
               <packing>
                 <property name="expand">False</property>
