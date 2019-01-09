@@ -1139,7 +1139,10 @@ IMPL_LINK(SvxNumberFormatTabPage, DoubleClickHdl_Impl, weld::TreeView&, rLb, voi
     SelFormatHdl_Impl(&rLb);
 
     if (SfxTabDialogController* pController = GetDialogController())
-        pController->getDialog()->response(RET_OK);
+    {
+        weld::Button& rOkButton = pController->GetOKButton();
+        rOkButton.clicked();
+    }
     else
     {
         SfxSingleTabDialog* pParent = dynamic_cast<SfxSingleTabDialog*>(GetParentDialog());
