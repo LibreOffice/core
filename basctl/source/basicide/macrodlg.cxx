@@ -226,20 +226,16 @@ void MacroChooser::EnableButton(weld::Button& rButton, bool bEnable)
 
 SbMethod* MacroChooser::GetMacro()
 {
-    SbMethod* pMethod = nullptr;
-    m_xBasicBox->get_cursor(m_xBasicBoxIter.get());
+    if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()))
+        return nullptr;
     SbModule* pModule = m_xBasicBox->FindModule(m_xBasicBoxIter.get());
-    if (pModule)
-    {
-        if (m_xMacroBox->get_selected(m_xMacroBoxIter.get()))
-        {
-            OUString aMacroName(m_xMacroBox->get_text(*m_xMacroBoxIter));
-            pMethod = pModule->FindMethod(aMacroName, SbxClassType::Method);
-        }
-    }
-    return pMethod;
+    if (!pModule)
+        return nullptr;
+    if (!m_xMacroBox->get_selected(m_xMacroBoxIter.get()))
+        return nullptr;
+    OUString aMacroName(m_xMacroBox->get_text(*m_xMacroBoxIter));
+    return pModule->FindMethod(aMacroName, SbxClassType::Method);
 }
-
 
 void MacroChooser::DeleteMacro()
 {
