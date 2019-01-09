@@ -527,7 +527,7 @@
                               <object class="GtkImage" id="plus">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="pixbuf">extensions/source/scanner/plus.png</property>
+                                <property name="pixbuf">extensions/res/scanner/plus.png</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -540,7 +540,7 @@
                               <object class="GtkImage" id="minus">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="pixbuf">extensions/source/scanner/minus.png</property>
+                                <property name="pixbuf">extensions/res/scanner/minus.png</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
