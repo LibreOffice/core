@@ -449,8 +449,8 @@ public:
      * @return heap allocated token array object. The caller <i>must</i>
      *         manage the life cycle of this object.
      */
-    ScTokenArray* CompileString( const OUString& rFormula );
-    ScTokenArray* CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
+    std::unique_ptr<ScTokenArray> CompileString( const OUString& rFormula );
+    std::unique_ptr<ScTokenArray> CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
     const ScAddress& GetPos() const { return aPos; }
 
     void MoveRelWrap();

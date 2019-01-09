@@ -67,7 +67,7 @@ public:
     bool EqualTokens( const ScTokenArray* pArr2 ) const;
 
     virtual void Clear() override;
-    ScTokenArray* Clone() const;    /// True copy!
+    std::unique_ptr<ScTokenArray> Clone() const;    /// True copy!
 
     void GenHash();
     size_t GetHash() const { return mnHashValue;}

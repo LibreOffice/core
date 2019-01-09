@@ -897,10 +897,10 @@ public:
                 // Create a new token array from the hybrid formula string, and
                 // set it to the group.
                 ScCompiler aComp(mrCompileFormulaCxt, pTop->aPos);
-                ScTokenArray* pNewCode = aComp.CompileString(aFormula);
+                std::unique_ptr<ScTokenArray> pNewCode = aComp.CompileString(aFormula);
                 ScFormulaCellGroupRef xGroup = pTop->GetCellGroup();
                 assert(xGroup);
-                xGroup->setCode(pNewCode);
+                xGroup->setCode(std::move(pNewCode));
                 xGroup->compileCode(*mpDoc, pTop->aPos, mpDoc->GetGrammar());
 
                 // Propagate the new token array to all formula cells in the group.
@@ -924,14 +924,14 @@ public:
             {
                 // Create token array from formula string.
                 ScCompiler aComp(mrCompileFormulaCxt, pCell->aPos);
-                ScTokenArray* pNewCode = aComp.CompileString(aFormula);
+                std::unique_ptr<ScTokenArray> pNewCode = aComp.CompileString(aFormula);
 
                 // Generate RPN tokens.
                 ScCompiler aComp2(mpDoc, pCell->aPos, *pNewCode, formula::FormulaGrammar::GRAM_UNSPECIFIED,
                                   true, pCell->GetMatrixFlag() != ScMatrixMode::NONE);
                 aComp2.CompileTokenArray();
 
-                pCell->SetCode(pNewCode);
+                pCell->SetCode(std::move(pNewCode));
                 pCell->StartListeningTo(mrStartListenCxt);
                 pCell->SetDirty();
             }

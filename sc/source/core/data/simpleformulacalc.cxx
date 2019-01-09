@@ -30,7 +30,7 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
 {
     // compile already here
     ScCompiler aComp(mpDoc, maAddr, eGram, true, bMatrixFormula);
-    mpCode.reset(aComp.CompileString(rFormula));
+    mpCode = aComp.CompileString(rFormula);
     if(mpCode->GetCodeError() == FormulaError::NONE && mpCode->GetLen())
         aComp.CompileTokenArray();
 }

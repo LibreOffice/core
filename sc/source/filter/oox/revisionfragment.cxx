@@ -29,6 +29,7 @@
 #include <formulacell.hxx>
 #include <chgviset.hxx>
 #include <richstringcontext.hxx>
+#include <tokenarray.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
 
@@ -118,11 +119,11 @@ protected:
                 // formula string
                 ScDocument& rDoc = getScDocument();
                 ScCompiler aComp(&rDoc, mrPos, formula::FormulaGrammar::GRAM_OOXML);
-                ScTokenArray* pArray = aComp.CompileString(rChars);
+                std::unique_ptr<ScTokenArray> pArray = aComp.CompileString(rChars);
                 if (!pArray)
                     break;
 
-                mrCellValue.set(new ScFormulaCell(&rDoc, mrPos, pArray));
+                mrCellValue.set(new ScFormulaCell(&rDoc, mrPos, std::move(pArray)));
             }
             break;
             default:

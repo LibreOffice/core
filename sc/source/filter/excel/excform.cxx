@@ -154,7 +154,7 @@ void ImportExcel::Formula(
 
     if (pResult)
     {
-        pCell = new ScFormulaCell(&rDoc.getDoc(), aScPos, pResult.release());
+        pCell = new ScFormulaCell(&rDoc.getDoc(), aScPos, std::move(pResult));
         pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
         rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());
         rDoc.getDoc().EnsureTable(aScPos.Tab());

@@ -30,6 +30,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/tempfile.hxx>
 #include <scitems.hxx>
+#include <tokenarray.hxx>
 
 #include <orcus/csv_parser.hpp>
 
@@ -477,7 +478,7 @@ bool checkFormulaPositions(
     return true;
 }
 
-ScTokenArray* compileFormula(
+std::unique_ptr<ScTokenArray> compileFormula(
     ScDocument* pDoc, const OUString& rFormula,
     formula::FormulaGrammar::Grammar eGram )
 {

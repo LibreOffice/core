@@ -1003,11 +1003,8 @@ void Test::testFormulaCompiler()
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {
-        std::unique_ptr<ScTokenArray> pArray;
-        {
-            pArray.reset(compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), aTests[i].eInputGram));
-            CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray);
-        }
+        std::unique_ptr<ScTokenArray> pArray = compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), aTests[i].eInputGram);
+        CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray);
 
         OUString aFormula = toString(*m_pDoc, ScAddress(), *pArray, aTests[i].eOutputGram);
         CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aTests[i].pOutput), aFormula);

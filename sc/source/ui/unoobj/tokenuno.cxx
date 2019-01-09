@@ -139,9 +139,8 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
         ScCompiler aCompiler( &rDoc, aRefPos, rDoc.GetGrammar());
         SetCompilerFlags( aCompiler );
 
-        ScTokenArray* pCode = aCompiler.CompileString( aFormula );
+        std::unique_ptr<ScTokenArray> pCode = aCompiler.CompileString( aFormula );
         ScTokenConversion::ConvertToTokenSequence( rDoc, aRet, *pCode );
-        delete pCode;
     }
 
     return aRet;

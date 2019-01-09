@@ -238,7 +238,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
     bool bEligibleForCache = true;
     bool bSingleRelativeReference = false;
     ScSingleRefData aOffsetForSingleRelRef;
-    const ScTokenArray* pTokens = nullptr;
+    std::unique_ptr<ScTokenArray> pTokens;
     for (size_t nFormatEntryIx = 0; nFormatEntryIx < pFormat->size(); ++nFormatEntryIx)
     {
         auto pFormatEntry = pFormat->GetEntry(nFormatEntryIx);
@@ -259,7 +259,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
         ScCompiler aComp( pDoc, aSrcPos );
         aComp.SetGrammar( formula::FormulaGrammar::GRAM_ODFF );
         pTokens = aComp.CompileString( pCondFormatEntry->GetExpression(aSrcPos, 0), "" );
-        if (HasRelRefIgnoringSheet0Relative( pDoc, pTokens ))
+        if (HasRelRefIgnoringSheet0Relative( pDoc, pTokens.get() ))
         {
             // In general not eligible, but some might be. We handle one very special case: When the
             // conditional format has one entry, the reference position is the first cell of the
@@ -268,7 +268,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
             if (pFormat->size() == 1 &&
                 pFormat->GetRange().size() == 1 &&
                 pFormat->GetRange()[0].aStart == aSrcPos &&
-                HasOneSingleFullyRelativeReference( pTokens, aOffsetForSingleRelRef ))
+                HasOneSingleFullyRelativeReference( pTokens.get(), aOffsetForSingleRelRef ))
             {
                 bSingleRelativeReference = true;
             }
@@ -358,7 +358,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
         }
         mrParent.maCache[nIndexOfOldest].mpFormat = pInsertedFormat;
         mrParent.maCache[nIndexOfOldest].mbSingleRelativeReference = bSingleRelativeReference;
-        mrParent.maCache[nIndexOfOldest].mpTokens.reset(pTokens);
+        mrParent.maCache[nIndexOfOldest].mpTokens = std::move(pTokens);
         mrParent.maCache[nIndexOfOldest].mnAge = 0;
     }
 }
