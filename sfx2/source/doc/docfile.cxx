@@ -1311,7 +1311,8 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand( bool bLoading, bool b
                                 }
                                 catch (const uno::Exception&)
                                 {
-                                    if (tools::IsMappedWebDAVPath(GetURLObject()))
+                                    if (tools::IsMappedWebDAVPath(GetURLObject().GetMainURL(
+                                            INetURLObject::DecodeMechanism::NONE)))
                                     {
                                         // This is a path that redirects to a WebDAV resource;
                                         // so failure creating lockfile is not an error here.
