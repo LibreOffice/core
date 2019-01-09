@@ -43,16 +43,16 @@
  * when destroying them.
  */
 
+#include <memory>
 #include <vector>
 
 #include <rtl/ustring.hxx>
 
 class SwCacheObj;
 
-typedef std::vector<SwCacheObj*> SwCacheObjArr;
 class SwCache
 {
-    SwCacheObjArr m_aCacheObjects;
+    std::vector<std::unique_ptr<SwCacheObj>> m_aCacheObjects;
     std::vector<sal_uInt16> m_aFreePositions; /// Free positions for the Insert if the maximum has not been reached
                                             /// Every time an object is deregistered, its position is added here
     SwCacheObj *m_pRealFirst;                 /// _ALWAYS_ the real first LRU
@@ -112,7 +112,7 @@ public:
     sal_uInt16 GetCurMax() const { return m_nCurMax; }
     SwCacheObj *First() { return m_pRealFirst; }
     static inline SwCacheObj *Next( SwCacheObj *pCacheObj);
-    SwCacheObj* operator[](sal_uInt16 nIndex) { return m_aCacheObjects[nIndex]; }
+    SwCacheObj* operator[](sal_uInt16 nIndex) { return m_aCacheObjects[nIndex].get(); }
     sal_uInt16 size() { return m_aCacheObjects.size(); }
 };
 
