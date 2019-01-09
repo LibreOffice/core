@@ -1307,7 +1307,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
 
     SwCharRange &rReformat = pPara->GetReformat();
     SwRepaint   &rRepaint = pPara->GetRepaint();
-    SwRepaint *pFreeze = nullptr;
+    std::unique_ptr<SwRepaint> pFreeze;
 
     // Due to performance reasons we set rReformat to COMPLETE_STRING in Init()
     // In this case we adjust rReformat
@@ -1566,7 +1566,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                 {
                     while( rLine.Next() )
                         ; //Nothing
-                    pFreeze = new SwRepaint( rRepaint ); // to minimize painting
+                    pFreeze.reset(new SwRepaint( rRepaint )); // to minimize painting
                 }
                 else
                     break;
@@ -1578,7 +1578,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
     if( pFreeze )
     {
         rRepaint = *pFreeze;
-        delete pFreeze;
+        pFreeze.reset();
     }
 
     if( !rLine.IsStop() )

@@ -486,9 +486,9 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         rDo.SetCapInf( aCapInf );
 
     SwFntObj *pOldLast = pLastFont;
-    SwFntAccess *pBigFontAccess = nullptr;
+    std::unique_ptr<SwFntAccess> pBigFontAccess;
     SwFntObj *pBigFont;
-    SwFntAccess *pSpaceFontAccess = nullptr;
+    std::unique_ptr<SwFntAccess> pSpaceFontAccess;
     SwFntObj *pSpaceFont = nullptr;
 
     const void* nFontCacheId2 = nullptr;
@@ -508,8 +508,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         if ( bWordWise )
         {
             aFont.SetWordLineMode( false );
-            pSpaceFontAccess = new SwFntAccess( nFontCacheId2, nIndex2, &aFont,
-                                                rDo.GetInf().GetShell() );
+            pSpaceFontAccess.reset(new SwFntAccess( nFontCacheId2, nIndex2, &aFont,
+                                                rDo.GetInf().GetShell() ));
             pSpaceFont = pSpaceFontAccess->Get();
         }
         else
@@ -521,8 +521,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         aFont.SetStrikeout( STRIKEOUT_NONE );
         nFontCacheId2 = nullptr;
         nIndex2 = 0;
-        pBigFontAccess = new SwFntAccess( nFontCacheId2, nIndex2, &aFont,
-                                          rDo.GetInf().GetShell() );
+        pBigFontAccess.reset(new SwFntAccess( nFontCacheId2, nIndex2, &aFont,
+                                          rDo.GetInf().GetShell() ));
         pBigFont = pBigFontAccess->Get();
     }
     else
@@ -733,7 +733,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     // clean up:
     if( pBigFont != pOldLast )
-        delete pBigFontAccess;
+        pBigFontAccess.reset();
 
     if( bTextLines )
     {
@@ -744,7 +744,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             static_cast<SwDoDrawCapital&>( rDo ).DrawSpace( aStartPos );
         }
         if ( bWordWise )
-            delete pSpaceFontAccess;
+            pSpaceFontAccess.reset();
     }
     pLastFont = pOldLast;
     pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );

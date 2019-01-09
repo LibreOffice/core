@@ -6214,12 +6214,12 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
 
             if ( aRect.HasArea() )
             {
-                SvxBrushItem* pNewItem = nullptr;
+                std::unique_ptr<SvxBrushItem> pNewItem;
 
                 if( pCol )
                 {
-                    pNewItem = new SvxBrushItem( *pCol, RES_BACKGROUND );
-                    pItem = pNewItem;
+                    pNewItem.reset(new SvxBrushItem( *pCol, RES_BACKGROUND ));
+                    pItem = pNewItem.get();
                     aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pCol));
                 }
 
@@ -6287,8 +6287,6 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
                                 bConsiderBackgroundTransparency );
                     }
                 }
-                if( pCol )
-                    delete pNewItem;
             }
         }
         else

@@ -1968,16 +1968,16 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         aTextSize.setWidth( m_pPrinter->GetTextWidth( rInf.GetText(),
                                sal_Int32(rInf.GetIdx()), sal_Int32(nLn)));
         aTextSize.setHeight( m_pPrinter->GetTextHeight() );
-        long* pKernArray = new long[sal_Int32(nLn)];
+        std::unique_ptr<long[]> pKernArray(new long[sal_Int32(nLn)]);
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pScrFont );
         long nScrPos;
 
-        m_pPrinter->GetTextArray(rInf.GetText(), pKernArray,
+        m_pPrinter->GetTextArray(rInf.GetText(), pKernArray.get(),
                 sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
         if( bCompress )
-            rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
+            rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray.get(),
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
                 static_cast<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
         else
@@ -2027,7 +2027,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             }
         }
 
-        delete[] pKernArray;
+        pKernArray.reset();
         aTextSize.setWidth( nScrPos );
     }
     else
