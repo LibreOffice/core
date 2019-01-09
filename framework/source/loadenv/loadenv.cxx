@@ -90,6 +90,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/profilezone.hxx>
 #include <classes/taskcreator.hxx>
+#include <tools/fileutil.hxx>
 
 const char PROP_TYPES[] = "Types";
 const char PROP_NAME[] = "Name";
@@ -247,21 +248,25 @@ void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans:
     m_bReactivateControllerOnError = false;
     m_bLoaded = false;
 
+    OUString aRealURL;
+    if (!tools::IsMappedWebDAVPath(sURL, &aRealURL))
+        aRealURL = sURL;
+
     // try to find out, if its really a content, which can be loaded or must be "handled"
     // We use a default value for this in-parameter. Then we have to start a complex check method
     // internally. But if this check was already done outside it can be suppressed to perform
     // the load request. We take over the result then!
-    m_eContentType = LoadEnv::classifyContent(sURL, lMediaDescriptor);
+    m_eContentType = LoadEnv::classifyContent(aRealURL, lMediaDescriptor);
     if (m_eContentType == E_UNSUPPORTED_CONTENT)
         throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::initializeLoading");
 
     // make URL part of the MediaDescriptor
     // It doesn't matter if it is already an item of it.
     // It must be the same value... so we can overwrite it :-)
-    m_lMediaDescriptor[utl::MediaDescriptor::PROP_URL()] <<= sURL;
+    m_lMediaDescriptor[utl::MediaDescriptor::PROP_URL()] <<= aRealURL;
 
     // parse it - because some following code require that
-    m_aURL.Complete = sURL;
+    m_aURL.Complete = aRealURL;
     uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
     xParser->parseStrict(m_aURL);
 
