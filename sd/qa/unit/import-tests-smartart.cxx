@@ -719,14 +719,14 @@ void SdImportTestSmartArt::testOrgChart()
     // Make sure that the manager has 2 employees.
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 2; Actual  : 1'.
-    uno::Reference<drawing::XShapes> xEmployees(getChildShape(getChildShape(xGroup, 0), 1),
+    uno::Reference<drawing::XShapes> xEmployees(getChildShape(getChildShape(xGroup, 0), 2),
                                                 uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployees.is());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xEmployees->getCount());
 
     uno::Reference<text::XText> xEmployee(
         getChildShape(
-            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 0), 0), 0),
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 0), 0), 0),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployee.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Employee"), xEmployee->getString());
@@ -747,7 +747,7 @@ void SdImportTestSmartArt::testOrgChart()
     // the second employee was below the first one.
     uno::Reference<text::XText> xEmployee2(
         getChildShape(
-            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 1), 0), 0),
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 2), 1), 0), 0),
         uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmployee2.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Employee2"), xEmployee2->getString());
@@ -757,6 +757,21 @@ void SdImportTestSmartArt::testOrgChart()
 
     awt::Point aEmployee2Pos = xEmployee2Shape->getPosition();
     CPPUNIT_ASSERT_GREATER(aEmployeePos.X, aEmployee2Pos.X);
+
+    // Make sure that assistant is above employees.
+    uno::Reference<text::XText> xAssistant(
+        getChildShape(
+            getChildShape(getChildShape(getChildShape(getChildShape(xGroup, 0), 1), 1), 0), 0),
+        uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Assistant"), xAssistant->getString());
+
+    uno::Reference<drawing::XShape> xAssistantShape(xAssistant, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xAssistantShape.is());
+
+    awt::Point aAssistantPos = xAssistantShape->getPosition();
+    // Without the accompanying fix in place, this test would have failed: the
+    // assistant shape was below the employee shape.
+    CPPUNIT_ASSERT_GREATER(aAssistantPos.Y, aEmployeePos.Y);
 
     xDocShRef->DoClose();
 }
