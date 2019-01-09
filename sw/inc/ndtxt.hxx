@@ -91,8 +91,8 @@ class SW_DLLPUBLIC SwTextNode
        Therefore: never access directly! */
     std::unique_ptr<SwpHints> m_pSwpHints;
 
-    mutable SwNodeNum* mpNodeNum;  ///< Numbering for this paragraph.
-    mutable SwNodeNum* mpNodeNumRLHidden; ///< Numbering for this paragraph (hidden redlines)
+    mutable std::unique_ptr<SwNodeNum> mpNodeNum;  ///< Numbering for this paragraph.
+    mutable std::unique_ptr<SwNodeNum> mpNodeNumRLHidden; ///< Numbering for this paragraph (hidden redlines)
 
     OUString m_Text;
 
