@@ -348,10 +348,7 @@ PrinterJob::StartJob (
     OUString aTitle( aFilterWS );
     if( ! isAscii( aTitle ) )
     {
-        sal_Int32 nIndex = 0;
-        while( nIndex != -1 )
-            aTitle = rFileName.getToken( 0, '/', nIndex );
-        aTitle = WhitespaceToSpace( aTitle, false );
+        aTitle = WhitespaceToSpace( rFileName.copy(rFileName.lastIndexOf('/')+1), false );
         if( ! isAscii( aTitle ) )
             aTitle.clear();
     }
