@@ -1110,5 +1110,24 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf81782_file, "tdf78611.odt", "10-testing-addre
     }
 }
 
+// problem was: field content was duplicated & truncated
+DECLARE_SHELL_MAILMERGE_TEST(testTdf81750_shell, "tdf81750.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // prepare unit test and run
+    executeMailMerge();
+
+    // reset currently opened layout of the original template,
+    // and create the layout of the document with 10 mails inside
+    dumpMMLayout();
+
+    // check several pages page
+    OUString aExpected("Text: Foo ");
+    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[1]/body/txt[2]", ""));
+    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[3]/body/txt[2]", ""));
+    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[5]/body/txt[2]", ""));
+    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[7]/body/txt[2]", ""));
+    CPPUNIT_ASSERT_EQUAL( aExpected, parseDump("/root/page[9]/body/txt[2]", ""));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
