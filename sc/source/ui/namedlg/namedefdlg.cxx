@@ -123,16 +123,14 @@ void ScNameDefDlg::CancelPushed()
 bool ScNameDefDlg::IsFormulaValid()
 {
     ScCompiler aComp( mpDoc, maCursorPos, mpDoc->GetGrammar());
-    ScTokenArray* pCode = aComp.CompileString(m_pEdRange->GetText());
+    std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_pEdRange->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {
         //TODO: info message
-        delete pCode;
         return false;
     }
     else
     {
-        delete pCode;
         return true;
     }
 }

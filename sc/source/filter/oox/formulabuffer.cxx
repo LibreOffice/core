@@ -117,11 +117,11 @@ void applySharedFormulas(
 
             ScCompiler aComp(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML, true, false);
             aComp.SetNumberFormatter(&rFormatter);
-            ScTokenArray* pArray = aComp.CompileString(rTokenStr);
+            std::unique_ptr<ScTokenArray> pArray = aComp.CompileString(rTokenStr);
             if (pArray)
             {
                 aComp.CompileTokenArray(); // Generate RPN tokens.
-                aGroups.set(nId, pArray);
+                aGroups.set(nId, std::move(pArray));
             }
         }
     }
@@ -222,13 +222,13 @@ void applyCellFormulas(
         ScCompiler aCompiler(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML, true, false);
         aCompiler.SetNumberFormatter(&rFormatter);
         aCompiler.SetExternalLinks(rExternalLinks);
-        ScTokenArray* pCode = aCompiler.CompileString(rItem.maTokenStr);
+        std::unique_ptr<ScTokenArray> pCode = aCompiler.CompileString(rItem.maTokenStr);
         if (!pCode)
             continue;
 
         aCompiler.CompileTokenArray(); // Generate RPN tokens.
 
-        ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pCode);
+        ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, std::move(pCode));
         rDoc.setFormulaCell(aPos, pCell);
         rCache.store(aPos, pCell);
     }

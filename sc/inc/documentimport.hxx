@@ -104,7 +104,7 @@ public:
         const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar,
         const OUString& rResult );
 
-    void setFormulaCell(const ScAddress& rPos, ScTokenArray* pArray);
+    void setFormulaCell(const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray);
     void setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCell);
 
     void setMatrixCells(

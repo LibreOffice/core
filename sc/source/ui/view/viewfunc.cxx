@@ -416,11 +416,11 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             bAgain = false;
             bool bAddEqual = false;
-            ScTokenArray* pArrFirst = pArr = aComp.CompileString( aFormula );
+            ScTokenArray* pArrFirst = pArr = aComp.CompileString( aFormula ).release();
             bool bCorrected = aComp.IsCorrected();
             if ( bCorrected )
             {   // try to parse with first parser-correction
-                pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
+                pArr = aComp.CompileString( aComp.GetCorrectedFormula() ).release();
             }
             if ( pArr->GetCodeError() == FormulaError::NONE )
             {

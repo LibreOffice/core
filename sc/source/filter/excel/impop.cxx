@@ -363,7 +363,7 @@ void ImportExcel::ReadBoolErr()
         double fValue;
         std::unique_ptr<ScTokenArray> pScTokArr = ErrorToFormula( nType != EXC_BOOLERR_BOOL, nValue, fValue );
         ScFormulaCell* pCell = pScTokArr
-            ? new ScFormulaCell(pD, aScPos, pScTokArr.release())
+            ? new ScFormulaCell(pD, aScPos, std::move(pScTokArr))
             : new ScFormulaCell(pD, aScPos);
         pCell->SetHybridDouble( fValue );
         GetDocImport().setFormulaCell(aScPos, pCell);
@@ -844,7 +844,7 @@ void ImportExcel::Shrfmla()
 
     ScDocumentImport& rDoc = GetDocImport();
 
-    ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, pResult.release());
+    ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, std::move(pResult));
     pCell->GetCode()->WrapReference(aPos, EXC_MAXCOL8, EXC_MAXROW8);
     rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());
     rDoc.getDoc().EnsureTable(aPos.Tab());

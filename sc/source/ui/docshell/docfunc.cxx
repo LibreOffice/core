@@ -4227,10 +4227,9 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         else if (bEnglish)
         {
             ScCompiler aComp( &rDoc, rRange.aStart, eGrammar);
-            ScTokenArray* pCode = aComp.CompileString( rString );
+            std::unique_ptr<ScTokenArray> pCode = aComp.CompileString( rString );
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, EMPTY_OUSTRING, pCode, eGrammar);
-            delete pCode;
+                    aMark, EMPTY_OUSTRING, pCode.get(), eGrammar);
         }
         else
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,

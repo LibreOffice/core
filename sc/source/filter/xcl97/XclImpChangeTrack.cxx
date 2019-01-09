@@ -272,7 +272,7 @@ void XclImpChangeTrack::ReadCell(
             if( pStrm->IsValid() && pTokenArray )
             {
                 rCell.meType = CELLTYPE_FORMULA;
-                rCell.mpFormula = new ScFormulaCell(&GetDocRef(), rPosition, pTokenArray.release());
+                rCell.mpFormula = new ScFormulaCell(&GetDocRef(), rPosition, std::move(pTokenArray));
             }
         }
         break;

@@ -331,7 +331,7 @@ void ScDocumentImport::setFormulaCell(
         rCells.set(pBlockPos->miCellPos, rPos.Row(), pFC.release());
 }
 
-void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScTokenArray* pArray)
+void ScDocumentImport::setFormulaCell(const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray)
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
     if (!pTab)
@@ -343,7 +343,7 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScTokenArray* pArra
         return;
 
     std::unique_ptr<ScFormulaCell> pFC =
-        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, pArray);
+        o3tl::make_unique<ScFormulaCell>(&mpImpl->mrDoc, rPos, std::move(pArray));
 
     mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pFC->GetCode());
 
