@@ -400,20 +400,19 @@ void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
             rInf.DrawBackground( *this );
 
         // make sure that font is not rotated
-        SwFont* pTmpFont = nullptr;
+        std::unique_ptr<SwFont> pTmpFont;
         if ( rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() ) )
         {
-            pTmpFont = new SwFont( *rInf.GetFont() );
+            pTmpFont.reset(new SwFont( *rInf.GetFont() ));
             pTmpFont->SetVertical( 0, rInf.GetTextFrame()->IsVertical() );
         }
 
-        SwFontSave aFontSave( rInf, pTmpFont );
+        SwFontSave aFontSave( rInf, pTmpFont.get() );
         // for text inside drop portions we let vcl handle the text directions
         SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
         aLayoutModeModifier.SetAuto();
 
         SwTextPortion::Paint( rInf );
-        delete pTmpFont;
     }
 }
 

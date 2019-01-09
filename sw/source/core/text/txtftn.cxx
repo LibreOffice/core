@@ -737,9 +737,8 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
         if( bBrutal )
         {
             pBoss->RemoveFootnote( pSrcFrame, pFootnote, false );
-            SwSaveFootnoteHeight *pHeight = bEnd ? nullptr : new SwSaveFootnoteHeight( pBoss, nDeadLine );
+            std::unique_ptr<SwSaveFootnoteHeight> pHeight(bEnd ? nullptr : new SwSaveFootnoteHeight( pBoss, nDeadLine ));
             pBoss->AppendFootnote( this, pFootnote );
-            delete pHeight;
         }
     }
 

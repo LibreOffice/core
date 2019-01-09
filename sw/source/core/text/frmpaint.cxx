@@ -464,17 +464,17 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             return false;
         else if( pSh->GetWin() )
         {
-            SwFont *pFnt;
+            std::unique_ptr<SwFont> pFnt;
             const SwTextNode& rTextNode = *GetTextNodeForParaProps();
             if ( rTextNode.HasSwAttrSet() )
             {
                 const SwAttrSet *pAttrSet = &( rTextNode.GetSwAttrSet() );
-                pFnt = new SwFont( pAttrSet, rTextNode.getIDocumentSettingAccess() );
+                pFnt.reset(new SwFont( pAttrSet, rTextNode.getIDocumentSettingAccess() ));
             }
             else
             {
                 SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), pSh );
-                pFnt = new SwFont( aFontAccess.Get()->GetFont() );
+                pFnt.reset(new SwFont( aFontAccess.Get()->GetFont() ));
             }
 
             const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
@@ -516,14 +516,12 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 if ( rSpace.GetTextFirstLineOfst() > 0 )
                     aPos.AdjustX(rSpace.GetTextFirstLineOfst() );
 
-                SwSaveClip *pClip;
+                std::unique_ptr<SwSaveClip> pClip;
                 if( IsUndersized() )
                 {
-                    pClip = new SwSaveClip( pSh->GetOut() );
+                    pClip.reset(new SwSaveClip( pSh->GetOut() ));
                     pClip->ChgClip( rRect );
                 }
-                else
-                    pClip = nullptr;
 
                 aPos.AdjustY(pFnt->GetAscent( pSh, *pSh->GetOut() ) );
 
@@ -554,15 +552,13 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     aDrawInf.SetGrammarCheck( nullptr );
                     aDrawInf.SetSmartTags( nullptr );
                     aDrawInf.SetFrame( this );
-                    aDrawInf.SetFont( pFnt );
+                    aDrawInf.SetFont( pFnt.get() );
                     aDrawInf.SetSnapToGrid( false );
 
                     pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
                     pFnt->DrawText_( aDrawInf );
                 }
-                delete pClip;
             }
-            delete pFnt;
             return true;
         }
     }
