@@ -94,7 +94,7 @@ public:
 
     const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
-    SvxGridItem*            CreateGridItem() const;
+    std::unique_ptr<SvxGridItem> CreateGridItem() const;
 
     ScViewOptions&          operator=  ( const ScViewOptions& rCpy );
     bool                    operator== ( const ScViewOptions& rOpt ) const;
