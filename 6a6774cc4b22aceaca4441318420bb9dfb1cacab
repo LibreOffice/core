@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_d71e236f",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-09T10:14:47Z",
+      "side": 0,
+      "message": "removal of \u003cutility\u003e is not helpful here, as the code below uses std::move",
+      "revId": "6a6774cc4b22aceaca4441318420bb9dfb1cacab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
