@@ -1346,7 +1346,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
     SwFrame       *pFrame = nullptr;
     std::unique_ptr<SwActualSection> pActualSection;
-    SwLayHelper *pPageMaker;
+    std::unique_ptr<SwLayHelper> pPageMaker;
 
     //If the layout will be created (bPages == true) we do head on the progress
     //Flys and DrawObjects are not connected immediately, this
@@ -1355,8 +1355,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     {
         // Attention: the SwLayHelper class uses references to the content-,
         // page-, layout-frame etc. and may change them!
-        pPageMaker = new SwLayHelper( pDoc, pFrame, pPrv, pPage, pLay,
-                pActualSection, nIndex, 0 == nEndIndex );
+        pPageMaker.reset(new SwLayHelper( pDoc, pFrame, pPrv, pPage, pLay,
+                pActualSection, nIndex, 0 == nEndIndex ));
         if( bStartPercent )
         {
             const sal_uLong nPageCount = pPageMaker->CalcPageCount();
@@ -1747,7 +1747,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     if( pPageMaker )
     {
         pPageMaker->CheckFlyCache( pPage );
-        delete pPageMaker;
+        pPageMaker.reset();
         if( pDoc->GetLayoutCache() )
         {
 #ifdef DBG_UTIL

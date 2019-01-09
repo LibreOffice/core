@@ -221,7 +221,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
             mvItems.pop_back();
         }
         ::basegfx::B2DPolyPolygon aPolyPolygon;
-        ::basegfx::B2DPolyPolygon* pPolyPolygon = nullptr;
+        std::unique_ptr<::basegfx::B2DPolyPolygon> pPolyPolygon;
 
         if ( auto pVirtFlyDrawObj = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) )
         {
@@ -242,13 +242,13 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
             }
 
             ::basegfx::B2DPolyPolygon aContourPoly(pObj->TakeContour());
-            pPolyPolygon = new ::basegfx::B2DPolyPolygon(aContourPoly);
+            pPolyPolygon.reset(new ::basegfx::B2DPolyPolygon(aContourPoly));
         }
         const SvxLRSpaceItem &rLRSpace = pFormat->GetLRSpace();
         const SvxULSpaceItem &rULSpace = pFormat->GetULSpace();
         CacheItem item {
             pObj, // due to #37347 the Object must be entered only after GetContour()
-            o3tl::make_unique<TextRanger>( aPolyPolygon, pPolyPolygon, 20,
+            o3tl::make_unique<TextRanger>( aPolyPolygon, pPolyPolygon.get(), 20,
                 static_cast<sal_uInt16>(rLRSpace.GetLeft()), static_cast<sal_uInt16>(rLRSpace.GetRight()),
                 pFormat->GetSurround().IsOutside(), false, pFrame->IsVertical() )
         };
@@ -256,7 +256,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         mvItems[0].mxTextRanger->SetUpper( rULSpace.GetUpper() );
         mvItems[0].mxTextRanger->SetLower( rULSpace.GetLower() );
 
-        delete pPolyPolygon;
+        pPolyPolygon.reset();
 
         nPntCnt += mvItems[0].mxTextRanger->GetPointCount();
         while( nPntCnt > POLY_MAX && mvItems.size() > POLY_MIN )
