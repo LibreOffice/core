@@ -2633,7 +2633,7 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
 
     OSL_ENSURE( pOldBoss->IsInSct() == pNewBoss->IsInSct(),
             "MoveLowerFootnotes: Section confusion" );
-    SwFootnoteFrames *pFootnoteArr;
+    std::unique_ptr<SwFootnoteFrames> pFootnoteArr;
     SwLayoutFrame* pNewChief = nullptr;
     SwLayoutFrame* pOldChief = nullptr;
 
@@ -2647,7 +2647,7 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
 
     if (bFoundCandidate)
     {
-        pFootnoteArr = new SwFootnoteFrames;
+        pFootnoteArr.reset(new SwFootnoteFrames);
         pOldChief = pOldBoss->FindFootnoteBossFrame( true );
         pNewChief = pNewBoss->FindFootnoteBossFrame( true );
         while( pOldChief->IsAnLower( pStart ) )
@@ -2659,8 +2659,7 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
         }
         if( pFootnoteArr->empty() )
         {
-            delete pFootnoteArr;
-            pFootnoteArr = nullptr;
+            pFootnoteArr.reset();
         }
     }
     else
@@ -2673,7 +2672,7 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
         if( pFootnoteArr )
         {
             static_cast<SwFootnoteBossFrame*>(pNewChief)->MoveFootnotes_( *pFootnoteArr, true );
-            delete pFootnoteArr;
+            pFootnoteArr.reset();
         }
         bMoved = true;
 

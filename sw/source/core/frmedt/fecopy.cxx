@@ -585,20 +585,20 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             aBoxes.empty() ? nullptr : aBoxes[0]->GetSttNd()->FindTableNode());
         if (nullptr != pTableNd)
         {
-            SwPosition* pDstPos = nullptr;
+            std::unique_ptr<SwPosition> pDstPos;
             if( this == pDestShell )
             {
                 // same shell? Then create new Cursor at the
                 // DocumentPosition passed
-                pDstPos = new SwPosition( *GetCursor()->GetPoint() );
+                pDstPos.reset(new SwPosition( *GetCursor()->GetPoint() ));
                 Point aPt( rInsPt );
-                GetLayout()->GetCursorOfst( pDstPos, aPt );
+                GetLayout()->GetCursorOfst( pDstPos.get(), aPt );
                 if( !pDstPos->nNode.GetNode().IsNoTextNode() )
                     bRet = true;
             }
             else if( !pDestShell->GetCursor()->GetNode().IsNoTextNode() )
             {
-                pDstPos = new SwPosition( *pDestShell->GetCursor()->GetPoint() );
+                pDstPos.reset(new SwPosition( *pDestShell->GetCursor()->GetPoint() ));
                 bRet = true;
             }
 
@@ -625,7 +625,6 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 if( this == pDestShell )
                     GetCursorDocPos() = rInsPt;
             }
-            delete pDstPos;
         }
     }
     else

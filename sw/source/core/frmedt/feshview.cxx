@@ -570,15 +570,14 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
             // re-created. Thus, delete all fly frames except the <this> before the
             // anchor attribute is change and re-create them afterwards.
             {
-                SwHandleAnchorNodeChg* pHandleAnchorNodeChg( nullptr );
+                std::unique_ptr<SwHandleAnchorNodeChg> pHandleAnchorNodeChg;
                 SwFlyFrameFormat* pFlyFrameFormat( dynamic_cast<SwFlyFrameFormat*>(&rFormat) );
                 if ( pFlyFrameFormat )
                 {
-                    pHandleAnchorNodeChg =
-                        new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch );
+                    pHandleAnchorNodeChg.reset(
+                        new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                 }
                 rFormat.GetDoc()->SetAttr( aAnch, rFormat );
-                delete pHandleAnchorNodeChg;
             }
             // #i28701# - no call of method
             // <CheckCharRectAndTopOfLine()> for to-character anchored
