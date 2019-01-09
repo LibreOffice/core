@@ -11,6 +11,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -75,6 +76,17 @@ DECLARE_RTFEXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground
     xCell.set(xTable->getCellByName("B6"));
     if (mbExported)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFBCC), getProperty<sal_Int32>(xCell, "BackColor"));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf122589_firstSection, "tdf122589_firstSection.odt")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xHeaderText
+        = getProperty<uno::Reference<text::XTextRange>>(xPageStyle, "HeaderText");
+    CPPUNIT_ASSERT_EQUAL(OUString("My header"), xHeaderText->getString());
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("# of paragraphs", 2, getParagraphs());
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf104035, "tdf104035.rtf")

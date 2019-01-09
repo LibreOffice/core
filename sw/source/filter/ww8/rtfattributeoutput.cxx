@@ -243,6 +243,9 @@ void RtfAttributeOutput::RTLAndCJKState(bool bIsRTL, sal_uInt16 nScript)
 
 void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo)
 {
+    if (m_bIsBeforeFirstParagraph && m_rExport.m_nTextTyp != TXT_HDFT)
+        m_bIsBeforeFirstParagraph = false;
+
     // Output table/table row/table cell starts if needed
     if (pTextNodeInfo)
     {
@@ -1180,6 +1183,9 @@ void RtfAttributeOutput::SectionBreak(sal_uInt8 nC, const WW8_SepInfo* pSectionI
 
 void RtfAttributeOutput::StartSection()
 {
+    if (m_bIsBeforeFirstParagraph)
+        return;
+
     m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_SECT OOO_STRING_SVTOOLS_RTF_SECTD);
     if (!m_bBufferSectionBreaks)
         m_rExport.Strm().WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
@@ -3604,6 +3610,7 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
     , m_bLastTable(true)
     , m_bWroteCellInfo(false)
     , m_bTableRowEnded(false)
+    , m_bIsBeforeFirstParagraph(true)
     , m_bSingleEmptyRun(false)
     , m_bInRun(false)
     , m_pFlyFrameSize(nullptr)
