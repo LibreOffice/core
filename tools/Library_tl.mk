@@ -108,6 +108,7 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_use_system_win32_libs,tl,\
 	mpr \
+	netapi32 \
 	ole32 \
 	shell32 \
 	uuid \
