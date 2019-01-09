@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <new>
 #include <ostream>
+#include <utility>
 
 #include "rtl/ustring.h"
 #include "rtl/string.hxx"
