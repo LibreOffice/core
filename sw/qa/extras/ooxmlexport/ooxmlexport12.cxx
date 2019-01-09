@@ -936,6 +936,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99631, "tdf99631.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dyaOrig", "768");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf122563, "tdf122563.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 1);
+    // Size of the embedded OLE spreadsheet was the bad "width:28.35pt;height:28.35pt"
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object/v:shape", "style",
+                "width:255.75pt;height:63.75pt");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
