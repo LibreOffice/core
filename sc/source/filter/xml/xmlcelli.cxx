@@ -1382,7 +1382,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
     if ( !aText.isEmpty() )
     {
         // temporary formula string as string tokens
-        ScTokenArray *pCode = new ScTokenArray();
+        std::unique_ptr<ScTokenArray> pCode(new ScTokenArray());
 
         // Check the special case of a single error constant without leading
         // '=' and create an error formula cell without tokens.
@@ -1411,7 +1411,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             }
         }
 
-        ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode, eGrammar, ScMatrixMode::NONE);
+        ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, std::move(pCode), eGrammar, ScMatrixMode::NONE);
         SetFormulaCell(pNewCell);
         rDoc.setFormulaCell(rCellPos, pNewCell);
     }

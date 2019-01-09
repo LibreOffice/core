@@ -126,7 +126,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument, const ScAddress* pPos) :
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
-    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),   // make real copy (not copy-ctor)
+    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone().release() : new ScTokenArray()),   // make real copy (not copy-ctor)
     aPos        (pPos ? *pPos : rScRangeData.aPos),
     eType       (rScRangeData.eType),
     pDoc        (pDocument ? pDocument : rScRangeData.pDoc),
@@ -154,8 +154,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
     ScCompiler aComp( pDoc, aPos, eTempGrammar );
     if (bSetError)
         aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
-    ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
-    pCode.reset(pNewCode);
+    pCode = aComp.CompileString( rSymbol );
     pCode->SetFromRangeName(true);
     if( pCode->GetCodeError() == FormulaError::NONE )
     {

@@ -4383,7 +4383,7 @@ public:
 
 }
 
-ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
+std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormula )
 {
     OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );
     if( meGrammar == FormulaGrammar::GRAM_EXTERNAL )
@@ -4680,9 +4680,9 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         delete [] pFunctionStack;
 
     // remember pArr, in case a subsequent CompileTokenArray() is executed.
-    ScTokenArray* pNew = new ScTokenArray( aArr );
+    std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( aArr ));
     pNew->GenHash();
-    pArr = pNew;
+    pArr = pNew.get();
     maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
 
     if (!maExternalFiles.empty())
@@ -4697,7 +4697,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     return pNew;
 }
 
-ScTokenArray* ScCompiler::CompileString( const OUString& rFormula, const OUString& rFormulaNmsp )
+std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormula, const OUString& rFormulaNmsp )
 {
     OSL_ENSURE( (GetGrammar() == FormulaGrammar::GRAM_EXTERNAL) || rFormulaNmsp.isEmpty(),
         "ScCompiler::CompileString - unexpected formula namespace for internal grammar" );
@@ -4712,8 +4712,8 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula, const OUStrin
         if( ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, aTokenSeq ) )
         {
             // remember pArr, in case a subsequent CompileTokenArray() is executed.
-            ScTokenArray* pNew = new ScTokenArray( aTokenArray );
-            pArr = pNew;
+            std::unique_ptr<ScTokenArray> pNew(new ScTokenArray( aTokenArray ));
+            pArr = pNew.get();
             maArrIterator = FormulaTokenArrayPlainIterator(*pArr);
             return pNew;
         }
@@ -4760,7 +4760,7 @@ bool ScCompiler::HandleRange()
                 pNew->AddOpCode( ocClose );
                 PushTokenArray( pNew, true );
             }
-            pNew = pRangeData->GetCode()->Clone();
+            pNew = pRangeData->GetCode()->Clone().release();
             pNew->SetFromRangeName( true );
             PushTokenArray( pNew, true );
             if( pRangeData->HasReferences() )
@@ -4826,7 +4826,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
                 return true;
             }
 
-            ScTokenArray* pNew = xNew->Clone();
+            ScTokenArray* pNew = xNew->Clone().release();
             PushTokenArray( pNew, true);
             if (FormulaTokenArrayPlainIterator(*pNew).GetNextReference() != nullptr)
             {

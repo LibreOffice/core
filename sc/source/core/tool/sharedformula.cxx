@@ -371,7 +371,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
     rDoc.SetDetectiveDirty(true);
 
     ScFormulaCellGroupRef xGroup = rTopCell.GetCellGroup();
-    const ScTokenArray* pCode = xGroup->mpCode;
+    const ScTokenArray* pCode = xGroup->mpCode.get();
     assert(pCode == rTopCell.GetCode());
     if (pCode->IsRecalcModeAlways())
     {

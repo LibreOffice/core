@@ -1904,9 +1904,9 @@ void ScTokenArray::Clear()
     FormulaTokenArray::Clear();
 }
 
-ScTokenArray* ScTokenArray::Clone() const
+std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const
 {
-    ScTokenArray* p = new ScTokenArray();
+    std::unique_ptr<ScTokenArray> p(new ScTokenArray());
     p->nLen = nLen;
     p->nRPN = nRPN;
     p->nMode = nMode;

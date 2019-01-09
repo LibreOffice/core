@@ -119,7 +119,7 @@ void XclImpPCItem::WriteToSource( XclImpRoot& rRoot, const ScAddress& rScPos ) c
         std::unique_ptr<ScTokenArray> pScTokArr = rRoot.GetOldFmlaConverter().GetBoolErr(
             XclTools::ErrorToEnum( fValue, true, nErrCode ) );
         ScFormulaCell* pCell = pScTokArr
-            ? new ScFormulaCell(&rDoc.getDoc(), rScPos, pScTokArr.release())
+            ? new ScFormulaCell(&rDoc.getDoc(), rScPos, std::move(pScTokArr))
             : new ScFormulaCell(&rDoc.getDoc(), rScPos);
         pCell->SetHybridDouble( fValue );
         rDoc.setFormulaCell(rScPos, pCell);
