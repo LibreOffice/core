@@ -10907,6 +10907,20 @@ AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 
+# This is only used in Qt5/KDE5 checks to determine if /usr/lib64
+# paths should be added to library search path. So lets put all 64-bit
+# platforms there.
+supports_multilib=
+case "$host_cpu" in
+x86_64 | powerpc64 | powerpc64le | s390x | aarch64 | mips64 | mips64el)
+    if test "$SAL_TYPES_SIZEOFLONG" = "8"; then
+        supports_multilib="yes"
+    fi
+    ;;
+*)
+    ;;
+esac
+
 dnl ===================================================================
 dnl QT5 Integration
 dnl ===================================================================
