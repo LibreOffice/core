@@ -414,19 +414,22 @@ namespace emfplushelper
             }
             // transform the pen width
             double adjustedPenWidth = pen->penWidth;
-            if (!pen->penWidth) // no width specified, then use default value
+
+            // If a zero width is specified, a minimum value must be used, which is determined by the units
+            if (pen->penWidth == 0.0)
             {
                 adjustedPenWidth = pen->penUnit == 0 ? 0.18f   // 0.18f is determined by comparison with MSO  (case of Unit == World)
                     : 0.05f;  // 0.05f is taken from old EMF+ implementation (case of Unit == Pixel etc.)
             }
-
             // transform and compare to 5 (the value 5 is determined by comparison to MSO)
             const double transformedPenWidth = std::max( MapSize(adjustedPenWidth, 0).getX(), 5.);
+
             drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
                                                                 transformedPenWidth,
                                                                 lineJoin,
                                                                 lineCap);
 
+            drawinglayer::attribute::StrokeAttribute aStrokeAttribute;
             if (pen->penDataFlags & 0x00000020 && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predefined line style
             {
                 // short writing
@@ -436,8 +439,6 @@ namespace emfplushelper
                 const std::vector<double> dot = { pw, 3*pw };
                 const std::vector<double> dashdot = { 3*pw, 3*pw, pw, 3*pw };
                 const std::vector<double> dashdotdot = { 3*pw, 3*pw, pw, 3*pw, pw, 3*pw };
-
-                drawinglayer::attribute::StrokeAttribute aStrokeAttribute;
 
                 switch (pen->dashStyle)
                 {
@@ -455,13 +456,7 @@ namespace emfplushelper
                     case EmfPlusLineStyleDashDotDot:
                         aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(dashdotdot);
                         break;
-
                 }
-                mrTargetHolders.Current().append(
-                    o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
-                        polygon,
-                        lineAttribute,
-                        aStrokeAttribute));
             }
             else if (pen->penDataFlags & 0x00000100) // pen has a custom dash line
             {
@@ -472,20 +467,29 @@ namespace emfplushelper
                     // convert from float to double and multiply with the adjusted pen width
                     aPattern[i] = transformedPenWidth * pen->dashPattern[i];
                 }
-                drawinglayer::attribute::StrokeAttribute strokeAttribute(aPattern);
-                mrTargetHolders.Current().append(
-                    o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
-                        polygon,
-                        lineAttribute,
-                        strokeAttribute));
-
+                aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(aPattern);
             }
-            else // no further line decoration, so use simple primitive
+
+            if (pen->GetColor().GetTransparency() == 0)
             {
                 mrTargetHolders.Current().append(
                     o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
                         polygon,
-                        lineAttribute));
+                        lineAttribute,
+                        aStrokeAttribute));
+            }
+            else
+            {
+                const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
+                            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                                polygon,
+                                lineAttribute,
+                                aStrokeAttribute));
+
+                mrTargetHolders.Current().append(
+                            o3tl::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                                drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
+                                pen->GetColor().GetTransparency() / 255.0));
             }
 
             mrPropertyHolders.Current().setLineColor(pen->GetColor().getBColor());
@@ -1271,7 +1275,7 @@ namespace emfplushelper
                                 }
                                 else
                                 {
-                                    SAL_INFO("drawinglayer", "EMF+\t warning: empty bitmap");
+                                    SAL_WARN("drawinglayer", "EMF+\t warning: empty bitmap");
                                 }
                             }
                             else if (image.type == ImageDataTypeMetafile)
@@ -1655,16 +1659,16 @@ namespace emfplushelper
                         float dx, dy, dw, dh;
                         ReadRectangle(rMS, dx, dy, dw, dh);
                         SAL_INFO("drawinglayer", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
-                        ::basegfx::B2DPoint mappedPoint(Map(dx, dy));
-                        ::basegfx::B2DSize mappedSize(MapSize(dw, dh));
+                        ::basegfx::B2DPoint mappedPoint1(Map(dx, dy));
+                        ::basegfx::B2DPoint mappedPoint2(Map(dx + dw, dy + dh));
 
                         ::basegfx::B2DPolyPolygon polyPolygon(
                                 ::basegfx::utils::createPolygonFromRect(
                                     ::basegfx::B2DRectangle(
-                                        mappedPoint.getX(),
-                                        mappedPoint.getY(),
-                                        mappedPoint.getX() + mappedSize.getX(),
-                                        mappedPoint.getY() + mappedSize.getY())));
+                                        mappedPoint1.getX(),
+                                        mappedPoint1.getY(),
+                                        mappedPoint2.getX(),
+                                        mappedPoint2.getY())));
 
                         HandleNewClipRegion(combineClip(mrPropertyHolders.Current().getClipPolyPolygon(), combineMode, polyPolygon), mrTargetHolders, mrPropertyHolders);
                         break;
@@ -1678,11 +1682,11 @@ namespace emfplushelper
                         EMFPPath *path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
                         if (!path)
                         {
+                            SAL_WARN("drawinglayer", "EMF+\t TODO Unable to find path in slot: " << (flags & 0xff));
                             break;
                         }
 
                         ::basegfx::B2DPolyPolygon& clipPoly(path->GetPolygon(*this));
-                        // clipPoly.transform(rState.mapModeTransform);
 
                         HandleNewClipRegion( combineClip(mrPropertyHolders.Current().getClipPolyPolygon(), combineMode, clipPoly), mrTargetHolders, mrPropertyHolders);
                         break;
@@ -1695,6 +1699,7 @@ namespace emfplushelper
                         EMFPRegion *region = static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
                         if (!region)
                         {
+                            SAL_WARN("drawinglayer", "EMF+\t TODO Unable to find region in slot: " << (flags & 0xff));
                             break;
                         }
 
