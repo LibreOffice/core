@@ -752,11 +752,11 @@ void SwDoc::PrtOLENotify( bool bAll )
                 }
 
                 bool bFound = false;
-                for ( std::vector<SvGlobalName*>::size_type j = 0;
+                for ( std::vector<SvGlobalName>::size_type j = 0;
                       j < pGlobalOLEExcludeList->size() && !bFound;
                       ++j )
                 {
-                    bFound = *(*pGlobalOLEExcludeList)[j] == aName;
+                    bFound = (*pGlobalOLEExcludeList)[j] == aName;
                 }
                 if ( bFound )
                     continue;
@@ -765,7 +765,7 @@ void SwDoc::PrtOLENotify( bool bAll )
                 // If it doesn't want to be informed
                 if ( xObj.is() )
                 {
-                        pGlobalOLEExcludeList->push_back( new SvGlobalName( aName ) );
+                    pGlobalOLEExcludeList->push_back( SvGlobalName( aName ) );
                 }
             }
             delete pNodes;

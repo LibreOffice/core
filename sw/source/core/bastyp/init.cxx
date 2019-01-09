@@ -430,7 +430,7 @@ SfxItemInfo aSlotTab[] =
     { 0, true }                            // RES_UNKNOWNATR_CONTAINER
 };
 
-std::vector<SvGlobalName*> *pGlobalOLEExcludeList = nullptr;
+std::vector<SvGlobalName> *pGlobalOLEExcludeList = nullptr;
 
 SwAutoCompleteWord* SwDoc::mpACmpltWords = nullptr;
 
@@ -648,7 +648,7 @@ void InitCore()
     SwSelPaintRects::s_pMapMode = new MapMode;
     SwFntObj::pPixMap = new MapMode;
 
-    pGlobalOLEExcludeList = new std::vector<SvGlobalName*>;
+    pGlobalOLEExcludeList = new std::vector<SvGlobalName>;
 
     if (!utl::ConfigManager::IsFuzzing())
     {
@@ -733,8 +733,6 @@ void FinitCore()
         delete pHt;
     }
 
-    for (SvGlobalName* p : *pGlobalOLEExcludeList)
-        delete p;
     delete pGlobalOLEExcludeList;
 }
 
