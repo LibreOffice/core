@@ -96,6 +96,11 @@ ScaleTabPage::ScaleTabPage(TabPageParent pWindow,const SfxItemSet& rInAttrs)
     m_xCbxAutoOrigin->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
     m_xCbx_AutoTimeResolution->connect_toggled(LINK(this, ScaleTabPage, EnableValueHdl));
 
+    m_xFmtFldMin->set_range(SAL_MIN_INT64 / 2, SAL_MAX_INT64 / 2);
+    m_xFmtFldMax->set_range(SAL_MIN_INT64 / 2, SAL_MAX_INT64 / 2);
+    m_xFmtFldStepMain->set_range(SAL_MIN_INT64 / 2, SAL_MAX_INT64 / 2);
+    m_xFmtFldOrigin->set_range(SAL_MIN_INT64 / 2, SAL_MAX_INT64 / 2);
+
     m_xLB_AxisType->connect_changed(LINK(this, ScaleTabPage, SelectAxisTypeHdl));
 
     HideAllControls();
