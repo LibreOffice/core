@@ -701,7 +701,13 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         case accessibility::AccessibleEventId::SELECTION_CHANGED_ADD:
         case accessibility::AccessibleEventId::SELECTION_CHANGED_REMOVE:
         case accessibility::AccessibleEventId::SELECTION_CHANGED_WITHIN:
-            g_signal_emit_by_name( G_OBJECT( atk_obj ), "selection_changed");
+            if (ATK_IS_SELECTION(atk_obj))
+                g_signal_emit_by_name(G_OBJECT(atk_obj), "selection_changed");
+            else
+            {
+                // e.g. tdf#122353, when such dialogs become native the problem will go away anyway
+                SAL_INFO("vcl.gtk", "selection change from obj which doesn't support XAccessibleSelection");
+            }
             break;
 
         case accessibility::AccessibleEventId::HYPERTEXT_CHANGED:
