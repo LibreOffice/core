@@ -294,16 +294,14 @@ bool ScNameDlg::IsNameValid()
 bool ScNameDlg::IsFormulaValid()
 {
     ScCompiler aComp( mpDoc, maCursorPos, mpDoc->GetGrammar());
-    ScTokenArray* pCode = aComp.CompileString(m_pEdAssign->GetText());
+    std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(m_pEdAssign->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {
         m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        delete pCode;
         return false;
     }
     else
     {
-        delete pCode;
         return true;
     }
 }

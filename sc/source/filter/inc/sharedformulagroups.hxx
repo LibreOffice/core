@@ -23,7 +23,7 @@ private:
     StoreType m_Store;
 
 public:
-    void set( size_t nSharedId, ScTokenArray* pArray );
+    void set( size_t nSharedId, std::unique_ptr<ScTokenArray> pArray );
     const ScTokenArray* get( size_t nSharedId ) const;
 };
 

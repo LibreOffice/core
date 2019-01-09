@@ -60,7 +60,7 @@ public:
 
     mutable size_t mnRefCount;
 
-    ScTokenArray* mpCode;
+    std::unique_ptr<ScTokenArray> mpCode;
     ScFormulaCell *mpTopCell;
     SCROW mnLength; // How many of these do we have ?
     sal_Int32 mnWeight;
@@ -77,7 +77,7 @@ public:
     ~ScFormulaCellGroup();
 
     void setCode( const ScTokenArray& rCode );
-    void setCode( ScTokenArray* pCode );
+    void setCode( std::unique_ptr<ScTokenArray> pCode );
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
 
@@ -181,7 +181,7 @@ public:
      * formula cell being constructed.  The caller <i>must not</i> pass a NULL
      * token array pointer.
      */
-    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, ScTokenArray* pArray,
+    ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT,
                    ScMatrixMode cMatInd = ScMatrixMode::NONE );
 
@@ -340,7 +340,7 @@ public:
     ScTokenArray*   GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}
 
-    void SetCode( ScTokenArray* pNew );
+    void SetCode( std::unique_ptr<ScTokenArray> pNew );
 
     bool            IsRunning() const { return bRunning;}
     void            SetRunning( bool bVal );

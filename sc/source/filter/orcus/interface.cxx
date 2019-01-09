@@ -973,12 +973,12 @@ void ScOrcusFormula::commit()
 
             // Compile the formula expression into tokens.
             ScCompiler aComp(&mrSheet.getDoc().getDoc(), aPos, meGrammar);
-            ScTokenArray* pArray = aComp.CompileString(maFormula);
+            std::unique_ptr<ScTokenArray> pArray = aComp.CompileString(maFormula);
             if (!pArray)
                 // Tokenization failed.
                 return;
 
-            rGroups.set(mnSharedFormulaIndex, pArray);
+            rGroups.set(mnSharedFormulaIndex, std::move(pArray));
         }
         rFactory.pushSharedFormulaToken(aPos, mnSharedFormulaIndex);
     }

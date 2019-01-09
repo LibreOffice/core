@@ -224,9 +224,9 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 {
     // Real copy of the formulas (for Ref Undo)
     if (r.pFormula1)
-        pFormula1.reset( r.pFormula1->Clone() );
+        pFormula1 = r.pFormula1->Clone();
     if (r.pFormula2)
-        pFormula2.reset( r.pFormula2->Clone() );
+        pFormula2 = r.pFormula2->Clone();
 
     // Formula cells are created at IsValid
     // TODO: But not in the Clipboard! So interpret beforehand!
@@ -352,7 +352,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             }
             else
             {
-                pFormula1.reset( aComp.CompileString( rExpr1, rExprNmsp1 ) );
+                pFormula1 = aComp.CompileString( rExpr1, rExprNmsp1 );
                 SimplifyCompiledFormula( pFormula1, nVal1, bIsStr1, aStrVal1 );
                 bRelRef1 = lcl_HasRelRef( mpDoc, pFormula1.get() );
             }
@@ -371,7 +371,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             }
             else
             {
-                pFormula2.reset( aComp.CompileString( rExpr2, rExprNmsp2 ) );
+                pFormula2 = aComp.CompileString( rExpr2, rExprNmsp2 );
                 SimplifyCompiledFormula( pFormula2, nVal2, bIsStr2, aStrVal2 );
                 bRelRef2 = lcl_HasRelRef( mpDoc, pFormula2.get() );
             }

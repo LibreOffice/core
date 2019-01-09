@@ -530,21 +530,18 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
 
 ScFormulaCellGroup::~ScFormulaCellGroup()
 {
-    delete mpCode;
 }
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
 {
-    delete mpCode;
     mpCode = rCode.Clone();
     mbInvariant = mpCode->IsInvariant();
     mpCode->GenHash();
 }
 
-void ScFormulaCellGroup::setCode( ScTokenArray* pCode )
+void ScFormulaCellGroup::setCode( std::unique_ptr<ScTokenArray> pCode )
 {
-    delete mpCode;
-    mpCode = pCode; // takes ownership of the token array.
+    mpCode = std::move(pCode); // takes ownership of the token array.
     mpCode->Finalize(); // Reduce memory usage if needed.
     mbInvariant = mpCode->IsInvariant();
     mpCode->GenHash();
@@ -667,7 +664,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 ScFormulaCell::ScFormulaCell(
-    ScDocument* pDoc, const ScAddress& rPos, ScTokenArray* pArray,
+    ScDocument* pDoc, const ScAddress& rPos, std::unique_ptr<ScTokenArray> pArray,
     const FormulaGrammar::Grammar eGrammar, ScMatrixMode cMatInd ) :
     bDirty( true ),
     bTableOpDirty( false ),
@@ -687,7 +684,7 @@ ScFormulaCell::ScFormulaCell(
     nSeenInIteration(0),
     nFormatType ( SvNumFormatType::NUMBER ),
     eTempGrammar( eGrammar),
-    pCode(pArray),
+    pCode(pArray.release()),
     pDocument( pDoc ),
     pPrevious(nullptr),
     pNext(nullptr),
@@ -695,7 +692,7 @@ ScFormulaCell::ScFormulaCell(
     pNextTrack(nullptr),
     aPos(rPos)
 {
-    assert(pArray); // Never pass a NULL pointer here.
+    assert(pCode); // Never pass a NULL pointer here.
 
     pCode->Finalize(); // Reduce memory usage if needed.
 
@@ -788,7 +785,7 @@ ScFormulaCell::ScFormulaCell(
     nSeenInIteration(0),
     nFormatType(xGroup->mnFormatType),
     eTempGrammar( eGrammar),
-    pCode(xGroup->mpCode ? xGroup->mpCode : new ScTokenArray),
+    pCode(xGroup->mpCode ? xGroup->mpCode.get() : new ScTokenArray),
     pDocument( pDoc ),
     pPrevious(nullptr),
     pNext(nullptr),
@@ -828,7 +825,7 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     pNextTrack(nullptr),
     aPos(rPos)
 {
-    pCode = rCell.pCode->Clone();
+    pCode = rCell.pCode->Clone().release();
 
     //  set back any errors and recompile
     //  not in the Clipboard - it must keep the received error flag
@@ -1129,7 +1126,7 @@ void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
     ScCompiler aComp( pDocument, aPos, eGrammar);
-    pCode = aComp.CompileString( rFormula );
+    pCode = aComp.CompileString( rFormula ).release();
     delete pCodeOld;
     if( pCode->GetCodeError() == FormulaError::NONE )
     {
@@ -1163,7 +1160,7 @@ void ScFormulaCell::Compile(
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
     ScCompiler aComp(rCxt, aPos);
-    pCode = aComp.CompileString( rFormula );
+    pCode = aComp.CompileString( rFormula ).release();
     delete pCodeOld;
     if( pCode->GetCodeError() == FormulaError::NONE )
     {
@@ -1339,7 +1336,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     if (bDoCompile)
     {
         ScTokenArray* pCodeOld = pCode;
-        pCode = aComp.CompileString( aFormula, aFormulaNmsp );
+        pCode = aComp.CompileString( aFormula, aFormulaNmsp ).release();
         delete pCodeOld;
 
         if( pCode->GetCodeError() == FormulaError::NONE )
@@ -3232,7 +3229,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
 
     std::unique_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
-        pOldCode.reset(pCode->Clone());
+        pOldCode = pCode->Clone();
 
     bool bValChanged = false;
     bool bRefModified = false;
@@ -3361,7 +3358,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     bool bCellStateChanged = false;
     std::unique_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
-        pOldCode.reset(pCode->Clone());
+        pOldCode = pCode->Clone();
 
     bool bValChanged = false;
     bool bRefModified = false;
@@ -3485,7 +3482,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
 
     std::unique_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
-        pOldCode.reset(pCode->Clone());
+        pOldCode = pCode->Clone();
 
     if (bOnRefMove)
         // Cell may reference itself, e.g. ocColumn, ocRow without parameter
@@ -3764,7 +3761,9 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         bPosChanged = true;
     }
 
-    ScTokenArray* pOld = pUndoDoc ? pCode->Clone() : nullptr;
+    std::unique_ptr<ScTokenArray> pOld;
+    if (pUndoDoc)
+        pOld = pCode->Clone();
     bool bRefChanged = false;
 
     formula::FormulaTokenArrayPlainIterator aIter(*pCode);
@@ -3808,8 +3807,6 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     }
     else
         StartListeningTo( pDocument ); // Listener as previous
-
-    delete pOld;
 }
 
 void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
@@ -3886,11 +3883,11 @@ void ScFormulaCell::SetChanged(bool b)
     bChanged = b;
 }
 
-void ScFormulaCell::SetCode( ScTokenArray* pNew )
+void ScFormulaCell::SetCode( std::unique_ptr<ScTokenArray> pNew )
 {
     assert(!mxGroup); // Don't call this if it's shared.
     delete pCode;
-    pCode = pNew; // takes ownership.
+    pCode = pNew.release(); // takes ownership.
 }
 
 void ScFormulaCell::SetRunning( bool bVal )
@@ -3948,7 +3945,7 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     mxGroup->mpTopCell = this;
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
-    mxGroup->mpCode = pCode; // Move this to the shared location.
+    mxGroup->mpCode.reset(pCode); // Move this to the shared location.
     return mxGroup;
 }
 
@@ -3958,7 +3955,7 @@ void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
     {
         // Make this cell a non-grouped cell.
         if (mxGroup)
-            pCode = mxGroup->mpCode->Clone();
+            pCode = mxGroup->mpCode->Clone().release();
 
         mxGroup = xRef;
         return;
@@ -3970,7 +3967,7 @@ void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
         delete pCode;
 
     mxGroup = xRef;
-    pCode = mxGroup->mpCode;
+    pCode = mxGroup->mpCode.get();
     mxGroup->mnWeight = 0;      // invalidate
 }
 
@@ -4836,7 +4833,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
             xGroup->mpTopCell->aPos.IncRow(nOffset);
             xGroup->mbInvariant = mxGroup->mbInvariant;
             xGroup->mnLength = nCurChunkSize;
-            xGroup->mpCode = mxGroup->mpCode;
+            xGroup->mpCode.reset( mxGroup->mpCode.get() );
         }
 
         ScTokenArray aCode;
@@ -4868,7 +4865,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
             {
                 mxGroup->mpTopCell->aPos = aOrigPos;
                 xGroup->mpTopCell = nullptr;
-                xGroup->mpCode = nullptr;
+                xGroup->mpCode.release();
             }
 
             aScope.addMessage("group token conversion failed");
@@ -5268,12 +5265,12 @@ sal_Int32 ScFormulaCell::GetWeight() const
 
 ScTokenArray* ScFormulaCell::GetSharedCode()
 {
-    return mxGroup ? mxGroup->mpCode : nullptr;
+    return mxGroup ? mxGroup->mpCode.get() : nullptr;
 }
 
 const ScTokenArray* ScFormulaCell::GetSharedCode() const
 {
-    return mxGroup ? mxGroup->mpCode : nullptr;
+    return mxGroup ? mxGroup->mpCode.get() : nullptr;
 }
 
 void ScFormulaCell::SyncSharedCode()
@@ -5282,7 +5279,7 @@ void ScFormulaCell::SyncSharedCode()
         // Not a shared formula cell.
         return;
 
-    pCode = mxGroup->mpCode;
+    pCode = mxGroup->mpCode.get();
 }
 
 #if DUMP_COLUMN_STORAGE
