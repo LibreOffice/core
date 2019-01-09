@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_bridges_java_uno.hxx"
+#include "precompiled_bridges.hxx"
 
 #include <sal/alloca.h>
 

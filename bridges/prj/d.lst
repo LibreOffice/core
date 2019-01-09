@@ -1,0 +1,11 @@
+..\%__SRC%\lib\libjava_uno* %_DEST%\lib%_EXT%\libjava_uno*
+..\%__SRC%\bin\java_uno* %_DEST%\bin%_EXT%\java_uno*
+..\%__SRC%\class\java_uno*.jar %_DEST%\bin%_EXT%\java_uno*.jar
+
+..\%__SRC%\bin\msci_uno.* %_DEST%\bin%_EXT%\msci_uno.*
+..\%__SRC%\bin\gcc3_uno.dll %_DEST%\bin%_EXT%\gcc3_uno.dll
+..\%__SRC%\lib\libgcc2_uno.* %_DEST%\lib%_EXT%\libgcc2_uno.*
+..\%__SRC%\lib\libgcc3_uno.* %_DEST%\lib%_EXT%\libgcc3_uno.*
+..\%__SRC%\lib\libs5abi_uno.* %_DEST%\lib%_EXT%\libs5abi_uno.*
+..\%__SRC%\bin\gcc3_uno.* %_DEST%\bin%_EXT%\gcc3_uno.*
+..\%__SRC%\lib\libsunpro5_uno.* %_DEST%\lib%_EXT%\libsunpro5_uno.*
