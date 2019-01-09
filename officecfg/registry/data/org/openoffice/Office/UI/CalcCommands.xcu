@@ -442,10 +442,10 @@
           <value xml:lang="en-US">Pi~vot Table...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Pivot Table</value>
+          <value xml:lang="en-US">Insert or Edit Pivot Table</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Edit Layout...</value>
+          <value xml:lang="en-US">~Properties...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -453,7 +453,7 @@
       </node>
       <node oor:name=".uno:InsertPivotTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Create...</value>
+          <value xml:lang="en-US">~Insert or Edit...</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:DataDataPilotRun</value>
