@@ -206,6 +206,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_bitmap_render_test \
 	CppunitTest_vcl_apitests \
 	CppunitTest_vcl_png_test \
+	CppunitTest_vcl_widget_definition_reader_test \
 ))
 
 ifneq (,$(filter PDFIUM,$(BUILD_TYPE)))
