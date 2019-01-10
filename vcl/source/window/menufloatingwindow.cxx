@@ -401,6 +401,16 @@ void MenuFloatingWindow::Start()
         GetParent()->IncModalCount();
 }
 
+bool MenuFloatingWindow::MenuInHierarchyHasFocus() const
+{
+    if (HasChildPathFocus())
+        return true;
+    PopupMenu* pSub = GetActivePopup();
+    if (!pSub)
+        return false;
+    return pSub->ImplGetFloatingWindow()->HasChildPathFocus();
+}
+
 void MenuFloatingWindow::End()
 {
     if (!bInExecute)
@@ -412,7 +422,7 @@ void MenuFloatingWindow::End()
     // restore focus to previous window if we still have the focus
     VclPtr<vcl::Window> xFocusId(xSaveFocusId);
     xSaveFocusId = nullptr;
-    if (HasChildPathFocus() && xFocusId != nullptr)
+    if (xFocusId != nullptr && MenuInHierarchyHasFocus())
     {
         ImplGetSVData()->maWinData.mbNoDeactivate = false;
         Window::EndSaveFocus(xFocusId);
