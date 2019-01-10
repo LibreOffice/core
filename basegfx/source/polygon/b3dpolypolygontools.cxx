@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/range/b3drange.hxx>
@@ -53,13 +52,9 @@ namespace basegfx
             return aRetval;
         }
 
-        namespace
+        B3DPolyPolygon const & createUnitCubePolyPolygon()
         {
-            struct theUnitCubePolyPolygon : public rtl::StaticWithInit<B3DPolyPolygon,
-                                                                       theUnitCubePolyPolygon>
-            {
-                B3DPolyPolygon operator()()
-                {
+            static auto const singleton = [] {
                     B3DPolyPolygon aRetval;
                     B3DPolygon aTemp;
                     aTemp.append(B3DPoint(0.0, 0.0, 1.0));
@@ -97,22 +92,13 @@ namespace basegfx
                     aTemp.append(B3DPoint(1.0, 0.0, 1.0));
                     aRetval.append(aTemp);
                     return aRetval;
-                }
-            };
+                }();
+            return singleton;
         }
 
-        B3DPolyPolygon const & createUnitCubePolyPolygon()
+        B3DPolyPolygon const & createUnitCubeFillPolyPolygon()
         {
-            return theUnitCubePolyPolygon::get();
-        }
-
-        namespace
-        {
-            struct theUnitCubeFillPolyPolygon : public rtl::StaticWithInit<B3DPolyPolygon,
-                                                                           theUnitCubeFillPolyPolygon>
-            {
-                B3DPolyPolygon operator()()
-                {
+            static auto const singleton = [] {
                     B3DPolyPolygon aRetval;
                     B3DPolygon aTemp;
 
@@ -179,13 +165,8 @@ namespace basegfx
                     aTemp.setClosed(true);
                     aRetval.append(aTemp);
                     return aRetval;
-                }
-            };
-        }
-
-        B3DPolyPolygon const & createUnitCubeFillPolyPolygon()
-        {
-            return theUnitCubeFillPolyPolygon::get();
+                }();
+            return singleton;
         }
 
         B3DPolyPolygon createCubePolyPolygonFromB3DRange( const B3DRange& rRange)

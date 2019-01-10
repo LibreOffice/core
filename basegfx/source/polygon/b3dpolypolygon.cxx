@@ -20,7 +20,6 @@
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
-#include <rtl/instance.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <functional>
@@ -188,11 +187,17 @@ public:
 
 namespace basegfx
 {
-    namespace { struct DefaultPolyPolygon : public rtl::Static<B3DPolyPolygon::ImplType,
-                                                               DefaultPolyPolygon> {}; }
+    namespace {
+
+    B3DPolyPolygon::ImplType const & getDefaultPolyPolygon() {
+        static B3DPolyPolygon::ImplType const singleton;
+        return singleton;
+    }
+
+    }
 
     B3DPolyPolygon::B3DPolyPolygon() :
-        mpPolyPolygon(DefaultPolyPolygon::get())
+        mpPolyPolygon(getDefaultPolyPolygon())
     {
     }
 
@@ -335,7 +340,7 @@ namespace basegfx
 
     void B3DPolyPolygon::clear()
     {
-        mpPolyPolygon = DefaultPolyPolygon::get();
+        mpPolyPolygon = getDefaultPolyPolygon();
     }
 
     void B3DPolyPolygon::flip()

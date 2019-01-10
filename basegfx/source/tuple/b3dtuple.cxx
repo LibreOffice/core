@@ -19,15 +19,13 @@
 
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/tuple/b3ituple.hxx>
-#include <rtl/instance.hxx>
-
-namespace { struct EmptyTuple : public rtl::Static<basegfx::B3DTuple, EmptyTuple> {}; }
 
 namespace basegfx
 {
     const B3DTuple& B3DTuple::getEmptyTuple()
     {
-        return EmptyTuple::get();
+        static B3DTuple const singleton;
+        return singleton;
     }
 
     B3ITuple fround(const B3DTuple& rTup)

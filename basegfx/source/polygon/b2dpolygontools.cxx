@@ -21,7 +21,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -1637,13 +1636,9 @@ namespace basegfx
             return aPolygon;
         }
 
-        namespace
+        B2DPolygon const & createUnitPolygon()
         {
-            struct theUnitPolygon :
-                public rtl::StaticWithInit<B2DPolygon, theUnitPolygon>
-            {
-                B2DPolygon operator () ()
-                {
+            static auto const singleton = [] {
                     B2DPolygon aPolygon {
                         { 0.0, 0.0 },
                         { 1.0, 0.0 },
@@ -1655,13 +1650,8 @@ namespace basegfx
                     aPolygon.setClosed( true );
 
                     return aPolygon;
-                }
-            };
-        }
-
-        B2DPolygon const & createUnitPolygon()
-        {
-            return theUnitPolygon::get();
+            }();
+            return singleton;
         }
 
         B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double fRadius )
@@ -1703,13 +1693,9 @@ namespace basegfx
             return aUnitCircle;
         }
 
-        namespace
+        B2DPolygon const & createHalfUnitCircle()
         {
-            struct theUnitHalfCircle :
-                public rtl::StaticWithInit<B2DPolygon, theUnitHalfCircle>
-            {
-                B2DPolygon operator()()
-                {
+            static auto const singleton = [] {
                     B2DPolygon aUnitHalfCircle;
                     const double fSegmentKappa(impDistanceBezierPointToControl(F_PI2 / STEPSPERQUARTER));
                     const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
@@ -1727,40 +1713,8 @@ namespace basegfx
                         aForward *= aRotateMatrix;
                     }
                     return aUnitHalfCircle;
-                }
-            };
-        }
-
-        B2DPolygon const & createHalfUnitCircle()
-        {
-            return theUnitHalfCircle::get();
-        }
-
-        namespace
-        {
-            struct theUnitCircleStartQuadrantOne :
-                public rtl::StaticWithInit<B2DPolygon, theUnitCircleStartQuadrantOne>
-            {
-                B2DPolygon operator()() { return impCreateUnitCircle(1); }
-            };
-
-            struct theUnitCircleStartQuadrantTwo :
-                public rtl::StaticWithInit<B2DPolygon, theUnitCircleStartQuadrantTwo>
-            {
-                B2DPolygon operator()() { return impCreateUnitCircle(2); }
-            };
-
-            struct theUnitCircleStartQuadrantThree :
-                public rtl::StaticWithInit<B2DPolygon, theUnitCircleStartQuadrantThree>
-            {
-                B2DPolygon operator()() { return impCreateUnitCircle(3); }
-            };
-
-            struct theUnitCircleStartQuadrantZero :
-                public rtl::StaticWithInit<B2DPolygon, theUnitCircleStartQuadrantZero>
-            {
-                B2DPolygon operator()() { return impCreateUnitCircle(0); }
-            };
+                }();
+            return singleton;
         }
 
         B2DPolygon const & createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant)
@@ -1768,16 +1722,28 @@ namespace basegfx
             switch(nStartQuadrant % 4)
             {
                 case 1 :
-                    return theUnitCircleStartQuadrantOne::get();
+                    {
+                        static auto const singleton = impCreateUnitCircle(1);
+                        return singleton;
+                    }
 
                 case 2 :
-                    return theUnitCircleStartQuadrantTwo::get();
+                    {
+                        static auto const singleton = impCreateUnitCircle(2);
+                        return singleton;
+                    }
 
                 case 3 :
-                    return theUnitCircleStartQuadrantThree::get();
+                    {
+                        static auto const singleton = impCreateUnitCircle(3);
+                        return singleton;
+                    }
 
                 default : // case 0 :
-                    return theUnitCircleStartQuadrantZero::get();
+                    {
+                        static auto const singleton = impCreateUnitCircle(0);
+                        return singleton;
+                    }
             }
         }
 
