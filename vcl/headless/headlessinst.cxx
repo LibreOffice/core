@@ -9,6 +9,7 @@
 #include <headless/svpinst.hxx>
 #include <headless/svpdummies.hxx>
 #include <unx/gendata.hxx>
+#include <o3tl/make_unique.hxx>
 
 class HeadlessSalInstance : public SvpSalInstance
 {
