@@ -838,6 +838,9 @@ SPECIAL_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
 //we need the nss libs for libxmlsec (or if the internal mozilla is enabled)
 #ifndef SYSTEM_NSS
 SPECIAL_LIB_FILE(gid_File_Lib_Freebl3,freebl3)
+#ifdef LINUX
+SPECIAL_LIB_FILE(gid_File_Lib_Freeblpriv3,freeblpriv3)
+#endif
 SPECIAL_LIB_FILE(gid_File_Lib_Nss3,nss3)
 SPECIAL_LIB_FILE(gid_File_Lib_Nspr,nspr4)
 SPECIAL_LIB_FILE(gid_File_Lib_Nssdbm3,nssdbm3)

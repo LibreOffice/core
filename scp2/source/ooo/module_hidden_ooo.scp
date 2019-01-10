@@ -230,6 +230,9 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Rdf,
 	gid_Unixlink_File_Lib_Rdf,
 	gid_File_Lib_Freebl3,
+#ifdef LINUX
+	gid_File_Lib_Freeblpriv3,
+#endif
 	gid_File_Lib_Nss3,
 	gid_File_Lib_Nspr,
 	gid_File_Lib_Nssdbm3,
