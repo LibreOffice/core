@@ -1850,21 +1850,26 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
+                        VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
                                                                                 GetActiveDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,
                                                                                 nResId));
-                        if ( pDlg->Execute() == RET_OK )
-                        {
-                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                        std::shared_ptr<SfxRequest> xRequest(new SfxRequest(rReq));
+                        rReq.Ignore(); // the 'old' request is not relevant any more
+                        pDlg->StartExecuteAsync([this, pDlg, pStyleSheet, xRequest](sal_Int32 nResult){
+                            if ( nResult == RET_OK )
+                            {
+                                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
-                            if ( pOutSet )
-                                m_aDocument.ModifyStyleSheet( *pStyleSheet, *pOutSet );
+                                if ( pOutSet )
+                                    m_aDocument.ModifyStyleSheet( *pStyleSheet, *pOutSet );
 
-                            SetDocumentModified();
-                            rReq.Done();
-                        }
+                                SetDocumentModified();
+                                xRequest->Done();
+                                pDlg->disposeOnce();
+                            }
+                        });
                     }
                 }
             }
