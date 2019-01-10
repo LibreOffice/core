@@ -19,8 +19,6 @@
 
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/utils/tools.hxx>
