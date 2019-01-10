@@ -410,6 +410,16 @@ public:
     }
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+    OUString(std::u16string_view sv) {
+        if (sv.size() > sal_uInt32(SAL_MAX_INT32)) {
+            throw std::bad_alloc();
+        }
+        pData = nullptr;
+        rtl_uString_newFromStr_WithLength(&pData, sv.data(), sv.size());
+    }
+#endif
+
     /**
       Release the string data.
     */
