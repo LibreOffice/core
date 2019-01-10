@@ -35,10 +35,14 @@ namespace sc {
 bool DocFuncUtil::hasProtectedTab( const ScDocument& rDoc, const ScMarkData& rMark )
 {
     SCTAB nTabCount = rDoc.GetTableCount();
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nTabCount; ++itr)
-        if (rDoc.IsTabProtected(*itr))
+    for (const auto& rTab : rMark)
+    {
+        if (rTab >= nTabCount)
+            break;
+
+        if (rDoc.IsTabProtected(rTab))
             return true;
+    }
 
     return false;
 }
@@ -51,10 +55,9 @@ ScDocumentUniquePtr DocFuncUtil::createDeleteContentsUndoDoc(
     SCTAB nTab = rRange.aStart.Tab();
     pUndoDoc->InitUndo(&rDoc, nTab, nTab);
     SCTAB nTabCount = rDoc.GetTableCount();
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd; ++itr)
-        if (*itr != nTab)
-            pUndoDoc->AddUndoTab( *itr, *itr );
+    for (const auto& rTab : rMark)
+        if (rTab != nTab)
+            pUndoDoc->AddUndoTab( rTab, rTab );
     ScRange aCopyRange = rRange;
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
@@ -93,11 +96,8 @@ std::unique_ptr<ScSimpleUndo::DataSpansType> DocFuncUtil::getNonEmptyCellSpans(
     const ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange )
 {
     std::unique_ptr<ScSimpleUndo::DataSpansType> pDataSpans(new ScSimpleUndo::DataSpansType);
-    ScMarkData::const_iterator it = rMark.begin(), itEnd = rMark.end();
-    for (; it != itEnd; ++it)
+    for (const SCTAB nTab : rMark)
     {
-        SCTAB nTab = *it;
-
         SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
 
