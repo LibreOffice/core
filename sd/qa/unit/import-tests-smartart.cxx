@@ -698,7 +698,10 @@ void SdImportTestSmartArt::testOrgChart()
     uno::Reference<text::XText> xManager(
         getChildShape(getChildShape(getChildShape(xGroup, 0), 0), 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xManager.is());
-    CPPUNIT_ASSERT_EQUAL(OUString("Manager"), xManager->getString());
+    // Without the accompanying fix in place, this test would have failed: this
+    // was just "Manager", and the second paragraph was lost.
+    OUString aExpected("Manager" SAL_NEWLINE_STRING "Second para");
+    CPPUNIT_ASSERT_EQUAL(aExpected, xManager->getString());
 
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xManager, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
