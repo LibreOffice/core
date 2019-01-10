@@ -70,63 +70,58 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxStringItem* pPageItem = SfxItemSet::GetItem<SfxStringItem>(pArgs, FN_PARAM_1, false);
 
-    if ( !pArgs || pPageItem )
+    if ( pArgs && !pPageItem )
     {
-        // fill ItemSet for Dialog
-        SfxItemSet aEditAttr( mpDoc->GetPool() );
-        mpView->GetAttributes( aEditAttr );
-
-        SfxItemSet aNewAttr( mpViewShell->GetPool(),
-                             svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
-        aNewAttr.Put( aEditAttr, false );
-
-        // create and execute dialog
-        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr, mpView) : nullptr);
-        if( pDlg )
-        {
-            if ( pPageItem )
-                pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
-            sal_uInt16 nResult = pDlg->Execute();
-
-            switch( nResult )
-            {
-                case RET_OK:
-                {
-                    SfxItemSet aSet( *pDlg->GetOutputItemSet() );
-
-                    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
-
-                    std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
-
-                    if (OutlineView* pView = dynamic_cast<OutlineView*>(mpView))
-                    {
-                        pOLV = pView->GetViewByWindow(mpViewShell->GetActiveWindow());
-                        aGuard.reset(new OutlineViewModelChangeGuard(*pView));
-                    }
-
-                    if( pOLV )
-                        pOLV->EnableBullets();
-
-                    rReq.Done( aSet );
-                    pArgs = rReq.GetArgs();
-                }
-                break;
-
-                default:
-                    return;
-            }
-        }
+        /* not direct to pOlView; therefore, SdDrawView::SetAttributes can catch
+           changes to master page and redirect to a template */
+        mpView->SetAttributes(*pArgs);
+        return;
     }
 
-    /* not direct to pOlView; therefore, SdDrawView::SetAttributes can catch
-       changes to master page and redirect to a template */
-    mpView->SetAttributes(*pArgs);
+    // fill ItemSet for Dialog
+    SfxItemSet aEditAttr( mpDoc->GetPool() );
+    mpView->GetAttributes( aEditAttr );
 
-/* #i35937#
-    // invalidate possible affected fields
-    mpViewShell->Invalidate( FN_NUM_BULLET_ON );
-*/
+    SfxItemSet aNewAttr( mpViewShell->GetPool(),
+                             svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+    aNewAttr.Put( aEditAttr, false );
+
+    // create and execute dialog
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdOutlineBulletTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr, mpView) );
+    if ( pPageItem )
+        pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
+
+    std::shared_ptr<SfxRequest> xRequest(new SfxRequest(rReq));
+    rReq.Ignore(); // the 'old' request is not relevant any more
+
+    pDlg->StartExecuteAsync([this, pDlg, xRequest](sal_Int32 nResult){
+
+        if( nResult == RET_OK )
+        {
+            SfxItemSet aSet( *pDlg->GetOutputItemSet() );
+
+            OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+
+            std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
+
+            if (OutlineView* pView = dynamic_cast<OutlineView*>(mpView))
+            {
+                pOLV = pView->GetViewByWindow(mpViewShell->GetActiveWindow());
+                aGuard.reset(new OutlineViewModelChangeGuard(*pView));
+            }
+
+            if( pOLV )
+                pOLV->EnableBullets();
+
+            xRequest->Done( aSet );
+
+            /* not direct to pOlView; therefore, SdDrawView::SetAttributes can catch
+               changes to master page and redirect to a template */
+            mpView->SetAttributes(*xRequest->GetArgs());
+        }
+        pDlg->disposeOnce();
+    });
 }
 
 void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
