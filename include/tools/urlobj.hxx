@@ -23,10 +23,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <sal/types.h>
-#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
+#include <string_view>
 
 class SvMemoryStream;
 
@@ -381,7 +381,7 @@ public:
 
     bool isSchemeEqualTo(INetProtocol scheme) const { return scheme == m_eScheme; }
 
-    bool isSchemeEqualTo(o3tl::u16string_view scheme) const;
+    bool isSchemeEqualTo(std::u16string_view scheme) const;
 
     /** Check if the scheme is one of the WebDAV scheme
      *  we know about.

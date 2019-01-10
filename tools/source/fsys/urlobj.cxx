@@ -3862,7 +3862,7 @@ OUString INetURLObject::getExternalURL() const
     return aTheExtURIRef;
 }
 
-bool INetURLObject::isSchemeEqualTo(o3tl::u16string_view scheme) const {
+bool INetURLObject::isSchemeEqualTo(std::u16string_view scheme) const {
     return m_aScheme.isPresent()
         && (rtl_ustr_compareIgnoreAsciiCase_WithLength(
                 scheme.data(), scheme.size(),
