@@ -60,10 +60,9 @@ public:
 
     void removeCell(const ScFormulaCell* pCell)
     {
-        ModuleCellMap::iterator itr = maCells.begin(), itrEnd = maCells.end();
-        for (; itr != itrEnd; ++itr)
+        for (auto& rEntry : maCells)
         {
-            itr->second.erase(std::remove(itr->second.begin(), itr->second.end(), pCell), itr->second.end() );
+            rEntry.second.erase(std::remove(rEntry.second.begin(), rEntry.second.end(), pCell), rEntry.second.end() );
         }
     }
 
@@ -181,10 +180,8 @@ void ScMacroManager::BroadcastModuleUpdate(const OUString& aModuleName)
 {
     vector<ScFormulaCell*> aCells;
     mpDepTracker->getCellsByModule(aModuleName, aCells);
-    vector<ScFormulaCell*>::iterator itr = aCells.begin(), itrEnd = aCells.end();
-    for (; itr != itrEnd; ++itr)
+    for (ScFormulaCell* pCell : aCells)
     {
-        ScFormulaCell* pCell = *itr;
         mpDoc->PutInFormulaTree(pCell); // for F9 recalc
 
         // for recalc on cell value change.  If the cell is not volatile, the

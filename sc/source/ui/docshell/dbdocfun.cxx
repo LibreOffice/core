@@ -251,12 +251,11 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     std::unique_ptr<ScDBCollection> pUndoColl;
     bool bRecord = rDoc.IsUndoEnabled();
 
-    std::vector<ScRange>::const_iterator iter;
-    for (iter = rDelAreaList.begin(); iter != rDelAreaList.end(); ++iter)
+    for (const auto& rDelArea : rDelAreaList)
     {
         // unregistering target in SBA no longer necessary
-        const ScAddress& rStart = iter->aStart;
-        const ScAddress& rEnd   = iter->aEnd;
+        const ScAddress& rStart = rDelArea.aStart;
+        const ScAddress& rEnd   = rDelArea.aEnd;
         rDocShell.DBAreaDeleted(
             rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col());
     }
@@ -1615,11 +1614,8 @@ void ScDBDocFunc::RefreshPivotTables(const ScDPObject* pDPObj, bool bApi)
     if (pErrId)
         return;
 
-    std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
-    for (; it != itEnd; ++it)
+    for (ScDPObject* pObj : aRefs)
     {
-        ScDPObject* pObj = *it;
-
         // This action is intentionally not undoable since it modifies cache.
         UpdatePivotTable(*pObj, false, bApi);
     }
@@ -1652,10 +1648,8 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
 
     // We allow pDimData being NULL.
     const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
-    std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
-    for (; it != itEnd; ++it)
+    for (ScDPObject* pObj : aRefs)
     {
-        ScDPObject* pObj = *it;
         if (pObj != pDPObj)
         {
             pSaveData = pObj->GetSaveData();

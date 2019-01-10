@@ -336,10 +336,9 @@ void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows, SCROW nLow, SCR
 {
     vector<SCROW> aRows;
     aRows.reserve(maRows.size());
-    RowsDataType::const_iterator itr = maRows.begin(), itrEnd = maRows.end();
-    for (; itr != itrEnd; ++itr)
-        if (nLow <= itr->first && itr->first <= nHigh)
-            aRows.push_back(itr->first);
+    for (const auto& rEntry : maRows)
+        if (nLow <= rEntry.first && rEntry.first <= nHigh)
+            aRows.push_back(rEntry.first);
 
     // hash map is not ordered, so we need to explicitly sort it.
     ::std::sort(aRows.begin(), aRows.end());
@@ -352,16 +351,10 @@ void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows, SCROW nLow, SCR
     if( !maRows.empty() )
     {
         // iterate over entire container (hash map is not sorted by key)
-        RowsDataType::const_iterator itr = maRows.begin(), itrEnd = maRows.end();
-        aRange.first = itr->first;
-        aRange.second = itr->first + 1;
-        while( ++itr != itrEnd )
-        {
-            if( itr->first < aRange.first )
-                aRange.first = itr->first;
-            else if( itr->first >= aRange.second )
-                aRange.second = itr->first + 1;
-        }
+        auto itMinMax = std::minmax_element(maRows.begin(), maRows.end(),
+            [](const RowsDataType::value_type& a, const RowsDataType::value_type& b) { return a.first < b.first; });
+        aRange.first = itMinMax.first->first;
+        aRange.second = itMinMax.second->first + 1;
     }
     return aRange;
 }
@@ -376,10 +369,9 @@ void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols, SCC
     const RowDataType& rRowData = itrRow->second;
     vector<SCCOL> aCols;
     aCols.reserve(rRowData.size());
-    RowDataType::const_iterator itrCol = rRowData.begin(), itrColEnd = rRowData.end();
-    for (; itrCol != itrColEnd; ++itrCol)
-        if (nLow <= itrCol->first && itrCol->first <= nHigh)
-            aCols.push_back(itrCol->first);
+    for (const auto& rCol : rRowData)
+        if (nLow <= rCol.first && rCol.first <= nHigh)
+            aCols.push_back(rCol.first);
 
     // hash map is not ordered, so we need to explicitly sort it.
     ::std::sort(aCols.begin(), aCols.end());
@@ -399,30 +391,22 @@ void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols, SCC
     if( !rRowData.empty() )
     {
         // iterate over entire container (hash map is not sorted by key)
-        RowDataType::const_iterator itr = rRowData.begin(), itrEnd = rRowData.end();
-        aRange.first = itr->first;
-        aRange.second = itr->first + 1;
-        while( ++itr != itrEnd )
-        {
-            if( itr->first < aRange.first )
-                aRange.first = itr->first;
-            else if( itr->first >= aRange.second )
-                aRange.second = itr->first + 1;
-        }
+        auto itMinMax = std::minmax_element(rRowData.begin(), rRowData.end(),
+            [](const RowDataType::value_type& a, const RowDataType::value_type& b) { return a.first < b.first; });
+        aRange.first = itMinMax.first->first;
+        aRange.second = itMinMax.second->first + 1;
     }
     return aRange;
 }
 
 void ScExternalRefCache::Table::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const
 {
-    RowsDataType::const_iterator itrRow = maRows.begin(), itrRowEnd = maRows.end();
-    for (; itrRow != itrRowEnd; ++itrRow)
+    for (const auto& rRow : maRows)
     {
-        const RowDataType& rRowData = itrRow->second;
-        RowDataType::const_iterator itrCol = rRowData.begin(), itrColEnd = rRowData.end();
-        for (; itrCol != itrColEnd; ++itrCol)
+        const RowDataType& rRowData = rRow.second;
+        for (const auto& rCol : rRowData)
         {
-            const Cell& rCell = itrCol->second;
+            const Cell& rCell = rCol.second;
             rNumFmts.push_back(rCell.mnFmtIndex);
         }
     }
@@ -642,10 +626,10 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                 nDataRow2 = aRows.back();
                 SCCOL nMinCol = std::numeric_limits<SCCOL>::max();
                 SCCOL nMaxCol = std::numeric_limits<SCCOL>::min();
-                for (vector<SCROW>::const_iterator itr = aRows.begin(), itrEnd = aRows.end(); itr != itrEnd; ++itr)
+                for (const auto& rRow : aRows)
                 {
                     vector<SCCOL> aCols;
-                    pTab->getAllCols(*itr, aCols, nDataCol1, nDataCol2);
+                    pTab->getAllCols(rRow, aCols, nDataCol1, nDataCol2);
                     if (!aCols.empty())
                     {
                         nMinCol = std::min( nMinCol, aCols.front());
@@ -673,14 +657,12 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         if (bFill)
         {
             // Only fill non-empty cells, for better performance.
-            for (vector<SCROW>::const_iterator itr = aRows.begin(), itrEnd = aRows.end(); itr != itrEnd; ++itr)
+            for (SCROW nRow : aRows)
             {
-                SCROW nRow = *itr;
                 vector<SCCOL> aCols;
                 pTab->getAllCols(nRow, aCols, nDataCol1, nDataCol2);
-                for (vector<SCCOL>::const_iterator itrCol = aCols.begin(), itrColEnd = aCols.end(); itrCol != itrColEnd; ++itrCol)
+                for (SCCOL nCol : aCols)
                 {
-                    SCCOL nCol = *itrCol;
                     TokenRef pToken = pTab->getCell(nCol, nRow);
                     if (!pToken)
                         // This should never happen!
@@ -834,15 +816,14 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
     size_t nTabFirstId = itrTabName->second;
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
     SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
-    vector<SingleRangeData>::const_iterator itrDataBeg = rData.begin(), itrDataEnd = rData.end();
-    for (vector<SingleRangeData>::const_iterator itrData = itrDataBeg; itrData != itrDataEnd; ++itrData)
+    size_t i = nTabFirstId;
+    for (const auto& rItem : rData)
     {
-        size_t i = nTabFirstId + ::std::distance(itrDataBeg, itrData);
         TableTypeRef& pTabData = rDoc.maTables[i];
         if (!pTabData.get())
             pTabData.reset(new Table);
 
-        const ScMatrixRef& pMat = itrData->mpRangeData;
+        const ScMatrixRef& pMat = rItem.mpRangeData;
         SCSIZE nMatCols, nMatRows;
         pMat->GetDimensions( nMatCols, nMatRows);
         if (nMatCols > static_cast<SCSIZE>(nCol2 - nCol1) && nMatRows > static_cast<SCSIZE>(nRow2 - nRow1))
@@ -883,6 +864,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
                         (nErr == FormulaError::MatrixSize ? ", ok" : ", not ok"));
             }
         }
+        ++i;
     }
 
     size_t nTabLastId = nTabFirstId + rRange.aEnd.Tab() - rRange.aStart.Tab();
@@ -945,10 +927,9 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
     // when loading cached data from, say, Excel XCT/CRN records.
     vector<TableName> aNewTabNames;
     aNewTabNames.reserve(n);
-    for (vector<OUString>::const_iterator itr = rTabNames.begin(), itrEnd = rTabNames.end();
-          itr != itrEnd; ++itr)
+    for (const auto& rTabName : rTabNames)
     {
-        TableName aNameItem(ScGlobal::pCharClass->uppercase(*itr), *itr);
+        TableName aNameItem(ScGlobal::pCharClass->uppercase(rTabName), rTabName);
         aNewTabNames.push_back(aNameItem);
     }
     pDoc->maTableNames.swap(aNewTabNames);
@@ -1065,9 +1046,8 @@ void ScExternalRefCache::getAllTableNames(sal_uInt16 nFileId, vector<OUString>& 
 
     size_t n = pDoc->maTableNames.size();
     rTabNames.reserve(n);
-    for (vector<TableName>::const_iterator itr = pDoc->maTableNames.begin(), itrEnd = pDoc->maTableNames.end();
-          itr != itrEnd; ++itr)
-        rTabNames.push_back(itr->maRealName);
+    for (const auto& rTableName : pDoc->maTableNames)
+        rTabNames.push_back(rTableName.maRealName);
 }
 
 SCTAB ScExternalRefCache::getTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const
@@ -1102,14 +1082,11 @@ void ScExternalRefCache::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const
     using ::std::unique;
 
     vector<sal_uInt32> aNumFmts;
-    for (DocDataType::const_iterator itrDoc = maDocs.begin(), itrDocEnd = maDocs.end();
-          itrDoc != itrDocEnd; ++itrDoc)
+    for (const auto& rEntry : maDocs)
     {
-        const vector<TableTypeRef>& rTables = itrDoc->second.maTables;
-        for (vector<TableTypeRef>::const_iterator itrTab = rTables.begin(), itrTabEnd = rTables.end();
-              itrTab != itrTabEnd; ++itrTab)
+        const vector<TableTypeRef>& rTables = rEntry.second.maTables;
+        for (TableTypeRef pTab : rTables)
         {
-            TableTypeRef pTab = *itrTab;
             if (!pTab)
                 continue;
 
@@ -1129,11 +1106,10 @@ bool ScExternalRefCache::setCacheDocReferenced( sal_uInt16 nFileId )
     if (!pDocItem)
         return areAllCacheTablesReferenced();
 
-    for (::std::vector<TableTypeRef>::iterator itrTab = pDocItem->maTables.begin();
-            itrTab != pDocItem->maTables.end(); ++itrTab)
+    for (auto& rxTab : pDocItem->maTables)
     {
-        if ((*itrTab).get())
-            (*itrTab)->setReferenced( true);
+        if (rxTab.get())
+            rxTab->setReferenced(true);
     }
     addCacheDocToReferenced( nFileId);
     return areAllCacheTablesReferenced();
@@ -1172,31 +1148,27 @@ void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
     if (bReferenced)
     {
         maReferenced.reset(0);
-        for (DocDataType::iterator itrDoc = maDocs.begin(); itrDoc != maDocs.end(); ++itrDoc)
+        for (auto& rEntry : maDocs)
         {
-            ScExternalRefCache::DocItem& rDocItem = (*itrDoc).second;
-            for (::std::vector<TableTypeRef>::iterator itrTab = rDocItem.maTables.begin();
-                    itrTab != rDocItem.maTables.end(); ++itrTab)
+            ScExternalRefCache::DocItem& rDocItem = rEntry.second;
+            for (auto& rxTab : rDocItem.maTables)
             {
-                if ((*itrTab).get())
-                    (*itrTab)->setReferenced( true);
+                if (rxTab.get())
+                    rxTab->setReferenced(true);
             }
         }
     }
     else
     {
         size_t nDocs = 0;
-        for (DocDataType::const_iterator itrDoc = maDocs.begin(); itrDoc != maDocs.end(); ++itrDoc)
-        {
-            if (nDocs <= (*itrDoc).first)
-                nDocs  = (*itrDoc).first + 1;
-        }
+        auto itrMax = std::max_element(maDocs.begin(), maDocs.end(),
+            [](const DocDataType::value_type& a, const DocDataType::value_type& b) { return a.first < b.first; });
+        if (itrMax != maDocs.end())
+            nDocs = itrMax->first + 1;
         maReferenced.reset( nDocs);
 
-        for (DocDataType::iterator itrDoc = maDocs.begin(); itrDoc != maDocs.end(); ++itrDoc)
+        for (auto& [nFileId, rDocItem] : maDocs)
         {
-            ScExternalRefCache::DocItem& rDocItem = (*itrDoc).second;
-            sal_uInt16 nFileId = (*itrDoc).first;
             size_t nTables = rDocItem.maTables.size();
             ReferencedStatus::DocReferenced & rDocReferenced = maReferenced.maDocs[nFileId];
             // All referenced => non-existing tables evaluate as completed.
@@ -1274,16 +1246,12 @@ void ScExternalRefCache::getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSp
 
         std::vector<SCROW> aRows;
         pTab->getAllRows(aRows);
-        std::vector<SCROW>::const_iterator itRow = aRows.begin(), itRowEnd = aRows.end();
-        for (; itRow != itRowEnd; ++itRow)
+        for (SCROW nRow : aRows)
         {
-            SCROW nRow = *itRow;
             std::vector<SCCOL> aCols;
             pTab->getAllCols(nRow, aCols);
-            std::vector<SCCOL>::const_iterator itCol = aCols.begin(), itColEnd = aCols.end();
-            for (; itCol != itColEnd; ++itCol)
+            for (SCCOL nCol : aCols)
             {
-                SCCOL nCol = *itCol;
                 rSet.set(nTab, nCol, nRow, true);
             }
         }
@@ -1314,12 +1282,8 @@ void ScExternalRefCache::ReferencedStatus::reset( size_t nDocs )
 
 void ScExternalRefCache::ReferencedStatus::checkAllDocs()
 {
-    for (DocReferencedVec::const_iterator itr = maDocs.begin(); itr != maDocs.end(); ++itr)
-    {
-        if (!(*itr).mbAllTablesReferenced)
-            return;
-    }
-    mbAllReferenced = true;
+    if (std::all_of(maDocs.begin(), maDocs.end(), [](const DocReferenced& rDoc) { return rDoc.mbAllTablesReferenced; }))
+        mbAllReferenced = true;
 }
 
 ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const
@@ -1739,11 +1703,13 @@ sal_uInt16 ScExternalRefManager::getExternalFileCount() const
 void ScExternalRefManager::markUsedByLinkListeners()
 {
     bool bAllMarked = false;
-    for (LinkListenerMap::const_iterator itr = maLinkListeners.begin();
-            itr != maLinkListeners.end() && !bAllMarked; ++itr)
+    for (const auto& [rFileId, rLinkListeners] : maLinkListeners)
     {
-        if (!(*itr).second.empty())
-            bAllMarked = maRefCache.setCacheDocReferenced( (*itr).first);
+        if (!rLinkListeners.empty())
+            bAllMarked = maRefCache.setCacheDocReferenced(rFileId);
+
+        if (bAllMarked)
+            break;
         /* TODO: LinkListeners should remember the table they're listening to.
          * As is, listening to one table will mark all tables of the document
          * being referenced. */
@@ -1752,13 +1718,10 @@ void ScExternalRefManager::markUsedByLinkListeners()
 
 void ScExternalRefManager::markUsedExternalRefCells()
 {
-    RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rEntry : maRefCells)
     {
-        RefCellSet::iterator itrCell = itr->second.begin(), itrCellEnd = itr->second.end();
-        for (; itrCell != itrCellEnd; ++itrCell)
+        for (ScFormulaCell* pCell : rEntry.second)
         {
-            ScFormulaCell* pCell = *itrCell;
             bool bUsed = pCell->MarkUsedExternalReferences();
             if (bUsed)
                 // Return true when at least one cell references external docs.
@@ -2196,11 +2159,8 @@ bool ScExternalRefManager::hasCellExternalReference(const ScAddress& rCell)
     ScFormulaCell* pCell = mpDoc->GetFormulaCell(rCell);
 
     if (pCell)
-      for (RefCellMap::iterator itr = maRefCells.begin(); itr != maRefCells.end(); ++itr)
-      {
-          if (itr->second.find(pCell) != itr->second.end())
-              return true;
-      }
+        return std::any_of(maRefCells.begin(), maRefCells.end(),
+            [&pCell](const RefCellMap::value_type& rEntry) { return rEntry.second.find(pCell) != rEntry.second.end(); });
 
     return false;
 }
@@ -2215,9 +2175,8 @@ void ScExternalRefManager::enableDocTimer( bool bEnable )
     {
         if (!maDocShells.empty())
         {
-            DocShellMap::iterator it = maDocShells.begin(), itEnd = maDocShells.end();
-            for (; it != itEnd; ++it)
-                it->second.maLastAccess = tools::Time(tools::Time::SYSTEM);
+            for (auto& rEntry : maDocShells)
+                rEntry.second.maLastAccess = tools::Time(tools::Time::SYSTEM);
 
             maSrcDocTimer.Start();
         }
@@ -2757,10 +2716,8 @@ std::vector<OUString> ScExternalRefManager::getAllCachedExternalFileNames() cons
 {
     std::vector<OUString> aNames;
     aNames.reserve(maSrcFiles.size());
-    std::vector<SrcFileData>::const_iterator it = maSrcFiles.begin(), itEnd = maSrcFiles.end();
-    for (; it != itEnd; ++it)
+    for (const SrcFileData& rData : maSrcFiles)
     {
-        const SrcFileData& rData = *it;
         aNames.push_back(rData.maFileName);
     }
 
@@ -3023,9 +2980,8 @@ void ScExternalRefManager::setFilterData(sal_uInt16 nFileId, const OUString& rFi
 
 void ScExternalRefManager::clear()
 {
-    DocShellMap::iterator itrEnd = maDocShells.end();
-    for (DocShellMap::iterator itr = maDocShells.begin(); itr != itrEnd; ++itr)
-        itr->second.maShell->DoClose();
+    for (auto& rEntry : maDocShells)
+        rEntry.second.maShell->DoClose();
 
     maDocShells.clear();
     maSrcDocTimer.Stop();
@@ -3038,15 +2994,14 @@ bool ScExternalRefManager::hasExternalData() const
 
 void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
 {
-    for (vector<SrcFileData>::iterator itr = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
-          itr != itrEnd; ++itr)
+    for (auto& rSrcFile : maSrcFiles)
     {
         // Re-generate relative file name from the absolute file name.
-        OUString aAbsName = itr->maRealFileName;
+        OUString aAbsName = rSrcFile.maRealFileName;
         if (aAbsName.isEmpty())
-            aAbsName = itr->maFileName;
+            aAbsName = rSrcFile.maFileName;
 
-        itr->maRelativeName = URIHelper::simpleNormalizedMakeRelative(
+        rSrcFile.maRelativeName = URIHelper::simpleNormalizedMakeRelative(
             rBaseFileUrl, aAbsName);
     }
 }
@@ -3054,16 +3009,15 @@ void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
 void ScExternalRefManager::updateAbsAfterLoad()
 {
     OUString aOwn( getOwnDocumentName() );
-    for (vector<SrcFileData>::iterator itr = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
-          itr != itrEnd; ++itr)
+    for (auto& rSrcFile : maSrcFiles)
     {
         // update maFileName to the real file name,
         // to be called when the original name is no longer needed (after CompileXML)
 
-        itr->maybeCreateRealFileName( aOwn );
-        OUString aReal = itr->maRealFileName;
+        rSrcFile.maybeCreateRealFileName( aOwn );
+        OUString aReal = rSrcFile.maRealFileName;
         if (!aReal.isEmpty())
-            itr->maFileName = aReal;
+            rSrcFile.maFileName = aReal;
     }
 }
 
@@ -3109,9 +3063,8 @@ void ScExternalRefManager::removeLinkListener(sal_uInt16 nFileId, LinkListener* 
 
 void ScExternalRefManager::removeLinkListener(LinkListener* pListener)
 {
-    LinkListenerMap::iterator itr = maLinkListeners.begin(), itrEnd = maLinkListeners.end();
-    for (; itr != itrEnd; ++itr)
-        itr->second.erase(pListener);
+    for (auto& rEntry : maLinkListeners)
+        rEntry.second.erase(pListener);
 }
 
 void ScExternalRefManager::notifyAllLinkListeners(sal_uInt16 nFileId, LinkUpdateType eType)
@@ -3128,18 +3081,17 @@ void ScExternalRefManager::notifyAllLinkListeners(sal_uInt16 nFileId, LinkUpdate
 void ScExternalRefManager::purgeStaleSrcDocument(sal_Int32 nTimeOut)
 {
     // To avoid potentially freezing Calc, we close one stale document at a time.
-    DocShellMap::iterator itr = maDocShells.begin(), itrEnd = maDocShells.end();
-    for (; itr != itrEnd; ++itr)
+    DocShellMap::iterator itr = std::find_if(maDocShells.begin(), maDocShells.end(),
+        [nTimeOut](const DocShellMap::value_type& rEntry) {
+            // in 100th of a second.
+            sal_Int32 nSinceLastAccess = (tools::Time( tools::Time::SYSTEM ) - rEntry.second.maLastAccess).GetTime();
+            return nSinceLastAccess >= nTimeOut;
+        });
+    if (itr != maDocShells.end())
     {
-        // in 100th of a second.
-        sal_Int32 nSinceLastAccess = (tools::Time( tools::Time::SYSTEM ) - itr->second.maLastAccess).GetTime();
-        if (nSinceLastAccess >= nTimeOut)
-        {
-            // Timed out.  Let's close this, and exit the loop.
-            itr->second.maShell->DoClose();
-            maDocShells.erase(itr);
-            break;
-        }
+        // Timed out.  Let's close this.
+        itr->second.maShell->DoClose();
+        maDocShells.erase(itr);
     }
 
     if (maDocShells.empty())
