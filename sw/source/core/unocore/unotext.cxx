@@ -1835,10 +1835,10 @@ void SwXText::Impl::ConvertCell(
 
     SwNodeRange aTmpRange(aStartCellPam.Start()->nNode,
                           aEndCellPam.End()->nNode);
-    SwNodeRange * pCorrectedRange =
+    std::unique_ptr<SwNodeRange> pCorrectedRange =
         m_pDoc->GetNodes().ExpandRangeForTableBox(aTmpRange);
 
-    if (pCorrectedRange != nullptr)
+    if (pCorrectedRange)
     {
         SwPaM aNewStartPaM(pCorrectedRange->aStart, 0);
         aStartCellPam = aNewStartPaM;
@@ -1851,7 +1851,7 @@ void SwXText::Impl::ConvertCell(
         SwPaM aNewEndPaM(pCorrectedRange->aEnd, nEndLen);
         aEndCellPam = aNewEndPaM;
 
-        delete pCorrectedRange;
+        pCorrectedRange.reset();
     }
 
     /** check the nodes between start and end

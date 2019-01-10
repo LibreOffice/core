@@ -258,7 +258,7 @@ public:
                                 SwTextFormatColl* pTextColl,
                                 SwUndoTextToTable* pUndo );
 
-    SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
+    std::unique_ptr<SwNodeRange> ExpandRangeForTableBox(const SwNodeRange & rRange);
 
     /// create a table from a vector of NodeRanges - API support
     SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
