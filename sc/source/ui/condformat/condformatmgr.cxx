@@ -171,7 +171,9 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnClickHdl, Button*, void)
 {
     mbModified = true;
     EditBtnHdl(nullptr);
-    UpdateButtonSensitivity();
+    // EditBtnHdl() might call EndDialog which will blow us away
+    if (!IsDisposed())
+        UpdateButtonSensitivity();
 }
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl, SvTreeListBox*, bool)
 {
