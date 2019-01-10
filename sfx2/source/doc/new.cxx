@@ -182,7 +182,8 @@ IMPL_LINK( SfxNewFileDialog, RegionSelect, weld::TreeView&, rBox, void )
     for (sal_uInt16 i = 0; i < nCount; ++i)
         m_xTemplateLb->append_text(m_aTemplates.GetName(nRegion, i));
     m_xTemplateLb->thaw();
-    m_xTemplateLb->select(0);
+    if (nCount)
+        m_xTemplateLb->select(0);
     TemplateSelect(*m_xTemplateLb);
 }
 
