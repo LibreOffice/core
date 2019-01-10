@@ -993,19 +993,36 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
     bool bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, aCalc );
 #endif
 
-    // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
+    // Make sure we don't hide all content, which would lead to a crash. First, count how many visible sections we have.
     int nShownSections = 0;
+    sal_uLong nContentStart = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionIndex() + 1;
+    sal_uLong nContentEnd = m_rDoc.GetNodes().GetEndOfContent().GetIndex();
+    SwSectionFormats& rSectFormats = m_rDoc.GetSections();
+    for( SwSectionFormats::size_type n = 0; n<rSectFormats.size(); ++n )
     {
-        SwSectionFormats& rSectFormats = m_rDoc.GetSections();
-        for( SwSectionFormats::size_type n = 0; n<rSectFormats.size(); ++n )
-        {
-            SwSectionFormat* pSectFormat = rSectFormats[ n ];
-            SwSection* pSect = pSectFormat->GetSection();
+        SwSectionFormat& rSectFormat = *rSectFormats[ n ];
+        SwSectionNode* pSectionNode = rSectFormat.GetSectionNode();
+        SwSection* pSect = rSectFormat.GetSection();
 
-            // count only visible sections
-            if ( pSect && !pSect->CalcHiddenFlag())
-                nShownSections++;
+        // Usually some of the content is not in a section: count that as a virtual section, so that all real sections can be hidden.
+        // Only look for section gaps at the lowest level, ignoring sub-sections.
+        if ( pSectionNode && !rSectFormat.GetParent() )
+        {
+            SwNodeIndex aNextIdx( *pSectionNode->EndOfSectionNode(), 1 );
+            if ( n == 0 && pSectionNode->GetIndex() != nContentStart )
+                nShownSections++;  //document does not start with a section
+            if ( n == rSectFormats.size() - 1 )
+            {
+                if ( aNextIdx.GetIndex() != nContentEnd )
+                    nShownSections++;  //document does not end in a section
+            }
+            else if ( !aNextIdx.GetNode().IsSectionNode() )
+                    nShownSections++; //section is not immediately followed by another section
         }
+
+        // count only visible sections
+        if ( pSect && !pSect->CalcHiddenFlag())
+            nShownSections++;
     }
 
     IDocumentRedlineAccess const& rIDRA(m_rDoc.getIDocumentRedlineAccess());
