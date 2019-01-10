@@ -131,10 +131,10 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
                     aSet.Put(*pSet);
             }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
+            VclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         pMDI, aSet, rSh, const_cast<SwTOXBase*>(pCurTOX),
                                                         bGlobal));
-            pDlg->Execute();
+            pDlg->StartExecuteAsync(nullptr);
         }
         break;
         case FN_REMOVE_CUR_TOX:
