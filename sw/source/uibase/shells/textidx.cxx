@@ -138,11 +138,11 @@ void SwTextShell::ExecIdx(SfxRequest const &rReq)
             }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
+            VclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         pMDI, aSet, rSh, const_cast<SwTOXBase*>(pCurTOX),
                                                         bGlobal));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
-            pDlg->Execute();
+            pDlg->StartExecuteAsync(nullptr);
         }
         break;
         case FN_REMOVE_CUR_TOX:
