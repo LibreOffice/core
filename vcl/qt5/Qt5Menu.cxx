@@ -185,7 +185,15 @@ void Qt5Menu::InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos)
 void Qt5Menu::RemoveItem(unsigned nPos)
 {
     SolarMutexGuard aGuard;
-    maItems.erase(maItems.begin() + nPos);
+
+    if (nPos < maItems.size())
+    {
+        Qt5MenuItem* pItem = maItems[nPos];
+        pItem->mpAction.reset();
+        pItem->mpMenu.reset();
+
+        maItems.erase(maItems.begin() + nPos);
+    }
 }
 
 void Qt5Menu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned)
