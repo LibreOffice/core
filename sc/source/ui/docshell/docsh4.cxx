@@ -1693,46 +1693,50 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
                         vcl::Window* pParent = GetActiveDialogParent();
-                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg(pParent ? pParent->GetFrameWeld() : nullptr, *pStyleSheet, true));
+                        VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg(pParent ? pParent->GetFrameWeld() : nullptr, *pStyleSheet, true));
 
-                        if ( pDlg->Execute() == RET_OK )
-                        {
-                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-
-                            WaitObject aWait( GetActiveDialogParent() );
-
-                            OUString aNewName = pStyleSheet->GetName();
-                            if ( aNewName != aOldName &&
-                                m_aDocument.RenamePageStyleInUse( aOldName, aNewName ) )
+                        std::shared_ptr<SfxRequest> pRequest(new SfxRequest(rReq));
+                        rReq.Ignore(); // the 'old' request is not relevant any more
+                        pDlg->StartExecuteAsync([this, pDlg, pRequest, pStyleSheet, aOldData, aOldName, &rStyleSet, nCurTab, &rCaller, bUndo](sal_Int32 nResult){
+                            if ( nResult == RET_OK )
                             {
-                                SfxBindings* pBindings = GetViewBindings();
-                                if (pBindings)
+                                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+
+                                WaitObject aWait( GetActiveDialogParent() );
+
+                                OUString aNewName = pStyleSheet->GetName();
+                                if ( aNewName != aOldName &&
+                                    m_aDocument.RenamePageStyleInUse( aOldName, aNewName ) )
                                 {
-                                    pBindings->Invalidate( SID_STATUS_PAGESTYLE );
-                                    pBindings->Invalidate( FID_RESET_PRINTZOOM );
+                                    SfxBindings* pBindings = GetViewBindings();
+                                    if (pBindings)
+                                    {
+                                        pBindings->Invalidate( SID_STATUS_PAGESTYLE );
+                                        pBindings->Invalidate( FID_RESET_PRINTZOOM );
+                                    }
                                 }
+
+                                if ( pOutSet )
+                                    m_aDocument.ModifyStyleSheet( *pStyleSheet, *pOutSet );
+
+                                // memorizing for GetState():
+                                GetPageOnFromPageStyleSet( &rStyleSet, nCurTab, m_bHeaderOn, m_bFooterOn );
+                                rCaller.GetViewFrame()->GetBindings().Invalidate( SID_HFEDIT );
+
+                                ScStyleSaveData aNewData;
+                                aNewData.InitFromStyle( pStyleSheet );
+                                if (bUndo)
+                                {
+                                    GetUndoManager()->AddUndoAction(
+                                            o3tl::make_unique<ScUndoModifyStyle>( this, SfxStyleFamily::Page,
+                                                        aOldData, aNewData ) );
+                                }
+
+                                PageStyleModified( aNewName, false );
+                                pRequest->Done();
+                                pDlg->disposeOnce();
                             }
-
-                            if ( pOutSet )
-                                m_aDocument.ModifyStyleSheet( *pStyleSheet, *pOutSet );
-
-                            // memorizing for GetState():
-                            GetPageOnFromPageStyleSet( &rStyleSet, nCurTab, m_bHeaderOn, m_bFooterOn );
-                            rCaller.GetViewFrame()->GetBindings().Invalidate( SID_HFEDIT );
-
-                            ScStyleSaveData aNewData;
-                            aNewData.InitFromStyle( pStyleSheet );
-                            if (bUndo)
-                            {
-                                GetUndoManager()->AddUndoAction(
-                                        o3tl::make_unique<ScUndoModifyStyle>( this, SfxStyleFamily::Page,
-                                                    aOldData, aNewData ) );
-                            }
-
-                            PageStyleModified( aNewName, false );
-                            rReq.Done();
-                        }
-                        pDlg.disposeAndClear();
+                        });
                     }
                 }
             }
