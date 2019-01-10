@@ -267,7 +267,7 @@ enum class XRefEntryType
 };
 
 /// An entry in a cross-reference stream.
-struct XRefEntry
+class XRefEntry
 {
     XRefEntryType m_eType = XRefEntryType::NOT_COMPRESSED;
     /**
@@ -280,7 +280,20 @@ struct XRefEntry
     /// Are changed as part of an incremental update?.
     bool m_bDirty = false;
 
+public:
     XRefEntry();
+
+    void SetType(XRefEntryType eType) { m_eType = eType; }
+
+    XRefEntryType GetType() const { return m_eType; }
+
+    void SetOffset(sal_uInt64 nOffset) { m_nOffset = nOffset; }
+
+    sal_uInt64 GetOffset() const { return m_nOffset; }
+
+    void SetDirty(bool bDirty) { m_bDirty = bDirty; }
+
+    bool GetDirty() const { return m_bDirty; }
 };
 
 /// Hex string: in <AABB> form.

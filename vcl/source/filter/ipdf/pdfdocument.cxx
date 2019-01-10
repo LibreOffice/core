@@ -175,14 +175,14 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     // Write signature object.
     sal_Int32 nSignatureId = m_aXRef.size();
     XRefEntry aSignatureEntry;
-    aSignatureEntry.m_nOffset = m_aEditBuffer.Tell();
-    aSignatureEntry.m_bDirty = true;
+    aSignatureEntry.SetOffset(m_aEditBuffer.Tell());
+    aSignatureEntry.SetDirty(true);
     m_aXRef[nSignatureId] = aSignatureEntry;
     OStringBuffer aSigBuffer;
     aSigBuffer.append(nSignatureId);
     aSigBuffer.append(" 0 obj\n");
     aSigBuffer.append("<</Contents <");
-    rContentOffset = aSignatureEntry.m_nOffset + aSigBuffer.getLength();
+    rContentOffset = aSignatureEntry.GetOffset() + aSigBuffer.getLength();
     // Reserve space for the PKCS#7 object.
     OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
@@ -206,7 +206,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     aSigBuffer.append(" ");
     aSigBuffer.append(rContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1);
     aSigBuffer.append(" ");
-    rLastByteRangeOffset = aSignatureEntry.m_nOffset + aSigBuffer.getLength();
+    rLastByteRangeOffset = aSignatureEntry.GetOffset() + aSigBuffer.getLength();
     // We don't know how many bytes we need for the last ByteRange value, this
     // should be enough.
     OStringBuffer aByteRangeFiller;
@@ -233,8 +233,8 @@ sal_Int32 PDFDocument::WriteAppearanceObject()
     // Write appearance object.
     sal_Int32 nAppearanceId = m_aXRef.size();
     XRefEntry aAppearanceEntry;
-    aAppearanceEntry.m_nOffset = m_aEditBuffer.Tell();
-    aAppearanceEntry.m_bDirty = true;
+    aAppearanceEntry.SetOffset(m_aEditBuffer.Tell());
+    aAppearanceEntry.SetDirty(true);
     m_aXRef[nAppearanceId] = aAppearanceEntry;
     m_aEditBuffer.WriteUInt32AsString(nAppearanceId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
@@ -254,8 +254,8 @@ sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_
     // Write the Annot object, references nSignatureId and nAppearanceId.
     sal_Int32 nAnnotId = m_aXRef.size();
     XRefEntry aAnnotEntry;
-    aAnnotEntry.m_nOffset = m_aEditBuffer.Tell();
-    aAnnotEntry.m_bDirty = true;
+    aAnnotEntry.SetOffset(m_aEditBuffer.Tell());
+    aAnnotEntry.SetDirty(true);
     m_aXRef[nAnnotId] = aAnnotEntry;
     m_aEditBuffer.WriteUInt32AsString(nAnnotId);
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
@@ -297,9 +297,9 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
         }
 
         sal_uInt32 nAnnotsId = pAnnotsObject->GetObjectValue();
-        m_aXRef[nAnnotsId].m_eType = XRefEntryType::NOT_COMPRESSED;
-        m_aXRef[nAnnotsId].m_nOffset = m_aEditBuffer.Tell();
-        m_aXRef[nAnnotsId].m_bDirty = true;
+        m_aXRef[nAnnotsId].SetType(XRefEntryType::NOT_COMPRESSED);
+        m_aXRef[nAnnotsId].SetOffset(m_aEditBuffer.Tell());
+        m_aXRef[nAnnotsId].SetDirty(true);
         m_aEditBuffer.WriteUInt32AsString(nAnnotsId);
         m_aEditBuffer.WriteCharPtr(" 0 obj\n[");
 
@@ -338,8 +338,8 @@ bool PDFDocument::WritePageObject(PDFObjectElement& rFirstPage, sal_Int32 nAnnot
             SAL_WARN("vcl.filter", "PDFDocument::Sign: invalid first page obj id");
             return false;
         }
-        m_aXRef[nFirstPageId].m_nOffset = m_aEditBuffer.Tell();
-        m_aXRef[nFirstPageId].m_bDirty = true;
+        m_aXRef[nFirstPageId].SetOffset(m_aEditBuffer.Tell());
+        m_aXRef[nFirstPageId].SetDirty(true);
         m_aEditBuffer.WriteUInt32AsString(nFirstPageId);
         m_aEditBuffer.WriteCharPtr(" 0 obj\n");
         m_aEditBuffer.WriteCharPtr("<<");
@@ -428,9 +428,9 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         }
 
         sal_uInt32 nAcroFormId = pAcroFormObject->GetObjectValue();
-        m_aXRef[nAcroFormId].m_eType = XRefEntryType::NOT_COMPRESSED;
-        m_aXRef[nAcroFormId].m_nOffset = m_aEditBuffer.Tell();
-        m_aXRef[nAcroFormId].m_bDirty = true;
+        m_aXRef[nAcroFormId].SetType(XRefEntryType::NOT_COMPRESSED);
+        m_aXRef[nAcroFormId].SetOffset(m_aEditBuffer.Tell());
+        m_aXRef[nAcroFormId].SetDirty(true);
         m_aEditBuffer.WriteUInt32AsString(nAcroFormId);
         m_aEditBuffer.WriteCharPtr(" 0 obj\n");
 
@@ -498,8 +498,8 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
     {
         // Write the updated Catalog object, references nAnnotId.
         auto pAcroFormDictionary = dynamic_cast<PDFDictionaryElement*>(pAcroForm);
-        m_aXRef[nCatalogId].m_nOffset = m_aEditBuffer.Tell();
-        m_aXRef[nCatalogId].m_bDirty = true;
+        m_aXRef[nCatalogId].SetOffset(m_aEditBuffer.Tell());
+        m_aXRef[nCatalogId].SetDirty(true);
         m_aEditBuffer.WriteUInt32AsString(nCatalogId);
         m_aEditBuffer.WriteCharPtr(" 0 obj\n");
         m_aEditBuffer.WriteCharPtr("<<");
@@ -562,8 +562,8 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         // This is a bit meta: the xref stream stores its own offset.
         sal_Int32 nXRefStreamId = m_aXRef.size();
         XRefEntry aXRefStreamEntry;
-        aXRefStreamEntry.m_nOffset = nXRefOffset;
-        aXRefStreamEntry.m_bDirty = true;
+        aXRefStreamEntry.SetOffset(nXRefOffset);
+        aXRefStreamEntry.SetDirty(true);
         m_aXRef[nXRefStreamId] = aXRefStreamEntry;
 
         // Write stream data.
@@ -581,7 +581,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         {
             const XRefEntry& rEntry = rXRef.second;
 
-            if (!rEntry.m_bDirty)
+            if (!rEntry.GetDirty())
                 continue;
 
             // Predictor.
@@ -591,7 +591,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
 
             // First field.
             unsigned char nType = 0;
-            switch (rEntry.m_eType)
+            switch (rEntry.GetType())
             {
                 case XRefEntryType::FREE:
                     nType = 0;
@@ -611,7 +611,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
                 size_t nByte = nOffsetLen - i - 1;
                 // Fields requiring more than one byte are stored with the
                 // high-order byte first.
-                unsigned char nCh = (rEntry.m_nOffset & (0xff << (nByte * 8))) >> (nByte * 8);
+                unsigned char nCh = (rEntry.GetOffset() & (0xff << (nByte * 8))) >> (nByte * 8);
                 aOrigLine[nPos++] = nCh;
             }
 
@@ -658,7 +658,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         m_aEditBuffer.WriteCharPtr("/Index [ ");
         for (const auto& rXRef : m_aXRef)
         {
-            if (!rXRef.second.m_bDirty)
+            if (!rXRef.second.GetDirty())
                 continue;
 
             m_aEditBuffer.WriteUInt32AsString(rXRef.first);
@@ -723,8 +723,8 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
         for (const auto& rXRef : m_aXRef)
         {
             size_t nObject = rXRef.first;
-            size_t nOffset = rXRef.second.m_nOffset;
-            if (!rXRef.second.m_bDirty)
+            size_t nOffset = rXRef.second.GetOffset();
+            if (!rXRef.second.GetDirty())
                 continue;
 
             m_aEditBuffer.WriteUInt32AsString(nObject);
@@ -1671,16 +1671,16 @@ void PDFDocument::ReadXRefStream(SvStream& rStream)
                     switch (nType)
                     {
                         case 0:
-                            aEntry.m_eType = XRefEntryType::FREE;
+                            aEntry.SetType(XRefEntryType::FREE);
                             break;
                         case 1:
-                            aEntry.m_eType = XRefEntryType::NOT_COMPRESSED;
+                            aEntry.SetType(XRefEntryType::NOT_COMPRESSED);
                             break;
                         case 2:
-                            aEntry.m_eType = XRefEntryType::COMPRESSED;
+                            aEntry.SetType(XRefEntryType::COMPRESSED);
                             break;
                     }
-                    aEntry.m_nOffset = nStreamOffset;
+                    aEntry.SetOffset(nStreamOffset);
                     m_aXRef[nIndex] = aEntry;
                 }
             }
@@ -1753,10 +1753,10 @@ void PDFDocument::ReadXRef(SvStream& rStream)
             if (m_aXRef.find(nIndex) == m_aXRef.end())
             {
                 XRefEntry aEntry;
-                aEntry.m_nOffset = aOffset.GetValue();
+                aEntry.SetOffset(aOffset.GetValue());
                 // Initially only the first entry is dirty.
                 if (nIndex == 0)
-                    aEntry.m_bDirty = true;
+                    aEntry.SetDirty(true);
                 m_aXRef[nIndex] = aEntry;
             }
             PDFDocument::SkipWhitespace(rStream);
@@ -1803,14 +1803,14 @@ void PDFDocument::SkipLineBreaks(SvStream& rStream)
 size_t PDFDocument::GetObjectOffset(size_t nIndex) const
 {
     auto it = m_aXRef.find(nIndex);
-    if (it == m_aXRef.end() || it->second.m_eType == XRefEntryType::COMPRESSED)
+    if (it == m_aXRef.end() || it->second.GetType() == XRefEntryType::COMPRESSED)
     {
         SAL_WARN("vcl.filter", "PDFDocument::GetObjectOffset: wanted to look up index #"
                                    << nIndex << ", but failed");
         return 0;
     }
 
-    return it->second.m_nOffset;
+    return it->second.GetOffset();
 }
 
 const std::vector<std::unique_ptr<PDFElement>>& PDFDocument::GetElements() { return m_aElements; }
