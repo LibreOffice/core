@@ -1610,9 +1610,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
 
     bool bWrongArg = false;
     if(!bExcept)
-       {
-        SvxBrushItem* pSetBrush = nullptr;
-        Size* pSetSize = nullptr;
+    {
+        std::unique_ptr<SvxBrushItem> pSetBrush;
+        std::unique_ptr<Size> pSetSize;
         std::unique_ptr<SwFormatVertOrient> pSetVOrient;
         bool bCharStyleNameSet = false;
 
@@ -1922,11 +1922,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                         {
                             const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
                             if(pOrigBrush)
-                            {
-                                pSetBrush = new SvxBrushItem(*pOrigBrush);
-                            }
+                                pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
                             else
-                                pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
+                                pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
                         }
                         Graphic aGraphic(xGraphic);
                         pSetBrush->SetGraphic(aGraphic);
@@ -1945,11 +1943,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                         {
                             const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
                             if(pOrigBrush)
-                            {
-                                pSetBrush = new SvxBrushItem(*pOrigBrush);
-                            }
+                                pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
                             else
-                                pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
+                                pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
                         }
 
                         uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
@@ -1964,7 +1960,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 {
                     assert( !pDocShell );
                     if(!pSetSize)
-                        pSetSize = new Size;
+                        pSetSize.reset(new Size);
                     awt::Size size;
                     if (pProp->Value >>= size)
                     {
@@ -2016,11 +2012,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                         {
                             const SvxBrushItem* pOrigBrush = aFormat.GetBrush();
                             if(pOrigBrush)
-                            {
-                                pSetBrush = new SvxBrushItem(*pOrigBrush);
-                            }
+                                pSetBrush.reset(new SvxBrushItem(*pOrigBrush));
                             else
-                                pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
+                                pSetBrush.reset(new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND));
                         }
 
                         Graphic aGraphic = vcl::graphic::loadFromURL(aURL);
@@ -2036,7 +2030,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         if(!bExcept && !bWrongArg && (pSetBrush || pSetSize || pSetVOrient))
         {
             if(!pSetBrush && aFormat.GetBrush())
-                pSetBrush = new SvxBrushItem(*aFormat.GetBrush());
+                pSetBrush.reset(new SvxBrushItem(*aFormat.GetBrush()));
 
             if(pSetBrush)
             {
@@ -2045,7 +2039,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
 
                 if(!pSetSize)
                 {
-                    pSetSize = new Size(aFormat.GetGraphicSize());
+                    pSetSize.reset(new Size(aFormat.GetGraphicSize()));
                     if(!pSetSize->Width() || !pSetSize->Height())
                     {
                         const Graphic* pGraphic = pSetBrush->GetGraphic();
@@ -2055,7 +2049,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 }
                 sal_Int16 eOrient = pSetVOrient ?
                     pSetVOrient->GetVertOrient() : text::VertOrientation::NONE;
-                aFormat.SetGraphicBrush( pSetBrush, pSetSize, text::VertOrientation::NONE == eOrient ? nullptr : &eOrient );
+                aFormat.SetGraphicBrush( pSetBrush.get(), pSetSize.get(), text::VertOrientation::NONE == eOrient ? nullptr : &eOrient );
             }
         }
         if ((!bCharStyleNameSet || rCharStyleName.isEmpty())
@@ -2067,9 +2061,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             SwStyleNameMapper::FillProgName(RES_POOLCHR_BUL_LEVEL, tmp);
             rCharStyleName = tmp;
         }
-        delete pSetBrush;
-        delete pSetSize;
-      }
+    }
 
     if(bWrongArg)
         throw lang::IllegalArgumentException();
@@ -2086,13 +2078,13 @@ uno::Reference< XPropertySetInfo > SwXNumberingRules::getPropertySetInfo()
 void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     SolarMutexGuard aGuard;
-    SwNumRule* pDocRule = nullptr;
+    std::unique_ptr<SwNumRule> pDocRule;
     SwNumRule* pCreatedRule = nullptr;
     if(!m_pNumRule)
     {
         if(m_pDocShell)
         {
-            pDocRule = new SwNumRule(*m_pDocShell->GetDoc()->GetOutlineNumRule());
+            pDocRule.reset(new SwNumRule(*m_pDocShell->GetDoc()->GetOutlineNumRule()));
         }
         else if(m_pDoc && !m_sCreatedNumRuleName.isEmpty())
         {
@@ -2117,7 +2109,6 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(rPropertyName == UNO_NAME_NAME)
     {
-        delete pDocRule;
         throw IllegalArgumentException();
     }
     else if(rPropertyName == UNO_NAME_IS_ABSOLUTE_MARGINS)
@@ -2135,7 +2126,6 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(rPropertyName == UNO_NAME_DEFAULT_LIST_ID)
     {
-        delete pDocRule;
         throw IllegalArgumentException();
     }
     else
@@ -2144,7 +2134,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     if(pDocRule)
     {
         m_pDocShell->GetDoc()->SetOutlineNumRule(*pDocRule);
-        delete pDocRule;
+        pDocRule.reset();
     }
     else if(pCreatedRule)
     {
