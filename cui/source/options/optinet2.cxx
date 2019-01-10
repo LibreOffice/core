@@ -19,7 +19,8 @@
 
 #include <sal/config.h>
 
-#include <o3tl/string_view.hxx>
+#include <string_view>
+
 #include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Security.hxx>
@@ -115,7 +116,7 @@ bool isValidPort(OUString const & value) {
         return true;
     }
     // Overflow in OUString::toUInt64 returns 0, so need to check value contains only zeroes:
-    return o3tl::u16string_view(value).find_first_not_of(u'0') == o3tl::u16string_view::npos;
+    return std::u16string_view(value).find_first_not_of(u'0') == std::u16string_view::npos;
 }
 
 }
