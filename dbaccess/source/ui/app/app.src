@@ -39,7 +39,7 @@
 #include "toolbox.hrc"
 #endif
 
-#define MN_PROPS    25
+#define MN_PROPS 25
 
 
 String RID_STR_NEW_FORM
@@ -106,52 +106,51 @@ Menu RID_MENU_APP_NEW
     {
         MenuItem
         {
-            Identifier = SID_APP_NEW_FORM;
-            Command = ".uno:DBNewForm";
+            Identifier = SID_APP_NEW_FORM ;
+            Command = ".uno:DBNewForm" ;
             Text [ en-US ] = "Form..." ;
         };
         MenuItem
         {
-            Identifier = SID_APP_NEW_REPORT;
-            Command = ".uno:DBNewReport";
+            Identifier = SID_APP_NEW_REPORT ;
+            Command = ".uno:DBNewReport" ;
             Text [ en-US ] = "Report..." ;
         };
         MenuItem
         {
             MID_DOCUMENT_CREATE_REPWIZ
-            Command = ".uno:DBNewReportAutoPilot";
+            Command = ".uno:DBNewReportAutoPilot" ;
         };
         MenuItem
         {
             MID_QUERY_NEW_DESIGN
-            Command = ".uno:DBNewQuery";
+            Command = ".uno:DBNewQuery" ;
         };
         MenuItem
         {
             MID_QUERY_NEW_SQL
-            Command = ".uno:DBNewQuerySql";
+            Command = ".uno:DBNewQuerySql" ;
         };
         MenuItem
         {
-            Separator = TRUE;
+            Separator = TRUE ;
         };
         MenuItem
         {
             MID_NEW_TABLE_DESIGN
-            Command = ".uno:DBNewTable";
+            Command = ".uno:DBNewTable" ;
         };
         MenuItem
         {
             MID_NEW_VIEW_DESIGN
-            Command = ".uno:DBNewView";
+            Command = ".uno:DBNewView" ;
         };
         MenuItem
         {
-            Identifier = SID_DB_NEW_VIEW_SQL;
-            Command = ".uno:DBNewViewSQL";
+            Identifier = SID_DB_NEW_VIEW_SQL ;
+            Command = ".uno:DBNewViewSQL" ;
             Text [ en-US ] = "View (Simple)..." ;
         };
-
     };
 };
 
@@ -169,9 +168,9 @@ Menu RID_MENU_APP_EDIT
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_PASTE_SPECIAL;
-            Text[ en-US ] = "Paste Special...";
-            Command = ".uno:PasteSpecial";
+            Identifier = SID_DB_APP_PASTE_SPECIAL ;
+            Text [ en-US ] = "Paste Special..." ;
+            Command = ".uno:PasteSpecial" ;
         };
         MenuItem
         {
@@ -179,58 +178,57 @@ Menu RID_MENU_APP_EDIT
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_DELETE;
-            Text[ en-US ] = "Delete";
-            Command = ".uno:DBDelete";
+            Identifier = SID_DB_APP_DELETE ;
+            Text [ en-US ] = "Delete" ;
+            Command = ".uno:DBDelete" ;
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_RENAME;
-            Text[ en-US ] = "Rename";
-            Command = ".uno:DBRename";
+            Identifier = SID_DB_APP_RENAME ;
+            Text [ en-US ] = "Rename" ;
+            Command = ".uno:DBRename" ;
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_EDIT;
-            Text[ en-US ] = "Edit";
-            Command = ".uno:DBEdit";
+            Identifier = SID_DB_APP_EDIT ;
+            Text [ en-US ] = "Edit" ;
+            Command = ".uno:DBEdit" ;
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_EDIT_SQL_VIEW;
-            Text [ en-US ] = "Edit in SQL View...";
-            Command = ".uno:DBEditSqlView";
+            Identifier = SID_DB_APP_EDIT_SQL_VIEW ;
+            Text [ en-US ] = "Edit in SQL View..." ;
+            Command = ".uno:DBEditSqlView" ;
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_OPEN;
-            Text[ en-US ] = "Open";
-            Command = ".uno:DBOpen";
+            Identifier = SID_DB_APP_OPEN ;
+            Text [ en-US ] = "Open" ;
+            Command = ".uno:DBOpen" ;
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_CONVERTTOVIEW;
-            Text[ en-US ] = "Create as View";
-            Command = ".uno:DBConvertToView";
+            Identifier = SID_DB_APP_CONVERTTOVIEW ;
+            Text [ en-US ] = "Create as View" ;
+            Command = ".uno:DBConvertToView" ;
         };
         MenuItem
         {
-            Identifier = SID_FORM_CREATE_REPWIZ_PRE_SEL;
-            Text [ en-US ] = "Form Wizard...";
-            Command = ".uno:DBNewFormAutoPilotWithPreSelection";
+            Identifier = SID_FORM_CREATE_REPWIZ_PRE_SEL ;
+            Text [ en-US ] = "Form Wizard..." ;
+            Command = ".uno:DBNewFormAutoPilotWithPreSelection" ;
         };
         MenuItem
         {
-            Identifier = SID_APP_NEW_REPORT_PRE_SEL;
-            Command = ".uno:DBNewReportWithPreSelection";
+            Identifier = SID_APP_NEW_REPORT_PRE_SEL ;
+            Command = ".uno:DBNewReportWithPreSelection" ;
             Text [ en-US ] = "Report..." ;
         };
         MenuItem
         {
             Identifier = SID_REPORT_CREATE_REPWIZ_PRE_SEL ;
-            Text[ en-US ] = "Report Wizard...";
-
-            Command = ".uno:DBNewReportAutoPilotWithPreSelection";
+            Text [ en-US ] = "Report Wizard..." ;
+            Command = ".uno:DBNewReportAutoPilotWithPreSelection" ;
         };
         MenuItem
         {
@@ -238,9 +236,9 @@ Menu RID_MENU_APP_EDIT
         };
         MenuItem
         {
-            Identifier = SID_SELECTALL;
-            Text[ en-US ] = "Select All";
-            Command = ".uno:SelectAll";
+            Identifier = SID_SELECTALL ;
+            Text [ en-US ] = "Select All" ;
+            Command = ".uno:SelectAll" ;
         };
         MenuItem
         {
@@ -248,29 +246,29 @@ Menu RID_MENU_APP_EDIT
         };
         MenuItem
         {
-            Identifier = MN_PROPS;
-            Text[ en-US ] = "~Database";
+            Identifier = MN_PROPS ;
+            Text [ en-US ] = "~Database" ;
             SubMenu = Menu
             {
                 ItemList =
                 {
                     MenuItem
                     {
-                        Identifier = SID_DB_APP_DSPROPS;
-                        Text[ en-US ] = "Properties...";
-                        Command = ".uno:DBDSProperties";
+                        Identifier = SID_DB_APP_DSPROPS ;
+                        Text [ en-US ] = "Properties..." ;
+                        Command = ".uno:DBDSProperties" ;
                     };
                     MenuItem
                     {
-                        Identifier = SID_DB_APP_DSCONNECTION_TYPE;
-                        Text[ en-US ] = "Connection Type...";
-                        Command = ".uno:DBDSConnectionType";
+                        Identifier = SID_DB_APP_DSCONNECTION_TYPE ;
+                        Text [ en-US ] = "Connection Type..." ;
+                        Command = ".uno:DBDSConnectionType" ;
                     };
                     MenuItem
                     {
-                        Identifier = SID_DB_APP_DSADVANCED_SETTINGS;
-                        Text[ en-US ] = "Advanced Settings...";
-                        Command = ".uno:DBDSAdvancedSettings";
+                        Identifier = SID_DB_APP_DSADVANCED_SETTINGS ;
+                        Text [ en-US ] = "Advanced Settings..." ;
+                        Command = ".uno:DBDSAdvancedSettings" ;
                     };
                 };
             };
@@ -372,41 +370,41 @@ Menu RID_MENU_APP_PREVIEW
     {
         MenuItem
         {
-            Identifier = SID_DB_APP_DISABLE_PREVIEW;
-            Text[ en-US ] = "None";
-            Command = ".uno:DBDisablePreview";
-            Checkable = TRUE;
-            RadioCheck = TRUE;
-            AutoCheck = TRUE;
+            Identifier = SID_DB_APP_DISABLE_PREVIEW ;
+            Text [ en-US ] = "None" ;
+            Command = ".uno:DBDisablePreview" ;
+            Checkable = TRUE ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
-            Text[ en-US ] = "Document Information";
-            Command = ".uno:DBShowDocInfoPreview";
-            Checkable = TRUE;
-            RadioCheck = TRUE;
-            AutoCheck = TRUE;
+            Identifier = SID_DB_APP_VIEW_DOCINFO_PREVIEW ;
+            Text [ en-US ] = "Document Information" ;
+            Command = ".uno:DBShowDocInfoPreview" ;
+            Checkable = TRUE ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
         };
         MenuItem
         {
-            Identifier = SID_DB_APP_VIEW_DOC_PREVIEW;
-            Text[ en-US ] = "Document";
-            Command = ".uno:DBShowDocPreview";
-            Checkable = TRUE;
-            RadioCheck = TRUE;
-            AutoCheck = TRUE;
+            Identifier = SID_DB_APP_VIEW_DOC_PREVIEW ;
+            Text [ en-US ] = "Document" ;
+            Command = ".uno:DBShowDocPreview" ;
+            Checkable = TRUE ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
         };
     };
 };
 String RID_STR_FORM
 {
-    Text [ en-US ] = "Form";
+    Text [ en-US ] = "Form" ;
 };
 
 String RID_STR_REPORT
 {
-    Text [ en-US ] = "Report";
+    Text [ en-US ] = "Report" ;
 };
 String STR_FRM_LABEL
 {
@@ -424,23 +422,25 @@ String STR_FOLDER_LABEL
 
 String STR_SUB_DOCS_WITH_SCRIPTS
 {
-    Text [ en-US ] = "The document contains forms or reports with embedded macros.";
+    Text [ en-US ] = "The document contains forms or reports with embedded macros." ;
 };
 
 String STR_SUB_DOCS_WITH_SCRIPTS_DETAIL
 {
-    Text [ en-US ] = "Macros should be embedded into the database document itself.\n\nYou can continue to use your document as before, however, you are encouraged to migrate your macros. The menu item 'Tools / Migrate Macros ...' will assist you with this.\n\nNote that you won't be able to embed macros into the database document itself until this migration is done. ";
+    Text [ en-US ] = "Macros should be embedded into the database document itself.\n\nYou can continue to use your document as before, however, you are encouraged to migrate your macros. The menu item 'Tools - Migrate Macros...' will assist you with this.\n\nNote that you won't be able to embed macros into the database document itself until this migration is done." ;
 };
 
 String RID_STR_EMBEDDED_DATABASE
 {
-    Text [ en-US ] = "Embedded database";
+    Text [ en-US ] = "Embedded database" ;
 };
 String RID_STR_NO_DIFF_CAT
 {
-    Text [ en-US ] = "You cannot select different categories.";
+    Text [ en-US ] = "You cannot select different categories." ;
 };
 String RID_STR_UNSUPPORTED_OBJECT_TYPE
 {
-    Text [ en-US ] = "Unsupported object type found ($type$).";
+    Text [ en-US ] = "Unsupported object type found ($type$)." ;
 };
+
+// ********************************************************************** EOF
