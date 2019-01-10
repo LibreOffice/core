@@ -523,7 +523,7 @@
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
                                             <property name="margin_left">8</property>
-                                            <property name="label" translatable="yes" context="printdialog|labelcopies">Number of Copies:</property>
+                                            <property name="label" translatable="yes" context="printdialog|labelcopies">Number of copies:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">copycount</property>
                                           </object>
@@ -646,7 +646,7 @@
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
                                             <property name="margin_left">6</property>
-                                            <property name="label" translatable="yes" context="printdialog|labelpapersides">Paper Sides:</property>
+                                            <property name="label" translatable="yes" context="printdialog|labelpapersides">Paper sides:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">sidesbox</property>
                                           </object>
@@ -693,7 +693,7 @@
                                         </child>
                                         <child>
                                           <object class="GtkCheckButton" id="reverseorder">
-                                            <property name="label" translatable="yes" context="printdialog|reverseorder">Print in Reverse Order</property>
+                                            <property name="label" translatable="yes" context="printdialog|reverseorder">Print in reverse order</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
@@ -774,7 +774,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes" context="printdialog|labelsize">Paper Size:</property>
+                                        <property name="label" translatable="yes" context="printdialog|labelsize">Paper size:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">papersizebox</property>
                                       </object>
