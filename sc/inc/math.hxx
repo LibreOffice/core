@@ -68,7 +68,7 @@ inline double divide( const double& fNumerator, const double& fDenominator )
 
 /** Return pow(fVal1,fVal2) with error handling.
 
-    If an error was detectect, a coded double error of
+    If an error was detected, a coded double error of
     FormulaError::IllegalFPOperation is returned.
  */
 double power( const double& fVal1, const double& fVal2 );
