@@ -23,6 +23,9 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 
+#include <stack>
+#include <vector>
+
 class VCL_DLLPUBLIC WaitObject
 {
 private:
@@ -35,6 +38,18 @@ public:
                         mpWindow->EnterWait();
                 }
                 ~WaitObject();
+};
+
+class VCL_DLLPUBLIC TopLevelWindowLocker
+{
+private:
+    std::stack<std::vector<VclPtr<vcl::Window>>> m_aBusyStack;
+public:
+    // lock all toplevels, except the argument
+    void incBusy(const vcl::Window* pIgnore);
+    // unlock previous lock
+    void decBusy();
+    bool isBusy() const { return !m_aBusyStack.empty(); }
 };
 
 #endif // INCLUDED_VCL_WAITOBJ_HXX
