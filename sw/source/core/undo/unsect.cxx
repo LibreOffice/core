@@ -42,12 +42,12 @@
 #include <calc.hxx>
 #include <o3tl/make_unique.hxx>
 
-static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
+static std::unique_ptr<SfxItemSet> lcl_GetAttrSet( const SwSection& rSect )
 {
     // save attributes of the format (columns, color, ...)
     // Content and Protect items are not interesting since they are already
     // stored in Section, thus delete them.
-    SfxItemSet* pAttr = nullptr;
+    std::unique_ptr<SfxItemSet> pAttr;
     if( rSect.GetFormat() )
     {
         sal_uInt16 nCnt = 1;
@@ -56,13 +56,12 @@ static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 
         if( nCnt < rSect.GetFormat()->GetAttrSet().Count() )
         {
-            pAttr = new SfxItemSet( rSect.GetFormat()->GetAttrSet() );
+            pAttr.reset(new SfxItemSet( rSect.GetFormat()->GetAttrSet() ));
             pAttr->ClearItem( RES_PROTECT );
             pAttr->ClearItem( RES_CNTNT );
             if( !pAttr->Count() )
             {
-                delete pAttr;
-                pAttr = nullptr;
+                pAttr.reset();
             }
         }
     }
@@ -424,7 +423,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     SwSection& rNdSect = pSectNd->GetSection();
     SwFormat* pFormat = rNdSect.GetFormat();
 
-    SfxItemSet* pCur = ::lcl_GetAttrSet( rNdSect );
+    std::unique_ptr<SfxItemSet> pCur = ::lcl_GetAttrSet( rNdSect );
     if (m_pAttrSet)
     {
         // The Content and Protect items must persist
@@ -445,7 +444,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
         pFormat->ResetFormatAttr( RES_HEADER, RES_OPAQUE );
         pFormat->ResetFormatAttr( RES_SURROUND, RES_FRMATR_END-1 );
     }
-    m_pAttrSet.reset(pCur);
+    m_pAttrSet = std::move(pCur);
 
     if (!m_bOnlyAttrChanged)
     {
