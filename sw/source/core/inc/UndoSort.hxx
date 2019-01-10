@@ -57,8 +57,6 @@ struct SwSortUndoElement
     ~SwSortUndoElement();
 };
 
-typedef std::vector<SwNodeIndex*> SwUndoSortList;
-
 class SwUndoSort : public SwUndo, private SwUndRng
 {
     std::unique_ptr<SwSortOptions>    pSortOpt;
