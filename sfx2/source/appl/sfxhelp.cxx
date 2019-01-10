@@ -21,6 +21,7 @@
 #include <sfx2/sfxhelp.hxx>
 
 #include <set>
+#include <string_view>
 #include <algorithm>
 #include <cassert>
 
@@ -758,7 +759,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
                             << " before [Instance] app-path");
                     throw Failure();
                 }
-                o3tl::string_view const line(
+                std::string_view const line(
                     reinterpret_cast<char const *>(bytes.getConstArray()), bytes.getLength());
                 if (instance) {
                     static constexpr auto keyPath = OUStringLiteral("app-path=");
