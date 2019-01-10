@@ -121,7 +121,8 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         // create index for (sorted) positions
         // The IndexList must be created based on (asc.) sorted SourcePosition.
-        SwUndoSortList aIdxList;
+        std::vector<SwNodeIndex> aIdxList;
+        aIdxList.reserve(m_SortList.size());
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {
@@ -129,9 +130,8 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 if (j->SORT_TXT_TBL.TXT.nSource == nSttNode + i)
                 {
-                    SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
-                        j->SORT_TXT_TBL.TXT.nTarget );
-                    aIdxList.insert( aIdxList.begin() + i, pIdx );
+                    aIdxList.push_back( SwNodeIndex( rDoc.GetNodes(),
+                                            j->SORT_TXT_TBL.TXT.nTarget ) );
                     break;
                 }
             }
@@ -140,13 +140,11 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i );
-            SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
+            SwNodeRange aRg( aIdxList[i], 0, aIdxList[i], 1 );
             rDoc.getIDocumentContentOperations().MoveNodeRange(aRg, aIdx,
                 SwMoveFlags::DEFAULT);
         }
         // delete indices
-        for(auto& rpIdx : aIdxList)
-            delete rpIdx;
         aIdxList.clear();
         SetPaM(rPam, true);
     }
@@ -203,25 +201,23 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         SetPaM(rPam);
         RemoveIdxFromRange(rPam, true);
 
-        SwUndoSortList aIdxList;
+        std::vector<SwNodeIndex> aIdxList;
+        aIdxList.reserve(m_SortList.size());
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {   // current position is starting point
-            SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
-                    m_SortList[i]->SORT_TXT_TBL.TXT.nSource);
-            aIdxList.insert( aIdxList.begin() + i, pIdx );
+            aIdxList.push_back( SwNodeIndex( rDoc.GetNodes(),
+                                             m_SortList[i]->SORT_TXT_TBL.TXT.nSource) );
         }
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i);
-            SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
+            SwNodeRange aRg( aIdxList[i], 0, aIdxList[i], 1 );
             rDoc.getIDocumentContentOperations().MoveNodeRange(aRg, aIdx,
                 SwMoveFlags::DEFAULT);
         }
         // delete indices
-        for(auto& rpIdx : aIdxList)
-            delete rpIdx;
         aIdxList.clear();
         SetPaM(rPam, true);
         SwTextNode const*const pTNd = rPam.GetNode().GetTextNode();
