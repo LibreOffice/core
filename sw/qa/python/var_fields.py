@@ -132,10 +132,7 @@ class TestVarFields(unittest.TestCase):
         read_content = xSection.getPropertyValue("Condition")
 
         # 21. check
-        # expected:
-        # self.assertEqual("foo EQ 1", readContent)
-        # reality:
-        self.assertEqual("0", read_content)
+        self.assertEqual("foo EQ 1", read_content)
 
 if __name__ == '__main__':
     unittest.main()
