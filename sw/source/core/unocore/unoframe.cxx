@@ -1548,7 +1548,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 
             UnoActionContext aAction(pFormat->GetDoc());
 
-            SfxItemSet* pSet = nullptr;
+            std::unique_ptr<SfxItemSet> pSet;
             // #i31771#, #i25798# - No adjustment of
             // anchor ( no call of method <sw_ChkAndSetNewAnchor(..)> ),
             // if document is currently in reading mode.
@@ -1563,21 +1563,18 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     const ::SfxPoolItem* pItem;
                     if( SfxItemState::SET == pFrameFormat->GetItemState( RES_ANCHOR, false, &pItem ))
                     {
-                        pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrameFormatSetRange );
+                        pSet.reset(new SfxItemSet( pDoc->GetAttrPool(), aFrameFormatSetRange ));
                         pSet->Put( *pItem );
                         if ( pFormat->GetDoc()->GetEditShell() != nullptr
                              && !sw_ChkAndSetNewAnchor( *pFly, *pSet ) )
                         {
-                            delete pSet;
-                            pSet = nullptr;
+                            pSet.reset();
                         }
                     }
                 }
             }
 
-            pFormat->GetDoc()->SetFrameFormatToFly( *pFormat, *pFrameFormat, pSet );
-            delete pSet;
-
+            pFormat->GetDoc()->SetFrameFormatToFly( *pFormat, *pFrameFormat, pSet.get() );
         }
         else if (FN_UNO_GRAPHIC_FILTER == pEntry->nWID)
         {
