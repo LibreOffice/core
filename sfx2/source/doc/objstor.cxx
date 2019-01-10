@@ -581,6 +581,10 @@ bool SfxObjectShell::ImportFromGeneratedStream_Impl(
 bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 {
     ModifyBlocker_Impl aBlock( this );
+    struct FontLockGuard {
+        FontLockGuard() { Application::LockFontUpdates(true); }
+        ~FontLockGuard() { Application::LockFontUpdates(false); }
+    } aFontLockGuard;
 
     pMedium = pMed;
     pMedium->CanDisposeStorage_Impl( true );
