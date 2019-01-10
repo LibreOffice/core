@@ -136,7 +136,7 @@ String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
 
 String STR_INTERNAL_ERRMSG
 {
-    Text [ en-US ] = "The following internal error has occurred : " ;
+    Text [ en-US ] = "The following internal error has occurred: " ;
 };
 
 QueryBox QBX_USERDATALOCKED
@@ -163,9 +163,9 @@ ModalDialog DLG_CMDLINEHELP
     HelpID = "desktop:ModalDialog:DLG_CMDLINEHELP" ;
     Text = "%PRODUCTNAME Commandline Help" ;
     Size = MAP_APPFONT ( 275, 380 ) ;
-    Border = True ;
-    SVLook = True ;
-    Moveable = True ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
 
     FixedText TXT_DLG_CMDLINEHELP_HEADER
     {
