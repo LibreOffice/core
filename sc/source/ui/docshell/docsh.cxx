@@ -2999,10 +2999,8 @@ namespace {
 
 void removeKeysIfExists(const Reference<ui::XAcceleratorConfiguration>& xScAccel, const vector<const awt::KeyEvent*>& rKeys)
 {
-    vector<const awt::KeyEvent*>::const_iterator itr = rKeys.begin(), itrEnd = rKeys.end();
-    for (; itr != itrEnd; ++itr)
+    for (const awt::KeyEvent* p : rKeys)
     {
-        const awt::KeyEvent* p = *itr;
         if (!p)
             continue;
 

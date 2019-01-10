@@ -535,10 +535,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         if (xQueryBox->run() == RET_YES)
                         {
                             ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
-                            ScDBCollection::NamedDBs::iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-                            for (; itr != itrEnd; ++itr)
+                            for (const auto& rxDB : rDBs)
                             {
-                                ScDBData& rDBData = **itr;
+                                ScDBData& rDBData = *rxDB;
                                 if ( rDBData.IsStripData() &&
                                      rDBData.HasImportParam() && !rDBData.HasImportSelection() )
                                 {

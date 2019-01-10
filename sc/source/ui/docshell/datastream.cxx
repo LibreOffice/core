@@ -477,12 +477,10 @@ void DataStream::Text2Doc()
 
     MoveData();
     {
-        std::vector<Cell>::const_iterator it = aLine.maCells.begin(), itEnd = aLine.maCells.end();
         SCCOL nCol = maStartRange.aStart.Col();
         const char* pLineHead = aLine.maLine.getStr();
-        for (; it != itEnd; ++it, ++nCol)
+        for (const Cell& rCell : aLine.maCells)
         {
-            const Cell& rCell = *it;
             if (rCell.mbValue)
             {
                 maDocAccess.setNumericCell(
@@ -494,6 +492,7 @@ void DataStream::Text2Doc()
                     ScAddress(nCol, mnCurRow, maStartRange.aStart.Tab()),
                     OUString(pLineHead+rCell.maStr.Pos, rCell.maStr.Size, RTL_TEXTENCODING_UTF8));
             }
+            ++nCol;
         }
     }
 
