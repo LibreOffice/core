@@ -1279,9 +1279,8 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     return &rNdTable;
 }
 
-SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
+std::unique_ptr<SwNodeRange> SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
 {
-    SwNodeRange * pResult = nullptr;
     bool bChanged = false;
 
     SwNodeIndex aNewStart = rRange.aStart;
@@ -1335,9 +1334,9 @@ SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
         pNode = &aIndex.GetNode();
     }
 
+    std::unique_ptr<SwNodeRange> pResult;
     if (bChanged)
-        pResult = new SwNodeRange(aNewStart, aNewEnd);
-
+        pResult.reset(new SwNodeRange(aNewStart, aNewEnd));
     return pResult;
 }
 
