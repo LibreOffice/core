@@ -25,6 +25,8 @@
 #include <headless/CustomWidgetDraw.hxx>
 #include <saldatabasic.hxx>
 
+#include <FileDefinitionWidgetDraw.hxx>
+
 #include <o3tl/safeint.hxx>
 #include <vcl/sysdata.hxx>
 #include <config_cairo_canvas.h>
@@ -560,7 +562,11 @@ SvpSalGraphics::SvpSalGraphics()
     , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    bool bFileDefinitionsWidgetDraw = !!getenv("VCL_DRAW_WIDGETS_FROM_FILE");
+
+    if (bFileDefinitionsWidgetDraw)
+        m_pWidgetDraw.reset(new vcl::FileDefinitionWidgetDraw(*this));
+    else if (comphelper::LibreOfficeKit::isActive())
         m_pWidgetDraw.reset(new vcl::CustomWidgetDraw(*this));
 }
 
