@@ -295,7 +295,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_INSERT_DATE_TIME:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractHeaderFooterDialog> pDlg(pFact ? pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ) : nullptr);
+            ScopedVclPtr<AbstractHeaderFooterDialog> pDlg(pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ));
             pDlg->Execute();
             pDlg.disposeAndClear();
 
