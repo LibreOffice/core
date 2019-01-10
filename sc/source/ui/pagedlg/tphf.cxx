@@ -182,13 +182,14 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
+        VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
             this, aDataSet, aStrPageStyle, nResId));
-
-        if ( pDlg->Execute() == RET_OK )
-        {
-            aDataSet.Put( *pDlg->GetOutputItemSet() );
-        }
+        pDlg->StartExecuteAsync([this, pDlg](sal_Int32 nResult){
+            if ( nResult == RET_OK )
+            {
+                aDataSet.Put( *pDlg->GetOutputItemSet() );
+            }
+        });
     }
     else
     {
