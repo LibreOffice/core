@@ -20,6 +20,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPCUSTOMLINECAP_HXX
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPCUSTOMLINECAP_HXX
 
+#include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include "emfphelperdata.hxx"
 
 namespace emfplushelper
