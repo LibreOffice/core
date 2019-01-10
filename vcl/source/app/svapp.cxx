@@ -987,6 +987,11 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
     }
 }
 
+void Application::LockFontUpdates(bool bLock)
+{
+    OutputDevice::LockFontUpdates(bLock);
+}
+
 WorkWindow* Application::GetAppWindow()
 {
     return ImplGetSVData()->maWinData.mpAppWin;

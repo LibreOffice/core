@@ -351,6 +351,9 @@ struct ImplSVData
     bool                    mbDeInit = false;               // Is VCL deinitializing
     std::unique_ptr<SalI18NImeStatus> mpImeStatus;          // interface to ime status window, only used by the X11 backend
     std::unique_ptr<SalSystem> mpSalSystem;                 // SalSystem interface
+    int                     mnFontUpdatesLockCount = 0;     // avoid repeated font updates
+    bool                    mbFontUpdatesPending = false;   // need to update font data after unlock
+    bool                    mbFontUpdatesNewLists = false;  // generate new font lists
     bool                    mbResLocaleSet = false;         // SV-Resource-Manager
     std::locale             maResLocale;                    // Resource locale
     ImplSchedulerContext    maSchedCtx;                     // indepen data for class Scheduler

@@ -1365,6 +1365,17 @@ public:
 
     ///@}
 
+    /** Lock font updates for all output devices
+
+     @remark When performing operations that might involve multiple registration of fonts, such as
+        opening/closing documents with multiple embedded fonts, then each font addition/removal
+        might cause an event that initiates a rebuild of each OutputDevice's font lists.
+
+        Locking font updates disables processing such events, and unlocking causes a single such
+        processing for all OutputDevices.
+    */
+    static void LockFontUpdates(bool bLock);
+
     // For vclbootstrapprotector:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
 
