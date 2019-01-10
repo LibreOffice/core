@@ -20,15 +20,13 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <rtl/instance.hxx>
-
-namespace { struct EmptyTuple : public rtl::Static<basegfx::B2DTuple, EmptyTuple> {}; }
 
 namespace basegfx
 {
     const B2DTuple& B2DTuple::getEmptyTuple()
     {
-        return EmptyTuple::get();
+        static B2DTuple const singleton;
+        return singleton;
     }
 
     B2DTuple::B2DTuple(const B2ITuple& rTup)

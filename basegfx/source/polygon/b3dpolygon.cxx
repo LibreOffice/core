@@ -21,7 +21,6 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <rtl/instance.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -1397,11 +1396,17 @@ public:
 
 namespace basegfx
 {
-    namespace { struct DefaultPolygon : public rtl::Static< B3DPolygon::ImplType,
-                                                            DefaultPolygon > {}; }
+    namespace {
+
+    B3DPolygon::ImplType const & getDefaultPolygon() {
+        static B3DPolygon::ImplType const singleton;
+        return singleton;
+    }
+
+    }
 
     B3DPolygon::B3DPolygon() :
-        mpPolygon(DefaultPolygon::get())
+        mpPolygon(getDefaultPolygon())
     {
     }
 
@@ -1581,7 +1586,7 @@ namespace basegfx
 
     void B3DPolygon::clear()
     {
-        mpPolygon = DefaultPolygon::get();
+        mpPolygon = getDefaultPolygon();
     }
 
     bool B3DPolygon::isClosed() const
