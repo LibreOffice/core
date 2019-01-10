@@ -227,18 +227,17 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
     if (pMainWindow)
     {
         mpQMenuBar = pMainWindow->menuBar();
+        mpQMenu = nullptr;
+        mpQActionGroup = nullptr;
 
         DoFullMenuUpdate(mpVCLMenu);
     }
 }
 
-void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
+void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar)
 {
-    mpQMenu = pParentMenu;
-
     if (mbMenuBar && mpQMenuBar)
         mpQMenuBar->clear();
-    mpQActionGroup = nullptr;
 
     for (sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++)
     {
@@ -248,8 +247,12 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
 
         if (pSalMenuItem->mpSubMenu != nullptr)
         {
+            // correct parent menu and action group before calling HandleMenuActivateEvent
+            pSalMenuItem->mpSubMenu->mpQMenu = pQMenu;
+            pSalMenuItem->mpSubMenu->mpQActionGroup = nullptr;
+
             pMenuBar->HandleMenuActivateEvent(pSalMenuItem->mpSubMenu->GetMenu());
-            pSalMenuItem->mpSubMenu->DoFullMenuUpdate(pMenuBar, pQMenu);
+            pSalMenuItem->mpSubMenu->DoFullMenuUpdate(pMenuBar);
             pMenuBar->HandleMenuDeActivateEvent(pSalMenuItem->mpSubMenu->GetMenu());
         }
     }
