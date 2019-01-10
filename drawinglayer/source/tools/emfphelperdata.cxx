@@ -412,28 +412,18 @@ namespace emfplushelper
                 lineCap = static_cast<css::drawing::LineCap>(EMFPPen::lcl_convertStrokeCap(pen->startCap));
                 SAL_WARN_IF(pen->startCap != pen->endCap, "drawinglayer", "emf+ pen uses different start and end cap");
             }
-            // transform the pen width
-            double adjustedPenWidth = pen->penWidth;
 
-            // If a zero width is specified, a minimum value must be used, which is determined by the units
-            if (pen->penWidth == 0.0)
-            {
-                adjustedPenWidth = pen->penUnit == 0 ? 0.18f   // 0.18f is determined by comparison with MSO  (case of Unit == World)
-                    : 0.05f;  // 0.05f is taken from old EMF+ implementation (case of Unit == Pixel etc.)
-            }
-            // transform and compare to 5 (the value 5 is determined by comparison to MSO)
-            const double transformedPenWidth = std::max( MapSize(adjustedPenWidth, 0).getX(), 5.);
-
+            const double transformedPenWidth = maMapTransform.get(0, 0) * pen->penWidth;
             drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
-                                                                transformedPenWidth,
-                                                                lineJoin,
-                                                                lineCap);
+                                                                 transformedPenWidth,
+                                                                 lineJoin,
+                                                                 lineCap);
 
             drawinglayer::attribute::StrokeAttribute aStrokeAttribute;
             if (pen->penDataFlags & 0x00000020 && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predefined line style
             {
                 // short writing
-                const double pw = transformedPenWidth;
+                const double pw = maMapTransform.get(1, 1) * pen->penWidth;
                 // taken from the old cppcanvas implementation and multiplied with pen width
                 const std::vector<double> dash = { 3*pw, 3*pw };
                 const std::vector<double> dot = { pw, 3*pw };
@@ -465,7 +455,7 @@ namespace emfplushelper
                 for (size_t i=0; i<aPattern.size(); i++)
                 {
                     // convert from float to double and multiply with the adjusted pen width
-                    aPattern[i] = transformedPenWidth * pen->dashPattern[i];
+                    aPattern[i] = maMapTransform.get(1, 1) * pen->penWidth * pen->dashPattern[i];
                 }
                 aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(aPattern);
             }
@@ -1230,9 +1220,9 @@ namespace emfplushelper
                                 {
                                     float x1, y1, x2, y2, x3, y3;
 
-                                    ReadPoint(rMS, x1, y1, flags);
-                                    ReadPoint(rMS, x2, y2, flags);
-                                    ReadPoint(rMS, x3, y3, flags);
+                                    ReadPoint(rMS, x1, y1, flags); // upper-left point
+                                    ReadPoint(rMS, x2, y2, flags); // upper-right
+                                    ReadPoint(rMS, x3, y3, flags); // lower-left
 
                                     SAL_INFO("drawinglayer", "EMF+\t destination points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3);
                                     SAL_INFO("drawinglayer", "EMF+\t destination rectangle: " << x1 << "," << y1 << " " << x2 - x1 << "x" << y3 - y1);

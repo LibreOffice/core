@@ -21,7 +21,6 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPEN_HXX
 
 #include "emfpbrush.hxx"
-#include <com/sun/star/rendering/StrokeAttributes.hpp>
 #include <vector>
 
 namespace emfplushelper
@@ -67,10 +66,6 @@ namespace emfplushelper
         EMFPPen();
 
         virtual ~EMFPPen() override;
-
-        void SetStrokeWidth(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes, EmfPlusHelperData const & rR, const ::basegfx::B2DHomMatrix& mapModeTransform);
-
-        void SetStrokeAttributes(com::sun::star::rendering::StrokeAttributes& rStrokeAttributes);
 
         void Read(SvStream& s, EmfPlusHelperData const & rR);
 
