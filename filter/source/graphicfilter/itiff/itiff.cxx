@@ -1587,7 +1587,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             {
                 if (o3tl::checked_multiply<sal_Int32>(nImageWidth, nImageLength, nImageDataSize) ||
                     o3tl::checked_multiply<sal_Int32>(nImageDataSize, (HasAlphaChannel() ? 4 : 3), nImageDataSize) ||
-                    nImageDataSize > SAL_MAX_INT32/2)
+                    nImageDataSize > SAL_MAX_INT32/4)
                 {
                     bStatus = false;
                 }
