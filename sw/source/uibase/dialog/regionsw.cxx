@@ -81,11 +81,9 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         // height=width for more consistent preview (analog to edit region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialog creation failed!");
-        ScopedVclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
+        VclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
             &GetView().GetViewFrame()->GetWindow(), aSet , rSh));
-        OSL_ENSURE(aTabDlg, "Dialog creation failed!");
-        aTabDlg->Execute();
+        aTabDlg->StartExecuteAsync(nullptr);
         rReq.Ignore();
     }
     else
@@ -173,13 +171,8 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
 }
 
-IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
+void SwWrtShell::StartInsertRegionDialog(SwSectionData& rSectionData)
 {
-    SwSectionData* pSect = static_cast<SwSectionData*>(p);
-    std::unique_ptr<SwSectionData> xSectionData(pSect);
-    if (!xSectionData.get())
-        return;
-
     SfxItemSet aSet(
         GetView().GetPool(),
         svl::Items<
@@ -194,13 +187,10 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
     // height=width for more consistent preview (analog to edit region)
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
-    ScopedVclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
+    VclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
         &GetView().GetViewFrame()->GetWindow(),aSet , *this));
-    OSL_ENSURE(aTabDlg, "Dialog creation failed!");
-    aTabDlg->SetSectionData(*xSectionData);
-    aTabDlg->Execute();
-
+    aTabDlg->SetSectionData(rSectionData);
+    aTabDlg->StartExecuteAsync(nullptr);
 }
 
 void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)
