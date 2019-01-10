@@ -43,6 +43,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/waitobj.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
@@ -1530,6 +1531,30 @@ void ModelessDialog::Activate()
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("Modeless Dialog Visible");
     Dialog::Activate();
+}
+
+void TopLevelWindowLocker::incBusy(const vcl::Window* pIgnore)
+{
+    // lock any toplevel windows from being closed until busy is over
+    std::vector<VclPtr<vcl::Window>> aTopLevels;
+    vcl::Window *pTopWin = Application::GetFirstTopLevelWindow();
+    while (pTopWin)
+    {
+        if (pTopWin != pIgnore)
+            aTopLevels.push_back(pTopWin);
+        pTopWin = Application::GetNextTopLevelWindow(pTopWin);
+    }
+    for (auto& a : aTopLevels)
+        a->IncModalCount();
+    m_aBusyStack.push(aTopLevels);
+}
+
+void TopLevelWindowLocker::decBusy()
+{
+    // unlock locked toplevel windows from being closed now busy is over
+    for (auto& a : m_aBusyStack.top())
+        a->DecModalCount();
+    m_aBusyStack.pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
