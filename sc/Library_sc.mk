@@ -275,7 +275,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/refreshtimer \
     sc/source/core/tool/reftokenhelper \
     sc/source/core/tool/refupdat \
-    sc/source/core/tool/reordermap \
     sc/source/core/tool/scmatrix \
     sc/source/core/tool/scopetools \
     sc/source/core/tool/sharedformula \
