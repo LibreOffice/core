@@ -1047,16 +1047,19 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                     rShape->setTextBody(pTextBody);
                 }
 
-                TextParagraph& rPara=pTextBody->addParagraph();
-                if( aVecIter->second != -1 )
-                    rPara.getProperties().setLevel(aVecIter->second);
+                const TextParagraphVector& rSourceParagraphs
+                    = aDataNode2->second->mpShape->getTextBody()->getParagraphs();
+                for (const auto& pSourceParagraph : rSourceParagraphs)
+                {
+                    TextParagraph& rPara = pTextBody->addParagraph();
+                    if (aVecIter->second != -1)
+                        rPara.getProperties().setLevel(aVecIter->second);
 
-                std::shared_ptr<TextParagraph> pSourceParagraph
-                    = aDataNode2->second->mpShape->getTextBody()->getParagraphs().front();
-                for (const auto& pRun : pSourceParagraph->getRuns())
-                    rPara.addRun(pRun);
-                rPara.getProperties().apply(
-                    aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getProperties());
+                    for (const auto& pRun : pSourceParagraph->getRuns())
+                        rPara.addRun(pRun);
+                    const TextBodyPtr& rBody = aDataNode2->second->mpShape->getTextBody();
+                    rPara.getProperties().apply(rBody->getParagraphs().front()->getProperties());
+                }
             }
 
             ++aVecIter;
