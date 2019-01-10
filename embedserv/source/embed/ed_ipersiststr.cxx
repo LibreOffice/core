@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <embeddoc.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -34,7 +38,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <o3tl/string_view.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <sal/types.h>
@@ -397,7 +400,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
         if ( m_xFactory.is() && pStg )
         {
             uno::Reference< frame::XModel > aDocument(
-                            m_xFactory->createInstance( o3tl::toOUString(getServiceNameFromGUID_Impl( &m_guid )) ),
+                            m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
                             uno::UNO_QUERY );
             if ( aDocument.is() )
             {
@@ -532,7 +535,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
         if ( xTempIn.is() )
         {
             uno::Reference< frame::XModel > aDocument(
-                                                m_xFactory->createInstance( o3tl::toOUString(getServiceNameFromGUID_Impl( &m_guid )) ),
+                                                m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
                                                 uno::UNO_QUERY );
             if ( aDocument.is() )
             {
@@ -739,7 +742,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
     if ( FAILED( hr ) || !m_pMasterStorage ) return E_FAIL;
 
-    o3tl::u16string_view aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+    std::u16string_view aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
     CLIPFORMAT cf = static_cast<CLIPFORMAT>(RegisterClipboardFormatW( L"Embedded Object" ));
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
                             cf,                         // ???
@@ -765,7 +768,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
 
     uno::Reference< frame::XModel > aDocument(
-                    m_xFactory->createInstance( o3tl::toOUString(getServiceNameFromGUID_Impl( &m_guid )) ),
+                    m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
                     uno::UNO_QUERY );
     if ( aDocument.is() )
     {

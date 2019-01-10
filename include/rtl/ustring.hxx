@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <limits>
 #include <new>
 #include <ostream>
 #include <utility>
@@ -407,6 +408,16 @@ public:
             *end = '\0';
             // TODO realloc in case pData->length is noticeably smaller than l?
         }
+    }
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+    OUString(std::u16string_view sv) {
+        if (sv.size() > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            throw std::bad_alloc();
+        }
+        pData = nullptr;
+        rtl_uString_newFromStr_WithLength(&pData, sv.data(), sv.size());
     }
 #endif
 

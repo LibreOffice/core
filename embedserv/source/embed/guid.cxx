@@ -58,7 +58,7 @@ wchar_t const * getStorageTypeFromGUID_Impl( GUID const * guid )
     return L"";
 }
 
-o3tl::u16string_view getServiceNameFromGUID_Impl( GUID const * guid )
+std::u16string_view getServiceNameFromGUID_Impl( GUID const * guid )
 {
     if ( *guid == OID_WriterTextServer )
         return u"com.sun.star.comp.Writer.TextDocument";
