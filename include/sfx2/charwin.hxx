@@ -23,6 +23,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/dllapi.h>
 #include <vcl/customweld.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 
 class SFX2_DLLPUBLIC SvxCharView : public weld::CustomWidgetController
