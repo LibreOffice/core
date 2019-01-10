@@ -52,8 +52,8 @@ struct DocumentLinkManagerImpl
         if (linkManager)
         {
             sfx2::SvLinkSources aTemp = linkManager->GetServers();
-            for (sfx2::SvLinkSources::const_iterator it = aTemp.begin(); it != aTemp.end(); ++it)
-                (*it)->Closed();
+            for (const auto& pLinkSource : aTemp)
+                pLinkSource->Closed();
 
             if (!linkManager->GetLinks().empty())
                 linkManager->Remove(0, linkManager->GetLinks().size());

@@ -100,9 +100,13 @@ void ScEditableTester::TestSelectedBlock( const ScDocument* pDoc,
                         const ScMarkData& rMark )
 {
     SCTAB nTabCount = pDoc->GetTableCount();
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nTabCount; ++itr)
-        TestBlock( pDoc, *itr, nStartCol, nStartRow, nEndCol, nEndRow );
+    for (const auto& rTab : rMark)
+    {
+        if (rTab >= nTabCount)
+            break;
+
+        TestBlock( pDoc, rTab, nStartCol, nStartRow, nEndCol, nEndRow );
+    }
 }
 
 void ScEditableTester::TestRange(  const ScDocument* pDoc, const ScRange& rRange )
@@ -137,12 +141,12 @@ void ScEditableTester::TestBlockForAction(
 {
     mbOnlyMatrix = false;
 
-    for (ScMarkData::const_iterator it = rMark.begin(), itEnd = rMark.end(); it != itEnd; ++it)
+    for (const auto& rTab : rMark)
     {
         if (!mbIsEditable)
             return;
 
-        mbIsEditable = rDoc.IsEditActionAllowed(eAction, *it, nStart, nEnd);
+        mbIsEditable = rDoc.IsEditActionAllowed(eAction, rTab, nStart, nEnd);
     }
 }
 

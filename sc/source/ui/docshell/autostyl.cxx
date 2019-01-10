@@ -83,15 +83,14 @@ void ScAutoStyleList::AddInitial( const ScRange& rRange, const OUString& rStyle1
 
 IMPL_LINK_NOARG(ScAutoStyleList, InitHdl, Timer *, void)
 {
-    std::vector<ScAutoStyleInitData>::iterator iter;
-    for (iter = aInitials.begin(); iter != aInitials.end(); ++iter)
+    for (const auto& rInitial : aInitials)
     {
         //  apply first style immediately
-        pDocSh->DoAutoStyle(iter->aRange,iter->aStyle1);
+        pDocSh->DoAutoStyle(rInitial.aRange, rInitial.aStyle1);
 
         //  add second style to list
-        if (iter->nTimeout)
-            AddEntry(iter->nTimeout,iter->aRange,iter->aStyle2 );
+        if (rInitial.nTimeout)
+            AddEntry(rInitial.nTimeout, rInitial.aRange, rInitial.aStyle2 );
     }
 
     aInitials.clear();
@@ -131,13 +130,12 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
 
 void ScAutoStyleList::AdjustEntries( sal_uLong nDiff )  // milliseconds
 {
-    std::vector<ScAutoStyleData>::iterator iter;
-    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
+    for (auto& rEntry : aEntries)
     {
-        if (iter->nTimeout <= nDiff)
-            iter->nTimeout = 0;                 // expired
+        if (rEntry.nTimeout <= nDiff)
+            rEntry.nTimeout = 0;                 // expired
         else
-            iter->nTimeout -= nDiff;                // continue counting
+            rEntry.nTimeout -= nDiff;                // continue counting
     }
 }
 
@@ -162,9 +160,8 @@ void ScAutoStyleList::ExecuteAllNow()
 {
     aTimer.Stop();
 
-    std::vector<ScAutoStyleData>::iterator iter;
-    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
-        pDocSh->DoAutoStyle(iter->aRange,iter->aStyle);
+    for (const auto& rEntry : aEntries)
+        pDocSh->DoAutoStyle(rEntry.aRange, rEntry.aStyle);
 
     aEntries.clear();
 }
