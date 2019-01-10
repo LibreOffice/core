@@ -3441,13 +3441,13 @@ void ScMatrix::PowOp( bool bFlag, double fVal, ScMatrix& rMat)
 {
     if (bFlag)
     {
-        auto pow_ = [](double a, double b){return pow(b, a);};
+        auto pow_ = [](double a, double b){return sc::power(b, a);};
         matop::MatOp<decltype(pow_)> aOp(pow_, pImpl->GetErrorInterpreter(), fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
-        auto pow_ = [](double a, double b){return pow(a, b);};
+        auto pow_ = [](double a, double b){return sc::power(a, b);};
         matop::MatOp<decltype(pow_)> aOp(pow_, pImpl->GetErrorInterpreter(), fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
