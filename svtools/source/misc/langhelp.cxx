@@ -7,10 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/System.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
@@ -129,7 +132,7 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
             OUString install = getInstalledLocaleForLanguage(comphelper::containerToSequence(aAvailable), wantedLocale);
             if (!install.isEmpty() && install != "en-US")
             {
-                o3tl::string_view sVendor(OOO_VENDOR);
+                std::string_view sVendor(OOO_VENDOR);
                 if (sVendor == "Red Hat, Inc." || sVendor == "The Fedora Project")
                 {
                     // langpack is the typical Fedora/RHEL naming convention
