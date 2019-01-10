@@ -34,7 +34,8 @@ public:                                                 \
     virtual Bitmap createScreenshot() const override;   \
     virtual OString GetScreenshotId() const override;   \
     virtual         ~Class() override;                           \
-    virtual short   Execute() override ;
+    virtual short   Execute() override; \
+    virtual bool StartExecuteAsync(AsyncContext &ctx) override;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
 std::vector<OString> Class::getAllPageUIXMLDescriptions() const { return pDlg->getAllPageUIXMLDescriptions(); } \
@@ -47,6 +48,10 @@ Class::~Class()                                     \
 short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
+}                                                   \
+bool Class::StartExecuteAsync(AsyncContext &ctx) \
+{                                                   \
+    return pDlg->StartExecuteAsync(ctx);            \
 }
 
 namespace sd {
