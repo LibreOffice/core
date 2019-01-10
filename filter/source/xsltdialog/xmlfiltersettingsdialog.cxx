@@ -132,32 +132,6 @@ void XMLFilterSettingsDialog::dispose()
     ModelessDialog::dispose();
 }
 
-void XMLFilterSettingsDialog::incBusy()
-{
-    // lock any toplevel windows from being closed until busy is over
-    // ensure any dialogs are reset before entering
-    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
-    while (xTopWin)
-    {
-        if (xTopWin != this)
-            xTopWin->IncModalCount();
-        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
-    }
-}
-
-void XMLFilterSettingsDialog::decBusy()
-{
-    // unlock any toplevel windows from being closed until busy is over
-    // ensure any dialogs are reset before entering
-    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
-    while (xTopWin)
-    {
-        if (xTopWin != this)
-            xTopWin->DecModalCount();
-        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
-    }
-}
-
 IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
 {
     // tdf#122171 block closing libreoffice until the following dialog is dismissed

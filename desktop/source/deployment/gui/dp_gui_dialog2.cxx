@@ -340,7 +340,6 @@ DialogHelper::DialogHelper(const uno::Reference< uno::XComponentContext > &xCont
                            Dialog *pWindow)
     : m_xVCLWindow(pWindow)
     , m_nEventID(nullptr)
-    , m_nBusy(0)
 {
     m_xContext = xContext;
 }
@@ -460,34 +459,6 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
         Application::RemoveUserEvent( m_nEventID );
 
     m_nEventID = Application::PostUserEvent( rLink, pCaller, true/*bReferenceLink*/ );
-}
-
-void DialogHelper::incBusy()
-{
-    ++m_nBusy;
-    // lock any toplevel windows from being closed until busy is over
-    // ensure any dialogs are reset before entering
-    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
-    while (xTopWin)
-    {
-        if (xTopWin != m_xVCLWindow)
-            xTopWin->IncModalCount();
-        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
-    }
-}
-
-void DialogHelper::decBusy()
-{
-    --m_nBusy;
-    // unlock any toplevel windows from being closed until busy is over
-    // ensure any dialogs are reset before entering
-    vcl::Window *xTopWin = Application::GetFirstTopLevelWindow();
-    while (xTopWin)
-    {
-        if (xTopWin != m_xVCLWindow)
-            xTopWin->DecModalCount();
-        xTopWin = Application::GetNextTopLevelWindow(xTopWin);
-    }
 }
 
 //                             ExtMgrDialog
