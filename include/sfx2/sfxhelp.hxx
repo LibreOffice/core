@@ -40,8 +40,6 @@ private:
     SAL_DLLPRIVATE virtual bool Start(const OUString& rURL, weld::Widget* pWidget) override;
     SAL_DLLPRIVATE static OUString GetHelpModuleName_Impl(const OUString &rHelpId);
     SAL_DLLPRIVATE static OUString CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName );
-    SAL_DLLPRIVATE static void incBusy(const vcl::Window* pParent);
-    SAL_DLLPRIVATE static void decBusy(const vcl::Window* pParent);
 
 public:
     SfxHelp();
