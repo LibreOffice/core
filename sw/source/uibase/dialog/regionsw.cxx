@@ -81,7 +81,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         ScopedVclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
             &GetView().GetViewFrame()->GetWindow(), aSet , rSh));
-        aTabDlg->Execute();
+        aTabDlg->StartExecuteAsync(nullptr);
         rReq.Ignore();
     }
     else
@@ -169,13 +169,8 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
 }
 
-IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
+void SwWrtShell::StartInsertRegionDialog(SwSectionData& rSectionData)
 {
-    SwSectionData* pSect = static_cast<SwSectionData*>(p);
-    std::unique_ptr<SwSectionData> xSectionData(pSect);
-    if (!xSectionData)
-        return;
-
     SfxItemSet aSet(
         GetView().GetPool(),
         svl::Items<
@@ -193,9 +188,8 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
         &GetView().GetViewFrame()->GetWindow(),aSet , *this));
-    aTabDlg->SetSectionData(*xSectionData);
-    aTabDlg->Execute();
-
+    aTabDlg->SetSectionData(rSectionData);
+    aTabDlg->StartExecuteAsync(nullptr);
 }
 
 void SwBaseShell::EditRegionDialog(SfxRequest const & rReq)

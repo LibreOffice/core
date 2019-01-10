@@ -2613,17 +2613,16 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
                         ? nullptr : SwIoSystem::GetFileFilter(sFileURL);
                 if( pFlt && dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) == nullptr )
                 {
-                // and then pull up the insert-region-dialog by PostUser event
-                    SwSectionData * pSect = new SwSectionData(
+                    // and then pull up the insert-region-dialog
+                    SwSectionData aSect(
                                     FILE_LINK_SECTION,
                                     rSh.GetDoc()->GetUniqueSectionName() );
-                    pSect->SetLinkFileName( sFileURL );
-                    pSect->SetProtectFlag( true );
+                    aSect.SetLinkFileName( sFileURL );
+                    aSect.SetProtectFlag( true );
 
-                    Application::PostUserEvent( LINK( &rSh, SwWrtShell,
-                                                      InsertRegionDialog ), pSect );
+                    rSh.StartInsertRegionDialog( aSect ); // starts dialog asynchronously
                     bRet = true;
-                    }
+                }
                 else if( SwPasteSdr::SetAttr == nAction ||
                         ( bIsURLFile && SwPasteSdr::Insert == nAction ))
                 {
