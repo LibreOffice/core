@@ -801,6 +801,7 @@ void SwNavigationPI::dispose()
 
 void SwNavigationPI::SetPopupWindow( SfxPopupWindow* pWindow )
 {
+    m_pPopupWindow.disposeAndClear();
     m_pPopupWindow = pWindow;
     m_pPopupWindow->SetPopupModeEndHdl( LINK( this, SwNavigationPI, PopupModeEndHdl ));
     m_pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNavigationPI, ClosePopupWindow ));
