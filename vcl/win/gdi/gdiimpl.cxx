@@ -2345,6 +2345,21 @@ bool WinSalGraphicsImpl::drawPolyLine(
         aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
     }
 
+    if(mrParent.isPrinter())
+    {
+        // tdf#122384 As metioned above in WinSalGraphicsImpl::drawPolyPolygon
+        // (look for 'One more hint: This *may* also be needed now in'...).
+        // See comments in same spot above *uregntly* before doing changes here,
+        // these comments are *still fully valid* at this place (!)
+        const Gdiplus::REAL aDpiX(aGraphics.GetDpiX());
+        const Gdiplus::REAL aDpiY(aGraphics.GetDpiY());
+
+        aGraphics.ScaleTransform(
+            Gdiplus::REAL(100.0) / aDpiX,
+            Gdiplus::REAL(100.0) / aDpiY,
+            Gdiplus::MatrixOrderAppend);
+    }
+
     aGraphics.DrawPath(
         &aPen,
         &(*pGraphicsPath));
