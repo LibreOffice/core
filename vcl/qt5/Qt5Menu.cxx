@@ -27,7 +27,6 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
     , mbMenuBar(bMenuBar)
     , mpQMenuBar(nullptr)
     , mpQMenu(nullptr)
-    , mpQActionGroup(nullptr)
 {
     connect(this, &Qt5Menu::setFrameSignal, this, &Qt5Menu::SetFrame, Qt::BlockingQueuedConnection);
 }
@@ -90,7 +89,11 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
             }
 
             pQMenu = pTempQMenu;
-            mpQActionGroup = new QActionGroup(pQMenu);
+
+            ReinitializeActionGroup(nPos);
+
+            // clear all action groups since menu is recreated
+            pSalMenuItem->mpSubMenu->ResetAllActionGroups();
 
             connect(pQMenu, &QMenu::aboutToShow, this,
                     [pSalMenuItem] { slotMenuAboutToShow(pSalMenuItem); });
@@ -114,6 +117,8 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                 {
                     pQMenu->addAction(pAction);
                 }
+
+                ReinitializeActionGroup(nPos);
             }
             else
             {
@@ -131,6 +136,8 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                     pQMenu->addAction(pAction);
                 }
 
+                ReinitializeActionGroup(nPos);
+
                 pAction->setShortcut(toQString(nAccelKey.GetName(GetFrame()->GetWindow())));
 
                 if (itemBits & MenuItemBits::CHECKABLE)
@@ -141,15 +148,12 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
                 else if (itemBits & MenuItemBits::RADIOCHECK)
                 {
                     pAction->setCheckable(true);
-                    if (!mpQActionGroup)
+
+                    if (pSalMenuItem->mpActionGroup)
                     {
-                        mpQActionGroup = new QActionGroup(pQMenu);
-                        mpQActionGroup->setExclusive(true);
+                        pSalMenuItem->mpActionGroup->addAction(pAction);
                     }
-                    // NOTE: QActionGroup support may need improvement
-                    // if menu item is added not to the end of menu,
-                    // it may be needed to add new item to QActionGroup different from last created one for this menu
-                    mpQActionGroup->addAction(pAction);
+
                     pAction->setChecked(bChecked);
                 }
 
@@ -163,6 +167,130 @@ QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
     }
 
     return pQMenu;
+}
+
+void Qt5Menu::ReinitializeActionGroup(unsigned nPos)
+{
+    const unsigned nCount = GetItemCount();
+
+    if (nCount == 0)
+    {
+        return;
+    }
+
+    if (nPos == MENU_APPEND)
+    {
+        nPos = nCount - 1;
+    }
+    else if (nPos >= nCount)
+    {
+        return;
+    }
+
+    Qt5MenuItem* pPrevItem = (nPos > 0) ? GetItemAtPos(nPos - 1) : nullptr;
+    Qt5MenuItem* pCurrentItem = GetItemAtPos(nPos);
+    Qt5MenuItem* pNextItem = (nPos < nCount - 1) ? GetItemAtPos(nPos + 1) : nullptr;
+
+    if (pCurrentItem->mnType == MenuItemType::SEPARATOR)
+    {
+        pCurrentItem->mpActionGroup.reset();
+
+        // if it's inserted into middle of existing group, split it into two groups:
+        // first goes original group, after separator goes new group
+        if (pPrevItem && pPrevItem->mpActionGroup && pNextItem && pNextItem->mpActionGroup
+            && (pPrevItem->mpActionGroup == pNextItem->mpActionGroup))
+        {
+            std::shared_ptr<QActionGroup> pFirstActionGroup = pPrevItem->mpActionGroup;
+            std::shared_ptr<QActionGroup> pSecondActionGroup(new QActionGroup(nullptr));
+            pSecondActionGroup->setExclusive(true);
+
+            auto actions = pFirstActionGroup->actions();
+
+            for (unsigned idx = nPos + 1; idx < nCount; ++idx)
+            {
+                Qt5MenuItem* pModifiedItem = GetItemAtPos(idx);
+
+                if ((!pModifiedItem) || (!pModifiedItem->mpActionGroup))
+                {
+                    break;
+                }
+
+                pModifiedItem->mpActionGroup = pSecondActionGroup;
+                auto action = pModifiedItem->getAction();
+
+                if (actions.contains(action))
+                {
+                    pFirstActionGroup->removeAction(action);
+                    pSecondActionGroup->addAction(action);
+                }
+            }
+        }
+    }
+    else
+    {
+        if (!pCurrentItem->mpActionGroup)
+        {
+            // unless element is inserted between two separators, or a separator and an end of vector, use neighbouring group since it's shared
+            if (pPrevItem && pPrevItem->mpActionGroup)
+            {
+                pCurrentItem->mpActionGroup = pPrevItem->mpActionGroup;
+            }
+            else if (pNextItem && pNextItem->mpActionGroup)
+            {
+                pCurrentItem->mpActionGroup = pNextItem->mpActionGroup;
+            }
+            else
+            {
+                pCurrentItem->mpActionGroup.reset(new QActionGroup(nullptr));
+                pCurrentItem->mpActionGroup->setExclusive(true);
+            }
+        }
+
+        // if there's also a different group after this element, merge it
+        if (pNextItem && pNextItem->mpActionGroup
+            && (pCurrentItem->mpActionGroup != pNextItem->mpActionGroup))
+        {
+            auto pFirstCheckedAction = pCurrentItem->mpActionGroup->checkedAction();
+            auto pSecondCheckedAction = pNextItem->mpActionGroup->checkedAction();
+            auto actions = pNextItem->mpActionGroup->actions();
+
+            // first move all actions from second group to first one, and if first group already has checked action,
+            // and second group also has a checked action, uncheck action from second group
+            for (auto action : actions)
+            {
+                pNextItem->mpActionGroup->removeAction(action);
+
+                if (pFirstCheckedAction && pSecondCheckedAction && (action == pSecondCheckedAction))
+                {
+                    action->setChecked(false);
+                }
+
+                pCurrentItem->mpActionGroup->addAction(action);
+            }
+
+            // now replace all pointers to second group with pointers to first group
+            for (unsigned idx = nPos + 1; idx < nCount; ++idx)
+            {
+                Qt5MenuItem* pModifiedItem = GetItemAtPos(idx);
+
+                if ((!pModifiedItem) || (!pModifiedItem->mpActionGroup))
+                {
+                    break;
+                }
+
+                pModifiedItem->mpActionGroup = pCurrentItem->mpActionGroup;
+            }
+        }
+    }
+}
+
+void Qt5Menu::ResetAllActionGroups()
+{
+    for (unsigned nItem = 0; nItem < GetItemCount(); ++nItem)
+    {
+        Qt5MenuItem* pSalMenuItem = GetItemAtPos(nItem);
+        pSalMenuItem->mpActionGroup.reset();
+    }
 }
 
 void Qt5Menu::InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos)
@@ -191,6 +319,14 @@ void Qt5Menu::RemoveItem(unsigned nPos)
         pItem->mpMenu.reset();
 
         maItems.erase(maItems.begin() + nPos);
+
+        // Recalculate action groups if necessary:
+        // if separator between two QActionGroups was removed,
+        // it may be needed to merge them
+        if (nPos > 0)
+        {
+            ReinitializeActionGroup(nPos - 1);
+        }
     }
 }
 
@@ -229,7 +365,6 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
             mpQMenuBar->clear();
 
         mpQMenu = nullptr;
-        mpQActionGroup = nullptr;
 
         DoFullMenuUpdate(mpVCLMenu);
     }
@@ -237,17 +372,19 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
 
 void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar)
 {
+    // clear action groups since menu is rebuilt
+    ResetAllActionGroups();
+
     for (sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++)
     {
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nItem);
-        QMenu* pQMenu = InsertMenuItem(pSalMenuItem, MENU_APPEND);
+        QMenu* pQMenu = InsertMenuItem(pSalMenuItem, nItem);
         SetItemImage(nItem, pSalMenuItem, pSalMenuItem->maImage);
 
         if (pSalMenuItem->mpSubMenu != nullptr)
         {
-            // correct parent menu and action group before calling HandleMenuActivateEvent
+            // correct parent menu before calling HandleMenuActivateEvent
             pSalMenuItem->mpSubMenu->mpQMenu = pQMenu;
-            pSalMenuItem->mpSubMenu->mpQActionGroup = nullptr;
 
             pMenuBar->HandleMenuActivateEvent(pSalMenuItem->mpSubMenu->GetMenu());
             pSalMenuItem->mpSubMenu->DoFullMenuUpdate(pMenuBar);
