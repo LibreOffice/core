@@ -843,8 +843,6 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
 
     // Add the states that are safe to skip duplicates on,
     // even when not consequent.
-    m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_START, "NIL");
-    m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_END, "NIL");
     m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
     m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL");
     m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
