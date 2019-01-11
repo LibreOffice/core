@@ -4495,7 +4495,7 @@ void wwSectionManager::InsertSegments()
              descriptor.
             */
 
-            bool bIgnoreCols = false;
+            bool bIgnoreCols = bInsertSection;
             bool bThisAndNextAreCompatible = (aNext == aEnd) ||
                 ((aIter->GetPageWidth() == aNext->GetPageWidth()) &&
                  (aIter->GetPageHeight() == aNext->GetPageHeight()) &&
