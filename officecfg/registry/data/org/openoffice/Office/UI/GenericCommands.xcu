@@ -6690,12 +6690,12 @@
       </node>
       <node oor:name=".uno:ClassificationDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Manage document classification</value>
+          <value xml:lang="en-US">Manage Document Classification</value>
         </prop>
       </node>
       <node oor:name=".uno:ParagraphClassificationDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Manage paragraph classification</value>
+          <value xml:lang="en-US">Manage Paragraph Classification</value>
         </prop>
       </node>
       <node oor:name=".uno:EditSelectMenu" oor:op="replace">
