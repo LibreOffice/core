@@ -202,12 +202,7 @@ class SvxCSS1Parser : public CSS1Parser
     static constexpr sal_uInt16 gnMinFixLineSpace = MM50/2;    // minimum spacing for fixed line spacing
 
     rtl_TextEncoding    eDfltEnc;
-
     bool bIgnoreFontFamily;
-
-    void ParseProperty( const OUString& rProperty,
-                        const CSS1Expression *pExpr );
-
     std::vector<sal_uInt16> aWhichMap;        // Which-Map of Parser
 
     using CSS1Parser::ParseStyleOption;
@@ -229,13 +224,13 @@ protected:
     /// the content of the aItemSet will be copied into all recently
     /// created Styles.
     /// Derived classes should not override this method!
-    virtual bool SelectorParsed( CSS1Selector *pSelector, bool bFirst ) override;
+    virtual void SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, bool bFirst ) override;
 
     /// Will be called for every parsed Property.  Adds the item to the
     /// pItemSet.
     /// Derived classes should not override this method!
-    virtual bool DeclarationParsed( const OUString& rProperty,
-                                    const CSS1Expression *pExpr ) override;
+    virtual void DeclarationParsed( const OUString& rProperty,
+                                    std::unique_ptr<CSS1Expression> pExpr ) override;
 
 public:
 
