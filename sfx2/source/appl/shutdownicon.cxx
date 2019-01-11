@@ -144,7 +144,7 @@ bool LoadModule()
 #endif // ENABLE_QUICKSTART_APPLET
     }
     assert(!boost::logic::indeterminate(loaded));
-    return loaded;
+    return bool(loaded);
 }
 
 }

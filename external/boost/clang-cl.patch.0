@@ -19,24 +19,6 @@
    typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
                           mutable_iterator_tag> iterator;
 
-# workdir/UnpackedTarball/boost\boost/smart_ptr/detail/yield_k.hpp(63,29) :  error: 'Sleep' redeclared without 'dllimport' attribute: previous 'dll# import' ignored [-Werror,-Winconsistent-dllimport]
-#   extern "C" void __stdcall Sleep( unsigned long ms );
-#                             ^
-# C:/PROGRA~2/WI3CF2~1/8.1/include/um\synchapi.h(908,1) :  note: previous declaration is here
-# Sleep(
-# ^
---- boost/smart_ptr/detail/yield_k.hpp
-+++ boost/smart_ptr/detail/yield_k.hpp
-@@ -61,7 +61,7 @@
- 
- #if !defined( BOOST_USE_WINDOWS_H ) && !BOOST_PLAT_WINDOWS_RUNTIME
- #if !BOOST_COMP_CLANG || !defined __MINGW32__
--  extern "C" void __stdcall Sleep( unsigned long ms );
-+  extern "C" __declspec(dllimport) void __stdcall Sleep( unsigned long ms );
- #else
- #include <_mingw.h>
- #if !defined __MINGW64_VERSION_MAJOR
-
 # workdir/UnpackedTarball/boost/libs/thread/src/win32/thread.cpp(1006,36) :  error: dllimport cannot be applied to non-inline function definition
 #     BOOST_THREAD_DECL void __cdecl on_process_enter()
 #                                    ^

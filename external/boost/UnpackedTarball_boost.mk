@@ -34,7 +34,7 @@ boost_patches += boost_1_60_0.undef.warning.patch
 boost_patches += boost_1_63_0.undef.warning.patch.1
 
 # https://svn.boost.org/trac10/ticket/13230
-boost_patches += boost-android-unified.patch.1
+#TODO? boost_patches += boost-android-unified.patch.1
 
 boost_patches += windows-no-utf8-locales.patch.0
 
