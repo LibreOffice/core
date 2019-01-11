@@ -9,9 +9,6 @@
 
 boost_patches :=
 
-#http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47679
-boost_patches += boost.gcc47679.patch
-
 #https://svn.boost.org/trac/boost/ticket/6142
 boost_patches += boost.6142.warnings.patch.1
 
