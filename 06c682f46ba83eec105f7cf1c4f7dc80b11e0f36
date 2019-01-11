@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_a0da3a14",
+        "filename": "sc/source/ui/docshell/dbdocfun.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-11T07:51:39Z",
+      "side": 1,
+      "message": "exlude -\u003e exclude",
+      "revId": "06c682f46ba83eec105f7cf1c4f7dc80b11e0f36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
