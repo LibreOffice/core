@@ -14,6 +14,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -64,6 +65,25 @@ DECLARE_OOXMLEXPORT_TEST(testendingSectionProps, "endingSectionProps.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of paragraphs", 2, getParagraphs());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section is RightToLeft", text::WritingMode2::RL_TB, getProperty<sal_Int16>(xSect, "WritingMode"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section Left Margin", sal_Int32(2540), getProperty<sal_Int32>(xSect, "SectionLeftMargin"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
+{
+    // Check that we did not lost the date control
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDraws->getCount());
+    uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xControl->getControl().is());
+
+    // check XML
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // We need to export date format and a dummy character (" ") for empty date control
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "dd/MM/yyyy");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u" ");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

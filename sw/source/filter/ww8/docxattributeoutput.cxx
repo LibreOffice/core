@@ -5019,6 +5019,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
         OUString aContentText;
         bool bHasDate = false;
         css::util::Date aUNODate;
+        bool bUseGrabbagFormat = false;
         if (xPropertySet->getPropertyValue("Date") >>= aUNODate)
         {
             bHasDate = true;
@@ -5028,16 +5029,22 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
             if (aOriginalDate == aDate)
             {
                 aContentText = sOriginalContent;
-                // sDateFormat was extracted from the grab bag
+                bUseGrabbagFormat = true;
             }
             else
             {
                 aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate).getStr());
-                sDateFormat = "dd/MM/yyyy";
+                bUseGrabbagFormat = false;
             }
         }
         else
-            aContentText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
+            aContentText = " "; // Need to write out something to have it imported by MS Word
+
+        // Need to set date format even if there is no date set
+        if (!bUseGrabbagFormat)
+        {
+            sDateFormat = "dd/MM/yyyy";
+        }
 
         // output component
 
