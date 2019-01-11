@@ -7,14 +7,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+
 import unittest
-import unohelper
+
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.lang import IllegalArgumentException
-from com.sun.star.container import NoSuchElementException
-import uno
-import time
-
 
 class TestXText(unittest.TestCase):
 
@@ -28,60 +25,65 @@ class TestXText(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-    def test_insertAndRemoveAnnotations(self):
-        xText = self._uno.getDoc().getText()
-        self.assertIsNotNone(xText)
+    def test_insert_and_remove_annotations(self):
+        x_text = self._uno.getDoc().getText()
+        self.assertIsNotNone(x_text)
 
         # Insert annotation field
-        xAnnotation = self.createAnnotation("John Doe")
-        xCursor = xText.createTextCursor()
-        xText.insertTextContent(xCursor, xAnnotation, False)
+        x_annotation = self.create_annotation("John Doe")
+        x_cursor = x_text.createTextCursor()
+        x_text.insertTextContent(x_cursor, x_annotation, False)
 
         # And the same once again, actually not inserted
-        xText.insertTextContent(xCursor, xAnnotation, False)
+        x_text.insertTextContent(x_cursor, x_annotation, False)
 
         # Exception if we try to replace object by itself
         with self.assertRaises(IllegalArgumentException):
-            xText.insertTextContent(xCursor, xAnnotation, True)
+            x_text.insertTextContent(x_cursor, x_annotation, True)
+
         # We expect just one annotation actually
-        self.checkAnnotations(["John Doe"])
+        self.check_annotations(["John Doe"])
 
-        xAnnotation2 = self.createAnnotation("Richard Roe")
-        xText.insertTextContent(xCursor, xAnnotation2, True)
-        self.checkAnnotations(["Richard Roe"])
+        x_annotation_2 = self.create_annotation("Richard Roe")
+        x_text.insertTextContent(x_cursor, x_annotation_2, True)
+        self.check_annotations(["Richard Roe"])
 
-        xAnnotation3 = self.createAnnotation("Jane Roe")
-        xText.insertTextContent(xCursor, xAnnotation3, True)
-        self.checkAnnotations(["Jane Roe", "Richard Roe"])
+        x_annotation_3 = self.create_annotation("Jane Roe")
+        x_text.insertTextContent(x_cursor, x_annotation_3, True)
+        self.check_annotations(["Jane Roe", "Richard Roe"])
 
         # Remove annotations
-        xText.removeTextContent(xAnnotation3)
-        self.checkAnnotations(["Richard Roe"])
-        xText.removeTextContent(xAnnotation2)
-        self.checkAnnotations([])
+        x_text.removeTextContent(x_annotation_3)
+        self.check_annotations(["Richard Roe"])
+        x_text.removeTextContent(x_annotation_2)
+        self.check_annotations([])
 
         # Remove _already removed_ ones again
         # TODO: unexpected behaviour, it should throw an exception,
         # but let's nail down current behaviour
-        xText.removeTextContent(xAnnotation2)
-        xText.removeTextContent(xAnnotation)
+        # NOTE: Should this be reported?
+        x_text.removeTextContent(x_annotation_2)
+        x_text.removeTextContent(x_annotation)
 
-        self.checkAnnotations([])
+        self.check_annotations([])
 
-    def createAnnotation(self, author):
-        xAnnotation = self._uno.getDoc().createInstance("com.sun.star.text.TextField.Annotation")
-        self.assertIsNotNone(xAnnotation)
-        xAnnotation.setPropertyValue("Author", author)
-        return xAnnotation
+    def create_annotation(self, author):
+        x_annotation = self._uno.getDoc().createInstance("com.sun.star.text.TextField.Annotation")
+        self.assertIsNotNone(x_annotation)
+        x_annotation.setPropertyValue("Author", author)
+        return x_annotation
 
-    def checkAnnotations(self, authors):
-        xFieldsEnum = self._uno.getDoc().getTextFields().createEnumeration()
-        annotationsFound = 0
-        for xField, author in zip(xFieldsEnum, authors):
-            self.assertTrue(xField.supportsService("com.sun.star.text.TextField.Annotation"))
-            self.assertEqual(xField.getPropertyValue("Author"), author)
-            annotationsFound += 1
-        self.assertEqual(annotationsFound, len(authors))
+    def check_annotations(self, authors):
+        x_fields_enum = self._uno.getDoc().getTextFields().createEnumeration()
+
+        annotations_found = 0
+
+        for x_field, author in zip(x_fields_enum, authors):
+            self.assertTrue(x_field.supportsService("com.sun.star.text.TextField.Annotation"))
+            self.assertEqual(x_field.getPropertyValue("Author"), author)
+            annotations_found += 1
+
+        self.assertEqual(annotations_found, len(authors))
 
 if __name__ == '__main__':
     unittest.main()
