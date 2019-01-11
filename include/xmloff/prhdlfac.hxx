@@ -87,7 +87,7 @@ public:
      *  use the handler cache. This method should only be called in special
      *  circumstances; calling GetPropertyHandler is almost always
      *  preferable. */
-    static const XMLPropertyHandler* CreatePropertyHandler( sal_Int32 nType );
+    static std::unique_ptr<XMLPropertyHandler> CreatePropertyHandler( sal_Int32 nType );
 
 protected:
     /** Retrieves a PropertyHandler from the internal cache */
