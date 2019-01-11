@@ -124,6 +124,7 @@
   <object class="GtkDialog" id="PrintDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="title" translatable="yes" context="printdialog|PrintDialog">Print</property>
     <property name="type_hint">dialog</property>
     <child>
       <placeholder/>
