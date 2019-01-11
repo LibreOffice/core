@@ -7,12 +7,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+
 import unittest
-import unohelper
+
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.lang import IllegalArgumentException
-import uno
-
 
 class TestXTextContent(unittest.TestCase):
 
@@ -25,54 +24,56 @@ class TestXTextContent(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-    def test_anchorOperations(self):
-        xDoc = self._uno.openDocFromTDOC("xtextcontent.odt")
-        self.assertIsNotNone(xDoc)
+    def test_anchor_operations(self):
+        x_doc = self._uno.openDocFromTDOC("xtextcontent.odt")
+        self.assertIsNotNone(x_doc)
 
         # getAnchor for both text frames and ensure we receive ranges we expect
-        xFrame1 = self.getTextFrame("Frame1")
-        xRange1 = xFrame1.getAnchor()
-        self.assertIsNotNone(xRange1)
-        self.compareRange(xRange1, "String1")
+        x_frame_1 = self.get_text_frame("Frame1")
+        x_range_1 = x_frame_1.getAnchor()
+        self.assertIsNotNone(x_range_1)
+        self.compare_range(x_range_1, "String1")
 
-        xFrame2 = self.getTextFrame("Frame2")
-        xRange2 = xFrame2.getAnchor()
-        self.assertIsNotNone(xRange2)
-        self.compareRange(xRange2, "String2")
+        x_frame_2 = self.get_text_frame("Frame2")
+        x_range_2 = x_frame_2.getAnchor()
+        self.assertIsNotNone(x_range_2)
+        self.compare_range(x_range_2, "String2")
 
         # Check how XTextContent::attach works. Try to exchange anchors
-        xFrame1.attach(xRange2)
-        xFrame2.attach(xRange1)
-        self.compareRange(xFrame1.getAnchor(), "String2")
-        self.compareRange(xFrame2.getAnchor(), "String1")
+        x_frame_1.attach(x_range_2)
+        x_frame_2.attach(x_range_1)
+        self.compare_range(x_frame_1.getAnchor(), "String2")
+        self.compare_range(x_frame_2.getAnchor(), "String1")
 
         # Try to attach to None
         with self.assertRaises(IllegalArgumentException):
-            xFrame1.attach(None)
+            x_frame_1.attach(None)
 
         # Trying to attach frame to range from other document
-        xDoc2 = self._uno.openDocFromTDOC("xcontrolshape.odt")
+        x_doc_2 = self._uno.openDocFromTDOC("xcontrolshape.odt")
         with self.assertRaises(IllegalArgumentException):
-            xFrame1.attach(xDoc2.getText())
+            x_frame_1.attach(x_doc_2.getText())
 
-        xDoc2.close(True)
-        xDoc.close(True)
+        x_doc_2.close(True)
+        x_doc.close(True)
 
-    def getTextFrame(self, frameName):
-        xTextFrames = self._uno.getDoc().getTextFrames()
-        self.assertIsNotNone(xTextFrames)
-        xTextFrame = xTextFrames[frameName]
-        self.assertIsNotNone(xTextFrame)
-        return xTextFrame
+    def get_text_frame(self, frame_name):
+        x_test_frames = self._uno.getDoc().getTextFrames()
+        self.assertIsNotNone(x_test_frames)
+
+        x_test_frame = x_test_frames[frame_name]
+        self.assertIsNotNone(x_test_frame)
+
+        return x_test_frame
 
     # Helper to extract text content from range and compare to expected string
-    def compareRange(self, xRange, expectedContent):
-        xCursor = xRange.getText().createTextCursor()
-        self.assertIsNotNone(xCursor)
-        xCursor.collapseToStart()
-        xCursor.goRight(len(expectedContent), True)
-        self.assertEqual(xCursor.getString(), expectedContent)
+    def compare_range(self, x_range, expected_content):
+        x_cursor = x_range.getText().createTextCursor()
+        self.assertIsNotNone(x_cursor)
 
+        x_cursor.collapseToStart()
+        x_cursor.goRight(len(expected_content), True)
+        self.assertEqual(x_cursor.getString(), expected_content)
 
 if __name__ == '__main__':
     unittest.main()
