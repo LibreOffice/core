@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_804cdec7",
+        "filename": "include/o3tl/strong_int.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-11T09:17:05Z",
+      "side": 1,
+      "message": "What\u0027s the rationale for having both an (explicit) conversion function and a get() to retrieve the UNDERLYING_TYPE value?  Reading code like\n\n  m_aBuffer.appendCopy(m_pTextFrame-\u003eGetText(), sal_Int32(m_nViewPosition), sal_Int32(nLength));\n\n(SwAccessiblePortionData::Text, sw/source/core/access/accportions.cxx), makes one wonder whether the cast to sal_Int32 is a deliberate cast from some integer type to specificially sal_Int32 (e.g., to resolve an overload ambiguity of the called function); using .get() instead would have been better there IMO.",
+      "revId": "e2e76df7e48fb77f1e802f57c7d9a22eb8c74c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
