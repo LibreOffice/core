@@ -147,7 +147,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
         }
         if( dynamic_cast<const SvXMLAttrContainerItem*>( &rItem) !=  nullptr )
         {
-            SvXMLNamespaceMap *pNewNamespaceMap = nullptr;
+            std::unique_ptr<SvXMLNamespaceMap> pNewNamespaceMap;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
             const SvXMLAttrContainerItem *pUnknown =
@@ -169,9 +169,9 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                     {
                         if( !pNewNamespaceMap )
                         {
-                            pNewNamespaceMap =
-                                        new SvXMLNamespaceMap( rNamespaceMap );
-                            pNamespaceMap = pNewNamespaceMap;
+                            pNewNamespaceMap.reset(
+                                        new SvXMLNamespaceMap( rNamespaceMap ));
+                            pNamespaceMap = pNewNamespaceMap.get();
                         }
                         pNewNamespaceMap->Add( sPrefix, sNamespace );
 
@@ -188,8 +188,6 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                             pUnknown->GetAttrValue(i) );
                 }
             }
-
-            delete pNewNamespaceMap;
         }
         else
         {
