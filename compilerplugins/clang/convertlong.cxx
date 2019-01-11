@@ -77,8 +77,6 @@ bool ConvertLong::VisitVarDecl(VarDecl const* varDecl)
         return true;
     if (loplugin::isSamePathname(fileName, SRCDIR "/include/tools/solar.h"))
         return true;
-    if (loplugin::isSamePathname(fileName, SRCDIR "/include/o3tl/string_view.hxx"))
-        return true;
     if (!varDecl->hasInit())
         return true;
     if (isa<IntegerLiteral>(varDecl->getInit()->IgnoreParenImpCasts()))
