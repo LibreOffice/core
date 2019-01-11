@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <ndtxt.hxx>
 #include <viscrs.hxx>
@@ -28,12 +29,23 @@ DECLARE_WW8IMPORT_TEST(testFloatingTableSectionMargins, "floating-table-section-
 {
     sal_Int32 pageLeft = parseDump("/root/page[2]/infos/bounds", "left").toInt32();
     sal_Int32 pageWidth = parseDump("/root/page[2]/infos/bounds", "width").toInt32();
-    sal_Int32 tableLeft = parseDump("/root/page[2]/body/column/body/section/column/body/txt[2]/anchored/fly/tab/infos/bounds", "left").toInt32();
-    sal_Int32 tableWidth = parseDump("/root/page[2]/body/column/body/section/column/body/txt[2]/anchored/fly/tab/infos/bounds", "width").toInt32();
+    sal_Int32 tableLeft = parseDump("//tab/infos/bounds", "left").toInt32();
+    sal_Int32 tableWidth = parseDump("//tab/infos/bounds", "width").toInt32();
     CPPUNIT_ASSERT( pageWidth > 0 );
     CPPUNIT_ASSERT( tableWidth > 0 );
     // The table's resulting position should be roughly centered.
     CPPUNIT_ASSERT( abs(( pageLeft + pageWidth / 2 ) - ( tableLeft + tableWidth / 2 )) < 20 );
+
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(2), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    OUString pageStyleName = getProperty<OUString>(getParagraph(2), "PageStyleName");
+    uno::Reference<style::XStyle> pageStyle( getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(pageStyleName), uno::UNO_QUERY);
+    uno::Reference<text::XTextColumns> xPageColumns = getProperty< uno::Reference<text::XTextColumns> >(xPageStyle, "TextColumns");
+
+    //either one or the other should get the column's, not both.
+    CPPUNIT_ASSERT( xTextColumns->getColumnCount() != xPageColumns->getColumnCount());
 }
 
 DECLARE_WW8IMPORT_TEST(testN816593, "n816593.doc")
