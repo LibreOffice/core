@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
-#include <o3tl/clamp.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/graph.hxx>
 
@@ -290,8 +293,8 @@ namespace drawinglayer
             }
 
             // get offset in percent
-            const double fOffsetX(o3tl::clamp(getOffset().getX() * 0.01, 0.0, 1.0));
-            const double fOffsetY(o3tl::clamp(getOffset().getY() * 0.01, 0.0, 1.0));
+            const double fOffsetX(std::clamp(getOffset().getX() * 0.01, 0.0, 1.0));
+            const double fOffsetY(std::clamp(getOffset().getY() * 0.01, 0.0, 1.0));
 
             // create FillGraphicAttribute
             return FillGraphicAttribute(

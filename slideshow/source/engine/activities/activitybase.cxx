@@ -19,7 +19,8 @@
 
 #include <sal/config.h>
 
-#include <o3tl/clamp.hxx>
+#include <algorithm>
+
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
@@ -148,7 +149,7 @@ namespace slideshow
             // ================================
 
             // clamp nT to permissible [0,1] range
-            nT = o3tl::clamp( nT, 0.0, 1.0 );
+            nT = std::clamp( nT, 0.0, 1.0 );
 
             // take acceleration/deceleration into account. if the sum
             // of mnAccelerationFraction and mnDecelerationFraction

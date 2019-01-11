@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <drawinglayer/texture/texture.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <o3tl/clamp.hxx>
 
 #include <converters.hxx>
 
@@ -698,8 +701,8 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY)
         :   maRange(rRange),
-            mfOffsetX(o3tl::clamp(fOffsetX, 0.0, 1.0)),
-            mfOffsetY(o3tl::clamp(fOffsetY, 0.0, 1.0))
+            mfOffsetX(std::clamp(fOffsetX, 0.0, 1.0)),
+            mfOffsetY(std::clamp(fOffsetY, 0.0, 1.0))
         {
             if(!basegfx::fTools::equalZero(mfOffsetX))
             {

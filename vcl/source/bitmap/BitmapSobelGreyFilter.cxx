@@ -10,7 +10,8 @@
 
 #include <sal/config.h>
 
-#include <o3tl/clamp.hxx>
+#include <algorithm>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
@@ -119,7 +120,7 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
                         nSum1 = static_cast<long>(
                             sqrt(static_cast<double>(nSum1 * nSum1 + nSum2 * nSum2)));
 
-                        aGrey.SetIndex(~static_cast<sal_uInt8>(o3tl::clamp(nSum1, 0L, 255L)));
+                        aGrey.SetIndex(~static_cast<sal_uInt8>(std::clamp(nSum1, 0L, 255L)));
                         pWriteAcc->SetPixelOnData(pScanline, nX, aGrey);
 
                         if (nX < (nWidth - 1))

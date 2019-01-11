@@ -22,12 +22,11 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <ostream>
 
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
-#include <o3tl/clamp.hxx>
-
 
 namespace basegfx
 {
@@ -155,9 +154,9 @@ namespace basegfx
         // clamp color to [0.0..1.0] values in all three intensity components
         BColor& clamp()
         {
-            mfX = o3tl::clamp(mfX, 0.0, 1.0);
-            mfY = o3tl::clamp(mfY, 0.0, 1.0);
-            mfZ = o3tl::clamp(mfZ, 0.0, 1.0);
+            mfX = std::clamp(mfX, 0.0, 1.0);
+            mfY = std::clamp(mfY, 0.0, 1.0);
+            mfZ = std::clamp(mfZ, 0.0, 1.0);
             return *this;
         }
 

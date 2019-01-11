@@ -19,7 +19,8 @@
 
 #include <sal/config.h>
 
-#include <o3tl/clamp.hxx>
+#include <algorithm>
+
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "PosSizePropertyPanel.hxx"
 #include <svx/sidebar/SidebarDialControl.hxx>
@@ -1103,10 +1104,10 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     fBottom -= maRect.getHeight();
 
     const double fMaxLong(static_cast<double>(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
-    fLeft = o3tl::clamp(fLeft, -fMaxLong, fMaxLong);
-    fRight = o3tl::clamp(fRight, -fMaxLong, fMaxLong);
-    fTop = o3tl::clamp(fTop, - fMaxLong, fMaxLong);
-    fBottom = o3tl::clamp(fBottom, -fMaxLong, fMaxLong);
+    fLeft = std::clamp(fLeft, -fMaxLong, fMaxLong);
+    fRight = std::clamp(fRight, -fMaxLong, fMaxLong);
+    fTop = std::clamp(fTop, - fMaxLong, fMaxLong);
+    fBottom = std::clamp(fBottom, -fMaxLong, fMaxLong);
 
     mpMtrPosX->SetMin(basegfx::fround64(fLeft));
     mpMtrPosX->SetFirst(basegfx::fround64(fLeft));

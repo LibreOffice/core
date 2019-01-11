@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <basegfx/color/bcolormodifier.hxx>
-#include <o3tl/clamp.hxx>
 
 namespace basegfx
 {
@@ -217,11 +220,11 @@ namespace basegfx
 {
     BColorModifier_RGBLuminanceContrast::BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast)
     :   BColorModifier(),
-        mfRed(o3tl::clamp(fRed, -1.0, 1.0)),
-        mfGreen(o3tl::clamp(fGreen, -1.0, 1.0)),
-        mfBlue(o3tl::clamp(fBlue, -1.0, 1.0)),
-        mfLuminance(o3tl::clamp(fLuminance, -1.0, 1.0)),
-        mfContrast(o3tl::clamp(fContrast, -1.0, 1.0)),
+        mfRed(std::clamp(fRed, -1.0, 1.0)),
+        mfGreen(std::clamp(fGreen, -1.0, 1.0)),
+        mfBlue(std::clamp(fBlue, -1.0, 1.0)),
+        mfLuminance(std::clamp(fLuminance, -1.0, 1.0)),
+        mfContrast(std::clamp(fContrast, -1.0, 1.0)),
         mfContrastOff(1.0),
         mfRedOff(0.0),
         mfGreenOff(0.0),
@@ -283,9 +286,9 @@ namespace basegfx
         if(mbUseIt)
         {
             return basegfx::BColor(
-                o3tl::clamp(aSourceColor.getRed() * mfContrastOff + mfRedOff, 0.0, 1.0),
-                o3tl::clamp(aSourceColor.getGreen() * mfContrastOff + mfGreenOff, 0.0, 1.0),
-                o3tl::clamp(aSourceColor.getBlue() * mfContrastOff + mfBlueOff, 0.0, 1.0));
+                std::clamp(aSourceColor.getRed() * mfContrastOff + mfRedOff, 0.0, 1.0),
+                std::clamp(aSourceColor.getGreen() * mfContrastOff + mfGreenOff, 0.0, 1.0),
+                std::clamp(aSourceColor.getBlue() * mfContrastOff + mfBlueOff, 0.0, 1.0));
         }
         else
         {

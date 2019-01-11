@@ -10,8 +10,9 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+
 #include <tools/helpers.hxx>
-#include <o3tl/clamp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
@@ -54,7 +55,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
                 const long nLz = FRound(sin(fElev) * 255.0);
                 const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
                 const long nNzLz = ((6 * 255) / 4) * nLz;
-                const sal_uInt8 cLz = static_cast<sal_uInt8>(o3tl::clamp(nLz, 0L, 255L));
+                const sal_uInt8 cLz = static_cast<sal_uInt8>(std::clamp(nLz, 0L, 255L));
 
                 // fill mapping tables
                 pHMap[0] = 0;
@@ -105,7 +106,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
                         {
                             const double fGrey
                                 = nDotL / sqrt(static_cast<double>(nNx * nNx + nNy * nNy + nZ2));
-                            aGrey.SetIndex(static_cast<sal_uInt8>(o3tl::clamp(fGrey, 0.0, 255.0)));
+                            aGrey.SetIndex(static_cast<sal_uInt8>(std::clamp(fGrey, 0.0, 255.0)));
                         }
 
                         pWriteAcc->SetPixelOnData(pScanline, nX, aGrey);

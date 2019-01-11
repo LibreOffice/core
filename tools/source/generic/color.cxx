@@ -19,11 +19,11 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <iomanip>
 #include <sstream>
 #include <stdlib.h>
 
-#include <o3tl/clamp.hxx>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
@@ -40,16 +40,16 @@ sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
 
 void Color::IncreaseLuminance( sal_uInt8 cLumInc )
 {
-    SetRed( static_cast<sal_uInt8>(o3tl::clamp( static_cast<long>(COLORDATA_RED( mnColor )) + cLumInc, 0L, 255L )) );
-    SetGreen( static_cast<sal_uInt8>(o3tl::clamp( static_cast<long>(COLORDATA_GREEN( mnColor )) + cLumInc, 0L, 255L )) );
-    SetBlue( static_cast<sal_uInt8>(o3tl::clamp( static_cast<long>(COLORDATA_BLUE( mnColor )) + cLumInc, 0L, 255L )) );
+    SetRed( static_cast<sal_uInt8>(std::clamp( static_cast<long>(COLORDATA_RED( mnColor )) + cLumInc, 0L, 255L )) );
+    SetGreen( static_cast<sal_uInt8>(std::clamp( static_cast<long>(COLORDATA_GREEN( mnColor )) + cLumInc, 0L, 255L )) );
+    SetBlue( static_cast<sal_uInt8>(std::clamp( static_cast<long>(COLORDATA_BLUE( mnColor )) + cLumInc, 0L, 255L )) );
 }
 
 void Color::DecreaseLuminance( sal_uInt8 cLumDec )
 {
-    SetRed( static_cast<sal_uInt8>(o3tl::clamp( static_cast<long>(COLORDATA_RED( mnColor )) - cLumDec, 0L, 255L )) );
-    SetGreen( static_cast<sal_uInt8>(o3tl::clamp( static_cast<long>(COLORDATA_GREEN( mnColor )) - cLumDec, 0L, 255L )) );
-    SetBlue( static_cast<sal_uInt8>(o3tl::clamp( static_cast<long>(COLORDATA_BLUE( mnColor )) - cLumDec, 0L, 255L )) );
+    SetRed( static_cast<sal_uInt8>(std::clamp( static_cast<long>(COLORDATA_RED( mnColor )) - cLumDec, 0L, 255L )) );
+    SetGreen( static_cast<sal_uInt8>(std::clamp( static_cast<long>(COLORDATA_GREEN( mnColor )) - cLumDec, 0L, 255L )) );
+    SetBlue( static_cast<sal_uInt8>(std::clamp( static_cast<long>(COLORDATA_BLUE( mnColor )) - cLumDec, 0L, 255L )) );
 }
 
 void Color::DecreaseContrast( sal_uInt8 cContDec )
@@ -59,9 +59,9 @@ void Color::DecreaseContrast( sal_uInt8 cContDec )
         const double fM = ( 128.0 - 0.4985 * cContDec ) / 128.0;
         const double fOff = 128.0 - fM * 128.0;
 
-        SetRed( static_cast<sal_uInt8>(o3tl::clamp( FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L )) );
-        SetGreen( static_cast<sal_uInt8>(o3tl::clamp( FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L )) );
-        SetBlue( static_cast<sal_uInt8>(o3tl::clamp( FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L )) );
+        SetRed( static_cast<sal_uInt8>(std::clamp( FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L )) );
+        SetGreen( static_cast<sal_uInt8>(std::clamp( FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L )) );
+        SetBlue( static_cast<sal_uInt8>(std::clamp( FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L )) );
     }
 }
 
