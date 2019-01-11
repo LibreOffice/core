@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_602b22eb",
+        "filename": "framework/source/dispatch/dispatchinformationprovider.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-11T08:05:16Z",
+      "side": 1,
+      "message": "you\u0027re only using one of the sub-providers here, instead of 3 like the older method?",
+      "revId": "e19628e7a32d7fc9c1c92d33e12747b8ee74711e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_20352a47",
+        "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider2.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-11T08:05:16Z",
+      "side": 1,
+      "message": "needs an @since tag",
+      "revId": "e19628e7a32d7fc9c1c92d33e12747b8ee74711e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
