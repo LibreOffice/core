@@ -6,7 +6,7 @@ diff -ru boost.orig/boost/libs/locale/src/encoding/codepage.cpp boost/boost/libs
                                              method_type how)
                  {
 +                    #if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
-                     std::auto_ptr<converter_between> cvt;
+                     hold_ptr<converter_between> cvt;
                      #ifdef BOOST_LOCALE_WITH_ICONV
                      cvt.reset(new iconv_between());
 @@ -55,6 +56,7 @@
@@ -22,7 +22,7 @@ diff -ru boost.orig/boost/libs/locale/src/encoding/codepage.cpp boost/boost/libs
                                          method_type how)
                  {
 +                    #if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
-                     std::auto_ptr<converter_to_utf<CharType> > cvt;
+                     hold_ptr<converter_to_utf<CharType> > cvt;
                      #ifdef BOOST_LOCALE_WITH_ICONV
                      cvt.reset(new iconv_to_utf<CharType>());
 @@ -81,6 +84,7 @@
@@ -38,7 +38,7 @@ diff -ru boost.orig/boost/libs/locale/src/encoding/codepage.cpp boost/boost/libs
                                          method_type how)
                  {
 +                    #if defined(BOOST_LOCALE_WITH_ICONV) || defined(BOOST_LOCALE_WITH_ICU) || defined(BOOST_LOCALE_WITH_WCONV)
-                     std::auto_ptr<converter_from_utf<CharType> > cvt;
+                     hold_ptr<converter_from_utf<CharType> > cvt;
                      #ifdef BOOST_LOCALE_WITH_ICONV
                      cvt.reset(new iconv_from_utf<CharType>());
 @@ -107,6 +112,7 @@
