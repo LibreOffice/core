@@ -2492,9 +2492,10 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
     float fScaleFactor = rRenderContext.GetDPIScaleFactor();
 
     tools::Polygon aPoly(4);
+    int iTBHeight = rRenderContext.GetOutputSize().Height(); //scale triangle depending on theme/toolbar height
 
-    long width = 7 * fScaleFactor;
-    long height = 4 * fScaleFactor;
+    long width = round(iTBHeight/5.5) * fScaleFactor; // 7 for gtk, 5 for gen
+    long height = round(iTBHeight/9.5) * fScaleFactor; // 4 for gtk, 3 for gen
 
     long x = rDropDownRect.Left() + (rDropDownRect.getWidth() - width)/2;
     long y = rDropDownRect.Top() + (rDropDownRect.getHeight() - height)/2;
