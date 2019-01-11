@@ -465,7 +465,7 @@ bool SwViewShell::PrintOrPDFExport(
     // will fit on the real page, and replay that scaled
     // output to the real outputdevice
     GDIMetaFile *pOrigRecorder(nullptr);
-    GDIMetaFile *pMetaFile(nullptr);
+    std::unique_ptr<GDIMetaFile> pMetaFile;
     SwPostItMode nPostItMode = rPrintData.GetPrintPostIts();
 
     // tdf#91680 Reserve space in margin for comments only if there are comments
@@ -481,7 +481,7 @@ bool SwViewShell::PrintOrPDFExport(
         pOutDev->EnableOutput(false);
         // just record the rendering commands to the metafile
         // instead
-        pMetaFile = new GDIMetaFile;
+        pMetaFile.reset(new GDIMetaFile);
         pMetaFile->SetPrefSize(pOutDev->GetOutputSize());
         pMetaFile->SetPrefMapMode(pOutDev->GetMapMode());
         pMetaFile->Record(pOutDev);
@@ -574,7 +574,7 @@ bool SwViewShell::PrintOrPDFExport(
 
             //play back the scaled page
             pMetaFile->Play(pOutDev);
-            delete pMetaFile;
+            pMetaFile.reset();
         }
     }
 
