@@ -238,7 +238,7 @@ void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacr
 }
 
 
-SvxMacro* SfxEventConfiguration::ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc )
+std::unique_ptr<SvxMacro> SfxEventConfiguration::ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc )
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc );
 }

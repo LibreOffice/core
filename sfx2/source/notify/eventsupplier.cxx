@@ -329,9 +329,9 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 
-SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell )
+std::unique_ptr<SvxMacro> SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell )
 {
-    SvxMacro* pMacro = nullptr;
+    std::unique_ptr<SvxMacro> pMacro;
     uno::Sequence < beans::PropertyValue > aProperties;
     uno::Any aAny;
     NormalizeMacro( rElement, aAny, pObjShell );
@@ -383,10 +383,10 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
                 aLibrary = SfxGetpApp()->GetName();
             else
                 aLibrary.clear();
-            pMacro = new SvxMacro( aMacroName, aLibrary, eType );
+            pMacro.reset(new SvxMacro( aMacroName, aLibrary, eType ));
         }
         else if ( eType == EXTENDED_STYPE )
-            pMacro = new SvxMacro( aScriptURL, aType );
+            pMacro.reset(new SvxMacro( aScriptURL, aType ));
     }
 
     return pMacro;
