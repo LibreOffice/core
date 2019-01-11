@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -91,7 +95,7 @@ OUString Translator::translateToInternal(
     }
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file:");
     OUStringBuffer buf;
-    buf.appendCopy(externalUriReference, 0, i);
+    buf.append(std::u16string_view(externalUriReference).substr(0, i));
     // Some environments (e.g., Java) produce illegal file URLs without an
     // authority part; treat them as having an empty authority part:
     if (!externalUriReference.match("//", i))
@@ -139,7 +143,7 @@ OUString Translator::translateToExternal(
     }
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file://");
     OUStringBuffer buf;
-    buf.appendCopy(internalUriReference, 0, i);
+    buf.append(std::u16string_view(internalUriReference).substr(0, i));
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     for (bool path = true;;) {
         sal_Int32 j = i;

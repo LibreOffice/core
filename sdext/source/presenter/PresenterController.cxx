@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "PresenterController.hxx"
 
 #include "PresenterAccessibility.hxx"
@@ -381,13 +385,13 @@ void PresenterController::UpdatePaneTitles()
             if (nStartIndex < 0)
             {
                 // Add the remaining part of the string.
-                sResult.appendCopy(sTemplate, nIndex);
+                sResult.append(std::u16string_view(sTemplate).substr(nIndex));
                 break;
             }
             else
             {
                 // Add the part preceding the next %.
-                sResult.appendCopy(sTemplate, nIndex, nStartIndex-nIndex);
+                sResult.append(std::u16string_view(sTemplate).substr(nIndex, nStartIndex-nIndex));
 
                 // Get the placeholder
                 ++nStartIndex;

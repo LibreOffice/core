@@ -20,6 +20,8 @@
 #include <oox/dump/dumperbase.hxx>
 
 #include <algorithm>
+#include <string_view>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/TextOutputStream.hpp>
@@ -496,7 +498,7 @@ void StringHelper::appendEncString( OUStringBuffer& rStr, const OUString& rData,
             if( (nBeg == 0) && (nIdx == nEnd) )
                 rStr.append( rData );
             else
-                rStr.appendCopy( rData, nBeg, nIdx - nBeg );
+                rStr.append( std::u16string_view(rData).substr(nBeg, nIdx - nBeg) );
         }
         // append characters to be encoded
         while( (nIdx < nEnd) && (rData[ nIdx ] < 0x20) )
@@ -562,7 +564,7 @@ OUString lclTrimQuotedStringList( const OUString& rStr )
             {
                 // seek to next quote character and add text portion to token buffer
                 sal_Int32 nEnd = lclIndexOf( rStr, OOX_DUMP_CFG_QUOTE, nPos );
-                aToken.appendCopy( rStr, nPos, nEnd - nPos );
+                aToken.append( std::u16string_view(rStr).substr(nPos, nEnd - nPos) );
                 // process literal quotes
                 while( (nEnd + 1 < nLen) && (rStr[ nEnd ] == OOX_DUMP_CFG_QUOTE) && (rStr[ nEnd + 1 ] == OOX_DUMP_CFG_QUOTE) )
                 {
@@ -585,7 +587,7 @@ OUString lclTrimQuotedStringList( const OUString& rStr )
         {
             // find list separator, add token text to buffer
             sal_Int32 nEnd = lclIndexOf( rStr, OOX_DUMP_CFG_LISTSEP, nPos );
-            aBuffer.appendCopy( rStr,  nPos, nEnd - nPos );
+            aBuffer.append( std::u16string_view(rStr).substr(nPos, nEnd - nPos) );
             if( nEnd < nLen )
                 aBuffer.append( OOX_DUMP_LF );
             // set current position behind list separator

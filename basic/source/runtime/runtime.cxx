@@ -20,7 +20,7 @@
 #include <stdlib.h>
 
 #include <algorithm>
-
+#include <string_view>
 #include <unordered_map>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -2050,7 +2050,7 @@ void SbiRuntime::StepRSET()
         }
         else
         {
-            aNewStr.appendCopy(aRefValString, 0, nVarStrLen);
+            aNewStr.append(std::u16string_view(aRefValString).substr(0, nVarStrLen));
         }
         refVar->PutString(aNewStr.makeStringAndClear());
 

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <string_view>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
@@ -553,7 +554,7 @@ void normalize(
     } else {
         OUStringBuffer buf(path);
         buf.append('/');
-        buf.appendCopy(relative, 0, i);
+        buf.append(std::u16string_view(relative).substr(0, i));
         *normalizedPath = buf.makeStringAndClear();
         *name = relative.copy(i + 1);
     }

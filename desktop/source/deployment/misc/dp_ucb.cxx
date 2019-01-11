@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <dp_misc.h>
 #include <dp_ucb.h>
@@ -216,18 +219,18 @@ bool readLine( OUString * res, OUString const & startingWith,
             {
                 pos = file.indexOf( LF, pos );
                 if (pos < 0) { // EOF
-                    buf.appendCopy( file, start );
+                    buf.append( std::u16string_view(file).substr(start) );
                 }
                 else
                 {
                     if (pos > 0 && file[ pos - 1 ] == CR)
                     {
                         // consume extra CR
-                        buf.appendCopy( file, start, pos - start - 1 );
+                        buf.append( std::u16string_view(file).substr(start, pos - start - 1) );
                         ++pos;
                     }
                     else
-                        buf.appendCopy( file, start, pos - start );
+                        buf.append( std::u16string_view(file).substr(start, pos - start) );
                     ++pos; // consume LF
                     // check next line:
                     if (pos < file.getLength() &&
@@ -271,16 +274,16 @@ bool readProperties( std::vector< std::pair< OUString, OUString> > & out_result,
         bool bEOF = false;
         pos = file.indexOf( LF, pos );
         if (pos < 0) { // EOF
-            buf.appendCopy( file, start );
+            buf.append( std::u16string_view(file).substr(start) );
             bEOF = true;
         }
         else
         {
             if (pos > 0 && file[ pos - 1 ] == CR)
                 // consume extra CR
-                buf.appendCopy( file, start, pos - start - 1 );
+                buf.append( std::u16string_view(file).substr(start, pos - start - 1) );
             else
-                buf.appendCopy( file, start, pos - start );
+                buf.append( std::u16string_view(file).substr(start, pos - start) );
             pos++;
         }
         OUString aLine = buf.makeStringAndClear();

@@ -21,6 +21,7 @@
 
 #include <cstddef>
 #include <string.h>
+#include <string_view>
 #include <vector>
 #include <algorithm>
 
@@ -443,7 +444,7 @@ OUString removeAny(OUString const& rIn,
             {
                 if (i > 0)
                 {
-                    buf.appendCopy(rIn, 0, i);
+                    buf.append(std::u16string_view(rIn).substr(0, i));
                 }
                 isFound = true;
             }

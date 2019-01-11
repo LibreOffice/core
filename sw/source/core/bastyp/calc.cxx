@@ -23,6 +23,7 @@
 #include <cfloat>
 #include <climits>
 #include <memory>
+#include <string_view>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <cstdlib>
@@ -758,8 +759,8 @@ SwCalcOper SwCalc::GetToken()
                                 // ignore the ]
                                 if ('\\' == m_sCommand[nFndPos-1])
                                 {
-                                    m_aVarName.appendCopy(m_sCommand, nSttPos,
-                                                    nFndPos - nSttPos - 1 );
+                                    m_aVarName.append(std::u16string_view(m_sCommand).substr(nSttPos,
+                                                    nFndPos - nSttPos - 1) );
                                     nSttPos = ++nFndPos;
                                 }
                                 else
@@ -770,8 +771,8 @@ SwCalcOper SwCalc::GetToken()
                         if( nFndPos != -1 )
                         {
                             if( nSttPos != nFndPos )
-                                m_aVarName.appendCopy(m_sCommand, nSttPos,
-                                                    nFndPos - nSttPos );
+                                m_aVarName.append(std::u16string_view(m_sCommand).substr(nSttPos,
+                                                    nFndPos - nSttPos) );
                             aRes.EndPos = nFndPos + 1;
                             m_eCurrOper = CALC_NAME;
                         }

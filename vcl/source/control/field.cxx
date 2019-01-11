@@ -18,6 +18,9 @@
  */
 
 #include <sal/config.h>
+
+#include <string_view>
+
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -113,23 +116,23 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         // If in "a b/c" format.
         if(nFracNumPos != -1 )
         {
-            aStr1.appendCopy(aStr, 0, nFracNumPos);
-            aStrNum.appendCopy(aStr, nFracNumPos+1, nFracDivPos-nFracNumPos-1);
-            aStrDenom.appendCopy(aStr, nFracDivPos+1);
+            aStr1.append(std::u16string_view(aStr).substr(0, nFracNumPos));
+            aStrNum.append(std::u16string_view(aStr).substr(nFracNumPos+1, nFracDivPos-nFracNumPos-1));
+            aStrDenom.append(std::u16string_view(aStr).substr(nFracDivPos+1));
         }
         // "a/b" format, or not a fraction at all
         else
         {
-            aStrNum.appendCopy(aStr, 0, nFracDivPos);
-            aStrDenom.appendCopy(aStr, nFracDivPos+1);
+            aStrNum.append(std::u16string_view(aStr).substr(0, nFracDivPos));
+            aStrDenom.append(std::u16string_view(aStr).substr(nFracDivPos+1));
         }
 
     }
     // parse decimal strings
     else if ( nDecPos >= 0)
     {
-        aStr1.appendCopy(aStr, 0, nDecPos);
-        aStr2.appendCopy(aStr, nDecPos+1);
+        aStr1.append(std::u16string_view(aStr).substr(0, nDecPos));
+        aStr2.append(std::u16string_view(aStr).substr(nDecPos+1));
     }
     else
         aStr1 = aStr;

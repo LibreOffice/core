@@ -69,6 +69,7 @@
 #include <vcl/vcllayout.hxx>
 
 #include <map>
+#include <string_view>
 #include <vector>
 
 namespace vcl
@@ -1669,9 +1670,9 @@ static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext 
         if (nPos < aNonMnem.getLength() && i_rLong[nPos+1] == aNonMnem[nPos])
         {
             OUStringBuffer aBuf( i_rLong.getLength() );
-            aBuf.appendCopy( aNonMnem, 0, nPos );
+            aBuf.append( std::u16string_view(aNonMnem).substr(0, nPos) );
             aBuf.append( '~' );
-            aBuf.appendCopy( aNonMnem, nPos );
+            aBuf.append( std::u16string_view(aNonMnem).substr(nPos) );
             aNonMnem = aBuf.makeStringAndClear();
         }
     }

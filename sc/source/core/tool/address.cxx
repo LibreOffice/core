@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <address.hxx>
 #include <global.hxx>
 #include <compiler.hxx>
@@ -2157,7 +2161,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
                 {
                     if (!aDocName.isEmpty())
                     {
-                        rString.append("'[").append(aDocName).append("]").appendCopy(aTabName, 1);
+                        rString.append("'[").append(aDocName).append("]").append(std::u16string_view(aTabName).substr(1));
                     }
                     else
                     {

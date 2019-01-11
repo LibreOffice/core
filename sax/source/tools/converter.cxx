@@ -35,6 +35,7 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <string_view>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -755,7 +756,7 @@ void Converter::convertDuration(OUStringBuffer& rBuffer,
         if ( aNS.getLength() > 2 )
         {
             rBuffer.append( '.');
-            rBuffer.appendCopy( aNS, 2 );     // strip "0."
+            rBuffer.append( std::u16string_view(aNS).substr(2) );     // strip "0."
         }
     }
     rBuffer.append( 'S');

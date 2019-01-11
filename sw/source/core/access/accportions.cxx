@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "accportions.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
@@ -125,7 +129,7 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
     m_aPortionAttrs.push_back( nAttr );
 
     // update buffer + nViewPosition
-    m_aBuffer.appendCopy(m_pTextFrame->GetText(), sal_Int32(m_nViewPosition), sal_Int32(nLength));
+    m_aBuffer.append(std::u16string_view(m_pTextFrame->GetText()).substr(sal_Int32(m_nViewPosition), sal_Int32(nLength)));
     m_nViewPosition += nLength;
 }
 

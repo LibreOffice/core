@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <hintids.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svl/whiter.hxx>
@@ -92,7 +96,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         if (pStart->nContent != nLastEnd) // not 0 so we eliminate adjacent deletes
         {
             extents.emplace_back(pNode, nLastEnd, pStart->nContent.GetIndex());
-            mergedText.appendCopy(pNode->GetText(), nLastEnd, pStart->nContent.GetIndex() - nLastEnd);
+            mergedText.append(std::u16string_view(pNode->GetText()).substr(nLastEnd, pStart->nContent.GetIndex() - nLastEnd));
         }
         if (&pEnd->nNode.GetNode() != pNode)
         {
@@ -213,7 +217,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     if (nLastEnd != pNode->Len())
     {
         extents.emplace_back(pNode, nLastEnd, pNode->Len());
-        mergedText.appendCopy(pNode->GetText(), nLastEnd, pNode->Len() - nLastEnd);
+        mergedText.append(std::u16string_view(pNode->GetText()).substr(nLastEnd, pNode->Len() - nLastEnd));
     }
     if (extents.empty()) // there was no text anywhere
     {

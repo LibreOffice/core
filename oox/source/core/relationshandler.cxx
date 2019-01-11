@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <oox/core/relationshandler.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -44,7 +48,7 @@ OUString lclGetRelationsPath( const OUString& rFragmentPath )
     return
         OUStringBuffer( rFragmentPath.copy( 0, nPathLen ) ).    // file path including slash
         append( "_rels/" ).                                // additional '_rels/' path
-        appendCopy( rFragmentPath, nPathLen ).               // file name after path
+        append( std::u16string_view(rFragmentPath).substr(nPathLen) ).               // file name after path
         append( ".rels" ).                                 // '.rels' suffix
         makeStringAndClear();
 }

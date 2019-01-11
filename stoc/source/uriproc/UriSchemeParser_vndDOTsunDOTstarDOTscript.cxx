@@ -40,6 +40,7 @@
 #include <sal/types.h>
 
 #include <exception>
+#include <string_view>
 
 namespace {
 
@@ -284,7 +285,7 @@ void SAL_CALL UrlReference::setName(OUString const & name)
 
     OUStringBuffer newPath;
     newPath.append(encodeNameOrParamFragment(name));
-    newPath.appendCopy(m_base.m_path, i);
+    newPath.append(std::u16string_view(m_base.m_path).substr(i));
     m_base.m_path = newPath.makeStringAndClear();
 }
 
@@ -315,7 +316,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     }
 
     OUStringBuffer newPath;
-    newPath.appendCopy(m_base.m_path, 0, i);
+    newPath.append(std::u16string_view(m_base.m_path).substr(0, i));
     if (!bExistent) {
         newPath.append( m_base.m_path.indexOf('?') < 0 ? '?' : '&' );
         newPath.append(encodeNameOrParamFragment(key));
@@ -325,7 +326,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
     if (bExistent) {
         /*oldValue = */
         parsePart(m_base.m_path, false, &i); // skip key
-        newPath.appendCopy(m_base.m_path, i);
+        newPath.append(std::u16string_view(m_base.m_path).substr(i));
     }
 
     m_base.m_path = newPath.makeStringAndClear();

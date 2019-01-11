@@ -24,6 +24,10 @@
 
  *************************************************************************/
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
@@ -1729,7 +1733,7 @@ Content::queryChildContent( const OUString & rRelativeChildUri )
     if ( !rRelativeChildUri.startsWith("/") )
         aBuf.append( rRelativeChildUri );
     else
-        aBuf.appendCopy( rRelativeChildUri, 1 );
+        aBuf.append( std::u16string_view(rRelativeChildUri).substr(1) );
 
     uno::Reference< ucb::XContentIdentifier > xChildId
         = new ::ucbhelper::ContentIdentifier( aBuf.makeStringAndClear() );

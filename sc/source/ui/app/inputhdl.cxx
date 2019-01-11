@@ -18,6 +18,8 @@
  */
 
 #include <memory>
+#include <string_view>
+
 #include <inputhdl.hxx>
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
@@ -1001,9 +1003,9 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
                             if (nStartPosition > 0)
                             {
                                 OUStringBuffer aBuf;
-                                aBuf.appendCopy(aNew, 0, nStartPosition);
+                                aBuf.append(std::u16string_view(aNew).substr(0, nStartPosition));
                                 aBuf.append(u'\x25BA');
-                                aBuf.appendCopy(aNew, nStartPosition);
+                                aBuf.append(std::u16string_view(aNew).substr(nStartPosition));
                                 nArgs = ppFDesc->getParameterCount();
                                 sal_Int16 nVarArgsSet = 0;
                                 if ( nArgs >= PAIRED_VAR_ARGS )
