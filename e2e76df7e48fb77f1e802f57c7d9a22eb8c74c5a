@@ -16,6 +16,24 @@
       "revId": "e2e76df7e48fb77f1e802f57c7d9a22eb8c74c5a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_00d6aec6",
+        "filename": "include/o3tl/strong_int.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-11T09:24:09Z",
+      "side": 1,
+      "message": "I don\u0027t remember any specific rationale.",
+      "parentUuid": "5f4e5783_804cdec7",
+      "revId": "e2e76df7e48fb77f1e802f57c7d9a22eb8c74c5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
