@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_6b4c23c7",
+        "filename": "sw/inc/pvprtdat.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-11T17:23:53Z",
+      "side": 1,
+      "message": "it turns out the only user of SetLeftSpace/GetLeftSpace etc. is unotxdoc.cxx, which reads / sets values of type sal_Int32 in it, so that looks like the most appropriate type here...",
+      "revId": "2550faeb39ab2fa47d13d400c45c0b4475b0d283",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_4bc72714",
+        "filename": "sw/inc/pvprtdat.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-11T17:23:53Z",
+      "side": 1,
+      "message": "please watch the indent of the lines; it was consistently 4 spaces before, but this line now has 3 spaces.",
+      "revId": "2550faeb39ab2fa47d13d400c45c0b4475b0d283",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
