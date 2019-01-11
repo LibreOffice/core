@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
 
 #include <editeng/numitem.hxx>
 
@@ -24,7 +27,6 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/brushitem.hxx>
-#include <o3tl/clamp.hxx>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/editids.hrc>
@@ -263,10 +265,10 @@ void SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pConverte
     rStream.WriteUInt16( cBullet );
 
     rStream.WriteInt16(
-        sal_Int16(o3tl::clamp<sal_Int32>(nFirstLineOffset, SAL_MIN_INT16, SAL_MAX_INT16)) );
+        sal_Int16(std::clamp<sal_Int32>(nFirstLineOffset, SAL_MIN_INT16, SAL_MAX_INT16)) );
         //TODO: better way to handle out-of-bounds value?
     rStream.WriteInt16(
-        sal_Int16(o3tl::clamp<sal_Int32>(nAbsLSpace, SAL_MIN_INT16, SAL_MAX_INT16)) );
+        sal_Int16(std::clamp<sal_Int32>(nAbsLSpace, SAL_MIN_INT16, SAL_MAX_INT16)) );
         //TODO: better way to handle out-of-bounds value?
     rStream.WriteInt16( 0 ); // write a dummy for old now unused nLSpace
 

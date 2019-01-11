@@ -19,7 +19,6 @@
 
 #include <basegfx/utils/keystoplerp.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <o3tl/clamp.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -87,7 +86,7 @@ namespace basegfx
             // everything)
             return ResultType(
                 mnLastIndex,
-                o3tl::clamp(fRawLerp,0.0,1.0));
+                std::clamp(fRawLerp,0.0,1.0));
         }
     }
 }

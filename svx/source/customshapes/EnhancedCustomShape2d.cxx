@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/clamp.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <svx/EnhancedCustomShapeGeometry.hxx>
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
@@ -56,6 +55,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+
+#include <algorithm>
 #include <math.h>
 
 using namespace ::com::sun::star;
@@ -1045,15 +1046,15 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
         {
             if (dBrightness >=0.0)
             { //lighten, blending with white
-                return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(rFillColor.GetRed() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0)  )),
-                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(rFillColor.GetGreen() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) )),
-                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(rFillColor.GetBlue() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) ))  );
+                return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(rFillColor.GetRed() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0)  )),
+                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(rFillColor.GetGreen() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) )),
+                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(rFillColor.GetBlue() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) ))  );
             }
             else
             { //darken (indicated by negative sign), blending with black
-                return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(rFillColor.GetRed() * (1.0+dBrightness), 0.0, 255.0)  )),
-                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(rFillColor.GetGreen() * (1.0+dBrightness), 0.0, 255.0) )),
-                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(rFillColor.GetBlue() * (1.0+dBrightness), 0.0, 255.0) ))  );
+                return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(rFillColor.GetRed() * (1.0+dBrightness), 0.0, 255.0)  )),
+                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(rFillColor.GetGreen() * (1.0+dBrightness), 0.0, 255.0) )),
+                              static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(rFillColor.GetBlue() * (1.0+dBrightness), 0.0, 255.0) ))  );
             }
         }
     }
@@ -1084,9 +1085,9 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
         }
 
         aHSVColor = basegfx::utils::hsv2rgb(aHSVColor);
-        return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 )),
-                    static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 )),
-                    static_cast<sal_uInt8>(static_cast< sal_Int32 >( o3tl::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 )) );
+        return Color( static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 )),
+                    static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 )),
+                    static_cast<sal_uInt8>(static_cast< sal_Int32 >( std::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 )) );
     }
 }
 

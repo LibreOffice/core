@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
-#include <o3tl/clamp.hxx>
 #include <vcl/graph.hxx>
 
 namespace drawinglayer
@@ -99,8 +102,8 @@ namespace drawinglayer
             double fOffsetY)
         :   mpFillGraphicAttribute(ImpFillGraphicAttribute(
                 rGraphic, rGraphicRange, bTiling,
-                    o3tl::clamp(fOffsetX, 0.0, 1.0),
-                    o3tl::clamp(fOffsetY, 0.0, 1.0)))
+                    std::clamp(fOffsetX, 0.0, 1.0),
+                    std::clamp(fOffsetY, 0.0, 1.0)))
         {
         }
 

@@ -19,7 +19,8 @@
 
 #include <sal/config.h>
 
-#include <o3tl/clamp.hxx>
+#include <algorithm>
+
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
@@ -272,7 +273,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt
                 sal_uInt16 nFillTransparence(getTransparenceForSvxBrushItem(rSourceSet, bSearchInParents));
 
                 // take half orig transparence, add half transparent, clamp result
-                nFillTransparence = o3tl::clamp(static_cast<sal_uInt16>((nFillTransparence / 2) + 50), sal_uInt16(0), sal_uInt16(255));
+                nFillTransparence = std::clamp(static_cast<sal_uInt16>((nFillTransparence / 2) + 50), sal_uInt16(0), sal_uInt16(255));
 
                 // #i125189# nFillTransparence is in range [0..100] and needs to be in [0..254] unsigned
                 // It is necessary to use the maximum of 0xfe for transparence for the SvxBrushItem

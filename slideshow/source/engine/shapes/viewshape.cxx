@@ -19,9 +19,9 @@
 
 #include <sal/config.h>
 
-#include <o3tl/clamp.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <algorithm>
 #include <math.h>
 
 #include <rtl/math.hxx>
@@ -436,7 +436,7 @@ namespace slideshow
             if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Alpha) )
             {
                 mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
-                                    o3tl::clamp(pAttr->getAlpha(),
+                                    std::clamp(pAttr->getAlpha(),
                                                      0.0,
                                                      1.0) :
                                     1.0 );

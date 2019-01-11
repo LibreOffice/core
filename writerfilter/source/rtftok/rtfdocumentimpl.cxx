@@ -8,6 +8,7 @@
  */
 
 #include "rtfdocumentimpl.hxx"
+#include <algorithm>
 #include <memory>
 #include <string_view>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -16,7 +17,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <o3tl/clamp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -893,11 +893,11 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     WmfExternal aExtHeader;
     aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
     aExtHeader.xExt = sal_uInt16(
-        o3tl::clamp<sal_Int32>(m_aStates.top().aPicture.nWidth, 0,
-                               SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
+        std::clamp<sal_Int32>(m_aStates.top().aPicture.nWidth, 0,
+                              SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
     aExtHeader.yExt = sal_uInt16(
-        o3tl::clamp<sal_Int32>(m_aStates.top().aPicture.nHeight, 0,
-                               SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
+        std::clamp<sal_Int32>(m_aStates.top().aPicture.nHeight, 0,
+                              SAL_MAX_UINT16)); //TODO: better way to handle out-of-bounds values?
     WmfExternal* pExtHeader = &aExtHeader;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.xShape,
                                                     uno::UNO_QUERY);

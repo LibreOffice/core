@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/cropprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -25,7 +29,6 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <o3tl/clamp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
@@ -123,12 +126,12 @@ namespace drawinglayer
                 aRetval = create2DColorModifierEmbeddingsAsNeeded(
                     aRetval,
                     aSuppressGraphicAttr.GetDrawMode(),
-                    o3tl::clamp(aSuppressGraphicAttr.GetLuminance() * 0.01, -1.0, 1.0),
-                    o3tl::clamp(aSuppressGraphicAttr.GetContrast() * 0.01, -1.0, 1.0),
-                    o3tl::clamp(aSuppressGraphicAttr.GetChannelR() * 0.01, -1.0, 1.0),
-                    o3tl::clamp(aSuppressGraphicAttr.GetChannelG() * 0.01, -1.0, 1.0),
-                    o3tl::clamp(aSuppressGraphicAttr.GetChannelB() * 0.01, -1.0, 1.0),
-                    o3tl::clamp(aSuppressGraphicAttr.GetGamma(), 0.0, 10.0),
+                    std::clamp(aSuppressGraphicAttr.GetLuminance() * 0.01, -1.0, 1.0),
+                    std::clamp(aSuppressGraphicAttr.GetContrast() * 0.01, -1.0, 1.0),
+                    std::clamp(aSuppressGraphicAttr.GetChannelR() * 0.01, -1.0, 1.0),
+                    std::clamp(aSuppressGraphicAttr.GetChannelG() * 0.01, -1.0, 1.0),
+                    std::clamp(aSuppressGraphicAttr.GetChannelB() * 0.01, -1.0, 1.0),
+                    std::clamp(aSuppressGraphicAttr.GetGamma(), 0.0, 10.0),
                     aSuppressGraphicAttr.IsInvert());
 
                 if(aRetval.empty())
@@ -141,7 +144,7 @@ namespace drawinglayer
             if(getGraphicAttr().IsTransparent())
             {
                 // check for transparency
-                const double fTransparency(o3tl::clamp(getGraphicAttr().GetTransparency() * (1.0 / 255.0), 0.0, 1.0));
+                const double fTransparency(std::clamp(getGraphicAttr().GetTransparency() * (1.0 / 255.0), 0.0, 1.0));
 
                 if(!basegfx::fTools::equalZero(fTransparency))
                 {

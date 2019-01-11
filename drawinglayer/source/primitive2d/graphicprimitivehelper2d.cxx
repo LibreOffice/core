@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
@@ -29,7 +33,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <o3tl/clamp.hxx>
 
 // helper class for animated graphics
 
@@ -591,8 +594,8 @@ namespace drawinglayer
                 // original in svtools uses:
                 // #define WATERMARK_LUM_OFFSET        50
                 // #define WATERMARK_CON_OFFSET        -70
-                fLuminance = o3tl::clamp(fLuminance + 0.5, -1.0, 1.0);
-                fContrast = o3tl::clamp(fContrast - 0.7, -1.0, 1.0);
+                fLuminance = std::clamp(fLuminance + 0.5, -1.0, 1.0);
+                fContrast = std::clamp(fContrast - 0.7, -1.0, 1.0);
                 aGraphicDrawMode = GraphicDrawMode::Standard;
             }
 
