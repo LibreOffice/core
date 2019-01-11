@@ -6504,7 +6504,6 @@ include/o3tl/numeric.hxx
 include/o3tl/runtimetooustring.hxx
 include/o3tl/safeint.hxx
 include/o3tl/sorted_vector.hxx
-include/o3tl/string_view.hxx
 include/o3tl/strong_int.hxx
 include/o3tl/typed_flags_set.hxx
 include/o3tl/vector_pool.hxx
