@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_601442a1",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-11T08:06:41Z",
+      "side": 1,
+      "message": "Just repeating this here: you want pFrameFormat, not the table format to have access to the frame content.",
+      "revId": "fb51fb2e0e699c845010b6fe3c48fb13e6bc9519",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
