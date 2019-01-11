@@ -21,6 +21,9 @@
  <toolbar:toolbaritem xlink:href=".uno:DesignerDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditStyle" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
@@ -30,33 +33,46 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
- <toolbar:toolbaritem xlink:href=".uno:Underline"/>
+ <toolbar:toolbaritem xlink:href=".uno:UnderlineSimple"/>
+ <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
+ <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shadowed" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToLower" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToUpper" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SmallCaps" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Color"/>
  <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
  <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
- <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
- <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
+ <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
+ <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>

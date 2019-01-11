@@ -21,13 +21,15 @@
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grow"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shrink"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
  <toolbar:toolbaritem xlink:href=".uno:UnderlineSimple"/>
  <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
+ <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
@@ -37,8 +39,10 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToLower" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangeCaseToUpper" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SmallCaps" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color"/>
+ <toolbar:toolbaritem xlink:href=".uno:CharBackColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignLeft"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter"/>
@@ -50,21 +54,17 @@
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
+ <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
- <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectAll" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:visible="false"/>
 </toolbar:toolbar>
