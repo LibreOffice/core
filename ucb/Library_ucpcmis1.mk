@@ -33,6 +33,17 @@ $(eval $(call gb_Library_use_externals,ucpcmis1,\
 	libxml2 \
 ))
 
+# On Windows, libcmis.lib(ws-relatedmultipart.o) references BCryptCloseAlgorithmProvider,
+# BCryptGenRandom, and BCryptOpenAlgorithmProvider via
+# workdir/UnpackedTarball/boost/boost/winapi/bcrypt.hpp:
+ifeq ($(OS),WNT)
+ifeq ($(SYSTEM_LIBCMIS)$(SYSTEM_BOOST),)
+$(eval $(call gb_Library_add_libs,ucpcmis1, \
+    Bcrypt.lib \
+))
+endif
+endif
+
 $(eval $(call gb_Library_add_exception_objects,ucpcmis1,\
 	ucb/source/ucp/cmis/auth_provider \
 	ucb/source/ucp/cmis/certvalidation_handler \

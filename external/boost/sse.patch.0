@@ -1,0 +1,533 @@
+--- boost/type_traits/detail/is_function_cxx_11.hpp
++++ boost/type_traits/detail/is_function_cxx_11.hpp
+@@ -107,8 +107,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -120,8 +122,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -133,8 +137,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -146,8 +152,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+    // reference qualified:
+ #ifdef __CLR_VER
+@@ -160,8 +168,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -173,8 +183,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -186,8 +198,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -199,8 +213,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+    // rvalue reference qualified:
+ #ifdef __CLR_VER
+@@ -213,8 +229,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)&&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)&&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -226,8 +244,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -239,8 +259,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -252,8 +274,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+ #endif // _MSC_VER
+ 
+@@ -339,8 +363,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -352,8 +378,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -365,8 +393,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -378,8 +408,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+    // reference qualified:
+ #ifdef __CLR_VER
+@@ -392,8 +424,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -405,8 +439,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -418,8 +454,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -431,8 +469,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+    // rvalue reference qualified:
+ #ifdef __CLR_VER
+@@ -445,8 +485,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...) && BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...) && BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -458,8 +500,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -471,8 +515,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -484,8 +530,10 @@
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __fastcall(Args...)const volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_function<Ret __vectorcall(Args...)const volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+ #endif // _MSC_VER
+ 
+--- boost/type_traits/detail/is_member_function_pointer_cxx_11.hpp
++++ boost/type_traits/detail/is_member_function_pointer_cxx_11.hpp
+@@ -121,8 +121,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -136,8 +138,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)const BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -151,8 +155,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -166,8 +172,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)const volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+    // reference qualified:
+ #ifdef __CLR_VER
+@@ -182,8 +190,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -197,8 +207,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)const &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -212,8 +224,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -227,8 +241,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)const volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+    // rvalue reference qualified:
+ #ifdef __CLR_VER
+@@ -243,8 +259,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...) && BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...) && BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -258,8 +276,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)const &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -273,8 +293,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -288,9 +310,11 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret (__vectorcall C::*)(Args...)const volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#endif
+ 
+ 
+ #if defined(_MSVC_LANG) && (_MSVC_LANG >= 201703) 
+@@ -375,8 +399,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -390,8 +416,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)const BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -405,8 +433,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -420,8 +450,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)const volatile BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+    // reference qualified:
+ #ifdef __CLR_VER
+@@ -436,8 +468,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -451,8 +485,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)const &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -466,8 +502,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -481,8 +519,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)const volatile &BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ 
+    // rvalue reference qualified:
+ #ifdef __CLR_VER
+@@ -497,8 +537,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...) && BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...) && BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -512,8 +554,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)const &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -527,8 +571,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+    // const volatile:
+ #ifdef __CLR_VER
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+@@ -542,8 +588,10 @@
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__cdecl C::*)(Args...)const volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
+ #endif
++#if !(defined _M_IX86_FP && _M_IX86_FP == 1) // error C2215: '__vectorcall' cannot be used with '/arch:SSE'
+    template <class Ret, class C, class...Args BOOST_TT_NOEXCEPT_PARAM>
+    struct is_member_function_pointer<Ret(__vectorcall C::*)(Args...)const volatile &&BOOST_TT_NOEXCEPT_DECL> : public true_type {};
++#endif
+ #endif
+ 
+ 
