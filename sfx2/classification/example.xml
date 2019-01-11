@@ -8,15 +8,17 @@
         <baf:ProgramID>urn:example:tscp:1</baf:ProgramID>
     </baf:AdministrativeData>
     <baf:Included>
-        <!-- Translators: the Name attribute in this string can be localized -->
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:non-business" Name="Non-Business" loextAbbreviatedName="NB">
+        <!-- Translators: the Name and loextAbbreviatedName attributes in this string can be localized -->
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:non-business" Name="UNCLASSIFIED" loextAbbreviatedName="U">
             <baf:LabelingRules/>
             <baf:ImpactLevel>
-                <baf:Scale>UK-Cabinet</baf:Scale>
-                <baf:ConfidentalityValue>0</baf:ConfidentalityValue>
+                <baf:Scale>FIPS-199</baf:Scale>
+                <baf:ConfidentalityValue>Low</baf:ConfidentalityValue>
+                <baf:IntegrityValue>Low</baf:IntegrityValue>
+                <baf:AvailabilityValue>Low</baf:AvailabilityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
-        <!-- Translators: the Name attribute in this string can be localized -->
+        <!-- Translators: the Name and loextAbbreviatedName attributes in this string can be localized -->
         <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:general-business" Name="General Business" loextAbbreviatedName="GB">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
@@ -26,36 +28,14 @@
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
             <baf:ImpactLevel>
-                <baf:Scale>UK-Cabinet</baf:Scale>
-                <baf:ConfidentalityValue>1</baf:ConfidentalityValue>
+                <baf:Scale>FIPS-199</baf:Scale>
+                <baf:ConfidentalityValue>Low</baf:ConfidentalityValue>
+                <baf:IntegrityValue>Low</baf:IntegrityValue>
+                <baf:AvailabilityValue>Moderate</baf:AvailabilityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
-        <!-- Translators: the Name attribute in this string can be localized -->
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:confidential" Name="Confidential" loextAbbreviatedName="Conf">
-            <baf:LabelingRules>
-                <baf:VisualMarkingPart>
-                    <baf:Identifier>Document: Header</baf:Identifier>
-                    <!-- Translators: this string can be localized -->
-                    <baf:Value>Classification: Confidential</baf:Value>
-                </baf:VisualMarkingPart>
-                <baf:VisualMarkingPart>
-                    <baf:Identifier>Document: Footer</baf:Identifier>
-                    <!-- Translators: this string can be localized -->
-                    <baf:Value>This content is marked Confidential. Do not distribute it externally without business approval.</baf:Value>
-                </baf:VisualMarkingPart>
-                <baf:VisualMarkingPart>
-                    <baf:Identifier>Document: Watermark</baf:Identifier>
-                    <!-- Translators: this string can be localized -->
-                    <baf:Value>Confidential</baf:Value>
-                </baf:VisualMarkingPart>
-            </baf:LabelingRules>
-            <baf:ImpactLevel>
-                <baf:Scale>UK-Cabinet</baf:Scale>
-                <baf:ConfidentalityValue>2</baf:ConfidentalityValue>
-            </baf:ImpactLevel>
-        </baf:BusinessAuthorizationCategory>
-        <!-- Translators: the Name attribute in this string can be localized -->
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:internal-only" Name="Internal Only" loextAbbreviatedName="IO">
+	<!-- Translators: the Name and loextAbbreviatedName attributes in this string can be localized -->
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:internal-only" Name="Internal Only" loextAbbreviatedName="INT">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Header</baf:Identifier>
@@ -65,7 +45,7 @@
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Footer</baf:Identifier>
                     <!-- Translators: this string can be localized -->
-                    <baf:Value>This content is marked Internal Only. Do not distribute it outside of the business.</baf:Value>
+                    <baf:Value>This content is marked Internal Only. Do not distribute it externally without business approval.</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Watermark</baf:Identifier>
@@ -74,15 +54,149 @@
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
             <baf:ImpactLevel>
-                <baf:Scale>UK-Cabinet</baf:Scale>
-                <baf:ConfidentalityValue>3</baf:ConfidentalityValue>
+                <baf:Scale>FIPS-199</baf:Scale>
+                <baf:ConfidentalityValue>High</baf:ConfidentalityValue>
+                <baf:IntegrityValue>Moderate</baf:IntegrityValue>
+                <baf:AvailabilityValue>High</baf:AvailabilityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
-        <loext:Marking Name="Example Marking" />
-        <loext:IntellectualPropertyPart Name="Example First IP Part" />
-        <loext:IntellectualPropertyPart Name="Example Second IP Part" />
-        <loext:IntellectualPropertyPartNumber Name="1" />
-        <loext:IntellectualPropertyPartNumber Name="2" />
+	<!-- Translators: the Name and loextAbbreviatedName attributes in this string can be localized -->
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:restricted" Name="RESTRICTED / R" loextAbbreviatedName="RES">
+            <baf:LabelingRules>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Header</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>Classification: Restricted</baf:Value>
+                </baf:VisualMarkingPart>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Footer</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>This content is marked Restricted. Do not distribute it externally without business approval.</baf:Value>
+                </baf:VisualMarkingPart>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Watermark</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>Restricted</baf:Value>
+                </baf:VisualMarkingPart>
+            </baf:LabelingRules>
+            <baf:ImpactLevel>
+                <baf:Scale>FIPS-199</baf:Scale>
+                <baf:ConfidentalityValue>Moderate</baf:ConfidentalityValue>
+                <baf:IntegrityValue>Moderate</baf:IntegrityValue>
+                <baf:AvailabilityValue>High</baf:AvailabilityValue>
+            </baf:ImpactLevel>
+        </baf:BusinessAuthorizationCategory>
+	<!-- Translators: the Name and loextAbbreviatedName attributes in this string can be localized -->
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:confidential" Name="St.CONFIDENTIAL / St.C" loextAbbreviatedName="STCO">
+            <baf:LabelingRules>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Header</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>Classification: St.Confidential</baf:Value>
+                </baf:VisualMarkingPart>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Footer</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>This content is marked St.Confidential. Do not distribute it without required approval.</baf:Value>
+                </baf:VisualMarkingPart>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Watermark</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>St.Confidential</baf:Value>
+                </baf:VisualMarkingPart>
+            </baf:LabelingRules>
+            <baf:ImpactLevel>
+                <baf:Scale>FIPS-199</baf:Scale>
+                <baf:ConfidentalityValue>High</baf:ConfidentalityValue>
+                <baf:IntegrityValue>High</baf:IntegrityValue>
+                <baf:AvailabilityValue>High</baf:AvailabilityValue>
+            </baf:ImpactLevel>
+        </baf:BusinessAuthorizationCategory>
+	<!-- Translators: the Name and loextAbbreviatedName attributes in this string can be localized -->
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:st-secret" Name="St.SECRET / St.S" loextAbbreviatedName="STSE">
+            <baf:LabelingRules>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Header</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>Classification: St.Secret</baf:Value>
+                </baf:VisualMarkingPart>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Footer</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>This content is marked St.Secret. Do not distribute it without required approval.</baf:Value>
+                </baf:VisualMarkingPart>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Watermark</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>St.Secret</baf:Value>
+                </baf:VisualMarkingPart>
+            </baf:LabelingRules>
+            <baf:ImpactLevel>
+                <baf:Scale>FIPS-199</baf:Scale>
+                <baf:ConfidentalityValue>High</baf:ConfidentalityValue>
+                <baf:IntegrityValue>High</baf:IntegrityValue>
+                <baf:AvailabilityValue>High</baf:AvailabilityValue>
+            </baf:ImpactLevel>
+        </baf:BusinessAuthorizationCategory>
+	<!-- Translators: the Name and loextAbbreviatedName attributes in this string can be localized -->
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:st-topsecret" Name="St.TOPSECRET / St.TS" loextAbbreviatedName="STTS">
+            <baf:LabelingRules>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Header</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>Classification: St.Topsecret</baf:Value>
+                </baf:VisualMarkingPart>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Footer</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>This content is marked St.Topsecret. Do not distribute it without required approval.</baf:Value>
+                </baf:VisualMarkingPart>
+                <baf:VisualMarkingPart>
+                    <baf:Identifier>Document: Watermark</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
+                    <baf:Value>St.Topsecret</baf:Value>
+                </baf:VisualMarkingPart>
+            </baf:LabelingRules>
+            <baf:ImpactLevel>
+                <baf:Scale>FIPS-199</baf:Scale>
+                <baf:ConfidentalityValue>High</baf:ConfidentalityValue>
+                <baf:IntegrityValue>High</baf:IntegrityValue>
+                <baf:AvailabilityValue>High</baf:AvailabilityValue>
+            </baf:ImpactLevel>
+        </baf:BusinessAuthorizationCategory>
+        <!-- Translators: the Name attributes in the following strings can be localized -->
+        <loext:Marking Name="NLD-EYES-ONLY" />
+        <loext:Marking Name="RELEASABLE TO …" />
+        <loext:Marking Name="COMMUNICATIONS INTELLIGENCE / COMINT" />
+        <loext:Marking Name="SPECIAL ACCESS REQUIRED / SAR" />
+        <loext:Marking Name="CRYPTO" />
+        <loext:Marking Name="CRYPTOSECURITY / CS" />
+        <loext:Marking Name="COMMUNICATIONS SECURITY / COMSEC" />
+        <loext:Marking Name="CONTROLLED CRYPTOGRAPHIC ITEM / CCI" />
+        <loext:Marking Name="EXPORT CONTROLLED / EC" />
+        <loext:Marking Name="BOHEMIA / B" />
+        <loext:Marking Name="ACOUSTIC INTELLIGENCE / ACINT" />
+        <loext:Marking Name="ATOMAL / A" />
+        <loext:Marking Name="UNCLASSIFIED" />
+        <loext:Marking Name="PERMANENT" />
+        <loext:Marking Name="STAFF CONFIDENTIAL" />
+        <loext:Marking Name="MEDICAL SECRET" />
+        <loext:Marking Name="COMMERCIAL CONFIDENTIAL" />
+        <loext:Marking Name="INTERNAL" />
+        <loext:IntellectualPropertyPart Name="SME" />
+        <loext:IntellectualPropertyPart Name="ITAR" />
+        <loext:IntellectualPropertyPart Name="EAR" />
+        <loext:IntellectualPropertyPart Name="EU Dual Use" />
+        <loext:IntellectualPropertyPart Name="NLML" />
+        <loext:IntellectualPropertyPart Name="USML" />
+        <loext:IntellectualPropertyPartNumber Name="12345" />
+        <loext:IntellectualPropertyPartNumber Name="12347" />
+        <loext:IntellectualPropertyPartNumber Name="12345-a" />
+        <loext:IntellectualPropertyPartNumber Name="12347-a" />
+        <loext:IntellectualPropertyPartNumber Name="A12347" />
+        <loext:IntellectualPropertyPartNumber Name="200.09" />
+        <loext:IntellectualPropertyPartNumber Name="200.10" />
+        <loext:IntellectualPropertyPartNumber Name="200.11" />
     </baf:Included>
 </baf:BusinessAuthorization>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab:
