@@ -1218,32 +1218,13 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
-                // inform about the community involvement
-                const sal_Int64 nLastShown = officecfg::Setup::Product::LastTimeGetInvolvedShown::get();
-                const sal_Int64 nNow = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-                const sal_Int64 nPeriodSec(60 * 60 * 24 * 30); // 30 days in seconds
-                bool bUpdateLastTimeGetInvolvedShown = false;
-
-                if (nLastShown == 0)
-                    bUpdateLastTimeGetInvolvedShown = true;
-                else if (nPeriodSec < nNow && nLastShown < nNow - nPeriodSec)
-                {
-                    bUpdateLastTimeGetInvolvedShown = true;
-
-                    VclPtr<SfxInfoBarWindow> pInfoBar = AppendInfoBar("getinvolved", SfxResId(STR_GET_INVOLVED_TEXT), InfoBarType::Info);
-
-                    VclPtrInstance<PushButton> xGetInvolvedButton(&GetWindow());
-                    xGetInvolvedButton->SetText(SfxResId(STR_GET_INVOLVED_BUTTON));
-                    xGetInvolvedButton->SetSizePixel(xGetInvolvedButton->GetOptimalSize());
-                    xGetInvolvedButton->SetClickHdl(LINK(this, SfxViewFrame, GetInvolvedHandler));
-                    pInfoBar->addButton(xGetInvolvedButton);
-                }
-
-                if (bUpdateLastTimeGetInvolvedShown
-                    && !officecfg::Setup::Product::LastTimeGetInvolvedShown::isReadOnly())
+                // Inform about the community involvement (disabled for 6.1 stable as per ESC decision).
+                // Reset the timers so that both "get involved" and "donate" don't pop up simultaneously
+                // when the feature is re-activated by 6.2.
+                if (!officecfg::Setup::Product::LastTimeGetInvolvedShown::isReadOnly())
                 {
                     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-                    officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
+                    officecfg::Setup::Product::LastTimeGetInvolvedShown::set(0, batch);
                     batch->commit();
                 }
 
