@@ -30,17 +30,17 @@ struct SwProgress
     long nStartValue,
          nStartCount;
     SwDocShell  *pDocShell;
-    SfxProgress *pProgress;
+    std::unique_ptr<SfxProgress> pProgress;
 };
 
-static std::vector<SwProgress*> *pProgressContainer = nullptr;
+static std::vector<std::unique_ptr<SwProgress>> *pProgressContainer = nullptr;
 
 static SwProgress *lcl_SwFindProgress( SwDocShell const *pDocShell )
 {
-    for (SwProgress* pTmp : *pProgressContainer)
+    for (auto& pTmp : *pProgressContainer)
     {
         if ( pTmp->pDocShell == pDocShell )
-            return pTmp;
+            return pTmp.get();
     }
     return nullptr;
 }
@@ -48,29 +48,31 @@ static SwProgress *lcl_SwFindProgress( SwDocShell const *pDocShell )
 void StartProgress( const char* pMessResId, long nStartValue, long nEndValue,
                     SwDocShell *pDocShell )
 {
-    if( !SW_MOD()->IsEmbeddedLoadSave() )
-    {
-        SwProgress *pProgress = nullptr;
+    if( SW_MOD()->IsEmbeddedLoadSave() )
+        return;
 
-        if ( !pProgressContainer )
-            pProgressContainer = new std::vector<SwProgress*>;
-        else
-        {
-            if ( nullptr != (pProgress = lcl_SwFindProgress( pDocShell )) )
-                ++pProgress->nStartCount;
-        }
-        if ( !pProgress )
-        {
-            pProgress = new SwProgress;
-            pProgress->pProgress = new SfxProgress( pDocShell,
-                                                    SwResId(pMessResId),
-                                                    nEndValue - nStartValue );
-            pProgress->nStartCount = 1;
-            pProgress->pDocShell = pDocShell;
-            pProgressContainer->insert( pProgressContainer->begin(), pProgress );
-        }
-        pProgress->nStartValue = nStartValue;
+    SwProgress *pProgress = nullptr;
+
+    if ( !pProgressContainer )
+        pProgressContainer = new std::vector<std::unique_ptr<SwProgress>>;
+    else
+    {
+        pProgress = lcl_SwFindProgress( pDocShell );
+        if ( pProgress )
+            ++pProgress->nStartCount;
     }
+
+    if ( !pProgress )
+    {
+        pProgress = new SwProgress;
+        pProgress->pProgress.reset( new SfxProgress( pDocShell,
+                                                SwResId(pMessResId),
+                                                nEndValue - nStartValue ) );
+        pProgress->nStartCount = 1;
+        pProgress->pDocShell = pDocShell;
+        pProgressContainer->insert( pProgressContainer->begin(), std::unique_ptr<SwProgress>(pProgress) );
+    }
+    pProgress->nStartValue = nStartValue;
 }
 
 void SetProgressState( long nPosition, SwDocShell const *pDocShell )
@@ -91,7 +93,7 @@ void EndProgress( SwDocShell const *pDocShell )
         std::vector<SwProgress *>::size_type i;
         for ( i = 0; i < pProgressContainer->size(); ++i )
         {
-            SwProgress *pTmp = (*pProgressContainer)[i];
+            SwProgress *pTmp = (*pProgressContainer)[i].get();
             if ( pTmp->pDocShell == pDocShell )
             {
                 pProgress = pTmp;
@@ -103,8 +105,6 @@ void EndProgress( SwDocShell const *pDocShell )
         {
             pProgress->pProgress->Stop();
             pProgressContainer->erase( pProgressContainer->begin() + i );
-            delete pProgress->pProgress;
-            delete pProgress;
             //#112337# it may happen that the container has been removed
             //while rescheduling
             if ( pProgressContainer && pProgressContainer->empty() )
