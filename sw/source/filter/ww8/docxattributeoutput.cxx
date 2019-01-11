@@ -5037,7 +5037,13 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
             }
         }
         else
+        {
             aContentText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
+            if(aContentText.isEmpty())
+                aContentText = " "; // Need to write out something to have it imported by MS Word
+            if(sDateFormat.isEmpty())
+                sDateFormat = "dd/MM/yyyy"; // Need to set date format even if there is no date set
+        }
 
         // output component
 
