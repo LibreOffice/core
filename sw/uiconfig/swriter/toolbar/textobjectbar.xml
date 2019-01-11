@@ -77,8 +77,6 @@
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Orientation" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SelectAll" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:visible="false"/>
