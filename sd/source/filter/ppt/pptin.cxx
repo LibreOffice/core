@@ -1297,7 +1297,15 @@ bool ImplSdPPTImport::Import()
                         if ( SeekToRec( rStCtrl, PPT_PST_NamedShowSlides, aCuHeader.GetRecEndFilePos(), &aContent ) )
                         {
                             PptSlidePersistList* pPageList = GetPageList( PPT_SLIDEPAGE );
-                            sal_uInt32 nSCount = aContent.nRecLen >> 2;
+                            const auto nRemainingSize = rStCtrl.remainingSize();
+                            sal_uInt32 nBCount = aContent.nRecLen;
+                            if (nBCount > nRemainingSize)
+                            {
+                                SAL_WARN("filter.ms", "page number data len longer than remaining stream size");
+                                nBCount = nRemainingSize;
+                            }
+                            sal_uInt32 nSCount = nBCount >> 2;
+
                             if ( pPageList && nSCount )
                             {
                                 SdCustomShowList* pList = mpDoc->GetCustomShowList( true );
