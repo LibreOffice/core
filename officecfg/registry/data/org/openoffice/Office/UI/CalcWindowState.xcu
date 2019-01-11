@@ -152,7 +152,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">TSCP Classification</value>
+          <value xml:lang="en-US">Classification</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/graphicobjectbar" oor:op="replace">
