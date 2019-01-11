@@ -317,11 +317,10 @@ void SwHTMLWriter::OutBasicBodyEvents()
     uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
     for ( sal_Int32 i=0; i<4; i++ )
     {
-        SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( OUString::createFromAscii(aEventNames[i]) ), pDocSh );
+        std::unique_ptr<SvxMacro> pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( OUString::createFromAscii(aEventNames[i]) ), pDocSh );
         if ( pMacro )
         {
             aDocTable.Insert( aBodyEventTable[i].nEvent, *pMacro );
-            delete pMacro;
         }
     }
 
