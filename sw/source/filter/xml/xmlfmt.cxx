@@ -614,21 +614,20 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     }
 
     const SfxPoolItem *pItem;
-    SwFormatPageDesc *pFormatPageDesc = nullptr;
+    std::unique_ptr<SwFormatPageDesc> pFormatPageDesc;
     if( SfxItemState::SET == pItemSet->GetItemState( RES_PAGEDESC, false,
                                                 &pItem ) )
     {
          if( static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc() != pPageDesc )
-            pFormatPageDesc = new SwFormatPageDesc( *static_cast<const SwFormatPageDesc *>(pItem) );
+            pFormatPageDesc.reset(new SwFormatPageDesc( *static_cast<const SwFormatPageDesc *>(pItem) ));
     }
     else
-        pFormatPageDesc = new SwFormatPageDesc();
+        pFormatPageDesc.reset(new SwFormatPageDesc());
 
     if( pFormatPageDesc )
     {
         pFormatPageDesc->RegisterToPageDesc( *pPageDesc );
         pItemSet->Put( *pFormatPageDesc );
-        delete pFormatPageDesc;
     }
 }
 
