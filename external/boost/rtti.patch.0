@@ -2,15 +2,6 @@ Visible function type RTTI for Clang -fsanitize=function
 
 --- boost/function/function_base.hpp
 +++ boost/function/function_base.hpp
-@@ -97,7 +97,7 @@
-         } obj_ref;
-       };
- 
--      union function_buffer
-+      union BOOST_SYMBOL_VISIBLE function_buffer
-       {
-         // Type-specific union members
-         mutable function_buffer_members members;
 @@ -159,7 +159,7 @@
        };
  

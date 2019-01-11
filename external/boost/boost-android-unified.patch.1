@@ -1,28 +1,22 @@
-https://svn.boost.org/trac10/ticket/13230 unified headers causing trouble with that..
-diff -ur boost.org/libs/filesystem/src/operations.cpp boost/libs/filesystem/src/operations.cpp
---- boost.org/libs/filesystem/src/operations.cpp	2017-11-22 02:21:33.724304181 +0100
-+++ boost/libs/filesystem/src/operations.cpp	2017-11-22 02:21:59.686302450 +0100
-@@ -11,23 +11,6 @@
- //--------------------------------------------------------------------------------------// 
+--- a/boost/type_traits/detail/is_function_cxx_11.hpp
++++ b/boost/type_traits/detail/is_function_cxx_11.hpp
+@@ -18,7 +18,7 @@
+    template <class T>
+    struct is_function : public false_type {};
  
- //  define 64-bit offset macros BEFORE including boost/config.hpp (see ticket #5355) 
--#if !(defined(__HP_aCC) && defined(_ILP32) && !defined(_STATVFS_ACPP_PROBLEMS_FIXED))
--#define _FILE_OFFSET_BITS 64 // at worst, these defines may have no effect,
--#endif
--#if !defined(__PGI)
--#define __USE_FILE_OFFSET64 // but that is harmless on Windows and on POSIX
--      // 64-bit systems or on 32-bit systems which don't have files larger 
--      // than can be represented by a traditional POSIX/UNIX off_t type. 
--      // OTOH, defining them should kick in 64-bit off_t's (and thus 
--      // st_size)on 32-bit systems that provide the Large File
--      // Support (LFS)interface, such as Linux, Solaris, and IRIX.
--      // The defines are given before any headers are included to
--      // ensure that they are available to all included headers.
--      // That is required at least on Solaris, and possibly on other
--      // systems as well.
--#else
--#define _FILE_OFFSET_BITS 64
--#endif
+-#if defined(__cpp_noexcept_function_type) && !defined(_MSC_VER)
++#if defined(__cpp_noexcept_function_type) && !defined(_MSC_VER) && !(defined __ANDROID__ && defined __clang__ && __clang_major__ == 5 && __clang_minor__ == 0 && __clang_patchlevel__ == 300080)
+ #define BOOST_TT_NOEXCEPT_PARAM , bool NE
+ #define BOOST_TT_NOEXCEPT_DECL noexcept(NE)
+ #else
+--- a/boost/type_traits/detail/is_member_function_pointer_cxx_11.hpp
++++ b/boost/type_traits/detail/is_member_function_pointer_cxx_11.hpp
+@@ -31,7 +31,7 @@
+    template <class T>
+    struct is_member_function_pointer<T const volatile> : public is_member_function_pointer<T> {};
  
- // define BOOST_FILESYSTEM_SOURCE so that <boost/filesystem/config.hpp> knows
- // the library is being built (possibly exporting rather than importing code)
+-#if defined(_MSVC_LANG) && (_MSVC_LANG >= 201703) 
++#if (defined(_MSVC_LANG) && (_MSVC_LANG >= 201703)) || (defined __ANDROID__ && defined __clang__ && __clang_major__ == 5 && __clang_minor__ == 0 && __clang_patchlevel__ == 300080)
+    // MSVC can't handle noexcept(b) as a deduced template parameter 
+    // so we will have to write everything out :(
+ #define BOOST_TT_NOEXCEPT_PARAM
