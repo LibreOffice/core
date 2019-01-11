@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <string_view>
 #include <sal/config.h>
 
 #include <com/sun/star/io/IOException.hpp>
@@ -2810,12 +2811,12 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                                 nTmp++;
                             if (nTmp < nSttWdPos)
                                 break; // word delimiter found
-                            buf.appendCopy(rTxt, nFndPos, nSttWdPos - nFndPos).append(pFnd->GetLong());
+                            buf.append(std::u16string_view(rTxt).substr(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
                             nFndPos = nSttWdPos + sTmp.getLength();
                         }
                     } while (nSttWdPos != -1);
                     if (nEndPos - nFndPos > extra_repl)
-                        buf.appendCopy(rTxt, nFndPos, nEndPos - nFndPos);
+                        buf.append(std::u16string_view(rTxt).substr(nFndPos, nEndPos - nFndPos));
                     aLong = buf.makeStringAndClear();
                 }
                 SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);

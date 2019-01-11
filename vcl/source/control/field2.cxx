@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <string_view>
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
@@ -678,7 +679,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             {
                 // possibly extend string until cursor position
                 if ( aStr.getLength() < nNewPos )
-                    aStr.appendCopy( rLiteralMask, aStr.getLength(), nNewPos-aStr.getLength() );
+                    aStr.append( std::u16string_view(rLiteralMask).substr(aStr.getLength(), nNewPos-aStr.getLength()) );
                 if ( nNewPos < aStr.getLength() )
                     aStr.insert( cChar, nNewPos );
                 else if ( nNewPos < rEditMask.getLength() )

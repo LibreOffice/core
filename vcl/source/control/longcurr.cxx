@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/string.hxx>
 #include <tools/bigint.hxx>
 #include <sal/log.hxx>
@@ -117,7 +121,7 @@ bool ImplCurrencyGetValue( const OUString& rStr, BigInt& rValue,
     if ( nDecPos != -1 )
     {
         aStr1 = aStr.copy( 0, nDecPos );
-        aStr2.appendCopy(aStr, nDecPos+1);
+        aStr2.append(std::u16string_view(aStr).substr(nDecPos+1));
     }
     else
         aStr1 = aStr;

@@ -28,6 +28,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <map>
 #include <memory>
+#include <string_view>
 #include <unordered_map>
 #include <com/sun/star/linguistic2/NumberText.hpp>
 
@@ -1070,7 +1071,7 @@ OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGere
         makeHebrewNumber(value, output, true, useGeresh);
 
         if (i < len)
-            output.appendCopy(aNumberString,i);
+            output.append(std::u16string_view(aNumberString).substr(i));
 
         return output.makeStringAndClear();
     }
@@ -1189,7 +1190,7 @@ OUString getCyrillicNativeNumberString(const OUString& aNumberString)
         makeCyrillicNumber(value, output, true);
 
         if (i < len)
-            output.appendCopy(aNumberString,i);
+            output.append(std::u16string_view(aNumberString).substr(i));
 
         return output.makeStringAndClear();
     }

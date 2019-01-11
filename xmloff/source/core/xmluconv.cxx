@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
 
 #include <xmloff/xmluconv.hxx>
 
@@ -393,7 +396,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
                 // Truncate nFractionDecimals+1 digit if it was not rounded to zero.
                 const sal_Int32 nCount = nLen - 2 - static_cast<int>(nLen > nFractionDecimals + 2);
                 rBuffer.append( '.');
-                rBuffer.appendCopy( aFraction, 2, nCount);     // strip 0.
+                rBuffer.append( std::u16string_view(aFraction).substr(2, nCount));     // strip 0.
             }
         }
     }

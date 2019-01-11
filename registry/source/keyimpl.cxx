@@ -19,6 +19,7 @@
 
 
 #include <string.h>
+#include <string_view>
 
 #include "keyimpl.hxx"
 
@@ -987,7 +988,7 @@ OUString ORegKey::getFullPath(OUString const & path) const {
     OUStringBuffer b(m_name);
     if (!b.isEmpty() && b[b.getLength() - 1] == '/') {
         if (path[0] == '/') {
-            b.appendCopy(path,1);
+            b.append(std::u16string_view(path).substr(1));
         } else {
             b.append(path);
         }

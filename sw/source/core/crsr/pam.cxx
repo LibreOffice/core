@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <tools/gen.hxx>
 #include <hintids.hxx>
 #include <editeng/protitem.hxx>
@@ -1026,7 +1030,7 @@ OUString SwPaM::GetText() const
                     ? End()->nContent.GetIndex()
                     : aTmpStr.getLength();
 
-                aResult.appendCopy(aTmpStr, nStart, nEnd-nStart);
+                aResult.append(std::u16string_view(aTmpStr).substr(nStart, nEnd-nStart));
             }
             else
             {

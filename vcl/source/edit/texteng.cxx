@@ -63,6 +63,7 @@
 #include <cstdlib>
 #include <memory>
 #include <set>
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -272,7 +273,7 @@ OUString TextEngine::GetTextLines( LineEnd aSeparator ) const
         for ( size_t nL = 0; nL < nLines; ++nL )
         {
             TextLine& rLine = pTEParaPortion->GetLines()[nL];
-            aText.appendCopy( pTEParaPortion->GetNode()->GetText(), rLine.GetStart(), rLine.GetEnd() - rLine.GetStart() );
+            aText.append( std::u16string_view(pTEParaPortion->GetNode()->GetText()).substr(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart()) );
             if ( pSep && ( ( (nP+1) < nParas ) || ( (nL+1) < nLines ) ) )
                 aText.append(pSep);
         }
@@ -409,7 +410,7 @@ OUString TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) co
         if ( nNode == nEndPara ) // may also be == nStart!
             nEndPos = aSel.GetEnd().GetIndex();
 
-        aText.appendCopy(pNode->GetText(), nStartPos, nEndPos-nStartPos);
+        aText.append(std::u16string_view(pNode->GetText()).substr(nStartPos, nEndPos-nStartPos));
         if ( nNode < nEndPara )
             aText.append(pSep);
     }

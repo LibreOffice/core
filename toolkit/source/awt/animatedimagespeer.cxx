@@ -39,7 +39,7 @@
 #include <vcl/settings.hxx>
 
 #include <limits>
-
+#include <string_view>
 
 namespace toolkit
 {
@@ -117,9 +117,9 @@ namespace toolkit
             ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsupported URL scheme - cannot automatically determine HC version!", i_imageURL );
 
             OUStringBuffer composer;
-            composer.appendCopy( i_imageURL, 0, separatorPos );
+            composer.append( std::u16string_view(i_imageURL).substr(0, separatorPos) );
             composer.append( "/sifr" );
-            composer.appendCopy( i_imageURL, separatorPos );
+            composer.append( std::u16string_view(i_imageURL).substr(separatorPos) );
             return composer.makeStringAndClear();
         }
 

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <comphelper/classids.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
@@ -367,7 +371,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                         if( aBuffer.isEmpty() )
                         {
                             aBuffer.append( '\'' );
-                            aBuffer.appendCopy( sRange, 0, i );
+                            aBuffer.append( std::u16string_view(sRange).substr(0, i) );
                         }
                         if( '\'' == c || '\\' == c )
                             aBuffer.append( '\\' );

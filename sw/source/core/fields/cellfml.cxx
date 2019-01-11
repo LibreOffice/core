@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <float.h>
 #include <hintids.hxx>
 #include <hints.hxx>
@@ -640,12 +644,12 @@ OUString SwTableFormula::ScanString( FnScanFormula fnFormula, const SwTable& rTa
         if (nStt<0 || nEnd<0 )
         {
             // set the rest and finish
-            aStr.appendCopy(m_sFormula, nFormula);
+            aStr.append(std::u16string_view(m_sFormula).substr(nFormula));
             break;
         }
 
         // write beginning
-        aStr.appendCopy(m_sFormula, nFormula, nStt - nFormula);
+        aStr.append(std::u16string_view(m_sFormula).substr(nFormula, nStt - nFormula));
 
         if (fnFormula)
         {

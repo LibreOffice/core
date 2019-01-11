@@ -9,6 +9,7 @@
 
 #include "rtfdocumentimpl.hxx"
 #include <memory>
+#include <string_view>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -2236,7 +2237,7 @@ RTFError RTFDocumentImpl::popState()
                                                   - aState.aLevelNumbers.size()));
                         }
                         else
-                            aBuf.appendCopy(aOrig, i, 1);
+                            aBuf.append(std::u16string_view(aOrig).substr(i, 1));
                     }
 
                     pValue->setString(aBuf.makeStringAndClear());

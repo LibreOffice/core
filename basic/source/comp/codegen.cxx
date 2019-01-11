@@ -25,6 +25,7 @@
 #include <cstddef>
 #include <limits>
 #include <algorithm>
+#include <string_view>
 #include <osl/diagnose.h>
 #include <com/sun/star/script/ModuleType.hpp>
 
@@ -212,7 +213,7 @@ void SbiCodeGen::Save()
                         {
                             aIfaceProcName.append(aPropPrefix);
                         }
-                        aIfaceProcName.appendCopy(aPureProcName, rIfaceName.getLength() + 1 );
+                        aIfaceProcName.append(std::u16string_view(aPureProcName).substr(rIfaceName.getLength() + 1) );
                         aIfaceName = rIfaceName;
                         nPassCount = 2;
                         break;

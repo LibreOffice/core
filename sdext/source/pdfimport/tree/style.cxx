@@ -25,6 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
+#include <string_view>
 
 using namespace pdfi;
 
@@ -167,7 +168,7 @@ OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
             else
                 aStyleName = OStringToOUString( rStyle.Name, RTL_TEXTENCODING_ASCII_US );
             sal_Int32 nIndex = aStyleName.lastIndexOf( ':' );
-            aRet.appendCopy( aStyleName, nIndex+1 );
+            aRet.append( std::u16string_view(aStyleName).substr(nIndex+1) );
             aRet.append( nStyle );
         }
     }

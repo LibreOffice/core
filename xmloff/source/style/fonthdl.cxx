@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include "fonthdl.hxx"
 
 #include <sax/tools/converter.hxx>
@@ -93,7 +97,7 @@ bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any
             if( !sValue.isEmpty() )
                 sValue.append(';');
 
-            sValue.appendCopy(rStrImpValue, nFirst, nLast-nFirst+1);
+            sValue.append(std::u16string_view(rStrImpValue).substr(nFirst, nLast-nFirst+1));
         }
 
         if( -1 != nPos )

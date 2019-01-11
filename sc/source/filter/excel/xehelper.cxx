@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <sfx2/objsh.hxx>
@@ -921,7 +925,7 @@ OUString lclEncodeDosUrl(
                 // Excel seems confused by this token).
                 aBuf.append(EXC_URL_PARENTDIR);
             else
-                aBuf.appendCopy(aOldUrl,0,nPos).append(EXC_URL_SUBDIR);
+                aBuf.append(std::u16string_view(aOldUrl).substr(0,nPos)).append(EXC_URL_SUBDIR);
 
             aOldUrl = aOldUrl.copy(nPos + 1);
         }

@@ -42,6 +42,7 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <memory>
+#include <string_view>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/linkhelper.hxx>
@@ -266,7 +267,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
 {
     OUStringBuffer buf;
     if (baseURL.getLength() > 1 && baseURL[ baseURL.getLength() - 1 ] == '/')
-        buf.appendCopy( baseURL, 0, baseURL.getLength() - 1 );
+        buf.append( std::u16string_view(baseURL).substr(0, baseURL.getLength() - 1) );
     else
         buf.append( baseURL );
     OUString relPath(relPath_);

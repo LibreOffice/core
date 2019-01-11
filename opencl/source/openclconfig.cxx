@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <unicode/regex.h>
 
 #include <comphelper/configuration.hxx>
@@ -76,7 +80,7 @@ OUString getToken(const OUString& string, sal_Int32& index)
     while ((p = token.indexOf('%', i)) >= 0)
     {
         if (p > i)
-            result.appendCopy(token, i, p - i);
+            result.append(std::u16string_view(token).substr(i, p - i));
         if (p < token.getLength() - 2)
         {
             result.append(OUStringLiteral1(token.copy(p+1, 2).toInt32(16)));
@@ -87,7 +91,7 @@ OUString getToken(const OUString& string, sal_Int32& index)
             i = token.getLength();
         }
     }
-    result.appendCopy(token,i);
+    result.append(std::u16string_view(token).substr(i));
 
     return result.makeStringAndClear();
 }
