@@ -1384,6 +1384,28 @@ public:
     }
 };
 
+class IsFieldNotDeleted : public FilterFunctor
+{
+private:
+    IDocumentRedlineAccess const& m_rIDRA;
+    FilterFunctor const& m_rNext;
+
+public:
+    IsFieldNotDeleted(IDocumentRedlineAccess const& rIDRA,
+            FilterFunctor & rNext)
+        : m_rIDRA(rIDRA)
+        , m_rNext(rNext)
+    {
+    }
+    bool operator()(const SwFormatField* pField) const override
+    {
+        if (!m_rNext(pField))
+            return false;
+        if (!pField->GetTextField())
+            return false;
+        return !sw::IsFieldDeletedInModel(m_rIDRA, *pField->GetTextField());
+    }
+};
 
 //Manages the passed in vector by automatically removing entries if they are deleted
 //and automatically adding entries if they appear in the document and match the
@@ -1494,7 +1516,9 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
     mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitFieldWithAuthorOf aFilter(rAuthor);
-    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
+    IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
+    IsFieldNotDeleted aFilter2(rIDRA, aFilter);
+    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter2);
     while (const SwFormatField* pField = aStack.pop())
     {
         if (mpWrtShell->GotoField(*pField))
@@ -1521,7 +1545,9 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
     mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitFieldWithPostitId aFilter(nPostItId);
-    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
+    IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
+    IsFieldNotDeleted aFilter2(rIDRA, aFilter);
+    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter2);
     const SwFormatField* pField = aStack.pop();
     if (pField && mpWrtShell->GotoField(*pField))
         mpWrtShell->DelRight();
@@ -1542,8 +1568,10 @@ void SwPostItMgr::Delete()
     mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitField aFilter;
+    IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
+    IsFieldNotDeleted aFilter2(rIDRA, aFilter);
     FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(),
-        aFilter);
+        aFilter2);
     while (const SwFormatField* pField = aStack.pop())
     {
         if (mpWrtShell->GotoField(*pField))
