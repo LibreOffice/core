@@ -1062,7 +1062,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             bOk = rItem.QueryValue( aAny );
             if( bOk )
             {
-                const XMLPropertyHandler* pWritingModeHandler =
+                std::unique_ptr<XMLPropertyHandler> pWritingModeHandler =
                     XMLPropertyHandlerFactory::CreatePropertyHandler(
                         XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT );
                 OUString sValue;
@@ -1070,8 +1070,6 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                                                       rUnitConverter );
                 if( bOk )
                     aOut.append( sValue );
-
-                delete pWritingModeHandler;
             }
         }
         break;

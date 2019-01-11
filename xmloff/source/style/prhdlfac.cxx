@@ -158,310 +158,307 @@ void XMLPropertyHandlerFactory::PutHdlCache( sal_Int32 nType, const XMLPropertyH
 const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 nType ) const
 {
     const XMLPropertyHandler* pPropHdl = GetHdlCache( nType );
+    if( pPropHdl )
+        return pPropHdl;
 
-    if( !pPropHdl )
-    {
-        pPropHdl = CreatePropertyHandler( nType );
-
-        if( pPropHdl )
-            PutHdlCache( nType, pPropHdl );
-    }
-
-    return pPropHdl;
+    std::unique_ptr<XMLPropertyHandler> pNewPropHdl = CreatePropertyHandler( nType );
+    if( pNewPropHdl )
+        PutHdlCache( nType, pNewPropHdl.get() );
+    return pNewPropHdl.release();
 }
 
-const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_Int32 nType )
+const std::unique_ptr<XMLPropertyHandler> XMLPropertyHandlerFactory::CreatePropertyHandler( sal_Int32 nType )
 {
-    XMLPropertyHandler* pPropHdl = nullptr;
+    std::unique_ptr<XMLPropertyHandler> pPropHdl;
 
     switch( nType )
     {
         case XML_TYPE_BOOL :
-            pPropHdl = new XMLBoolPropHdl;
+            pPropHdl.reset(new XMLBoolPropHdl);
             break;
         case XML_TYPE_BOOL_FALSE :
-            pPropHdl = new XMLBoolFalsePropHdl;
+            pPropHdl.reset(new XMLBoolFalsePropHdl);
             break;
         case XML_TYPE_MEASURE :
-            pPropHdl = new XMLMeasurePropHdl( 4 );
+            pPropHdl.reset(new XMLMeasurePropHdl( 4 ));
             break;
         case XML_TYPE_MEASURE8 :
-            pPropHdl = new XMLMeasurePropHdl( 1 );
+            pPropHdl.reset(new XMLMeasurePropHdl( 1 ));
             break;
         case XML_TYPE_MEASURE16:
-            pPropHdl = new XMLMeasurePropHdl( 2 );
+            pPropHdl.reset(new XMLMeasurePropHdl( 2 ));
             break;
         case XML_TYPE_PERCENT :
-            pPropHdl = new XMLPercentPropHdl( 4 );
+            pPropHdl.reset(new XMLPercentPropHdl( 4 ));
             break;
         case XML_TYPE_PERCENT8 :
-            pPropHdl = new XMLPercentPropHdl( 1 );
+            pPropHdl.reset(new XMLPercentPropHdl( 1 ));
             break;
         case XML_TYPE_PERCENT16 :
-            pPropHdl = new XMLPercentPropHdl( 2 );
+            pPropHdl.reset(new XMLPercentPropHdl( 2 ));
             break;
         case XML_TYPE_DOUBLE_PERCENT :
-            pPropHdl = new XMLDoublePercentPropHdl;
+            pPropHdl.reset(new XMLDoublePercentPropHdl);
             break;
         case XML_TYPE_NEG_PERCENT :
-            pPropHdl = new XMLNegPercentPropHdl( 4 );
+            pPropHdl.reset(new XMLNegPercentPropHdl( 4 ));
             break;
         case XML_TYPE_NEG_PERCENT8 :
-            pPropHdl = new XMLNegPercentPropHdl( 1 );
+            pPropHdl.reset(new XMLNegPercentPropHdl( 1 ));
             break;
         case XML_TYPE_NEG_PERCENT16 :
-            pPropHdl = new XMLNegPercentPropHdl( 2 );
+            pPropHdl.reset(new XMLNegPercentPropHdl( 2 ));
             break;
         case XML_TYPE_MEASURE_PX :
-            pPropHdl = new XMLMeasurePxPropHdl( 4 );
+            pPropHdl.reset(new XMLMeasurePxPropHdl( 4 ));
             break;
         case XML_TYPE_STRING :
-            pPropHdl = new XMLStringPropHdl;
+            pPropHdl.reset(new XMLStringPropHdl);
             break;
         case XML_TYPE_COLOR :
-            pPropHdl = new XMLColorPropHdl;
+            pPropHdl.reset(new XMLColorPropHdl);
             break;
         case XML_TYPE_HEX :
-            pPropHdl = new XMLHexPropHdl;
+            pPropHdl.reset(new XMLHexPropHdl);
             break;
         case XML_TYPE_NUMBER :
-            pPropHdl = new XMLNumberPropHdl( 4 );
+            pPropHdl.reset(new XMLNumberPropHdl( 4 ));
             break;
         case XML_TYPE_NUMBER8 :
-            pPropHdl = new XMLNumberPropHdl( 1 );
+            pPropHdl.reset(new XMLNumberPropHdl( 1 ));
             break;
         case XML_TYPE_NUMBER16:
-            pPropHdl = new XMLNumberPropHdl( 2 );
+            pPropHdl.reset(new XMLNumberPropHdl( 2 ));
             break;
         case XML_TYPE_NUMBER_NONE :
-            pPropHdl = new XMLNumberNonePropHdl;
+            pPropHdl.reset(new XMLNumberNonePropHdl);
             break;
         case XML_TYPE_NUMBER8_NONE :
-            pPropHdl = new XMLNumberNonePropHdl( 1 );
+            pPropHdl.reset(new XMLNumberNonePropHdl( 1 ));
             break;
         case XML_TYPE_NUMBER16_NONE :
-            pPropHdl = new XMLNumberNonePropHdl( 2 );
+            pPropHdl.reset(new XMLNumberNonePropHdl( 2 ));
             break;
         case XML_TYPE_DOUBLE :
-            pPropHdl = new XMLDoublePropHdl;
+            pPropHdl.reset(new XMLDoublePropHdl);
             break;
         case XML_TYPE_NBOOL :
-            pPropHdl = new XMLNBoolPropHdl;
+            pPropHdl.reset(new XMLNBoolPropHdl);
             break;
         case XML_TYPE_COLORTRANSPARENT :
-            pPropHdl = new XMLColorTransparentPropHdl;
+            pPropHdl.reset(new XMLColorTransparentPropHdl);
             break;
         case XML_TYPE_ISTRANSPARENT :
-            pPropHdl = new XMLIsTransparentPropHdl;
+            pPropHdl.reset(new XMLIsTransparentPropHdl);
             break;
         case XML_TYPE_COLORAUTO :
-            pPropHdl = new XMLColorAutoPropHdl;
+            pPropHdl.reset(new XMLColorAutoPropHdl);
             break;
         case XML_TYPE_ISAUTOCOLOR :
-            pPropHdl = new XMLIsAutoColorPropHdl;
+            pPropHdl.reset(new XMLIsAutoColorPropHdl);
             break;
         case XML_TYPE_BUILDIN_CMP_ONLY :
-            pPropHdl = new XMLCompareOnlyPropHdl;
+            pPropHdl.reset(new XMLCompareOnlyPropHdl);
             break;
 
         case XML_TYPE_RECTANGLE_LEFT :
         case XML_TYPE_RECTANGLE_TOP :
         case XML_TYPE_RECTANGLE_WIDTH :
         case XML_TYPE_RECTANGLE_HEIGHT :
-            pPropHdl = new XMLRectangleMembersHdl( nType );
+            pPropHdl.reset(new XMLRectangleMembersHdl( nType ));
             break;
 
         case XML_TYPE_TEXT_CROSSEDOUT_TYPE:
-            pPropHdl = new XMLCrossedOutTypePropHdl ;
+            pPropHdl.reset(new XMLCrossedOutTypePropHdl) ;
             break;
         case XML_TYPE_TEXT_CROSSEDOUT_STYLE:
-            pPropHdl = new XMLCrossedOutStylePropHdl ;
+            pPropHdl.reset(new XMLCrossedOutStylePropHdl) ;
             break;
         case XML_TYPE_TEXT_CROSSEDOUT_WIDTH:
-            pPropHdl = new XMLCrossedOutWidthPropHdl ;
+            pPropHdl.reset(new XMLCrossedOutWidthPropHdl) ;
             break;
         case XML_TYPE_TEXT_CROSSEDOUT_TEXT:
-            pPropHdl = new XMLCrossedOutTextPropHdl ;
+            pPropHdl.reset(new XMLCrossedOutTextPropHdl) ;
             break;
         case XML_TYPE_TEXT_BOOLCROSSEDOUT:
-            pPropHdl = new XMLNamedBoolPropertyHdl(
+            pPropHdl.reset(new XMLNamedBoolPropertyHdl(
                 GetXMLToken(XML_SOLID),
-                GetXMLToken(XML_NONE) );
+                GetXMLToken(XML_NONE) ));
             break;
         case XML_TYPE_TEXT_ESCAPEMENT:
-            pPropHdl = new XMLEscapementPropHdl;
+            pPropHdl.reset(new XMLEscapementPropHdl);
             break;
         case XML_TYPE_TEXT_ESCAPEMENT_HEIGHT:
-            pPropHdl = new XMLEscapementHeightPropHdl;
+            pPropHdl.reset(new XMLEscapementHeightPropHdl);
             break;
         case XML_TYPE_TEXT_CASEMAP:
-            pPropHdl = new XMLCaseMapPropHdl;
+            pPropHdl.reset(new XMLCaseMapPropHdl);
             break;
         case XML_TYPE_TEXT_CASEMAP_VAR:
-            pPropHdl = new XMLCaseMapVariantHdl;
+            pPropHdl.reset(new XMLCaseMapVariantHdl);
             break;
         case XML_TYPE_TEXT_FONTFAMILYNAME:
-            pPropHdl = new XMLFontFamilyNamePropHdl;
+            pPropHdl.reset(new XMLFontFamilyNamePropHdl);
             break;
         case XML_TYPE_TEXT_FONTFAMILY:
-            pPropHdl = new XMLFontFamilyPropHdl;
+            pPropHdl.reset(new XMLFontFamilyPropHdl);
             break;
         case XML_TYPE_TEXT_FONTENCODING:
-            pPropHdl = new XMLFontEncodingPropHdl;
+            pPropHdl.reset(new XMLFontEncodingPropHdl);
             break;
         case XML_TYPE_TEXT_FONTPITCH:
-            pPropHdl = new XMLFontPitchPropHdl;
+            pPropHdl.reset(new XMLFontPitchPropHdl);
             break;
         case XML_TYPE_TEXT_KERNING:
-            pPropHdl = new XMLKerningPropHdl;
+            pPropHdl.reset(new XMLKerningPropHdl);
             break;
         case XML_TYPE_TEXT_POSTURE:
-            pPropHdl = new XMLPosturePropHdl;
+            pPropHdl.reset(new XMLPosturePropHdl);
             break;
         case XML_TYPE_TEXT_SHADOWED:
-            pPropHdl = new XMLShadowedPropHdl;
+            pPropHdl.reset(new XMLShadowedPropHdl);
             break;
         case XML_TYPE_TEXT_UNDERLINE_TYPE:
-            pPropHdl = new XMLUnderlineTypePropHdl;
+            pPropHdl.reset(new XMLUnderlineTypePropHdl);
             break;
         case XML_TYPE_TEXT_UNDERLINE_STYLE:
-            pPropHdl = new XMLUnderlineStylePropHdl;
+            pPropHdl.reset(new XMLUnderlineStylePropHdl);
             break;
         case XML_TYPE_TEXT_UNDERLINE_WIDTH:
-            pPropHdl = new XMLUnderlineWidthPropHdl;
+            pPropHdl.reset(new XMLUnderlineWidthPropHdl);
             break;
         case XML_TYPE_TEXT_UNDERLINE_COLOR:
-            pPropHdl = new XMLColorTransparentPropHdl( XML_FONT_COLOR );
+            pPropHdl.reset(new XMLColorTransparentPropHdl( XML_FONT_COLOR ));
             break;
         case XML_TYPE_TEXT_UNDERLINE_HASCOLOR:
-            pPropHdl = new XMLIsTransparentPropHdl( XML_FONT_COLOR,
-                                                     false );
+            pPropHdl.reset(new XMLIsTransparentPropHdl( XML_FONT_COLOR,
+                                                     false ));
             break;
         case XML_TYPE_TEXT_OVERLINE_TYPE:
-            pPropHdl = new XMLUnderlineTypePropHdl;
+            pPropHdl.reset(new XMLUnderlineTypePropHdl);
             break;
         case XML_TYPE_TEXT_OVERLINE_STYLE:
-            pPropHdl = new XMLUnderlineStylePropHdl;
+            pPropHdl.reset(new XMLUnderlineStylePropHdl);
             break;
         case XML_TYPE_TEXT_OVERLINE_WIDTH:
-            pPropHdl = new XMLUnderlineWidthPropHdl;
+            pPropHdl.reset(new XMLUnderlineWidthPropHdl);
             break;
         case XML_TYPE_TEXT_OVERLINE_COLOR:
-            pPropHdl = new XMLColorTransparentPropHdl( XML_FONT_COLOR );
+            pPropHdl.reset(new XMLColorTransparentPropHdl( XML_FONT_COLOR ));
             break;
         case XML_TYPE_TEXT_OVERLINE_HASCOLOR:
-            pPropHdl = new XMLIsTransparentPropHdl( XML_FONT_COLOR,
-                                                     false );
+            pPropHdl.reset(new XMLIsTransparentPropHdl( XML_FONT_COLOR,
+                                                     false ));
             break;
         case XML_TYPE_TEXT_WEIGHT:
-            pPropHdl = new XMLFontWeightPropHdl;
+            pPropHdl.reset(new XMLFontWeightPropHdl);
             break;
         case XML_TYPE_TEXT_SPLIT:
-            pPropHdl = new XMLNamedBoolPropertyHdl(
+            pPropHdl.reset(new XMLNamedBoolPropertyHdl(
                 GetXMLToken(XML_AUTO),
-                GetXMLToken(XML_ALWAYS) );
+                GetXMLToken(XML_ALWAYS) ));
             break;
         case XML_TYPE_TEXT_BREAKBEFORE:
-            pPropHdl = new XMLFmtBreakBeforePropHdl;
+            pPropHdl.reset(new XMLFmtBreakBeforePropHdl);
             break;
         case XML_TYPE_TEXT_BREAKAFTER:
-            pPropHdl = new XMLFmtBreakAfterPropHdl;
+            pPropHdl.reset(new XMLFmtBreakAfterPropHdl);
             break;
         case XML_TYPE_TEXT_SHADOW:
-            pPropHdl = new XMLShadowPropHdl;
+            pPropHdl.reset(new XMLShadowPropHdl);
             break;
         case XML_TYPE_TEXT_ADJUST:
-            pPropHdl = new XMLParaAdjustPropHdl;
+            pPropHdl.reset(new XMLParaAdjustPropHdl);
             break;
         case XML_TYPE_TEXT_ADJUSTLAST:
-            pPropHdl = new XMLLastLineAdjustPropHdl;
+            pPropHdl.reset(new XMLLastLineAdjustPropHdl);
             break;
         case XML_TYPE_CHAR_HEIGHT:
-            pPropHdl = new XMLCharHeightHdl;
+            pPropHdl.reset(new XMLCharHeightHdl);
             break;
         case XML_TYPE_CHAR_HEIGHT_PROP:
-            pPropHdl = new XMLCharHeightPropHdl;
+            pPropHdl.reset(new XMLCharHeightPropHdl);
             break;
         case XML_TYPE_CHAR_HEIGHT_DIFF:
-            pPropHdl = new XMLCharHeightDiffHdl;
+            pPropHdl.reset(new XMLCharHeightDiffHdl);
             break;
         case XML_TYPE_CHAR_RFC_LANGUAGE_TAG:
-            pPropHdl = new XMLCharRfcLanguageTagHdl;
+            pPropHdl.reset(new XMLCharRfcLanguageTagHdl);
             break;
         case XML_TYPE_CHAR_LANGUAGE:
-            pPropHdl = new XMLCharLanguageHdl;
+            pPropHdl.reset(new XMLCharLanguageHdl);
             break;
         case XML_TYPE_CHAR_SCRIPT:
-            pPropHdl = new XMLCharScriptHdl;
+            pPropHdl.reset(new XMLCharScriptHdl);
             break;
         case XML_TYPE_CHAR_COUNTRY:
-            pPropHdl = new XMLCharCountryHdl;
+            pPropHdl.reset(new XMLCharCountryHdl);
             break;
         case XML_TYPE_LINE_SPACE_FIXED:
-            pPropHdl = new XMLLineHeightHdl;
+            pPropHdl.reset(new XMLLineHeightHdl);
             break;
         case XML_TYPE_LINE_SPACE_MINIMUM:
-            pPropHdl = new XMLLineHeightAtLeastHdl;
+            pPropHdl.reset(new XMLLineHeightAtLeastHdl);
             break;
         case XML_TYPE_LINE_SPACE_DISTANCE:
-            pPropHdl = new XMLLineSpacingHdl;
+            pPropHdl.reset(new XMLLineSpacingHdl);
             break;
         case XML_TYPE_BORDER_WIDTH:
-            pPropHdl = new XMLBorderWidthHdl;
+            pPropHdl.reset(new XMLBorderWidthHdl);
             break;
         case XML_TYPE_BORDER:
-            pPropHdl = new XMLBorderHdl;
+            pPropHdl.reset(new XMLBorderHdl);
             break;
         case XML_TYPE_TEXT_TABSTOP:
-            pPropHdl = new XMLTabStopPropHdl;
+            pPropHdl.reset(new XMLTabStopPropHdl);
             break;
         case XML_TYPE_ATTRIBUTE_CONTAINER:
-            pPropHdl = new XMLAttributeContainerHandler;
+            pPropHdl.reset(new XMLAttributeContainerHandler);
             break;
         case XML_TYPE_COLOR_MODE:
-            pPropHdl = new XMLEnumPropertyHdl(aXML_ColorMode_EnumMap);
+            pPropHdl.reset(new XMLEnumPropertyHdl(aXML_ColorMode_EnumMap));
             break;
         case XML_TYPE_DURATION16_MS:
-            pPropHdl = new XMLDurationMS16PropHdl_Impl;
+            pPropHdl.reset(new XMLDurationMS16PropHdl_Impl);
             break;
         case XML_TYPE_TEXT_HORIZONTAL_ADJUST:
-            pPropHdl = new XMLEnumPropertyHdl(aXML_HorizontalAdjust_Enum);
+            pPropHdl.reset(new XMLEnumPropertyHdl(aXML_HorizontalAdjust_Enum));
             break;
         case XML_TYPE_TEXT_DRAW_ASPECT:
-            pPropHdl = new DrawAspectHdl;
+            pPropHdl.reset(new DrawAspectHdl);
             break;
         case XML_TYPE_TEXT_WRITING_MODE:
-            pPropHdl = new XMLConstantsPropertyHandler(
+            pPropHdl.reset(new XMLConstantsPropertyHandler(
                 &(aXML_WritingDirection_Enum[1]),
-                XML_LR_TB);
+                XML_LR_TB));
             break;
         case XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT:
-            pPropHdl = new XMLConstantsPropertyHandler(
+            pPropHdl.reset(new XMLConstantsPropertyHandler(
                 aXML_WritingDirection_Enum,
-                XML_PAGE);
+                XML_PAGE));
             break;
         case XML_TYPE_TEXT_HIDDEN_AS_DISPLAY:
-            pPropHdl = new XMLNamedBoolPropertyHdl(
+            pPropHdl.reset(new XMLNamedBoolPropertyHdl(
                 GetXMLToken(XML_NONE),
-                GetXMLToken(XML_TRUE) );
+                GetXMLToken(XML_TRUE) ));
             break;
         case XML_TYPE_STYLENAME :
-            pPropHdl = new XMLStyleNamePropHdl;
+            pPropHdl.reset(new XMLStyleNamePropHdl);
             break;
         case XML_TYPE_NUMBER_NO_ZERO:
-            pPropHdl = new XMLNumberWithoutZeroPropHdl( 4 );
+            pPropHdl.reset(new XMLNumberWithoutZeroPropHdl( 4 ));
             break;
         case XML_TYPE_NUMBER8_NO_ZERO:
-            pPropHdl = new XMLNumberWithoutZeroPropHdl( 1 );
+            pPropHdl.reset(new XMLNumberWithoutZeroPropHdl( 1 ));
             break;
         case XML_TYPE_NUMBER16_NO_ZERO:
-            pPropHdl = new XMLNumberWithoutZeroPropHdl( 2 );
+            pPropHdl.reset(new XMLNumberWithoutZeroPropHdl( 2 ));
             break;
         case XML_TYPE_NUMBER16_AUTO:
-            pPropHdl = new XMLNumberWithAutoInsteadZeroPropHdl;
+            pPropHdl.reset(new XMLNumberWithAutoInsteadZeroPropHdl);
             break;
         case XML_TYPE_TEXT_VERTICAL_POS:
-            pPropHdl = new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID );
+            pPropHdl.reset(new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID ));
         break;
 
     }
