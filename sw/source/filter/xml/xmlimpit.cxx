@@ -905,19 +905,14 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
         case RES_FRAMEDIR:
         {
-            const XMLPropertyHandler* pWritingModeHandler =
+            std::unique_ptr<XMLPropertyHandler> pWritingModeHandler =
                 XMLPropertyHandlerFactory::CreatePropertyHandler(
                     XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT );
-            if( pWritingModeHandler != nullptr )
-            {
-                Any aAny;
-                bOk = pWritingModeHandler->importXML( rValue, aAny,
+            Any aAny;
+            bOk = pWritingModeHandler->importXML( rValue, aAny,
                                                       rUnitConverter );
-                if( bOk )
-                    bOk = rItem.PutValue( aAny, 0 );
-
-                delete pWritingModeHandler;
-            }
+            if( bOk )
+                bOk = rItem.PutValue( aAny, 0 );
         }
         break;
 
