@@ -43,7 +43,6 @@ private:
 
 public:
     Qt5Menu(bool bMenuBar);
-    virtual ~Qt5Menu() override;
 
     virtual bool VisibleMenuBar() override; // must return TRUE to actually DISPLAY native menu bars
 

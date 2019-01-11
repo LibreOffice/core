@@ -32,8 +32,6 @@ Qt5Menu::Qt5Menu(bool bMenuBar)
     connect(this, &Qt5Menu::setFrameSignal, this, &Qt5Menu::SetFrame, Qt::BlockingQueuedConnection);
 }
 
-Qt5Menu::~Qt5Menu() { maItems.clear(); }
-
 bool Qt5Menu::VisibleMenuBar() { return true; }
 
 QMenu* Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
@@ -227,6 +225,9 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
     if (pMainWindow)
     {
         mpQMenuBar = pMainWindow->menuBar();
+        if (mpQMenuBar)
+            mpQMenuBar->clear();
+
         mpQMenu = nullptr;
         mpQActionGroup = nullptr;
 
@@ -236,9 +237,6 @@ void Qt5Menu::SetFrame(const SalFrame* pFrame)
 
 void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar)
 {
-    if (mbMenuBar && mpQMenuBar)
-        mpQMenuBar->clear();
-
     for (sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++)
     {
         Qt5MenuItem* pSalMenuItem = GetItemAtPos(nItem);
