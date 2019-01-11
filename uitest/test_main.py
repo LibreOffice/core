@@ -45,9 +45,9 @@ def find_test_files(dir_path):
         if not os.path.isfile(file_path):
             continue
 
-        # ignore any non .py files
+        # fail on any non .py files
         if not os.path.splitext(file_path)[1] == ".py":
-            continue
+            raise Exception("file with an extension which is not .py: " + file_path)
 
         # ignore the __init__.py file
         # it is obviously not a test file
