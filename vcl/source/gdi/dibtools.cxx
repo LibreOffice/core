@@ -563,6 +563,14 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         {
             const long nWidth(rHeader.nWidth);
             const long nHeight(rHeader.nHeight);
+            if (nAlignedWidth > rIStm.remainingSize())
+            {
+                // ofz#11188 avoid timeout
+                // all following paths will enter a case statement, and nCount
+                // is always at least 1, so we can check here before allocation
+                // if at least one row can be read
+                return false;
+            }
             std::vector<sal_uInt8> aBuf(nAlignedWidth);
 
             const long nI(bTopDown ? 1 : -1);
