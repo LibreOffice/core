@@ -207,8 +207,8 @@ class CSS1Parser
 
     // parse parts of the grammar
     void ParseRule();
-    CSS1Selector *ParseSelector();
-    CSS1Expression *ParseDeclaration( OUString& rProperty );
+    std::unique_ptr<CSS1Selector> ParseSelector();
+    std::unique_ptr<CSS1Expression> ParseDeclaration( OUString& rProperty );
 
 protected:
     void ParseStyleSheet();
@@ -236,18 +236,16 @@ protected:
      *
      * @param pSelector The selector that was parsed
      * @param bFirst if true, a new declaration starts with this selector
-     * @return If true, the selector will be deleted. (Returns always true?)
      */
-    virtual bool SelectorParsed( CSS1Selector* pSelector, bool bFirst );
+    virtual void SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, bool bFirst );
 
     /** Called after a declaration or property was parsed
      *
      * @param rProperty The declaration/property
      * @param pExpr ???
-     * @return If true, the declaration will be deleted. (Returns always true?)
      */
-    virtual bool DeclarationParsed( const OUString& rProperty,
-                                    const CSS1Expression *pExpr );
+    virtual void DeclarationParsed( const OUString& rProperty,
+                                    std::unique_ptr<CSS1Expression> pExpr );
 
 public:
     CSS1Parser();

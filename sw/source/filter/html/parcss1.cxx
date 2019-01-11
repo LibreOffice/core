@@ -733,13 +733,12 @@ void CSS1Parser::ParseStyleSheet()
 void CSS1Parser::ParseRule()
 {
     // selector
-    CSS1Selector *pSelector = ParseSelector();
+    std::unique_ptr<CSS1Selector> pSelector = ParseSelector();
     if( !pSelector )
         return;
 
     // process selector
-    if( SelectorParsed( pSelector, true ) )
-        delete pSelector;
+    SelectorParsed( std::move(pSelector), true );
 
     LOOP_CHECK_DECL
 
@@ -757,8 +756,7 @@ void CSS1Parser::ParseRule()
             return;
 
         // process selector
-        if( SelectorParsed( pSelector, false ) )
-            delete pSelector;
+        SelectorParsed( std::move(pSelector), false );
     }
 
     // '{'
@@ -768,13 +766,12 @@ void CSS1Parser::ParseRule()
 
     // declaration
     OUString aProperty;
-    CSS1Expression *pExpr = ParseDeclaration( aProperty );
+    std::unique_ptr<CSS1Expression> pExpr = ParseDeclaration( aProperty );
     if( !pExpr )
         return;
 
     // process expression
-    if( DeclarationParsed( aProperty, pExpr ) )
-        delete pExpr;
+    DeclarationParsed( aProperty, std::move(pExpr) );
 
     LOOP_CHECK_RESTART
 
@@ -789,12 +786,11 @@ void CSS1Parser::ParseRule()
         // declaration
         if( CSS1_IDENT == nToken )
         {
-            CSS1Expression *pExp = ParseDeclaration( aProperty );
+            std::unique_ptr<CSS1Expression> pExp = ParseDeclaration( aProperty );
             if( pExp )
             {
                 // process expression
-                if( DeclarationParsed( aProperty, pExp ) )
-                    delete pExp;
+                DeclarationParsed( aProperty, std::move(pExp));
             }
         }
     }
@@ -824,9 +820,10 @@ void CSS1Parser::ParseRule()
 // pseude_element
 //  : IDENT
 
-CSS1Selector *CSS1Parser::ParseSelector()
+std::unique_ptr<CSS1Selector> CSS1Parser::ParseSelector()
 {
-    CSS1Selector *pRoot = nullptr, *pLast = nullptr;
+    std::unique_ptr<CSS1Selector> pRoot;
+    CSS1Selector *pLast = nullptr;
 
     bool bDone = false;
     CSS1Selector *pNew = nullptr;
@@ -932,7 +929,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
             if( pLast )
                 pLast->SetNext( pNew );
             else
-                pRoot = pNew;
+                pRoot.reset(pNew);
 
             pLast = pNew;
             pNew = nullptr;
@@ -991,9 +988,10 @@ CSS1Selector *CSS1Parser::ParseSelector()
 
 // the sign is only used for numeric values (except PERCENTAGE)
 // and it's applied on nValue!
-CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
+std::unique_ptr<CSS1Expression> CSS1Parser::ParseDeclaration( OUString& rProperty )
 {
-    CSS1Expression *pRoot = nullptr, *pLast = nullptr;
+    std::unique_ptr<CSS1Expression> pRoot;
+    CSS1Expression *pLast = nullptr;
 
     // property
     if( CSS1_IDENT != nToken )
@@ -1079,7 +1077,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
             if( pLast )
                 pLast->SetNext( pNew );
             else
-                pRoot = pNew;
+                pRoot.reset(pNew);
 
             pLast = pNew;
             pNew = nullptr;
@@ -1166,15 +1164,12 @@ void CSS1Parser::ParseStyleOption( const OUString& rIn )
     }
 
     OUString aProperty;
-    CSS1Expression *pExpr = ParseDeclaration( aProperty );
+    std::unique_ptr<CSS1Expression> pExpr = ParseDeclaration( aProperty );
     if( !pExpr )
-    {
         return;
-    }
 
     // process expression
-    if( DeclarationParsed( aProperty, pExpr ) )
-        delete pExpr;
+    DeclarationParsed( aProperty, std::move(pExpr) );
 
     LOOP_CHECK_DECL
 
@@ -1186,28 +1181,23 @@ void CSS1Parser::ParseStyleOption( const OUString& rIn )
         nToken = GetNextToken();
         if( CSS1_IDENT==nToken )
         {
-            CSS1Expression *pExp = ParseDeclaration( aProperty );
+            std::unique_ptr<CSS1Expression> pExp = ParseDeclaration( aProperty );
             if( pExp )
             {
                 // process expression
-                if( DeclarationParsed( aProperty, pExp ) )
-                    delete pExp;
+                DeclarationParsed( aProperty, std::move(pExp) );
             }
         }
     }
 }
 
-bool CSS1Parser::SelectorParsed( CSS1Selector* /* pSelector */, bool /*bFirst*/ )
+void CSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> /* pSelector */, bool /*bFirst*/ )
 {
-    // delete selector
-    return true;
 }
 
-bool CSS1Parser::DeclarationParsed( const OUString& /*rProperty*/,
-                                    const CSS1Expression * /* pExpr */ )
+void CSS1Parser::DeclarationParsed( const OUString& /*rProperty*/,
+                                    std::unique_ptr<CSS1Expression> /* pExpr */ )
 {
-    // delete declaration
-    return true;
 }
 
 CSS1Selector::~CSS1Selector()
