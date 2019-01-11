@@ -7,12 +7,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+
 import unittest
-import unohelper
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.beans import UnknownPropertyException
-import uno
-
 
 class TestXControlShape(unittest.TestCase):
 
@@ -25,53 +23,54 @@ class TestXControlShape(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-    def test_getAndSetControlShape(self):
-        xDoc = self.__class__._uno.openDocFromTDOC("xcontrolshape.odt")
-        self.assertIsNotNone(xDoc)
+    def test_get_and_set_control_shape(self):
+        x_doc = self.__class__._uno.openDocFromTDOC("xcontrolshape.odt")
+        self.assertIsNotNone(x_doc)
 
-        xDrawPage = xDoc.getDrawPage()
-        self.assertIsNotNone(xDrawPage)
+        x_draw_page = x_doc.getDrawPage()
+        self.assertIsNotNone(x_draw_page)
 
         # Date picker has control
-        xShapeDatePicker = xDrawPage[0]
-        self.assertIsNotNone(xShapeDatePicker)
-        self.assertIsNotNone(xShapeDatePicker.getControl())
+        x_shape_date_picker = x_draw_page[0]
+        self.assertIsNotNone(x_shape_date_picker)
+        self.assertIsNotNone(x_shape_date_picker.getControl())
 
         # Combobox also has control
-        xShapeCombo = xDrawPage[1]
-        self.assertIsNotNone(xShapeCombo)
-        self.assertIsNotNone(xShapeCombo.getControl())
+        x_shape_combo = x_draw_page[1]
+        self.assertIsNotNone(x_shape_combo)
+        self.assertIsNotNone(x_shape_combo.getControl())
 
         # Simple draw shape has no ControlShape
-        xShapeSimple = xDrawPage[2]
-        self.assertIsNotNone(xShapeSimple)
+        x_shape_simple = x_draw_page[2]
+        self.assertIsNotNone(x_shape_simple)
+
         # Shape has no XControlShape interface and we get AttributeError exception
         # during getControl() call
         with self.assertRaises(AttributeError):
-            self.assertIsNone(xShapeSimple.getControl())
+            self.assertIsNone(x_shape_simple.getControl())
 
-        xOldControlShape = xShapeCombo.getControl()
+        x_old_control_shape = x_shape_combo.getControl()
 
         # Combo box was a combo box and had no "Date" attribute"
         with self.assertRaises(UnknownPropertyException):
-            xShapeCombo.getControl().getPropertyValue("Date")
+            x_shape_combo.getControl().getPropertyValue("Date")
 
         # We are setting new Control Shape
-        xShapeCombo.setControl(xShapeDatePicker.getControl())
+        x_shape_combo.setControl(x_shape_date_picker.getControl())
 
         # And we can get date with some value
-        xDate = xShapeCombo.getControl().getPropertyValue("Date")
-        self.assertIsNotNone(xDate)
-        self.assertTrue(xDate.Day > 0 and xDate.Month > 0 and xDate.Year > 0)
+        x_date = x_shape_combo.getControl().getPropertyValue("Date")
+        self.assertIsNotNone(x_date)
+        self.assertTrue(x_date.Day > 0 and x_date.Month > 0 and x_date.Year > 0)
 
         # Return back original controlshape
-        xShapeCombo.setControl(xOldControlShape)
+        x_shape_combo.setControl(x_old_control_shape)
+
         # ...and ensure that date no longer available
         with self.assertRaises(UnknownPropertyException):
-            xShapeCombo.getControl().getPropertyValue("Date")
+            x_shape_combo.getControl().getPropertyValue("Date")
 
-        xDoc.close(True)
-
+        x_doc.close(True)
 
 if __name__ == '__main__':
     unittest.main()
