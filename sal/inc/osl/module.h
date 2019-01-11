@@ -44,7 +44,7 @@ extern "C" {
 
 #elif defined(SAL_UNX)
 #if defined(MACOSX)
-#define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name ".dylib." version
+#define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name ".dylib"
 #else
 #define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name SAL_DLLEXTENSION "." version
 #endif

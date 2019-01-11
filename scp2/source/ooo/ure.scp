@@ -190,7 +190,11 @@ End
 File gid_File_Dl_Cppu
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
+#if defined MACOSX
+    Name = SCP2_URE_DL_UNO_NORMAL("cppu");
+#else
     Name = SCP2_URE_DL_UNO_VER("cppu", "3");
+#endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 
@@ -200,7 +204,11 @@ File gid_File_Dl_Cppuhelper
 #ifdef OS2
     Name = "cppuh3.dll";
 #else
+#if defined MACOSX
+    Name = SCP2_URE_DL_UNO_COMID_NORMAL("cppuhelper");
+#else
     Name = SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
+#endif
 #endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
@@ -211,7 +219,11 @@ File gid_File_Dl_PurpEnvHelper
 #ifdef OS2
     Name = "purpeh3.dll";
 #else
+#if defined MACOSX
+    Name = SCP2_URE_DL_UNO_COMID_NORMAL("purpenvhelper");
+#else
     Name = SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
+#endif
 #endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
@@ -219,7 +231,11 @@ End
 File gid_File_Dl_Sal
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
+#if defined MACOSX
+    Name = SCP2_URE_DL_UNO_NORMAL("sal");
+#else
     Name = SCP2_URE_DL_UNO_VER("sal", "3");
+#endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 
@@ -229,7 +245,11 @@ File gid_File_Dl_Salhelper
 #ifdef OS2
     Name = "salhelp3.dll";
 #else
+#if defined MACOSX
+    Name = SCP2_URE_DL_UNO_COMID_NORMAL("salhelper");
+#else
     Name = SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
+#endif
 #endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
@@ -239,14 +259,22 @@ End
 File gid_File_Dl_Reg
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
+#if defined MACOSX
+    Name = SCP2_URE_DL_NORMAL("reg");
+#else
     Name = SCP2_URE_DL_VER("reg", "3");
+#endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 
 File gid_File_Dl_Store
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
+#if defined MACOSX
+    Name = SCP2_URE_DL_NORMAL("store");
+#else
     Name = SCP2_URE_DL_VER("store", "3");
+#endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 
@@ -267,7 +295,11 @@ File gid_File_Dl_Jvmaccess
 #ifdef OS2
     Name = "jvmacces.dll";
 #else
+#if defined MACOSX
+    Name = SCP2_URE_DL_COMID_NORMAL("jvmaccess");
+#else
     Name = SCP2_URE_DL_COMID_VER("jvmaccess", "3");
+#endif
 #endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
@@ -275,7 +307,11 @@ End
 File gid_File_Dl_Jvmfwk
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
+#if defined MACOSX
+    Name = SCP2_URE_DL_NORMAL("jvmfwk");
+#else
     Name = SCP2_URE_DL_VER("jvmfwk", "3");
+#endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 

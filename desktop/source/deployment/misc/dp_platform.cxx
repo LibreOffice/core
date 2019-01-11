@@ -180,7 +180,7 @@ namespace
         else if (token.equals(OUSTR(PLATFORM_MACOSX_X86)))
             ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_MACOSX_X86_64)))
-            ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("X86_64"));
+            ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("x86_64"));
         else if (token.equals(OUSTR(PLATFORM_MACOSX_PPC)))
             ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("PowerPC"));
         else if (token.equals(OUSTR(PLATFORM_OS2_X86)))

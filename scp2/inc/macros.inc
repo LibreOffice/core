@@ -548,6 +548,8 @@ End
 #define SCP2_URE_DL_VER(n, v) "lib" n STRING(UNXSUFFIX) "." v
 #define SCP2_URE_DL_COMID_VER(n, v) \
     "lib" n STRING(COMID) STRING(UNXSUFFIX) "." v
+#define SCP2_URE_DL_COMID_NORMAL(n) \
+    "lib" n STRING(COMID) STRING(UNXSUFFIX)
 #define SCP2_URE_DL_UNO_VER(n, v) "libuno_" n STRING(UNXSUFFIX) "." v
 #define SCP2_URE_DL_UNO_NORMAL(n) "libuno_" n STRING(UNXSUFFIX)
 #define SCP2_URE_DL_UNO_COMID_VER(n, v)	\

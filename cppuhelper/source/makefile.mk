@@ -34,9 +34,9 @@ VISIBILITY_HIDDEN=TRUE
 # without "-L" (light) switch
 BOOTSTRAP_SERVICE=TRUE
 
-.IF "$(OS)" != "WNT" && "$(GUI)"!="OS2"
+.IF "$(OS)" != "WNT" && "$(GUI)"!="OS2" && "$(OS)" != "MACOSX"
 UNIXVERSIONNAMES=UDK
-.ENDIF # WNT
+.ENDIF # WNT OS2 MACOSX
 
 # --- Settings -----------------------------------------------------
 

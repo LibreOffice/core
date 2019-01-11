@@ -282,27 +282,42 @@ then
 #    Only necessary on MacOSX, on other Unix systems the links are already prepared
 #    in the SDK installation.
 
-#    cleanup potential old links first
-    rm -f "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}" \
-	"${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}" \
-	"${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}" \
-	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
-	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
-
 #    prepare links 
     if [ "${OFFICE_HOME}" ]
     then
 	mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppu.${soext}.3" \
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppu.${soext}" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_sal.${soext}.3" \
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_sal.${soext}" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_salhelper${comid}.${soext}" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
-	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
+
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppu.${soext}" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}.3"
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}.3"
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_sal.${soext}" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}.3"
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_salhelper${comid}.${soext}" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}.3"
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}.3"
+
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppu.${soext}" \
+	    "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppu.${soext}.3"
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}" \
+	    "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3"
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_sal.${soext}" \
+	    "${OO_SDK_OFFICE_LIB_DIR}/libuno_sal.${soext}.3"
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_salhelper${comid}.${soext}" \
+	    "${OO_SDK_OFFICE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3"
+	ln -shf "${OO_SDK_OFFICE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}" \
+	    "${OO_SDK_OFFICE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3"
 
     fi
 fi 

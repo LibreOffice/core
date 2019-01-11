@@ -167,17 +167,15 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 ###LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
-EXTRA_LINKFLAGS*=-L$(MACOSX_SDK_PATH)
-# Very long install_names are needed so that install_name_tool -change later on
-# does not complain that "larger updated load commands do not fit:"
-LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'
+EXTRA_LINKFLAGS*=-L$(MACOSX_SDK_PATH) -Wl,-headerpad,ff
+LINKFLAGSRUNPATH_URELIB=-install_name '@_______URELIB/$(@:f)'
 LINKFLAGSRUNPATH_UREBIN=
-LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO/$(@:f)'
+LINKFLAGSRUNPATH_OOO=-install_name '@_______OOO/$(@:f)'
 LINKFLAGSRUNPATH_SDK=
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_BOXT=
-LINKFLAGSRUNPATH_NONE=-install_name '@__________________________________________________NONE/$(@:f)'
+LINKFLAGSRUNPATH_NONE=-install_name '@_______NONE/$(@:f)'
 LINKFLAGS=$(LINKFLAGSDEFS)
 
 LINKFLAGS+=-lobjc

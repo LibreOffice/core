@@ -36,7 +36,9 @@ USE_DEFFILE=TRUE
 TARGETTYPE=CUI
 .ENDIF # UNX
 
+.IF "$(OS)" != "MACOSX"
 UNIXVERSIONNAMES=UDK
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 

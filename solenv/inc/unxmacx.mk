@@ -186,19 +186,17 @@ LIBSTLPORTST=$(SOLARVERSION)/$(INPATH)/lib/libstlport_gcc.a
 LINK*=$(CXX)
 LINKC*=$(CC)
 
-LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
+LINKFLAGSDEFS*=-Wl,-headerpad,ff,-multiply_defined,suppress
 # assure backwards-compatibility
 EXTRA_LINKFLAGS*=-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk
-# Very long install_names are needed so that install_name_tool -change later on
-# does not complain that "larger updated load commands do not fit:"
-LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'
+LINKFLAGSRUNPATH_URELIB=-install_name '@_______URELIB/$(@:f)'
 LINKFLAGSRUNPATH_UREBIN=
-LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO/$(@:f)'
+LINKFLAGSRUNPATH_OOO=-install_name '@_______OOO/$(@:f)'
 LINKFLAGSRUNPATH_SDK=
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_BOXT=
-LINKFLAGSRUNPATH_NONE=-install_name '@__________________________________________________NONE/$(@:f)'
+LINKFLAGSRUNPATH_NONE=-install_name '@_______NONE/$(@:f)'
 LINKFLAGS=$(LINKFLAGSDEFS)
 
 # [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line

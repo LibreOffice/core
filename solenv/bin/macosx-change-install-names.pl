@@ -114,7 +114,7 @@ if ($type eq "extshl")
     {
         foreach $file (@ARGV)
         {
-            my $call = "${::CC_PATH}install_name_tool$change -id \@__________________________________________________$loc/$inames{$file} $file";
+            my $call = "${::CC_PATH}install_name_tool$change -id \@_______$loc/$inames{$file} $file";
             system($call) == 0 or die "cannot $call";
         }
     }
@@ -127,7 +127,7 @@ foreach $file (@ARGV)
     while (<IN>)
     {
         $change .= " -change $1 " . action($type, $loc, $2) . "$3"
-            if m'^\s*(@_{50}([^/]+)(/.+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$';
+            if m'^\s*(@_{7}([^/]+)(/.+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$';
     }
     close(IN);
     if ($change ne "")

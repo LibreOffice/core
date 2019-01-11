@@ -285,7 +285,7 @@ $(COMPONENT_MYSQL_LIBFILE): $(MYSQL_LIBFILE)
     @@-$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@ > $(NULLDEV)
     .IF "$(OS)" == "MACOSX"
-        install_name_tool -id @__________________________________________________OOO/$(MYSQL_LIBFILE:f) $@
+        install_name_tool -id @_______OOO/$(MYSQL_LIBFILE:f) $@
     .ENDIF
 .ENDIF
 

@@ -18,8 +18,7 @@ mkdir: %_DEST%\inc%_EXT%\systools\win32
 symlink: %_DEST%\lib%_EXT%\libsalalloc_malloc.so.3 %_DEST%\lib%_EXT%\libsalalloc_malloc.so
 ..\%__SRC%\lib\libuno_sal.so.3 %_DEST%\lib%_EXT%\libuno_sal.so.3
 symlink: %_DEST%\lib%_EXT%\libuno_sal.so.3 %_DEST%\lib%_EXT%\libuno_sal.so
-..\%__SRC%\lib\libuno_sal.dylib.3 %_DEST%\lib%_EXT%\libuno_sal.dylib.3
-symlink: %_DEST%\lib%_EXT%\libuno_sal.dylib.3 %_DEST%\lib%_EXT%\libuno_sal.dylib
+..\%__SRC%\lib\libuno_sal.dylib %_DEST%\lib%_EXT%\libuno_sal.dylib
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 
