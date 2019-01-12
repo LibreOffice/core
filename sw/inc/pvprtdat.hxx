@@ -24,7 +24,7 @@
 
 class SwPagePreviewPrtData
 {
-    sal_uInt64 nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
+    sal_uInt32 nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
             nHorzSpace, nVertSpace;
     sal_uInt8 nRow, nCol;
     bool bLandscape : 1;
@@ -35,23 +35,23 @@ public:
             bLandscape(false)
     {}
 
-   sal_uInt64 GetLeftSpace() const          { return nLeftSpace; }
-    void SetLeftSpace( sal_uInt64 n )        { nLeftSpace = n; }
+    sal_uInt32 GetLeftSpace() const          { return nLeftSpace; }
+    void SetLeftSpace( sal_uInt32 n )        { nLeftSpace = n; }
 
-    sal_uInt64 GetRightSpace() const         { return nRightSpace; }
-    void SetRightSpace( sal_uInt64 n )       { nRightSpace = n; }
+    sal_uInt32 GetRightSpace() const         { return nRightSpace; }
+    void SetRightSpace( sal_uInt32 n )       { nRightSpace = n; }
 
-   sal_uInt64 GetTopSpace() const           { return nTopSpace; }
-    void SetTopSpace( sal_uInt64 n )         { nTopSpace = n; }
+    sal_uInt32 GetTopSpace() const           { return nTopSpace; }
+    void SetTopSpace( sal_uInt32 n )         { nTopSpace = n; }
 
-    sal_uInt64 GetBottomSpace() const        { return nBottomSpace; }
-    void SetBottomSpace(sal_uInt64 n )      { nBottomSpace = n; }
+    sal_uInt32 GetBottomSpace() const        { return nBottomSpace; }
+    void SetBottomSpace(sal_uInt32 n )       { nBottomSpace = n; }
 
-    sal_uInt64 GetHorzSpace() const          { return nHorzSpace; }
-    void SetHorzSpace( sal_uInt64 n )        { nHorzSpace = n; }
+    sal_uInt32 GetHorzSpace() const          { return nHorzSpace; }
+    void SetHorzSpace( sal_uInt32 n )        { nHorzSpace = n; }
 
-    sal_uInt64 GetVertSpace() const          { return nVertSpace; }
-    void SetVertSpace( sal_uInt64 n )        { nVertSpace = n; }
+    sal_uInt32 GetVertSpace() const          { return nVertSpace; }
+    void SetVertSpace( sal_uInt32 n )        { nVertSpace = n; }
 
     sal_uInt8 GetRow() const                { return nRow; }
     void SetRow(sal_uInt8 n )               { nRow = n; }
