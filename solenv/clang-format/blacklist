@@ -6489,7 +6489,6 @@ include/linguistic/lngprops.hxx
 include/linguistic/misc.hxx
 include/linguistic/spelldta.hxx
 include/o3tl/any.hxx
-include/o3tl/array_view.hxx
 include/o3tl/char16_t2wchar_t.hxx
 include/o3tl/cow_wrapper.hxx
 include/o3tl/deleter.hxx
@@ -6504,6 +6503,7 @@ include/o3tl/numeric.hxx
 include/o3tl/runtimetooustring.hxx
 include/o3tl/safeint.hxx
 include/o3tl/sorted_vector.hxx
+include/o3tl/span.hxx
 include/o3tl/strong_int.hxx
 include/o3tl/typed_flags_set.hxx
 include/o3tl/vector_pool.hxx
@@ -8777,12 +8777,12 @@ mysqlc/source/mysqlc_types.cxx
 mysqlc/source/mysqlc_types.hxx
 o3tl/qa/cow_wrapper_clients.cxx
 o3tl/qa/cow_wrapper_clients.hxx
-o3tl/qa/test-array_view.cxx
 o3tl/qa/test-cow_wrapper.cxx
 o3tl/qa/test-enumarray.cxx
 o3tl/qa/test-lru_map.cxx
 o3tl/qa/test-safeint.cxx
 o3tl/qa/test-sorted_vector.cxx
+o3tl/qa/test-span.cxx
 o3tl/qa/test-string_view.cxx
 o3tl/qa/test-typed_flags.cxx
 o3tl/qa/test-vector_pool.cxx
