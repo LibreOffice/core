@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xfunctiondescriptions.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -36,7 +37,8 @@ class ScFunctionListObj : public CalcUnoApiTest,
                           public apitest::XEnumerationAccess,
                           public apitest::XFunctionDescriptions,
                           public apitest::XIndexAccess,
-                          public apitest::XNameAccess
+                          public apitest::XNameAccess,
+                          public apitest::XServiceInfo
 {
 public:
     ScFunctionListObj();
@@ -66,6 +68,11 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -77,6 +84,7 @@ ScFunctionListObj::ScFunctionListObj()
     , XElementAccess(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get())
     , XIndexAccess(392)
     , XNameAccess("IF")
+    , XServiceInfo("stardiv.StarCalc.ScFunctionListObj", "com.sun.star.sheet.FunctionDescriptions")
 {
 }
 
