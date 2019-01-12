@@ -23,8 +23,6 @@
 #include <xmloff/xmlimppr.hxx>
 #include <memory>
 
-class XMLFontStylesContext;
-
 class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper : public SvXMLImportPropertyMapper
 {
     sal_Int32 nSizeTypeIndex;

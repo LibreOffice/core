@@ -43,6 +43,7 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlement.hxx>
 #include "XMLAnchorTypePropHdl.hxx"
 #include <enummaps.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>

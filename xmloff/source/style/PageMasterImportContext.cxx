@@ -31,6 +31,7 @@
 
 //
 #include <xmlsdtypes.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <xmloff/xmlerror.hxx>
 

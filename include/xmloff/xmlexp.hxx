@@ -24,16 +24,9 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XLocator.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <rtl/ustring.hxx>
+#include <xmloff/attrlist.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/formlayerexport.hxx>
 #include <xmloff/xmlnumfe.hxx>
@@ -46,35 +39,38 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XGraphicStorageHandler.hpp>
-#include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <unotools/saveopt.hxx>
 
 #include <xmloff/XMLPageExport.hxx>
-#include <xmloff/ProgressBarHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/errcode.hxx>
 
-#include <list>
 #include <vector>
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace document { class XEmbeddedObjectResolver; } } } }
+namespace com { namespace sun { namespace star { namespace document { class XGraphicStorageHandler; } } } }
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
+namespace com { namespace sun { namespace star { namespace task { class XStatusIndicator; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XExtendedDocumentHandler; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XLocator; } } } } }
+
 class SvXMLNamespaceMap;
-class SvXMLAttributeList;
 class SvXMLExport_Impl;
-class SvXMLUnitConverter;
 class ProgressBarHelper;
 class XMLEventExport;
-class XMLSettingsExportHelper;
 class XMLImageMapExport;
 class XMLErrors;
 class LanguageTag;
@@ -85,7 +81,6 @@ enum class SvXMLErrorFlags;
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
-    namespace container { class XIndexContainer; }
     namespace lang { struct Locale; }
 } } }
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }

@@ -20,6 +20,7 @@
 #define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEHEADERFOOTERCONTEXT_HXX
 
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/maptype.hxx>
 
 class PageHeaderFooterContext : public SvXMLImportContext
 {

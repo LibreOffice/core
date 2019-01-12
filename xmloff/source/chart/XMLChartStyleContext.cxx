@@ -23,8 +23,10 @@
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmltypes.hxx>
+#include <xmloff/xmlimppr.hxx>
 
 #include <sal/log.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "XMLChartPropertyContext.hxx"
 

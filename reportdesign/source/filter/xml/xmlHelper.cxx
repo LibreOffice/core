@@ -21,6 +21,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>

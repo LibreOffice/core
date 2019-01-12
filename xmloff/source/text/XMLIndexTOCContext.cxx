@@ -43,6 +43,7 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/xmlement.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 

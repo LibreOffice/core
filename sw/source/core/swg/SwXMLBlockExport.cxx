@@ -20,6 +20,7 @@
 #include <SwXMLBlockExport.hxx>
 #include <SwXMLTextBlocks.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 using namespace ::com::sun::star::uno;

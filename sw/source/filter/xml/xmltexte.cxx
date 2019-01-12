@@ -30,6 +30,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/xmlexppr.hxx>
 
 #include <svx/svdobj.hxx>
 #include <doc.hxx>

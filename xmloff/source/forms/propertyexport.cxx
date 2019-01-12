@@ -28,6 +28,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
+#include <xmloff/xmlexppr.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <sax/tools/converter.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>

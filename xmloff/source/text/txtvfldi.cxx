@@ -40,6 +40,8 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <sax/tools/converter.hxx>
 

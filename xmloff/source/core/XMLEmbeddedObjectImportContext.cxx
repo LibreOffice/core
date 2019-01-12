@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <tools/globname.hxx>

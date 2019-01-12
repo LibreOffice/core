@@ -436,3 +436,51 @@ blacklist:
     include/toolkit/helper/macros.hxx:
     # Needed for macros
     - comphelper/servicehelper.hxx
+    include/xmloff/XMLEmbeddedObjectExportFilter.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/xml/sax/XExtendedDocumentHandler.hpp
+    include/xmloff/attrlist.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/xml/sax/XAttributeList.hpp
+    include/xmloff/fasttokenhandler.hxx:
+    # base class has to be a complete type
+    - com/sun/star/xml/sax/XFastTokenHandler.hpp
+    include/xmloff/unointerfacetouniqueidentifiermapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/uno/XInterface.hpp
+    include/xmloff/unoatrcn.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNameContainer.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    include/xmloff/xmlictxt.hxx:
+    # base class has to be a complete type
+    - com/sun/star/xml/sax/XFastContextHandler.hpp
+    include/xmloff/xmlexp.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XFilter.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/document/XExporter.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/container/XNamed.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    include/xmloff/xmlmetae.hxx:
+    # base class has to be a complete type
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
+    include/xmloff/xmlimp.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XFilter.hpp
+    - com/sun/star/document/XImporter.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XUnoTunnel.hpp
+    - com/sun/star/xml/sax/XExtendedDocumentHandler.hpp
+    - com/sun/star/xml/sax/XFastDocumentHandler.hpp
+    - com/sun/star/xml/sax/XFastParser.hpp
+    include/xmloff/xmltabe.hxx:
+    # Needed for css shortcut
+    - sal/types.h

@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/attrlist.hxx>
 #include <i18nlangtag/languagetag.hxx>

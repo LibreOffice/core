@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <xmloff/nmspmap.hxx>

@@ -23,15 +23,14 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <tools/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <memory>
 
-class SvXMLNamespaceMap;
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+
 class SvXMLImport;
 
 class SvXMLImportContext;

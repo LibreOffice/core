@@ -22,6 +22,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
 #include "xmlHierarchyCollection.hxx"
@@ -30,6 +31,8 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/propertysequence.hxx>
 
 namespace dbaxml

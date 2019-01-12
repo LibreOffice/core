@@ -21,10 +21,13 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/xmlement.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
+
+#include <limits.h>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;

@@ -30,6 +30,7 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/chart2/RegressionEquation.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 

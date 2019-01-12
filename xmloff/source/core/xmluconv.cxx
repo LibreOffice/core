@@ -36,6 +36,7 @@
 #include <tools/time.hxx>
 #include <tools/fldunit.hxx>
 
+#include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>

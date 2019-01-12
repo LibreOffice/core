@@ -34,6 +34,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlprmap.hxx>
 
 #include <map>
 #include <memory>

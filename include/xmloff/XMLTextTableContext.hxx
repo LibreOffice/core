@@ -24,10 +24,6 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace text { class XTextContent; }
-} } }
-
 class XMLOFF_DLLPUBLIC XMLTextTableContext : public SvXMLImportContext
 {
 

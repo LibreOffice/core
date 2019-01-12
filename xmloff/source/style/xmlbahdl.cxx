@@ -26,6 +26,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <xmloff/xmltoken.hxx>
 
+#include <limits.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 

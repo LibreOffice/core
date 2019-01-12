@@ -26,6 +26,7 @@
 
 
 #include <sal/log.hxx>
+#include <xmloff/xmlement.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprhdl.hxx>

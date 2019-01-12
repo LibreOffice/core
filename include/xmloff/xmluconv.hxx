@@ -25,25 +25,14 @@
 #include <sal/types.h>
 
 #include <memory>
-#include <limits.h>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/Position3D.hpp>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/fldunit.hxx>
-#include <tools/mapunit.hxx>
-
-namespace tools { class Time; }
 
 namespace com { namespace sun { namespace star {
-    namespace util { struct DateTime; }
     namespace text { class XNumberingTypeInfo; }
 }}}
 
@@ -51,6 +40,16 @@ namespace basegfx
 {
     class B3DVector;
 }
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { struct Position3D; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace com { namespace sun { namespace star { namespace util { struct Date; } } } }
+template <typename EnumT> struct SvXMLEnumMapEntry;
+template <typename EnumT> struct SvXMLEnumStringMapEntry;
 
 class XMLOFF_DLLPUBLIC SvXMLTokenEnumerator
 {

@@ -21,8 +21,6 @@
 #define INCLUDED_XMLOFF_WORDWRAPPROPERTYHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
-#include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlement.hxx>
 
 /**
     PropertyHandler for a named xml bool type:

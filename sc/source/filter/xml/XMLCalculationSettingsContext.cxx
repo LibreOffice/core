@@ -26,6 +26,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 using namespace com::sun::star;
 using namespace xmloff::token;
 

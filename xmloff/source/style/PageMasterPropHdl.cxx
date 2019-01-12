@@ -28,6 +28,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 

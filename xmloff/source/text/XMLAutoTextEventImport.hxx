@@ -21,6 +21,7 @@
 #define INCLUDED_XMLOFF_SOURCE_TEXT_XMLAUTOTEXTEVENTIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
+#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 

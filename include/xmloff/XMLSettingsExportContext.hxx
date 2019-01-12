@@ -20,9 +20,9 @@
 #ifndef INCLUDED_XMLOFF_XMLSETTINGSEXPORTCONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLSETTINGSEXPORTCONTEXT_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-
 #include <xmloff/xmltoken.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 
 namespace xmloff

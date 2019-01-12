@@ -36,6 +36,7 @@
 #include <xmloff/numehelp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <editeng/editstat.hxx>
@@ -86,6 +87,7 @@
 #include <com/sun/star/util/MalformedNumberFormatException.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

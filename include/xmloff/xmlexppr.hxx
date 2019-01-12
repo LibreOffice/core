@@ -20,15 +20,21 @@
 #ifndef INCLUDED_XMLOFF_XMLEXPPR_HXX
 #define INCLUDED_XMLOFF_XMLEXPPR_HXX
 
-#include <rtl/ref.hxx>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <xmloff/xmlprmap.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <rtl/ustring.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <memory>
+#include <vector>
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace rtl { template <class reference_type> class Reference; }
+
+class XMLPropertySetMapper;
+struct XMLPropertyState;
 
 enum class SvXmlExportFlags {
     NONE        = 0x0000,
@@ -42,7 +48,6 @@ namespace o3tl
 class SvXMLUnitConverter;
 class SvXMLAttributeList;
 class SvXMLNamespaceMap;
-class FilterPropertiesInfos_Impl;
 class SvXMLExport;
 
 class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public salhelper::SimpleReferenceObject

@@ -24,6 +24,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -22,12 +22,12 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <sal/types.h>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <rtl/ustring.hxx>
 
-class SvXMLNamespaceMap;
-class SvXMLAttributeList;
-class SvXMLUnitConverter;
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+
 class SvXMLExport;
 class SvXMLImport;
 

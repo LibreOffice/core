@@ -27,6 +27,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprmap.hxx>
+#include <xmloff/xmlement.hxx>
 
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <com/sun/star/text/HorizontalAdjust.hpp>

@@ -22,6 +22,9 @@
 #include <xmloff/xmlnumi.hxx>
 #include <xmltabi.hxx>
 #include <xmloff/txtprmap.hxx>
+#include <xmloff/xmlimppr.hxx>
+
+#include <com/sun/star/container/XIndexReplace.hpp>
 
 #include "sdpropls.hxx"
 

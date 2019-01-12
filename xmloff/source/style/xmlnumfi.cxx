@@ -34,6 +34,7 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <xmloff/xmlement.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

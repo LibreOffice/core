@@ -23,6 +23,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/prhdlfac.hxx>
 
 extern const XMLPropertyMapEntry aXMLChartPropMap[];
 

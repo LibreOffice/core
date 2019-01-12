@@ -45,6 +45,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>

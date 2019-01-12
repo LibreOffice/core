@@ -51,6 +51,8 @@
 #include <vector>
 #include <typeinfo>
 #include <algorithm>
+#include <queue>
+#include <iterator>
 
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

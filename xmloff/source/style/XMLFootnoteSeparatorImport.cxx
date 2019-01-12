@@ -37,6 +37,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/xmlement.hxx>
 
 #include <xmloff/PageMasterStyleMap.hxx>
 

@@ -22,18 +22,17 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <rtl/ref.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <xmloff/xmlimppr.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
 
 class SvXMLImport;
 class SvXMLImportContext;
 class SvXMLStylesContext;
-class XMLPropStyleContext;
 
 
 namespace xmloff

@@ -35,6 +35,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/i18nmap.hxx>
+#include <xmloff/xmlimppr.hxx>
 #include <unocrsr.hxx>
 #include <TextCursorHelper.hxx>
 #include <unoframe.hxx>

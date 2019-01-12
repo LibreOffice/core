@@ -24,9 +24,12 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <set>
+
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
 
 class SvXMLExport;
 

@@ -30,6 +30,8 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>

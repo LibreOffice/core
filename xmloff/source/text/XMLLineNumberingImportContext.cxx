@@ -30,6 +30,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnumi.hxx>
+#include <xmloff/xmlement.hxx>
 
 
 using namespace ::com::sun::star;

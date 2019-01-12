@@ -21,11 +21,10 @@
 #define INCLUDED_XMLOFF_TXTPARAE_HXX
 
 #include <sal/config.h>
+#include <rtl/ref.hxx>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <xmloff/xmlexppr.hxx>
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
@@ -38,23 +37,22 @@ class SvXMLExport;
 class SvXMLAutoStylePoolP;
 class XMLTextFieldExport;
 class XMLTextNumRuleInfo;
-class XMLTextListAutoStylePool;
 class XMLSectionExport;
 class XMLIndexMarkExport;
 class XMLRedlineExport;
 struct XMLPropertyState;
 class MultiPropertySetHelper;
 enum class XMLShapeExportFlags;
+class SvXMLExportPropertyMapper;
 
 namespace com { namespace sun { namespace star
 {
     namespace beans { class XPropertySet; class XPropertyState;
                       class XPropertySetInfo; }
-    namespace container { class XEnumerationAccess; class XEnumeration; class XIndexAccess; }
+    namespace container { class XEnumeration; class XIndexAccess; }
     namespace text { class XTextContent; class XTextRange; class XText;
                      class XFootnote; class XTextFrame; class XTextSection;
-                     class XTextField;
-                     class XDocumentIndex; class XTextShapesSupplier; }
+                     class XTextField; }
 } } }
 
 namespace xmloff

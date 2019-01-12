@@ -24,6 +24,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <xmloff/XMLTextMasterPageExport.hxx>
+#include <xmloff/table/XMLTableExport.hxx>
 
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlaustp.hxx>

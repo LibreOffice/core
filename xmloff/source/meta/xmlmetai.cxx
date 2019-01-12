@@ -27,6 +27,7 @@
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/character.hxx>

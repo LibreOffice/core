@@ -24,6 +24,9 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;

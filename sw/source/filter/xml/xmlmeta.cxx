@@ -23,6 +23,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlmetae.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include <editeng/langitem.hxx>
 #include <o3tl/safeint.hxx>
 #include <xmloff/xmluconv.hxx>

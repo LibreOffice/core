@@ -22,20 +22,28 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <xmloff/xmlprmap.hxx>
-#include <xmloff/AutoStyleEntry.hxx>
+#include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
+#include <vector>
 
 class SvXMLExportPropertyMapper;
 class SvXMLNamespaceMap;
 class SvXMLAutoStylePoolP_Impl;
 class SvXMLAttributeList;
 class SvXMLExport;
+class SvXMLUnitConverter;
+struct XMLPropertyState;
+
 namespace com { namespace sun { namespace star { namespace uno
     { template<typename A> class Sequence; }
 } } }
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
+namespace xmloff { struct AutoStyleEntry; }
+namespace rtl { template <class reference_type> class Reference; }
 
 class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public salhelper::SimpleReferenceObject
 {

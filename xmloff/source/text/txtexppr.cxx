@@ -26,6 +26,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
 #include <tools/color.hxx>

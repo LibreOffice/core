@@ -39,6 +39,8 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -48,6 +50,7 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/documentconstants.hxx>

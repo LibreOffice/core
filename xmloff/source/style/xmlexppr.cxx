@@ -21,6 +21,7 @@
 #include <string_view>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>

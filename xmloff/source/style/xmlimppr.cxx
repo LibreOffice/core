@@ -24,6 +24,8 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+#include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

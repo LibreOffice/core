@@ -21,6 +21,7 @@
 
 #include <SchXMLImport.hxx>
 
+#include <com/sun/star/awt/Size.hpp>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/shapeimport.hxx>
 #include <list>

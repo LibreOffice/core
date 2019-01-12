@@ -25,14 +25,13 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <vector>
-#include <xmloff/attrlist.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace style { class XStyle; }
-    namespace container { class XIndexReplace; class XNameAccess;}
+    namespace container { class XNameAccess;}
     namespace beans { class XPropertySet; }
 } } }
 
