@@ -829,14 +829,37 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
 Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTables(const Any& /*catalog*/,
                                                             const OUString& schemaPattern,
                                                             const OUString& tableNamePattern,
-                                                            const Sequence<OUString>& /*types */)
+                                                            const Sequence<OUString>& types)
 {
-    OUString query(
+    OUStringBuffer buffer{
         "SELECT TABLE_CATALOG AS TABLE_CAT, TABLE_SCHEMA AS TABLE_SCHEM, TABLE_NAME,"
         "IF(STRCMP(TABLE_TYPE,'BASE TABLE'), TABLE_TYPE, 'TABLE') AS TABLE_TYPE, TABLE_COMMENT AS "
         "REMARKS "
         "FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA  LIKE '?' AND TABLE_NAME LIKE '?' "
-        "ORDER BY TABLE_TYPE, TABLE_SCHEMA, TABLE_NAME");
+    };
+
+    if (types.getLength() == 1)
+    {
+        buffer.append("AND TABLE_TYPE LIKE '");
+        buffer.append(types[0]);
+        buffer.append("'");
+    }
+    else if (types.getLength() > 1)
+    {
+        buffer.append("AND (TABLE_TYPE LIKE '");
+        buffer.append(types[0]);
+        buffer.append("'");
+        for (sal_Int32 i = 1; i < types.getLength(); ++i)
+        {
+            buffer.append(" OR TABLE_TYPE LIKE '");
+            buffer.append(types[i]);
+            buffer.append("'");
+        }
+        buffer.append(")");
+    }
+
+    buffer.append(" ORDER BY TABLE_TYPE, TABLE_SCHEMA, TABLE_NAME");
+    OUString query = buffer.makeStringAndClear();
 
     // TODO use prepared stmt instead
     // TODO escape schema, table name ?
