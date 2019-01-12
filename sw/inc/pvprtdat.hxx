@@ -24,7 +24,8 @@
 
 class SwPagePreviewPrtData
 {
-    sal_uLong nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
+
+    sal_Int32 nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
             nHorzSpace, nVertSpace;
     sal_uInt8 nRow, nCol;
     bool bLandscape : 1;
@@ -35,23 +36,23 @@ public:
             bLandscape(false)
     {}
 
-    sal_uLong GetLeftSpace() const          { return nLeftSpace; }
-    void SetLeftSpace( sal_uLong n )        { nLeftSpace = n; }
+    sal_Int32 GetLeftSpace() const          { return nLeftSpace; }
+    void SetLeftSpace( sal_Int32 n )        { nLeftSpace = n; }
 
-    sal_uLong GetRightSpace() const         { return nRightSpace; }
-    void SetRightSpace( sal_uLong n )       { nRightSpace = n; }
+    sal_Int32 GetRightSpace() const         { return nRightSpace; }
+    void SetRightSpace( sal_Int32 n )       { nRightSpace = n; }
 
-    sal_uLong GetTopSpace() const           { return nTopSpace; }
-    void SetTopSpace( sal_uLong n )         { nTopSpace = n; }
+    sal_Int32 GetTopSpace() const           { return nTopSpace; }
+    void SetTopSpace( sal_Int32 n )         { nTopSpace = n; }
 
-    sal_uLong GetBottomSpace() const        { return nBottomSpace; }
-    void SetBottomSpace( sal_uLong n )      { nBottomSpace = n; }
+    sal_Int32 GetBottomSpace() const        { return nBottomSpace; }
+    void SetBottomSpace(sal_Int32 n )       { nBottomSpace = n; }
 
-    sal_uLong GetHorzSpace() const          { return nHorzSpace; }
-    void SetHorzSpace( sal_uLong n )        { nHorzSpace = n; }
+    sal_Int32 GetHorzSpace() const          { return nHorzSpace; }
+    void SetHorzSpace( sal_Int32 n )        { nHorzSpace = n; }
 
-    sal_uLong GetVertSpace() const          { return nVertSpace; }
-    void SetVertSpace( sal_uLong n )        { nVertSpace = n; }
+    sal_Int32 GetVertSpace() const          { return nVertSpace; }
+    void SetVertSpace( sal_Int32 n )        { nVertSpace = n; }
 
     sal_uInt8 GetRow() const                { return nRow; }
     void SetRow(sal_uInt8 n )               { nRow = n; }
