@@ -85,7 +85,6 @@ job92=sc.ScDataPilotTablesObj
 job94=sc.ScDDELinksObj
 job95=sc.ScDrawPagesObj
 job96=sc.ScFilterDescriptorBase
-job97=sc.ScFunctionListObj
 job98=sc.ScHeaderFieldObj
 job99=sc.ScHeaderFieldsObj
 job126=sc.ScSheetLinkObj

@@ -8,17 +8,22 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/sheet/xfunctiondescriptions.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+#include <cppu/unotype.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -27,6 +32,7 @@ using namespace com::sun::star;
 namespace sc_apitest
 {
 class ScFunctionListObj : public CalcUnoApiTest,
+                          public apitest::XElementAccess,
                           public apitest::XEnumerationAccess,
                           public apitest::XFunctionDescriptions,
                           public apitest::XIndexAccess,
@@ -40,6 +46,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScFunctionListObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -64,6 +74,7 @@ private:
 
 ScFunctionListObj::ScFunctionListObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get())
     , XIndexAccess(392)
     , XNameAccess("IF")
 {
