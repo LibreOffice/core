@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/sheet/xfunctiondescriptions.hxx>
 
@@ -28,6 +29,7 @@ namespace sc_apitest
 class ScFunctionListObj : public CalcUnoApiTest,
                           public apitest::XEnumerationAccess,
                           public apitest::XFunctionDescriptions,
+                          public apitest::XIndexAccess,
                           public apitest::XNameAccess
 {
 public:
@@ -45,6 +47,10 @@ public:
     // XFunctionDescriptions
     CPPUNIT_TEST(testGetById);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
     CPPUNIT_TEST(testGetElementNames);
@@ -58,6 +64,7 @@ private:
 
 ScFunctionListObj::ScFunctionListObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(392)
     , XNameAccess("IF")
 {
 }
