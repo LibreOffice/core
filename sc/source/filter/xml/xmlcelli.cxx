@@ -57,6 +57,7 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/prstylei.hxx>
+#include <xmloff/xmlimppr.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>

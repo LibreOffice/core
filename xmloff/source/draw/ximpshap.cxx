@@ -54,6 +54,8 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
@@ -74,6 +76,9 @@
 #include "ximpcustomshape.hxx"
 #include <XMLEmbeddedObjectImportContext.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <xmloff/table/XMLTableImport.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
+#include <xmloff/attrlist.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/container/XChild.hpp>

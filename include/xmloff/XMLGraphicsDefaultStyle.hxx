@@ -24,11 +24,6 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/prstylei.hxx>
 
-namespace com { namespace sun { namespace star { namespace container
-{
-    class XNameContainer;
-} } } }
-
 class XMLOFF_DLLPUBLIC XMLGraphicsDefaultStyle : public XMLPropStyleContext
 {
 public:

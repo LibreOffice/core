@@ -19,6 +19,7 @@
 
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <tools/color.hxx>
@@ -30,6 +31,8 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/xmlimppr.hxx>
+#include <xmloff/xmlprmap.hxx>
 
 #include <XMLShapePropertySetContext.hxx>
 #include <algorithm>

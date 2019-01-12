@@ -20,17 +20,17 @@
 #ifndef INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
 #define INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
 
-#include <com/sun/star/chart2/data/XDataSequence.hpp>
-#include <com/sun/star/chart2/data/XDataSource.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <xmloff/dllapi.h>
 
 #include <vector>
 #include <map>
-#include <iterator>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class XMLOFF_DLLPUBLIC SchXMLSeriesHelper
 {

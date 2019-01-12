@@ -30,6 +30,7 @@
 
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 using namespace ::xmloff::token;

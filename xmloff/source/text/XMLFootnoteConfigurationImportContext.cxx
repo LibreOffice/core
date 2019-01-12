@@ -28,6 +28,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlement.hxx>
 
 #include <xmloff/families.hxx>
 #include <xmloff/xmluconv.hxx>

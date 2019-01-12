@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 
 #include <xmloff/table/XMLTableImport.hxx>
 #include <xmloff/xmltkmap.hxx>

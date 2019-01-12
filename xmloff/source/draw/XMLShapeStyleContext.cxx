@@ -23,15 +23,18 @@
 #include <XMLShapePropertySetContext.hxx>
 #include <xmloff/contextid.hxx>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/xmlimppr.hxx>
 
 #include "sdpropls.hxx"
 

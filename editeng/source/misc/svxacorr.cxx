@@ -63,6 +63,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <unotools/streamwrap.hxx>
 #include "SvXMLAutoCorrectImport.hxx"
 #include "SvXMLAutoCorrectExport.hxx"

@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <memory>
 

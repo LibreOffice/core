@@ -43,6 +43,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/settingsstore.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <xmloff/XMLFontStylesContext.hxx>

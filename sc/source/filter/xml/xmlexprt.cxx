@@ -99,6 +99,8 @@
 #include <formula/errorcodes.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLEventExport.hxx>
+#include <xmloff/xmlprmap.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 
 #include <sax/tools/converter.hxx>
 

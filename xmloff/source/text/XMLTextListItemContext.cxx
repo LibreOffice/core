@@ -26,8 +26,10 @@
 #include "XMLTextListBlockContext.hxx"
 #include <xmloff/txtimp.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <xmloff/xmlnumi.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include "XMLTextListItemContext.hxx"
 
 

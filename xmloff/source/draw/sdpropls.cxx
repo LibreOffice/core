@@ -53,6 +53,7 @@
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/TextureKind.hpp>
 #include <com/sun/star/drawing/TextureMode.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/txtprmap.hxx>
 #include <XMLClipPropertyHandler.hxx>
 #include <XMLIsPercentagePropertyHandler.hxx>

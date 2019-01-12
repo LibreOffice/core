@@ -21,11 +21,12 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
 
 #include <salhelper/simplereferenceobject.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace rtl { template <class reference_type> class Reference; }
 
 namespace com { namespace sun { namespace star
 {
@@ -44,7 +45,6 @@ namespace com { namespace sun { namespace star
 
 } } }
 
-class XMLPropertySetMapper;
 class SvXMLExportPropertyMapper;
 class SvXMLAutoStylePoolP;
 class SvXMLExport;

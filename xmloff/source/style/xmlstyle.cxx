@@ -32,6 +32,7 @@
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 #include <svl/itemset.hxx>
+#include <svl/style.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

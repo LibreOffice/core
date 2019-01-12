@@ -20,6 +20,7 @@
 #include "breakhdl.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/xmlement.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/uno/Any.hxx>

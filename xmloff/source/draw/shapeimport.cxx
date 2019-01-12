@@ -35,6 +35,8 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/table/XMLTableImport.hxx>
+#include <xmloff/attrlist.hxx>
 #include "ximpstyl.hxx"
 #include "ximpshap.hxx"
 #include "sdpropls.hxx"
@@ -46,6 +48,8 @@
 
 #include <map>
 #include <vector>
+
+class ShapeSortContext;
 
 using namespace ::std;
 using namespace ::com::sun::star;

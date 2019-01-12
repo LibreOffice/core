@@ -21,14 +21,14 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-
-#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
 
 class SvXMLImport;
 class SvXMLImportContext;
 
 namespace com { namespace sun { namespace star {
     namespace uno { template<typename T> class Reference; }
+    namespace uno { template <typename > class Sequence; }
     namespace beans { class XPropertySet; struct PropertyValue; }
     namespace frame { class XModel; }
     namespace container { class XNameAccess; }

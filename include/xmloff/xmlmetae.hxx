@@ -30,9 +30,10 @@
 #include <vector>
 
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+
+namespace com { namespace sun { namespace star { namespace document { class XDocumentProperties; } } } }
+namespace com { namespace sun { namespace star { namespace util { struct DateTime; } } } }
 
 
 class SvXMLExport;

@@ -21,6 +21,8 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/xmlimppr.hxx>
+#include <xmloff/xmlprmap.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::std;

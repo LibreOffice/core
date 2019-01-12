@@ -26,6 +26,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>

@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/prstylei.hxx>
-#include <xmloff/families.hxx>
 
 class SvXMLImport;
 

@@ -23,15 +23,14 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/families.hxx>
-#include <com/sun/star/util/XStringMapping.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
+#include <xmloff/xmltkmap.hxx>
+
+namespace com { namespace sun { namespace star { namespace chart { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 
 namespace com { namespace sun { namespace star {
     namespace frame {
         class XModel;
-    }
-    namespace task {
-        class XStatusIndicator;
     }
     namespace xml {
         namespace sax {
@@ -39,19 +38,12 @@ namespace com { namespace sun { namespace star {
         }
     }
     namespace chart2 {
-        namespace data {
-            class XDataProvider;
-            class XLabeledDataSequence;
-        }
         class XChartDocument;
         class XDataSeries;
     }
 }}}
 
-class SvXMLUnitConverter;
 class SvXMLStylesContext;
-class XMLChartImportPropertyMapper;
-class SvXMLTokenMap;
 class SvXMLImportContext;
 class SvXMLImport;
 

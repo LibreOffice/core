@@ -39,6 +39,8 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/xmlimppr.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 

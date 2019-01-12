@@ -22,6 +22,8 @@
 #include <SchXMLImport.hxx>
 #include "transporttypes.hxx"
 
+#include <com/sun/star/chart/XChartDocument.hpp>
+
 class SchXMLAxisContext : public SvXMLImportContext
 {
 public:

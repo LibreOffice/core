@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <set>
 #include <memory>
 #include <vector>
@@ -33,6 +34,7 @@
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
+#include <xmloff/xmlprmap.hxx>
 #include <xmloff/AutoStyleEntry.hxx>
 
 class SvXMLAutoStylePoolP;

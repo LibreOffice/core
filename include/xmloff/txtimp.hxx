@@ -22,28 +22,24 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <map>
 #include <memory>
 
-#include <xmloff/xmltkmap.hxx>
-#include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 class XMLTextListsHelper;
 class SvXMLImportContext;
 class SvXMLTokenMap;
 class SvXMLImportPropertyMapper;
-class SvXMLNamespaceMap;
 class SvXMLImport;
 class SvXMLStylesContext;
-class XMLTextListBlockContext;
 class SvxXMLListStyleContext;
 class XMLPropStyleContext;
 class SvI18NMap;
-class XMLSectionImportContext;
-class XMLFontStylesContext;
 template<class A> class XMLPropertyBackpatcher;
 class XMLEventsImportContext;
 
@@ -60,12 +56,13 @@ namespace text {
     class XFormField;
 }
 namespace frame { class XModel; }
-namespace container { class XNameContainer; class XIndexReplace; class XNameAccess; }
+namespace container { class XNameContainer; class XIndexReplace; }
 namespace beans { class XPropertySet; }
 namespace xml { namespace sax { class XAttributeList; } }
 namespace util { struct DateTime; }
-namespace lang { class XMultiServiceFactory; }
 } } }
+
+namespace rtl { template <class reference_type> class Reference; }
 
 enum SwXMLTextElemTokens
 {

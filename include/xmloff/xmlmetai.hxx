@@ -24,10 +24,10 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
 
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace document { class XDocumentProperties; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace dom { class XSAXDocumentBuilder2; } } } } }
 
 /// handles the top-level office:document-meta element of meta.xml documents
 // NB: virtual inheritance is needed so that the context that handles the

@@ -32,6 +32,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/txtimp.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vector>
 

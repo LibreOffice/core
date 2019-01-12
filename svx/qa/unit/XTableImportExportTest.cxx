@@ -23,6 +23,7 @@
 #include <xmlxtexp.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 using namespace css;
 

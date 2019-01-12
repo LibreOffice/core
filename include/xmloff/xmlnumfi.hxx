@@ -23,14 +23,15 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmlstyle.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/lang.h>
 #include <memory>
 #include <vector>
-#include <unotools/localedatawrapper.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
 
 #define XML_NUMBERSTYLES "NumberStyles"
 
@@ -58,14 +59,9 @@ enum SvXMLDateElementAttributes
 class Color;
 class SvXMLNumImpData;
 class SvXMLImport;
-class SvXMLStyleContext;
-class SvXMLStylesContext;
 struct SvXMLNumberInfo;
 class SvNumberFormatter;
-class SvtSysLocale;
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-}}}}
+class LocaleDataWrapper;
 
 
 //  use SvXMLNumFmtHelper in the context for <office:styles> to create

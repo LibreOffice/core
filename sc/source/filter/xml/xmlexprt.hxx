@@ -21,6 +21,7 @@
 
 #include <xmloff/xmlexp.hxx>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 
 #include <address.hxx>
 

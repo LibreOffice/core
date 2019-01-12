@@ -23,7 +23,6 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/prstylei.hxx>
 
-class SvXMLTokenMap;
 class XMLEventsImportContext;
 
 class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext

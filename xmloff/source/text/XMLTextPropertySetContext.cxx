@@ -23,6 +23,7 @@
 #include <XMLBackgroundImageContext.hxx>
 #include "XMLSectionFootnoteConfigImport.hxx"
 
+#include <xmloff/xmlimppr.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmltabi.hxx>
 #include "txtdropi.hxx"

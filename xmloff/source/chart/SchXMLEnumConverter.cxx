@@ -20,6 +20,7 @@
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include "SchXMLEnumConverter.hxx"
+#include <xmloff/xmlement.hxx>
 #include <rtl/instance.hxx>
 
 using namespace ::xmloff::token;

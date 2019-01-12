@@ -25,6 +25,7 @@
 #include "txtprhdl.hxx"
 #include <xmlsdtypes.hxx>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

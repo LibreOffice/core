@@ -60,6 +60,8 @@
 #include <xmloff/families.hxx>
 #include <xmloff/styleexp.hxx>
 #include <xmloff/settingsstore.hxx>
+#include <xmloff/table/XMLTableExport.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>

@@ -20,13 +20,14 @@
 #ifndef INCLUDED_XMLOFF_XMLPRMAP_HXX
 #define INCLUDED_XMLOFF_XMLPRMAP_HXX
 
-#include <rtl/ref.hxx>
 #include <xmloff/dllapi.h>
 #include <unotools/saveopt.hxx>
 #include <rtl/ustring.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
+
+namespace rtl { template <class reference_type> class Reference; }
 
 class SvXMLUnitConverter;
 class XMLPropertyHandler;
