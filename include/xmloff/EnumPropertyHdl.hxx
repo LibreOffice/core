@@ -21,9 +21,9 @@
 #define INCLUDED_XMLOFF_ENUMPROPERTYHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
-#include <com/sun/star/uno/Type.h>
 #include <cppu/unotype.hxx>
-#include <xmloff/xmlement.hxx>
+
+template <typename EnumT> struct SvXMLEnumMapEntry;
 
 /**
     PropertyHandler for a generic xml enumeration type:

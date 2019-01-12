@@ -27,6 +27,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 
+#include <com/sun/star/container/XNameContainer.hpp>
+
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

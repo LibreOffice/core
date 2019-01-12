@@ -30,6 +30,7 @@
 #include <xmloff/txtparae.hxx>
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include "XMLSectionExport.hxx"
 #include "XMLLineNumberingExport.hxx"
 #include "txtexppr.hxx"

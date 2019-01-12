@@ -23,12 +23,7 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <cppuhelper/implbase.hxx>

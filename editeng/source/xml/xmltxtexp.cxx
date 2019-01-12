@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sot/storage.hxx>

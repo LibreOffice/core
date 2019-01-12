@@ -19,6 +19,7 @@
 
 #include "PageMasterPropMapper.hxx"
 
+#include <rtl/ref.hxx>
 #include <xmloff/PageMasterStyleMap.hxx>
 #include "PageMasterPropHdlFactory.hxx"
 

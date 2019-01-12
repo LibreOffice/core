@@ -26,6 +26,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <sax/fastattribs.hxx>
+#include <comphelper/attributelist.hxx>
 
 using namespace ::com::sun::star;
 

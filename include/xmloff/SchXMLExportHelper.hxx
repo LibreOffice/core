@@ -21,16 +21,9 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <sal/types.h>
+#include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/util/XStringMapping.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/Point.hpp>
-#include <xmloff/xmlprmap.hxx>
 
-#include <queue>
-#include <vector>
 #include <memory>
 
 class SvXMLAutoStylePoolP;

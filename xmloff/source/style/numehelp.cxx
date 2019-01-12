@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <sax/tools/converter.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>

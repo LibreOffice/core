@@ -20,6 +20,7 @@
 #include "SvXMLAutoCorrectExport.hxx"
 
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star::uno;

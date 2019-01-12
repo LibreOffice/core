@@ -33,9 +33,11 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
+#include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
@@ -51,12 +53,14 @@
 #include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/XMLEventExport.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include <XMLStarBasicExportHandler.hxx>
 #include <XMLScriptExportHandler.hxx>
 #include <xmloff/SettingsExportHelper.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <xmloff/GradientStyle.hxx>
 #include <xmloff/HatchStyle.hxx>
 #include <xmloff/ImageStyle.hxx>

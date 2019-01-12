@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 class SvXMLImport;

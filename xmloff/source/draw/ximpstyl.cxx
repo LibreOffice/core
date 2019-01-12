@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
@@ -48,6 +49,7 @@
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <XMLNumberStylesImport.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <xmloff/table/XMLTableImport.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

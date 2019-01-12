@@ -19,6 +19,7 @@
 
 #include "PageMasterPropHdlFactory.hxx"
 #include <enummaps.hxx>
+#include <xmloff/xmlement.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmlbahdl.hxx"

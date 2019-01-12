@@ -18,6 +18,7 @@
  */
 
 #include <tools/urlobj.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

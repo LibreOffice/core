@@ -24,12 +24,13 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/ucb/XAnyCompare.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 #include <set>
 
 namespace com { namespace sun { namespace star { namespace container {
     class XIndexReplace; } } } }
+namespace com { namespace sun { namespace star { namespace ucb { class XAnyCompare; } } } }
 
 
 class XMLTextListAutoStylePool_Impl;

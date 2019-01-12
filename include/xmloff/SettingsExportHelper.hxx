@@ -22,10 +22,11 @@
 
 #include <xmloff/dllapi.h>
 
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/formula/SymbolDescriptor.hpp>
-#include <com/sun/star/util/XStringSubstitution.hpp>
-#include <xmloff/xmlexp.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace formula { struct SymbolDescriptor; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XStringSubstitution; } } } }
 
 namespace com
 {

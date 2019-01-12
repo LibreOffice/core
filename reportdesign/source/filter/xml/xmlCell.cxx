@@ -23,6 +23,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>

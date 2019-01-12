@@ -34,6 +34,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlement.hxx>
 
 using namespace ::com::sun::star;
 

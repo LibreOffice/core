@@ -21,19 +21,17 @@
 #define INCLUDED_XMLOFF_XMLNUME_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/mapunit.hxx>
-#include <xmloff/attrlist.hxx>
+#include <xmloff/dllapi.h>
 
 namespace com { namespace sun { namespace star {
-    namespace frame { class XModel; }
     namespace style { class XStyle; }
     namespace container { class XIndexReplace; }
     namespace beans { struct PropertyValue; }
 } } }
 
-class SvXMLNamespaceMap;
-class SvXMLUnitConverter;
-class SvXMLExportItemMapper;
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+
 class SvXMLExport;
 class XMLTextListAutoStylePool;
 

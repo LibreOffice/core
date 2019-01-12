@@ -23,6 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 #include <sax/tools/converter.hxx>
 

@@ -32,6 +32,7 @@
 #include "property_description.hxx"
 #include "property_meta_data.hxx"
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/Duration.hpp>

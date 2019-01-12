@@ -23,6 +23,7 @@
 #include <XMLTextColumnsContext.hxx>
 #include <xmloff/PageMasterStyleMap.hxx>
 #include "XMLFootnoteSeparatorImport.hxx"
+#include <xmloff/xmlimppr.hxx>
 
 
 using namespace ::com::sun::star::uno;

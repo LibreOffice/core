@@ -20,8 +20,8 @@
 #ifndef INCLUDED_XMLOFF_XMLERROR_HXX
 #define INCLUDED_XMLOFF_XMLERROR_HXX
 
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vector>

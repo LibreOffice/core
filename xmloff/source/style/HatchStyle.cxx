@@ -33,6 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmlement.hxx>
 
 using namespace ::com::sun::star;
 

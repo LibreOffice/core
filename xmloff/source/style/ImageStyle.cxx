@@ -19,6 +19,7 @@
 
 #include <xmloff/ImageStyle.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>

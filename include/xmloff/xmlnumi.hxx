@@ -25,12 +25,10 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/container/XIndexReplace.hpp>
-
 #include <xmloff/xmlstyle.hxx>
-#include <com/sun/star/style/NumberingType.hpp>
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XIndexReplace; } } } }
 
 class SvxXMLListLevelStyleContext_Impl;
 typedef std::vector<rtl::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLListStyle_Impl;

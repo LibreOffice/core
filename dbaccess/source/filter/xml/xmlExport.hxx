@@ -35,6 +35,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlexppr.hxx>
 #include <dsntypes.hxx>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

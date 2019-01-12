@@ -22,6 +22,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 #include "xmlHelper.hxx"
 #include "xmlGroup.hxx"
 #include "xmlSection.hxx"

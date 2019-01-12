@@ -26,6 +26,8 @@
 #include <document.hxx>
 #include <scmatrix.hxx>
 #include <com/sun/star/sheet/XDDELink.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/style/GraphicLocation.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <sax/tools/converter.hxx>
 

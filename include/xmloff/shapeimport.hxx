@@ -22,28 +22,28 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlictxt.hxx>
 
-#include <xmloff/table/XMLTableImport.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <vector>
 #include <memory>
 
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XShapes; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+
 class SvXMLImport;
-class SvXMLImportContext;
 class SvXMLTokenMap;
 class SvXMLStylesContext;
 class XMLSdPropHdlFactory;
-class XMLPropertySetMapper;
 class SvXMLImportPropertyMapper;
+class XMLTableImport;
 
 
 enum SdXMLGroupShapeElemTokenMap
@@ -213,7 +213,6 @@ public:
 };
 
 
-class ShapeSortContext;
 struct XMLShapeImportHelperImpl;
 struct XMLShapeImportPageContextImpl;
 

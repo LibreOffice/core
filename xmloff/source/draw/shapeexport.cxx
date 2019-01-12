@@ -111,6 +111,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/table/XMLTableExport.hxx>
+#include <xmloff/ProgressBarHelper.hxx>
 
 #include <anim.hxx>
 #include <EnhancedCustomShapeToken.hxx>

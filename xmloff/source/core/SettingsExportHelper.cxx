@@ -31,6 +31,7 @@
 
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>

@@ -48,6 +48,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 
 
 #include "convdic.hxx"

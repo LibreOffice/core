@@ -21,6 +21,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
+#include <xmloff/xmlimppr.hxx>
 #include "PagePropertySetContext.hxx"
 
 using namespace com::sun::star;

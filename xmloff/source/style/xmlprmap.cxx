@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ref.hxx>
+
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmltypes.hxx>

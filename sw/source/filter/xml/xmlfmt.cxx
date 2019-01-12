@@ -47,6 +47,7 @@
 #include <xmloff/XMLTextMasterStylesContext.hxx>
 #include <xmloff/XMLTextShapeStyleContext.hxx>
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
+#include <xmloff/table/XMLTableImport.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"

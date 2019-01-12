@@ -25,6 +25,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;

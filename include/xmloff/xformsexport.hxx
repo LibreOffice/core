@@ -26,7 +26,6 @@ class SvXMLExport;
 namespace com { namespace sun { namespace star {
     namespace uno { template<typename T> class Reference; }
     namespace uno { template<typename T> class Sequence; }
-    namespace frame { class XModel; }
     namespace beans { class XPropertySet; struct PropertyValue; }
     namespace container { class XNameAccess; }
 } } }

@@ -28,6 +28,8 @@
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>

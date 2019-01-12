@@ -26,21 +26,12 @@
 
 #include <xmloff/dllapi.h>
 #include <xmloff/prhdlfac.hxx>
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <xmloff/xmlexppr.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 
-template<typename EnumT> struct SvXMLEnumMapEntry;
-class Color;
-
 namespace xmloff
 {
-
-
-    class IFormsExportContext;
-    class OFormLayerXMLImport_Impl;
 
 
     //= ORotationAngleHandler

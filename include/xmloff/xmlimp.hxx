@@ -27,44 +27,41 @@
 
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
-#include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XGraphicStorageHandler.hpp>
-#include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/weak.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/SchXMLImportHelper.hxx>
-#include <xmloff/ProgressBarHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/formlayerimport.hxx>
-#include <comphelper/attributelist.hxx>
 #include <sax/fastattribs.hxx>
 #include <rtl/ustring.hxx>
 #include <unordered_map>
 
-#include <com/sun/star/beans/NamedValue.hpp>
-
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com { namespace sun { namespace star { namespace document { class XEmbeddedObjectResolver; } } } }
+namespace com { namespace sun { namespace star { namespace document { class XGraphicStorageHandler; } } } }
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com { namespace sun { namespace star { namespace graphic { class XGraphic; } } } }
+namespace com { namespace sun { namespace star { namespace task { class XStatusIndicator; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XAttributeList; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastAttributeList; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastContextHandler; } } } } }
+namespace comphelper { class AttributeList; }
+
+class ProgressBarHelper;
 
 #define NAMESPACE_TOKEN( prefixToken ) ( ( sal_Int32( prefixToken + 1 ) ) << NMSP_SHIFT )
 #define XML_ELEMENT( prefix, name ) ( NAMESPACE_TOKEN( XML_NAMESPACE_##prefix ) | name )
@@ -81,7 +78,6 @@ namespace com { namespace sun { namespace star {
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
 class SvXMLNamespaceMap;
-class SvXMLImportContext;
 class SvXMLImport_Impl;
 class SvXMLUnitConverter;
 class SvXMLNumFmtHelper;

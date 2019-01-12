@@ -30,6 +30,7 @@
 #include <stringconstants.hxx>
 #include <strings.hxx>
 #include "xmlEnums.hxx"
+#include <rtl/ref.hxx>
 
 namespace dbaxml
 {

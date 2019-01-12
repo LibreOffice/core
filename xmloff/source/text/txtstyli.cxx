@@ -30,7 +30,10 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/xmlimppr.hxx>
+#include <xmloff/xmlement.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>

@@ -20,8 +20,9 @@
 #define INCLUDED_XMLOFF_XMLCHARCONTEXT_HXX
 
 #include <xmloff/dllapi.h>
-#include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmlictxt.hxx>
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 class XMLOFF_DLLPUBLIC XMLCharContext : public SvXMLImportContext
 {

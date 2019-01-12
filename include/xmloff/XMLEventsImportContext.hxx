@@ -23,11 +23,8 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlevent.hxx>
 
-#include <map>
 #include <vector>
 
 namespace com { namespace sun { namespace star {
@@ -36,6 +33,8 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameReplace; }
     namespace document { class XEventsSupplier; }
 } } }
+
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 typedef ::std::pair<
             OUString,

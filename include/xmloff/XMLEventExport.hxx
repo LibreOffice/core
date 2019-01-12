@@ -23,8 +23,6 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlevent.hxx>
 
@@ -38,6 +36,9 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace beans { struct PropertyValue; }
 } } }
+
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 typedef ::std::map< OUString, std::unique_ptr<XMLEventExportHandler> > HandlerMap;
 typedef ::std::map< OUString, XMLEventName > NameMap;

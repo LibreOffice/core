@@ -32,6 +32,7 @@
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include "txtparai.hxx"

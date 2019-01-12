@@ -52,6 +52,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmlement.hxx>
 #include <txtflde.hxx>
 
 

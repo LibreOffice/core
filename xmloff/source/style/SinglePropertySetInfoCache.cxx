@@ -19,6 +19,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::beans::XPropertySet;

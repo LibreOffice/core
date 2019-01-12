@@ -39,6 +39,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <memory>
 

@@ -20,6 +20,7 @@
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <tools/debug.hxx>
 
@@ -31,6 +32,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlement.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <XMLBackgroundImageContext.hxx>
 

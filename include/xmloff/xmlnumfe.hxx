@@ -23,11 +23,14 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/lang.h>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatsSupplier; } } } }
 
 #define XML_WRITTENNUMBERSTYLES "WrittenNumberStyles"
 
@@ -35,13 +38,10 @@ class Color;
 class LocaleDataWrapper;
 class CharClass;
 class SvXMLExport;
-class SvXMLNamespaceMap;
-class SvXMLAttributeList;
 class SvNumberFormatter;
 class SvNumberformat;
 class SvXMLNumUsedList_Impl;
 
-struct SvXMLEmbeddedTextEntry;
 class SvXMLEmbeddedTextEntryArr;
 
 class XMLOFF_DLLPUBLIC SvXMLNumFmtExport final

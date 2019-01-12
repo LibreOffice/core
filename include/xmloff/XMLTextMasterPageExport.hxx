@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <rtl/ustring.hxx>
-#include <xmloff/attrlist.hxx>
 #include <xmloff/XMLPageExport.hxx>
 
 namespace com { namespace sun { namespace star {

@@ -12,8 +12,11 @@
 #define INCLUDED_XMLOFF_AUTOSTYLEENTRY_HXX
 
 #include <sal/config.h>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Any.hxx>
 #include <xmloff/dllapi.h>
-#include <memory>
+#include <utility>
+#include <vector>
 
 namespace xmloff
 {

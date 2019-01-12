@@ -22,18 +22,18 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/style/XStyle.hpp>
 #include <vector>
 #include <xmloff/xmlstyle.hxx>
 
 #include <unordered_set>
 
 struct XMLPropertyState;
-class SvXMLStylesContext;
 
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
+
+namespace com { namespace sun { namespace star { namespace style { class XStyle; } } } }
 
 typedef std::unordered_set<OUString> OldFillStyleDefinitionSet;
 
