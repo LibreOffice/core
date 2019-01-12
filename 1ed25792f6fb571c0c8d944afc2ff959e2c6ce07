@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_e6af2a92",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-12T12:23:44Z",
+      "side": 1,
+      "message": "this is not the same as the previous condition. It might be a bug fix actually, but then it should really go into it\u0027s own commit",
+      "revId": "1ed25792f6fb571c0c8d944afc2ff959e2c6ce07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f4e5783_c6942e47",
+        "filename": "sc/source/ui/docshell/docfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4775,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-12T12:23:44Z",
+      "side": 1,
+      "message": "ditto here",
+      "revId": "1ed25792f6fb571c0c8d944afc2ff959e2c6ce07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
