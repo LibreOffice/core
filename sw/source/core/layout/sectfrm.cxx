@@ -2598,12 +2598,12 @@ void SwSectionFrame::SwClientNotify( const SwModify& rMod, const SfxHint& rHint 
 {
     SwFrame::SwClientNotify(rMod, rHint);
     // #i117863#
-    const SwSectionFrameMoveAndDeleteHint* pHint =
-                    dynamic_cast<const SwSectionFrameMoveAndDeleteHint*>(&rHint);
-    if (pHint && pHint->GetId() == SfxHintId::Dying && &rMod == GetDep())
-    {
-        SwSectionFrame::MoveContentAndDelete( this, pHint->IsSaveContent() );
-    }
+    if(&rMod != GetDep())
+        return;
+    const auto pHint = dynamic_cast<const SwSectionFrameMoveAndDeleteHint*>(&rHint);
+    if(!pHint)
+        return;
+    SwSectionFrame::MoveContentAndDelete( this, pHint->IsSaveContent() );
 }
 
 void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,

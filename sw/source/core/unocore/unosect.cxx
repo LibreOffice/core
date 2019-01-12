@@ -497,10 +497,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXTextSection::getPropertySetInfo()
 {
     SolarMutexGuard g;
-
-    static const uno::Reference< beans::XPropertySetInfo >  aRef =
-        m_pImpl->m_rPropSet.getPropertySetInfo();
-    return aRef;
+    return m_pImpl->m_rPropSet.getPropertySetInfo();
 }
 
 static void
@@ -952,7 +949,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
     SwSectionFormat *const pFormat = GetSectionFormat();
     if (!pFormat && !m_bIsDescriptor)
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException( "non-descriptor section without format");
     }
 
     uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());

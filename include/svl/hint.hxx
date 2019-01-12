@@ -108,9 +108,10 @@ enum class SfxHintId {
 // STARMATH
     MathFormatChanged,
 
-// SW
+// Sw
     SwDrawViewsCreated,
     SwSplitNodeOperation,
+    SwSectionFrameMoveAndDelete,
 };
 
 template< typename charT, typename traits >
@@ -188,6 +189,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::MathFormatChanged: return stream << "MathFormatChanged";
     case SfxHintId::SwDrawViewsCreated: return stream << "SwDrawViewsCreated";
     case SfxHintId::SwSplitNodeOperation: return stream << "SwSplitNodeOperation";
+    case SfxHintId::SwSectionFrameMoveAndDelete: return stream << "SwSectionFrameMoveAndDelete";
     default: return stream << "unk(" << std::to_string(int(id)) << ")";
     }
 }
