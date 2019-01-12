@@ -9,13 +9,15 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xnameaccess.hxx>
 #include <test/sheet/xfunctiondescriptions.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -25,7 +27,8 @@ namespace sc_apitest
 {
 class ScFunctionListObj : public CalcUnoApiTest,
                           public apitest::XEnumerationAccess,
-                          public apitest::XFunctionDescriptions
+                          public apitest::XFunctionDescriptions,
+                          public apitest::XNameAccess
 {
 public:
     ScFunctionListObj();
@@ -42,6 +45,11 @@ public:
     // XFunctionDescriptions
     CPPUNIT_TEST(testGetById);
 
+    // XNameAccess
+    CPPUNIT_TEST(testGetByName);
+    CPPUNIT_TEST(testGetElementNames);
+    CPPUNIT_TEST(testHasByName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -50,6 +58,7 @@ private:
 
 ScFunctionListObj::ScFunctionListObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XNameAccess("IF")
 {
 }
 
@@ -75,7 +84,7 @@ void ScFunctionListObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFunctionListObj);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
