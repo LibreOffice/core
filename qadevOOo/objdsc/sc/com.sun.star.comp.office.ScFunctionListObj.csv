@@ -1,6 +1,3 @@
-"ScFunctionListObj";"com::sun::star::container::XNameAccess";"getByName()"
-"ScFunctionListObj";"com::sun::star::container::XNameAccess";"getElementNames()"
-"ScFunctionListObj";"com::sun::star::container::XNameAccess";"hasByName()"
 "ScFunctionListObj";"com::sun::star::container::XIndexAccess";"getCount()"
 "ScFunctionListObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScFunctionListObj";"com::sun::star::container::XElementAccess";"getElementType()"
