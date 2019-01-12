@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <algorithm>
+#include <cstddef>
 #include <deque>
 #include <vector>
 
@@ -132,7 +133,7 @@ struct SfxDispatcher_Impl
 
     SfxSlotFilterState   nFilterEnabling; // 1==filter enabled slots,
                                           // 2==ReadOnlyDoc overturned
-    o3tl::array_view<sal_uInt16 const>
+    o3tl::span<sal_uInt16 const>
                          pFilterSIDs;   // sorted Array of SIDs
     SfxDisableFlags      nDisableFlags;
     bool                 bFlushed;
@@ -1541,11 +1542,11 @@ void SfxDispatcher::FlushImpl()
         pDisp->SetSlotFilter();
 */
 void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
-        o3tl::array_view<sal_uInt16 const> pSIDs)
+        o3tl::span<sal_uInt16 const> pSIDs)
 {
 #ifdef DBG_UTIL
     // Check Array
-    for ( size_t n = 1; n < pSIDs.size(); ++n )
+    for ( std::ptrdiff_t n = 1; n < pSIDs.size(); ++n )
         DBG_ASSERT( pSIDs[n] > pSIDs[n-1], "SetSlotFilter: SIDs not sorted" );
 #endif
 

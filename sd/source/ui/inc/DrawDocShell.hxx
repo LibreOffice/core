@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DRAWDOCSHELL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DRAWDOCSHELL_HXX
 
-#include <o3tl/array_view.hxx>
+#include <o3tl/span.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -146,7 +146,7 @@ public:
      */
     bool                    CheckPageName(weld::Window* pWin, OUString& rName );
 
-    void                    SetSlotFilter(bool bEnable = false, o3tl::array_view<sal_uInt16 const> pSIDs = o3tl::array_view<sal_uInt16 const>()) { mbFilterEnable = bEnable; mpFilterSIDs = pSIDs; }
+    void                    SetSlotFilter(bool bEnable = false, o3tl::span<sal_uInt16 const> pSIDs = o3tl::span<sal_uInt16 const>()) { mbFilterEnable = bEnable; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
 
     SfxStyleFamily          GetStyleFamily() const { return mnStyleFamily; }
@@ -212,7 +212,7 @@ protected:
     rtl::Reference<FuPoor> mxDocShellFunction;
     DocumentType const      meDocType;
     SfxStyleFamily          mnStyleFamily;
-    o3tl::array_view<sal_uInt16 const>
+    o3tl::span<sal_uInt16 const>
                             mpFilterSIDs;
     bool                    mbFilterEnable;
     bool const              mbSdDataObj;
