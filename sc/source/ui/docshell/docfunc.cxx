@@ -1827,7 +1827,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     std::unique_ptr<ScUndoRemoveMerge> pUndoRemoveMerge;
 
     itr = aMark.begin();
-    for (; itr != itrEnd && nTabCount; ++itr)
+    for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
         i = *itr;
         if( rDoc.HasAttrib( nMergeTestStartCol, nMergeTestStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
@@ -4730,7 +4730,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( &rDoc, nDestStartTab, nDestStartTab );
         ScMarkData::iterator itr = aMark.begin(), itrEnd = aMark.end();
-        for (; itr != itrEnd && nTabCount; ++itr)
+        for (; itr != itrEnd && *itr < nTabCount; ++itr)
             if (*itr != nDestStartTab)
                 pUndoDoc->AddUndoTab( *itr, *itr );
 
