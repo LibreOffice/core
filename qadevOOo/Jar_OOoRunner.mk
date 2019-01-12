@@ -981,7 +981,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScDrawPageObj \
     qadevOOo/tests/java/mod/_sc/ScDrawPagesObj \
     qadevOOo/tests/java/mod/_sc/ScFilterDescriptorBase \
-    qadevOOo/tests/java/mod/_sc/ScFunctionListObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFieldObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFieldsObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextCursor \

@@ -24,7 +24,6 @@
 -o sc.ScDrawPageObj
 -o sc.ScDrawPagesObj
 -o sc.ScFilterDescriptorBase
--o sc.ScFunctionListObj
 # ported to cppunit -o sc.ScHeaderFieldObj
 -o sc.ScHeaderFieldsObj
 # The two HeaderFooter tests seem to fail randomly
