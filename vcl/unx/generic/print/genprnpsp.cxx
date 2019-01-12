@@ -63,12 +63,8 @@
 using namespace psp;
 using namespace com::sun::star;
 
-/*
- *  static helpers
- */
-static OUString getPdfDir( const PrinterInfo& rInfo )
+bool getPdfDir( const PrinterInfo& rInfo, OUString &rDir )
 {
-    OUString aDir;
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
@@ -76,13 +72,13 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
         if( aToken.startsWith( "pdf=" ) )
         {
             sal_Int32 nPos = 0;
-            aDir = aToken.getToken( 1, '=', nPos );
-            if( aDir.isEmpty() && getenv( "HOME" ) )
-                aDir = OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
-            break;
+            rDir = aToken.getToken( 1, '=', nPos );
+            if( rDir.isEmpty() && getenv( "HOME" ) )
+                rDir = OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
+            return true;
         }
     }
-    return aDir;
+    return false;
 }
 
 namespace
@@ -418,16 +414,9 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         pInfo->maLocation       = rInfo.m_aLocation;
         pInfo->maComment        = rInfo.m_aComment;
 
-        sal_Int32 nIndex = 0;
-        while( nIndex != -1 )
-        {
-            OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( aToken.match( "pdf=" ) )
-            {
-                pInfo->maLocation = getPdfDir( rInfo );
-                break;
-            }
-        }
+        OUString sPdfDir;
+        if (getPdfDir(rInfo, sPdfDir))
+            pInfo->maLocation = sPdfDir;
 
         pList->Add( std::move(pInfo) );
     }
@@ -855,21 +844,16 @@ bool PspSalPrinter::StartJob(
 
     int nMode = 0;
     // check whether this printer is configured as fax
-    sal_Int32 nIndex = 0;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
-    while( nIndex != -1 )
+    OUString sPdfDir;
+    if (getPdfDir(rInfo, sPdfDir))
     {
-        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( aToken.startsWith( "pdf=" ) )
-        {
-            m_bPdf = true;
-            m_aTmpFile = getTmpName();
-            nMode = S_IRUSR | S_IWUSR;
+        m_bPdf = true;
+        m_aTmpFile = getTmpName();
+        nMode = S_IRUSR | S_IWUSR;
 
-            if( m_aFileName.isEmpty() )
-                m_aFileName = getPdfDir( rInfo ) + "/" + rJobName + ".pdf";
-            break;
-        }
+        if( m_aFileName.isEmpty() )
+            m_aFileName = sPdfDir + "/" + rJobName + ".pdf";
     }
     m_aPrinterGfx.Init( m_aJobData );
 
