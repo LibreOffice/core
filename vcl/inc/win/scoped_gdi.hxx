@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_WIN_GDI_SCOPED_GDI_HXX
-#define INCLUDED_VCL_WIN_GDI_SCOPED_GDI_HXX
+#ifndef INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
+#define INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
 
 #include <win/svsys.h>
 #include <win/wincomp.hxx>
@@ -37,6 +37,6 @@ using ScopedHBRUSH = std::unique_ptr<HBRUSH, HBRUSHDeleter>;
 using ScopedHRGN = std::unique_ptr<HRGN, HRGNDeleter>;
 using ScopedHDC = std::unique_ptr<HDC, HDCDeleter>;
 
-#endif // INCLUDED_VCL_WIN_GDI_SCOPED_GDI_HXX
+#endif // INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

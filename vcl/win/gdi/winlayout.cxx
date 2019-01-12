@@ -32,13 +32,13 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
+#include <win/scoped_gdi.hxx>
 #include <outdev.h>
 
 #include <win/DWriteTextRenderer.hxx>
 
 #include <sft.hxx>
 #include <sallayout.hxx>
-#include "scoped_gdi.hxx"
 
 #include <cstdio>
 #include <cstdlib>

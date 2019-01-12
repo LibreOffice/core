@@ -20,7 +20,6 @@
 #include <svsys.h>
 
 #include "gdiimpl.hxx"
-#include "scoped_gdi.hxx"
 
 #include <string.h>
 #include <rtl/strbuf.hxx>
@@ -33,6 +32,7 @@
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
 #include <win/salbmp.h>
+#include <win/scoped_gdi.hxx>
 #include <vcl/salbtype.hxx>
 #include <win/salframe.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
