@@ -35,10 +35,10 @@
 #include <outdev.h>
 
 #include <win/DWriteTextRenderer.hxx>
+#include <win/scoped_gdi.hxx>
 
 #include <sft.hxx>
 #include <sallayout.hxx>
-#include "scoped_gdi.hxx"
 
 #include <cstdio>
 #include <cstdlib>
