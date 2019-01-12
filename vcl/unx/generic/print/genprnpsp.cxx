@@ -65,18 +65,15 @@ using namespace com::sun::star;
 
 bool getPdfDir( const PrinterInfo& rInfo, OUString &rDir )
 {
-    sal_Int32 nIndex = 0;
-    while( nIndex != -1 )
+    sal_Int32 nIndex {rInfo.m_aFeatures.indexOf("pdf=")};
+    // check that "pdf" is a whole word, knowing that tokens are separated by ','
+    if (nIndex==0 || (nIndex>0 && rInfo.m_aFeatures[nIndex-1]==','))
     {
-        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( aToken.startsWith( "pdf=" ) )
-        {
-            sal_Int32 nPos = 0;
-            rDir = aToken.getToken( 1, '=', nPos );
-            if( rDir.isEmpty() && getenv( "HOME" ) )
-                rDir = OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
-            return true;
-        }
+        nIndex += RTL_CONSTASCII_LENGTH("pdf=");
+        rDir = rInfo.m_aFeatures.getToken(0, ',', nIndex);
+        if( rDir.isEmpty() && getenv( "HOME" ) )
+            rDir = OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
+        return true;
     }
     return false;
 }
