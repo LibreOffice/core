@@ -71,8 +71,12 @@ bool getPdfDir( const PrinterInfo& rInfo, OUString &rDir )
     {
         nIndex += RTL_CONSTASCII_LENGTH("pdf=");
         rDir = rInfo.m_aFeatures.getToken(0, ',', nIndex);
-        if( rDir.isEmpty() && getenv( "HOME" ) )
-            rDir = OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
+        if (rDir.isEmpty())
+        {
+            char * pHome = getenv( "HOME" );
+            if (pHome)
+                rDir = OUString( pHome, strlen( pHome ), osl_getThreadTextEncoding() );
+        }
         return true;
     }
     return false;
