@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f4e5783_e65e0ae5",
+        "filename": "offapi/com/sun/star/frame/XAppDispatchProvider.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-12T06:09:30Z",
+      "side": 1,
+      "message": "sberg, can we change this?",
+      "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
