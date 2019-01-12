@@ -252,7 +252,7 @@ class SwSectionFrameMoveAndDeleteHint : public SfxHint
 {
     public:
         SwSectionFrameMoveAndDeleteHint( const bool bSaveContent )
-            : SfxHint( SfxHintId::Dying )
+            : SfxHint( SfxHintId::SwSectionFrameMoveAndDelete )
             , mbSaveContent( bSaveContent )
         {}
 

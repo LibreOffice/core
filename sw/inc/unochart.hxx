@@ -44,6 +44,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <rtl/ref.hxx>
+#include <svl/listener.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
 
@@ -229,8 +230,9 @@ SwChartDataSequenceBaseClass;
 
 class SwChartDataSequence :
     public SwChartDataSequenceBaseClass,
-    public SwClient
+    public SvtListener
 {
+    SwFrameFormat* m_pFormat;
     ::comphelper::OInterfaceContainerHelper2          m_aEvtListeners;
     ::comphelper::OInterfaceContainerHelper2          m_aModifyListeners;
     css::chart2::data::DataSequenceRole               m_aRole;
@@ -248,10 +250,6 @@ class SwChartDataSequence :
 
     SwChartDataSequence( const SwChartDataSequence &rObj );
     SwChartDataSequence & operator = ( const SwChartDataSequence & ) = delete;
-
-protected:
-    //SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
@@ -309,12 +307,14 @@ public:
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
-    SwFrameFormat*   GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
-    bool    DeleteBox( const SwTableBox &rBox );
+    SwFrameFormat* GetFrameFormat() const { return m_pFormat; }
+    bool DeleteBox( const SwTableBox &rBox );
 
     void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;
     void        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
     std::vector< css::uno::Reference< css::table::XCell > > GetCells();
+
+    virtual void Notify(const SfxHint& rHint) override;
 };
 
 typedef cppu::WeakImplHelper

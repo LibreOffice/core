@@ -237,7 +237,8 @@ namespace sw
     // used anymore, in which case a BroadcasterMixin should be enough instead
     // then.
     class SW_DLLPUBLIC BroadcastingModify : public SwModify, public BroadcasterMixin {
-        virtual void CallSwClientNotify(const SfxHint& rHint) const override;
+        public:
+            virtual void CallSwClientNotify(const SfxHint& rHint) const override;
     };
     // this should be hidden but sadly SwIterator template needs it...
     class ListenerEntry final : public SwClient

@@ -40,7 +40,7 @@ namespace drawinglayer { namespace attribute {
 }}
 
 /// Base class for various Writer styles.
-class SW_DLLPUBLIC SwFormat : public SwModify
+class SW_DLLPUBLIC SwFormat : public sw::BroadcastingModify
 {
     friend class SwFrameFormat;
 
