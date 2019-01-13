@@ -1,5 +1,3 @@
 "ScDatabaseRangesObj";"com::sun::star::container::XNameAccess";"getByName()"
 "ScDatabaseRangesObj";"com::sun::star::container::XNameAccess";"getElementNames()"
 "ScDatabaseRangesObj";"com::sun::star::container::XNameAccess";"hasByName()"
-"ScDatabaseRangesObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScDatabaseRangesObj";"com::sun::star::container::XElementAccess";"hasElements()"
