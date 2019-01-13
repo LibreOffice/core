@@ -19,6 +19,7 @@
 
 #include <extended/AccessibleBrowseBoxTable.hxx>
 #include <vcl/accessibletableprovider.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 
 using ::com::sun::star::uno::Reference;
@@ -26,7 +27,6 @@ using ::com::sun::star::uno::Sequence;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::svt;
 
 
 namespace accessibility {

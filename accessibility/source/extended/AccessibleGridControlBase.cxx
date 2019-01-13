@@ -19,6 +19,7 @@
 
 #include <extended/AccessibleGridControlBase.hxx>
 #include <vcl/accessibletable.hxx>
+#include <vcl/window.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/types.h>
 

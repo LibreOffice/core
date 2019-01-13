@@ -20,10 +20,11 @@
 #ifndef INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 #define INCLUDED_VCL_ACCESSIBLETABLEPROVIDER_HXX
 
-#include <vcl/window.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <vcl/outdev.hxx>
+
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace utl { class AccessibleStateSetHelper; }
 
 namespace vcl
 {

@@ -20,9 +20,13 @@
 #ifndef INCLUDED_VCL_ACCESSIBLETABLE_HXX
 #define INCLUDED_VCL_ACCESSIBLETABLE_HXX
 
-#include <vcl/window.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <tools/gen.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessible; } } } }
+namespace utl { class AccessibleStateSetHelper; }
+namespace vcl { class Window; }
 
 namespace vcl { namespace table
 {

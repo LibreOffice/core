@@ -21,6 +21,7 @@
 #include <extended/AccessibleBrowseBoxTableCell.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 namespace accessibility
 {
@@ -44,7 +45,6 @@ namespace accessibility
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::accessibility::XAccessible;
     using namespace ::com::sun::star::accessibility;
-    using namespace ::svt;
 
 
     // implementation of a table cell
