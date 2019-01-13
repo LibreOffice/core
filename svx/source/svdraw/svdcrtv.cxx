@@ -554,10 +554,10 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
         }
 
         if (aPnt==maDragStat.GetNow()) return;
-        bool bMerk(maDragStat.IsMinMoved());
+        bool bIsMinMoved(maDragStat.IsMinMoved());
         if (maDragStat.CheckMinMoved(aPnt))
         {
-            if (!bMerk) maDragStat.NextPoint();
+            if (!bIsMinMoved) maDragStat.NextPoint();
             maDragStat.NextMove(aPnt);
             pCurrentCreate->MovCreate(maDragStat);
 
@@ -598,7 +598,7 @@ void SdrCreateView::SetupObjLayer(const SdrPageView* pPageView, const OUString& 
 bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 {
     bool bRet=false;
-    SdrObject* pObjMerk=pCurrentCreate;
+    SdrObject* pObjCreated=pCurrentCreate;
 
     if (pCurrentCreate!=nullptr)
     {
@@ -630,7 +630,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 // recognize creation of a new 3D object inside a 3D scene
                 bool bSceneIntoScene(false);
 
-                E3dScene* pObjScene = dynamic_cast<E3dScene*>(pObjMerk);
+                E3dScene* pObjScene = dynamic_cast<E3dScene*>(pObjCreated);
                 E3dScene* pCurrentScene = pObjScene ? dynamic_cast<E3dScene*>(pCreatePV->GetCurrentGroup()) : nullptr;
                 if (pCurrentScene)
                 {
@@ -640,8 +640,8 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     if(bDidInsert)
                     {
                         // delete object, its content is cloned and inserted
-                        SdrObject::Free( pObjMerk );
-                        pObjMerk = nullptr;
+                        SdrObject::Free( pObjCreated );
+                        pObjCreated = nullptr;
                         bSceneIntoScene = true;
                     }
                 }
