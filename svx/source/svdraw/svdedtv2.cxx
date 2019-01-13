@@ -1256,7 +1256,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
     // continue as before
     basegfx::B2DPolyPolygon aPolyPolygon;
     SdrObjList* pCurrentOL = nullptr;
-    SdrMarkList aRemoveMerker;
+    SdrMarkList aRemoveBuffer;
 
     SortMarkedObjects();
     size_t nInsPos = SAL_MAX_SIZE;
@@ -1294,7 +1294,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
                 pInsOL = pObj->getParentSdrObjListFromSdrObject();
             }
 
-            aRemoveMerker.InsertEntry(SdrMark(pObj, pM->GetPageView()));
+            aRemoveBuffer.InsertEntry(SdrMark(pObj, pM->GetPageView()));
         }
     }
 
@@ -1376,12 +1376,12 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
     }
 
     // build an UndoComment from the objects actually used
-    aRemoveMerker.ForceSort(); // important for remove (see below)
+    aRemoveBuffer.ForceSort(); // important for remove (see below)
     if( bUndo )
-        SetUndoComment(SvxResId(bNoPolyPoly?STR_EditCombine_OnePoly:STR_EditCombine_PolyPoly),aRemoveMerker.GetMarkDescription());
+        SetUndoComment(SvxResId(bNoPolyPoly?STR_EditCombine_OnePoly:STR_EditCombine_PolyPoly),aRemoveBuffer.GetMarkDescription());
 
     // remove objects actually used from the list
-    DeleteMarkedList(aRemoveMerker);
+    DeleteMarkedList(aRemoveBuffer);
     if( bUndo )
         EndUndo();
 }
@@ -1650,7 +1650,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
 {
     // temporary MarkList
-    SdrMarkList aRemoveMerker;
+    SdrMarkList aRemoveBuffer;
 
     SortMarkedObjects();
 
@@ -1671,7 +1671,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
         SdrObjList* pOL=pObj->getParentSdrObjListFromSdrObject();
         if (pOL!=pOL0) { pOL0=pOL; pObj->GetOrdNum(); } // make sure OrdNums are correct!
         if (ImpCanDismantle(pObj,bMakeLines)) {
-            aRemoveMerker.InsertEntry(SdrMark(pObj,pM->GetPageView()));
+            aRemoveBuffer.InsertEntry(SdrMark(pObj,pM->GetPageView()));
             const size_t nPos0=pObj->GetOrdNumDirect();
             size_t nPos=nPos0+1;
             SdrObjList* pSubList=pObj->GetSubList();
@@ -1696,7 +1696,7 @@ void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
     if( bUndo )
     {
         // construct UndoComment from objects actually used
-        SetUndoComment(SvxResId(bMakeLines?STR_EditDismantle_Lines:STR_EditDismantle_Polys),aRemoveMerker.GetMarkDescription());
+        SetUndoComment(SvxResId(bMakeLines?STR_EditDismantle_Lines:STR_EditDismantle_Polys),aRemoveBuffer.GetMarkDescription());
         // remove objects actually used from the list
         EndUndo();
     }
