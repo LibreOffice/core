@@ -1941,7 +1941,7 @@ static void impAddB2DPolygonToGDIPlusGraphicsPathReal(
 
                     // tdf#99165 MS Gdiplus cannot handle creating correct extra geometry for fat lines
                     // with LineCap or LineJoin when a bezier segment starts or ends trivial, e.g. has
-                    // no 1st or 2nd control point, despite that these are mathematicaly correct definitions
+                    // no 1st or 2nd control point, despite that these are mathematically correct definitions
                     // (basegfx can handle that).
                     // Caution: This error (and it's correction) might be necessary for other graphical
                     // sub-systems in a similar way.
@@ -2347,9 +2347,9 @@ bool WinSalGraphicsImpl::drawPolyLine(
 
     if(mrParent.isPrinter())
     {
-        // tdf#122384 As metioned above in WinSalGraphicsImpl::drawPolyPolygon
+        // tdf#122384 As mentioned above in WinSalGraphicsImpl::drawPolyPolygon
         // (look for 'One more hint: This *may* also be needed now in'...).
-        // See comments in same spot above *uregntly* before doing changes here,
+        // See comments in same spot above *urgently* before doing changes here,
         // these comments are *still fully valid* at this place (!)
         const Gdiplus::REAL aDpiX(aGraphics.GetDpiX());
         const Gdiplus::REAL aDpiY(aGraphics.GetDpiY());
