@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_63b7e2da",
+        "filename": "vcl/inc/win/scoped_gdi.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-13T15:45:53Z",
+      "side": 1,
+      "message": "This looks like a candidate for a template with handle type and deleter function as arguments, and typedefs as specializations of the template?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 2
+      },
+      "revId": "94552e8b5763080702d09518134221e8753da17a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
