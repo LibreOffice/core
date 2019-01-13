@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/sheet/xdatapilottables.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -17,8 +18,8 @@
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -33,7 +34,8 @@ namespace sc_apitest
 {
 class ScDataPilotTablesObj : public CalcUnoApiTest,
                              public apitest::XDataPilotTables,
-                             public apitest::XEnumerationAccess
+                             public apitest::XEnumerationAccess,
+                             public apitest::XIndexAccess
 {
 public:
     ScDataPilotTablesObj();
@@ -51,6 +53,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -59,6 +65,7 @@ private:
 
 ScDataPilotTablesObj::ScDataPilotTablesObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(1)
 {
 }
 
@@ -81,7 +88,7 @@ uno::Reference<uno::XInterface> ScDataPilotTablesObj::init()
     uno::Reference<sheet::XDataPilotDescriptor> xDPD(xDPT->createDataPilotDescriptor(),
                                                      UNO_QUERY_THROW);
     xDPD->setSourceRange(table::CellRangeAddress(0, 0, 0, 4, 4));
-    //xDPT->insertNewByName("DataPilotTable", table::CellAddress(0, 5, 5), xDPD);
+    xDPT->insertNewByName("DataPilotTable", table::CellAddress(0, 5, 5), xDPD);
 
     return xDPT;
 }
@@ -112,7 +119,7 @@ void ScDataPilotTablesObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDataPilotTablesObj);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
