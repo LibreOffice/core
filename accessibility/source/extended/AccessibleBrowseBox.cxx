@@ -20,6 +20,7 @@
 #include <extended/AccessibleBrowseBox.hxx>
 #include <extended/AccessibleBrowseBoxTable.hxx>
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/accessibletableprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/types.h>

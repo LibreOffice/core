@@ -23,6 +23,7 @@
 #include <extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <vcl/svtabbx.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 
 namespace accessibility

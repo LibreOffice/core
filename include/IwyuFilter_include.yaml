@@ -242,10 +242,16 @@ blacklist:
     include/svl/urihelper.hxx:
     # base class has to be a complete type
     - tools/link.hxx
+    include/vcl/FilterConfigItem.hxx:
+    # Needed on Windows with --disable-pch
+    - com/sun/star/beans/PropertyValue.hpp
     include/vcl/builderfactory.hxx:
     # Needed for macros
     - vcl/builder.hxx
     - vcl/vclptr.hxx
+    include/vcl/decoview.hxx:
+    # Full definition needed for VclPtr
+    - vcl/outdev.hxx
     include/vcl/devicecoordinate.hxx:
     # Needed for #if configure switch
     - basegfx/point/b2ipoint.hxx
@@ -262,6 +268,9 @@ blacklist:
     # Needed for macros
     - com/sun/star/awt/Key.hpp
     - com/sun/star/awt/KeyGroup.hpp
+    include/vcl/mtfxmldump.hxx:
+    # Full definition needed for o3tl::enumarray
+    - vcl/metaactiontypes.hxx
     include/vcl/outdevstate.hxx:
     # Full definition needed for boost::optional
     - vcl/mapmod.hxx

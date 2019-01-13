@@ -21,12 +21,11 @@
 #define INCLUDED_VCL_ACCESSIBLEFACTORY_HXX
 
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
-#include <vcl/accessibletableprovider.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <tools/gen.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace accessibility {
@@ -37,6 +36,11 @@ namespace com { namespace sun { namespace star {
         class XWindow;
     }
 } } }
+
+namespace vcl { class IAccessibleBrowseBox; }
+namespace vcl { class IAccessibleTabListBox; }
+namespace vcl { class IAccessibleTableProvider; }
+
 class SvHeaderTabListBox;
 class SvtIconChoiceCtrl;
 class TabBar;
