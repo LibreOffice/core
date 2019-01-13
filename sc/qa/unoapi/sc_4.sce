@@ -17,7 +17,6 @@
 #
 -o sc.ScDataPilotItemObj
 -o sc.ScDataPilotItemsObj
--o sc.ScDataPilotTablesObj
 -o sc.ScDatabaseRangeObj
 -o sc.ScDocumentConfiguration
 -o sc.ScDrawPageObj
