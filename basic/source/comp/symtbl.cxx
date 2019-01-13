@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <rtl/character.hxx>
-#include <o3tl/make_unique.hxx>
 
 // All symbol names are laid down int the symbol-pool's stringpool, so that
 // all symbols are handled in the same case. On saving the code-image, the
@@ -352,7 +351,7 @@ SbiSymPool& SbiSymDef::GetPool()
 {
     if( !pPool )
     {
-        pPool = o3tl::make_unique<SbiSymPool>( pIn->pParser->aGblStrings, SbLOCAL, pIn->pParser );// is dumped
+        pPool = std::make_unique<SbiSymPool>( pIn->pParser->aGblStrings, SbLOCAL, pIn->pParser );// is dumped
     }
     return *pPool;
 }
@@ -378,7 +377,7 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const OUString& rName,
          , mbProcDecl( bProcDecl )
 {
     aParams.SetParent( &pParser->aPublics );
-    pPool = o3tl::make_unique<SbiSymPool>( pParser->aGblStrings, SbLOCAL, pParser );
+    pPool = std::make_unique<SbiSymPool>( pParser->aGblStrings, SbLOCAL, pParser );
     pPool->SetParent( &aParams );
     nLine1  =
     nLine2  = 0;

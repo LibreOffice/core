@@ -24,7 +24,6 @@
 #include <bitmaps.hlst>
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
-#include <o3tl/make_unique.hxx>
 #include <svx/passwd.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/uri.hxx>
@@ -250,7 +249,7 @@ void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
         for ( sal_uInt16 nCol = 1; nCol < nCount; ++nCol )
         {
             SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nCol ));
-            pEntry->ReplaceItem(o3tl::make_unique<LibLBoxString>( rCol.GetText() ), nCol);
+            pEntry->ReplaceItem(std::make_unique<LibLBoxString>( rCol.GetText() ), nCol);
         }
     }
 }
@@ -1531,7 +1530,7 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                         aLibName,
                         Image(StockImage::Yes, sId),
                         pRootEntry, false,
-                        o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
+                        std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
                     DBG_ASSERT( pNewLibEntry, "Insert entry failed!" );
 
                     if( pNewLibEntry )
@@ -1540,7 +1539,7 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                             aModName,
                             Image(StockImage::Yes, RID_BMP_MODULE),
                             pNewLibEntry, false,
-                            o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+                            std::make_unique<Entry>(OBJ_TYPE_MODULE));
                         DBG_ASSERT( pEntry_, "Insert entry failed!" );
                         pBasicBox->SetCurEntry( pEntry_ );
                         pBasicBox->Select( pBasicBox->GetCurEntry() );      // OV-Bug?!
@@ -1640,8 +1639,8 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     BrowseMode nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
                     const OUString sId = bDlgMode ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_MODLIB);
-                    pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
-                    pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+                    pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
+                    pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_MODULE));
                     pBasicBox->set_cursor(*xRootEntry);
                     pBasicBox->select(*xRootEntry);
                 }

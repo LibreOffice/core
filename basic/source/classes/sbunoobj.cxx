@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/errcode.hxx>
@@ -4646,7 +4645,7 @@ void SbUnoStructRefObject::initMemberCache()
         for ( sal_Int32 nPos = pCompTypeDescr->nMembers; nPos--; )
         {
             OUString aName( ppNames[nPos] );
-            maFields[ aName ] = o3tl::make_unique<StructRefInfo>( maMemberInfo.getRootAnyRef(), ppTypeRefs[nPos], maMemberInfo.getPos() + pMemberOffsets[nPos] );
+            maFields[ aName ] = std::make_unique<StructRefInfo>( maMemberInfo.getRootAnyRef(), ppTypeRefs[nPos], maMemberInfo.getPos() + pMemberOffsets[nPos] );
         }
     }
     typelib_typedescription_release(pTD);

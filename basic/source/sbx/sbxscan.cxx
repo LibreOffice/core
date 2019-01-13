@@ -50,8 +50,6 @@
 #include <sal/log.hxx>
 #include <svl/zforlist.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal_Unicode& rcDecimalSepAlt )
 {
@@ -858,7 +856,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 OUString aFalseStrg = BasResId(STR_BASICKEY_FORMAT_FALSE);
                 OUString aCurrencyFormatStrg = BasResId(STR_BASICKEY_FORMAT_CURRENCY);
 
-                rAppData.pBasicFormater = o3tl::make_unique<SbxBasicFormater>(
+                rAppData.pBasicFormater = std::make_unique<SbxBasicFormater>(
                                                                 cComma,c1000,aOnStrg,aOffStrg,
                                                                 aYesStrg,aNoStrg,aTrueStrg,aFalseStrg,
                                                                 aCurrencyStrg,aCurrencyFormatStrg );
