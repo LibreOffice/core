@@ -29,7 +29,6 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <comphelper/processfactory.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -862,7 +861,7 @@ void ObjectPage::NewDialog()
                                 aDlgName,
                                 Image(StockImage::Yes, RID_BMP_DIALOG),
                                 pLibEntry, false,
-                                o3tl::make_unique<Entry>(OBJ_TYPE_DIALOG));
+                                std::make_unique<Entry>(OBJ_TYPE_DIALOG));
                             DBG_ASSERT( pEntry, "Insert entry failed!" );
                         }
                         m_pBasicBox->SetCurEntry( pEntry );
@@ -1031,7 +1030,7 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                             aModName,
                             Image(StockImage::Yes, RID_BMP_MODULE),
                             pSubRootEntry, false,
-                            o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+                            std::make_unique<Entry>(OBJ_TYPE_MODULE));
                         DBG_ASSERT( pEntry, "Insert entry failed!" );
                     }
                     rBasicBox.SetCurEntry( pEntry );
@@ -1127,7 +1126,7 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                     if (!bEntry)
                     {
                         rBasicBox.AddEntry(aModName, RID_BMP_MODULE, xEntry.get(), false,
-                                           o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
+                                           std::make_unique<Entry>(OBJ_TYPE_MODULE));
                     }
                     rBasicBox.set_cursor(*xEntry);
                     rBasicBox.select(*xEntry);

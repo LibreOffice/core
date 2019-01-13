@@ -35,7 +35,6 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace basctl
 {
@@ -118,7 +117,7 @@ Dll::Dll () :
 {
     SfxObjectFactory& rFactory = DocShell::Factory();
 
-    auto pModule = o3tl::make_unique<Module>("basctl", &rFactory);
+    auto pModule = std::make_unique<Module>("basctl", &rFactory);
     SfxModule* pMod = pModule.get();
     SfxApplication::SetModule(SfxToolsModule::Basic, std::move(pModule));
 

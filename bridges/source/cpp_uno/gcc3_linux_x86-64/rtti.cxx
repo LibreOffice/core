@@ -28,7 +28,6 @@
 
 #include <dlfcn.h>
 
-#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
@@ -210,7 +209,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                         default:
                             {
                                 m_rttiNames.emplace_back(OString(rttiName));
-                                auto pad = o3tl::make_unique<char[]>(
+                                auto pad = std::make_unique<char[]>(
                                     sizeof (__cxxabiv1::__vmi_class_type_info)
                                     + ((itd.nBaseTypes - 1)
                                        * sizeof (

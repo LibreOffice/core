@@ -22,7 +22,6 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <svtools/miscopt.hxx>
 #include <rtl/character.hxx>
-#include <o3tl/make_unique.hxx>
 
 struct SbiParseStack {              // "Stack" for statement-blocks
     SbiParseStack* pNext;           // Chain
@@ -508,10 +507,10 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
                 if( nParCount == 2 || nParCount == 3 )
                 {
                     if( nParCount == 2 )
-                        pPar->addExpression( o3tl::make_unique<SbiExpression>( this, -1, SbxLONG ) );
+                        pPar->addExpression( std::make_unique<SbiExpression>( this, -1, SbxLONG ) );
 
                     TestToken( EQ );
-                    pPar->addExpression( o3tl::make_unique<SbiExpression>( this ) );
+                    pPar->addExpression( std::make_unique<SbiExpression>( this ) );
 
                     bSpecialMidHandling = true;
                 }

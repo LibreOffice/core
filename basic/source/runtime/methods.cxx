@@ -65,7 +65,6 @@
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <memory>
 #include <random>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace comphelper;
@@ -2567,7 +2566,7 @@ static OUString implSetupWildcard(const OUString& rFileParam, SbiRTLData& rRTLDa
     // invalid anyway because it was not accepted by OSL before
     if (aPureFileName != "*")
     {
-        rRTLData.pWildCard = o3tl::make_unique<WildCard>(aPureFileName);
+        rRTLData.pWildCard = std::make_unique<WildCard>(aPureFileName);
     }
     return aPathStr;
 }
@@ -2798,7 +2797,7 @@ void SbRtl_Dir(StarBASIC *, SbxArray & rPar, bool)
 
                 // Read directory
                 bool bIncludeFolders = bool(nFlags & SbAttributes::DIRECTORY);
-                rRTLData.pDir = o3tl::make_unique<Directory>(aDirURL);
+                rRTLData.pDir = std::make_unique<Directory>(aDirURL);
                 FileBase::RC nRet = rRTLData.pDir->open();
                 if( nRet != FileBase::E_None )
                 {

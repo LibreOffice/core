@@ -32,7 +32,6 @@
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <basic/sbuno.hxx>
