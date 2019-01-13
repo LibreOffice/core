@@ -209,7 +209,7 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
     sal_uInt8           nOp, nLen;
     bool            bError = false;
     bool            bArrayFormula = false;
-    TokenId         nMerk0;
+    TokenId         nBuf0;
     const bool      bRangeName = eFT == FT_RangeName;
     const bool      bSharedFormula = eFT == FT_SharedFormula;
     const bool      bConditional = eFT == FT_CondFormat;
@@ -254,90 +254,90 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
                 break;
             }
             case 0x03: // Addition                              [312 264]
-                aStack >> nMerk0;
-                aPool <<  aStack << ocAdd << nMerk0;
+                aStack >> nBuf0;
+                aPool <<  aStack << ocAdd << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x04: // Subtraction                           [313 264]
                 // SECOND-TOP minus TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocSub << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocSub << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x05: // Multiplication                        [313 264]
-                aStack >> nMerk0;
-                aPool << aStack << ocMul << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocMul << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x06: // Division                              [313 264]
                 // divide TOP by SECOND-TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocDiv << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocDiv << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x07: // Exponentiation                            [313 265]
                 // raise SECOND-TOP to power of TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocPow << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocPow << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x08: // Concatenation                         [313 265]
                 // append TOP to SECOND-TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocAmpersand << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocAmpersand << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x09: // Less Than                             [313 265]
                 // SECOND-TOP < TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocLess << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocLess << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x0A: // Less Than or Equal                    [313 265]
                 // SECOND-TOP <= TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocLessEqual << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocLessEqual << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x0B: // Equal                                 [313 265]
                 // SECOND-TOP == TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocEqual << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocEqual << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x0C: // Greater Than or Equal                 [313 265]
                 // SECOND-TOP >= TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocGreaterEqual << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocGreaterEqual << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x0D: // Greater Than                          [313 265]
                 // SECOND-TOP > TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocGreater << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocGreater << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x0E: // Not Equal                             [313 265]
                 // SECOND-TOP != TOP
-                aStack >> nMerk0;
-                aPool << aStack << ocNotEqual << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocNotEqual << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x0F: // Intersection                          [314 265]
-                aStack >> nMerk0;
-                aPool << aStack << ocIntersect << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocIntersect << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x10: // Union                                 [314 265]
                 // ocSep instead of 'ocUnion'
-                aStack >> nMerk0;
-                aPool << aStack << ocSep << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocSep << nBuf0;
                     // doesn't fit exactly, but is more Excel-like
                 aPool >> aStack;
                 break;
             case 0x11: // Range                                 [314 265]
-                aStack >> nMerk0;
-                aPool << aStack << ocRange << nMerk0;
+                aStack >> nBuf0;
+                aPool << aStack << ocRange << nBuf0;
                 aPool >> aStack;
                 break;
             case 0x12: // Unary Plus                            [312 264]
