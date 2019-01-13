@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/sheet/xdatabaseranges.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -28,7 +29,8 @@ namespace sc_apitest
 {
 class ScDatabaseRangesObj : public CalcUnoApiTest,
                             public apitest::XDatabaseRanges,
-                            public apitest::XEnumerationAccess
+                            public apitest::XEnumerationAccess,
+                            public apitest::XIndexAccess
 {
 public:
     ScDatabaseRangesObj();
@@ -45,6 +47,10 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -53,6 +59,7 @@ private:
 
 ScDatabaseRangesObj::ScDatabaseRangesObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(1)
 {
 }
 
@@ -85,7 +92,7 @@ void ScDatabaseRangesObj::tearDown()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDatabaseRangesObj);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
