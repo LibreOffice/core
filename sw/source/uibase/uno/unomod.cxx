@@ -275,82 +275,79 @@ void SwXPrintSettings::_preSetValues ()
     }
 }
 
+namespace
+{
+    bool tryBoolAccess(const uno::Any &rValue)
+    {
+        const auto xPrSet = o3tl::tryAccess<bool>(rValue);
+        if (!xPrSet)
+            throw lang::IllegalArgumentException();
+        return *xPrSet;
+    }
+}
+
 void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
 {
-    bool bVal;
-
     switch( rInfo.mnHandle )
     {
         case HANDLE_PRINTSET_LEFT_PAGES:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintLeftPage(bVal);
+            mpPrtOpt->SetPrintLeftPage(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_RIGHT_PAGES:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintRightPage(bVal);
+            mpPrtOpt->SetPrintRightPage(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_REVERSED:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintReverse(bVal);
+            mpPrtOpt->SetPrintReverse(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_PROSPECT:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintProspect(bVal);
+            mpPrtOpt->SetPrintProspect(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_GRAPHICS:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintGraphic(bVal);
+            mpPrtOpt->SetPrintGraphic(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_TABLES:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintTable(bVal);
+            mpPrtOpt->SetPrintTable(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_DRAWINGS:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintDraw(bVal);
+            mpPrtOpt->SetPrintDraw(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_CONTROLS:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintControl(bVal);
+            mpPrtOpt->SetPrintControl(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_PAGE_BACKGROUND:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintPageBackground(bVal);
+            mpPrtOpt->SetPrintPageBackground(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_BLACK_FONTS:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintBlackFont(bVal);
+            mpPrtOpt->SetPrintBlackFont(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_SINGLE_JOBS:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintSingleJobs(bVal);
+            mpPrtOpt->SetPrintSingleJobs(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_PAPER_FROM_SETUP:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPaperFromSetup(bVal);
+            mpPrtOpt->SetPaperFromSetup(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_ANNOTATION_MODE:
@@ -366,8 +363,7 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_EMPTY_PAGES:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintEmptyPages(bVal);
+            mpPrtOpt->SetPrintEmptyPages(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_FAX_NAME:
@@ -381,20 +377,17 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_PROSPECT_RTL:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintProspect_RTL(bVal);
+            mpPrtOpt->SetPrintProspect_RTL(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_PLACEHOLDER:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintTextPlaceholder(bVal);
+            mpPrtOpt->SetPrintTextPlaceholder(tryBoolAccess(rValue));
         }
         break;
         case HANDLE_PRINTSET_HIDDEN_TEXT:
         {
-            bVal = *o3tl::tryAccess<bool>(rValue);
-            mpPrtOpt->SetPrintHiddenText(bVal);
+            mpPrtOpt->SetPrintHiddenText(tryBoolAccess(rValue));
         }
         break;
         default:
