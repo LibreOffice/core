@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/container/xnameaccess.hxx>
 #include <test/sheet/xdatabaseranges.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -35,7 +36,8 @@ class ScDatabaseRangesObj : public CalcUnoApiTest,
                             public apitest::XDatabaseRanges,
                             public apitest::XElementAccess,
                             public apitest::XEnumerationAccess,
-                            public apitest::XIndexAccess
+                            public apitest::XIndexAccess,
+                            public apitest::XNameAccess
 {
 public:
     ScDatabaseRangesObj();
@@ -60,6 +62,11 @@ public:
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetCount);
 
+    // XNameAccess
+    CPPUNIT_TEST(testGetByName);
+    CPPUNIT_TEST(testGetElementNames);
+    CPPUNIT_TEST(testHasByName);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -70,6 +77,7 @@ ScDatabaseRangesObj::ScDatabaseRangesObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<sheet::XDatabaseRange>::get())
     , XIndexAccess(1)
+    , XNameAccess("DbRange")
 {
 }
 
