@@ -21,13 +21,13 @@
 #include <extended/AccessibleBrowseBoxHeaderCell.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <extended/AccessibleBrowseBox.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 namespace accessibility
 {
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::uno;
-    using namespace ::svt;
 
 AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
                                   const Reference< XAccessible >& rxParent,

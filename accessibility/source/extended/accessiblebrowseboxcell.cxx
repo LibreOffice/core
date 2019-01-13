@@ -26,7 +26,6 @@ namespace accessibility
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::accessibility;
-    using namespace ::svt;
 
     // AccessibleBrowseBoxCell
     AccessibleBrowseBoxCell::AccessibleBrowseBoxCell(

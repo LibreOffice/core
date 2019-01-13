@@ -12,11 +12,12 @@
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
-#include <vcl/gdimtf.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <o3tl/enumarray.hxx>
 
 namespace tools { class XmlWriter; }
+class GDIMetaFile;
+class SvStream;
 
 enum class MetaActionType;
 

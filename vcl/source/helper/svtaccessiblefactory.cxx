@@ -27,6 +27,7 @@
 
 #include <osl/module.h>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 
 namespace vcl
 {

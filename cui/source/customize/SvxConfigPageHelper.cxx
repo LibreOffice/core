@@ -19,6 +19,8 @@
 
 #include <SvxConfigPageHelper.hxx>
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+
 #include <comphelper/random.hxx>
 #include <comphelper/processfactory.hxx>
 
