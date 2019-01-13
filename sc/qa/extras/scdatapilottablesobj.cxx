@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xdatapilottables.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -42,7 +43,8 @@ class ScDataPilotTablesObj : public CalcUnoApiTest,
                              public apitest::XElementAccess,
                              public apitest::XEnumerationAccess,
                              public apitest::XIndexAccess,
-                             public apitest::XNameAccess
+                             public apitest::XNameAccess,
+                             public apitest::XServiceInfo
 {
 public:
     ScDataPilotTablesObj();
@@ -73,6 +75,11 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -84,6 +91,7 @@ ScDataPilotTablesObj::ScDataPilotTablesObj()
     , XElementAccess(cppu::UnoType<sheet::XDataPilotTable2>::get())
     , XIndexAccess(1)
     , XNameAccess("DataPilotTable")
+    , XServiceInfo("ScDataPilotTablesObj", "com.sun.star.sheet.DataPilotTables")
 {
 }
 
