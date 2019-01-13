@@ -80,7 +80,6 @@ job85=sc.ScCellSearchObj
 job88=sc.ScDatabaseRangeObj
 job90=sc.ScDataPilotFieldObj
 job91=sc.ScDataPilotFieldsObj
-job92=sc.ScDataPilotTablesObj
 job94=sc.ScDDELinksObj
 job95=sc.ScDrawPagesObj
 job96=sc.ScFilterDescriptorBase
