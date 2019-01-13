@@ -21,6 +21,7 @@
 #include <vcl/accessibletableprovider.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 
 using css::uno::Reference;
@@ -29,7 +30,6 @@ using css::uno::Any;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using namespace ::svt;
 
 
 namespace accessibility {

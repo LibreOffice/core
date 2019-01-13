@@ -29,6 +29,7 @@
 
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclevent.hxx>
 

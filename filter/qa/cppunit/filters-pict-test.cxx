@@ -12,6 +12,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <test/xmltesttools.hxx>
 #include <tools/stream.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaactiontypes.hxx>
 

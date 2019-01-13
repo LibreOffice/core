@@ -20,6 +20,7 @@
 #include <extended/AccessibleBrowseBox.hxx>
 #include <extended/AccessibleBrowseBoxTable.hxx>
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/accessibletableprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/types.h>
@@ -32,7 +33,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
-using namespace ::svt;
 
 // Ctor/Dtor/disposing
 

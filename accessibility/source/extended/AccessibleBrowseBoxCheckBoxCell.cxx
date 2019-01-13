@@ -20,13 +20,13 @@
 #include <extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <vcl/accessibletableprovider.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 namespace accessibility
 {
     using namespace com::sun::star::accessibility;
     using namespace com::sun::star::uno;
     using namespace com::sun::star::accessibility::AccessibleEventId;
-    using namespace ::svt;
 
     AccessibleCheckBoxCell::AccessibleCheckBoxCell(const Reference<XAccessible >& _rxParent,
                                 vcl::IAccessibleTableProvider& _rBrowseBox,

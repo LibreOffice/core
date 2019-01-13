@@ -22,6 +22,7 @@
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 namespace accessibility
 {
