@@ -94,6 +94,24 @@ private:
     ScopedHFONT m_hSelectedFont;
 };
 
+class ScopedSelectedHBRUSH
+{
+public:
+    ScopedSelectedHBRUSH(HDC hDC, HBRUSH hBrush)
+        : m_hDC(hDC)
+        , m_hOrigBrush(SelectBrush(hDC, hBrush))
+        , m_hSelectedBrush(hBrush)
+    {
+    }
+
+    ~ScopedSelectedHBRUSH() { SelectBrush(m_hDC, m_hOrigBrush); }
+
+private:
+    HDC m_hDC;
+    HBRUSH m_hOrigBrush;
+    ScopedHBRUSH m_hSelectedBrush;
+};
+
 #endif // INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
