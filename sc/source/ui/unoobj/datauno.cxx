@@ -2216,7 +2216,7 @@ sal_Int32 SAL_CALL ScDatabaseRangesObj::getCount()
 {
     SolarMutexGuard aGuard;
 
-    //! "unbenannt" weglassen ?
+    //! need to omit "unnamed"?
 
     if (pDocShell)
     {
