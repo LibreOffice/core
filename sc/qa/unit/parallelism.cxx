@@ -37,6 +37,7 @@ public:
     void testSUMIFImplicitRange();
     void testFGCycleWithPlainFormulaCell1();
     void testFGCycleWithPlainFormulaCell2();
+    void testMultipleFGColumn();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -47,6 +48,7 @@ public:
     CPPUNIT_TEST(testSUMIFImplicitRange);
     CPPUNIT_TEST(testFGCycleWithPlainFormulaCell1);
     CPPUNIT_TEST(testFGCycleWithPlainFormulaCell2);
+    CPPUNIT_TEST(testMultipleFGColumn);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -468,6 +470,68 @@ void ScParallelismTest::testFGCycleWithPlainFormulaCell2()
     // C500 must have value = 3
     nExpected = 3;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Value at cell C500", nExpected, static_cast<size_t>(m_pDoc->GetValue(2, 499, 0)));
+    m_pDoc->DeleteTab(0);
+}
+
+static void lcl_setupMultipleFGColumn(ScDocument* pDocument, size_t nNumRowsInBlock, size_t nNumFG, size_t nOffset)
+{
+    OUString aFormula;
+    ScAddress aAddr(1, 0, 0);
+    // Column B with multiple FG's
+    for (size_t nFGIdx = 0; nFGIdx < nNumFG; ++nFGIdx)
+    {
+        size_t nRowStart = 2*nFGIdx*nNumRowsInBlock;
+        for (size_t nRow = nRowStart; nRow < (nRowStart + nNumRowsInBlock); ++nRow)
+        {
+            aAddr.SetRow(nRow);
+            aFormula = "=$C" + OUString::number(nRow+1) + " + 0";
+            pDocument->SetFormula(aAddr, aFormula,
+                                  formula::FormulaGrammar::GRAM_NATIVE_UI);
+            // Fill Column C with doubles.
+            pDocument->SetValue(2, nRow, 0, static_cast<double>(nFGIdx));
+        }
+    }
+
+    // Column A with a single FG that depends on Column B.
+    size_t nNumRowsInRef = nNumRowsInBlock*2;
+    size_t nColAFGLen = 2*nNumRowsInBlock*nNumFG - nNumRowsInRef + 1;
+    aAddr.SetCol(0);
+    for (size_t nRow = nOffset; nRow < nColAFGLen; ++nRow)
+    {
+        aAddr.SetRow(nRow);
+        aFormula = "=SUM($B" + OUString::number(nRow+1) + ":$B" + OUString::number(nRow+nNumRowsInRef) + ")";
+        pDocument->SetFormula(aAddr, aFormula,
+                              formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+}
+
+void ScParallelismTest::testMultipleFGColumn()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    size_t nNumRowsInBlock = 200;
+    size_t nNumFG = 50;
+    size_t nNumRowsInRef = nNumRowsInBlock*2;
+    size_t nColAFGLen = 2*nNumRowsInBlock*nNumFG - nNumRowsInRef + 1;
+    size_t nColAStartOffset = nNumRowsInBlock/2;
+    lcl_setupMultipleFGColumn(m_pDoc, nNumRowsInBlock, nNumFG, nColAStartOffset);
+
+    m_xDocShell->DoHardRecalc();
+
+    OString aMsg;
+    // First cell in the FG in col A references nColAStartOffset cells in second formula-group of column B each having value 1.
+    size_t nExpected = nColAStartOffset;
+    size_t nIn = 0, nOut = 0;
+    for (size_t nRow = nColAStartOffset; nRow < nColAFGLen; ++nRow)
+    {
+        aMsg = "Value at Cell A" + OString::number(nRow+1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected, static_cast<size_t>(m_pDoc->GetValue(0, nRow, 0)));
+        nIn = static_cast<size_t>(m_pDoc->GetValue(2, nRow+nNumRowsInRef, 0));
+        nOut = static_cast<size_t>(m_pDoc->GetValue(2, nRow, 0));
+        nExpected = nExpected + nIn - nOut;
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
