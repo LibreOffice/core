@@ -51,6 +51,7 @@ private:
 
 using ScopedSelectedHPEN = ScopedSelectedGDI<HPEN, ScopedHPEN, SelectPen>;
 using ScopedSelectedHFONT = ScopedSelectedGDI<HFONT, ScopedHFONT, SelectFont>;
+using ScopedSelectedHBRUSH = ScopedSelectedGDI<HBRUSH, ScopedHBRUSH, SelectBrush>;
 
 #endif // INCLUDED_VCL_INC_WIN_SCOPED_GDI_HXX
 
