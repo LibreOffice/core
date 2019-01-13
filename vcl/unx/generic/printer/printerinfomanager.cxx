@@ -556,19 +556,19 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
 
-bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const
+bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const OUStringLiteral& sToken ) const
 {
     const PrinterInfo& rPrinterInfo( getPrinterInfo( rPrinterName ) );
-    sal_Int32 nIndex = 0;
-    while( nIndex != -1 )
-    {
-        OUString aOuterToken = rPrinterInfo.m_aFeatures.getToken( 0, ',', nIndex );
-        sal_Int32 nInnerIndex = 0;
-        OUString aInnerToken = aOuterToken.getToken( 0, '=', nInnerIndex );
-        if( aInnerToken.equalsIgnoreAsciiCaseAscii( pToken ) )
-            return true;
-    }
-    return false;
+    // Token shall match a whole-word, so check that it is:
+    // * at beginning of string or preceded by a ','
+    // * followed by a '='
+    sal_Int32 nIndex {rPrinterInfo.m_aFeatures.indexOf(sToken)};
+    if (nIndex<0)
+        return false;
+    if (nIndex>0 && rPrinterInfo.m_aFeatures[nIndex-1]!=',')
+        return false;
+    nIndex += sToken.getLength();
+    return nIndex<rPrinterInfo.m_aFeatures.getLength() && rPrinterInfo.m_aFeatures[nIndex]=='=';
 }
 
 FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickCommand )

@@ -90,7 +90,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrint
     return aEmptyInfo;
 }
 
-bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, const char* /* pToken */ ) const
+bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, const OUStringLiteral& /* pToken */ ) const
 {
     (void) this;
 
