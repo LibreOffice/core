@@ -558,17 +558,25 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
 
-bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const
+bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const OUStringLiteral& sToken ) const
 {
     const PrinterInfo& rPrinterInfo( getPrinterInfo( rPrinterName ) );
-    sal_Int32 nIndex = 0;
-    while( nIndex != -1 )
+    // Token shall match a whole-word, so check that it is:
+    // * at beginning of string or preceded by a ','
+    // * followed by a '='
+    sal_Int32 nSearchIdx {0};
+    for (;;)
     {
-        OUString aOuterToken = rPrinterInfo.m_aFeatures.getToken( 0, ',', nIndex );
-        if( aOuterToken.getToken( 0, '=' ).equalsIgnoreAsciiCaseAscii( pToken ) )
+        const sal_Int32 nMatchIdx {rPrinterInfo.m_aFeatures.indexOf(sToken, nSearchIdx)};
+        if (nMatchIdx<0)
+            return false;
+        // next search, if any, will start after current match
+        nSearchIdx = nMatchIdx + sToken.getLength();
+        if (nMatchIdx>0 && rPrinterInfo.m_aFeatures[nMatchIdx-1]!=',')
+            continue;
+        if (nSearchIdx<rPrinterInfo.m_aFeatures.getLength() && rPrinterInfo.m_aFeatures[nSearchIdx]=='=')
             return true;
     }
-    return false;
 }
 
 FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
