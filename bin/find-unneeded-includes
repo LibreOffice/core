@@ -41,6 +41,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
     # Avoid debug STL.
     debugStl = {
         "array": "debug/array",
+        "bitset": "debug/bitset",
         "deque": "debug/deque",
         "list": "debug/list",
         "map": "debug/map.h",
