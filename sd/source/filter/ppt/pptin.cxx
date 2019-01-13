@@ -192,7 +192,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
 
         if ( mbDocumentFound )
         {
-            sal_uLong nPosMerk = rStCtrl.Tell();
+            sal_uLong nPosBuf = rStCtrl.Tell();
 
             pStData = rStorage_.OpenSotStream( "Pictures", StreamMode::STD_READ );
 
@@ -205,7 +205,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
                 if ( SeekToRec( rStCtrl, DFF_msofbtDggContainer, nPPDGLen ) )
                     nDggContainerOfs = rStCtrl.Tell();
             }
-            rStCtrl.Seek( nPosMerk );
+            rStCtrl.Seek( nPosBuf );
         }
         sal_uInt32 nSvxMSDffOLEConvFlags2 = 0;
 
@@ -773,7 +773,7 @@ bool ImplSdPPTImport::Import()
 
                 bool bNewAnimationsUsed = false;
                 ProcessData aProcessData( (*pList)[ nCurrentPageNum ], SdPageCapsule(pMPage) );
-                sal_uInt32 nFPosMerk = rStCtrl.Tell();
+                sal_uInt32 nFPosBuf = rStCtrl.Tell();
                 DffRecordHeader aPageHd;
                 if ( SeekToCurrentPage( &aPageHd ) )
                 {
@@ -863,7 +863,7 @@ bool ImplSdPPTImport::Import()
                         }
                     }
                 }
-                rStCtrl.Seek( nFPosMerk );
+                rStCtrl.Seek( nFPosBuf );
                 ImportPageEffect( pMPage, bNewAnimationsUsed );
 
                 // background object
@@ -905,7 +905,7 @@ bool ImplSdPPTImport::Import()
 
     // importing slide pages
     {
-        sal_uInt32          nFPosMerk = rStCtrl.Tell();
+        sal_uInt32          nFPosBuf = rStCtrl.Tell();
         PptPageKind     ePageKind = eCurrentPageKind;
         sal_uInt16          nPageNum = nCurrentPageNum;
 
@@ -1074,7 +1074,7 @@ bool ImplSdPPTImport::Import()
             pSdrModel->InsertPage( pNPage );
         }
         SetPageNum( nPageNum, ePageKind );
-        rStCtrl.Seek( nFPosMerk );
+        rStCtrl.Seek( nFPosBuf );
     }
 
     // create handout and note pages
@@ -1510,7 +1510,7 @@ bool Ppt97AnimationStlSortHelper::operator()( const std::pair< SdrObject*, Ppt97
 
 void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimationsUsed )
 {
-    sal_uLong nFilePosMerk = rStCtrl.Tell();
+    sal_uLong nFilePosBuf = rStCtrl.Tell();
 
     // set PageKind at page (up to now only PageKind::Standard or PageKind::Notes)
     if ( pPage->GetPageKind() == PageKind::Standard )
@@ -1869,7 +1869,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                 pPpt97Animation->createAndSetCustomAnimationEffect( rEntry.first );
         }
     }
-    rStCtrl.Seek( nFilePosMerk );
+    rStCtrl.Seek( nFilePosBuf );
 }
 
 // import of sounds
@@ -1879,7 +1879,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
 OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 {
     OUString aRetval;
-    sal_uInt32 nPosMerk = rStCtrl.Tell();
+    sal_uInt32 nPosBuf = rStCtrl.Tell();
     DffRecordHeader aDocHd;
     if ( SeekToDocument( &aDocHd ) )
     {
@@ -1896,7 +1896,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
             {
                 sal_uInt32 nStrLen = aSoundRecHd.GetRecEndFilePos();
                 OUString aRefStr;
-                sal_uInt32 nPosMerk2 = rStCtrl.Tell();
+                sal_uInt32 nPosBuf2 = rStCtrl.Tell();
                 if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, nullptr, 2 ) )
                 {
                     if ( ReadString( aRefStr ) )
@@ -1906,7 +1906,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                 {
                     if ( OUString::number(nSoundRef) == aRefStr )
                     {
-                        rStCtrl.Seek( nPosMerk2 );
+                        rStCtrl.Seek( nPosBuf2 );
                         if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen ) )
                         {
                             ReadString( aRetval );
@@ -1939,7 +1939,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 
                     if ( !bSoundExists )
                     {
-                        rStCtrl.Seek( nPosMerk2 );
+                        rStCtrl.Seek( nPosBuf2 );
                         DffRecordHeader aSoundDataRecHd;
                         if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd ) )
                         {
@@ -1986,7 +1986,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
             }
         }
     }
-    rStCtrl.Seek( nPosMerk );
+    rStCtrl.Seek( nPosBuf );
     return aRetval;
 }
 
@@ -2662,13 +2662,13 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                         break;
                         case PPT_PST_InteractiveInfo:
                         {
-                            sal_uInt32 nFilePosMerk2 = rSt.Tell();
+                            sal_uInt32 nFilePosBuf2 = rSt.Tell();
                             OUString aMacroName;
 
                             if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd ) )
                                 ReadString(aMacroName);
 
-                            rSt.Seek( nFilePosMerk2 );
+                            rSt.Seek( nFilePosBuf2 );
                             DffRecordHeader aHdInteractiveInfoAtom;
                             if ( SeekToRec( rSt, PPT_PST_InteractiveInfoAtom, nHdRecEnd, &aHdInteractiveInfoAtom ) )
                             {
