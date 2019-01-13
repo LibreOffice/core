@@ -633,10 +633,10 @@ void SdrEditView::CheckPossibilities()
         m_bPossibilitiesDirty=false;
 
         if (m_bReadOnly) {
-            bool bMerker1=m_bGrpEnterPossible;
+            bool bTemp=m_bGrpEnterPossible;
             ImpResetPossibilityFlags();
             m_bReadOnly=true;
-            m_bGrpEnterPossible=bMerker1;
+            m_bGrpEnterPossible=bTemp;
         }
         if (m_bMoveAllowed) {
             // Don't allow moving glued connectors.
