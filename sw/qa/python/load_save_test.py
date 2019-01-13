@@ -17,34 +17,23 @@
 '''
 
 import unittest
-import unohelper
 import os
 import os.path
-import time
-import uno
-from com.sun.star.lang import EventObject
-from com.sun.star.lang import XMultiServiceFactory
-from com.sun.star.lang import XComponent
-from com.sun.star.beans import PropertyValue
-from com.sun.star.frame import XGlobalEventBroadcaster
-from com.sun.star.frame import XStorable
-from com.sun.star.document import DocumentEvent
-from com.sun.star.document import XDocumentEventListener
-from org.libreoffice.unotest import UnoInProcess
 from urllib.parse import quote
 
+import uno
+from com.sun.star.beans import PropertyValue
+from org.libreoffice.unotest import UnoInProcess
 
 class LoadSaveTest(unittest.TestCase):
 
-    def mkPropertyValue(self, name, value):
+    def make_property_value(self, name, value):
         return uno.createUnoStruct("com.sun.star.beans.PropertyValue", name, 0, value, 0)
 
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls.xDoc = cls._uno.openEmptyWriterDoc()
-        cls.xContext = cls._uno.getContext()
 
         cls.m_fileURL = "file:/"
         cls.m_SourceDir = "FIXME"
@@ -57,76 +46,111 @@ class LoadSaveTest(unittest.TestCase):
     def tearDownClass(cls):
         cls._uno.tearDown()
 
-    def testLoadStore(self):
-        self.dirs, self.files = self.getDirAndFile(self.m_SourceDir)
-        self.makeDirs(self.m_TargetDir)
-        for self.file_name in self.files:
-            self.tstDoc()
+    def setUp(self):
+        self.xDoc = self.__class__._uno.openEmptyWriterDoc()
+        self.xContext = self.__class__._uno.getContext()
 
-    def tstDoc(self):
+    def tearDown(self):
+        self.xDoc.close(True)
+
+    def test_load_store(self):
+        #Set up instance variables.
+        self.dirs, self.files = [], []
+
+        #self.get_dir_and_file_names(self.m_SourceDir)
+
+        #self.make_directories(self.m_TargetDir)
+
+        #Get a list of files from the testdocuments.
+        self.files = os.listdir("../../../../sw/qa/python/testdocuments")
+
+        print(self.files)
+
+        for file_name in self.files:
+            self.tst_document(file_name)
+
+    def tst_document(self, file_name):
         try:
             props = [("ReadOnly", True)]
-            load_props = tuple([self.mkPropertyValue(name, value) for (name, value) in props])
+
+            load_props = tuple([self.make_property_value(name, value) for (name, value) in props])
 
             m_xMSF = self.xContext.ServiceManager
             desktop = m_xMSF.createInstanceWithContext('com.sun.star.frame.Desktop', self.xContext)
 
-            filepath = os.path.abspath("FIXME")
-            if os.name == "nt":
-                source_file = ''.join(("file:///", filepath, "/", quote(self.file_name)))
-            else:
-                source_file = ''.join(("file://", quote(filepath), "/", quote(self.file_name)))
-
-            self.xDoc = desktop.loadComponentFromURL(source_file, "_blank", 0, load_props)
-            assert(self.xDoc)
+            filepath = os.path.abspath(file_name)
 
             if os.name == "nt":
-                target_file = ''.join(("file:///", self.m_TargetDir, quote(self.m_SourceDir), "/", quote(self.file_name)))
+                source_file = "file:///"+quote(filepath)
+
             else:
-                target_file = ''.join(("file://", quote(self.m_TargetDir), quote(self.m_SourceDir), "/", quote(self.fileName)))
+                source_file = "file://"+quote(filepath)
+
+            print("test", source_file)
+
+            #FIXME: segfault here for some reason.
+            temp_xDoc = desktop.loadComponentFromURL(source_file, "_blank", 0,
+                                                     [])#load_props)
+
+            assert temp_xDoc
+
+            print("test2")
+
+            if os.name == "nt":
+                target_file = ''.join(("file:///", self.m_TargetDir,
+                                       quote(self.m_SourceDir), "/",
+                                       quote(file_name)))
+
+            else:
+                target_file = ''.join(("file://", quote(self.m_TargetDir),
+                                       quote(self.m_SourceDir), "/",
+                                       quote(file_name)))
 
             p1 = PropertyValue()
-            PropValue = uno.Any("[]com.sun.star.beans.PropertyValue", (p1,))
-            uno.invoke(self.xDoc, "storeToURL", (target_file, PropValue))
+            property_value = uno.Any("[]com.sun.star.beans.PropertyValue", (p1,))
+            uno.invoke(self.xDoc, "storeToURL", (target_file, property_value))
 
         except Exception:
             raise
 
-    def getDirAndFile(self, dir):
+    def get_dir_and_file_names(self, _dir):
+        """
+        Make a big list of files in this directory, and add
+        to self.files. Calls itself recursively when directories
+        are found in th given directory.
+        """
 
-        root2 = os.mkdir(dir)
-        root_path = ''.join((dir, "/", dir, ".odt"))
-        root = open(root_path, 'a')
+        if os.path.isdir(_dir):
+            self.dirs.append(_dir)
+            subfiles = os.listdir(_dir)
 
-        self.getDirAndFileNames(dir)
-        return self.dirs, self.files
-
-    def getDirAndFileNames(self, fdName):
-
-        if os.path.isdir(fdName):
-            self.dirs.append(fdName)
-            subfiles = os.listdir(fdName)
-
-            if not fdName[-1] == "/":
-                fdName += "/"
+            #Add a '/' to the end of the directory, so we can
+            #assemble the full path to any files inside.
+            if not _dir[-1] == "/":
+                _dir += "/"
 
             for subfile in subfiles:
-                subfile_name = fdName + subfile
-                self.getDirAndFileNames(subfile_name)
+                subfile_name = _dir+subfile
+                self.get_dir_and_file_names(subfile_name)
 
-        if os.path.isfile(fdName):
-            self.files.append(fdName.split('/')[-1])
+        elif os.path.isfile(_dir):
+            self.files.append(_dir.split('/')[-1])
 
-    def makeDirs(self, target):
+    def make_directories(self, target):
+        """
+        Recreates the folder structure at the source, under the
+        destination folder.
+        """
+
         if not os.path.exists(target):
             os.mkdir(target)
             self.assertTrue(os.path.exists(target))
 
-        for dir in self.dirs:
-            if not os.path.exists(target + dir):
-                f = os.mkdir(target + dir)
-                self.assertTrue(os.path.exists(target + dir))
+        for _dir in self.dirs:
+            if not os.path.exists(target + _dir):
+                os.mkdir(target + _dir)
+                self.assertTrue(os.path.exists(target + _dir))
 
-        target_path = ''.join((target, dir, "/", self.m_SourceDir, ".odt"))
-        root = open(target_path, 'a')
-        filepath = os.path.abspath(target_path)
+        #What are these 2 lines of code for?
+        #target_path = target+_dir+"/"+self.m_SourceDir+".odt"
+        #root = open(target_path, 'a')

@@ -44,6 +44,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	xtextrange \
 	xtext \
 	xtextcursor \
+	load_save_test \
 ))
 
 # vim: set noet sw=4 ts=4:
