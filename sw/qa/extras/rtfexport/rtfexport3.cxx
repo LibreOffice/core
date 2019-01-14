@@ -236,6 +236,14 @@ DECLARE_RTFEXPORT_TEST(testUlw, "ulw.rtf")
     CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(1), 1), "CharWordMode"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf122455, "tdf122455.rtf")
+{
+    // Without the accompanying fix in place, this test would have failed with
+    // 'Expected: 16; Actual  : 32', the font size from a list definition
+    // leaked into the first run's character properties.
+    CPPUNIT_ASSERT_EQUAL(16.0, getProperty<double>(getRun(getParagraph(1), 1), "CharHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
