@@ -184,7 +184,7 @@ bool UCB_IsDirectory( const OUString& rURL )
 bool UCB_GetFileListOfFolder( const OUString& rURL,
                                 std::vector<OUString>& rList,
                                 const OUString* pExtension,
-                                std::vector< ::DateTime* >* pDateTimeList )
+                                std::vector< ::DateTime >* pDateTimeList )
 {
     bool bOk = false;
     try
@@ -227,7 +227,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
                             if( pDateTimeList )
                             {
                                 css::util::DateTime aStamp = xRow->getTimestamp(2);
-                                ::DateTime* pDateTime = new ::DateTime(
+                                ::DateTime aDateTime(
                                         ::Date( aStamp.Day,
                                                 aStamp.Month,
                                                 aStamp.Year ),
@@ -235,7 +235,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
                                                 aStamp.Minutes,
                                                 aStamp.Seconds,
                                                 aStamp.NanoSeconds ));
-                                pDateTimeList->push_back( pDateTime );
+                                pDateTimeList->push_back( aDateTime );
                             }
                         }
 
