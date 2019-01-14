@@ -2306,7 +2306,7 @@ void ScChangeTrack::NotifyModified( ScChangeTrackMsgType eMsgType,
     {
         if ( !xBlockModifyMsg || xBlockModifyMsg->eMsgType != eMsgType ||
                 (IsGenerated( nStartAction ) &&
-                (eMsgType == SC_CTM_APPEND || eMsgType == SC_CTM_REMOVE)) )
+                (eMsgType == ScChangeTrackMsgType::Append || eMsgType == ScChangeTrackMsgType::Remove)) )
         {   // Append within Append e.g. not
             StartBlockModify( eMsgType, nStartAction );
             EndBlockModify( nEndAction );
@@ -2419,18 +2419,18 @@ void ScChangeTrack::Append( ScChangeAction* pAppend, sal_uLong nAction )
 
     if ( aModifiedLink.IsSet() )
     {
-        NotifyModified( SC_CTM_APPEND, nAction, nAction );
+        NotifyModified( ScChangeTrackMsgType::Append, nAction, nAction );
         if ( pAppend->GetType() == SC_CAT_CONTENT )
         {
             ScChangeActionContent* pContent = static_cast<ScChangeActionContent*>(pAppend);
             if ( ( pContent = pContent->GetPrevContent() ) != nullptr )
             {
                 sal_uLong nMod = pContent->GetActionNumber();
-                NotifyModified( SC_CTM_CHANGE, nMod, nMod );
+                NotifyModified( ScChangeTrackMsgType::Change, nMod, nMod );
             }
         }
         else
-            NotifyModified( SC_CTM_CHANGE, pFirst->GetActionNumber(),
+            NotifyModified( ScChangeTrackMsgType::Change, pFirst->GetActionNumber(),
                 pLast->GetActionNumber() );
     }
 }
@@ -2452,7 +2452,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
         ScDocument* pRefDoc, SCTAB nDz, sal_uLong nRejectingInsert )
 {
     SetInDeleteRange( rRange );
-    StartBlockModify( SC_CTM_APPEND, GetActionMax() + 1 );
+    StartBlockModify( ScChangeTrackMsgType::Append, GetActionMax() + 1 );
     SCCOL nCol1;
     SCROW nRow1;
     SCTAB nTab1;
@@ -2734,7 +2734,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
         Undo( nStartLastCut, nEndLastCut ); // Remember Cuts here
         // StartAction only after Undo!
         nStartAction = GetActionMax() + 1;
-        StartBlockModify( SC_CTM_APPEND, nStartAction );
+        StartBlockModify( ScChangeTrackMsgType::Append, nStartAction );
         // Contents to overwrite in ToRange
         LookUpContents( aRange, pRefDoc, 0, 0, 0 );
         pLastCutMove->SetStartLastCut( nStartLastCut );
@@ -2747,7 +2747,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
     {
         bDoContents = true;
         nStartAction = GetActionMax() + 1;
-        StartBlockModify( SC_CTM_APPEND, nStartAction );
+        StartBlockModify( ScChangeTrackMsgType::Append, nStartAction );
     }
     if ( bDoContents )
     {
@@ -2782,7 +2782,7 @@ void ScChangeTrack::AppendContentsIfInRefDoc( ScDocument* pRefDoc,
     if (aIter.first())
     {
         nStartAction = GetActionMax() + 1;
-        StartBlockModify( SC_CTM_APPEND, nStartAction );
+        StartBlockModify( ScChangeTrackMsgType::Append, nStartAction );
         SvNumberFormatter* pFormatter = pRefDoc->GetFormatTable();
         do
         {
@@ -2847,7 +2847,7 @@ ScChangeActionContent* ScChangeTrack::GenerateDelContent(
     }
     pFirstGeneratedDelContent = pContent;
     aGeneratedMap.insert( std::make_pair( nGeneratedMin, pContent ) );
-    NotifyModified( SC_CTM_APPEND, nGeneratedMin, nGeneratedMin );
+    NotifyModified( ScChangeTrackMsgType::Append, nGeneratedMin, nGeneratedMin );
     return pContent;
 }
 
@@ -2862,7 +2862,7 @@ void ScChangeTrack::DeleteGeneratedDelContent( ScChangeActionContent* pContent )
     if ( pContent->pPrev )
         pContent->pPrev->pNext = pContent->pNext;
     delete pContent;
-    NotifyModified( SC_CTM_REMOVE, nAct, nAct );
+    NotifyModified( ScChangeTrackMsgType::Remove, nAct, nAct );
     if ( nAct == nGeneratedMin )
         ++nGeneratedMin; // Only after NotifyModified due to IsGenerated!
 }
@@ -2893,7 +2893,7 @@ void ScChangeTrack::AddDependentWithNotify( ScChangeAction* pParent,
     if ( aModifiedLink.IsSet() )
     {
         sal_uLong nMod = pParent->GetActionNumber();
-        NotifyModified( SC_CTM_PARENT, nMod, nMod );
+        NotifyModified( ScChangeTrackMsgType::Parent, nMod, nMod );
     }
 }
 
@@ -3067,18 +3067,18 @@ void ScChangeTrack::Remove( ScChangeAction* pRemove )
     // That happens automatically on delete by LinkEntry without traversing lists
     if ( aModifiedLink.IsSet() )
     {
-        NotifyModified( SC_CTM_REMOVE, nAct, nAct );
+        NotifyModified( ScChangeTrackMsgType::Remove, nAct, nAct );
         if ( pRemove->GetType() == SC_CAT_CONTENT )
         {
             ScChangeActionContent* pContent = static_cast<ScChangeActionContent*>(pRemove);
             if ( ( pContent = pContent->GetPrevContent() ) != nullptr )
             {
                 sal_uLong nMod = pContent->GetActionNumber();
-                NotifyModified( SC_CTM_CHANGE, nMod, nMod );
+                NotifyModified( ScChangeTrackMsgType::Change, nMod, nMod );
             }
         }
         else if ( pLast )
-            NotifyModified( SC_CTM_CHANGE, pFirst->GetActionNumber(),
+            NotifyModified( ScChangeTrackMsgType::Change, pFirst->GetActionNumber(),
                 pLast->GetActionNumber() );
     }
 
@@ -3109,7 +3109,7 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
         if ( nStartAction == nStartLastCut && nEndAction == nEndLastCut &&
                 !IsInPasteCut() )
             ResetLastCut();
-        StartBlockModify( SC_CTM_REMOVE, nStartAction );
+        StartBlockModify( ScChangeTrackMsgType::Remove, nStartAction );
         for ( sal_uLong j = nEndAction; j >= nStartAction; --j )
         {   // Traverse backwards to recycle nActionMax and for faster access via pLast
             // Deletes are in right order
@@ -3144,7 +3144,7 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
                 {   // Recover LastCut
                     // Break Links before Cut Append!
                     pMove->RemoveAllLinks();
-                    StartBlockModify( SC_CTM_APPEND, nStart );
+                    StartBlockModify( ScChangeTrackMsgType::Append, nStart );
                     for ( sal_uLong nCut = nStart; nCut <= nEnd; nCut++ )
                     {
                         ScChangeActionMap::iterator itCut = aPasteCutMap.find( nCut );

@@ -626,7 +626,7 @@ void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rCom
         if (pTrack)
         {
             sal_uLong nNumber = pAction->GetActionNumber();
-            pTrack->NotifyModified( SC_CTM_CHANGE, nNumber, nNumber );
+            pTrack->NotifyModified( ScChangeTrackMsgType::Change, nNumber, nNumber );
         }
     }
 }

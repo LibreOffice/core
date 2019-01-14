@@ -783,13 +783,13 @@ public:
 };
 
 //  ScChangeTrack
-enum ScChangeTrackMsgType
+enum class ScChangeTrackMsgType
 {
-    SC_CTM_NONE,
-    SC_CTM_APPEND,      // Actions appended
-    SC_CTM_REMOVE,      // Actions removed
-    SC_CTM_CHANGE,      // Actions changed
-    SC_CTM_PARENT       // became a parent (and wasn't before)
+    NONE,
+    Append,      // Actions appended
+    Remove,      // Actions removed
+    Change,      // Actions changed
+    Parent       // became a parent (and wasn't before)
 };
 
 struct ScChangeTrackMsgInfo
