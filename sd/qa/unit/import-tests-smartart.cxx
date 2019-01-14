@@ -718,6 +718,7 @@ void SdImportTestSmartArt::testOrgChart()
     CPPUNIT_ASSERT(xManagerShape.is());
 
     awt::Point aManagerPos = xManagerShape->getPosition();
+    awt::Size aManagerSize = xManagerShape->getSize();
 
     // Make sure that the manager has 2 employees.
     // Without the accompanying fix in place, this test would have failed with
@@ -775,6 +776,20 @@ void SdImportTestSmartArt::testOrgChart()
     // Without the accompanying fix in place, this test would have failed: the
     // assistant shape was below the employee shape.
     CPPUNIT_ASSERT_GREATER(aAssistantPos.Y, aEmployeePos.Y);
+
+    // Make sure the height of xManager and xManager2 is the same.
+    uno::Reference<text::XText> xManager2(
+        getChildShape(getChildShape(getChildShape(xGroup, 1), 0), 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xManager2.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Manager2"), xManager2->getString());
+
+    uno::Reference<drawing::XShape> xManager2Shape(xManager2, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xManager2Shape.is());
+
+    awt::Size aManager2Size = xManager2Shape->getSize();
+    // Without the accompanying fix in place, this test would have failed:
+    // xManager2's height was 3 times larger than xManager's height.
+    CPPUNIT_ASSERT_EQUAL(aManagerSize.Height, aManager2Size.Height);
 
     xDocShRef->DoClose();
 }

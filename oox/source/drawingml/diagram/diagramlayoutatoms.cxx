@@ -552,6 +552,13 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             sal_Int32 nCount = rShape->getChildren().size();
 
+            // A manager node's height should be indepdenent from if it has
+            // assistants and employees, compensate for that.
+            bool bTop = mnType == XML_hierRoot && rShape->getInternalName() == "hierRoot1";
+            double fHeightScale = 1.0;
+            if (mnType == XML_hierRoot && nCount < 3 && bTop)
+                fHeightScale = fHeightScale * nCount / 3;
+
             if (mnType == XML_hierRoot && nCount == 3)
             {
                 // Order assistant nodes above employee nodes.
@@ -563,7 +570,10 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromT)
+            {
                 aChildSize.Height /= nCount;
+                aChildSize.Height *= fHeightScale;
+            }
             else
                 aChildSize.Width /= nCount;
 
