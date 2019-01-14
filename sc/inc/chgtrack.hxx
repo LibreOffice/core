@@ -32,6 +32,7 @@
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <unotools/options.hxx>
+#include <boost/optional.hpp>
 #include "global.hxx"
 #include "bigrange.hxx"
 #include "scdllapi.h"
@@ -799,8 +800,8 @@ struct ScChangeTrackMsgInfo
 };
 
 // MsgQueue for notification via ModifiedLink
-typedef std::vector<ScChangeTrackMsgInfo*> ScChangeTrackMsgQueue;
-typedef std::vector<ScChangeTrackMsgInfo*> ScChangeTrackMsgStack;
+typedef std::vector<ScChangeTrackMsgInfo> ScChangeTrackMsgQueue;
+typedef std::vector<ScChangeTrackMsgInfo> ScChangeTrackMsgStack;
 typedef std::map<sal_uLong, ScChangeAction*> ScChangeActionMap;
 
 enum ScChangeTrackMergeState
@@ -848,7 +849,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeActionLinkEntry*    pLinkInsertRow;
     ScChangeActionLinkEntry*    pLinkInsertTab;
     ScChangeActionLinkEntry*    pLinkMove;
-    ScChangeTrackMsgInfo*   pBlockModifyMsg;
+    boost::optional<ScChangeTrackMsgInfo> xBlockModifyMsg;
     ScDocument*             pDoc;
     sal_uLong               nActionMax;
     sal_uLong               nGeneratedMin;

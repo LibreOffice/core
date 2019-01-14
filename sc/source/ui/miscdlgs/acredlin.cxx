@@ -1541,16 +1541,16 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
     sal_uLong   nStartAction;
     sal_uLong   nEndAction;
 
-    for (const auto& pMsg : aMsgQueue)
+    for (const auto& rMsg : aMsgQueue)
     {
-        nStartAction = pMsg->nStartAction;
-        nEndAction = pMsg->nEndAction;
+        nStartAction = rMsg.nStartAction;
+        nEndAction = rMsg.nEndAction;
 
         if(!bIgnoreMsg)
         {
             bNoSelection=true;
 
-            switch(pMsg->eMsgType)
+            switch(rMsg.eMsgType)
             {
                 case SC_CTM_APPEND: AppendChanges(&rChgTrack,nStartAction,nEndAction);
                                     break;
@@ -1560,13 +1560,10 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
                 case SC_CTM_CHANGE: //bNeedsUpdate=true;
                                     UpdateEntrys(&rChgTrack,nStartAction,nEndAction);
                                     break;
-                default:
-                {
+                default: ;
                     // added to avoid warnings
-                }
             }
         }
-        delete pMsg;
     }
 
     aMsgQueue.clear();
