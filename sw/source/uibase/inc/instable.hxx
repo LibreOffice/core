@@ -82,7 +82,7 @@ public:
 
     void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                     SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,
-                    SwTableAutoFormat *& prTAFormat );
+                    std::unique_ptr<SwTableAutoFormat>& prTAFormat );
 };
 
 #endif

@@ -374,7 +374,7 @@ void SwHHCWrapper::ReplaceUnit(
     OUString aOrigText( m_rWrtShell.GetSelText() );
     OUString aNewText( rReplaceWith );
     OSL_ENSURE( aOrigText == rOrigText, "!! text mismatch !!" );
-    SwFormatRuby *pRuby = nullptr;
+    std::unique_ptr<SwFormatRuby> pRuby;
     bool bRubyBelow = false;
     OUString  aNewOrigText;
     switch (eAction)
@@ -393,24 +393,24 @@ void SwHHCWrapper::ReplaceUnit(
         break;
         case eReplacementAbove  :
         {
-            pRuby = new SwFormatRuby( rReplaceWith );
+            pRuby.reset(new SwFormatRuby( rReplaceWith ));
         }
         break;
         case eOriginalAbove :
         {
-            pRuby = new SwFormatRuby( aOrigText );
+            pRuby.reset(new SwFormatRuby( aOrigText ));
             aNewOrigText = rReplaceWith;
         }
         break;
         case eReplacementBelow :
         {
-            pRuby = new SwFormatRuby( rReplaceWith );
+            pRuby.reset(new SwFormatRuby( rReplaceWith ));
             bRubyBelow = true;
         }
         break;
         case eOriginalBelow :
         {
-            pRuby = new SwFormatRuby( aOrigText );
+            pRuby.reset(new SwFormatRuby( aOrigText ));
             aNewOrigText = rReplaceWith;
             bRubyBelow = true;
         }
@@ -445,7 +445,7 @@ void SwHHCWrapper::ReplaceUnit(
         pRuby->SetAdjustment( RubyAdjust_CENTER );
 
         m_rWrtShell.SetAttrItem(*pRuby);
-        delete pRuby;
+        pRuby.reset();
         m_rWrtShell.EndUndo( SwUndoId::SETRUBYATTR );
     }
     else

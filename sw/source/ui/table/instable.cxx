@@ -29,7 +29,7 @@
 
 void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTableOpts, OUString& rAutoName,
-                                SwTableAutoFormat *& prTAFormat )
+                                std::unique_ptr<SwTableAutoFormat>& prTAFormat )
 {
     SwInsertTableFlags nInsMode = SwInsertTableFlags::NONE;
     rName = m_xNameEdit->get_text();
@@ -46,7 +46,7 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
         nInsMode |= SwInsertTableFlags::SplitLayout;
     if( pTAutoFormat )
     {
-        prTAFormat = new SwTableAutoFormat( *pTAutoFormat );
+        prTAFormat.reset(new SwTableAutoFormat( *pTAutoFormat ));
         rAutoName = prTAFormat->GetName();
     }
 

@@ -120,7 +120,7 @@ protected:
 public:
     virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
-                                SwTableAutoFormat *& prTAFormat ) = 0;
+                                std::unique_ptr<SwTableAutoFormat>& prTAFormat ) = 0;
 };
 
 class AbstractJavaEditDialog : public VclAbstractDialog
