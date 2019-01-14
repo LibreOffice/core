@@ -165,6 +165,9 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
         Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
         maCtlFavorites.InsertItem( static_cast<sal_uInt16>(nFavorite), aThumbImage, aStr );
     }
+
+    if (maCtlFavorites.GetItemCount())
+        maCtlFavorites.SelectItem(1);
 }
 
 void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* pModel )
