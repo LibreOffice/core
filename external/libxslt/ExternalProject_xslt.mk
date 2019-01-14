@@ -15,19 +15,8 @@ $(eval $(call gb_ExternalProject_register_targets,xslt,\
 	build \
 ))
 ifeq ($(OS),WNT)
-ifeq ($(COM),GCC)
-$(call gb_ExternalProject_get_state_target,xslt,build):
-	$(call gb_ExternalProject_run,build,\
-		./configure --without-crypto --without-python --disable-static \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
-			$(if $(MINGW_SHARED_GXXLIB),LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
-			LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
-			OBJDUMP=objdump \
-		&& chmod 777 xslt-config \
-		&& $(MAKE) \
-	)
-else # COM=MSC
+$(eval $(call gb_ExternalProject_use_nmake,xslt,build))
+
 $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js \
@@ -35,9 +24,11 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 			vcmanifest=yes \
 			lib=$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc \
 		&& unset MAKEFLAGS \
-		&& LIB="$(ILIB)" nmake \
+		&& unset MAKE \
+		&& INCLUDE="$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC)))" \
+		   LIB="$(ILIB)" \
+		   nmake \
 	,win32)
-endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(call gb_ExternalProject_run,build,\
@@ -55,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(gb_Package_SOURCEDIR_xslt)/libxslt/.libs/libxslt.1.dylib \
+				$(EXTERNAL_WORKDIR)/libxslt/.libs/libxslt.1.dylib \
 		) \
 	)
 endif
