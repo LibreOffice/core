@@ -3270,7 +3270,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             // In an ideal world we could handle the tab stop between the number and
                             // the entry correctly, but I currently have no clue how to obtain
                             // the tab stop position. It is _not_ set at the paragraph style.
-                            SwForm* pForm = nullptr;
+                            std::unique_ptr<SwForm> pForm;
                             for (SwWW8StyInf & rSI : m_vColl)
                             {
                                 if (rSI.IsOutlineNumbered())
@@ -3282,7 +3282,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                         ++nStyleLevel;
 
                                         if ( !pForm )
-                                            pForm = new SwForm( pBase->GetTOXForm() );
+                                            pForm.reset(new SwForm( pBase->GetTOXForm() ));
 
                                         SwFormTokens aPattern = pForm->GetPattern(nStyleLevel);
                                         SwFormTokens::iterator aIt =
@@ -3302,7 +3302,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                             if ( pForm )
                             {
                                 pBase->SetTOXForm( *pForm );
-                                delete pForm;
                             }
                         }
 
