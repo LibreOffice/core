@@ -2835,9 +2835,9 @@ void GDIMetaFile::UseCanvas( bool _bUseCanvas )
     m_bUseCanvas = _bUseCanvas;
 }
 
-void GDIMetaFile::dumpAsXml() const
+void GDIMetaFile::dumpAsXml( const OUString& sFileName ) const
 {
-    SvFileStream aStream("metafile.xml", StreamMode::STD_READWRITE | StreamMode::TRUNC);
+    SvFileStream aStream(sFileName.isEmpty() ? "metafile.xml" : sFileName, StreamMode::STD_READWRITE | StreamMode::TRUNC);
     MetafileXmlDump aDumper;
     aDumper.dump(*this, aStream);
 }
