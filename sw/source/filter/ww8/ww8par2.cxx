@@ -460,9 +460,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     bool bNowApo = aRet.HasFrame() || pTopLevelTable;
     if (bNowApo)
     {
-        if (WW8FlyPara *pTest = ConstructApo(aRet, pTabPos))
-            delete pTest;
-        else
+        if (!ConstructApo(aRet, pTabPos))
             bNowApo = false;
     }
 
@@ -2080,10 +2078,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         if (aApo.mbStartApo)
         {
             //if there really is a fly here, and not a "null" fly then break.
-            WW8FlyPara *pNewFly = m_pIo->ConstructApo(aApo, pTabPos);
-            if (pNewFly)
-                delete pNewFly;
-            else
+            if (m_pIo->ConstructApo(aApo, pTabPos))
                 break;
         }
 
@@ -3408,7 +3403,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 
     // #i33818# - determine absolute position object attributes,
     // if possible. It's needed for nested tables.
-    WW8FlyPara* pTableWFlyPara( nullptr );
+    std::unique_ptr<WW8FlyPara> pTableWFlyPara;
     WW8SwFlyPara* pTableSFlyPara( nullptr );
     // #i45301# - anchor nested table inside Writer fly frame
     // only at-character, if absolute position object attributes are available.
@@ -3485,7 +3480,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             // if existing, and apply them to the created Writer fly frame.
             if ( pTableWFlyPara && pTableSFlyPara )
             {
-                WW8FlySet aFlySet( *this, pTableWFlyPara, pTableSFlyPara, false );
+                WW8FlySet aFlySet( *this, pTableWFlyPara.get(), pTableSFlyPara, false );
                 SwFormatAnchor aAnchor( RndStdIds::FLY_AT_CHAR );
                 aAnchor.SetAnchor( m_xTableDesc->m_pParentPos );
                 aFlySet.Put( aAnchor );
@@ -3510,7 +3505,6 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
         PopTableDesc();
 
     // #i33818#
-    delete pTableWFlyPara;
     delete pTableSFlyPara;
 
     return m_xTableDesc != nullptr;

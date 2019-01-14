@@ -2364,14 +2364,13 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrameFormat *pFlyFormat,
     return nRetWidth;
 }
 
-WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
+std::unique_ptr<WW8FlyPara> SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
     const WW8_TablePos *pTabPos)
 {
-    WW8FlyPara *pRet = nullptr;
     OSL_ENSURE(rApo.HasFrame() || pTabPos,
         "If no frame found, *MUST* be in a table");
 
-    pRet = new WW8FlyPara(m_bVer67, rApo.mpStyleApo);
+    std::unique_ptr<WW8FlyPara> pRet(new WW8FlyPara(m_bVer67, rApo.mpStyleApo));
 
     // find APO parameter and test for bGrafApo
     if (rApo.HasFrame())
@@ -2381,8 +2380,7 @@ WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
 
     if (pRet->IsEmpty())
     {
-        delete pRet;
-        pRet = nullptr;
+        pRet.reset();
     }
     return pRet;
 }
@@ -2418,7 +2416,7 @@ bool SwWW8ImplReader::IsDropCap()
 
 bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos)
 {
-    m_xWFlyPara.reset(ConstructApo(rApo, pTabPos));
+    m_xWFlyPara = ConstructApo(rApo, pTabPos);
     if (!m_xWFlyPara)
         return false;
 
