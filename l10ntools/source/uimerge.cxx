@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/main.h>
-
 #include <osl/file.hxx>
 
 #include <rtl/strbuf.hxx>
@@ -17,6 +15,8 @@
 #include <libxslt/transform.h>
 #include <libxslt/xslt.h>
 #include <libxslt/xsltutils.h>
+
+#include <sal/main.h>
 
 #include <stdio.h>
 
