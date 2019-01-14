@@ -1717,6 +1717,8 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             WinBits nStyle = pWindow->GetStyle();
             sal_uInt16 nTmp = 0;
             Value >>= nTmp;
+            // clear any dodgy bits passed in, can come from dodgy extensions
+            nTmp &= o3tl::typed_flags<WindowBorderStyle>::mask;
             WindowBorderStyle nBorder = static_cast<WindowBorderStyle>(nTmp);
             if ( !bool(nBorder) )
             {

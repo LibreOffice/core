@@ -190,10 +190,14 @@ void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
                 if( eType != SbxOBJECT || pVar->GetClass() != SbxClassType::Object )
                     pVar->Convert( eType );
         SbxVariableRef& rRef = GetRef( nIdx );
+        // tdf#122250. It is possible that I hold the last reference to myself, so check, otherwise I might
+        // call SetFlag on myself after I have died.
+        bool removingMyself = rRef.get() && rRef->GetParameters() == this && GetRefCount() == 1;
         if(rRef.get() != pVar )
         {
             rRef = pVar;
-            SetFlag( SbxFlagBits::Modified );
+            if (!removingMyself)
+                SetFlag( SbxFlagBits::Modified );
         }
     }
 }
