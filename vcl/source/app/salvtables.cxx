@@ -229,6 +229,9 @@ private:
         }
     }
 
+protected:
+    virtual void HandleEventListener(VclWindowEvent& rEvent);
+
 public:
     SalInstanceWidget(vcl::Window* pWidget, bool bTakeOwnership)
         : m_xWidget(pWidget)
@@ -537,7 +540,7 @@ public:
     }
 };
 
-IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
+void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
 {
     if (rEvent.GetId() == VclEventId::WindowGetFocus || rEvent.GetId() == VclEventId::WindowActivate)
         m_aFocusInHdl.Call(*this);
@@ -555,6 +558,11 @@ IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
         const KeyEvent* pKeyEvent = static_cast<const KeyEvent*>(rEvent.GetData());
         m_aKeyReleaseHdl.Call(*pKeyEvent);
     }
+}
+
+IMPL_LINK(SalInstanceWidget, EventListener, VclWindowEvent&, rEvent, void)
+{
+    HandleEventListener(rEvent);
 }
 
 namespace
@@ -2883,6 +2891,20 @@ private:
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
     DECL_LINK(PopupMenuHdl, const Point&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
+
+    // SalInstanceWidget has a generic listener for all these
+    // events, ignore the ones we have specializations for
+    // in VclDrawingArea
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override
+    {
+        if (rEvent.GetId() == VclEventId::WindowResize ||
+            rEvent.GetId() == VclEventId::WindowKeyInput ||
+            rEvent.GetId() == VclEventId::WindowKeyUp)
+        {
+            return;
+        }
+        SalInstanceWidget::HandleEventListener(rEvent);
+    }
 
 public:
     SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, const a11yref& rAlly,
