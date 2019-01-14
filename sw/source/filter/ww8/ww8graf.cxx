@@ -1149,7 +1149,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                 if( pFlyFormat && pRecord )
                 {
                     SfxItemSet aFlySet( m_rDoc.GetAttrPool(),
-                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1, XATTR_START, XATTR_END>{} );
 
                     tools::Rectangle aInnerDist(   pRecord->nDxTextLeft,
                                              pRecord->nDyTextTop,
@@ -2552,7 +2552,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // when in a header or footer word appears to treat all elements as wrap through
 
     // determine wrapping mode
-    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
+    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1, XATTR_START, XATTR_END>{});
     Reader::ResetFrameFormatAttrs(aFlySet); // tdf#122425: Explicitly remove borders and spacing
     css::text::WrapTextMode eSurround = css::text::WrapTextMode_PARALLEL;
     bool bContour = false;
