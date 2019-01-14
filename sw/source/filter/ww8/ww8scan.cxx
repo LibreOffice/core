@@ -6875,9 +6875,9 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
 // so it has no empty slot, we should allocate memory and a pointer should
 // reference to STD (perhaps filled with 0). If the slot is empty,
 // it will return a null pointer.
-WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip)
+std::unique_ptr<WW8_STD> WW8Style::Read1STDFixed(sal_uInt16& rSkip)
 {
-    WW8_STD* pStd = nullptr;
+    std::unique_ptr<WW8_STD> pStd;
 
     sal_uInt16 cbStd(0);
     m_rStream.ReadUInt16(cbStd);   // read length
@@ -6888,8 +6888,8 @@ WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip)
         // Fixed part completely available
 
         // read fixed part of STD
-        pStd = new WW8_STD;
-        memset( pStd, 0, sizeof( *pStd ) );
+        pStd.reset(new WW8_STD);
+        memset( pStd.get(), 0, sizeof( *pStd ) );
 
         do
         {
@@ -6936,8 +6936,7 @@ WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip)
 
         if (!m_rStream.good() || !nRead)
         {
-            delete pStd;
-            pStd = nullptr;       // report error with NULL
+            pStd.reset(); // report error with NULL
         }
 
         rSkip = cbStd - m_cbSTDBaseInFile;
@@ -6951,12 +6950,12 @@ WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip)
     return pStd;
 }
 
-WW8_STD* WW8Style::Read1Style(sal_uInt16& rSkip, OUString* pString)
+std::unique_ptr<WW8_STD> WW8Style::Read1Style(sal_uInt16& rSkip, OUString* pString)
 {
     // Attention: MacWord-Documents have their Stylenames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
 
-    WW8_STD* pStd = Read1STDFixed(rSkip);         // read STD
+    std::unique_ptr<WW8_STD> pStd = Read1STDFixed(rSkip);         // read STD
 
     // string desired?
     if( pString )
