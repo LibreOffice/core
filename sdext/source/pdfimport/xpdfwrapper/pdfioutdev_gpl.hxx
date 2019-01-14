@@ -288,8 +288,12 @@ extern FILE* g_binary_out;
 
 // note: if you ever change Output_t, please keep in mind that the current code
 // relies on it being of 8 bit size
-typedef Guchar Output_t;
+typedef unsigned char Output_t;
 typedef std::vector< Output_t > OutputBuffer;
+
+#if !POPPLER_CHECK_VERSION(0, 73, 0)
+static_assert(std::is_same<Guchar, unsigned char>::value, "unexpected typedef");
+#endif
 
 #endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
 
