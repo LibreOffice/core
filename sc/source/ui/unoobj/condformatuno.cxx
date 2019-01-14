@@ -357,9 +357,9 @@ sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCel
 
     SCTAB nTab = aCoreRange[0].aStart.Tab();
 
-    ScConditionalFormat* pNewFormat = new ScConditionalFormat(0, &mpDocShell->GetDocument());
+    std::unique_ptr<ScConditionalFormat> pNewFormat(new ScConditionalFormat(0, &mpDocShell->GetDocument()));
     pNewFormat->SetRange(aCoreRange);
-    return mpDocShell->GetDocument().AddCondFormat(pNewFormat, nTab);
+    return mpDocShell->GetDocument().AddCondFormat(std::move(pNewFormat), nTab);
 }
 
 void ScCondFormatsObj::removeByID(const sal_Int32 nID)

@@ -543,7 +543,7 @@ public:
      const ScConditionalFormat& operator=(const ScConditionalFormat&) = delete;
 
     // true copy of formulas (for Ref-Undo / between documents)
-    ScConditionalFormat* Clone(ScDocument* pNewDoc = nullptr) const;
+    std::unique_ptr<ScConditionalFormat> Clone(ScDocument* pNewDoc = nullptr) const;
 
     void            AddEntry( ScFormatEntry* pNew );
     void RemoveEntry(size_t nIndex);
@@ -610,7 +610,7 @@ public:
     ScConditionalFormatList(const ScConditionalFormatList& rList);
     ScConditionalFormatList(ScDocument* pDoc, const ScConditionalFormatList& rList);
 
-    void    InsertNew( ScConditionalFormat* pNew );
+    void    InsertNew( std::unique_ptr<ScConditionalFormat> pNew );
 
     /**
      * Checks that all cond formats have a non empty range.
