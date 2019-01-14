@@ -1,0 +1,59 @@
+From 582d188e6e3487180891f1fc457a80dec8be26a8 Mon Sep 17 00:00:00 2001
+From: Christian Heimes <christian@python.org>
+Date: Mon, 24 Sep 2018 14:38:31 +0200
+Subject: [PATCH] [3.6] bpo-17239: Disable external entities in SAX parser
+ (GH-9217) (GH-9512)
+
+The SAX parser no longer processes general external entities by default
+to increase security. Before, the parser created network connections
+to fetch remote files or loaded local files from the file system for DTD
+and entities.
+
+Signed-off-by: Christian Heimes <christian@python.org>
+
+https://bugs.python.org/issue17239.
+(cherry picked from commit 17b1d5d4e36aa57a9b25a0e694affbd1ee637e45)
+
+Co-authored-by: Christian Heimes <christian@python.org>
+
+
+
+https://bugs.python.org/issue17239
+---
+ Doc/library/xml.dom.pulldom.rst               | 14 +++++
+ Doc/library/xml.rst                           |  6 +-
+ Doc/library/xml.sax.rst                       |  8 +++
+ Doc/whatsnew/3.6.rst                          | 18 +++++-
+ Lib/test/test_pulldom.py                      |  7 +++
+ Lib/test/test_sax.py                          | 60 ++++++++++++++++++-
+ Lib/test/test_xml_etree.py                    | 13 ++++
+ Lib/xml/sax/expatreader.py                    |  2 +-
+ .../2018-09-11-18-30-55.bpo-17239.kOpwK2.rst  |  3 +
+ 9 files changed, 125 insertions(+), 6 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Security/2018-09-11-18-30-55.bpo-17239.kOpwK2.rst
+
+diff --git a/Lib/xml/sax/expatreader.py b/Lib/xml/sax/expatreader.py
+index 421358fa5b..5066ffc2fa 100644
+--- a/Lib/xml/sax/expatreader.py
++++ b/Lib/xml/sax/expatreader.py
+@@ -95,7 +95,7 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
+         self._lex_handler_prop = None
+         self._parsing = 0
+         self._entity_stack = []
+-        self._external_ges = 1
++        self._external_ges = 0
+         self._interning = None
+ 
+     # XMLReader methods
+diff --git a/Misc/NEWS.d/next/Security/2018-09-11-18-30-55.bpo-17239.kOpwK2.rst b/Misc/NEWS.d/next/Security/2018-09-11-18-30-55.bpo-17239.kOpwK2.rst
+new file mode 100644
+index 0000000000..8dd0fe8c1b
+--- /dev/null
++++ b/Misc/NEWS.d/next/Security/2018-09-11-18-30-55.bpo-17239.kOpwK2.rst
+@@ -0,0 +1,3 @@
++The xml.sax and xml.dom.minidom parsers no longer processes external
++entities by default. External DTD and ENTITY declarations no longer
++load files or create network connections.
+-- 
+2.20.1
+
