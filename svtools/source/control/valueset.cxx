@@ -2545,7 +2545,7 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
     }
 
     if ( nItemPos == VALUESET_ITEM_NOTFOUND )
-        return false;
+        return true;
 
     if ( nItemPos!=VALUESET_ITEM_NONEITEM && nItemPos<nLastItem )
     {
