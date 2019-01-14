@@ -248,7 +248,7 @@ void SwPostItMgr::CheckForRemovedPostIts()
     {
         if (!(*it)->UseElement(*mpWrtShell->GetLayout(), rIDRA))
         {
-            EndListening(const_cast<SfxBroadcaster&>(*(*it)->GetBroadCaster()));
+            EndListening(const_cast<SfxBroadcaster&>(*(*it)->GetBroadcaster()));
             std::unique_ptr<SwSidebarItem> p = std::move(*it);
             it = mvPostItFields.erase(it);
             if (GetActiveSidebarWin() == p->pPostIt)
@@ -282,7 +282,7 @@ SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExisten
     {
         for (auto const& postItField : mvPostItFields)
         {
-            if ( postItField->GetBroadCaster() == pItem )
+            if ( postItField->GetBroadcaster() == pItem )
                 return nullptr;
         }
     }
@@ -303,7 +303,7 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 {
     EndListening(*pBroadcast);
     auto i = std::find_if(mvPostItFields.begin(), mvPostItFields.end(),
-        [&pBroadcast](const std::unique_ptr<SwSidebarItem>& pField) { return pField->GetBroadCaster() == pBroadcast; });
+        [&pBroadcast](const std::unique_ptr<SwSidebarItem>& pField) { return pField->GetBroadcaster() == pBroadcast; });
     if (i != mvPostItFields.end())
     {
         std::unique_ptr<SwSidebarItem> p = std::move(*i);
@@ -394,7 +394,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 SwFormatField* pFormatField = dynamic_cast<SwFormatField*>(&rBC);
                 for (auto const& postItField : mvPostItFields)
                 {
-                    if ( pFormatField == postItField->GetBroadCaster() )
+                    if ( pFormatField == postItField->GetBroadcaster() )
                     {
                         if (postItField->pPostIt)
                         {
@@ -418,7 +418,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 SwFormatField* pFormatField = dynamic_cast<SwFormatField*>(&rBC);
                 for (auto const& postItField : mvPostItFields)
                 {
-                    if ( pFormatField == postItField->GetBroadCaster() )
+                    if ( pFormatField == postItField->GetBroadcaster() )
                     {
                         if (postItField->pPostIt)
                         {
@@ -502,7 +502,7 @@ void SwPostItMgr::Focus(SfxBroadcaster& rBC)
     for (auto const& postItField : mvPostItFields)
     {
         // field to get the focus is the broadcaster
-        if ( &rBC == postItField->GetBroadCaster() )
+        if ( &rBC == postItField->GetBroadcaster() )
         {
             if (postItField->pPostIt)
             {
@@ -1322,7 +1322,7 @@ void SwPostItMgr::RemoveSidebarWin()
 {
     for (auto& postItField : mvPostItFields)
     {
-        EndListening( *const_cast<SfxBroadcaster*>(postItField->GetBroadCaster()) );
+        EndListening( *const_cast<SfxBroadcaster*>(postItField->GetBroadcaster()) );
         postItField->pPostIt.disposeAndClear();
         postItField.reset();
     }
@@ -1691,7 +1691,7 @@ SwAnnotationWin* SwPostItMgr::GetSidebarWin( const SfxBroadcaster* pBroadcaster)
 {
     for (auto const& postItField : mvPostItFields)
     {
-        if ( postItField->GetBroadCaster() == pBroadcaster)
+        if ( postItField->GetBroadcaster() == pBroadcaster)
             return postItField->pPostIt;
     }
     return nullptr;
