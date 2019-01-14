@@ -30,7 +30,7 @@
 
 #include "lessoperators.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
+namespace com::sun::star::uno {
 
 bool operator <(TypeDescription const & left, TypeDescription const & right) {
     assert(left.is() && right.is());
@@ -42,7 +42,7 @@ bool operator <(TypeDescription const & left, TypeDescription const & right) {
           OUString::unacquired(&right.get()->pTypeName)));
 }
 
-} } } }
+}
 
 namespace rtl {
 

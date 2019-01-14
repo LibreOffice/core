@@ -24,9 +24,7 @@
 
 #include <uno/any2.h>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class TypeDescription;
-} } } }
+namespace com::sun::star::uno { class TypeDescription; }
 
 namespace binaryurp {
 

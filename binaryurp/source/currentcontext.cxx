@@ -30,9 +30,7 @@
 
 #include "currentcontext.hxx"
 
-namespace binaryurp {
-
-namespace current_context {
+namespace binaryurp::current_context {
 
 css::uno::UnoInterfaceReference get() {
     css::uno::UnoInterfaceReference cc;
@@ -53,8 +51,6 @@ void set(css::uno::UnoInterfaceReference const & value) {
     {
         throw css::uno::RuntimeException("uno_setCurrentContext failed");
     }
-}
-
 }
 
 }

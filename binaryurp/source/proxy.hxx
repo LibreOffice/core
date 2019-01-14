@@ -33,9 +33,7 @@
 #include <uno/dispatcher.h>
 
 namespace binaryurp { class Bridge; }
-namespace com { namespace sun { namespace star { namespace uno {
-    class UnoInterfaceReference;
-} } } }
+namespace com::sun::star::uno { class UnoInterfaceReference; }
 
 namespace binaryurp {
 
