@@ -150,6 +150,7 @@ protected:
     void         CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
     void         AddDragModeHdl(SdrDragMode eMode);
     virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) override;
+    virtual bool RequestHelp(const HelpEvent& rHEvt) override;
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
