@@ -1719,7 +1719,7 @@ public:
     void            ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void            ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
-    SC_DLLPUBLIC sal_uLong  AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab );
+    SC_DLLPUBLIC sal_uLong  AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew, SCTAB nTab );
     void                    DeleteConditionalFormat( sal_uLong nIndex, SCTAB nTab );
 
     void                                    SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab );
