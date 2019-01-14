@@ -1186,14 +1186,14 @@ public:
     /** Notes **/
     SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
-    void                         SetNote(const ScAddress& rPos, ScPostIt* pNote);
-    void                         SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt* pNote);
+    void                         SetNote(const ScAddress& rPos, std::unique_ptr<ScPostIt> pNote);
+    void                         SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPostIt> pNote);
     SC_DLLPUBLIC bool            HasNote(const ScAddress& rPos) const;
     bool                         HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     SC_DLLPUBLIC bool            HasColNotes(SCCOL nCol, SCTAB nTab) const;
     SC_DLLPUBLIC bool            HasTabNotes(SCTAB nTab) const;
     bool                         HasNotes() const;
-    SC_DLLPUBLIC ScPostIt*       ReleaseNote(const ScAddress& rPos);
+    SC_DLLPUBLIC std::unique_ptr<ScPostIt> ReleaseNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetOrCreateNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       CreateNote(const ScAddress& rPos);
     size_t                       GetNoteCount( SCTAB nTab, SCCOL nCol ) const;

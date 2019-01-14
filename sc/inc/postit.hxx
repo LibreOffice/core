@@ -90,7 +90,7 @@ public:
             object (used e.g. in Undo documents to restore the pointer to the
             existing caption object).
      */
-    ScPostIt*           Clone(
+    std::unique_ptr<ScPostIt> Clone(
                             const ScAddress& rOwnPos,
                             ScDocument& rDestDoc, const ScAddress& rDestPos,
                             bool bCloneCaption ) const;

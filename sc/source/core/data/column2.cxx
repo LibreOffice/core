@@ -1825,7 +1825,7 @@ public:
         SCROW nDestRow = nRow + mnDestOffset;
         ScAddress aSrcPos(mnSrcCol, nRow, mnSrcTab);
         ScAddress aDestPos(mnDestCol, nDestRow, mnDestTab);
-        miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(aSrcPos, *mrDestCol.GetDoc(), aDestPos, mbCloneCaption));
+        miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(aSrcPos, *mrDestCol.GetDoc(), aDestPos, mbCloneCaption).release());
         // Notify our LOK clients also
         ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, mrDestCol.GetDoc(), aDestPos, p);
     }
@@ -1914,10 +1914,10 @@ const ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, 
     return sc::cellnote_block::at(*aPos.first->data, aPos.second);
 }
 
-void ScColumn::SetCellNote(SCROW nRow, ScPostIt* pNote)
+void ScColumn::SetCellNote(SCROW nRow, std::unique_ptr<ScPostIt> pNote)
 {
     //pNote->UpdateCaptionPos(ScAddress(nCol, nRow, nTab)); // TODO notes useful ? slow import with many notes
-    maCellNotes.set(nRow, pNote);
+    maCellNotes.set(nRow, pNote.release());
 }
 
 namespace {

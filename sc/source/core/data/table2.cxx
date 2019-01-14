@@ -1003,8 +1003,8 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                         ScPostIt* pNote = *itData;
                         if (pNote)
                         {
-                            ScPostIt* pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
-                            pTransClip->pDocument->SetNote(aDestPos, pClonedNote);
+                            std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
+                            pTransClip->pDocument->SetNote(aDestPos, std::move(pClonedNote));
                         }
                     }
                     break; // we reached the last valid block
@@ -1020,8 +1020,8 @@ void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SC
                         ScPostIt* pNote = *itData;
                         if (pNote)
                         {
-                            ScPostIt* pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
-                            pTransClip->pDocument->SetNote(aDestPos, pClonedNote);
+                            std::unique_ptr<ScPostIt> pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, true );
+                            pTransClip->pDocument->SetNote(aDestPos, std::move(pClonedNote));
                         }
                     }
                 }
@@ -1588,7 +1588,7 @@ ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetFormulaCell(nRow);
 }
 
-ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
+std::unique_ptr<ScPostIt> ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
 {
     if (!ValidCol(nCol))
         return nullptr;

@@ -530,10 +530,10 @@ ScPostIt::~ScPostIt()
     RemoveCaption();
 }
 
-ScPostIt* ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, bool bCloneCaption ) const
+std::unique_ptr<ScPostIt> ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, bool bCloneCaption ) const
 {
     CreateCaptionFromInitData( rOwnPos );
-    return bCloneCaption ? new ScPostIt( rDestDoc, rDestPos, *this, mnPostItId ) : new ScPostIt( rDestDoc, rDestPos, maNoteData, false, mnPostItId );
+    return bCloneCaption ? std::make_unique<ScPostIt>( rDestDoc, rDestPos, *this, mnPostItId ) : std::make_unique<ScPostIt>( rDestDoc, rDestPos, maNoteData, false, mnPostItId );
 }
 
 void ScPostIt::SetDate( const OUString& rDate )
@@ -886,7 +886,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, false );
     pNote->AutoStamp();
 
-    rDoc.SetNote(rPos, pNote);
+    rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
 
     // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
     ScNoteCaptionCreator aCreator( rDoc, rPos, aNoteData.m_pCaption, true/*bShown*/ );
@@ -922,7 +922,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, /*bAlwaysCreateCaption*/false, 0/*nPostItId*/ );
     pNote->AutoStamp();
 
-    rDoc.SetNote(rPos, pNote);
+    rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
 
     return pNote;
 }
@@ -945,7 +945,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
         pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption, nPostItId );
         pNote->AutoStamp();
         //insert takes ownership
-        rDoc.SetNote(rPos, pNote);
+        rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
     }
     return pNote;
 }

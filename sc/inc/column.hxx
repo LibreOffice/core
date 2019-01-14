@@ -602,10 +602,10 @@ public:
     const ScPostIt* GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
     void DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership );
     bool HasCellNotes() const;
-    void SetCellNote( SCROW nRow, ScPostIt* pNote);
+    void SetCellNote( SCROW nRow, std::unique_ptr<ScPostIt> pNote);
     bool IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
 
-    ScPostIt* ReleaseNote( SCROW nRow );
+    std::unique_ptr<ScPostIt> ReleaseNote( SCROW nRow );
     size_t GetNoteCount() const;
     void CreateAllNoteCaptions();
     void ForgetNoteCaptions( SCROW nRow1, SCROW nRow2, bool bPreserveData );
