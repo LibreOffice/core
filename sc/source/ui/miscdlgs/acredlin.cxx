@@ -1552,16 +1552,17 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
 
             switch(rMsg.eMsgType)
             {
-                case SC_CTM_APPEND: AppendChanges(&rChgTrack,nStartAction,nEndAction);
+                case ScChangeTrackMsgType::Append:
+                                    AppendChanges(&rChgTrack,nStartAction,nEndAction);
                                     break;
-                case SC_CTM_REMOVE: RemoveEntrys(nStartAction,nEndAction);
+                case ScChangeTrackMsgType::Remove:
+                                    RemoveEntrys(nStartAction,nEndAction);
                                     break;
-                case SC_CTM_PARENT:
-                case SC_CTM_CHANGE: //bNeedsUpdate=true;
+                case ScChangeTrackMsgType::Parent:
+                case ScChangeTrackMsgType::Change: //bNeedsUpdate=true;
                                     UpdateEntrys(&rChgTrack,nStartAction,nEndAction);
                                     break;
-                default: ;
-                    // added to avoid warnings
+                default: assert(false); break;
             }
         }
     }
