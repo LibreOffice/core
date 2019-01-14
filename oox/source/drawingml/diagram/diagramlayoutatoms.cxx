@@ -552,7 +552,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             sal_Int32 nCount = rShape->getChildren().size();
 
-            // A manager node's height should be indepdenent from if it has
+            // A manager node's height should be independent from if it has
             // assistants and employees, compensate for that.
             bool bTop = mnType == XML_hierRoot && rShape->getInternalName() == "hierRoot1";
             double fHeightScale = 1.0;
