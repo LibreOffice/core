@@ -280,12 +280,7 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
 
 void Window::RequestHelp(const HelpEvent& rEvt)
 {
-    if ( mpViewShell )
-    {
-        if( !mpViewShell->RequestHelp( rEvt ) )
-            vcl::Window::RequestHelp( rEvt );
-    }
-    else
+    if (!mpViewShell || !mpViewShell->RequestHelp(rEvt))
         vcl::Window::RequestHelp( rEvt );
 }
 
