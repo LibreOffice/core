@@ -53,11 +53,8 @@ $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,poppler,cc))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/goo/gfile \
-	UnpackedTarball/poppler/goo/gmempp \
-	UnpackedTarball/poppler/goo/GooList \
 	UnpackedTarball/poppler/goo/GooTimer \
 	UnpackedTarball/poppler/goo/GooString \
-	UnpackedTarball/poppler/goo/gmem \
 	UnpackedTarball/poppler/goo/FixedPoint \
 	UnpackedTarball/poppler/goo/NetPBMWriter \
 	UnpackedTarball/poppler/goo/PNGWriter \
@@ -80,6 +77,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/BuiltinFontTables \
 	UnpackedTarball/poppler/poppler/CachedFile \
 	UnpackedTarball/poppler/poppler/Catalog \
+	UnpackedTarball/poppler/poppler/CertificateInfo \
 	UnpackedTarball/poppler/poppler/CharCodeToUnicode \
 	UnpackedTarball/poppler/poppler/CMap \
 	UnpackedTarball/poppler/poppler/DateInfo \
@@ -114,7 +112,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/PDFDoc \
 	UnpackedTarball/poppler/poppler/PDFDocEncoding \
 	UnpackedTarball/poppler/poppler/PDFDocFactory \
-	UnpackedTarball/poppler/poppler/PopplerCache \
 	UnpackedTarball/poppler/poppler/ProfileData \
 	UnpackedTarball/poppler/poppler/PreScanOutputDev \
 	UnpackedTarball/poppler/poppler/PSTokenizer \
@@ -135,7 +132,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/StdinPDFDocBuilder \
 	UnpackedTarball/poppler/poppler/Sound \
 	UnpackedTarball/poppler/poppler/ViewerPreferences \
-	UnpackedTarball/poppler/poppler/XpdfPluginAPI \
 	UnpackedTarball/poppler/poppler/Movie \
 	UnpackedTarball/poppler/poppler/Rendition \
 	UnpackedTarball/poppler/poppler/DCTStream \
