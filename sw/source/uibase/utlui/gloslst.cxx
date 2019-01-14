@@ -318,7 +318,6 @@ void SwGlossaryList::Update()
                     if(!bFound)
                     {
                         aGroupArr.erase(aGroupArr.begin() + i);
-                        delete pGroup;
                     }
                 }
             }
