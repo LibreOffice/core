@@ -14,8 +14,8 @@
  
  LIBXML2_2.6.32 {
 @@ -2231,3 +2231,43 @@
-   xmlXPathSetContextNode;
- } LIBXML2_2.9.0;
+   xmlHashDefaultDeallocator;
+ } LIBXML2_2.9.1;
  
 +# HACK: export global variable accessor functions (globals.h)
 +LIBXML2_GLOBAL_VARIABLES {
