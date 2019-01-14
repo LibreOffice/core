@@ -243,6 +243,11 @@ bool SdrView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
     return bRet;
 }
 
+bool SdrView::RequestHelp(const HelpEvent& rHEvt)
+{
+    return SdrCreateView::RequestHelp(rHEvt);
+}
+
 bool SdrView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
 {
     SetActualWin(pWin);

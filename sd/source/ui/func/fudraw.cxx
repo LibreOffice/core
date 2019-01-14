@@ -765,6 +765,9 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
         bReturn = FuPoor::RequestHelp(rHEvt);
     }
 
+    if (!bReturn)
+       bReturn = mpView->RequestHelp(rHEvt);
+
     return bReturn;
 }
 
