@@ -550,7 +550,7 @@ void AbstractInsFootNoteDlg_Impl::SetText( const OUString& rStr )
 
 void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
-                                SwTableAutoFormat *& prTAFormat )
+                                std::unique_ptr<SwTableAutoFormat>& prTAFormat )
 {
     m_xDlg->GetValues(rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
 }

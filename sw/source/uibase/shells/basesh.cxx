@@ -2616,7 +2616,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             SwInsertTableOptions aInsTableOpts( SwInsertTableFlags::All, 1 );
             OUString aTableName;
             OUString aAutoName;
-            SwTableAutoFormat* pTAFormat = nullptr;
+            std::unique_ptr<SwTableAutoFormat> pTAFormat;
 
             if( pArgs && pArgs->Count() >= 2 )
             {
@@ -2643,7 +2643,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                         {
                             if ( aTableTable[n].GetName() == aAutoName )
                             {
-                                pTAFormat = new SwTableAutoFormat( aTableTable[n] );
+                                pTAFormat.reset(new SwTableAutoFormat( aTableTable[n] ));
                                 break;
                             }
                         }
@@ -2689,7 +2689,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 if( rSh.HasSelection() )
                     rSh.DelRight();
 
-                rSh.InsertTable( aInsTableOpts, nRows, nCols, pTAFormat );
+                rSh.InsertTable( aInsTableOpts, nRows, nCols, pTAFormat.get() );
                 rSh.MoveTable( GotoPrevTable, fnTableStart );
 
                 if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )
@@ -2701,7 +2701,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 rSh.EndAllAction();
                 rTempView.AutoCaption(TABLE_CAP);
             }
-            delete pTAFormat;
         }
 
         if( bCallEndUndo )
