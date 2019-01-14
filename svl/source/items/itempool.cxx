@@ -756,8 +756,8 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[nIndex].get();
     assert(pItemArr && "removing Item not in Pool");
 
-    SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::const_iterator it;
-    it = pItemArr->maPtrToIndex.find(const_cast<SfxPoolItem *>(&rItem));
+    SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::const_iterator it
+        = pItemArr->maPtrToIndex.find(const_cast<SfxPoolItem *>(&rItem));
     if (it != pItemArr->maPtrToIndex.end())
     {
         sal_uInt32 nIdx = it->second;
