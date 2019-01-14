@@ -2276,7 +2276,7 @@ void ScTable::SetAnonymousDBData(std::unique_ptr<ScDBData> pDBData)
     pDBDataNoName = std::move(pDBData);
 }
 
-sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
+sal_uLong ScTable::AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew )
 {
     if(!mpCondFormatList)
         mpCondFormatList.reset(new ScConditionalFormatList());
@@ -2284,7 +2284,7 @@ sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
     sal_uInt32 nMax = mpCondFormatList->getMaxKey();
 
     pNew->SetKey(nMax+1);
-    mpCondFormatList->InsertNew(pNew);
+    mpCondFormatList->InsertNew(std::move(pNew));
 
     return nMax + 1;
 }

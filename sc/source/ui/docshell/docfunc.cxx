@@ -5447,7 +5447,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );     // Navigator
 }
 
-void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges )
+void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, std::unique_ptr<ScConditionalFormat> pFormat, SCTAB nTab, const ScRangeList& rRanges )
 {
     ScDocShellModificator aModificator(rDocShell);
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -5499,7 +5499,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
         else
             pRepaintRange.reset(new ScRange(aCombinedRange));
 
-        sal_uLong nIndex = rDoc.AddCondFormat(pFormat, nTab);
+        sal_uLong nIndex = rDoc.AddCondFormat(std::move(pFormat), nTab);
 
         rDoc.AddCondFormatData(rRanges, nTab, nIndex);
         rDoc.SetStreamValid(nTab, false);
