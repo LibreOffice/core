@@ -13,6 +13,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,poppler,$(POPPLER_TARBALL),,poppler
 
 $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-config.patch.1 \
+	external/poppler/poppler-c++11.patch.1 \
+))
+
+# std::make_unique is only available in C++14
+$(eval $(call gb_UnpackedTarball_set_post_action,poppler,\
+	$(FIND) . -name '*.cc' | xargs sed -i -e 's/std::make_unique/o3tl::make_unique/' \
 ))
 
 # vim: set noet sw=4 ts=4:
