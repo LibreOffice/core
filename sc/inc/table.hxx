@@ -460,7 +460,7 @@ public:
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
-    ScPostIt* ReleaseNote( SCCOL nCol, SCROW nRow );
+    std::unique_ptr<ScPostIt> ReleaseNote( SCCOL nCol, SCROW nRow );
 
     size_t GetNoteCount( SCCOL nCol ) const;
     SCROW GetNotePosition( SCCOL nCol, size_t nIndex ) const;
