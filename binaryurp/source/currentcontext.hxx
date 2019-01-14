@@ -22,19 +22,13 @@
 
 #include <sal/config.h>
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class UnoInterfaceReference;
-} } } }
+namespace com::sun::star::uno { class UnoInterfaceReference; }
 
-namespace binaryurp {
-
-namespace current_context {
+namespace binaryurp::current_context {
 
 com::sun::star::uno::UnoInterfaceReference get();
 
 void set(com::sun::star::uno::UnoInterfaceReference const & value);
-
-}
 
 }
 

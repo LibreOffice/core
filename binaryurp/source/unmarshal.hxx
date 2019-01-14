@@ -34,9 +34,7 @@ namespace binaryurp {
     class Bridge;
     struct ReaderState;
 }
-namespace com { namespace sun { namespace star { namespace uno {
-    class TypeDescription;
-} } } }
+namespace com::sun::star::uno { class TypeDescription; }
 
 namespace binaryurp {
 

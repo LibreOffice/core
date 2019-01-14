@@ -50,7 +50,7 @@ namespace binaryurp {
     class Proxy;
     class Reader;
 }
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace bridge { class XInstanceProvider; }
     namespace connection { class XConnection; }
     namespace lang { class XEventListener; }
@@ -60,7 +60,7 @@ namespace com { namespace sun { namespace star {
         class UnoInterfaceReference;
         class XInterface;
     }
-} } }
+}
 namespace rtl { class ByteSequence; }
 
 namespace binaryurp {

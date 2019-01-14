@@ -35,13 +35,13 @@
 #include <cppuhelper/compbase.hxx>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star {
+namespace com::sun::star {
     namespace connection { class XConnection; }
     namespace uno {
         class XComponentContext;
         class XInterface;
     }
-} } }
+}
 
 namespace binaryurp {
 
