@@ -403,6 +403,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
                          parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
+{
+    // We need to make sure we don't export the text itself next to the input list field
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 5);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
