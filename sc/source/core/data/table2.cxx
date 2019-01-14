@@ -1588,7 +1588,7 @@ ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetFormulaCell(nRow);
 }
 
-ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
+std::unique_ptr<ScPostIt> ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
 {
     if (!ValidCol(nCol))
         return nullptr;

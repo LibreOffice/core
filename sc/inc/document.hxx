@@ -1193,7 +1193,7 @@ public:
     SC_DLLPUBLIC bool            HasColNotes(SCCOL nCol, SCTAB nTab) const;
     SC_DLLPUBLIC bool            HasTabNotes(SCTAB nTab) const;
     bool                         HasNotes() const;
-    SC_DLLPUBLIC ScPostIt*       ReleaseNote(const ScAddress& rPos);
+    SC_DLLPUBLIC std::unique_ptr<ScPostIt> ReleaseNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetOrCreateNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       CreateNote(const ScAddress& rPos);
     size_t                       GetNoteCount( SCTAB nTab, SCCOL nCol ) const;

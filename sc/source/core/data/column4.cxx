@@ -611,14 +611,14 @@ void ScColumn::CloneFormulaCell(
     CellStorageModified();
 }
 
-ScPostIt* ScColumn::ReleaseNote( SCROW nRow )
+std::unique_ptr<ScPostIt> ScColumn::ReleaseNote( SCROW nRow )
 {
     if (!ValidRow(nRow))
         return nullptr;
 
     ScPostIt* p = nullptr;
     maCellNotes.release(nRow, p);
-    return p;
+    return std::unique_ptr<ScPostIt>(p);
 }
 
 size_t ScColumn::GetNoteCount() const

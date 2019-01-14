@@ -6535,7 +6535,7 @@ bool ScDocument::HasNotes() const
     return false;
 }
 
-ScPostIt* ScDocument::ReleaseNote(const ScAddress& rPos)
+std::unique_ptr<ScPostIt> ScDocument::ReleaseNote(const ScAddress& rPos)
 {
     ScTable* pTab = FetchTable(rPos.Tab());
     if (!pTab)
