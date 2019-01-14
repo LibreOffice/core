@@ -167,7 +167,7 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 ###LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
-EXTRA_LINKFLAGS*=-L$(MACOSX_SDK_PATH) -Wl,-headerpad,ff
+EXTRA_LINKFLAGS*=-L$(MACOSX_SDK_PATH) -Wl,-headerpad_max_install_names
 LINKFLAGSRUNPATH_URELIB=-install_name '@_______URELIB/$(@:f)'
 LINKFLAGSRUNPATH_UREBIN=
 LINKFLAGSRUNPATH_OOO=-install_name '@_______OOO/$(@:f)'

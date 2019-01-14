@@ -31,6 +31,12 @@ $(eval $(call gb_Executable_add_linked_libs,regsingleton,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Executable_add_ldflags,regsingleton,\
+	-dynamiclib -headerpad_max_install_names \
+))
+endif
+
 $(eval $(call gb_Executable_set_private_extract_of_public_api,regsingleton,$(OUTDIR)/bin/udkapi.rdb,\
  	com.sun.star.uno.TypeClass \
  	com.sun.star.uno.XAggregation \

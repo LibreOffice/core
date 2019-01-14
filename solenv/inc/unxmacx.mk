@@ -186,7 +186,7 @@ LIBSTLPORTST=$(SOLARVERSION)/$(INPATH)/lib/libstlport_gcc.a
 LINK*=$(CXX)
 LINKC*=$(CC)
 
-LINKFLAGSDEFS*=-Wl,-headerpad,ff,-multiply_defined,suppress
+LINKFLAGSDEFS*=-Wl,-headerpad_max_install_names,-multiply_defined,suppress
 # assure backwards-compatibility
 EXTRA_LINKFLAGS*=-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk
 LINKFLAGSRUNPATH_URELIB=-install_name '@_______URELIB/$(@:f)'

@@ -29,6 +29,11 @@ $(eval $(call gb_Executable_add_linked_libs,sp2bv,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Executable_add_ldflags,sp2bv,\
+	-dynamiclib -headerpad_max_install_names \
+))
+endif
 $(eval $(call gb_Executable_add_exception_objects,sp2bv,\
 	cpputools/source/sp2bv/sp2bv \
 ))
