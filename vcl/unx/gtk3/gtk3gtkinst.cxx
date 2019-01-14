@@ -3084,6 +3084,7 @@ private:
 
     static gboolean launch_overflow_switch_page(GtkInstanceNotebook* pThis)
     {
+        SolarMutexGuard aGuard;
         pThis->signal_overflow_switch_page();
         return false;
     }
