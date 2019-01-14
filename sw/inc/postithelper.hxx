@@ -118,7 +118,7 @@ public:
     virtual SwPosition GetAnchorPosition() const = 0;
     virtual bool UseElement(SwRootFrame const&, IDocumentRedlineAccess const&) = 0;
     virtual const SwFormatField& GetFormatField() const = 0;
-    virtual const SfxBroadcaster* GetBroadCaster() const = 0;
+    virtual const SfxBroadcaster* GetBroadcaster() const = 0;
     virtual VclPtr<sw::annotation::SwAnnotationWin> GetSidebarWindow( SwEditWin& rEditWin,
                                                                 SwPostItMgr& aMgr) = 0;
 };
@@ -140,7 +140,7 @@ public:
     {
         return mrFormatField;
     }
-    virtual const SfxBroadcaster* GetBroadCaster() const override
+    virtual const SfxBroadcaster* GetBroadcaster() const override
     {
         return dynamic_cast<const SfxBroadcaster *> (&mrFormatField);
     }
