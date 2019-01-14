@@ -1455,7 +1455,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     }
 
     SwFormat* pFormat = nullptr;
-    SwPageDesc* pNewDsc = nullptr;
+    std::unique_ptr<SwPageDesc> pNewDsc;
     size_t nPgDscPos = 0;
 
     switch(nFamily)
@@ -1611,7 +1611,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
                 if (rDoc.FindPageDesc(pDesc->GetName(), &nPgDscPos))
                 {
-                    pNewDsc = new SwPageDesc( *pDesc );
+                    pNewDsc.reset( new SwPageDesc( *pDesc ) );
                     // #i48949# - no undo actions for the
                     // copy of the page style
                     ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
@@ -1696,8 +1696,8 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             ::ItemSetToPageDesc( aSet, *pNewDsc );
             rDoc.ChgPageDesc( nPgDscPos, *pNewDsc );
             pDesc = &rDoc.GetPageDesc( nPgDscPos );
-            rDoc.PreDelPageDesc(pNewDsc); // #i7983#
-            delete pNewDsc;
+            rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
+            pNewDsc.reset();
         }
         else
             rDoc.ChgFormat(*pFormat, aSet);       // put all that is set
@@ -1707,8 +1707,8 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         aCoreSet.ClearItem();
         if( pNewDsc )       // we still need to delete it
         {
-            rDoc.PreDelPageDesc(pNewDsc); // #i7983#
-            delete pNewDsc;
+            rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
+            pNewDsc.reset();
         }
     }
 

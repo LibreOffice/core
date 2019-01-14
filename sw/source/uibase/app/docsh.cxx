@@ -872,12 +872,12 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     // reconnect it after PrtOle2. We don't use an empty JobSetup because
     // that would only lead to questionable results after expensive
     // reformatting (Preview!)
-    JobSetup *pOrig = nullptr;
+    std::unique_ptr<JobSetup> pOrig;
     if ( !rSetup.GetPrinterName().isEmpty() && ASPECT_THUMBNAIL != nAspect )
     {
-        pOrig = const_cast<JobSetup*>(m_xDoc->getIDocumentDeviceAccess().getJobsetup());
-        if( pOrig )         // then we copy that
-            pOrig = new JobSetup( *pOrig );
+        const JobSetup* pCurrentJobSetup = m_xDoc->getIDocumentDeviceAccess().getJobsetup();
+        if( pCurrentJobSetup )         // then we copy that
+            pOrig.reset(new JobSetup( *pCurrentJobSetup ));
         m_xDoc->getIDocumentDeviceAccess().setJobsetup( rSetup );
     }
 
@@ -896,7 +896,6 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     if( pOrig )
     {
         m_xDoc->getIDocumentDeviceAccess().setJobsetup( *pOrig );
-        delete pOrig;
     }
     if ( bResetModified )
         EnableSetModified();

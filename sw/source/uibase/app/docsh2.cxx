@@ -843,7 +843,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 WriterRef xWrt;
                 // mba: looks as if relative URLs don't make sense here
                 ::GetRTFWriter( OUString('O'), OUString(), xWrt );
-                SvMemoryStream *pStrm = new SvMemoryStream();
+                std::unique_ptr<SvMemoryStream> pStrm (new SvMemoryStream());
                 pStrm->SetBufferSize( 16348 );
                 SwWriter aWrt( *pStrm, *GetDoc() );
                 ErrCode eErr = aWrt.Write( xWrt );
@@ -864,7 +864,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
                         // Transfer ownership of stream to a lockbytes object
-                        SvLockBytes aLockBytes( pStrm, true );
+                        SvLockBytes aLockBytes( pStrm.release(), true );
                         SvLockBytesStat aStat;
                         if ( aLockBytes.Stat( &aStat ) == ERRCODE_NONE )
                         {
@@ -887,7 +887,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     pStrm->GetData()), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? &GetView()->GetEditWin() : nullptr );
-                        delete pStrm;
                     }
                 }
                 else
