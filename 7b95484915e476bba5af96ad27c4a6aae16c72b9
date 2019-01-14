@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_a6ef28e8",
+        "filename": "xmloff/source/draw/animationimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-14T11:43:53Z",
+      "side": 1,
+      "message": "It looks like count_codes does duplicate job in all these cases - looks like just exiting early needed in case of empty string, and then just get tokens, push to a vector, and use comphelper::containerToSequence?",
+      "range": {
+        "startLine": 472,
+        "startChar": 30,
+        "endLine": 472,
+        "endChar": 41
+      },
+      "revId": "7b95484915e476bba5af96ad27c4a6aae16c72b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
