@@ -480,7 +480,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             }
 
             // Attributes of the numbering
-            wwFont *pPseudoFont = nullptr;
+            std::unique_ptr<wwFont> pPseudoFont;
             const SfxItemSet* pOutSet = nullptr;
 
             // cbGrpprlChpx
@@ -500,8 +500,8 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     if ( sFontName.isEmpty() )
                         sFontName = pBulletFont->GetFamilyName();
 
-                    pPseudoFont = new wwFont( sFontName, pBulletFont->GetPitch(),
-                        eFamily, eChrSet);
+                    pPseudoFont.reset(new wwFont( sFontName, pBulletFont->GetPitch(),
+                        eFamily, eChrSet));
                 }
                 else
                     pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
@@ -531,12 +531,10 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     rFormat.GetNumAdjust(),
                     aNumLvlPos,
                     nFollow,
-                    pPseudoFont, pOutSet,
+                    pPseudoFont.get(), pOutSet,
                     nIndentAt, nFirstLineIndex, nListTabPos,
                     sNumStr,
                     rFormat.GetNumberingType()==SVX_NUM_BITMAP ? rFormat.GetBrush():nullptr);
-
-            delete pPseudoFont;
         }
         AttrOutput().EndAbstractNumbering();
     }

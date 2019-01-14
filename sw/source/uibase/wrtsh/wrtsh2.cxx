@@ -134,14 +134,17 @@ void SwWrtShell::Insert(SwField const &rField)
 void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
 {
     // Go through the list of fields and updating
-    SwInputFieldList* pTmp = pLst;
-    if( !pTmp )
-        pTmp = new SwInputFieldList( this );
+    std::unique_ptr<SwInputFieldList> pTmp;
+    if (!pLst)
+    {
+        pTmp.reset(new SwInputFieldList( this ));
+        pLst = pTmp.get();
+    }
 
-    const size_t nCnt = pTmp->Count();
+    const size_t nCnt = pLst->Count();
     if(nCnt)
     {
-        pTmp->PushCursor();
+        pLst->PushCursor();
 
         bool bCancel = false;
 
@@ -153,7 +156,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
         {
             for (size_t i = 0; i < nCnt; i++)
             {
-                if (pField == pTmp->GetField(i))
+                if (pField == pLst->GetField(i))
                 {
                     nIndex = i;
                     break;
@@ -165,8 +168,8 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
         {
             bool bPrev = nIndex > 0;
             bool bNext = nIndex < nCnt - 1;
-            pTmp->GotoFieldPos(nIndex);
-            pField = pTmp->GetField(nIndex);
+            pLst->GotoFieldPos(nIndex);
+            pField = pLst->GetField(nIndex);
             if (pField->GetTyp()->Which() == SwFieldIds::Dropdown)
             {
                 bCancel = StartDropDownFieldDlg(pField, bPrev, bNext, GetView().GetFrameWeld(), &ePressedButton);
@@ -177,7 +180,7 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
             if (!bCancel)
             {
                 // Otherwise update error at multi-selection:
-                pTmp->GetField(nIndex)->GetTyp()->UpdateFields();
+                pLst->GetField(nIndex)->GetTyp()->UpdateFields();
 
                 if (ePressedButton == FieldDialogPressedButton::Previous && nIndex > 0)
                     nIndex--;
@@ -188,11 +191,8 @@ void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
             }
         }
 
-        pTmp->PopCursor();
+        pLst->PopCursor();
     }
-
-    if( !pLst )
-        delete pTmp;
 }
 
 // Listener class: will close InputField dialog if input field(s)
