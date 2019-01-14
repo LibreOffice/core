@@ -2099,7 +2099,7 @@ void ScChangeTrack::Init()
     pLinkInsertRow = nullptr;
     pLinkInsertTab = nullptr;
     pLinkMove = nullptr;
-    pBlockModifyMsg = nullptr;
+    xBlockModifyMsg.reset();
     nActionMax = 0;
     nGeneratedMin = SC_CHGTRACK_GENERATED_START;
     nMarkLastSaved = 0;
@@ -2148,20 +2148,9 @@ void ScChangeTrack::DtorClear()
 
 void ScChangeTrack::ClearMsgQueue()
 {
-    if ( pBlockModifyMsg )
-    {
-        delete pBlockModifyMsg;
-        pBlockModifyMsg = nullptr;
-    }
-    std::for_each(aMsgStackTmp.rbegin(), aMsgStackTmp.rend(), std::default_delete<ScChangeTrackMsgInfo>());
+    xBlockModifyMsg.reset();
     aMsgStackTmp.clear();
-    std::for_each(aMsgStackFinal.rbegin(), aMsgStackFinal.rend(), std::default_delete<ScChangeTrackMsgInfo>());
     aMsgStackFinal.clear();
-
-    ScChangeTrackMsgQueue::iterator itQueue;
-    for ( itQueue = aMsgQueue.begin(); itQueue != aMsgQueue.end(); ++itQueue)
-        delete *itQueue;
-
     aMsgQueue.clear();
 }
 
@@ -2262,11 +2251,12 @@ void ScChangeTrack::StartBlockModify( ScChangeTrackMsgType eMsgType,
 {
     if ( aModifiedLink.IsSet() )
     {
-        if ( pBlockModifyMsg )
-            aMsgStackTmp.push_back( pBlockModifyMsg ); // Block in Block
-        pBlockModifyMsg = new ScChangeTrackMsgInfo;
-        pBlockModifyMsg->eMsgType = eMsgType;
-        pBlockModifyMsg->nStartAction = nStartAction;
+        if ( xBlockModifyMsg )
+            aMsgStackTmp.push_back( *xBlockModifyMsg ); // Block in Block
+        xBlockModifyMsg = ScChangeTrackMsgInfo();
+        xBlockModifyMsg->eMsgType = eMsgType;
+        xBlockModifyMsg->nStartAction = nStartAction;
+        xBlockModifyMsg->nEndAction = 0;
     }
 }
 
@@ -2274,25 +2264,25 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
 {
     if ( aModifiedLink.IsSet() )
     {
-        if ( pBlockModifyMsg )
+        if ( xBlockModifyMsg )
         {
-            if ( pBlockModifyMsg->nStartAction <= nEndAction )
+            if ( xBlockModifyMsg->nStartAction <= nEndAction )
             {
-                pBlockModifyMsg->nEndAction = nEndAction;
+                xBlockModifyMsg->nEndAction = nEndAction;
                 // Blocks dissolved in Blocks
-                aMsgStackFinal.push_back( pBlockModifyMsg );
+                aMsgStackFinal.push_back( *xBlockModifyMsg );
             }
             else
-                delete pBlockModifyMsg;
+                xBlockModifyMsg.reset();
             if (aMsgStackTmp.empty())
-                pBlockModifyMsg = nullptr;
+                xBlockModifyMsg.reset();
             else
             {
-                pBlockModifyMsg = aMsgStackTmp.back(); // Maybe Block in Block
+                xBlockModifyMsg = aMsgStackTmp.back(); // Maybe Block in Block
                 aMsgStackTmp.pop_back();
             }
         }
-        if ( !pBlockModifyMsg )
+        if ( !xBlockModifyMsg )
         {
             bool bNew = !aMsgStackFinal.empty();
             aMsgQueue.reserve(aMsgQueue.size() + aMsgStackFinal.size());
@@ -2314,7 +2304,7 @@ void ScChangeTrack::NotifyModified( ScChangeTrackMsgType eMsgType,
 {
     if ( aModifiedLink.IsSet() )
     {
-        if ( !pBlockModifyMsg || pBlockModifyMsg->eMsgType != eMsgType ||
+        if ( !xBlockModifyMsg || xBlockModifyMsg->eMsgType != eMsgType ||
                 (IsGenerated( nStartAction ) &&
                 (eMsgType == SC_CTM_APPEND || eMsgType == SC_CTM_REMOVE)) )
         {   // Append within Append e.g. not
