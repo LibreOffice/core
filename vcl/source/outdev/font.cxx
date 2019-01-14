@@ -595,18 +595,10 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
     }
 }
 
-namespace {
-osl::Mutex& GetFontUpdatesLockMutex()
-{
-    static osl::Mutex aFontUpdatesMutex;
-    return aFontUpdatesMutex;
-}
-}
-
 void OutputDevice::ImplRefreshAllFontData(bool bNewFontLists)
 {
     auto svdata = ImplGetSVData();
-    osl::MutexGuard aGuard(GetFontUpdatesLockMutex());
+    DBG_TESTSOLARMUTEX();
     if (!svdata->mnFontUpdatesLockCount)
         ImplUpdateFontDataForAllFrames(&OutputDevice::ImplRefreshFontData, bNewFontLists);
     else
@@ -663,7 +655,7 @@ void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHd
 void OutputDevice::LockFontUpdates(bool bLock)
 {
     auto svdata = ImplGetSVData();
-    osl::MutexGuard aGuard(GetFontUpdatesLockMutex());
+    DBG_TESTSOLARMUTEX();
     if (bLock)
     {
         ++svdata->mnFontUpdatesLockCount;
