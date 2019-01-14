@@ -377,8 +377,8 @@ namespace sw {
         rNode.SwContentNode::GetAttr(rFormatSet);
         if (pLayout && pLayout->IsHideRedlines())
         {
-            if (sw::MergedPara const*const pMerged =
-                static_cast<SwTextFrame*>(rNode.getLayoutFrame(pLayout))->GetMergedPara())
+            auto pFrame = static_cast<SwTextFrame*>(rNode.getLayoutFrame(pLayout));
+            if (sw::MergedPara const*const pMerged = pFrame ? pFrame->GetMergedPara() : nullptr)
             {
                 if (pMerged->pFirstNode != &rNode)
                 {
