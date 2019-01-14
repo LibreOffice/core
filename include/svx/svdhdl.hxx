@@ -242,6 +242,9 @@ public:
         visualisation during mouse over it must override this method and call Touch(). */
     virtual void onMouseEnter(const MouseEvent& rMEvt);
 
+    /** is called when help is requested for the area of this handle */
+    virtual void onHelpRequest(const HelpEvent& rHEvt);
+
     /** is called when the mouse leaves the area of this handle. If the handle changes his
         visualisation during mouse over it must override this method and call Touch(). */
     virtual void onMouseLeave();

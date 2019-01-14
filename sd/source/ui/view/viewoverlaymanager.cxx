@@ -177,6 +177,25 @@ void ImageButtonHdl::HideTip()
     Help::HideBalloonAndQuickHelp();
 }
 
+void ImageButtonHdl::ShowTip()
+{
+    if (!pHdlList || !pHdlList->GetView() || mnHighlightId == -1)
+        return;
+
+    OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
+    if( pDev == nullptr )
+        pDev = Application::GetDefaultDevice();
+
+    OUString aHelpText(SdResId(gButtonToolTips[mnHighlightId]));
+    ::tools::Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
+    Help::ShowQuickHelp(static_cast< vcl::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText);
+}
+
+void ImageButtonHdl::onHelpRequest(const HelpEvent& /*rHEvt*/)
+{
+    ShowTip();
+}
+
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
     if( pHdlList && pHdlList->GetView())
@@ -198,12 +217,8 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 
             mnHighlightId = nHighlightId;
 
-            if( pHdlList )
-            {
-                OUString aHelpText(SdResId(gButtonToolTips[mnHighlightId]));
-                ::tools::Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
-                Help::ShowQuickHelp(static_cast< vcl::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText);
-            }
+            ShowTip();
+
             Touch();
         }
     }

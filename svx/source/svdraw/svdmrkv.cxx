@@ -1224,6 +1224,25 @@ bool SdrMarkView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
     return SdrSnapView::MouseMove(rMEvt, pWin);
 }
 
+void SdrMarkView::RequestHelp(const HelpEvent& rHEvt)
+{
+    if (maHdlList.GetHdlCount())
+    {
+        const size_t nHdlCount = maHdlList.GetHdlCount();
+
+        for (size_t nHdl = 0; nHdl < nHdlCount; ++nHdl)
+        {
+            SdrHdl* pCurrentHdl = GetHdl(nHdl);
+            if (pCurrentHdl->mbMouseOver)
+            {
+                pCurrentHdl->onHelpRequest(rHEvt);
+                return;
+            }
+        }
+    }
+    SdrSnapView::RequestHelp(rHEvt);
+}
+
 void SdrMarkView::ForceRefToMarked()
 {
     switch(meDragMode)
