@@ -6471,14 +6471,14 @@ ScPostIt* ScDocument::GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
 
 }
 
-void ScDocument::SetNote(const ScAddress& rPos, ScPostIt* pNote)
+void ScDocument::SetNote(const ScAddress& rPos, std::unique_ptr<ScPostIt> pNote)
 {
-    return SetNote(rPos.Col(), rPos.Row(), rPos.Tab(), pNote);
+    return SetNote(rPos.Col(), rPos.Row(), rPos.Tab(), std::move(pNote));
 }
 
-void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt* pNote)
+void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPostIt> pNote)
 {
-    return maTabs[nTab]->aCol[nCol].SetCellNote(nRow, pNote);
+    return maTabs[nTab]->aCol[nCol].SetCellNote(nRow, std::move(pNote));
 }
 
 bool ScDocument::HasNote(const ScAddress& rPos) const
@@ -6535,7 +6535,7 @@ bool ScDocument::HasNotes() const
     return false;
 }
 
-ScPostIt* ScDocument::ReleaseNote(const ScAddress& rPos)
+std::unique_ptr<ScPostIt> ScDocument::ReleaseNote(const ScAddress& rPos)
 {
     ScTable* pTab = FetchTable(rPos.Tab());
     if (!pTab)
@@ -6554,7 +6554,7 @@ ScPostIt* ScDocument::GetOrCreateNote(const ScAddress& rPos)
 ScPostIt* ScDocument::CreateNote(const ScAddress& rPos)
 {
     ScPostIt* pPostIt = new ScPostIt(*this, rPos);
-    SetNote(rPos, pPostIt);
+    SetNote(rPos, std::unique_ptr<ScPostIt>(pPostIt));
     return pPostIt;
 }
 

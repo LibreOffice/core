@@ -1206,7 +1206,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
             pNote = pNote->Clone(ScAddress(nCol, nSrcRow, nTab),
                                  *rDestCol.GetDoc(),
                                  ScAddress(rDestCol.nCol, nDestRow, rDestCol.nTab),
-                                 false);
+                                 false).release();
             rDestCol.maCellNotes.set(nDestRow, pNote);
             pNote->UpdateCaptionPos(ScAddress(rDestCol.nCol, nDestRow, rDestCol.nTab));
         }

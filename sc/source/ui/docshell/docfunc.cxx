@@ -1254,7 +1254,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : nullptr;
 
         ScNoteData aOldData;
-        ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
+        std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote( rPos );
         sal_uInt32 nNoteId = 0;
         if( pOldNote )
         {
@@ -1270,7 +1270,8 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
             pDrawLayer->BeginCalcUndo(false);
 
         // delete the note (creates drawing undo action for the caption object)
-        delete pOldNote;
+        bool hadOldNote(pOldNote);
+        pOldNote.reset();
 
         // create new note (creates drawing undo action for the new caption object)
         ScNoteData aNewData;
@@ -1298,7 +1299,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         // Let our LOK clients know about the new/modified note
         if (pNewNote)
         {
-            ScDocShell::LOKCommentNotify(pOldNote ? LOKCommentNotificationType::Modify : LOKCommentNotificationType::Add,
+            ScDocShell::LOKCommentNotify(hadOldNote ? LOKCommentNotificationType::Modify : LOKCommentNotificationType::Add,
                                          &rDoc, rPos, pNewNote);
         }
     }

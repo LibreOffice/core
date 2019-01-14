@@ -5343,8 +5343,8 @@ void Test::testNoteLifeCycle()
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new cell comment.", pNote);
 
     pNote->SetText(aPos, "New note");
-    ScPostIt* pNote2 = m_pDoc->ReleaseNote(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("This note instance is expected to be identical to the original.", pNote, pNote2);
+    std::unique_ptr<ScPostIt> pNote2 = m_pDoc->ReleaseNote(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This note instance is expected to be identical to the original.", pNote, pNote2.get());
     CPPUNIT_ASSERT_MESSAGE("The note shouldn't be here after it's been released.", !m_pDoc->HasNote(aPos));
 
     // Modify the internal state of the note instance to make sure it's really
@@ -5352,7 +5352,7 @@ void Test::testNoteLifeCycle()
     pNote->SetText(aPos, "New content");
 
     // Re-insert the note back to the same place.
-    m_pDoc->SetNote(aPos, pNote);
+    m_pDoc->SetNote(aPos, std::move(pNote2));
     SdrCaptionObj* pCaption = pNote->GetOrCreateCaption(aPos).get();
     CPPUNIT_ASSERT_MESSAGE("Failed to create a caption object.", pCaption);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This caption should belong to the drawing layer of the document.",

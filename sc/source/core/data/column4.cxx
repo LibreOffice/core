@@ -295,7 +295,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         for (size_t i = 0; i < nDestSize; ++i)
         {
             bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-            aNotes.push_back(pNote->Clone(rSrcPos, *pDocument, aDestPos, bCloneCaption));
+            aNotes.push_back(pNote->Clone(rSrcPos, *pDocument, aDestPos, bCloneCaption).release());
             aDestPos.IncRow();
         }
 
@@ -611,14 +611,14 @@ void ScColumn::CloneFormulaCell(
     CellStorageModified();
 }
 
-ScPostIt* ScColumn::ReleaseNote( SCROW nRow )
+std::unique_ptr<ScPostIt> ScColumn::ReleaseNote( SCROW nRow )
 {
     if (!ValidRow(nRow))
         return nullptr;
 
     ScPostIt* p = nullptr;
     maCellNotes.release(nRow, p);
-    return p;
+    return std::unique_ptr<ScPostIt>(p);
 }
 
 size_t ScColumn::GetNoteCount() const

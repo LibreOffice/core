@@ -966,7 +966,7 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
         ScDocument& rDoc = pDocShell->GetDocument();
         OSL_ENSURE( !rDoc.GetNote(maPos), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
         ScPostIt* pNote = new ScPostIt( rDoc, maPos, rNoteData, false );
-        rDoc.SetNote( maPos, pNote );
+        rDoc.SetNote( maPos, std::unique_ptr<ScPostIt>(pNote) );
         ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &rDoc, maPos, pNote);
     }
 }
@@ -977,14 +977,13 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         OSL_ENSURE( rDoc.GetNote(maPos), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
-        if( ScPostIt* pNote = rDoc.ReleaseNote( maPos ) )
+        if( std::unique_ptr<ScPostIt> pNote = rDoc.ReleaseNote( maPos ) )
         {
             /*  Forget pointer to caption object to suppress removing the
                 caption object from the drawing layer while deleting pNote
                 (removing the caption is done by a drawing undo action). */
             pNote->ForgetCaption();
-            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, &rDoc, maPos, pNote);
-            delete pNote;
+            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, &rDoc, maPos, pNote.get());
         }
     }
 }
