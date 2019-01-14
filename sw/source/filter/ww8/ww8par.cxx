@@ -5771,10 +5771,10 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         m_pStrm->Seek(0);
                         size_t nUnencryptedHdr =
                             (8 == m_xWwFib->m_nVersion) ? 0x44 : 0x34;
-                        sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
-                        nUnencryptedHdr = m_pStrm->ReadBytes(pIn, nUnencryptedHdr);
-                        aDecryptMain.WriteBytes(pIn, nUnencryptedHdr);
-                        delete [] pIn;
+                        std::unique_ptr<sal_uInt8[]> pIn(new sal_uInt8[nUnencryptedHdr]);
+                        nUnencryptedHdr = m_pStrm->ReadBytes(pIn.get(), nUnencryptedHdr);
+                        aDecryptMain.WriteBytes(pIn.get(), nUnencryptedHdr);
+                        pIn.reset();
 
                         DecryptXOR(aCtx, *m_pStrm, aDecryptMain);
 
@@ -5838,14 +5838,14 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
 
                         m_pStrm->Seek(0);
                         std::size_t nUnencryptedHdr = 0x44;
-                        sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
-                        nUnencryptedHdr = m_pStrm->ReadBytes(pIn, nUnencryptedHdr);
+                        std::unique_ptr<sal_uInt8[]> pIn(new sal_uInt8[nUnencryptedHdr]);
+                        nUnencryptedHdr = m_pStrm->ReadBytes(pIn.get(), nUnencryptedHdr);
 
                         DecryptRC4(*xCtx, *m_pStrm, aDecryptMain);
 
                         aDecryptMain.Seek(0);
-                        aDecryptMain.WriteBytes(pIn, nUnencryptedHdr);
-                        delete [] pIn;
+                        aDecryptMain.WriteBytes(pIn.get(), nUnencryptedHdr);
+                        pIn.reset();
 
                         pTempTable = MakeTemp(aDecryptTable);
                         DecryptRC4(*xCtx, *m_pTableStream, aDecryptTable);
