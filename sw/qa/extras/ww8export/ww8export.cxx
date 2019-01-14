@@ -1303,6 +1303,9 @@ DECLARE_WW8EXPORT_TEST(testTdf76349_textboxMargins, "tdf76349_textboxMargins.doc
 {
     // textboxes without borders were losing their spacing items in round-tripping
     CPPUNIT_ASSERT( 0 < parseDump("/root/page/body/txt/anchored/fly/infos/prtBounds", "left").toInt32() );
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox background color", Color(0xD8, 0xD8, 0xD8), getProperty<Color>(xShape, "BackColor"));
 }
 
 DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
