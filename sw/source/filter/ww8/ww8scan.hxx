@@ -1571,8 +1571,8 @@ protected:
 
 public:
     WW8Style( SvStream& rSt, WW8Fib& rFibPara );
-    WW8_STD* Read1STDFixed(sal_uInt16& rSkip);
-    WW8_STD* Read1Style(sal_uInt16& rSkip, OUString* pString);
+    std::unique_ptr<WW8_STD> Read1STDFixed(sal_uInt16& rSkip);
+    std::unique_ptr<WW8_STD> Read1Style(sal_uInt16& rSkip, OUString* pString);
     sal_uInt16 GetCount() const { return m_cstd; }
 };
 
