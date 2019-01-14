@@ -454,10 +454,10 @@ else ifeq ($(OS)-$(CPUNAME)-$(COMNAME),MACOSX-X86_64-s5abi)
 ###########################################################
 
 $(eval $(call gb_Library_add_exception_objects,$(COMNAME)_uno,\
-	bridges/source/cpp_uno/s5abi_macosx_x86_64/abi \
-	bridges/source/cpp_uno/s5abi_macosx_x86_64/except \
-	bridges/source/cpp_uno/s5abi_macosx_x86_64/cpp2uno \
-	bridges/source/cpp_uno/s5abi_macosx_x86_64/uno2cpp \
+	bridges/source/cpp_uno/s5abi_macosx_x86-64/abi \
+	bridges/source/cpp_uno/s5abi_macosx_x86-64/except \
+	bridges/source/cpp_uno/s5abi_macosx_x86-64/cpp2uno \
+	bridges/source/cpp_uno/s5abi_macosx_x86-64/uno2cpp \
 ))
 
 #########################################################
