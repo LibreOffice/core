@@ -179,6 +179,16 @@ DECLARE_WW8EXPORT_TEST(testTdf121111_fillStyleNone, "tdf121111_fillStyleNone.doc
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xText, "FillStyle"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf101826_xattrTextBoxFill, "tdf101826_xattrTextBoxFill.doc")
+{
+    //Basic 1 Color Fill: gradient from yellow(FFFF00) to brown(767600) currently saves as mid-color
+    CPPUNIT_ASSERT_MESSAGE("background color", Color(0xFF, 0xFF, 0x00) != getProperty<Color>(getShape(1), "BackColor"));
+    //Basic 2 Color Fill: gradient from yellow(FFFF00) to green(00B050) currently saves as mid-color
+    CPPUNIT_ASSERT_MESSAGE("background color", Color(0xFF, 0xFF, 0x00) != getProperty<Color>(getShape(4), "BackColor"));
+    //Basic Picture Fill: Tux image
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("background image", drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(getShape(5), "FillStyle"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf123433_fillStyleStop, "tdf123433_fillStyleStop.doc")
 {
     uno::Reference<text::XTextRange> xText(getParagraph(12));

@@ -1691,6 +1691,29 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
             rFlySet.Put( *pPoolItem );
         }
 
+    // take new XATTR items directly. Skip old RES_BACKGROUND if new FILLSTYLE taken.
+    bool bSkipResBackground = false;
+    SfxItemPool* pPool = rFlySet.GetPool();
+    if ( pPool )
+    {
+        for ( sal_uInt16 i = XATTR_START; i < XATTR_END; ++i )
+        {
+            // Not all Fly types support XATTRs - skip unsupported attributes
+            SfxItemPool* pAttrPool = pPool->GetMasterPool();
+            while ( pAttrPool && !pAttrPool->IsInRange(i) )
+                pAttrPool = pAttrPool->GetSecondaryPool();
+            if ( !pAttrPool )
+                continue;
+
+            if ( SfxItemState::SET == rOldSet.GetItemState(i, false, &pPoolItem) )
+            {
+                rFlySet.Put( *pPoolItem );
+                if ( i == XATTR_FILLSTYLE )
+                    bSkipResBackground = true;
+            }
+        }
+    }
+
     // now calculate the borders and build the box: The unit is needed for the
     // frame SIZE!
     SvxBoxItem aBox(sw::util::ItemGet<SvxBoxItem>(rFlySet, RES_BOX));
@@ -1817,7 +1840,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
 
     // Separate transparency
     eState = rOldSet.GetItemState(XATTR_FILLTRANSPARENCE, true, &pItem);
-    if (eState == SfxItemState::SET)
+    if (!bSkipResBackground && eState == SfxItemState::SET)
     {
         sal_uInt16 nRes = WW8ITEMVALUE(rOldSet, XATTR_FILLTRANSPARENCE,
             XFillTransparenceItem);
@@ -1828,7 +1851,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
 
     // Background: SvxBrushItem
     eState = rOldSet.GetItemState(XATTR_FILLSTYLE, true, &pItem);
-    if (eState == SfxItemState::SET)
+    if (!bSkipResBackground && eState == SfxItemState::SET)
     {
         const drawing::FillStyle eFill = static_cast<const XFillStyleItem*>(pItem)->GetValue();
 
