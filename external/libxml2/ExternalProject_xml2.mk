@@ -14,30 +14,17 @@ $(eval $(call gb_ExternalProject_register_targets,xml2,\
 ))
 
 ifeq ($(OS),WNT)
-ifeq ($(COM),GCC)
-$(call gb_ExternalProject_get_state_target,xml2,build):
-	$(call gb_ExternalProject_run,build,\
-		./configure --disable-ipv6 --without-python --without-zlib \
-			--without-lzma \
-			--disable-static --without-debug lt_cv_cc_dll_switch="-shared" \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
-			LIBS="-lws2_32 $(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED_LIBSTDCPP))" \
-			LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
-			OBJDUMP=objdump \
-		&& $(MAKE) \
-	)
-else # COM=MSC
 $(call gb_ExternalProject_use_external_project,xml2,icu)
+
+$(eval $(call gb_ExternalProject_use_nmake,libxml2,build))
 
 $(call gb_ExternalProject_get_state_target,xml2,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js \
 			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),run_debug=yes cruntime=/MDd) \
-		&& unset MAKEFLAGS \
-		&& LIB="$(ILIB)" nmake \
+			$(if $(filter TRUE,$(ENABLE_DBGUTIL)),debug=yes) \
+		&& nmake \
 	,win32)
-endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,xml2,build):
 	$(call gb_ExternalProject_run,build,\
