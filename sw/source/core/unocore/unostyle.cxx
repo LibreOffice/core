@@ -3474,17 +3474,16 @@ SwXAutoStyleFamily::SwXAutoStyleFamily(SwDocShell* pDocSh, IStyleAccess::SwAutoS
     m_pDocShell( pDocSh ), m_eFamily(nFamily)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDocSh->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    StartListening(pDocSh->GetDoc()->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 }
 
 SwXAutoStyleFamily::~SwXAutoStyleFamily()
 {
 }
 
-void SwXAutoStyleFamily::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXAutoStyleFamily::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    if(rHint.GetId() == SfxHintId::Dying)
         m_pDocShell = nullptr;
 }
 
@@ -3772,20 +3771,17 @@ SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwA
 : m_pImpl( new SwAutoStylesEnumImpl( pDoc, eFam ) )
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 }
 
 SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
 {
 }
 
-void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXAutoStylesEnumerator::Notify( const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-    {
+    if(rHint.GetId() == SfxHintId::Dying)
         m_pImpl.reset();
-    }
 }
 
 sal_Bool SwXAutoStylesEnumerator::hasMoreElements(  )
@@ -3826,20 +3822,17 @@ SwXAutoStyle::SwXAutoStyle(
     mrDoc(*pDoc)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    mrDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    //StartListening(mrDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 }
 
 SwXAutoStyle::~SwXAutoStyle()
 {
 }
 
-void SwXAutoStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXAutoStyle::Notify(const SfxHint& rHint)
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-    {
+    if(rHint.GetId() == SfxHintId::Dying)
         mpSet.reset();
-    }
 }
 
 uno::Reference< beans::XPropertySetInfo > SwXAutoStyle::getPropertySetInfo(  )

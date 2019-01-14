@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_UNOSTYLE_HXX
 #define INCLUDED_SW_INC_UNOSTYLE_HXX
 
+#include <svl/listener.hxx>
 #include <svl/style.hxx>
 #include "unocoll.hxx"
 #include "tblafmt.hxx"
@@ -131,14 +132,11 @@ public:
 };
 
 // access to a family of automatic styles (character or paragraph or ...)
-class SwXAutoStyleFamily : public cppu::WeakImplHelper< css::style::XAutoStyleFamily >,
-    public SwClient
+class SwXAutoStyleFamily : public cppu::WeakImplHelper< css::style::XAutoStyleFamily >, public SvtListener
 {
     SwDocShell *m_pDocShell;
     IStyleAccess::SwAutoStyleFamily const m_eFamily;
 
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     SwXAutoStyleFamily(SwDocShell* pDocShell, IStyleAccess::SwAutoStyleFamily eFamily);
@@ -154,10 +152,10 @@ public:
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
+    virtual void Notify( const SfxHint&) override;
 };
 
-class SwXAutoStylesEnumerator : public cppu::WeakImplHelper< css::container::XEnumeration >,
-    public SwClient
+class SwXAutoStylesEnumerator : public cppu::WeakImplHelper< css::container::XEnumeration >, public SvtListener
 {
     std::unique_ptr<SwAutoStylesEnumImpl> m_pImpl;
 public:
@@ -167,8 +165,8 @@ public:
     //XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
     virtual css::uno::Any SAL_CALL nextElement(  ) override;
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+
+    virtual void Notify( const SfxHint&) override;
 };
 
 // an automatic style
@@ -178,7 +176,7 @@ class SwXAutoStyle : public cppu::WeakImplHelper
     css::beans::XPropertyState,
     css::style::XAutoStyle
 >,
-    public SwClient
+    public SvtListener
 {
 private:
     std::shared_ptr<SfxItemSet>            mpSet;
@@ -224,8 +222,8 @@ public:
 
     // Special
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getProperties() override;
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+
+    virtual void Notify( const SfxHint& ) override;
 
 };
 
