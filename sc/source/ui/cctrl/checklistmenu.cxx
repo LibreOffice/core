@@ -1153,7 +1153,7 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
             SvTreeListEntries& rEntries = (*itr)->GetChildEntries();
             for (auto it = rEntries.begin(), itEnd = rEntries.end(); it != itEnd; ++ it)
             {
-                maChecks->CheckEntry(*itr, bSet);
+                maChecks->CheckEntry(it->get(), bSet);
             }
         }
     }
