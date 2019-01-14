@@ -866,7 +866,7 @@ void ScDrawView::DeleteMarked()
         bool bUndo = pDrawLayer && pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now
-        ScPostIt* pNote = pDoc->ReleaseNote( pCaptData->maStart );
+        std::unique_ptr<ScPostIt> pNote = pDoc->ReleaseNote( pCaptData->maStart );
         OSL_ENSURE( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
         if( pNote )
         {
@@ -877,7 +877,7 @@ void ScDrawView::DeleteMarked()
             if( bUndo )
                 pDrawLayer->BeginCalcUndo(false);
             // delete the note (already removed from document above)
-            delete pNote;
+            pNote.reset();
             // add the undo action for the note
             if( bUndo )
                 pUndoMgr->AddUndoAction( o3tl::make_unique<ScUndoReplaceNote>( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
