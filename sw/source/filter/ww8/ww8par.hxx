@@ -1493,7 +1493,7 @@ private:
     bool IsListOrDropcap() { return (!m_xCurrentItemSet  || m_bDropCap); };
 
     //Apo == Absolutely Positioned Object, MSWord's old-style frames
-    WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
+    std::unique_ptr<WW8FlyPara> ConstructApo(const ApoTestResults &rApo,
         const WW8_TablePos *pTabPos);
     bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     void StopApo();
