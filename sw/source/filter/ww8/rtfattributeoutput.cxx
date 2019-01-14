@@ -1532,6 +1532,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         }
         m_rExport.OutputItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN,
                                 m_rExport.m_bExportModeRTF);
+        m_aStyles.append(m_aStylesEnd.makeStringAndClear());
         m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
     }
 
