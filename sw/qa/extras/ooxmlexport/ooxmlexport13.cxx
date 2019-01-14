@@ -86,6 +86,17 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "empty-date-control.odt")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u" ");
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
+{
+    // We need to make sure we don't export the text itself next to the input list field
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 5);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
