@@ -245,6 +245,10 @@ void OfaAutocorrOptionsPage::InsertEntry(const OUString& rTxt)
     m_xCheckLB->set_text(nRow, rTxt, 1);
 }
 
+#define CBCOL_FIRST     0
+#define CBCOL_SECOND    1
+#define CBCOL_BOTH      2
+
 void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -263,14 +267,14 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
     InsertEntry(m_sAccidentalCaps);
 
     int nPos = 0;
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::Autocorrect) );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartWord) );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartSentence) );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl) );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetINetAttr) );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash) );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace) );
-    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CorrectCapsLock) );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::Autocorrect), CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartWord), CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CapitalStartSentence), CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgWeightUnderl), CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::SetINetAttr), CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::ChgToEnEmDash), CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::IgnoreDoubleSpace), CBCOL_FIRST );
+    m_xCheckLB->set_toggle( nPos++, bool(nFlags & ACFlags::CorrectCapsLock), CBCOL_FIRST );
 
     m_xCheckLB->thaw();
 }
@@ -318,10 +322,6 @@ public:
 /*  use TabPage autoformat                                           */
 /*                                                                   */
 /*********************************************************************/
-
-#define CBCOL_FIRST     0
-#define CBCOL_SECOND    1
-#define CBCOL_BOTH      2
 
 enum OfaAutoFmtOptions
 {
