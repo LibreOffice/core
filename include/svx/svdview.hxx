@@ -187,6 +187,7 @@ public:
     virtual bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin) override;
     virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) override;
+    using SdrCreateView::RequestHelp;
     virtual bool Command(const CommandEvent& rCEvt, vcl::Window* pWin) override;
 
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;

@@ -146,10 +146,12 @@ public:
     virtual bool isMarkable() const override;
 
     virtual void onMouseEnter(const MouseEvent& rMEvt) override;
+    virtual void onHelpRequest(const HelpEvent& rHEvt) override;
     virtual void onMouseLeave() override;
 
     int getHighlightId() const { return mnHighlightId; }
 
+    void ShowTip();
     static void HideTip();
 
 private:
@@ -177,6 +179,35 @@ void ImageButtonHdl::HideTip()
     Help::HideBalloonAndQuickHelp();
 }
 
+void ImageButtonHdl::ShowTip()
+{
+    if (!pHdlList || !pHdlList->GetView() || mnHighlightId == -1)
+        return;
+
+    OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
+    if( pDev == nullptr )
+        pDev = Application::GetDefaultDevice();
+
+    OUString aHelpText(SdResId(gButtonToolTips[mnHighlightId]));
+    Point aHelpPos(pDev->LogicToPixel(GetPos()));
+    if (mnHighlightId == 1)
+        aHelpPos.Move(maImageSize.Width(), 0);
+    else if (mnHighlightId == 2)
+        aHelpPos.Move(0, maImageSize.Height());
+    else if (mnHighlightId == 3)
+        aHelpPos.Move(maImageSize.Width(), maImageSize.Height());
+    ::tools::Rectangle aLogicPix(aHelpPos, maImageSize);
+    vcl::Window* pWindow = static_cast<vcl::Window*>(pHdlList->GetView()->GetFirstOutputDevice());
+    ::tools::Rectangle aScreenRect(pWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
+                                   pWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
+    Help::ShowQuickHelp(pWindow, aScreenRect, aHelpText);
+}
+
+void ImageButtonHdl::onHelpRequest(const HelpEvent& /*rHEvt*/)
+{
+    ShowTip();
+}
+
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
     if( pHdlList && pHdlList->GetView())
@@ -198,12 +229,8 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 
             mnHighlightId = nHighlightId;
 
-            if( pHdlList )
-            {
-                OUString aHelpText(SdResId(gButtonToolTips[mnHighlightId]));
-                ::tools::Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
-                Help::ShowQuickHelp(static_cast< vcl::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText);
-            }
+            ShowTip();
+
             Touch();
         }
     }
