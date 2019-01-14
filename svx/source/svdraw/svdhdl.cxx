@@ -1061,6 +1061,10 @@ void SdrHdl::onMouseEnter(const MouseEvent& /*rMEvt*/)
 {
 }
 
+void SdrHdl::onHelpRequest(const HelpEvent& /*rHEvt*/)
+{
+}
+
 void SdrHdl::onMouseLeave()
 {
 }
