@@ -444,9 +444,9 @@ public:
     {
     }
     virtual short Execute() override;
-    virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
-                                SwTableAutoFormat *& prTAFormat ) override;
+    virtual void  GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
+                             SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
+                             std::unique_ptr<SwTableAutoFormat>& prTAFormat ) override;
 };
 
 class SwJavaEditDialog;
