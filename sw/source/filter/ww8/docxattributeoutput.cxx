@@ -1921,7 +1921,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
             sExpand = static_cast<SwAuthorityField const*>(rInfos.pField.get())
                         ->ExpandCitation(AUTH_FIELD_TITLE);
         }
-        else
+        else if(rInfos.eType != ww::eFORMDROPDOWN)
         {
             sExpand = rInfos.pField->ExpandField( true );
         }
