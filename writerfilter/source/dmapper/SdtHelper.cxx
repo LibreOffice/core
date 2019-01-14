@@ -125,7 +125,7 @@ void SdtHelper::createDateControl(OUString const& rContentText, const beans::Pro
         xPropertySet->setPropertyValue("Date", uno::makeAny(aDate));
     }
     else
-        xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText));
+        xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText.trim()));
 
     // append date format to grab bag
     comphelper::SequenceAsHashMap aGrabBag;
