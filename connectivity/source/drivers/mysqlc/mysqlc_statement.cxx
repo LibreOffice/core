@@ -289,7 +289,7 @@ sal_Bool OCommonStatement::convertFastPropertyValue(Any& /* rConvertedValue */,
 
 void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& /* rValue */)
 {
-    // set the value to what ever is necessary
+    // set the value to whatever is necessary
     switch (nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:
