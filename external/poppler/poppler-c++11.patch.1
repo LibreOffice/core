@@ -1,0 +1,31 @@
+remove usage of newfangled C++ that baseline toolchains don't support
+
+--- poppler/goo/gfile.cc.orig	2019-01-16 11:02:21.112911552 +0100
++++ poppler/goo/gfile.cc	2019-01-16 11:01:33.125975178 +0100
+@@ -67,7 +67,7 @@
+ 
+ #ifndef _WIN32
+ 
+-using namespace std::string_literals;
++//using namespace std::string_literals;
+ 
+ namespace {
+ 
+@@ -366,7 +366,7 @@
+   }
+ #else
+   // First try to atomically open the file with CLOEXEC
+-  const std::string modeStr = mode + "e"s;
++  const std::string modeStr = mode + std::string("e");
+   FILE *file = fopen(path, modeStr.c_str());
+   if (file != nullptr)
+     return file;
+--- poppler/goo/gmem.h.orig	2019-01-16 11:25:28.161920038 +0100
++++ poppler/goo/gmem.h	2019-01-16 11:25:53.756882295 +0100
+@@ -177,4 +177,6 @@
+   return std::strncpy(r, s, n);
+ }
+ 
++#include <o3tl/make_unique.hxx>
++
+ #endif // GMEM_H
