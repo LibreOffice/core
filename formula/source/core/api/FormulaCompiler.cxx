@@ -2746,6 +2746,13 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
             else
                 rCurr->SetInForceArray( formula::ParamClass::SuppressedReferenceOrForceArray);
         }
+
+        // Propagate a ForceArrayReturn to caller if the called function
+        // returns one and the caller so far does not have a stronger array
+        // mode set.
+        if (pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown
+                && GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) == ParamClass::ForceArrayReturn)
+            pCurrentFactorToken->SetInForceArray( ParamClass::ForceArrayReturn);
     }
 }
 
