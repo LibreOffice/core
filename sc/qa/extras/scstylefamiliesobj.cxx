@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -31,7 +32,8 @@ namespace sc_apitest
 class ScStyleFamiliesObj : public CalcUnoApiTest,
                            public apitest::XElementAccess,
                            public apitest::XIndexAccess,
-                           public apitest::XNameAccess
+                           public apitest::XNameAccess,
+                           public apitest::XServiceInfo
 {
 public:
     ScStyleFamiliesObj();
@@ -55,6 +57,11 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -66,6 +73,7 @@ ScStyleFamiliesObj::ScStyleFamiliesObj()
     , XElementAccess(cppu::UnoType<container::XNameContainer>::get())
     , XIndexAccess(2)
     , XNameAccess("CellStyles")
+    , XServiceInfo("ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies")
 {
 }
 
