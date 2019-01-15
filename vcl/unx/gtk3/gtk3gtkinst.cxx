@@ -4818,8 +4818,9 @@ private:
     GtkTreeView* m_pTreeView;
     GtkTreeStore* m_pTreeStore;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
+    // map from toggle column to toggle visibility column
+    std::map<int, int> m_aToggleVisMap;
     gint m_nTextCol;
-    gint m_nToggleCol;
     gint m_nImageCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
@@ -5009,7 +5010,6 @@ public:
         , m_pTreeView(pTreeView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_tree_view_get_model(m_pTreeView)))
         , m_nTextCol(-1)
-        , m_nToggleCol(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
@@ -5030,10 +5030,9 @@ public:
                     m_nTextCol = nIndex;
                 else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
                 {
-                    if (m_nToggleCol == -1)
-                        m_nToggleCol = nIndex;
                     g_object_set_data(G_OBJECT(pCellRenderer), "g-lo-CellIndex", reinterpret_cast<gpointer>(nIndex));
                     g_signal_connect(G_OBJECT(pCellRenderer), "toggled", G_CALLBACK(signalCellToggled), this);
+                    m_aToggleVisMap[nIndex] = -1;
                 }
                 else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
                 {
@@ -5048,7 +5047,11 @@ public:
             g_list_free(pRenderers);
         }
         g_list_free(pColumns);
-        m_nIdCol = nIndex;
+        m_nIdCol = nIndex++;
+        for (auto& a : m_aToggleVisMap)
+        {
+            a.second = nIndex++;
+        }
     }
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
@@ -5263,15 +5266,13 @@ public:
 
     virtual bool get_toggle(int pos, int col) const override
     {
-        if (col == -1)
-            return get_bool(pos, m_nToggleCol);
         return get_bool(pos, col);
     }
 
     virtual void set_toggle(int pos, bool bOn, int col) override
     {
-        if (col == -1)
-            return set(pos, m_nToggleCol, bOn);
+        // checkbuttons are invisible until toggled on or off
+        set(pos, m_aToggleVisMap[col], true);
         return set(pos, col, bOn);
     }
 

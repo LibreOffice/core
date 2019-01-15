@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -10,6 +10,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkGrid" id="SmartTagOptionsPage">
@@ -38,8 +40,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -77,8 +77,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -110,6 +108,7 @@
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                                   <attributes>
+                                    <attribute name="activatable">3</attribute>
                                     <attribute name="active">0</attribute>
                                   </attributes>
                                 </child>
@@ -133,8 +132,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -155,16 +152,12 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
