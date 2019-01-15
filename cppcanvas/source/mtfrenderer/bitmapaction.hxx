@@ -58,6 +58,10 @@ namespace cppcanvas
                                                        const ::basegfx::B2DVector& rDstSize,
                                                        const CanvasSharedPtr&,
                                                        const OutDevState& );
+            ActionSharedPtr createBitmapAction( const ::BitmapEx&,
+                                                       const ::basegfx::B2DHomMatrix& rDstTransform,
+                                                       const CanvasSharedPtr&,
+                                                       const OutDevState& );
         }
     }
 }

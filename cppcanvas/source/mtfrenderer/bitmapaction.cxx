@@ -58,6 +58,10 @@ namespace cppcanvas
                               const ::basegfx::B2DVector& rDstSize,
                               const CanvasSharedPtr&,
                               const OutDevState& );
+                BitmapAction( const ::BitmapEx&,
+                              const ::basegfx::B2DHomMatrix&  rTransform,
+                              const CanvasSharedPtr&,
+                              const OutDevState& );
 
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -135,6 +139,41 @@ namespace cppcanvas
                                    rState,
                                    rCanvas,
                                    rDstPoint,
+                                   &aScale,
+                                   nullptr );
+            }
+
+            BitmapAction::BitmapAction( const ::BitmapEx&           rBmpEx,
+                                        const ::basegfx::B2DHomMatrix& rDstTransform,
+                                        const CanvasSharedPtr&      rCanvas,
+                                        const OutDevState&          rState      ) :
+                CachedPrimitiveBase( rCanvas, true ),
+                mxBitmap( vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
+                                                                rBmpEx ) ),
+                mpCanvas( rCanvas ),
+                maState()
+            {
+                tools::initRenderState(maState,rState);
+
+                // Setup transformation such that the next render call is
+                // moved rPoint away, and scaled according to the ratio
+                // given by src and dst size.
+                const ::Size aBmpSize( rBmpEx.GetSizePixel() );
+
+                basegfx::B2DVector aDstScale, aDstTranslate;
+                double fDstRotate, fDstShearX;
+                rDstTransform.decompose(aDstScale, aDstTranslate, fDstRotate, fDstShearX);
+                const ::basegfx::B2DVector aScale( aDstScale.getX() / aBmpSize.Width(),
+                                                   aDstScale.getY() / aBmpSize.Height() );
+                const basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aScale, fDstShearX, -fDstRotate, aDstTranslate));
+                ::canvas::tools::appendToRenderState( maState, aLocalTransformation );
+
+                // correct clip (which is relative to original transform)
+                tools::modifyClip( maState,
+                                   rState,
+                                   rCanvas,
+                                   aDstTranslate,
                                    &aScale,
                                    nullptr );
             }
@@ -219,6 +258,17 @@ namespace cppcanvas
             return ActionSharedPtr( new BitmapAction(rBmpEx,
                                                      rDstPoint,
                                                      rDstSize,
+                                                     rCanvas,
+                                                     rState ) );
+        }
+
+        ActionSharedPtr BitmapActionFactory::createBitmapAction( const ::BitmapEx&           rBmpEx,
+                                                                 const ::basegfx::B2DHomMatrix& rTransform,
+                                                                 const CanvasSharedPtr&      rCanvas,
+                                                                 const OutDevState&          rState )
+        {
+            return ActionSharedPtr( new BitmapAction(rBmpEx,
+                                                     rTransform,
                                                      rCanvas,
                                                      rState ) );
         }

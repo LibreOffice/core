@@ -57,6 +57,7 @@
 #include <emfppen.hxx>
 #include <emfpregion.hxx>
 #include <emfpstringformat.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 namespace
 {
@@ -1216,8 +1217,8 @@ namespace cppcanvas
                                         SAL_INFO("cppcanvas.emf", "EMF+ destination points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3);
                                         SAL_INFO("cppcanvas.emf", "EMF+ destination rectangle: " << x1 << "," << y1 << " " << x2 - x1 << "x" << y3 - y1);
 
-                                        aDstPoint = Map (x1, y1);
-                                        aDstSize = MapSize(x2 - x1, y3 - y1);
+                                        aDstPoint = basegfx::B2DVector(x1, y1);
+                                        aDstSize = basegfx::B2DVector(x2 - x1, y3 - y1);
 
                                         bValid = true;
                                     }
@@ -1228,8 +1229,8 @@ namespace cppcanvas
 
                                     SAL_INFO("cppcanvas.emf", "EMF+ destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
 
-                                    aDstPoint = Map (dx, dy);
-                                    aDstSize = MapSize(dw, dh);
+                                    aDstPoint = basegfx::B2DVector(dx, dy);
+                                    aDstSize = basegfx::B2DVector(dw, dh);
 
                                     bValid = true;
                                 }
@@ -1241,11 +1242,15 @@ namespace cppcanvas
                                     Size aSize( aBmp.GetSizePixel() );
                                     SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                     if( aSize.Width() > 0 && aSize.Height() > 0 ) {
+                                        basegfx::B2DHomMatrix aTransform(aWorldTransform.eM11, aWorldTransform.eM12, aWorldTransform.eDx, aWorldTransform.eM21, aWorldTransform.eM22, aWorldTransform.eDy);
+                                        aTransform.scale(100.0 * nMmX / nPixX, 100.0 * nMmY / nPixY);
+                                        aTransform.translate(-nFrameLeft, -nFrameTop);
+                                        aTransform *= basegfx::B2DHomMatrix(aBaseTransform.eM11, aBaseTransform.eM12, aBaseTransform.eDx, aBaseTransform.eM21, aBaseTransform.eM22, aBaseTransform.eDy);
+                                        aTransform = aTransform * basegfx::tools::createScaleTranslateB2DHomMatrix(aDstSize, aDstPoint);
                                         ActionSharedPtr pBmpAction (
                                             internal::BitmapActionFactory::createBitmapAction (
                                                 aBmp,
-                                                rState.mapModeTransform * aDstPoint,
-                                                rState.mapModeTransform * aDstSize,
+                                                rState.mapModeTransform * aTransform,
                                                 rCanvas,
                                                 rState));
 
