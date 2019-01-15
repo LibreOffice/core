@@ -678,7 +678,7 @@ public:
 
     std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCROW nRow1, SCROW nRow2 ) const;
 
-    void EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2 );
+    bool EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2, bool bSkipRunning = false );
 
     void StoreToCache(SvStream& rStrm) const;
     void RestoreFromCache(SvStream& rStrm);
