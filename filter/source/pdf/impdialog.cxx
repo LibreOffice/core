@@ -462,7 +462,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(TabPageParent pParent, const SfxItemS
     , mxNfQuality(m_xBuilder->weld_metric_spin_button("quality", FUNIT_PERCENT))
     , mxCbReduceImageResolution(m_xBuilder->weld_check_button("reduceresolution"))
     , mxCoReduceImageResolution(m_xBuilder->weld_combo_box_text("resolution"))
-    , mxCbPDFA1b(m_xBuilder->weld_check_button("pdfa"))
+    , mxCbPDFA2b(m_xBuilder->weld_check_button("pdfa"))
     , mxCbTaggedPDF(m_xBuilder->weld_check_button("tagged"))
     , mxCbExportFormFields(m_xBuilder->weld_check_button("forms"))
     , mxFormsFrame(m_xBuilder->weld_widget("formsframe"))
@@ -530,16 +530,16 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxCbWatermark->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
     mxFtWatermark->set_sensitive(false );
     mxEdWatermark->set_sensitive( false );
-    mxCbPDFA1b->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
+    mxCbPDFA2b->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl));
     switch( pParent->mnPDFTypeSelection )
     {
     default:
-    case 0: mxCbPDFA1b->set_active( false ); // PDF 1.5
+        mxCbPDFA2b->set_active( false ); // PDF 1.5
         break;
-    case 1: mxCbPDFA1b->set_active(true); // PDF/A-1a
+    case 2: mxCbPDFA2b->set_active(true); // PDF/A-2a
         break;
     }
-    ToggleExportPDFAHdl( *mxCbPDFA1b );
+    ToggleExportPDFAHdl( *mxCbPDFA2b );
 
     mxCbExportFormFields->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
 
@@ -547,7 +547,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mbTaggedPDFUserSelection = pParent->mbUseTaggedPDF;
     mbExportFormFieldsUserSelection = pParent->mbExportFormFields;
 
-    if( !mxCbPDFA1b->get_active() )
+    if( !mxCbPDFA2b->get_active() )
     {
         // the value for PDF/A set by the ToggleExportPDFAHdl method called before
         mxCbTaggedPDF->set_active( mbTaggedPDFUserSelection  );
@@ -643,9 +643,9 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     }
 
     pParent->mnPDFTypeSelection = 0;
-    if( mxCbPDFA1b->get_active() )
+    if( mxCbPDFA2b->get_active() )
     {
-        pParent->mnPDFTypeSelection = 1;
+        pParent->mnPDFTypeSelection = 2;
         pParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
         pParent->mbExportFormFields = mbExportFormFieldsUserSelection;
     }
@@ -759,11 +759,11 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, 
     ImpPDFTabSecurityPage* pSecPage = mpParent ? mpParent->getSecurityPage() : nullptr;
     if (pSecPage)
     {
-        pSecPage->ImplPDFASecurityControl(!mxCbPDFA1b->get_active());
+        pSecPage->ImplPDFASecurityControl(!mxCbPDFA2b->get_active());
     }
 
     // PDF/A-1 needs tagged PDF, so force disable the control, will be forced in pdfexport.
-    bool bPDFA1Sel = mxCbPDFA1b->get_active();
+    bool bPDFA1Sel = mxCbPDFA2b->get_active();
     mxFormsFrame->set_sensitive(bPDFA1Sel);
     if(bPDFA1Sel)
     {
@@ -784,14 +784,14 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, weld::ToggleButton&, 
         mxCbExportFormFields->set_sensitive(true);
     }
 
-    // PDF/A-1 doesn't allow launch action, so enable/disable the selection on
+    // PDF/A-2 doesn't allow launch action, so enable/disable the selection on
     // Link page
     ImpPDFTabLinksPage* pLinksPage = mpParent ? mpParent->getLinksPage() : nullptr;
     if (pLinksPage)
-        pLinksPage->ImplPDFALinkControl(!mxCbPDFA1b->get_active());
+        pLinksPage->ImplPDFALinkControl(!mxCbPDFA2b->get_active());
 
     // if a password was set, inform the user that this will not be used in PDF/A case
-    if( mxCbPDFA1b->get_active() && pSecPage && pSecPage->hasPassword() )
+    if( mxCbPDFA2b->get_active() && pSecPage && pSecPage->hasPassword() )
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xContainer.get(),
                                                   VclMessageType::Warning, VclButtonsType::Ok,
@@ -1347,11 +1347,11 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* pParent )
 
     // now check the status of PDF/A selection
     // and set the link action accordingly
-    // PDF/A-1 doesn't allow launch action on links
+    // PDF/A-2 doesn't allow launch action on links
 
     ImpPDFTabGeneralPage* pGeneralPage = pParent->getGeneralPage();
     if (pGeneralPage)
-        ImplPDFALinkControl(!pGeneralPage->mxCbPDFA1b->get_active());
+        ImplPDFALinkControl(!pGeneralPage->mxCbPDFA2b->get_active());
 }
 
 

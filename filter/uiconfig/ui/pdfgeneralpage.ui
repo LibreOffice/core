@@ -463,11 +463,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pdfa">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">Archive P_DF/A-1a (ISO 19005-1)</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">Archive P_DF/A-2b (ISO 19005-2)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|pdfa|tooltip_text">Creates an ISO 19005-1 compliant PDF file, ideal for long-term document preservation</property>
+                    <property name="tooltip_text" translatable="yes" context="pdfgeneralpage|pdfa|tooltip_text">Creates an ISO 19005-2 compliant PDF file, ideal for long-term document preservation</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>

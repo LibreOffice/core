@@ -572,6 +572,13 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 mbEncrypt = false;              // no encryption
                 xEnc.clear();
                 break;
+            case 2:
+                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_2;
+                mbUseTaggedPDF = true;          // force the tagged PDF as well
+                mbRemoveTransparencies = false; // PDF/A-2 does allow transparencies
+                mbEncrypt = false;              // no encryption
+                xEnc.clear();
+                break;
             }
 
             // copy in context the values default in the constructor or set by the FilterData sequence of properties

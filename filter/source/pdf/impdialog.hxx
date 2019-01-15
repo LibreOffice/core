@@ -190,7 +190,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> mxNfQuality;
     std::unique_ptr<weld::CheckButton> mxCbReduceImageResolution;
     std::unique_ptr<weld::ComboBoxText> mxCoReduceImageResolution;
-    std::unique_ptr<weld::CheckButton> mxCbPDFA1b;
+    std::unique_ptr<weld::CheckButton> mxCbPDFA2b;
     std::unique_ptr<weld::CheckButton> mxCbTaggedPDF;
     std::unique_ptr<weld::CheckButton> mxCbExportFormFields;
     std::unique_ptr<weld::Widget> mxFormsFrame;
@@ -235,7 +235,7 @@ public:
 
     void                        GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem(ImpPDFTabDialog* paParent);
-    bool                        IsPdfaSelected() const { return mxCbPDFA1b->get_active(); }
+    bool                        IsPdfaSelected() const { return mxCbPDFA2b->get_active(); }
 };
 
 /// Class tab page viewer
