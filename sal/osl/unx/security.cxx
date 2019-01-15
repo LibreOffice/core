@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cstddef>
+#include <cstring>
 #include <limits>
 
 #ifdef IOS
@@ -52,7 +53,6 @@
 #define getpwuid_r(uid, pwd, buf, buflen, result) (*(result) = getpwuid(uid), (*(result) ? (memcpy (buf, *(result), sizeof (struct passwd)), 0) : errno))
 #endif
 
-static bool osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax);
 static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
@@ -196,13 +196,26 @@ bool osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 n
 sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 {
     bool     bRet = false;
-    sal_Char pszName[1024];
+    sal_Char * pszName;
+    sal_Int32 len;
 
-    pszName[0] = '\0';
+    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
-    bRet = osl_psz_getUserName(Security,pszName,sizeof(pszName));
+    if (pSecImpl != nullptr && pSecImpl->m_pPasswd.pw_name != nullptr) {
+        pszName = pSecImpl->m_pPasswd.pw_name;
+        auto const n = std::strlen(pszName);
+        if (n <= sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            len = n;
+            bRet = true;
+        }
+    }
 
-    rtl_string2UString( ustrName, pszName, rtl_str_getLength( pszName ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    if (!bRet) {
+        pszName = nullptr;
+        len = 0;
+    }
+
+    rtl_string2UString( ustrName, pszName, len, osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     SAL_WARN_IF(*ustrName == nullptr, "sal.osl", "ustrName == NULL");
 
     return bRet;
@@ -211,18 +224,6 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 sal_Bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **ustrName)
 {
     return osl_getUserName(Security, ustrName); // No domain name on unix
-}
-
-static bool osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
-{
-    oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
-
-    if (pSecImpl == nullptr || pSecImpl->m_pPasswd.pw_name == nullptr)
-        return false;
-
-    strncpy(pszName, pSecImpl->m_pPasswd.pw_name, nMax);
-
-    return true;
 }
 
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
