@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <cstddef>
 #include <cstring>
 #include <limits>
@@ -53,7 +54,7 @@
 #define getpwuid_r(uid, pwd, buf, buflen, result) (*(result) = getpwuid(uid), (*(result) ? (memcpy (buf, *(result), sizeof (struct passwd)), 0) : errno))
 #endif
 
-static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
+static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory);
 static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
 static bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
@@ -229,15 +230,13 @@ sal_Bool SAL_CALL osl_getShortUserName(oslSecurity Security, rtl_uString **ustrN
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     bool     bRet = false;
-    sal_Char pszDirectory[PATH_MAX];
+    OString pszDirectory;
 
-    pszDirectory[0] = '\0';
-
-    bRet = osl_psz_getHomeDir(Security,pszDirectory,sizeof(pszDirectory));
+    bRet = osl_psz_getHomeDir(Security,&pszDirectory);
 
     if ( bRet )
     {
-        rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+        rtl_string2UString( pustrDirectory, pszDirectory.getStr(), pszDirectory.getLength(), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
         SAL_WARN_IF(*pustrDirectory == nullptr, "sal.osl", "*pustrDirectory == NULL");
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
@@ -245,8 +244,10 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     return bRet;
 }
 
-static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
 {
+    assert(pszDirectory != nullptr);
+
     oslSecurityImpl *pSecImpl = static_cast<oslSecurityImpl *>(Security);
 
     if (pSecImpl == nullptr)
@@ -257,8 +258,10 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
     sal_Char homeDir[B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH];
     status_t result = find_directory(B_USER_DIRECTORY, volume, false, homeDir,
                                      sizeof(homeDir));
-    if (result == B_OK && strlen(homeDir) < nMax) {
-        strcpy(pszDirectory, homeDir);
+    if (result == B_OK) {
+        static_assert(
+            B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH <= std::numeric_limits<sal_Int32>::max());
+        *pszDirectory = OString(homeDir, std::strlen(homeDir));
         return true;
     }
     return false;
@@ -266,7 +269,6 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
 
 #ifdef ANDROID
 {
-    sal_Bool bRet = sal_False;
     OUString pValue;
 
     if (rtl::Bootstrap::get("HOME", pValue))
@@ -274,14 +276,10 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
         auto const pStrValue = OUStringToOString(pValue, RTL_TEXTENCODING_UTF8);
         if (!pStrValue.isEmpty())
         {
-            sal_Int32 nCopy = (sal_Int32)std::min<sal_uInt32>(nMax-1, pStrValue.getLength()) ;
-            strncpy (pszDirectory, pStrValue.getStr(), nCopy);
-            pszDirectory[nCopy] = '\0';
-            bRet = (std::size_t)pStrValue.getLength() < nMax;
+            *pszDirectory = pStrValue;
+            return true;
         }
     }
-    if (bRet)
-        return bRet;
 }
 #endif
 
@@ -290,9 +288,10 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
         // Let's pretend the app-specific "Documents" directory is the home directory for now
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *userDirectory = [paths objectAtIndex:0];
-        if ([userDirectory length] < nMax)
+        auto const len = [userDirectory length];
+        if (len <= std::numeric_limits<sal_Int32>::max())
         {
-            strcpy(pszDirectory, [userDirectory UTF8String]);
+            *pszDirectory = OString([userDirectory UTF8String], len);
             return sal_True;
         }
     }
@@ -323,12 +322,22 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
 
         if (pStr != nullptr && strlen(pStr) > 0 && access(pStr, 0) == 0)
         {
-            strncpy(pszDirectory, pStr, nMax);
+            auto const len = std::strlen(pStr);
+            if (len > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+                return false;
+            }
+            *pszDirectory = OString(pStr, len);
             return true;
         }
     }
     if (pSecImpl->m_pPasswd.pw_dir != nullptr)
-        strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
+    {
+        auto const len = std::strlen(pSecImpl->m_pPasswd.pw_dir);
+        if (len > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            return false;
+        }
+        *pszDirectory = OString(pSecImpl->m_pPasswd.pw_dir, len);
+    }
     else
         return false;
 
@@ -380,26 +389,24 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
 
     if (pStr == nullptr || strlen(pStr) == 0 || access(pStr, 0) != 0)
     {
-        std::size_t n = 0;
-
         // a default equal to $HOME/.config should be used.
-        if (!osl_psz_getHomeDir(Security, pszDirectory, nMax))
+        OString home;
+        if (!osl_psz_getHomeDir(Security, &home))
             return false;
-        n = strlen(pszDirectory);
-        if (n + sizeof(DOT_CONFIG) < nMax)
+        if (home.getLength() + sizeof(DOT_CONFIG) < nMax)
         {
-            strcpy(pszDirectory+n, DOT_CONFIG); // safe
+            auto const config = OString(home + DOT_CONFIG);
 
             // try to create dir if not present
             bool dirOK = true;
-            if (mkdir(pszDirectory, S_IRWXU) != 0)
+            if (mkdir(config.getStr(), S_IRWXU) != 0)
             {
                 int e = errno;
                 if (e != EEXIST)
                 {
                     SAL_WARN(
                         "sal.osl",
-                        "mkdir(" << pszDirectory << "): errno=" << e);
+                        "mkdir(" << config << "): errno=" << e);
                     dirOK = false;
                 }
             }
@@ -407,7 +414,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
             {
                 // check file type and permissions
                 struct stat st;
-                if (stat(pszDirectory, &st) != 0)
+                if (stat(config.getStr(), &st) != 0)
                 {
                     SAL_INFO("sal.osl","Could not stat $HOME/.config");
                     dirOK = false;
@@ -427,9 +434,10 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
                 }
             }
 
-            // resort to HOME
-            if (!dirOK)
-                pszDirectory[n] = '\0';
+            // if !dirOK, resort to HOME
+            if (dirOK)
+                home = config;
+            strcpy(pszDirectory, home.getStr()); // safe
         }
     }
     else
@@ -452,8 +460,11 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
 #define MACOSX_CONFIG_DIR "/Library/Application Support" /* Used on iOS, too */
 static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
-    if( osl_psz_getHomeDir(Security, pszDirectory, nMax - sizeof(MACOSX_CONFIG_DIR) + 1) )
+    OString home;
+    if( osl_psz_getHomeDir(Security, &home)
+        && sal_uInt32(home.getLength()) < nMax - sizeof(MACOSX_CONFIG_DIR) )
     {
+        strcpy(pszDirectory, home.getStr());
         strcat( pszDirectory, MACOSX_CONFIG_DIR );
         return true;
     }
