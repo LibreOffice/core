@@ -867,10 +867,10 @@ void PrintDialog::readFromSettings()
     // preview box
     aValue = pItem->getValue( "PrintDialog",
                               "HasPreview" );
-    if ( aValue.equalsIgnoreAsciiCase("true") )
-        mpPreviewBox->Check( true );
-    else
+    if ( aValue.equalsIgnoreAsciiCase("false") )
         mpPreviewBox->Check( false );
+    else
+        mpPreviewBox->Check( true );
 
 }
 
