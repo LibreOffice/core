@@ -55,6 +55,11 @@ $(eval $(call gb_Module_add_check_targets,sw,\
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sw_uwriter) \
+    CppunitTest_sw_rtfexport \
+    CppunitTest_sw_rtfexport2 \
+    CppunitTest_sw_rtfexport3 \
+    CppunitTest_sw_rtfexport4 \
+    CppunitTest_sw_rtfexport5 \
     CppunitTest_sw_docbookexport \
     CppunitTest_sw_fodfexport \
     CppunitTest_sw_htmlexport \
@@ -85,9 +90,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ww8export2 \
     CppunitTest_sw_ww8export3 \
     CppunitTest_sw_ww8import \
-    CppunitTest_sw_rtfexport \
-    CppunitTest_sw_rtfexport2 \
-    CppunitTest_sw_rtfexport3 \
     CppunitTest_sw_rtfimport \
     CppunitTest_sw_odfexport \
     CppunitTest_sw_odfimport \
