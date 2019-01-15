@@ -32,7 +32,7 @@
 #include "system.hxx"
 
 #include <osl/security.h>
-#include <rtl/bootstrap.h>
+#include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 
 #include <osl/thread.h>
@@ -267,28 +267,18 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
 #ifdef ANDROID
 {
     sal_Bool bRet = sal_False;
-    rtl_uString *pName = 0, *pValue = 0;
+    OUString pValue;
 
-    rtl_uString_newFromAscii(&pName, "HOME");
-
-    if (rtl_bootstrap_get(pName, &pValue, NULL))
+    if (rtl::Bootstrap::get("HOME", pValue))
     {
-        rtl_String *pStrValue = 0;
-        if (pValue && pValue->length > 0)
+        auto const pStrValue = OUStringToOString(pValue, RTL_TEXTENCODING_UTF8);
+        if (!pStrValue.isEmpty())
         {
-            rtl_uString2String(&pStrValue, pValue->buffer,
-                               pValue->length, RTL_TEXTENCODING_UTF8,
-                               OUSTRING_TO_OSTRING_CVTFLAGS);
-            if (pStrValue && pStrValue->length > 0)
-            {
-                sal_Int32 nCopy = (sal_Int32)std::min<sal_uInt32>(nMax-1, pStrValue->length) ;
-                strncpy (pszDirectory, pStrValue->buffer, nCopy);
-                pszDirectory[nCopy] = '\0';
-                bRet = (std::size_t)pStrValue->length < nMax;
-            }
-            rtl_string_release(pStrValue);
+            sal_Int32 nCopy = (sal_Int32)std::min<sal_uInt32>(nMax-1, pStrValue.getLength()) ;
+            strncpy (pszDirectory, pStrValue.getStr(), nCopy);
+            pszDirectory[nCopy] = '\0';
+            bRet = (std::size_t)pStrValue.getLength() < nMax;
         }
-        rtl_uString_release(pName);
     }
     if (bRet)
         return bRet;
