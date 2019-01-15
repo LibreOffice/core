@@ -322,13 +322,12 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
 #endif
 
         if (pStr != nullptr && strlen(pStr) > 0 && access(pStr, 0) == 0)
+        {
             strncpy(pszDirectory, pStr, nMax);
-        else if (pSecImpl->m_pPasswd.pw_dir != nullptr)
-            strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
-        else
-            return false;
+            return true;
+        }
     }
-    else if (pSecImpl->m_pPasswd.pw_dir != nullptr)
+    if (pSecImpl->m_pPasswd.pw_dir != nullptr)
         strncpy(pszDirectory, pSecImpl->m_pPasswd.pw_dir, nMax);
     else
         return false;
