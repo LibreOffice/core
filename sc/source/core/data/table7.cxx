@@ -429,15 +429,22 @@ std::unique_ptr<sc::ColumnIterator> ScTable::GetColumnIterator( SCCOL nCol, SCRO
     return aCol[nCol].GetColumnIterator(nRow1, nRow2);
 }
 
-void ScTable::EnsureFormulaCellResults( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2 )
+bool ScTable::EnsureFormulaCellResults( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2, bool bSkipRunning )
 {
     if (nCol2 < nCol1 || !IsColValid(nCol1) || !ValidCol(nCol2))
-        return;
+        return false;
 
     const SCCOL nMaxCol2 = std::min<SCCOL>( nCol2, aCol.size() - 1 );
 
+    bool bAnyDirty = false;
+
     for (SCCOL nCol = nCol1; nCol <= nMaxCol2; ++nCol)
-        aCol[nCol].EnsureFormulaCellResults(nRow1, nRow2);
+    {
+        bool bRet = aCol[nCol].EnsureFormulaCellResults(nRow1, nRow2, bSkipRunning);
+        bAnyDirty = bAnyDirty || bRet;
+    }
+
+    return bAnyDirty;
 }
 
 void ScTable::finalizeOutlineImport()
