@@ -13,9 +13,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,lcms2,$(LCMS2_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,lcms2,3))
 
 $(eval $(call gb_UnpackedTarball_add_patches,lcms2,\
+	external/lcms2/0017-Upgrade-Visual-studio-2017-15.8.patch.1 \
 	external/lcms2/lcms2-2.4-windows.patch \
 	external/lcms2/lcms2-msvc-disable-sse2.patch.1 \
-	external/lcms2/0001-Added-an-extra-check-to-MLU-bounds.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
