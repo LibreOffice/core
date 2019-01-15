@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -23,7 +24,9 @@ using namespace css::uno;
 
 namespace sc_apitest
 {
-class ScStyleFamiliesObj : public CalcUnoApiTest, public apitest::XNameAccess
+class ScStyleFamiliesObj : public CalcUnoApiTest,
+                           public apitest::XIndexAccess,
+                           public apitest::XNameAccess
 {
 public:
     ScStyleFamiliesObj();
@@ -33,6 +36,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScStyleFamiliesObj);
+
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
 
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
@@ -47,6 +54,7 @@ private:
 
 ScStyleFamiliesObj::ScStyleFamiliesObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(2)
     , XNameAccess("CellStyles")
 {
 }

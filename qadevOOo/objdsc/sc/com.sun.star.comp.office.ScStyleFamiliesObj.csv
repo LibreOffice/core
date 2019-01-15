@@ -1,4 +1,2 @@
-"ScStyleFamiliesObj";"com::sun::star::container::XIndexAccess#optional";"getCount()"
-"ScStyleFamiliesObj";"com::sun::star::container::XIndexAccess#optional";"getByIndex()"
 "ScStyleFamiliesObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScStyleFamiliesObj";"com::sun::star::container::XElementAccess";"hasElements()"
