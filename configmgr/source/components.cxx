@@ -48,7 +48,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
@@ -196,19 +195,12 @@ void Components::WriteThread::execute() {
     reference_->clear();
 }
 
-class theComponentsSingleton :
-    public rtl::StaticWithArg<
-        Components,
-        css::uno::Reference< css::uno::XComponentContext >,
-        theComponentsSingleton>
-{
-};
-
 Components & Components::getSingleton(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     assert(context.is());
-    return theComponentsSingleton::get(context);
+    static Components singleton(context);
+    return singleton;
 }
 
 bool Components::allLocales(OUString const & locale) {
