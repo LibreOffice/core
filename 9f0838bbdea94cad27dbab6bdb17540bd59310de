@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_0c185b7f",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3180,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-15T18:01:46Z",
+      "side": 1,
+      "message": "this still isn\u0027t terribly elegant :)\n\na potential problem here: if the node already has a RES_PARATR_GRABBAG, then this will overwrite it?\n\n(guess this can\u0027t happen in the case of the start node, because that one is inside the ToC so it\u0027s typically generated anyway)",
+      "revId": "9f0838bbdea94cad27dbab6bdb17540bd59310de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
