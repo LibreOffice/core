@@ -1050,7 +1050,7 @@ public:
 
     std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
 
-    void EnsureFormulaCellResults( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2 );
+    bool EnsureFormulaCellResults( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2, bool bSkipRunning = false );
 
     void ConvertFormulaToValue(
         sc::EndListeningContext& rCxt,
