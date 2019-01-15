@@ -1400,7 +1400,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     const ScPatternAttr*    pAttrs      = pTabViewShell->GetSelectionPattern();
     const SfxItemSet*       pSet        = rReq.GetArgs();
     sal_uInt16                  nSlot       = rReq.GetSlot();
-    SfxAllItemSet*          pNewSet = nullptr;
+    std::unique_ptr<SfxAllItemSet> pNewSet;
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
@@ -1412,7 +1412,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
         ||(nSlot == SID_ULINE_VAL_DOUBLE)
         ||(nSlot == SID_ULINE_VAL_DOTTED) )
     {
-        pNewSet = new SfxAllItemSet( GetPool() );
+        pNewSet.reset(new SfxAllItemSet( GetPool() ));
 
         switch ( nSlot )
         {
@@ -1631,7 +1631,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     if( pNewSet )
     {
         rReq.Done( *pNewSet );
-        delete pNewSet;
+        pNewSet.reset();
     }
     else
     {
