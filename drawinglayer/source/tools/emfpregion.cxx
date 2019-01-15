@@ -18,7 +18,6 @@
  */
 
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -70,16 +69,15 @@ namespace emfplushelper
             SAL_INFO("drawinglayer", "EMF+\t\t RegionNodeDataTypeRect x:" << dx << ", y:" << dy <<
                      ", width:" << dw << ", height:" << dh);
 
-            ::basegfx::B2DPoint mappedPoint(rR.Map(dx, dy));
-            ::basegfx::B2DSize mappedSize(rR.MapSize(dw, dh));
-
-            ::basegfx::B2DPolyPolygon polyPolygon(
+            const ::basegfx::B2DPoint mappedStartPoint(rR.Map(dx, dy));
+            const ::basegfx::B2DPoint mappedEndPoint(rR.Map(dx + dw, dy + dh));
+            const ::basegfx::B2DPolyPolygon polyPolygon(
                     ::basegfx::utils::createPolygonFromRect(
                         ::basegfx::B2DRectangle(
-                            mappedPoint.getX(),
-                            mappedPoint.getY(),
-                            mappedPoint.getX() + mappedSize.getX(),
-                            mappedPoint.getY() + mappedSize.getY())));
+                            mappedStartPoint.getX(),
+                            mappedStartPoint.getY(),
+                            mappedEndPoint.getX(),
+                            mappedEndPoint.getY())));
             polygon = polyPolygon;
             break;
         }
