@@ -703,7 +703,7 @@ OUString SwTextFrame::GetCurWord(SwPosition const& rPos) const
     OUString const& rText(GetText());
     assert(sal_Int32(nPos) <= rText.getLength()); // invalid index
 
-    if (rText.isEmpty())
+    if (rText.isEmpty() || IsHiddenNow())
         return OUString();
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
