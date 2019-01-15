@@ -713,7 +713,7 @@ void ScShapeChildren::FindChanged(ScShapeChildVec& rOld, ScShapeChildVec& rNew) 
     ScShapeChildVec::iterator aOldItr = rOld.begin();
     ScShapeChildVec::iterator aOldEnd = rOld.end();
     ScShapeChildVec::const_iterator aNewItr = rNew.begin();
-    ScShapeChildVec::const_iterator aNewEnd = rNew.begin();
+    ScShapeChildVec::const_iterator aNewEnd = rNew.end();
     uno::Reference<XAccessible> xAcc;
     while ((aNewItr != aNewEnd) && (aOldItr != aOldEnd))
     {
