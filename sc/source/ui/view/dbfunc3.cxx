@@ -1137,15 +1137,15 @@ void ScDBFunc::GroupDataPilot()
         }
     }
 
-    ScDPSaveGroupDimension* pNewGroupDim = nullptr;
+    std::unique_ptr<ScDPSaveGroupDimension> pNewGroupDim;
     if ( !pGroupDimension )
     {
         // create a new group dimension
         OUString aGroupDimName =
             pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, nullptr);
-        pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, aGroupDimName );
+        pNewGroupDim.reset(new ScDPSaveGroupDimension( aBaseDimName, aGroupDimName ));
 
-        pGroupDimension = pNewGroupDim;     // make changes to the new dim if none existed
+        pGroupDimension = pNewGroupDim.get();     // make changes to the new dim if none existed
 
         if ( pBaseGroupDim )
         {
@@ -1195,10 +1195,10 @@ void ScDBFunc::GroupDataPilot()
     if ( pNewGroupDim )
     {
         pDimData->AddGroupDimension( *pNewGroupDim );
-        delete pNewGroupDim;        // AddGroupDimension copies the object
+        pNewGroupDim.reset();        // AddGroupDimension copies the object
         // don't access pGroupDimension after here
     }
-    pGroupDimension = pNewGroupDim = nullptr;
+    pGroupDimension = nullptr;
 
     // set orientation
     ScDPSaveDimension* pSaveDimension = aData.GetDimensionByName( aGroupDimName );
