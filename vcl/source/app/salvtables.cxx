@@ -2208,8 +2208,6 @@ public:
     virtual bool get_toggle(int pos, int col) const override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        if (col == -1)
-            return m_xTreeView->GetCheckButtonState(pEntry) == SvButtonState::Checked;
 
         ++col; //skip dummy/expander column
 
@@ -2225,11 +2223,6 @@ public:
     virtual void set_toggle(int pos, bool bOn, int col) override
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
-        if (col == -1)
-        {
-            m_xTreeView->SetCheckButtonState(pEntry, bOn ? SvButtonState::Checked : SvButtonState::Unchecked);
-            return;
-        }
 
         bool bRadio = std::find(m_aRadioIndexes.begin(), m_aRadioIndexes.end(), col) != m_aRadioIndexes.end();
         ++col; //skip dummy/expander column

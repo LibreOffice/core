@@ -45,6 +45,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkBox" id="TocIndexPage">
