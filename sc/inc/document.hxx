@@ -2435,7 +2435,7 @@ public:
      * @param rRange range in which to potentially calculate the formula
      *               cells.
      */
-    void EnsureFormulaCellResults( const ScRange& rRange );
+    SC_DLLPUBLIC bool EnsureFormulaCellResults( const ScRange& rRange, bool bSkipRunning = false );
 
     SvtBroadcaster*         GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster*   GetBroadcaster( const ScAddress& rPos ) const;
