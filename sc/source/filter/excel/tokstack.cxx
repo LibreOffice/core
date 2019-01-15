@@ -125,14 +125,11 @@ bool TokenPool::GrowElement()
     if (!nElementNew)
         return false;
 
-    sal_uInt16* pElementNew = new (::std::nothrow) sal_uInt16[ nElementNew ];
-    E_TYPE* pTypeNew = new (::std::nothrow) E_TYPE[ nElementNew ];
-    sal_uInt16* pSizeNew = new (::std::nothrow) sal_uInt16[ nElementNew ];
+    std::unique_ptr<sal_uInt16[]> pElementNew(new (::std::nothrow) sal_uInt16[ nElementNew ]);
+    std::unique_ptr<E_TYPE[]> pTypeNew(new (::std::nothrow) E_TYPE[ nElementNew ]);
+    std::unique_ptr<sal_uInt16[]> pSizeNew(new (::std::nothrow) sal_uInt16[ nElementNew ]);
     if (!pElementNew || !pTypeNew || !pSizeNew)
     {
-        delete [] pElementNew;
-        delete [] pTypeNew;
-        delete [] pSizeNew;
         return false;
     }
 
@@ -145,9 +142,9 @@ bool TokenPool::GrowElement()
 
     nElement = nElementNew;
 
-    pElement.reset( pElementNew );
-    pType.reset( pTypeNew );
-    pSize.reset( pSizeNew );
+    pElement = std::move( pElementNew );
+    pType = std::move( pTypeNew );
+    pSize = std::move( pSizeNew );
     return true;
 }
 

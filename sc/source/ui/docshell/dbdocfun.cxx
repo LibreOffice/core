@@ -782,7 +782,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         rDoc.BeginDrawUndo();
     }
 
-    ScDocument* pAttribDoc = nullptr;
+    std::unique_ptr<ScDocument> pAttribDoc;
     ScRange aAttribRange;
     if (pDestData)                                      // delete destination range
     {
@@ -798,7 +798,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             //  also for filled-in formulas
             aAttribRange.aEnd.SetCol( aAttribRange.aEnd.Col() + nFormulaCols );
 
-            pAttribDoc = new ScDocument( SCDOCMODE_UNDO );
+            pAttribDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
             pAttribDoc->InitUndo( &rDoc, nDestTab, nDestTab, false, true );
             rDoc.CopyToDocument(aAttribRange, InsertDeleteFlags::ATTRIB, false, *pAttribDoc);
         }
@@ -882,8 +882,6 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                                     nDestTab, *pStyle );
                 }
             }
-
-            delete pAttribDoc;
         }
     }
 

@@ -5599,49 +5599,44 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
     uno::Reference<sheet::XCellRangeAddressable> xAddr( xObject, uno::UNO_QUERY );
 
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh && xAddr.is() )
+    if ( !pDocSh || !xAddr.is() )
     {
-        //! check if xObject is in the same document
-
-        ScFilterDescriptor* pNew = new ScFilterDescriptor(pDocSh);  //! instead from object?
-
-        ScQueryParam aParam = pNew->GetParam();
-        aParam.bHasHeader = true;
-
-        table::CellRangeAddress aDataAddress(xAddr->getRangeAddress());
-        aParam.nCol1 = static_cast<SCCOL>(aDataAddress.StartColumn);
-        aParam.nRow1 = static_cast<SCROW>(aDataAddress.StartRow);
-        aParam.nCol2 = static_cast<SCCOL>(aDataAddress.EndColumn);
-        aParam.nRow2 = static_cast<SCROW>(aDataAddress.EndRow);
-        aParam.nTab  = aDataAddress.Sheet;
-
-        ScDocument& rDoc = pDocSh->GetDocument();
-        if (rDoc.CreateQueryParam(aRange, aParam))
-        {
-            //  FilterDescriptor contains the counted fields inside the area
-            SCCOLROW nFieldStart = aParam.bByRow ?
-                static_cast<SCCOLROW>(aDataAddress.StartColumn) :
-                static_cast<SCCOLROW>(aDataAddress.StartRow);
-            SCSIZE nCount = aParam.GetEntryCount();
-            for (SCSIZE i=0; i<nCount; i++)
-            {
-                ScQueryEntry& rEntry = aParam.GetEntry(i);
-                if (rEntry.bDoQuery && rEntry.nField >= nFieldStart)
-                    rEntry.nField -= nFieldStart;
-            }
-
-            pNew->SetParam( aParam );
-            return pNew;
-        }
-        else
-        {
-            delete pNew;
-            return nullptr;
-        }
+        OSL_FAIL("no document or no area");
+        return nullptr;
     }
 
-    OSL_FAIL("no document or no area");
-    return nullptr;
+    //! check if xObject is in the same document
+
+    std::unique_ptr<ScFilterDescriptor> pNew(new ScFilterDescriptor(pDocSh));  //! instead from object?
+
+    ScQueryParam aParam = pNew->GetParam();
+    aParam.bHasHeader = true;
+
+    table::CellRangeAddress aDataAddress(xAddr->getRangeAddress());
+    aParam.nCol1 = static_cast<SCCOL>(aDataAddress.StartColumn);
+    aParam.nRow1 = static_cast<SCROW>(aDataAddress.StartRow);
+    aParam.nCol2 = static_cast<SCCOL>(aDataAddress.EndColumn);
+    aParam.nRow2 = static_cast<SCROW>(aDataAddress.EndRow);
+    aParam.nTab  = aDataAddress.Sheet;
+
+    ScDocument& rDoc = pDocSh->GetDocument();
+    if (!rDoc.CreateQueryParam(aRange, aParam))
+        return nullptr;
+
+    //  FilterDescriptor contains the counted fields inside the area
+    SCCOLROW nFieldStart = aParam.bByRow ?
+        static_cast<SCCOLROW>(aDataAddress.StartColumn) :
+        static_cast<SCCOLROW>(aDataAddress.StartRow);
+    SCSIZE nCount = aParam.GetEntryCount();
+    for (SCSIZE i=0; i<nCount; i++)
+    {
+        ScQueryEntry& rEntry = aParam.GetEntry(i);
+        if (rEntry.bDoQuery && rEntry.nField >= nFieldStart)
+            rEntry.nField -= nFieldStart;
+    }
+
+    pNew->SetParam( aParam );
+    return pNew.release();
 }
 
 // XSubTotalSource
