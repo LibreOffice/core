@@ -944,17 +944,21 @@ std::unique_ptr<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, S
     return pTab->GetColumnIterator(nCol, nRow1, nRow2);
 }
 
-void ScDocument::EnsureFormulaCellResults( const ScRange& rRange )
+bool ScDocument::EnsureFormulaCellResults( const ScRange& rRange, bool bSkipRunning )
 {
+    bool bAnyDirty = false;
     for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
     {
         ScTable* pTab = FetchTable(nTab);
         if (!pTab)
             continue;
 
-        pTab->EnsureFormulaCellResults(
-            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+        bool bRet = pTab->EnsureFormulaCellResults(
+            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), bSkipRunning);
+        bAnyDirty = bAnyDirty || bRet;
     }
+
+    return bAnyDirty;
 }
 
 sc::ExternalDataMapper& ScDocument::GetExternalDataMapper()
