@@ -29,6 +29,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <svl/listener.hxx>
 
 #include "flyenum.hxx"
 #include "frmfmt.hxx"
@@ -306,10 +307,10 @@ public:
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
 };
 
-class SwXOLEListener : public cppu::WeakImplHelper<css::util::XModifyListener>,
-    public SwClient
+class SwXOLEListener : public cppu::WeakImplHelper<css::util::XModifyListener>, public SvtListener
 {
-    css::uno::Reference< css::frame::XModel > xOLEModel;
+    SwFormat* m_pOLEFormat;
+    css::uno::Reference<css::frame::XModel> m_xOLEModel;
 
 public:
     SwXOLEListener(SwFormat& rOLEFormat, css::uno::Reference< css::frame::XModel > const & xOLE);
@@ -321,8 +322,7 @@ public:
 // css::util::XModifyListener
     virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 
-protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Notify( const SfxHint& ) override;
 };
 
 #endif

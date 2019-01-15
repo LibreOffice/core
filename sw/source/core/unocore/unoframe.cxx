@@ -3541,11 +3541,25 @@ uno::Reference<container::XNameReplace> SAL_CALL
     return new SwFrameEventDescriptor( *this );
 }
 
-
-SwXOLEListener::SwXOLEListener( SwFormat& rOLEFormat, uno::Reference< XModel > const & xOLE) :
-    SwClient(&rOLEFormat),
-    xOLEModel(xOLE)
+namespace
 {
+    SwOLENode* lcl_GetOLENode(const SwFormat* pFormat)
+    {
+        if(!pFormat)
+            return nullptr;
+        const SwNodeIndex* pIdx(pFormat->GetContent().GetContentIdx());
+        if(!pIdx)
+            return nullptr;
+        const SwNodeIndex aIdx(*pIdx, 1);
+        return aIdx.GetNode().GetNoTextNode()->GetOLENode();
+    }
+}
+
+SwXOLEListener::SwXOLEListener( SwFormat& rOLEFormat, uno::Reference< XModel > const & xOLE)
+    : m_pOLEFormat(&rOLEFormat)
+    , m_xOLEModel(xOLE)
+{
+    StartListening(m_pOLEFormat->GetNotifier());
 }
 
 SwXOLEListener::~SwXOLEListener()
@@ -3554,30 +3568,17 @@ SwXOLEListener::~SwXOLEListener()
 void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
 {
     SolarMutexGuard aGuard;
-
-    SwOLENode* pNd = nullptr;
-    SwFormat* pFormat = static_cast<SwFormat*>(GetRegisteredIn());
-    if(pFormat)
-    {const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
-        if(pIdx)
-        {
-            SwNodeIndex aIdx(*pIdx, 1);
-            SwNoTextNode* pNoText = aIdx.GetNode().GetNoTextNode();
-            pNd = pNoText->GetOLENode();
-        }
-    }
+    const auto pNd = lcl_GetOLENode(m_pOLEFormat);
     if(!pNd)
         throw uno::RuntimeException();
-
-    uno::Reference < embed::XEmbeddedObject > xIP = pNd->GetOLEObj().GetOleRef();
-    if ( xIP.is() )
+    const auto xIP = pNd->GetOLEObj().GetOleRef();
+    if(xIP.is())
     {
         sal_Int32 nState = xIP->getCurrentState();
-        if ( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE )
+        if(nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE)
+            // if the OLE-Node is UI-Active do nothing
             return;
     }
-
-    // if the OLE-Node is UI-Active do nothing
     pNd->SetOLESizeInvalid(true);
     pNd->GetDoc()->SetOLEObjModified();
 }
@@ -3585,16 +3586,14 @@ void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
 void SwXOLEListener::disposing( const lang::EventObject& rEvent )
 {
     SolarMutexGuard aGuard;
-
-    uno::Reference< util::XModifyListener >  xListener( this );
-
-    uno::Reference< frame::XModel >  xModel( rEvent.Source, uno::UNO_QUERY );
-    uno::Reference< util::XModifyBroadcaster >  xBrdcst(xModel, uno::UNO_QUERY);
-
+    uno::Reference<util::XModifyListener> xListener( this );
+    uno::Reference<frame::XModel> xModel(rEvent.Source, uno::UNO_QUERY);
+    uno::Reference<util::XModifyBroadcaster> xBrdcst(xModel, uno::UNO_QUERY);
+    if(!xBrdcst.is())
+        return;
     try
     {
-        if( xBrdcst.is() )
-            xBrdcst->removeModifyListener( xListener );
+        xBrdcst->removeModifyListener(xListener);
     }
     catch(uno::Exception const &)
     {
@@ -3602,11 +3601,13 @@ void SwXOLEListener::disposing( const lang::EventObject& rEvent )
     }
 }
 
-void SwXOLEListener::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwXOLEListener::Notify( const SfxHint& rHint )
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-        xOLEModel = nullptr;
+    if(rHint.GetId() == SfxHintId::Dying)
+    {
+        m_xOLEModel = nullptr;
+        m_pOLEFormat = nullptr;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
