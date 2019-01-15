@@ -856,7 +856,7 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
 // #i75163#
 basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
 {
-    if(mbMap)
+    if(mbMap && mpOutDevData)
     {
         if(!mpOutDevData->mpViewTransform)
         {
@@ -884,7 +884,7 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
 // #i75163#
 basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
 {
-    if(mbMap)
+    if(mbMap && mpOutDevData)
     {
         if(!mpOutDevData->mpInverseViewTransform)
         {
