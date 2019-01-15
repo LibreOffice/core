@@ -372,7 +372,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/fx_memory \
     UnpackedTarball/pdfium/core/fxcrt/fx_stream \
     UnpackedTarball/pdfium/core/fxcrt/fx_system \
-    UnpackedTarball/pdfium/core/fxcrt/fx_ucddata \
     UnpackedTarball/pdfium/core/fxcrt/fx_unicode \
     UnpackedTarball/pdfium/core/fxcrt/xml/cfx_xmldocument \
     UnpackedTarball/pdfium/core/fxcrt/xml/cfx_xmlelement \
@@ -488,7 +487,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit_ctrl \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_edit_impl \
-    UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_font_map \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_icon \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_box \
     UnpackedTarball/pdfium/fpdfsdk/pwl/cpwl_list_impl \
