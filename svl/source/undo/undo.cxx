@@ -393,14 +393,7 @@ namespace svl { namespace undo { namespace impl
         {
             SfxUndoAction* pAction = m_aUndoActionsCleanup.front();
             m_aUndoActionsCleanup.pop_front();
-            try
-            {
-                delete pAction;
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
+            delete pAction;
         }
 
         // handle scheduled notification
