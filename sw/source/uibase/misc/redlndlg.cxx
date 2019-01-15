@@ -601,13 +601,13 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
 
         if (bValidChild)
         {
-            RedlinData *pData = new RedlinData;
+            std::unique_ptr<RedlinData> pData(new RedlinData);
             pData->pData = pRedlineChild;
             pData->bDisabled = true;
             sChild = GetRedlineText(rRedln, pData->aDateTime, nStack);
 
             SvTreeListEntry* pChild = m_pTable->InsertEntry(GetActionImage(rRedln, nStack),
-                    sChild, pData, pParent->pTLBParent);
+                    sChild, std::move(pData), pParent->pTLBParent);
 
             pRedlineChild->pTLBChild = pChild;
             if (!bValidParent)
@@ -748,12 +748,12 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         m_RedlineParents.insert(m_RedlineParents.begin() + i,
                 std::unique_ptr<SwRedlineDataParent>(pRedlineParent));
 
-        RedlinData *pData = new RedlinData;
+        std::unique_ptr<RedlinData> pData(new RedlinData);
         pData->pData = pRedlineParent;
         pData->bDisabled = false;
 
         sParent = GetRedlineText(rRedln, pData->aDateTime);
-        pParent = m_pTable->InsertEntry(GetActionImage(rRedln), sParent, pData, nullptr, i);
+        pParent = m_pTable->InsertEntry(GetActionImage(rRedln), sParent, std::move(pData), nullptr, i);
         if( pCurrRedline == &rRedln )
         {
             m_pTable->SetCurEntry( pParent );

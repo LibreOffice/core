@@ -166,14 +166,14 @@ public:
 
         The rStr contains the entire redline entry; the columns are delimited by '\t'.
     */
-    SvTreeListEntry* InsertEntry(const OUString &rStr, RedlinData *pUserData,
+    SvTreeListEntry* InsertEntry(const OUString &rStr, std::unique_ptr<RedlinData> pUserData,
                                  SvTreeListEntry* pParent = nullptr, sal_uLong nPos = TREELIST_APPEND);
 
     /** Insert a redline entry.
 
         The rStr contains the entire redline entry; the columns are delimited by '\t'.
     */
-    SvTreeListEntry* InsertEntry(const OUString &rStr, RedlinData *pUserData, const Color&,
+    SvTreeListEntry* InsertEntry(const OUString &rStr, std::unique_ptr<RedlinData> pUserData, const Color&,
                                  SvTreeListEntry* pParent, sal_uLong nPos = TREELIST_APPEND);
 
     /** Insert a redline entry.
@@ -181,7 +181,7 @@ public:
         rRedlineType contains the image for this redline entry (plus for insertion, minus for deletion etc.).
         rStr contains the rest of the redline entry; the columns are delimited by '\t'.
     */
-    SvTreeListEntry* InsertEntry(const Image &rRedlineType, const OUString &rStr, RedlinData *pUserData,
+    SvTreeListEntry* InsertEntry(const Image &rRedlineType, const OUString &rStr, std::unique_ptr<RedlinData> pUserData,
                                  SvTreeListEntry* pParent, sal_uLong nPos = TREELIST_APPEND);
 
     virtual SvTreeListEntry* CreateEntry() const override;

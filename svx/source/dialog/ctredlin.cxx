@@ -289,15 +289,15 @@ bool SvxRedlinTable::IsValidComment(const OUString &rCommentStr)
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
-        RedlinData *pUserData, SvTreeListEntry* pParent, sal_uLong nPos)
+        std::unique_ptr<RedlinData> pUserData, SvTreeListEntry* pParent, sal_uLong nPos)
 {
     const Color aColor = (pUserData && pUserData->bDisabled) ? COL_GRAY : GetTextColor();
 
-    return InsertEntry(rStr, pUserData, aColor, pParent, nPos);
+    return InsertEntry(rStr, std::move(pUserData), aColor, pParent, nPos);
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
-        RedlinData *pUserData, const Color& rColor, SvTreeListEntry* pParent, sal_uLong nPos)
+        std::unique_ptr<RedlinData> pUserData, const Color& rColor, SvTreeListEntry* pParent, sal_uLong nPos)
 {
     maEntryColor = rColor;
     maEntryImage = Image();
@@ -306,17 +306,17 @@ SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
     const OUString aFirstStr(rStr.getToken(0, '\t', nIndex));
     maEntryString = nIndex > 0 ? rStr.copy(nIndex) : OUString();
 
-    return SvSimpleTable::InsertEntry(aFirstStr, pParent, false, nPos, pUserData);
+    return SvSimpleTable::InsertEntry(aFirstStr, pParent, false, nPos, pUserData.release());
 }
 
 SvTreeListEntry* SvxRedlinTable::InsertEntry(const Image &rRedlineType, const OUString& rStr,
-        RedlinData *pUserData, SvTreeListEntry* pParent, sal_uLong nPos)
+        std::unique_ptr<RedlinData> pUserData, SvTreeListEntry* pParent, sal_uLong nPos)
 {
     maEntryColor = (pUserData && pUserData->bDisabled) ? COL_GRAY : GetTextColor();
     maEntryImage = rRedlineType;
     maEntryString = rStr;
 
-    return SvSimpleTable::InsertEntry(OUString(), pParent, false, nPos, pUserData);
+    return SvSimpleTable::InsertEntry(OUString(), pParent, false, nPos, pUserData.release());
 }
 
 SvTreeListEntry* SvxRedlinTable::CreateEntry() const
