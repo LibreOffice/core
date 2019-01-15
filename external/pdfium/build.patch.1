@@ -147,16 +147,3 @@ index 7050f695b..916afed8b 100644
  };
  
  #endif  // CORE_FPDFDOC_CPDF_FILESPEC_H_
-diff --git a/core/fxcrt/fx_coordinates.cpp b/core/fxcrt/fx_coordinates.cpp
-index fabde1e80..92a423cc6 100644
---- a/core/fxcrt/fx_coordinates.cpp
-+++ b/core/fxcrt/fx_coordinates.cpp
-@@ -302,7 +302,7 @@ std::ostream& operator<<(std::ostream& os, const CFX_RectF& rect) {
- 
- std::tuple<float, float, float, float, float, float> CFX_Matrix::AsTuple()
-     const {
--  return {a, b, c, d, e, f};
-+  return std::tuple<float, float, float, float, float, float>(a, b, c, d, e, f);
- }
- 
- CFX_Matrix CFX_Matrix::GetInverse() const {
