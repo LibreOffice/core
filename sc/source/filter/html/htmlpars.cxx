@@ -470,8 +470,7 @@ void ScHTMLLayoutParser::Adjust()
 {
     xLockedList->RemoveAll();
 
-    std::stack< ScHTMLAdjustStackEntry* > aStack;
-    ScHTMLAdjustStackEntry* pS = nullptr;
+    std::stack< std::unique_ptr<ScHTMLAdjustStackEntry> > aStack;
     sal_uInt16 nTab = 0;
     SCCOL nLastCol = SCCOL_MAX;
     SCROW nNextRow = 0;
@@ -484,15 +483,13 @@ void ScHTMLLayoutParser::Adjust()
         {   // Table finished
             if ( !aStack.empty() )
             {
-                pS = aStack.top();
+                std::unique_ptr<ScHTMLAdjustStackEntry> pS = std::move(aStack.top());
                 aStack.pop();
 
                 nLastCol = pS->nLastCol;
                 nNextRow = pS->nNextRow;
                 nCurRow = pS->nCurRow;
             }
-            delete pS;
-            pS = nullptr;
             nTab = pE->nTab;
             if (pTables)
             {
@@ -526,7 +523,7 @@ void ScHTMLLayoutParser::Adjust()
         nLastCol = pE->nCol; // Read column
         if ( pE->nTab > nTab )
         {   // New table
-            aStack.push( new ScHTMLAdjustStackEntry(
+            aStack.push( std::make_unique<ScHTMLAdjustStackEntry>(
                 nLastCol, nNextRow, nCurRow ) );
             nTab = pE->nTab;
             if ( pTables )
@@ -608,11 +605,6 @@ void ScHTMLLayoutParser::Adjust()
         SCROW nRowTmp = pE->nRow + pE->nRowOverlap;
         if ( nRowMax < nRowTmp )
             nRowMax = nRowTmp;
-    }
-    while ( !aStack.empty() )
-    {
-        delete aStack.top();
-        aStack.pop();
     }
 }
 
