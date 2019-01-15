@@ -8,10 +8,12 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -19,12 +21,15 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <cppu/unotype.hxx>
+
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest
 {
 class ScStyleFamiliesObj : public CalcUnoApiTest,
+                           public apitest::XElementAccess,
                            public apitest::XIndexAccess,
                            public apitest::XNameAccess
 {
@@ -36,6 +41,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScStyleFamiliesObj);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XIndexAccess
     CPPUNIT_TEST(testGetByIndex);
@@ -54,6 +63,7 @@ private:
 
 ScStyleFamiliesObj::ScStyleFamiliesObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<container::XNameContainer>::get())
     , XIndexAccess(2)
     , XNameAccess("CellStyles")
 {

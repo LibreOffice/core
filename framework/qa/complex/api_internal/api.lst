@@ -89,7 +89,6 @@ job126=sc.ScSheetLinkObj
 job127=sc.ScSheetLinksObj
 job128=sc.ScSpreadsheetSettings
 job129=sc.ScSpreadsheetSettingsObj
-job130=sc.ScStyleFamiliesObj
 job131=sc.ScStyleFamilyObj
 job132=sc.ScStyleObj
 job134=sc.ScTableColumnObj

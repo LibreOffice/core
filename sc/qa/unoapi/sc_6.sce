@@ -22,5 +22,4 @@
 -o sc.ScSheetLinksObj
 -o sc.ScSpreadsheetSettings
 -o sc.ScSpreadsheetSettingsObj
--o sc.ScStyleFamiliesObj
 -o sc.ScStyleFamilyObj
