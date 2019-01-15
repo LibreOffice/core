@@ -10,6 +10,8 @@
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkBox" id="AutocorrectOptionsPage">
@@ -48,6 +50,7 @@
                 <child>
                   <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                   <attributes>
+                    <attribute name="visible">3</attribute>
                     <attribute name="active">0</attribute>
                   </attributes>
                 </child>

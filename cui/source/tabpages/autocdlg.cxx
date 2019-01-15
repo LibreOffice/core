@@ -206,20 +206,24 @@ VclPtr<SfxTabPage> OfaAutocorrOptionsPage::Create(TabPageParent pParent,
     return VclPtr<OfaAutocorrOptionsPage>::Create(pParent, *rSet);
 }
 
+#define CBCOL_FIRST     0
+#define CBCOL_SECOND    1
+#define CBCOL_BOTH      2
+
 bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     ACFlags nFlags = pAutoCorrect->GetFlags();
 
     int nPos = 0;
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,          m_xCheckLB->get_toggle(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,     m_xCheckLB->get_toggle(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_xCheckLB->get_toggle(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_xCheckLB->get_toggle(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_xCheckLB->get_toggle(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_xCheckLB->get_toggle(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_xCheckLB->get_toggle(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_xCheckLB->get_toggle(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,          m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,     m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,      m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,          m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,        m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::IgnoreDoubleSpace,    m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,      m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
 
     bool bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
@@ -241,13 +245,9 @@ void OfaAutocorrOptionsPage::InsertEntry(const OUString& rTxt)
     m_xCheckLB->insert(nullptr, -1, nullptr, nullptr, nullptr,
                        nullptr, nullptr, false);
     const int nRow = m_xCheckLB->n_children() - 1;
-    m_xCheckLB->set_toggle(nRow, false, 0);
+    m_xCheckLB->set_toggle(nRow, false, CBCOL_FIRST);
     m_xCheckLB->set_text(nRow, rTxt, 1);
 }
-
-#define CBCOL_FIRST     0
-#define CBCOL_SECOND    1
-#define CBCOL_BOTH      2
 
 void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
 {
@@ -411,25 +411,25 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
     ACFlags nFlags = pAutoCorrect->GetFlags();
 
-    bool bCheck = m_xCheckLB->get_toggle(USE_REPLACE_TABLE);
+    bool bCheck = m_xCheckLB->get_toggle(USE_REPLACE_TABLE, CBCOL_FIRST);
     bModified |= pOpt->bAutoCorrect != bCheck;
     pOpt->bAutoCorrect = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::Autocorrect,
                         m_xCheckLB->get_toggle(USE_REPLACE_TABLE, CBCOL_SECOND));
 
-    bCheck = m_xCheckLB->get_toggle(CORR_UPPER);
+    bCheck = m_xCheckLB->get_toggle(CORR_UPPER, CBCOL_FIRST);
     bModified |= pOpt->bCapitalStartWord != bCheck;
     pOpt->bCapitalStartWord = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartWord,
                         m_xCheckLB->get_toggle(CORR_UPPER, CBCOL_SECOND));
 
-    bCheck = m_xCheckLB->get_toggle(BEGIN_UPPER);
+    bCheck = m_xCheckLB->get_toggle(BEGIN_UPPER, CBCOL_FIRST);
     bModified |= pOpt->bCapitalStartSentence != bCheck;
     pOpt->bCapitalStartSentence = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence,
                         m_xCheckLB->get_toggle(BEGIN_UPPER, CBCOL_SECOND));
 
-    bCheck = m_xCheckLB->get_toggle(BOLD_UNDERLINE);
+    bCheck = m_xCheckLB->get_toggle(BOLD_UNDERLINE, CBCOL_FIRST);
     bModified |= pOpt->bChgWeightUnderl != bCheck;
     pOpt->bChgWeightUnderl = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgWeightUnderl,
@@ -441,21 +441,21 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     pAutoCorrect->SetAutoCorrFlag(ACFlags::CorrectCapsLock,
                         m_xCheckLB->get_toggle(CORRECT_CAPS_LOCK, CBCOL_SECOND));
 
-    bCheck = m_xCheckLB->get_toggle(DETECT_URL);
+    bCheck = m_xCheckLB->get_toggle(DETECT_URL, CBCOL_FIRST);
     bModified |= pOpt->bSetINetAttr != bCheck;
     pOpt->bSetINetAttr = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr,
                         m_xCheckLB->get_toggle(DETECT_URL, CBCOL_SECOND));
 
-    bCheck = m_xCheckLB->get_toggle(DEL_EMPTY_NODE);
+    bCheck = m_xCheckLB->get_toggle(DEL_EMPTY_NODE, CBCOL_FIRST);
     bModified |= pOpt->bDelEmptyNode != bCheck;
     pOpt->bDelEmptyNode = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_USER_COLL);
+    bCheck = m_xCheckLB->get_toggle(REPLACE_USER_COLL, CBCOL_FIRST);
     bModified |= pOpt->bChgUserColl != bCheck;
     pOpt->bChgUserColl = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_BULLETS);
+    bCheck = m_xCheckLB->get_toggle(REPLACE_BULLETS, CBCOL_FIRST);
     bModified |= pOpt->bChgEnumNum != bCheck;
     pOpt->bChgEnumNum = bCheck;
     bModified |= aBulletFont != pOpt->aBulletFont;
@@ -468,7 +468,7 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     pOpt->aByInputBulletFont = aByInputBulletFont;
     pOpt->cByInputBullet = sByInputBulletChar[0];
 
-    bCheck = m_xCheckLB->get_toggle(MERGE_SINGLE_LINE_PARA);
+    bCheck = m_xCheckLB->get_toggle(MERGE_SINGLE_LINE_PARA, CBCOL_FIRST);
     bModified |= pOpt->bRightMargin != bCheck;
     pOpt->bRightMargin = bCheck;
     bModified |= nPercent != pOpt->nRightMargin;
@@ -490,20 +490,20 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     bModified |= pOpt->bReplaceStyles != bCheck;
     pOpt->bReplaceStyles = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_DASHES);
+    bCheck = m_xCheckLB->get_toggle(REPLACE_DASHES, CBCOL_FIRST);
     bModified |= pOpt->bChgToEnEmDash != bCheck;
     pOpt->bChgToEnEmDash = bCheck;
     pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgToEnEmDash,
                         m_xCheckLB->get_toggle(REPLACE_DASHES, CBCOL_SECOND));
 
-    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_AT_STT_END);
+    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_AT_STT_END, CBCOL_FIRST);
     bModified |= pOpt->bAFormatDelSpacesAtSttEnd != bCheck;
     pOpt->bAFormatDelSpacesAtSttEnd = bCheck;
     bCheck = m_xCheckLB->get_toggle(DEL_SPACES_AT_STT_END, CBCOL_SECOND);
     bModified |= pOpt->bAFormatByInpDelSpacesAtSttEnd != bCheck;
     pOpt->bAFormatByInpDelSpacesAtSttEnd = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_BETWEEN_LINES);
+    bCheck = m_xCheckLB->get_toggle(DEL_SPACES_BETWEEN_LINES, CBCOL_FIRST);
     bModified |= pOpt->bAFormatDelSpacesBetweenLines != bCheck;
     pOpt->bAFormatDelSpacesBetweenLines = bCheck;
     bCheck = m_xCheckLB->get_toggle(DEL_SPACES_BETWEEN_LINES, CBCOL_SECOND);
@@ -1618,8 +1618,8 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
     if (m_xCheckLB->get_visible())
     {
         int nPos = 0;
-        pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace, m_xCheckLB->get_toggle(nPos++));
-        pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber, m_xCheckLB->get_toggle(nPos++));
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber, m_xCheckLB->get_toggle(nPos++, CBCOL_FIRST));
     }
 
     bool bModified = false;
@@ -1627,13 +1627,13 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
     {
         SvxSwAutoFormatFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        bool bCheck = m_xSwCheckLB->get_toggle(ADD_NONBRK_SPACE);
+        bool bCheck = m_xSwCheckLB->get_toggle(ADD_NONBRK_SPACE, CBCOL_FIRST);
         bModified |= pOpt->bAddNonBrkSpace != bCheck;
         pOpt->bAddNonBrkSpace = bCheck;
         pAutoCorrect->SetAutoCorrFlag(ACFlags::AddNonBrkSpace,
                             m_xSwCheckLB->get_toggle(ADD_NONBRK_SPACE, CBCOL_SECOND));
 
-        bCheck = m_xSwCheckLB->get_toggle(REPLACE_1ST);
+        bCheck = m_xSwCheckLB->get_toggle(REPLACE_1ST, CBCOL_FIRST);
         bModified |= pOpt->bChgOrdinalNumber != bCheck;
         pOpt->bChgOrdinalNumber = bCheck;
         pAutoCorrect->SetAutoCorrFlag(ACFlags::ChgOrdinalNumber,
@@ -1716,8 +1716,8 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
         CreateEntry(*m_xCheckLB, sOrdinal, CBCOL_FIRST, 1);
 
         int nPos = 0;
-        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::AddNonBrkSpace));
-        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::ChgOrdinalNumber));
+        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::AddNonBrkSpace), CBCOL_FIRST);
+        m_xCheckLB->set_toggle(nPos++, bool(nFlags & ACFlags::ChgOrdinalNumber), CBCOL_FIRST);
 
         m_xCheckLB->thaw();
     }
@@ -2213,7 +2213,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
                                        nullptr, nullptr, false);
             const int nRow = m_xSmartTagTypesLB->n_children() - 1;
             const bool bCheck = rSmartTagMgr.IsSmartTagTypeEnabled( aSmartTagType );
-            m_xSmartTagTypesLB->set_toggle(nRow, bCheck);
+            m_xSmartTagTypesLB->set_toggle(nRow, bCheck, CBCOL_FIRST);
             m_xSmartTagTypesLB->set_text(nRow, aLBEntry, 1);
             m_xSmartTagTypesLB->set_id(nRow, OUString::number(reinterpret_cast<sal_Int64>(new ImplSmartTagLBUserData(aSmartTagType, xRec, j))));
         }
@@ -2288,7 +2288,7 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
     for (int i = 0; i < nCount; ++i)
     {
         const ImplSmartTagLBUserData* pUserData = reinterpret_cast<ImplSmartTagLBUserData*>(m_xSmartTagTypesLB->get_id(i).toInt64());
-        const bool bChecked = m_xSmartTagTypesLB->get_toggle(i);
+        const bool bChecked = m_xSmartTagTypesLB->get_toggle(i, CBCOL_FIRST);
         const bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );
 
         bModifiedSmartTagTypes = bModifiedSmartTagTypes || ( !bChecked != !bIsCurrentlyEnabled );

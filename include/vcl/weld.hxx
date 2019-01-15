@@ -519,8 +519,8 @@ public:
     virtual OUString get_text(int row, int col = -1) const = 0;
     virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
     virtual void set_id(int row, const OUString& rId) = 0;
-    virtual void set_toggle(int row, bool bOn, int col = -1) = 0;
-    virtual bool get_toggle(int row, int col = -1) const = 0;
+    virtual void set_toggle(int row, bool bOn, int col) = 0;
+    virtual bool get_toggle(int row, int col) const = 0;
     virtual void set_top_entry(int pos) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
     virtual void set_font_color(int pos, const Color& rColor) const = 0;
