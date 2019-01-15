@@ -2430,12 +2430,18 @@ public:
     /**
      * Make sure all of the formula cells in the specified range have been
      * fully calculated.  This method only re-calculates those formula cells
-     * that have been flagged dirty.
+     * that have been flagged dirty. In case of formula-groups, this calculates
+     * only the dirty subspans along with the dependents in the same way
+     * recursively.
      *
-     * @param rRange range in which to potentially calculate the formula
-     *               cells.
+     * @param rRange       range in which to potentially calculate the formula
+     *                     cells.
+     * @param bSkipRunning flag to skip evaluation of formula-cells that are
+     *                     marked as already being evaluated.
+     * @return             true if at least one formula-cell in the specified range was dirty
+     *                     else returns false.
      */
-    void EnsureFormulaCellResults( const ScRange& rRange );
+    SC_DLLPUBLIC bool EnsureFormulaCellResults( const ScRange& rRange, bool bSkipRunning = false );
 
     SvtBroadcaster*         GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster*   GetBroadcaster( const ScAddress& rPos ) const;
