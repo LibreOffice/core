@@ -1309,12 +1309,12 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     {
         ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
 
-        ScPrintFunc* pPrintFunc;
+        std::unique_ptr<ScPrintFunc> pPrintFunc;
 
         if (bStateValid)
-            pPrintFunc = new ScPrintFunc( this, pDocShell, aState, &aOptions );
+            pPrintFunc.reset(new ScPrintFunc( this, pDocShell, aState, &aOptions ));
         else
-            pPrintFunc = new ScPrintFunc( this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions );
+            pPrintFunc.reset(new ScPrintFunc( this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions ));
 
         nLeftMargin = static_cast<long>( pPrintFunc->GetLeftMargin() * HMM_PER_TWIPS - aOffset.X() );
         nRightMargin = static_cast<long>( pPrintFunc->GetRightMargin() * HMM_PER_TWIPS );
@@ -1332,7 +1332,6 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
             nHeaderHeight = static_cast<long>( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS );
             nFooterHeight = static_cast<long>( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS );
         }
-        delete pPrintFunc;
     }
 
     Point   aPixPt( rMEvt.GetPosPixel() );
