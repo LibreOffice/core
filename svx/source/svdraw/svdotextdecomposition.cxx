@@ -484,15 +484,15 @@ namespace
 
     void impTextBreakupHandler::impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara)
     {
+        sal_Int16 nDepth = mrOutliner.GetDepth(nPara);
+        EBulletInfo eInfo = mrOutliner.GetBulletInfo(nPara);
+        // Pass -1 to signal VclMetafileProcessor2D that there is no active
+        // bullets/numbering in this paragraph (i.e. this is normal text)
+        const sal_Int16 nOutlineLevel( eInfo.bVisible ?  nDepth : -1);
+
         // ALWAYS create a paragraph primitive, even when no content was added. This is done to
         // have the correct paragraph count even with empty paragraphs. Those paragraphs will
         // have an empty sub-PrimitiveSequence.
-        const sal_Int16 nOutlineLevel(nPara >= 0 && nPara < mrOutliner.GetParagraphCount()
-            ? mrOutliner.GetParaAttribs(nPara).Get(EE_PARA_OUTLLEVEL).GetValue()
-            : -1);
-
-        //Z This basically makes OutlineLevel information available in VclMetafileProcessor2D,
-        //Z so may be used similar to 'SetAlternateText' in processGraphicPrimitive2D for PDF export
         maParagraphPrimitives.push_back(
             new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(
                 maLinePrimitives,
