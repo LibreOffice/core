@@ -55,7 +55,7 @@
 #endif
 
 static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory);
-static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
+static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory);
 
 static bool sysconf_SC_GETPW_R_SIZE_MAX(std::size_t * value) {
 #if defined _SC_GETPW_R_SIZE_MAX
@@ -347,15 +347,13 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
 sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
     bool     bRet = false;
-    sal_Char pszDirectory[PATH_MAX];
+    OString pszDirectory;
 
-    pszDirectory[0] = '\0';
-
-    bRet = osl_psz_getConfigDir(Security,pszDirectory,sizeof(pszDirectory));
+    bRet = osl_psz_getConfigDir(Security,&pszDirectory);
 
     if ( bRet )
     {
-        rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+        rtl_string2UString( pustrDirectory, pszDirectory.getStr(), pszDirectory.getLength(), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
         SAL_WARN_IF(*pustrDirectory == nullptr, "sal.osl", "*pustrDirectory == NULL");
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
@@ -365,26 +363,30 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 
 #if defined HAIKU
 
-static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
 {
+    assert(pszDirectory != nullptr);
     (void) Security;
     dev_t volume = dev_for_path("/boot");
     sal_Char configDir[B_PATH_NAME_LENGTH + B_FILE_NAME_LENGTH];
     status_t result = find_directory(B_USER_SETTINGS_DIRECTORY, volume, false,
                                      configDir, sizeof(configDir));
-    if (result == B_OK && strlen(configDir) < nMax) {
-        strcpy(pszDirectory, configDir);
-        return true;
+    if (result == B_OK) {
+        auto const len = strlen(configDir);
+        if (len <= sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            *pszDirectory = OString(configDir, len);
+            return true;
+        }
     }
     return false;
 }
 
 #elif !defined(MACOSX) && !defined(IOS)
 
-#define DOT_CONFIG "/.config"
-
-static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
 {
+    assert(pszDirectory != nullptr);
+
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
 
     if (pStr == nullptr || strlen(pStr) == 0 || access(pStr, 0) != 0)
@@ -393,60 +395,61 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
         OString home;
         if (!osl_psz_getHomeDir(Security, &home))
             return false;
-        if (home.getLength() + sizeof(DOT_CONFIG) < nMax)
+        auto const config = OString(home + "/.config");
+
+        // try to create dir if not present
+        bool dirOK = true;
+        if (mkdir(config.getStr(), S_IRWXU) != 0)
         {
-            auto const config = OString(home + DOT_CONFIG);
-
-            // try to create dir if not present
-            bool dirOK = true;
-            if (mkdir(config.getStr(), S_IRWXU) != 0)
+            int e = errno;
+            if (e != EEXIST)
             {
-                int e = errno;
-                if (e != EEXIST)
-                {
-                    SAL_WARN(
-                        "sal.osl",
-                        "mkdir(" << config << "): errno=" << e);
-                    dirOK = false;
-                }
+                SAL_WARN(
+                    "sal.osl",
+                    "mkdir(" << config << "): errno=" << e);
+                dirOK = false;
             }
-            if (dirOK)
-            {
-                // check file type and permissions
-                struct stat st;
-                if (stat(config.getStr(), &st) != 0)
-                {
-                    SAL_INFO("sal.osl","Could not stat $HOME/.config");
-                    dirOK = false;
-                }
-                else
-                {
-                    if (!S_ISDIR(st.st_mode))
-                    {
-                        SAL_INFO("sal.osl", "$HOME/.config is not a directory");
-                        dirOK = false;
-                    }
-                    if (!(st.st_mode & S_IRUSR && st.st_mode & S_IWUSR && st.st_mode & S_IXUSR))
-                    {
-                        SAL_INFO("sal.osl", "$HOME/.config has bad permissions");
-                        dirOK = false;
-                    }
-                }
-            }
-
-            // if !dirOK, resort to HOME
-            if (dirOK)
-                home = config;
-            strcpy(pszDirectory, home.getStr()); // safe
         }
+        if (dirOK)
+        {
+            // check file type and permissions
+            struct stat st;
+            if (stat(config.getStr(), &st) != 0)
+            {
+                SAL_INFO("sal.osl","Could not stat $HOME/.config");
+                dirOK = false;
+            }
+            else
+            {
+                if (!S_ISDIR(st.st_mode))
+                {
+                    SAL_INFO("sal.osl", "$HOME/.config is not a directory");
+                    dirOK = false;
+                }
+                if (!(st.st_mode & S_IRUSR && st.st_mode & S_IWUSR && st.st_mode & S_IXUSR))
+                {
+                    SAL_INFO("sal.osl", "$HOME/.config has bad permissions");
+                    dirOK = false;
+                }
+            }
+        }
+
+        // if !dirOK, resort to HOME
+        if (dirOK)
+            home = config;
+        *pszDirectory = home;
     }
     else
-        strncpy(pszDirectory, pStr, nMax);
+    {
+        auto const len = std::strlen(pStr);
+        if (len > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
+            return false;
+        }
+        *pszDirectory = OString(pStr, len);
+    }
 
     return true;
 }
-
-#undef DOT_CONFIG
 
 #else
 
@@ -457,15 +460,14 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
  * support for Objective-C in the build environment
  */
 
-#define MACOSX_CONFIG_DIR "/Library/Application Support" /* Used on iOS, too */
-static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
+static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
 {
+    assert(pszDirectory != nullptr);
+
     OString home;
-    if( osl_psz_getHomeDir(Security, &home)
-        && sal_uInt32(home.getLength()) < nMax - sizeof(MACOSX_CONFIG_DIR) )
+    if( osl_psz_getHomeDir(Security, &home) )
     {
-        strcpy(pszDirectory, home.getStr());
-        strcat( pszDirectory, MACOSX_CONFIG_DIR );
+        *pszDirectory = home + "/Library/Application Support"; /* Used on iOS, too */
         return true;
     }
 
