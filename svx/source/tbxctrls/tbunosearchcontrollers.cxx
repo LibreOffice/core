@@ -49,6 +49,7 @@
 
 #include <svl/ctloptions.hxx>
 #include <svl/srchitem.hxx>
+#include <svtools/acceleratorexecute.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
@@ -159,6 +160,7 @@ private:
 
     css::uno::Reference< css::frame::XFrame > m_xFrame;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    std::unique_ptr<svt::AcceleratorExecute> m_pAcc;
 };
 
 FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent, WinBits nStyle,
@@ -166,10 +168,12 @@ FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent, WinBits nStyle
     const css::uno::Reference< css::uno::XComponentContext >& xContext) :
     ComboBox( pParent, nStyle ),
     m_xFrame(xFrame),
-    m_xContext(xContext)
+    m_xContext(xContext),
+    m_pAcc(svt::AcceleratorExecute::createAcceleratorHelper())
 {
     SetPlaceholderText(SvxResId(RID_SVXSTR_FINDBAR_FIND));
     EnableAutocomplete(true, true);
+    m_pAcc->init(m_xContext, m_xFrame);
 }
 
 void FindTextFieldControl::Remember_Impl(const OUString& rStr)
@@ -262,11 +266,11 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 }
             }
             // Select text in the search box when Ctrl-F pressed
-            if ( bMod1 && nCode == KEY_F )
+            else if ( bMod1 && nCode == KEY_F )
                 SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
             // Execute the search when Return, Ctrl-G or F3 pressed
-            if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
+            else if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
             {
                 Remember_Impl(GetText());
 
@@ -275,6 +279,13 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 
                 impl_executeSearch( m_xContext, m_xFrame, pToolBox, bShift);
                 bRet = true;
+            }
+            else
+            {
+                auto awtKey = svt::AcceleratorExecute::st_VCLKey2AWTKey(pKeyEvent->GetKeyCode());
+                const OUString aCommand(m_pAcc->findCommand(awtKey));
+                if (aCommand == ".uno:SearchDialog")
+                    bRet = m_pAcc->execute(awtKey);
             }
             break;
         }
