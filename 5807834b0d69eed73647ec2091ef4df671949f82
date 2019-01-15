@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_6c2d8f45",
+        "filename": "sw/source/core/doc/DocumentFieldsManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2019-01-15T11:59:56Z",
+      "side": 1,
+      "message": "\"else\" is missing before the \"if\".",
+      "revId": "5807834b0d69eed73647ec2091ef4df671949f82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
