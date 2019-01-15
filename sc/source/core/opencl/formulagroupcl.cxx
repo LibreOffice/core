@@ -3769,7 +3769,7 @@ public:
     DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize );
     virtual ~DynamicKernel() override;
 
-    static DynamicKernel* create( const ScCalcConfig& config, const ScTokenArray& rCode, int nResultSize );
+    static std::unique_ptr<DynamicKernel> create( const ScCalcConfig& config, const ScTokenArray& rCode, int nResultSize );
 
     /// OpenCL code generation
     void CodeGen();
@@ -4077,7 +4077,7 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
     return nullptr;
 }
 
-DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScTokenArray& rCode, int nResultSize )
+std::unique_ptr<DynamicKernel> DynamicKernel::create( const ScCalcConfig& rConfig, const ScTokenArray& rCode, int nResultSize )
 {
     // Constructing "AST"
     FormulaTokenIterator aCode(rCode);
@@ -4119,7 +4119,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
     FormulaTreeNodeRef Root = std::make_shared<FormulaTreeNode>(nullptr);
     Root->Children.push_back(aHashMap[aTokenVector.back()]);
 
-    DynamicKernel* pDynamicKernel = new DynamicKernel(rConfig, Root, nResultSize);
+    std::unique_ptr<DynamicKernel> pDynamicKernel(new DynamicKernel(rConfig, Root, nResultSize));
 
     // OpenCL source code generation and kernel compilation
     try
@@ -4130,14 +4130,12 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
     catch (const UnhandledToken& ut)
     {
         SAL_INFO("sc.opencl", "Dynamic formula compiler: UnhandledToken: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
-        delete pDynamicKernel;
         return nullptr;
     }
     catch (const InvalidParameterCount& ipc)
     {
         SAL_INFO("sc.opencl", "Dynamic formula compiler: InvalidParameterCount " << ipc.mParameterCount
             << " at " << ipc.mFile << ":" << ipc.mLineNumber);
-        delete pDynamicKernel;
         return nullptr;
     }
     catch (const OpenCLError& oce)
@@ -4148,7 +4146,6 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
 
         // OpenCLError used to go to the catch-all below, and not delete pDynamicKernel. Was that
         // intentional, should we not do it here then either?
-        delete pDynamicKernel;
         openclwrapper::kernelFailures++;
         return nullptr;
     }
@@ -4158,7 +4155,6 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
 
         // Unhandled used to go to the catch-all below, and not delete pDynamicKernel. Was that
         // intentional, should we not do it here then either?
-        delete pDynamicKernel;
         openclwrapper::kernelFailures++;
         return nullptr;
     }
@@ -4166,7 +4162,6 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
     {
         // FIXME: Do we really want to catch random exceptions here?
         SAL_WARN("sc.opencl", "Dynamic formula compiler: unexpected exception");
-        // FIXME: Not deleting pDynamicKernel here!?, is that intentional?
         openclwrapper::kernelFailures++;
         return nullptr;
     }
@@ -4258,10 +4253,10 @@ public:
         return mpKernel != nullptr;
     }
 
-    void setManagedKernel( DynamicKernel* pKernel )
+    void setManagedKernel( std::unique_ptr<DynamicKernel> pKernel )
     {
-        mpKernelStore.reset(pKernel);
-        mpKernel = pKernel;
+        mpKernelStore = std::move(pKernel);
+        mpKernel = mpKernelStore.get();
     }
 
     CLInterpreterResult launchKernel()
