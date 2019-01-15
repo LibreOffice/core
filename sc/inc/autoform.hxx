@@ -333,7 +333,7 @@ public:
     iterator find(const ScAutoFormatData* pData);
     iterator find(const OUString& rName);
 
-    bool insert(ScAutoFormatData* pNew);
+    iterator insert(std::unique_ptr<ScAutoFormatData> pNew);
     void erase(const iterator& it);
 
     size_t size() const;

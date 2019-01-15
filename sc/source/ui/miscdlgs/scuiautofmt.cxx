@@ -228,17 +228,16 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl, Button*, void)
 
                 if ( !aFormatName.isEmpty() && aFormatName != aStrStandard && pFormat->find(aFormatName) == pFormat->end() )
                 {
-                    ScAutoFormatData* pNewData
-                        = new ScAutoFormatData( *pSelFmtData );
+                    std::unique_ptr<ScAutoFormatData> pNewData(
+                        new ScAutoFormatData( *pSelFmtData ));
 
                     pNewData->SetName( aFormatName );
-                    bFmtInserted = pFormat->insert(pNewData);
+                    ScAutoFormat::iterator it = pFormat->insert(std::move(pNewData));
+                    bFmtInserted = it != pFormat->end();
 
                     if ( bFmtInserted )
                     {
-                        ScAutoFormat::const_iterator it = pFormat->find(pNewData);
-                        ScAutoFormat::const_iterator itBeg = pFormat->begin();
-                        size_t nPos = std::distance(itBeg, it);
+                        size_t nPos = std::distance(pFormat->begin(), it);
                         m_pLbFormat->InsertEntry(aFormatName, nPos);
                         m_pLbFormat->SelectEntry( aFormatName );
                         m_pBtnAdd->Disable();
@@ -252,9 +251,6 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl, Button*, void)
                         SelFmtHdl( *m_pLbFormat.get() );
                         bOk = true;
                     }
-                    else
-                        delete pNewData;
-
                 }
 
                 if ( !bFmtInserted )
@@ -344,8 +340,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, Button*, void)
 
                     m_pLbFormat->RemoveEntry(nIndex );
                     const ScAutoFormatData* p = pFormat->findByIndex(nIndex);
-                    ScAutoFormatData* pNewData
-                        = new ScAutoFormatData(*p);
+                    std::unique_ptr<ScAutoFormatData> pNewData(new ScAutoFormatData(*p));
 
                     it = pFormat->begin();
                     std::advance(it, nIndex);
@@ -353,7 +348,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, Button*, void)
 
                     pNewData->SetName( aFormatName );
 
-                    pFormat->insert(pNewData);
+                    pFormat->insert(std::move(pNewData));
 
                     m_pLbFormat->SetUpdateMode(false);
                     m_pLbFormat->Clear();
