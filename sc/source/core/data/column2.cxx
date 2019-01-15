@@ -2906,70 +2906,6 @@ void ScColumn::AssertNoInterpretNeeded( SCROW nRow1, SCROW nRow2 )
 }
 #endif
 
-
-bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
-{
-    if (nRow1 > nRow2)
-        return false;
-
-    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow1);
-    sc::CellStoreType::const_iterator it = aPos.first;
-    size_t nOffset = aPos.second;
-    SCROW nRow = nRow1;
-    for (;it != maCells.end() && nRow <= nRow2; ++it, nOffset = 0)
-    {
-        switch( it->type )
-        {
-            case sc::element_type_edittext:
-                // These require EditEngine (in ScEditUtils::GetString()), which is probably
-                // too complex for use in threads.
-                return false;
-            case sc::element_type_formula:
-            {
-                size_t nRowsToRead = nRow2 - nRow + 1;
-                size_t nEnd = std::min(it->size, nOffset+nRowsToRead); // last row + 1
-                sc::formula_block::const_iterator itCell = sc::formula_block::begin(*it->data);
-                std::advance(itCell, nOffset);
-                // Loop inside the formula block.
-                for (size_t i = nOffset; i < nEnd; ++itCell, ++i)
-                {
-                    // Check if itCell is already in path.
-                    // If yes use a cycle guard to mark all elements of the cycle
-                    // and return false
-                    const ScFormulaCellGroupRef& mxGroupChild = (*itCell)->GetCellGroup();
-                    ScFormulaCell* pChildTopCell = mxGroupChild ? mxGroupChild->mpTopCell : *itCell;
-                    if (pChildTopCell->GetSeenInPath())
-                    {
-                        ScRecursionHelper& rRecursionHelper = GetDoc()->GetRecursionHelper();
-                        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, pChildTopCell);
-                        return false;
-                    }
-
-                    (*itCell)->MaybeInterpret();
-
-                    // child cell's Interpret could result in calling dependency calc
-                    // and that could detect a cycle involving mxGroup
-                    // and do early exit in that case.
-                    if (mxGroup->mbPartOfCycle)
-                    {
-                        // Set itCell as dirty as itCell may be interpreted in InterpretTail()
-                        (*itCell)->SetDirtyVar();
-                        return false;
-                    }
-                }
-                nRow += nEnd - nOffset;
-                break;
-            }
-            default:
-                // Skip this block.
-                nRow += it->size - nOffset;
-                continue;
-        }
-    }
-
-    return true;
-}
-
 void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen )
 {
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
@@ -3030,6 +2966,8 @@ void ScColumn::CalculateInThread( ScInterpreterContext& rContext, SCROW nRow, si
             continue;
 
         ScFormulaCell& rCell = **itCell;
+        if (!rCell.NeedsInterpret())
+            continue;
         // Here we don't call IncInterpretLevel() and DecInterpretLevel() as this call site is
         // always in a threaded calculation.
         rCell.InterpretTail(rContext, ScFormulaCell::SCITP_NORMAL);

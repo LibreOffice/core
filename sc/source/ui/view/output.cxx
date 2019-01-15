@@ -1804,6 +1804,8 @@ void ScOutputData::FindChanged()
         pRowInfo[nArrY].bChanged = false;
 
     bool bProgress = false;
+    SCCOL nCol1 = MAXCOL, nCol2 = 0;
+    SCROW nRow1 = MAXROW, nRow2 = 0;
     for (nArrY=0; nArrY<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
@@ -1824,26 +1826,51 @@ void ScOutputData::FindChanged()
                 // still being interpreted. Skip it.
                 continue;
 
-            (void)pFCell->GetValue();
-            if (!pFCell->IsChanged())
-                // the result hasn't changed. Skip it.
-                continue;
+            ScAddress& rPos(pFCell->aPos);
+            nCol1 = std::min(rPos.Col(), nCol1);
+            nCol2 = std::max(rPos.Col(), nCol2);
+            nRow1 = std::min(rPos.Row(), nRow1);
+            nRow2 = std::max(rPos.Row(), nRow2);
+        }
+    }
 
-            pThisRowInfo->bChanged = true;
-            if ( pThisRowInfo->pCellInfo[nX+1].bMerged )
+    if (bProgress)
+    {
+        mpDoc->EnsureFormulaCellResults(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), true);
+
+        for (nArrY=0; nArrY<nArrCount; nArrY++)
+        {
+            RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+            for (nX=nX1; nX<=nX2; nX++)
             {
-                SCSIZE nOverY = nArrY + 1;
-                while ( nOverY<nArrCount &&
-                        pRowInfo[nOverY].pCellInfo[nX+1].bVOverlapped )
+                const ScRefCellValue& rCell = pThisRowInfo->pCellInfo[nX+1].maCell;
+
+                if (rCell.meType != CELLTYPE_FORMULA)
+                    continue;
+
+                ScFormulaCell* pFCell = rCell.mpFormula;
+
+                if (!pFCell->IsChanged())
+                    // the result hasn't changed. Skip it.
+                    continue;
+
+                pThisRowInfo->bChanged = true;
+                if ( pThisRowInfo->pCellInfo[nX+1].bMerged )
                 {
-                    pRowInfo[nOverY].bChanged = true;
-                    ++nOverY;
+                    SCSIZE nOverY = nArrY + 1;
+                    while ( nOverY<nArrCount &&
+                            pRowInfo[nOverY].pCellInfo[nX+1].bVOverlapped )
+                    {
+                        pRowInfo[nOverY].bChanged = true;
+                        ++nOverY;
+                    }
                 }
             }
         }
-    }
-    if ( bProgress )
+
         ScProgress::DeleteInterpretProgress();
+    }
+
     mpDoc->EnableIdle(bWasIdleEnabled);
 }
 

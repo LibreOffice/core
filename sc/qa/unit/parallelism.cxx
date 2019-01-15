@@ -38,6 +38,8 @@ public:
     void testFGCycleWithPlainFormulaCell1();
     void testFGCycleWithPlainFormulaCell2();
     void testMultipleFGColumn();
+    void testFormulaGroupSpanEval();
+    void testFormulaGroupSpanEvalNonGroup();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -49,6 +51,8 @@ public:
     CPPUNIT_TEST(testFGCycleWithPlainFormulaCell1);
     CPPUNIT_TEST(testFGCycleWithPlainFormulaCell2);
     CPPUNIT_TEST(testMultipleFGColumn);
+    CPPUNIT_TEST(testFormulaGroupSpanEval);
+    CPPUNIT_TEST(testFormulaGroupSpanEvalNonGroup);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -510,11 +514,11 @@ void ScParallelismTest::testMultipleFGColumn()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
     m_pDoc->InsertTab(0, "1");
 
-    size_t nNumRowsInBlock = 200;
-    size_t nNumFG = 50;
-    size_t nNumRowsInRef = nNumRowsInBlock*2;
-    size_t nColAFGLen = 2*nNumRowsInBlock*nNumFG - nNumRowsInRef + 1;
-    size_t nColAStartOffset = nNumRowsInBlock/2;
+    constexpr size_t nNumRowsInBlock = 200;
+    constexpr size_t nNumFG = 50;
+    constexpr size_t nNumRowsInRef = nNumRowsInBlock*2;
+    constexpr size_t nColAFGLen = 2*nNumRowsInBlock*nNumFG - nNumRowsInRef + 1;
+    constexpr size_t nColAStartOffset = nNumRowsInBlock/2;
     lcl_setupMultipleFGColumn(m_pDoc, nNumRowsInBlock, nNumFG, nColAStartOffset);
 
     m_xDocShell->DoHardRecalc();
@@ -530,6 +534,126 @@ void ScParallelismTest::testMultipleFGColumn()
         nIn = static_cast<size_t>(m_pDoc->GetValue(2, nRow+nNumRowsInRef, 0));
         nOut = static_cast<size_t>(m_pDoc->GetValue(2, nRow, 0));
         nExpected = nExpected + nIn - nOut;
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testFormulaGroupSpanEval()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    constexpr size_t nFGLen = 2048;
+    OUString aFormula;
+
+    for (size_t nRow = 0; nRow < nFGLen; ++nRow)
+    {
+        aFormula = "=$C" + OUString::number(nRow+1) + " + 0";
+        m_pDoc->SetFormula(ScAddress(1, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+        aFormula = "=SUM($B" + OUString::number(nRow+1) + ":$B" + OUString::number(nRow+2) + ")";
+        m_pDoc->SetFormula(ScAddress(0, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    for (size_t nRow = 0; nRow < nFGLen; ++nRow)
+    {
+        m_pDoc->SetValue(2, nRow, 0, 1.0);
+        ScFormulaCell* pFCell = m_pDoc->GetFormulaCell(ScAddress(1, nRow, 0));
+        pFCell->SetDirtyVar();
+        pFCell = m_pDoc->GetFormulaCell(ScAddress(0, nRow, 0));
+        pFCell->SetDirtyVar();
+    }
+
+    constexpr size_t nSpanStart = 100;
+    constexpr size_t nSpanLen = 1024;
+    constexpr size_t nSpanEnd = nSpanStart + nSpanLen - 1;
+
+    m_pDoc->SetAutoCalc(true);
+
+    // EnsureFormulaCellResults should only calculate the sepecified range along with the dependent spans recursively and nothing more.
+    // The specified range is A99:A1124, and the dependent range is B99:B1125 (since A99 = SUM(B99:B100) and A1124 = SUM(B1124:B1125) )
+    bool bAnyDirty = m_pDoc->EnsureFormulaCellResults(ScRange(0, nSpanStart, 0, 0, nSpanEnd, 0));
+    CPPUNIT_ASSERT(bAnyDirty);
+    m_pDoc->SetAutoCalc(false);
+
+    OString aMsg;
+    for (size_t nRow = 0; nRow < nFGLen; ++nRow)
+    {
+        size_t nExpectedA = 0, nExpectedB = 0;
+        // For nRow from 100(nSpanStart) to 1123(nSpanEnd) column A must have the value of 2 and
+        // column B should have value 1.
+
+        // For nRow == 1124, column A should have value 0 and column B should have value 1.
+
+        // For all other rows both column A and B must have value 0.
+        if (nRow >= nSpanStart)
+        {
+            if (nRow <= nSpanEnd)
+            {
+                nExpectedA = 2;
+                nExpectedB = 1;
+            }
+            else if (nRow == nSpanEnd + 1)
+                nExpectedB = 1;
+        }
+
+        aMsg = "Value at Cell A" + OString::number(nRow+1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpectedA, static_cast<size_t>(m_pDoc->GetValue(0, nRow, 0)));
+        aMsg = "Value at Cell B" + OString::number(nRow+1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpectedB, static_cast<size_t>(m_pDoc->GetValue(1, nRow, 0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testFormulaGroupSpanEvalNonGroup()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, false);
+    m_pDoc->InsertTab(0, "1");
+
+    constexpr size_t nFGLen = 2048;
+    OUString aFormula;
+
+    for (size_t nRow = 0; nRow < nFGLen; ++nRow)
+    {
+        aFormula = "=$B" + OUString::number(nRow+1) + " + 0";
+        m_pDoc->SetFormula(ScAddress(0, nRow, 0), aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    constexpr size_t nNumChanges = 12;
+    constexpr size_t nChangeRows[nNumChanges] = {10, 11, 12, 101, 102, 103, 251, 252, 253, 503, 671, 1029};
+    for (size_t nIdx = 0; nIdx < nNumChanges; ++nIdx)
+    {
+        size_t nRow = nChangeRows[nIdx];
+        m_pDoc->SetValue(1, nRow, 0, 1.0);
+        ScFormulaCell* pFCell = m_pDoc->GetFormulaCell(ScAddress(0, nRow, 0));
+        pFCell->SetDirtyVar();
+    }
+
+    m_pDoc->SetAutoCalc(true);
+    bool bAnyDirty = m_pDoc->EnsureFormulaCellResults(ScRange(0, 9, 0, 0, 1030, 0));
+    CPPUNIT_ASSERT(bAnyDirty);
+    m_pDoc->SetAutoCalc(false);
+
+    OString aMsg;
+    for (size_t nRow = 0, nIdx = 0; nRow < nFGLen; ++nRow)
+    {
+        size_t nExpected = 0;
+        if (nIdx < nNumChanges && nRow == nChangeRows[nIdx])
+        {
+            nExpected = 1;
+            ++nIdx;
+        }
+
+        aMsg = "Value at Cell A" + OString::number(nRow+1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nExpected, static_cast<size_t>(m_pDoc->GetValue(0, nRow, 0)));
     }
 
     m_pDoc->DeleteTab(0);

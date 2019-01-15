@@ -28,6 +28,7 @@
 #include <sharedformula.hxx>
 #include <drwlayer.hxx>
 #include <compiler.hxx>
+#include <recursionhelper.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <sal/log.hxx>
@@ -1642,20 +1643,201 @@ std::unique_ptr<sc::ColumnIterator> ScColumn::GetColumnIterator( SCROW nRow1, SC
     return std::make_unique<sc::ColumnIterator>(maCells, nRow1, nRow2);
 }
 
-void ScColumn::EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2 )
+static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCROW nStartOffset, SCROW nEndOffset,
+                              const ScFormulaCellGroupRef& mxParentGroup, bool& bAllowThreading)
+{
+    bAllowThreading = true;
+    ScFormulaCell* pCellStart = nullptr;
+    SCROW nSpanStart = -1;
+    SCROW nSpanEnd = -1;
+    sc::formula_block::const_iterator itSpanStart;
+    bool bAnyDirty = false;
+    for (SCROW nFGOffset = nStartOffset; nFGOffset <= nEndOffset; ++rSpanIter, ++nFGOffset)
+    {
+        bool bThisDirty = (*rSpanIter)->NeedsInterpret();
+        if (!pCellStart && bThisDirty)
+        {
+            pCellStart = *rSpanIter;
+            itSpanStart = rSpanIter;
+            nSpanStart = nFGOffset;
+            bAnyDirty = true;
+        }
+
+        if (pCellStart && (!bThisDirty || nFGOffset == nEndOffset))
+        {
+            nSpanEnd = bThisDirty ? nFGOffset : nFGOffset - 1;
+            assert(nSpanStart >= nStartOffset && nSpanStart <= nSpanEnd && nSpanEnd <= nEndOffset);
+
+            // Found a completely dirty sub span [nSpanStart, nSpanEnd] inside the required span [nStartOffset, nEndOffset]
+            bool bGroupInterpreted = pCellStart->Interpret(nSpanStart, nSpanEnd);
+
+            // child cell's Interpret could result in calling dependency calc
+            // and that could detect a cycle involving mxGroup
+            // and do early exit in that case.
+            if (mxParentGroup && mxParentGroup->mbPartOfCycle)
+            {
+                // Set pCellStart as dirty as pCellStart may be interpreted in InterpretTail()
+                pCellStart->SetDirtyVar();
+                bAllowThreading = false;
+                return bAnyDirty;
+            }
+
+            if (!bGroupInterpreted)
+            {
+                // Evaluate from second cell in non-grouped style (no point in trying group-interpret again).
+                ++itSpanStart;
+                for (SCROW nIdx = nSpanStart+1; nIdx <= nSpanEnd; ++nIdx, ++itSpanStart)
+                    (*itSpanStart)->Interpret(); // We know for sure that this cell is dirty so directly call Interpret().
+            }
+
+            pCellStart = nullptr; // For next sub span start detection.
+        }
+    }
+
+    return bAnyDirty;
+}
+
+static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, ScDocument& rDoc,
+                          const ScFormulaCellGroupRef& mxGroup, bool bThreadingDepEval, bool bSkipRunning,
+                          bool& bIsDirty, bool& bAllowThreading)
+{
+    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = rCells.position(nRow1);
+    sc::CellStoreType::const_iterator it = aPos.first;
+    size_t nOffset = aPos.second;
+    SCROW nRow = nRow1;
+
+    bIsDirty = false;
+
+    for (;it != rCells.end() && nRow <= nRow2; ++it, nOffset = 0)
+    {
+        switch( it->type )
+        {
+            case sc::element_type_edittext:
+                // These require EditEngine (in ScEditUtils::GetString()), which is probably
+                // too complex for use in threads.
+                if (bThreadingDepEval)
+                {
+                    bAllowThreading = false;
+                    return;
+                }
+                break;
+            case sc::element_type_formula:
+            {
+                size_t nRowsToRead = nRow2 - nRow + 1;
+                const size_t nEnd = std::min(it->size, nOffset+nRowsToRead); // last row + 1
+                sc::formula_block::const_iterator itCell = sc::formula_block::begin(*it->data);
+                std::advance(itCell, nOffset);
+
+                // Loop inside the formula block.
+                size_t nCellIdx = nOffset;
+                while (nCellIdx < nEnd)
+                {
+                    const ScFormulaCellGroupRef& mxGroupChild = (*itCell)->GetCellGroup();
+                    ScFormulaCell* pChildTopCell = mxGroupChild ? mxGroupChild->mpTopCell : *itCell;
+
+                    // Check if itCell is already in path.
+                    // If yes use a cycle guard to mark all elements of the cycle
+                    // and return false
+                    if (bThreadingDepEval && pChildTopCell->GetSeenInPath())
+                    {
+                        ScRecursionHelper& rRecursionHelper = rDoc.GetRecursionHelper();
+                        ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, pChildTopCell);
+                        bAllowThreading = false;
+                        return;
+                    }
+
+                    if (bSkipRunning && (*itCell)->IsRunning())
+                    {
+                        ++itCell;
+                        nCellIdx += 1;
+                        nRow += 1;
+                        nRowsToRead -= 1;
+                        continue;
+                    }
+
+                    if (mxGroupChild)
+                    {
+                        // It is a Formula-group, evaluate the necessary parts of it (spans).
+                        const SCROW nFGStartOffset = (*itCell)->aPos.Row() - pChildTopCell->aPos.Row();
+                        const SCROW nFGEndOffset = std::min(nFGStartOffset + static_cast<SCROW>(nRowsToRead) - 1, mxGroupChild->mnLength - 1);
+                        assert(nFGEndOffset >= nFGStartOffset);
+                        const SCROW nSpanLen = nFGEndOffset - nFGStartOffset + 1;
+                        // The (main) span required to be evaluated is [nFGStartOffset, nFGEndOffset], but this span may contain
+                        // non-dirty cells, so split this into sets of completely-dirty spans and try evaluate each of them in grouped-style.
+
+                        bool bAnyDirtyInSpan = lcl_InterpretSpan(itCell, nFGStartOffset, nFGEndOffset, mxGroup, bAllowThreading);
+                        if (!bAllowThreading)
+                            return;
+                        // itCell will now point to cell just after the end of span [nFGStartOffset, nFGEndOffset].
+                        bIsDirty = bIsDirty || bAnyDirtyInSpan;
+
+                        // update the counters by nSpanLen.
+                        // itCell already got updated.
+                        nCellIdx += nSpanLen;
+                        nRow += nSpanLen;
+                        nRowsToRead -= nSpanLen;
+                    }
+                    else
+                    {
+                        // No formula-group here.
+                        bool bDirtyFlag = (*itCell)->MaybeInterpret();
+                        bIsDirty = bIsDirty || bDirtyFlag;
+
+                        // child cell's Interpret could result in calling dependency calc
+                        // and that could detect a cycle involving mxGroup
+                        // and do early exit in that case.
+                        if (bThreadingDepEval && mxGroup && mxGroup->mbPartOfCycle)
+                        {
+                            // Set itCell as dirty as itCell may be interpreted in InterpretTail()
+                            (*itCell)->SetDirtyVar();
+                            bAllowThreading = false;
+                            return;
+                        }
+
+                        // update the counters by 1.
+                        nCellIdx += 1;
+                        nRow += 1;
+                        nRowsToRead -= 1;
+                        ++itCell;
+                    }
+                }
+                break;
+            }
+            default:
+                // Skip this block.
+                nRow += it->size - nOffset;
+                continue;
+        }
+    }
+
+    if (bThreadingDepEval)
+        bAllowThreading = true;
+
+}
+
+// Returns true if at least one FC is dirty.
+bool ScColumn::EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2, bool bSkipRunning )
 {
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
-        return;
+        return false;
 
     if (!HasFormulaCell(nRow1, nRow2))
-        return;
+        return false;
 
-    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2,
-        []( size_t /*nRow*/, ScFormulaCell* pCell )
-        {
-            pCell->MaybeInterpret();
-        }
-    );
+    bool bAnyDirty = false, bTmp = false;
+    lcl_EvalDirty(maCells, nRow1, nRow2, *GetDoc(), nullptr, false, bSkipRunning, bAnyDirty, bTmp);
+    return bAnyDirty;
+}
+
+bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
+{
+    if (nRow1 > nRow2)
+        return false;
+
+    bool bAllowThreading = true, bTmp = false;
+    lcl_EvalDirty(maCells, nRow1, nRow2, *GetDoc(), mxGroup, true, false, bTmp, bAllowThreading);
+
+    return bAllowThreading;
 }
 
 namespace {
