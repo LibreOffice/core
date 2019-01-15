@@ -16,6 +16,24 @@
       "revId": "5807834b0d69eed73647ec2091ef4df671949f82",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_ecce1f82",
+        "filename": "sw/source/core/doc/DocumentFieldsManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2019-01-15T12:59:06Z",
+      "side": 1,
+      "message": "Nope that is intentional.  \nif ( first section and section does not start at the beginning of the document), the space before the section is a \"virtual section\".\n\nif the section is not the last section (so possibly the first section which may or may not start at the beginning of the document) and it isn\u0027t immediately followed by another section, there is another virtual section.\n\nTechnically, it wouldn\u0027t really matter if the else was there, since we only need a single \"virtual\" section in order to allow all of the real sections to hide, but logically it is better for the else to not be there.",
+      "parentUuid": "1f485f77_6c2d8f45",
+      "revId": "5807834b0d69eed73647ec2091ef4df671949f82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
