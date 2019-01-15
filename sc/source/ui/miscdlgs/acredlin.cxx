@@ -370,7 +370,7 @@ SvTreeListEntry* ScAcceptChgDlg::AppendChangeAction(
     OUStringBuffer aBuf;
     OUString aDesc;
 
-    ScRedlinData* pNewData=new ScRedlinData;
+    std::unique_ptr<ScRedlinData> pNewData(new ScRedlinData);
     pNewData->pData=const_cast<ScChangeAction *>(pScChangeAction);
     pNewData->nActionNo=pScChangeAction->GetActionNumber();
     pNewData->bIsAcceptable=pScChangeAction->IsClickable();
@@ -474,12 +474,12 @@ SvTreeListEntry* ScAcceptChgDlg::AppendChangeAction(
     if(!bFlag&& bUseColor&& pParent==nullptr)
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear() ,pNewData, COL_LIGHTBLUE, pParent, TREELIST_APPEND);
+            aBuf.makeStringAndClear(), std::move(pNewData), COL_LIGHTBLUE, pParent, TREELIST_APPEND);
     }
     else if(bFlag&& bUseColor&& pParent!=nullptr)
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear(), pNewData, COL_GREEN, pParent, TREELIST_APPEND);
+            aBuf.makeStringAndClear(), std::move(pNewData), COL_GREEN, pParent, TREELIST_APPEND);
         SvTreeListEntry* pExpEntry=pParent;
 
         while(pExpEntry!=nullptr && !pTheView->IsExpanded(pExpEntry))
@@ -494,7 +494,7 @@ SvTreeListEntry* ScAcceptChgDlg::AppendChangeAction(
     else
     {
         pEntry = pTheView->InsertEntry(
-            aBuf.makeStringAndClear(), pNewData, pParent, TREELIST_APPEND);
+            aBuf.makeStringAndClear(), std::move(pNewData), pParent, TREELIST_APPEND);
     }
     return pEntry;
 }
@@ -545,7 +545,7 @@ SvTreeListEntry* ScAcceptChgDlg::AppendFilteredAction(
         OUString aString;
         OUString aDesc;
 
-        ScRedlinData* pNewData=new ScRedlinData;
+        std::unique_ptr<ScRedlinData> pNewData(new ScRedlinData);
         pNewData->pData=const_cast<ScChangeAction *>(pScChangeAction);
         pNewData->nActionNo=pScChangeAction->GetActionNumber();
         pNewData->bIsAcceptable=pScChangeAction->IsClickable();
@@ -614,10 +614,8 @@ SvTreeListEntry* ScAcceptChgDlg::AppendFilteredAction(
         if (pTheView->IsValidComment(aComment))
         {
             aString+=aComment;
-            pEntry=pTheView->InsertEntry(aString,pNewData,pParent,TREELIST_APPEND);
+            pEntry=pTheView->InsertEntry(aString,std::move(pNewData),pParent,TREELIST_APPEND);
         }
-        else
-            delete pNewData;
     }
     return pEntry;
 }
@@ -718,7 +716,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
 
     aString += aComment;
 
-    ScRedlinData* pNewData=new ScRedlinData;
+    std::unique_ptr<ScRedlinData> pNewData(new ScRedlinData);
     pNewData->nInfo=nSpecial;
     pNewData->pData=const_cast<ScChangeActionContent *>(pScChangeAction);
     pNewData->nActionNo=pScChangeAction->GetActionNumber();
@@ -733,10 +731,10 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     if (pTheView->IsValidComment(aComment) && bFlag)
     {
         bHasFilterEntry=true;
-        pEntry=pTheView->InsertEntry(aString,pNewData,pParent);
+        pEntry=pTheView->InsertEntry(aString,std::move(pNewData),pParent);
     }
     else
-        pEntry=pTheView->InsertEntry(aString,pNewData,COL_LIGHTBLUE,pParent);
+        pEntry=pTheView->InsertEntry(aString,std::move(pNewData),COL_LIGHTBLUE,pParent);
     return pEntry;
 }
 
@@ -818,14 +816,14 @@ void ScAcceptChgDlg::UpdateView()
     if(nAcceptCount>0)
     {
         pParent=pTheView->InsertEntry(
-            aStrAllAccepted, static_cast< RedlinData * >(nullptr),
+            aStrAllAccepted, std::unique_ptr<RedlinData>(),
             static_cast< SvTreeListEntry * >(nullptr));
         pParent->EnableChildrenOnDemand();
     }
     if(nRejectCount>0)
     {
         pParent=pTheView->InsertEntry(
-            aStrAllRejected, static_cast< RedlinData * >(nullptr),
+            aStrAllRejected, std::unique_ptr<RedlinData>(),
             static_cast< SvTreeListEntry * >(nullptr));
         pParent->EnableChildrenOnDemand();
     }

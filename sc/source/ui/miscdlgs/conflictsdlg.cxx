@@ -631,9 +631,9 @@ void ScConflictsDlg::UpdateView()
     {
         if (rConflictEntry.meConflictAction == SC_CONFLICT_ACTION_NONE)
         {
-            RedlinData* pRootUserData = new RedlinData();
+            std::unique_ptr<RedlinData> pRootUserData(new RedlinData());
             pRootUserData->pData = static_cast<void*>(&rConflictEntry);
-            SvTreeListEntry* pRootEntry = m_pLbConflicts->InsertEntry( GetConflictString( rConflictEntry ), pRootUserData );
+            SvTreeListEntry* pRootEntry = m_pLbConflicts->InsertEntry( GetConflictString( rConflictEntry ), std::move(pRootUserData) );
 
             for ( auto& aSharedAction : rConflictEntry.maSharedActions )
             {
@@ -651,7 +651,7 @@ void ScConflictsDlg::UpdateView()
                     }
 
                     OUString aString( GetActionString( pAction, mpSharedDoc ) );
-                    m_pLbConflicts->InsertEntry( aString, static_cast< RedlinData* >( nullptr ), pRootEntry );
+                    m_pLbConflicts->InsertEntry( aString, std::unique_ptr<RedlinData>(), pRootEntry );
                 }
             }
 
@@ -671,9 +671,9 @@ void ScConflictsDlg::UpdateView()
                     }
 
                     OUString aString( GetActionString( pAction, mpOwnDoc ) );
-                    RedlinData* pUserData = new RedlinData();
+                    std::unique_ptr<RedlinData> pUserData(new RedlinData());
                     pUserData->pData = static_cast< void* >( pAction );
-                    m_pLbConflicts->InsertEntry( aString, pUserData, pRootEntry );
+                    m_pLbConflicts->InsertEntry( aString, std::move(pUserData), pRootEntry );
                 }
             }
 
