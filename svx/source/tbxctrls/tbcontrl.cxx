@@ -1608,10 +1608,6 @@ IMPL_LINK(SvxColorWindow, SelectHdl, ValueSet*, pColorSet, void)
     VclPtr<SvxColorWindow> xThis(this);
 
     NamedColor aNamedColor = GetSelectEntryColor(pColorSet);
-    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
-        This instance may be deleted in the meantime (i.e. when a dialog is opened
-        while in Dispatch()), accessing members will crash in this case. */
-    pColorSet->SetNoSelection();
 
     if ( pColorSet != mpRecentColorSet )
     {
@@ -1631,10 +1627,6 @@ IMPL_LINK(SvxColorWindow, SelectHdl, ValueSet*, pColorSet, void)
 IMPL_LINK(ColorWindow, SelectHdl, SvtValueSet*, pColorSet, void)
 {
     NamedColor aNamedColor = GetSelectEntryColor(pColorSet);
-    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
-        This instance may be deleted in the meantime (i.e. when a dialog is opened
-        while in Dispatch()), accessing members will crash in this case. */
-    pColorSet->SetNoSelection();
 
     if (pColorSet != mxRecentColorSet.get())
     {
