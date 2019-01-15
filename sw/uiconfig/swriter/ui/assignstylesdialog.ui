@@ -16,7 +16,7 @@
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
-      <!-- column-name check -->
+      <!-- column-name check1 -->
       <column type="gboolean"/>
       <!-- column-name check2 -->
       <column type="gboolean"/>
@@ -40,6 +40,28 @@
       <column type="gboolean"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name checkvis1 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis2 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis3 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis4 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis5 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis6 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis7 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis8 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis9 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis10 -->
+      <column type="gboolean"/>
+      <!-- column-name checkvis11 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkDialog" id="AssignStylesDialog">
