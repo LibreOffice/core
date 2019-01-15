@@ -853,7 +853,7 @@ ScAutoFormat::ScAutoFormat() :
     mbSaveLater(false)
 {
     //  create default autoformat
-    ScAutoFormatData* pData = new ScAutoFormatData;
+    std::unique_ptr<ScAutoFormatData> pData(new ScAutoFormatData);
     OUString aName(ScResId(STR_STYLENAME_STANDARD));
     pData->SetName(aName);
 
@@ -929,7 +929,7 @@ ScAutoFormat::ScAutoFormat() :
         }
     }
 
-    insert(pData);
+    insert(std::move(pData));
 }
 
 bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right) const
@@ -985,10 +985,10 @@ ScAutoFormat::iterator ScAutoFormat::find(const OUString& rName)
     return m_Data.find(rName);
 }
 
-bool ScAutoFormat::insert(ScAutoFormatData* pNew)
+ScAutoFormat::iterator ScAutoFormat::insert(std::unique_ptr<ScAutoFormatData> pNew)
 {
     OUString aName = pNew->GetName();
-    return m_Data.insert(std::make_pair(aName, std::unique_ptr<ScAutoFormatData>(pNew))).second;
+    return m_Data.insert(std::make_pair(aName, std::move(pNew))).first;
 }
 
 void ScAutoFormat::erase(const iterator& it)
@@ -1062,15 +1062,14 @@ void ScAutoFormat::Load()
             {
                 m_aVersions.Load( rStream, nVal );        // item versions
 
-                ScAutoFormatData* pData;
                 sal_uInt16 nCnt = 0;
                 rStream.ReadUInt16( nCnt );
                 bRet = (rStream.GetError() == ERRCODE_NONE);
                 for (sal_uInt16 i=0; bRet && (i < nCnt); i++)
                 {
-                    pData = new ScAutoFormatData();
+                    std::unique_ptr<ScAutoFormatData> pData(new ScAutoFormatData());
                     bRet = pData->Load(rStream, m_aVersions);
-                    insert(pData);
+                    insert(std::move(pData));
                 }
             }
         }
