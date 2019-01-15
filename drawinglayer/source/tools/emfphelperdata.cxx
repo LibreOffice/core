@@ -36,6 +36,7 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
+#include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -334,12 +335,6 @@ namespace emfplushelper
     {
         // map in one step using complete MapTransform (see mappingChanged)
         return maMapTransform * ::basegfx::B2DPoint(ix, iy);
-    }
-
-    ::basegfx::B2DSize EmfPlusHelperData::MapSize(double iwidth, double iheight) const
-    {
-        // map in one step using complete MapTransform (see mappingChanged)
-        return maMapTransform * ::basegfx::B2DSize(iwidth, iheight);
     }
 
     Color EmfPlusHelperData::EMFPGetBrushColorOrARGBColor(const sal_uInt16 flags, const sal_uInt32 brushIndexOrColor) const {
@@ -1224,11 +1219,10 @@ namespace emfplushelper
                                     ReadPoint(rMS, x2, y2, flags); // upper-right
                                     ReadPoint(rMS, x3, y3, flags); // lower-left
 
-                                    SAL_INFO("drawinglayer", "EMF+\t destination points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3);
-                                    SAL_INFO("drawinglayer", "EMF+\t destination rectangle: " << x1 << "," << y1 << " " << x2 - x1 << "x" << y3 - y1);
+                                    SAL_INFO("drawinglayer", "EMF+\t destination points: P1:" << x1 << "," << y1 << " P2:" << x2 << "," << y2 << " P3:" << x3 << "," << y3);
 
-                                    aDstPoint = Map(x1, y1);
-                                    aDstSize = MapSize(x2 - x1, y3 - y1);
+                                    aDstPoint = ::basegfx::B2DPoint(x1, y1);
+                                    aDstSize = ::basegfx::B2DSize(x2 - x1, y3 - y1);
                                 }
                                 else
                                 {
@@ -1241,12 +1235,12 @@ namespace emfplushelper
                                 float dx, dy, dw, dh;
                                 ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
                                 SAL_INFO("drawinglayer", "EMF+\t destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
-                                aDstPoint = Map(dx, dy);
-                                aDstSize = MapSize(dw, dh);
+                                aDstPoint = ::basegfx::B2DPoint(dx, dy);
+                                aDstSize = ::basegfx::B2DSize(dw, dh);
                             }
 
                             // create correct transform matrix
-                            basegfx::B2DHomMatrix aTransformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                            const basegfx::B2DHomMatrix aTransformMatrix = maMapTransform * basegfx::utils::createScaleTranslateB2DHomMatrix(
                                 aDstSize.getX(),
                                 aDstSize.getY(),
                                 aDstPoint.getX(),
@@ -1266,6 +1260,7 @@ namespace emfplushelper
                                 else
                                 {
                                     SAL_WARN("drawinglayer", "EMF+\t warning: empty bitmap");
+                                    break;
                                 }
                             }
                             else if (image.type == ImageDataTypeMetafile)

@@ -24,8 +24,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/color/bcolor.hxx>
 #include <map>
 
 // predefines
@@ -204,7 +202,6 @@ namespace emfplushelper
 
         // mappers
         ::basegfx::B2DPoint Map(double ix, double iy) const;
-        ::basegfx::B2DSize MapSize(double iwidth, double iheight) const;
 
         // readers
         static void ReadRectangle(SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);

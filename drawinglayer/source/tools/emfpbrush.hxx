@@ -22,7 +22,6 @@
 
 #include "emfphelperdata.hxx"
 #include <tools/color.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 namespace emfplushelper
 {
