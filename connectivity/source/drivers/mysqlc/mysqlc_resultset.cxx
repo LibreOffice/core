@@ -136,6 +136,13 @@ void OResultSet::ensureResultFetched()
 
 void OResultSet::ensureFieldInfoFetched()
 {
+    if (m_bResultFetched)
+        return; // already fetched
+
+    // it works only if result set is produced via mysql_store_result
+    // TODO ensure that
+    m_nRowCount = mysql_num_rows(m_pResult);
+
     if (!m_aFields.empty())
         return;
     unsigned nFieldCount = mysql_num_fields(m_pResult);
@@ -150,11 +157,6 @@ void OResultSet::fetchResult()
 {
     // Mysql C API does not allow simultaneously opened result sets, but sdbc does.
     // Because of that we need to fetch all of the data ASAP
-
-    // it works only if result set is produced via mysql_store_result
-    // TODO ensure that
-    m_nRowCount = mysql_num_rows(m_pResult);
-
     ensureFieldInfoFetched();
 
     // fetch all the data
@@ -228,8 +230,7 @@ uno::Reference<XInputStream> SAL_CALL OResultSet::getBinaryStream(sal_Int32 colu
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
     if (checkNull(column))
         return nullptr;
 
@@ -242,8 +243,7 @@ uno::Reference<XInputStream> SAL_CALL OResultSet::getCharacterStream(sal_Int32 c
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getCharacterStream",
                                                             *this);
     return nullptr;
@@ -253,8 +253,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
     if (checkNull(column))
         return false;
 
@@ -266,8 +265,7 @@ sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
     if (checkNull(column))
         return 0;
 
@@ -280,6 +278,7 @@ uno::Sequence<sal_Int8> SAL_CALL OResultSet::getBytes(sal_Int32 column)
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
+    checkBordersAndEnsureFetched(column);
     OString sVal = m_aRows[m_nRowPosition][column - 1];
     if (checkNull(column))
         return uno::Sequence<sal_Int8>();
@@ -292,8 +291,7 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
 
     Date d;
 
@@ -330,8 +328,7 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
 
     if (checkNull(column))
         return 0.0;
@@ -344,8 +341,7 @@ float SAL_CALL OResultSet::getFloat(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
     if (checkNull(column))
         return 0.0f;
 
@@ -357,6 +353,7 @@ sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    checkBordersAndEnsureFetched(column);
     if (checkNull(column))
         return 0;
 
@@ -376,8 +373,7 @@ sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
     if (checkNull(column))
         return 0LL;
 
@@ -396,8 +392,7 @@ uno::Reference<XArray> SAL_CALL OResultSet::getArray(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getArray", *this);
     return nullptr;
@@ -407,8 +402,7 @@ uno::Reference<XClob> SAL_CALL OResultSet::getClob(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getClob", *this);
     return nullptr;
@@ -418,8 +412,7 @@ uno::Reference<XBlob> SAL_CALL OResultSet::getBlob(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getBlob", *this);
     return nullptr;
@@ -429,8 +422,7 @@ uno::Reference<XRef> SAL_CALL OResultSet::getRef(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getRef", *this);
     return nullptr;
@@ -441,8 +433,7 @@ Any SAL_CALL OResultSet::getObject(sal_Int32 column,
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
 
     Any aRet = Any();
 
@@ -454,8 +445,7 @@ sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
     if (checkNull(column))
         return 0;
 
@@ -467,8 +457,7 @@ OUString SAL_CALL OResultSet::getString(sal_Int32 column)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
     if (checkNull(column))
         return rtl::OUString{};
 
@@ -480,9 +469,8 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
+    checkBordersAndEnsureFetched(column);
 
-    checkColumnIndex(column);
-    checkRowIndex();
     Time t;
     if (checkNull(column))
         return t;
@@ -518,8 +506,7 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
-    checkColumnIndex(column);
-    checkRowIndex();
+    checkBordersAndEnsureFetched(column);
 
     if (checkNull(column))
         return DateTime{};
@@ -559,6 +546,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureFieldInfoFetched();
 
     return m_nRowPosition >= m_nRowCount;
 }
@@ -567,6 +555,7 @@ sal_Bool SAL_CALL OResultSet::isFirst()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureFieldInfoFetched();
 
     return m_nRowPosition == 0 && !isAfterLast();
 }
@@ -575,6 +564,7 @@ sal_Bool SAL_CALL OResultSet::isLast()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureFieldInfoFetched();
 
     return m_nRowPosition == m_nRowCount - 1;
 }
@@ -590,6 +580,7 @@ void SAL_CALL OResultSet::afterLast()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureFieldInfoFetched();
     m_nRowPosition = m_nRowCount;
 }
 
@@ -615,7 +606,7 @@ sal_Bool SAL_CALL OResultSet::last()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureResultFetched();
+    ensureFieldInfoFetched();
     m_nRowPosition = m_nRowCount - 1;
 
     return true;
@@ -625,6 +616,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureFieldInfoFetched();
 
     sal_Int32 nToGo = row < 0 ? (m_nRowCount - 1) - row : row - 1;
 
@@ -642,6 +634,7 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ensureFieldInfoFetched();
 
     if (row == 0)
         return true;
@@ -712,7 +705,7 @@ sal_Bool SAL_CALL OResultSet::next()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    ensureResultFetched();
+    ensureFieldInfoFetched();
     if (m_nRowPosition + 1 > m_nRowCount) // afterlast
         return false;
     if (m_nRowPosition + 1 == m_nRowCount) // last
@@ -1119,6 +1112,13 @@ void OResultSet::checkColumnIndex(sal_Int32 index)
         /* static object for efficiency or thread safety is a problem ? */
         throw SQLException("index out of range", *this, OUString(), 1, Any());
     }
+}
+
+void OResultSet::checkBordersAndEnsureFetched(sal_Int32 index)
+{
+    ensureResultFetched();
+    checkColumnIndex(index);
+    checkRowIndex();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
