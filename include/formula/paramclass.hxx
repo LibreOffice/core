@@ -67,7 +67,12 @@ namespace formula
             Reference in JumpMatrix context should use the result matrix
             instead of the array of references. Never used as initial parameter
             classification. */
-        SuppressedReferenceOrForceArray
+        SuppressedReferenceOrForceArray,
+
+        /** A function return forces the caller into array mode for this one
+            call, making it behave like it had ForceArray but not propagated to
+            any further operators in the same parameter. */
+        ForceArrayReturn
     };
 }
 

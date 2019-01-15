@@ -757,6 +757,7 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                             case ParamClass::ForceArray:
                             case ParamClass::ReferenceOrForceArray:
                             case ParamClass::SuppressedReferenceOrForceArray:
+                            case ParamClass::ForceArrayReturn:
                                 ;   // nothing, only as array/matrix
                             // no default to get compiler warning
                         }
