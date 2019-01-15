@@ -658,6 +658,9 @@ bool OutputDevice::HasMirroredGraphics() const
 
 bool OutputDevice::ImplIsRecordLayout() const
 {
+    if (!mpOutDevData)
+        return false;
+
     return mpOutDevData->mpRecordLayout;
 }
 

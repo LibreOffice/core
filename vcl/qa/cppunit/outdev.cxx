@@ -18,6 +18,7 @@
 #include <tools/stream.hxx>
 #include <vcl/pngwrite.hxx>
 #include <sal/log.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 class VclOutdevTest : public test::BootstrapFixture
 {
@@ -25,9 +26,11 @@ public:
     VclOutdevTest() : BootstrapFixture(true, false) {}
 
     void testVirtualDevice();
+    void testUseAfterDispose();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
+    CPPUNIT_TEST(testUseAfterDispose);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -78,6 +81,21 @@ void VclOutdevTest::testVirtualDevice()
     CPPUNIT_ASSERT( pWin );
     OutputDevice *pOutDev = pWin.get();
 #endif
+}
+
+void VclOutdevTest::testUseAfterDispose()
+{
+    // Create a virtual device, enable map mode then dispose it.
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+
+    pVDev->EnableMapMode();
+
+    pVDev->disposeOnce();
+
+    // Make sure that these don't crash after dispose.
+    pVDev->GetInverseViewTransformation();
+
+    pVDev->GetViewTransformation();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclOutdevTest);
