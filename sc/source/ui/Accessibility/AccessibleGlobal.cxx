@@ -19,6 +19,8 @@
 
 #include <AccessibleGlobal.hxx>
 
+#include <comphelper/sequence.hxx>
+
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 using ::std::set;
@@ -59,14 +61,7 @@ sal_Bool SAL_CALL ScAccessibleStateSet::containsAll(
 
 Sequence<sal_Int16> SAL_CALL ScAccessibleStateSet::getStates()
 {
-    Sequence<sal_Int16> aSeq(0);
-    set<sal_Int16>::const_iterator itr = maStates.begin(), itrEnd = maStates.end();
-    for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-    {
-        aSeq.realloc(i+1);
-        aSeq[i] = *itr;
-    }
-    return aSeq;
+    return comphelper::containerToSequence(maStates);
 }
 
 void ScAccessibleStateSet::insert(sal_Int16 nState)

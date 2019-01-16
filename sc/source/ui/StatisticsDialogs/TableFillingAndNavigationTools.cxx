@@ -38,15 +38,13 @@ void FormulaTemplate::setTemplate(const char* aTemplate)
 
 const OUString& FormulaTemplate::getTemplate()
 {
-    RangeReplacementMap::iterator itRange;
-    for (itRange = mRangeReplacementMap.begin(); itRange != mRangeReplacementMap.end(); ++itRange)
+    for (const auto& [rVariable, rRange] : mRangeReplacementMap)
     {
-        applyRange(itRange->first, itRange->second, mbUse3D);
+        applyRange(rVariable, rRange, mbUse3D);
     }
-    AddressReplacementMap::iterator itAddress;
-    for (itAddress = mAddressReplacementMap.begin(); itAddress != mAddressReplacementMap.end(); ++itAddress)
+    for (const auto& [rVariable, rAddress] : mAddressReplacementMap)
     {
-        applyAddress(itAddress->first, itAddress->second, mbUse3D);
+        applyAddress(rVariable, rAddress, mbUse3D);
     }
     return mTemplate;
 }

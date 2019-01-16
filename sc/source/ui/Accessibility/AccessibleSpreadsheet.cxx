@@ -99,10 +99,8 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
         {
             m_vecTempCol.clear();
             {
-                VEC_RANGE::const_iterator vi = m_vecTempRange.begin();
-                for (; vi < m_vecTempRange.end(); ++vi)
+                for (ScRange const & r : m_vecTempRange)
                 {
-                    ScRange const & r = *vi;
                     if ( row >= r.aStart.Row() && row <= r.aEnd.Row())
                     {
                         m_vecTempCol.emplace_back(r.aStart.Col(),r.aEnd.Col());
@@ -111,14 +109,12 @@ ScMyAddress ScAccessibleSpreadsheet::CalcScAddressFromRangeList(ScRangeList *pMa
             }
             std::sort(m_vecTempCol.begin(),m_vecTempCol.end(),CompMinCol);
             {
-                VEC_COL::const_iterator vic = m_vecTempCol.begin();
-                for(; vic != m_vecTempCol.end(); ++vic)
+                for(const PAIR_COL &pairCol : m_vecTempCol)
                 {
-                    const PAIR_COL &pariCol = *vic;
-                    sal_uInt16 nCol = pariCol.second - pariCol.first + 1;
+                    sal_uInt16 nCol = pairCol.second - pairCol.first + 1;
                     if (nCol + nCurrentIndex > nSelectedChildIndex)
                     {
-                        return ScMyAddress(static_cast<SCCOL>(pariCol.first + nSelectedChildIndex - nCurrentIndex), row, maActiveCell.Tab());
+                        return ScMyAddress(static_cast<SCCOL>(pairCol.first + nSelectedChildIndex - nCurrentIndex), row, maActiveCell.Tab());
                     }
                     nCurrentIndex += nCol;
                 }
@@ -621,11 +617,10 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         }
                         else
                         {
-                            VEC_MYADDR::iterator viAddr = vecNew.begin();
-                            for(; viAddr < vecNew.end() ; ++viAddr )
+                            for(const auto& rAddr : vecNew)
                             {
-                                uno::Reference< XAccessible > xChild = getAccessibleCellAt(viAddr->Row(),viAddr->Col());
-                                if (!(bNewPosCellFocus && *viAddr == aNewCell) )
+                                uno::Reference< XAccessible > xChild = getAccessibleCellAt(rAddr.Row(),rAddr.Col());
+                                if (!(bNewPosCellFocus && rAddr == aNewCell) )
                                 {
                                     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS;
                                     aEvent.NewValue <<= xChild;
@@ -634,7 +629,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
                                 aEvent.NewValue <<= xChild;
                                 CommitChange(aEvent);
-                                m_mapSelectionSend.emplace(*viAddr,xChild);
+                                m_mapSelectionSend.emplace(rAddr,xChild);
                             }
                         }
                     }
@@ -724,10 +719,7 @@ void ScAccessibleSpreadsheet::RemoveSelection(const ScMarkData &refScMarkData)
         aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
         aEvent.NewValue <<= miRemove->second;
         CommitChange(aEvent);
-        MAP_ADDR_XACC::iterator miNext = miRemove;
-        ++miNext;
-        m_mapSelectionSend.erase(miRemove);
-        miRemove = miNext;
+        miRemove = m_mapSelectionSend.erase(miRemove);
     }
 }
 void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
@@ -1564,17 +1556,16 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
             }
             else
             {
-                VEC_MYADDR::iterator viAddr = vecNew.begin();
-                for(; viAddr != vecNew.end() ; ++viAddr )
+                for(const auto& rAddr : vecNew)
                 {
                     uno::Reference< XAccessible > xChild;
-                    if (*viAddr == aFormulaAddr)
+                    if (rAddr == aFormulaAddr)
                     {
                         xChild = m_pAccFormulaCell.get();
                     }
                     else
                     {
-                        xChild = getAccessibleCellAt(viAddr->Row(),viAddr->Col());
+                        xChild = getAccessibleCellAt(rAddr.Row(),rAddr.Col());
                         aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS;
                         aEvent.NewValue <<= xChild;
                         CommitChange(aEvent);
@@ -1582,7 +1573,7 @@ void ScAccessibleSpreadsheet::NotifyRefMode()
                     aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_ADD;
                     aEvent.NewValue <<= xChild;
                     CommitChange(aEvent);
-                    m_mapFormulaSelectionSend.emplace(*viAddr,xChild);
+                    m_mapFormulaSelectionSend.emplace(rAddr,xChild);
                 }
             }
             m_vecFormulaLastMyAddr.swap(vecCurSel);
@@ -1606,10 +1597,7 @@ void ScAccessibleSpreadsheet::RemoveFormulaSelection(bool bRemoveAll )
         aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_REMOVE;
         aEvent.NewValue <<= miRemove->second;
         CommitChange(aEvent);
-        MAP_ADDR_XACC::iterator miNext = miRemove;
-        ++miNext;
-        m_mapFormulaSelectionSend.erase(miRemove);
-        miRemove = miNext;
+        miRemove = m_mapFormulaSelectionSend.erase(miRemove);
     }
 }
 

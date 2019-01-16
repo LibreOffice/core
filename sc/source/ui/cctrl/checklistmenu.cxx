@@ -39,6 +39,8 @@
 #include <vcl/treelistentry.hxx>
 #include <document.hxx>
 
+#include <numeric>
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
@@ -101,8 +103,8 @@ ScMenuFloatingWindow::~ScMenuFloatingWindow()
 void ScMenuFloatingWindow::dispose()
 {
     EndPopupMode();
-    for (auto i = maMenuItems.begin(); i != maMenuItems.end(); ++i)
-        i->mpSubMenuWin.disposeAndClear();
+    for (auto& rMenuItem : maMenuItems)
+        rMenuItem.mpSubMenuWin.disposeAndClear();
     mpParentMenu.clear();
     PopupMenuFloatingWindow::dispose();
 }
@@ -284,11 +286,11 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         ScAccessibleFilterMenu* p = static_cast<ScAccessibleFilterMenu*>(
             mxAccessible.get());
 
-        vector<MenuItemData>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
-        for (itr = itrBeg; itr != itrEnd; ++itr)
+        size_t nPos = 0;
+        for (const auto& rMenuItem : maMenuItems)
         {
-            size_t nPos = ::std::distance(itrBeg, itr);
-            p->appendMenuItem(itr->maText, nPos);
+            p->appendMenuItem(rMenuItem.maText, nPos);
+            ++nPos;
         }
     }
 
@@ -332,15 +334,12 @@ Size ScMenuFloatingWindow::getMenuSize() const
     if (maMenuItems.empty())
         return Size();
 
-    vector<MenuItemData>::const_iterator itr = maMenuItems.begin(), itrEnd = maMenuItems.end();
-    long nTextWidth = 0;
-    for (; itr != itrEnd; ++itr)
-    {
-        if (itr->mbSeparator)
-            continue;
-
-        nTextWidth = ::std::max(GetTextWidth(itr->maText), nTextWidth);
-    }
+    long nTextWidth = std::accumulate(maMenuItems.begin(), maMenuItems.end(), long(0),
+        [this](const long& rTextWidth, const MenuItemData& rMenuItem) -> long {
+            if (rMenuItem.mbSeparator)
+                return rTextWidth;
+            return std::max(GetTextWidth(rMenuItem.maText), rTextWidth);
+        });
 
     size_t nLastPos = maMenuItems.size()-1;
     Point aPos;
@@ -592,11 +591,11 @@ void ScMenuFloatingWindow::endSubMenu(ScMenuFloatingWindow* pSubMenu)
 
 void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const
 {
-    vector<MenuItemData>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
-    for (itr = itrBeg; itr != itrEnd; ++itr)
+    size_t nPos = 0;
+    for (const auto& rMenuItem : maMenuItems)
     {
-        size_t nPos = ::std::distance(itrBeg, itr);
-        pAccMenu->appendMenuItem(itr->maText, nPos);
+        pAccMenu->appendMenuItem(rMenuItem.maText, nPos);
+        ++nPos;
     }
 }
 
@@ -1134,9 +1133,9 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
         aParents.insert(maMembers[i].mpParent);
     }
 
-    for (auto itr = aParents.begin(), itrEnd = aParents.end(); itr != itrEnd; ++itr)
+    for (const auto& pParent : aParents)
     {
-        if (!(*itr))
+        if (!pParent)
         {
             sal_uInt32 nCount = maChecks->GetEntryCount();
             for( sal_uInt32 i = 0; i < nCount; ++i)
@@ -1150,10 +1149,10 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
         }
         else
         {
-            SvTreeListEntries& rEntries = (*itr)->GetChildEntries();
-            for (auto it = rEntries.begin(), itEnd = rEntries.end(); it != itEnd; ++ it)
+            SvTreeListEntries& rEntries = pParent->GetChildEntries();
+            for (const auto& rxEntry : rEntries)
             {
-                maChecks->CheckEntry(it->get(), bSet);
+                maChecks->CheckEntry(rxEntry.get(), bSet);
             }
         }
     }

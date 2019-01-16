@@ -50,10 +50,10 @@ void ScCondFormatManagerWindow::Init()
 
     if (mpFormatList)
     {
-        for(ScConditionalFormatList::iterator itr = mpFormatList->begin(); itr != mpFormatList->end(); ++itr)
+        for(const auto& rItem : *mpFormatList)
         {
-            SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(**itr) );
-            maMapLBoxEntryToCondIndex.insert(std::pair<SvTreeListEntry*,sal_Int32>(pEntry, (*itr)->GetKey()));
+            SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(*rItem) );
+            maMapLBoxEntryToCondIndex.insert(std::pair<SvTreeListEntry*,sal_Int32>(pEntry, rItem->GetKey()));
         }
     }
 

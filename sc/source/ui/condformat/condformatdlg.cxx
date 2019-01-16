@@ -59,8 +59,8 @@ void ScCondFormatList::dispose()
     Freeze();
     mpDialogParent.clear();
     mpScrollBar.disposeAndClear();
-    for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
-        it->disposeAndClear();
+    for (auto& rxEntry : maEntries)
+        rxEntry.disposeAndClear();
     maEntries.clear();
     Control::dispose();
 }
@@ -268,12 +268,8 @@ void ScCondFormatList::DoScroll(long nDelta)
 
 IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
 {
-    EntryContainer::iterator itr = maEntries.begin();
-    for(; itr != maEntries.end(); ++itr)
-    {
-        if((*itr)->IsSelected())
-            break;
-    }
+    EntryContainer::iterator itr = std::find_if(maEntries.begin(), maEntries.end(),
+        [](const VclPtr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
     if(itr == maEntries.end())
         return;
 
@@ -333,12 +329,8 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox&, rBox, void)
 IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
 {
     ListBox* pBox = static_cast<ListBox*>(p);
-    EntryContainer::iterator itr = maEntries.begin();
-    for(; itr != maEntries.end(); ++itr)
-    {
-        if((*itr)->IsSelected())
-            break;
-    }
+    EntryContainer::iterator itr = std::find_if(maEntries.begin(), maEntries.end(),
+        [](const VclPtr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
     if(itr == maEntries.end())
         return;
 
@@ -405,9 +397,9 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl, Button*, void )
     Freeze();
     VclPtr<ScCondFrmtEntry> pNewEntry = VclPtr<ScConditionFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
     maEntries.push_back( pNewEntry );
-    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    for(auto& rxEntry : maEntries)
     {
-        (*itr)->SetInactive();
+        rxEntry->SetInactive();
     }
     mpDialogParent->InvalidateRefData();
     pNewEntry->SetActive();
@@ -419,15 +411,12 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl, Button*, void )
 IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, Button*, void )
 {
     Freeze();
-    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    auto itr = std::find_if(maEntries.begin(), maEntries.end(),
+        [](const VclPtr<ScCondFrmtEntry>& widget) { return widget->IsSelected(); });
+    if (itr != maEntries.end())
     {
-        auto widget = *itr;
-        if (widget->IsSelected())
-        {
-            maEntries.erase(itr);
-            widget.disposeAndClear();
-            break;
-        }
+        itr->disposeAndClear();
+        maEntries.erase(itr);
     }
     mpDialogParent->InvalidateRefData();
     mpDialogParent->OnSelectionChange(0, maEntries.size(), false);

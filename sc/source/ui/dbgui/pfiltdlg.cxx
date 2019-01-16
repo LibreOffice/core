@@ -314,10 +314,9 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
             }
 
             const ScFilterEntries* pColl = m_pEntryLists[nColumn].get();
-            std::vector<ScTypedStrData>::const_iterator it = pColl->begin(), itEnd = pColl->end();
-            for (; it != itEnd; ++it)
+            for (const auto& rEntry : *pColl)
             {
-                pValList->InsertEntry(it->GetString(), nListPos);
+                pValList->InsertEntry(rEntry.GetString(), nListPos);
                 nListPos++;
             }
         }
