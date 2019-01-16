@@ -395,6 +395,22 @@ bool Qt5Widget::handleKeyEvent(QKeyEvent* pEvent, bool bDown)
     return bStopProcessingKey;
 }
 
+bool Qt5Widget::event(QEvent* pEvent)
+{
+    if (pEvent->type() == QEvent::ShortcutOverride)
+    {
+        // Accepted event disables shortcut activation,
+        // but enables keypress event.
+        // If event is not accepted and shortcut is successfully activated,
+        // KeyPress event is omitted.
+        // It looks like handleKeyEvent function still activates the shortcut on KeyPress event,
+        // so there's no harm in disabling shortcut activation via Qt mechanisms.
+        pEvent->accept();
+    }
+
+    return QWidget::event(pEvent);
+}
+
 void Qt5Widget::keyPressEvent(QKeyEvent* pEvent)
 {
     if (handleKeyEvent(pEvent, true))
