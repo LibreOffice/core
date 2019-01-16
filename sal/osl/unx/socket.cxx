@@ -278,9 +278,6 @@ static oslSocketAddr osl_psz_resolveHostname (
 static sal_Int32 osl_psz_getServicePort (
     const sal_Char* pszServicename, const sal_Char* pszProtocol);
 
-static oslSocketResult osl_psz_getDottedInetAddrOfSocketAddr (
-    oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
-
 static void osl_psz_getLastSocketErrorDescription (
     oslSocket Socket, sal_Char* pBuffer, sal_uInt32 BufferSize);
 
@@ -1110,38 +1107,22 @@ oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uSt
 
 oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrDottedInetAddr)
 {
-    oslSocketResult Result;
-    sal_Char pszDottedInetAddr[1024];
-
-    pszDottedInetAddr[0] = '\0';
-
-    Result = osl_psz_getDottedInetAddrOfSocketAddr(Addr,pszDottedInetAddr,sizeof(pszDottedInetAddr));
-
-    rtl_uString_newFromAscii(ustrDottedInetAddr,pszDottedInetAddr);
-
-    return Result;
-
-}
-
-oslSocketResult osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAddr,
-                                                  sal_Char *pBuffer, sal_uInt32 BufferSize)
-{
-    SAL_WARN_IF( !pAddr, "sal.osl", "undefined address" );
-
-    if( pAddr )
+    if( !Addr )
     {
-        struct sockaddr_in* pSystemInetAddr = reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
-
-        if (pSystemInetAddr->sin_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
-        {
-            strncpy(pBuffer, inet_ntoa(pSystemInetAddr->sin_addr), BufferSize);
-            pBuffer[BufferSize - 1] = '\0';
-
-            return osl_Socket_Ok;
-        }
+        return osl_Socket_Error;
     }
 
-    return osl_Socket_Error;
+    struct sockaddr_in* pSystemInetAddr = reinterpret_cast<sockaddr_in *>(&Addr->m_sockaddr);
+
+    if (pSystemInetAddr->sin_family != FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
+    {
+        return osl_Socket_Error;
+    }
+
+    rtl_uString_newFromAscii(ustrDottedInetAddr,inet_ntoa(pSystemInetAddr->sin_addr));
+
+    return osl_Socket_Ok;
+
 }
 
 oslSocket SAL_CALL osl_createSocket(
