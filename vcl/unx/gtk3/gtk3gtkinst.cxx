@@ -3221,7 +3221,7 @@ private:
     {
         disable_notify_events();
 
-        GtkWidget *pTabWidget = gtk_image_new_from_icon_name("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+        GtkWidget *pTabWidget = gtk_fixed_new();
         gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), "useless");
 
         GtkWidget *pChild = gtk_grid_new();
@@ -3451,6 +3451,16 @@ public:
         else
             m_nSizeAllocateSignalId = 0;
         gtk_notebook_set_show_border(m_pOverFlowNotebook, false);
+
+        // tdf#122623 it's nigh impossible to have a GtkNotebook without an active (checked) tab, so try and theme
+        // the unwanted tab into invisibility
+        GtkStyleContext *pNotebookContext = gtk_widget_get_style_context(GTK_WIDGET(m_pOverFlowNotebook));
+        GtkCssProvider *pProvider = gtk_css_provider_new();
+        static const gchar data[] = "header.top > tabs > tab:checked { box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0; border-image: none; border-image-width: 0 0 0 0; background-image: none; background-color: transparent; border-radius: 0 0 0 0; border-width: 0 0 0 0; border-style: none; border-color: transparent; opacity: 0; min-height: 0; min-width: 0; }";
+        static const gchar olddata[] = "tab.top:active { box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0; border-image: none; border-image-width: 0 0 0 0; background-image: none; background-color: transparent; border-radius: 0 0 0 0; border-width: 0 0 0 0; border-style: none; border-color: transparent; opacity: 0; }";
+        gtk_css_provider_load_from_data(pProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
+        gtk_style_context_add_provider(pNotebookContext, GTK_STYLE_PROVIDER(pProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
     virtual int get_current_page() const override
