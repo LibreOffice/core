@@ -1504,7 +1504,7 @@ void SvxNumberFormatTabPage::EditHdl_Impl(const weld::Entry* pEdFormat)
                 if (nTmpCurPos != sal_uInt16(-1))
                     set_active_currency(nTmpCurPos);
             }
-            short nPosi=pNumFmtShell->GetListPos4Entry( nCurKey);
+            short nPosi=pNumFmtShell->GetListPos4Entry( nCurKey, aFormat);
             if(nPosi>=0)
                 m_xLbFormat->select(static_cast<sal_uInt16>(nPosi));
 

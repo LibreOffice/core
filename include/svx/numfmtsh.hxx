@@ -165,7 +165,7 @@ public:
     sal_uInt16          FindCurrencyFormat( const OUString& rFmtString );
     sal_uInt16          FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,bool bTmpBanking);
     void                SetCurCurrencyEntry(NfCurrencyEntry*);
-    short               GetListPos4Entry(sal_uInt32 nIdx);
+    short               GetListPos4Entry( sal_uInt32 nIdx, const OUString& rFmtString );
 
     void                GetCurrencySymbols(std::vector<OUString>& rList, sal_uInt16* pPos );
 
