@@ -995,7 +995,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScSubTotalDescriptorBase \
     qadevOOo/tests/java/mod/_sc/ScTableColumnObj \
     qadevOOo/tests/java/mod/_sc/ScTableColumnsObj \
-    qadevOOo/tests/java/mod/_sc/ScTableConditionalFormat \
     qadevOOo/tests/java/mod/_sc/ScTableRowObj \
     qadevOOo/tests/java/mod/_sc/ScTableSheetObj \
     qadevOOo/tests/java/mod/_sc/ScTableSheetsObj \

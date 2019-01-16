@@ -93,7 +93,6 @@ job131=sc.ScStyleFamilyObj
 job132=sc.ScStyleObj
 job134=sc.ScTableColumnObj
 job135=sc.ScTableColumnsObj
-job137=sc.ScTableConditionalFormat
 job138=sc.ScTableRowObj
 job139=sc.ScTableValidationObj
 job140=sc.XMLContentExporter
