@@ -692,7 +692,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     // Font table
     WriteFonts();
 
-    m_pStyles.reset(new MSWordStyles(*this));
+    m_pStyles = std::make_unique<MSWordStyles>(*this);
     // Color and stylesheet table
     WriteStyles();
 
@@ -1057,7 +1057,7 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, SwPaM* pCurrent
     m_pSdrExport = o3tl::make_unique<RtfSdrExport>(*this);
 
     if (!m_pWriter)
-        m_pWriter = &m_pFilter->m_aWriter;
+        m_pWriter = &m_pFilter->GetWriter();
 }
 
 RtfExport::~RtfExport() = default;
