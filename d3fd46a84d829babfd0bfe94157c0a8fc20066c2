@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_9d17d3ee",
+        "filename": "external/poppler/UnpackedTarball_poppler.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-16T21:09:58Z",
+      "side": 1,
+      "message": "on macOS, sed would need to be called with something like LC_ALL\u003dC (overriding the typical LANG\u003d*.UTF-8) because e.g. splash/SplashBitmap.cc in poppler-0.73.0.tar.xz contains the single byte 0xE4 (apparently representing ISO 8859-1 \"ä\" in \"Christian Feuersänger\") which is not a valid UTF-8 sequence, causing the somewhat cryptic \"sed: RE error: illegal byte sequence\" error message",
+      "revId": "d3fd46a84d829babfd0bfe94157c0a8fc20066c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
