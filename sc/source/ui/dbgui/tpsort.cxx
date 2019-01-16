@@ -440,10 +440,8 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, weld::ComboBox&, rLb, void )
     }
 
     // Find selected listbox
-    for ( pIter = m_aSortWin.m_aSortKeyItems.begin(); pIter != m_aSortWin.m_aSortKeyItems.end(); ++pIter )
-    {
-        if ( (*pIter)->m_xLbSort.get() == &rLb ) break;
-    }
+    pIter = std::find_if(m_aSortWin.m_aSortKeyItems.begin(), m_aSortWin.m_aSortKeyItems.end(),
+        [&rLb](const ScSortKeyItems::value_type& rItem) { return rItem->m_xLbSort.get() == &rLb; });
 
     if (pIter == m_aSortWin.m_aSortKeyItems.end())
         return;

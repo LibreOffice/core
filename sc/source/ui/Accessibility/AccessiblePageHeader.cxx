@@ -227,20 +227,20 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChil
     if(mnChildCount < 0)
         getAccessibleChildCount();
 
-    auto aItr = maAreas.begin();
-    auto aEndItr = maAreas.end();
-    while (!xRet.is() && (nIndex >= 0) && (aItr != aEndItr))
-    {
-        if (aItr->is())
+    if (nIndex >= 0)
+        for (const auto& rxArea : maAreas)
         {
-            if (nIndex == 0)
-                xRet = aItr->get();
-            else
-                --nIndex;
+            if (rxArea.is())
+            {
+                if (nIndex == 0)
+                {
+                    xRet = rxArea.get();
+                    break;
+                }
+                else
+                    --nIndex;
+            }
         }
-        else
-            ++aItr;
-    }
 
     if ( !xRet.is() )
         throw lang::IndexOutOfBoundsException();

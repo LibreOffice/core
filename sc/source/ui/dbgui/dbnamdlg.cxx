@@ -344,9 +344,8 @@ void ScDbNameDlg::UpdateNames()
 
     if (!rDBs.empty())
     {
-        DBsType::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-        for (; itr != itrEnd; ++itr)
-            m_pEdName->InsertEntry((*itr)->GetName());
+        for (const auto& rxDB : rDBs)
+            m_pEdName->InsertEntry(rxDB->GetName());
     }
     else
     {

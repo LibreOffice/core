@@ -163,15 +163,14 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         pLbFilterArea->Clear();
         pLbFilterArea->InsertEntry( aStrUndefined, 0 );
 
-        ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
-        for (; itr != itrEnd; ++itr)
+        for (const auto& rEntry : *pRangeNames)
         {
-            if (!itr->second->HasType(ScRangeData::Type::Criteria))
+            if (!rEntry.second->HasType(ScRangeData::Type::Criteria))
                 continue;
 
-            const sal_Int32 nInsert = pLbFilterArea->InsertEntry(itr->second->GetName());
+            const sal_Int32 nInsert = pLbFilterArea->InsertEntry(rEntry.second->GetName());
             OUString aSymbol;
-            itr->second->GetSymbol(aSymbol);
+            rEntry.second->GetSymbol(aSymbol);
             pLbFilterArea->SetEntryData(nInsert, new OUString(aSymbol));
         }
 

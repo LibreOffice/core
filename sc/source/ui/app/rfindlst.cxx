@@ -35,12 +35,8 @@ ScRangeFindList::ScRangeFindList(const OUString& rName) :
 
 Color ScRangeFindList::Insert( const ScRangeFindData &rNew )
 {
-    std::vector<ScRangeFindData>::iterator it=maEntries.begin();
-    for( ; it!=maEntries.end(); ++it)
-    {
-        if(it->aRef == rNew.aRef)
-            break;
-    }
+    auto it = std::find_if(maEntries.begin(), maEntries.end(),
+        [&rNew](const ScRangeFindData& rEntry) { return rEntry.aRef == rNew.aRef; });
     ScRangeFindData insertData(rNew);
     insertData.nColor = ( it != maEntries.end() ? it->nColor :
                               ScRangeFindList::GetColorName( maEntries.size() ) );
