@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_928d827d",
+        "filename": "include/vcl/winscheduler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-16T12:05:11Z",
+      "side": 1,
+      "message": "what\u0027s the point of a struct with no members?",
+      "revId": "19d19a53dd6b14207bcf345042226aab9da2821e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
