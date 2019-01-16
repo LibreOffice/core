@@ -1327,24 +1327,39 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
  * Input:      Number of the entry
  * Output:     Category number
  */
-short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
+short SvxNumberFormatShell::GetListPos4Entry( sal_uInt32 nIdx, const OUString& rFmtString )
 {
     short nSelP = SELPOS_NONE;
-    // Check list size against return type limit.
-    if (aCurEntryList.size() <= static_cast<size_t>(::std::numeric_limits<short>::max()))
+    if (nIdx != NUMBERFORMAT_ENTRY_NEW_CURRENCY)
     {
-        for (size_t i = 0; i < aCurEntryList.size(); ++i)
+        // Check list size against return type limit.
+        if (aCurEntryList.size() <= static_cast<size_t>(::std::numeric_limits<short>::max()))
         {
-            if (aCurEntryList[i] == nIdx)
+            for (size_t i = 0; i < aCurEntryList.size(); ++i)
             {
-                nSelP = i;
-                break;
+                if (aCurEntryList[i] == nIdx)
+                {
+                    nSelP = i;
+                    break;
+                }
             }
+        }
+        else
+        {
+            OSL_FAIL("svx::SvxNumberFormatShell::GetListPos4Entry(), list got too large!");
         }
     }
     else
     {
-        OSL_FAIL("svx::SvxNumberFormatShell::GetListPos4Entry(), list got too large!");
+        // A second list holds the generated currency formats.
+        for (size_t i = 0; i < aCurrencyFormatList.size(); ++i)
+        {
+            if (rFmtString == aCurrencyFormatList[i])
+            {
+                nSelP = static_cast<short>(i);
+                break;
+            }
+        }
     }
     return nSelP;
 }
