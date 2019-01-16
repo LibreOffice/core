@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_f23dd62c",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-16T15:07:18Z",
+      "side": 1,
+      "message": "this looks like a no-op to me? is the pWorkShell\u0027s doc ever frozen? ... is the pWorkShell ever the same as pTargetShell? apparently not, because pWorkShell comes from the call in line 1494?",
+      "revId": "311f10d2160b05ca62ee0764ad5873c9f69c9234",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
