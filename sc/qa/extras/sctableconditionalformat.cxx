@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xnameaccess.hxx>
 #include <test/sheet/xsheetconditionalentries.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -22,12 +23,12 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #include <unonames.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -37,6 +38,7 @@ namespace sc_apitest
 {
 class ScTableConditionalFormat : public CalcUnoApiTest,
                                  public apitest::XEnumerationAccess,
+                                 public apitest::XNameAccess,
                                  public apitest::XSheetConditionalEntries
 {
 public:
@@ -52,6 +54,11 @@ public:
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
+    // XNameAccess
+    CPPUNIT_TEST(testGetByName);
+    CPPUNIT_TEST(testGetElementNames);
+    CPPUNIT_TEST(testHasByName);
+
     // XSheetConditionalEntries
     CPPUNIT_TEST(testAddNew);
     CPPUNIT_TEST(testClear);
@@ -65,6 +72,7 @@ private:
 
 ScTableConditionalFormat::ScTableConditionalFormat()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XNameAccess("Entry1")
 {
 }
 
