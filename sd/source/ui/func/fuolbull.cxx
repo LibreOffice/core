@@ -95,20 +95,23 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
     std::shared_ptr<SfxRequest> xRequest(new SfxRequest(rReq));
     rReq.Ignore(); // the 'old' request is not relevant any more
 
-    pDlg->StartExecuteAsync([this, pDlg, xRequest](sal_Int32 nResult){
+    // do not capture this, because this will go way before the dialog finishes executing
+    auto pView = mpView;
+    auto pViewShell = mpViewShell;
+    pDlg->StartExecuteAsync([pView, pViewShell, pDlg, xRequest](sal_Int32 nResult){
 
         if( nResult == RET_OK )
         {
             SfxItemSet aSet( *pDlg->GetOutputItemSet() );
 
-            OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+            OutlinerView* pOLV = pView->GetTextEditOutlinerView();
 
             std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
 
-            if (OutlineView* pView = dynamic_cast<OutlineView*>(mpView))
+            if (OutlineView* pOutlineView = dynamic_cast<OutlineView*>(pView))
             {
-                pOLV = pView->GetViewByWindow(mpViewShell->GetActiveWindow());
-                aGuard.reset(new OutlineViewModelChangeGuard(*pView));
+                pOLV = pOutlineView->GetViewByWindow(pViewShell->GetActiveWindow());
+                aGuard.reset(new OutlineViewModelChangeGuard(*pOutlineView));
             }
 
             if( pOLV )
@@ -118,7 +121,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
             /* not direct to pOlView; therefore, SdDrawView::SetAttributes can catch
                changes to master page and redirect to a template */
-            mpView->SetAttributes(*xRequest->GetArgs());
+            pView->SetAttributes(*xRequest->GetArgs());
         }
         pDlg->disposeOnce();
     });
