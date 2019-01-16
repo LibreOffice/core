@@ -321,7 +321,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal
         pStr = getenv("HOME");
 #endif
 
-        if (pStr != nullptr && strlen(pStr) > 0 && access(pStr, 0) == 0)
+        if (pStr != nullptr && pStr[0] != '\0' && access(pStr, 0) == 0)
         {
             strncpy(pszDirectory, pStr, nMax);
             return true;
@@ -378,7 +378,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, s
 {
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
 
-    if (pStr == nullptr || strlen(pStr) == 0 || access(pStr, 0) != 0)
+    if (pStr == nullptr || pStr[0] == '\0' || access(pStr, 0) != 0)
     {
         std::size_t n = 0;
 

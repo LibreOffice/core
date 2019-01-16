@@ -210,7 +210,7 @@ void Test::testMetaGenerator()
 
         SvXMLMetaDocumentContext::setBuildId(
                 OUString::createFromAscii(tests[i].generator), xInfoSet);
-        if (std::strlen(tests[i].buildId) != 0)
+        if (tests[i].buildId[0] != '\0')
         {
             CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(tests[i].buildId),
                     xInfoSet->getPropertyValue("BuildId").get<OUString>());

@@ -157,7 +157,7 @@ static EContactAddress *
 getDefaultContactAddress( EContact *pContact,int *value )
 {
     EContactAddress *ec = static_cast<EContactAddress *>(e_contact_get(pContact,whichAddress(WORK_ADDR_LINE1)));
-    if ( ec && (strlen(ec->street)>0) )
+    if ( ec && (ec->street[0]!='\0') )
     {
         *value= *value +WORK_ADDR_LINE1 -1;
         return ec;
@@ -165,7 +165,7 @@ getDefaultContactAddress( EContact *pContact,int *value )
     else
         {
             ec = static_cast<EContactAddress *>(e_contact_get(pContact,whichAddress(HOME_ADDR_LINE1)));
-            if ( ec && (strlen(ec->street)>0) )
+            if ( ec && (ec->street[0]!='\0') )
             {
                 *value=*value+HOME_ADDR_LINE1-1;
                 return ec;

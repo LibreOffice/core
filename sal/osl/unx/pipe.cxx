@@ -392,7 +392,7 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
         SAL_WARN("sal.osl.pipe", "close() failed: " << UnixErrnoString(errno));
 
     /* remove filesystem entry */
-    if (strlen(pPipe->m_Name) > 0)
+    if (pPipe->m_Name[0] != '\0')
         unlink(pPipe->m_Name);
 
     pPipe->m_bClosed = true;
@@ -407,7 +407,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     if (!pPipe)
         return nullptr;
 
-    assert(strlen(pPipe->m_Name) > 0);  // you cannot have an empty pipe name
+    assert(pPipe->m_Name[0] != '\0');  // you cannot have an empty pipe name
 
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pPipe->m_bIsAccepting = true;
