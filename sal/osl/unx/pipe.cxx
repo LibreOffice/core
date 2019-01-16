@@ -38,9 +38,6 @@
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
 
-#define PIPENAMEMASK        "OSL_PIPE_%s"
-#define SECPIPENAMEMASK     "OSL_PIPE_%s_%s"
-
 static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
 static struct
@@ -147,53 +144,35 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
     size_t len;
     struct sockaddr_un addr;
 
-    sal_Char name[PATH_MAX+1];
-    size_t nNameLength = 0;
-    bool bNameTooLong = false;
+    OString name;
     oslPipe pPipe;
 
     if (access(PIPEDEFAULTPATH, W_OK) == 0)
-        strncpy(name, PIPEDEFAULTPATH, sizeof(name));
+        name = PIPEDEFAULTPATH;
     else if (access(PIPEALTERNATEPATH, W_OK) == 0)
-        strncpy(name, PIPEALTERNATEPATH, sizeof(name));
+        name = PIPEALTERNATEPATH;
     else {
-        auto const path = getBootstrapSocketPath ();
-        if (path.isEmpty() || sal_uInt32(path.getLength()) > sizeof(name) - 1) {
-            return nullptr;
-        }
-        std::memcpy(name, path.getStr(), sal_uInt32(path.getLength()) + 1);
+        name = getBootstrapSocketPath ();
     }
 
-    name[sizeof(name)-1] = '\0';  // ensure the string is NULL-terminated
-    nNameLength = strlen(name);
-    bNameTooLong = nNameLength > sizeof(name) - 2;
+    name += "/";
 
-    if (!bNameTooLong)
+    if (Security)
     {
-        size_t nRealLength = 0;
+        sal_Char Ident[256];
 
-        strcat(name, "/");
-        ++nNameLength;
+        Ident[0] = '\0';
 
-        if (Security)
-        {
-            sal_Char Ident[256];
+        OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
 
-            Ident[0] = '\0';
-
-            OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
-
-            nRealLength = snprintf(&name[nNameLength], sizeof(name) - nNameLength, SECPIPENAMEMASK, Ident, pszPipeName);
-        }
-        else
-        {
-            nRealLength = snprintf(&name[nNameLength], sizeof(name) - nNameLength, PIPENAMEMASK, pszPipeName);
-        }
-
-        bNameTooLong = nRealLength > sizeof(name) - nNameLength - 1;
+        name += OStringLiteral("OSL_PIPE_") + Ident + "_" + pszPipeName;
+    }
+    else
+    {
+        name += OStringLiteral("OSL_PIPE_") + pszPipeName;
     }
 
-    if (bNameTooLong)
+    if (sal_uInt32(name.getLength()) >= sizeof addr.sun_path)
     {
         SAL_WARN("sal.osl.pipe", "osl_createPipe: pipe name too long");
         return nullptr;
@@ -229,7 +208,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
     SAL_INFO("sal.osl.pipe", "new pipe on fd " << pPipe->m_Socket << " '" << name << "'");
 
     addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, name, sizeof(addr.sun_path) - 1);
+    strcpy(addr.sun_path, name.getStr()); // safe, see check above
 #if defined(FREEBSD)
     len = SUN_LEN(&addr);
 #else
@@ -241,7 +220,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
         struct stat status;
 
         /* check if there exists an orphan filesystem entry */
-        if ((stat(name, &status) == 0) &&
+        if ((stat(name.getStr(), &status) == 0) &&
             (S_ISSOCK(status.st_mode) || S_ISFIFO(status.st_mode)))
         {
             if (connect(pPipe->m_Socket, reinterpret_cast< sockaddr* >(&addr), len) >= 0)
@@ -251,7 +230,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
                 return nullptr;
             }
 
-            unlink(name);
+            unlink(name.getStr());
         }
 
         /* ok, fs clean */
@@ -267,9 +246,9 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
             depends on umask */
 
         if (!Security)
-            chmod(name,S_IRWXU | S_IRWXG |S_IRWXO);
+            chmod(name.getStr(),S_IRWXU | S_IRWXG |S_IRWXO);
 
-        strncpy(pPipe->m_Name, name, sizeof(pPipe->m_Name) - 1);
+        strcpy(pPipe->m_Name, name.getStr()); // safe, see check above
 
         if (listen(pPipe->m_Socket, 5) < 0)
         {
@@ -279,7 +258,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
             // unrelated, as it would fail if name existed at that point in
             // time:
             // coverity[toctou] - this is bogus
-            unlink(name);   /* remove filesystem entry */
+            unlink(name.getStr());   /* remove filesystem entry */
             close(pPipe->m_Socket);
             destroyPipeImpl(pPipe);
             return nullptr;
@@ -289,7 +268,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
     }
 
     /* osl_pipe_OPEN */
-    if (access(name, F_OK) != -1)
+    if (access(name.getStr(), F_OK) != -1)
     {
         if (connect(pPipe->m_Socket, reinterpret_cast< sockaddr* >(&addr), len) >= 0)
             return pPipe;
@@ -357,7 +336,7 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
         SAL_INFO("sal.osl.pipe", "osl_destroyPipe : Pipe Name '" << pPipe->m_Name << "'");
 
         addr.sun_family = AF_UNIX;
-        strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path) - 1);
+        strcpy(addr.sun_path, pPipe->m_Name); // safe, as both are same size
 
         nRet = connect(fd, reinterpret_cast< sockaddr* >(&addr), sizeof(addr));
         if (nRet < 0)
