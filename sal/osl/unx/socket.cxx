@@ -278,9 +278,6 @@ static oslSocketAddr osl_psz_resolveHostname (
 static sal_Int32 osl_psz_getServicePort (
     const sal_Char* pszServicename, const sal_Char* pszProtocol);
 
-static oslSocketResult osl_psz_getHostnameOfSocketAddr (
-    oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
-
 static oslSocketResult osl_psz_getDottedInetAddrOfSocketAddr (
     oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
 
@@ -1097,36 +1094,18 @@ sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(oslSocketAddr pAddr, sal_Int32 Por
 
 oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrHostname)
 {
-    oslSocketResult Result;
-    sal_Char pszHostname[1024];
+    oslHostAddr pHostAddr= osl_createHostAddrByAddr(Addr);
 
-    pszHostname[0] = '\0';
-
-    Result = osl_psz_getHostnameOfSocketAddr(Addr,pszHostname,sizeof(pszHostname));
-    if (Result == osl_Socket_Ok)
+    if (!pHostAddr)
     {
-        rtl_uString_newFromAscii(ustrHostname,pszHostname);
+        return osl_Socket_Error;
     }
 
-    return Result;
-}
+    rtl_uString_newFromAscii(ustrHostname,pHostAddr->pHostName);
 
-oslSocketResult osl_psz_getHostnameOfSocketAddr(oslSocketAddr pAddr,
-                                            sal_Char *pBuffer, sal_uInt32 BufferSize)
-{
-    oslHostAddr pHostAddr= osl_createHostAddrByAddr(pAddr);
+    osl_destroyHostAddr(pHostAddr);
 
-    if (pHostAddr)
-    {
-        strncpy(pBuffer, pHostAddr->pHostName, BufferSize);
-        pBuffer[BufferSize - 1] = '\0';
-
-        osl_destroyHostAddr(pHostAddr);
-
-        return osl_Socket_Ok;
-    }
-
-    return osl_Socket_Error;
+    return osl_Socket_Ok;
 }
 
 oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **ustrDottedInetAddr)
