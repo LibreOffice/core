@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
@@ -31,6 +32,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <cppu/unotype.hxx>
+
 using namespace css;
 using namespace css::uno;
 using namespace com::sun::star;
@@ -38,6 +41,7 @@ using namespace com::sun::star;
 namespace sc_apitest
 {
 class ScTableConditionalFormat : public CalcUnoApiTest,
+                                 public apitest::XElementAccess,
                                  public apitest::XEnumerationAccess,
                                  public apitest::XIndexAccess,
                                  public apitest::XNameAccess,
@@ -52,6 +56,10 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableConditionalFormat);
+
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -78,6 +86,7 @@ private:
 
 ScTableConditionalFormat::ScTableConditionalFormat()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XElementAccess(cppu::UnoType<sheet::XSheetConditionalEntry>::get())
     , XIndexAccess(2)
     , XNameAccess("Entry1")
 {
