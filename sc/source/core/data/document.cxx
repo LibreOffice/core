@@ -5582,7 +5582,7 @@ void ScDocument::ExtendTotalMerge( ScRange& rRange ) const
 {
     // Extend range to merged cells without including any new non-overlapped cells
     ScRange aExt = rRange;
-    // ExtendMerge() is non-const, but called withouth refresh.
+    // ExtendMerge() is non-const, but called without refresh.
     if (const_cast<ScDocument*>(this)->ExtendMerge( aExt ))
     {
         if ( aExt.aEnd.Row() > rRange.aEnd.Row() )
