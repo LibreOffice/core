@@ -44,7 +44,6 @@
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <rtl/strbuf.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <autocdlg.hxx>
 #include <editeng/acorrcfg.hxx>

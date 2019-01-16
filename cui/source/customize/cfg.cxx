@@ -65,7 +65,6 @@
 #include <dialmgr.hxx>
 
 #include <unotools/configmgr.hxx>
-#include <o3tl/make_unique.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
@@ -1742,7 +1741,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
              pNewEntryData->GetStyle() & css::ui::ItemStyle::DROP_DOWN )
         {
             // add new popup painter, it gets destructed by the entry
-            pNewEntry->ReplaceItem( o3tl::make_unique<PopupPainter>(aName), pNewEntry->ItemCount() - 1 );
+            pNewEntry->ReplaceItem( std::make_unique<PopupPainter>(aName), pNewEntry->ItemCount() - 1 );
         }
     }
 

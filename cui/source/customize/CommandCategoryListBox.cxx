@@ -41,7 +41,6 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <comphelper/sequenceashashmap.hxx>
-#include <o3tl/make_unique.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <sal/log.hxx>
 
@@ -142,7 +141,7 @@ void CommandCategoryListBox::Init(
         {
             // Add the category of "All commands"
             nEntryPos = InsertEntry( CuiResId(RID_SVXSTR_ALLFUNCTIONS) );
-            m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_ALLFUNCTIONS, 0 ) );
+            m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_ALLFUNCTIONS, 0 ) );
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
@@ -169,7 +168,7 @@ void CommandCategoryListBox::Init(
 
             nEntryPos = InsertEntry( sGroupName );
             m_aGroupInfo.push_back(
-              o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
+              std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
@@ -183,7 +182,7 @@ void CommandCategoryListBox::Init(
         OUString sMacros( CuiResId(RID_SVXSTR_MACROS) );
         nEntryPos = InsertEntry( sMacros );
         m_aGroupInfo.push_back(
-            o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr) );
+            std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr) );
         SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
 
         // Add styles category
@@ -191,7 +190,7 @@ void CommandCategoryListBox::Init(
         nEntryPos = InsertEntry( sStyle );
         //TODO: last param should contain user data?
         m_aGroupInfo.push_back(
-            o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) );
+            std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) );
         SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
     }
     catch(const css::uno::RuntimeException&)
@@ -239,7 +238,7 @@ void CommandCategoryListBox::FillFunctionsList(
 
         SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(sUIName, aImage, aImage );
 
-        m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
+        m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
         SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel   = sUIName;
@@ -345,7 +344,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                 rootNode->acquire();
 
                 m_aGroupInfo.push_back(
-                    o3tl::make_unique<SfxGroupInfo_Impl>(
+                    std::make_unique<SfxGroupInfo_Impl>(
                         SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void *>(rootNode.get()) ) );
 
                 // Add main macro groups
@@ -376,7 +375,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
 
                         SvTreeListEntry* pMacroGroup = pFunctionListBox->InsertEntry( sUIName );
                         m_aGroupInfo.push_back(
-                            o3tl::make_unique<SfxGroupInfo_Impl>(
+                            std::make_unique<SfxGroupInfo_Impl>(
                                 SfxCfgKind::GROUP_SCRIPTCONTAINER, 0 ) );
                         SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
                         pMacroGroup->SetUserData(pGrpInfo);
@@ -413,7 +412,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
 
                 SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry( pIt.sLabel ); // Name of the style family
 
-                m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0 ) );
+                m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0 ) );
                 SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
                 pFuncEntry->SetUserData(pGrpInfo);
                 pFuncEntry->EnableChildrenOnDemand();
@@ -444,7 +443,7 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
                                 sUIName, pFuncEntry );
 
                     m_aGroupInfo.push_back(
-                                o3tl::make_unique<SfxGroupInfo_Impl>(
+                                std::make_unique<SfxGroupInfo_Impl>(
                                     SfxCfgKind::GROUP_STYLES, 0, pStyle ) );
 
                     m_aGroupInfo.back()->sCommand = pStyle->sCommand;
@@ -501,7 +500,7 @@ void CommandCategoryListBox::addChildren(
 
             SvTreeListEntry* pNewEntry = pFunctionListBox->InsertEntry( sUIName, parentEntry );
 
-            m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
+            m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
                                                                          0, static_cast<void *>( child.get())));
             pNewEntry->SetUserData( m_aGroupInfo.back().get() );
             pNewEntry->EnableChildrenOnDemand();
@@ -563,7 +562,7 @@ void CommandCategoryListBox::addChildren(
 
             SvTreeListEntry* pNewEntry = pFunctionListBox->InsertEntry( sUIName, aImage, aImage, parentEntry );
 
-            m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
+            m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
             m_aGroupInfo.back()->sCommand = uri;
             m_aGroupInfo.back()->sLabel = sUIName;
             m_aGroupInfo.back()->sHelpText = description;

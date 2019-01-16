@@ -65,7 +65,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/vclmedit.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -520,7 +519,7 @@ void SfxConfigGroupListBox::InitModule()
         {
             // Add All Commands category
             SvTreeListEntry* pEntry = InsertEntry( CuiResId(RID_SVXSTR_ALLFUNCTIONS) );
-            aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_ALLFUNCTIONS, 0 ) );
+            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_ALLFUNCTIONS, 0 ) );
             pEntry->SetUserData(aArr.back().get());
         }
 
@@ -540,7 +539,7 @@ void SfxConfigGroupListBox::InitModule()
                 { continue; }
 
             SvTreeListEntry*        pEntry = InsertEntry(sGroupName);
-            aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
+            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
             pEntry->SetUserData(aArr.back().get());
         }
     }
@@ -674,7 +673,7 @@ void SfxConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                     SetExpandedEntryBmp(  pNewEntry, aImage );
                     SetCollapsedEntryBmp( pNewEntry, aImage );
 
-                    aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
+                    aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
                             0, static_cast<void *>( theChild.get())));
 
                     pNewEntry->SetUserData( aArr.back().get() );
@@ -716,7 +715,7 @@ void SfxConfigGroupListBox::FillFunctionsList(const css::uno::Sequence<DispatchI
     {
         OUString sUIName = MapCommand2UIName(rInfo.Command);
         SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(sUIName );
-        aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
+        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
         SfxGroupInfo_Impl* pGrpInfo = aArr.back().get();
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel   = sUIName;
@@ -767,7 +766,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                 //get autodestructed and become invalid when accessed later.
             rootNode->acquire();
 
-            aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
+            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
                     static_cast<void *>(rootNode.get())));
             OUString aTitle(xImp->m_sDlgMacros);
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle );
@@ -787,7 +786,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     {
         OUString sStyle(xImp->m_aStrGroupStyles);
         SvTreeListEntry *pEntry = InsertEntry( sStyle );
-        aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
+        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
         pEntry->SetUserData( aArr.back().get() );
         pEntry->EnableChildrenOnDemand();
     }
@@ -1007,7 +1006,7 @@ void SfxConfigGroupListBox::GroupSelected()
                                 pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
                                 pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage );
 
-                                pFunctionListBox->aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
+                                pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
                                 pFunctionListBox->aArr.back()->sCommand = uri;
                                 pFunctionListBox->aArr.back()->sLabel = children[n]->getName();
                                 pFunctionListBox->aArr.back()->sHelpText = description;
@@ -1033,7 +1032,7 @@ void SfxConfigGroupListBox::GroupSelected()
                 {
                     SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(lStyle);
                     SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry( pStyle->sLabel );
-                    pFunctionListBox->aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pStyle ) );
+                    pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pStyle ) );
                     pFunctionListBox->aArr.back()->sCommand = pStyle->sCommand;
                     pFunctionListBox->aArr.back()->sLabel = pStyle->sLabel;
                     pFuncEntry->SetUserData( pFunctionListBox->aArr.back().get() );
@@ -1113,7 +1112,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                 {
                     SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(lStyleFamily);
                     SvTreeListEntry* pStyleEntry = InsertEntry( pFamily->sLabel, pEntry );
-                    aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
+                    aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
                     pStyleEntry->SetUserData( aArr.back().get() );
                     pStyleEntry->EnableChildrenOnDemand( false );
                 }
@@ -1259,7 +1258,7 @@ void CuiConfigGroupListBox::InitModule()
         if ( c1 )
         {
             // Add All Commands category
-            aArr.push_back(o3tl::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
+            aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
             m_xTreeView->append(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())),
                                 CuiResId(RID_SVXSTR_ALLFUNCTIONS));
         }
@@ -1279,7 +1278,7 @@ void CuiConfigGroupListBox::InitModule()
             catch(const css::container::NoSuchElementException&)
                 { continue; }
 
-            aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
+            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, rGroupID ) );
             m_xTreeView->append(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())),
                                 sGroupName);
         }
@@ -1380,7 +1379,7 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
 
                     OUString aImage = GetImage(theChild, m_xContext, bIsRootNode);
 
-                    aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
+                    aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
                             0, static_cast<void *>( theChild.get())));
 
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
@@ -1399,7 +1398,7 @@ void CuiConfigGroupListBox::FillFunctionsList(const css::uno::Sequence<DispatchI
     for (const auto & rInfo : xCommands)
     {
         OUString sUIName = MapCommand2UIName(rInfo.Command);
-        aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
+        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
         SfxGroupInfo_Impl* pGrpInfo = aArr.back().get();
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel   = sUIName;
@@ -1450,7 +1449,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                 //get autodestructed and become invalid when accessed later.
             rootNode->acquire();
 
-            aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
+            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
                     static_cast<void *>(rootNode.get())));
             OUString aTitle(xImp->m_sDlgMacros);
             OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
@@ -1467,7 +1466,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     // add styles
     if ( bEventMode )
     {
-        aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
+        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
         OUString sStyle(xImp->m_aStrGroupStyles);
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
         m_xTreeView->insert(nullptr, -1, &sStyle, &sId, nullptr, nullptr, nullptr, true);
@@ -1684,7 +1683,7 @@ void CuiConfigGroupListBox::GroupSelected()
                                 OUString* pScriptURI = new OUString( uri );
 
                                 OUString aImage = GetImage(children[n], Reference< XComponentContext >(), false);
-                                m_pFunctionListBox->aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
+                                m_pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
                                 m_pFunctionListBox->aArr.back()->sCommand = uri;
                                 m_pFunctionListBox->aArr.back()->sLabel = children[n]->getName();
                                 m_pFunctionListBox->aArr.back()->sHelpText = description;
@@ -1711,7 +1710,7 @@ void CuiConfigGroupListBox::GroupSelected()
                 for (auto const& lStyle : lStyles)
                 {
                     SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(lStyle);
-                    m_pFunctionListBox->aArr.push_back(o3tl::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, pStyle));
+                    m_pFunctionListBox->aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, pStyle));
                     m_pFunctionListBox->aArr.back()->sCommand = pStyle->sCommand;
                     m_pFunctionListBox->aArr.back()->sLabel = pStyle->sLabel;
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_pFunctionListBox->aArr.back().get())));
@@ -1760,7 +1759,7 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, weld::TreeIter&, rIter, bool)
                 for (auto const& lStyleFamily : lStyleFamilies)
                 {
                     SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(lStyleFamily);
-                    aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
+                    aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
                     m_xTreeView->insert(&rIter, -1, &pFamily->sLabel, &sId, nullptr, nullptr, nullptr, false);
                 }

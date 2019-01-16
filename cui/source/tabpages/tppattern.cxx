@@ -49,8 +49,6 @@
 #include <sfx2/opengrf.hxx>
 #include <sal/log.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 using namespace com::sun::star;
 
 /*************************************************************************
@@ -436,7 +434,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
         const BitmapEx aBitmapEx(m_xBitmapCtl->GetBitmapEx());
 
         // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
-        m_pPatternList->Replace(o3tl::make_unique<XBitmapEntry>(Graphic(aBitmapEx), aName), nPos);
+        m_pPatternList->Replace(std::make_unique<XBitmapEntry>(Graphic(aBitmapEx), aName), nPos);
 
         BitmapEx aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_xPatternLB->GetIconSize() );
         m_xPatternLB->RemoveItem(nId);

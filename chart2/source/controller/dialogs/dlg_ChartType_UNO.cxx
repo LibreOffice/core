@@ -23,7 +23,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-#include <o3tl/make_unique.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 
@@ -74,7 +73,7 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
 }
 svt::OGenericUnoDialog::Dialog ChartTypeUnoDlg::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(o3tl::make_unique<ChartTypeDialog>(Application::GetFrameWeld(rParent), m_xChartModel));
+    return svt::OGenericUnoDialog::Dialog(std::make_unique<ChartTypeDialog>(Application::GetFrameWeld(rParent), m_xChartModel));
 }
 uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySetInfo()
 {

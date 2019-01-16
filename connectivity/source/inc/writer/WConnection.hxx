@@ -25,7 +25,6 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <unotools/closeveto.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace com
 {
@@ -81,7 +80,7 @@ class OWriterConnection : public file::OConnection
         {
             m_xDesktop = rDesktop;
             m_xDesktop->addTerminateListener(this);
-            m_pCloseListener = o3tl::make_unique<utl::CloseVeto>(rCloseable, true);
+            m_pCloseListener = std::make_unique<utl::CloseVeto>(rCloseable, true);
         }
 
         void stop()

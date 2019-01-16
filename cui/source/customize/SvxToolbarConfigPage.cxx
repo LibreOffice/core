@@ -63,7 +63,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
-#include <o3tl/make_unique.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
