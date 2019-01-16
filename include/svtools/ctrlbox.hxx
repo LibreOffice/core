@@ -421,6 +421,8 @@ class SVT_DLLPUBLIC SvtFontSizeBox
     FontMetric      aFontMetric;
     const FontList* pFontList;
     int             nSavedValue;
+    int             nMin;
+    int             nMax;
     FieldUnit       eUnit;
     sal_uInt16      nDecimalDigits;
     sal_uInt16      nRelMin;
@@ -440,6 +442,7 @@ class SVT_DLLPUBLIC SvtFontSizeBox
     void SetDecimalDigits(sal_uInt16 nDigits) { nDecimalDigits = nDigits; }
     FieldUnit GetUnit() const { return eUnit; }
     void SetUnit(FieldUnit _eUnit) { eUnit = _eUnit; }
+    void SetRange(int nNewMin, int nNewMax) { nMin = nNewMin; nMax = nNewMax; }
     void SetValue(int nNewValue, FieldUnit eInUnit);
 
     void InsertValue(int i);
