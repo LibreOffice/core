@@ -1401,6 +1401,8 @@ sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eO
 SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p)
     : pFontList(nullptr)
     , nSavedValue(0)
+    , nMin(20)
+    , nMax(9999)
     , eUnit(FieldUnit::POINT)
     , nDecimalDigits(1)
     , nRelMin(0)
@@ -1616,6 +1618,7 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
         if (bPtRelative)
         {
             SetDecimalDigits( 1 );
+            SetRange(nPtRelMin, nPtRelMax);
             SetUnit(FieldUnit::POINT);
 
             short i = nPtRelMin, n = 0;
@@ -1629,6 +1632,7 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
         else
         {
             SetDecimalDigits(0);
+            SetRange(nRelMin, nRelMax);
             SetUnit(FieldUnit::PERCENT);
 
             sal_uInt16 i = nRelMin;
@@ -1645,6 +1649,7 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
             m_xComboBox->clear();
         bRelative = bPtRelative = false;
         SetDecimalDigits(1);
+        SetRange(20, 9999);
         SetUnit(FieldUnit::POINT);
         if ( pFontList)
             Fill( &aFontMetric, pFontList );
@@ -1685,6 +1690,10 @@ OUString SvtFontSizeBox::format_number(int nValue) const
 void SvtFontSizeBox::SetValue(int nNewValue, FieldUnit eInUnit)
 {
     auto nTempValue = MetricField::ConvertValue(nNewValue, 0, GetDecimalDigits(), eInUnit, GetUnit());
+    if (nTempValue < nMin)
+        nTempValue = nMin;
+    else if (nTempValue > nMax)
+        nTempValue = nMax;
     if (!bRelative)
     {
         FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());
@@ -1725,6 +1734,13 @@ int SvtFontSizeBox::get_value() const
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
     double fResult(0.0);
     MetricFormatter::TextToValue(aStr, fResult, 0, GetDecimalDigits(), rLocaleData, GetUnit());
+    if (!aStr.isEmpty())
+    {
+        if (fResult < nMin)
+            fResult = nMin;
+        else if (fResult > nMax)
+            fResult = nMax;
+    }
     return fResult;
 }
 
