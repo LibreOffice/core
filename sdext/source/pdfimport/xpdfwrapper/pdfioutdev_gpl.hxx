@@ -282,7 +282,7 @@ typedef unsigned char Output_t;
 typedef std::vector< Output_t > OutputBuffer;
 
 #if !POPPLER_CHECK_VERSION(0, 73, 0)
-static_assert(std::is_same_v<Guchar, unsigned char>, "unexpected typedef");
+static_assert(std::is_same<Guchar, unsigned char>::value, "unexpected typedef");
 #endif
 
 #endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_XPDFWRAPPER_PDFIOUTDEV_GPL_HXX
