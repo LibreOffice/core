@@ -29,7 +29,6 @@
 
 #include <svtools/valueset.hxx>
 
-#include <o3tl/make_unique.hxx>
 #include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -656,24 +655,24 @@ ChartTypeTabPage::ChartTypeTabPage(TabPageParent pParent , const uno::Reference<
         }
     }
 
-    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<ColumnChartDialogController>());
-    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<BarChartDialogController>());
-    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<PieChartDialogController>());
-    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<AreaChartDialogController>());
-    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<LineChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(std::make_unique<ColumnChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(std::make_unique<BarChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(std::make_unique<PieChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(std::make_unique<AreaChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(std::make_unique<LineChartDialogController>());
     if (bEnableComplexChartTypes)
     {
-        m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<XYChartDialogController>());
+        m_aChartTypeDialogControllerList.push_back(std::make_unique<XYChartDialogController>());
         m_aChartTypeDialogControllerList.push_back(
-            o3tl::make_unique<BubbleChartDialogController>());
+            std::make_unique<BubbleChartDialogController>());
     }
-    m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<NetChartDialogController>());
+    m_aChartTypeDialogControllerList.push_back(std::make_unique<NetChartDialogController>());
     if (bEnableComplexChartTypes)
     {
-        m_aChartTypeDialogControllerList.push_back(o3tl::make_unique<StockChartDialogController>());
+        m_aChartTypeDialogControllerList.push_back(std::make_unique<StockChartDialogController>());
     }
     m_aChartTypeDialogControllerList.push_back(
-        o3tl::make_unique<CombiColumnLineChartDialogController>());
+        std::make_unique<CombiColumnLineChartDialogController>());
 
     for (auto const& elem : m_aChartTypeDialogControllerList)
     {

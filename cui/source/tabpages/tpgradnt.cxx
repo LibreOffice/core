@@ -43,8 +43,6 @@
 #include <svx/strings.hrc>
 #include <sal/log.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 #define DEFAULT_GRADIENTSTEP 64
 
 using namespace com::sun::star;
@@ -386,7 +384,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
                               static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
 
-        m_pGradientList->Insert(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nCount);
+        m_pGradientList->Insert(std::make_unique<XGradientEntry>(aXGradient, aName), nCount);
 
         sal_Int32 nId = m_xGradientLB->GetItemId(nCount - 1); //calculate the last ID
         BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( nCount, m_xGradientLB->GetIconSize() );
@@ -425,7 +423,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
                               static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
 
-        m_pGradientList->Replace(o3tl::make_unique<XGradientEntry>(aXGradient, aName), nPos);
+        m_pGradientList->Replace(std::make_unique<XGradientEntry>(aXGradient, aName), nPos);
 
         BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xGradientLB->GetIconSize() );
         m_xGradientLB->RemoveItem( nId );

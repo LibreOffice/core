@@ -61,7 +61,6 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -1867,7 +1866,7 @@ private:
         if (it == m_SeriesGroup.end())
         {
             std::pair<GroupMinMaxType::iterator,bool> r =
-                m_SeriesGroup.insert(std::make_pair(fX, o3tl::make_unique<SeriesMinMaxType>()));
+                m_SeriesGroup.insert(std::make_pair(fX, std::make_unique<SeriesMinMaxType>()));
 
             if (!r.second)
                 // insertion failed.
@@ -2622,9 +2621,9 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         pRet = new PieChart(xChartTypeModel,nDimensionCount, bExcludingPositioning );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-        pRet = new NetChart(xChartTypeModel,nDimensionCount,true,o3tl::make_unique<PolarPlottingPositionHelper>());
+        pRet = new NetChart(xChartTypeModel,nDimensionCount,true,std::make_unique<PolarPlottingPositionHelper>());
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
-        pRet = new NetChart(xChartTypeModel,nDimensionCount,false,o3tl::make_unique<PolarPlottingPositionHelper>());
+        pRet = new NetChart(xChartTypeModel,nDimensionCount,false,std::make_unique<PolarPlottingPositionHelper>());
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
         pRet = new CandleStickChart(xChartTypeModel,nDimensionCount);
     else

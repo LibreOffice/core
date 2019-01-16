@@ -23,7 +23,6 @@
 
 #include "ChartTransferable.hxx"
 
-#include <o3tl/make_unique.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
 #include <unotools/streamwrap.hxx>
@@ -52,7 +51,7 @@ ChartTransferable::ChartTransferable(
 :   m_pMarkedObjModel( nullptr )
     ,m_bDrawing( bDrawing )
 {
-    std::unique_ptr<SdrExchangeView> pExchgView(o3tl::make_unique<SdrView>( rSdrModel ));
+    std::unique_ptr<SdrExchangeView> pExchgView(std::make_unique<SdrView>( rSdrModel ));
     SdrPageView* pPv = pExchgView->ShowSdrPage( rSdrModel.GetPage( 0 ));
     if( pSelectedObj )
         pExchgView->MarkObj( pSelectedObj, pPv );

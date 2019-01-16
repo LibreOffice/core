@@ -75,7 +75,6 @@
 #include <editeng/optitems.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
-#include <o3tl/make_unique.hxx>
 #include <officecfg/Office/OptionsDialog.hxx>
 #include <osl/module.hxx>
 #include <osl/process.h>
@@ -999,7 +998,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
                 : CreateItemSet( pGroupInfo->m_nDialogId );
         if(!pGroupInfo->m_pOutItemSet)
-            pGroupInfo->m_pOutItemSet = o3tl::make_unique<SfxItemSet>(
+            pGroupInfo->m_pOutItemSet = std::make_unique<SfxItemSet>(
                 *pGroupInfo->m_pInItemSet->GetPool(),
                 pGroupInfo->m_pInItemSet->GetRanges());
 
@@ -1096,7 +1095,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
     {
         case SID_GENERAL_OPTIONS:
         {
-            pRet = o3tl::make_unique<SfxItemSet>(
+            pRet = std::make_unique<SfxItemSet>(
                 SfxGetpApp()->GetPool(),
                 svl::Items<
                     SID_HTML_MODE, SID_HTML_MODE,
@@ -1137,7 +1136,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         break;
         case SID_LANGUAGE_OPTIONS :
         {
-            pRet = o3tl::make_unique<SfxItemSet>(
+            pRet = std::make_unique<SfxItemSet>(
                 SfxGetpApp()->GetPool(),
                 svl::Items<
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CJK_LANGUAGE,
@@ -1205,7 +1204,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         }
         break;
         case SID_INET_DLG :
-                pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
+                pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
                                 svl::Items<SID_BASIC_ENABLED, SID_BASIC_ENABLED,
                 //SID_OPTIONS_START - ..END
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
@@ -1214,7 +1213,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 SfxGetpApp()->GetOptions(*pRet);
         break;
         case SID_FILTER_DLG:
-            pRet = o3tl::make_unique<SfxItemSet>(
+            pRet = std::make_unique<SfxItemSet>(
                 SfxGetpApp()->GetPool(),
                 svl::Items<
                     SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
@@ -1225,7 +1224,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
             break;
 
         case SID_SB_STARBASEOPTIONS:
-            pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
+            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
             svl::Items<SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER>{} );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
             svx::DbRegisteredNamesConfig::GetOptions(*pRet);
@@ -1234,7 +1233,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         case SID_SCH_EDITOPTIONS:
         {
             SvxChartOptions aChartOpt;
-            pRet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS>{} );
+            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS>{} );
             pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
             break;
         }

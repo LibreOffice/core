@@ -27,7 +27,6 @@
 #include <svtools/fontsubstconfig.hxx>
 #include "fontsubs.hxx"
 #include <helpids.h>
-#include <o3tl/make_unique.hxx>
 
 /*********************************************************************/
 /*                                                                   */
@@ -120,13 +119,13 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
     if (!m_xCheckButtonData)
         m_xCheckButtonData.reset(new SvLBoxButtonData(m_pCheckLB));
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false)); // otherwise boom!
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false)); // otherwise boom!
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
-    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
+    pEntry->AddItem(std::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
+    pEntry->AddItem(std::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rFont1));
-    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rFont2));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(rFont1));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(rFont2));
 
     return pEntry;
 }

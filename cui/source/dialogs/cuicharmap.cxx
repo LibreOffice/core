@@ -33,7 +33,6 @@
 #include <vcl/fontcharmap.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/stritem.hxx>
-#include <o3tl/make_unique.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -105,38 +104,38 @@ SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, 
     , m_xRecentGrid(m_xBuilder->weld_widget("viewgrid"))
     , m_xFavGrid(m_xBuilder->weld_widget("favgrid"))
     , m_xShowChar(new weld::CustomWeld(*m_xBuilder, "showchar", m_aShowChar))
-    , m_xRecentCharView{o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar3", m_aRecentCharView[2]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar4", m_aRecentCharView[3]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar5", m_aRecentCharView[4]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar6", m_aRecentCharView[5]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar7", m_aRecentCharView[6]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar8", m_aRecentCharView[7]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar9", m_aRecentCharView[8]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar10", m_aRecentCharView[9]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar11", m_aRecentCharView[10]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar12", m_aRecentCharView[11]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar13", m_aRecentCharView[12]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar14", m_aRecentCharView[13]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar15", m_aRecentCharView[14]),
-                        o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar16", m_aRecentCharView[15])}
-    , m_xFavCharView{o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar1", m_aFavCharView[0]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar2", m_aFavCharView[1]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar3", m_aFavCharView[2]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar4", m_aFavCharView[3]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar5", m_aFavCharView[4]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar6", m_aFavCharView[5]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar7", m_aFavCharView[6]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar8", m_aFavCharView[7]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar9", m_aFavCharView[8]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar10", m_aFavCharView[9]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar11", m_aFavCharView[10]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar12", m_aFavCharView[11]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar13", m_aFavCharView[12]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar14", m_aFavCharView[13]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar15", m_aFavCharView[14]),
-                     o3tl::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar16", m_aFavCharView[15])}
+    , m_xRecentCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar1", m_aRecentCharView[0]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar2", m_aRecentCharView[1]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar3", m_aRecentCharView[2]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar4", m_aRecentCharView[3]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar5", m_aRecentCharView[4]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar6", m_aRecentCharView[5]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar7", m_aRecentCharView[6]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar8", m_aRecentCharView[7]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar9", m_aRecentCharView[8]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar10", m_aRecentCharView[9]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar11", m_aRecentCharView[10]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar12", m_aRecentCharView[11]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar13", m_aRecentCharView[12]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar14", m_aRecentCharView[13]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar15", m_aRecentCharView[14]),
+                        std::make_unique<weld::CustomWeld>(*m_xBuilder, "viewchar16", m_aRecentCharView[15])}
+    , m_xFavCharView{std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar1", m_aFavCharView[0]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar2", m_aFavCharView[1]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar3", m_aFavCharView[2]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar4", m_aFavCharView[3]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar5", m_aFavCharView[4]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar6", m_aFavCharView[5]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar7", m_aFavCharView[6]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar8", m_aFavCharView[7]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar9", m_aFavCharView[8]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar10", m_aFavCharView[9]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar11", m_aFavCharView[10]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar12", m_aFavCharView[11]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar13", m_aFavCharView[12]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar14", m_aFavCharView[13]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar15", m_aFavCharView[14]),
+                     std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar16", m_aFavCharView[15])}
     , m_xShowSet(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll"), m_xVirDev))
     , m_xShowSetArea(new weld::CustomWeld(*m_xBuilder, "showcharset", *m_xShowSet))
     , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window("searchscroll"), m_xVirDev))

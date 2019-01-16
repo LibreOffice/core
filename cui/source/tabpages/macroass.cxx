@@ -34,7 +34,6 @@
 #include <headertablistbox.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
-#include <o3tl/make_unique.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;

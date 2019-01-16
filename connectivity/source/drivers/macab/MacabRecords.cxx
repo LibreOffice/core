@@ -33,7 +33,6 @@
 #include <AddressBook/ABAddressBookC.h>
 #include <postmac.h>
 #include <com/sun/star/util/DateTime.hpp>
-#include <o3tl/make_unique.hxx>
 
 using namespace connectivity::macab;
 using namespace com::sun::star::util;
@@ -635,12 +634,12 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                         multiLabel = OUStringToCFString(multiLabelString);
                         hdr.reset(createHeaderForProperty(multiType, multiValue, multiLabel));
                         if (!hdr)
-                            hdr = o3tl::make_unique<MacabHeader>();
+                            hdr = std::make_unique<MacabHeader>();
                         multiLengthSecondLevel += hdr->getSize();
                     }
                     else
                     {
-                        hdr = o3tl::make_unique<MacabHeader>();
+                        hdr = std::make_unique<MacabHeader>();
                     }
                     if(multiValue)
                         CFRelease(multiValue);
@@ -785,7 +784,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                     arrLabel = OUStringToCFString(arrLabelString);
                     auto hdr = std::unique_ptr<MacabHeader>(createHeaderForProperty(arrType, arrValue, arrLabel));
                     if (!hdr)
-                        hdr = o3tl::make_unique<MacabHeader>();
+                        hdr = std::make_unique<MacabHeader>();
                     length += hdr->getSize();
                     CFRelease(arrLabel);
                     arrHeaders.push_back(std::move(hdr));

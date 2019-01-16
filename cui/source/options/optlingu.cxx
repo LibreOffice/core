@@ -30,7 +30,6 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
-#include <o3tl/make_unique.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -1662,11 +1661,11 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
         m_xCheckButtonData.reset(new SvLBoxButtonData(m_pLinguOptionsCLB));
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
+        pEntry->AddItem(std::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
-    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-    pEntry->AddItem(o3tl::make_unique<BrwString_Impl>(rTxt));
+        pEntry->AddItem(std::make_unique<SvLBoxString>(""));    // empty column
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+    pEntry->AddItem(std::make_unique<BrwString_Impl>(rTxt));
 
     return pEntry;
 }
@@ -1784,11 +1783,11 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     }
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
+        pEntry->AddItem(std::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
-    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-    pEntry->AddItem(o3tl::make_unique<BrwStringDic_Impl>(rTxt));
+        pEntry->AddItem(std::make_unique<SvLBoxString>(""));    // empty column
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
+    pEntry->AddItem(std::make_unique<BrwStringDic_Impl>(rTxt));
 
     return pEntry;
 }

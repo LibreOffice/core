@@ -19,7 +19,6 @@
 
 #include "BarPositionHelper.hxx"
 #include <DateHelper.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace chart
 {
@@ -45,7 +44,7 @@ BarPositionHelper::~BarPositionHelper()
 
 std::unique_ptr<PlottingPositionHelper> BarPositionHelper::clone() const
 {
-    return o3tl::make_unique<BarPositionHelper>(*this);
+    return std::make_unique<BarPositionHelper>(*this);
 }
 
 void BarPositionHelper::updateSeriesCount( double fSeriesCount )

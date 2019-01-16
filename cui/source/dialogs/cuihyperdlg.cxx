@@ -21,7 +21,6 @@
 
 #include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
 #include <cuihyperdlg.hxx>
@@ -124,7 +123,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     GetCancelButton().SetText ( CuiResId(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
     // create itemset for tabpages
-    mpItemSet = o3tl::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_HYPERLINK_GETLINK,
+    mpItemSet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_HYPERLINK_GETLINK,
                                SID_HYPERLINK_SETLINK>{} );
 
     SvxHyperlinkItem aItem(SID_HYPERLINK_GETLINK);

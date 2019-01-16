@@ -42,7 +42,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <comphelper/string.hxx>
 #include <osl/file.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <stack>
 #include <algorithm>
@@ -228,10 +227,10 @@ SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const OUS
     {
         aText = OUString::number( nVal ) + ". ";
     }
-    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(OUString())); // add empty column
+    pEntry->AddItem(std::make_unique<SvLBoxString>(OUString())); // add empty column
     aText += rText;
-    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false)); // otherwise crash
-    pEntry->AddItem(o3tl::make_unique<AlternativesString>(*this, aText));
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(Image(), Image(), false)); // otherwise crash
+    pEntry->AddItem(std::make_unique<AlternativesString>(*this, aText));
 
     SetExtraData( pEntry, AlternativesExtraData( rText, bIsHeader ) );
     GetModel()->Insert( pEntry );

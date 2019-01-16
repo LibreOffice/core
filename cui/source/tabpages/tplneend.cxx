@@ -46,8 +46,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 
-#include <o3tl/make_unique.hxx>
-
 #define XOUT_WIDTH    150
 
 SvxLineEndDefTabPage::SvxLineEndDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
@@ -331,7 +329,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
             if(pOldEntry)
             {
                 // #123497# Need to replace the existing entry with a new one
-                pLineEndList->Replace(o3tl::make_unique<XLineEndEntry>(pOldEntry->GetLineEnd(), aName), nPos);
+                pLineEndList->Replace(std::make_unique<XLineEndEntry>(pOldEntry->GetLineEnd(), aName), nPos);
 
                 m_xEdtName->set_text(aName);
 
@@ -424,7 +422,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
                 bLoop = false;
 
                 auto nLineEndCount = pLineEndList->Count();
-                pLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNewPolyPolygon, aName), nLineEndCount);
+                pLineEndList->Insert(std::make_unique<XLineEndEntry>(aNewPolyPolygon, aName), nLineEndCount);
 
                 // add to the ListBox
                 m_xLbLineEnds->Append(*pLineEndList->GetLineEnd(nLineEndCount), pLineEndList->GetUiBitmap(nLineEndCount));

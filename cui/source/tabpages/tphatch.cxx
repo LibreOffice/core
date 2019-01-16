@@ -45,8 +45,6 @@
 #include <svx/strings.hrc>
 #include <sal/log.hxx>
 
-#include <o3tl/make_unique.hxx>
-
 using namespace com::sun::star;
 
 SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
@@ -454,7 +452,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
                         GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
                         static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
-        m_pHatchingList->Insert(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nCount);
+        m_pHatchingList->Insert(std::make_unique<XHatchEntry>(aXHatch, aName), nCount);
 
         sal_Int32 nId = m_xHatchLB->GetItemId(nCount - 1); // calculate the last ID
         BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, m_xHatchLB->GetIconSize() );
@@ -483,7 +481,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
                          GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
                         static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
-        m_pHatchingList->Replace(o3tl::make_unique<XHatchEntry>(aXHatch, aName), nPos);
+        m_pHatchingList->Replace(std::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 
         BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xHatchLB->GetIconSize() );
         m_xHatchLB->RemoveItem( nId );

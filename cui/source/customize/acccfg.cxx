@@ -71,7 +71,6 @@
 #include <vcl/help.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <o3tl/make_unique.hxx>
 // namespaces
 
 using namespace css;
@@ -1074,8 +1073,8 @@ void SfxAcceleratorConfigPage::CreateCustomItems(SvTreeListEntry* pEntry,
                                                  const OUString& sCol1 ,
                                                  const OUString& sCol2)
 {
-    pEntry->ReplaceItem(o3tl::make_unique<SfxAccCfgLBoxString_Impl>(sCol1), 1);
-    pEntry->ReplaceItem(o3tl::make_unique<SfxAccCfgLBoxString_Impl>(sCol2), 2);
+    pEntry->ReplaceItem(std::make_unique<SfxAccCfgLBoxString_Impl>(sCol1), 1);
+    pEntry->ReplaceItem(std::make_unique<SfxAccCfgLBoxString_Impl>(sCol2), 2);
 }
 
 
