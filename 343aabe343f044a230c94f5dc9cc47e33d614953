@@ -16,6 +16,24 @@
       "revId": "343aabe343f044a230c94f5dc9cc47e33d614953",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b2ef5ee8",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2019-01-16T13:31:49Z",
+      "side": 1,
+      "message": "How do I skip separator items? Can I assume that these items have zero text width?",
+      "parentUuid": "1f485f77_d2f41ad2",
+      "revId": "343aabe343f044a230c94f5dc9cc47e33d614953",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
