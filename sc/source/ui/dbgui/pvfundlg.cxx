@@ -76,10 +76,9 @@ template< typename ListBoxType >
 bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rMembers, sal_Int32 nEmptyPos = LISTBOX_APPEND )
 {
     bool bEmpty = false;
-    vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
-    for (; itr != itrEnd; ++itr)
+    for (const auto& rMember : rMembers)
     {
-        OUString aName = itr->getDisplayName();
+        OUString aName = rMember.getDisplayName();
         if (!aName.isEmpty())
             rLBox.InsertEntry(aName);
         else
@@ -271,12 +270,12 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
 
     // base field list box
     OUString aSelectedEntry;
-    for( ScDPLabelDataVector::const_iterator aIt = mrLabelVec.begin(), aEnd = mrLabelVec.end(); aIt != aEnd; ++aIt )
+    for( const auto& rxLabel : mrLabelVec )
     {
-        mpLbBaseField->InsertEntry((*aIt)->getDisplayName());
-        maBaseFieldNameMap.emplace((*aIt)->getDisplayName(), (*aIt)->maName);
-        if ((*aIt)->maName == rFuncData.maFieldRef.ReferenceField)
-            aSelectedEntry = (*aIt)->getDisplayName();
+        mpLbBaseField->InsertEntry(rxLabel->getDisplayName());
+        maBaseFieldNameMap.emplace(rxLabel->getDisplayName(), rxLabel->maName);
+        if (rxLabel->maName == rFuncData.maFieldRef.ReferenceField)
+            aSelectedEntry = rxLabel->getDisplayName();
     }
 
     // base item list box
@@ -396,9 +395,8 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox&, rLBox, void )
             mbEmptyItem = lclFillListBox(*mpLbBaseItem, rMembers, SC_BASEITEM_USER_POS);
             // build cache for base names.
             NameMapType aMap;
-            vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
-            for (; itr != itrEnd; ++itr)
-                aMap.emplace(itr->getDisplayName(), itr->maName);
+            for (const auto& rMember : rMembers)
+                aMap.emplace(rMember.getDisplayName(), rMember.maName);
             maBaseItemNameMap.swap(aMap);
         }
 
@@ -653,13 +651,13 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     // sort fields list box
     m_pLbSortBy->InsertEntry(maLabelData.getDisplayName());
 
-    for( ScDPNameVec::const_iterator aIt = rDataFields.begin(), aEnd = rDataFields.end(); aIt != aEnd; ++aIt )
+    for( const auto& rDataField : rDataFields )
     {
         // Cache names for later lookup.
-        maDataFieldNameMap.emplace(aIt->maLayoutName, *aIt);
+        maDataFieldNameMap.emplace(rDataField.maLayoutName, rDataField);
 
-        m_pLbSortBy->InsertEntry( aIt->maLayoutName );
-        m_pLbShowUsing->InsertEntry( aIt->maLayoutName );  // for AutoShow
+        m_pLbSortBy->InsertEntry( rDataField.maLayoutName );
+        m_pLbShowUsing->InsertEntry( rDataField.maLayoutName );  // for AutoShow
     }
 
     if( m_pLbSortBy->GetEntryCount() > SC_SORTDATA_POS )

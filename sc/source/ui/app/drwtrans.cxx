@@ -326,10 +326,9 @@ void ScDrawTransferObj::AddSupportedFormats()
             //  (this must be after inserting the default formats!)
 
             DataFlavorExVector              aVector( m_aOleData.GetDataFlavorExVector() );
-            DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
 
-            while( aIter != aEnd )
-                AddFormat( *aIter++ );
+            for( const auto& rItem : aVector )
+                AddFormat( rItem );
         }
     }
     else                        // any drawing objects

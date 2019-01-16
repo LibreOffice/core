@@ -534,10 +534,9 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
             OSL_ASSERT(pList);
 
-            std::vector<ScTypedStrData>::const_iterator it = pList->maFilterEntries.begin(), itEnd = pList->maFilterEntries.end();
-            for (; it != itEnd; ++it)
+            for (const auto& rEntry : pList->maFilterEntries)
             {
-                pValList->InsertEntry(it->GetString(), nListPos++);
+                pValList->InsertEntry(rEntry.GetString(), nListPos++);
             }
         }
         pValList->SetText( aCurValue );

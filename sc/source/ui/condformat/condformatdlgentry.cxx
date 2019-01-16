@@ -155,10 +155,9 @@ void FillStyleListBox( const ScDocument* pDoc, ListBox& rLbStyle )
     {
         aStyleNames.insert(pStyle->GetName());
     }
-    for(std::set<OUString>::const_iterator itr = aStyleNames.begin(), itrEnd = aStyleNames.end();
-                        itr != itrEnd; ++itr)
+    for(const auto& rStyleName : aStyleNames)
     {
-        rLbStyle.InsertEntry( *itr );
+        rLbStyle.InsertEntry( rStyleName );
     }
 }
 
@@ -1584,8 +1583,8 @@ ScIconSetFrmtEntry::~ScIconSetFrmtEntry()
 
 void ScIconSetFrmtEntry::dispose()
 {
-    for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
-        it->disposeAndClear();
+    for (auto& rxEntry : maEntries)
+        rxEntry.disposeAndClear();
     maEntries.clear();
     maIconParent.clear();
     maLbColorFormat.clear();
@@ -1609,8 +1608,8 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl, ListBox&, void )
     sal_Int32 nPos = maLbIconSetType->GetSelectedEntryPos();
     sal_uInt32 nElements = pMap[nPos].nElements;
 
-    for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
-        it->disposeAndClear();
+    for (auto& rxEntry : maEntries)
+        rxEntry.disposeAndClear();
     maEntries.clear();
 
     for(size_t i = 0; i < nElements; ++i)
@@ -1633,10 +1632,9 @@ void ScIconSetFrmtEntry::SetActive()
 {
     maLbColorFormat->Show();
     maLbIconSetType->Show();
-    for(ScIconSetFrmtDataEntriesType::iterator itr = maEntries.begin(),
-            itrEnd = maEntries.end(); itr != itrEnd; ++itr)
+    for(auto& rxEntry : maEntries)
     {
-        (*itr)->Show();
+        rxEntry->Show();
     }
 
     Select();
@@ -1646,10 +1644,9 @@ void ScIconSetFrmtEntry::SetInactive()
 {
     maLbColorFormat->Hide();
     maLbIconSetType->Hide();
-    for(ScIconSetFrmtDataEntriesType::iterator itr = maEntries.begin(),
-            itrEnd = maEntries.end(); itr != itrEnd; ++itr)
+    for(auto& rxEntry : maEntries)
     {
-        (*itr)->Hide();
+        rxEntry->Hide();
     }
 
     Deselect();
@@ -1661,10 +1658,9 @@ ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
 
     ScIconSetFormatData* pData = new ScIconSetFormatData;
     pData->eIconSetType = static_cast<ScIconSetType>(maLbIconSetType->GetSelectedEntryPos());
-    for(ScIconSetFrmtDataEntriesType::const_iterator itr = maEntries.begin(),
-            itrEnd = maEntries.end(); itr != itrEnd; ++itr)
+    for(const auto& rxEntry : maEntries)
     {
-        pData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>((*itr)->CreateEntry(mpDoc, maPos)));
+        pData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(rxEntry->CreateEntry(mpDoc, maPos)));
     }
     pFormat->SetIconSetData(pData);
 

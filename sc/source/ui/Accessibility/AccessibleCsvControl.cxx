@@ -847,8 +847,8 @@ ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
 void ScAccessibleCsvGrid::disposing()
 {
     SolarMutexGuard aGuard;
-    for (XAccessibleSet::iterator aI = maAccessibleChildren.begin(); aI != maAccessibleChildren.end(); ++aI)
-        aI->second->dispose();
+    for (auto& rEntry : maAccessibleChildren)
+        rEntry.second->dispose();
     maAccessibleChildren.clear();
     ScAccessibleCsvControl::disposing();
 }
