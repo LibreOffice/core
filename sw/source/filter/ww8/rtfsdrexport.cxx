@@ -220,7 +220,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
             case ESCHER_Prop_geoLeft:
             case ESCHER_Prop_geoTop:
             {
-                sal_uInt32 nLeft = 0, nTop = 0;
+                sal_uInt32 nLeft = 0;
+                sal_uInt32 nTop = 0;
 
                 if (nId == ESCHER_Prop_geoLeft)
                 {
@@ -243,7 +244,10 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
             case ESCHER_Prop_geoRight:
             case ESCHER_Prop_geoBottom:
             {
-                sal_uInt32 nLeft = 0, nRight = 0, nTop = 0, nBottom = 0;
+                sal_uInt32 nLeft = 0;
+                sal_uInt32 nRight = 0;
+                sal_uInt32 nTop = 0;
+                sal_uInt32 nBottom = 0;
                 rProps.GetOpt(ESCHER_Prop_geoLeft, nLeft);
                 rProps.GetOpt(ESCHER_Prop_geoTop, nTop);
 

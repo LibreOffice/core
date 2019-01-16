@@ -52,6 +52,7 @@ class RtfExportFilter final
 {
     css::uno::Reference<css::uno::XComponentContext> m_xCtx;
     css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
+    RtfWriter m_aWriter;
 
 public:
     explicit RtfExportFilter(css::uno::Reference<css::uno::XComponentContext> xCtx);
@@ -66,7 +67,7 @@ public:
     void SAL_CALL
     setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
 
-    RtfWriter m_aWriter;
+    Writer& GetWriter() { return m_aWriter; }
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORTFILTER_HXX
