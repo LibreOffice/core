@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_b253dee2",
+        "filename": "sw/source/core/crsr/pam.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-16T12:25:12Z",
+      "side": 1,
+      "message": "this could be simplified, by just replacing the GetSectionNode above with FindSectionNode, the latter will return the node itself if it\u0027s a section-node",
+      "revId": "0fc6c76ff56d887bffd626108954a90d3e45d27c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
