@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d2c77a45",
+        "filename": "fpicker/source/win32/filepicker/VistaFilePickerImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2019-01-16T14:20:48Z",
+      "side": 1,
+      "message": "i think this won\u0027t cause a double-free of pStr but it took some minutes to come to that conclusion...",
+      "revId": "ee40f7c21f5abdef78914abf03d78bcd87d25225",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
