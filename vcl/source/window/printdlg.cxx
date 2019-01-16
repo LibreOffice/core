@@ -1006,21 +1006,14 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
 
 void PrintDialog::updateOrientationBox( const bool bAutomatic )
 {
-    Orientation eOrientation = maPController->getPrinter()->GetOrientation();
     if ( !bAutomatic )
     {
+        Orientation eOrientation = maPController->getPrinter()->GetOrientation();
         mpOrientationBox->SelectEntryPos( static_cast<sal_Int32>(eOrientation) + 1 );
-
-        maPController->setValue( "IsLandscape",
-                                 makeAny( static_cast<sal_Int32>(eOrientation) ) );
     }
     else if ( hasOrientationChanged() )
     {
         mpOrientationBox->SelectEntryPos( ORIENTATION_AUTOMATIC );
-
-        // used to make sure document orientation matches printer paper orientation
-        maPController->setValue( "IsLandscape",
-                                 makeAny( static_cast<sal_Int32>(eOrientation) ) );
     }
 }
 
@@ -1061,10 +1054,6 @@ void PrintDialog::setPaperOrientation( Orientation eOrientation )
         Size& aPaperSize = maPController->getPaperSizeSetup();
         checkPaperSize( aPaperSize );
     }
-
-    // used to sync printer paper orientation with document orientation
-    maPController->setValue( "IsLandscape",
-                             makeAny( static_cast<sal_Int32>(eOrientation) ) );
 }
 
 void PrintDialog::checkControlDependencies()
