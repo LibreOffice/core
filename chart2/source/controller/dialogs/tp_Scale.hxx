@@ -95,7 +95,7 @@ private:
 
         @param pControl
             If non-NULL, contains a pointer to the control in which the
-            errornous value was in.  This method gives this control the focus
+            erroneous value was in. This method gives this control the focus
             and selects its content.
 
         @return false, if nResIdMessage was 0, true otherwise
