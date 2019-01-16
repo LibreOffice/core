@@ -115,7 +115,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void testScMarkArraySearch_check(ScMarkArray & ar, SCROW nRow, bool expectStatus, SCSIZE nIndexExpect);
+    void testScMarkArraySearch_check(const ScMarkArray & ar, SCROW nRow, bool expectStatus, SCSIZE nIndexExpect);
 };
 
 static void lcl_GetSortedRanges( const ScRangeList& rRangeList, ScRangeList& rRangeListOut )
@@ -851,7 +851,7 @@ void Test::testDeleteTabAfterSelected()
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), aMark.GetFirstSelected());
 }
 
-void Test::testScMarkArraySearch_check(ScMarkArray & ar, SCROW nRow, bool expectStatus, SCSIZE nIndexExpect)
+void Test::testScMarkArraySearch_check(const ScMarkArray & ar, SCROW nRow, bool expectStatus, SCSIZE nIndexExpect)
 {
     SCSIZE nIndex = 0;
     bool status = ar.Search(nRow, nIndex);

@@ -483,7 +483,7 @@ public:
         return (*pImpl);
     }
 
-    static storeError guard (std::shared_ptr<PageData> & rxPage, sal_uInt32 nAddr)
+    static storeError guard (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nAddr)
     {
         PageData * pHead = rxPage.get();
         if (!pHead)

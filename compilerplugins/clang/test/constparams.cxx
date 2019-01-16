@@ -12,7 +12,7 @@
 struct Class1
 {
     int const * m_f1;
-    Class1(int * f1) : m_f1(f1) {} // expected-error {{this parameter can be const [loplugin:constparams]}}
+    Class1(int * f1) : m_f1(f1) {} // expected-error {{this parameter can be const Class1::Class1 [loplugin:constparams]}}
 };
 
 struct Class2
@@ -38,7 +38,7 @@ void g() {
     P2 p2;
     p2 = (P2) (f3);
 }
-int const * f1(int * p) { // expected-error {{this parameter can be const [loplugin:constparams]}}
+int const * f1(int * p) { // expected-error {{this parameter can be const f1 [loplugin:constparams]}}
     return p;
 }
 void f4(std::string * p) {

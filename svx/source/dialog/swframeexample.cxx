@@ -226,7 +226,7 @@ void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     }
 }
 
-void SwFrameExample::CalcBoundRect_Impl(vcl::RenderContext& rRenderContext, tools::Rectangle &rRect)
+void SwFrameExample::CalcBoundRect_Impl(const vcl::RenderContext& rRenderContext, tools::Rectangle &rRect)
 {
     switch (nAnchor)
     {

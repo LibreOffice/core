@@ -387,7 +387,7 @@ public:
     static css::uno::Reference< css::sdbc::XConnection>
             GetConnection(const OUString& rDataSource,
                 css::uno::Reference< css::sdbc::XDataSource>& rxSource,
-                SwView* pView);
+                const SwView* pView);
 
     static css::uno::Reference< css::sdbcx::XColumnsSupplier>
             GetColumnSupplier(css::uno::Reference< css::sdbc::XConnection> const & xConnection,
@@ -449,7 +449,7 @@ public:
                          const OUString& _sCommand,
                          sal_Int32 _nCommandType,
                          const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                         SwView* pView);
+                         const SwView* pView);
 
     void setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell);
     const OUString& getEmbeddedName() const;

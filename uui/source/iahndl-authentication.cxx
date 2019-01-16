@@ -725,8 +725,8 @@ UUIInteractionHelper::handlePasswordRequest(
 }
 
 void
-UUIInteractionHelper::handleAuthFallbackRequest( OUString & instructions,
-        OUString & url,
+UUIInteractionHelper::handleAuthFallbackRequest( const OUString & instructions,
+        const OUString & url,
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
 {
     uno::Reference<awt::XWindow> xParent = getParentXWindow();

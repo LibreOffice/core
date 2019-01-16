@@ -200,7 +200,7 @@ protected:
     bool mbDocumentIsProtected;
     std::vector<WW8_SepInfo> aSects;
 
-    void CheckForFacinPg( WW8Export& rWrt ) const;
+    void CheckForFacinPg( const WW8Export& rWrt ) const;
     void NeedsDocumentProtected(const WW8_SepInfo &rInfo);
 
     //No copy, no assign

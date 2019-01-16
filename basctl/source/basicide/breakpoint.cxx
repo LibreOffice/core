@@ -125,7 +125,7 @@ void BreakPointList::ResetHitCount()
     }
 }
 
-void BreakPointList::remove(BreakPoint* ptr)
+void BreakPointList::remove(const BreakPoint* ptr)
 {
     for ( auto i = maBreakPoints.begin(); i != maBreakPoints.end(); ++i )
     {

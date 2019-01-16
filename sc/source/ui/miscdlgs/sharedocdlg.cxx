@@ -46,7 +46,7 @@ IMPL_LINK(ScShareDocumentDlg, SizeAllocated, const Size&, rSize, void)
 
 // class ScShareDocumentDlg
 
-ScShareDocumentDlg::ScShareDocumentDlg(weld::Window* pParent, ScViewData* pViewData)
+ScShareDocumentDlg::ScShareDocumentDlg(weld::Window* pParent, const ScViewData* pViewData)
     : GenericDialogController(pParent, "modules/scalc/ui/sharedocumentdlg.ui",
                               "ShareDocumentDialog")
     , m_aStrNoUserData(ScResId(STR_NO_USER_DATA_AVAILABLE))

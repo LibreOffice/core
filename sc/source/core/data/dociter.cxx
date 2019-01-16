@@ -77,7 +77,7 @@ void decBlock(std::pair<Iter, size_t>& rPos)
 
 static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrArray*& rpArr,
         SCROW& nAttrEndRow, const ScAttrArray* pNewArr, SCROW nRow,
-        const ScDocument* pDoc, ScInterpreterContext* pContext = nullptr )
+        const ScDocument* pDoc, const ScInterpreterContext* pContext = nullptr )
 {
     if ( rpArr != pNewArr || nAttrEndRow < nRow )
     {

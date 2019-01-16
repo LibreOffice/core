@@ -918,7 +918,7 @@ void WW8SprmIter::UpdateMyMembers()
     }
 }
 
-SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId, sal_uInt8* pNextByteMatch)
+SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId, const sal_uInt8* pNextByteMatch)
 {
     while (GetSprms())
     {
@@ -4884,7 +4884,7 @@ sal_uInt16 WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
     return nId;
 }
 
-WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
+WW8PLCFMan::WW8PLCFMan(const WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     bool bDoingDrawTextBox)
     : maSprmParser(*pBase->m_pWw8Fib),
     mbDoingDrawTextBox(bDoingDrawTextBox)

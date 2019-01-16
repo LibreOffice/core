@@ -287,8 +287,8 @@ private:
     DECL_LINK(ClickSaveHdl_Impl, weld::Button&, void);
     DECL_LINK(ChangeMetricHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(SelectTypeListBoxHdl_Impl, weld::ComboBox&, void);
-    void SelectTypeHdl_Impl(weld::ComboBox*);
-    void ChangeMetricHdl_Impl(weld::ToggleButton*);
+    void SelectTypeHdl_Impl(const weld::ComboBox*);
+    void ChangeMetricHdl_Impl(const weld::ToggleButton*);
 
     void CheckChanges_Impl();
 

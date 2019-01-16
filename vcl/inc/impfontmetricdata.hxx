@@ -97,7 +97,7 @@ public:
                                         int nUPEM);
 
 private:
-    bool            ShouldUseWinMetrics(vcl::TTGlobalFontInfo& rInfo);
+    bool            ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo);
 
     // font instance attributes from the font request
     long const      mnHeight;                   // Font size

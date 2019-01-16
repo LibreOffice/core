@@ -2118,7 +2118,7 @@ IMPL_LINK(SvxNumOptionsTabPage, EditModifyHdl_Impl, weld::Entry&, rEdit, void)
     EditModifyHdl_Impl(&rEdit);
 }
 
-void SvxNumOptionsTabPage::EditModifyHdl_Impl(weld::Entry* pEdit)
+void SvxNumOptionsTabPage::EditModifyHdl_Impl(const weld::Entry* pEdit)
 {
     bool bPrefix = pEdit == m_xPrefixED.get();
     bool bSuffix = pEdit == m_xSuffixED.get();

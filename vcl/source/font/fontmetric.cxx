@@ -395,7 +395,7 @@ void ImplFontMetricData::ImplInitFlags( const OutputDevice* pDev )
     SetFullstopCenteredFlag( bCentered );
 }
 
-bool ImplFontMetricData::ShouldUseWinMetrics(vcl::TTGlobalFontInfo& rInfo)
+bool ImplFontMetricData::ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo)
 {
     if (utl::ConfigManager::IsFuzzing())
         return false;

@@ -396,7 +396,7 @@ void ScDocument::DelayFormulaGrouping( bool delay )
     }
 }
 
-void ScDocument::AddDelayedFormulaGroupingCell( ScFormulaCell* cell )
+void ScDocument::AddDelayedFormulaGroupingCell( const ScFormulaCell* cell )
 {
     if( !pDelayedFormulaGrouping->In( cell->aPos ))
         pDelayedFormulaGrouping->ExtendTo( cell->aPos );
@@ -501,7 +501,7 @@ public:
         mpCxt->setColumnSet( rpColSet);
     }
 
-    void operator() (ScTableUniquePtr & p)
+    void operator() (const ScTableUniquePtr & p)
     {
         if (p)
             p->StartListeners(*mpCxt, false);

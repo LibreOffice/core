@@ -2488,7 +2488,7 @@ public:
     // Called from compareByString() method, where different sources of strings are checked.
     // The value is placed inside one parameter: [pValueSource1] or [pValueSource2] but never in both.
     std::pair<bool,bool> compareByStringComparator(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-        const svl::SharedString* pValueSource1, OUString * pValueSource2)
+        const svl::SharedString* pValueSource1, const OUString * pValueSource2)
     {
         bool bOk = false;
         bool bTestEqual = false;

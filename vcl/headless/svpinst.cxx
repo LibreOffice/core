@@ -253,7 +253,7 @@ std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice( SalGraphi
     return pNew;
 }
 
-cairo_surface_t* get_underlying_cairo_surface(VirtualDevice& rDevice)
+cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice& rDevice)
 {
     return static_cast<SvpSalVirtualDevice*>(rDevice.mpVirDev.get())->GetSurface();
 }

@@ -604,7 +604,7 @@ struct ImplEntryMetrics
     long    nImgHeight;
 };
 
-SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(OutputDevice* pOutputDevice)
+SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(const OutputDevice* pOutputDevice)
 {
     if (maStrGlyphs.IsValid())
         // Use pre-calculated result.

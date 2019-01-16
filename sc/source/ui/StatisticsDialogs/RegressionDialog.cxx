@@ -679,10 +679,10 @@ void ScRegressionDialog::WritePredictionsWithResiduals(AddressWalkerWriter& rOut
 }
 
 // Generic table writer
-void ScRegressionDialog::WriteTable(std::function<CellValueGetter>& rCellGetter,
+void ScRegressionDialog::WriteTable(const std::function<CellValueGetter>& rCellGetter,
                                     size_t nRowsInTable, size_t nColsInTable,
                                     AddressWalkerWriter& rOutput,
-                                    std::function<CellWriter>& rFunc)
+                                    const std::function<CellWriter>& rFunc)
 {
     for (size_t nRowIdx = 0; nRowIdx < nRowsInTable; ++nRowIdx)
     {

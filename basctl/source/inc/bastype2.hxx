@@ -256,7 +256,7 @@ private:
     weld::Window* m_pTopLevel;
     BrowseMode nMode;
     DocumentEventNotifier m_aNotifier;
-    void            SetEntryBitmaps(weld::TreeIter& rIter, const OUString& rImage);
+    void            SetEntryBitmaps(const weld::TreeIter& rIter, const OUString& rImage);
 
 protected:
     DECL_LINK(RequestingChildrenHdl, weld::TreeIter&, bool);
@@ -286,16 +286,16 @@ public:
     void            ScanAllEntries();
     void            UpdateEntries();
 
-    bool            IsEntryProtected(weld::TreeIter* pEntry);
+    bool            IsEntryProtected(const weld::TreeIter* pEntry);
 
     void            SetMode( BrowseMode nM ) { nMode = nM; }
     BrowseMode      GetMode() const { return nMode; }
 
-    SbModule*       FindModule(weld::TreeIter* pEntry);
-    SbxVariable*    FindVariable(weld::TreeIter* pEntry);
+    SbModule*       FindModule(const weld::TreeIter* pEntry);
+    SbxVariable*    FindVariable(const weld::TreeIter* pEntry);
     bool            FindRootEntry(const ScriptDocument& rDocument, LibraryLocation eLocation, weld::TreeIter& rIter);
     bool            FindEntry(const OUString& rText, EntryType eType, weld::TreeIter& rIter);
-    EntryDescriptor GetEntryDescriptor(weld::TreeIter* pEntry);
+    EntryDescriptor GetEntryDescriptor(const weld::TreeIter* pEntry);
 
     static ItemType ConvertType (EntryType eType);
     bool            IsValidEntry(weld::TreeIter& rEntry);
@@ -303,7 +303,7 @@ public:
                   weld::TreeIter* pIter, bool bChildrenOnDemand, std::unique_ptr<Entry>&& rUserData);
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
-    std::unique_ptr<weld::TreeIter> make_iterator(weld::TreeIter* pIter = nullptr) const { return m_xControl->make_iterator(pIter); }
+    std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pIter = nullptr) const { return m_xControl->make_iterator(pIter); }
     void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const { m_xControl->copy_iterator(rSource, rDest); }
     bool get_selected(weld::TreeIter* pIter) const { return m_xControl->get_selected(pIter); }
     void select(const weld::TreeIter& rIter) { m_xControl->select(rIter); }

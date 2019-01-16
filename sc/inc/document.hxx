@@ -911,7 +911,7 @@ public:
     SC_DLLPUBLIC sal_uLong      TransferTab(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,
                                             bool bInsertNew = true,
                                             bool bResultsOnly = false );
-    SC_DLLPUBLIC void           TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos);
+    SC_DLLPUBLIC void           TransferDrawPage(const ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos);
     SC_DLLPUBLIC void           SetVisible( SCTAB nTab, bool bVisible );
     SC_DLLPUBLIC bool           IsVisible( SCTAB nTab ) const;
     bool                        IsStreamValid( SCTAB nTab ) const;
@@ -1325,7 +1325,7 @@ public:
     void            DelayFormulaGrouping( bool delay );
     bool            IsDelayedFormulaGrouping() const { return pDelayedFormulaGrouping.get() != nullptr; }
     /// To be used only by SharedFormulaUtil::joinFormulaCells().
-    void            AddDelayedFormulaGroupingCell( ScFormulaCell* cell );
+    void            AddDelayedFormulaGroupingCell( const ScFormulaCell* cell );
 
     FormulaError    GetErrCode( const ScAddress& ) const;
 

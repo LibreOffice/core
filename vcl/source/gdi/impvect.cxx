@@ -44,7 +44,7 @@
 #define VECT_POLY_OUTLINE_INNER 4UL
 #define VECT_POLY_OUTLINE_OUTER 8UL
 
-static void VECT_MAP( std::unique_ptr<long []> & pMapIn, std::unique_ptr<long []>& pMapOut, long nVal )
+static void VECT_MAP( const std::unique_ptr<long []> & pMapIn, const std::unique_ptr<long []>& pMapOut, long nVal )
 {
     pMapIn[nVal] = (nVal * 4) + 1;
     pMapOut[nVal] = pMapIn[nVal] + 5;

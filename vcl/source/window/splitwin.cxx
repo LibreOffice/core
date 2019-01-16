@@ -1033,7 +1033,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
     return 0;
 }
 
-sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
+sal_uInt16 SplitWindow::ImplTestSplit( const SplitWindow* pWindow, const Point& rPos,
                                    long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos )
 {
     // Resizable SplitWindow should be treated different

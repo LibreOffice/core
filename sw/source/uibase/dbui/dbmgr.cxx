@@ -1946,7 +1946,7 @@ sal_Int32 SwDBManager::GetColumnType( const OUString& rDBName,
 }
 
 uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rDataSource,
-                                                              uno::Reference<sdbc::XDataSource>& rxSource, SwView *pView)
+                                                              uno::Reference<sdbc::XDataSource>& rxSource, const SwView *pView)
 {
     uno::Reference< sdbc::XConnection> xConnection;
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -2970,7 +2970,7 @@ namespace
 {
     // tdf#117824 switch the embedded database away from using its current storage and point it to temporary storage
     // which allows the original storage to be deleted
-    void switchEmbeddedDatabaseStorage(uno::Reference<sdb::XDatabaseContext>& rDatabaseContext, const OUString& rName)
+    void switchEmbeddedDatabaseStorage(const uno::Reference<sdb::XDatabaseContext>& rDatabaseContext, const OUString& rName)
     {
         uno::Reference<sdb::XDocumentDataSource> xDS(rDatabaseContext->getByName(rName), uno::UNO_QUERY);
         if (!xDS)
@@ -3201,7 +3201,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
                                        const OUString& _sCommand,
                                        sal_Int32 _nCommandType,
                                        const uno::Reference<sdbc::XConnection>& _xConnection,
-                                       SwView* pView)
+                                       const SwView* pView)
 {
     uno::Reference<sdbc::XResultSet> xResultSet;
     try

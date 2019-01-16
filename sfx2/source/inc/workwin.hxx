@@ -100,7 +100,7 @@ struct SfxChild_Impl
         nVisible = bIsVisible ? SfxChildVisibility::VISIBLE : SfxChildVisibility::NOT_VISIBLE;
     }
 
-    SfxChild_Impl(std::shared_ptr<SfxModelessDialogController>& rChild,
+    SfxChild_Impl(const std::shared_ptr<SfxModelessDialogController>& rChild,
                   SfxChildAlignment eAlignment):
         pWin(nullptr), xController(rChild), eAlign(eAlignment), bResize(false),
         bSetFocus( false )

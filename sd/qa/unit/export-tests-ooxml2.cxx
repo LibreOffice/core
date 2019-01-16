@@ -1878,7 +1878,7 @@ void SdOOXMLExportTest2::testTdf118836()
     xDocShRef->DoClose();
 }
 
-static double getAdjustmentValue( uno::Reference<beans::XPropertySet>& xSet )
+static double getAdjustmentValue( const uno::Reference<beans::XPropertySet>& xSet )
 {
     auto aGeomPropSeq = xSet->getPropertyValue( "CustomShapeGeometry" )
                             .get<uno::Sequence<beans::PropertyValue>>();
@@ -1903,7 +1903,7 @@ static double getAdjustmentValue( uno::Reference<beans::XPropertySet>& xSet )
     return -1.0;
 }
 
-static bool getScaleXValue(uno::Reference<beans::XPropertySet>& xSet)
+static bool getScaleXValue(const uno::Reference<beans::XPropertySet>& xSet)
 {
     bool bScaleX = false;
 

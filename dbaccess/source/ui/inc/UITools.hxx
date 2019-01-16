@@ -183,11 +183,11 @@ namespace dbaui
     void callColumnFormatDialog(const css::uno::Reference< css::beans::XPropertySet>& _xAffectedCol,
                                 const css::uno::Reference< css::beans::XPropertySet>& _xField,
                                 SvNumberFormatter* _pFormatter,
-                                vcl::Window* _pParent);
+                                const vcl::Window* _pParent);
 
     /** second variant of the function before
     */
-    bool callColumnFormatDialog(vcl::Window* _pParent,
+    bool callColumnFormatDialog(const vcl::Window* _pParent,
                                     SvNumberFormatter* _pFormatter,
                                     sal_Int32 _nDataType,
                                     sal_Int32& _nFormatKey,

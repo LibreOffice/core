@@ -70,7 +70,7 @@ TableCell::~TableCell()
 }
 
 static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
-        Reference< XPropertySet > const & rxPropSet, oox::drawingml::LineProperties& rLineProperties,
+        Reference< XPropertySet > const & rxPropSet, oox::drawingml::LineProperties const & rLineProperties,
         sal_Int32 nPropId )
 {
     BorderLine2 aBorderLine;

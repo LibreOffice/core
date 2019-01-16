@@ -62,7 +62,7 @@ namespace dbaui
     public:
         DlgQryJoin( OQueryTableView * pParent,
                     const TTableConnectionData::value_type& pData,
-                    OJoinTableView::OTableWindowMap*    _pTableMap,
+                    const OJoinTableView::OTableWindowMap*    _pTableMap,
                     const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                     bool _bAllowTableSelect);
         virtual ~DlgQryJoin() override;

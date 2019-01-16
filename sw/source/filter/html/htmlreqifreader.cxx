@@ -216,7 +216,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1, sal_uInt32& nWidth, s
 }
 
 /// Writes rGraphic with size from rOLENode to rRtf as an RTF hexdump.
-void WrapOleGraphicInRtf(SvStream& rRtf, SwOLENode& rOLENode, const Graphic& rGraphic)
+void WrapOleGraphicInRtf(SvStream& rRtf, const SwOLENode& rOLENode, const Graphic& rGraphic)
 {
     // Start result.
     rRtf.WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_RESULT);

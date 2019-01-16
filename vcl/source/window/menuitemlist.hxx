@@ -92,7 +92,7 @@ struct MenuItemData
     ~MenuItemData();
 
     /// Computes aText's text layout (glyphs), cached in aTextGlyphs.
-    SalLayoutGlyphs* GetTextGlyphs(OutputDevice* pOutputDevice);
+    SalLayoutGlyphs* GetTextGlyphs(const OutputDevice* pOutputDevice);
 
     bool HasCheck() const
     {

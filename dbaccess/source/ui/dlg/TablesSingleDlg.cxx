@@ -33,7 +33,7 @@ using namespace com::sun::star::container;
 
     // OTableSubscriptionDialog
 OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
-            ,SfxItemSet* _pItems
+            ,const SfxItemSet* _pItems
             ,const Reference< XComponentContext >& _rxORB
             ,const css::uno::Any& _aDataSourceName)
     : SfxSingleTabDialog(pParent, _pItems, "TablesFilterDialog",

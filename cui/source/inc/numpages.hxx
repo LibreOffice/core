@@ -315,7 +315,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     DECL_LINK(BulColorHdl_Impl, ColorListBox&, void);
     DECL_LINK(BulRelSizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(PreviewInvalidateHdl_Impl, Timer*, void);
-    void EditModifyHdl_Impl(weld::Entry*);
+    void EditModifyHdl_Impl(const weld::Entry*);
 
 public:
     SvxNumOptionsTabPage(TabPageParent pParent, const SfxItemSet& rSet);

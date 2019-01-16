@@ -128,7 +128,7 @@ private:
 
     void            InitTabPos_Impl( sal_uInt16 nPos = 0 );
     void            SetFillAndTabType_Impl();
-    void            NewHdl_Impl(weld::Button*);
+    void            NewHdl_Impl(const weld::Button*);
 
     // Handler
     DECL_LINK(NewHdl_Impl, weld::Button&, void);

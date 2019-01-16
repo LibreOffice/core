@@ -1246,7 +1246,7 @@ bool WW8_SepInfo::IsProtected() const
     return bRet;
 }
 
-void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
+void MSWordSections::CheckForFacinPg( const WW8Export& rWrt ) const
 {
     // 2 values getting set
     //      Dop.fFacingPages            == Header and Footer different

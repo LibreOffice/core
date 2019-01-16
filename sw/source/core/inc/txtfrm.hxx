@@ -122,7 +122,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
 void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
         SwTextNode const& rFirstNode, SwTextNode & rSecondNode, bool);
 
-void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode);
+void MoveDeletedPrevFrames(const SwTextNode & rDeletedPrev, SwTextNode & rNode);
 enum class Recreate { No, ThisNode, Predecessor };
 void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate eRecreateMerged);
 

@@ -39,7 +39,7 @@ using namespace css::uno;
 // Function for TypeConverting
 
 template< class _type_ >
-static bool convert( TaskManager* pShell,
+static bool convert( TaskManager const * pShell,
                   uno::Reference< script::XTypeConverter >& xConverter,
                   uno::Any& rValue,
                   _type_& aReturn  )

@@ -435,7 +435,7 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
     }
 }
 
-void SfxNotebookBar::ShowMenubar(SfxViewFrame* pViewFrame, bool bShow)
+void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
 {
     if (m_bLock)
         return;

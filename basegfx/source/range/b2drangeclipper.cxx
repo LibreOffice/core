@@ -706,7 +706,7 @@ namespace basegfx
             Iterator          first,
             Iterator          last,
             ListOfEdges&      rActiveEdgeList,
-            SweepLineEvent&   rCurrEvent,
+            SweepLineEvent const & rCurrEvent,
             VectorOfPolygons& rPolygonPool,
             B2DPolyPolygon&   rRes )
         {

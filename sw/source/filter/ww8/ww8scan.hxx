@@ -282,7 +282,7 @@ public:
     explicit WW8SprmIter(const sal_uInt8* pSprms_, sal_Int32 nLen_,
         const wwSprmParser &rSprmParser);
     void  SetSprms(const sal_uInt8* pSprms_, sal_Int32 nLen_);
-    SprmResult FindSprm(sal_uInt16 nId, sal_uInt8* pNextByteMatch = nullptr);
+    SprmResult FindSprm(sal_uInt16 nId, const sal_uInt8* pNextByteMatch = nullptr);
     void  advance();
     const sal_uInt8* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
@@ -968,7 +968,7 @@ private:
     sal_uInt16 GetId(const WW8PLCFxDesc* p ) const;
 
 public:
-    WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
+    WW8PLCFMan(const WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         bool bDoingDrawTextBox = false);
     ~WW8PLCFMan();
 
@@ -1033,7 +1033,7 @@ friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(const WW8Fib& rFib,
 friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
     const WW8ScannerBase&, ePLCFT );
 
-friend WW8PLCFMan::WW8PLCFMan(WW8ScannerBase*, ManTypes, long, bool);
+friend WW8PLCFMan::WW8PLCFMan(const WW8ScannerBase*, ManTypes, long, bool);
 friend class SwWW8FltControlStack;
 
 private:

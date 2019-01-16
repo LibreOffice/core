@@ -457,7 +457,7 @@ void SvxHFPage::InitHandler()
     m_xBackgroundBtn->connect_clicked(LINK(this,SvxHFPage, BackgroundHdl));
 }
 
-void SvxHFPage::TurnOn(weld::ToggleButton* pBox)
+void SvxHFPage::TurnOn(const weld::ToggleButton* pBox)
 {
     if (m_xTurnOnBox->get_active())
     {

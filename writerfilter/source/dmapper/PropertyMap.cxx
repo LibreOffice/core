@@ -682,7 +682,7 @@ void SectionPropertyMap::DontBalanceTextColumns()
     }
 }
 
-void SectionPropertyMap::ApplySectionProperties( uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
+void SectionPropertyMap::ApplySectionProperties( const uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
 {
     try
     {

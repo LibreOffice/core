@@ -376,7 +376,7 @@ namespace weld
         m_aChangeHdl.Call(*this);
     }
 
-    void EntryTreeView::EntryModifyHdl(weld::Entry& rBox)
+    void EntryTreeView::EntryModifyHdl(const weld::Entry& rBox)
     {
         OUString sText(rBox.get_text());
         int nExists = m_xTreeView->find_text(sText);

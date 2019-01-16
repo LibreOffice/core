@@ -258,7 +258,7 @@ void SbTreeListBox::ScanAllEntries()
     }
 }
 
-SbxVariable* SbTreeListBox::FindVariable(weld::TreeIter* pEntry)
+SbxVariable* SbTreeListBox::FindVariable(const weld::TreeIter* pEntry)
 {
     if ( !pEntry )
         return nullptr;
@@ -449,7 +449,7 @@ EntryDescriptor TreeListBox::GetEntryDescriptor( SvTreeListEntry* pEntry )
     return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 }
 
-EntryDescriptor SbTreeListBox::GetEntryDescriptor(weld::TreeIter* pEntry)
+EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
 {
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
@@ -691,7 +691,7 @@ bool SbTreeListBox::IsValidEntry(weld::TreeIter& rEntry)
     return bIsValid;
 }
 
-SbModule* SbTreeListBox::FindModule(weld::TreeIter* pEntry)
+SbModule* SbTreeListBox::FindModule(const weld::TreeIter* pEntry)
 {
     return dynamic_cast<SbModule*>(FindVariable(pEntry));
 }

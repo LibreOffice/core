@@ -194,7 +194,7 @@ inline void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
     eraseFrame( pFrame );
 }
 
-VCL_DLLPUBLIC cairo_surface_t* get_underlying_cairo_surface(VirtualDevice& rDevice);
+VCL_DLLPUBLIC cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice& rDevice);
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 

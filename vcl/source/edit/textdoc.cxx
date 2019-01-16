@@ -495,7 +495,7 @@ TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM )
     return aPaM;
 }
 
-TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, TextNode* pRight )
+TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, const TextNode* pRight )
 {
     sal_Int32 nPrevLen = pLeft->GetText().getLength();
     pLeft->Append( *pRight );

@@ -63,7 +63,7 @@ public:
     /// Destroy a TextBox for a shape.
     static void destroy(SwFrameFormat* pShape);
     /// Get interface of a shape's TextBox, if there is any.
-    static css::uno::Any queryInterface(SwFrameFormat* pShape, const css::uno::Type& rType);
+    static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
 
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,

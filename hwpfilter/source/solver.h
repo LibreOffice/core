@@ -26,7 +26,7 @@ public:
   static std::unique_ptr<std::unique_ptr<double[]>[]> NewMatrix (int N);
   static std::unique_ptr<double[]> NewVector (int N);
 
-  static bool Solve (int N, std::unique_ptr<std::unique_ptr<double[]>[]>& A, double* b);
+  static bool Solve (int N, std::unique_ptr<std::unique_ptr<double[]>[]> const & A, double* b);
   // Input:
   //     A[N][N] coefficient matrix, entries are A[row][col]
   //     b[N] vector, entries are b[row]

@@ -379,7 +379,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, weld::ToggleButton&, r, void
     ChangeMetricHdl_Impl(&r);
 }
 
-void SvxLineDefTabPage::ChangeMetricHdl_Impl(weld::ToggleButton* p)
+void SvxLineDefTabPage::ChangeMetricHdl_Impl(const weld::ToggleButton* p)
 {
     if( !m_xCbxSynchronize->get_active() && m_xMtrLength1->get_unit() != eFUnit )
     {
@@ -450,7 +450,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeListBoxHdl_Impl, weld::ComboBox&, rListB
     SelectTypeHdl_Impl(&rListBox);
 }
 
-void  SvxLineDefTabPage::SelectTypeHdl_Impl(weld::ComboBox* p)
+void  SvxLineDefTabPage::SelectTypeHdl_Impl(const weld::ComboBox* p)
 {
     if (p == m_xLbType1.get() || !p)
     {

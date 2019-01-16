@@ -331,7 +331,7 @@ bool KillFile( const INetURLObject& rURL )
 }
 
 
-GalleryProgress::GalleryProgress( GraphicFilter* pFilter )
+GalleryProgress::GalleryProgress( const GraphicFilter* pFilter )
 {
 
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );

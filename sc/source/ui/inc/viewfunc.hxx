@@ -104,7 +104,7 @@ public:
                                             bool bApi = false, bool bIncludeObjects = false, bool bStopEdit = true );
     bool                        CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut,
                                             bool bIncludeObjects );
-    bool                        CopyToClipMultiRange( ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut,
+    bool                        CopyToClipMultiRange( const ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut,
                                             bool bApi, bool bIncludeObjects );
     ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC bool           PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,

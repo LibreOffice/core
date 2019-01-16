@@ -374,7 +374,7 @@ IMPL_LINK(ScTablePage, PageNoHdl, weld::ToggleButton&, rBtn, void)
     PageNoHdl(&rBtn);
 }
 
-void ScTablePage::PageNoHdl(weld::ToggleButton* pBtn)
+void ScTablePage::PageNoHdl(const weld::ToggleButton* pBtn)
 {
     if (m_xBtnPageNo->get_active())
     {

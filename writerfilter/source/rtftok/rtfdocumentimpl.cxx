@@ -191,7 +191,7 @@ OString DTTM22OString(long nDTTM)
     return DateTimeToOString(msfilter::util::DTTM2DateTime(nDTTM));
 }
 
-static RTFSprms lcl_getBookmarkProperties(int nPos, OUString& rString)
+static RTFSprms lcl_getBookmarkProperties(int nPos, const OUString& rString)
 {
     RTFSprms aAttributes;
     auto pPos = new RTFValue(nPos);
@@ -458,7 +458,7 @@ static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttr
 }
 
 writerfilter::Reference<Properties>::Pointer_t
-RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms const& rSprms, Id nStyleType)
+RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSprms, Id nStyleType)
 {
     RTFSprms aSprms(rSprms);
     RTFValue::Pointer_t pAbstractList;

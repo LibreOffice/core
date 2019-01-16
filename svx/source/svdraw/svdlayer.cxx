@@ -188,7 +188,7 @@ SdrLayer* SdrLayerAdmin::NewLayer(const OUString& rName, sal_uInt16 nPos)
     return pLay;
 }
 
-sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
+sal_uInt16 SdrLayerAdmin::GetLayerPos(const SdrLayer* pLayer) const
 {
     sal_uInt16 nRet=SDRLAYERPOS_NOTFOUND;
     if (pLayer!=nullptr) {

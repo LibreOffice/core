@@ -305,7 +305,7 @@ public:
     SwTOXWidget* GetActiveControl() { return m_pActiveCtrl; }
 
     void        InsertAtSelection(const SwFormToken& aToken);
-    void        RemoveControl(SwTOXButton* pDel, bool bInternalCall = false);
+    void        RemoveControl(const SwTOXButton* pDel, bool bInternalCall = false);
 
     bool        Contains(FormTokenType) const;
 

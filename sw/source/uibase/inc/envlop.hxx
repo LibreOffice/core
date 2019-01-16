@@ -28,7 +28,7 @@
 #define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FieldUnit::TWIP))
 #define SetFieldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FieldUnit::TWIP)
 
-inline int getfieldval(weld::MetricSpinButton& rField)
+inline int getfieldval(const weld::MetricSpinButton& rField)
 {
     return rField.denormalize(rField.get_value(FieldUnit::TWIP));
 }

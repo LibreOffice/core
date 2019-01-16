@@ -61,7 +61,7 @@ private:
     DECL_LINK(ButtonHdl, weld::Button&, void);
 
     void                CheckButtons();
-    void                SaveSetCurEntry(weld::TreeView& rBox, weld::TreeIter& rEntry);
+    void                SaveSetCurEntry(weld::TreeView& rBox, const weld::TreeIter& rEntry);
     void                UpdateFields();
 
     void                EnableButton(weld::Button& rButton, bool bEnable);

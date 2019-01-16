@@ -227,7 +227,7 @@ void SdPageObjsTLB::SetSdNavigator(SdNavigatorWin* pNavigator)
     mpNavigator = pNavigator;
 }
 
-void SdPageObjsTLB::SetViewFrame( SfxViewFrame* pViewFrame )
+void SdPageObjsTLB::SetViewFrame( const SfxViewFrame* pViewFrame )
 {
     sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
     const css::uno::Reference< css::frame::XFrame > xFrame = pBase->GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();

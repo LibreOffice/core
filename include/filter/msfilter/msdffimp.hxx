@@ -770,12 +770,12 @@ struct SvxMSDffShapeInfo
         {
             bReplaceByFly   = false;
         }
-    SvxMSDffShapeInfo(SvxMSDffShapeInfo& rInfo):
+    SvxMSDffShapeInfo(const SvxMSDffShapeInfo& rInfo):
         nShapeId( rInfo.nShapeId ),
         nFilePos( rInfo.nFilePos ),
-        nTxBxComp( rInfo.nTxBxComp )
+        nTxBxComp( rInfo.nTxBxComp ),
+        bReplaceByFly( rInfo.bReplaceByFly )
         {
-            bReplaceByFly   = rInfo.bReplaceByFly;
         }
 };
 

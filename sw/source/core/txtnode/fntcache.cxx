@@ -101,7 +101,7 @@ long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &
  * Pre-calculates glyph items for the rendered subset of rKey's text, assuming
  * outdev state does not change between the outdev calls.
  */
-SalLayoutGlyphs* lcl_CreateLayout(SwTextGlyphsKey& rKey, SalLayoutGlyphs& rTextGlyphs)
+SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SalLayoutGlyphs& rTextGlyphs)
 {
     // Use pre-calculated result.
     if (rTextGlyphs.IsValid())

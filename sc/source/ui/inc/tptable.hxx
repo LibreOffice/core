@@ -76,7 +76,7 @@ private:
     // Handler:
     DECL_LINK(PageDirHdl, weld::ToggleButton&, void);
     DECL_LINK(PageNoHdl, weld::ToggleButton&, void);
-    void PageNoHdl(weld::ToggleButton* pBtn);
+    void PageNoHdl(const weld::ToggleButton* pBtn);
     DECL_LINK(ScaleHdl, weld::ComboBox&, void);
     DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
 };

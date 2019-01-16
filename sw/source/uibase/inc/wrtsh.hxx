@@ -448,7 +448,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM = nullptr );
 
     // starts dialog for inserting ranges via Drag&Drop/Clipboard
-    void StartInsertRegionDialog(SwSectionData&);
+    void StartInsertRegionDialog(const SwSectionData&);
 
     // ctor, the first one is a kind of a controlled copy ctor for more views of a document
     SwWrtShell( SwWrtShell&, vcl::Window *pWin, SwView &rShell);

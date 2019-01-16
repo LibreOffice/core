@@ -1612,7 +1612,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, weld::ComboBox&, rBox, voi
     SelectHdl_Impl(&rBox);
 }
 
-void SvxCharEffectsPage::SelectHdl_Impl(weld::ComboBox* pBox)
+void SvxCharEffectsPage::SelectHdl_Impl(const weld::ComboBox* pBox)
 {
     if (m_xEmphasisLB.get() == pBox)
     {

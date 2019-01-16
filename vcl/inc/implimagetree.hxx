@@ -133,7 +133,7 @@ private:
 
     void createStyle();
 
-    IconCache &getIconCache(ImageRequestParameters& rParameters);
+    IconCache &getIconCache(const ImageRequestParameters& rParameters);
 
     bool iconCacheLookup(ImageRequestParameters& rParameters);
 

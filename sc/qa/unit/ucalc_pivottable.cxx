@@ -79,7 +79,7 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef const aFields[], size_t 
 }
 
 bool checkDPTableOutput(
-    ScDocument* pDoc, const ScRange& aOutRange,
+    const ScDocument* pDoc, const ScRange& aOutRange,
     const std::vector<std::vector<const char*>>& aOutputCheck, const char* pCaption )
 {
     return checkOutput(pDoc, aOutRange, aOutputCheck, pCaption);

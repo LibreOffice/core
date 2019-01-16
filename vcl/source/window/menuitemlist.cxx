@@ -39,7 +39,7 @@ MenuItemData::~MenuItemData()
     pSubMenu.disposeAndClear();
 }
 
-SalLayoutGlyphs* MenuItemData::GetTextGlyphs(OutputDevice* pOutputDevice)
+SalLayoutGlyphs* MenuItemData::GetTextGlyphs(const OutputDevice* pOutputDevice)
 {
     if (aTextGlyphs.IsValid())
         // Use pre-calculated result.

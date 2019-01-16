@@ -69,7 +69,7 @@ namespace
  * Pre-calculates glyph items for rText on rRenderContext. Subsequent calls
  * avoid the calculation and just return a pointer to rTextGlyphs.
  */
-SalLayoutGlyphs* lcl_GetRulerTextGlyphs(vcl::RenderContext& rRenderContext, const OUString& rText,
+SalLayoutGlyphs* lcl_GetRulerTextGlyphs(const vcl::RenderContext& rRenderContext, const OUString& rText,
                                         SalLayoutGlyphs& rTextGlyphs)
 {
     if (rTextGlyphs.IsValid())

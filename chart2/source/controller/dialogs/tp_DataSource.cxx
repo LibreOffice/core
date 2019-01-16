@@ -756,7 +756,7 @@ void DataSourceTabPage::disposingRangeSelection()
     m_rDialogModel.getRangeSelectionHelper()->stopRangeListening( false );
 }
 
-bool DataSourceTabPage::updateModelFromControl(weld::Entry* pField)
+bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
 {
     if (!m_bIsDirty)
         return true;

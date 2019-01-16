@@ -259,7 +259,7 @@ SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XS
     return getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT);
 }
 
-template <typename T> static void lcl_queryInterface(SwFrameFormat* pShape, uno::Any& rAny)
+template <typename T> static void lcl_queryInterface(const SwFrameFormat* pShape, uno::Any& rAny)
 {
     if (SwFrameFormat* pFormat = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
     {
@@ -269,7 +269,7 @@ template <typename T> static void lcl_queryInterface(SwFrameFormat* pShape, uno:
     }
 }
 
-uno::Any SwTextBoxHelper::queryInterface(SwFrameFormat* pShape, const uno::Type& rType)
+uno::Any SwTextBoxHelper::queryInterface(const SwFrameFormat* pShape, const uno::Type& rType)
 {
     uno::Any aRet;
 

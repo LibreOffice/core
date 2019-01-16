@@ -1388,7 +1388,7 @@ private:
 
 public:
     IsFieldNotDeleted(IDocumentRedlineAccess const& rIDRA,
-            FilterFunctor & rNext)
+            const FilterFunctor & rNext)
         : m_rIDRA(rIDRA)
         , m_rNext(rNext)
     {

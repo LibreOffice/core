@@ -1212,7 +1212,7 @@ namespace {
 
 struct SetDirtyIfPostponedHandler
 {
-    void operator() (ScTableUniquePtr & p)
+    void operator() (const ScTableUniquePtr & p)
     {
         if (p)
             p->SetDirtyIfPostponed();
@@ -1221,7 +1221,7 @@ struct SetDirtyIfPostponedHandler
 
 struct BroadcastRecalcOnRefMoveHandler
 {
-    void operator() (ScTableUniquePtr & p)
+    void operator() (const ScTableUniquePtr & p)
     {
         if (p)
             p->BroadcastRecalcOnRefMove();

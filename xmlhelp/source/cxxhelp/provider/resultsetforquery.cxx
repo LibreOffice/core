@@ -71,7 +71,7 @@ struct HitItem
 ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentContext >& rxContext,
                                       const uno::Reference< XContentProvider >&  xProvider,
                                       const uno::Sequence< beans::Property >& seq,
-                                      URLParameter& aURLParameter,
+                                      const URLParameter& aURLParameter,
                                       Databases* pDatabases )
     : ResultSetBase( rxContext,xProvider,seq ),
       m_aURLParameter( aURLParameter )

@@ -350,8 +350,8 @@ public:
     /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
     bool IsNumeric() const ;
 
-    void MatTrans( ScMatrix& mRes) const ;
-    void MatCopy ( ScMatrix& mRes) const ;
+    void MatTrans( const ScMatrix& mRes) const ;
+    void MatCopy ( const ScMatrix& mRes) const ;
 
     // Convert ScInterpreter::CompareMat values (-1,0,1) to boolean values
     void CompareEqual() ;
@@ -391,13 +391,13 @@ public:
     void GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero = true ) const ;
     void MergeDoubleArrayMultiply( std::vector<double>& rArray ) const ;
 
-    void NotOp(ScMatrix& rMat) ;
-    void NegOp(ScMatrix& rMat) ;
-    void AddOp(double fVal, ScMatrix& rMat) ;
-    void SubOp(bool bFlag, double fVal, ScMatrix& rMat) ;
-    void MulOp(double fVal, ScMatrix& rMat) ;
-    void DivOp(bool bFlag, double fVal, ScMatrix& rMat) ;
-    void PowOp(bool bFlag, double fVal, ScMatrix& rMat) ;
+    void NotOp(const ScMatrix& rMat) ;
+    void NegOp(const ScMatrix& rMat) ;
+    void AddOp(double fVal, const ScMatrix& rMat) ;
+    void SubOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
+    void MulOp(double fVal, const ScMatrix& rMat) ;
+    void DivOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
+    void PowOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
 
     std::vector<ScMatrix::IterateResult> Collect(const std::vector<sc::op::Op>& aOp) ;
 

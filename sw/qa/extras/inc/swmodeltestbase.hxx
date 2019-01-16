@@ -350,7 +350,7 @@ protected:
     }
 
 protected:
-    void dumpLayout(uno::Reference< lang::XComponent > & rComponent)
+    void dumpLayout(const uno::Reference< lang::XComponent > & rComponent)
     {
         // create the xml writer
         mpXmlBuffer = xmlBufferCreate();

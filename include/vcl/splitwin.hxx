@@ -104,7 +104,7 @@ private:
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
                                                 bool bRows );
-    static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
+    static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( const SplitWindow* pWindow, const Point& rPos,
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos );
     SAL_DLLPRIVATE void ImplDrawSplitTracking(const Point& rPos);
 

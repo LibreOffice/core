@@ -154,7 +154,7 @@ SwCharFormat* SwEndNoteInfo::GetCharFormat(SwDoc& rDoc) const
 
 namespace
 {
-    void lcl_ResetPoolIdForDocAndSync(const sal_uInt16 nId, SwCharFormat* pFormat, SwEndNoteInfo& rInfo)
+    void lcl_ResetPoolIdForDocAndSync(const sal_uInt16 nId, SwCharFormat* pFormat, const SwEndNoteInfo& rInfo)
     {
         auto pDoc = pFormat->GetDoc();
         if(!pDoc)

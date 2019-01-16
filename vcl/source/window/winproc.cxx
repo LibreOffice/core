@@ -1869,13 +1869,13 @@ static void DelayedCloseEventLink( void* pCEvent, void* )
     delete pEv;
 }
 
-static void ImplHandleClose( vcl::Window* pWindow )
+static void ImplHandleClose( const vcl::Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     bool bWasPopup = false;
     if( pWindow->ImplIsFloatingWindow() &&
-        static_cast<FloatingWindow*>(pWindow)->ImplIsInPrivatePopupMode() )
+        static_cast<const FloatingWindow*>(pWindow)->ImplIsInPrivatePopupMode() )
     {
         bWasPopup = true;
     }
