@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d2f41ad2",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2019-01-16T13:16:17Z",
+      "side": 1,
+      "message": "std::max_element",
+      "revId": "343aabe343f044a230c94f5dc9cc47e33d614953",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
