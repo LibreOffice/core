@@ -1806,6 +1806,7 @@ ToFile( "ENABLE_HYPHEN",	"@ENABLE_HYPHEN@", "e" );
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );
 ToFile( "DPKG",              "@DPKG@",           "e" );
+ToFile( "FAKEROOT",          "@FAKEROOT@",       "e" );
 ToFile( "PKGMK",             "@PKGMK@",          "e" );
 ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
 ToFile( "GNUTAR",            "@GNUTAR@",         "e" );

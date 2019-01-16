@@ -3199,7 +3199,12 @@ sub tar_package
     my ( $installdir, $packagename, $tarfilename, $getuidlibrary) = @_;
 
     my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    if ($ENV{'FAKEROOT'} ne "no") {
+        $ldpreloadstring = "fakeroot"
+    } else {
+        if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+    }
 
     my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename > $tarfilename";
     # my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * > $tarfilename";
@@ -3238,7 +3243,12 @@ sub untar_package
     my ( $installdir, $tarfilename, $getuidlibrary) = @_;
 
     my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    if ($ENV{'FAKEROOT'} ne "no") {
+        $ldpreloadstring = "fakeroot"
+    } else {
+        if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+    }
 
     my $systemcall = "cd $installdir; $ldpreloadstring tar -xf $tarfilename";
 

@@ -303,7 +303,12 @@ sub tar_package
     my ( $installdir, $tarfilename, $getuidlibrary) = @_;
 
     my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    if ($ENV{'FAKEROOT'} ne "no") {
+        $ldpreloadstring = "fakeroot"
+    } else {
+        if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+    }
 
     my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * > $tarfilename";
 
@@ -367,8 +372,14 @@ sub create_tar_gz_file_from_package
     $installer::globals::downloadfileextension = ".tar.gz";
     my $targzname = $packagename . $installer::globals::downloadfileextension;
     $installer::globals::downloadfilename = $targzname;
+
     my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    if ($ENV{'FAKEROOT'} ne "no") {
+        $ldpreloadstring = "fakeroot"
+    } else {
+        if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+    }
 
     my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename | gzip > $targzname";
     $installer::logger::Info->printf("... %s ...\n", $systemcall);
@@ -788,7 +799,12 @@ sub create_tar_gz_file_from_directory
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$changedir);
 
     my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    if ($ENV{'FAKEROOT'} ne "no") {
+        $ldpreloadstring = "fakeroot"
+    } else {
+        if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+    }
 
     $installer::globals::downloadfileextension = ".tar.gz";
     $installer::globals::downloadfilename = $downloadfilename . $installer::globals::downloadfileextension;

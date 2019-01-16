@@ -45,6 +45,12 @@ DEBFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i4.2-$(TARGET)-menus_$(PKGVERS
 
 .ENDIF
 
+.IF "$(FAKEROOT)"!="no"
+FAKEROOT2="fakeroot"
+.ELSE
+FAKEROOT2="LD_PRELOAD=$(SOLARBINDIR)/getuid.so"
+.ENDIF
+
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
@@ -85,7 +91,7 @@ $(DEBFILES) : makefile.mk control postinst postrm prerm
     @chmod a+rx $(MISC)$/$(@:b)$/DEBIAN $(MISC)/$(@:b)/DEBIAN/post* $(MISC)/$(@:b)/DEBIAN/pre*
     @chmod g-s $(MISC)/$(@:b)/DEBIAN
     @mkdir -p $(PKGDIR)
-    /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(@:b) $@" 
+    /bin/bash -c "$(FAKEROOT2) dpkg-deb --build $(MISC)/$(@:b) $@" 
     $(RM) -r $(MISC)$/$(@:b)
 #	@chmod -R g+w $(MISC)/$(TARGET)/$(DEBFILE:f)
 

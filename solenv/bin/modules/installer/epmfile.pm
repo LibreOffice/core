@@ -887,10 +887,20 @@ sub get_ld_preload_string
 
     my $getuidlibraryname = "getuid.so";
 
-    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
-    if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "get_ld_preload_string"); }
+    my $ldpreloadstring;
 
-    my $ldpreloadstring = "LD_PRELOAD=" . $$getuidlibraryref;
+    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
+
+    if ($ENV{'FAKEROOT'} ne "no") {
+
+        $ldpreloadstring = "fakeroot"
+
+    } else {
+
+        if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "get_ld_preload_string"); }
+
+        my $ldpreloadstring = "LD_PRELOAD=" . $$getuidlibraryref;
+    }
 
     return $ldpreloadstring;
 }
@@ -914,7 +924,7 @@ sub call_epm
     my $outdirstring = "";
     if ( $installer::globals::epmoutpath ne "" ) { $outdirstring = " --output-dir $installer::globals::epmoutpath"; }
 
-    # Debian package build needs a LD_PRELOAD for correct rights
+    # Debian package build needs fakeroot or our LD_PRELOAD hack for correct rights
 
     my $ldpreloadstring = "";
 

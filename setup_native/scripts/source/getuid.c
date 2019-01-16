@@ -111,10 +111,11 @@ int fstatat64(int fildes, const char *path, struct stat64  *buf, int flag)
 }
 #elif  defined LINUX
 
-uid_t getuid  (void) {return 0;}
-uid_t geteuid (void) {return 0;}
+uid_t getuid  (void)    {return 0;}
+uid_t geteuid (void)    {return 0;}
+int setgid    (gid_t p) {return 0;}
 
-/* This is to fool tar */
+/* This is to fool epm, tar, dpkg, et.al. into thinking we are root */
 #ifdef X86_64
 int __lxstat(int n, const char *path, struct stat *buf)
 {
