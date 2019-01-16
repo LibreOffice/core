@@ -45,6 +45,8 @@ class Qt5Widget : public QWidget
     bool handleKeyEvent(QKeyEvent*, bool);
     void handleMouseButtonEvent(QMouseEvent*, bool);
 
+    virtual bool event(QEvent*) override;
+
     virtual void focusInEvent(QFocusEvent*) override;
     virtual void focusOutEvent(QFocusEvent*) override;
     virtual void keyPressEvent(QKeyEvent*) override;
