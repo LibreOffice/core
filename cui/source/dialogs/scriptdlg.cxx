@@ -25,7 +25,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -234,7 +233,7 @@ void SFTreeListBox::Init( const OUString& language  )
             getLangNodeFromRootNode( children[ n ], language );
 
         insertEntry( uiName, app ? OUStringLiteral(RID_CUIBMP_HARDDISK) : OUStringLiteral(RID_CUIBMP_DOC),
-            nullptr, true, o3tl::make_unique< SFEntry >( langEntries, xDocumentModel ), factoryURL );
+            nullptr, true, std::make_unique< SFEntry >( langEntries, xDocumentModel ), factoryURL );
     }
 
     SetUpdateMode( true );
@@ -315,11 +314,11 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
         OUString name( children[ n ]->getName() );
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            insertEntry(name, RID_CUIBMP_LIB, pRootEntry, true, o3tl::make_unique< SFEntry >( children[ n ],model));
+            insertEntry(name, RID_CUIBMP_LIB, pRootEntry, true, std::make_unique< SFEntry >( children[ n ],model));
         }
         else
         {
-            insertEntry(name, RID_CUIBMP_MACRO, pRootEntry, false, o3tl::make_unique< SFEntry >( children[ n ],model));
+            insertEntry(name, RID_CUIBMP_MACRO, pRootEntry, false, std::make_unique< SFEntry >( children[ n ],model));
         }
     }
 }
@@ -935,12 +934,12 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
             pNewEntry = m_pScriptsBox->insertEntry( aChildName,
-                    RID_CUIBMP_MACRO, pEntry, false, o3tl::make_unique< SFEntry >( aChildNode,xDocumentModel ) );
+                    RID_CUIBMP_MACRO, pEntry, false, std::make_unique< SFEntry >( aChildNode,xDocumentModel ) );
         }
         else
         {
             pNewEntry = m_pScriptsBox->insertEntry( aChildName,
-                RID_CUIBMP_LIB, pEntry, false, o3tl::make_unique< SFEntry >( aChildNode,xDocumentModel ) );
+                RID_CUIBMP_LIB, pEntry, false, std::make_unique< SFEntry >( aChildNode,xDocumentModel ) );
 
             // If the Parent is not loaded then set to
             // loaded, this will prevent RequestingChildren ( called

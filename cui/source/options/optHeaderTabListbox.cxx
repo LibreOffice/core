@@ -23,7 +23,6 @@
 #include <vcl/headbar.hxx>
 #include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
-#include <o3tl/make_unique.hxx>
 namespace svx
 {
 // class OptLBoxString_Impl ----------------------------------------------
@@ -72,7 +71,7 @@ void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const OUString& rT
     {
         // initialize all columns with own class (column 0 == Bitmap)
         SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nCol ));
-        pEntry->ReplaceItem(o3tl::make_unique<OptLBoxString_Impl>(rCol.GetText()), nCol);
+        pEntry->ReplaceItem(std::make_unique<OptLBoxString_Impl>(rCol.GetText()), nCol);
     }
 }
 

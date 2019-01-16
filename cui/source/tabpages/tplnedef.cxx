@@ -42,7 +42,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
-#include <o3tl/make_unique.hxx>
 #include <cuitabarea.hxx>
 
 #define XOUT_WIDTH    150
@@ -524,7 +523,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
             FillDash_Impl();
 
             long nDashCount = pDashList->Count();
-            pDashList->Insert( o3tl::make_unique<XDashEntry>(aDash, aName), nDashCount );
+            pDashList->Insert( std::make_unique<XDashEntry>(aDash, aName), nDashCount );
             m_xLbLineStyles->Append( *pDashList->GetDash(nDashCount), pDashList->GetUiBitmap(nDashCount) );
 
             m_xLbLineStyles->set_active(m_xLbLineStyles->get_count() - 1);
@@ -592,7 +591,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
                 bLoop = false;
                 FillDash_Impl();
 
-                pDashList->Replace(o3tl::make_unique<XDashEntry>(aDash, aName), nPos);
+                pDashList->Replace(std::make_unique<XDashEntry>(aDash, aName), nPos);
                 m_xLbLineStyles->Modify(*pDashList->GetDash(nPos), nPos, pDashList->GetUiBitmap(nPos));
 
                 m_xLbLineStyles->set_active(nPos);

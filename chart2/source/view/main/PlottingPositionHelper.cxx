@@ -31,7 +31,6 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
-#include <o3tl/make_unique.hxx>
 #include <rtl/math.hxx>
 #include <tools/helpers.hxx>
 
@@ -81,7 +80,7 @@ PlottingPositionHelper::~PlottingPositionHelper()
 
 std::unique_ptr<PlottingPositionHelper> PlottingPositionHelper::clone() const
 {
-    return o3tl::make_unique<PlottingPositionHelper>(*this);
+    return std::make_unique<PlottingPositionHelper>(*this);
 }
 
 std::unique_ptr<PlottingPositionHelper> PlottingPositionHelper::createSecondaryPosHelper( const ExplicitScaleData& rSecondaryScale )
@@ -337,7 +336,7 @@ PolarPlottingPositionHelper::~PolarPlottingPositionHelper()
 
 std::unique_ptr<PlottingPositionHelper> PolarPlottingPositionHelper::clone() const
 {
-    return o3tl::make_unique<PolarPlottingPositionHelper>(*this);
+    return std::make_unique<PolarPlottingPositionHelper>(*this);
 }
 
 void PolarPlottingPositionHelper::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)

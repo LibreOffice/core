@@ -40,7 +40,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <o3tl/make_unique.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -628,11 +627,11 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     ,m_nLength(0)
 {
     if (eds_check_version( 3, 7, 6 ) == nullptr)
-        m_pVersionHelper  = o3tl::make_unique<OEvoabVersion38Helper>();
+        m_pVersionHelper  = std::make_unique<OEvoabVersion38Helper>();
     else if (eds_check_version( 3, 6, 0 ) == nullptr)
-        m_pVersionHelper  = o3tl::make_unique<OEvoabVersion36Helper>();
+        m_pVersionHelper  = std::make_unique<OEvoabVersion36Helper>();
     else
-        m_pVersionHelper  = o3tl::make_unique<OEvoabVersion35Helper>();
+        m_pVersionHelper  = std::make_unique<OEvoabVersion35Helper>();
 
     #define REGISTER_PROP( id, member ) \
         registerProperty( \

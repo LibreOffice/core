@@ -29,7 +29,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
-#include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
 
 #include <memory>
@@ -204,13 +203,13 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
                                         bool bInsertToPrefBox)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(
         Image(), Image(), false)); //It is needed, otherwise causes crash
-    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rProp));
-    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rStatus));
-    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rType));
-    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rValue));
-    m_vectorUserData.push_back(o3tl::make_unique<UserData>(rPropertyPath));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(rProp));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(rStatus));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(rType));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(rValue));
+    m_vectorUserData.push_back(std::make_unique<UserData>(rPropertyPath));
     pEntry->SetUserData(m_vectorUserData.back().get());
 
     if(bInsertToPrefBox)
@@ -283,16 +282,16 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             {
                 // not leaf node
                 SvTreeListEntry* pEntry = new SvTreeListEntry;
-                pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
+                pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(
                     SvTreeListBox::GetDefaultExpandedNodeImage(),
                     SvTreeListBox::GetDefaultCollapsedNodeImage(), false));
-                pEntry->AddItem(o3tl::make_unique<SvLBoxString>(seqItems[i]));
+                pEntry->AddItem(std::make_unique<SvLBoxString>(seqItems[i]));
                 //It is needed, without this the selection line will be truncated.
-                pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
-                pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
-                pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
+                pEntry->AddItem(std::make_unique<SvLBoxString>(""));
+                pEntry->AddItem(std::make_unique<SvLBoxString>(""));
+                pEntry->AddItem(std::make_unique<SvLBoxString>(""));
 
-                m_vectorUserData.push_back(o3tl::make_unique<UserData>(xNextNameAccess, lineage + 1));
+                m_vectorUserData.push_back(std::make_unique<UserData>(xNextNameAccess, lineage + 1));
                 pEntry->SetUserData(m_vectorUserData.back().get());
                 pEntry->EnableChildrenOnDemand();
                 m_pPrefBox->Insert( pEntry, pParentEntry );
@@ -774,7 +773,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                 );
                 if (it != m_prefBoxEntries.end())
                 {
-                    (*it)->ReplaceItem(o3tl::make_unique<SvLBoxString>(sDialogValue), 4);
+                    (*it)->ReplaceItem(std::make_unique<SvLBoxString>(sDialogValue), 4);
 
                     SvTreeListEntries::iterator modifiedIt = std::find_if(
                                 m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
@@ -787,7 +786,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
 
                     if( modifiedIt != m_modifiedPrefBoxEntries.end())
                     {
-                        (*modifiedIt)->ReplaceItem(o3tl::make_unique<SvLBoxString>(sDialogValue), 4);
+                        (*modifiedIt)->ReplaceItem(std::make_unique<SvLBoxString>(sDialogValue), 4);
                     }
                     else
                     {
@@ -887,14 +886,14 @@ void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
         if(!hasEntry)
         {
             pParentEntry = new SvTreeListEntry;
-            pParentEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
+            pParentEntry->AddItem(std::make_unique<SvLBoxContextBmp>(
                    SvTreeListBox::GetDefaultExpandedNodeImage(),
                    SvTreeListBox::GetDefaultCollapsedNodeImage(), false));
-            pParentEntry->AddItem(o3tl::make_unique<SvLBoxString>(sParentName));
+            pParentEntry->AddItem(std::make_unique<SvLBoxString>(sParentName));
             //It is needed, without this the selection line will be truncated.
-            pParentEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
-            pParentEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
-            pParentEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
+            pParentEntry->AddItem(std::make_unique<SvLBoxString>(""));
+            pParentEntry->AddItem(std::make_unique<SvLBoxString>(""));
+            pParentEntry->AddItem(std::make_unique<SvLBoxString>(""));
             pParentEntry->EnableChildrenOnDemand(false);
             m_pPrefBox->Insert( pParentEntry, pGrandParentEntry );
         }

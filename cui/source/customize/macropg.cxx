@@ -40,7 +40,6 @@
 #include <strings.hrc>
 #include <vcl/builderfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -533,7 +532,7 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         OUString* pEventName = new OUString( sEventName );
         _pE->SetUserData( static_cast<void*>(pEventName) );
         OUString sNew( eventURL );
-        _pE->ReplaceItem(o3tl::make_unique<IconLBoxString>(sNew, &mpImpl->aMacroImg, &mpImpl->aComponentImg),
+        _pE->ReplaceItem(std::make_unique<IconLBoxString>(sNew, &mpImpl->aMacroImg, &mpImpl->aComponentImg),
             LB_MACROS_ITEMPOS );
         rListBox.GetModel()->InvalidateEntry( _pE );
         rListBox.Select( _pE );
@@ -676,7 +675,7 @@ void SvxMacroTabPage_::GenericHandler_Impl( SvxMacroTabPage_* pThis, PushButton*
 
     // update the listbox entry
     pImpl->pEventLB->SetUpdateMode( false );
-    pE->ReplaceItem(o3tl::make_unique<IconLBoxString>(sEventURL, &pImpl->aMacroImg, &pImpl->aComponentImg),
+    pE->ReplaceItem(std::make_unique<IconLBoxString>(sEventURL, &pImpl->aMacroImg, &pImpl->aComponentImg),
         LB_MACROS_ITEMPOS );
 
     rListBox.GetModel()->InvalidateEntry( pE );

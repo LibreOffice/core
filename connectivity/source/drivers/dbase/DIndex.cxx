@@ -37,7 +37,6 @@
 #include <dbase/DResultSet.hxx>
 #include <strings.hrc>
 #include <unotools/sharedunocomponent.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::comphelper;
 
@@ -163,7 +162,7 @@ void ODbaseIndex::openIndexFile()
 std::unique_ptr<OIndexIterator> ODbaseIndex::createIterator()
 {
     openIndexFile();
-    return o3tl::make_unique<OIndexIterator>(this);
+    return std::make_unique<OIndexIterator>(this);
 }
 
 bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
