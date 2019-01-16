@@ -25,7 +25,7 @@
 #include <osl/interlck.h>
 #include <rtl/string.h>
 #include <rtl/ustring.h>
-#include <rtl/bootstrap.h>
+#include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 
 #include "sockimpl.hxx"
@@ -33,6 +33,7 @@
 #include "unixerrnostring.hxx"
 
 #include <cassert>
+#include <cstring>
 
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
@@ -127,38 +128,16 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
 
 }
 
-static bool
-cpyBootstrapSocketPath(sal_Char *name, size_t len)
+static OString
+getBootstrapSocketPath()
 {
-    bool bRet = false;
-    rtl_uString *pName = nullptr, *pValue = nullptr;
+    OUString pValue;
 
-    rtl_uString_newFromAscii(&pName, "OSL_SOCKET_PATH");
-
-    if (rtl_bootstrap_get(pName, &pValue, nullptr))
+    if (rtl::Bootstrap::get("OSL_SOCKET_PATH", pValue))
     {
-        if (pValue && pValue->length > 0)
-        {
-            rtl_String *pStrValue = nullptr;
-
-            rtl_uString2String(&pStrValue, pValue->buffer,
-                               pValue->length, RTL_TEXTENCODING_UTF8,
-                               OUSTRING_TO_OSTRING_CVTFLAGS);
-            if (pStrValue)
-            {
-                if (pStrValue->length > 0)
-                {
-                    size_t nCopy = (len-1 < static_cast<size_t>(pStrValue->length)) ? len-1 : static_cast<size_t>(pStrValue->length);
-                    strncpy (name, pStrValue->buffer, nCopy);
-                    name[nCopy] = '\0';
-                    bRet = static_cast<size_t>(pStrValue->length) < len;
-                }
-                rtl_string_release(pStrValue);
-            }
-        }
-        rtl_uString_release(pName);
+        return OUStringToOString(pValue, RTL_TEXTENCODING_UTF8);
     }
-    return bRet;
+    return "";
 }
 
 static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options,
@@ -177,8 +156,13 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
         strncpy(name, PIPEDEFAULTPATH, sizeof(name));
     else if (access(PIPEALTERNATEPATH, W_OK) == 0)
         strncpy(name, PIPEALTERNATEPATH, sizeof(name));
-    else if (!cpyBootstrapSocketPath (name, sizeof (name)))
-        return nullptr;
+    else {
+        auto const path = getBootstrapSocketPath ();
+        if (path.isEmpty() || sal_uInt32(path.getLength()) > sizeof(name) - 1) {
+            return nullptr;
+        }
+        std::memcpy(name, path.getStr(), sal_uInt32(path.getLength()) + 1);
+    }
 
     name[sizeof(name)-1] = '\0';  // ensure the string is NULL-terminated
     nNameLength = strlen(name);
