@@ -1004,35 +1004,6 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
     mpPageEdit->Enable( nPages > 1 );
 }
 
-void PrintDialog::updateOrientationBox( const bool bAutomatic )
-{
-    Orientation eOrientation = maPController->getPrinter()->GetOrientation();
-    if ( !bAutomatic )
-    {
-        mpOrientationBox->SelectEntryPos( static_cast<sal_Int32>(eOrientation) + 1 );
-
-        maPController->setValue( "IsLandscape",
-                                 makeAny( static_cast<sal_Int32>(eOrientation) ) );
-    }
-    else if ( hasOrientationChanged() )
-    {
-        mpOrientationBox->SelectEntryPos( ORIENTATION_AUTOMATIC );
-
-        // used to make sure document orientation matches printer paper orientation
-        maPController->setValue( "IsLandscape",
-                                 makeAny( static_cast<sal_Int32>(eOrientation) ) );
-    }
-}
-
-bool PrintDialog::hasOrientationChanged() const
-{
-    const int nOrientation = mpOrientationBox->GetSelectedEntryPos();
-    const Orientation eOrientation = maPController->getPrinter()->GetOrientation();
-
-    return (nOrientation == ORIENTATION_LANDSCAPE && eOrientation == Orientation::Portrait)
-        || (nOrientation == ORIENTATION_PORTRAIT && eOrientation == Orientation::Landscape);
-}
-
 // make sure paper size matches paper orientation
 void PrintDialog::checkPaperSize( Size& rPaperSize )
 {
@@ -1061,10 +1032,6 @@ void PrintDialog::setPaperOrientation( Orientation eOrientation )
         Size& aPaperSize = maPController->getPaperSizeSetup();
         checkPaperSize( aPaperSize );
     }
-
-    // used to sync printer paper orientation with document orientation
-    maPController->setValue( "IsLandscape",
-                             makeAny( static_cast<sal_Int32>(eOrientation) ) );
 }
 
 void PrintDialog::checkControlDependencies()
@@ -1937,8 +1904,6 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
                 }
             }
 
-            updateOrientationBox( false );
-
             // tdf#63905 don't use cache: page size may change
             preparePreview(false);
         }
@@ -1958,8 +1923,6 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             maPController->setPrinter( VclPtrInstance<Printer>( aNewPrinter ) );
             maPController->resetPrinterOptions( false  );
 
-            updateOrientationBox();
-
             // update text fields
             mpOKButton->SetText( maPrintText );
             updatePrinterText();
@@ -1974,7 +1937,6 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             maPController->resetPrinterOptions( true );
 
             setPaperSizes();
-            updateOrientationBox();
             preparePreview( true );
         }
 
@@ -2082,8 +2044,6 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
             // tdf#63905 use paper size set in printer properties
             if (pVal->Name == "PageOptions")
                 maPController->resetPaperToLastConfigured();
-
-            updateOrientationBox();
 
             checkOptionalControlDependencies();
 

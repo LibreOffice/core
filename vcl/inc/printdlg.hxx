@@ -232,8 +232,6 @@ namespace vcl
         void storeToSettings();
         void readFromSettings();
         void setPaperOrientation( Orientation eOrientation );
-        void updateOrientationBox( bool bAutomatic = true );
-        bool hasOrientationChanged() const;
         void checkPaperSize( Size& rPaperSize );
         void setPreviewText();
         void updatePrinterText();
