@@ -16,6 +16,41 @@
       "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_32212ea1",
+        "filename": "offapi/com/sun/star/frame/XAppDispatchProvider.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-16T10:15:29Z",
+      "side": 1,
+      "message": "yes, you can at least technically change that, as XAppDispatchProvider is not published; whether it is a good idea to change it (i.e., whether 3rd party code already relies on it in practice, even though it is not published) I do not know---it probably doesn\u0027t hurt to mark the commit [API CHANGE] nevertheless and mention this at \u003chttps://wiki.documentfoundation.org/ReleaseNotes/6.3#UNO_API_changes\u003e",
+      "parentUuid": "5f4e5783_e65e0ae5",
+      "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_122632b9",
+        "filename": "offapi/com/sun/star/frame/XDispatchInformationProvider2.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2019-01-16T10:15:29Z",
+      "side": 1,
+      "message": "this method lacks documentation (esp. for the meaning of SlotMode, which is the addition over XDispatchInformationProvider.getConfigurableDispatchInformation, and maybe there\u0027s a better name than ...2 (e.g., getConfigurable DispatchInformationForSlotMode)?",
+      "revId": "30a7355a54d9c989a8681afd0ff2eaae4a4ba0d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
