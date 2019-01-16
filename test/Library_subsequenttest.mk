@@ -144,7 +144,6 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xspreadsheets \
 	test/source/sheet/xspreadsheets2 \
 	test/source/sheet/xspreadsheetview \
-	test/source/sheet/xstyleloader \
 	test/source/sheet/xsubtotalcalculatable \
 	test/source/sheet/xsubtotaldescriptor \
 	test/source/sheet/xsubtotalfield \
@@ -153,6 +152,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xviewfreezable \
 	test/source/sheet/xviewpane \
 	test/source/sheet/xviewsplitable \
+	test/source/style/xstyleloader \
 	test/source/table/xcell \
 	test/source/table/xcellcursor \
 	test/source/table/xcolumnrowrange \

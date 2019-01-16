@@ -12,6 +12,7 @@
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/lang/xserviceinfo.hxx>
+#include <test/style/xstyleloader.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -33,12 +34,17 @@ class ScStyleFamiliesObj : public CalcUnoApiTest,
                            public apitest::XElementAccess,
                            public apitest::XIndexAccess,
                            public apitest::XNameAccess,
-                           public apitest::XServiceInfo
+                           public apitest::XServiceInfo,
+                           public apitest::XStyleLoader
 {
 public:
     ScStyleFamiliesObj();
 
     virtual uno::Reference<uno::XInterface> init() override;
+    virtual uno::Reference<sheet::XSpreadsheetDocument> getTargetDoc() override;
+    virtual uno::Reference<lang::XComponent> getSourceComponent() override;
+    virtual OUString getTestURL() override;
+
     virtual void setUp() override;
     virtual void tearDown() override;
 
@@ -62,10 +68,15 @@ public:
     CPPUNIT_TEST(testGetSupportedServiceNames);
     CPPUNIT_TEST(testSupportsService);
 
+    // XStyleLoader
+    CPPUNIT_TEST(testLoadStylesFromDocument);
+    CPPUNIT_TEST(testLoadStylesFromURL);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference<lang::XComponent> m_xComponent;
+    uno::Reference<lang::XComponent> m_xSrcComponent;
 };
 
 ScStyleFamiliesObj::ScStyleFamiliesObj()
@@ -88,17 +99,41 @@ uno::Reference<uno::XInterface> ScStyleFamiliesObj::init()
     return xNA;
 }
 
+uno::Reference<sheet::XSpreadsheetDocument> ScStyleFamiliesObj::getTargetDoc()
+{
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(m_xComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("no calc document", xDoc.is());
+
+    return xDoc;
+}
+
+uno::Reference<lang::XComponent> ScStyleFamiliesObj::getSourceComponent()
+{
+    return m_xSrcComponent;
+}
+
+OUString ScStyleFamiliesObj::getTestURL()
+{
+    OUString aFileURL;
+    createFileURL("ScStyleFamiliesObj.ods", aFileURL);
+    return aFileURL;
+}
+
 void ScStyleFamiliesObj::setUp()
 {
     CalcUnoApiTest::setUp();
     // create a calc document
     m_xComponent = loadFromDesktop("private:factory/scalc");
     CPPUNIT_ASSERT_MESSAGE("no component", m_xComponent.is());
+
+    m_xSrcComponent = loadFromDesktop(getTestURL());
+    CPPUNIT_ASSERT_MESSAGE("no src component", m_xSrcComponent.is());
 }
 
 void ScStyleFamiliesObj::tearDown()
 {
     closeDocument(m_xComponent);
+    closeDocument(m_xSrcComponent);
     CalcUnoApiTest::tearDown();
 }
 
