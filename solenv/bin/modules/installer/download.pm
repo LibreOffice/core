@@ -305,7 +305,7 @@ sub tar_package
     my $ldpreloadstring = "";
 
     if ($ENV{'FAKEROOT'} ne "no") {
-        $ldpreloadstring = "fakeroot"
+        $ldpreloadstring = $ENV{'FAKEROOT'};
     } else {
         if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
     }
@@ -376,7 +376,7 @@ sub create_tar_gz_file_from_package
     my $ldpreloadstring = "";
 
     if ($ENV{'FAKEROOT'} ne "no") {
-        $ldpreloadstring = "fakeroot"
+        $ldpreloadstring = $ENV{'FAKEROOT'};
     } else {
         if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
     }
@@ -801,7 +801,7 @@ sub create_tar_gz_file_from_directory
     my $ldpreloadstring = "";
 
     if ($ENV{'FAKEROOT'} ne "no") {
-        $ldpreloadstring = "fakeroot"
+        $ldpreloadstring = $ENV{'FAKEROOT'};
     } else {
         if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
     }

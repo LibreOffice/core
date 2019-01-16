@@ -893,7 +893,7 @@ sub get_ld_preload_string
 
     if ($ENV{'FAKEROOT'} ne "no") {
 
-        $ldpreloadstring = "fakeroot"
+        $ldpreloadstring = $ENV{'FAKEROOT'};
 
     } else {
 
