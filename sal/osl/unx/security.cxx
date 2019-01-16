@@ -320,7 +320,7 @@ static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory)
         pStr = getenv("HOME");
 #endif
 
-        if (pStr != nullptr && strlen(pStr) > 0 && access(pStr, 0) == 0)
+        if (pStr != nullptr && pStr[0] != '\0' && access(pStr, 0) == 0)
         {
             auto const len = std::strlen(pStr);
             if (len > sal_uInt32(std::numeric_limits<sal_Int32>::max())) {
@@ -389,7 +389,7 @@ static bool osl_psz_getConfigDir(oslSecurity Security, OString* pszDirectory)
 
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
 
-    if (pStr == nullptr || strlen(pStr) == 0 || access(pStr, 0) != 0)
+    if (pStr == nullptr || pStr[0] == '\0' || access(pStr, 0) != 0)
     {
         // a default equal to $HOME/.config should be used.
         OString home;

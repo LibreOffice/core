@@ -903,7 +903,7 @@ oslSocketResult osl_psz_getLocalHostname (
 {
     static sal_Char LocalHostname[256] = "";
 
-    if (strlen(LocalHostname) == 0)
+    if (LocalHostname[0] == '\0')
     {
 
 #ifdef SYSV
@@ -940,7 +940,7 @@ oslSocketResult osl_psz_getLocalHostname (
         }
     }
 
-    if (strlen(LocalHostname) > 0)
+    if (LocalHostname[0] != '\0')
     {
         strncpy(pBuffer, LocalHostname, nBufLen);
         pBuffer[nBufLen - 1] = '\0';
