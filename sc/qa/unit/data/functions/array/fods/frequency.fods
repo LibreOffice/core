@@ -3475,27 +3475,57 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce15"/>
-     <table:table-cell table:number-columns-repeated="22"/>
+     <table:table-cell table:formula="of:=SUM(ABS(FREQUENCY([.K40:.K59];[.L40:.L46])))" office:value-type="float" office:value="20" calcext:value-type="float">
+      <text:p>20</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="20" calcext:value-type="float">
+      <text:p>20</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce14" table:formula="of:=ROUND([.A61];12)=ROUND([.B61];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" table:formula="of:=FORMULA([.A61])" office:value-type="string" office:string-value="=SUM(ABS(FREQUENCY(K40:K59,L40:L46)))" calcext:value-type="string">
+      <text:p>=SUM(ABS(FREQUENCY(K40:K59,L40:L46)))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
      <table:table-cell office:value-type="float" office:value="57" calcext:value-type="float">
       <text:p>57</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce15"/>
-     <table:table-cell table:number-columns-repeated="22"/>
+     <table:table-cell table:formula="of:=SUM(ABS(FREQUENCY([.K40:.K59];[.L40:.L46])+ABS([.M40:.M47])))" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#VALUE!</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=#VALUE!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#VALUE!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce14" table:formula="of:=ISERROR([.A62])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" table:formula="of:=FORMULA([.A62])" office:value-type="string" office:string-value="=SUM(ABS(FREQUENCY(K40:K59,L40:L46)+ABS(M40:M47)))" calcext:value-type="string">
+      <text:p>=SUM(ABS(FREQUENCY(K40:K59,L40:L46)+ABS(M40:M47)))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
      <table:table-cell office:value-type="float" office:value="58" calcext:value-type="float">
       <text:p>58</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce15"/>
-     <table:table-cell table:number-columns-repeated="22"/>
+     <table:table-cell table:formula="of:=MAX(FREQUENCY(ROW([.K40:.K59]);([.K40:.K59]&lt;12)*ROW([.K40:.K59])))" office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="9" calcext:value-type="float">
+      <text:p>9</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce14" table:formula="of:=ROUND([.A63];12)=ROUND([.B63];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" table:formula="of:=FORMULA([.A63])" office:value-type="string" office:string-value="=MAX(FREQUENCY(ROW(K40:K59),(K40:K59&lt;12)*ROW(K40:K59)))" calcext:value-type="string">
+      <text:p>=MAX(FREQUENCY(ROW(K40:K59),(K40:K59&lt;12)*ROW(K40:K59)))</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="21"/>
      <table:table-cell office:value-type="float" office:value="79" calcext:value-type="float">
       <text:p>79</text:p>
      </table:table-cell>
