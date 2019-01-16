@@ -7615,7 +7615,6 @@ include/test/sheet/xspreadsheet.hxx
 include/test/sheet/xspreadsheetdocument.hxx
 include/test/sheet/xspreadsheets.hxx
 include/test/sheet/xspreadsheets2.hxx
-include/test/sheet/xstyleloader.hxx
 include/test/sheet/xsubtotalcalculatable.hxx
 include/test/sheet/xsubtotaldescriptor.hxx
 include/test/sheet/xsubtotalfield.hxx
@@ -10152,7 +10151,6 @@ sc/qa/extras/scmodelobj.cxx
 sc/qa/extras/scnamedrangeobj.cxx
 sc/qa/extras/scnamedrangesobj.cxx
 sc/qa/extras/scoutlineobj.cxx
-sc/qa/extras/scstyleloaderobj.cxx
 sc/qa/extras/scsubtotaldescriptorbaseobj.cxx
 sc/qa/extras/scsubtotalfieldobj.cxx
 sc/qa/extras/sctablesheetobj.cxx
@@ -16609,7 +16607,6 @@ test/source/sheet/xspreadsheet.cxx
 test/source/sheet/xspreadsheetdocument.cxx
 test/source/sheet/xspreadsheets.cxx
 test/source/sheet/xspreadsheets2.cxx
-test/source/sheet/xstyleloader.cxx
 test/source/sheet/xsubtotalcalculatable.cxx
 test/source/sheet/xsubtotaldescriptor.cxx
 test/source/sheet/xsubtotalfield.cxx
