@@ -35,19 +35,19 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScTableConditionalFormatObj : public CalcUnoApiTest,
-                                    public apitest::XEnumerationAccess,
-                                    public apitest::XSheetConditionalEntries
+class ScTableConditionalFormat : public CalcUnoApiTest,
+                                 public apitest::XEnumerationAccess,
+                                 public apitest::XSheetConditionalEntries
 {
 public:
-    ScTableConditionalFormatObj();
+    ScTableConditionalFormat();
 
     virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Sequence<beans::PropertyValue> createCondition(const sal_Int32 nr) override;
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    CPPUNIT_TEST_SUITE(ScTableConditionalFormatObj);
+    CPPUNIT_TEST_SUITE(ScTableConditionalFormat);
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
@@ -63,12 +63,12 @@ private:
     uno::Reference<lang::XComponent> mxComponent;
 };
 
-ScTableConditionalFormatObj::ScTableConditionalFormatObj()
+ScTableConditionalFormat::ScTableConditionalFormat()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
 {
 }
 
-uno::Reference<uno::XInterface> ScTableConditionalFormatObj::init()
+uno::Reference<uno::XInterface> ScTableConditionalFormat::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -90,7 +90,7 @@ uno::Reference<uno::XInterface> ScTableConditionalFormatObj::init()
     return xSheetConditionalEntries;
 }
 
-uno::Sequence<beans::PropertyValue> ScTableConditionalFormatObj::createCondition(const sal_Int32 nr)
+uno::Sequence<beans::PropertyValue> ScTableConditionalFormat::createCondition(const sal_Int32 nr)
 {
     uno::Sequence<beans::PropertyValue> aPropValue(5);
     aPropValue[0].Name = SC_UNONAME_STYLENAME;
@@ -107,22 +107,22 @@ uno::Sequence<beans::PropertyValue> ScTableConditionalFormatObj::createCondition
     return aPropValue;
 }
 
-void ScTableConditionalFormatObj::setUp()
+void ScTableConditionalFormat::setUp()
 {
     CalcUnoApiTest::setUp();
     // create a calc document
     mxComponent = loadFromDesktop("private:factory/scalc");
 }
 
-void ScTableConditionalFormatObj::tearDown()
+void ScTableConditionalFormat::tearDown()
 {
     closeDocument(mxComponent);
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScTableConditionalFormatObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScTableConditionalFormat);
 
-} // end namespace
+} // namespace sc_apitest
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
