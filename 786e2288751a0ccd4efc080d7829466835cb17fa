@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_9da8f377",
+        "filename": "svx/source/dialog/framelinkarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2019-01-16T22:28:39Z",
+      "side": 1,
+      "message": "This entire block of code and another block, elsewhere within the same loop are almost identical\n\nWould it be possible, perhaps, if the rightmost Nth column of the range is hidden to take N-1 as nLastColumn, nEndCol respectively ... The goal would be that \u0027//create right line for the cell\u0027 block would create the right border straight away (instead of skipping it as it does now)\n\nOr reduce copy\u0027n\u0027pasted code in some different way ...",
+      "revId": "786e2288751a0ccd4efc080d7829466835cb17fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
