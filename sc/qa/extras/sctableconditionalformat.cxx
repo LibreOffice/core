@@ -12,6 +12,7 @@
 #include <test/container/xenumerationaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
+#include <test/lang/xserviceinfo.hxx>
 #include <test/sheet/xsheetconditionalentries.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -45,6 +46,7 @@ class ScTableConditionalFormat : public CalcUnoApiTest,
                                  public apitest::XEnumerationAccess,
                                  public apitest::XIndexAccess,
                                  public apitest::XNameAccess,
+                                 public apitest::XServiceInfo,
                                  public apitest::XSheetConditionalEntries
 {
 public:
@@ -73,6 +75,11 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
 
+    // XServiceInfo
+    CPPUNIT_TEST(testGetImplementationName);
+    CPPUNIT_TEST(testGetSupportedServiceNames);
+    CPPUNIT_TEST(testSupportsService);
+
     // XSheetConditionalEntries
     CPPUNIT_TEST(testAddNew);
     CPPUNIT_TEST(testClear);
@@ -89,6 +96,7 @@ ScTableConditionalFormat::ScTableConditionalFormat()
     , XElementAccess(cppu::UnoType<sheet::XSheetConditionalEntry>::get())
     , XIndexAccess(2)
     , XNameAccess("Entry1")
+    , XServiceInfo("ScTableConditionalFormat", "com.sun.star.sheet.TableConditionalFormat")
 {
 }
 
