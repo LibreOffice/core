@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/sheet/xsheetconditionalentries.hxx>
 
@@ -38,6 +39,7 @@ namespace sc_apitest
 {
 class ScTableConditionalFormat : public CalcUnoApiTest,
                                  public apitest::XEnumerationAccess,
+                                 public apitest::XIndexAccess,
                                  public apitest::XNameAccess,
                                  public apitest::XSheetConditionalEntries
 {
@@ -53,6 +55,10 @@ public:
 
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
+
+    // XIndexAccess
+    CPPUNIT_TEST(testGetByIndex);
+    CPPUNIT_TEST(testGetCount);
 
     // XNameAccess
     CPPUNIT_TEST(testGetByName);
@@ -72,6 +78,7 @@ private:
 
 ScTableConditionalFormat::ScTableConditionalFormat()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XIndexAccess(2)
     , XNameAccess("Entry1")
 {
 }
