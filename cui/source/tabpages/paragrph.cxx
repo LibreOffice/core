@@ -591,9 +591,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
     // because for Impress the min of first-line indent depends on value of
     // left-indent!
     ELRLoseFocus();
-    m_xAutoCB->save_state();
-    m_xContextualCB->save_state();
-    m_xLineDist->save_value();
+    ChangesApplied();
 }
 
 void SvxStdParagraphTabPage::ChangesApplied()
@@ -869,12 +867,6 @@ void SvxStdParagraphTabPage::Init_Impl()
     m_xRightIndent->connect_value_changed(aLink2);
 
     Link<weld::MetricSpinButton&,void> aLink = LINK(this, SvxStdParagraphTabPage, ModifyHdl_Impl);
-#if 0
-    //TO DO
-    m_xFLineIndent->SetModifyHdl( aLink );
-    m_xLeftIndent->SetModifyHdl( aLink );
-    m_xRightIndent->SetModifyHdl( aLink );
-#endif
     m_xTopDist->connect_value_changed(aLink);
     m_xBottomDist->connect_value_changed(aLink);
 
@@ -943,7 +935,7 @@ void SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
     nMinFixDist = nMinTwip;
 }
 
-void    SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
+void SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
 
 /* different bit represent call to different method of SvxStdParagraphTabPage
