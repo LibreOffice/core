@@ -1205,6 +1205,8 @@ namespace emfplushelper
                             ::basegfx::B2DPoint aDstPoint;
                             ::basegfx::B2DSize aDstSize;
 
+                            double fShearX = 0.0;
+                            double fShearY = 0.0;
                             if (type == EmfPlusRecordTypeDrawImagePoints)
                             {
                                 sal_uInt32 aCount;
@@ -1223,6 +1225,8 @@ namespace emfplushelper
 
                                     aDstPoint = ::basegfx::B2DPoint(x1, y1);
                                     aDstSize = ::basegfx::B2DSize(x2 - x1, y3 - y1);
+                                    fShearX = x3 - x1;
+                                    fShearY = y2 - y1;
                                 }
                                 else
                                 {
@@ -1239,12 +1243,14 @@ namespace emfplushelper
                                 aDstSize = ::basegfx::B2DSize(dw, dh);
                             }
 
-                            // create correct transform matrix
-                            const basegfx::B2DHomMatrix aTransformMatrix = maMapTransform * basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                aDstSize.getX(),
-                                aDstSize.getY(),
-                                aDstPoint.getX(),
-                                aDstPoint.getY());
+                            const basegfx::B2DHomMatrix aTransformMatrix = maMapTransform *
+                                    basegfx::B2DHomMatrix(
+                                        /* Row 0, Column 0 */ aDstSize.getX(),
+                                        /* Row 0, Column 1 */ fShearX,
+                                        /* Row 0, Column 2 */ aDstPoint.getX(),
+                                        /* Row 1, Column 0 */ fShearY,
+                                        /* Row 1, Column 1 */ aDstSize.getY(),
+                                        /* Row 1, Column 2 */ aDstPoint.getY());
 
                             if (image.type == ImageDataTypeBitmap)
                             {
