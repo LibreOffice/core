@@ -61,7 +61,7 @@ public:
     bool LinksUpdated() const override;
 
     //Non-Interface method
-    bool SelectServerObj( const OUString& rStr, SwPaM*& rpPam, SwNodeRange*& rpRange ) const;
+    bool SelectServerObj( const OUString& rStr, SwPaM*& rpPam, std::unique_ptr<SwNodeRange>& rpRange ) const;
 
     virtual ~DocumentLinksAdministrationManager() override;
 
