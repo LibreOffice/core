@@ -38,7 +38,6 @@ enum class PortionType
     Text        = 0x8000,
     Lay         = 0x8001,
     Para        = 0x8002,
-    Url         = 0x8003,
     Hanging     = 0x8004,
     InputField  = 0x8005,
 

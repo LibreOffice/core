@@ -54,7 +54,6 @@ class XmlPortionDumper:public SwPortionHandler
             case PortionType::Text: return "PortionType::Text";
             case PortionType::Lay: return "PortionType::Lay";
             case PortionType::Para: return "PortionType::Para";
-            case PortionType::Url: return "PortionType::Url";
             case PortionType::Hanging: return "PortionType::Hanging";
 
             case PortionType::Drop: return "PortionType::Drop";

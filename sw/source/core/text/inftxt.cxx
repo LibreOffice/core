@@ -1281,7 +1281,6 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         case PortionType::QuoVadis:
         case PortionType::Number:
         case PortionType::Field:
-        case PortionType::Url:
         case PortionType::Hidden:
         case PortionType::Tox:
         case PortionType::Ref:
