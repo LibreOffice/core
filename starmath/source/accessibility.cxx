@@ -486,12 +486,12 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
             Size  aSize (pNode->GetSize());
 
-            long* pXAry = new long[ aNodeText.getLength() ];
+            std::unique_ptr<long[]> pXAry(new long[ aNodeText.getLength() ]);
             pWin->SetFont( pNode->GetFont() );
-            pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.getLength() );
+            pWin->GetTextArray( aNodeText, pXAry.get(), 0, aNodeText.getLength() );
             aTLPos.AdjustX(nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0 );
             aSize.setWidth( nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex] );
-            delete[] pXAry;
+            pXAry.reset();
 
             aTLPos = pWin->LogicToPixel( aTLPos );
             aSize  = pWin->LogicToPixel( aSize );
@@ -556,15 +556,15 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 
                 long nNodeX = pNode->GetLeft();
 
-                long* pXAry = new long[ aTxt.getLength() ];
+                std::unique_ptr<long[]> pXAry(new long[ aTxt.getLength() ]);
                 pWin->SetFont( pNode->GetFont() );
-                pWin->GetTextArray( aTxt, pXAry, 0, aTxt.getLength() );
+                pWin->GetTextArray( aTxt, pXAry.get(), 0, aTxt.getLength() );
                 for (sal_Int32 i = 0;  i < aTxt.getLength()  &&  nRes == -1;  ++i)
                 {
                     if (pXAry[i] + nNodeX > aPos.X())
                         nRes = i;
                 }
-                delete[] pXAry;
+                pXAry.reset();
                 OSL_ENSURE( nRes >= 0  &&  nRes < aTxt.getLength(), "index out of range" );
                 OSL_ENSURE( pNode->GetAccessibleIndex() >= 0,
                         "invalid accessible index" );

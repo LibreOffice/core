@@ -740,7 +740,7 @@ bool SmCursor::InsertRow() {
 
     //If we're in the context of a table
     if(pTable) {
-        SmNodeList *pNewLineList = new SmNodeList;
+        std::unique_ptr<SmNodeList> pNewLineList(new SmNodeList);
         //Move elements from pLineList to pNewLineList
         pNewLineList->splice(pNewLineList->begin(), *pLineList, it, pLineList->end());
         //Make sure it is valid again
@@ -750,8 +750,8 @@ bool SmCursor::InsertRow() {
         if(pNewLineList->empty())
             pNewLineList->push_front(new SmPlaceNode());
         //Parse new line
-        std::unique_ptr<SmNode> pNewLine(SmNodeListParser().Parse(pNewLineList));
-        delete pNewLineList;
+        std::unique_ptr<SmNode> pNewLine(SmNodeListParser().Parse(pNewLineList.get()));
+        pNewLineList.reset();
         //Wrap pNewLine in SmLineNode if needed
         if(pLineParent->GetType() == SmNodeType::Line) {
             std::unique_ptr<SmLineNode> pNewLineNode(new SmLineNode(SmToken(TNEWLINE, '\0', "newline")));

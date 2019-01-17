@@ -721,11 +721,11 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     {
         if (const SmNode *pTemp = pNode->GetSubNode(i))
         {
-            SvXMLElementExport *pRow=nullptr;
-            SvXMLElementExport *pCell=nullptr;
+            std::unique_ptr<SvXMLElementExport> pRow;
+            std::unique_ptr<SvXMLElementExport> pCell;
             if (pTable)
             {
-                pRow  = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTR, true, true);
+                pRow.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTR, true, true));
                 SmTokenType eAlign = TALIGNC;
                 if (pTemp->GetType() == SmNodeType::Align)
                 {
@@ -752,11 +752,9 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
                     AddAttribute(XML_NAMESPACE_MATH, XML_COLUMNALIGN,
                         eAlign == TALIGNL ? XML_LEFT : XML_RIGHT);
                 }
-                pCell = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTD, true, true);
+                pCell.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTD, true, true));
             }
             ExportNodes(pTemp, nLevel+1);
-            delete pCell;
-            delete pRow;
         }
     }
 }
