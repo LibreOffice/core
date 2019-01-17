@@ -26,7 +26,6 @@
 #include "vclmetafileprocessor2d.hxx"
 #include "vclpixelprocessor2d.hxx"
 #include <vcl/window.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace com::sun::star;
 
@@ -44,12 +43,12 @@ namespace drawinglayer
             if(bOutputToRecordingMetaFile)
             {
                 // create MetaFile Vcl-Processor and process
-                return o3tl::make_unique<drawinglayer::processor2d::VclMetafileProcessor2D>(rViewInformation2D, rTargetOutDev);
+                return std::make_unique<drawinglayer::processor2d::VclMetafileProcessor2D>(rViewInformation2D, rTargetOutDev);
             }
             else
             {
                 // create Pixel Vcl-Processor
-                return o3tl::make_unique<drawinglayer::processor2d::VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
+                return std::make_unique<drawinglayer::processor2d::VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
             }
         }
     } // end of namespace processor2d

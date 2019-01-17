@@ -19,7 +19,6 @@
 
 #include "eschesdo.hxx"
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/xflftrit.hxx>
@@ -3790,7 +3789,7 @@ bool EscherPersistTable::PtIsID( sal_uInt32 nID )
 
 void EscherPersistTable::PtInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    maPersistTable.push_back( o3tl::make_unique<EscherPersistEntry>( nID, nOfs ) );
+    maPersistTable.push_back( std::make_unique<EscherPersistEntry>( nID, nOfs ) );
 }
 
 void EscherPersistTable::PtDelete( sal_uInt32 nID )
@@ -4645,7 +4644,7 @@ EscherSolverContainer::~EscherSolverContainer()
 
 void EscherSolverContainer::AddShape( const uno::Reference<drawing::XShape> & rXShape, sal_uInt32 nId )
 {
-    maShapeList.push_back( o3tl::make_unique<EscherShapeListEntry>( rXShape, nId ) );
+    maShapeList.push_back( std::make_unique<EscherShapeListEntry>( rXShape, nId ) );
 }
 
 void EscherSolverContainer::AddConnector(
@@ -4656,7 +4655,7 @@ void EscherSolverContainer::AddConnector(
     uno::Reference<drawing::XShape> const & rConB
 )
 {
-    maConnectorList.push_back( o3tl::make_unique<EscherConnectorListEntry>( rConnector, rPA, rConA, rPB, rConB ) );
+    maConnectorList.push_back( std::make_unique<EscherConnectorListEntry>( rConnector, rPA, rConA, rPB, rConB ) );
 }
 
 sal_uInt32 EscherSolverContainer::GetShapeId( const uno::Reference<drawing::XShape> & rXShape ) const

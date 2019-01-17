@@ -9,7 +9,6 @@
  */
 
 #include <editeng/CustomPropertyField.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/metaact.hxx>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -30,7 +29,7 @@ CustomPropertyField::~CustomPropertyField()
 
 std::unique_ptr<SvxFieldData> CustomPropertyField::Clone() const
 {
-    return o3tl::make_unique<CustomPropertyField>(msName, msCurrentPresentation);
+    return std::make_unique<CustomPropertyField>(msName, msCurrentPresentation);
 }
 
 bool CustomPropertyField::operator==(const SvxFieldData& rOther) const

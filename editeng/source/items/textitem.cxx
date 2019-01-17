@@ -20,7 +20,6 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
-#include <o3tl/make_unique.hxx>
 #include <vcl/bitmapex.hxx>
 #include <tools/stream.hxx>
 #include <math.h>
@@ -2799,7 +2798,7 @@ bool SvxCharReliefItem::QueryValue( css::uno::Any& rVal,
 *************************************************************************/
 
 SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
-    : SfxSetItem( nSlotId, o3tl::make_unique<SfxItemSet>( rPool,
+    : SfxSetItem( nSlotId, std::make_unique<SfxItemSet>( rPool,
                         svl::Items<SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT>{} ))
 {
     sal_uInt16 nLatin, nAsian, nComplex;

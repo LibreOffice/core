@@ -50,7 +50,6 @@
 #include <sot/formats.hxx>
 #include <vcl/edit.hxx>
 #include <osl/mutex.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <unordered_map>
 
@@ -602,7 +601,7 @@ void BibFrameController_Impl::addStatusListener(
 {
     BibConfig* pConfig = BibModul::GetConfig();
     // create a new Reference and insert into listener array
-    aStatusListeners.push_back( o3tl::make_unique<BibStatusDispatch>( aURL, aListener ) );
+    aStatusListeners.push_back( std::make_unique<BibStatusDispatch>( aURL, aListener ) );
 
     // send first status synchronously
     FeatureStateEvent aEvent;

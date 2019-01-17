@@ -49,7 +49,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <vcl/treelistentry.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -111,7 +110,7 @@ namespace
         // add an undo action
         if ( _bAddUndo )
             addUndoAction(  _pView,
-                            o3tl::make_unique<OQueryAddTabConnUndoAction>(_pView),
+                            std::make_unique<OQueryAddTabConnUndoAction>(_pView),
                             static_cast< OQueryTableConnection*>(_pConnection));
         // redraw
         _pConnection->RecalcLines();
@@ -630,7 +629,7 @@ bool OQueryTableView::RemoveConnection(VclPtr<OTableConnection>& rConnection, bo
 
     // add undo action
     addUndoAction(this,
-                  o3tl::make_unique<OQueryDelTabConnUndoAction>(this),
+                  std::make_unique<OQueryDelTabConnUndoAction>(this),
                   xConnection.get(),
                   true);
 

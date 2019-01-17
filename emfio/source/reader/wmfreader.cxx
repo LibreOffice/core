@@ -32,7 +32,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <tools/fract.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <osl/thread.h>
@@ -826,7 +825,7 @@ namespace emfio
                         nCount++;
                 }
                 Color aColor( static_cast<sal_uInt8>( nRed / nCount ), static_cast<sal_uInt8>( nGreen / nCount ), static_cast<sal_uInt8>( nBlue / nCount ) );
-                CreateObject(o3tl::make_unique<WinMtfFillStyle>( aColor, false ));
+                CreateObject(std::make_unique<WinMtfFillStyle>( aColor, false ));
             }
             break;
 
@@ -846,13 +845,13 @@ namespace emfio
 
             case W_META_CREATEBRUSH:
             {
-                CreateObject(o3tl::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
+                CreateObject(std::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
             }
             break;
 
             case W_META_CREATEPATTERNBRUSH:
             {
-                CreateObject(o3tl::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
+                CreateObject(std::make_unique<WinMtfFillStyle>( COL_WHITE, false ));
             }
             break;
 
@@ -929,7 +928,7 @@ namespace emfio
                     default :
                         aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
                 }
-                CreateObject(o3tl::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
+                CreateObject(std::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
             }
             break;
 
@@ -937,7 +936,7 @@ namespace emfio
             {
                 sal_uInt16  nStyle = 0;
                 mpInputStream->ReadUInt16( nStyle );
-                CreateObject(o3tl::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
+                CreateObject(std::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
             }
             break;
 
@@ -981,7 +980,7 @@ namespace emfio
                     eCharSet = RTL_TEXTENCODING_MS_1252;
                 aLogFont.alfFaceName = OUString( lfFaceName, strlen(lfFaceName), eCharSet );
 
-                CreateObject(o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
+                CreateObject(std::make_unique<WinMtfFontStyle>( aLogFont ));
             }
             break;
 
@@ -1159,7 +1158,7 @@ namespace emfio
                                         mpEMFStream.reset();
                                     }
                                     else
-                                        mpEMFStream = o3tl::make_unique<SvMemoryStream>(mnEMFSize, 0);
+                                        mpEMFStream = std::make_unique<SvMemoryStream>(mnEMFSize, 0);
                                 }
                                 else if( (mnEMFRecCount != nComRecCount ) || (mnEMFSize != nEMFTotalSize ) ) // add additional checks here
                                 {
@@ -1431,7 +1430,7 @@ namespace emfio
                         {
                             GDIMetaFile aMeta;
                             mpEMFStream->Seek( 0 );
-                            std::unique_ptr<EmfReader> pEMFReader(o3tl::make_unique<EmfReader>( *mpEMFStream, aMeta ));
+                            std::unique_ptr<EmfReader> pEMFReader(std::make_unique<EmfReader>( *mpEMFStream, aMeta ));
                             bEMFAvailable = pEMFReader->ReadEnhWMF();
                             pEMFReader.reset(); // destroy first!!!
 

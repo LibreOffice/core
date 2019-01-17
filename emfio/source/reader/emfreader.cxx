@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/dibtools.hxx>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <memory>
@@ -1002,7 +1001,7 @@ namespace emfio
                                 default :
                                     aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
                             }
-                            CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
+                            CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
                         }
                     }
                     break;
@@ -1092,7 +1091,7 @@ namespace emfio
                                 default :
                                     aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
                             }
-                            CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfLineStyle>( aColorRef, aLineInfo, bTransparent ));
+                            CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>( aColorRef, aLineInfo, bTransparent ));
                         }
                     }
                     break;
@@ -1104,7 +1103,7 @@ namespace emfio
                         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                         {
                             mpInputStream->ReadUInt32( nStyle );
-                            CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
+                            CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
                         }
                     }
                     break;
@@ -1565,7 +1564,7 @@ namespace emfio
                             // aLogFont.lfHeight = aTransVec.getY();
                             if (mpInputStream->good() && aLogFont.lfHeight != SAL_MIN_INT32 && aLogFont.lfWidth != SAL_MIN_INT32)
                             {
-                                CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFontStyle>( aLogFont ));
+                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfFontStyle>( aLogFont ));
                             }
                         }
                     }
@@ -1759,7 +1758,7 @@ namespace emfio
                             }
                         }
 
-                        CreateObjectIndexed(nIndex, o3tl::make_unique<WinMtfFillStyle>( aBitmap ));
+                        CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( aBitmap ));
                     }
                     break;
 

@@ -21,7 +21,6 @@
 #include <vcl/metaact.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <editeng/flditem.hxx>
 #include <editeng/CustomPropertyField.hxx>
@@ -252,7 +251,7 @@ SvxFieldData::~SvxFieldData()
 
 std::unique_ptr<SvxFieldData> SvxFieldData::Clone() const
 {
-    return o3tl::make_unique<SvxFieldData>();
+    return std::make_unique<SvxFieldData>();
 }
 
 
@@ -341,7 +340,7 @@ SvxDateField::SvxDateField( const Date& rDate, SvxDateType eT, SvxDateFormat eF 
 
 std::unique_ptr<SvxFieldData> SvxDateField::Clone() const
 {
-    return o3tl::make_unique<SvxDateField>( *this );
+    return std::make_unique<SvxDateField>( *this );
 }
 
 
@@ -449,7 +448,7 @@ SvxURLField::SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLF
 
 std::unique_ptr<SvxFieldData> SvxURLField::Clone() const
 {
-    return o3tl::make_unique<SvxURLField>( *this );
+    return std::make_unique<SvxURLField>( *this );
 }
 
 
@@ -483,7 +482,7 @@ SvxPageTitleField::SvxPageTitleField() {}
 
 std::unique_ptr<SvxFieldData> SvxPageTitleField::Clone() const
 {
-    return o3tl::make_unique<SvxPageTitleField>();
+    return std::make_unique<SvxPageTitleField>();
 }
 
 bool SvxPageTitleField::operator==( const SvxFieldData& rCmp ) const
@@ -506,7 +505,7 @@ SvxPageField::SvxPageField() {}
 
 std::unique_ptr<SvxFieldData> SvxPageField::Clone() const
 {
-    return o3tl::make_unique<SvxPageField>();        // empty
+    return std::make_unique<SvxPageField>();        // empty
 }
 
 bool SvxPageField::operator==( const SvxFieldData& rCmp ) const
@@ -524,7 +523,7 @@ SvxPagesField::SvxPagesField() {}
 
 std::unique_ptr<SvxFieldData> SvxPagesField::Clone() const
 {
-    return o3tl::make_unique<SvxPagesField>();   // empty
+    return std::make_unique<SvxPagesField>();   // empty
 }
 
 bool SvxPagesField::operator==( const SvxFieldData& rCmp ) const
@@ -536,7 +535,7 @@ SvxTimeField::SvxTimeField() {}
 
 std::unique_ptr<SvxFieldData> SvxTimeField::Clone() const
 {
-    return o3tl::make_unique<SvxTimeField>();    // empty
+    return std::make_unique<SvxTimeField>();    // empty
 }
 
 bool SvxTimeField::operator==( const SvxFieldData& rCmp ) const
@@ -553,7 +552,7 @@ SvxFileField::SvxFileField() {}
 
 std::unique_ptr<SvxFieldData> SvxFileField::Clone() const
 {
-    return o3tl::make_unique<SvxFileField>();    // empty
+    return std::make_unique<SvxFileField>();    // empty
 }
 
 bool SvxFileField::operator==( const SvxFieldData& rCmp ) const
@@ -573,7 +572,7 @@ void SvxTableField::SetTab(int nTab)
 
 std::unique_ptr<SvxFieldData> SvxTableField::Clone() const
 {
-    return o3tl::make_unique<SvxTableField>(mnTab);
+    return std::make_unique<SvxTableField>(mnTab);
 }
 
 bool SvxTableField::operator==( const SvxFieldData& rCmp ) const
@@ -605,7 +604,7 @@ SvxExtTimeField::SvxExtTimeField( const tools::Time& rTime, SvxTimeType eT, SvxT
 
 std::unique_ptr<SvxFieldData> SvxExtTimeField::Clone() const
 {
-    return o3tl::make_unique<SvxExtTimeField>( *this );
+    return std::make_unique<SvxExtTimeField>( *this );
 }
 
 
@@ -718,7 +717,7 @@ SvxExtFileField::SvxExtFileField( const OUString& rStr, SvxFileType eT, SvxFileF
 
 std::unique_ptr<SvxFieldData> SvxExtFileField::Clone() const
 {
-    return o3tl::make_unique<SvxExtFileField>( *this );
+    return std::make_unique<SvxExtFileField>( *this );
 }
 
 
@@ -828,7 +827,7 @@ SvxAuthorField::SvxAuthorField( const OUString& rFirstName,
 
 std::unique_ptr<SvxFieldData> SvxAuthorField::Clone() const
 {
-    return o3tl::make_unique<SvxAuthorField>( *this );
+    return std::make_unique<SvxAuthorField>( *this );
 }
 
 
@@ -875,7 +874,7 @@ SvxHeaderField::SvxHeaderField() {}
 
 std::unique_ptr<SvxFieldData> SvxHeaderField::Clone() const
 {
-    return o3tl::make_unique<SvxHeaderField>();      // empty
+    return std::make_unique<SvxHeaderField>();      // empty
 }
 
 bool SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
@@ -887,7 +886,7 @@ SvxFooterField::SvxFooterField() {}
 
 std::unique_ptr<SvxFieldData> SvxFooterField::Clone() const
 {
-    return o3tl::make_unique<SvxFooterField>();      // empty
+    return std::make_unique<SvxFooterField>();      // empty
 }
 
 bool SvxFooterField::operator==( const SvxFieldData& rCmp ) const
@@ -897,7 +896,7 @@ bool SvxFooterField::operator==( const SvxFieldData& rCmp ) const
 
 std::unique_ptr<SvxFieldData> SvxDateTimeField::Clone() const
 {
-    return o3tl::make_unique<SvxDateTimeField>();        // empty
+    return std::make_unique<SvxDateTimeField>();        // empty
 }
 
 bool SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const

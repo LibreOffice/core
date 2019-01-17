@@ -44,7 +44,6 @@
 #include <UITools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
-#include <o3tl/make_unique.hxx>
 #include <algorithm>
 #include <functional>
 
@@ -1077,7 +1076,7 @@ void OJoinTableView::TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPositi
     Point ptThumbPos(GetHScrollBar().GetThumbPos(), GetVScrollBar().GetThumbPos());
     ptWhich->GetData()->SetPosition(ptWhich->GetPosPixel() + ptThumbPos);
 
-    invalidateAndModify(o3tl::make_unique<OJoinMoveTabWinUndoAct>(this, ptOldPosition, ptWhich));
+    invalidateAndModify(std::make_unique<OJoinMoveTabWinUndoAct>(this, ptOldPosition, ptWhich));
 }
 
 void OJoinTableView::TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize)
@@ -1085,7 +1084,7 @@ void OJoinTableView::TabWinSized(OTableWindow* ptWhich, const Point& ptOldPositi
     ptWhich->GetData()->SetSize(ptWhich->GetSizePixel());
     ptWhich->GetData()->SetPosition(ptWhich->GetPosPixel());
 
-    invalidateAndModify(o3tl::make_unique<OJoinSizeTabWinUndoAct>(this, ptOldPosition, szOldSize, ptWhich));
+    invalidateAndModify(std::make_unique<OJoinSizeTabWinUndoAct>(this, ptOldPosition, szOldSize, ptWhich));
 }
 
 bool OJoinTableView::IsAddAllowed()

@@ -36,7 +36,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <vcl/virdev.hxx>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/Office/Linguistic.hxx>
@@ -777,7 +776,7 @@ namespace emfio
 
     void MtfTools::CreateObject()
     {
-        CreateObject(o3tl::make_unique<GDIObj>());
+        CreateObject(std::make_unique<GDIObj>());
     }
 
     void MtfTools::DeleteObject( sal_Int32 nIndex )

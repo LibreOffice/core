@@ -26,7 +26,8 @@
 
 #include <stdio.h>
 #include <sal/macros.h>
-#include <o3tl/make_unique.hxx>
+
+#include <memory>
 
 #ifdef UNOPKG
 
@@ -161,7 +162,7 @@ DWORD WINAPI InputThread( LPVOID pParam )
         //can be used (little and big endian);
         int cNewLine = WideCharToMultiByte(
             GetConsoleCP(), 0, L"\r\n", 2, nullptr, 0, nullptr, nullptr);
-        auto mbBuff = o3tl::make_unique<char[]>(cNewLine);
+        auto mbBuff = std::make_unique<char[]>(cNewLine);
         WideCharToMultiByte(
             GetConsoleCP(), 0, L"\r\n", 2, mbBuff.get(), cNewLine, nullptr, nullptr);
 
@@ -208,7 +209,7 @@ DWORD WINAPI InputThread( LPVOID pParam )
             int sizeWBuf = MultiByteToWideChar(
                 GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, nullptr, 0);
 
-            auto wideBuf = o3tl::make_unique<wchar_t[]>(sizeWBuf);
+            auto wideBuf = std::make_unique<wchar_t[]>(sizeWBuf);
 
             //Do the conversion.
             MultiByteToWideChar(

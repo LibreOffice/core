@@ -27,7 +27,6 @@
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -287,7 +286,7 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
             break;
         }
     }
-    mvMappings.push_back(o3tl::make_unique<Mapping>(*pSetMapping));
+    mvMappings.push_back(std::make_unique<Mapping>(*pSetMapping));
     SetModified();
 }
 

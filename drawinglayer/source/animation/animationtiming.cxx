@@ -21,7 +21,6 @@
 
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace drawinglayer
 {
@@ -50,7 +49,7 @@ namespace drawinglayer
 
         std::unique_ptr<AnimationEntry> AnimationEntryFixed::clone() const
         {
-            return o3tl::make_unique<AnimationEntryFixed>(mfDuration, mfState);
+            return std::make_unique<AnimationEntryFixed>(mfDuration, mfState);
         }
 
         bool AnimationEntryFixed::operator==(const AnimationEntry& rCandidate) const
@@ -99,7 +98,7 @@ namespace drawinglayer
 
         std::unique_ptr<AnimationEntry> AnimationEntryLinear::clone() const
         {
-            return o3tl::make_unique<AnimationEntryLinear>(mfDuration, mfFrequency, mfStart, mfStop);
+            return std::make_unique<AnimationEntryLinear>(mfDuration, mfFrequency, mfStart, mfStop);
         }
 
         bool AnimationEntryLinear::operator==(const AnimationEntry& rCandidate) const
@@ -184,7 +183,7 @@ namespace drawinglayer
 
         std::unique_ptr<AnimationEntry> AnimationEntryList::clone() const
         {
-            std::unique_ptr<AnimationEntryList> pNew(o3tl::make_unique<AnimationEntryList>());
+            std::unique_ptr<AnimationEntryList> pNew(std::make_unique<AnimationEntryList>());
 
             for(const auto &i : maEntries)
             {
@@ -277,7 +276,7 @@ namespace drawinglayer
 
         std::unique_ptr<AnimationEntry> AnimationEntryLoop::clone() const
         {
-            std::unique_ptr<AnimationEntryLoop> pNew(o3tl::make_unique<AnimationEntryLoop>(mnRepeat));
+            std::unique_ptr<AnimationEntryLoop> pNew(std::make_unique<AnimationEntryLoop>(mnRepeat));
 
             for(const auto &i : maEntries)
             {

@@ -43,7 +43,7 @@
 #include <vcl/event.hxx>
 
 #include <memory>
-#include <o3tl/make_unique.hxx>
+
 namespace dbaui
 {
 
@@ -142,7 +142,7 @@ void DBTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& aStr, co
 {
     SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp, eButtonKind);
     SvLBoxItem* pTextItem(_pEntry->GetFirstItem(SvLBoxItemType::String));
-    _pEntry->ReplaceItem(o3tl::make_unique<OBoldListboxString>(aStr), _pEntry->GetPos(pTextItem));
+    _pEntry->ReplaceItem(std::make_unique<OBoldListboxString>(aStr), _pEntry->GetPos(pTextItem));
 }
 
 void DBTreeListBox::implStopSelectionTimer()
