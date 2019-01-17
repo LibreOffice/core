@@ -324,14 +324,12 @@ String RID_RIDER_SLL_PERSONAL
 ImageList RID_IMGLIST_TREEOPT
 {
     Prefix = "tr" ;
-    MASK_COL
     IMGLST_IDLST
 };
 
 ImageList RID_IMGLIST_TREEOPT_HC
 {
     Prefix = "trh" ;
-    MASK_COL
     IMGLST_IDLST
 };
 
