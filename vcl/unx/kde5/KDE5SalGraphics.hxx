@@ -29,13 +29,15 @@
 #include <QtGui/QImage>
 #include <QtWidgets/QPushButton>
 
+class Qt5Frame;
+
 /**
  * Handles native graphics requests and performs the needed drawing operations.
  */
 class KDE5SalGraphics : public SvpSalGraphics
 {
 public:
-    KDE5SalGraphics();
+    KDE5SalGraphics(Qt5Frame* pFrame);
     virtual bool IsNativeControlSupported(ControlType, ControlPart) override;
 
     virtual bool hitTestNativeControl(ControlType, ControlPart, const tools::Rectangle&,
@@ -48,8 +50,11 @@ public:
                                         ControlState, const ImplControlValue&, const OUString&,
                                         tools::Rectangle&, tools::Rectangle&) override;
 
+    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+
 private:
     Qt5Graphics_Controls m_aControl;
+    Qt5Frame* m_pFrame;
 };
 
 inline bool KDE5SalGraphics::IsNativeControlSupported(ControlType nType, ControlPart nPart)
