@@ -3068,6 +3068,8 @@ private:
     gulong m_nSwitchPageSignalId;
     gulong m_nOverFlowSwitchPageSignalId;
     gulong m_nSizeAllocateSignalId;
+    gulong m_nFocusSignalId;
+    gulong m_nChangeCurrentPageId;
     guint m_nLaunchSplitTimeoutId;
     bool m_bOverFlowBoxActive;
     bool m_bOverFlowBoxIsStart;
@@ -3431,6 +3433,55 @@ private:
         pThis->signal_notebook_size_allocate();
     }
 
+    bool signal_focus(GtkDirectionType direction)
+    {
+        if (!m_bOverFlowBoxActive)
+            return false;
+
+        int nPage = gtk_notebook_get_current_page(m_pNotebook);
+        if (direction == GTK_DIR_LEFT && nPage == 0)
+        {
+            auto nOverFlowLen = gtk_notebook_get_n_pages(m_pOverFlowNotebook) - 1;
+            gtk_notebook_set_current_page(m_pOverFlowNotebook, nOverFlowLen - 1);
+            return true;
+        }
+        else if (direction == GTK_DIR_RIGHT && nPage == gtk_notebook_get_n_pages(m_pNotebook) - 1)
+        {
+            gtk_notebook_set_current_page(m_pOverFlowNotebook, 0);
+            return true;
+        }
+
+        return false;
+    }
+
+    static gboolean signalFocus(GtkNotebook* notebook, GtkDirectionType direction, gpointer widget)
+    {
+        // if the notebook widget itself has focus
+        if (gtk_widget_is_focus(GTK_WIDGET(notebook)))
+        {
+            GtkInstanceNotebook* pThis = static_cast<GtkInstanceNotebook*>(widget);
+            return pThis->signal_focus(direction);
+        }
+        return false;
+    }
+
+    // ctrl + page_up/ page_down
+    bool signal_change_current_page(gint arg1)
+    {
+        bool bHandled = signal_focus(arg1 < 0 ? GTK_DIR_LEFT : GTK_DIR_RIGHT);
+        if (bHandled)
+            g_signal_stop_emission_by_name(m_pNotebook, "change-current-page");
+        return false;
+    }
+
+    static gboolean signalChangeCurrentPage(GtkNotebook*, gint arg1, gpointer widget)
+    {
+        if (arg1 == 0)
+            return true;
+        GtkInstanceNotebook* pThis = static_cast<GtkInstanceNotebook*>(widget);
+        return pThis->signal_change_current_page(arg1);
+    }
+
 public:
     GtkInstanceNotebook(GtkNotebook* pNotebook, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pNotebook), bTakeOwnership)
@@ -3439,6 +3490,8 @@ public:
         , m_pOverFlowNotebook(GTK_NOTEBOOK(gtk_notebook_new()))
         , m_nSwitchPageSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
         , m_nOverFlowSwitchPageSignalId(g_signal_connect(m_pOverFlowNotebook, "switch-page", G_CALLBACK(signalOverFlowSwitchPage), this))
+        , m_nFocusSignalId(g_signal_connect(pNotebook, "focus", G_CALLBACK(signalFocus), this))
+        , m_nChangeCurrentPageId(g_signal_connect(pNotebook, "change-current-page", G_CALLBACK(signalChangeCurrentPage), this))
         , m_nLaunchSplitTimeoutId(0)
         , m_bOverFlowBoxActive(false)
         , m_bOverFlowBoxIsStart(false)
@@ -3574,6 +3627,8 @@ public:
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pNotebook, m_nSwitchPageSignalId);
+        g_signal_handler_block(m_pNotebook, m_nFocusSignalId);
+        g_signal_handler_block(m_pNotebook, m_nChangeCurrentPageId);
         g_signal_handler_block(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
         gtk_widget_freeze_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
         GtkInstanceContainer::disable_notify_events();
@@ -3585,6 +3640,8 @@ public:
         gtk_widget_thaw_child_notify(GTK_WIDGET(m_pOverFlowNotebook));
         g_signal_handler_unblock(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
         g_signal_handler_unblock(m_pNotebook, m_nSwitchPageSignalId);
+        g_signal_handler_unblock(m_pNotebook, m_nFocusSignalId);
+        g_signal_handler_unblock(m_pNotebook, m_nChangeCurrentPageId);
     }
 
     void reset_split_data()
@@ -3626,6 +3683,8 @@ public:
         if (m_nSizeAllocateSignalId)
             g_signal_handler_disconnect(m_pNotebook, m_nSizeAllocateSignalId);
         g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
+        g_signal_handler_disconnect(m_pNotebook, m_nFocusSignalId);
+        g_signal_handler_disconnect(m_pNotebook, m_nChangeCurrentPageId);
         g_signal_handler_disconnect(m_pOverFlowNotebook, m_nOverFlowSwitchPageSignalId);
         gtk_widget_destroy(GTK_WIDGET(m_pOverFlowNotebook));
         if (m_pOverFlowBox)
