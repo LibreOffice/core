@@ -1170,7 +1170,7 @@ IMPL_LINK(SvxCharNamePage, FontFeatureButtonClicked, weld::Button&, rButton, voi
         cui::FontFeaturesDialog aDialog(GetDialogFrameWeld(), sFontName);
         if (aDialog.run() == RET_OK)
         {
-            pNameBox->set_active_text(aDialog.getResultFontName());
+            pNameBox->set_entry_text(aDialog.getResultFontName());
             UpdatePreview_Impl();
         }
     }
