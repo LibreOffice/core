@@ -1894,7 +1894,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         aPageSize.Height = TwipsToHMM( aTwips.Height());
     }
 
-    long nPropCount = bWasCellRange ? 3 : 2;
+    long nPropCount = bWasCellRange ? 5 : 4;
     uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
     beans::PropertyValue* pArray = aSequence.getArray();
     pArray[0].Name = SC_UNONAME_PAGESIZE;
@@ -1907,8 +1907,19 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         table::CellRangeAddress aRangeAddress( nTab,
                         aCellRange.aStart.Col(), aCellRange.aStart.Row(),
                         aCellRange.aEnd.Col(), aCellRange.aEnd.Row() );
+        tools::Rectangle aMMRect( pDocShell->GetDocument().GetMMRect(
+                    aCellRange.aStart.Col(), aCellRange.aStart.Row(),
+                    aCellRange.aEnd.Col(), aCellRange.aEnd.Row(), aCellRange.aStart.Tab()));
+
+        awt::Size aCalcPageSize ( aMMRect.GetSize().Width(),  aMMRect.GetSize().Height() );
+        awt::Point aCalcPagePos( aMMRect.getX(), aMMRect.getY() );
+
         pArray[2].Name = SC_UNONAME_SOURCERANGE;
         pArray[2].Value <<= aRangeAddress;
+        pArray[3].Name = SC_UNONAME_CALCPAGESIZE;
+        pArray[3].Value <<= aCalcPageSize;
+        pArray[4].Name = SC_UNONAME_CALCPAGEPOS;
+        pArray[4].Value <<= aCalcPagePos;
     }
 
     if( ! pPrinterOptions )
