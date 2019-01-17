@@ -440,7 +440,7 @@ DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager()
 {
 }
 
-bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, SwPaM*& rpPam, SwNodeRange*& rpRange ) const
+bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, SwPaM*& rpPam, std::unique_ptr<SwNodeRange>& rpRange ) const
 {
     // Do we actually have the Item?
     rpPam = nullptr;
@@ -474,8 +474,8 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
             }
             if( aPara.pTableNd )
             {
-                rpRange = new SwNodeRange( *aPara.pTableNd, 0,
-                                *aPara.pTableNd->EndOfSectionNode(), 1 );
+                rpRange.reset(new SwNodeRange( *aPara.pTableNd, 0,
+                                *aPara.pTableNd->EndOfSectionNode(), 1 ));
                 return true;
             }
         }
@@ -488,7 +488,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
                 nullptr != ( pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx()) ) &&
                 !( pNd = &pIdx->GetNode())->IsNoTextNode() )
             {
-                rpRange = new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() );
+                rpRange.reset(new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() ));
                 return true;
             }
         }
@@ -508,7 +508,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
                 const SwOutlineNodes& rOutlNds = m_rDoc.GetNodes().GetOutLineNds();
                 SwOutlineNodes::size_type nTmpPos;
                 (void)rOutlNds.Seek_Entry( pNd, &nTmpPos );
-                rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
+                rpRange.reset(new SwNodeRange( aPos.nNode, 0, aPos.nNode ));
 
                 // look for the section's end, now
                 for( ++nTmpPos;
@@ -555,8 +555,8 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
             }
             if( aPara.pSectNd )
             {
-                rpRange = new SwNodeRange( *aPara.pSectNd, 1,
-                                        *aPara.pSectNd->EndOfSectionNode() );
+                rpRange.reset(new SwNodeRange( *aPara.pSectNd, 1,
+                                        *aPara.pSectNd->EndOfSectionNode() ));
                 return true;
 
             }

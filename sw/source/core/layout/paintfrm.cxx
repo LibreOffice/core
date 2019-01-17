@@ -2910,9 +2910,9 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     else
         SwRootFrame::s_isInPaint = bResetRootPaint = true;
 
-    SwSavePaintStatics *pStatics = nullptr;
+    std::unique_ptr<SwSavePaintStatics> pStatics;
     if ( gProp.pSGlobalShell )
-        pStatics = new SwSavePaintStatics();
+        pStatics.reset(new SwSavePaintStatics());
     gProp.pSGlobalShell = pSh;
 
     if( !pSh->GetWin() )
@@ -3230,7 +3230,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     if ( bResetRootPaint )
         SwRootFrame::s_isInPaint = false;
     if ( pStatics )
-        delete pStatics;
+        pStatics.reset();
     else
     {
         gProp.pSProgress = nullptr;
