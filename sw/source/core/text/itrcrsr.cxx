@@ -85,12 +85,12 @@ static void lcl_GetCharRectInsideField( SwTextSizeInfo& rInf, SwRect& rOrig,
                 nFieldLen = 0;
             }
 
-            if ( ! pPor->GetPortion() || nFieldIdx + nFieldLen > nCharOfst )
+            if ( ! pPor->GetNextPortion() || nFieldIdx + nFieldLen > nCharOfst )
                 break;
 
             nFieldIdx = nFieldIdx + nFieldLen;
             rOrig.Pos().AdjustX(pPor->Width() );
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
 
         } while ( true );
 
@@ -438,7 +438,7 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
             nPorHeight = pPor->Height();
             nPorAscent = pPor->GetAscent();
         }
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
 
     const Size aCharSize( 1, nTmpHeight );
@@ -565,7 +565,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                         ++nKanaIdx;
                 }
             }
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
         }
 
         if( !pPor )
@@ -623,8 +623,8 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                                 )
                                 ++nKanaIdx;
                         }
-                        if ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
-                                !pPor->GetPortion()->IsMarginPortion() ) )
+                        if ( !pPor->IsFlyPortion() || ( pPor->GetNextPortion() &&
+                                !pPor->GetNextPortion()->IsMarginPortion() ) )
                             nX += pPor->PrtWidth();
                     }
                     if( pPor->IsMultiPortion() )
@@ -658,7 +658,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     }
 
                     aInf.SetIdx( aInf.GetIdx() + pPor->GetLen() );
-                    pPor = pPor->GetPortion();
+                    pPor = pPor->GetNextPortion();
                 }
                 else
                 {
@@ -947,12 +947,12 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                 while( pTmp->HasFollow() && pTmp->GetExp().isEmpty() )
                 {
                     sal_uInt16 nAddX = pTmp->Width();
-                    SwLinePortion *pNext = pTmp->GetPortion();
+                    SwLinePortion *pNext = pTmp->GetNextPortion();
                     while( pNext && !pNext->InFieldGrp() )
                     {
                         OSL_ENSURE( !pNext->GetLen(), "Where's my field follow?" );
                         nAddX = nAddX + pNext->Width();
-                        pNext = pNext->GetPortion();
+                        pNext = pNext->GetNextPortion();
                     }
                     if( !pNext )
                         break;
@@ -987,8 +987,8 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                         if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->size() )
                             ++nKanaIdx;
                     }
-                    if ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
-                            !pPor->GetPortion()->IsMarginPortion() ) )
+                    if ( !pPor->IsFlyPortion() || ( pPor->GetNextPortion() &&
+                            !pPor->GetNextPortion()->IsMarginPortion() ) )
                         nX += pPor->PrtWidth();
                 }
                 if( pPor->IsMultiPortion() &&
@@ -1010,11 +1010,11 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                     nPorHeight = pPor->Height();
                     nPorAscent = pPor->GetAscent();
                 }
-                pPor = pPor->GetPortion();
+                pPor = pPor->GetNextPortion();
             }
 
             if( aInf.GetIdx() == nOfst && pPor && pPor->InHyphGrp() &&
-                pPor->GetPortion() && pPor->GetPortion()->InFixGrp() )
+                pPor->GetNextPortion() && pPor->GetNextPortion()->InFixGrp() )
             {
                 // All special portions have to be skipped
                 // Taking the German word "zusammen" as example: zu-[FLY]sammen, 'u' == 19, 's' == 20; Right()
@@ -1028,7 +1028,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                         nPorHeight = pPor->Height();
                         nPorAscent = pPor->GetAscent();
                     }
-                    pPor = pPor->GetPortion();
+                    pPor = pPor->GetNextPortion();
                 }
             }
             if( pPor && pCMS )
@@ -1341,12 +1341,12 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                      30 :
                      nWidth;
 
-    while( pPor->GetPortion() && nWidth30 < nX && !pPor->IsBreakPortion() )
+    while( pPor->GetNextPortion() && nWidth30 < nX && !pPor->IsBreakPortion() )
     {
         nX = nX - nWidth;
         nCurrStart = nCurrStart + pPor->GetLen();
         bHolePortion = pPor->IsHolePortion();
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
         nWidth = pPor->Width();
         if ( m_pCurr->IsSpaceAdd() || pKanaComp )
         {
@@ -1388,18 +1388,18 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
             bLastHyph = pPor->InHyphGrp();
     }
 
-    const bool bLastPortion = (nullptr == pPor->GetPortion());
+    const bool bLastPortion = (nullptr == pPor->GetNextPortion());
 
     if( nX==nWidth )
     {
-        SwLinePortion *pNextPor = pPor->GetPortion();
+        SwLinePortion *pNextPor = pPor->GetNextPortion();
         while( pNextPor && pNextPor->InFieldGrp() && !pNextPor->Width() )
         {
             nCurrStart = nCurrStart + pPor->GetLen();
             pPor = pNextPor;
             if( !pPor->IsFlyPortion() && !pPor->IsMarginPortion() )
                 bLastHyph = pPor->InHyphGrp();
-            pNextPor = pPor->GetPortion();
+            pNextPor = pPor->GetNextPortion();
         }
     }
 
@@ -1448,7 +1448,7 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
 
         // 7849, 7816: pPor->GetHyphPortion is mandatory!
         if( bHolePortion || ( !bRightAllowed && bLastHyph ) ||
-            ( pPor->IsMarginPortion() && !pPor->GetPortion() &&
+            ( pPor->IsMarginPortion() && !pPor->GetNextPortion() &&
               // 46598: Consider the situation: We might end up behind the last character,
               // in the last line of a centered paragraph
               nCurrStart < TextFrameIndex(rText.getLength())))
@@ -1495,13 +1495,13 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                           !static_cast<SwFieldPortion*>(pPor)->HasFollow() ) )
                         ++nCurrStart;
                 }
-                else if ( ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
-                    !pPor->GetPortion()->IsMarginPortion() &&
-                    !pPor->GetPortion()->IsHolePortion() ) )
+                else if ( ( !pPor->IsFlyPortion() || ( pPor->GetNextPortion() &&
+                    !pPor->GetNextPortion()->IsMarginPortion() &&
+                    !pPor->GetNextPortion()->IsHolePortion() ) )
                          && ( nWidth/2 < nX ) &&
                          ( !bFieldInfo ||
-                            ( pPor->GetPortion() &&
-                              pPor->GetPortion()->IsPostItsPortion() ) )
+                            ( pPor->GetNextPortion() &&
+                              pPor->GetNextPortion()->IsPostItsPortion() ) )
                          && ( bRightAllowed || !bLastHyph ))
                     ++nCurrStart;
 
@@ -1680,8 +1680,8 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
                         aDrawInf.GetCursorBidiLevel();
 
                 if( bFieldInfo && nLength == pPor->GetLen() &&
-                    ( ! pPor->GetPortion() ||
-                      ! pPor->GetPortion()->IsPostItsPortion() ) )
+                    ( ! pPor->GetNextPortion() ||
+                      ! pPor->GetNextPortion()->IsPostItsPortion() ) )
                     --nLength;
             }
             if( nOldProp )
@@ -1730,8 +1730,8 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
     // 7684: We end up in front of the HyphPortion. We must assure
     // that we end up in the string.
     // If we are at end of line in front of FlyFrames, we must proceed the same way.
-    if( nOffset && pPor->GetLen() == nLength && pPor->GetPortion() &&
-        !pPor->GetPortion()->GetLen() && pPor->GetPortion()->InHyphGrp() )
+    if( nOffset && pPor->GetLen() == nLength && pPor->GetNextPortion() &&
+        !pPor->GetNextPortion()->GetLen() && pPor->GetNextPortion()->InHyphGrp() )
         --nOffset;
 
     return nOffset;

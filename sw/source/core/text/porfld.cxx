@@ -624,9 +624,9 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
-        SwLinePortion *pTmp = GetPortion();
+        SwLinePortion *pTmp = GetNextPortion();
         while ( pTmp && !pTmp->InTextGrp() )
-            pTmp = pTmp->GetPortion();
+            pTmp = pTmp->GetNextPortion();
         if ( !pTmp )
             return;
     }
@@ -641,7 +641,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         nSumWidth = nSumWidth + pTmp->Width();
         if ( static_cast<const SwNumberPortion*>(pTmp)->HasFollow() )
-            pTmp = pTmp->GetPortion();
+            pTmp = pTmp->GetNextPortion();
         else
         {
             nOffset = pTmp->Width() - static_cast<const SwNumberPortion*>(pTmp)->nFixWidth;
@@ -880,9 +880,9 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
         return;
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
-        SwLinePortion *pTmp = GetPortion();
+        SwLinePortion *pTmp = GetNextPortion();
         while ( pTmp && !pTmp->InTextGrp() )
-            pTmp = pTmp->GetPortion();
+            pTmp = pTmp->GetNextPortion();
         if ( !pTmp )
             return;
     }
@@ -915,7 +915,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( m_bReplace )
     {
-        const long nTmpH = GetPortion() ? GetPortion()->GetAscent() : 120;
+        const long nTmpH = GetNextPortion() ? GetNextPortion()->GetAscent() : 120;
         aSize = Size( nTmpH, nTmpH );
         aPos.setY( rInf.Y() - nTmpH );
     }
@@ -1038,7 +1038,7 @@ void SwTextFrame::StopAnimation( OutputDevice* pOut )
         SwLineLayout *pLine = GetPara();
         while( pLine )
         {
-            SwLinePortion *pPor = pLine->GetPortion();
+            SwLinePortion *pPor = pLine->GetNextPortion();
             while( pPor )
             {
                 if( pPor->IsGrfNumPortion() )
@@ -1046,7 +1046,7 @@ void SwTextFrame::StopAnimation( OutputDevice* pOut )
                 // The NumberPortion is always at the first char,
                 // which means we can cancel as soon as we've reached a portion
                 // with a length > 0
-                pPor = pPor->GetLen() ? nullptr : pPor->GetPortion();
+                pPor = pPor->GetLen() ? nullptr : pPor->GetNextPortion();
             }
             pLine = pLine->GetLen() ? nullptr : pLine->GetNext();
         }
@@ -1095,8 +1095,8 @@ void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
     rInf.DrawViewOpt( *this, POR_FLD );
 
     // do we have to repaint a post it portion?
-    if( rInf.OnWin() && pPortion && !pPortion->Width() )
-        pPortion->PrePaint( rInf, this );
+    if( rInf.OnWin() && mpNextPortion && !mpNextPortion->Width() )
+        mpNextPortion->PrePaint( rInf, this );
 
     const sal_Int32 nCount = m_aExpand.getLength();
     if( !nCount )

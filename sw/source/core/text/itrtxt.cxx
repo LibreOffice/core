@@ -302,14 +302,14 @@ void SwTextIter::TwipsToLine( const SwTwips y)
 // Local helper function to check, if pCurr needs a field rest portion:
 static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 {
-    const SwLinePortion *pPor = pCurr->GetPortion();
+    const SwLinePortion *pPor = pCurr->GetNextPortion();
     bool bRet = false;
     while( pPor && !bRet )
     {
         bRet = pPor->InFieldGrp() && static_cast<const SwFieldPortion*>(pPor)->HasFollow();
-        if( !pPor->GetPortion() || !pPor->GetPortion()->InFieldGrp() )
+        if( !pPor->GetNextPortion() || !pPor->GetNextPortion()->InFieldGrp() )
             break;
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
     return bRet;
 }

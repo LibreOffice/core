@@ -646,9 +646,9 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     // for underlining we must know when not to add extra space behind
     // a character in justified mode
-    aDrawInf.SetSpaceStop( ! rPor.GetPortion() ||
-                             rPor.GetPortion()->InFixMargGrp() ||
-                             rPor.GetPortion()->IsHolePortion() );
+    aDrawInf.SetSpaceStop( ! rPor.GetNextPortion() ||
+                             rPor.GetNextPortion()->InFixMargGrp() ||
+                             rPor.GetNextPortion()->IsHolePortion() );
 
     // Draw text next to the left border
     Point aFontPos(aPos);
@@ -1201,7 +1201,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                         }
                     }
                     nIdx += nLen;
-                    pPos = pPos->GetPortion();
+                    pPos = pPos->GetNextPortion();
                 } while ( pPos );
 
             drawcontinue:
@@ -1556,7 +1556,7 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
 bool SwTextFormatInfo::CheckFootnotePortion_( SwLineLayout const * pCurr )
 {
     const sal_uInt16 nHeight = pCurr->GetRealHeight();
-    for( SwLinePortion *pPor = pCurr->GetPortion(); pPor; pPor = pPor->GetPortion() )
+    for( SwLinePortion *pPor = pCurr->GetNextPortion(); pPor; pPor = pPor->GetNextPortion() )
     {
         if( pPor->IsFootnotePortion() && nHeight > static_cast<SwFootnotePortion*>(pPor)->Orig() )
         {
@@ -1679,7 +1679,7 @@ bool SwTextFormatInfo::LastKernPortion()
             pKern = pPor;
         else if( pPor->Width() || ( pPor->GetLen() && !pPor->IsHolePortion() ) )
             pKern = nullptr;
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
     if( pKern )
     {

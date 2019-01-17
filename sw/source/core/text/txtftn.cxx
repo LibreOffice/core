@@ -1048,7 +1048,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
         if ( pPor->IsFlyPortion() )
             nLastLeft = static_cast<SwFlyPortion*>(pPor)->GetFix() +
                         static_cast<SwFlyPortion*>(pPor)->Width();
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
 
     // The old game all over again: we want the Line to wrap around
@@ -1106,7 +1106,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
         pGlue->Width( 0 );
         pGlue->SetLen(TextFrameIndex(0));
         pGlue->SetAscent( 0 );
-        pGlue->SetPortion( nullptr );
+        pGlue->SetNextPortion( nullptr );
         pGlue->SetFixWidth(0);
     }
 
@@ -1160,7 +1160,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
             pGlue = new SwGluePortion(0);
             pGlue->Width( nLastLeft );
             pPor->Append( pGlue );
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
         }
     }
 
@@ -1170,9 +1170,9 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
     {
         // pPor->Append deletes the pPortion pointer of pPor.
         // Therefore we have to keep a pointer to the next portion
-        pQuo = static_cast<SwQuoVadisPortion*>(pCurrPor->GetPortion());
+        pQuo = static_cast<SwQuoVadisPortion*>(pCurrPor->GetNextPortion());
         pPor->Append( pCurrPor );
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
         pCurrPor = pQuo;
     }
 
@@ -1480,7 +1480,7 @@ void SwParaPortion::SetErgoSumNum( const OUString& rErgo )
     {
         if ( pPor->IsQuoVadisPortion() )
             pQuo = static_cast<SwQuoVadisPortion*>(pPor);
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
     if( pQuo )
         pQuo->SetNumber( rErgo );
@@ -1502,7 +1502,7 @@ bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
     {
         if ( pPor->IsQuoVadisPortion() )
             pQuo = static_cast<SwQuoVadisPortion*>(pPor);
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
 
     if( !pQuo )

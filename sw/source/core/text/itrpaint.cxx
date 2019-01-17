@@ -114,7 +114,7 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
             else
                 pPor->Move( GetInfo() );
             pLast = pPor;
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
         }
 
         // 7529: if PostIts return also pLast.
@@ -177,7 +177,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                     break;
                 }
             }
-            pPorIter = pPorIter->GetPortion();
+            pPorIter = pPorIter->GetNextPortion();
         }
     }
     if( !bEndPor && nTmpLeft >= nMaxRight )
@@ -356,7 +356,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         // Portions, which lay "below" the text like post-its
-        SwLinePortion *pNext = pPor->GetPortion();
+        SwLinePortion *pNext = pPor->GetNextPortion();
         if( GetInfo().OnWin() && pNext && !pNext->Width() )
         {
             // Fix 11289: Fields were omitted here because of Last!=Owner during
@@ -646,7 +646,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             ++nNumberOfPortions;
 
             nTmpIdx += pPor->GetLen();
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
         }
 
         // resulting height

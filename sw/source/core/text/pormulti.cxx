@@ -143,7 +143,7 @@ void SwMultiPortion::ActualizeTabulator()
 {
     SwLinePortion* pPor = GetRoot().GetFirstPortion();
     // First line
-    for( bTab1 = bTab2 = false; pPor; pPor = pPor->GetPortion() )
+    for( bTab1 = bTab2 = false; pPor; pPor = pPor->GetNextPortion() )
         if( pPor->InTabGrp() )
             SetTab1( true );
     if( GetRoot().GetNext() )
@@ -154,7 +154,7 @@ void SwMultiPortion::ActualizeTabulator()
         {
             if( pPor->InTabGrp() )
                 SetTab2( true );
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
         } while ( pPor );
     }
 }
@@ -221,7 +221,7 @@ TextFrameIndex SwBidiPortion::GetSpaceCnt(const SwTextSizeInfo &rInf) const
     TextFrameIndex nNull(0);
     TextFrameIndex nBlanks(0);
 
-    for (SwLinePortion* pPor = GetRoot().GetFirstPortion(); pPor; pPor = pPor->GetPortion())
+    for (SwLinePortion* pPor = GetRoot().GetFirstPortion(); pPor; pPor = pPor->GetNextPortion())
     {
         if( pPor->InTextGrp() )
             nBlanks = nBlanks + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
@@ -458,7 +458,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
     TextFrameIndex nStart = rInf.GetIdx();
     SetTab1( false );
     SetTab2( false );
-    for (nBlank1 = TextFrameIndex(0); pPor; pPor = pPor->GetPortion())
+    for (nBlank1 = TextFrameIndex(0); pPor; pPor = pPor->GetNextPortion())
     {
         if( pPor->InTextGrp() )
             nBlank1 = nBlank1 + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
@@ -472,7 +472,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
         pPor = GetRoot().GetNext()->GetFirstPortion();
         nLineDiff -= GetRoot().GetNext()->Width();
     }
-    for (nBlank2 = TextFrameIndex(0); pPor; pPor = pPor->GetPortion())
+    for (nBlank2 = TextFrameIndex(0); pPor; pPor = pPor->GetNextPortion())
     {
         if( pPor->InTextGrp() )
             nBlank2 = nBlank2 + static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
@@ -601,11 +601,11 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     pField->SetFollow( true );
 
     if( OnTop() )
-        GetRoot().SetPortion( pField );
+        GetRoot().SetNextPortion( pField );
     else
     {
         GetRoot().SetNext( new SwLineLayout() );
-        GetRoot().GetNext()->SetPortion( pField );
+        GetRoot().GetNext()->SetNextPortion( pField );
     }
 
     // ruby portions have the same direction as the frame directions
@@ -667,7 +667,7 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
         {
             TextFrameIndex nCharCnt(0);
             SwLinePortion *pPor;
-            for( pPor = pCurr->GetFirstPortion(); pPor; pPor = pPor->GetPortion() )
+            for( pPor = pCurr->GetFirstPortion(); pPor; pPor = pPor->GetNextPortion() )
             {
                 if( pPor->InTextGrp() )
                     static_cast<SwTextPortion*>(pPor)->GetSpaceCnt( rInf, nCharCnt );
@@ -696,14 +696,14 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
     }
     if( nLeft || nRight )
     {
-        if( !pCurr->GetPortion() )
-            pCurr->SetPortion(SwTextPortion::CopyLinePortion(*pCurr));
+        if( !pCurr->GetNextPortion() )
+            pCurr->SetNextPortion(SwTextPortion::CopyLinePortion(*pCurr));
         if( nLeft )
         {
             SwMarginPortion *pMarg = new SwMarginPortion;
             pMarg->AddPrtWidth( nLeft );
-            pMarg->SetPortion( pCurr->GetPortion() );
-            pCurr->SetPortion( pMarg );
+            pMarg->SetNextPortion( pCurr->GetNextPortion() );
+            pCurr->SetNextPortion( pMarg );
         }
         if( nRight )
         {
@@ -736,7 +736,7 @@ void SwRubyPortion::CalcRubyOffset()
     {
         if( pPor->InFieldGrp() )
             pField = static_cast<const SwFieldPortion*>(pPor);
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
     if( pField )
     {
@@ -1543,9 +1543,9 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         rMulti.Height( nOldHeight );
 
     // do we have to repaint a post it portion?
-    if( GetInfo().OnWin() && rMulti.GetPortion() &&
-        ! rMulti.GetPortion()->Width() )
-        rMulti.GetPortion()->PrePaint( GetInfo(), &rMulti );
+    if( GetInfo().OnWin() && rMulti.GetNextPortion() &&
+        ! rMulti.GetNextPortion()->Width() )
+        rMulti.GetNextPortion()->PrePaint( GetInfo(), &rMulti );
 
     // old values must be saved and restored at the end
     TextFrameIndex const nOldLen = GetInfo().GetLen();
@@ -1707,7 +1707,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         else
             bSeeked = false;
 
-        SwLinePortion *pNext = pPor->GetPortion();
+        SwLinePortion *pNext = pPor->GetNextPortion();
         if(GetInfo().OnWin() && pNext && !pNext->Width() )
         {
             if ( !bSeeked )
@@ -1834,11 +1834,11 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpField )
 {
     SwLinePortion* pLast = pLine;
-    rpField = pLine->GetPortion();
+    rpField = pLine->GetNextPortion();
     while( rpField && !rpField->InFieldGrp() )
     {
         pLast = rpField;
-        rpField = rpField->GetPortion();
+        rpField = rpField->GetNextPortion();
     }
     bool bRet = rpField != nullptr;
     if( bRet )
@@ -1846,7 +1846,7 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpField
         if( static_cast<SwFieldPortion*>(rpField)->IsFollow() )
         {
             rpField->Truncate();
-            pLast->SetPortion( nullptr );
+            pLast->SetNextPortion( nullptr );
         }
         else
             rpField = nullptr;
@@ -1979,13 +1979,13 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     }
     else
     {
-        pFirstRest = rMulti.GetRoot().GetPortion();
+        pFirstRest = rMulti.GetRoot().GetNextPortion();
         pSecondRest = rMulti.GetRoot().GetNext() ?
-                      rMulti.GetRoot().GetNext()->GetPortion() : nullptr;
+                      rMulti.GetRoot().GetNext()->GetNextPortion() : nullptr;
         if( pFirstRest )
-            rMulti.GetRoot().SetPortion( nullptr );
+            rMulti.GetRoot().SetNextPortion( nullptr );
         if( pSecondRest )
-            rMulti.GetRoot().GetNext()->SetPortion( nullptr );
+            rMulti.GetRoot().GetNext()->SetNextPortion( nullptr );
         rMulti.SetFormatted();
         nMultiLen = nMultiLen - rInf.GetIdx();
     }
@@ -2097,7 +2097,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             BuildPortions( aTmp );
 
             const SwLinePortion *pRightPortion = rMulti.OnRight() ?
-                                                 rMulti.GetRoot().GetNext()->GetPortion() : nullptr;
+                                                 rMulti.GetRoot().GetNext()->GetNextPortion() : nullptr;
             if (pRightPortion)
             {
                 // The ruby text on the right is vertical.
@@ -2255,7 +2255,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
                 if( pNextSecond )
                 {
                     pTmp->GetRoot().SetNext( new SwLineLayout() );
-                    pTmp->GetRoot().GetNext()->SetPortion( pNextSecond );
+                    pTmp->GetRoot().GetNext()->SetNextPortion( pNextSecond );
                 }
                 pTmp->SetFollowField();
             }
@@ -2287,16 +2287,16 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
             SwLinePortion* pPor = aRoot.GetFirstPortion();
             while ( pPor )
             {
-                if ( pPor->GetPortion() && pPor->GetPortion()->IsHolePortion() )
+                if ( pPor->GetNextPortion() && pPor->GetNextPortion()->IsHolePortion() )
                 {
-                    SwLinePortion* pHolePor = pPor->GetPortion();
-                    pPor->SetPortion( nullptr );
+                    SwLinePortion* pHolePor = pPor->GetNextPortion();
+                    pPor->SetNextPortion( nullptr );
                     aRoot.SetLen( aRoot.GetLen() - pHolePor->GetLen() );
                     rMulti.SetLen( rMulti.GetLen() - pHolePor->GetLen() );
-                    rMulti.SetPortion( pHolePor );
+                    rMulti.SetNextPortion( pHolePor );
                     break;
                 }
-                pPor = pPor->GetPortion();
+                pPor = pPor->GetNextPortion();
             }
 
             pTmp = new SwBidiPortion( nMultiLen + rInf.GetIdx(),
@@ -2314,7 +2314,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
         if( pNextFirst && pTmp )
         {
             pTmp->SetFollowField();
-            pTmp->GetRoot().SetPortion( pNextFirst );
+            pTmp->GetRoot().SetNextPortion( pNextFirst );
         }
         else
             // A follow field portion is still waiting. If nobody wants it,
@@ -2380,7 +2380,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
             pField = nullptr;
             pTmpMulti = static_cast<const SwMultiPortion*>(pPor);
         }
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
         // If the last portion is a multi-portion, we enter it
         // and look for a field portion inside.
         // If we are already in a multiportion, we could change to the
@@ -2476,7 +2476,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
                 pLay->SetNext( new SwLineLayout() );
                 pLay = pLay->GetNext();
             }
-            pLay->SetPortion( pRest );
+            pLay->SetNextPortion( pRest );
         }
         return pTmp;
     }
