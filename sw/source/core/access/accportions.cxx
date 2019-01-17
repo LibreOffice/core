@@ -276,7 +276,6 @@ bool SwAccessiblePortionData::IsGrayPortionType( PortionType nType ) const
         case PortionType::QuoVadis:
         case PortionType::Number:
         case PortionType::Field:
-        case PortionType::Url:
         case PortionType::InputField:
         case PortionType::IsoTox:
         case PortionType::Tox:
