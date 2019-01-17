@@ -142,7 +142,6 @@
 #include <rtl/ustring.hxx>
 #include <svtools/embedhlp.hxx>
 #include <memory>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -6288,7 +6287,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         }
         m_xShapeInfosByTxBxComp->insert(std::make_shared<SvxMSDffShapeInfo>(
                     aInfo));
-        m_aShapeOrders.push_back(o3tl::make_unique<SvxMSDffShapeOrder>(
+        m_aShapeOrders.push_back(std::make_unique<SvxMSDffShapeOrder>(
                     aInfo.nShapeId ));
     }
 

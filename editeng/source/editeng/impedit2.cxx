@@ -59,7 +59,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/asiancfg.hxx>
-#include <o3tl/make_unique.hxx>
 #include <comphelper/lok.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -246,7 +245,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
 
     GetParaPortions().Reset();
 
-    GetParaPortions().Insert(0, o3tl::make_unique<ParaPortion>( aEditDoc[0] ));
+    GetParaPortions().Insert(0, std::make_unique<ParaPortion>( aEditDoc[0] ));
 
     bFormatted = false;
 
@@ -696,7 +695,7 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet()
 {
     if ( !pEmptyItemSet )
     {
-        pEmptyItemSet = o3tl::make_unique<SfxItemSet>( aEditDoc.GetItemPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
+        pEmptyItemSet = std::make_unique<SfxItemSet>( aEditDoc.GetItemPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
         {
             pEmptyItemSet->ClearItem( nWhich );
@@ -2085,7 +2084,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
                 break;  // for
             }
         }
-        InsertUndo(o3tl::make_unique<EditUndoRemoveChars>(pEditEngine, CreateEPaM(rPaM), aStr));
+        InsertUndo(std::make_unique<EditUndoRemoveChars>(pEditEngine, CreateEPaM(rPaM), aStr));
     }
 
     aEditDoc.RemoveChars( rPaM, nChars );
@@ -2144,7 +2143,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     aBeginMovingParagraphsHdl.Call( aMoveParagraphsInfo );
 
     if ( IsUndoEnabled() && !IsInUndo())
-        InsertUndo(o3tl::make_unique<EditUndoMoveParagraphs>(pEditEngine, aOldPositions, nNewPos));
+        InsertUndo(std::make_unique<EditUndoMoveParagraphs>(pEditEngine, aOldPositions, nNewPos));
 
     // do not lose sight of the Position !
     ParaPortion* pDestPortion = GetParaPortions().SafeGetObject( nNewPos );
@@ -2224,13 +2223,13 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     }
 
     sal_Int32 nParagraphTobeDeleted = aEditDoc.GetPos( pRight );
-    aDeletedNodes.push_back(o3tl::make_unique<DeletedNodeInfo>( pRight, nParagraphTobeDeleted ));
+    aDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pRight, nParagraphTobeDeleted ));
 
     GetEditEnginePtr()->ParagraphConnected( aEditDoc.GetPos( pLeft ), aEditDoc.GetPos( pRight ) );
 
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        InsertUndo( o3tl::make_unique<EditUndoConnectParas>(pEditEngine,
+        InsertUndo( std::make_unique<EditUndoConnectParas>(pEditEngine,
             aEditDoc.GetPos( pLeft ), pLeft->Len(),
             pLeft->GetContentAttribs().GetItems(), pRight->GetContentAttribs().GetItems(),
             pLeft->GetStyleSheet(), pRight->GetStyleSheet(), bBackward ) );
@@ -2457,7 +2456,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 
     OSL_ENSURE( pNode, "Blind Node in ImpRemoveParagraph" );
 
-    aDeletedNodes.push_back(o3tl::make_unique<DeletedNodeInfo>( pNode, nPara ));
+    aDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pNode, nPara ));
 
     // The node is managed by the undo and possibly destroyed!
     aEditDoc.Release( nPara );
@@ -2475,7 +2474,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
         ParaAttribsChanged( pNextNode );
 
     if ( IsUndoEnabled() && !IsInUndo() )
-        InsertUndo(o3tl::make_unique<EditUndoDelContent>(pEditEngine, pNode, nPara));
+        InsertUndo(std::make_unique<EditUndoDelContent>(pEditEngine, pNode, nPara));
     else
     {
         aEditDoc.RemoveItemsFromPool(*pNode);
@@ -2710,7 +2709,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
                 aLine = aLine.copy( 0, nMaxNewChars );        // Delete the Rest...
             }
             if ( IsUndoEnabled() && !IsInUndo() )
-                InsertUndo(o3tl::make_unique<EditUndoInsertChars>(pEditEngine, CreateEPaM(aPaM), aLine));
+                InsertUndo(std::make_unique<EditUndoInsertChars>(pEditEngine, CreateEPaM(aPaM), aLine));
             // Tabs ?
             if ( aLine.indexOf( '\t' ) == -1 )
                 aPaM = aEditDoc.InsertText( aPaM, aLine );
@@ -2768,7 +2767,7 @@ EditPaM ImpEditEngine::ImpFastInsertText( EditPaM aPaM, const OUString& rStr )
     if ( ( aPaM.GetNode()->Len() + rStr.getLength() ) < MAXCHARSINPARA )
     {
         if ( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo(o3tl::make_unique<EditUndoInsertChars>(pEditEngine, CreateEPaM(aPaM), rStr));
+            InsertUndo(std::make_unique<EditUndoInsertChars>(pEditEngine, CreateEPaM(aPaM), rStr));
 
         aPaM = aEditDoc.InsertText( aPaM, rStr );
         TextModified();
@@ -2793,7 +2792,7 @@ EditPaM ImpEditEngine::ImpInsertFeature(const EditSelection& rCurSel, const SfxP
         return aPaM;
 
     if ( IsUndoEnabled() && !IsInUndo() )
-        InsertUndo(o3tl::make_unique<EditUndoInsertFeature>(pEditEngine, CreateEPaM(aPaM), rItem));
+        InsertUndo(std::make_unique<EditUndoInsertFeature>(pEditEngine, CreateEPaM(aPaM), rItem));
     aPaM = aEditDoc.InsertFeature( aPaM, rItem );
     UpdateFields();
 
@@ -2827,7 +2826,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
     }
 
     if ( IsUndoEnabled() && !IsInUndo() )
-        InsertUndo(o3tl::make_unique<EditUndoSplitPara>(pEditEngine, aEditDoc.GetPos(rPaM.GetNode()), rPaM.GetIndex()));
+        InsertUndo(std::make_unique<EditUndoSplitPara>(pEditEngine, aEditDoc.GetPos(rPaM.GetNode()), rPaM.GetIndex()));
 
     EditPaM aPaM( aEditDoc.InsertParaBreak( rPaM, bKeepEndingAttribs ) );
 
@@ -2886,10 +2885,10 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( sal_Int32 nPara )
         if ( nPara )
         {
             OSL_ENSURE( aEditDoc.GetObject( nPara-1 ), "FastInsertParagraph: Prev does not exist" );
-            InsertUndo(o3tl::make_unique<EditUndoSplitPara>(pEditEngine, nPara-1, aEditDoc.GetObject( nPara-1 )->Len()));
+            InsertUndo(std::make_unique<EditUndoSplitPara>(pEditEngine, nPara-1, aEditDoc.GetObject( nPara-1 )->Len()));
         }
         else
-            InsertUndo(o3tl::make_unique<EditUndoSplitPara>(pEditEngine, 0, 0));
+            InsertUndo(std::make_unique<EditUndoSplitPara>(pEditEngine, 0, 0));
     }
 
     ContentNode* pNode = new ContentNode( aEditDoc.GetItemPool() );
@@ -2901,7 +2900,7 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( sal_Int32 nPara )
 
     aEditDoc.Insert(nPara, pNode);
 
-    GetParaPortions().Insert(nPara, o3tl::make_unique<ParaPortion>( pNode ));
+    GetParaPortions().Insert(nPara, std::make_unique<ParaPortion>( pNode ));
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPara );
 

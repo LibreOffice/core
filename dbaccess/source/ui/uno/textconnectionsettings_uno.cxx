@@ -35,7 +35,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <o3tl/make_unique.hxx>
 
 namespace dbaui
 {
@@ -207,7 +206,7 @@ namespace dbaui
 
     svt::OGenericUnoDialog::Dialog OTextConnectionSettingsDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(o3tl::make_unique<TextConnectionSettingsDialog>(Application::GetFrameWeld(rParent), *m_pDatasourceItems));
+        return svt::OGenericUnoDialog::Dialog(std::make_unique<TextConnectionSettingsDialog>(Application::GetFrameWeld(rParent), *m_pDatasourceItems));
     }
 
     void SAL_CALL OTextConnectionSettingsDialog::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )

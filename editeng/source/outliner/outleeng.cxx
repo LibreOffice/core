@@ -33,7 +33,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include "outlundo.hxx"
-#include <o3tl/make_unique.hxx>
 
 OutlinerEditEng::OutlinerEditEng( Outliner* pEngOwner, SfxItemPool* pPool )
  : EditEngine( pPool )
@@ -97,7 +96,7 @@ void OutlinerEditEng::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int3
         Paragraph* pPara = pOwner->GetParagraph( nRightParagraph );
         if( pPara && Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
         {
-            pOwner->InsertUndo( o3tl::make_unique<OutlinerUndoChangeParaFlags>( pOwner, nRightParagraph, ParaFlag::ISPAGE, ParaFlag::NONE ) );
+            pOwner->InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( pOwner, nRightParagraph, ParaFlag::ISPAGE, ParaFlag::NONE ) );
         }
     }
 }

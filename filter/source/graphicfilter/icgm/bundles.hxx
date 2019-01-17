@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include "cgmtypes.hxx"
 #include <vcl/salbtype.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vector>
 #include <memory>
 
@@ -45,7 +44,7 @@ public:
         , mnColor( 0 )
         {};
 
-    virtual std::unique_ptr<Bundle> Clone() { return o3tl::make_unique<Bundle>( *this ); };
+    virtual std::unique_ptr<Bundle> Clone() { return std::make_unique<Bundle>( *this ); };
 
     virtual            ~Bundle() {} ;
 
@@ -68,7 +67,7 @@ public:
         , nLineWidth(0)
     {}
 
-    virtual std::unique_ptr<Bundle> Clone() override { return o3tl::make_unique<LineBundle>( *this ); }
+    virtual std::unique_ptr<Bundle> Clone() override { return std::make_unique<LineBundle>( *this ); }
 };
 
 
@@ -84,7 +83,7 @@ public:
         , nMarkerSize( 0.0 )
         {};
 
-    virtual std::unique_ptr<Bundle> Clone() override { return o3tl::make_unique<MarkerBundle>( *this ); } ;
+    virtual std::unique_ptr<Bundle> Clone() override { return std::make_unique<MarkerBundle>( *this ); } ;
 };
 
 
@@ -99,7 +98,7 @@ public:
         : eEdgeType(ET_NONE)
         , nEdgeWidth(0)
     {}
-    virtual std::unique_ptr<Bundle> Clone() override { return o3tl::make_unique<EdgeBundle>( *this ); }
+    virtual std::unique_ptr<Bundle> Clone() override { return std::make_unique<EdgeBundle>( *this ); }
 };
 
 
@@ -119,7 +118,7 @@ public:
         , nCharacterSpacing( 0.0 )
         {};
 
-    virtual std::unique_ptr<Bundle> Clone() override { return o3tl::make_unique<TextBundle>( *this ); } ;
+    virtual std::unique_ptr<Bundle> Clone() override { return std::make_unique<TextBundle>( *this ); } ;
 };
 
 
@@ -136,7 +135,7 @@ public:
         , nFillPatternIndex(0)
         , nFillHatchIndex(0)
     {}
-    virtual std::unique_ptr<Bundle> Clone() override { return o3tl::make_unique<FillBundle>( *this ); }
+    virtual std::unique_ptr<Bundle> Clone() override { return std::make_unique<FillBundle>( *this ); }
 };
 
 

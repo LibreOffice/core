@@ -26,7 +26,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/lineinfo.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/FilterConfigItem.hxx>
 

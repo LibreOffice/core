@@ -22,7 +22,6 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <o3tl/any.hxx>
-#include <o3tl/make_unique.hxx>
 #include <xmloff/xmlcnimp.hxx>
 #include <xmloff/unoatrcn.hxx>
 #include <editeng/xmlcnitm.hxx>
@@ -78,7 +77,7 @@ sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/
 bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer
-        = new SvUnoAttributeContainer(o3tl::make_unique<SvXMLAttrContainerData>(*pImpl));
+        = new SvUnoAttributeContainer(std::make_unique<SvXMLAttrContainerData>(*pImpl));
 
     rVal <<= xContainer;
     return true;

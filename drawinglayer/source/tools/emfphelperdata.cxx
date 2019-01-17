@@ -41,7 +41,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <sal/log.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -463,7 +462,7 @@ namespace emfplushelper
             if (pen->GetColor().GetTransparency() == 0)
             {
                 mrTargetHolders.Current().append(
-                    o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
+                    std::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
                         polygon,
                         lineAttribute,
                         aStrokeAttribute));
@@ -477,7 +476,7 @@ namespace emfplushelper
                                 aStrokeAttribute));
 
                 mrTargetHolders.Current().append(
-                            o3tl::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                            std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
                                 drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
                                 pen->GetColor().GetTransparency() / 255.0));
             }
@@ -506,7 +505,7 @@ namespace emfplushelper
                 {
                     // not transparent
                     mrTargetHolders.Current().append(
-                                o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                                std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
                                     polygon,
                                     color.getBColor()));
                 }
@@ -518,7 +517,7 @@ namespace emfplushelper
                                     color.getBColor()));
 
                     mrTargetHolders.Current().append(
-                                o3tl::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
+                                std::make_unique<drawinglayer::primitive2d::UnifiedTransparencePrimitive2D>(
                                     drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
                                     color.GetTransparency() / 255.0));
                 }
@@ -579,7 +578,7 @@ namespace emfplushelper
                 // temporal solution: create a solid colored polygon
                 // TODO create a 'real' hatching primitive
                 mrTargetHolders.Current().append(
-                    o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
+                    std::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
                         polygon,
                         fillColor.getBColor()));
             }
@@ -688,7 +687,7 @@ namespace emfplushelper
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
-                        o3tl::make_unique<drawinglayer::primitive2d::SvgLinearGradientPrimitive2D>(
+                        std::make_unique<drawinglayer::primitive2d::SvgLinearGradientPrimitive2D>(
                             aTextureTransformation,
                             polygon,
                             aVector,
@@ -704,7 +703,7 @@ namespace emfplushelper
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
-                        o3tl::make_unique<drawinglayer::primitive2d::SvgRadialGradientPrimitive2D>(
+                        std::make_unique<drawinglayer::primitive2d::SvgRadialGradientPrimitive2D>(
                             aTextureTransformation,
                             polygon,
                             aVector,
@@ -1261,7 +1260,7 @@ namespace emfplushelper
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
                                     mrTargetHolders.Current().append(
-                                        o3tl::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(aBmp, aTransformMatrix));
+                                        std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(aBmp, aTransformMatrix));
                                 }
                                 else
                                 {
@@ -1273,7 +1272,7 @@ namespace emfplushelper
                                 GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
                                 aGDI.Clip(aSource);
                                 mrTargetHolders.Current().append(
-                                        o3tl::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(aTransformMatrix, aGDI));
+                                        std::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(aTransformMatrix, aGDI));
                             }
                         }
                         else
@@ -1408,7 +1407,7 @@ namespace emfplushelper
                                 }
 
                                 mrTargetHolders.Current().append(
-                                            o3tl::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                                            std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
                                                 maMapTransform,
                                                 drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText } ));
                             }
@@ -1844,7 +1843,7 @@ namespace emfplushelper
                                                     color.GetTransparency() / 255.0);
                                     }
                                     mrTargetHolders.Current().append(
-                                                o3tl::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                                                std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
                                                     maMapTransform,
                                                     drawinglayer::primitive2d::Primitive2DContainer { aPrimitiveText } ));
                                 }

@@ -19,7 +19,6 @@
 
 
 #include <editeng/measfld.hxx>
-#include <o3tl/make_unique.hxx>
 
 SdrMeasureField::~SdrMeasureField()
 {
@@ -27,7 +26,7 @@ SdrMeasureField::~SdrMeasureField()
 
 std::unique_ptr<SvxFieldData> SdrMeasureField::Clone() const
 {
-    return o3tl::make_unique<SdrMeasureField>(*this);
+    return std::make_unique<SdrMeasureField>(*this);
 }
 
 bool SdrMeasureField::operator==(const SvxFieldData& rSrc) const
