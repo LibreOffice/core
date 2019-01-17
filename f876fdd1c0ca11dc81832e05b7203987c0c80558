@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_d8231905",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-17T14:21:14Z",
+      "side": 0,
+      "message": "Ah! So previously this only worked for fallback cases, so effectively never, and didn\u0027t release fonts added using AddFontResourceExW? :-)",
+      "range": {
+        "startLine": 1100,
+        "startChar": 8,
+        "endLine": 1107,
+        "endChar": 9
+      },
+      "revId": "f876fdd1c0ca11dc81832e05b7203987c0c80558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
