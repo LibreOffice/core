@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <comphelper/lok.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/ptitem.hxx>
@@ -524,13 +525,21 @@ void SwDrawBase::CreateDefaultObject()
 Point  SwDrawBase::GetDefaultCenterPos()
 {
     Size aDocSz(m_pSh->GetDocSize());
-    const SwRect& rVisArea = m_pSh->VisArea();
-    Point aStartPos = rVisArea.Center();
-    if(rVisArea.Width() > aDocSz.Width())
-        aStartPos.setX( aDocSz.Width() / 2 + rVisArea.Left() );
-    if(rVisArea.Height() > aDocSz.Height())
-        aStartPos.setY( aDocSz.Height() / 2 + rVisArea.Top() );
-    return aStartPos;
+
+    SwRect aVisArea(m_pSh->VisArea());
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        aVisArea = m_pSh->getLOKVisibleArea();
+        aVisArea.Intersection(SwRect(Point(), aDocSz));
+    }
+
+    Point aCenter = aVisArea.Center();
+    if (aVisArea.Width() > aDocSz.Width())
+        aCenter.setX(aDocSz.Width() / 2 + aVisArea.Left());
+    if (aVisArea.Height() > aDocSz.Height())
+        aCenter.setY(aDocSz.Height() / 2 + aVisArea.Top());
+
+    return aCenter;
 }
 
 // #i33136#

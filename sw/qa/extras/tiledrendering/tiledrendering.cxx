@@ -62,6 +62,7 @@ public:
     void testGetTextSelection();
     void testSetGraphicSelection();
     void testResetSelection();
+    void testInsertShape();
     void testSearch();
     void testSearchViewArea();
     void testSearchTextFrame();
@@ -117,6 +118,7 @@ public:
     CPPUNIT_TEST(testGetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
+    CPPUNIT_TEST(testInsertShape);
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchViewArea);
     CPPUNIT_TEST(testSearchTextFrame);
@@ -455,6 +457,24 @@ void SwTiledRenderingTest::testResetSelection()
     pXTextDocument->resetSelection();
     // We no longer have a graphic selection.
     CPPUNIT_ASSERT(!pWrtShell->IsSelFrameMode());
+}
+
+void SwTiledRenderingTest::testInsertShape()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+
+    pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
+    comphelper::dispatchCommand(".uno:BasicShapes.circle", uno::Sequence<beans::PropertyValue>());
+
+    // check that the shape was inserted in the visible area, not outside
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(2736, 868, 7264, 3132), pObject->GetSnapRect());
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 static void lcl_search(bool bBackward)

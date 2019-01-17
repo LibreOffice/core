@@ -3266,12 +3266,16 @@ bool SwXTextDocument::isMimeTypeSupported()
 
 void SwXTextDocument::setClientVisibleArea(const tools::Rectangle& rRectangle)
 {
-    SwView* pView = pDocShell->GetView();
-    if (!pView)
-        return;
+    if (SwView* pView = pDocShell->GetView())
+    {
+        // set the PgUp/PgDown offset
+        pView->ForcePageUpDownOffset(2 * rRectangle.GetHeight() / 3);
+    }
 
-    // set the PgUp/PgDown offset
-    pView->ForcePageUpDownOffset(2 * rRectangle.GetHeight() / 3);
+    if (SwViewShell* pViewShell = pDocShell->GetWrtShell())
+    {
+        pViewShell->setLOKVisibleArea(rRectangle);
+    }
 }
 
 void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight_*/,
