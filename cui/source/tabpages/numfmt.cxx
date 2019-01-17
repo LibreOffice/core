@@ -947,10 +947,10 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
                 m_xEdDecimals->set_text( "" ); //General format tdf#44399
             else
                 if ( nCategory == CAT_FRACTION )
-                    m_xEdDenominator->set_text( OUString::number( nDecimals ) );
+                    m_xEdDenominator->set_value( nDecimals );
                 else
-                    m_xEdDecimals->set_text( OUString::number( nDecimals ) );
-            m_xEdLeadZeroes->set_text( OUString::number( nZeroes ) );
+                    m_xEdDecimals->set_value( nDecimals );
+            m_xEdLeadZeroes->set_value( nZeroes );
             m_xBtnNegRed->set_active( bNegRed );
             if ( nCategory != CAT_SCIENTIFIC )
             {
@@ -976,8 +976,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_xBtnNegRed->set_sensitive(false);
             m_xBtnThousand->set_sensitive(false);
             m_xBtnEngineering->set_sensitive(false);
-            m_xEdDecimals->set_text( OUString::number( 0 ) );
-            m_xEdLeadZeroes->set_text( OUString::number( 0 ) );
+            m_xEdDecimals->set_text( OUString() );
+            m_xEdLeadZeroes->set_text( OUString() );
             m_xBtnNegRed->set_active( false );
             m_xBtnThousand->set_active( false );
             m_xBtnEngineering->set_active( false );
