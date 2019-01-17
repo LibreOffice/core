@@ -22,6 +22,30 @@
       "revId": "f876fdd1c0ca11dc81832e05b7203987c0c80558",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_b875fdfc",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2019-01-17T14:29:46Z",
+      "side": 0,
+      "message": "In theory non of this is needed.\n\nIf AddFontResourceExW doesn\u0027t fail it should be a private font, which is released when the process ends, regardless of there being a RemoveFontResourceExW call. The release was just triggered, if private fails, because then you must release the global font.\n\nIt shouldn\u0027t fix anything, but since nobody can reproduce these Windows errors locally and just Jenkins fails…",
+      "parentUuid": "1f485f77_d8231905",
+      "range": {
+        "startLine": 1100,
+        "startChar": 8,
+        "endLine": 1107,
+        "endChar": 9
+      },
+      "revId": "f876fdd1c0ca11dc81832e05b7203987c0c80558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
