@@ -1021,7 +1021,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
         SfxItemState eItemState = pSrcSet->GetItemState( nAttrId, false, &pSrcItem );
         if (eItemState==SfxItemState::SET)
         {
-            SfxPoolItem* pNewItem = nullptr;
+            std::unique_ptr<SfxPoolItem> pNewItem;
 
             if ( nAttrId == ATTR_VALIDDATA )
             {
@@ -1036,7 +1036,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
                     if ( pOldData )
                         nNewIndex = pDestDoc->AddValidationEntry( *pOldData );
                 }
-                pNewItem = new SfxUInt32Item( ATTR_VALIDDATA, nNewIndex );
+                pNewItem.reset(new SfxUInt32Item( ATTR_VALIDDATA, nNewIndex ));
             }
             else if ( nAttrId == ATTR_VALUE_FORMAT && pDestDoc->GetFormatExchangeList() )
             {
@@ -1047,14 +1047,13 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
                 if (it != pDestDoc->GetFormatExchangeList()->end())
                 {
                     sal_uInt32 nNewFormat = it->second;
-                    pNewItem = new SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat );
+                    pNewItem.reset(new SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ));
                 }
             }
 
             if ( pNewItem )
             {
                 pDestSet->Put(*pNewItem);
-                delete pNewItem;
             }
             else
                 pDestSet->Put(*pSrcItem);

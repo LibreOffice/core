@@ -2747,7 +2747,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         // Find common (cell) attributes before RemoveAdjust
         if ( pActiveViewSh && bUniformAttribs )
         {
-            SfxItemSet* pCommonAttrs = nullptr;
+            std::unique_ptr<SfxItemSet> pCommonAttrs;
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
             {
                 SfxItemState eState = aOldAttribs.GetItemState( nId, false, &pItem );
@@ -2757,7 +2757,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                             *pItem != pEditDefaults->Get(nId) )
                 {
                     if ( !pCommonAttrs )
-                        pCommonAttrs = new SfxItemSet( mpEditEngine->GetEmptyItemSet() );
+                        pCommonAttrs.reset(new SfxItemSet( mpEditEngine->GetEmptyItemSet() ));
                     pCommonAttrs->Put( *pItem );
                 }
             }
@@ -2766,8 +2766,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             {
                 ScDocument* pDoc = pActiveViewSh->GetViewData().GetDocument();
                 pCellAttrs = o3tl::make_unique<ScPatternAttr>(pDoc->GetPool());
-                pCellAttrs->GetFromEditItemSet( pCommonAttrs );
-                delete pCommonAttrs;
+                pCellAttrs->GetFromEditItemSet( pCommonAttrs.get() );
             }
         }
 
