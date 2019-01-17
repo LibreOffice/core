@@ -117,6 +117,49 @@ bool containsDataNodeType(const oox::drawingml::ShapePtr& pShape, sal_Int32 nTyp
 
     return false;
 }
+
+/**
+ * Calculates the offset and scaling for pShape (laid out with the hierChild
+ * algorithm) based on the siblings of pParent.
+ */
+void calculateHierChildOffsetScale(const oox::drawingml::ShapePtr& pShape,
+                                   const oox::drawingml::LayoutNode* pParent, sal_Int32& rXOffset,
+                                   double& rWidthScale)
+{
+    if (!pParent)
+        return;
+
+    const std::vector<oox::drawingml::ShapePtr>& rParents = pParent->getNodeShapes();
+    for (size_t nParent = 0; nParent < rParents.size(); ++nParent)
+    {
+        const oox::drawingml::ShapePtr& pParentShape = rParents[nParent];
+        const std::vector<oox::drawingml::ShapePtr>& rChildren = pParentShape->getChildren();
+        auto it = std::find_if(
+            rChildren.begin(), rChildren.end(),
+            [pShape](const oox::drawingml::ShapePtr& pChild) { return pChild == pShape; });
+        if (it == rChildren.end())
+            // This is not our parent.
+            continue;
+
+        if (nParent > 0)
+        {
+            if (rParents[nParent - 1]->getChildren().size() == 1)
+            {
+                // Previous sibling of our parent has no children: can use that
+                // space, so shift to the left and scale up.
+                rWidthScale += 1.0;
+                rXOffset -= pShape->getSize().Width;
+            }
+        }
+        if (nParent < rParents.size() - 1)
+        {
+            if (rParents[nParent + 1]->getChildren().size() == 1)
+                // Next sibling of our parent has no children: can use that
+                // space, so scale up.
+                rWidthScale += 1.0;
+        }
+    }
+}
 }
 
 namespace oox { namespace drawingml {
@@ -568,16 +611,22 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                     std::swap(rChildren[1], rChildren[2]);
             }
 
+            sal_Int32 nXOffset = 0;
+            double fWidthScale = 1.0;
+            if (mnType == XML_hierChild)
+                calculateHierChildOffsetScale(rShape, pParent, nXOffset, fWidthScale);
+
             awt::Size aChildSize = rShape->getSize();
             if (nDir == XML_fromT)
             {
                 aChildSize.Height /= nCount;
-                aChildSize.Height *= fHeightScale;
             }
             else
                 aChildSize.Width /= nCount;
+            aChildSize.Height *= fHeightScale;
+            aChildSize.Width *= fWidthScale;
 
-            awt::Point aChildPos(0, 0);
+            awt::Point aChildPos(nXOffset, 0);
             for (auto& pChild : rShape->getChildren())
             {
                 pChild->setPosition(aChildPos);

@@ -739,6 +739,7 @@ void SdImportTestSmartArt::testOrgChart()
     CPPUNIT_ASSERT(xEmployeeShape.is());
 
     awt::Point aEmployeePos = xEmployeeShape->getPosition();
+    awt::Size aEmployeeSize = xEmployeeShape->getSize();
 
     CPPUNIT_ASSERT_EQUAL(aManagerPos.X, aEmployeePos.X);
 
@@ -760,6 +761,7 @@ void SdImportTestSmartArt::testOrgChart()
     CPPUNIT_ASSERT(xEmployee2Shape.is());
 
     awt::Point aEmployee2Pos = xEmployee2Shape->getPosition();
+    awt::Size aEmployee2Size = xEmployee2Shape->getSize();
     CPPUNIT_ASSERT_GREATER(aEmployeePos.X, aEmployee2Pos.X);
 
     // Make sure that assistant is above employees.
@@ -790,6 +792,10 @@ void SdImportTestSmartArt::testOrgChart()
     // Without the accompanying fix in place, this test would have failed:
     // xManager2's height was 3 times larger than xManager's height.
     CPPUNIT_ASSERT_EQUAL(aManagerSize.Height, aManager2Size.Height);
+
+    // Make sure the employee nodes use the free space on the right, since
+    // manager2 has no assistants / employees.
+    CPPUNIT_ASSERT_GREATER(aManagerSize.Width, aEmployeeSize.Width + aEmployee2Size.Width);
 
     xDocShRef->DoClose();
 }
