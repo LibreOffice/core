@@ -208,7 +208,7 @@ SalGraphics* KDE5SalFrame::AcquireGraphics()
 
     if (!m_pKDE5Graphics.get())
     {
-        m_pKDE5Graphics.reset(new KDE5SalGraphics());
+        m_pKDE5Graphics.reset(new KDE5SalGraphics(this));
         Qt5Frame::InitSvpSalGraphics(m_pKDE5Graphics.get());
     }
 
