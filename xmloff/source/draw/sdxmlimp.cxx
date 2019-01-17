@@ -578,6 +578,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageElemTokenMap()
             { XML_NAMESPACE_PRESENTATION,   XML_NOTES,              XML_TOK_DRAWPAGE_NOTES      },
             { XML_NAMESPACE_ANIMATION,      XML_PAR,                XML_TOK_DRAWPAGE_PAR        },
             { XML_NAMESPACE_ANIMATION,      XML_SEQ,                XML_TOK_DRAWPAGE_SEQ        },
+            { XML_NAMESPACE_DRAW,           XML_LAYER_SET,          XML_TOK_DRAWPAGE_LAYER_SET  },
             XML_TOKEN_MAP_END
         };
 

@@ -110,7 +110,8 @@ enum SdXMLDrawPageElemTokenMap
 {
     XML_TOK_DRAWPAGE_NOTES,
     XML_TOK_DRAWPAGE_PAR,
-    XML_TOK_DRAWPAGE_SEQ
+    XML_TOK_DRAWPAGE_SEQ,
+    XML_TOK_DRAWPAGE_LAYER_SET
 };
 
 enum SdXMLPresentationPlaceholderAttrTokenMap
