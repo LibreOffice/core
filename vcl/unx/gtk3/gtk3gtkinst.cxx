@@ -5748,6 +5748,7 @@ private:
     gulong m_nValueChangedSignalId;
     gulong m_nOutputSignalId;
     gulong m_nInputSignalId;
+    bool m_bFormatting;
 
     static void signalValueChanged(GtkSpinButton*, gpointer widget)
     {
@@ -5756,11 +5757,19 @@ private:
         pThis->signal_value_changed();
     }
 
+    bool guarded_signal_output()
+    {
+        m_bFormatting = true;
+        bool bRet = signal_output();
+        m_bFormatting = false;
+        return bRet;
+    }
+
     static gboolean signalOutput(GtkSpinButton*, gpointer widget)
     {
         GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
         SolarMutexGuard aGuard;
-        return pThis->signal_output();
+        return pThis->guarded_signal_output();
     }
 
     static gint signalInput(GtkSpinButton*, gdouble* new_value, gpointer widget)
@@ -5796,6 +5805,7 @@ public:
         , m_nValueChangedSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
         , m_nOutputSignalId(g_signal_connect(pButton, "output", G_CALLBACK(signalOutput), this))
         , m_nInputSignalId(g_signal_connect(pButton, "input", G_CALLBACK(signalInput), this))
+        , m_bFormatting(false)
     {
     }
 
@@ -5808,6 +5818,18 @@ public:
     {
         disable_notify_events();
         gtk_spin_button_set_value(m_pButton, toGtk(value));
+        enable_notify_events();
+    }
+
+    virtual void set_text(const OUString& rText) override
+    {
+        disable_notify_events();
+        gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+        // tdf#122786 if we're just formatting a value, then we're done,
+        // however if set_text has been called directly we want to update our
+        // value from this new text
+        if (!m_bFormatting)
+            gtk_spin_button_update(m_pButton);
         enable_notify_events();
     }
 
