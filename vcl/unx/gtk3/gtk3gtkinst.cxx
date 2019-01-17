@@ -5752,6 +5752,12 @@ public:
         enable_notify_events();
     }
 
+    virtual void set_text(const OUString& rText) override
+    {
+        GtkInstanceEntry::set_text(rText);
+        gtk_spin_button_update(m_pButton);
+    }
+
     virtual void set_range(int min, int max) override
     {
         disable_notify_events();
