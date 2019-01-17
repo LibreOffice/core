@@ -12,8 +12,9 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
 #include <svx/colorbox.hxx>
+#include <sfx2/basedlgs.hxx>
 
-class SwWatermarkDialog : public weld::GenericDialogController
+class SwWatermarkDialog : public SfxDialogController
 {
 public:
     SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings);
