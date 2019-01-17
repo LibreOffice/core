@@ -24,7 +24,6 @@
 #include <svl/hint.hxx>
 #include <editeng/lrspitem.hxx>
 #include <sfx2/app.hxx>
-#include <o3tl/make_unique.hxx>
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
@@ -80,7 +79,7 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
                 aNewStyleName = pStyle->GetName();
 
             InsertUndo(
-                o3tl::make_unique<EditUndoSetStyleSheet>(pEditEngine, aEditDoc.GetPos( pNode ),
+                std::make_unique<EditUndoSetStyleSheet>(pEditEngine, aEditDoc.GetPos( pNode ),
                         aPrevStyleName, pCurStyle ? pCurStyle->GetFamily() : SfxStyleFamily::Para,
                         aNewStyleName, pStyle ? pStyle->GetFamily() : SfxStyleFamily::Para,
                         pNode->GetContentAttribs().GetItems() ) );
@@ -267,7 +266,7 @@ void ImpEditEngine::InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge 
     DBG_ASSERT( !IsInUndo(), "InsertUndo in Undo mode!" );
     if ( pUndoMarkSelection )
     {
-        GetUndoManager().AddUndoAction( o3tl::make_unique<EditUndoMarkSelection>(pEditEngine, *pUndoMarkSelection) );
+        GetUndoManager().AddUndoAction( std::make_unique<EditUndoMarkSelection>(pEditEngine, *pUndoMarkSelection) );
         pUndoMarkSelection.reset();
     }
     GetUndoManager().AddUndoAction( std::move(pUndo), bTryMerge );
@@ -691,11 +690,11 @@ void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
             {
                 SfxItemSet aTmpSet( GetEmptyItemSet() );
                 aTmpSet.Put( rSet );
-                InsertUndo(o3tl::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet));
+                InsertUndo(std::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet));
             }
             else
             {
-                InsertUndo(o3tl::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), rSet));
+                InsertUndo(std::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), rSet));
             }
         }
 

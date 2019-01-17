@@ -121,7 +121,6 @@
 #include <vcl/virdev.hxx>
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/safeint.hxx>
 #include <boost/optional.hpp>
 #include <sal/log.hxx>
@@ -4067,7 +4066,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                               const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle,
                               const PPTTextSpecInfo& rTextSpecInfo ) :
 
-    PPTNumberFormatCreator  ( o3tl::make_unique<PPTExtParaProv>( rManager, rIn, &rSlideHd ) ),
+    PPTNumberFormatCreator  ( std::make_unique<PPTExtParaProv>( rManager, rIn, &rSlideHd ) ),
     maTxSI                  ( rTextSpecInfo )
 {
     sal_uInt32 nOldFilePos = rIn.Tell();
@@ -5291,7 +5290,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                            bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                            nBuBlip, nHasAnm, nAnmScheme );
 
-            aCharPropList.push_back(o3tl::make_unique<PPTCharPropSet>(aCharPropSet, 0));
+            aCharPropList.push_back(std::make_unique<PPTCharPropSet>(aCharPropSet, 0));
         }
     }
 
@@ -5353,7 +5352,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                             aCharPropSet.maString.clear();
                         if ( nLen || bEmptyParaPossible )
                             aCharPropList.push_back(
-                                o3tl::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
+                                std::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
                         nCurrentPara++;
                         nLen++;
                         nCharReadCnt += nLen;
@@ -5367,7 +5366,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                             nLen = ( nCurrentSpecMarker & 0xffff ) - nCharReadCnt;
                             aCharPropSet.maString = aString.copy(nCharReadCnt, nLen);
                             aCharPropList.push_back(
-                                o3tl::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
+                                std::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
                             nCharCount -= nLen;
                             nCharReadCnt += nLen;
                         }
@@ -5395,7 +5394,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                         aCharPropSet.maString = aString.copy(nCharReadCnt, nStrLen);
                     }
                     aCharPropList.push_back(
-                        o3tl::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
+                        std::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
                     nCharReadCnt += nCharCount;
                     bEmptyParaPossible = false;
                     break;
@@ -5870,7 +5869,7 @@ PPTParagraphObj::~PPTParagraphObj()
 void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
 {
     m_PortionList.push_back(
-            o3tl::make_unique<PPTPortionObj>(rPPTPortion));
+            std::make_unique<PPTPortionObj>(rPPTPortion));
     if ( !mbTab )
     {
         mbTab = m_PortionList.back()->HasTabulator();
@@ -7611,7 +7610,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32
                     {
                         SdrText* pSdrText = pTable->getText( nTableIndex );
                         if ( pSdrText )
-                            pSdrText->SetOutlinerParaObject(o3tl::make_unique<OutlinerParaObject>(*pParaObject) );
+                            pSdrText->SetOutlinerParaObject(std::make_unique<OutlinerParaObject>(*pParaObject) );
                     }
                 }
             }

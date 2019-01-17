@@ -17,7 +17,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <map>
-#include <o3tl/make_unique.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <sal/log.hxx>
 
@@ -324,7 +323,7 @@ public:
             GetUserNameExW(NameDisplay, nullptr, &nSize);
             if (GetLastError() != ERROR_MORE_DATA)
                 throw css::uno::RuntimeException();
-            auto pNameBuf(o3tl::make_unique<wchar_t[]>(nSize));
+            auto pNameBuf(std::make_unique<wchar_t[]>(nSize));
             if (!GetUserNameExW(NameDisplay, pNameBuf.get(), &nSize))
                 throw css::uno::RuntimeException();
             m_sName = o3tl::toU(pNameBuf.get());
@@ -335,7 +334,7 @@ public:
             // administrator account on non-DC systems), where GetUserName will
             // still give a name.
             DWORD nSize = UNLEN + 1;
-            auto pNameBuf(o3tl::make_unique<wchar_t[]>(nSize));
+            auto pNameBuf(std::make_unique<wchar_t[]>(nSize));
             if (!GetUserNameW(pNameBuf.get(), &nSize))
                 throw css::uno::RuntimeException();
             m_sName = o3tl::toU(pNameBuf.get());

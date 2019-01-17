@@ -28,7 +28,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <vcl/svapp.hxx>
-#include <o3tl/make_unique.hxx>
 
 using namespace dbaui;
 using namespace dbtools;
@@ -149,10 +148,10 @@ svt::OGenericUnoDialog::Dialog OSQLMessageDialog::createDialog(const css::uno::R
 {
     weld::Window* pParent = Application::GetFrameWeld(rParent);
     if ( m_aException.hasValue() )
-        return svt::OGenericUnoDialog::Dialog(o3tl::make_unique<OSQLMessageBox>(pParent, SQLExceptionInfo(m_aException), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, m_sHelpURL));
+        return svt::OGenericUnoDialog::Dialog(std::make_unique<OSQLMessageBox>(pParent, SQLExceptionInfo(m_aException), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, m_sHelpURL));
 
     OSL_FAIL("OSQLMessageDialog::createDialog : You should use the SQLException property to specify the error to display!");
-    return svt::OGenericUnoDialog::Dialog(o3tl::make_unique<OSQLMessageBox>(pParent, SQLException()));
+    return svt::OGenericUnoDialog::Dialog(std::make_unique<OSQLMessageBox>(pParent, SQLException()));
 }
 
 }   // namespace dbaui

@@ -29,7 +29,6 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/treelistentry.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <o3tl/make_unique.hxx>
 
 using namespace ::dbaui;
 
@@ -382,7 +381,7 @@ VCL_BUILDER_FACTORY(OColumnTreeBox)
 void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
 {
     DBTreeListBox::InitEntry(pEntry, rStr, rImg1, rImg2, eButtonKind);
-    pEntry->ReplaceItem(o3tl::make_unique<OColumnString>(rStr,false), pEntry->ItemCount() - 1);
+    pEntry->ReplaceItem(std::make_unique<OColumnString>(rStr,false), pEntry->ItemCount() - 1);
 }
 
 bool OColumnTreeBox::Select( SvTreeListEntry* pEntry, bool bSelect )

@@ -33,7 +33,6 @@
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/conditn.hxx>
-#include <o3tl/make_unique.hxx>
 
 #include <functional>
 #include <stack>
@@ -656,7 +655,7 @@ namespace framework
         const bool bHadRedoActions = ( rUndoManager.GetRedoActionCount() > 0 );
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
-            rUndoManager.AddUndoAction( o3tl::make_unique<UndoActionWrapper>( i_action ) );
+            rUndoManager.AddUndoAction( std::make_unique<UndoActionWrapper>( i_action ) );
         }
         const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount() > 0 );
 

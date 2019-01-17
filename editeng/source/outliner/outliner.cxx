@@ -53,7 +53,6 @@
 #include <libxml/xmlwriter.h>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <o3tl/make_unique.hxx>
 
 // calculate if it's RTL or not
 #include <unicode/ubidi.h>
@@ -277,7 +276,7 @@ void Outliner::SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStar
     if( pPara && pPara->GetNumberingStartValue() != nNumberingStartValue )
     {
         if( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( o3tl::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
+            InsertUndo( std::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
                 pPara->GetNumberingStartValue(), nNumberingStartValue,
                 pPara->IsParaIsNumberingRestart(), pPara->IsParaIsNumberingRestart() ) );
 
@@ -301,7 +300,7 @@ void Outliner::SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumbering
     if( pPara && (pPara->IsParaIsNumberingRestart() != bParaIsNumberingRestart) )
     {
         if( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( o3tl::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
+            InsertUndo( std::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
                 pPara->GetNumberingStartValue(), pPara->GetNumberingStartValue(),
                 pPara->IsParaIsNumberingRestart(), bParaIsNumberingRestart ) );
 
@@ -734,7 +733,7 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUnd
 
         if ( bUndo )
         {
-            InsertUndo( o3tl::make_unique<OutlinerUndoChangeDepth>( this, nPara, nOldDepth, nDepth ) );
+            InsertUndo( std::make_unique<OutlinerUndoChangeDepth>( this, nPara, nOldDepth, nDepth ) );
         }
 
         pEditEngine->SetUpdateMode( bUpdate );
@@ -1987,7 +1986,7 @@ void Outliner::SetParaFlag( Paragraph* pPara,  ParaFlag nFlag )
     if( pPara && !pPara->HasFlag( nFlag ) )
     {
         if( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( o3tl::make_unique<OutlinerUndoChangeParaFlags>( this, GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags|nFlag ) );
+            InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( this, GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags|nFlag ) );
 
         pPara->SetFlag( nFlag );
     }
