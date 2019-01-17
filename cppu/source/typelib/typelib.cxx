@@ -102,7 +102,7 @@ static sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
 
     sal_Int32 nSize;
     // The reference is the description
-    // if the description is empty, than it must be filled with
+    // if the description is empty, then it must be filled with
     // the new description
     switch( eTypeClass )
     {
