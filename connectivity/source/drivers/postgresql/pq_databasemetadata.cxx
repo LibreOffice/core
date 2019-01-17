@@ -2251,7 +2251,7 @@ namespace
                                          (may be <NULL/>)
             4. LITERAL_SUFFIX string ==> suffix used to quote a literal
                                          (may be <NULL/>)
-            5. CREATE_PARAMS string ==> parameters used in creating thw type (may be <NULL/>)
+            5. CREATE_PARAMS string ==> parameters used in creating the type (may be <NULL/>)
             12. LOCAL_TYPE_NAME  string ==> localized version of type name (may be <NULL/>)
             15, SQL_DATA_TYPE long ==> unused
             16. SQL_DATETIME_SUB long ==> unused
