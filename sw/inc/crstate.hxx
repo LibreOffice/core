@@ -130,7 +130,7 @@ enum CursorMoveState
 struct SwCursorMoveState
 {
     SwFillCursorPos   *m_pFill;     ///< for automatic filling with tabs etc
-    Sw2LinesPos     *m_p2Lines;   ///< for selections inside/around 2line portions
+    std::unique_ptr<Sw2LinesPos> m_p2Lines;   ///< for selections inside/around 2line portions
     SwSpecialPos*   m_pSpecialPos; ///< for positions inside fields
     Point m_aRealHeight;          ///< contains then the position/height of the cursor
     CursorMoveState m_eState;
@@ -163,7 +163,6 @@ struct SwCursorMoveState
 
     SwCursorMoveState( CursorMoveState eSt = MV_NONE ) :
         m_pFill( nullptr ),
-        m_p2Lines( nullptr ),
         m_pSpecialPos( nullptr ),
         m_eState( eSt ),
         m_nCursorBidiLevel( 0 ),
@@ -186,7 +185,6 @@ struct SwCursorMoveState
     {}
     SwCursorMoveState( SwFillCursorPos *pInitFill ) :
         m_pFill( pInitFill ),
-        m_p2Lines( nullptr ),
         m_pSpecialPos( nullptr ),
         m_eState( MV_SETONLYTEXT ),
         m_nCursorBidiLevel( 0 ),

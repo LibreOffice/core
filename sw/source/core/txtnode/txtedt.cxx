@@ -214,8 +214,6 @@ static SwRect lcl_CalculateRepaintRect(
     SwCursorMoveState aTmpState( MV_NONE );
     aTmpState.m_b2Lines = true;
     rTextFrame.GetCharRect( aRect, aPos, &aTmpState );
-    // information about end of repaint area
-    Sw2LinesPos* pEnd2Pos = aTmpState.m_p2Lines;
 
     const SwTextFrame *pEndFrame = &rTextFrame;
 
@@ -223,8 +221,10 @@ static SwRect lcl_CalculateRepaintRect(
            iChgEnd >= pEndFrame->GetFollow()->GetOfst())
         pEndFrame = pEndFrame->GetFollow();
 
-    if ( pEnd2Pos )
+    // information about end of repaint area
+    if ( aTmpState.m_p2Lines )
     {
+        Sw2LinesPos* pEnd2Pos = aTmpState.m_p2Lines.get();
         // we are inside a special portion, take left border
         SwRectFnSet aRectFnSet(pEndFrame);
         aRectFnSet.SetTop( aRect, aRectFnSet.GetTop(pEnd2Pos->aLine) );
@@ -234,7 +234,7 @@ static SwRect lcl_CalculateRepaintRect(
             aRectFnSet.SetLeft( aRect, aRectFnSet.GetRight(pEnd2Pos->aPortion) );
         aRectFnSet.SetWidth( aRect, 1 );
         aRectFnSet.SetHeight( aRect, aRectFnSet.GetHeight(pEnd2Pos->aLine) );
-        delete pEnd2Pos;
+        aTmpState.m_p2Lines.reset();
     }
 
     aTmpState.m_p2Lines = nullptr;
@@ -255,9 +255,9 @@ static SwRect lcl_CalculateRepaintRect(
         pEndFrame = pEndFrame->GetFollow();
 
     // information about start of repaint area
-    Sw2LinesPos* pSt2Pos = aTmpState.m_p2Lines;
-    if ( pSt2Pos )
+    if ( aTmpState.m_p2Lines )
     {
+        Sw2LinesPos* pSt2Pos = aTmpState.m_p2Lines.get();
         // we are inside a special portion, take right border
         SwRectFnSet aRectFnSet(pStartFrame);
         aRectFnSet.SetTop( aTmp, aRectFnSet.GetTop(pSt2Pos->aLine) );
@@ -267,7 +267,7 @@ static SwRect lcl_CalculateRepaintRect(
             aRectFnSet.SetLeft( aTmp, aRectFnSet.GetLeft(pSt2Pos->aPortion) );
         aRectFnSet.SetWidth( aTmp, 1 );
         aRectFnSet.SetHeight( aTmp, aRectFnSet.GetHeight(pSt2Pos->aLine) );
-        delete pSt2Pos;
+        aTmpState.m_p2Lines.reset();
     }
 
     bool bSameFrame = true;
