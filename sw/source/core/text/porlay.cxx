@@ -213,35 +213,35 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
 {
     // First attribute change: copy mass and length from *pIns into the first
     // text portion
-    if( !pPortion )
+    if( !mpNextPortion )
     {
         if( GetLen() )
         {
-            pPortion = SwTextPortion::CopyLinePortion(*this);
+            mpNextPortion = SwTextPortion::CopyLinePortion(*this);
             if( IsBlinking() && pBlink )
             {
                 SetBlinking( false );
-                pBlink->Replace( this, pPortion );
+                pBlink->Replace( this, mpNextPortion );
             }
         }
         else
         {
-            SetPortion( pIns );
+            SetNextPortion( pIns );
             return pIns;
         }
     }
     // Call with scope or we'll end up with recursion!
-    return pPortion->SwLinePortion::Insert( pIns );
+    return mpNextPortion->SwLinePortion::Insert( pIns );
 }
 
 SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
 {
     // First attribute change: copy mass and length from *pIns into the first
     // text portion
-    if( !pPortion )
-        pPortion = SwTextPortion::CopyLinePortion(*this);
+    if( !mpNextPortion )
+        mpNextPortion = SwTextPortion::CopyLinePortion(*this);
     // Call with scope or we'll end up with recursion!
-    return pPortion->SwLinePortion::Append( pIns );
+    return mpNextPortion->SwLinePortion::Append( pIns );
 }
 
 // For special treatment of empty lines
@@ -259,15 +259,15 @@ bool SwLineLayout::Format( SwTextFormatInfo &rInf )
 // MarginPortion.
 SwMarginPortion *SwLineLayout::CalcLeftMargin()
 {
-    SwMarginPortion *pLeft = (GetPortion() && GetPortion()->IsMarginPortion()) ?
-        static_cast<SwMarginPortion *>(GetPortion()) : nullptr;
-    if( !GetPortion() )
-         SetPortion(SwTextPortion::CopyLinePortion(*this));
+    SwMarginPortion *pLeft = (GetNextPortion() && GetNextPortion()->IsMarginPortion()) ?
+        static_cast<SwMarginPortion *>(GetNextPortion()) : nullptr;
+    if( !GetNextPortion() )
+         SetNextPortion(SwTextPortion::CopyLinePortion(*this));
     if( !pLeft )
     {
         pLeft = new SwMarginPortion;
-        pLeft->SetPortion( GetPortion() );
-        SetPortion( pLeft );
+        pLeft->SetNextPortion( GetNextPortion() );
+        SetNextPortion( pLeft );
     }
     else
     {
@@ -275,18 +275,18 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
         pLeft->Width( 0 );
         pLeft->SetLen(TextFrameIndex(0));
         pLeft->SetAscent( 0 );
-        pLeft->SetPortion( nullptr );
+        pLeft->SetNextPortion( nullptr );
         pLeft->SetFixWidth(0);
     }
 
-    SwLinePortion *pPos = pLeft->GetPortion();
+    SwLinePortion *pPos = pLeft->GetNextPortion();
     while( pPos )
     {
         if( pPos->IsFlyPortion() )
         {
             // The FlyPortion gets sucked out...
             pLeft->Join( static_cast<SwGluePortion*>(pPos) );
-            pPos = pLeft->GetPortion();
+            pPos = pLeft->GetNextPortion();
             if( GetpKanaComp() && !GetKanaComp().empty() )
                 GetKanaComp().pop_front();
         }
@@ -354,20 +354,20 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     bool bHasBlankPortion = false;
     bool bHasOnlyBlankPortions = true;
 
-    if( pPortion )
+    if( mpNextPortion )
     {
         SetContent( false );
-        if( pPortion->IsBreakPortion() )
+        if( mpNextPortion->IsBreakPortion() )
         {
-            SetLen( pPortion->GetLen() );
+            SetLen( mpNextPortion->GetLen() );
             if( GetLen() )
                 bTmpDummy = false;
         }
         else
         {
             const sal_uInt16 nLineHeight = Height();
-            Init( GetPortion() );
-            SwLinePortion *pPos = pPortion;
+            Init( GetNextPortion() );
+            SwLinePortion *pPos = mpNextPortion;
             SwLinePortion *pLast = this;
             sal_uInt16 nMaxDescent = 0;
 
@@ -384,7 +384,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 {
                     // Only take over Height and Ascent if the rest of the line
                     // is empty.
-                    if( !pPos->GetPortion() )
+                    if( !pPos->GetNextPortion() )
                     {
                         if( !Height() )
                             Height( pPos->Height() );
@@ -392,7 +392,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                             SetAscent( pPos->GetAscent() );
                     }
                     delete pLast->Cut( pPos );
-                    pPos = pLast->GetPortion();
+                    pPos = pLast->GetNextPortion();
                     continue;
                 }
 
@@ -408,7 +408,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                               lcl_HasOnlyBlanks( rInf.GetText(), nPorSttIdx, nPorSttIdx + pPos->GetLen() ) ) )
                     {
                         pLast = pPos;
-                        pPos = pPos->GetPortion();
+                        pPos = pPos->GetNextPortion();
                         bHasBlankPortion = true;
                         continue;
                     }
@@ -418,7 +418,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 if( pPos->IsDropPortion() && static_cast<SwDropPortion*>(pPos)->GetLines() > 1)
                 {
                     pLast = pPos;
-                    pPos = pPos->GetPortion();
+                    pPos = pPos->GetNextPortion();
                     continue;
                 }
 
@@ -529,7 +529,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 bTmpDummy &= !HasContent() && ( !pPos->Width() || pPos->IsFlyPortion() );
 
                 pLast = pPos;
-                pPos = pPos->GetPortion();
+                pPos = pPos->GetNextPortion();
             }
 
             if( pFlyCnt )
@@ -617,9 +617,9 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
     _orObjDescent = 0;
 
     const SwLinePortion* pTmpPortion = this;
-    if ( !pTmpPortion->GetLen() && pTmpPortion->GetPortion() )
+    if ( !pTmpPortion->GetLen() && pTmpPortion->GetNextPortion() )
     {
-        pTmpPortion = pTmpPortion->GetPortion();
+        pTmpPortion = pTmpPortion->GetNextPortion();
     }
 
     while ( pTmpPortion )
@@ -627,7 +627,7 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
         if ( !pTmpPortion->IsBreakPortion() && !pTmpPortion->IsFlyPortion() &&
              ( !_bNoFlyCntPorAndLinePor ||
                ( !pTmpPortion->IsFlyCntPortion() &&
-                 !(pTmpPortion == this && pTmpPortion->GetPortion() ) ) ) )
+                 !(pTmpPortion == this && pTmpPortion->GetNextPortion() ) ) ) )
         {
             SwTwips nPortionAsc = static_cast<SwTwips>(pTmpPortion->GetAscent());
             SwTwips nPortionDesc = static_cast<SwTwips>(pTmpPortion->Height()) -
@@ -649,7 +649,7 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
                 _orDescent = std::max( _orDescent, nPortionDesc );
             }
         }
-        pTmpPortion = pTmpPortion->GetPortion();
+        pTmpPortion = pTmpPortion->GetNextPortion();
     }
 }
 
@@ -670,7 +670,7 @@ SwLineLayout::SwLineLayout()
 
 SwLinePortion *SwLineLayout::GetFirstPortion() const
 {
-    const SwLinePortion *pRet = pPortion ? pPortion : this;
+    const SwLinePortion *pRet = mpNextPortion ? mpNextPortion : this;
     return const_cast<SwLinePortion*>(pRet);
 }
 
@@ -2177,9 +2177,9 @@ const SwDropPortion *SwParaPortion::FindDropPortion() const
         pLay = pLay->GetNext();
     while( pLay )
     {
-        const SwLinePortion *pPos = pLay->GetPortion();
+        const SwLinePortion *pPos = pLay->GetNextPortion();
         while ( pPos && !pPos->GetLen() )
-            pPos = pPos->GetPortion();
+            pPos = pPos->GetNextPortion();
         if( pPos && pPos->IsDropPortion() )
             return static_cast<const SwDropPortion *>(pPos);
         pLay = pLay->GetLen() ? nullptr : pLay->GetNext();
@@ -2194,7 +2194,7 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
     SetLen(TextFrameIndex(0));
     SetAscent( 0 );
     SetRealHeight( 0 );
-    SetPortion( pNextPortion );
+    SetNextPortion( pNextPortion );
 }
 
 // looks for hanging punctuation portions in the paragraph
@@ -2202,7 +2202,7 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
 // If no such portion is found, the Margin/Hanging-flags will be updated.
 SwTwips SwLineLayout::GetHangingMargin_() const
 {
-    SwLinePortion* pPor = GetPortion();
+    SwLinePortion* pPor = GetNextPortion();
     bool bFound = false;
     SwTwips nDiff = 0;
     while( pPor)
@@ -2214,10 +2214,10 @@ SwTwips SwLineLayout::GetHangingMargin_() const
                 bFound = true;
         }
         // the last post its portion
-        else if ( pPor->IsPostItsPortion() && ! pPor->GetPortion() )
+        else if ( pPor->IsPostItsPortion() && ! pPor->GetNextPortion() )
             nDiff = nAscent;
 
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
     if( !bFound ) // update the hanging-flag
         const_cast<SwLineLayout*>(this)->SetHanging( false );

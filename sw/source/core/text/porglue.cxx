@@ -176,13 +176,13 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
         {
             if( pPos->InFixMargGrp() )
                 pLeft = static_cast<SwGluePortion*>(pPos);
-            pPos = pPos->GetPortion();
+            pPos = pPos->GetNextPortion();
             if( pPos == pRight)
                 pPos = nullptr;
         }
 
         // Two adjoining FlyPortions are merged
-        if( pRight && pLeft && pLeft->GetPortion() == pRight )
+        if( pRight && pLeft && pLeft->GetNextPortion() == pRight )
         {
             pRight->MoveAllGlue( pLeft );
             pRight = nullptr;
@@ -233,20 +233,20 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                     pRight->MoveGlue( pLeft, short( pPrev->PrtWidth() ) );
                     // Now fix the linking of our portions.
                     SwLinePortion *pPrevPrev = pPrev->FindPrevPortion( pLeft );
-                    pPrevPrev->SetPortion( pRight );
-                    pPrev->SetPortion( pRight->GetPortion() );
-                    pRight->SetPortion( pPrev );
-                    if ( pPrev->GetPortion() && pPrev->InTextGrp()
-                         && pPrev->GetPortion()->IsHolePortion() )
+                    pPrevPrev->SetNextPortion( pRight );
+                    pPrev->SetNextPortion( pRight->GetNextPortion() );
+                    pRight->SetNextPortion( pPrev );
+                    if ( pPrev->GetNextPortion() && pPrev->InTextGrp()
+                         && pPrev->GetNextPortion()->IsHolePortion() )
                     {
                         SwHolePortion *pHolePor =
-                            static_cast<SwHolePortion*>(pPrev->GetPortion());
-                        if ( !pHolePor->GetPortion() ||
-                             !pHolePor->GetPortion()->InFixMargGrp() )
+                            static_cast<SwHolePortion*>(pPrev->GetNextPortion());
+                        if ( !pHolePor->GetNextPortion() ||
+                             !pHolePor->GetNextPortion()->InFixMargGrp() )
                         {
                             pPrev->AddPrtWidth( pHolePor->GetBlankWidth() );
                             pPrev->SetLen(pPrev->GetLen() + TextFrameIndex(1));
-                            pPrev->SetPortion( pHolePor->GetPortion() );
+                            pPrev->SetNextPortion( pHolePor->GetNextPortion() );
                             delete pHolePor;
                         }
                     }

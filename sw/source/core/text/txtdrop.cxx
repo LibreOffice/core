@@ -673,7 +673,7 @@ void SwTextPainter::PaintDropPortion()
     while( pPor && !pPor->IsDropPortion() )
     {
         nX = nX + pPor->Width();
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
     Point aLineOrigin( GetTopLeft() );
 

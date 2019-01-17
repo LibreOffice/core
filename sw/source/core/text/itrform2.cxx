@@ -194,11 +194,11 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
                 {
                     pTmpPrev->Move( rInf );
                     rInf.SetLast( pTmpPrev );
-                    pTmpPrev = pTmpPrev->GetPortion();
+                    pTmpPrev = pTmpPrev->GetNextPortion();
                     OSL_ENSURE( pTmpPrev, "Underflow: losing control!" );
                 };
             }
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
         }
         pPor = pTmpPrev;
         if( pPor && // Skip flys and initials when underflow.
@@ -252,7 +252,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
         rInf.SetFly( pFly );
         CalcFlyWidth( rInf );
     }
-    rInf.GetLast()->SetPortion(nullptr);
+    rInf.GetLast()->SetNextPortion(nullptr);
 
     // The SwLineLayout is an exception to this, which splits at the first
     // portion change.
@@ -263,9 +263,9 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
         {
             const sal_uInt16 nOldWhich = m_pCurr->GetWhichPor();
             *static_cast<SwLinePortion*>(m_pCurr) = *pPor;
-            m_pCurr->SetPortion( pPor->GetPortion() );
+            m_pCurr->SetNextPortion( pPor->GetNextPortion() );
             m_pCurr->SetWhichPor( nOldWhich );
-            pPor->SetPortion( nullptr );
+            pPor->SetNextPortion( nullptr );
             delete pPor;
             pPor = m_pCurr;
         }
@@ -273,7 +273,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
 
     // Make sure that m_pFirstOfBorderMerge does not point to a portion which
     // will be deleted by Truncate() below.
-    SwLinePortion* pNext = pPor->GetPortion();
+    SwLinePortion* pNext = pPor->GetNextPortion();
     while (pNext)
     {
         if (pNext == m_pFirstOfBorderMerge)
@@ -281,7 +281,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
             m_pFirstOfBorderMerge = nullptr;
             break;
         }
-        pNext = pNext->GetPortion();
+        pNext = pNext->GetNextPortion();
     }
     pPor->Truncate();
     SwLinePortion *const pRest( rInf.GetRest() );
@@ -303,9 +303,9 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
     // LineLayout...
     if( pPor == m_pCurr )
     {
-        if ( m_pCurr->GetPortion() )
+        if ( m_pCurr->GetNextPortion() )
         {
-            pPor = m_pCurr->GetPortion();
+            pPor = m_pCurr->GetNextPortion();
         }
 
         // i#112181 - Prevent footnote anchor being wrapped to next line
@@ -315,10 +315,10 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
     else
     {
         SwLinePortion *pLast = rInf.GetLast();
-        if( pLast->GetPortion() )
+        if( pLast->GetNextPortion() )
         {
-            while( pLast->GetPortion() )
-                pLast = pLast->GetPortion();
+            while( pLast->GetNextPortion() )
+                pLast = pLast->GetNextPortion();
             rInf.SetLast( pLast );
         }
         pLast->Insert( pPor );
@@ -338,7 +338,7 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
     {
         pPor->Move( rInf );
         rInf.SetLast( pPor );
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
 }
 
@@ -477,7 +477,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     SwKernPortion* pKrn =
                         new SwKernPortion( *rInf.GetLast(), nLstHeight,
                                            pLast->InFieldGrp() && pPor->InFieldGrp() );
-                    rInf.GetLast()->SetPortion( nullptr );
+                    rInf.GetLast()->SetNextPortion( nullptr );
                     MergeCharacterBorder(*pKrn, rInf.GetLast()->FindLastPortion(), rInf);
                     InsertPortion( rInf, pKrn );
                 }
@@ -651,12 +651,12 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 OSL_ENSURE( pGridKernPortion, "No GridKernPortion available" );
 
                 // calculate size
-                SwLinePortion* pTmpPor = pGridKernPortion->GetPortion();
+                SwLinePortion* pTmpPor = pGridKernPortion->GetNextPortion();
                 sal_uInt16 nSumWidth = pPor->Width();
                 while ( pTmpPor )
                 {
                     nSumWidth = nSumWidth + pTmpPor->Width();
-                    pTmpPor = pTmpPor->GetPortion();
+                    pTmpPor = pTmpPor->GetNextPortion();
                 }
 
                 const SwTwips i = nSumWidth ?
@@ -690,7 +690,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         if( !pPor->IsDropPortion() )
         {
             SwLinePortion *pPrev = rInf.GetLast() ? rInf.GetLast()->FindLastPortion() : nullptr;
-            for ( SwLinePortion *pNext = pPor ; pNext!= nullptr ; pNext=pNext->GetPortion())
+            for ( SwLinePortion *pNext = pPor ; pNext!= nullptr ; pNext=pNext->GetNextPortion())
             {
                 if ( !pNext->IsParaPortion() )
                     MergeCharacterBorder(*pNext, pPrev, rInf);
@@ -717,8 +717,8 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
         else if( rInf.GetLast() && rInf.LastKernPortion() )
             rInf.GetLast()->FormatEOL( rInf );
     }
-    if( m_pCurr->GetPortion() && m_pCurr->GetPortion()->InNumberGrp()
-        && static_cast<SwNumberPortion*>(m_pCurr->GetPortion())->IsHide() )
+    if( m_pCurr->GetNextPortion() && m_pCurr->GetNextPortion()->InNumberGrp()
+        && static_cast<SwNumberPortion*>(m_pCurr->GetNextPortion())->IsHide() )
         rInf.SetNumDone( false );
 
     // Delete fly in any case
@@ -923,7 +923,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
             }
             if( !pPor )
             {
-                if( !rInf.X() && !m_pCurr->GetPortion() && !m_pCurr->GetLen() )
+                if( !rInf.X() && !m_pCurr->GetNextPortion() && !m_pCurr->GetLen() )
                     pPor = m_pCurr;
                 else
                     pPor = new SwTextPortion;
@@ -1057,7 +1057,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
         }
 
         // 3. Kerning portions at beginning of line in grid mode
-        if ( ! pPor && ! m_pCurr->GetPortion() )
+        if ( ! pPor && ! m_pCurr->GetNextPortion() )
         {
             SwTextGridItem const*const pGrid(
                     GetGridItem(GetTextFrame()->FindPageFrame()));
@@ -1117,7 +1117,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
             pPor = static_cast<SwLinePortion*>(NewDropPortion( rInf ));
 
         // 9. Kerning portions at beginning of line in grid mode
-        if ( !pPor && !m_pCurr->GetPortion() )
+        if ( !pPor && !m_pCurr->GetNextPortion() )
         {
             SwTextGridItem const*const pGrid(
                     GetGridItem(GetTextFrame()->FindPageFrame()));
@@ -1127,7 +1127,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
     }
 
         // 10. Decimal tab portion at the beginning of each line in table cells
-        if ( !pPor && !m_pCurr->GetPortion() &&
+        if ( !pPor && !m_pCurr->GetNextPortion() &&
              GetTextFrame()->IsInTab() &&
              GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT))
         {
@@ -1147,7 +1147,7 @@ static bool lcl_OldFieldRest( const SwLineLayout* pCurr )
 {
     if( !pCurr->GetNext() )
         return false;
-    const SwLinePortion *pPor = pCurr->GetNext()->GetPortion();
+    const SwLinePortion *pPor = pCurr->GetNext()->GetNextPortion();
     bool bRet = false;
     while( pPor && !bRet )
     {
@@ -1155,7 +1155,7 @@ static bool lcl_OldFieldRest( const SwLineLayout* pCurr )
             (pPor->IsMultiPortion() && static_cast<const SwMultiPortion*>(pPor)->IsFollowField());
         if( !pPor->GetLen() )
             break;
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
     return bRet;
 }
@@ -1518,7 +1518,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
                 flyStarts.push_back( nPOfst );
 
             nPOfst += pPor->Width();
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
         }
     }
 
@@ -1563,8 +1563,8 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
 
         //i#120864 For Special case that at the first calculation couldn't get
         //correct height. And need to recalculate for the right height.
-        SwLinePortion* pPorTmp = m_pCurr->GetPortion();
-        if ( IsFlyInCntBase() && (!IsQuick() || (pPorTmp && pPorTmp->IsFlyCntPortion() && !pPorTmp->GetPortion() &&
+        SwLinePortion* pPorTmp = m_pCurr->GetNextPortion();
+        if ( IsFlyInCntBase() && (!IsQuick() || (pPorTmp && pPorTmp->IsFlyCntPortion() && !pPorTmp->GetNextPortion() &&
             m_pCurr->Height() > pPorTmp->Height())))
         {
             sal_uInt16 nTmpAscent, nTmpHeight;
@@ -1618,7 +1618,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         while (pPor)
         {
             nSum += pPor->Width();
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
         }
 
         if (nSum > m_pCurr->Width())
@@ -1946,7 +1946,7 @@ bool SwTextFormatter::AllowRepaintOpt() const
                 {
                     SwLinePortion *pPos = m_pCurr->GetFirstPortion();
                     while ( pPos && !pPos->IsFlyPortion() )
-                        pPos = pPos->GetPortion();
+                        pPos = pPos->GetNextPortion();
                     bOptimizeRepaint = !pPos;
                 }
             }
@@ -2104,7 +2104,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
             const_cast<SwTextFormatter*>(this)->pMulti = nullptr;
         }
         pPos->Move( aTmpInf );
-        pPos = pPos->GetPortion();
+        pPos = pPos->GetNextPortion();
     }
 }
 
@@ -2151,7 +2151,7 @@ void SwTextFormatter::AlignFlyInCntBase( long nBaseLine ) const
                     nFlyAsc, nFlyDesc, nFlags );
             }
         }
-        pPos = pPos->GetPortion();
+        pPos = pPos->GetNextPortion();
     }
 }
 
@@ -2237,7 +2237,7 @@ bool SwTextFormatter::ChkFlyUnderflow( SwTextFormatInfo &rInf ) const
             }
 
             aLine.Left( aLine.Left() + pPos->Width() );
-            pPos = pPos->GetPortion();
+            pPos = pPos->GetNextPortion();
         }
     }
     return false;
@@ -2636,7 +2636,7 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePorti
                     if( nMaxAscent < pActPor->GetAscent() )
                         nMaxAscent = pActPor->GetAscent();
 
-                    pActPor = pActPor->GetPortion();
+                    pActPor = pActPor->GetNextPortion();
                     if( !pActPor && !bReachCurrent )
                     {
                         pActPor = &rPortion;
@@ -2654,7 +2654,7 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePorti
                     if( nMaxAscent > pActPor->GetAscent() )
                         pActPor->SetAscent(nMaxAscent);
 
-                    pActPor = pActPor->GetPortion();
+                    pActPor = pActPor->GetNextPortion();
                     if( !pActPor && !bReachCurrent )
                     {
                         pActPor = &rPortion;
@@ -2762,7 +2762,7 @@ namespace {
                 }
                 nX = nX + pPor->Width();
                 nIdx = nIdx + pPor->GetLen();
-                pPor = pPor->GetPortion();
+                pPor = pPor->GetNextPortion();
             }
 
             return nPOfst + rThis.GetLeftMargin();

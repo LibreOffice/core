@@ -90,8 +90,8 @@ bool SwTextFrame::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
         if( aLine.Prev() )
         {
             SwLinePortion *pPor = aLine.GetCurr()->GetFirstPortion();
-            while( pPor->GetPortion() )
-                pPor = pPor->GetPortion();
+            while( pPor->GetNextPortion() )
+                pPor = pPor->GetNextPortion();
             if( pPor->GetWhichPor() == POR_SOFTHYPH ||
                 pPor->GetWhichPor() == POR_SOFTHYPHSTR )
                 aLine.Next();
@@ -167,7 +167,7 @@ bool SwTextFormatter::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
         // at which line breaking is possible. So we search for the first
         // HyphPortion in the specified range.
 
-        SwLinePortion *pPos = m_pCurr->GetPortion();
+        SwLinePortion *pPos = m_pCurr->GetNextPortion();
         const TextFrameIndex nPamStart = rHyphInf.m_nStart;
         nWrdStart = m_nStart;
         const TextFrameIndex nEnd = rHyphInf.m_nEnd;
@@ -190,7 +190,7 @@ bool SwTextFormatter::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
             }
 
             nWrdStart = nWrdStart + pPos->GetLen();
-            pPos = pPos->GetPortion();
+            pPos = pPos->GetNextPortion();
         }
         // When pPos is null, no hyphen position was found.
         if( !pPos )
@@ -254,11 +254,11 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess const &rGu
 {
     const Reference< XHyphenatedWord >&  xHyphWord = rGuess.HyphWord();
 
-    OSL_ENSURE( !pPortion, "SwTextPortion::CreateHyphen(): another portion, another planet..." );
+    OSL_ENSURE( !mpNextPortion, "SwTextPortion::CreateHyphen(): another portion, another planet..." );
     OSL_ENSURE( xHyphWord.is(), "SwTextPortion::CreateHyphen(): You are lucky! The code is robust here." );
 
     if( rInf.IsHyphForbud() ||
-        pPortion || // robust
+        mpNextPortion || // robust
         !xHyphWord.is() || // more robust
         // multi-line fields can't be hyphenated interactively
         ( rInf.IsInterHyph() && InFieldGrp() ) )
@@ -539,9 +539,9 @@ void SwSoftHyphPortion::FormatEOL( SwTextFormatInfo &rInf )
 bool SwSoftHyphPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
     if( IsExpand() || ( rInf.OnWin() && rInf.GetOpt().IsSoftHyph() ) ||
-        ( GetPortion() && ( GetPortion()->InFixGrp() ||
-          GetPortion()->IsDropPortion() || GetPortion()->IsLayPortion() ||
-          GetPortion()->IsParaPortion() || GetPortion()->IsBreakPortion() ) ) )
+        ( GetNextPortion() && ( GetNextPortion()->InFixGrp() ||
+          GetNextPortion()->IsDropPortion() || GetNextPortion()->IsLayPortion() ||
+          GetNextPortion()->IsParaPortion() || GetNextPortion()->IsBreakPortion() ) ) )
     {
         return SwHyphPortion::GetExpText( rInf, rText );
     }

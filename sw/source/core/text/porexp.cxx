@@ -74,8 +74,8 @@ void SwExpandPortion::Paint( const SwTextPaintInfo &rInf ) const
     rInf.DrawBorder( *this );
 
     // Do we have to repaint a post it portion?
-    if( rInf.OnWin() && pPortion && !pPortion->Width() )
-        pPortion->PrePaint( rInf, this );
+    if( rInf.OnWin() && mpNextPortion && !mpNextPortion->Width() )
+        mpNextPortion->PrePaint( rInf, this );
 
     // The contents of field portions is not considered during the
     // calculation of the directions. Therefore we let vcl handle
@@ -107,10 +107,10 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
     if( rInf.StopUnderflow() )
         return 0;
     const SwLinePortion *pPos = rInf.GetRoot();
-    if( pPos->GetPortion() )
-        pPos = pPos->GetPortion();
+    if( pPos->GetNextPortion() )
+        pPos = pPos->GetNextPortion();
     while( pPos && pPos->IsBlankPortion() )
-        pPos = pPos->GetPortion();
+        pPos = pPos->GetNextPortion();
     if( !pPos || !rInf.GetIdx() || ( !pPos->GetLen() && pPos == rInf.GetRoot() ) )
         return 0; // There are just BlankPortions left
 
@@ -125,7 +125,7 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTextFormatInfo &rInf,
     if( nIdx && !const_cast<SwTextFormatInfo&>(rInf).GetFly() )
     {
         while( pPos && !pPos->IsFlyPortion() )
-            pPos = pPos->GetPortion();
+            pPos = pPos->GetNextPortion();
         if( !pPos )
         {
         // We check to see if there are useful line breaks, blanks or fields etc. left
