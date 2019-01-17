@@ -660,7 +660,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
             OUString columnStringValue = xRow->getString(i);
             if (i == 1)
             { // TABLE_SCHEM
-                informationSchema = !columnStringValue.equalsIgnoreAsciiCase("information_schema");
+                informationSchema = columnStringValue.equalsIgnoreAsciiCase("information_schema");
             }
             aRow.push_back(makeAny(columnStringValue));
         }
