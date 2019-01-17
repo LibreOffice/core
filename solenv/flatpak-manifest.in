@@ -64,7 +64,7 @@
                     "url": "https://dev-www.libreoffice.org/src/pdfium-3667.tar.bz2",
                     "sha256": "012ef554e7a6ec6d794f9ff7e66ff71011cab1b67317b427d9c820c48c141e5e",
                     "type": "file",
-                    "dest-filename": "external/tarballs/pdfium-3613.tar.bz2"
+                    "dest-filename": "external/tarballs/pdfium-3667.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz",
@@ -145,10 +145,10 @@
                     "dest-filename": "external/tarballs/EmojiOneColor-SVGinOT-1.3.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/boost_1_66_0.tar.bz2",
-                    "sha256": "5721818253e6a0989583192f96782c4a98eb6204965316df9f5ad75819225ca9",
+                    "url": "https://dev-www.libreoffice.org/src/boost_1_69_0.tar.bz2",
+                    "sha256": "8f32d4617390d1c2d16f26a27ab60d97807b35440d45891fa340fc2648b04406",
                     "type": "file",
-                    "dest-filename": "external/tarballs/boost_1_66_0.tar.bz2"
+                    "dest-filename": "external/tarballs/boost_1_69_0.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz",
@@ -367,10 +367,10 @@
                     "dest-filename": "external/tarballs/liborcus-0.14.1.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/poppler-0.66.0.tar.xz",
-                    "sha256": "2c096431adfb74bc2f53be466889b7646e1b599f28fa036094f3f7235cc9eae7",
+                    "url": "https://dev-www.libreoffice.org/src/poppler-0.73.0.tar.xz",
+                    "sha256": "e44b5543903128884ba4538c2a97d3bcc8889e97ffacc4636112101f0238db03",
                     "type": "file",
-                    "dest-filename": "external/tarballs/poppler-0.66.0.tar.xz"
+                    "dest-filename": "external/tarballs/poppler-0.73.0.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/postgresql-9.2.24.tar.bz2",
