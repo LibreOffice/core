@@ -60,7 +60,7 @@ void SwTextAdjuster::FormatBlock( )
             {
                 if( pPor->InTextGrp() )
                     bSkip = false;
-                pPor = pPor->GetPortion();
+                pPor = pPor->GetNextPortion();
             }
             pLay = bSkip ? pLay->GetNext() : nullptr;
         }
@@ -91,7 +91,7 @@ void SwTextAdjuster::FormatBlock( )
                     pFly = pTmpFly; // A Fly with follow-up text!
                     pTmpFly = nullptr;
                 }
-                pPos = pPos->GetPortion();
+                pPos = pPos->GetNextPortion();
             }
             // End if we didn't find one
             if( !pFly )
@@ -286,7 +286,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     const bool bDoNotJustifyLinesWithManualBreak =
         GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
 
-    SwLinePortion *pPos = pCurrent->GetPortion();
+    SwLinePortion *pPos = pCurrent->GetNextPortion();
 
     while( pPos )
     {
@@ -388,7 +388,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
             pCurrent->SetLLSpaceAdd( 0, nSpaceIdx );
             break;
         }
-        pPos = pPos->GetPortion();
+        pPos = pPos->GetNextPortion();
     }
 }
 
@@ -409,7 +409,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     // Do not forget: CalcRightMargin() sets pCurrent->Width() to the line width!
     CalcRightMargin( pCurrent );
 
-    SwLinePortion* pPos = pCurrent->GetPortion();
+    SwLinePortion* pPos = pCurrent->GetNextPortion();
 
     while( pPos )
     {
@@ -479,13 +479,13 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
         }
 
         nX += pPos->Width();
-        pPos = pPos->GetPortion();
+        pPos = pPos->GetNextPortion();
     }
 
     // set portion width
     nKanaIdx = 0;
     sal_uInt16 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
-    pPos = pCurrent->GetPortion();
+    pPos = pCurrent->GetNextPortion();
     long nDecompress = 0;
 
     while( pPos )
@@ -518,7 +518,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
             nDecompress = 0;
         }
-        pPos = pPos->GetPortion();
+        pPos = pPos->GetNextPortion();
     }
 
     return nRepaintOfst;
@@ -585,7 +585,7 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
     // CalcRightMargin also calculates a possible overlap with FlyFrames.
     CalcRightMargin( pCurrent );
 
-    SwLinePortion *pPos = pLeft->GetPortion();
+    SwLinePortion *pPos = pLeft->GetNextPortion();
     TextFrameIndex nLen(0);
 
     // If we only have one line, the text portion is consecutive and we center, then ...
@@ -642,7 +642,7 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
             bComplete = false;
         }
         nLen = nLen + pPos->GetLen();
-        pPos = pPos->GetPortion();
+        pPos = pPos->GetNextPortion();
      }
 
      if( ! bTabCompat && ! bMultiTab && SvxAdjust::Right == GetAdjust() )
@@ -744,16 +744,16 @@ void SwTextAdjuster::CalcDropAdjust()
 
         // 2) Make sure we include the ropPortion
         // 3) pLeft is the GluePor preceding the DropPor
-        if( pPor->InGlueGrp() && pPor->GetPortion()
-              && pPor->GetPortion()->IsDropPortion() )
+        if( pPor->InGlueGrp() && pPor->GetNextPortion()
+              && pPor->GetNextPortion()->IsDropPortion() )
         {
-            const SwLinePortion *pDropPor = static_cast<SwDropPortion*>( pPor->GetPortion() );
+            const SwLinePortion *pDropPor = static_cast<SwDropPortion*>( pPor->GetNextPortion() );
             SwGluePortion *pLeft = static_cast<SwGluePortion*>( pPor );
 
             // 4) pRight: Find the GluePor coming after the DropPor
-            pPor = pPor->GetPortion();
+            pPor = pPor->GetNextPortion();
             while( pPor && !pPor->InFixMargGrp() )
-                pPor = pPor->GetPortion();
+                pPor = pPor->GetNextPortion();
 
             SwGluePortion *pRight = ( pPor && pPor->InGlueGrp() ) ?
                                     static_cast<SwGluePortion*>(pPor) : nullptr;

@@ -53,7 +53,7 @@ class SwLinePortion: public SwPosSize
 {
 protected:
     // Here we have areas with different attributes
-    SwLinePortion *pPortion;
+    SwLinePortion *mpNextPortion;
     // Count of chars and spaces on the line
     TextFrameIndex nLineLength;
     sal_uInt16 nAscent;      // Maximum ascender
@@ -71,11 +71,11 @@ public:
            virtual ~SwLinePortion();
 
     // Access methods
-    SwLinePortion *GetPortion() const { return pPortion; }
+    SwLinePortion *GetNextPortion() const { return mpNextPortion; }
     inline SwLinePortion &operator=(const SwLinePortion &rPortion);
     TextFrameIndex GetLen() const { return nLineLength; }
     void SetLen(TextFrameIndex const nLen) { nLineLength = nLen; }
-    void SetPortion( SwLinePortion *pNew ){ pPortion = pNew; }
+    void SetNextPortion( SwLinePortion *pNew ){ mpNextPortion = pNew; }
     sal_uInt16 &GetAscent() { return nAscent; }
     sal_uInt16 GetAscent() const { return nAscent; }
     void SetAscent( const sal_uInt16 nNewAsc ) { nAscent = nNewAsc; }
@@ -186,7 +186,7 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
 
 inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     SwPosSize( rPortion ),
-    pPortion( nullptr ),
+    mpNextPortion( nullptr ),
     nLineLength( rPortion.nLineLength ),
     nAscent( rPortion.nAscent ),
     nWhichPor( rPortion.nWhichPor ),
@@ -197,7 +197,7 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
 
 inline void SwLinePortion::Truncate()
 {
-    if ( pPortion )
+    if ( mpNextPortion )
         Truncate_();
 }
 

@@ -204,10 +204,10 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
                 }
                 if( m_pCurr->HasForcedLeftMargin() )
                 {
-                    SwLinePortion* pPor = m_pCurr->GetPortion();
+                    SwLinePortion* pPor = m_pCurr->GetNextPortion();
                     while( pPor && !pPor->IsFlyPortion() )
                     {
-                        pPor = pPor->GetPortion();
+                        pPor = pPor->GetNextPortion();
                     }
                     if ( pPor )
                     {
@@ -424,7 +424,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             Width( 0 );
             SetLen( TextFrameIndex(0) );
             SetAscent( 0 );
-            SetPortion( nullptr ); //?????
+            SetNextPortion( nullptr ); //?????
         }
         return true;
     }
@@ -443,13 +443,13 @@ bool SwTabPortion::PostFormat( SwTextFormatInfo &rInf )
     // If the tab position is larger than the right margin, it gets scaled down by default.
     // However, if compat mode enabled, we allow tabs to go over the margin: the rest of the paragraph is not broken into lines.
     const sal_uInt16 nRight = bTabOverMargin ? GetTabPos() : std::min(GetTabPos(), rInf.Width());
-    const SwLinePortion *pPor = GetPortion();
+    const SwLinePortion *pPor = GetNextPortion();
 
     sal_uInt16 nPorWidth = 0;
     while( pPor )
     {
         nPorWidth = nPorWidth + pPor->Width();
-        pPor = pPor->GetPortion();
+        pPor = pPor->GetNextPortion();
     }
 
     const sal_uInt16 nWhich = GetWhichPor();
@@ -538,8 +538,8 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
         rInf.DrawBorder( *this );
 
     // do we have to repaint a post it portion?
-    if( rInf.OnWin() && pPortion && !pPortion->Width() )
-        pPortion->PrePaint( rInf, this );
+    if( rInf.OnWin() && mpNextPortion && !mpNextPortion->Width() )
+        mpNextPortion->PrePaint( rInf, this );
 
     // display special characters
     if( rInf.OnWin() && rInf.GetOpt().IsTab() )

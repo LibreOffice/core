@@ -3417,12 +3417,12 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
             {
                 SwTwips nNumberPortionWidth( pFirstPortion->Width() );
 
-                const SwLinePortion* pPortion = pFirstPortion->GetPortion();
+                const SwLinePortion* pPortion = pFirstPortion->GetNextPortion();
                 while ( pPortion &&
                         pPortion->InNumberGrp() && !pPortion->IsFootnoteNumPortion())
                 {
                     nNumberPortionWidth += pPortion->Width();
-                    pPortion = pPortion->GetPortion();
+                    pPortion = pPortion->GetNextPortion();
                 }
 
                 if ( ( IsRightToLeft() &&
@@ -3797,7 +3797,7 @@ void SwTextFrame::VisitPortions( SwPortionHandler& rPH ) const
             while ( pPor )
             {
                 pPor->HandlePortion( rPH );
-                pPor = pPor->GetPortion();
+                pPor = pPor->GetNextPortion();
             }
 
             rPH.LineBreak(pLine->Width());

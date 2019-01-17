@@ -89,7 +89,7 @@ sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const
 { return 0; }
 
 SwLinePortion *SwBreakPortion::Compress()
-{ return (GetPortion() && GetPortion()->InTextGrp() ? nullptr : this); }
+{ return (GetNextPortion() && GetNextPortion()->InTextGrp() ? nullptr : this); }
 
 void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
@@ -149,8 +149,8 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
             rInf.DrawBorder( *this );
 
         // do we have to repaint a post it portion?
-        if( rInf.OnWin() && pPortion && !pPortion->Width() )
-            pPortion->PrePaint( rInf, this );
+        if( rInf.OnWin() && mpNextPortion && !mpNextPortion->Width() )
+            mpNextPortion->PrePaint( rInf, this );
 
         if( rInf.GetFont()->IsPaintBlank() )
         {
