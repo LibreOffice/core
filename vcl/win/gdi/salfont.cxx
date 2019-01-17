@@ -1064,8 +1064,7 @@ static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
 
 struct TempFontItem
 {
-    OUString maFontFilePath;
-    OUString maResourcePath;
+    OUString maFontResourcePath;
     TempFontItem* mpNextItem;
 };
 
@@ -1076,57 +1075,23 @@ bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
     nRet = AddFontResourceExW( o3tl::toW(aUSytemPath.getStr()), FR_PRIVATE, nullptr );
-
-    if ( !nRet )
+    SAL_WARN_IF(!nRet, "vcl.fonts", "Adding private font failed: " << rFontFileURL);
+    if (nRet > 0)
     {
-        static int nCounter = 0;
-        wchar_t aFileName[] = L"soAA.fot";
-        aFileName[2] = sal::static_int_cast<wchar_t>(L'A' + (15 & (nCounter>>4)));
-        aFileName[3] = sal::static_int_cast<wchar_t>(L'A' + (15 & nCounter));
-        wchar_t aResourceName[512];
-        int const nMaxLen = SAL_N_ELEMENTS(aResourceName) - 16;
-        int nLen = GetTempPathW( nMaxLen, aResourceName );
-        wcsncpy( aResourceName + nLen, aFileName, SAL_N_ELEMENTS( aResourceName ) - nLen );
-        // security: end buffer in any case
-        aResourceName[ SAL_N_ELEMENTS(aResourceName)-1 ] = 0;
-        DeleteFileW( aResourceName );
-
-        // TODO: font should be private => need to investigate why it doesn't work then
-        if( !CreateScalableFontResourceW( 0, aResourceName, o3tl::toW(aUSytemPath.getStr()), nullptr ) )
-            return false;
-        ++nCounter;
-
-        nRet = AddFontResourceW( aResourceName );
-        if( nRet > 0 )
-        {
-            TempFontItem* pNewItem = new TempFontItem;
-            pNewItem->maResourcePath = o3tl::toU( aResourceName );
-            pNewItem->maFontFilePath = aUSytemPath;
-            pNewItem->mpNextItem = rSalData.mpTempFontItem;
-            rSalData.mpTempFontItem = pNewItem;
-        }
+        TempFontItem* pNewItem = new TempFontItem;
+        pNewItem->maFontResourcePath = aUSytemPath;
+        pNewItem->mpNextItem = rSalData.mpTempFontItem;
+        rSalData.mpTempFontItem = pNewItem;
     }
-
     return (nRet > 0);
 }
 
 void ImplReleaseTempFonts( SalData& rSalData )
 {
-    int nCount = 0;
-    while( TempFontItem* p = rSalData.mpTempFontItem )
+    while (TempFontItem* p = rSalData.mpTempFontItem)
     {
-        ++nCount;
-        if( p->maResourcePath.getLength() )
-        {
-            const wchar_t* pResourcePath = o3tl::toW(p->maResourcePath.getStr());
-            RemoveFontResourceW( pResourcePath );
-            DeleteFileW( pResourcePath );
-        }
-        else
-        {
-            RemoveFontResourceW( o3tl::toW(p->maFontFilePath.getStr()) );
-        }
-
+        RemoveFontResourceExW(o3tl::toW(p->maFontResourcePath.getStr()),
+                              FR_PRIVATE, nullptr);
         rSalData.mpTempFontItem = p->mpNextItem;
         delete p;
     }
