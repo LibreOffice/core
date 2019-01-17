@@ -405,10 +405,10 @@
                     "dest-filename": "external/tarballs/liborcus-0.13.4.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/poppler-0.66.0.tar.xz",
-                    "sha256": "2c096431adfb74bc2f53be466889b7646e1b599f28fa036094f3f7235cc9eae7",
+                    "url": "https://dev-www.libreoffice.org/src/poppler-0.73.0.tar.xz",
+                    "sha256": "e44b5543903128884ba4538c2a97d3bcc8889e97ffacc4636112101f0238db03",
                     "type": "file",
-                    "dest-filename": "external/tarballs/poppler-0.66.0.tar.xz"
+                    "dest-filename": "external/tarballs/poppler-0.73.0.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2",
