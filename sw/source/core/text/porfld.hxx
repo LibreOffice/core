@@ -109,7 +109,7 @@ class SwHiddenPortion : public SwFieldPortion
 public:
     SwHiddenPortion( const OUString &rExpand, std::unique_ptr<SwFont> pFntL = nullptr )
          : SwFieldPortion( rExpand, std::move(pFntL) )
-        { SetLen(TextFrameIndex(1)); SetWhichPor( POR_HIDDEN ); }
+        { SetLen(TextFrameIndex(1)); SetWhichPor( PortionType::Hidden ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 

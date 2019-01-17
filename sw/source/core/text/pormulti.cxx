@@ -1536,7 +1536,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 #if OSL_DEBUG_LEVEL > 1
     // only paint first level bidi portions
     if( rMulti.Width() > 1 && ! pEnvPor )
-        GetInfo().DrawViewOpt( rMulti, POR_FLD );
+        GetInfo().DrawViewOpt( rMulti, PortionType::Field );
 #endif
 
     if ( bRubyInGrid && pGrid->IsSquaredMode() )

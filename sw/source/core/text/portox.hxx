@@ -25,7 +25,7 @@
 class SwToxPortion : public SwTextPortion
 {
 public:
-    SwToxPortion(){ SetWhichPor( POR_TOX ); }
+    SwToxPortion(){ SetWhichPor( PortionType::Tox ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 

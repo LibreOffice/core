@@ -31,7 +31,7 @@ class SwTextPortion : public SwLinePortion
     bool Format_( SwTextFormatInfo &rInf );
 
 public:
-    SwTextPortion(){ SetWhichPor( POR_TXT ); }
+    SwTextPortion(){ SetWhichPor( PortionType::Text ); }
     static SwTextPortion * CopyLinePortion(const SwLinePortion &rPortion);
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;

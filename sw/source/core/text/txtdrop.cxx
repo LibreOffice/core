@@ -110,7 +110,7 @@ SwDropPortion::SwDropPortion( const sal_uInt16 nLineCnt,
     nFix(0),
     nY(0)
 {
-    SetWhichPor( POR_DROP );
+    SetWhichPor( PortionType::Drop );
 }
 
 SwDropPortion::~SwDropPortion()

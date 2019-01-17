@@ -24,6 +24,7 @@
 #include "TextFrameIndex.hxx"
 
 class SwFont;
+enum class PortionType;
 
 /** The SwPortionHandler interface implements a visitor for the layout
  * engine's text portions. This can be used to gather information of
@@ -56,7 +57,7 @@ public:
      */
     virtual void Text(
         TextFrameIndex nLength, ///< length of this portion in the view string
-        sal_uInt16 nType,         /// type of this portion
+        PortionType nType,       /// type of this portion
         sal_Int32 nHeight = 0,   /// height of this portion
         sal_Int32 nWidth = 0     /// width of this portion
         ) = 0;
@@ -69,7 +70,7 @@ public:
     virtual void Special(
         TextFrameIndex nLength, ///< length of this portion in the view string
         const OUString& rText, /// text which is painted on-screen
-        sal_uInt16 nType,         /// type of this portion
+        PortionType nType,         /// type of this portion
         sal_Int32 nHeight = 0,     /// font height of the painted text
         sal_Int32 nWidth = 0,     /// width of this portion
         const SwFont* pFont = nullptr /// font of this portion

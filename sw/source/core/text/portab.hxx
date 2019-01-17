@@ -47,7 +47,7 @@ class SwTabLeftPortion : public SwTabPortion
 public:
     SwTabLeftPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar, bool bAutoTab )
          : SwTabPortion( nTabPosVal, cFillChar, bAutoTab )
-    { SetWhichPor( POR_TABLEFT ); }
+    { SetWhichPor( PortionType::TabLeft ); }
 };
 
 class SwTabRightPortion : public SwTabPortion
@@ -55,7 +55,7 @@ class SwTabRightPortion : public SwTabPortion
 public:
     SwTabRightPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar )
          : SwTabPortion( nTabPosVal, cFillChar )
-    { SetWhichPor( POR_TABRIGHT ); }
+    { SetWhichPor( PortionType::TabRight ); }
 };
 
 class SwTabCenterPortion : public SwTabPortion
@@ -63,7 +63,7 @@ class SwTabCenterPortion : public SwTabPortion
 public:
     SwTabCenterPortion( const sal_uInt16 nTabPosVal, const sal_Unicode cFillChar )
          : SwTabPortion( nTabPosVal, cFillChar )
-    { SetWhichPor( POR_TABCENTER ); }
+    { SetWhichPor( PortionType::TabCenter ); }
 };
 
 class SwTabDecimalPortion : public SwTabPortion
@@ -83,7 +83,7 @@ public:
          : SwTabPortion( nTabPosVal, cFillChar ),
            mcTab(cTab),
            mnWidthOfPortionsUpTpDecimalPosition( USHRT_MAX )
-    { SetWhichPor( POR_TABDECIMAL ); }
+    { SetWhichPor( PortionType::TabDecimal ); }
 
     sal_Unicode GetTabDecimal() const { return mcTab; }
 

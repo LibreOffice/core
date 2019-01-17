@@ -26,7 +26,7 @@ class SwHyphPortion : public SwExpandPortion
 public:
     SwHyphPortion()
     {
-        SetWhichPor( POR_HYPH );
+        SetWhichPor( PortionType::Hyphen );
     }
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
@@ -42,7 +42,7 @@ public:
     explicit SwHyphStrPortion(const OUString &rStr)
         : aExpand(rStr + "-")
     {
-        SetWhichPor( POR_HYPHSTR );
+        SetWhichPor( PortionType::HyphenStr );
     }
 
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;

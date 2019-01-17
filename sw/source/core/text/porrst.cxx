@@ -53,7 +53,7 @@ SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
-    SetWhichPor( POR_TMPEND );
+    SetWhichPor( PortionType::TempEnd );
 }
 
 void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -77,7 +77,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion )
 {
     nLineLength = TextFrameIndex(1);
-    SetWhichPor( POR_BRK );
+    SetWhichPor( PortionType::Break );
 }
 
 TextFrameIndex SwBreakPortion::GetCursorOfst(const sal_uInt16) const
@@ -120,7 +120,7 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
     nLineLength = TextFrameIndex(0);
-    SetWhichPor( POR_KERN );
+    SetWhichPor( PortionType::Kern );
     if( nKern > 0 )
         Width( nKern );
      rPortion.Insert( this );
@@ -133,7 +133,7 @@ SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
     SetAscent( rPortion.GetAscent() );
 
     nLineLength = TextFrameIndex(0);
-    SetWhichPor( POR_KERN );
+    SetWhichPor( PortionType::Kern );
 }
 
 void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -142,7 +142,7 @@ void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         // bBackground is set for Kerning Portions between two fields
         if ( bBackground )
-            rInf.DrawViewOpt( *this, POR_FLD );
+            rInf.DrawViewOpt( *this, PortionType::Field );
 
         rInf.DrawBackBrush( *this );
         if (GetJoinBorderWithNext() ||GetJoinBorderWithPrev())
@@ -183,7 +183,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
     nLineLength = TextFrameIndex(0);
-    SetWhichPor( POR_ARROW );
+    SetWhichPor( PortionType::Arrow );
 }
 
 SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
@@ -194,7 +194,7 @@ SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
                rInf.GetTextFrame()->getFramePrintArea().Right() );
     aPos.setY( rInf.GetTextFrame()->getFrameArea().Top() +
                rInf.GetTextFrame()->getFramePrintArea().Bottom() );
-    SetWhichPor( POR_ARROW );
+    SetWhichPor( PortionType::Arrow );
 }
 
 void SwArrowPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -487,7 +487,7 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( Width() )  // is only set during prepaint mode
     {
-        rInf.DrawViewOpt( *this, POR_CONTROLCHAR );
+        rInf.DrawViewOpt( *this, PortionType::ControlChar );
 
         if ( !rInf.GetOpt().IsPagePreview() &&
              !rInf.GetOpt().IsReadonly() &&

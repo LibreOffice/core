@@ -31,7 +31,7 @@ SwGluePortion::SwGluePortion( const sal_uInt16 nInitFixWidth )
     : nFixWidth( nInitFixWidth )
 {
     PrtWidth( nFixWidth );
-    SetWhichPor( POR_GLUE );
+    SetWhichPor( PortionType::Glue );
 }
 
 TextFrameIndex SwGluePortion::GetCursorOfst(const sal_uInt16 nOfst) const
@@ -137,19 +137,19 @@ SwFixPortion::SwFixPortion( const SwRect &rRect )
        :SwGluePortion( sal_uInt16(rRect.Width()) ), nFix( sal_uInt16(rRect.Left()) )
 {
     Height( sal_uInt16(rRect.Height()) );
-    SetWhichPor( POR_FIX );
+    SetWhichPor( PortionType::Fix );
 }
 
 SwFixPortion::SwFixPortion()
        : SwGluePortion(0), nFix(0)
 {
-    SetWhichPor( POR_FIX );
+    SetWhichPor( PortionType::Fix );
 }
 
 SwMarginPortion::SwMarginPortion()
     :SwGluePortion( 0 )
 {
-    SetWhichPor( POR_MARGIN );
+    SetWhichPor( PortionType::Margin );
 }
 
 /**

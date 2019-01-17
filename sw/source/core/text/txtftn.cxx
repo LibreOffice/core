@@ -1309,7 +1309,7 @@ SwFootnotePortion::SwFootnotePortion( const OUString &rExpand,
         , mnPreferredScriptType( SwFontScript::Latin )
 {
     SetLen(TextFrameIndex(1));
-    SetWhichPor( POR_FTN );
+    SetWhichPor( PortionType::Footnote );
 }
 
 bool SwFootnotePortion::GetExpText( const SwTextSizeInfo &, OUString &rText ) const
@@ -1342,7 +1342,7 @@ void SwFootnotePortion::Paint( const SwTextPaintInfo &rInf ) const
     // #i98418#
 //    SwFootnoteSave aFootnoteSave( rInf, pFootnote );
     SwFootnoteSave aFootnoteSave( rInf, pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
-    rInf.DrawViewOpt( *this, POR_FTN );
+    rInf.DrawViewOpt( *this, PortionType::Footnote );
     SwExpandPortion::Paint( rInf );
 }
 
@@ -1370,7 +1370,7 @@ SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, const OUString& rStr
     : SwFieldPortion( rExp ), aErgo(rStr)
 {
     SetLen(TextFrameIndex(0));
-    SetWhichPor( POR_QUOVADIS );
+    SetWhichPor( PortionType::QuoVadis );
 }
 
 bool SwQuoVadisPortion::Format( SwTextFormatInfo &rInf )
@@ -1421,7 +1421,7 @@ void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const
     // can quickly switch
     if( PrtWidth() )
     {
-        rInf.DrawViewOpt( *this, POR_QUOVADIS );
+        rInf.DrawViewOpt( *this, PortionType::QuoVadis );
         SwTextSlot aDiffText( &rInf, this, true, false );
         SwFontSave aSave( rInf, m_pFont.get() );
         rInf.DrawText( *this, rInf.GetLen(), true );
@@ -1441,7 +1441,7 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
 
     // One blank distance to the text
     m_aExpand += " ";
-    SetWhichPor( POR_ERGOSUM );
+    SetWhichPor( PortionType::ErgoSum );
 }
 
 TextFrameIndex SwErgoSumPortion::GetCursorOfst(const sal_uInt16) const
