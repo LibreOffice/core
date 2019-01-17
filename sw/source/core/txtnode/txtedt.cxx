@@ -1893,11 +1893,9 @@ void SwTextNode::TransliterateText(
         {
             // here we may transliterate over complete language portions...
 
-            SwLanguageIterator* pIter;
+            std::unique_ptr<SwLanguageIterator> pIter;
             if( rTrans.needLanguageForTheMode() )
-                pIter = new SwLanguageIterator( *this, nStt );
-            else
-                pIter = nullptr;
+                pIter.reset(new SwLanguageIterator( *this, nStt ));
 
             sal_Int32 nEndPos = 0;
             LanguageType nLang = LANGUAGE_NONE;
@@ -1934,7 +1932,6 @@ void SwTextNode::TransliterateText(
 
                 nStt = nEndPos;
             } while( nEndPos < nEnd && pIter && pIter->Next() );
-            delete pIter;
         }
 
         if (!aChanges.empty())
