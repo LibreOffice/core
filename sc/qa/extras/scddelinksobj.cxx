@@ -13,6 +13,7 @@
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
 #include <test/lang/xserviceinfo.hxx>
+#include <test/sheet/xddelinks.hxx>
 
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
@@ -38,6 +39,7 @@ using namespace com::sun::star;
 namespace sc_apitest
 {
 class ScDDELinksObj : public CalcUnoApiTest,
+                      public apitest::XDDELinks,
                       public apitest::XElementAccess,
                       public apitest::XEnumerationAccess,
                       public apitest::XIndexAccess,
@@ -52,6 +54,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScDDELinksObj);
+
+    // XDDELinks
+    CPPUNIT_TEST(testAddDDELink);
 
     // XElementAccess
     CPPUNIT_TEST(testGetElementType);
@@ -82,6 +87,7 @@ private:
 
 ScDDELinksObj::ScDDELinksObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , XDDELinks(m_directories.getURLFromSrc("/sc/qa/unoapi/testdocuments/ScDDELinksObj.ods"))
     , XElementAccess(cppu::UnoType<sheet::XDDELink>::get())
     , XIndexAccess(1)
     , XNameAccess("soffice|"
