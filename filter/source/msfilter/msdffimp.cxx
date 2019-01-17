@@ -5056,10 +5056,10 @@ SvxMSDffImportRec* SvxMSDffImportData::find(const SdrObject* pObj)
     return nullptr;
 }
 
-void SvxMSDffImportData::insert(SvxMSDffImportRec* pImpRec)
+void SvxMSDffImportData::insert(std::unique_ptr<SvxMSDffImportRec> pImpRec)
 {
-    m_ObjToRecMap[pImpRec->pObj] = pImpRec;
-    m_Records.insert(std::unique_ptr<SvxMSDffImportRec>(pImpRec));
+    m_ObjToRecMap[pImpRec->pObj] = pImpRec.get();
+    m_Records.insert(std::move(pImpRec));
 }
 
 void SvxMSDffImportData::NotifyFreeObj(SdrObject* pObj)
@@ -5576,7 +5576,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( pOrgObj )
             {
                 pImpRec->pObj = pOrgObj;
-                rImportData.insert(pImpRec);
+                rImportData.insert(std::unique_ptr<SvxMSDffImportRec>(pImpRec));
                 bDeleteImpRec = false;
                 if (pImpRec == pTextImpRec)
                     bDeleteTextImpRec = false;
@@ -5587,7 +5587,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 // Modify ShapeId (must be unique)
                 pImpRec->nShapeId |= 0x8000000;
                 pTextImpRec->pObj = pTextObj;
-                rImportData.insert(pTextImpRec);
+                rImportData.insert(std::unique_ptr<SvxMSDffImportRec>(pTextImpRec));
                 bDeleteTextImpRec = false;
                 if (pTextImpRec == pImpRec)
                     bDeleteImpRec = false;

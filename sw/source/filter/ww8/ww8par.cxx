@@ -593,7 +593,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
     if( !rTextRect.IsEmpty() )
     {
         SvxMSDffImportData& rImportData = static_cast<SvxMSDffImportData&>(rData);
-        SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
+        std::unique_ptr<SvxMSDffImportRec> pImpRec(new SvxMSDffImportRec);
 
         // fill Import Record with data
         pImpRec->nShapeId   = rObjData.nShapeId;
@@ -1066,9 +1066,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         if( pImpRec->nShapeId )
         {
+            auto pImpRecTmp = pImpRec.get();
             // Complement Import Record List
             pImpRec->pObj = pObj;
-            rImportData.insert(pImpRec);
+            rImportData.insert(std::move(pImpRec));
 
             // Complement entry in Z Order List with a pointer to this Object
             // Only store objects which are not deep inside the tree
@@ -1077,12 +1078,12 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 ( (rObjData.nSpFlags & ShapeFlag::Group)
                  && (rObjData.nCalledByGroup < 2) )
               )
-                StoreShapeOrder( pImpRec->nShapeId,
-                                ( static_cast<sal_uLong>(pImpRec->aTextId.nTxBxS) << 16 )
-                                    + pImpRec->aTextId.nSequence, pObj );
+                StoreShapeOrder( pImpRecTmp->nShapeId,
+                                ( static_cast<sal_uLong>(pImpRecTmp->aTextId.nTxBxS) << 16 )
+                                    + pImpRecTmp->aTextId.nSequence, pObj );
         }
         else
-            delete pImpRec;
+            pImpRec.reset();
     }
 
     sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape, 0 );
