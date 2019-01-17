@@ -53,7 +53,7 @@ class Class4 {
     ~Class4()
     {
         for (int i = 0; i < 10; ++i)
-            delete m_pbar[i]; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete m_pbar[i]; // expected-error {{rather manage this member with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 class Class5 {
@@ -89,7 +89,7 @@ class Class7 {
     ~Class7()
     {
         for (int i = 0; i < 10; ++i)
-            delete m_pbar[i]; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete m_pbar[i]; // expected-error {{rather manage this member with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 class Class8 {
@@ -162,7 +162,7 @@ class Foo12 {
     {
         int i = 0;
         while (i < 10)
-            delete m_pbar[i++]; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete m_pbar[i++]; // expected-error {{rather manage this member with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 #define DELETEZ( p )    ( delete p,p = NULL )
@@ -224,7 +224,7 @@ class Foo18 {
     ~Foo18()
     {
         for (auto aIter = m_pbar1.begin(); aIter != m_pbar1.end(); ++aIter)
-            delete *aIter; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete *aIter; // expected-error {{rather manage this member with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 
@@ -272,7 +272,7 @@ class Foo23
     ~Foo23()
     {
         for(auto it = map.begin(); it != map.end(); ++it)
-            delete it->second; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete it->second; // expected-error {{rather manage this member with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 
@@ -283,7 +283,7 @@ class Foo24
     ~Foo24()
     {
         for ( HTMLAttrs::const_iterator it = m_aSetAttrTab.begin(); it != m_aSetAttrTab.end(); ++it )
-            delete *it; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete *it; // expected-error {{rather manage this member with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 
