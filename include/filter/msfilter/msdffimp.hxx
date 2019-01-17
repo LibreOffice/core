@@ -289,7 +289,7 @@ public:
     SvxMSDffImportData( SvxMSDffImportData const & ) = delete; // MSVC2015 workaround
     virtual ~SvxMSDffImportData() override;
     bool empty() const { return m_Records.empty(); }
-    void insert(SvxMSDffImportRec* pImpRec);
+    void insert(std::unique_ptr<SvxMSDffImportRec> pImpRec);
     void unmap(const SdrObject* pObj) { m_ObjToRecMap.erase(pObj); }
     size_t size() const { return m_Records.size(); }
     SvxMSDffImportRec* find(const SdrObject* pObj);
