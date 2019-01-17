@@ -3155,7 +3155,7 @@ void ChartExport::exportDataLabels(
     if (GetProperty(xPropSet, "LinkNumberFormatToSource"))
         mAny >>= bLinkedNumFmt;
 
-    if (GetProperty(xPropSet, "NumberFormat"))
+    if (GetProperty(xPropSet, "NumberFormat") || GetProperty(xPropSet, "PercentageNumberFormat"))
     {
         sal_Int32 nKey = 0;
         mAny >>= nKey;
