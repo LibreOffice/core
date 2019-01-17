@@ -301,7 +301,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
         if( Count() )
         {
             // #i92811#
-            SfxStringItem* pNewListIdItem( nullptr );
+            std::unique_ptr<SfxStringItem> pNewListIdItem;
 
             const SfxPoolItem* pItem;
             const SwDoc *pSrcDoc = GetDoc();
@@ -355,9 +355,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                         // Thus, create new list id item.
                         if (pSrcDocNumRule && sListId == pSrcDocNumRule->GetDefaultListId())
                         {
-                            pNewListIdItem = new SfxStringItem (
+                            pNewListIdItem.reset(new SfxStringItem (
                                             RES_PARATR_LIST_ID,
-                                            pDstDocNumRule->GetDefaultListId() );
+                                            pDstDocNumRule->GetDefaultListId() ));
                         }
                     }
                     // check again, if list exist, because <SwDoc::MakeNumRule(..)>
@@ -435,10 +435,6 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             {
                 pFormat->SetFormatAttr( *this );
             }
-
-            // #i92811#
-            delete pNewListIdItem;
-            pNewListIdItem = nullptr;
         }
     }
 #if OSL_DEBUG_LEVEL > 0
