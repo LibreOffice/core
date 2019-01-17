@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_98b48137",
+        "filename": "vcl/inc/win/scoped_gdi.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2019-01-17T10:27:21Z",
+      "side": 1,
+      "message": "Seems redundant, since std::unique_ptr already offers this as typename pointer. So it\u0027s possible to just typedef (or use) it in the class definition.",
+      "range": {
+        "startLine": 33,
+        "startChar": 10,
+        "endLine": 33,
+        "endChar": 20
+      },
+      "revId": "55f15da3ccc32dbb8a68ff3c073813bf1f795e21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
