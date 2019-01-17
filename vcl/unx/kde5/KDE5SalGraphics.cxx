@@ -21,7 +21,11 @@
 
 #include <salbmp.hxx>
 
+#include <QtGui/QScreen>
+#include <QtGui/QWindow>
+
 #include <Qt5Tools.hxx>
+#include <Qt5Frame.hxx>
 
 static void QImage2BitmapBuffer(QImage* pImg, BitmapBuffer* pBuf)
 {
@@ -35,8 +39,9 @@ static void QImage2BitmapBuffer(QImage* pImg, BitmapBuffer* pBuf)
     }
 }
 
-KDE5SalGraphics::KDE5SalGraphics()
+KDE5SalGraphics::KDE5SalGraphics(Qt5Frame* pFrame)
     : SvpSalGraphics()
+    , m_pFrame(pFrame)
 {
 }
 
@@ -57,6 +62,24 @@ bool KDE5SalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
         drawBitmap(aTR, pBuffer, CAIRO_OPERATOR_OVER);
     }
     return bHandled;
+}
+
+void KDE5SalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
+{
+    char* pForceDpi;
+    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    {
+        OString sForceDPI(pForceDpi);
+        rDPIX = rDPIY = sForceDPI.toInt32();
+        return;
+    }
+
+    if (!m_pFrame || !m_pFrame->GetQWidget()->window()->windowHandle())
+        return;
+
+    QScreen* pScreen = m_pFrame->GetQWidget()->window()->windowHandle()->screen();
+    rDPIX = pScreen->logicalDotsPerInchX();
+    rDPIY = pScreen->logicalDotsPerInchY();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
