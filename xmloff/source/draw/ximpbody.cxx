@@ -35,6 +35,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/families.hxx>
 #include "ximpshow.hxx"
+#include "layerimp.hxx"
 #include <PropertySetMerger.hxx>
 #include <animationimport.hxx>
 #include <osl/diagnose.hxx>
@@ -257,6 +258,10 @@ SvXMLImportContextRef SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPref
                 }
             }
             break;
+        }
+        case XML_TOK_DRAWPAGE_LAYER_SET:
+        {
+            xContext = new SdXMLLayerSetContext( GetSdImport(), nPrefix, rLocalName, xAttrList );
         }
     }
 
