@@ -1270,33 +1270,33 @@ void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 }
 
 void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
-                                  const sal_uInt16 nWhich ) const
+                                   PortionType nWhich ) const
 {
     if( OnWin() && !IsMulti() )
     {
         bool bDraw = false;
         switch( nWhich )
         {
-        case POR_FTN:
-        case POR_QUOVADIS:
-        case POR_NUMBER:
-        case POR_FLD:
-        case POR_URL:
-        case POR_HIDDEN:
-        case POR_TOX:
-        case POR_REF:
-        case POR_META:
-        case POR_CONTROLCHAR:
+        case PortionType::Footnote:
+        case PortionType::QuoVadis:
+        case PortionType::Number:
+        case PortionType::Field:
+        case PortionType::Url:
+        case PortionType::Hidden:
+        case PortionType::Tox:
+        case PortionType::Ref:
+        case PortionType::Meta:
+        case PortionType::ControlChar:
             if ( !GetOpt().IsPagePreview()
                  && !GetOpt().IsReadonly()
                  && SwViewOption::IsFieldShadings()
-                 && ( POR_NUMBER != nWhich
+                 && ( PortionType::Number != nWhich
                       || m_pFrame->GetTextNodeForParaProps()->HasMarkedLabel())) // #i27615#
             {
                 bDraw = true;
             }
             break;
-        case POR_INPUTFLD:
+        case PortionType::InputField:
             // input field shading also in read-only mode
             if ( !GetOpt().IsPagePreview()
                  && SwViewOption::IsFieldShadings() )
@@ -1304,13 +1304,13 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                 bDraw = true;
             }
             break;
-        case POR_TAB:
+        case PortionType::Table:
             if ( GetOpt().IsTab() )     bDraw = true;
             break;
-        case POR_SOFTHYPH:
+        case PortionType::SoftHyphen:
             if ( GetOpt().IsSoftHyph() )bDraw = true;
             break;
-        case POR_BLANK:
+        case PortionType::Blank:
             if ( GetOpt().IsHardBlank())bDraw = true;
             break;
         default:

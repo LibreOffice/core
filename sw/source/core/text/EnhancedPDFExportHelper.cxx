@@ -732,8 +732,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             case vcl::PDFWriter::Span :
             case vcl::PDFWriter::Quote :
             case vcl::PDFWriter::Code :
-                if( POR_HYPHSTR == pPor->GetWhichPor() || POR_SOFTHYPHSTR == pPor->GetWhichPor() ||
-                    POR_HYPH == pPor->GetWhichPor() || POR_SOFTHYPH == pPor->GetWhichPor() )
+                if( PortionType::HyphenStr == pPor->GetWhichPor() || PortionType::SoftHyphenStr == pPor->GetWhichPor() ||
+                    PortionType::Hyphen == pPor->GetWhichPor() || PortionType::SoftHyphen == pPor->GetWhichPor() )
                     bActualText = true;
                 else
                 {
@@ -757,7 +757,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         if ( bActualText )
         {
             OUString aActualText;
-            if (pPor->GetWhichPor() == POR_SOFTHYPH || pPor->GetWhichPor() == POR_HYPH)
+            if (pPor->GetWhichPor() == PortionType::SoftHyphen || pPor->GetWhichPor() == PortionType::Hyphen)
                 aActualText = OUString(u'\x00ad'); // soft hyphen
             else
                 aActualText = rInf.GetText().copy(sal_Int32(rInf.GetIdx()), sal_Int32(pPor->GetLen()));
@@ -1319,18 +1319,18 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
     switch ( pPor->GetWhichPor() )
     {
-        case POR_HYPH :
-        case POR_SOFTHYPH :
+        case PortionType::Hyphen :
+        case PortionType::SoftHyphen :
         // Check for alternative spelling:
-        case POR_HYPHSTR :
-        case POR_SOFTHYPHSTR :
+        case PortionType::HyphenStr :
+        case PortionType::SoftHyphenStr :
             nPDFType = vcl::PDFWriter::Span;
             aPDFType = aSpanString;
             break;
 
-        case POR_LAY :
-        case POR_TXT :
-        case POR_PARA :
+        case PortionType::Lay :
+        case PortionType::Text :
+        case PortionType::Para :
             {
                 std::pair<SwTextNode const*, sal_Int32> const pos(
                         pFrame->MapViewToModel(rInf.GetIdx()));
@@ -1391,12 +1391,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             }
             break;
 
-        case POR_FTN :
+        case PortionType::Footnote :
             nPDFType = vcl::PDFWriter::Link;
             aPDFType = aLinkString;
             break;
 
-        case POR_FLD :
+        case PortionType::Field :
             {
                 // check field type:
                 TextFrameIndex const nIdx = static_cast<const SwFieldPortion*>(pPor)->IsFollow()
@@ -1420,12 +1420,13 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             }
             break;
 
-        case POR_TAB :
-        case POR_TABRIGHT :
-        case POR_TABCENTER :
-        case POR_TABDECIMAL :
+        case PortionType::Table :
+        case PortionType::TabRight :
+        case PortionType::TabCenter :
+        case PortionType::TabDecimal :
             nPDFType = vcl::PDFWriter::NonStructElement;
             break;
+        default: break;
     }
 
     if ( USHRT_MAX != nPDFType )

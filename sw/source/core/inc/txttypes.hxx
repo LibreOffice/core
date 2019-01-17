@@ -21,69 +21,71 @@
 
 #include <swtypes.hxx>
 
-// Portiontypen
-#define POR_LIN         0x0000
-#define POR_FLYCNT      0x0001
+enum class PortionType
+{
+    NONE        = 0x0000,
+    FlyCnt      = 0x0001,
 
-#define POR_HOLE        0x0080
-#define POR_TMPEND      0x0081
-#define POR_BRK         0x0082
-#define POR_KERN        0x0083
-#define POR_ARROW       0x0084
-#define POR_MULTI       0x0085
-#define POR_HIDDEN_TXT  0x0086
-#define POR_CONTROLCHAR 0x0087
+    Hole        = 0x0080,
+    TempEnd     = 0x0081,
+    Break       = 0x0082,
+    Kern        = 0x0083,
+    Arrow       = 0x0084,
+    Multi       = 0x0085,
+    HiddenText  = 0x0086,
+    ControlChar = 0x0087,
 
-#define POR_TXT         0x8000
-#define POR_LAY         0x8001
-#define POR_PARA        0x8002
-#define POR_URL         0x8003
-#define POR_HNG         0x8004
-#define POR_INPUTFLD    0x8005
+    Text        = 0x8000,
+    Lay         = 0x8001,
+    Para        = 0x8002,
+    Url         = 0x8003,
+    Hanging     = 0x8004,
+    InputField  = 0x8005,
 
-#define POR_DROP        0x8080
-#define POR_TOX         0x8089
-#define POR_ISOTOX      0x808a
-#define POR_REF         0x808b
-#define POR_ISOREF      0x808c
-#define POR_META        0x808d
+    Drop        = 0x8080,
+    Tox         = 0x8089,
+    IsoTox      = 0x808a,
+    Ref         = 0x808b,
+    IsoRef      = 0x808c,
+    Meta        = 0x808d,
 
-#define POR_EXP         0xc080
-#define POR_BLANK       0xc081
-#define POR_POSTITS     0xc082
+    Expand      = 0xc080,
+    Blank       = 0xc081,
+    PostIts     = 0xc082,
 
-#define POR_HYPH        0xd080
-#define POR_HYPHSTR     0xd081
-#define POR_SOFTHYPH    0xd082
-#define POR_SOFTHYPHSTR 0xd083
-#define POR_SOFTHYPH_COMP 0xd084
+    Hyphen         = 0xd080,
+    HyphenStr      = 0xd081,
+    SoftHyphen     = 0xd082,
+    SoftHyphenStr  = 0xd083,
+    SoftHyphenComp = 0xd084,
 
-#define POR_FLD         0xe080
-#define POR_HIDDEN      0xe081
-#define POR_QUOVADIS    0xe082
-#define POR_ERGOSUM     0xe083
-#define POR_COMBINED    0xe084
-#define POR_FTN         0xe085
+    Field       = 0xe080,
+    Hidden      = 0xe081,
+    QuoVadis    = 0xe082,
+    ErgoSum     = 0xe083,
+    Combined    = 0xe084,
+    Footnote    = 0xe085,
 
-#define POR_FTNNUM      0xe880
-#define POR_NUMBER      0xe881
-#define POR_BULLET      0xe882
-#define POR_GRFNUM      0xe883
+    FootnoteNum = 0xe880,
+    Number      = 0xe881,
+    Bullet      = 0xe882,
+    GrfNum      = 0xe883,
 
-#define POR_GLUE        0x0480
+    Glue        = 0x0480,
 
-#define POR_MARGIN      0x04c0
+    Margin      = 0x04c0,
 
-#define POR_FIX         0x06c0
-#define POR_FLY         0x06c1
+    Fix         = 0x06c0,
+    Fly         = 0x06c1,
 
-#define POR_TAB         0x0750
+    Table       = 0x0750,
 
-#define POR_TABRIGHT    0x07d0
-#define POR_TABCENTER   0x07d1
-#define POR_TABDECIMAL  0x07d2
+    TabRight    = 0x07d0,
+    TabCenter   = 0x07d1,
+    TabDecimal  = 0x07d2,
 
-#define POR_TABLEFT     0x0740
+    TabLeft     = 0x0740,
+};
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
 

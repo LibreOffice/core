@@ -217,7 +217,7 @@ SwTextPortion * SwTextPortion::CopyLinePortion(const SwLinePortion &rPortion)
 {
     SwTextPortion *const pNew(new SwTextPortion);
     static_cast<SwLinePortion&>(*pNew) = rPortion;
-    pNew->SetWhichPor( POR_TXT ); // overwrite that!
+    pNew->SetWhichPor( PortionType::Text ); // overwrite that!
     return pNew;
 }
 
@@ -677,7 +677,7 @@ void SwTextPortion::HandlePortion( SwPortionHandler& rPH ) const
 SwTextInputFieldPortion::SwTextInputFieldPortion()
     : SwTextPortion()
 {
-    SetWhichPor( POR_INPUTFLD );
+    SetWhichPor( PortionType::InputField );
 }
 
 bool SwTextInputFieldPortion::Format(SwTextFormatInfo &rTextFormatInfo)
@@ -689,7 +689,7 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( Width() )
     {
-        rInf.DrawViewOpt( *this, POR_INPUTFLD );
+        rInf.DrawViewOpt( *this, PortionType::InputField );
         SwTextSlot aPaintText( &rInf, this, true, true, OUString() );
         SwTextPortion::Paint( rInf );
     }
@@ -730,7 +730,7 @@ SwHolePortion::SwHolePortion( const SwTextPortion &rPor )
     SetLen( TextFrameIndex(1) );
     Height( rPor.Height() );
     SetAscent( rPor.GetAscent() );
-    SetWhichPor( POR_HOLE );
+    SetWhichPor( PortionType::Hole );
 }
 
 SwLinePortion *SwHolePortion::Compress() { return this; }

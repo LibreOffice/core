@@ -375,7 +375,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
             // portion spanning to the end or the next fixed portion
             while( pPos )
             {
-                SAL_WARN_IF( POR_LIN == pPos->GetWhichPor(),
+                SAL_WARN_IF( PortionType::NONE == pPos->GetWhichPor(),
                         "sw.core", "SwLineLayout::CalcLine: don't use SwLinePortions !" );
 
                 // Null portions are eliminated. They can form if two FlyFrames
@@ -482,7 +482,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                         if( Height() < nPosHeight )
                         {
                             // Height is set to 0 when Init() is called.
-                            if (bIgnoreBlanksAndTabsForLineHeightCalculation && pPos->GetWhichPor() == POR_FLYCNT)
+                            if (bIgnoreBlanksAndTabsForLineHeightCalculation && pPos->GetWhichPor() == PortionType::FlyCnt)
                                 // Compat flag set: take the line height, if it's larger.
                                 Height(std::max(nPosHeight, nLineHeight));
                             else
@@ -665,7 +665,7 @@ SwLineLayout::SwLineLayout()
       m_bUnderscore( false )
 {
     ResetFlags();
-    SetWhichPor( POR_LAY );
+    SetWhichPor( PortionType::Lay );
 }
 
 SwLinePortion *SwLineLayout::GetFirstPortion() const
@@ -2151,7 +2151,7 @@ SwParaPortion::SwParaPortion()
 {
     FormatReset();
     m_bFlys = m_bFootnoteNum = m_bMargin = false;
-    SetWhichPor( POR_PARA );
+    SetWhichPor( PortionType::Para );
 }
 
 SwParaPortion::~SwParaPortion()

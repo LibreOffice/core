@@ -414,7 +414,7 @@ public:
     void DrawRedArrow( const SwLinePortion &rPor ) const;
     void DrawPostIts( bool bScript ) const;
     void DrawBackground( const SwLinePortion &rPor ) const;
-    void DrawViewOpt( const SwLinePortion &rPor, const sal_uInt16 nWhich ) const;
+    void DrawViewOpt( const SwLinePortion &rPor, PortionType nWhich ) const;
     void DrawBackBrush( const SwLinePortion &rPor ) const;
 
     /**

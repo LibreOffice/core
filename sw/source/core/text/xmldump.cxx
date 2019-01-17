@@ -35,71 +35,71 @@ class XmlPortionDumper:public SwPortionHandler
     const OUString& m_rText;
     OUString m_aLine;
 
-    static const char* getTypeName( sal_uInt16 nType )
+    static const char* getTypeName( PortionType nType )
     {
         switch ( nType )
         {
-            case POR_LIN: return "POR_LIN";
-            case POR_FLYCNT: return "POR_FLYCNT";
+            case PortionType::NONE: return "PortionType::NONE";
+            case PortionType::FlyCnt: return "PortionType::FlyCnt";
 
-            case POR_HOLE: return "POR_HOLE";
-            case POR_TMPEND: return "POR_TMPEND";
-            case POR_BRK: return "POR_BRK";
-            case POR_KERN: return "POR_KERN";
-            case POR_ARROW: return "POR_ARROW";
-            case POR_MULTI: return "POR_MULTI";
-            case POR_HIDDEN_TXT: return "POR_HIDDEN_TXT";
-            case POR_CONTROLCHAR: return "POR_CONTROLCHAR";
+            case PortionType::Hole: return "PortionType::Hole";
+            case PortionType::TempEnd: return "PortionType::TempEnd";
+            case PortionType::Break: return "PortionType::Break";
+            case PortionType::Kern: return "PortionType::Kern";
+            case PortionType::Arrow: return "PortionType::Arrow";
+            case PortionType::Multi: return "PortionType::Multi";
+            case PortionType::HiddenText: return "PortionType::HiddenText";
+            case PortionType::ControlChar: return "PortionType::ControlChar";
 
-            case POR_TXT: return "POR_TXT";
-            case POR_LAY: return "POR_LAY";
-            case POR_PARA: return "POR_PARA";
-            case POR_URL: return "POR_URL";
-            case POR_HNG: return "POR_HNG";
+            case PortionType::Text: return "PortionType::Text";
+            case PortionType::Lay: return "PortionType::Lay";
+            case PortionType::Para: return "PortionType::Para";
+            case PortionType::Url: return "PortionType::Url";
+            case PortionType::Hanging: return "PortionType::Hanging";
 
-            case POR_DROP: return "POR_DROP";
-            case POR_TOX: return "POR_TOX";
-            case POR_ISOTOX: return "POR_ISOTOX";
-            case POR_REF: return "POR_REF";
-            case POR_ISOREF: return "POR_ISOREF";
-            case POR_META: return "POR_META";
+            case PortionType::Drop: return "PortionType::Drop";
+            case PortionType::Tox: return "PortionType::Tox";
+            case PortionType::IsoTox: return "PortionType::IsoTox";
+            case PortionType::Ref: return "PortionType::Ref";
+            case PortionType::IsoRef: return "PortionType::IsoRef";
+            case PortionType::Meta: return "PortionType::Meta";
 
-            case POR_EXP: return "POR_EXP";
-            case POR_BLANK: return "POR_BLANK";
-            case POR_POSTITS: return "POR_POSTITS";
+            case PortionType::Expand: return "PortionType::Expand";
+            case PortionType::Blank: return "PortionType::Blank";
+            case PortionType::PostIts: return "PortionType::PostIts";
 
-            case POR_HYPH: return "POR_HYPH";
-            case POR_HYPHSTR: return "POR_HYPHSTR";
-            case POR_SOFTHYPH: return "POR_SOFTHYPH";
-            case POR_SOFTHYPHSTR: return "POR_SOFTHYPHSTR";
-            case POR_SOFTHYPH_COMP: return "POR_SOFTHYPH_COMP";
+            case PortionType::Hyphen: return "PortionType::Hyphen";
+            case PortionType::HyphenStr: return "PortionType::HyphenStr";
+            case PortionType::SoftHyphen: return "PortionType::SoftHyphen";
+            case PortionType::SoftHyphenStr: return "PortionType::SoftHyphenStr";
+            case PortionType::SoftHyphenComp: return "PortionType::SoftHyphenComp";
 
-            case POR_FLD: return "POR_FLD";
-            case POR_HIDDEN: return "POR_HIDDEN";
-            case POR_QUOVADIS: return "POR_QUOVADIS";
-            case POR_ERGOSUM: return "POR_ERGOSUM";
-            case POR_COMBINED: return "POR_COMBINED";
-            case POR_FTN: return "POR_FTN";
+            case PortionType::Field: return "PortionType::Field";
+            case PortionType::Hidden: return "PortionType::Hidden";
+            case PortionType::QuoVadis: return "PortionType::QuoVadis";
+            case PortionType::ErgoSum: return "PortionType::ErgoSum";
+            case PortionType::Combined: return "PortionType::Combined";
+            case PortionType::Footnote: return "PortionType::Footnote";
 
-            case POR_FTNNUM: return "POR_FTNNUM";
-            case POR_NUMBER: return "POR_NUMBER";
-            case POR_BULLET: return "POR_BULLET";
-            case POR_GRFNUM: return "POR_GRFNUM";
+            case PortionType::FootnoteNum: return "PortionType::FootnoteNum";
+            case PortionType::Number: return "PortionType::Number";
+            case PortionType::Bullet: return "PortionType::Bullet";
+            case PortionType::GrfNum: return "PortionType::GrfNum";
 
-            case POR_GLUE: return "POR_GLUE";
+            case PortionType::Glue: return "PortionType::Glue";
 
-            case POR_MARGIN: return "POR_MARGIN";
+            case PortionType::Margin: return "PortionType::Margin";
 
-            case POR_FIX: return "POR_FIX";
-            case POR_FLY: return "POR_FLY";
+            case PortionType::Fix: return "PortionType::Fix";
+            case PortionType::Fly: return "PortionType::Fly";
 
-            case POR_TAB: return "POR_TAB";
+            case PortionType::Table: return "PortionType::Table";
 
-            case POR_TABRIGHT: return "POR_TABRIGHT";
-            case POR_TABCENTER: return "POR_TABCENTER";
-            case POR_TABDECIMAL: return "POR_TABDECIMAL";
+            case PortionType::TabRight: return "PortionType::TabRight";
+            case PortionType::TabCenter: return "PortionType::TabCenter";
+            case PortionType::TabDecimal: return "PortionType::TabDecimal";
 
-            case POR_TABLEFT: return "POR_TABLEFT";
+            case PortionType::TabLeft: return "PortionType::TabLeft";
             default:
                 return "Unknown";
         }
@@ -118,7 +118,7 @@ class XmlPortionDumper:public SwPortionHandler
                 text which is painted on-screen
       */
     virtual void Text( TextFrameIndex nLength,
-                       sal_uInt16 nType,
+                       PortionType nType,
                        sal_Int32 nHeight,
                        sal_Int32 nWidth) override
     {
@@ -154,7 +154,7 @@ class XmlPortionDumper:public SwPortionHandler
       */
     virtual void Special( TextFrameIndex nLength,
                           const OUString & rText,
-                          sal_uInt16 nType,
+                          PortionType nType,
                           sal_Int32 nHeight,
                           sal_Int32 nWidth,
                           const SwFont* pFont ) override

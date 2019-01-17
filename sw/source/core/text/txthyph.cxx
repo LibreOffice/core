@@ -92,8 +92,8 @@ bool SwTextFrame::Hyphenate(SwInterHyphInfoTextFrame & rHyphInf)
             SwLinePortion *pPor = aLine.GetCurr()->GetFirstPortion();
             while( pPor->GetNextPortion() )
                 pPor = pPor->GetNextPortion();
-            if( pPor->GetWhichPor() == POR_SOFTHYPH ||
-                pPor->GetWhichPor() == POR_SOFTHYPHSTR )
+            if( pPor->GetWhichPor() == PortionType::SoftHyphen ||
+                pPor->GetWhichPor() == PortionType::SoftHyphenStr )
                 aLine.Next();
         }
 
@@ -394,7 +394,7 @@ SwSoftHyphPortion::SwSoftHyphPortion() :
     bExpand(false), nViewWidth(0)
 {
     SetLen(TextFrameIndex(1));
-    SetWhichPor( POR_SOFTHYPH );
+    SetWhichPor( PortionType::SoftHyphen );
 }
 
 sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
@@ -426,7 +426,7 @@ void SwSoftHyphPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
     {
-        rInf.DrawViewOpt( *this, POR_SOFTHYPH );
+        rInf.DrawViewOpt( *this, PortionType::SoftHyphen );
         SwExpandPortion::Paint( rInf );
     }
 }
@@ -550,8 +550,8 @@ bool SwSoftHyphPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText 
 
 void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    const sal_uInt16 nWhich = ! Width() ?
-                          POR_SOFTHYPH_COMP :
+    const PortionType nWhich = ! Width() ?
+                          PortionType::SoftHyphenComp :
                           GetWhichPor();
     rPH.Special( GetLen(), OUString('-'), nWhich );
 }
@@ -560,7 +560,7 @@ void SwSoftHyphStrPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     // Bug or feature?:
     // {Zu}{k-}{ker}, {k-} will be gray instead of {-}
-    rInf.DrawViewOpt( *this, POR_SOFTHYPH );
+    rInf.DrawViewOpt( *this, PortionType::SoftHyphen );
     SwHyphStrPortion::Paint( rInf );
 }
 
@@ -568,7 +568,7 @@ SwSoftHyphStrPortion::SwSoftHyphStrPortion( const OUString &rStr )
     : SwHyphStrPortion( rStr )
 {
     SetLen(TextFrameIndex(1));
-    SetWhichPor( POR_SOFTHYPHSTR );
+    SetWhichPor( PortionType::SoftHyphenStr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

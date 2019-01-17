@@ -82,7 +82,7 @@ SwFieldPortion::SwFieldPortion( const OUString &rExpand, std::unique_ptr<SwFont>
     , m_bNoLength( false )
     , m_nAttrFieldType(0)
 {
-    SetWhichPor( POR_FLD );
+    SetWhichPor( PortionType::Field );
 }
 
 SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
@@ -106,7 +106,7 @@ SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
     if ( rField.HasFont() )
         m_pFont.reset( new SwFont( *rField.GetFont() ) );
 
-    SetWhichPor( POR_FLD );
+    SetWhichPor( PortionType::Field );
 }
 
 SwFieldPortion::~SwFieldPortion()
@@ -432,7 +432,7 @@ void SwFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
     if( Width() && ( !m_bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
     {
         // A very liberal use of the background
-        rInf.DrawViewOpt( *this, POR_FLD );
+        rInf.DrawViewOpt( *this, PortionType::Field );
         SwExpandPortion::Paint( rInf );
     }
 }
@@ -480,7 +480,7 @@ void SwHiddenPortion::Paint( const SwTextPaintInfo &rInf ) const
     if( Width() )
     {
         SwFontSave aSave( rInf, m_pFont.get() );
-        rInf.DrawViewOpt( *this, POR_HIDDEN );
+        rInf.DrawViewOpt( *this, PortionType::Hidden );
         SwExpandPortion::Paint( rInf );
     }
 }
@@ -502,7 +502,7 @@ SwNumberPortion::SwNumberPortion( const OUString &rExpand,
           nMinDist( nMinDst ),
           mbLabelAlignmentPosAndSpaceModeActive( bLabelAlignmentPosAndSpaceModeActive )
 {
-    SetWhichPor( POR_NUMBER );
+    SetWhichPor( PortionType::Number );
     SetLeft( bLft );
     SetHide( false );
     SetCenter( bCntr );
@@ -655,7 +655,7 @@ void SwNumberPortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         SwNumberPortion *pThis = const_cast<SwNumberPortion*>(this);
         pThis->Width( nSumWidth );
-        rInf.DrawViewOpt( *this, POR_NUMBER );
+        rInf.DrawViewOpt( *this, PortionType::Number );
         pThis->Width( nOldWidth );
     }
 
@@ -744,7 +744,7 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                        std::move(pFont), bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
 {
-    SetWhichPor( POR_BULLET );
+    SetWhichPor( PortionType::Bullet );
 }
 
 #define GRFNUM_SECURE 10
@@ -759,7 +759,7 @@ SwGrfNumPortion::SwGrfNumPortion(
                      bLabelAlignmentPosAndSpaceModeActive ),
     pBrush( new SvxBrushItem(RES_BACKGROUND) ), nId( 0 )
 {
-    SetWhichPor( POR_GRFNUM );
+    SetWhichPor( PortionType::GrfNum );
     SetAnimated( false );
     m_bReplace = false;
     if( pGrfBrush )
@@ -1063,7 +1063,7 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rText )
     , nProportion(55)
 {
     SetLen(TextFrameIndex(1));
-    SetWhichPor( POR_COMBINED );
+    SetWhichPor( PortionType::Combined );
     if( m_aExpand.getLength() > 6 )
         m_aExpand = m_aExpand.copy( 0, 6 );
 
@@ -1092,7 +1092,7 @@ void SwCombinedPortion::Paint( const SwTextPaintInfo &rInf ) const
         return;
 
     rInf.DrawBackBrush( *this );
-    rInf.DrawViewOpt( *this, POR_FLD );
+    rInf.DrawViewOpt( *this, PortionType::Field );
 
     // do we have to repaint a post it portion?
     if( rInf.OnWin() && mpNextPortion && !mpNextPortion->Width() )

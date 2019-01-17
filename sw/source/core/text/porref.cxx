@@ -27,7 +27,7 @@ void SwRefPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
     {
-        rInf.DrawViewOpt( *this, POR_REF );
+        rInf.DrawViewOpt( *this, PortionType::Ref );
         SwTextPortion::Paint( rInf );
     }
 }
@@ -37,7 +37,7 @@ SwLinePortion *SwIsoRefPortion::Compress() { return this; }
 SwIsoRefPortion::SwIsoRefPortion() : nViewWidth(0)
 {
     SetLen(TextFrameIndex(1));
-    SetWhichPor( POR_ISOREF );
+    SetWhichPor( PortionType::IsoRef );
 }
 
 sal_uInt16 SwIsoRefPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
@@ -64,7 +64,7 @@ bool SwIsoRefPortion::Format( SwTextFormatInfo &rInf )
 void SwIsoRefPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
-        rInf.DrawViewOpt( *this, POR_REF );
+        rInf.DrawViewOpt( *this, PortionType::Ref );
 }
 
 void SwIsoRefPortion::HandlePortion( SwPortionHandler& rPH ) const

@@ -72,7 +72,7 @@ SwLinePortion::SwLinePortion( ) :
     mpNextPortion( nullptr ),
     nLineLength( 0 ),
     nAscent( 0 ),
-    nWhichPor( POR_LIN ),
+    nWhichPor( PortionType::NONE ),
     m_bJoinBorderWithPrev(false),
     m_bJoinBorderWithNext(false)
 {

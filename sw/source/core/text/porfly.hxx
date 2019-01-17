@@ -34,7 +34,7 @@ class SwFlyPortion : public SwFixPortion
     sal_uInt16 nBlankWidth;
 public:
     explicit SwFlyPortion( const SwRect &rFlyRect )
-        : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( POR_FLY ); }
+        : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( PortionType::Fly ); }
     sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
     void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
