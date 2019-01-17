@@ -20,7 +20,7 @@
 #include <svtools/ctrltool.hxx>
 
 SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings)
-    : GenericDialogController(pParent, "modules/swriter/ui/watermarkdialog.ui", "WatermarkDialog")
+    : SfxDialogController(pParent, "modules/swriter/ui/watermarkdialog.ui", "WatermarkDialog")
     , m_rBindings(rBindings)
     , m_xTextInput(m_xBuilder->weld_entry("TextInput"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
