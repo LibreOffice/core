@@ -1,5 +1,3 @@
-"ScDDELinksObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScDDELinksObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScDDELinksObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScDDELinksObj";"com::sun::star::container::XElementAccess";"hasElements()"
 "ScDDELinksObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
