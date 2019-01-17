@@ -129,6 +129,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_datapilottableobj \
 	CppunitTest_sc_datapilottablesobj \
 	CppunitTest_sc_ddelinkobj \
+	CppunitTest_sc_ddelinksobj \
 	CppunitTest_sc_documentconfigurationobj \
 	CppunitTest_sc_editfieldobj_cell \
 	CppunitTest_sc_editfieldobj_header \
