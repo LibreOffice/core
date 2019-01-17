@@ -170,6 +170,7 @@ Ascii85Encoder::PutEOD ()
 void
 Ascii85Encoder::ConvertToAscii85 ()
 {
+    // Add (4 - mnByte) zero padding bytes:
     if (mnByte < 4)
         std::memset (mpByteBuffer + mnByte, 0, (4 - mnByte) * sizeof(sal_uInt8));
 
@@ -199,6 +200,8 @@ Ascii85Encoder::ConvertToAscii85 ()
         nByteValue /= 85;
         mpFileBuffer [mnOffset + 0] = (nByteValue % 85) + 33;
 
+        // Ignore the last (4 - mnByte) generated characters that correspond to the (4 - mnByte)
+        // zero padding bytes:
         mnColumn += (mnByte + 1);
         mnOffset += (mnByte + 1);
 
