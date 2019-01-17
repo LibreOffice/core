@@ -1935,6 +1935,26 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     gdk_window_set_fullscreen_mode( widget_get_window(m_pWindow), m_bSpanMonitorsWhenFullscreen
         ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR );
 
+    GtkWidget* pMenuBarContainerWidget = m_pSalMenu ? m_pSalMenu->GetMenuBarContainerWidget() : nullptr;
+    if( eType == SetType::Fullscreen )
+    {
+        if (pMenuBarContainerWidget)
+            gtk_widget_hide(pMenuBarContainerWidget);
+        if (m_bSpanMonitorsWhenFullscreen)
+            gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
+        else
+        {
+            gtk_window_fullscreen_on_monitor(GTK_WINDOW(m_pWindow), pScreen, nMonitor);
+        }
+
+    }
+    else if( eType == SetType::UnFullscreen )
+    {
+        if (pMenuBarContainerWidget)
+            gtk_widget_show(pMenuBarContainerWidget);
+        gtk_window_unfullscreen( GTK_WINDOW( m_pWindow ) );
+    }
+
     if( eType == SetType::UnFullscreen &&
         !(m_nStyle & SalFrameStyleFlags::SIZEABLE) )
         gtk_window_set_resizable( GTK_WINDOW( m_pWindow ), FALSE );
@@ -1951,25 +1971,6 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
 
     if( bVisible )
         Show( true );
-
-    GtkWidget* pMenuBarContainerWidget = m_pSalMenu ? m_pSalMenu->GetMenuBarContainerWidget() : nullptr;
-    if( eType == SetType::Fullscreen )
-    {
-        if (pMenuBarContainerWidget)
-            gtk_widget_hide(pMenuBarContainerWidget);
-        if (m_bSpanMonitorsWhenFullscreen)
-            gtk_window_fullscreen(GTK_WINDOW(m_pWindow));
-        else
-        {
-            gtk_window_fullscreen_on_monitor(GTK_WINDOW(m_pWindow), pScreen, nMonitor);
-        }
-    }
-    else if( eType == SetType::UnFullscreen )
-    {
-        if (pMenuBarContainerWidget)
-            gtk_widget_show(pMenuBarContainerWidget);
-        gtk_window_unfullscreen( GTK_WINDOW( m_pWindow ) );
-    }
 }
 
 void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
