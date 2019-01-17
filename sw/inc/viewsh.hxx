@@ -183,6 +183,7 @@ protected:
     static vcl::DeleteOnDeinit< VclPtr<vcl::Window> > mpCareWindow;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
+    tools::Rectangle        maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
     rtl::Reference<SwDoc>   mxDoc;          ///< The document; never 0.
 
     sal_uInt16 mnStartAction; ///< != 0 if at least one Action is active.
@@ -259,6 +260,10 @@ public:
     void EnableSmooth( bool b ) { mbEnableSmooth = b; }
 
     const SwRect& VisArea() const;
+
+    /// The visible area in the client (set by setClientVisibleArea).
+    const tools::Rectangle getLOKVisibleArea() const { return maLOKVisibleArea; }
+    void setLOKVisibleArea(const tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
 
     // If necessary scroll until passed Rect is situated in visible sector.
     void MakeVisible( const SwRect & );
