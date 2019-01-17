@@ -24,7 +24,6 @@
 #include <sal/types.h>
 
 #include <osl/thread.hxx>
-#include <osl/time.h>
 
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
@@ -51,28 +50,6 @@ struct Gregorian : public rtl::StaticWithInit<OUString, Gregorian> {
         return OUString( CONST_TEST_STRING );
     }
 };
-}
-
-namespace ThreadHelper
-{
-    // typedef enum {
-    //     QUIET=1,
-    //     VERBOSE
-    // } eSleepVerboseMode;
-
-    static void thread_sleep_tenth_sec(sal_Int32 _nTenthSec/*, eSleepVerboseMode nVerbose = VERBOSE*/)
-    {
-        // if (nVerbose == VERBOSE)
-        // {
-        //     printf("wait %d tenth seconds. ", _nTenthSec );
-        //     fflush(stdout);
-        // }
-        osl::Thread::wait(std::chrono::milliseconds(_nTenthSec * 100));
-        // if (nVerbose == VERBOSE)
-        // {
-        //     printf("done\n");
-        // }
-    }
 }
 
 /** Simple thread for testing Thread-create.
@@ -104,7 +81,7 @@ protected:
     */
     void SAL_CALL run() override
         {
-            while(schedule())
+            for (int i = 0; i != 5; ++i)
             {
                 OUString aStr = Gregorian::get();
                 if (aStr == m_sConstStr)
@@ -117,7 +94,6 @@ protected:
                     osl::MutexGuard g(m_mutex);
                     m_nFails++;
                 }
-                ThreadHelper::thread_sleep_tenth_sec(1);
             }
         }
 
@@ -171,11 +147,6 @@ namespace rtl_DoubleLocking
                 pThread->create();
                 p2Thread->create();
 
-                ThreadHelper::thread_sleep_tenth_sec(5);
-
-                pThread->terminate();
-                p2Thread->terminate();
-
                 pThread->join();
                 p2Thread->join();
 
@@ -196,10 +167,8 @@ namespace rtl_DoubleLocking
                 delete pThread;
                 delete p2Thread;
 
-                CPPUNIT_ASSERT_MESSAGE(
-                    "getValue() failed, wrong value expected.",
-                    nValueOK != 0
-                    );
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nValueOK);
+                CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nValueOK2);
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nValueFails);
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nValueFails2);
             }
