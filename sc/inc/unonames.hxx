@@ -646,6 +646,8 @@
 #define SC_UNONAME_RENDERDEV        "RenderDevice"
 #define SC_UNONAME_SOURCERANGE      "SourceRange"
 #define SC_UNONAME_INC_NP_AREA      "PageIncludesNonprintableArea"
+#define SC_UNONAME_CALCPAGESIZE     "CalcPageContentSize"
+#define SC_UNONAME_CALCPAGEPOS      "CalcPagePos"
 
 // CellValueBinding
 #define SC_UNONAME_BOUNDCELL        "BoundCell"
