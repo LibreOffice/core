@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_bdaa8f16",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-17T08:15:43Z",
+      "side": 1,
+      "message": "Please avoid multiple newlines between functions.",
+      "revId": "1113d1a614fd07f59c9fef01da851af9f3de43ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_9da7d350",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-17T08:15:43Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "1113d1a614fd07f59c9fef01da851af9f3de43ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f485f77_5d671b27",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-17T08:15:43Z",
+      "side": 1,
+      "message": "I would extract this to a new member function, so you can do early return instead of the chain of many nested ifs.",
+      "revId": "1113d1a614fd07f59c9fef01da851af9f3de43ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
