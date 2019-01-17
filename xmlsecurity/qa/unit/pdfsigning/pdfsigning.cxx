@@ -38,6 +38,7 @@ char const DATA_DIRECTORY[] = "/xmlsecurity/qa/unit/pdfsigning/data/";
 /// Testsuite for the PDF signing feature.
 class PDFSigningTest : public test::BootstrapFixture
 {
+protected:
     uno::Reference<uno::XComponentContext> mxComponentContext;
 
     /**
@@ -55,54 +56,6 @@ class PDFSigningTest : public test::BootstrapFixture
 public:
     PDFSigningTest();
     void setUp() override;
-
-    /// Test adding a new signature to a previously unsigned file.
-    void testPDFAdd();
-    /// Test signing a previously unsigned file twice.
-    void testPDFAdd2();
-    /// Test removing a signature from a previously signed file.
-    void testPDFRemove();
-    /// Test removing all signatures from a previously multi-signed file.
-    void testPDFRemoveAll();
-    /// Test a PDF 1.4 document, signed by Adobe.
-    void testPDF14Adobe();
-    /// Test a PDF 1.6 document, signed by Adobe.
-    void testPDF16Adobe();
-    /// Test adding a signature to a PDF 1.6 document.
-    void testPDF16Add();
-    /// Test a PDF 1.4 document, signed by LO on Windows.
-    void testPDF14LOWin();
-    /// Test a PAdES document, signed by LO on Linux.
-    void testPDFPAdESGood();
-    /// Test a valid signature that does not cover the whole file.
-    void testPartial();
-    /// Test writing a PAdES signature.
-    void testSigningCertificateAttribute();
-    /// Test that we accept files which are supposed to be good.
-    void testGood();
-    /// Test that we don't crash / loop while tokenizing these files.
-    void testTokenize();
-    /// Test handling of unknown SubFilter values.
-    void testUnknownSubFilter();
-    void testTdf107782();
-
-    CPPUNIT_TEST_SUITE(PDFSigningTest);
-    CPPUNIT_TEST(testPDFAdd);
-    CPPUNIT_TEST(testPDFAdd2);
-    CPPUNIT_TEST(testPDFRemove);
-    CPPUNIT_TEST(testPDFRemoveAll);
-    CPPUNIT_TEST(testPDF14Adobe);
-    CPPUNIT_TEST(testPDF16Adobe);
-    CPPUNIT_TEST(testPDF16Add);
-    CPPUNIT_TEST(testPDF14LOWin);
-    CPPUNIT_TEST(testPDFPAdESGood);
-    CPPUNIT_TEST(testPartial);
-    CPPUNIT_TEST(testSigningCertificateAttribute);
-    CPPUNIT_TEST(testGood);
-    CPPUNIT_TEST(testTokenize);
-    CPPUNIT_TEST(testUnknownSubFilter);
-    CPPUNIT_TEST(testTdf107782);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 PDFSigningTest::PDFSigningTest() {}
@@ -229,7 +182,8 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
     return bSignSuccessful;
 }
 
-void PDFSigningTest::testPDFAdd()
+/// Test adding a new signature to a previously unsigned file.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd)
 {
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "no.pdf";
@@ -251,7 +205,8 @@ void PDFSigningTest::testPDFAdd()
     }
 }
 
-void PDFSigningTest::testPDFAdd2()
+/// Test signing a previously unsigned file twice.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd2)
 {
     // Sign.
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
@@ -270,7 +225,8 @@ void PDFSigningTest::testPDFAdd2()
         sign(aInURL, aOutURL, 1);
 }
 
-void PDFSigningTest::testPDFRemove()
+/// Test removing a signature from a previously signed file.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemove)
 {
     // Make sure that good.pdf has 1 valid signature.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
@@ -306,7 +262,8 @@ void PDFSigningTest::testPDFRemove()
     verify(aOutURL, 0, /*rExpectedSubFilter=*/OString());
 }
 
-void PDFSigningTest::testPDFRemoveAll()
+/// Test removing all signatures from a previously multi-signed file.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemoveAll)
 {
     // Make sure that good2.pdf has 2 valid signatures.  Unlike in
     // testPDFRemove(), here intentionally test DocumentSignatureManager and
@@ -345,7 +302,7 @@ void PDFSigningTest::testPDFRemoveAll()
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
 }
 
-void PDFSigningTest::testTdf107782()
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTdf107782)
 {
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -367,7 +324,8 @@ void PDFSigningTest::testTdf107782()
         aManager.getSecurityEnvironment());
 }
 
-void PDFSigningTest::testPDF14Adobe()
+/// Test a PDF 1.4 document, signed by Adobe.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF14Adobe)
 {
     // Two signatures, first is SHA1, the second is SHA256.
     // This was 0, as we failed to find the Annots key's value when it was a
@@ -379,7 +337,8 @@ void PDFSigningTest::testPDF14Adobe()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aInfos[1].stDateTime.Year);
 }
 
-void PDFSigningTest::testPDF16Adobe()
+/// Test a PDF 1.6 document, signed by Adobe.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF16Adobe)
 {
     // Contains a cross-reference stream, object streams and a compressed
     // stream with a predictor. And a valid signature.
@@ -389,7 +348,8 @@ void PDFSigningTest::testPDF16Adobe()
            /*rExpectedSubFilter=*/OString());
 }
 
-void PDFSigningTest::testPDF16Add()
+/// Test adding a signature to a PDF 1.6 document.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF16Add)
 {
     // Contains PDF 1.6 features, make sure we can add a signature using that
     // markup correctly.
@@ -410,7 +370,8 @@ void PDFSigningTest::testPDF16Add()
         sign(aInURL, aOutURL, 2);
 }
 
-void PDFSigningTest::testPDF14LOWin()
+/// Test a PDF 1.4 document, signed by LO on Windows.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF14LOWin)
 {
     // mscrypto used SEC_OID_PKCS1_SHA1_WITH_RSA_ENCRYPTION as a digest
     // algorithm when it meant SEC_OID_SHA1, make sure we tolerate that on all
@@ -420,13 +381,15 @@ void PDFSigningTest::testPDF14LOWin()
            /*rExpectedSubFilter=*/OString());
 }
 
-void PDFSigningTest::testPDFPAdESGood()
+/// Test a PAdES document, signed by LO on Linux.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFPAdESGood)
 {
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-pades.pdf", 1,
            "ETSI.CAdES.detached");
 }
 
-void PDFSigningTest::testPartial()
+/// Test a valid signature that does not cover the whole file.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPartial)
 {
     std::vector<SignatureInformation> aInfos
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.pdf", 1,
@@ -436,7 +399,8 @@ void PDFSigningTest::testPartial()
     CPPUNIT_ASSERT(rInformation.bPartialDocumentSignature);
 }
 
-void PDFSigningTest::testSigningCertificateAttribute()
+/// Test writing a PAdES signature.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testSigningCertificateAttribute)
 {
     // Create a new signature.
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
@@ -456,7 +420,8 @@ void PDFSigningTest::testSigningCertificateAttribute()
     CPPUNIT_ASSERT(rInformation.bHasSigningCertificate);
 }
 
-void PDFSigningTest::testGood()
+/// Test that we accept files which are supposed to be good.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGood)
 {
     const std::initializer_list<OUStringLiteral> aNames = {
         // We failed to determine if this is good or bad.
@@ -477,7 +442,8 @@ void PDFSigningTest::testGood()
     }
 }
 
-void PDFSigningTest::testTokenize()
+/// Test that we don't crash / loop while tokenizing these files.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTokenize)
 {
     const std::initializer_list<OUStringLiteral> aNames = {
         // We looped on this broken input.
@@ -508,7 +474,8 @@ void PDFSigningTest::testTokenize()
     }
 }
 
-void PDFSigningTest::testUnknownSubFilter()
+/// Test handling of unknown SubFilter values.
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testUnknownSubFilter)
 {
     // Tokenize the bugdoc.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
@@ -526,8 +493,6 @@ void PDFSigningTest::testUnknownSubFilter()
     std::vector<SignatureInformation>& rInformations = aManager.maCurrentSignatureInformations;
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), rInformations.size());
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(PDFSigningTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
