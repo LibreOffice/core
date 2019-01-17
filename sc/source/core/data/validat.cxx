@@ -774,7 +774,7 @@ bool ScValidationData::GetSelectionFromFormula(
         for( nCol = 0; nCol < nCols ; nCol++ )
         {
             ScTokenArray         aCondTokArr;
-            ScTypedStrData*        pEntry = nullptr;
+            std::unique_ptr<ScTypedStrData> pEntry;
             OUString               aValStr;
             ScMatrixValue nMatVal = pValues->Get( nCol, nRow);
 
@@ -794,7 +794,7 @@ bool ScValidationData::GetSelectionFromFormula(
                 }
 
                 if( nullptr != pStrings )
-                    pEntry = new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard);
+                    pEntry.reset(new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard));
 
                 if (!rCell.isEmpty() && rMatch < 0)
                     aCondTokArr.AddString(rSPool.intern(aValStr));
@@ -831,7 +831,7 @@ bool ScValidationData::GetSelectionFromFormula(
                     aCondTokArr.AddDouble( nMatVal.fVal );
                 }
                 if( nullptr != pStrings )
-                    pEntry = new ScTypedStrData( aValStr, nMatVal.fVal, ScTypedStrData::Value);
+                    pEntry.reset(new ScTypedStrData( aValStr, nMatVal.fVal, ScTypedStrData::Value));
             }
 
             if (rMatch < 0 && !rCell.isEmpty() && IsEqualToTokenArray(rCell, rPos, aCondTokArr))
@@ -842,10 +842,9 @@ bool ScValidationData::GetSelectionFromFormula(
                     return true;
             }
 
-            if( nullptr != pEntry )
+            if( pEntry )
             {
                 pStrings->push_back(*pEntry);
-                delete pEntry;
                 n++;
             }
         }

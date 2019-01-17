@@ -623,7 +623,7 @@ void ScEditEngineDefaulter::RepeatDefaults()
 
 void ScEditEngineDefaulter::RemoveParaAttribs()
 {
-    SfxItemSet* pCharItems = nullptr;
+    std::unique_ptr<SfxItemSet> pCharItems;
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
@@ -641,7 +641,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
                 if ( !pDefaults || *pParaItem != pDefaults->Get(nWhich) )
                 {
                     if (!pCharItems)
-                        pCharItems = new SfxItemSet( GetEmptyItemSet() );
+                        pCharItems.reset(new SfxItemSet( GetEmptyItemSet() ));
                     pCharItems->Put( *pParaItem );
                 }
             }
@@ -679,7 +679,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
                 nStart = nEnd;
             }
 
-            DELETEZ( pCharItems );
+            pCharItems.reset();
         }
 
         if ( rParaAttribs.Count() )

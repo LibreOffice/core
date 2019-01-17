@@ -1954,10 +1954,10 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
         ScAutoFormatData* pData = rFormat.findByIndex(nFormatNo);
         if (pData)
         {
-            ScPatternAttr* pPatternAttrs[16];
+            std::unique_ptr<ScPatternAttr> pPatternAttrs[16];
             for (sal_uInt8 i = 0; i < 16; ++i)
             {
-                pPatternAttrs[i] = new ScPatternAttr(pDocument->GetPool());
+                pPatternAttrs[i].reset(new ScPatternAttr(pDocument->GetPool()));
                 pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), *pDocument);
             }
 
@@ -2077,9 +2077,6 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
                     } // for nCol
                 } // if not equal Column
             } // if not all equal
-
-            for (ScPatternAttr* pPatternAttr : pPatternAttrs)
-                delete pPatternAttr;
         } // if AutoFormatData != NULL
     } // if ValidColRow
 }
