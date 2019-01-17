@@ -2122,12 +2122,11 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     //ContentRects to Start- and EndFrames.
     SwRect aStRect, aEndRect;
     pStartFrame->GetCharRect( aStRect, *pStartPos, &aTmpState );
-    Sw2LinesPos *pSt2Pos = aTmpState.m_p2Lines;
-    aTmpState.m_p2Lines = nullptr;
+    std::unique_ptr<Sw2LinesPos> pSt2Pos = std::move(aTmpState.m_p2Lines);
     aTmpState.m_nCursorBidiLevel = pEndFrame->IsRightToLeft() ? 1 : 0;
 
     pEndFrame->GetCharRect( aEndRect, *pEndPos, &aTmpState );
-    Sw2LinesPos *pEnd2Pos = aTmpState.m_p2Lines;
+    std::unique_ptr<Sw2LinesPos> pEnd2Pos = std::move(aTmpState.m_p2Lines);
 
     SwRect aStFrame ( pStartFrame->UnionFrame( true ) );
     aStFrame.Intersection( pStartFrame->GetPaintArea() );
@@ -2548,8 +2547,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     }
 
     aRegion.Invert();
-    delete pSt2Pos;
-    delete pEnd2Pos;
+    pSt2Pos.reset();
+    pEnd2Pos.reset();
 
     // Cut out Flys during loop. We don't cut out Flys when:
     // - the Lower is StartFrame/EndFrame (FlyInCnt and all other Flys which again

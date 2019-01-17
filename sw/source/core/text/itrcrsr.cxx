@@ -670,10 +670,10 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
 
                         if( pCMS && pCMS->m_b2Lines )
                         {
-                            const bool bRecursion = pCMS->m_p2Lines;
+                            const bool bRecursion (pCMS->m_p2Lines);
                             if ( !bRecursion )
                             {
-                                pCMS->m_p2Lines = new Sw2LinesPos;
+                                pCMS->m_p2Lines.reset(new Sw2LinesPos);
                                 pCMS->m_p2Lines->aLine = SwRect(aCharPos, aCharSize);
                             }
 
