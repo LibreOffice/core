@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f485f77_b89dfd67",
+        "filename": "sw/source/core/inc/txttypes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2019-01-17T13:02:14Z",
+      "side": 1,
+      "message": "Make sure \"exp\" is really \"expand\" and not \"expression\", I\u0027m not sure.",
+      "revId": "e7978f97cb84e2ba1aa3eb7a8f04141918b10ab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
