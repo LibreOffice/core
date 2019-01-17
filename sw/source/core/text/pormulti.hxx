@@ -106,7 +106,7 @@ protected:
         , eRubyPosition( RubyPosition::ABOVE )
         , nDirection(0)
     {
-        SetWhichPor(POR_MULTI);
+        SetWhichPor(PortionType::Multi);
         SetLen(nEnd);
     }
     void SetDouble() { bDouble = true; }

@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 using i18n::Boundary;
 
 // 'portion type' for terminating portions
-#define POR_TERMINATE 0
+#define POR_TERMINATE PortionType::NONE
 
 // portion attributes
 #define PORATTR_SPECIAL     1
@@ -109,7 +109,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 }
 
 void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
-        sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
+        PortionType nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
 {
     OSL_ENSURE((m_nViewPosition + nLength) <= TextFrameIndex(m_pTextFrame->GetText().getLength()),
                 "portion exceeds model string!" );
@@ -134,7 +134,7 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
 }
 
 void SwAccessiblePortionData::Special(
-    TextFrameIndex const nLength, const OUString& rText, sal_uInt16 nType,
+    TextFrameIndex const nLength, const OUString& rText, PortionType nType,
     sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/, const SwFont* /*pFont*/)
 {
     OSL_ENSURE(m_nViewPosition >= TextFrameIndex(0), "illegal position");
@@ -148,14 +148,14 @@ void SwAccessiblePortionData::Special(
     OUString sDisplay;
     switch( nType )
     {
-        case POR_POSTITS:
-        case POR_FLYCNT:
+        case PortionType::PostIts:
+        case PortionType::FlyCnt:
             sDisplay = OUString(u'\xfffc');
             break;
-        case POR_FLD:
-        case POR_HIDDEN:
-        case POR_COMBINED:
-        case POR_ISOREF:
+        case PortionType::Field:
+        case PortionType::Hidden:
+        case PortionType::Combined:
+        case PortionType::IsoRef:
             // When the field content is empty, input a special character.
             if (rText.isEmpty())
                 sDisplay = OUString(u'\xfffc');
@@ -164,9 +164,9 @@ void SwAccessiblePortionData::Special(
             m_aFieldPosition.push_back(m_aBuffer.getLength());
             m_aFieldPosition.push_back(m_aBuffer.getLength() + rText.getLength());
             break;
-        case POR_FTNNUM:
+        case PortionType::FootnoteNum:
             break;
-        case POR_FTN:
+        case PortionType::Footnote:
             {
                 sDisplay = rText;
                 sal_Int32 nStart=m_aBuffer.getLength();
@@ -175,16 +175,16 @@ void SwAccessiblePortionData::Special(
                 break;
             }
             break;
-        case POR_NUMBER:
-        case POR_BULLET:
+        case PortionType::Number:
+        case PortionType::Bullet:
             sDisplay = rText + " ";
             break;
         // There should probably be some special treatment to graphical bullets
-        case POR_GRFNUM:
+        case PortionType::GrfNum:
             break;
         // #i111768# - apply patch from kstribley:
         // Include the control characters.
-        case POR_CONTROLCHAR:
+        case PortionType::ControlChar:
             sDisplay = rText + OUStringLiteral1(m_pTextFrame->GetText()[sal_Int32(m_nViewPosition)]);
             break;
         default:
@@ -263,30 +263,30 @@ bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo ) const
     return IsPortionAttrSet(nPortionNo, PORATTR_SPECIAL);
 }
 
-bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
+bool SwAccessiblePortionData::IsGrayPortionType( PortionType nType ) const
 {
     // gray portions?
     // Compare with: inftxt.cxx, SwTextPaintInfo::DrawViewOpt(...)
     bool bGray = false;
     switch( nType )
     {
-        case POR_FTN:
-        case POR_ISOREF:
-        case POR_REF:
-        case POR_QUOVADIS:
-        case POR_NUMBER:
-        case POR_FLD:
-        case POR_URL:
-        case POR_INPUTFLD:
-        case POR_ISOTOX:
-        case POR_TOX:
-        case POR_HIDDEN:
+        case PortionType::Footnote:
+        case PortionType::IsoRef:
+        case PortionType::Ref:
+        case PortionType::QuoVadis:
+        case PortionType::Number:
+        case PortionType::Field:
+        case PortionType::Url:
+        case PortionType::InputField:
+        case PortionType::IsoTox:
+        case PortionType::Tox:
+        case PortionType::Hidden:
             bGray = !m_pViewOptions->IsPagePreview() &&
                 !m_pViewOptions->IsReadonly() && SwViewOption::IsFieldShadings();
             break;
-        case POR_TAB:       bGray = m_pViewOptions->IsTab();          break;
-        case POR_SOFTHYPH:  bGray = m_pViewOptions->IsSoftHyph();     break;
-        case POR_BLANK:     bGray = m_pViewOptions->IsHardBlank();    break;
+        case PortionType::Table:       bGray = m_pViewOptions->IsTab();          break;
+        case PortionType::SoftHyphen:  bGray = m_pViewOptions->IsSoftHyph();     break;
+        case PortionType::Blank:     bGray = m_pViewOptions->IsHardBlank();    break;
         default:
             break; // bGray is false
     }

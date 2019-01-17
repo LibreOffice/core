@@ -27,7 +27,7 @@ void SwToxPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
     {
-        rInf.DrawViewOpt( *this, POR_TOX );
+        rInf.DrawViewOpt( *this, PortionType::Tox );
         SwTextPortion::Paint( rInf );
     }
 }
@@ -37,7 +37,7 @@ SwLinePortion *SwIsoToxPortion::Compress() { return this; }
 SwIsoToxPortion::SwIsoToxPortion() : nViewWidth(0)
 {
     SetLen(TextFrameIndex(1));
-    SetWhichPor( POR_ISOTOX );
+    SetWhichPor( PortionType::IsoTox );
 }
 
 sal_uInt16 SwIsoToxPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
@@ -66,7 +66,7 @@ bool SwIsoToxPortion::Format( SwTextFormatInfo &rInf )
 void SwIsoToxPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
-        rInf.DrawViewOpt( *this, POR_TOX );
+        rInf.DrawViewOpt( *this, PortionType::Tox );
 }
 
 void SwIsoToxPortion::HandlePortion( SwPortionHandler& rPH ) const

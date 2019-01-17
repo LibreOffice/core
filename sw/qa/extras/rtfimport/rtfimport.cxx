@@ -350,7 +350,8 @@ DECLARE_RTFIMPORT_TEST(testTdf112211_2, "tdf112211-2.rtf")
 {
     // Spacing between the bullet and the actual text was too large.
     // This is now around 269, large old value was 629.
-    int nWidth = parseDump("/root/page/body/txt[2]/Text[@nType='POR_TABLEFT']", "nWidth").toInt32();
+    int nWidth = parseDump("/root/page/body/txt[2]/Text[@nType='PortionType::TabLeft']", "nWidth")
+                     .toInt32();
     CPPUNIT_ASSERT_LESS(300, nWidth);
 }
 

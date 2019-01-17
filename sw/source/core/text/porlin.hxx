@@ -60,7 +60,7 @@ protected:
 
     SwLinePortion();
 private:
-    sal_uInt16 nWhichPor;       // Who's who?
+    PortionType nWhichPor;       // Who's who?
     bool m_bJoinBorderWithPrev;
     bool m_bJoinBorderWithNext;
 
@@ -93,49 +93,49 @@ public:
     // Returns 0, if there's no payload
     virtual SwLinePortion *Compress();
 
-    void SetWhichPor( const sal_uInt16 nNew )    { nWhichPor = nNew; }
-    sal_uInt16 GetWhichPor( ) const        { return nWhichPor; }
+    void SetWhichPor( const PortionType nNew )    { nWhichPor = nNew; }
+    PortionType GetWhichPor( ) const        { return nWhichPor; }
 
 // Group queries
-    bool InTextGrp() const { return (nWhichPor & PORGRP_TXT) != 0; }
-    bool InGlueGrp() const { return (nWhichPor & PORGRP_GLUE) != 0; }
-    bool InTabGrp() const { return (nWhichPor & PORGRP_TAB) != 0; }
-    bool InHyphGrp() const { return (nWhichPor & PORGRP_HYPH) != 0; }
-    bool InNumberGrp() const { return (nWhichPor & PORGRP_NUMBER) != 0; }
-    bool InFixGrp() const { return (nWhichPor & PORGRP_FIX) != 0; }
-    bool InFieldGrp() const { return (nWhichPor & PORGRP_FLD) != 0; }
-    bool InToxRefGrp() const { return (nWhichPor & PORGRP_TOXREF) != 0; }
-    bool InToxRefOrFieldGrp() const { return (nWhichPor & ( PORGRP_FLD | PORGRP_TOXREF )) != 0; }
-    bool InExpGrp() const { return (nWhichPor & PORGRP_EXP) != 0; }
-    bool InFixMargGrp() const { return (nWhichPor & PORGRP_FIXMARG) != 0; }
+    bool InTextGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_TXT) != 0; }
+    bool InGlueGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_GLUE) != 0; }
+    bool InTabGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_TAB) != 0; }
+    bool InHyphGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_HYPH) != 0; }
+    bool InNumberGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_NUMBER) != 0; }
+    bool InFixGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_FIX) != 0; }
+    bool InFieldGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_FLD) != 0; }
+    bool InToxRefGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_TOXREF) != 0; }
+    bool InToxRefOrFieldGrp() const { return (sal_uInt16(nWhichPor) & ( PORGRP_FLD | PORGRP_TOXREF )) != 0; }
+    bool InExpGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_EXP) != 0; }
+    bool InFixMargGrp() const { return (sal_uInt16(nWhichPor) & PORGRP_FIXMARG) != 0; }
     bool InSpaceGrp() const { return InTextGrp() || IsMultiPortion(); }
 // Individual queries
-    bool IsGrfNumPortion() const { return nWhichPor == POR_GRFNUM; }
-    bool IsFlyCntPortion() const { return nWhichPor == POR_FLYCNT; }
-    bool IsBlankPortion() const { return nWhichPor == POR_BLANK; }
-    bool IsBreakPortion() const { return nWhichPor == POR_BRK; }
-    bool IsErgoSumPortion() const { return nWhichPor == POR_ERGOSUM; }
-    bool IsQuoVadisPortion() const { return nWhichPor == POR_QUOVADIS; }
-    bool IsTabLeftPortion() const { return nWhichPor == POR_TABLEFT; }
-    bool IsTabRightPortion() const { return nWhichPor == POR_TABRIGHT; }
-    bool IsFootnoteNumPortion() const { return nWhichPor == POR_FTNNUM; }
-    bool IsFootnotePortion() const { return nWhichPor == POR_FTN; }
-    bool IsDropPortion() const { return nWhichPor == POR_DROP; }
-    bool IsLayPortion() const { return nWhichPor == POR_LAY; }
-    bool IsParaPortion() const { return nWhichPor == POR_PARA; }
-    bool IsMarginPortion() const { return nWhichPor == POR_MARGIN; }
-    bool IsFlyPortion() const { return nWhichPor == POR_FLY; }
-    bool IsHolePortion() const { return nWhichPor == POR_HOLE; }
-    bool IsSoftHyphPortion() const { return nWhichPor == POR_SOFTHYPH; }
-    bool IsPostItsPortion() const { return nWhichPor == POR_POSTITS; }
-    bool IsCombinedPortion() const { return nWhichPor == POR_COMBINED; }
-    bool IsTextPortion() const { return nWhichPor == POR_TXT; }
-    bool IsHangingPortion() const { return nWhichPor == POR_HNG; }
-    bool IsKernPortion() const { return nWhichPor == POR_KERN; }
-    bool IsArrowPortion() const { return nWhichPor == POR_ARROW; }
-    bool IsMultiPortion() const { return nWhichPor == POR_MULTI; }
-    bool IsNumberPortion() const { return nWhichPor == POR_NUMBER; } // #i23726#
-    bool IsControlCharPortion() const { return nWhichPor == POR_CONTROLCHAR; }
+    bool IsGrfNumPortion() const { return nWhichPor == PortionType::GrfNum; }
+    bool IsFlyCntPortion() const { return nWhichPor == PortionType::FlyCnt; }
+    bool IsBlankPortion() const { return nWhichPor == PortionType::Blank; }
+    bool IsBreakPortion() const { return nWhichPor == PortionType::Break; }
+    bool IsErgoSumPortion() const { return nWhichPor == PortionType::ErgoSum; }
+    bool IsQuoVadisPortion() const { return nWhichPor == PortionType::QuoVadis; }
+    bool IsTabLeftPortion() const { return nWhichPor == PortionType::TabLeft; }
+    bool IsTabRightPortion() const { return nWhichPor == PortionType::TabRight; }
+    bool IsFootnoteNumPortion() const { return nWhichPor == PortionType::FootnoteNum; }
+    bool IsFootnotePortion() const { return nWhichPor == PortionType::Footnote; }
+    bool IsDropPortion() const { return nWhichPor == PortionType::Drop; }
+    bool IsLayPortion() const { return nWhichPor == PortionType::Lay; }
+    bool IsParaPortion() const { return nWhichPor == PortionType::Para; }
+    bool IsMarginPortion() const { return nWhichPor == PortionType::Margin; }
+    bool IsFlyPortion() const { return nWhichPor == PortionType::Fly; }
+    bool IsHolePortion() const { return nWhichPor == PortionType::Hole; }
+    bool IsSoftHyphPortion() const { return nWhichPor == PortionType::SoftHyphen; }
+    bool IsPostItsPortion() const { return nWhichPor == PortionType::PostIts; }
+    bool IsCombinedPortion() const { return nWhichPor == PortionType::Combined; }
+    bool IsTextPortion() const { return nWhichPor == PortionType::Text; }
+    bool IsHangingPortion() const { return nWhichPor == PortionType::Hanging; }
+    bool IsKernPortion() const { return nWhichPor == PortionType::Kern; }
+    bool IsArrowPortion() const { return nWhichPor == PortionType::Arrow; }
+    bool IsMultiPortion() const { return nWhichPor == PortionType::Multi; }
+    bool IsNumberPortion() const { return nWhichPor == PortionType::Number; } // #i23726#
+    bool IsControlCharPortion() const { return nWhichPor == PortionType::ControlChar; }
 
     // Positioning
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );

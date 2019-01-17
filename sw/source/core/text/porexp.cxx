@@ -195,7 +195,7 @@ bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
 void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( !bMulti ) // No gray background for multiportion brackets
-        rInf.DrawViewOpt( *this, POR_BLANK );
+        rInf.DrawViewOpt( *this, PortionType::Blank );
     SwExpandPortion::Paint( rInf );
 }
 
@@ -214,7 +214,7 @@ SwPostItsPortion::SwPostItsPortion( bool bScrpt )
     : bScript( bScrpt )
 {
     nLineLength = TextFrameIndex(1);
-    SetWhichPor( POR_POSTITS );
+    SetWhichPor( PortionType::PostIts );
 }
 
 void SwPostItsPortion::Paint( const SwTextPaintInfo &rInf ) const

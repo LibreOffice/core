@@ -1807,7 +1807,7 @@ void SwUiWriterTest::testTdf90003()
     CPPUNIT_ASSERT(pXmlDoc);
     // This was 1: an unexpected fly portion was created, resulting in too
     // large x position for the empty paragraph marker.
-    assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 0);
+    assertXPath(pXmlDoc, "//Special[@nType='PortionType::Fly']", 0);
 }
 
 void SwUiWriterTest::testTdf51741()
@@ -4208,7 +4208,7 @@ void SwUiWriterTest::testTdf87922()
 struct PortionItem
 {
     PortionItem(OUString const & sItemType, sal_Int32 nLength,
-                sal_uInt16 nTextType)
+                PortionType nTextType)
         : msItemType(sItemType)
         , mnLength(nLength)
         , mnTextType(nTextType)
@@ -4216,7 +4216,7 @@ struct PortionItem
 
     OUString msItemType;
     sal_Int32 mnLength;
-    sal_uInt16 mnTextType;
+    PortionType mnTextType;
 };
 
 class PortionHandler : public SwPortionHandler
@@ -4233,14 +4233,14 @@ class PortionHandler : public SwPortionHandler
         mPortionItems.clear();
     }
 
-    virtual void Text(TextFrameIndex nLength, sal_uInt16 nType,
+    virtual void Text(TextFrameIndex nLength, PortionType nType,
                       sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/) override
     {
         mPortionItems.emplace_back("text", sal_Int32(nLength), nType);
     }
 
     virtual void Special(TextFrameIndex nLength, const OUString & /*rText*/,
-                         sal_uInt16 nType, sal_Int32 /*nHeight*/,
+                         PortionType nType, sal_Int32 /*nHeight*/,
                          sal_Int32 /*nWidth*/, const SwFont* /*pFont*/) override
     {
         mPortionItems.emplace_back("special", sal_Int32(nLength), nType);
@@ -4248,17 +4248,17 @@ class PortionHandler : public SwPortionHandler
 
     virtual void LineBreak(sal_Int32 /*nWidth*/) override
     {
-        mPortionItems.emplace_back("line_break", 0, 0);
+        mPortionItems.emplace_back("line_break", 0, PortionType::NONE);
     }
 
     virtual void Skip(TextFrameIndex nLength) override
     {
-        mPortionItems.emplace_back("skip", sal_Int32(nLength), 0);
+        mPortionItems.emplace_back("skip", sal_Int32(nLength), PortionType::NONE);
     }
 
     virtual void Finish() override
     {
-        mPortionItems.emplace_back("finish", 0, 0);
+        mPortionItems.emplace_back("finish", 0, PortionType::NONE);
     }
 };
 
@@ -4283,7 +4283,7 @@ void SwUiWriterTest::testTdf77014()
         // Input Field - "One Two Three Four Five" = 25 chars
         CPPUNIT_ASSERT_EQUAL(OUString("text"),          aHandler.mPortionItems[0].msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(25),             aHandler.mPortionItems[0].mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD),  aHandler.mPortionItems[0].mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::InputField,   aHandler.mPortionItems[0].mnTextType);
 
         CPPUNIT_ASSERT_EQUAL(OUString("line_break"), aHandler.mPortionItems[1].msItemType);
 
@@ -4299,7 +4299,7 @@ void SwUiWriterTest::testTdf77014()
         // Input Field - "ThisIsAllOneWord" = 18 chars
         CPPUNIT_ASSERT_EQUAL(OUString("text"),         aHandler.mPortionItems[0].msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(18),            aHandler.mPortionItems[0].mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD), aHandler.mPortionItems[0].mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::InputField,  aHandler.mPortionItems[0].mnTextType);
 
         CPPUNIT_ASSERT_EQUAL(OUString("line_break"), aHandler.mPortionItems[1].msItemType);
 
@@ -4320,7 +4320,7 @@ void SwUiWriterTest::testTdf77014()
         auto& rPortionItem = aHandler.mPortionItems[0];
         CPPUNIT_ASSERT_EQUAL(OUString("text"),    rPortionItem.msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(91),       rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_TXT), rPortionItem.mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::Text,   rPortionItem.mnTextType);
 
         // NEW LINE
         rPortionItem = aHandler.mPortionItems[1];
@@ -4332,13 +4332,13 @@ void SwUiWriterTest::testTdf77014()
         rPortionItem = aHandler.mPortionItems[2];
         CPPUNIT_ASSERT_EQUAL(OUString("text"),         rPortionItem.msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(18),            rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD), rPortionItem.mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::InputField,  rPortionItem.mnTextType);
 
         // Text "."
         rPortionItem = aHandler.mPortionItems[3];
         CPPUNIT_ASSERT_EQUAL(OUString("text"),    rPortionItem.msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1),        rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_TXT), rPortionItem.mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::Text,   rPortionItem.mnTextType);
 
         // NEW LINE
         rPortionItem = aHandler.mPortionItems[4];
@@ -4361,7 +4361,7 @@ void SwUiWriterTest::testTdf77014()
             printf ("-- Type: %s length: %" SAL_PRIdINT32 " text type: %d\n",
                         rPortionItem.msItemType.toUtf8().getStr(),
                         rPortionItem.mnLength,
-                        rPortionItem.mnTextType);
+                        sal_uInt16(rPortionItem.mnTextType));
         }
 
         // Text "The purpose of this report is to summarize the results of the existing bug in the LO suite"
@@ -4369,7 +4369,7 @@ void SwUiWriterTest::testTdf77014()
         auto& rPortionItem = aHandler.mPortionItems[0];
         CPPUNIT_ASSERT_EQUAL(OUString("text"),    rPortionItem.msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(91),       rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_TXT), rPortionItem.mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::Text,   rPortionItem.mnTextType);
 
         // The input field here has more words ("One Two Three Four Five")
         // and it should break after "Two".
@@ -4377,12 +4377,12 @@ void SwUiWriterTest::testTdf77014()
         rPortionItem = aHandler.mPortionItems[1];
         CPPUNIT_ASSERT_EQUAL(OUString("text"),         rPortionItem.msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8),             rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD), rPortionItem.mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::InputField,  rPortionItem.mnTextType);
 
         rPortionItem = aHandler.mPortionItems[2];
         CPPUNIT_ASSERT_EQUAL(OUString("text"),     rPortionItem.msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1),         rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_HOLE), rPortionItem.mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::Hole,    rPortionItem.mnTextType);
 
         // NEW LINE
         rPortionItem = aHandler.mPortionItems[3];
@@ -4392,13 +4392,13 @@ void SwUiWriterTest::testTdf77014()
         rPortionItem = aHandler.mPortionItems[4];
         CPPUNIT_ASSERT_EQUAL(OUString("text"),         rPortionItem.msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(16),            rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD), rPortionItem.mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::InputField,  rPortionItem.mnTextType);
 
         // Text "."
         rPortionItem = aHandler.mPortionItems[5];
         CPPUNIT_ASSERT_EQUAL(OUString("text"),    rPortionItem.msItemType);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1),        rPortionItem.mnLength);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_TXT), rPortionItem.mnTextType);
+        CPPUNIT_ASSERT_EQUAL(PortionType::Text,   rPortionItem.mnTextType);
 
         // NEW LINE
         rPortionItem = aHandler.mPortionItems[6];
@@ -5515,16 +5515,16 @@ void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
     // Tabs should go past the margin @ ~3381
     sal_Int32 nMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
     // left tab was 3381 because it got its own full line
-    sal_Int32 nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABLEFT']", "nWidth").toInt32();
+    sal_Int32 nWidth = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabLeft']", "nWidth").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~4479", nMargin < nWidth);
     // center tab was 842
-    nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABCENTER']", "nWidth").toInt32();
+    nWidth = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabCenter']", "nWidth").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Center Tab width is ~3521", nMargin < nWidth);
     // right tab was probably the same as center tab.
-    nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABRIGHT']", "nWidth").toInt32();
+    nWidth = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabRight']", "nWidth").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Right Tab width is ~2907", sal_Int32(2500) < nWidth);
     // decimal tab was 266
-    nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABDECIMAL']", "nWidth").toInt32();
+    nWidth = getXPath(pXmlDoc, "//Text[@nType='PortionType::TabDecimal']", "nWidth").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
 }
 #endif
@@ -5559,18 +5559,18 @@ void SwUiWriterTest::testTdf107025()
     createDoc("tdf107025.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // Verify the number of characters in each line.
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]", "nLength").toInt32());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(9), getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nLength").toInt32());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nLength").toInt32());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(9), getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]", "nLength").toInt32());
 
     // Do the subsequent test only if the first line can be displayed,
     // in case that the required font does not exist.
-    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]", "nWidth").toInt32();
+    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nWidth").toInt32();
     if (!nWidth1)
         return;
 
-    CPPUNIT_ASSERT(!parseDump("(//Text[@nType='POR_TXT'])[2]", "nWidth").isEmpty());
+    CPPUNIT_ASSERT(!parseDump("(//Text[@nType='PortionType::Text'])[2]", "nWidth").isEmpty());
     // Width of the second line is expected to be 9 times of the first.
-    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]", "nWidth").toInt32();
+    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]", "nWidth").toInt32();
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9), nWidth2 / nWidth1 );
 }
@@ -5579,9 +5579,9 @@ void SwUiWriterTest::testTdf107362()
 {
     createDoc("tdf107362.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nHeight = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]" , "nHeight").toInt32();
-    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[1]" , "nWidth").toInt32();
-    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='POR_TXT'])[2]" , "nWidth").toInt32();
+    sal_Int32 nHeight = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]" , "nHeight").toInt32();
+    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]" , "nWidth").toInt32();
+    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]" , "nWidth").toInt32();
     sal_Int32 nLineWidth = getXPath(pXmlDoc, "//LineBreak" , "nWidth").toInt32();
     sal_Int32 nKernWidth = nLineWidth - nWidth1 - nWidth2;
     // Test only if fonts are available
@@ -5651,7 +5651,7 @@ void SwUiWriterTest::testTdf106736()
 {
     createDoc("tdf106736-grid.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nWidth = getXPath(pXmlDoc, "(//Text[@nType='POR_TABLEFT'])[1]", "nWidth").toInt32();
+    sal_Int32 nWidth = getXPath(pXmlDoc, "(//Text[@nType='PortionType::TabLeft'])[1]", "nWidth").toInt32();
     // In tdf106736, width of tab overflow so that it got
     // width value around 9200, expected value is around 103
     CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~103", nWidth < 150);
@@ -5736,7 +5736,7 @@ void SwUiWriterTest::testTdf58604()
     // Allow linebreak character follows hanging punctuation immediately instead of
     // breaking at the start of the next line.
     load(DATA_DIRECTORY, "tdf58604.odt");
-    CPPUNIT_ASSERT_EQUAL( OUString("POR_BRK"), parseDump( "(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType" ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("PortionType::Break"), parseDump( "(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType" ) );
 #endif
 }
 

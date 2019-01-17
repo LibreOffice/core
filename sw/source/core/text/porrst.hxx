@@ -95,7 +95,7 @@ class SwHangingPortion : public SwTextPortion
 public:
     explicit SwHangingPortion( SwPosSize aSize ) : nInnerWidth( aSize.Width() )
     {
-        SetWhichPor( POR_HNG );
+        SetWhichPor( PortionType::Hanging );
         SetLen(TextFrameIndex(1));
         Height( aSize.Height() );
     }
@@ -109,7 +109,7 @@ class SwHiddenTextPortion : public SwLinePortion
 public:
     explicit SwHiddenTextPortion(TextFrameIndex const nLen)
     {
-        SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen );
+        SetWhichPor( PortionType::HiddenText );  SetLen( nLen );
     }
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -129,7 +129,7 @@ public:
     explicit SwControlCharPortion( sal_Unicode cChar )
         : mnViewWidth( 0 ), mnHalfCharWidth( 0 ), mcChar( cChar )
     {
-        SetWhichPor( POR_CONTROLCHAR ); SetLen( TextFrameIndex(1) );
+        SetWhichPor( PortionType::ControlChar ); SetLen( TextFrameIndex(1) );
     }
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;

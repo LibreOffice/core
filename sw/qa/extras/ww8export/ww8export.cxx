@@ -305,7 +305,7 @@ DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 {
-    OUString aText = parseDump("/root/page/body/txt[3]/Special[@nType='POR_NUMBER']", "rText");
+    OUString aText = parseDump("/root/page/body/txt[3]/Special[@nType='PortionType::Number']", "rText");
     // This was 1.1.
     CPPUNIT_ASSERT_EQUAL(OUString("2.1"), aText);
 }
@@ -313,8 +313,8 @@ DECLARE_WW8EXPORT_TEST(testFdo36868, "fdo36868.doc")
 DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
 {
     // Similar to fdo#36868, numbering portions had wrong values.
-    OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='POR_NUMBER']", "rText");
-    // POR_NUMBER was completely missing.
+    OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='PortionType::Number']", "rText");
+    // PortionType::Number was completely missing.
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
 }
 

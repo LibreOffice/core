@@ -261,7 +261,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     {
         if( pPor->InTextGrp() && !pPor->InExpGrp() )
         {
-            const sal_uInt16 nOldWhich = m_pCurr->GetWhichPor();
+            const PortionType nOldWhich = m_pCurr->GetWhichPor();
             *static_cast<SwLinePortion*>(m_pCurr) = *pPor;
             m_pCurr->SetNextPortion( pPor->GetNextPortion() );
             m_pCurr->SetWhichPor( nOldWhich );
@@ -829,7 +829,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
 class SwMetaPortion : public SwTextPortion
 {
 public:
-    SwMetaPortion() { SetWhichPor( POR_META ); }
+    SwMetaPortion() { SetWhichPor( PortionType::Meta ); }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 
@@ -837,7 +837,7 @@ void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( Width() )
     {
-        rInf.DrawViewOpt( *this, POR_META );
+        rInf.DrawViewOpt( *this, PortionType::Meta );
         SwTextPortion::Paint( rInf );
     }
 }
@@ -1340,7 +1340,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                         // aligned at the tab stop position. We store the width from the beginning of
                         // the tab stop portion up to the portion containing the decimal separator:
                         if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
-                             POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
+                             PortionType::TabDecimal == pLastTabPortion->GetWhichPor() )
                         {
                             OSL_ENSURE( rInf.X() >= pLastTabPortion->GetFix(), "Decimal tab stop position cannot be calculated" );
                             const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = static_cast<sal_uInt16>(rInf.X() - pLastTabPortion->GetFix() );

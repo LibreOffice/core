@@ -256,7 +256,7 @@ SwFlyCntPortion::SwFlyCntPortion()
     , m_eAlign(sw::LineAlign::NONE)
 {
     nLineLength = TextFrameIndex(1);
-    SetWhichPor(POR_FLYCNT);
+    SetWhichPor(PortionType::FlyCnt);
 }
 
 sw::FlyContentPortion::FlyContentPortion(SwFlyInContentFrame* pFly)

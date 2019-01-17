@@ -79,7 +79,7 @@ class SwAccessiblePortionData : public SwPortionHandler
     /// Access to portion attributes
     bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;
     bool IsSpecialPortion( size_t nPortionNo ) const;
-    bool IsGrayPortionType( sal_uInt16 nType ) const;
+    bool IsGrayPortionType( PortionType nType ) const;
 
     // helper method for GetEditableRange(...):
     void AdjustAndCheck( sal_Int32 nPos, size_t& nPortionNo,
@@ -91,8 +91,8 @@ public:
     virtual ~SwAccessiblePortionData() override;
 
     // SwPortionHandler methods
-    virtual void Text(TextFrameIndex nLength, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) override;
-    virtual void Special(TextFrameIndex nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0, const SwFont* pFont = nullptr) override;
+    virtual void Text(TextFrameIndex nLength, PortionType nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) override;
+    virtual void Special(TextFrameIndex nLength, const OUString& rText, PortionType nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0, const SwFont* pFont = nullptr) override;
     virtual void LineBreak(sal_Int32 nWidth) override;
     virtual void Skip(TextFrameIndex nLength) override;
     virtual void Finish() override;
